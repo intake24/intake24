@@ -29,9 +29,6 @@
     >
       {{ i18n.refine }}
     </v-alert>
-    <div v-if="contents.subcategories.length" class="text-body-2 mt-2">
-      {{ i18n.relatedCategories }}
-    </div>
     <v-chip-group
       v-if="contents.subcategories.length"
       class="text-primary py-0"
@@ -51,8 +48,8 @@
     </v-chip-group>
     <v-btn
       v-if="contents.subcategories.length > threshold"
-      color="info"
-      variant="text"
+      color="primary"
+      variant="outlined"
       @click="showAll = !showAll"
     >
       {{ showAll ? i18n.showLess : i18n.showAll }}
@@ -189,7 +186,7 @@ export default defineComponent({
     return {
       expanded: false,
       showAll: false,
-      threshold: 5,
+      threshold: 0,
       thumbnailExpanded: reactive<Record<string, boolean>>({}),
     };
   },
@@ -215,6 +212,17 @@ export default defineComponent({
         return false;
       else
         return Math.round(foodsWithThumbnailsCount * 100.0 / totalFoodCount) >= this.gridThreshold;
+    },
+  },
+
+  watch: {
+    'contents.foods.length': {
+      handler(newLength) {
+        if (newLength === 0) {
+          this.showAll = true;
+        }
+      },
+      immediate: true,
     },
   },
 
