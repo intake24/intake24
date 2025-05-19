@@ -404,6 +404,7 @@ const reviewConfirmPrompt = baseStandardPrompt.extend({
 
 const sameAsBeforePrompt = baseStandardPrompt.extend({
   component: z.literal('same-as-before-prompt'),
+  skipToSAB: z.boolean().optional(),
 });
 
 const sleepSchedulePrompt = baseStandardPrompt.merge(timePicker).extend({

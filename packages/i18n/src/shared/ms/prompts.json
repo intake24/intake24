@@ -305,7 +305,11 @@
     "hadWith": "Ambil bersama:",
     "noAddedFoods": "Tiada tambahan (e.g. susu, gula, sos)",
     "same": "Ya, hidangan yang sama",
-    "notSame": "Tidak, saya ambil yang lain"
+    "notSame": "Tidak, saya ambil yang lain",
+    "details": "Display details",
+    "hadQuantity": "Quantity",
+    "characteristics": "Characteristics",
+    "none": "None"
   },
   "sleepSchedule": {
     "name": "Sleep schedule",
