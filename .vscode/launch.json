@@ -5,19 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "pwa-chrome",
+            "type": "chrome",
             "request": "launch",
             "name": "(survey)Launch Chrome against localhost",
             "url": "http://localhost:8200/test-survey",
-            "webRoot": "${workspaceFolder}/apps/survey/"
+            "webRoot": "${workspaceFolder}/apps/survey/",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**",
+                "**/clarity.js",
+            ]
         },
         {
-            "type": "pwa-chrome",
+            "type": "chrome",
             "request": "launch",
             "name": "(admin) Launch Chrome against localhost",
             "url": "http://localhost:8100",
-            "webRoot": "${workspaceFolder}/apps/admin/"
-        }
-
+            "webRoot": "${workspaceFolder}/apps/admin/",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**",
+                "**/clarity.js",
+            ]
+        },
     ]
 }

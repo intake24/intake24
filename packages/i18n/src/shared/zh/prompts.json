@@ -305,7 +305,11 @@
     "hadWith": "伴随着：",
     "noAddedFoods": "未添加任何东西（例如牛奶、糖、酱料)",
     "same": "我吃了相同的",
-    "notSame": "我没有吃相同的"
+    "notSame": "我没有吃相同的",
+    "details": "详情",
+    "hadQuantity": "数量",
+    "characteristics": "特征",
+    "none": "无"
   },
   "sleepSchedule": {
     "name": "Sleep schedule",

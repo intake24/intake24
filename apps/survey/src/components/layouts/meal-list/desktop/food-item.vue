@@ -63,11 +63,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { FoodState, MealState } from '@intake24/common/surveys';
-import { useI18n } from '@intake24/i18n';
-import { useSurvey } from '@intake24/survey/stores';
 
 import { useFoodItem } from '../use-food-item';
 import ContextMenu from './context-menu.vue';
@@ -97,43 +95,7 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { i18n: { locale } } = useI18n();
-    const survey = useSurvey();
-    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
-
-    const customPromptAnswerLabels = computed(() => {
-      if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
-        return '';
-      }
-      const foodPrompts = survey.foodPrompts;
-      const answers: string[] = [];
-      Object.entries(props.food.customPromptAnswers).forEach(([promptId, answer]) => {
-        const prompt = foodPrompts.find(p => p.id === promptId);
-        let displayText = '';
-        // Handle different prompt types
-        if (prompt && 'options' in prompt && prompt.options) {
-          const options = prompt.options[locale.value] || prompt.options.en || [];
-          if (Array.isArray(answer)) {
-            // Multiple selection
-            const labels = answer.map(value =>
-              options.find(opt => opt.value === value)?.shortLabel
-              ?? options.find(opt => opt.value === value)?.label
-              ?? (value || '').toString(),
-            );
-            displayText = labels.join(', ');
-          }
-          else {
-            // Single selection
-            displayText = options.find(opt => opt.value === answer)?.shortLabel
-              ?? options.find(opt => opt.value === answer)?.label
-              ?? (answer || '').toString();
-          }
-        }
-        if (displayText.trim())
-          answers.push(displayText);
-      });
-      return answers.join(', ');
-    });
+    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels } = useFoodItem(props, ctx);
     return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels };
   },
 });

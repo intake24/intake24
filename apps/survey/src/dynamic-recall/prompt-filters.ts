@@ -1,6 +1,6 @@
-import type { AddonFood, Prompts } from '@intake24/common/prompts';
+import type { AddonFood, Prompt, Prompts } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/surveys';
-import { evaluateCondition } from '@intake24/survey/dynamic-recall/prompt-manager';
+import { checkPromptCustomConditions, evaluateCondition } from '@intake24/survey/dynamic-recall/prompt-manager';
 import type { SurveyStore } from '@intake24/survey/stores';
 import { flattenFoods } from '@intake24/survey/util/meal-food';
 
@@ -49,4 +49,20 @@ export function filterForAddonFoods(surveyStore: SurveyStore, prompt: Prompts['a
       return acc;
     }, acc);
   }, {});
+}
+
+export function filterForIncompleteCustomPrompts(store: SurveyStore, meal: MealState, food: FoodState, foodPrompts: Prompt[]): Prompt[] {
+  return foodPrompts.filter((prompt) => {
+    if (prompt.type !== 'custom' || prompt.component === 'no-more-information-prompt') {
+      return false;
+    }
+    if (!checkPromptCustomConditions(store, meal, food, prompt)) {
+      return false;
+    }
+    const answer = food.customPromptAnswers[prompt.id];
+    return (
+      answer === undefined
+      || (typeof answer === 'object' && answer !== null && Object.keys(answer).length === 0)
+    );
+  });
 }

@@ -22,15 +22,13 @@ export type UseFoodItemProps = {
 };
 
 export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext<'action'[]>, 'emit'>) {
-  const { i18n: { t } } = useI18n();
+  const { i18n: { t, locale } } = useI18n();
   const { foodName } = useFoodUtils(props);
   const survey = useSurvey();
 
   const isPortionSizeComplete = computed(() => foodPortionSizeComplete(props.food));
 
-  const isCustomPromptComplete = computed(() => {
-    return customPromptComplete(survey, props.meal, props.food, survey.foodPrompts);
-  });
+  const isCustomPromptComplete = computed(() => customPromptComplete(survey, props.meal, props.food, survey.foodPrompts));
 
   const menu = computed(() =>
     (
@@ -60,5 +58,34 @@ export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext
     emit('action', type, id);
   };
 
-  return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu };
+  const customPromptAnswerLabels = computed(() => {
+    if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
+      return '';
+    }
+    const foodPrompts = survey.foodPrompts;
+    const answers = Object.entries(props.food.customPromptAnswers).reduce<string[]>((acc, [promptId, answer]) => {
+      const prompt = foodPrompts.find(p => p.id === promptId);
+      let displayText = '';
+      if (prompt && 'options' in prompt && prompt.options) {
+        const options = prompt.options[locale.value] || prompt.options.en || [];
+        if (Array.isArray(answer)) { // Multiple selection
+          const labels = answer.map((value) => {
+            const option = options.find(opt => opt.value === value);
+            return option?.shortLabel ?? option?.label ?? (value || '').toString();
+          });
+          displayText = labels.join(', ');
+        }
+        else { // Single selection
+          const option = options.find(opt => opt.value === answer);
+          displayText = option?.shortLabel ?? option?.label ?? (answer || '').toString();
+        }
+      }
+      if (displayText.trim())
+        acc.push(displayText);
+      return acc;
+    }, []);
+    return answers.join(', ');
+  });
+
+  return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels };
 }

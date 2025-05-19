@@ -1028,7 +1028,7 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
   throw new Error(`Prompt condition didn't match any switch branches`);
 }
 
-function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, prompt: Prompt) {
+export function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, prompt: Prompt) {
   try {
     let currentValue = true;
     for (let i = 0; i < prompt.conditions.length; ++i) {
