@@ -304,8 +304,8 @@
     },
     "hadWith": "Had it with:",
     "noAddedFoods": "Nothing added (e.g. milk, sugar, sauces)",
-    "same": "Yes, I had the same",
-    "notSame": "No, I had a different one"
+    "same": "Yes, it's similar",
+    "notSame": "No, it's different"
   },
   "sleepSchedule": {
     "name": "Sleep schedule",

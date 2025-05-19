@@ -1,21 +1,29 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid, sabOptions }" @action="action">
     <v-card-text class="pt-2 d-flex">
       <v-card border flat width="100%">
         <v-list class="px-4" color="grey-lighten-4">
           <v-list-subheader>{{ translate(sabFood.food.data.localName) }}</v-list-subheader>
           <v-divider />
           <v-list-item class="ps-0" density="compact">
-            <template #prepend>
-              <v-icon icon="fas fa-caret-right" />
-            </template>
-            <v-list-item-title>{{ promptI18n.serving }}</v-list-item-title>
+            <v-checkbox
+              v-model="sabOptions.serving"
+              class="custom-checkbox"
+              density="compact"
+              :label="promptI18n.serving"
+              :value="true"
+            />
           </v-list-item>
           <v-list-item v-if="showLeftovers" class="ps-0" density="compact">
-            <template #prepend>
-              <v-icon icon="fas fa-caret-right" />
-            </template>
-            <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
+            <v-list-item class="ps-0" density="compact">
+              <v-checkbox
+                v-model="sabOptions.leftovers"
+                class="custom-checkbox"
+                density="compact"
+                :label="promptI18n.leftovers"
+                :value="true"
+              />
+            </v-list-item>
           </v-list-item>
           <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
             <template #prepend>
@@ -24,22 +32,41 @@
             <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
-            <template #prepend>
-              <v-icon icon="fas fa-caret-right" />
-            </template>
-            <v-list-item-title>{{ promptI18n.quantity }}</v-list-item-title>
+            <v-checkbox
+              v-model="sabOptions.quantity"
+              class="custom-checkbox"
+              density="compact"
+              :label="promptI18n.quantity"
+              :value="true"
+            />
           </v-list-item>
         </v-list>
         <v-list v-if="linkedFoods.length" class="px-4" color="grey-lighten-4">
-          <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
+          <v-list-subheader>hadwitdh-{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
           <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
-            <template #prepend>
-              <v-icon icon="fas fa-caret-right" />
-            </template>
-            <v-list-item-title>{{ linkedFood.text }}</v-list-item-title>
+            <v-checkbox
+              v-model="sabOptions[linkedFood.id]"
+              class="custom-checkbox"
+              density="compact"
+              :label="linkedFood.text ? linkedFood.text : ''"
+              :value="true"
+            />
           </v-list-item>
         </v-list>
+        <!-- <v-list v-if="customPromptAnswers.length" class="px-4" color="grey-lighten-4">
+          <v-list-subheader>Please select your preferences</v-list-subheader>
+          <v-divider />
+          <v-list-item v-for="(answer, index) in customPromptAnswers" :key="index" class="ps-0" density="compact">
+            <v-checkbox
+              v-model="options[index]"
+              class="custom-checkbox"
+              density="compact"
+              :label="String(answer)"
+              :value="answer"
+            />
+          </v-list-item>
+        </v-list> -->
       </v-card>
     </v-card-text>
     <template #actions>
@@ -52,10 +79,26 @@
       </v-btn>
       <v-btn
         :title="promptI18n.same"
-        @click.stop="action('same')"
+        variant="text"
+        @click.stop="onSame"
       >
         <v-icon icon="$yes" start />
         {{ promptI18n.same }}
+      </v-btn>
+    </template>
+    <template #nav-actions>
+      <v-btn color="primary" :title="$t('common.action.no')" variant="text" @click.stop="action('notSame')">
+        <span class="text-overline font-weight-medium">
+          {{ $t('common.action.no') }}
+        </span>
+        <v-icon class="pb-1" icon="$no" />
+      </v-btn>
+      <v-divider vertical />
+      <v-btn color="primary" title="$t('common.action.yes')" variant="text" @click.stop="onSame">
+        <span class="text-overline font-weight-medium">
+          {{ $t('common.action.yes') }}
+        </span>
+        <v-icon class="pb-1" icon="$yes" />
       </v-btn>
     </template>
   </card-layout>
@@ -63,7 +106,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import type { EncodedFood } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -81,7 +124,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'update:modelValue']);
+const emit = defineEmits(['action', 'update:modelValue', 'update:sabOptions']);
+
+// Reactive state for "options"
+const sabOptions = ref<Record<string, any>>({});
 
 const { i18n: { t }, translate } = useI18n();
 const { action, translatePrompt, type } = usePromptUtils(props, { emit });
@@ -108,6 +154,17 @@ function getPortionWeight(food: EncodedFood) {
         )?.portionSize?.servingWeight ?? 0;
 
   return Math.round((servingWeight + linkedServingWeight) / getQuantity(food));
+}
+
+function onSame() {
+  console.debug('onSame action triggered');
+  console.debug('sabOptions.serving:', sabOptions.value.serving);
+  console.debug('sabOptions.leftovers:', sabOptions.value.leftovers);
+  // console.debug('sabOptions.noAddedFoods:', sabOptions.value.noAddedFoods);
+  console.debug('sabOptions.quantity:', sabOptions.value.quantity);
+
+  emit('update:sabOptions', { ...sabOptions.value }); // emit a copy to parent
+  action('same');
 }
 
 function getUnit(food: EncodedFood) {
@@ -146,11 +203,15 @@ const linkedFoods = computed(() =>
   }),
 );
 
+// const customPromptAnswers = computed(() => {
+//   const answers = props.sabFood.food.customPromptAnswers?.['sab-checkbox-list-prompt'];
+//   return Array.isArray(answers) ? answers.map(answer => answer) : [];
+// });
+
 const quantity = computed(() => getQuantity(props.sabFood.food));
 const serving = computed(() => {
   const amount = getPortionWeight(props.sabFood.food);
   const unit = getUnit(props.sabFood.food);
-
   return t(`prompts.${type.value}.serving`, { amount: `${amount} ${unit}` });
 });
 const servingQuantity = computed(() => t(`prompts.${type.value}.quantity`, { quantity: getQuantity(props.sabFood.food) }));
@@ -176,7 +237,7 @@ const promptI18n = computed(() => ({
   serving: serving.value,
   quantity: servingQuantity.value,
   leftovers: leftovers.value,
-  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
+  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame', 'some']),
 }));
 
 onMounted(async () => {
@@ -198,7 +259,26 @@ onMounted(async () => {
   );
 
   await resolveStandardUnits(names);
+  // Set default values for sabOptions
+  sabOptions.value = {
+    serving: true,
+    leftovers: true,
+    // noAddedFoods: true,
+    quantity: true,
+  };
+  // Set each linked food checkbox to checked by default
+  if (props.sabFood.food.linkedFoods?.length) {
+    for (const linkedFood of props.sabFood.food.linkedFoods) {
+      sabOptions.value[linkedFood.id] = true;
+    }
+  }
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.custom-checkbox {
+  height: 30px; /* Adjust the height as needed */
+  line-height: 30px; /* Align the label vertically */
+  padding: 0; /* Remove extra padding */
+}
+</style>
