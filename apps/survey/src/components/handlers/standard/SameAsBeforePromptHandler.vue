@@ -81,6 +81,17 @@ function onSabOptionsUpdate(newSabOptions: SabOptions): void {
       },
     );
   }
+  // Update custom prompt answers if checkbox for custom prompts
+  // if true, change prompt id to prompt name, otherwise remove them
+  if (sabOptions.value.customPromptAnswers) {
+    console.log('Updating custom prompts for sabFood');
+  }
+  else if (sabOptions.value.customPromptAnswers === false && sabFood?.food?.customPromptAnswers) {
+    console.log('Removing custom prompts for sabFood');
+    if (sabFood.food.customPromptAnswers && typeof sabFood.food.customPromptAnswers === 'object') {
+      sabFood.food.customPromptAnswers = {};
+    }
+  }
 }
 function sabAction(type: 'notSame' | 'same') {
   if (type === 'same' && sabFood) {
