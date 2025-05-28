@@ -54,19 +54,23 @@
             />
           </v-list-item>
         </v-list>
-        <!-- <v-list v-if="customPromptAnswers.length" class="px-4" color="grey-lighten-4">
-          <v-list-subheader>Please select your preferences</v-list-subheader>
+        <v-list v-if="customPromptAnswers.length" class="px-4" color="grey-lighten-4">
+          <v-list-subheader>Further information</v-list-subheader>
           <v-divider />
           <v-list-item v-for="(answer, index) in customPromptAnswers" :key="index" class="ps-0" density="compact">
-            <v-checkbox
-              v-model="options[index]"
-              class="custom-checkbox"
-              density="compact"
-              :label="String(answer)"
-              :value="answer"
-            />
+            <template #prepend>
+              <v-icon icon="fas fa-caret-right" />
+            </template>
+            <v-list-item-title>{{ answer }}</v-list-item-title>
           </v-list-item>
-        </v-list> -->
+          <v-checkbox
+            v-model="sabOptions.customPromptAnswers"
+            class="custom-checkbox"
+            density="compact"
+            :label="promptI18n.same"
+            :value="true"
+          />
+        </v-list>
       </v-card>
     </v-card-text>
     <template #actions>
@@ -203,10 +207,10 @@ const linkedFoods = computed(() =>
   }),
 );
 
-// const customPromptAnswers = computed(() => {
-//   const answers = props.sabFood.food.customPromptAnswers?.['sab-checkbox-list-prompt'];
-//   return Array.isArray(answers) ? answers.map(answer => answer) : [];
-// });
+const customPromptAnswers = computed(() => {
+  const answers = props.sabFood.food.customPromptAnswers?.['sab-checkbox-list-prompt'];
+  return Array.isArray(answers) ? answers.map(answer => answer) : [];
+});
 
 const quantity = computed(() => getQuantity(props.sabFood.food));
 const serving = computed(() => {
@@ -265,6 +269,7 @@ onMounted(async () => {
     leftovers: true,
     // noAddedFoods: true,
     quantity: true,
+    customPromptAnswers: true,
   };
   // Set each linked food checkbox to checked by default
   if (props.sabFood.food.linkedFoods?.length) {
