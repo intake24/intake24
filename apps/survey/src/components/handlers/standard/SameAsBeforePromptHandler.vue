@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
 import { getEntityId } from '@intake24/survey/util';
@@ -29,19 +29,13 @@ const survey = useSurvey();
 
 const sabFood = useSameAsBefore().getItem(survey.localeId, code);
 
-interface SabOptions {
-  [key: string]: boolean;
-}
-const sabOptions = ref<SabOptions>({});
-
-function onSabOptionsUpdate(newSabOptions: SabOptions): void {
-  console.debug('Received sabOptions from child:', newSabOptions);
-  sabOptions.value = newSabOptions;
-  // Remove portion size and portion size method if serving checkbox is false
-  if (!sabOptions.value.serving && sabFood?.food?.portionSize) {
+function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
+  console.debug('Received sabOptions from child:', sabOptions);
+  if (!sabOptions.serving && sabFood?.food?.portionSize) {
     sabFood.food.portionSize = null;
     sabFood.food.portionSizeMethodIndex = null;
-    console.debug('sabFood.food.portionSize cleared');
+    console.debug('Portion size and method are removed as SAB serving checkbox being false');
+
     if (Array.isArray(sabFood.food.flags)) {
       sabFood.food.flags = sabFood.food.flags.filter(
         (flag: string) =>
@@ -51,46 +45,36 @@ function onSabOptionsUpdate(newSabOptions: SabOptions): void {
       console.debug('Flags updated:', sabFood.food.flags);
     }
   }
-  // Remove portion size if leftovers checkbox is false
-  if (!sabOptions.value.leftovers && sabFood?.food?.portionSize) {
+  if (!sabOptions.leftovers && sabFood?.food?.portionSize) {
+    console.debug('Removing portion size due to SAB leftovers checkbox being false');
     sabFood.food.portionSize = null;
-    console.debug('sabFood.food.portionSize cleared');
     if (Array.isArray(sabFood.food.flags)) {
       sabFood.food.flags = sabFood.food.flags.filter(
         (flag: string) =>
           flag !== 'portion-size-option-complete'
           && flag !== 'portion-size-method-complete',
       );
-      console.debug('Flags updated:', sabFood.food.flags);
+      console.debug('portion-size-option-complete and portion-size-method-complete flags removed:', sabFood.food.flags);
     }
   }
-  // Keep or remove linked foods if checkbox for linked foods is false
-  // loop through sabFood.food.linkedFoods, match id with the key of sabOptions.value
-  // when a match is found, check if the value is false, if so, remove the linked food
-  // when a match is found and the value is true, keep the linked food
   if (sabFood?.food?.linkedFoods) {
+    console.debug('Removing linked foods if is explicitly unchecked in SAB options');
+    const numberOfLinkedFood = sabFood.food.linkedFoods.length;
+
     sabFood.food.linkedFoods = sabFood.food.linkedFoods.filter(
-      (linkedFood) => {
-        const key = linkedFood.id;
-        if (sabOptions.value[key] === false) {
-          console.debug(`Removing linked food with id ${key} because checkbox is false`);
-          return false; // Remove this linked food
-        }
-        console.debug(`Keeping linked food with id ${key} because checkbox is true`);
-        return true; // Keep this linked food
-      },
+      linkedFood => !(sabOptions[linkedFood.id] === false),
     );
-  }
-  // Update custom prompt answers if checkbox for custom prompts
-  // if true, change prompt id to prompt name, otherwise remove them
-  if (sabOptions.value.customPromptAnswers) {
-    console.log('Updating custom prompts for sabFood');
-  }
-  else if (sabOptions.value.customPromptAnswers === false && sabFood?.food?.customPromptAnswers) {
-    console.log('Removing custom prompts for sabFood');
-    if (sabFood.food.customPromptAnswers && typeof sabFood.food.customPromptAnswers === 'object') {
-      sabFood.food.customPromptAnswers = {};
+    console.debug('Linked foods updated:', sabFood.food.linkedFoods);
+    if (sabFood.food.linkedFoods.length < numberOfLinkedFood && Array.isArray(sabFood.food.flags)) {
+      sabFood.food.flags = sabFood.food.flags.filter(
+        (flag: string) => flag !== 'associated-foods-complete',
+      );
+      console.debug('associated-foods-complete flag removed:', sabFood.food.flags);
     }
+  }
+  if (sabOptions.customPromptAnswers === false && sabFood?.food?.customPromptAnswers) {
+    sabFood.food.customPromptAnswers = {};
+    console.debug('Custom prompt answers removed as SAB custom prompt answers checkbox is explicitly set to false');
   }
 }
 function sabAction(type: 'notSame' | 'same') {
