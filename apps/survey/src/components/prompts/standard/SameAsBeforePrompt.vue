@@ -42,7 +42,7 @@
           </v-list-item>
         </v-list>
         <v-list v-if="linkedFoods.length" class="px-4" color="grey-lighten-4">
-          <v-list-subheader>hadwitdh-{{ promptI18n.hadWith }}</v-list-subheader>
+          <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
           <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
             <v-checkbox
@@ -54,15 +54,17 @@
             />
           </v-list-item>
         </v-list>
-        <v-list v-if="customPromptAnswers.length" class="px-4" color="grey-lighten-4">
-          <v-list-subheader>Further information</v-list-subheader>
-          <v-divider />
-          <v-list-item v-for="(answer, index) in customPromptAnswers" :key="index" class="ps-0" density="compact">
-            <template #prepend>
-              <v-icon icon="fas fa-caret-right" />
-            </template>
-            <v-list-item-title>{{ answer }}</v-list-item-title>
-          </v-list-item>
+        <v-list v-if="customPromptAnswers && Object.keys(customPromptAnswers).length > 0" class="px-4" color="grey-lighten-4">
+          <v-list v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index" class="px-4" color="grey-lighten-4">
+            <v-list-subheader>{{ promptNames[index] || '' }}</v-list-subheader>
+            <v-divider />
+            <v-list-item v-for="(answer, answerIdx) in customPromptAnswer" :key="answerIdx" class="ps-0" density="compact">
+              <template #prepend>
+                <v-icon icon="fas fa-caret-right" />
+              </template>
+              <v-list-item-title>{{ answer }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
           <v-checkbox
             v-model="sabOptions.customPromptAnswers"
             class="custom-checkbox"
@@ -162,10 +164,7 @@ function getPortionWeight(food: EncodedFood) {
 
 function onSame() {
   console.debug('onSame action triggered');
-  console.debug('sabOptions.serving:', sabOptions.value.serving);
-  console.debug('sabOptions.leftovers:', sabOptions.value.leftovers);
-  // console.debug('sabOptions.noAddedFoods:', sabOptions.value.noAddedFoods);
-  console.debug('sabOptions.quantity:', sabOptions.value.quantity);
+  console.debug('sabOptions:', sabOptions.value);
 
   emit('update:sabOptions', { ...sabOptions.value }); // emit a copy to parent
   action('same');
@@ -208,8 +207,32 @@ const linkedFoods = computed(() =>
 );
 
 const customPromptAnswers = computed(() => {
-  const answers = props.sabFood.food.customPromptAnswers?.['sab-checkbox-list-prompt'];
-  return Array.isArray(answers) ? answers.map(answer => answer) : [];
+  const answers = props.sabFood.food.customPromptAnswers;
+  if (!answers) {
+    console.debug('No custom prompt answers found');
+    return {};
+  }
+  // delete null attributes in answers
+  const filteredAnswers = Object.fromEntries(
+    Object.entries(answers).filter(([_, value]) => value !== null),
+  );
+  return filteredAnswers;
+});
+
+const promptNames = computed(() => {
+  const idNameMap = survey.parameters?.surveyScheme.prompts.meals.foods.reduce(
+    (acc: Record<string, string>, item: { id: string; name: string }) => {
+      acc[item.id] = item.name;
+      return acc;
+    },
+    {},
+  );
+  if (!idNameMap) {
+    console.debug('No prompt names found');
+    return {};
+  }
+  console.debug('Prompt names:', idNameMap);
+  return idNameMap;
 });
 
 const quantity = computed(() => getQuantity(props.sabFood.food));
@@ -241,7 +264,7 @@ const promptI18n = computed(() => ({
   serving: serving.value,
   quantity: servingQuantity.value,
   leftovers: leftovers.value,
-  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame', 'some']),
+  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
 }));
 
 onMounted(async () => {
@@ -267,7 +290,6 @@ onMounted(async () => {
   sabOptions.value = {
     serving: true,
     leftovers: true,
-    // noAddedFoods: true,
     quantity: true,
     customPromptAnswers: true,
   };
