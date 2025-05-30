@@ -13,6 +13,7 @@
             "skipFiles": [
                 "<node_internals>/**",
                 "**/node_modules/**",
+                "**/clarity.js",
             ]
         },
         {
@@ -24,6 +25,7 @@
             "skipFiles": [
                 "<node_internals>/**",
                 "**/node_modules/**",
+                "**/clarity.js",
             ]
         },
     ]
