@@ -14,48 +14,76 @@
               :value="true"
             />
           </v-list-item>
-          <v-list-item v-if="showLeftovers" class="ps-0" density="compact">
-            <v-list-item class="ps-0" density="compact">
-              <v-checkbox
-                v-model="sabOptions.leftovers"
-                class="custom-checkbox"
-                density="compact"
-                :label="promptI18n.leftovers"
-                :value="true"
-              />
-            </v-list-item>
-          </v-list-item>
-          <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
+          <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
             <template #prepend>
               <v-icon icon="fas fa-caret-right" />
             </template>
-            <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
+            <v-list-item-title>
+              {{ promptI18n.quantity }}
+            </v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
-            <v-checkbox
-              v-model="sabOptions.quantity"
-              class="custom-checkbox"
-              density="compact"
-              :label="promptI18n.quantity"
-              :value="true"
-            />
+          <div v-if="showLeftovers" class="ps-0" density="compact">
+            <v-list-item class="ps-0" density="compact">
+              <template #prepend>
+                <v-icon icon="fas fa-caret-right" />
+              </template>
+              <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
+            </v-list-item>
+          </div>
+          <v-list-item class="ps-0" density="compact">
+            <v-radio-group
+              v-model="sabOptions.portionSize"
+              :hide-details="true"
+              :inline="true"
+            >
+              <v-radio
+                :label="$t('common.action.yes')"
+                :value="true"
+              />
+              <v-radio
+                :label="$t('common.action.no')"
+                :value="false"
+              />
+            </v-radio-group>
           </v-list-item>
         </v-list>
-        <v-list v-if="linkedFoods.length" class="px-4" color="grey-lighten-4">
+        <v-list class="px-4" color="grey-lighten-4">
           <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
-          <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
+          <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
             <v-checkbox
-              v-model="sabOptions[linkedFood.id]"
+              v-model="sabOptions.noAddedFoods"
               class="custom-checkbox"
               density="compact"
-              :label="linkedFood.text ? linkedFood.text : ''"
+              :label="promptI18n.noAddedFoods"
               :value="true"
             />
           </v-list-item>
+          <template v-if="linkedFoods.length">
+            <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
+              <template #prepend>
+                <v-icon icon="fas fa-caret-right" />
+              </template>
+              {{ linkedFood.text ? linkedFood.text : '' }}
+            </v-list-item>
+          </template>
+          <v-radio-group
+            v-model="sabOptions.linkedFoods"
+            :hide-details="true"
+            :inline="true"
+          >
+            <v-radio
+              :label="$t('common.action.yes')"
+              :value="true"
+            />
+            <v-radio
+              :label="$t('common.action.no')"
+              :value="false"
+            />
+          </v-radio-group>
         </v-list>
         <v-list v-if="customPromptAnswers && Object.keys(customPromptAnswers).length > 0" class="px-4" color="grey-lighten-4">
-          <v-list v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index" class="px-4" color="grey-lighten-4">
+          <div v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index">
             <v-list-subheader>{{ promptNames[index] || '' }}</v-list-subheader>
             <v-divider />
             <v-list-item v-for="(answer, answerIdx) in customPromptAnswer" :key="answerIdx" class="ps-0" density="compact">
@@ -64,14 +92,21 @@
               </template>
               <v-list-item-title>{{ answer }}</v-list-item-title>
             </v-list-item>
-          </v-list>
-          <v-checkbox
+          </div>
+          <v-radio-group
             v-model="sabOptions.customPromptAnswers"
-            class="custom-checkbox"
-            density="compact"
-            :label="promptI18n.same"
-            :value="true"
-          />
+            :hide-details="true"
+            :inline="true"
+          >
+            <v-radio
+              :label="$t('common.action.yes')"
+              :value="true"
+            />
+            <v-radio
+              :label="$t('common.action.no')"
+              :value="false"
+            />
+          </v-radio-group>
         </v-list>
       </v-card>
     </v-card-text>
@@ -102,7 +137,7 @@
       <v-divider vertical />
       <v-btn color="primary" title="$t('common.action.yes')" variant="text" @click.stop="onSame">
         <span class="text-overline font-weight-medium">
-          {{ $t('common.action.yes') }}
+          {{ $t('common.action.continue') }}
         </span>
         <v-icon class="pb-1" icon="$yes" />
       </v-btn>
@@ -135,7 +170,7 @@ const emit = defineEmits(['action', 'update:modelValue', 'update:sabOptions']);
 // Reactive state for "options"
 const sabOptions = ref<Record<string, any>>({});
 
-const { i18n: { t }, translate } = useI18n();
+const { i18n: { t, locale }, translate } = useI18n();
 const { action, translatePrompt, type } = usePromptUtils(props, { emit });
 const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
 const survey = useSurvey();
@@ -164,8 +199,6 @@ function getPortionWeight(food: EncodedFood) {
 
 function onSame() {
   console.debug('onSame action triggered');
-  console.debug('sabOptions:', sabOptions.value);
-
   emit('update:sabOptions', { ...sabOptions.value }); // emit a copy to parent
   action('same');
 }
@@ -208,31 +241,38 @@ const linkedFoods = computed(() =>
 
 const customPromptAnswers = computed(() => {
   const answers = props.sabFood.food.customPromptAnswers;
-  if (!answers) {
-    console.debug('No custom prompt answers found');
+  if (!answers)
     return {};
-  }
-  // delete null attributes in answers
   const filteredAnswers = Object.fromEntries(
     Object.entries(answers).filter(([_, value]) => value !== null),
   );
-  return filteredAnswers;
+  const foods = survey.parameters?.surveyScheme.prompts.meals.foods;
+  if (!foods)
+    return {};
+
+  return Object.fromEntries(
+    Object.entries(filteredAnswers).map(([key, value]) => {
+      const prompt = foods.find(item => item.id === key);
+      const label = prompt && Array.isArray(value) && 'options' in prompt && prompt?.options?.[locale.value]
+        ? value.map(v =>
+            prompt.options[locale.value].find(option => option.value === v)?.label ?? v,
+          )
+        : [];
+      return [key, label];
+    }),
+  );
 });
 
 const promptNames = computed(() => {
-  const idNameMap = survey.parameters?.surveyScheme.prompts.meals.foods.reduce(
-    (acc: Record<string, string>, item: { id: string; name: string }) => {
-      acc[item.id] = item.name;
-      return acc;
-    },
-    {},
-  );
-  if (!idNameMap) {
-    console.debug('No prompt names found');
+  const foods = survey.parameters?.surveyScheme.prompts.meals.foods;
+  if (!foods) {
+    console.debug('No custom prompt names found');
     return {};
   }
-  console.debug('Prompt names:', idNameMap);
-  return idNameMap;
+  return foods.reduce<Record<string, string>>((acc, item) => {
+    acc[item.id] = item.i18n?.name?.[locale.value] || item.i18n?.name?.en || '';
+    return acc;
+  }, {});
 });
 
 const quantity = computed(() => getQuantity(props.sabFood.food));
@@ -288,24 +328,9 @@ onMounted(async () => {
   await resolveStandardUnits(names);
   // Set default values for sabOptions
   sabOptions.value = {
-    serving: true,
-    leftovers: true,
-    quantity: true,
+    portionSize: true,
     customPromptAnswers: true,
+    linkedFoods: true,
   };
-  // Set each linked food checkbox to checked by default
-  if (props.sabFood.food.linkedFoods?.length) {
-    for (const linkedFood of props.sabFood.food.linkedFoods) {
-      sabOptions.value[linkedFood.id] = true;
-    }
-  }
 });
 </script>
-
-<style lang="scss" scoped>
-.custom-checkbox {
-  height: 30px; /* Adjust the height as needed */
-  line-height: 30px; /* Align the label vertically */
-  padding: 0; /* Remove extra padding */
-}
-</style>
