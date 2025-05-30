@@ -28,63 +28,58 @@ const {
 const survey = useSurvey();
 
 const sabFood = useSameAsBefore().getItem(survey.localeId, code);
-
+const updatedSabFood = {
+  ...(sabFood ?? {}),
+  food: {
+    ...(sabFood?.food ?? {}),
+    portionSize: sabFood?.food?.portionSize ? { ...sabFood.food.portionSize } : undefined,
+    portionSizeMethodIndex: sabFood?.food?.portionSizeMethodIndex ?? undefined,
+    linkedFoods: sabFood?.food?.linkedFoods ? [...sabFood.food.linkedFoods] : [],
+    customPromptAnswers: sabFood?.food?.customPromptAnswers ? { ...sabFood.food.customPromptAnswers } : {},
+    flags: sabFood?.food?.flags ? [...sabFood.food.flags] : [],
+  },
+};
 function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
   console.debug('Received sabOptions from child:', sabOptions);
-  if (!sabOptions.serving && sabFood?.food?.portionSize) {
-    sabFood.food.portionSize = null;
-    sabFood.food.portionSizeMethodIndex = null;
-    console.debug('Portion size and method are removed as SAB serving checkbox being false');
-
-    if (Array.isArray(sabFood.food.flags)) {
-      sabFood.food.flags = sabFood.food.flags.filter(
+  if (!sabOptions.portionSize && updatedSabFood?.food?.portionSize) {
+    updatedSabFood.food.portionSizeMethodIndex = undefined;
+    updatedSabFood.food.portionSize = undefined;
+    console.debug('PortionSize and Portion method index is removed as SAB prompt checkbox is explicitly set to false');
+    if (Array.isArray(updatedSabFood.food.flags)) {
+      updatedSabFood.food.flags = updatedSabFood.food.flags.filter(
         (flag: string) =>
           flag !== 'portion-size-option-complete'
           && flag !== 'portion-size-method-complete',
       );
-      console.debug('Flags updated:', sabFood.food.flags);
+      console.debug('portion-size-option-complete and portion-size-method-complete flag removed:', updatedSabFood.food.flags);
     }
   }
-  if (!sabOptions.leftovers && sabFood?.food?.portionSize) {
-    console.debug('Removing portion size due to SAB leftovers checkbox being false');
-    sabFood.food.portionSize = null;
-    if (Array.isArray(sabFood.food.flags)) {
-      sabFood.food.flags = sabFood.food.flags.filter(
-        (flag: string) =>
-          flag !== 'portion-size-option-complete'
-          && flag !== 'portion-size-method-complete',
-      );
-      console.debug('portion-size-option-complete and portion-size-method-complete flags removed:', sabFood.food.flags);
-    }
-  }
-  if (sabFood?.food?.linkedFoods) {
-    console.debug('Removing linked foods if is explicitly unchecked in SAB options');
-    const numberOfLinkedFood = sabFood.food.linkedFoods.length;
 
-    sabFood.food.linkedFoods = sabFood.food.linkedFoods.filter(
-      linkedFood => !(sabOptions[linkedFood.id] === false),
-    );
-    console.debug('Linked foods updated:', sabFood.food.linkedFoods);
-    if (sabFood.food.linkedFoods.length < numberOfLinkedFood && Array.isArray(sabFood.food.flags)) {
-      sabFood.food.flags = sabFood.food.flags.filter(
+  if (!sabOptions.linkedFoods && updatedSabFood?.food?.linkedFoods) {
+    updatedSabFood.food.linkedFoods = [];
+    console.debug('Linked foods are removed as SAB prompt linked foods checkbox is explicitly set to false');
+    if (Array.isArray(updatedSabFood.food.flags)) {
+      updatedSabFood.food.flags = updatedSabFood.food.flags.filter(
         (flag: string) => flag !== 'associated-foods-complete',
       );
-      console.debug('associated-foods-complete flag removed:', sabFood.food.flags);
+      console.debug('associated-foods-complete flag removed:', updatedSabFood.food.flags);
     }
   }
-  if (sabOptions.customPromptAnswers === false && sabFood?.food?.customPromptAnswers) {
-    sabFood.food.customPromptAnswers = {};
+
+  if (sabOptions.customPromptAnswers === false && updatedSabFood?.food?.customPromptAnswers) {
+    updatedSabFood.food.customPromptAnswers = {};
     console.debug('Custom prompt answers removed as SAB custom prompt answers checkbox is explicitly set to false');
   }
 }
+
 function sabAction(type: 'notSame' | 'same') {
-  if (type === 'same' && sabFood) {
-    const { id, ...update } = sabFood.food;
+  if (type === 'same' && updatedSabFood.food) {
+    const { id, ...update } = updatedSabFood.food;
     survey.updateFood({
       foodId,
       update: {
         ...update,
-        linkedFoods: update.linkedFoods.map(linkedFood => ({
+        linkedFoods: update.linkedFoods?.map(linkedFood => ({
           ...linkedFood,
           id: getEntityId(),
         })),
