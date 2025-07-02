@@ -136,6 +136,12 @@ const addonFood = z.object({
 });
 export type AddonFood = z.infer<typeof addonFood>;
 
+const foodSearchHint = z.object({
+  keyword: z.string().min(1).array(),
+  text: localeTranslation,
+});
+export type FoodSearchHint = z.infer<typeof foodSearchHint>;
+
 export const foodBrowser = z.object({
   categoriesFirst: z.record(z.enum(['browse', 'search']), z.boolean()),
   allowThumbnails: z.boolean(),
@@ -305,6 +311,7 @@ const portionSizeOptionPrompt = basePortionPrompt.extend({
 
 const recipeBuilderPrompt = basePortionPrompt.merge(foodBrowser).extend({
   component: z.literal('recipe-builder-prompt'),
+  hints: foodSearchHint.array(),
 });
 
 const standardPortionPrompt = basePortionPrompt.extend({
@@ -324,6 +331,7 @@ const addonFoodsPrompt = baseStandardPrompt.extend({
 
 const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
   component: z.literal('associated-foods-prompt'),
+  hints: foodSearchHint.array(),
   multiple: z.boolean(),
 });
 
@@ -332,6 +340,7 @@ const generalAssociatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).exten
   categoryCode: z.string(),
   promptText: localeTranslation,
   genericName: localeTranslation,
+  hints: foodSearchHint.array(),
   multiple: z.boolean(),
   skipPortionSize: z.boolean(),
 });
@@ -340,6 +349,7 @@ const editMealPrompt = baseStandardPrompt.extend({
   component: z.literal('edit-meal-prompt'),
   separateDrinks: z.boolean(),
   inputAutoFocus: z.boolean(),
+  hints: foodSearchHint.array(),
 });
 
 const externalSourcePrompt = baseStandardPrompt.extend({
@@ -357,6 +367,7 @@ const foodSearchPrompt = baseStandardPrompt.merge(foodBrowser).extend({
   component: z.literal('food-search-prompt'),
   allowBrowsing: z.boolean(),
   dualLanguage: z.boolean(),
+  hints: foodSearchHint.array(),
 });
 
 const mealAddPrompt = baseStandardPrompt.extend({

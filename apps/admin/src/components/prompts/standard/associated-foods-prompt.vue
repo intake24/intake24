@@ -15,32 +15,36 @@
           @update="update($event.field, $event.value)"
         />
       </v-col>
+      <v-col cols="12">
+        <food-search-hints
+          :model-value="hints"
+          @update:model-value="update('hints', $event)"
+        />
+      </v-col>
     </v-row>
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import type { Prompts } from '@intake24/common/prompts';
+import { foodBrowserProps, FoodBrowserSettings, FoodSearchHints, useBasePrompt } from '../partials';
 
-import { basePrompt, foodBrowserProps, FoodBrowserSettings } from '../partials';
-
-export default defineComponent({
-  name: 'AssociatedFoodsPrompt',
-
-  components: { FoodBrowserSettings },
-
-  mixins: [basePrompt, foodBrowserProps],
-
-  props: {
-    multiple: {
-      type: Boolean as PropType<Prompts['associated-foods-prompt']['multiple']>,
-      required: true,
-    },
+const props = defineProps({
+  ...foodBrowserProps,
+  hints: {
+    type: Array as PropType<Prompts['associated-foods-prompt']['hints']>,
+    required: true,
+  },
+  multiple: {
+    type: Boolean as PropType<Prompts['associated-foods-prompt']['multiple']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

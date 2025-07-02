@@ -2,17 +2,13 @@
   <v-tabs-window-item key="options" value="options">
     <v-container>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col class="d-flex flex-column gr-4" cols="12" md="6">
           <v-text-field
             hide-details="auto"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.categoryCode')"
             :model-value="categoryCode"
             @update:model-value="update('categoryCode', $event)"
           />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
           <language-selector
             :default="[]"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.promptText')"
@@ -29,10 +25,6 @@
               />
             </template>
           </language-selector>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
           <language-selector
             :default="[]"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.genericName')"
@@ -49,20 +41,12 @@
               />
             </template>
           </language-selector>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
           <v-switch
             hide-details="auto"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.multiple')"
             :model-value="multiple"
             @update:model-value="update('multiple', $event)"
           />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
           <v-switch
             hide-details="auto"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.skipPortionSize')"
@@ -70,13 +54,16 @@
             @update:model-value="update('skipPortionSize', $event)"
           />
         </v-col>
-      </v-row>
-
-      <v-row>
         <v-col cols="12" md="6">
           <food-browser-settings
             v-bind="{ categoriesFirst, allowThumbnails, enableGrid, gridThreshold }"
             @update="update($event.field, $event.value)"
+          />
+        </v-col>
+        <v-col cols="12">
+          <food-search-hints
+            :model-value="hints"
+            @update:model-value="update('hints', $event)"
           />
         </v-col>
       </v-row>
@@ -84,45 +71,43 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import type { Prompts } from '@intake24/common/prompts';
-
 import { LanguageSelector } from '../../forms';
-import { basePrompt, foodBrowserProps, FoodBrowserSettings } from '../partials';
+import { foodBrowserProps, FoodBrowserSettings, FoodSearchHints, useBasePrompt } from '../partials';
 
-export default defineComponent({
-  name: 'GeneralAssociatedFoodsPrompt',
-
-  components: { FoodBrowserSettings, LanguageSelector },
-
-  mixins: [basePrompt, foodBrowserProps],
-
-  props: {
-    categoryCode: {
-      type: String as PropType<Prompts['general-associated-foods-prompt']['categoryCode']>,
-      required: true,
-    },
-    promptText: {
-      type: Object as PropType<Prompts['general-associated-foods-prompt']['promptText']>,
-      required: true,
-    },
-    genericName: {
-      type: Object as PropType<Prompts['general-associated-foods-prompt']['genericName']>,
-      required: true,
-    },
-    multiple: {
-      type: Boolean as PropType<Prompts['general-associated-foods-prompt']['multiple']>,
-      required: true,
-    },
-    skipPortionSize: {
-      type: Boolean as PropType<Prompts['general-associated-foods-prompt']['skipPortionSize']>,
-      required: true,
-    },
+const props = defineProps({
+  ...foodBrowserProps,
+  categoryCode: {
+    type: String as PropType<Prompts['general-associated-foods-prompt']['categoryCode']>,
+    required: true,
+  },
+  promptText: {
+    type: Object as PropType<Prompts['general-associated-foods-prompt']['promptText']>,
+    required: true,
+  },
+  genericName: {
+    type: Object as PropType<Prompts['general-associated-foods-prompt']['genericName']>,
+    required: true,
+  },
+  hints: {
+    type: Array as PropType<Prompts['general-associated-foods-prompt']['hints']>,
+    required: true,
+  },
+  multiple: {
+    type: Boolean as PropType<Prompts['general-associated-foods-prompt']['multiple']>,
+    required: true,
+  },
+  skipPortionSize: {
+    type: Boolean as PropType<Prompts['general-associated-foods-prompt']['skipPortionSize']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update, updateLanguage } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>
