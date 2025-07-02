@@ -234,6 +234,7 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         conditions,
         separateDrinks: true,
         inputAutoFocus: true,
+        hints: [],
       };
     case 'meal-time-prompt':
     case 'time-picker-prompt':

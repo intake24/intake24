@@ -1,19 +1,18 @@
 <template>
-  <v-card border class="w-100" flat>
+  <v-card>
     <v-toolbar color="grey-lighten-4">
       <v-icon color="secondary" end icon="fas fa-list" />
-      <div class="d-flex flex-column">
-        <v-toolbar-title class="font-weight-medium">
-          {{ $t(`${i18nPrefix}.title`) }}
-        </v-toolbar-title>
-      </div>
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t('common.list.title', { item: pluralize(item) }) }}
+      </v-toolbar-title>
     </v-toolbar>
     <v-card-text class="d-flex flex-column gr-4">
       <v-select
+        v-if="hasStandardItems"
         v-model="items"
         hide-details="auto"
         :items="standardItems"
-        :label="$t(`${i18nPrefix}.standard`)"
+        :label="$t('common.list.standard', { item: item.toLowerCase() })"
         multiple
       >
         <template #item="{ item, props }">
@@ -39,11 +38,26 @@
       <v-form ref="form" validate-on="submit" @submit.prevent="add">
         <v-text-field
           v-model="custom"
+          clearable
           hide-details="auto"
-          :label="$t(`${i18nPrefix}.custom`)"
+          :label="hasStandardItems ? $t('common.list.custom', { item: item.toLowerCase() }) : $t('common.list._', { item })"
           outlined
           :rules="rules"
-        />
+        >
+          <template #append-inner>
+            <v-btn
+              v-if="custom"
+              color="primary"
+              rounded="pill"
+              size="small"
+              :title="$t('common.action.add')"
+              @click="add"
+            >
+              <v-icon icon="$add" />
+              {{ $t('common.action.add') }}
+            </v-btn>
+          </template>
+        </v-text-field>
       </v-form>
     </v-card-text>
     <v-list class="list-border">
@@ -60,15 +74,15 @@
             {{ item }}
           </v-chip>
           <template #append>
-            <v-list-item-action v-if="!standardItems.includes(item)">
-              <v-btn icon="$edit" :title="$t(`${i18nPrefix}.edit`)" @click.stop="edit(index)" />
+            <v-list-item-action v-if="!standardItems.includes(item) && !custom">
+              <v-btn icon="$edit" :title="$t('common.list.edit', { item: item.toLowerCase() })" @click.stop="edit(index)" />
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
                 color="error"
                 icon
                 icon-left="$delete"
-                :label="$t(`${i18nPrefix}.remove`)"
+                :label="$t('common.list.remove', { item: item.toLowerCase() })"
                 @confirm="remove(index)"
               >
                 {{ $t('common.action.confirm.delete', { name: item }) }}
@@ -85,26 +99,27 @@
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
 
+import pluralize from 'pluralize';
 import { computed, ref, useTemplateRef } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
 
+import { VueDraggable } from 'vue-draggable-plus';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
 defineOptions({ name: 'CustomList' });
 
 const props = defineProps({
-  i18nPrefix: {
+  item: {
     type: String,
+    default: 'item',
+  },
+  modelValue: {
+    type: Array as PropType<string[]>,
     required: true,
   },
   standardItems: {
     type: Array as PropType<readonly string[]>,
     default: () => [],
-  },
-  modelValue: {
-    type: Array as PropType<string[]>,
-    required: true,
   },
 });
 
@@ -115,6 +130,7 @@ const { i18n: { t } } = useI18n();
 const form = useTemplateRef('form');
 
 const items = useVModel(props, 'modelValue', emit, { passive: true, deep: true });
+const hasStandardItems = computed(() => !!props.standardItems.length);
 const selectedStandardItems = computed(() => items.value.filter(item => props.standardItems.includes(item)));
 const custom = ref('');
 
