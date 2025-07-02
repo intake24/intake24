@@ -196,6 +196,15 @@
     "_": "JSON brut",
     "title": "Editeur de contenu JSON"
   },
+  "list": {
+    "_": "{item}",
+    "title": "{item}",
+    "add": "Add {item}",
+    "edit": "Edit {item}",
+    "remove": "Remove {item}",
+    "standard": "Standard {item}",
+    "custom": "Custom {item}"
+  },
   "file": {
     "csv": "Fichier CSV à importer"
   }

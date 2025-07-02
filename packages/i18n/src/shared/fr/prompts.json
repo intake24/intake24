@@ -114,6 +114,11 @@
     "back": "Retour vers les résultats",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p> Essayez de parcourir les catégories alimentaires listées ci-dessus pour trouver votre aliment.</p><p>Si vous ne le trouvez toujours pas, sélectionnez 'Créer un nouvel aliment'.</p>",
@@ -144,6 +149,11 @@
     "root": "toutes les catégories alimentaires",
     "back": "Retour vers les résultats",
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p> Essayez de parcourir les catégories alimentaires listées ci-dessus pour trouver votre aliment.</p><p>Si vous ne le trouvez toujours pas, sélectionnez 'Créer un nouvel aliment'.</p>",
@@ -159,7 +169,12 @@
     "add": "Ajouter",
     "drinksOnly": "Boissons",
     "foods": "Aliments et boissons",
-    "foodsOnly": "Aliments"
+    "foodsOnly": "Aliments",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    }
   },
   "externalSource": {
     "name": "Source externe",
@@ -200,6 +215,11 @@
     "pizza": "Parcourez la liste ci-dessous",
     "rootCategory": "La recherche est restreinte à la catégorie '{category}', affichée par ordre alphabétique.",
     "rootCategoryToggle": "Recherche restreinte à la catégorie '{category}'",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Créer un nouvel aliment'.</p>",
@@ -536,6 +556,11 @@
     "addMore": "Ajouter un autre",
     "noMore": "Complet",
     "remove": "Enlever",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missingAllIngredients": "Ajoutez au moins un ingrédient pour continuer.",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",

@@ -114,6 +114,11 @@
     "back": "Back to '{category}'",
     "none": "No food results. Try refining your search.",
     "refine": "Getting lots of matches — try being more specific to find the right one.",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "I can't find my food",
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
@@ -144,6 +149,11 @@
     "root": "all food categories",
     "back": "Back to '{category}'",
     "none": "No food results. Try refining your search.",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "I can't find my food",
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
@@ -159,7 +169,12 @@
     "add": "Add",
     "drinksOnly": "பானங்கள்",
     "foods": "Foods and drinks",
-    "foodsOnly": "Foods"
+    "foodsOnly": "Foods",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    }
   },
   "externalSource": {
     "name": "External source",
@@ -200,6 +215,11 @@
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
     "rootCategory": "Food search restricted to '{category}', displayed in alphabetical order.",
     "rootCategoryToggle": "Restrict food search to '{category}'",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "I can't find my food",
       "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
@@ -536,6 +556,11 @@
     "addMore": "Add more ingredients",
     "noMore": "No more ingredients",
     "remove": "Remove",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missingAllIngredients": "தொடர்வதற்கு குறைந்தபட்சம் ஒரு பொருளை சேர்க்கவும்.",
     "missing": {
       "label": "I can't find my food",
