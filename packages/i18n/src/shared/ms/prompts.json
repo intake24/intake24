@@ -114,6 +114,11 @@
     "back": "Pergi balik ke '{category}'",
     "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
     "refine": "Getting lots of matches — try being more specific to find the right one.",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "Saya tidak jumpa makanan saya",
       "description": "<p>Sila layari kategori makanan di atas untuk mencari makanan anda.</p><p>Jika anda masih tidak dapat mencari makanan anda 'Laporkan makanan hilang'.</p>",
@@ -144,6 +149,11 @@
     "root": "all food categories",
     "back": "Back to '{category}'",
     "none": "No food results. Try refining your search.",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "I can't find my food",
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
@@ -159,7 +169,12 @@
     "add": "Tambah",
     "drinksOnly": "Minuman",
     "foods": "Makanan dan Minuman",
-    "foodsOnly": "Makanan"
+    "foodsOnly": "Makanan",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    }
   },
   "externalSource": {
     "name": "External source",
@@ -200,6 +215,11 @@
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
     "rootCategory": "Food search restricted to '{category}', displayed in alphabetical order.",
     "rootCategoryToggle": "Restrict food search to '{category}'",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "Saya tidak jumpa makanan saya",
       "description": "<p>Kalau makanan yang dicari tiada dalam senarai, sila tukar penyataan dalam kotak carian di atas'.</p>",
@@ -536,6 +556,11 @@
     "addMore": "Tambah lagi bahan-bahan",
     "noMore": "Tiada lagi bahan-bahan",
     "remove": "Buang",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missingAllIngredients": "Sila tambah sekurang-kurangnya satu bahan untuk meneruskan.",
     "missing": {
       "label": "Saya tidak jumpa makanan saya",

@@ -21,36 +21,40 @@
           @update="update($event.field, $event.value)"
         />
       </v-col>
+      <v-col cols="12">
+        <food-search-hints
+          :model-value="hints"
+          @update:model-value="update('hints', $event)"
+        />
+      </v-col>
     </v-row>
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import type { Prompts } from '@intake24/common/prompts';
+import { foodBrowserProps, FoodBrowserSettings, FoodSearchHints, useBasePrompt } from '../partials';
 
-import { basePrompt, foodBrowserProps, FoodBrowserSettings } from '../partials';
-
-export default defineComponent({
-  name: 'FoodSearchPrompt',
-
-  components: { FoodBrowserSettings },
-
-  mixins: [basePrompt, foodBrowserProps],
-
-  props: {
-    allowBrowsing: {
-      type: Boolean as PropType<Prompts['food-search-prompt']['allowBrowsing']>,
-      required: true,
-    },
-    dualLanguage: {
-      type: Boolean as PropType<Prompts['food-search-prompt']['dualLanguage']>,
-      required: true,
-    },
+const props = defineProps({
+  ...foodBrowserProps,
+  allowBrowsing: {
+    type: Boolean as PropType<Prompts['food-search-prompt']['allowBrowsing']>,
+    required: true,
+  },
+  dualLanguage: {
+    type: Boolean as PropType<Prompts['food-search-prompt']['dualLanguage']>,
+    required: true,
+  },
+  hints: {
+    type: Array as PropType<Prompts['food-search-prompt']['hints']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

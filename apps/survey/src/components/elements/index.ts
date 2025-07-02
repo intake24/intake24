@@ -2,6 +2,7 @@ export { default as CategoryContentsView } from './CategoryContentsView.vue';
 export { default as ErrorAlert } from './ErrorAlert.vue';
 export { default as ExpansionPanelActions } from './ExpansionPanelActions.vue';
 export { default as FoodBrowser } from './FoodBrowser.vue';
+export { default as FoodSearchHints } from './FoodSearchHints.vue';
 export { default as ImagePlaceholder } from './ImagePlaceholder.vue';
 export { default as InfoAlert } from './InfoAlert.vue';
 export { default as MissingAllRecipeIngredients } from './MissingAllRecipeIngredients.vue';

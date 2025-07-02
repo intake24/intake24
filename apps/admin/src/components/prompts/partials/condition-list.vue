@@ -1,7 +1,7 @@
 <template>
-  <v-card flat>
-    <v-toolbar color="white">
-      <v-toolbar-title class="font-weight-medium mx-0">
+  <v-card border flat>
+    <v-toolbar color="grey-lighten-4">
+      <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.prompts.${prompt}.filter`) }}
       </v-toolbar-title>
       <v-spacer />

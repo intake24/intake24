@@ -114,6 +114,11 @@
     "back": "返回到 '{category}'",
     "none": "没有食物结果。请尝试优化您的搜索。",
     "refine": "Getting lots of matches — try being more specific to find the right one.",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "我找不到我的食物",
       "description": "<p>尝试浏览上面列出的食物类别来查找您的食物</p><p>如果您仍然找不到食物，请选择“报告找不到食物”.</p>",
@@ -144,6 +149,11 @@
     "root": "all food categories",
     "back": "Back to '{category}'",
     "none": "No food results. Try refining your search.",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "I can't find my food",
       "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
@@ -159,7 +169,12 @@
     "add": "添加",
     "drinksOnly": "饮料",
     "foods": "食物和饮料",
-    "foodsOnly": "食物"
+    "foodsOnly": "食物",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    }
   },
   "externalSource": {
     "name": "External source",
@@ -200,6 +215,11 @@
     "pizza": "如果你的披萨来自外卖店或餐馆，请在列表中选择该选项。",
     "rootCategory": "Food search restricted to '{category}', displayed in alphabetical order.",
     "rootCategoryToggle": "Restrict food search to '{category}'",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "我找不到我的食物",
       "description": "<p>如果在列表中找不到您的食物，请尝试在上面的搜索文本框中重新表述描述，然后点击“再次搜索”。</p><p>或者点击“浏览所有食物”并探索食品类别。</p><p>如果您仍然找不到您的食物，请点击“报告缺失的食物。</p>",
@@ -536,6 +556,11 @@
     "addMore": "添加更多配料",
     "noMore": "没有其他的配料",
     "remove": "去除",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missingAllIngredients": "请至少添加一个成分以继续。",
     "missing": {
       "label": "我找不到我的食物",

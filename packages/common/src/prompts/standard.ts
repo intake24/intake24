@@ -26,6 +26,7 @@ export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
   type: 'standard',
   id: 'associated-foods-prompt',
   name: 'Associated foods prompt',
+  hints: [],
   multiple: false,
   ...foodBrowserDefaults,
 });
@@ -38,6 +39,7 @@ export const editMealPrompt: Prompts['edit-meal-prompt'] = copy({
   name: 'Meal Edit prompt',
   separateDrinks: false,
   inputAutoFocus: true,
+  hints: [],
 });
 
 export const externalSourcePrompt: Prompts['external-source-prompt'] = copy({
@@ -68,6 +70,7 @@ export const foodSearchPrompt: Prompts['food-search-prompt'] = copy({
   allowBrowsing: true,
   dualLanguage: false,
   ...foodBrowserDefaults,
+  hints: [],
 });
 
 export const mealAddPrompt: Prompts['meal-add-prompt'] = copy({
@@ -214,6 +217,7 @@ export const generalAssociatedFoodsPrompt: Prompts['general-associated-foods-pro
   categoryCode: '',
   promptText: {},
   genericName: {},
+  hints: [],
   multiple: false,
   skipPortionSize: false,
   ...foodBrowserDefaults,

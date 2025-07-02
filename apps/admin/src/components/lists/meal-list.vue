@@ -2,7 +2,7 @@
   <v-card flat tile>
     <v-toolbar color="grey-lighten-2">
       <v-icon color="secondary" end icon="fas fa-hamburger" />
-      <div class="d-flex flex-column">
+      <div class="d-flex flex-column ms-4">
         <v-toolbar-title class="font-weight-medium">
           {{ title }}
         </v-toolbar-title>
@@ -135,7 +135,9 @@
                   <v-col cols="12" md="6">
                     <custom-list
                       v-model="dialog.meal.flags"
-                      i18n-prefix="survey-schemes.meals.flags"
+                      border
+                      flat
+                      :item="$t('survey-schemes.meals.flag')"
                       :standard-items="staticMealFlags"
                     />
                   </v-col>

@@ -210,6 +210,16 @@
     "title": "JSON Content editor"
   },
 
+  "list": {
+    "_": "{item}",
+    "title": "{item}",
+    "add": "Add {item}",
+    "edit": "Edit {item}",
+    "remove": "Remove {item}",
+    "standard": "Standard {item}",
+    "custom": "Custom {item}"
+  },
+
   "file": {
     "csv": "CSV file to upload"
   }

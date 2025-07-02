@@ -25,6 +25,7 @@ Prompt to add additional foods as linked foods. Prompt can be added to `food`, `
 ### Associated foods prompt
 
 - `multiple` - allow multiple foods to be selected
+- `hints` - hints to be displayed in the prompt based on the search query (inline alerts)
 
 #### Food browser settings
 
@@ -36,9 +37,8 @@ Prompt to add additional foods as linked foods. Prompt can be added to `food`, `
 
 Edit meal prompt allows initial entry of food and drink before portion-size estimation.
 
-#### Options
-
 - `separateDrinks` - show drinks separately
+- `hints` - hints to be displayed in the prompt based on the search query (pop-up alerts)
 
 ### External source prompt
 
@@ -64,6 +64,8 @@ Terminal prompt that is shown at the end of the recall. It offers home button It
 - `rating` - 5-star rating with optional comment to be submitted after the recall
 
 ### Food search prompt
+
+- `hints` - hints to be displayed in the prompt based on the search query (inline alerts)
 
 #### Food browser settings
 
@@ -358,6 +360,8 @@ Portion size option selection prompt
 ### Recipe builder prompt
 
 Recipe builder prompt for foods with multiple ingredients, such as sandwiches, salads etc. Recipe foods can be defined in [locales recipe-foods](/admin/localization/locales#recipe-foods).
+
+- `hints` - hints to be displayed in the prompt based on the search query (inline alerts)
 
 #### Food browser settings
 

@@ -11,45 +11,55 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="8" sm="10">
-          <v-form @submit.prevent="moveToList">
-            <div class="d-flex">
-              <v-text-field
-                ref="search"
-                v-model.trim="newFood.description"
-                hide-details
-                :name="`${mode}-food`"
-                :placeholder="promptI18n.title"
-                @keydown.prevent.stop.enter="moveToList"
-                @update:model-value="updateFood"
-              >
-                <template v-if="$vuetify.display.xs" #append>
-                  <v-icon
-                    class="px-2"
-                    :disabled="!newFood.description.length"
-                    :title="promptI18n.add"
-                    @click="moveToList"
+          <food-search-hints
+            activator="manual"
+            mode="dialog"
+            :model-value="newFood.description"
+            :prompt
+            @confirm="moveToList"
+          >
+            <template #default="{ checkForHints }">
+              <v-form @submit.prevent="checkForHints">
+                <div class="d-flex">
+                  <v-text-field
+                    ref="search"
+                    v-model.trim="newFood.description"
+                    hide-details
+                    :name="`${mode}-food`"
+                    :placeholder="promptI18n.title"
+                    @keydown.prevent.stop.enter="checkForHints"
+                    @update:model-value="updateFood"
                   >
-                    fas fa-turn-down fa-rotate-90
-                  </v-icon>
-                </template>
-              </v-text-field>
-              <v-btn
-                v-if="$vuetify.display.smAndUp"
-                class="ms-2"
-                color="primary"
-                :disabled="!newFood.description.length"
-                height="initial"
-                size="x-large"
-                :title="promptI18n.add"
-                @click="moveToList"
-              >
-                <v-icon start>
-                  fas fa-turn-down fa-rotate-90
-                </v-icon>
-                {{ promptI18n.add }}
-              </v-btn>
-            </div>
-          </v-form>
+                    <template v-if="$vuetify.display.xs" #append>
+                      <v-icon
+                        class="px-2"
+                        :disabled="!newFood.description.length"
+                        :title="promptI18n.add"
+                        @click="checkForHints"
+                      >
+                        fas fa-turn-down fa-rotate-90
+                      </v-icon>
+                    </template>
+                  </v-text-field>
+                  <v-btn
+                    v-if="$vuetify.display.smAndUp"
+                    class="ms-2"
+                    color="primary"
+                    :disabled="!newFood.description.length"
+                    height="initial"
+                    size="x-large"
+                    :title="promptI18n.add"
+                    @click="checkForHints"
+                  >
+                    <v-icon start>
+                      fas fa-turn-down fa-rotate-90
+                    </v-icon>
+                    {{ promptI18n.add }}
+                  </v-btn>
+                </div>
+              </v-form>
+            </template>
+          </food-search-hints>
           <v-list v-if="foods.length" class="list-border" density="compact">
             <v-list-item
               v-for="(food, idx) in foods"
@@ -64,7 +74,6 @@
               <v-text-field
                 v-if="food.type === 'free-text'"
                 v-model.trim="food.description"
-                class="v-input-basis-stretch"
                 density="compact"
                 hide-details
                 variant="underlined"
@@ -99,17 +108,16 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import type { VTextField } from 'vuetify/components';
 import { useDebounceFn } from '@vueuse/core';
 import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue';
-
-import type { Prompt } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { FoodState, FreeTextFood, PromptSection } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { getEntityId } from '@intake24/survey/util';
 import { ConfirmDialog } from '@intake24/ui';
+import { FoodSearchHints } from '../../elements';
 
 defineOptions({ name: 'EditableFoodList' });
 
@@ -123,7 +131,7 @@ const props = defineProps({
     default: 'foods',
   },
   prompt: {
-    type: Object as PropType<Prompt>,
+    type: Object as PropType<Prompts['edit-meal-prompt']>,
     required: true,
   },
   section: {
@@ -215,7 +223,4 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.v-input-basis-stretch {
-  flex: 1 1 100%;
-}
 </style>

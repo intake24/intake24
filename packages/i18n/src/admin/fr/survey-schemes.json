@@ -47,14 +47,7 @@
     "remove": "Enlever le repas",
     "name": "Nom du repas",
     "defaultTime": "Default time",
-    "flags": {
-      "title": "Meal flags",
-      "add": "Add flag",
-      "edit": "Edit flag",
-      "remove": "Remove flag",
-      "standard": "Standard",
-      "custom": "Custom"
-    },
+    "flag": "Meal flag",
     "reset": {
       "_": "Réinitialiser les repas",
       "text": "Réinitialiser les repas à une liste par défaut"
@@ -448,6 +441,15 @@
       "confirm": "Require confirmation",
       "fraction": "Use fractions",
       "whole": "Use whole numbers"
+    },
+    "foodSearchHints": {
+      "_": "Food hint",
+      "title": "Food hints",
+      "add": "Add hint",
+      "edit": "Edit hint",
+      "remove": "Remove hint",
+      "keyword": "Hint keyword",
+      "text": "Hint text"
     },
     "slider": {
       "_": "Curseur",

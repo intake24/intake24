@@ -114,6 +114,11 @@
     "back": "العودة إلى '{category}'",
     "none": "لا توجد نتائج للطعام. حاول تحسين بحثك",
     "refine": "لقد وجد البحث الكثير من النتائج. يمكنك محاولة تحسين بحثك",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "لا يمكنني إيجاد طعامي",
       "description": "<p>Tجرب تصفح فئات الطعام المذكورة أعلاه للعثور على طعامك</p><p>إذا لم تتمكن من العثور على طعامك، اختر 'الإبلاغ عن طعام مفقود'.</p>",
@@ -144,6 +149,11 @@
     "root": "جميع فئات الطعام",
     "back": "العودة إلى '{category}'",
     "none": "لا توجد نتائج للطعام. حاول تحسين بحثك",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "لا أستطيع العثور على طعامي",
       "description": "<p>جرب تصفح فئات الطعام المذكورة أعلاه للعثور على طعامك</p><p>إذا لم تتمكن من العثور على طعامك، اختر 'الإبلاغ عن طعام مفقود'.</p>",
@@ -159,7 +169,12 @@
     "add": "إضافة",
     "drinksOnly": "المشروبات",
     "foods": "الأطعمة والمشروبات",
-    "foodsOnly": "الأطعمة"
+    "foodsOnly": "الأطعمة",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    }
   },
   "externalSource": {
     "name": "مصدر خارجي",
@@ -200,6 +215,11 @@
     "pizza": "إذا كانت البيتزا التي تناولتها من مطعم أو طلبت كوجبة جاهزة، اختر هذا الخيار من القائمة",
     "rootCategory": "Food search restricted to '{category}', displayed in alphabetical order.",
     "rootCategoryToggle": "Restrict food search to '{category}'",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missing": {
       "label": "لا أستطيع العثور على طعامي",
       "description": "<p>إذا لم تتمكن من العثور على طعامك في القائمة،, حاول إعادة صياغة الوصف في مربع البحث أعلاه.</p><p>Or اختر 'تصفح جميع الأطعمة' واستعرض فئات الطعام.</p><p>إذا لم تتمكن من العثور على طعامك، اختر 'الإبلاغ عن طعام مفقود'.</p>",
@@ -536,6 +556,11 @@
     "addMore": "أضف آخر",
     "noMore": "تم",
     "remove": "إزالة",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
     "missingAllIngredients": "أضف مكون إضافي آخر للإكمال",
     "missing": {
       "label": "لا يمكنني إيجاد طعامي",
