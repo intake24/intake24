@@ -11,18 +11,14 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { foodBrowserProps, FoodBrowserSettings, useBasePrompt } from '../partials';
 
-import { basePrompt, foodBrowserProps, FoodBrowserSettings } from '../partials';
+const props = defineProps(foodBrowserProps);
 
-export default defineComponent({
-  name: 'RecipeBuilderFoodPrompt',
+const emit = defineEmits(['update:options']);
 
-  components: { FoodBrowserSettings },
-
-  mixins: [basePrompt, foodBrowserProps],
-});
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

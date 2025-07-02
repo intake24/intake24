@@ -50,14 +50,7 @@
     "remove": "Remove meal",
     "name": "Meal name",
     "defaultTime": "Default time",
-    "flags": {
-      "title": "Meal flags",
-      "add": "Add flag",
-      "edit": "Edit flag",
-      "remove": "Remove flag",
-      "standard": "Standard",
-      "custom": "Custom"
-    },
+    "flag": "Meal flag",
     "reset": {
       "_": "Reset meals",
       "text": "Reset meals to default list"
@@ -452,6 +445,15 @@
       "confirm": "Require confirmation",
       "fraction": "Use fractions",
       "whole": "Use whole numbers"
+    },
+    "foodSearchHints": {
+      "_": "Food hint",
+      "title": "Food hints",
+      "add": "Add hint",
+      "edit": "Edit hint",
+      "remove": "Remove hint",
+      "keyword": "Hint keyword",
+      "text": "Hint text"
     },
     "slider": {
       "_": "Slider",
