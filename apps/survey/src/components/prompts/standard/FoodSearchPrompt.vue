@@ -58,9 +58,7 @@ const rootCategory = computed(() => {
   return props.food?.flags.includes('is-drink') ? drinksCategory : foodsCategory;
 });
 
-const rootCategoryToggleable = computed(() => {
-  return props.food?.flags?.find(flag => flag.startsWith('search-category-toggle:')) !== undefined;
-});
+const rootCategoryToggleable = computed(() => !!props.food?.flags?.find(flag => flag.startsWith('search-category-toggle:')));
 
 async function foodSelected(food: FoodHeader) {
   const foodData = await foodsService.getData(props.localeId, food.code);

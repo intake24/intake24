@@ -1,23 +1,28 @@
 <template>
   <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" class="py-2" :flat="!dialog">
-    <v-text-field
-      ref="searchRef"
-      v-model="searchTerm"
+    <food-search-hints
       class="mb-4"
-      clearable
-      flat
-      hide-details
-      :label="promptI18n.search"
-      :placeholder="promptI18n.search"
-      prepend-inner-icon="$search"
-      :rounded="dialog ? 'pill' : undefined"
-      @focus="openInDialog"
-    />
+      :model-value="searchTerm"
+      :prompt
+    >
+      <v-text-field
+        ref="searchRef"
+        v-model="searchTerm"
+        clearable
+        flat
+        hide-details
+        :label="promptI18n.search"
+        :placeholder="promptI18n.search"
+        prepend-inner-icon="$search"
+        :rounded="dialog ? 'pill' : undefined"
+        @focus="openInDialog"
+      />
+    </food-search-hints>
     <v-switch
       v-if="rootCategory && rootCategoryToggleable"
       v-model="limitToRootCategory"
       class="root-category-toggle"
-      dense
+      density="compact"
       hide-details="auto"
       :label="$t('prompts.foodSearch.rootCategoryToggle', { category: rootCategoryName })"
     />
@@ -164,14 +169,12 @@ import { watchDebounced } from '@vueuse/core';
 import { computed, nextTick, onMounted, ref } from 'vue';
 import { useGoTo } from 'vuetify';
 import { VCard } from 'vuetify/components';
-
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { RecipeFood } from '@intake24/common/types';
 import type {
   CategoryContents,
   CategoryHeader,
-
   FoodHeader,
   FoodSearchResponse,
 } from '@intake24/common/types/http';
@@ -180,13 +183,16 @@ import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 import { sendGtmEvent } from '@intake24/ui/tracking';
-
 import CategoryContentsView from './CategoryContentsView.vue';
 import FoodBrowserDialog from './FoodBrowserDialog.vue';
+import FoodSearchHints from './FoodSearchHints.vue';
 import ImagePlaceholder from './ImagePlaceholder.vue';
 import MissingFoodPanel from './MissingFoodPanel.vue';
 
-defineOptions({ name: 'FoodBrowser', components: { FoodBrowserDialog, VCard } });
+defineOptions({
+  name: 'FoodBrowser',
+  components: { FoodBrowserDialog, VCard },
+});
 
 const props = defineProps({
   inDialog: {
@@ -205,7 +211,6 @@ const props = defineProps({
   },
   rootCategoryToggleable: {
     type: Boolean,
-    required: false,
     default: false,
   },
   includeHidden: {
@@ -228,12 +233,10 @@ const props = defineProps({
   },
   stepName: {
     type: String,
-    required: false,
     default: '',
   },
   requiredToFill: {
     type: Boolean,
-    required: false,
     default: false,
   },
 });
