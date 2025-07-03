@@ -1,20 +1,19 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid, sabOptions }" @action="action">
     <v-card-text class="pt-2 d-flex">
-      <v-card border flat width="100%">
-        <v-list class="px-4" color="grey-lighten-4">
+      <v-card v-if="showSABcard" class="border flat width=100%">
+        <v-list v-if="serving || quantity || showLeftovers" class="px-4" color="grey-lighten-4">
           <v-list-subheader>{{ translate(sabFood.food.data.localName) }}</v-list-subheader>
           <v-divider />
-          <v-list-item class="ps-0" density="compact">
-            <v-checkbox
-              v-model="sabOptions.serving"
-              class="custom-checkbox"
-              density="compact"
-              :label="promptI18n.serving"
-              :value="true"
-            />
+          <v-list-item v-if="serving" class="ps-0" density="compact">
+            <v-list-item-title>
+              {{ promptI18n.serving }}
+            </v-list-item-title>
+            <template #prepend>
+              <v-icon icon="fas fa-caret-right" />
+            </template>
           </v-list-item>
-          <v-list-item v-if="quantity > 1" class="ps-0" density="compact">
+          <v-list-item v-if="quantity" class="ps-0" density="compact">
             <template #prepend>
               <v-icon icon="fas fa-caret-right" />
             </template>
@@ -51,13 +50,12 @@
           <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
           <v-divider />
           <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
-            <v-checkbox
-              v-model="sabOptions.noAddedFoods"
-              class="custom-checkbox"
-              density="compact"
-              :label="promptI18n.noAddedFoods"
-              :value="true"
-            />
+            <template #prepend>
+              <v-icon icon="fas fa-caret-right" />
+            </template>
+            <v-list-item-title>
+              {{ promptI18n.noAddedFoods }}
+            </v-list-item-title>
           </v-list-item>
           <template v-if="linkedFoods.length">
             <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="ps-0" density="compact">
@@ -111,36 +109,42 @@
       </v-card>
     </v-card-text>
     <template #actions>
-      <v-btn
-        :title="promptI18n.notSame"
-        @click.stop="action('notSame')"
-      >
-        <v-icon icon="$no" start />
-        {{ promptI18n.notSame }}
-      </v-btn>
-      <v-btn
-        :title="promptI18n.same"
-        variant="text"
-        @click.stop="onSame"
-      >
-        <v-icon icon="$yes" start />
-        {{ promptI18n.same }}
-      </v-btn>
+      <template v-if="!showSABcard">
+        <v-btn :title="promptI18n.notSame" variant="text" @click.stop="action('notSame')">
+          <v-icon icon="$no" start /> {{ promptI18n.notSame }}
+        </v-btn>
+        <v-btn :title="promptI18n.same" @click.stop="showSABcard = !showSABcard">
+          <v-icon icon="$add" start /> {{ promptI18n.same }}
+        </v-btn>
+      </template>
+      <template v-else>
+        <v-btn block color="primary" :title="$t('common.action.continue')" variant="flat" @click.stop="onSame">
+          <v-icon icon="$next" start /> {{ $t('common.action.continue') }}
+        </v-btn>
+      </template>
     </template>
     <template #nav-actions>
-      <v-btn color="primary" :title="$t('common.action.no')" variant="text" @click.stop="action('notSame')">
-        <span class="text-overline font-weight-medium">
-          {{ $t('common.action.no') }}
-        </span>
-        <v-icon class="pb-1" icon="$no" />
-      </v-btn>
-      <v-divider vertical />
-      <v-btn color="primary" title="$t('common.action.yes')" variant="text" @click.stop="onSame">
-        <span class="text-overline font-weight-medium">
-          {{ $t('common.action.continue') }}
-        </span>
-        <v-icon class="pb-1" icon="$yes" />
-      </v-btn>
+      <template v-if="!showSABcard">
+        <v-btn color="primary" :title="promptI18n.notSame" variant="text" @click.stop="action('notSame')">
+          <span class="text-overline font-weight-medium">
+            {{ promptI18n.notSame }}</span>
+          <v-icon class="pb-1" icon="$no" />
+        </v-btn>
+        <v-divider vertical />
+        <v-btn color="primary" :title="promptI18n.same" @click.stop="showSABcard = !showSABcard">
+          <span class="text-overline font-weight-medium">
+            {{ promptI18n.same }}</span>
+          <v-icon class="pb-1" icon="$add" />
+        </v-btn>
+      </template>
+      <template v-else>
+        <v-btn block color="primary" title="$t('common.action.continue')" variant="flat" @click.stop="onSame">
+          <span class="text-overline font-weight-medium">
+            {{ $t('common.action.continue') }}
+          </span>
+          <v-icon class="pb-1" icon="$next" />
+        </v-btn>
+      </template>
     </template>
   </card-layout>
 </template>
@@ -170,6 +174,7 @@ const emit = defineEmits(['action', 'update:modelValue', 'update:sabOptions']);
 // Reactive state for "options"
 const sabOptions = ref<Record<string, any>>({});
 
+const showSABcard = ref(false); // New reactive state for showing/hiding card text
 const { i18n: { t, locale }, translate } = useI18n();
 const { action, translatePrompt, type } = usePromptUtils(props, { emit });
 const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
