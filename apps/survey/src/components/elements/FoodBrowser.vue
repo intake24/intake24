@@ -21,7 +21,16 @@
       hide-details="auto"
       :label="$t('prompts.foodSearch.rootCategoryToggle', { category: rootCategoryName })"
     />
-    <v-alert v-if="rootCategory && !rootCategoryToggleable" class="mb-2 pa-2" :text="$t('prompts.foodSearch.rootCategory', { category: rootCategoryName })" type="info" />
+    <v-alert
+      v-if="rootCategory && !rootCategoryToggleable"
+      border="start"
+      class="mb-4"
+      density="compact"
+      icon="fas fa-lightbulb"
+      rounded="lg"
+      :text="$t('prompts.foodSearch.rootCategory', { category: rootCategoryName })"
+      type="warning"
+    />
     <template v-if="recipeBuilderToggle">
       <v-btn
         v-for="recipeBuilderFood in recipeBuilderFoods"
@@ -61,9 +70,6 @@
           <v-icon icon="fas fa-turn-up fa-flip-horizontal" start />
           {{ promptI18n.back }}
         </v-btn>
-        <v-list-subheader v-else class="font-weight-bold">
-          {{ promptI18n.browse }}
-        </v-list-subheader>
         <image-placeholder v-if="requestInProgress" class="my-6" />
         <category-contents-view
           v-if="currentCategoryContents && !requestInProgress"

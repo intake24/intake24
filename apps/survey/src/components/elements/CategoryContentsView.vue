@@ -3,29 +3,29 @@
     <v-alert
       v-if="!contents.subcategories.length && !contents.foods.length"
       border="start"
-      class="py-2"
-      icon="fas fa-triangle-exclamation"
-      type="info"
+      density="compact"
+      icon="fas fa-lightbulb"
+      type="warning"
     >
       {{ i18n.none }}
     </v-alert>
     <v-alert
       v-if="containsPizza"
       border="start"
-      class="py-2"
+      density="compact"
       icon="fas fa-lightbulb"
       rounded="lg"
-      type="info"
+      type="warning"
     >
       {{ i18n.pizza }}
     </v-alert>
     <v-alert
       v-if="contents.foods.length >= 50 && type === 'foodSearch'"
       border="start"
-      class="py-2"
-      icon="fas fa-lightbulb"
+      density="compact"
+      icon="fas fa-wrench"
       rounded="lg"
-      type="info"
+      type="warning"
     >
       {{ i18n.refine }}
     </v-alert>

@@ -198,7 +198,7 @@
     "none": "没有食物结果。请尝试优化您的搜索。",
     "refine": "搜索已经找到了很多结果。您可以尝试优化搜索。",
     "pizza": "如果你的披萨来自外卖店或餐馆，请在列表中选择该选项。",
-    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategory": "Food search restricted to '{category}', displayed in alphabetical order.",
     "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "我找不到我的食物",

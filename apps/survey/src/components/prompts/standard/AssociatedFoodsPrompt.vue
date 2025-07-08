@@ -45,13 +45,13 @@
                 color="grey-lighten-4"
                 flat
               >
-                <v-card-text class="pa-2">
-                  <v-row align="center" justify="space-between" no-gutters>
+                <v-card-text class="px-4 py-4 py-sm-2">
+                  <v-row align="center" class="gr-4" justify="space-between" no-gutters>
                     <v-col class="text-h6" cols="12" sm="auto">
                       <v-icon icon="$food" start />
                       {{ associatedFoodDescription(foodItem) }}
                     </v-col>
-                    <v-col class="pt-2 pt-sm-0 d-flex flex-column ga-1" cols="12" sm="auto">
+                    <v-col class="d-flex flex-column ga-1" cols="12" sm="auto">
                       <v-btn
                         color="primary"
                         :title="promptI18n['select.different']"
