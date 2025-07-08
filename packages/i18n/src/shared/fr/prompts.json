@@ -198,7 +198,7 @@
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "pizza": "Parcourez la liste ci-dessous",
-    "rootCategory": "La recherche est restreinte à la catégorie '{category}'",
+    "rootCategory": "La recherche est restreinte à la catégorie '{category}', affichée par ordre alphabétique.",
     "rootCategoryToggle": "Recherche restreinte à la catégorie '{category}'",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",

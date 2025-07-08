@@ -198,7 +198,7 @@
     "none": "لا توجد نتائج للطعام. حاول تحسين بحثك",
     "refine": "لقد وجد البحث الكثير من النتائج. يمكنك محاولة تقنين بحثك",
     "pizza": "إذا كانت البيتزا التي تناولتها من مطعم أو طلبت كوجبة جاهزة، اختر هذا الخيار من القائمة",
-    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategory": "Food search restricted to '{category}', displayed in alphabetical order.",
     "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "لا أستطيع العثور على طعامي",

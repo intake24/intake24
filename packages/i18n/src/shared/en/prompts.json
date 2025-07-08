@@ -198,7 +198,7 @@
     "none": "No food results. Try refining your search.",
     "refine": "Getting lots of matches — try being more specific to find the right one.",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
-    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategory": "Food search restricted to '{category}', displayed in alphabetical order.",
     "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "I can't find my food",

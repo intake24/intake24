@@ -198,7 +198,7 @@
     "none": "Tiada makanan tersebut. Sila kecilkan carian anda.",
     "refine": "Terdapat banyak keputusan berdasarkan carian anda. Sila kecilkan carian anda.",
     "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
-    "rootCategory": "Food search restricted to '{category}'",
+    "rootCategory": "Food search restricted to '{category}', displayed in alphabetical order.",
     "rootCategoryToggle": "Restrict food search to '{category}'",
     "missing": {
       "label": "Saya tidak jumpa makanan saya",
