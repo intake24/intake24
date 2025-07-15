@@ -140,6 +140,7 @@ import { useLocale } from 'vuetify';
 
 import { useI18n } from '@intake24/i18n';
 import { Navigation } from '@intake24/survey/components/layouts';
+import { sendGtmEvent } from '@intake24/survey/util';
 import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 import { useHttp } from './services';
 import { useAuth, useSurvey } from './stores';
@@ -171,6 +172,9 @@ export default defineComponent({
 
     async function logout() {
       await useAuth().logout(true);
+      sendGtmEvent({
+        event: 'surveyLogout',
+      });
       await router.push(
         surveyId.value ? { name: 'survey-login', params: { surveyId: surveyId.value } } : { name: 'home' },
       );

@@ -132,7 +132,7 @@ import type { PropType } from 'vue';
 import { defineComponent, reactive } from 'vue';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
-import { sendGtmEvent } from '@intake24/ui/tracking';
+import { sendGtmEvent } from '@intake24/survey/util';
 import NoImagePlaceholder from './NoImagePlaceholder.vue';
 
 export default defineComponent({
@@ -228,7 +228,6 @@ export default defineComponent({
         search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
-        noninteraction: false,
       });
     },
 
@@ -241,7 +240,6 @@ export default defineComponent({
         search_term: this.searchTerm,
         search_count: this.searchCount,
         percent_scrolled: this.percentScrolled,
-        noninteraction: false,
       });
     },
 
