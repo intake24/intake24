@@ -89,9 +89,9 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-
 import { useAuth } from '@intake24/survey/stores';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
+import { sendGtmEvent } from '@intake24/ui/tracking';
 
 import { useLogin } from './use-login';
 
@@ -140,6 +140,11 @@ async function submit() {
 }
 
 onMounted(async () => {
+  sendGtmEvent({
+    event: 'surveyLogin',
+    scheme_prompts: 'preMeals',
+    noninteraction: false,
+  });
   await fetchSurveyPublicInfo();
   if (!survey.value) {
     await router.push({ name: 'home' });
