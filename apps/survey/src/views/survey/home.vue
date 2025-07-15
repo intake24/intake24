@@ -330,6 +330,7 @@ import { useRouter } from 'vue-router';
 import type { SurveySubmissionEntry } from '@intake24/common/types/http';
 import { userService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
+import { sendGtmEvent } from '@intake24/survey/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
@@ -362,6 +363,11 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      sendGtmEvent({
+        event: 'surveyHome',
+        action: 'login',
+        scheme_prompts: 'preMeals',
+      });
       submissions.value = await userService.submissions(props.surveyId);
     });
 

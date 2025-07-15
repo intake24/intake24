@@ -10,8 +10,8 @@ import type { LocaleContentOptions } from '@intake24/i18n';
 import { useI18n } from '@intake24/i18n';
 
 import { useSurvey } from '@intake24/survey/stores';
+import { sendGtmEvent } from '@intake24/survey/util';
 import { promptType } from '@intake24/ui';
-import { sendGtmEvent } from '@intake24/ui/tracking';
 import type { GtmEventParams } from '@intake24/ui/tracking';
 import { useFoodUtils } from './use-food-utils';
 import { useMealUtils } from './use-meal-utils';
@@ -111,12 +111,11 @@ export function usePromptUtils<
     if (type !== 'next') {
       console.debug(`track event in use-prompt-utils: ${type}`);
       const gtmEventParams: GtmEventParams = {
-        event: type,
+        event: type as GtmEventParams['event'],
         action: type,
         prompt_id: props.prompt.id,
         meal: mealName.value,
         food: foodName.value,
-        noninteraction: false,
       };
       if (type === 'cancel') {
         gtmEventParams.event = 'deleteMeal';

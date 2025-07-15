@@ -1,5 +1,5 @@
 <template>
-  <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" v-scroll="onScroll" class="py-2" :flat="!dialog">
+  <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" class="py-2" :flat="!dialog">
     <v-text-field
       ref="searchRef"
       v-model="searchTerm"
@@ -46,7 +46,7 @@
         {{ $t(`prompts.recipeBuilder.label`, { searchTerm: recipeBuilderFood?.name }) }}
       </v-btn>
     </template>
-    <v-tabs-window v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab">
+    <v-tabs-window v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab" v-scroll="onScroll">
       <v-tabs-window-item key="browse">
         <v-alert
           v-if="requestFailed"
@@ -174,6 +174,7 @@ import type {
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
+import { sendGtmEvent } from '@intake24/survey/util';
 
 import CategoryContentsView from './CategoryContentsView.vue';
 import FoodBrowserDialog from './FoodBrowserDialog.vue';
@@ -233,7 +234,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'recipeBuilder', 'update:modelValue', 'foodSkipped']);
-
 const goTo = useGoTo();
 
 const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
@@ -410,7 +410,7 @@ async function recipeBuilderDetected(foods: FoodHeader[]) {
 async function search() {
   if (!searchTerm.value)
     return;
-
+  percentScrolled.value = 0;
   requestInProgress.value = true;
   recipeBuilderToggle.value = false;
   recipeBuilderFoods.value = [];
@@ -432,6 +432,14 @@ async function search() {
           return true;
         },
       );
+      sendGtmEvent({
+        event: 'foodSearch',
+        scheme_prompts: 'foods',
+        search_term: searchTerm.value,
+        search_term_order: searchCount.value,
+        search_results_count: searchResults.value.foods.length,
+        percent_scrolled: percentScrolled.value,
+      });
       if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0 && (!props.rootCategory || !limitToRootCategory.value))
         await recipeBuilderDetected(recipeBuilderFoods.value);
       requestFailed.value = false;
@@ -515,11 +523,11 @@ watchDebounced(
     emit('update:modelValue', searchTerm.value ?? '');
 
     if (searchTerm.value) {
+      searchCount.value++;
       await search();
       currentCategoryContents.value = undefined;
       navigationHistory.value = [];
       tab.value = 1;
-      searchCount.value++;
       percentScrolled.value = 0;
       return;
     }
