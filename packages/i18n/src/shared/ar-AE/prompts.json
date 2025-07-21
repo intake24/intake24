@@ -116,7 +116,7 @@
     "refine": "لقد وجد البحث الكثير من النتائج. يمكنك محاولة تحسين بحثك",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -151,7 +151,7 @@
     "none": "لا توجد نتائج للطعام. حاول تحسين بحثك",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -172,7 +172,7 @@
     "foodsOnly": "الأطعمة",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     }
   },
@@ -217,7 +217,7 @@
     "rootCategoryToggle": "Restrict food search to '{category}'",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -554,7 +554,7 @@
     "remove": "إزالة",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missingAllIngredients": "أضف مكون إضافي آخر للإكمال",

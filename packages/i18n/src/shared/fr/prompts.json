@@ -116,7 +116,7 @@
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -151,7 +151,7 @@
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -172,7 +172,7 @@
     "foodsOnly": "Aliments",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     }
   },
@@ -217,7 +217,7 @@
     "rootCategoryToggle": "Recherche restreinte à la catégorie '{category}'",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -558,7 +558,7 @@
     "remove": "Enlever",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missingAllIngredients": "Ajoutez au moins un ingrédient pour continuer.",

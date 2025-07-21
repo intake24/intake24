@@ -33,7 +33,7 @@
           </v-alert>
           <v-alert
             color="warning"
-            icon="fas fa-lightbulb"
+            icon="fas fa-wrench"
             variant="tonal"
           >
             {{ hint }}
@@ -44,7 +44,7 @@
             class="px-4"
             color="secondary"
             :title="promptI18n['hints.tryAgain']"
-            variant="tonal"
+            variant="text"
             @click="tryAgain"
           >
             <v-icon icon="fas fa-rotate-left" start />
@@ -55,7 +55,7 @@
             class="px-4"
             color="primary"
             :title="promptI18n['hints.confirm']"
-            variant="tonal"
+            variant="text"
             @click="confirm"
           >
             <v-icon icon="fas fa-check" start />
@@ -68,8 +68,9 @@
 </template>
 
 <script lang="ts" setup>
+import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
-import { computed, type PropType, ref } from 'vue';
+import { computed, ref } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -112,7 +113,7 @@ const hint = ref<string | null>(null);
 
 const trigger = computed(() =>
   new RegExp(
-    props.prompt.hints.map(({ keyword }) => `(?<${keyword.join('_')}>${keyword.join('|')})`).join('|'),
+    props.prompt.hints.filter(({ keyword }) => keyword.length).map(({ keyword }) => `(?<${keyword.join('_')}>${keyword.join('|')})`).join('|'),
     'i',
   ),
 );

@@ -116,7 +116,7 @@
     "refine": "Getting lots of matches — try being more specific to find the right one.",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -151,7 +151,7 @@
     "none": "No food results. Try refining your search.",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -172,7 +172,7 @@
     "foodsOnly": "食物",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     }
   },
@@ -217,7 +217,7 @@
     "rootCategoryToggle": "Restrict food search to '{category}'",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missing": {
@@ -554,7 +554,7 @@
     "remove": "去除",
     "hints": {
       "label": "You have entered",
-      "confirm": "Continue",
+      "confirm": "Keep",
       "tryAgain": "Try again"
     },
     "missingAllIngredients": "请至少添加一个成分以继续。",
