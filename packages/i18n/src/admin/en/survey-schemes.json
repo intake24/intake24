@@ -653,7 +653,8 @@
     },
     "same-as-before-prompt": {
       "title": "Same as before",
-      "subtitle": "Ask if food was same as before"
+      "subtitle": "Ask if food was same as before",
+      "skipToSAB": "Skip the 'No/Yes/Display Details' screen"
     },
     "sleep-schedule-prompt": {
       "title": "Sleep schedule",
