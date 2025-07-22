@@ -90,6 +90,7 @@
     "remove": "Supprimer l'option",
     "key": "Key",
     "label": "Libellé",
+    "shortLabel": "Libellé court",
     "value": "Valeur",
     "exclusive": "Exclusive",
     "selected": "Selected"

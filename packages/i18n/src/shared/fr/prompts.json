@@ -294,7 +294,7 @@
   "sameAsBefore": {
     "name": "Comme précédemment",
     "text": "",
-    "description": "<p>Est-ce que l'aliment <strong>{food}</strong> était le même que celui consommé précédemment?</p>",
+    "description": "<p>Est-ce que l'aliment <strong>{food}</strong> était la même que la dernière que vous avez mangée auparavant?</p>",
     "serving": "portion unitaire de {amount}",
     "leftovers": "restes de {amount}",
     "quantity": "{quantity} portions",
@@ -304,8 +304,11 @@
     },
     "hadWith": "Consommé avec :",
     "noAddedFoods": "Rien",
-    "same": "Continuer",
-    "notSame": "Non"
+    "same": "Oui",
+    "notSame": "Non",
+    "details": "Les détails",
+    "hadQuantity": "Quantité",
+    "characteristics": "Caractéristiques"
   },
   "sleepSchedule": {
     "name": "Sleep schedule",
