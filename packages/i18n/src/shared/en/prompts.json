@@ -294,7 +294,7 @@
   "sameAsBefore": {
     "name": "Same as before",
     "text": "",
-    "description": "<p>Was this <strong>{food}</strong> the same as the one you had before?</p>",
+    "description": "<p>Was this <strong>{food}</strong> the same as <i>the most recent one</i> you had before?</p>",
     "serving": "{amount} serving size",
     "leftovers": "Left about {amount}",
     "quantity": "{quantity} servings",
@@ -304,8 +304,11 @@
     },
     "hadWith": "Had it with:",
     "noAddedFoods": "Nothing added (e.g. milk, sugar, sauces)",
-    "same": "Yes, it's the same",
-    "notSame": "No, it's different"
+    "same": "Yes",
+    "notSame": "No",
+    "details": "Display details",
+    "hadQuantity": "Quantity",
+    "characteristics": "Characteristics"
   },
   "sleepSchedule": {
     "name": "Sleep schedule",
