@@ -202,12 +202,11 @@ const emit = defineEmits(['action', 'update:modelValue', 'update:sabOptions']);
 
 // Reactive state for "options"
 const sabOptions = ref<Record<string, any>>({});
-
-const showSABcard = ref(false); // New reactive state for showing/hiding card text
 const { i18n: { t, locale }, translate } = useI18n();
 const { action, translatePrompt, type } = usePromptUtils(props, { emit });
 const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
 const survey = useSurvey();
+const showSABcard = ref(survey.foodPrompts.find(item => item.component === 'same-as-before-prompt')?.skipToSAB === true);
 
 const isDrink = computed(() => props.sabFood.food.data.categories.includes('DRNK'));
 const isValid = true;
