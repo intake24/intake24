@@ -3,7 +3,27 @@
     <v-card-text class="pt-2 d-flex">
       <v-card v-if="showSABcard" class="border flat width=100%">
         <v-list v-if="serving || quantity || showLeftovers" class="px-4" color="grey-lighten-4">
-          <v-list-subheader>{{ translate(sabFood.food.data.localName) }}</v-list-subheader>
+          <div class="d-flex align-center">
+            <v-list-subheader class="flex-grow-1">
+              {{ promptI18n.hadQuantity }}
+            </v-list-subheader>
+            <div class="align-right">
+              <v-radio-group
+                v-model="sabOptions.portionSize"
+                :hide-details="true"
+                :inline="true"
+              >
+                <v-radio
+                  :label="$t('common.action.yes')"
+                  :value="true"
+                />
+                <v-radio
+                  :label="$t('common.action.no')"
+                  :value="false"
+                />
+              </v-radio-group>
+            </div>
+          </div>
           <v-divider />
           <v-list-item v-if="serving" class="ps-0" density="compact">
             <v-list-item-title>
@@ -29,25 +49,29 @@
               <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
             </v-list-item>
           </div>
-          <v-list-item class="ps-0" density="compact">
-            <v-radio-group
-              v-model="sabOptions.portionSize"
-              :hide-details="true"
-              :inline="true"
-            >
-              <v-radio
-                :label="$t('common.action.yes')"
-                :value="true"
-              />
-              <v-radio
-                :label="$t('common.action.no')"
-                :value="false"
-              />
-            </v-radio-group>
-          </v-list-item>
         </v-list>
         <v-list class="px-4" color="grey-lighten-4">
-          <v-list-subheader>{{ promptI18n.hadWith }}</v-list-subheader>
+          <div class="d-flex align-center">
+            <v-list-subheader class="flex-grow-1">
+              {{ promptI18n.hadWith }}
+            </v-list-subheader>
+            <div class="align-right">
+              <v-radio-group
+                v-model="sabOptions.linkedFoods"
+                :hide-details="true"
+                :inline="true"
+              >
+                <v-radio
+                  :label="$t('common.action.yes')"
+                  :value="true"
+                />
+                <v-radio
+                  :label="$t('common.action.no')"
+                  :value="false"
+                />
+              </v-radio-group>
+            </div>
+          </div>
           <v-divider />
           <v-list-item v-if="!linkedFoods.length" class="ps-0" density="compact">
             <template #prepend>
@@ -65,56 +89,55 @@
               {{ linkedFood.text ? linkedFood.text : '' }}
             </v-list-item>
           </template>
-          <v-radio-group
-            v-model="sabOptions.linkedFoods"
-            :hide-details="true"
-            :inline="true"
-          >
-            <v-radio
-              :label="$t('common.action.yes')"
-              :value="true"
-            />
-            <v-radio
-              :label="$t('common.action.no')"
-              :value="false"
-            />
-          </v-radio-group>
         </v-list>
-        <v-list v-if="customPromptAnswers && Object.keys(customPromptAnswers).length > 0" class="px-4" color="grey-lighten-4">
-          <div v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index">
-            <v-list-subheader>{{ promptNames[index] || '' }}</v-list-subheader>
-            <v-divider />
-            <v-list-item v-for="(answer, answerIdx) in customPromptAnswer" :key="answerIdx" class="ps-0" density="compact">
-              <template #prepend>
-                <v-icon icon="fas fa-caret-right" />
-              </template>
-              <v-list-item-title>{{ answer }}</v-list-item-title>
-            </v-list-item>
+        <v-list class="px-4" color="grey-lighten-4">
+          <div class="d-flex align-center">
+            <v-list-subheader class="flex-grow-1">
+              {{ promptI18n.characteristics }}
+            </v-list-subheader>
+            <div class="align-right">
+              <v-radio-group
+                v-model="sabOptions.customPromptAnswers"
+                :hide-details="true"
+                :inline="true"
+              >
+                <v-radio
+                  :label="$t('common.action.yes')"
+                  :value="true"
+                />
+                <v-radio
+                  :label="$t('common.action.no')"
+                  :value="false"
+                />
+              </v-radio-group>
+            </div>
           </div>
-          <v-radio-group
-            v-model="sabOptions.customPromptAnswers"
-            :hide-details="true"
-            :inline="true"
-          >
-            <v-radio
-              :label="$t('common.action.yes')"
-              :value="true"
-            />
-            <v-radio
-              :label="$t('common.action.no')"
-              :value="false"
-            />
-          </v-radio-group>
+          <v-divider />
+          <v-list v-if="customPromptAnswers && Object.keys(customPromptAnswers).length > 0" class="px-4" color="grey-lighten-4">
+            <div v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index">
+              <v-list-subheader>{{ promptNames[index] || '' }}</v-list-subheader>
+              <v-divider />
+              <v-list-item v-for="(answer, answerIdx) in customPromptAnswer" :key="answerIdx" class="ps-0" density="compact">
+                <template #prepend>
+                  <v-icon icon="fas fa-caret-right" />
+                </template>
+                <v-list-item-title>{{ answer }}</v-list-item-title>
+              </v-list-item>
+            </div>
+          </v-list>
         </v-list>
       </v-card>
     </v-card-text>
     <template #actions>
       <template v-if="!showSABcard">
-        <v-btn :title="promptI18n.notSame" variant="text" @click.stop="action('notSame')">
+        <v-btn :title="promptI18n.notSame" @click.stop="action('notSame')">
           <v-icon icon="$no" start /> {{ promptI18n.notSame }}
         </v-btn>
-        <v-btn :title="promptI18n.same" @click.stop="showSABcard = !showSABcard">
-          <v-icon icon="$add" start /> {{ promptI18n.same }}
+        <v-btn :title="promptI18n.same" @click.stop="onSame">
+          <v-icon icon="$yes" start /> {{ promptI18n.same }}
+        </v-btn>
+        <v-btn :title="promptI18n.details" variant="flat" @click.stop="showSABcard = !showSABcard">
+          <v-icon icon="$info" start /> {{ promptI18n.details }}
         </v-btn>
       </template>
       <template v-else>
@@ -125,16 +148,22 @@
     </template>
     <template #nav-actions>
       <template v-if="!showSABcard">
-        <v-btn color="primary" :title="promptI18n.notSame" variant="text" @click.stop="action('notSame')">
+        <v-btn color="primary" :title="promptI18n.notSame" @click.stop="action('notSame')">
           <span class="text-overline font-weight-medium">
             {{ promptI18n.notSame }}</span>
           <v-icon class="pb-1" icon="$no" />
         </v-btn>
         <v-divider vertical />
-        <v-btn color="primary" :title="promptI18n.same" @click.stop="showSABcard = !showSABcard">
+        <v-btn color="primary" :title="promptI18n.same" @click.stop="onSame">
           <span class="text-overline font-weight-medium">
             {{ promptI18n.same }}</span>
-          <v-icon class="pb-1" icon="$add" />
+          <v-icon class="pb-1" icon="$yes" />
+        </v-btn>
+        <v-divider vertical />
+        <v-btn color="primary" :title="promptI18n.details" @click.stop="showSABcard = !showSABcard">
+          <span class="text-overline font-weight-medium">
+            {{ promptI18n.details }}</span>
+          <v-icon class="pb-1" icon="$info" />
         </v-btn>
       </template>
       <template v-else>
@@ -260,7 +289,8 @@ const customPromptAnswers = computed(() => {
       const prompt = foods.find(item => item.id === key);
       const label = prompt && Array.isArray(value) && 'options' in prompt && prompt?.options?.[locale.value]
         ? value.map(v =>
-            prompt.options[locale.value].find(option => option.value === v)?.label ?? v,
+            (prompt.options[locale.value].find(option => option.value === v)?.shortLabel
+              || prompt.options[locale.value].find(option => option.value === v)?.label) ?? v,
           )
         : [];
       return [key, label];
@@ -309,7 +339,7 @@ const promptI18n = computed(() => ({
   serving: serving.value,
   quantity: servingQuantity.value,
   leftovers: leftovers.value,
-  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
+  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame', 'details', 'hadQuantity', 'characteristics']),
 }));
 
 onMounted(async () => {
