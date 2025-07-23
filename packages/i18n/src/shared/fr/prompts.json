@@ -308,7 +308,8 @@
     "notSame": "Non",
     "details": "Les détails",
     "hadQuantity": "Quantité",
-    "characteristics": "Caractéristiques"
+    "characteristics": "Caractéristiques",
+    "none": "Aucune"
   },
   "sleepSchedule": {
     "name": "Sleep schedule",
