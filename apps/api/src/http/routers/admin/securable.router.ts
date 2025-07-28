@@ -4,7 +4,7 @@ import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
-import { contract } from '@intake24/common/contracts';
+import { SecurableContract } from '@intake24/common/contracts';
 import { isSecurableType } from '@intake24/common/security';
 import {
   getRequestParamFromSecurable,
@@ -22,7 +22,7 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-export function securable(securable: ModelStatic<Securable>) {
+export function securable(securable: ModelStatic<Securable>, contract: SecurableContract) {
   const securableType = securable.name;
   if (!isSecurableType(securableType))
     throw new Error('Invalid securable type');
@@ -64,7 +64,7 @@ export function securable(securable: ModelStatic<Securable>) {
     );
   };
 
-  return () => initServer().router(contract.admin.languageSecurable, {
+  return initServer().router(contract, {
     browse: {
       middleware: [permission(resource)],
       handler: async ({ query, req }) => {

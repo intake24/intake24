@@ -86,3 +86,5 @@ export function securable(securable: SecurableType, prefix: string) {
     },
   });
 }
+
+export type SecurableContract = ReturnType<typeof securable>;

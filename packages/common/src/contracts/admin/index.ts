@@ -53,3 +53,5 @@ export default {
   task,
   user,
 };
+
+export { SecurableContract } from './securable.contract';
