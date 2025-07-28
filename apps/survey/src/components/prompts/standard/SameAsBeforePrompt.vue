@@ -286,24 +286,29 @@ const customPromptAnswers = computed(() => {
   const answers = props.sabFood.food.customPromptAnswers;
   if (!answers)
     return {};
-  const filteredAnswers = Object.fromEntries(
-    Object.entries(answers).filter(([_, value]) => value !== null),
-  );
   const foods = survey.parameters?.surveyScheme.prompts.meals.foods;
   if (!foods)
     return {};
 
   return Object.fromEntries(
-    Object.entries(filteredAnswers).map(([key, value]) => {
-      const prompt = foods.find(item => item.id === key);
-      const label = prompt && Array.isArray(value) && 'options' in prompt && prompt?.options?.[locale.value]
-        ? value.map(v =>
-            (prompt.options[locale.value].find(option => option.value === v)?.shortLabel
-              || prompt.options[locale.value].find(option => option.value === v)?.label) ?? v,
-          )
-        : [];
-      return [key, label];
-    }),
+    Object.entries(answers)
+      .filter(([, option_values]) => option_values !== null)
+      .map(([prompt_id, options]) => {
+        const prompt = foods.find(item => item.id === prompt_id);
+        if (!prompt || typeof prompt !== 'object' || !('options' in prompt))
+          return [];
+        const opts = prompt.options[locale.value];
+        if (!opts)
+          return [];
+
+        const getLabel = (v: string) =>
+          opts.find(option => option.value === v)?.shortLabel
+          || opts.find(option => option.value === v)?.label || v;
+
+        return Array.isArray(options)
+          ? [prompt_id, (options as string[]).map(getLabel)]
+          : [prompt_id, [getLabel(options as string)]];
+      }),
   );
 });
 
