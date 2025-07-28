@@ -94,6 +94,7 @@
     "key": "Key",
     "label": "Label",
     "value": "Value",
+    "shortLabel": "Short Label",
     "exclusive": "Exclusive",
     "selected": "Selected"
   },

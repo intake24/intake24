@@ -91,6 +91,7 @@
     "key": "Key",
     "label": "Libellé",
     "value": "Valeur",
+    "shortLabel": "Libellé court",
     "exclusive": "Exclusive",
     "selected": "Selected"
   },
