@@ -1,5 +1,8 @@
+import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, Selection, SurveyState } from '@intake24/common/surveys';
 import { randomString } from '@intake24/common/util';
+import { evaluateCondition } from '@intake24/survey/dynamic-recall/prompt-manager';
+import type { SurveyStore } from '@intake24/survey/stores';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 
 // Helper to generate unique id for each meal/food with same length
@@ -190,4 +193,56 @@ export function flattenFoods(foods: FoodState[]): FoodState[] {
   }
 
   return result;
+}
+
+/**
+ * Check if a prompt's custom conditions are met for the given food
+ */
+function checkPromptCustomConditions(store: SurveyStore, mealState: MealState, foodState: FoodState, prompt: Prompt): boolean {
+  try {
+    if (prompt.conditions.length === 0)
+      return true;
+
+    return prompt.conditions.reduce((acc, condition, index) => {
+      const result = evaluateCondition(condition, store, mealState, foodState, `prompt conditions (${prompt.id})`);
+
+      if (index === 0)
+        return result;
+
+      if (condition.orPrevious)
+        return acc || result;
+
+      // short-circuit if acc is already false
+      return acc ? result : false;
+    }, true);
+  }
+  catch (e) {
+    console.error(`Invalid prompt condition`, e);
+    return false;
+  }
+}
+
+export function getIncompleteCustomPrompts(store: SurveyStore, meal: MealState, food: FoodState, foodPrompts: Prompt[]): Prompt[] {
+  return foodPrompts
+    .filter(prompt =>
+      prompt.type === 'custom' && prompt.id !== 'no-more-information-prompt-foods',
+    )
+    .filter(prompt =>
+      // Only prompts that apply to this food (conditions are met)
+      checkPromptCustomConditions(store, meal, food, prompt),
+    )
+    .filter((prompt) => {
+      // Only prompts that are not answered or have empty answers
+      const answer = food.customPromptAnswers[prompt.id];
+      return answer === undefined
+        || answer === null
+        || (typeof answer === 'object' && answer !== null && Object.keys(answer).length === 0);
+    });
+}
+
+/**
+ * Check if all applicable custom prompts for a food are complete
+ */
+export function customPromptComplete(store: SurveyStore, meal: MealState, food: FoodState, foodPrompts: Prompt[]): boolean {
+  return getIncompleteCustomPrompts(store, meal, food, foodPrompts).length === 0;
 }
