@@ -5,8 +5,11 @@
       link
       @click="action('selectFood', food.id)"
     >
-      <v-list-item-title class="text-body-2 text-wrap">
-        {{ foodName }}
+      <v-list-item-title class="text-body-2 text-wrap d-flex flex-column">
+        <span class="food-name">{{ foodName }}</span>
+        <span v-if="customPromptAnswerLabels" class="text-caption text-grey">
+          {{ customPromptAnswerLabels }}
+        </span>
       </v-list-item-title>
       <template #append>
         <v-list-item-action class="d-flex flex-row me-4">
@@ -28,17 +31,17 @@
             <template #activator="{ props }">
               <v-icon
 
-                :color="isPortionSizeComplete ? 'green darken-2' : undefined"
+                :color="isPortionSizeComplete && isCustomPromptComplete ? 'green darken-2' : undefined"
                 size="small"
                 v-bind="props"
               >
-                {{ isPortionSizeComplete ? '$ok' : '$question' }}
+                {{ isPortionSizeComplete && isCustomPromptComplete ? '$ok' : '$question' }}
               </v-icon>
             </template>
             <span>
               {{
                 $t(
-                  `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`,
+                  `recall.menu.food.${food.type}.${isPortionSizeComplete && isCustomPromptComplete ? 'complete' : 'incomplete'}`,
                 )
               }}
             </span>
@@ -60,9 +63,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { FoodState, MealState } from '@intake24/common/surveys';
+import { useI18n } from '@intake24/i18n';
+import { useSurvey } from '@intake24/survey/stores';
 
 import { useFoodItem } from '../use-food-item';
 import ContextMenu from './context-menu.vue';
@@ -92,9 +97,44 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);
+    const { i18n: { locale } } = useI18n();
+    const survey = useSurvey();
+    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
 
-    return { action, foodName, isPortionSizeComplete, menu };
+    const customPromptAnswerLabels = computed(() => {
+      if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
+        return '';
+      }
+      const foodPrompts = survey.foodPrompts;
+      const answers: string[] = [];
+      Object.entries(props.food.customPromptAnswers).forEach(([promptId, answer]) => {
+        const prompt = foodPrompts.find(p => p.id === promptId);
+        let displayText = '';
+        // Handle different prompt types
+        if (prompt && 'options' in prompt && prompt.options) {
+          const options = prompt.options[locale.value] || prompt.options.en || [];
+          if (Array.isArray(answer)) {
+            // Multiple selection
+            const labels = answer.map(value =>
+              options.find(opt => opt.value === value)?.shortLabel
+              ?? options.find(opt => opt.value === value)?.label
+              ?? (value || '').toString(),
+            );
+            displayText = labels.join(', ');
+          }
+          else {
+            // Single selection
+            displayText = options.find(opt => opt.value === answer)?.shortLabel
+              ?? options.find(opt => opt.value === answer)?.label
+              ?? (answer || '').toString();
+          }
+        }
+        if (displayText.trim())
+          answers.push(displayText);
+      });
+      return answers.join(', ');
+    });
+    return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels };
   },
 });
 </script>
