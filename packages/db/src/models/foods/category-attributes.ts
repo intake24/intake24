@@ -37,7 +37,7 @@ export default class CategoryAttribute extends BaseModel<
   @ForeignKey(() => Category)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare categoryCode: string;
 

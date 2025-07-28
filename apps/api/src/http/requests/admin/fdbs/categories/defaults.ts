@@ -9,24 +9,24 @@ import { CategoryLocal, Op, SystemLocale } from '@intake24/db';
 const defaults: Schema = {
   name: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.minMax', { min: 3, max: 256 }),
+    errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 256 }),
     isString: true,
     isEmpty: { negated: true },
-    isLength: { options: { min: 3, max: 256 } },
+    isLength: { options: { min: 1, max: 256 } },
   },
   'main.name': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.minMax', { min: 3, max: 128 }),
+    errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 128 }),
     isString: true,
     isEmpty: { negated: true },
-    isLength: { options: { min: 3, max: 128 } },
+    isLength: { options: { min: 1, max: 128 } },
   },
   'main.code': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 8 }),
+    errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 32 }),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
-    isLength: { options: { min: 1, max: 8 }, bail: true },
+    isLength: { options: { min: 1, max: 32 }, bail: true },
     custom: {
       options: async (value, meta): Promise<void> => {
         const { localeId, categoryId } = (meta.req as Request).params;

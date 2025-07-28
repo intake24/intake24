@@ -24,13 +24,13 @@ export default class CategoryCategory extends BaseModel<
 > {
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare subcategoryCode: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare categoryCode: string;
 

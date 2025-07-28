@@ -28,14 +28,14 @@ export default class FoodCategory extends BaseModel<
   @ForeignKey(() => Food)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare foodCode: string;
 
   @ForeignKey(() => Category)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare categoryCode: string;
 

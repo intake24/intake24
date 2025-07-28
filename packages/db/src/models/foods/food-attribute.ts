@@ -36,7 +36,7 @@ export default class FoodAttribute extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare foodCode: string;
 

@@ -38,7 +38,7 @@ export default class AssociatedFood extends BaseModel<
   @ForeignKey(() => Food)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare foodCode: string;
 
@@ -52,14 +52,14 @@ export default class AssociatedFood extends BaseModel<
   @ForeignKey(() => Food)
   @Column({
     allowNull: true,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare associatedFoodCode: string | null;
 
   @ForeignKey(() => Category)
   @Column({
     allowNull: true,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare associatedCategoryCode: string | null;
 

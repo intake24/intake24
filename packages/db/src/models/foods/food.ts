@@ -45,7 +45,7 @@ export default class Food extends BaseModel<InferAttributes<Food>, InferCreation
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: DataType.STRING(8),
+    type: DataType.STRING(32),
   })
   declare code: string;
 
