@@ -133,9 +133,10 @@ export default defineComponent({
             displayText = options.find(opt => opt.value === answer)?.shortLabel || options.find(opt => opt.value === answer)?.label || '';
           }
         }
-        answers.push(displayText);
+        if (displayText.trim())
+          answers.push(displayText);
       });
-      return answers.join('').trim() === '' ? '' : answers.join(', ');
+      return answers.join(', ');
     });
     const updateContextId = (id: string) => {
       ctx.emit('update:context-id', id);
