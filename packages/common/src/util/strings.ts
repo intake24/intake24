@@ -20,11 +20,19 @@ export function kebabCase(string: string): string {
     .toLowerCase();
 }
 
+export function modelToResource<T extends string>(modelType: T): string {
+  return kebabCase(plural(modelType));
+}
+
+export function modelToRequestParam<T extends string>(modelType: T): string {
+  return `${modelType[0].toLowerCase()}${modelType.substring(1)}Id`;
+}
+
 export function getResourceFromSecurable(securableType: any): string {
   if (!isSecurableType(securableType))
     throw new Error('Invalid securable type');
 
-  return kebabCase(plural(securableType));
+  return modelToResource(securableType);
 }
 
 export function getRequestParamFromSecurable(securableType: any): string {

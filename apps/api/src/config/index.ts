@@ -4,7 +4,6 @@ import type { FileSystemConfig } from './filesystem';
 import type { PdfConfig } from './pdf';
 import type { PublisherConfig, SubscriberConfig } from './pub-sub';
 import type { QueueConfig } from './queue';
-
 import type { RateLimiterConfig } from './rate-limiter';
 import type { SecurityConfig } from './security';
 import type { ServicesConfig } from './services';
@@ -18,6 +17,7 @@ import { databaseConfig as database } from '@intake24/db';
 import app from './app';
 import cache from './cache';
 import filesystem from './filesystem';
+import media, { MediaConfig } from './media';
 import pdf from './pdf';
 import { publisherConfig as publisher, subscriberConfig as subscriber } from './pub-sub';
 import queue from './queue';
@@ -30,6 +30,7 @@ export * from './app';
 export * from './cache';
 export * from './filesystem';
 export * from './image-processor';
+export * from './media';
 export * from './pdf';
 export * from './queue';
 export * from './rate-limiter';
@@ -46,6 +47,7 @@ export type Config = {
   filesystem: FileSystemConfig;
   log: LogConfig;
   mail: MailConfig;
+  media: MediaConfig;
   pdf: PdfConfig;
   queue: QueueConfig;
   rateLimiter: RateLimiterConfig;
@@ -65,6 +67,7 @@ const config: Config = {
   filesystem,
   log,
   mail,
+  media,
   pdf,
   queue,
   rateLimiter,
