@@ -259,8 +259,8 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
       connect-redis:
-        specifier: ^8.1.0
-        version: 8.1.0(express-session@1.18.2)
+        specifier: ^9.0.0
+        version: 9.0.0(express-session@1.18.2)(redis@4.7.1)
       cookie-parser:
         specifier: ^1.4.7
         version: 1.4.7
@@ -5313,11 +5313,12 @@ packages:
     resolution: {integrity: sha512-e54B99q/OUoH64zYYRf3HBP5z24G38h5D3qXu23JGRoigpX5Ss4r9ZnDk3g0Z8uQC2x2lPaJ+UlWBc1ZWBWdLg==}
     engines: {node: '>=0.8'}
 
-  connect-redis@8.1.0:
-    resolution: {integrity: sha512-Km0EYLDlmExF52UCss5gLGTtrukGC57G6WCC2aqEMft5Vr4xNWuM4tL+T97kWrw+vp40SXFteb6Xk/7MxgpwdA==}
+  connect-redis@9.0.0:
+    resolution: {integrity: sha512-QwzyvUePTMvEzG1hy45gZYw3X3YHrjmEdSkayURlcZft7hqadQ3X39wYkmCqblK2rGlw+XItELYt6GnyG6DEIQ==}
     engines: {node: '>=18'}
     peerDependencies:
       express-session: '>=1'
+      redis: '>=5'
 
   consola@2.15.3:
     resolution: {integrity: sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==}
@@ -15223,9 +15224,10 @@ snapshots:
 
   connect-history-api-fallback@1.6.0: {}
 
-  connect-redis@8.1.0(express-session@1.18.2):
+  connect-redis@9.0.0(express-session@1.18.2)(redis@4.7.1):
     dependencies:
       express-session: 1.18.2
+      redis: 4.7.1
 
   consola@2.15.3: {}
 
