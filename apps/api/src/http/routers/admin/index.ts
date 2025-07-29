@@ -9,6 +9,7 @@ import { job } from './job.router';
 import { languageTranslation } from './language-translation.router';
 import { language } from './language.router';
 import locale from './locale';
+import { mediable } from './mediable.router';
 import { nutrientTable } from './nutrient-table.router';
 import { nutrientType } from './nutrient-type.router';
 import { nutrientUnit } from './nutrient-unit.router';
@@ -35,6 +36,7 @@ export default {
   language,
   languageTranslation,
   locale,
+  mediable,
   nutrientTable,
   nutrientType,
   nutrientUnit,

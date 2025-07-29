@@ -25,6 +25,7 @@ import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake
 import { defaultExport, defaultMeals, defaultPrompts, defaultSchemeSettings } from '@intake24/common/surveys';
 import { Survey, User, UserSecurable } from '.';
 import { BaseModel } from '..';
+import Media from './media';
 
 @Scopes(() => ({
   list: { attributes: ['id', 'name'], order: [['name', 'ASC']] },
@@ -158,6 +159,13 @@ export default class SurveyScheme
     scope: { securable_type: 'SurveyScheme' },
   })
   declare securables?: NonAttribute<UserSecurable[]>;
+
+  @HasMany(() => Media, {
+    foreignKey: 'modelId',
+    constraints: false,
+    scope: { model_type: 'SurveyScheme' },
+  })
+  declare media?: NonAttribute<Media[]>;
 }
 
 export type SurveySchemeAttributes = Attributes<SurveyScheme>;
