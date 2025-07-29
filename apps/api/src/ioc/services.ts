@@ -61,8 +61,9 @@ import {
 } from '@intake24/api/services';
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import { logger, Mailer } from '@intake24/common-backend';
+import { RequestIoC } from './ioc';
 
-export default (container: AwilixContainer): void => {
+export default (container: AwilixContainer<RequestIoC>): void => {
   container.register({
     authenticationService: asFunction(authenticationService).singleton(),
     aclCache: asFunction(aclCache).singleton(),

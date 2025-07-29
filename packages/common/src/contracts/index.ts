@@ -35,5 +35,3 @@ export const contract = c.router({
 });
 
 export default contract;
-
-export * from './admin';

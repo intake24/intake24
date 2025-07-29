@@ -4,7 +4,7 @@ import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
-import { SecurableContract } from '@intake24/common/contracts';
+import type { SecurableContract } from '@intake24/common/contracts/admin';
 import { isSecurableType } from '@intake24/common/security';
 import {
   getRequestParamFromSecurable,

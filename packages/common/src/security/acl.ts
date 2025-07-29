@@ -52,11 +52,12 @@ export type SecurableType = keyof typeof securableDefs;
 
 export const securableTypes = Object.keys(securableDefs) as SecurableType[];
 
-export type FeedbackSchemeSecurableActions = (typeof securableDefs.FeedbackScheme)[number];
-
-export type SurveySchemeSecurableActions = (typeof securableDefs.SurveyScheme)[number];
-
-export type SurveySecurableActions = (typeof securableDefs.Survey)[number];
+export type FeedbackSchemeSecurableAction = (typeof securableDefs.FeedbackScheme)[number];
+export type LanguageSecurableAction = (typeof securableDefs.Language)[number];
+export type LocaleSecurableAction = (typeof securableDefs.Locale)[number];
+export type SurveySchemeSecurableAction = (typeof securableDefs.SurveyScheme)[number];
+export type SurveySecurableAction = (typeof securableDefs.Survey)[number];
+export type SecurableAction = FeedbackSchemeSecurableAction | LanguageSecurableAction | LocaleSecurableAction | SurveySchemeSecurableAction | SurveySecurableAction;
 
 export const isSecurableType = (type: any): type is SecurableType => securableTypes.includes(type);
 
