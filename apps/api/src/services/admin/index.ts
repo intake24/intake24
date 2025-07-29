@@ -16,6 +16,7 @@ export * from './local-foods.service';
 export { default as localFoodsService } from './local-foods.service';
 export * from './locale.service';
 export { default as localeService } from './locale.service';
+export * from './media';
 export * from './nutrient-table.service';
 export { default as nutrientTableService } from './nutrient-table.service';
 export * from './nutrient-type.service';

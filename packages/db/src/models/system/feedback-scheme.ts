@@ -35,6 +35,7 @@ import { defaultMeals, defaultTopFoods } from '@intake24/common/feedback';
 import type { RecordVisibility } from '@intake24/common/security';
 import { Survey, User, UserSecurable } from '.';
 import { BaseModel } from '..';
+import Media from './media';
 
 @Scopes(() => ({
   surveys: { include: [{ model: Survey }] },
@@ -234,6 +235,13 @@ export default class FeedbackScheme
     scope: { securable_type: 'FeedbackScheme' },
   })
   declare securables?: NonAttribute<UserSecurable[]>;
+
+  @HasMany(() => Media, {
+    foreignKey: 'modelId',
+    constraints: false,
+    scope: { model_type: 'FeedbackScheme' },
+  })
+  declare media?: NonAttribute<Media[]>;
 }
 
 export type FeedbackSchemeAttributes = Attributes<FeedbackScheme>;

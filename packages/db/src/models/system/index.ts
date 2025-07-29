@@ -6,6 +6,7 @@ import Job from './job';
 import Language from './language';
 import LanguageTranslation from './language-translation';
 import SystemLocale from './locale';
+import Media from './media';
 import MFAAuthenticator from './mfa-authenticator';
 import MFADevice from './mfa-device';
 import SystemNutrientType from './nutrient-type';
@@ -64,6 +65,8 @@ export { default as LanguageTranslation } from './language-translation';
 export * from './language-translation';
 export { default as SystemLocale } from './locale';
 export * from './locale';
+export { default as Media } from './media';
+export * from './media';
 export { default as MFAAuthenticator } from './mfa-authenticator';
 export * from './mfa-authenticator';
 export { default as MFADevice } from './mfa-device';
@@ -156,6 +159,7 @@ export const system = {
   Language,
   LanguageTranslation,
   SystemLocale,
+  Media,
   MFAAuthenticator,
   MFADevice,
   SystemNutrientType,

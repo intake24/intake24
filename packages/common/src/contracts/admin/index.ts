@@ -9,6 +9,7 @@ import { job } from './job.contract';
 import { languageTranslation } from './language-translation.contract';
 import { language } from './language.contract';
 import locale from './locale';
+import { mediable } from './mediable.contract';
 import { nutrientTable } from './nutrient-table.contract';
 import { nutrientType } from './nutrient-type.contract';
 import { nutrientUnit } from './nutrient-unit.contract';
@@ -27,6 +28,7 @@ export default {
   acl,
   authentication,
   feedbackScheme,
+  feedbackSchemeMedia: mediable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   feedbackSchemeSecurable: securable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   foodDb,
   foodGroup,
@@ -49,9 +51,11 @@ export default {
   surveySecurable: securable('Survey', '/admin/surveys/:surveyId'),
   surveyScheme,
   surveySchemePrompt,
+  surveySchemeMedia: mediable('SurveyScheme', '/admin/survey-schemes/:surveySchemeId'),
   surveySchemeSecurable: securable('SurveyScheme', '/admin/survey-schemes/:surveySchemeId'),
   task,
   user,
 };
 
+export type { MediableContract } from './mediable.contract';
 export type { SecurableContract } from './securable.contract';

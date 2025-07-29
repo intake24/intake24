@@ -107,6 +107,7 @@ export const resources: Resource[] = [
       'cards',
       'demographic-groups',
       'henry-coefficients',
+      'media',
       'securables',
     ],
     refs: true,
@@ -118,7 +119,7 @@ export const resources: Resource[] = [
     api: 'admin/survey-schemes',
     securable: true,
     generateRoutes: true,
-    routes: [...routes, 'prompts', 'data-export', 'securables'],
+    routes: [...routes, 'prompts', 'data-export', 'media', 'securables'],
     refs: true,
   },
   {
