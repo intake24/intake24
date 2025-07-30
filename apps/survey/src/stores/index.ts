@@ -1,4 +1,5 @@
 export * from './auth';
+export * from './faqs';
 export * from './prompt';
 export * from './recall-log';
 export * from './same-as-before';

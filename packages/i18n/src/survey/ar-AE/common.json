@@ -32,6 +32,11 @@
   "phone": "رقم الهاتف الخلوي",
   "message": "رسالة",
   "continue": "متابعة",
+  "faqs": {
+    "_": "FAQ",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about Intake24"
+  },
   "help": {
     "_": "مساعدة",
     "title": "اطلب المساعدة",

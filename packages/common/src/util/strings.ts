@@ -1,7 +1,9 @@
+import type { CamelCase } from 'type-fest';
+import type { SecurableType } from '../security';
+import camelCase from 'lodash/camelCase';
 import { customAlphabet, nanoid } from 'nanoid';
 import { plural } from 'pluralize';
 import slugify from 'slugify';
-
 import { isSecurableType } from '../security';
 
 export function capitalize(string: string): string {
@@ -27,11 +29,8 @@ export function getResourceFromSecurable(securableType: any): string {
   return kebabCase(plural(securableType));
 }
 
-export function getRequestParamFromSecurable(securableType: any): string {
-  if (!isSecurableType(securableType))
-    throw new Error('Invalid securable type');
-
-  return `${securableType[0].toLowerCase()}${securableType.substring(1)}Id`;
+export function getRequestParamFromSecurable<T extends SecurableType>(securableType: T): `${CamelCase<T>}Id` {
+  return `${camelCase(securableType)}Id` as `${CamelCase<T>}Id`;
 }
 
 /**

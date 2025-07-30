@@ -14,11 +14,12 @@ export type ListOps<I, O = I> = {
   newItem: () => I;
   transformIn?: (item: O, index: number) => I;
   transformOut?: (item: I, index: number) => O;
+  watch?: boolean;
 };
 
 // TODO: fix generic types casting
 
-export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupContext, ops: ListOps<I, O>) {
+export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<SetupContext<'update:modelValue'[]>, 'emit'>, ops: ListOps<I, O>) {
   const { modelValue } = toRefs(props);
   const { newItem, transformIn, transformOut } = ops;
   const form = useTemplateRef<InstanceType<typeof VForm>>('form');
@@ -48,6 +49,12 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupC
     items.value = copy(transformIn ? val.map(transformIn) : val) as any;
   });
 
+  if (ops.watch) {
+    watch(outputItems, (val) => {
+      emit('update:modelValue', val);
+    }, { deep: true });
+  }
+
   const add = () => {
     dialog.value = newDialog(true);
   };
@@ -57,7 +64,10 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, context: SetupC
   };
 
   const update = () => {
-    context.emit('update:modelValue', outputItems.value);
+    if (ops.watch)
+      return;
+
+    emit('update:modelValue', outputItems.value);
   };
 
   const load = (list: UnwrapRef<I>[]) => {

@@ -35,9 +35,7 @@
             {{ translate(item.text) }}
           </v-list-item-subtitle>
           <template #append>
-            <v-chip v-if="errors.has(`associatedFoods[${index}]*`)" color="error" variant="flat">
-              {{ errors.get(`associatedFoods[${index}]*`).length }} errors
-            </v-chip>
+            <list-item-error :errors="errors.get(`associatedFoods[${index}]*`)" />
             <v-list-item-action v-if="!disabled">
               <v-btn icon="$edit" :title="$t('fdbs.associatedFoods.edit')" @click.stop="edit(index, item)" />
             </v-list-item-action>
@@ -187,95 +185,72 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { AssociatedFoodItem } from './associated-foods';
-import { defineComponent } from 'vue';
-
 import { VueDraggable } from 'vue-draggable-plus';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ErrorList, LanguageSelector } from '@intake24/admin/components/forms';
+import { ListItemError } from '@intake24/admin/components/lists';
 import { useListWithDialog } from '@intake24/admin/composables';
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { randomString } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-
 import { ConfirmDialog } from '@intake24/ui';
 import { createDefaultAssociatedFood } from './associated-foods';
 
-export default defineComponent({
-  name: 'AssociatedFoodList',
-
-  components: { ConfirmDialog, ErrorList, LanguageSelector, SelectResource, VueDraggable },
-
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    errors: {
-      type: Object as PropType<ReturnUseErrors>,
-      required: true,
-    },
-    foodCode: {
-      type: String,
-      required: true,
-    },
-    localeId: {
-      type: String,
-      required: true,
-    },
-    modelValue: {
-      type: Array as PropType<AssociatedFoodItem[]>,
-      required: true,
-    },
+const props = defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
   },
-
-  setup(props, context) {
-    const { translate } = useI18n();
-
-    const newItem = () => ({
-      ...createDefaultAssociatedFood(props.foodCode, props.localeId),
-      _id: randomString(6),
-    });
-
-    const { dialog, form, items, add, edit, load, remove, reset, save, update }
-      = useListWithDialog(props, context, {
-        newItem,
-        transformIn: withIdAndOrder,
-        transformOut: withoutIdAndOrder,
-      });
-
-    const clearCategory = (code: string | null) => {
-      if (!code)
-        return;
-
-      dialog.value.item.associatedCategoryCode = null;
-    };
-
-    const clearFood = (code: string | null) => {
-      if (!code)
-        return;
-
-      dialog.value.item.associatedFoodCode = null;
-    };
-
-    return {
-      dialog,
-      form,
-      translate,
-      items,
-      add,
-      edit,
-      load,
-      remove,
-      reset,
-      save,
-      update,
-      clearCategory,
-      clearFood,
-    };
+  errors: {
+    type: Object as PropType<ReturnUseErrors>,
+    required: true,
+  },
+  foodCode: {
+    type: String,
+    required: true,
+  },
+  localeId: {
+    type: String,
+    required: true,
+  },
+  modelValue: {
+    type: Array as PropType<AssociatedFoodItem[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const { translate } = useI18n();
+
+function newItem() {
+  return {
+    ...createDefaultAssociatedFood(props.foodCode, props.localeId),
+    _id: randomString(6),
+  };
+}
+
+const { dialog, form, items, add, edit, remove, reset, save, update } = useListWithDialog(props, { emit }, {
+  newItem,
+  transformIn: withIdAndOrder,
+  transformOut: withoutIdAndOrder,
+});
+
+function clearCategory(code: string | null) {
+  if (!code)
+    return;
+
+  dialog.value.item.associatedCategoryCode = null;
+}
+
+function clearFood(code: string | null) {
+  if (!code)
+    return;
+
+  dialog.value.item.associatedFoodCode = null;
+}
 </script>
