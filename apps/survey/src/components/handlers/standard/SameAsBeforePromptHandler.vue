@@ -68,7 +68,8 @@ function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
 
   if (sabOptions.customPromptAnswers === false && updatedSabFood?.food?.customPromptAnswers) {
     updatedSabFood.food.customPromptAnswers = {};
-    console.debug('Custom prompt answers removed as SAB custom prompt answers checkbox is explicitly set to false');
+    delete updatedSabFood.food.external;
+    console.debug('Custom prompt answers and external food removed as SAB custom prompt answers checkbox is explicitly set to false');
   }
 }
 
