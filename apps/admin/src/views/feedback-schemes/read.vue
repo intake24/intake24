@@ -1,10 +1,10 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <template #actions>
-      <copy-scheme-dialog
+      <copy-record-dialog
         v-if="canHandleEntry('copy')"
+        :record-id="id"
         resource="feedback-schemes"
-        :scheme-id="id"
       />
       <preview :feedback-scheme="entry" :images="refs.images" />
     </template>
@@ -46,16 +46,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { CopyRecordDialog } from '@intake24/admin/components/dialogs';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
-import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'FeedbackSchemeDetail',
 
-  components: { CopySchemeDialog, Preview },
+  components: { CopyRecordDialog, Preview },
 
   mixins: [detailMixin],
 

@@ -1,6 +1,5 @@
 import { initServer } from '@ts-rest/express';
 import { col, fn, literal, Op } from 'sequelize';
-
 import { anyPermission } from '@intake24/api/http/middleware';
 import { imageResponseCollection } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
@@ -10,6 +9,7 @@ import {
   AsServedSet,
   Category,
   DrinkwareSet,
+  FAQ,
   FeedbackScheme,
   Food,
   FoodGroup,
@@ -69,6 +69,34 @@ export function reference() {
         });
 
         return { status: 200, body: drinkwareSets };
+      },
+    },
+    faqs: {
+      middleware: [anyPermission('faqs', 'surveys')],
+      handler: async ({ query, req }) => {
+        const {
+          aclService,
+          user: { userId },
+        } = req.scope.cradle;
+
+        const paginateOptions: PaginateOptions<FeedbackScheme> = {
+          query,
+          columns: ['id', 'name'],
+          order: [[fn('lower', col('FAQ.name')), 'ASC']],
+        };
+
+        if (await aclService.hasPermission('faqs:use')) {
+          const feedbackSchemes = await FAQ.paginate(paginateOptions);
+          return { status: 200, body: feedbackSchemes };
+        }
+
+        const faqs = await FAQ.paginate({
+          ...paginateOptions,
+          ...visibilityScope(userId),
+          subQuery: false,
+        });
+
+        return { status: 200, body: faqs };
       },
     },
     feedbackSchemes: {

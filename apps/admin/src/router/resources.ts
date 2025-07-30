@@ -95,6 +95,18 @@ export const resources: Resource[] = [
   // Surveys
   {
     group: 'surveyMgmt',
+    name: 'faqs',
+    icon: 'fas fa-circle-question',
+    api: 'admin/faqs',
+    securable: true,
+    generateRoutes: true,
+    routes: [
+      ...routes,
+      'securables',
+    ],
+  },
+  {
+    group: 'surveyMgmt',
     name: 'feedback-schemes',
     icon: 'fas fa-comment-dots',
     api: 'admin/feedback-schemes',

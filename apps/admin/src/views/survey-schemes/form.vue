@@ -1,10 +1,10 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <template #actions>
-      <copy-scheme-dialog
+      <copy-record-dialog
         v-if="canHandleEntry('copy')"
+        :record-id="id"
         resource="survey-schemes"
-        :scheme-id="id"
       />
     </template>
     <v-form @keydown="clearError" @submit.prevent="submit">
@@ -60,9 +60,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { CopyRecordDialog } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
-import { CopySchemeDialog, SchemeSettings } from '@intake24/admin/components/schemes';
+import { SchemeSettings } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
 import type { RecordVisibility } from '@intake24/common/security';
 import type { ExportSection, Meal, RecallPrompts, SchemeSettings as SchemeSettingsType } from '@intake24/common/surveys';
@@ -87,7 +88,7 @@ export type PatchSurveySchemeForm = Pick<
 export default defineComponent({
   name: 'SurveySchemeForm',
 
-  components: { CopySchemeDialog, MealList, SchemeSettings },
+  components: { CopyRecordDialog, MealList, SchemeSettings },
 
   mixins: [formMixin],
 

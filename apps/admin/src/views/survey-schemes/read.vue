@@ -1,10 +1,10 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <template #actions>
-      <copy-scheme-dialog
+      <copy-record-dialog
         v-if="canHandleEntry('copy')"
+        :record-id="id"
         resource="survey-schemes"
-        :scheme-id="id"
       />
     </template>
     <v-table>
@@ -33,15 +33,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { CopyRecordDialog } from '@intake24/admin/components/dialogs';
 import { detailMixin } from '@intake24/admin/components/entry';
-import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'SurveySchemeDetail',
 
-  components: { CopySchemeDialog },
+  components: { CopyRecordDialog },
 
   mixins: [detailMixin],
 

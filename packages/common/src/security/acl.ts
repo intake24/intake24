@@ -1,3 +1,5 @@
+import type { ValueOf } from 'type-fest';
+
 export const ACL_PERMISSIONS_KEY = 'acl-permissions';
 export const ACL_ROLES_KEY = 'acl-roles';
 
@@ -14,6 +16,10 @@ export const surveyPermissions = (surveySlug: string): string[] => [surveyRespon
 export const standardSecurableActions = ['read', 'edit', 'delete', 'securables'] as const;
 
 export const securableDefs = {
+  FAQ: [
+    ...standardSecurableActions,
+    'use',
+  ] as const,
   FeedbackScheme: [
     ...standardSecurableActions,
     'copy',
@@ -49,15 +55,9 @@ export const securableDefs = {
 };
 
 export type SecurableType = keyof typeof securableDefs;
-
 export const securableTypes = Object.keys(securableDefs) as SecurableType[];
 
-export type FeedbackSchemeSecurableAction = (typeof securableDefs.FeedbackScheme)[number];
-export type LanguageSecurableAction = (typeof securableDefs.Language)[number];
-export type LocaleSecurableAction = (typeof securableDefs.Locale)[number];
-export type SurveySchemeSecurableAction = (typeof securableDefs.SurveyScheme)[number];
-export type SurveySecurableAction = (typeof securableDefs.Survey)[number];
-export type SecurableAction = FeedbackSchemeSecurableAction | LanguageSecurableAction | LocaleSecurableAction | SurveySchemeSecurableAction | SurveySecurableAction;
+export type SecurableAction = ValueOf<typeof securableDefs>[number];
 
 export const isSecurableType = (type: any): type is SecurableType => securableTypes.includes(type);
 

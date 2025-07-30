@@ -1,0 +1,32 @@
+{
+  "_": "FAQ",
+  "title": "FAQs",
+  "read": "FAQ detail",
+  "create": "Add FAQ",
+  "edit": "Edit FAQ",
+  "delete": "Delete FAQ",
+  "load": "Load from FAQ",
+  "none": "No FAQ found",
+  "copy": {
+    "_": "Copy",
+    "title": "Copy FAQ",
+    "name": "New FAQ name"
+  },
+  "sections": {
+    "_": "Section",
+    "title": "Sections",
+    "add": "Add section",
+    "edit": "Edit section",
+    "remove": "Remove section",
+    "header": "Header"
+  },
+  "items": {
+    "_": "FAQ item",
+    "title": "FAQ items",
+    "add": "Add FAQ item",
+    "edit": "Edit FAQ item",
+    "remove": "Remove FAQ item",
+    "header": "Header",
+    "content": "Content"
+  }
+}
