@@ -331,6 +331,7 @@ import type { SurveySubmissionEntry } from '@intake24/common/types/http';
 import { userService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 import { ConfirmDialog } from '@intake24/ui';
+import { sendGtmEvent } from '@intake24/ui/tracking';
 
 export default defineComponent({
   name: 'SurveyHome',
@@ -362,6 +363,14 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      sendGtmEvent({
+        event: 'surveyHome',
+        action: 'login',
+        scheme_prompts: 'preMeals',
+        noninteraction: false,
+        uxSessionId: survey.data.uxSessionId,
+        uxUserId: survey.user?.userId || '',
+      });
       submissions.value = await userService.submissions(props.surveyId);
     });
 
