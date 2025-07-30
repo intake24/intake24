@@ -77,6 +77,18 @@
               />
             </v-col>
             <v-col cols="12" md="6">
+              <select-resource
+                v-model="data.faqId"
+                :error-messages="errors.get('faqId')"
+                :initial-item="entry.faq"
+                item-name="name"
+                :label="$t('faqs._')"
+                name="faqId"
+                resource="faqs"
+                @update:model-value="errors.clear('faqId')"
+              />
+            </v-col>
+            <v-col cols="12" md="6">
               <v-select
                 v-model="data.state"
                 :error-messages="errors.get('state')"
@@ -611,6 +623,7 @@ export type SurveyForm = {
   state: SurveyStatus;
   localeId: string | null;
   surveySchemeId: string | null;
+  faqId: string | null;
   feedbackSchemeId: string | null;
   startDate: string | null;
   endDate: string | null;
@@ -645,6 +658,7 @@ export const surveyForm: SurveyForm = {
   state: 'notStarted',
   localeId: null,
   surveySchemeId: null,
+  faqId: null,
   feedbackSchemeId: null,
   startDate: null,
   endDate: null,

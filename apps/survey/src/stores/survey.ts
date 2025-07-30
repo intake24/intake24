@@ -186,6 +186,7 @@ export const useSurvey = defineStore('survey', {
     recallNumber(): number {
       return (this.user?.submissions ?? 1) + (this.isSubmitted ? 0 : 1);
     },
+    faqsEnabled: state => !!state.parameters?.faqs,
     feedbackAllowed(): boolean {
       return this.feedbackEnabled && this.feedbackAvailable;
     },

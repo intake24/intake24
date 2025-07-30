@@ -16,7 +16,20 @@ import { jobRequiresFile } from '@intake24/common/types';
 import { multerFile } from '@intake24/common/types/http';
 import { kebabCase } from '@intake24/common/util';
 import type { PaginateOptions } from '@intake24/db';
-import { createSurveyFields, FeedbackScheme, guardedSurveyFields, overridesFields, securableIncludes, securableScope, Survey, SurveyScheme, SystemLocale, updateSurveyFields, UserSecurable } from '@intake24/db';
+import {
+  createSurveyFields,
+  FAQ,
+  FeedbackScheme,
+  guardedSurveyFields,
+  overridesFields,
+  securableIncludes,
+  securableScope,
+  Survey,
+  SurveyScheme,
+  SystemLocale,
+  updateSurveyFields,
+  UserSecurable,
+} from '@intake24/db';
 
 const actionToFieldsMap: Record<'overrides', readonly string[]> = {
   overrides: overridesFields,
@@ -30,15 +43,16 @@ async function uniqueMiddleware(value: any, { surveyId, field = 'name' }: { surv
   }
 }
 
-async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<Record<'feedbackSchemeId' | 'localeId' | 'surveySchemeId', string | null | undefined>>, req: TsRestRequest<T>, survey?: Survey) {
+async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<Record<'faqId' | 'feedbackSchemeId' | 'localeId' | 'surveySchemeId', string | null | undefined>>, req: TsRestRequest<T>, survey?: Survey) {
   const models: Record<string, ModelStatic<any>> = {
+    faqId: FAQ,
     feedbackSchemeId: FeedbackScheme,
     localeId: SystemLocale,
     surveySchemeId: SurveyScheme,
   };
 
   for (const [key, value] of Object.entries(values)) {
-    const keyName = key as 'feedbackSchemeId' | 'localeId' | 'surveySchemeId';
+    const keyName = key as 'faqId' | 'feedbackSchemeId' | 'localeId' | 'surveySchemeId';
 
     if (!value || (survey && survey[keyName] === value))
       continue;
@@ -105,7 +119,7 @@ export function survey() {
         await Promise.all([
           uniqueMiddleware(body.name),
           uniqueMiddleware(body.slug, { field: 'slug' }),
-          checkVisibility(pick(body, ['feedbackSchemeId', 'localeId', 'surveySchemeId']), req),
+          checkVisibility(pick(body, ['faqId', 'feedbackSchemeId', 'localeId', 'surveySchemeId']), req),
         ]);
 
         const { userId } = req.scope.cradle.user;
@@ -131,6 +145,7 @@ export function survey() {
         const survey = await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'read', {
           where: { id: surveyId },
           include: [
+            { association: 'faq', attributes: ['id', 'name'] },
             { association: 'locale' },
             { association: 'feedbackScheme' },
             { association: 'surveyScheme' },
@@ -159,7 +174,7 @@ export function survey() {
           ],
         });
 
-        await checkVisibility(pick(body, ['feedbackSchemeId', 'localeId', 'surveySchemeId']), req, survey);
+        await checkVisibility(pick(body, ['faqId', 'feedbackSchemeId', 'localeId', 'surveySchemeId']), req, survey);
 
         const keysToUpdate: string[] = [];
         const [resourceActions, securableActions] = await Promise.all([
@@ -190,6 +205,7 @@ export function survey() {
         await survey.update(updateInput);
         await survey.reload({
           include: [
+            { association: 'faq', attributes: ['id', 'name'] },
             { association: 'locale' },
             { association: 'feedbackScheme' },
             { association: 'surveyScheme' },
@@ -207,12 +223,13 @@ export function survey() {
         const survey = await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'edit', {
           where: { id: surveyId },
           include: [
+            { association: 'faq', attributes: ['id', 'name'] },
             { association: 'locale' },
             { association: 'feedbackScheme' },
             { association: 'surveyScheme' },
           ],
         });
-        await checkVisibility(pick(body, ['feedbackSchemeId', 'localeId', 'surveySchemeId']), req, survey);
+        await checkVisibility(pick(body, ['faqId', 'feedbackSchemeId', 'localeId', 'surveySchemeId']), req, survey);
 
         await survey.update(
           pick(body, [...updateSurveyFields, ...overridesFields, ...guardedSurveyFields]),

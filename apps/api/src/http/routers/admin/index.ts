@@ -1,5 +1,6 @@
 import acl from './acl';
 import { authentication } from './authentication.router';
+import { faq } from './faq.router';
 import { feedbackScheme } from './feedback-scheme.router';
 import { foodDb } from './food-db.router';
 import { foodGroup } from './food-group.router';
@@ -26,6 +27,7 @@ import user from './user';
 export default {
   acl,
   authentication,
+  faq,
   feedbackScheme,
   foodDb,
   foodThumbnailImages,

@@ -19,9 +19,7 @@
       </span>
     </v-list-item-subtitle>
     <template #append>
-      <v-chip v-if="errors.length" color="error" variant="flat">
-        {{ errors.length }} errors
-      </v-chip>
+      <list-item-error :errors="errors" />
       <v-list-item-action>
         <v-btn icon="$edit" :title="$t('survey-schemes.prompts.edit')" @click.stop="edit" />
       </v-list-item-action>
@@ -112,11 +110,10 @@
 import type { PropType } from 'vue';
 import type { MoveSection } from './prompt-list.vue';
 import { deepEqual } from 'fast-equals';
-
 import { computed, ref } from 'vue';
+import { ListItemError } from '@intake24/admin/components/lists';
 import type { Prompt } from '@intake24/common/prompts';
 import { copy as copyObject } from '@intake24/common/util';
-
 import { ConfirmDialog } from '@intake24/ui';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 

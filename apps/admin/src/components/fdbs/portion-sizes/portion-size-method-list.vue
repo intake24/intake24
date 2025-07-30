@@ -34,9 +34,7 @@
           </v-list-item-title>
           <v-list-item-subtitle>{{ item.method }} </v-list-item-subtitle>
           <template #append>
-            <v-chip v-if="errors.has(`portionSizeMethods[${index}]*`)" color="error" variant="flat">
-              {{ errors.get(`portionSizeMethods[${index}]*`).length }} errors
-            </v-chip>
+            <list-item-error :errors="errors.get(`portionSizeMethods[${index}]*`)" />
             <v-list-item-action v-if="!disabled">
               <v-btn icon="$edit" :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })" />
             </v-list-item-action>
@@ -61,25 +59,20 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type {
-  InternalPortionSizeMethodItem,
-  PortionSizeMethodEvent,
-  PortionSizeMethodItem,
-} from './portion-sizes';
+import type { InternalPortionSizeMethodItem, PortionSizeMethodEvent, PortionSizeMethodItem } from './portion-sizes';
 import { deepEqual } from 'fast-equals';
 import { defineComponent, ref, useTemplateRef } from 'vue';
-
 import { VueDraggable } from 'vue-draggable-plus';
+import { ListItemError } from '@intake24/admin/components/lists';
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
-
 import { ConfirmDialog } from '@intake24/ui';
 import PortionSizeMethodSelector from './portion-size-method-selector.vue';
 
 export default defineComponent({
   name: 'PortionSizeMethodList',
 
-  components: { ConfirmDialog, PortionSizeMethodSelector, VueDraggable },
+  components: { ConfirmDialog, ListItemError, PortionSizeMethodSelector, VueDraggable },
 
   props: {
     disabled: {

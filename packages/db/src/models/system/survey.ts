@@ -21,7 +21,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
 import { surveyPermissions } from '@intake24/common/security';
 import type {
   SchemeOverrides,
@@ -35,9 +34,9 @@ import {
   defaultSessionSettings,
 } from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
-
 import {
   ClientErrorReport,
+  FAQ,
   FeedbackScheme,
   GenUserCounter,
   Permission,
@@ -186,6 +185,12 @@ export default class Survey extends BaseModel<
     allowNull: true,
     type: DataType.BIGINT,
   })
+  declare faqId: CreationOptional<string | null>;
+
+  @Column({
+    allowNull: true,
+    type: DataType.BIGINT,
+  })
   declare feedbackSchemeId: CreationOptional<string | null>;
 
   @Column({
@@ -307,6 +312,9 @@ export default class Survey extends BaseModel<
   @HasOne(() => GenUserCounter, 'surveyId')
   declare counter?: NonAttribute<GenUserCounter>;
 
+  @BelongsTo(() => FAQ, 'faqId')
+  declare faq?: NonAttribute<FAQ>;
+
   @BelongsTo(() => FeedbackScheme, 'feedbackSchemeId')
   declare feedbackScheme?: NonAttribute<FeedbackScheme>;
 
@@ -391,6 +399,7 @@ export const updateSurveyFields = [
   'endDate',
   'localeId',
   'surveySchemeId',
+  'faqId',
   'feedbackSchemeId',
   'allowGenUsers',
   'genUserKey',

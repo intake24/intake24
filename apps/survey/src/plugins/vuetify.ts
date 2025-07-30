@@ -99,6 +99,7 @@ export default createVuetify({
       drink: 'fas fa-glass-water',
       edit: 'fas fa-edit',
       expandImage: 'fas fa-arrows-alt',
+      faqs: 'fas fa-question-circle',
       feedback: 'fas fa-comments',
       food: 'fas fa-bowl-food',
       info: 'fas fa-circle-info',

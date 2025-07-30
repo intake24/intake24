@@ -1,10 +1,8 @@
 import type { Request } from 'express';
 import { initServer } from '@ts-rest/express';
-
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { UserSurveyAlias } from '@intake24/db';
-
 import { ForbiddenError, NotFoundError } from '../../errors';
 
 export function feedback() {
@@ -57,7 +55,7 @@ export function feedback() {
           include: [
             {
               association: 'survey',
-              where: { slug },
+              where: { slug: { [UserSurveyAlias.op('ciEq')]: slug } },
               attributes: ['id', 'slug'],
               include: [{ association: 'feedbackScheme', attributes: ['outputs'] }],
             },
