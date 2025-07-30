@@ -9,7 +9,7 @@ import type { SinglePrompt } from '@intake24/common/prompts';
 import type { SurveyStatus } from '@intake24/common/surveys';
 import { flattenSchemeWithSection, groupSchemeMultiPrompts, isMealSection } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
-import { Survey } from '@intake24/db';
+import { FAQ, Survey } from '@intake24/db';
 
 export function surveyRespondent() {
   const ratingRateLimiter = ioc.cradle.rateLimiter.createMiddleware('rating', {
@@ -21,6 +21,23 @@ export function surveyRespondent() {
   const surveySettingsCacheTTL = ioc.cradle.config.cache.surveySettingsTTL;
 
   return initServer().router(contract.surveyRespondent, {
+    faqs: async ({ params: { slug } }) => {
+      const faqs = await FAQ.findOne({
+        attributes: ['content'],
+        include: [
+          {
+            association: 'surveys',
+            attributes: ['id'],
+            where: { slug: { [FAQ.op('ciEq')]: slug } },
+          },
+        ],
+      });
+
+      if (!faqs)
+        throw new NotFoundError();
+
+      return { status: 200, body: faqs.content };
+    },
     parameters: async ({ params, req }) => {
       const { slug } = params;
       const { imagesBaseUrl } = req.scope.cradle;
@@ -57,6 +74,7 @@ export function surveyRespondent() {
         endDate,
         locale,
         surveyScheme,
+        faqId,
         feedbackScheme,
         numberOfSubmissionsForFeedback,
         searchSettings: {
@@ -127,6 +145,7 @@ export function surveyRespondent() {
           state,
           locale,
           surveyScheme: { id: surveyScheme.id, meals, prompts, settings },
+          faqs: !!faqId,
           feedbackScheme: feedbackScheme
             ? {
                 ...feedbackScheme.get(),

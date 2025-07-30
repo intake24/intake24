@@ -5,6 +5,7 @@ import { schemeOverrides, sessionSettings, surveySearchSettings, surveyStatuses 
 
 import { notification } from '../../notifications';
 import { safeIdentifier } from '../generic';
+import { faqAttributes } from './faqs';
 import { feedbackSchemeAttributes } from './feedback-schemes';
 import { systemLocaleAttributes } from './locales';
 import { userSecurableAttributes } from './securables';
@@ -30,6 +31,7 @@ export const surveyAttributes = z.object({
   surveyMonkeyUrl: z.string().max(512).nullable(),
   supportEmail: z.string().max(512).email().toLowerCase(),
   originatingUrl: z.string().max(512).nullable(),
+  faqId: z.string().nullable(),
   feedbackSchemeId: z.string().nullable(),
   numberOfSubmissionsForFeedback: z.number().int().min(1),
   notifications: notification.array(),
@@ -77,6 +79,7 @@ export const surveyEntry = surveyAttributes
     startDate: z.string(),
     endDate: z.string(),
     locale: systemLocaleAttributes,
+    faq: faqAttributes.optional(),
     feedbackScheme: feedbackSchemeAttributes.optional(),
     surveyScheme: surveySchemeAttributes,
     owner: owner.optional(),

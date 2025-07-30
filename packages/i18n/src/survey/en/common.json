@@ -35,6 +35,11 @@
   "message": "Message",
   "continue": "Continue",
 
+  "faqs": {
+    "_": "FAQ",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about Intake24"
+  },
   "help": {
     "_": "Help",
     "title": "Request help",

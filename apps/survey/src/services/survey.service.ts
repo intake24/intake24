@@ -4,13 +4,13 @@ import type {
   GenerateUserResponse,
   PublicSurveyEntry,
   SurveyEntryResponse,
+  SurveyFAQs,
   SurveyHelpRequest,
   SurveyRatingRequest,
   SurveySubmissionResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
-
 import http from './http.service';
 
 export type GenerateUserPayload = {
@@ -31,6 +31,12 @@ export default {
       `surveys/${surveyId}/generate-user`,
       payload,
     );
+
+    return data;
+  },
+
+  surveyFAQs: async (surveyId: string): Promise<SurveyFAQs> => {
+    const { data } = await http.get<SurveyFAQs>(`surveys/${surveyId}/faqs`);
 
     return data;
   },

@@ -1,6 +1,5 @@
 import { getSupportedRegionCodes, parsePhoneNumber } from 'awesome-phonenumber';
 import { isIn } from 'validator';
-
 import {
   groupedRecallPrompts,
   meal,
@@ -10,9 +9,9 @@ import {
   surveyRatings,
   surveyStatuses,
 } from '@intake24/common/surveys';
-
 import { z } from '../../util';
 import { userCustomField } from '../common';
+import { faqSection } from './admin';
 import { feedbackSchemeResponse } from './feedback';
 
 export const generateUserResponse = z.object({
@@ -59,6 +58,7 @@ export const surveyEntryResponse = z.object({
     prompts: groupedRecallPrompts,
   }),
   feedbackScheme: feedbackSchemeResponse.optional(),
+  faqs: z.boolean(),
   numberOfSubmissionsForFeedback: z.number(),
   session: sessionSettings,
   suspensionReason: z.string().nullable(),
@@ -106,6 +106,9 @@ export const surveyUserSessionResponse = z.object({
 });
 
 export type SurveyUserSessionResponse = z.infer<typeof surveyUserSessionResponse>;
+
+export const surveyFAQs = faqSection.array();
+export type SurveyFAQs = z.infer<typeof surveyFAQs>;
 
 export const surveyHelpRequest = z
   .object({

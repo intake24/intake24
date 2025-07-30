@@ -114,7 +114,7 @@
             <v-container>
               <v-tabs v-model="tab" bg-color="secondary">
                 <v-tab v-for="item in ['general', 'json']" :key="item" :value="item">
-                  {{ $t(`feedback-schemes.sections.tabs.${item}`) }}
+                  {{ $t(`common.tabs.${item}`) }}
                 </v-tab>
               </v-tabs>
             </v-container>
@@ -150,9 +150,7 @@
                 </language-selector>
               </v-tabs-window-item>
               <v-tabs-window-item key="json" value="json">
-                <v-container>
-                  <json-editor v-model="dialog.item" />
-                </v-container>
+                <json-editor v-model="dialog.item" />
               </v-tabs-window-item>
             </v-tabs-window>
             <v-card-actions>

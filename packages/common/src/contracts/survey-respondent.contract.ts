@@ -1,10 +1,10 @@
 import { initContract } from '@ts-rest/core';
-
 import { createSanitizer } from '../rules';
 import { surveyState } from '../surveys';
 import {
   foodSearchResponse,
   surveyEntryResponse,
+  surveyFAQs,
   surveyFoodSearchQuery,
   surveyHelpRequest,
   surveyRatingRequest,
@@ -17,6 +17,16 @@ import { z } from '../util';
 const tzOffset = z.coerce.number().openapi({ description: 'Client timezone offset in minutes' });
 
 export const surveyRespondent = initContract().router({
+  faqs: {
+    method: 'GET',
+    path: '/surveys/:slug/faqs',
+    responses: {
+      200: surveyFAQs,
+    },
+    summary: 'Survey faqs',
+    description:
+      'Returns survey FAQs, if any.',
+  },
   parameters: {
     method: 'GET',
     path: '/surveys/:slug/parameters',

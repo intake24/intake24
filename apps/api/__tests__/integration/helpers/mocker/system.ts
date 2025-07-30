@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
 import { faker } from '@faker-js/faker';
-
 import { times } from 'lodash';
 import slugify from 'slugify';
 import {
@@ -10,7 +9,6 @@ import {
   defaultTopFoods as defaultFeedbackTopFoods,
   feedbackPhysicalDataFields,
 } from '@intake24/common/feedback';
-
 import { customPrompts } from '@intake24/common/prompts';
 import { createAmrMethod, recordVisibilities } from '@intake24/common/security';
 import {
@@ -25,6 +23,7 @@ import { defaultJobsParams } from '@intake24/common/types';
 import type { UserCustomField } from '@intake24/common/types';
 import type {
   CreateRespondentRequest,
+  FAQRequest,
   LanguageRequest,
   LocaleRequest,
   PermissionRequest,
@@ -112,6 +111,22 @@ function respondent(): CreateRespondentRequest {
     passwordConfirm,
     phone,
     customFields,
+  };
+}
+
+function faq(): FAQRequest {
+  return {
+    name: faker.word.words(3),
+    content: [{
+      id: faker.string.nanoid(6),
+      title: { en: faker.word.words(3) },
+      items: times(3, () => ({
+        id: faker.string.nanoid(6),
+        title: { en: faker.word.words(3) },
+        content: { en: faker.lorem.paragraph() },
+      })),
+    }],
+    visibility: 'public',
   };
 }
 
@@ -395,6 +410,7 @@ function task(): TaskRequest {
 
 export default {
   customField,
+  faq,
   feedbackScheme,
   job,
   language,

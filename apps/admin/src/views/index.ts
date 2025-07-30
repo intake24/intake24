@@ -2,6 +2,7 @@ import type { Dictionary } from '@intake24/common/types';
 
 import authentication from './authentication';
 import dashboard from './dashboard.vue';
+import faqs from './faqs';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
 import foodGroups from './food-groups';
@@ -26,6 +27,7 @@ import users from './users';
 const views: Dictionary = {
   authentication,
   dashboard,
+  faqs,
   fdbs,
   'feedback-schemes': feedbackSchemes,
   'food-groups': foodGroups,

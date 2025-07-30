@@ -52,66 +52,51 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
 import { useForm } from '@intake24/admin/composables';
-import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 
-export type CopySchemeForm = {
+export type CopyRecordForm = {
   name: string | null;
 };
 
-export default defineComponent({
-  name: 'CopySchemeDialog',
-
-  props: {
+const props = defineProps(
+  {
     resource: {
-      type: String as () => 'survey-schemes' | 'feedback-schemes',
+      type: String as () => 'survey-schemes' | 'feedback-schemes' | 'faqs',
       required: true,
     },
-    schemeId: {
+    recordId: {
       type: String,
       required: true,
     },
   },
+);
 
-  setup(props) {
-    const { i18n } = useI18n();
-    const router = useRouter();
-    const route = useRoute();
+const { i18n } = useI18n();
+const router = useRouter();
+const route = useRoute();
 
-    const { data, errors, post } = useForm<CopySchemeForm>({ data: { name: null } });
-    const dialog = ref(false);
-    const redirect = ref(true);
+const { data, errors, post } = useForm<CopyRecordForm>({ data: { name: null } });
+const dialog = ref(false);
+const redirect = ref(true);
 
-    const close = () => {
-      dialog.value = false;
-    };
+function close() {
+  dialog.value = false;
+}
 
-    const confirm = async () => {
-      const { resource, schemeId } = props;
-      const { name } = route;
-      const { id } = await post<SurveySchemeEntry>(`admin/${resource}/${schemeId}/copy`);
+async function confirm() {
+  const { resource, recordId } = props;
+  const { name } = route;
+  const { id } = await post<{ id: string }>(`admin/${resource}/${recordId}/copy`);
 
-      close();
-      useMessages().success(i18n.t('common.msg.created', { name }));
+  close();
+  useMessages().success(i18n.t('common.msg.created', { name }));
 
-      if (redirect.value)
-        await router.push({ name: name ?? `${resource}-read`, params: { id } });
-    };
-
-    return {
-      close,
-      confirm,
-      data,
-      dialog,
-      errors,
-      redirect,
-    };
-  },
-});
+  if (redirect.value)
+    await router.push({ name: name ?? `${resource}-read`, params: { id } });
+}
 </script>

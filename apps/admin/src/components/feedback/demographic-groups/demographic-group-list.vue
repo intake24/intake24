@@ -204,9 +204,7 @@
                 </v-container>
               </v-tabs-window-item>
               <v-tabs-window-item key="json" value="json">
-                <v-container>
-                  <json-editor v-model="dialog.item" />
-                </v-container>
+                <json-editor v-model="dialog.item" />
               </v-tabs-window-item>
             </v-tabs-window>
             <v-card-actions>

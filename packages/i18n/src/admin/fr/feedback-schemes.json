@@ -113,11 +113,7 @@
     "title": "Sections",
     "add": "Add section",
     "edit": "Edit section",
-    "remove": "Remove section",
-    "tabs": {
-      "general": "General",
-      "json": "JSON"
-    }
+    "remove": "Remove section"
   },
   "custom": {
     "_": "Custom section",

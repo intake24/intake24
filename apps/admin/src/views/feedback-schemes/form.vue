@@ -1,10 +1,10 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <template #actions>
-      <copy-scheme-dialog
+      <copy-record-dialog
         v-if="canHandleEntry('copy')"
+        :record-id="id"
         resource="feedback-schemes"
-        :scheme-id="id"
       />
       <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
@@ -150,9 +150,9 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 
+import { CopyRecordDialog } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
-import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
 import type {
   Card,
@@ -199,7 +199,7 @@ export type PatchFeedbackSchemeForm = Pick<
 export default defineComponent({
   name: 'SchemeForm',
 
-  components: { CopySchemeDialog, FeedbackSections, Preview },
+  components: { CopyRecordDialog, FeedbackSections, Preview },
 
   mixins: [formMixin],
 

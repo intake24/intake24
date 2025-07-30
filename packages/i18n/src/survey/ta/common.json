@@ -32,6 +32,11 @@
   "phone": "தொலைபேசி",
   "message": "Message",
   "continue": "தொடரவும்",
+  "faqs": {
+    "_": "FAQ",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about Intake24"
+  },
   "help": {
     "_": "உதவி",
     "title": "உதவி கேட்கவும்",

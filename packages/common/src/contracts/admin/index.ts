@@ -1,5 +1,6 @@
 import acl from './acl';
 import { authentication } from './authentication.contract';
+import { faq } from './faq.contract';
 import { foodThumbnailImages } from './fdbs/food-thumbnail-images.contract';
 import { feedbackScheme } from './feedback-scheme.contract';
 import { foodDb } from './food-db.contract';
@@ -26,6 +27,8 @@ import user from './user';
 export default {
   acl,
   authentication,
+  faq,
+  faqSecurable: securable('FAQ', '/admin/faqs/:faqId'),
   feedbackScheme,
   feedbackSchemeSecurable: securable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   foodDb,

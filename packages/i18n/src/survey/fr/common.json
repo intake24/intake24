@@ -32,6 +32,11 @@
   "phone": "Téléphone",
   "message": "Message",
   "continue": "Continuer",
+  "faqs": {
+    "_": "FAQ",
+    "title": "Foire aux Questions (FAQ)",
+    "subtitle": "Trouvez les réponses aux questions fréquemment posées sur l'enquête alimentaire"
+  },
   "help": {
     "_": "Aide",
     "title": "Envoyer le message",

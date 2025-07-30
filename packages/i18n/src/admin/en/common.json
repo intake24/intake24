@@ -98,7 +98,10 @@
     "exclusive": "Exclusive",
     "selected": "Selected"
   },
-
+  "tabs": {
+    "general": "General",
+    "json": "JSON"
+  },
   "date": "Date",
   "expiredAt": "Expired at",
   "expiresAt": "Expires at",
@@ -192,6 +195,7 @@
 
   "redirect": "Redirect to new entry",
 
+  "errors": "{count} errors",
   "selected": "{count} items selected",
 
   "not": {

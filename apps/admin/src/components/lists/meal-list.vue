@@ -61,9 +61,7 @@
           <v-list-item-title>{{ meal.name.en }}</v-list-item-title>
           <v-list-item-subtitle>{{ meal.time }}</v-list-item-subtitle>
           <template #append>
-            <v-chip v-if="errors.has(`meals.${index}.*`)" color="error" variant="flat">
-              {{ errors.get(`meals.${index}.*`).length }} errors
-            </v-chip>
+            <list-item-error :errors="errors.get(`meals.${index}.*`)" />
             <v-list-item-action>
               <v-btn icon="$edit" :title="$t('survey-schemes.meals.edit')" @click.stop="edit(index, meal)" />
             </v-list-item-action>
@@ -182,11 +180,10 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-
 import { useVModel } from '@vueuse/core';
 import { computed, ref, useTemplateRef } from 'vue';
-
 import { VueDraggable } from 'vue-draggable-plus';
+import { ListItemError } from '@intake24/admin/components/lists';
 import type { ReturnUseErrors } from '@intake24/admin/composables';
 import type { Meal } from '@intake24/common/surveys';
 import { defaultMeals, staticMealFlags } from '@intake24/common/surveys';

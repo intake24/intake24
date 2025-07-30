@@ -95,6 +95,10 @@
     "exclusive": "Exclusive",
     "selected": "Selected"
   },
+  "tabs": {
+    "general": "General",
+    "json": "JSON"
+  },
   "date": "Date",
   "expiredAt": "Expiré à",
   "expiresAt": "Expires at",
@@ -180,6 +184,7 @@
     "none": "Aucun enregistrement trouvé"
   },
   "redirect": "Rediriger vers une autre entrée",
+  "errors": "{count} errors",
   "selected": "{count} éléments sélectionnés",
   "not": {
     "assigned": "Non attribué",

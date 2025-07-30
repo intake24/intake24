@@ -1,4 +1,5 @@
 import ClientErrorReport from './client-error-report';
+import FAQ from './faq';
 import FeedbackScheme from './feedback-scheme';
 import FixedFoodRanking from './fixed-food-ranking';
 import GenUserCounter from './gen-user-counter';
@@ -50,6 +51,8 @@ import UserSurveySession from './user-survey-session';
 
 export { default as ClientErrorReport } from './client-error-report';
 export * from './client-error-report';
+export { default as FAQ } from './faq';
+export * from './faq';
 export { default as FeedbackScheme } from './feedback-scheme';
 export * from './feedback-scheme';
 export { default as FixedFoodRanking } from './fixed-food-ranking';
@@ -149,6 +152,7 @@ export * from './user-survey-session';
 
 export const system = {
   ClientErrorReport,
+  FAQ,
   FeedbackScheme,
   FixedFoodRanking,
   GenUserCounter,

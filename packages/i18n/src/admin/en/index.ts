@@ -2,6 +2,7 @@ import asServedSets from './as-served-sets.json';
 import common from './common.json';
 import dashboard from './dashboard.json';
 import drinkwareSets from './drinkware-sets.json';
+import faqs from './faqs.json';
 import fdbs from './fdbs.json';
 import feedbackSchemes from './feedback-schemes.json';
 import foodGroups from './food-groups.json';
@@ -30,6 +31,7 @@ const messages = {
   common,
   dashboard,
   'drinkware-sets': drinkwareSets,
+  faqs,
   fdbs,
   'feedback-schemes': feedbackSchemes,
   'food-groups': foodGroups,
