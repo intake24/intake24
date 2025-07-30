@@ -2,7 +2,7 @@ import type { Router } from 'express';
 import { createExpressEndpoints, initServer } from '@ts-rest/express';
 import passport from 'passport';
 import { contract } from '@intake24/common/contracts';
-import { FeedbackScheme, Language, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
+import { FAQ, FeedbackScheme, Language, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
 import { requestValidationErrorHandler } from '../errors';
 import { isAccountVerified, isSurveyRespondent, registerACLScope } from '../middleware';
 import admin from './admin';
@@ -123,6 +123,8 @@ export function registerRouters(express: Router) {
     asServedImage: contract.admin.images.asServedImage,
     asServedSet: contract.admin.images.asServedSet,
     drinkwareSet: contract.admin.images.drinkwareSet,
+    faq: contract.admin.faq,
+    faqSecurable: contract.admin.faqSecurable,
     feedbackScheme: contract.admin.feedbackScheme,
     feedbackSchemeSecurable: contract.admin.feedbackSchemeSecurable,
     foodDb: contract.admin.foodDb,
@@ -172,6 +174,8 @@ export function registerRouters(express: Router) {
       asServedImage: admin.images.asServedImage(),
       asServedSet: admin.images.asServedSet(),
       drinkwareSet: admin.images.drinkwareSet(),
+      faq: admin.faq(),
+      faqSecurable: admin.securable(FAQ, contract.admin.faqSecurable),
       feedbackScheme: admin.feedbackScheme(),
       feedbackSchemeSecurable: admin.securable(FeedbackScheme, contract.admin.feedbackSchemeSecurable),
       foodDb: admin.foodDb(),

@@ -1,6 +1,7 @@
+import type { MockInstance } from 'vitest';
 import ms from 'ms';
 import request from 'supertest';
-import { MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';

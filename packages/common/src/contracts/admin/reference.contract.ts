@@ -7,6 +7,7 @@ import {
   asServedSetListEntry,
   categoryReference,
   drinkwareSetListEntry,
+  faqEntry,
   feedbackSchemeEntry,
   foodGroupReference,
   foodReference,
@@ -61,6 +62,19 @@ export const reference = initContract().router({
     },
     summary: 'Drinkware sets',
     description: 'Drinkware sets (paginated reference list)',
+  },
+  faqs: {
+    method: 'GET',
+    path: '/admin/references/faqs',
+    query: paginationRequest,
+    responses: {
+      200: z.object({
+        data: faqEntry.array(),
+        meta: paginationMeta,
+      }),
+    },
+    summary: 'FAQs',
+    description: 'FAQs (paginated reference list)',
   },
   feedbackSchemes: {
     method: 'GET',

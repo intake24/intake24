@@ -50,6 +50,16 @@
             </template>
             <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
           </v-list-item>
+          <v-list-item
+            v-if="faqsEnabled"
+            link
+            :to="{ name: 'faqs', params: { surveyId } }"
+          >
+            <template #prepend>
+              <v-icon icon="$faqs" />
+            </template>
+            <v-list-item-title>{{ $t('common.faqs._') }}</v-list-item-title>
+          </v-list-item>
         </template>
       </v-list>
       <template #append>
@@ -197,6 +207,7 @@ export default defineComponent({
   computed: {
     ...mapState(useAuth, ['loggedIn']),
     ...mapState(useSurvey, {
+      faqsEnabled: 'faqsEnabled',
       feedbackAllowed: 'feedbackAllowed',
       recallAllowed: 'recallAllowed',
       recallNumber: 'recallNumber',

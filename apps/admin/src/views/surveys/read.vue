@@ -102,6 +102,12 @@
           <th>{{ $t('surveys.search.matchScoreWeight') }}</th>
           <td>{{ entry.searchSettings.matchScoreWeight }}</td>
         </tr>
+        <tr v-if="entry.faq">
+          <th>{{ $t('faqs._') }}</th>
+          <td colspan="3">
+            {{ entry.faq.name }}
+          </td>
+        </tr>
       </tbody>
     </v-table>
   </layout>

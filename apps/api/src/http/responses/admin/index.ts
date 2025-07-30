@@ -1,4 +1,5 @@
 export * from './categories';
+export * from './faq';
 export * from './feedback-scheme';
 export * from './foods';
 export * from './images';
