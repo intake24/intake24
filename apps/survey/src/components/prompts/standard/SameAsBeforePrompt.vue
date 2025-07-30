@@ -115,8 +115,6 @@
           <v-divider />
           <v-list v-if="customPromptAnswers && Object.keys(customPromptAnswers).length > 0" class="px-4" color="grey-lighten-4">
             <div v-for="(customPromptAnswer, index) in customPromptAnswers" :key="index">
-              <v-list-subheader>{{ promptNames[index] || '' }}</v-list-subheader>
-              <v-divider />
               <v-list-item v-for="(answer, answerIdx) in customPromptAnswer" :key="answerIdx" class="ps-0" density="compact">
                 <template #prepend>
                   <v-icon icon="fas fa-check" />
@@ -310,18 +308,6 @@ const customPromptAnswers = computed(() => {
           : [prompt_id, [getLabel(options as string)]];
       }),
   );
-});
-
-const promptNames = computed(() => {
-  const foods = survey.parameters?.surveyScheme.prompts.meals.foods;
-  if (!foods) {
-    console.debug('No custom prompt names found');
-    return {};
-  }
-  return foods.reduce<Record<string, string>>((acc, item) => {
-    acc[item.id] = item.i18n?.name?.[locale.value] || item.i18n?.name?.en || '';
-    return acc;
-  }, {});
 });
 
 const quantity = computed(() => getQuantity(props.sabFood.food));
