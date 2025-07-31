@@ -39,7 +39,7 @@
               <template #prepend>
                 <v-avatar class="drag-and-drop__handle" icon="$handle" />
               </template>
-              <v-list-item-title>{{ translate(item.title.en) }}</v-list-item-title>
+              <v-list-item-title>{{ translate(item.title) }}</v-list-item-title>
               <template #append>
                 <list-item-error :errors="itemErrors(index)" />
                 <v-list-item-action>
@@ -57,7 +57,7 @@
                     :label="$t('faqs.items.remove')"
                     @confirm="remove(index)"
                   >
-                    {{ $t('common.action.confirm.delete', { name: translate(item.title.en) }) }}
+                    {{ $t('common.action.confirm.delete', { name: translate(item.title) }) }}
                   </confirm-dialog>
                 </v-list-item-action>
               </template>

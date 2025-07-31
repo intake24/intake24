@@ -47,13 +47,13 @@
         tile
       >
         <div class="d-flex align-center">
-          <div class="flex-1-0">
+          <div class="">
             <v-avatar class="drag-and-drop__handle" icon="$handle" />
           </div>
-          <div class="text-h4 font-weight-medium flex-1-1 text-truncate">
-            {{ translate(item.title.en) }}
+          <div class="text-h5 font-weight-medium flex-1-1 text-truncate">
+            {{ translate(item.title) }}
           </div>
-          <div class="flex-1-0">
+          <div class="">
             <v-btn
               icon="$edit"
               size="small"
@@ -70,7 +70,7 @@
               variant="text"
               @confirm="remove(index)"
             >
-              {{ $t('common.action.confirm.delete', { name: translate(item.title.en) }) }}
+              {{ $t('common.action.confirm.delete', { name: translate(item.title) }) }}
             </confirm-dialog>
           </div>
         </div>
