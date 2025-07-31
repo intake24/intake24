@@ -29,7 +29,16 @@
             </v-card-title>
             <v-container>
               <v-row>
-                <v-col cols="12" md="6">
+                <v-col cols="12" md="4">
+                  <v-text-field
+                    v-model="addon.id"
+                    hide-details="auto"
+                    :label="$t('common.id')"
+                    :name="`id.${addon.id}`"
+                    variant="outlined"
+                  />
+                </v-col>
+                <v-col cols="12" md="4" sm="6">
                   <v-select
                     v-model="addon.entity"
                     class="mb-4"
@@ -40,7 +49,7 @@
                     variant="outlined"
                   />
                 </v-col>
-                <v-col cols="12" md="6">
+                <v-col cols="12" md="4" sm="6">
                   <v-text-field
                     v-model="addon.code"
                     hide-details="auto"

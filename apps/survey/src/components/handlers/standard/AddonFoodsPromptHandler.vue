@@ -86,7 +86,7 @@ const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
 function commitAnswer() {
   for (const [foodId, addons] of Object.entries(state.value.foods)) {
     const linkedFoods = addons.reduce<FoodState[]>((acc, addonFood) => {
-      const { confirmed, data, portionSize, addon } = addonFood;
+      const { confirmed, data, portionSize, addon: { entity, code, id } } = addonFood;
       if (confirmed === undefined) {
         console.warn('AddonFoodsPromptHandler: not confirmed or no food data!');
         return acc;
@@ -94,8 +94,6 @@ function commitAnswer() {
 
       if (confirmed === false || !data)
         return acc;
-
-      const searchTerm = `addon-foods-prompt:${addon.entity}:${addon.entity}`;
 
       const portionSizeMethodIndex = data.portionSizeMethods.findIndex(psm =>
         psm.method === portionSize.method
@@ -109,7 +107,7 @@ function commitAnswer() {
           linkedFoods: [],
           customPromptAnswers: {},
           data,
-          searchTerm,
+          searchTerm: [props.prompt.component, props.prompt.id, entity, code, id].join(':'),
           portionSizeMethodIndex,
           portionSize,
         },
