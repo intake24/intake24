@@ -33,8 +33,8 @@
             <template #activator="{ props }">
               <v-icon
                 v-bind="props"
-                :color="isPortionSizeComplete ? 'green darken-2' : undefined"
-                :icon="isPortionSizeComplete ? '$ok' : '$question'"
+                :color="isPortionSizeComplete && isCustomPromptComplete ? 'green darken-2' : undefined"
+                :icon="isPortionSizeComplete && isCustomPromptComplete ? '$ok' : '$question'"
                 size="small"
               />
             </template>
@@ -103,7 +103,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { i18n: { locale } } = useI18n();
     const survey = useSurvey();
-    const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);
+    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
 
     const customPromptAnswerLabels = computed(() => {
       if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
@@ -144,6 +144,7 @@ export default defineComponent({
       isPortionSizeComplete,
       menu,
       customPromptAnswerLabels,
+      isCustomPromptComplete,
       updateContextId,
     };
   },
