@@ -31,17 +31,17 @@
             <template #activator="{ props }">
               <v-icon
 
-                :color="isPortionSizeComplete ? 'green darken-2' : undefined"
+                :color="isPortionSizeComplete && isCustomPromptComplete ? 'green darken-2' : undefined"
                 size="small"
                 v-bind="props"
               >
-                {{ isPortionSizeComplete ? '$ok' : '$question' }}
+                {{ isPortionSizeComplete && isCustomPromptComplete ? '$ok' : '$question' }}
               </v-icon>
             </template>
             <span>
               {{
                 $t(
-                  `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`,
+                  `recall.menu.food.${food.type}.${isPortionSizeComplete && isCustomPromptComplete ? 'complete' : 'incomplete'}`,
                 )
               }}
             </span>
@@ -99,7 +99,7 @@ export default defineComponent({
   setup(props, ctx) {
     const { i18n: { locale } } = useI18n();
     const survey = useSurvey();
-    const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);
+    const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu } = useFoodItem(props, ctx);
 
     const customPromptAnswerLabels = computed(() => {
       if (!props.food.customPromptAnswers || Object.keys(props.food.customPromptAnswers).length === 0) {
@@ -130,7 +130,7 @@ export default defineComponent({
       });
       return answers.join(', ');
     });
-    return { action, foodName, isPortionSizeComplete, menu, customPromptAnswerLabels };
+    return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels };
   },
 });
 </script>
