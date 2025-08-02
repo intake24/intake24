@@ -19,7 +19,7 @@
   "devDependencies": {
     "@ts-rest/open-api": "^3.52.1",
     "@types/node": "^24.1.0",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "vitepress": "^1.6.3"
   }
 }
