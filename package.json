@@ -45,7 +45,7 @@
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.17.0",
+    "@antfu/eslint-config": "^5.1.0",
     "@types/node": "^24.1.0",
     "@types/prompts": "^2.4.9",
     "calver": "^24.1.0",
