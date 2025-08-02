@@ -116,13 +116,17 @@ export default defineComponent({
           if (Array.isArray(answer)) {
             // Multiple selection
             const labels = answer.map(value =>
-              options.find(opt => opt.value === value)?.shortLabel || options.find(opt => opt.value === value)?.label || value,
+              options.find(opt => opt.value === value)?.shortLabel
+              ?? options.find(opt => opt.value === value)?.label
+              ?? (value || '').toString(),
             );
             displayText = labels.join(', ');
           }
           else {
             // Single selection
-            displayText = options.find(opt => opt.value === answer)?.shortLabel || options.find(opt => opt.value === answer)?.label || '';
+            displayText = options.find(opt => opt.value === answer)?.shortLabel
+              ?? options.find(opt => opt.value === answer)?.label
+              ?? (answer || '').toString();
           }
         }
         if (displayText.trim())
