@@ -649,7 +649,9 @@
     },
     "same-as-before-prompt": {
       "title": "Comme précédemment",
-      "subtitle": "Demander si l'aliment était tel que précédemment"
+      "subtitle": "Demander si l'aliment était tel que précédemment",
+      "skipToSAB": "Passer l'écran 'Non/Oui/Afficher les détails'"
+
     },
     "sleep-schedule-prompt": {
       "title": "Sleep schedule",
