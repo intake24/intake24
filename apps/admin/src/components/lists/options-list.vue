@@ -33,6 +33,13 @@
             variant="outlined"
           />
           <v-text-field
+            v-model="option.shortLabel"
+            density="compact"
+            hide-details="auto"
+            :label="$t('common.options.shortLabel')"
+            variant="outlined"
+          />
+          <v-text-field
             v-model="option.value"
             density="compact"
             hide-details="auto"
@@ -112,7 +119,7 @@ const optionValueRules = computed<RuleCallback[]>(() => [...defaultValueRules, .
 
 function add() {
   const size = currentOptions.value.length + 1;
-  currentOptions.value.push({ id: size, label: `label-${size}`, value: props.numeric ? size : `value-${size}` });
+  currentOptions.value.push({ id: size, label: `label-${size}`, shortLabel: `shortLabel-${size}`, value: props.numeric ? size : `value-${size}` });
 };
 
 function remove(index: number) {

@@ -639,6 +639,7 @@ export const useSurvey = defineStore('survey', {
       const food = findFood(this.data.meals, data.foodId);
 
       food.customPromptAnswers[data.promptId] = data.answer;
+      this.saveSameAsBefore(data.foodId);
     },
 
     addFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
