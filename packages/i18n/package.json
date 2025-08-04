@@ -23,8 +23,8 @@
   "dependencies": {
     "dompurify": "^3.2.6",
     "lodash": "^4.17.21",
-    "vue": "^3.5.17",
-    "vue-i18n": "^11.1.10"
+    "vue": "^3.5.18",
+    "vue-i18n": "^11.1.11"
   },
   "devDependencies": {
     "@jest/types": "^30.0.5",
@@ -33,7 +33,7 @@
     "@types/node": "^24.1.0",
     "jest": "^30.0.5",
     "jest-extended": "^6.0.0",
-    "ts-jest": "^29.4.0",
-    "typescript": "^5.8.3"
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2"
   }
 }

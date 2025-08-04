@@ -55,8 +55,8 @@
     "jest": "^30.0.5",
     "jest-extended": "^6.0.0",
     "svgo": "^4.0.0",
-    "ts-jest": "^29.4.0",
-    "typescript": "^5.8.3",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2",
     "typescript-json-validator": "^2.4.2"
   }
 }

@@ -1,15 +1,14 @@
 import type { Request } from 'express';
 import { initServer } from '@ts-rest/express';
-
+import { ipKeyGenerator } from 'express-rate-limit';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
-
 import { UnauthorizedError } from '../../errors';
 import { attachRefreshToken } from '../util';
 
 export function authentication() {
   const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
-    keyGenerator: req => `login:${req.body?.email ?? req.ip}`,
+    keyGenerator: req => `login:${req.body?.email ?? ipKeyGenerator(req.ip ?? req.ips[0])}`,
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
     skipSuccessfulRequests: true,
   });

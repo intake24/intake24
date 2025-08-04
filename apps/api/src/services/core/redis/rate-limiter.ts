@@ -1,11 +1,9 @@
 import type { Request } from 'express';
 import type { Options } from 'express-rate-limit';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
-
 import type { IoC } from '@intake24/api/ioc';
 import type { TokenPayload } from '@intake24/common/security';
-
 import HasRedisClient from './redis-store';
 
 export default class RateLimiter extends HasRedisClient {
@@ -25,7 +23,7 @@ export default class RateLimiter extends HasRedisClient {
           .status(statusCode)
           .json({ message: typeof message === 'function' ? message(req, res) : message });
       },
-      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
+      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? ipKeyGenerator(req.ip ?? req.ips[0])}`,
       skip: req => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.generic'),
       legacyHeaders: false,
@@ -46,7 +44,7 @@ export default class RateLimiter extends HasRedisClient {
       handler: (req, res, next, { message, statusCode }) => {
         res.status(statusCode).json({ message });
       },
-      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
+      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? ipKeyGenerator(req.ip ?? req.ips[0])}`,
       skip: req => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       legacyHeaders: false,
       standardHeaders: 'draft-7',

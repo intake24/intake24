@@ -1,5 +1,12 @@
 <template>
-  <editor v-bind="{ init, modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
+  <editor
+    v-bind="{
+      init,
+      licenseKey: 'gpl',
+      modelValue,
+    }"
+    @update:model-value="$emit('update:modelValue', $event)"
+  />
 </template>
 
 <script lang="ts">
@@ -48,7 +55,6 @@ export default defineComponent({
     const vLocale = useLocale();
 
     const init = computed<Partial<EditorOptions>>(() => ({
-      license_key: 'gpl',
       skin_url: 'default',
       directionality: vLocale.isRtl.value ? 'rtl' : 'ltr',
       default_link_target: '_blank',

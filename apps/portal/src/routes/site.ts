@@ -33,6 +33,6 @@ router.get('/info/:section', (req, res) => {
 });
 
 // Catch Not Found (404)
-router.get('*', (req, res) => res.status(404).render('errors/404'));
+router.get('/{*any}', (req, res) => res.status(404).render('errors/404'));
 
 export default router;
