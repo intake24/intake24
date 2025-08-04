@@ -59,7 +59,7 @@
     "@vite-pwa/assets-generator": "^1.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
-    "cross-env": "^7.0.3",
+    "cross-env": "^10.0.0",
     "jsdom": "^26.1.0",
     "sass": "^1.89.2",
     "typescript": "^5.8.3",
