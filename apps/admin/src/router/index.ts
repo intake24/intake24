@@ -227,6 +227,12 @@ resources.forEach((item) => {
   routes.push(...generateResourceRoutes(name, [`/${first}`, ...rest], resourceViews, item));
 });
 
+routes.push({
+  path: '/:catchAll(.*)',
+  name: '404',
+  redirect: { name: 'login' },
+});
+
 export default createRouter({
   history: createWebHistory(import.meta.env.VITE_APP_BASE_URL ?? '/'),
   routes,

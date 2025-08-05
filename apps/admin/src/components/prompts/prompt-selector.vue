@@ -377,7 +377,7 @@ export default defineComponent({
     },
 
     reset() {
-      this.tab = 0;
+      this.tab = 'general';
       this.promptTypeTab = 0;
       this.dialog = this.newDialog();
       this.form?.resetValidation();

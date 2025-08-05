@@ -109,13 +109,11 @@ const routes: RouteRecordRaw[] = [
     props: true,
   },
   // Catch any unmatched routes
-  // TODO V3
-  /* {
-    path: '*',
+  {
+    path: '/:catchAll(.*)',
     name: '404',
-    component: views.home,
-    meta: { module: 'public', title: 'common._' },
-  }, */
+    redirect: { name: 'home' },
+  },
 ];
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_APP_BASE_URL ?? '/'),
