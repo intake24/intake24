@@ -16,9 +16,7 @@
   },
   "scripts": {
     "i18n:sync": "pnpm tsx scripts/i18n-sync.ts",
-    "test:unit": "jest",
-    "test:unit:coverage": "pnpm test:unit --coverage",
-    "test:unit:watch": "pnpm test:unit --watch"
+    "test:unit": "vitest"
   },
   "dependencies": {
     "dompurify": "^3.2.6",
@@ -27,13 +25,10 @@
     "vue-i18n": "^11.1.11"
   },
   "devDependencies": {
-    "@jest/types": "^30.0.5",
-    "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.20",
     "@types/node": "^24.1.0",
-    "jest": "^30.0.5",
     "jest-extended": "^6.0.0",
-    "ts-jest": "^29.4.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   }
 }

@@ -1,12 +1,13 @@
 import ms from 'ms';
 import request from 'supertest';
+import { MockInstance, vi } from 'vitest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
 import { sleep } from '@intake24/api/util';
 import { UserPasswordReset } from '@intake24/db';
 
-let dateNowSpy: jest.SpyInstance;
+let dateNowSpy: MockInstance;
 
 export default () => {
   const url = '/api/password/reset';
@@ -89,7 +90,7 @@ export default () => {
   describe('shift time forward to expire token', () => {
     beforeAll(() => {
       const timeShift = Date.now() + ms(ioc.cradle.securityConfig.passwords.expiresIn);
-      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => timeShift);
+      dateNowSpy = vi.spyOn(Date, 'now').mockImplementation(() => timeShift);
     });
 
     it('should return 400 for expired token ', async () => {

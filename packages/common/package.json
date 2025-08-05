@@ -16,9 +16,7 @@
   },
   "scripts": {
     "svgo": "svgo -f ./src/theme/assets -o ./src/theme/assets",
-    "test:unit": "jest",
-    "test:unit:coverage": "pnpm test:unit --coverage",
-    "test:unit:watch": "pnpm test:unit --watch"
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@anatine/zod-openapi": "^2.2.8",
@@ -42,21 +40,19 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@jest/types": "^30.0.5",
     "@simplewebauthn/server": "^13.1.2",
     "@types/fs-extra": "^11.0.4",
-    "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.20",
     "@types/ms": "^0.7.34",
     "@types/node": "^24.1.0",
     "@types/pluralize": "^0.0.33",
     "@types/validator": "^13.15.2",
     "fs-extra": "^11.3.0",
-    "jest": "^30.0.5",
     "jest-extended": "^6.0.0",
     "svgo": "^4.0.0",
-    "ts-jest": "^29.4.1",
     "typescript": "^5.9.2",
-    "typescript-json-validator": "^2.4.2"
+    "typescript-json-validator": "^2.4.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4"
   }
 }
