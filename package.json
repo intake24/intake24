@@ -46,7 +46,6 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.1.0",
-    "@types/jest": "^30.0.0",
     "@types/node": "^24.1.0",
     "@types/prompts": "^2.4.9",
     "calver": "^24.1.0",
@@ -61,7 +60,8 @@
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.13.1",
     "tsx": "^4.20.3",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged",

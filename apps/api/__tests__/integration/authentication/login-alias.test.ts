@@ -44,7 +44,7 @@ export default () => {
       (res.get('Set-Cookie') ?? []).some(
         cookie => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name,
       ),
-    ).toBeTrue();
+    ).toBe(true);
   });
 
   it('valid credentials should return 200, access token & refresh cookie (case-insensitive)', async () => {
@@ -63,6 +63,6 @@ export default () => {
       (res.get('Set-Cookie') ?? []).some(
         cookie => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name,
       ),
-    ).toBeTrue();
+    ).toBe(true);
   });
 };

@@ -91,7 +91,7 @@ export default () => {
         (res.get('Set-Cookie') ?? []).some(
           cookie => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name,
         ),
-      ).toBeTrue();
+      ).toBe(true);
     });
 
     it('should return 400 for duplicate email', async () => {

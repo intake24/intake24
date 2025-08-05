@@ -9,7 +9,6 @@ export default mergeConfig(
       sequence: {
         concurrent: false,
       },
-      setupFiles: ['../../packages/common/vitest.setup.js'],
     },
   }),
 );

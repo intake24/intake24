@@ -13,7 +13,7 @@ describe('passwordShiro', () => {
       salt: 'hVI1j0K84CdzMVZThDD1hg==',
     });
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should fail on incorrect password', async () => {
@@ -23,6 +23,6 @@ describe('passwordShiro', () => {
       salt: 'incorrect-salt',
     });
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 });

@@ -1,6 +1,6 @@
 # Testing
 
-Tests are set up with [Jest](https://jestjs.io) framework.
+Tests are set up with [Vitest](https://vitest.dev) framework.
 
 All tests can be triggered from top-level repository structure.
 
@@ -17,7 +17,7 @@ Tests are always located in `__tests__` folder in each `app` or `package` and us
 │        ├─ unit
 │           └─ my-function1.spec.ts
 │        └─ integration
-│           └─ my-function2.spec.ts
+│           └─ my-function2.test.ts
 ├─ packages
    └─ {package}
       └─ __tests__
@@ -26,7 +26,7 @@ Tests are always located in `__tests__` folder in each `app` or `package` and us
 
 ## Unit tests
 
-Use following commands to run unit tests across repository and trigger tests in `__tests__` folders and `__tests__/unit` folders for `packages` and `apps`, respectively. `Jest` will search for all files with `.spec.ts` extension.
+Use following commands to run unit tests across repository and trigger tests in `__tests__` folders and `__tests__/unit` folders for `packages` and `apps`, respectively. `Vitest` will search for all files with `.spec.ts` extension.
 
 ```sh
 pnpm test:unit
@@ -85,7 +85,7 @@ pnpm test:integration:watch
 
 ## Admin & Survey apps
 
-Front-ends use Vue.js Jest implementation, so you can run tests with:
+Front-ends use Vue.js vitest implementation, so you can run tests with:
 
 ```sh
 pnpm test

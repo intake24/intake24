@@ -40,6 +40,6 @@ export default () => {
       (res.get('Set-Cookie') ?? []).some(
         cookie => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name,
       ),
-    ).toBeTrue();
+    ).toBe(true);
   });
 };

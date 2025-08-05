@@ -6,7 +6,7 @@ describe('passwordBcrypt', () => {
     const hashedPassword = await password.hash('password');
     const result = await password.verify('password', hashedPassword);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should fail on incorrect password', async () => {
@@ -14,6 +14,6 @@ describe('passwordBcrypt', () => {
     const hashedPassword = await password.hash('password');
     const result = await password.verify('wrong-password', hashedPassword);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 });

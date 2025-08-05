@@ -30,7 +30,7 @@ export async function releaseDatabases(): Promise<void> {
   await databases.system.drop({ cascade: true });
   await databases.foods.drop({ cascade: true });
 
-  // Close database connections to let jest test runner detect termination correctly
+  // Close database connections to let test runner detect termination correctly
   await databases.close();
 }
 
