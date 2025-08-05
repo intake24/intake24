@@ -54,4 +54,4 @@ export default {
   user,
 };
 
-export { SecurableContract } from './securable.contract';
+export type { SecurableContract } from './securable.contract';

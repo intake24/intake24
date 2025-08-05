@@ -1,7 +1,8 @@
+import type { CacheKey } from '../core/redis/cache';
+
 import { randomUUID } from 'node:crypto';
 
 import { pick } from 'lodash';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
@@ -28,7 +29,6 @@ import {
   Op,
   QueryTypes,
 } from '@intake24/db';
-import { CacheKey } from '../core/redis/cache';
 
 function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
   const browseCategories = async (localeId: string, query: PaginateQuery) => {

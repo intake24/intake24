@@ -1,6 +1,6 @@
-import { IoC } from '@intake24/api/ioc';
-import { Dictionary } from '@intake24/common/types';
-import { FoodHeader } from '@intake24/common/types/http';
+import type { IoC } from '@intake24/api/ioc';
+import type { Dictionary } from '@intake24/common/types';
+import type { FoodHeader } from '@intake24/common/types/http';
 import type { SourceFileInput } from '@intake24/common/types/http/admin';
 import { FoodThumbnailImage } from '@intake24/db';
 

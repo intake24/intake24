@@ -1,7 +1,8 @@
+import type { CacheKey } from '../core/redis/cache';
+
 import { randomUUID } from 'node:crypto';
 
 import { pick } from 'lodash';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import { foodsResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
@@ -23,7 +24,6 @@ import {
   Op,
   SystemLocale,
 } from '@intake24/db';
-import { CacheKey } from '../core/redis/cache';
 
 function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {

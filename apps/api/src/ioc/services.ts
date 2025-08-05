@@ -1,6 +1,7 @@
 import type { AwilixContainer } from 'awilix';
-import { asClass, asFunction, asValue } from 'awilix';
+import type { RequestIoC } from './ioc';
 
+import { asClass, asFunction, asValue } from 'awilix';
 import foodIndex from '@intake24/api/food-index';
 import {
   aclCache,
@@ -61,7 +62,6 @@ import {
 } from '@intake24/api/services';
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import { logger, Mailer } from '@intake24/common-backend';
-import { RequestIoC } from './ioc';
 
 export default (container: AwilixContainer<RequestIoC>): void => {
   container.register({
