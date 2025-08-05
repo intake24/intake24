@@ -1,9 +1,15 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
+    "target": "esnext",
+    "lib": ["DOM", "ESNext"],
     "baseUrl": ".",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "paths": {
       "@intake24/common/*": ["../../packages/common/src/*"]
-    }
-  }
+    },
+    "resolveJsonModule": true
+  },
+  "exclude": ["dist", "node_modules"]
 }

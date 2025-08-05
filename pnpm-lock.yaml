@@ -656,9 +656,15 @@ importers:
       '@ts-rest/open-api':
         specifier: ^3.52.1
         version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.1.0)(zod@3.25.76))(zod@3.25.76)
+      '@tsconfig/node22':
+        specifier: ^22.0.2
+        version: 22.0.2
       '@types/node':
         specifier: ^24.1.0
         version: 24.1.0
+      tsx:
+        specifier: ^4.20.3
+        version: 4.20.3
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
