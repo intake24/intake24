@@ -185,6 +185,14 @@ export const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes],
   },
+  {
+    group: 'images',
+    name: 'media',
+    icon: 'fas fa-photo-film',
+    api: 'admin/media',
+    generateRoutes: true,
+    routes: ['browse'],
+  },
   // System
   {
     group: 'system',

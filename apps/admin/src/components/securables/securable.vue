@@ -17,7 +17,7 @@
       <template #header-add>
         <user-dialog
           v-bind="{ api, actions, resource }"
-          ref="userDialog"
+          ref="dialog"
           @update:table="updateTable"
         />
       </template>
@@ -54,110 +54,83 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { DataTableHeader } from '../data-tables';
-
 import type { Owner } from './owner-dialog.vue';
-import { defineComponent, ref } from 'vue';
+import { computed, useTemplateRef } from 'vue';
 import type { SecurableType } from '@intake24/common/security';
 import { securableDefs } from '@intake24/common/security';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 import { getResourceFromSecurable } from '@intake24/common/util';
-
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { EmbeddedDataTable } from '../data-tables';
 import OwnerDialog from './owner-dialog.vue';
 import UserDialog from './user-dialog.vue';
 
-export default defineComponent({
-  name: 'ResourceSecurables',
-
-  components: { ConfirmDialog, EmbeddedDataTable, OwnerDialog, UserDialog },
-
-  props: {
-    resourceId: {
-      type: String,
-      required: true,
-    },
-    securableType: {
-      type: String as PropType<SecurableType>,
-      required: true,
-    },
-    owner: {
-      type: Object as PropType<Owner>,
-    },
+const props = defineProps({
+  resourceId: {
+    type: String,
+    required: true,
   },
-
-  setup() {
-    const { i18n: { t } } = useI18n();
-
-    const table = ref<InstanceType<typeof EmbeddedDataTable>>();
-    const userDialog = ref<InstanceType<typeof UserDialog>>();
-
-    const headers: DataTableHeader[] = [
-      {
-        title: t('users.name'),
-        sortable: true,
-        key: 'name',
-        align: 'start',
-      },
-      {
-        title: t('common.email'),
-        sortable: true,
-        key: 'email',
-        align: 'start',
-      },
-      {
-        title: t('securables.actions._'),
-        sortable: false,
-        key: 'securables',
-        align: 'start',
-      },
-      {
-        title: t('common.action._'),
-        sortable: false,
-        key: 'action',
-        align: 'end',
-      },
-    ];
-
-    return { headers, table, userDialog };
+  securableType: {
+    type: String as PropType<SecurableType>,
+    required: true,
   },
-
-  data() {
-    const { securableType } = this;
-    const resource = getResourceFromSecurable(securableType);
-    const actions = securableDefs[securableType];
-
-    return {
-      resource,
-      actions,
-    };
-  },
-
-  computed: {
-    api(): string {
-      const { resource, resourceId } = this;
-      return `admin/${resource}/${resourceId}/securables`;
-    },
-  },
-
-  methods: {
-    editUser(item: UserSecurableListEntry) {
-      this.userDialog?.edit(item);
-    },
-
-    async removeUser(userId: string) {
-      await this.userDialog?.remove(userId);
-    },
-
-    async updateTable() {
-      await this.table?.fetch();
-    },
+  owner: {
+    type: Object as PropType<Owner>,
   },
 });
+
+const { i18n: { t } } = useI18n();
+
+const table = useTemplateRef('table');
+const dialog = useTemplateRef('dialog');
+
+const resource = computed(() => getResourceFromSecurable(props.securableType));
+const actions = computed(() => securableDefs[props.securableType]);
+
+const headers: DataTableHeader[] = [
+  {
+    title: t('users.name'),
+    sortable: true,
+    key: 'name',
+    align: 'start',
+  },
+  {
+    title: t('common.email'),
+    sortable: true,
+    key: 'email',
+    align: 'start',
+  },
+  {
+    title: t('securables.actions._'),
+    sortable: false,
+    key: 'securables',
+    align: 'start',
+  },
+  {
+    title: t('common.action._'),
+    sortable: false,
+    key: 'action',
+    align: 'end',
+  },
+];
+
+const api = computed(() => `admin/${resource.value}/${props.resourceId}/securables`);
+
+function editUser(item: UserSecurableListEntry) {
+  dialog.value?.edit(item);
+};
+
+async function removeUser(userId: string) {
+  await dialog.value?.remove(userId);
+};
+
+async function updateTable() {
+  await table.value?.fetch();
+};
 </script>
 
 <style lang="scss" scoped></style>

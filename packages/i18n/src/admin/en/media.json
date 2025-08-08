@@ -1,0 +1,20 @@
+{
+  "_": "Media",
+  "title": "Media",
+  "tab": "Media",
+
+  "name": "Name",
+  "file": "File",
+  "filename": "Filename",
+  "disk": "Disk",
+  "size": "Size",
+
+  "collections": {
+    "_": "Collection",
+    "title": "Collections",
+    "default": "Default",
+    "tinymce": "HTML editor",
+    "feedback-schemes:card": "Card thumbnail",
+    "survey-schemes:carousel": "Carousel image"
+  }
+}
