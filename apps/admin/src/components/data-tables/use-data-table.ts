@@ -63,5 +63,10 @@ export function useDataTable(props: DataTableProps, filter: ComputedRef<Dictiona
     await fetch();
   });
 
+  watch(api, async () => {
+    items.value = [];
+    meta.value = { total: 0 };
+  });
+
   return { api, fetch, items, meta, options, selected, tracked };
 }

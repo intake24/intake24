@@ -2,14 +2,13 @@
   <div>
     <v-toolbar color="grey-lighten-4">
       <v-icon color="secondary" end>
-        fas fa-shield-halved
+        fas fa-photo-film
       </v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('media.title') }}
       </v-toolbar-title>
       <v-spacer />
     </v-toolbar>
-    <!-- <v-file-upload /> -->
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -18,7 +17,7 @@
               <v-text-field
                 v-model="data.name"
                 :error-messages="errors.get('name')"
-                :label="$t('media.id')"
+                :label="$t('media.name')"
                 name="name"
                 prepend-inner-icon="$media"
               />
@@ -34,6 +33,16 @@
                 @change="errors.clear('file')"
               />
             </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="data.collection"
+                :error-messages="errors.get('collection')"
+                :items="collections"
+                :label="$t('media.collections._')"
+                name="collection"
+                prepend-inner-icon="fas fa-folder"
+              />
+            </v-col>
           </v-row>
           <submit-footer :disabled="errors.any.value" />
         </v-card-text>
@@ -42,19 +51,24 @@
     <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">
       <template #[`item.thumb`]="{ item }">
         <v-img
-          class="rounded"
+          class="rounded ma-2"
           contain
-          height="100"
+          height="70"
           :src="item.sizes.thumb"
-          width="100"
+          width="70"
         />
+      </template>
+      <template #[`item.collection`]="{ item }">
+        {{ t(`media.collections.${item.collection}`) }}
+      </template>
+      <template #[`item.size`]="{ item }">
+        {{ `${Math.floor((item.size / 1024) * 100) / 100} KB` }}
       </template>
       <template #[`item.action`]="{ item }">
         <v-btn
           color="secondary"
           icon
           :title="$t('common.action.edit')"
-          @click.stop="editUser(item)"
         >
           <v-icon>
             $edit
@@ -81,8 +95,9 @@ import { computed, useTemplateRef } from 'vue';
 import { SubmitFooter } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import type { SecurableType } from '@intake24/common/security';
-import { getResourceFromSecurable } from '@intake24/common/util';
+import type { MediaModel } from '@intake24/common/types/http/admin';
+import { mediaCollections } from '@intake24/common/types/http/admin';
+import { modelToResource } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { EmbeddedDataTable } from '../data-tables';
@@ -102,8 +117,8 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  securableType: {
-    type: String as PropType<SecurableType>,
+  mediaModel: {
+    type: String as PropType<MediaModel>,
     required: true,
   },
 });
@@ -111,7 +126,12 @@ const props = defineProps({
 const { i18n: { t } } = useI18n();
 const http = useHttp();
 
-const api = computed(() => `admin/${getResourceFromSecurable(props.securableType)}/${props.resourceId}/media`);
+const resource = computed(() => modelToResource(props.mediaModel));
+const api = computed(() => `admin/${resource.value}/${props.resourceId}/media`);
+const collections = computed(() => mediaCollections[props.mediaModel].map(collection => ({
+  title: t(`media.collections.${collection}`),
+  value: collection,
+})));
 
 const table = useTemplateRef('table');
 
@@ -123,21 +143,27 @@ const headers: DataTableHeader[] = [
     align: 'start',
   },
   {
-    title: t('media.disk'),
+    title: t('media.name'),
     sortable: true,
-    key: 'disk',
+    key: 'name',
     align: 'start',
   },
   {
-    title: t('media.collection'),
+    title: t('media.filename'),
+    sortable: true,
+    key: 'name',
+    align: 'start',
+  },
+  {
+    title: t('media.collections._'),
     sortable: true,
     key: 'collection',
     align: 'start',
   },
   {
-    title: t('users.name'),
+    title: t('media.size'),
     sortable: true,
-    key: 'name',
+    key: 'size',
     align: 'start',
   },
   {
@@ -158,6 +184,7 @@ const { clearError, data, errors, post } = useForm<UploadForm>(
 async function submit() {
   try {
     await post(api.value);
+    await table.value?.fetch();
   }
   catch (error) {
     console.error('Error uploading media:', error);

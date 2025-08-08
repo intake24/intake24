@@ -4,6 +4,12 @@ import { bigIntString } from '../generic';
 export const mediaModels = ['FeedbackScheme', 'SurveyScheme'] as const;
 export type MediaModel = (typeof mediaModels)[number];
 
+export const commonCollections = ['default', 'tinymce'];
+export const mediaCollections: Record<MediaModel, string[]> = {
+  FeedbackScheme: [...commonCollections, 'feedback-schemes:card'],
+  SurveyScheme: [...commonCollections, 'survey-schemes:carousel'],
+};
+
 export const createMediaRequest = z.object({
   name: z.string().min(1).max(512).nullish(),
   collection: z.string().min(1).max(64),
