@@ -1,8 +1,6 @@
 /* eslint-disable perfectionist/sort-imports */
 import { createApp } from 'vue';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
-import VueGtag from 'vue-gtag';
-
 import pinia from '@intake24/ui/stores/bootstrap';
 import App from './app.vue';
 import i18n from './i18n';
@@ -12,7 +10,7 @@ import router from './router';
 import guards from './router/guards';
 import { errorHandler, httpService } from './services';
 import { useAuth } from './stores';
-import { cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui/cookie-consent';
+import { bootstrapAnalytics, cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui/cookie-consent';
 
 guards(router);
 
@@ -34,13 +32,14 @@ app.use(router);
 app.use(pinia);
 app.use(i18n);
 app.use(vuetify);
-app.use(VueGtag, { bootstrap: false }, router);
-app.use(cookieConsentPlugin, cookieConsentConfig());
 app.use(VueDOMPurifyHTML, {
   i18n: {
     ALLOWED_TAGS: ['b', 'i', 'strong', 'em', 'p', 'u'],
   },
 });
+app.use(cookieConsentPlugin, cookieConsentConfig());
+
+bootstrapAnalytics(app, router);
 
 app.mount('#app');
 

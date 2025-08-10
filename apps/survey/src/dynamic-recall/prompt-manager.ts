@@ -1,4 +1,3 @@
-import type { Dictionary } from 'vue-gtag';
 import type { SurveyState, SurveyStore } from '../stores';
 import type { PromptInstance } from './dynamic-recall';
 import type {
@@ -13,6 +12,7 @@ import type {
 import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
 import type { CustomPromptAnswer, FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
+import type { Dictionary } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {
   asServedComplete,

@@ -33,7 +33,7 @@
     "vanilla-cookieconsent": "^3.1.0",
     "vue": "^3.5.18",
     "vue-echarts": "^7.0.3",
-    "vue-gtag": "^2.1.2",
+    "vue-gtag": "^3.5.2",
     "vue-i18n": "^11.1.11",
     "vue-recaptcha": "^2.0.3",
     "vue-router": "^4.5.1",

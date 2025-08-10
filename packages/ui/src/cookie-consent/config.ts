@@ -1,38 +1,35 @@
 import type { CookieConsentConfig, Translation } from 'vanilla-cookieconsent';
-import type { PluginOptions } from 'vue-gtag';
 import { useGtm } from '@gtm-support/vue-gtm';
 import Clarity from '@microsoft/clarity';
 import get from 'lodash/get';
-import { bootstrap, optIn, optOut, setOptions } from 'vue-gtag';
+import { useConsent } from 'vue-gtag';
 import { defaultMessages } from '@intake24/i18n';
 
-export function gTagConfig(): PluginOptions {
-  return {
-    appName: import.meta.env.VITE_APP_NAME,
-    config: {
-      id: import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
-    },
-  };
-}
+export const CC_CAT_NECESSARY = 'necessary';
+export const CC_CAT_FUNCTIONALITY = 'functionality';
+export const CC_CAT_ANALYTICS = 'analytics';
 
-async function toggleGA(enabled: boolean) {
+export async function toggleGA(enabled: boolean) {
   console.debug('GA toggled to ', enabled);
+
+  const { acceptAll, rejectAll } = useConsent();
+
   if (!enabled) {
     console.debug('GA opt-out');
-    optOut();
+    rejectAll();
     return;
   }
 
   console.debug('GA opt-in', enabled);
-  optIn();
-  setOptions(gTagConfig());
-  await bootstrap();
+  acceptAll();
 }
-async function toggleGTM(enabled: boolean) {
+
+export async function toggleGTM(enabled: boolean) {
   console.debug('GTM toggled to ', enabled);
   useGtm()?.enable(enabled);
 }
-async function toggleClarity(enabled: boolean) {
+
+export async function toggleClarity(enabled: boolean) {
   console.debug('Clarity toggled to ', enabled);
 
   if (!('clarity' in window))
@@ -40,6 +37,7 @@ async function toggleClarity(enabled: boolean) {
 
   Clarity.consent(enabled);
 }
+
 export function cookieConsentConfig(translations?: CookieConsentConfig['language']['translations']): CookieConsentConfig {
   if (!translations) {
     translations = {
@@ -50,16 +48,34 @@ export function cookieConsentConfig(translations?: CookieConsentConfig['language
   return ({
     cookie: {
       name: 'it24_cc_consent',
+      domain: import.meta.env.VITE_CC_COOKIE_DOMAIN || undefined,
       expiresAfterDays: 365,
     },
-    mode: 'opt-out',
     categories: {
-      necessary: {
+      [CC_CAT_NECESSARY]: {
         enabled: true,
         readOnly: true,
       },
-      analytics: {
+      [CC_CAT_FUNCTIONALITY]: {
         enabled: true,
+        autoClear: {
+          cookies: [
+            { name: /^it24(a|s)_/ },
+          ],
+        },
+      },
+      [CC_CAT_ANALYTICS]: {
+        enabled: true,
+        autoClear: {
+          cookies: [
+            { name: /^_ga/ },
+            { name: '_gid' },
+            { name: /^_CLID/ },
+            { name: /^_MUID/ },
+            { name: /^_clck/ },
+            { name: /^_clsk/ },
+          ],
+        },
       },
     },
     language: {
@@ -68,15 +84,19 @@ export function cookieConsentConfig(translations?: CookieConsentConfig['language
     },
     onChange: ({ cookie }) => {
       console.debug('Consent changed');
-      toggleGA(cookie.categories.includes('analytics'));
-      toggleGTM(cookie.categories.includes('analytics'));
-      toggleClarity(cookie.categories.includes('analytics'));
+      const enabled = cookie.categories.includes(CC_CAT_ANALYTICS);
+
+      toggleGA(enabled);
+      toggleGTM(enabled);
+      toggleClarity(enabled);
     },
     onFirstConsent: ({ cookie }) => {
       console.debug('First consent');
-      toggleGA(cookie.categories.includes('analytics'));
-      toggleGTM(cookie.categories.includes('analytics'));
-      toggleClarity(cookie.categories.includes('analytics'));
+      const enabled = cookie.categories.includes(CC_CAT_ANALYTICS);
+
+      toggleGA(enabled);
+      toggleGTM(enabled);
+      toggleClarity(enabled);
     },
   });
 }

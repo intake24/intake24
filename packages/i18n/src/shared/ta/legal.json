@@ -10,7 +10,7 @@
       "consentModal": {
         "label": "Cookies",
         "title": "Intake24 uses cookies!",
-        "description": "Intake24 uses <strong>necessary cookies</strong> for the proper functioning of the website. <strong>Analytics & statistical</strong> cookies help us to understand how visitors use the websites to improve the services offered.",
+        "description": "We use <strong>necessary</strong> cookies to provide essential features, <strong>functionality</strong> cookies to remember user preferences and <strong>analytics</strong> cookies to help us to understand and improve user experience.",
         "acceptAllBtn": "Accept",
         "showPreferencesBtn": "Change preferences"
       },
@@ -22,7 +22,7 @@
         "sections": [
           {
             "title": "How we use cookies 📢",
-            "description": "Intake24 uses <strong>necessary cookies</strong> for the proper functioning of the website. <strong>Analytics & statistical</strong> cookies help us to understand how visitors use the websites to improve the services offered."
+            "description": "We use <strong>necessary</strong> cookies to provide essential features, <strong>functionality</strong> cookies to remember user preferences and <strong>analytics</strong> cookies to help us to understand and improve user experience."
           },
           {
             "title": "Necessary cookies <span class=\"pm__badge\">Always Enabled</span>",
@@ -49,7 +49,31 @@
             }
           },
           {
-            "title": " Analytics and statistical cookies",
+            "title": "Functionality cookies",
+            "description": "Functionality cookies allow the website to remember information that changes the way the website behaves or looks, like your preferred language or the region that you are in.",
+            "linkedCategory": "functionality",
+            "cookieTable": {
+              "headers": {
+                "name": "Name",
+                "exp": "Expiration",
+                "desc": "Description"
+              },
+              "body": [
+                {
+                  "name": "it24(a|s)_app",
+                  "exp": "1 year",
+                  "desc": "Stores localisation preferences for the application."
+                },
+                {
+                  "name": "it24a_resource",
+                  "exp": "1 year",
+                  "desc": "Stores data filter preferences for the application."
+                }
+              ]
+            }
+          },
+          {
+            "title": "Analytics and statistical cookies",
             "description": "Analytics and statistical cookies help us to understand how visitors use the websites to improve the services offered. Information is collected and stored anonymously.",
             "linkedCategory": "analytics",
             "cookieTable": {

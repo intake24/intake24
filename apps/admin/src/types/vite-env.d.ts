@@ -15,7 +15,10 @@ interface ImportMetaEnv {
   readonly VITE_CAPTCHA_PROVIDER: CaptchaProvider;
   readonly VITE_CAPTCHA_SITEKEY: string;
 
+  readonly VITE_CC_COOKIE_DOMAIN: string;
   readonly VITE_GOOGLE_ANALYTICS_ID: string;
+  readonly VITE_GTM_CONTAINER_ID: string;
+  readonly VITE_CLARITY_PROJECT_ID: string;
   readonly VITE_STRICH_KEY: string;
   readonly VITE_WEBPUSH_PUBLIC_KEY: string;
 
@@ -23,7 +26,6 @@ interface ImportMetaEnv {
   readonly VITE_LEGAL_COPYRIGHT: string;
   readonly VITE_LEGAL_PRIVACY: string;
   readonly VITE_LEGAL_TERMS: string;
-
 }
 
 interface ImportMeta {
