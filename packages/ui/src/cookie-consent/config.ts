@@ -47,8 +47,8 @@ export function cookieConsentConfig(translations?: CookieConsentConfig['language
 
   return ({
     cookie: {
-      name: 'it24_cc_consent',
-      domain: import.meta.env.VITE_CC_COOKIE_DOMAIN || undefined,
+      name: 'it24_cc',
+      domain: import.meta.env.VITE_CC_COOKIE_DOMAIN || location.hostname,
       expiresAfterDays: 365,
     },
     categories: {

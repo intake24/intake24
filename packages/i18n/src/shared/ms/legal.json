@@ -41,7 +41,7 @@
                   "desc": "Technical functionality of websites."
                 },
                 {
-                  "name": "it24_cc_consent",
+                  "name": "it24_cc",
                   "exp": "1 year",
                   "desc": "Cookies consent preferences used by the website."
                 }
@@ -60,14 +60,9 @@
               },
               "body": [
                 {
-                  "name": "it24(a|s)_app",
+                  "name": "^it24(a|s)_",
                   "exp": "1 year",
-                  "desc": "Stores localisation preferences for the application."
-                },
-                {
-                  "name": "it24a_resource",
-                  "exp": "1 year",
-                  "desc": "Stores data filter preferences for the application."
+                  "desc": "Stores user preferences and settings for the websites."
                 }
               ]
             }
