@@ -225,6 +225,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@css-inline/css-inline':
+        specifier: ^0.17.0
+        version: 0.17.0
       '@duosecurity/duo_universal':
         specifier: ^2.1.0
         version: 2.1.0
@@ -538,6 +541,9 @@ importers:
 
   apps/cli:
     dependencies:
+      '@css-inline/css-inline':
+        specifier: ^0.17.0
+        version: 0.17.0
       ajv:
         specifier: ^8.17.1
         version: 8.17.1
@@ -674,6 +680,9 @@ importers:
 
   apps/portal:
     dependencies:
+      '@css-inline/css-inline':
+        specifier: ^0.17.0
+        version: 0.17.0
       '@fortawesome/fontawesome-free':
         specifier: ^7.0.0
         version: 7.0.0
@@ -1114,6 +1123,9 @@ importers:
 
   packages/common-backend:
     dependencies:
+      '@css-inline/css-inline':
+        specifier: ^0.17.0
+        version: 0.17.0
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
@@ -2243,6 +2255,76 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
+
+  '@css-inline/css-inline-android-arm-eabi@0.17.0':
+    resolution: {integrity: sha512-4Tw2OH+0Ob6RJfVqjA7Pjg2jKhLQIeDmxO2ZirD7j7o/s7JvJwkBXhOgCBIPIbl7CviLQ0FzZPPbcTs7vn/Mtw==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [android]
+
+  '@css-inline/css-inline-android-arm64@0.17.0':
+    resolution: {integrity: sha512-Glbl4g27GIXWP+CbDOlGMUB9XIzrac9mU9s/VHN8dP8RDuEmxOCgA3eZVXns7/uijLSDIwQJTxjLstv3o5dTMQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [android]
+
+  '@css-inline/css-inline-darwin-arm64@0.17.0':
+    resolution: {integrity: sha512-MQ2myM834msxt4cEl1NOp9oP3xdIJAm4Y9JUa3NASbzNPCUsPD4CoJb8x4zgeIBIswo+HJOytIOUQpRrJstxeQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@css-inline/css-inline-darwin-x64@0.17.0':
+    resolution: {integrity: sha512-cCO+tI5NSkizLxRVjAqnIv0M7y/GfhY3w68mN/wPxmUHk9NuLnvZS2M4CcYs7FLQ63eE3MQLbHuk6hRKjDCcSg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@css-inline/css-inline-linux-arm-gnueabihf@0.17.0':
+    resolution: {integrity: sha512-bqrT9HbOrXj6kpw/dGuJXgsx8id3HMtPUygxMeiy/GOB4x3/xusTRuNne6tOxWkqw/Obu86T1wy/h2SUaXnDgg==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+
+  '@css-inline/css-inline-linux-arm64-gnu@0.17.0':
+    resolution: {integrity: sha512-1eQ4ajlcALxDACG86UcRM/n91/orMbHIw5e2NmD0+Y8nZsxXXUZJq2Rw7R2TETsOMxJC2IY12o8PS26Rw94D6A==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@css-inline/css-inline-linux-arm64-musl@0.17.0':
+    resolution: {integrity: sha512-Sq3nhiPyVXII7qIJlGK3lHWCCNJfOSDo0fEKPi4o9iDSO1L78um9vtIUrnJe/craoeza1vJb1xd5IASmVCU0Cg==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@css-inline/css-inline-linux-x64-gnu@0.17.0':
+    resolution: {integrity: sha512-zpKlmEl8l7QCrtVP6nbfnnYuSbwSjWsZRTVG1JLcIcx5LkxLzE7d7+NIQ3C4Myb0n0SeOuGVEVAZwFNct7Ksog==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@css-inline/css-inline-linux-x64-musl@0.17.0':
+    resolution: {integrity: sha512-0SxccSQa4reAekGdHsSv2VzTiG+ZTgNsnYM3lIeHRfv10n0a0/Px1KDmwe7RlHJytkH15T7Tubv8FEcjfOqZBQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@css-inline/css-inline-win32-arm64-msvc@0.17.0':
+    resolution: {integrity: sha512-DY3GAPpzjzaW2xCdelPKZM90ldrUieodTFZCQhjOODftTGf4wd5cj2741DcuDg2aqDGAZ6PtXbeysfmx+DHy3w==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@css-inline/css-inline-win32-x64-msvc@0.17.0':
+    resolution: {integrity: sha512-CDCcVgBFxaun1LZhgnOBen/DnFGIdg88k3rQ653mB4qVsfI7Kyt8V3ezYdWAN7rZKvQL/sRQG4LOVAjPsrJWgA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@css-inline/css-inline@0.17.0':
+    resolution: {integrity: sha512-IPZ4Z86lxacvcxlQl0jm1Hn8oiojCLrsm8qDdH6aeKstJWPeF4RhnPv15oMlW3ytsW4OHYPfknIaYBHm5rjhWg==}
+    engines: {node: '>= 10'}
 
   '@csstools/color-helpers@5.0.2':
     resolution: {integrity: sha512-JqWH1vsgdGcw2RR6VliXXdA0/59LttzlU8UlRT/iUUsEeWfYq8I+K0yhihEUTTHLRm1EXvpsCx3083EU15ecsA==}
@@ -12128,6 +12210,53 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+
+  '@css-inline/css-inline-android-arm-eabi@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-android-arm64@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-darwin-arm64@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-darwin-x64@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-linux-arm-gnueabihf@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-linux-arm64-gnu@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-linux-arm64-musl@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-linux-x64-gnu@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-linux-x64-musl@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-win32-arm64-msvc@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline-win32-x64-msvc@0.17.0':
+    optional: true
+
+  '@css-inline/css-inline@0.17.0':
+    optionalDependencies:
+      '@css-inline/css-inline-android-arm-eabi': 0.17.0
+      '@css-inline/css-inline-android-arm64': 0.17.0
+      '@css-inline/css-inline-darwin-arm64': 0.17.0
+      '@css-inline/css-inline-darwin-x64': 0.17.0
+      '@css-inline/css-inline-linux-arm-gnueabihf': 0.17.0
+      '@css-inline/css-inline-linux-arm64-gnu': 0.17.0
+      '@css-inline/css-inline-linux-arm64-musl': 0.17.0
+      '@css-inline/css-inline-linux-x64-gnu': 0.17.0
+      '@css-inline/css-inline-linux-x64-musl': 0.17.0
+      '@css-inline/css-inline-win32-arm64-msvc': 0.17.0
+      '@css-inline/css-inline-win32-x64-msvc': 0.17.0
 
   '@csstools/color-helpers@5.0.2': {}
 

@@ -22,6 +22,7 @@
     "test:integration": "vitest ./__tests__/integration/index.test.ts --config vitest.integration.config.ts"
   },
   "dependencies": {
+    "@css-inline/css-inline": "^0.17.0",
     "@fortawesome/fontawesome-free": "^7.0.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.7",
