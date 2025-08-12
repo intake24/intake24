@@ -1,6 +1,7 @@
 import type CookieConsent from 'vanilla-cookieconsent';
 
-import type { HttpClient, Permission } from '.';
+import type { Permission } from './common';
+import type { HttpClient } from './http';
 
 declare module 'vue' {
   interface ComponentCustomProperties {

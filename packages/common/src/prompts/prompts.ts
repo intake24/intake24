@@ -1,7 +1,7 @@
 import type { PortionSizeMethodId } from '../surveys';
 import { z } from 'zod';
 import { barcodeScannerOptions } from '../barcodes';
-import { localeOptionList, localeTranslation } from '../types';
+import { localeOptionList, localeTranslation } from '../types/common';
 import { actions } from './actions';
 import { condition } from './conditions';
 import { externalSourceOptions } from './external-sources';

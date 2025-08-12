@@ -1,5 +1,5 @@
 import type { Prompts } from './prompts';
-import { copy } from '@intake24/common/util';
+import { copy } from '../util';
 import { basePortionPrompt } from './base';
 import { foodBrowserDefaults } from './standard';
 

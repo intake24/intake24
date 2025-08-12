@@ -1,7 +1,6 @@
 import type { AuthenticationResponseJSON } from '@simplewebauthn/server';
 import type { Request } from 'express';
-
-import type { Tokens } from '.';
+import type { Tokens } from './jwt.service';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { captcha as captchaCheck } from '@intake24/api/http/rules';
 import type { IoC } from '@intake24/api/ioc';

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { variants } from '../theme';
-import { localeTranslation } from '../types';
+import { localeTranslation } from '../types/common';
 
 export const layoutTypes = ['desktop', 'mobile'] as const;
 export type PromptLayout = (typeof layoutTypes)[number];

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { variants } from '../theme';
-import { localeTranslation } from '../types';
+import { localeTranslation } from '../types/common';
 import { layoutTypes } from './partials';
 
 export const genericActionTypes = ['addMeal', 'next', 'review'] as const;

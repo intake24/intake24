@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { requiredLocaleTranslation } from '.';
+import { requiredLocaleTranslation } from './common';
 
 export const useInRecipeTypes = {
   USE_ANYWHERE: 0,

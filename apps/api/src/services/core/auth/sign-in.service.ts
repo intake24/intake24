@@ -1,4 +1,4 @@
-import type { SignInAttempt } from '.';
+import type { SignInAttempt } from './authentication.service';
 import type { IoC } from '@intake24/api/ioc';
 
 import { SignInLog } from '@intake24/db';

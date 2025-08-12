@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { requiredLocaleTranslationWithLimit } from '../types';
+import { requiredLocaleTranslationWithLimit } from '../types/common';
 
 export const meal = z.object({
   name: requiredLocaleTranslationWithLimit({ max: 64 }),
