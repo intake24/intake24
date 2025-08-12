@@ -12,6 +12,7 @@ import HasRedisClient from './redis-store';
 export type CacheKeyPrefix
   = | typeof ACL_PERMISSIONS_KEY
     | typeof ACL_ROLES_KEY
+    | 'category-attributes'
     | 'category-all-categories'
     | 'category-parent-categories'
     | 'food-attributes'

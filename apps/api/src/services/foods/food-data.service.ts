@@ -211,7 +211,7 @@ function foodDataService() {
       getBrands(localeId, foodCode),
       getNutrientKCalPer100G(localeId, foodCode),
       portionSizeMethodsImpl.resolveUserPortionSizeMethods(localeId, foodCode),
-      inheritableAttributesImpl.resolveInheritableAttributes(foodCode),
+      inheritableAttributesImpl.resolveFoodAttributes(foodCode),
       getAllTags(categories, foodLocal.tags),
     ]);
 

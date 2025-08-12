@@ -28,39 +28,60 @@ function foodSearchService({
     }
   }
 
-  const resolveInheritableAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes>> => {
+  const resolveCategoryAttributes = async (categoryCodes: string[]): Promise<Record<string, InheritableAttributes>> => {
     const data = await Promise.all(
-      foodCodes.map(code => inheritableAttributesService.resolveInheritableAttributes(code)),
+      categoryCodes.map(code => inheritableAttributesService.resolveCategoryAttributes(code)),
+    );
+
+    return Object.fromEntries(categoryCodes.map((code, index) => [code, data[index]]));
+  };
+
+  const resolveFoodAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes>> => {
+    const data = await Promise.all(
+      foodCodes.map(code => inheritableAttributesService.resolveFoodAttributes(code)),
     );
 
     return Object.fromEntries(foodCodes.map((code, index) => [code, data[index]]));
   };
 
-  const getInheritableAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes | null>> => {
-    return cache.rememberMany(foodCodes, 'food-attributes', cacheConfig.ttl, resolveInheritableAttributes);
+  const getCategoryAttributes = async (categoryCodes: string[]): Promise<Record<string, InheritableAttributes | null>> => {
+    return cache.rememberMany(categoryCodes, 'category-attributes', cacheConfig.ttl, resolveCategoryAttributes);
+  };
+
+  const getFoodAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes | null>> => {
+    return cache.rememberMany(foodCodes, 'food-attributes', cacheConfig.ttl, resolveFoodAttributes);
   };
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);
     const results = await foodIndex.search(queryParameters);
-    const attrs = await getInheritableAttributes(results.foods.map(r => r.code));
-    const thumbnailImages = await foodThumbnailImageService.resolveImages(localeId, results.foods.map(foodHeader => foodHeader.code));
+
+    const catCodes = results.categories.map(({ code }) => code);
+    const foodCodes = results.foods.map(({ code }) => code);
+
+    const [categoryAttrs, foodAttrs, thumbnailImages] = await Promise.all([
+      getCategoryAttributes(catCodes),
+      getFoodAttributes(foodCodes),
+      foodThumbnailImageService.resolveImages(localeId, foodCodes),
+    ]);
 
     const withFilteredIngredients = {
-      foods: results.foods.filter(header =>
-        acceptForQuery(isRecipe, attrs[header.code]?.useInRecipes),
-      ).map(header => ({
-        ...header,
-        thumbnailImageUrl: thumbnailImages[header.code],
-      })),
-      categories: results.categories,
+      foods: results.foods.reduce<FoodSearchResponse['foods']>((acc, food) => {
+        if (!acceptForQuery(isRecipe, foodAttrs[food.code]?.useInRecipes))
+          return acc;
+
+        acc.push({ ...food, thumbnailImageUrl: thumbnailImages[food.code] });
+
+        return acc;
+      }, []),
+      categories: results.categories.filter(category => acceptForQuery(isRecipe, categoryAttrs[category.code]?.useInRecipes)),
     };
 
     return withFilteredIngredients;
   };
 
   return {
-    getInheritableAttributes,
+    getFoodAttributes,
     search,
   };
 }

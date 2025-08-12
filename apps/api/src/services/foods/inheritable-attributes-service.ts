@@ -52,7 +52,7 @@ function inheritableAttributesService() {
     );
   };
 
-  const resolveInheritableAttributesRec = async (
+  const resolveAttributesRec = async (
     parentCategories: string[],
     attributes: InheritableAttributesTemp,
   ): Promise<InheritableAttributes> => {
@@ -88,13 +88,37 @@ function inheritableAttributesService() {
 
     const nextParents = await getCategoryParentCategories(parentCategories);
 
-    return resolveInheritableAttributesRec(nextParents, newAttributes);
+    return resolveAttributesRec(nextParents, newAttributes);
   };
 
-  async function resolveInheritableAttributes(foodCode: string): Promise<InheritableAttributes> {
-    const foodAttributesRow = await FoodAttribute.findOne({
-      where: { foodCode },
-    });
+  async function resolveCategoryAttributes(categoryCode: string): Promise<InheritableAttributes> {
+    const catAttributes = await CategoryAttribute.findOne({ where: { categoryCode } });
+
+    const attributes: InheritableAttributesTemp = {
+      readyMealOption: null,
+      reasonableAmount: null,
+      sameAsBeforeOption: null,
+      useInRecipes: null,
+    };
+
+    if (catAttributes) {
+      attributes.readyMealOption = catAttributes.readyMealOption;
+      attributes.reasonableAmount = catAttributes.reasonableAmount;
+      attributes.sameAsBeforeOption = catAttributes.sameAsBeforeOption;
+      attributes.useInRecipes = catAttributes.useInRecipes;
+    }
+
+    const maybeComplete = completeAttributes(attributes);
+    if (maybeComplete)
+      return maybeComplete;
+
+    const parentCategories = await getCategoryParentCategories([categoryCode]);
+
+    return resolveAttributesRec(parentCategories, attributes);
+  }
+
+  async function resolveFoodAttributes(foodCode: string): Promise<InheritableAttributes> {
+    const foodAttributesRow = await FoodAttribute.findOne({ where: { foodCode } });
 
     const attributes: InheritableAttributesTemp = {
       readyMealOption: null,
@@ -111,17 +135,17 @@ function inheritableAttributesService() {
     }
 
     const maybeComplete = completeAttributes(attributes);
-
     if (maybeComplete)
       return maybeComplete;
 
     const parentCategories = await getFoodParentCategories(foodCode);
 
-    return resolveInheritableAttributesRec(parentCategories, attributes);
+    return resolveAttributesRec(parentCategories, attributes);
   }
 
   return {
-    resolveInheritableAttributes,
+    resolveCategoryAttributes,
+    resolveFoodAttributes,
   };
 }
 

@@ -156,7 +156,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
         order: [['foodCode', 'asc']],
         transform: async (food: FoodLocal) => {
           const [attributes, categories, portionSizeMethods] = await Promise.all([
-            this.foodSearchService.getInheritableAttributes([food.foodCode]),
+            this.foodSearchService.getFoodAttributes([food.foodCode]),
             this.cachedParentCategoriesService.getFoodAllCategories(food.foodCode),
             food.portionSizeMethods?.length
               ? this.portionSizeMethodsService.resolvePortionSizeMethods(
