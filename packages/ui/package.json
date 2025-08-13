@@ -42,10 +42,12 @@
   "devDependencies": {
     "@types/lodash": "^4.17.20",
     "@types/node": "^24.1.0",
+    "@vue/test-utils": "^2.4.6",
     "type-fest": "^4.41.0",
     "typescript": "^5.9.2",
     "vite": "^7.0.6",
     "vite-plugin-pwa": "^1.0.2",
+    "vitest": "^3.2.4",
     "workbox-window": "^7.3.0"
   }
 }

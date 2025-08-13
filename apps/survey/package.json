@@ -17,6 +17,7 @@
     "build-only": "vite build",
     "generate-pwa-assets": "pwa-assets-generator",
     "start": "node server/index.js",
+    "test:unit": "vitest",
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
@@ -25,6 +26,7 @@
     "@fortawesome/fontawesome-free": "^7.0.0",
     "@gtm-support/vue-gtm": "^3.1.0",
     "@microsoft/clarity": "^1.0.0",
+    "@pinia/testing": "^1.0.2",
     "@vue-youtube/core": "^0.0.6",
     "@vueuse/core": "^13.6.0",
     "awesome-phonenumber": "^7.5.0",
@@ -59,6 +61,7 @@
     "@vite-pwa/assets-generator": "^1.0.0",
     "@vitejs/plugin-legacy": "^7.1.0",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
     "cross-env": "^10.0.0",
     "jsdom": "^26.1.0",
