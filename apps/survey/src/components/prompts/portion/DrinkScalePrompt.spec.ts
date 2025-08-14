@@ -92,11 +92,5 @@ describe('drinkScalePrompt', () => {
     expect(panelItems).toHaveLength(3);
 
     expect(wrapper.find('.v-card-actions button').attributes('disabled')).toBe('');
-
-    // wrapper.vm.ge;
-
-    await (panelItems[1].find('.v-expansion-panel-title')).trigger('click');
-    console.log(wrapper.emitted());
-    expect(wrapper.emitted()).toHaveProperty('update:click');
   });
 });

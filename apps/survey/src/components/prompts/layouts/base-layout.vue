@@ -1,23 +1,23 @@
 <template>
-  <div>
+  <div class="prompt">
     <v-card class="mb-4" :tile="$vuetify.display.mobile">
       <breadcrumbs v-bind="{ food, meal, promptName: i18n.name }" />
       <slot name="prompt-text">
-        <v-card-text v-if="i18n.text" class="pt-0">
+        <v-card-text v-if="i18n.text" class="prompt__text pt-0">
           <v-divider class="mb-2" />
           <h3>{{ i18n.text }}</h3>
         </v-card-text>
       </slot>
     </v-card>
     <slot name="prompt-description">
-      <v-card v-if="!isInMultiPrompt && i18n.description" class="mb-4" :tile="$vuetify.display.mobile">
+      <v-card v-if="!isInMultiPrompt && i18n.description" class="prompt__description mb-4" :tile="$vuetify.display.mobile">
         <div class="pa-4" v-html="i18n.description" />
       </v-card>
     </slot>
     <slot />
     <prompt-actions
       id="actions"
-      class="navigation pa-4 px-md-0"
+      class="prompt__actions navigation pa-4 px-md-0"
     >
       <template v-if="desktopActions.length">
         <v-btn
@@ -36,7 +36,7 @@
         <slot name="actions" />
       </template>
     </prompt-actions>
-    <div v-if="$vuetify.display.mobile" id="actions" class="bottom-navigation">
+    <div v-if="$vuetify.display.mobile" id="actions" class="prompt__actions bottom-navigation">
       <div v-if="showSummary" class="bottom-navigation__summary">
         <meal-list-mobile v-if="showSummary" v-bind="{ meals }" @action="action" />
       </div>

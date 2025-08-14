@@ -17,7 +17,7 @@
     >
       <template #prev="{ props }">
         <v-btn
-          class="opacity-80"
+          class="prev opacity-80"
           :color="prompt.carousel.color"
           :icon="props.icon"
           variant="flat"
@@ -26,7 +26,7 @@
       </template>
       <template #next="{ props }">
         <v-btn
-          class="opacity-80"
+          class="next opacity-80"
           :color="prompt.carousel.color"
           :icon="props.icon"
           variant="flat"

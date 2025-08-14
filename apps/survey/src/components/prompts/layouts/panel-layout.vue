@@ -1,11 +1,12 @@
 <template>
-  <v-expansion-panel>
+  <v-expansion-panel class="prompt">
     <v-expansion-panel-title>{{ i18n.name }}</v-expansion-panel-title>
     <v-expansion-panel-text>
       <v-card flat :tile="$vuetify.display.mobile">
         <slot name="prompt-description">
           <div
             v-if="i18n.description"
+            class="prompt__description"
             :class="{ 'pb-4': !hasDefaultSlot }"
             v-html="i18n.description"
           />
@@ -13,7 +14,7 @@
         <slot />
         <prompt-actions
           id="actions"
-          class="navigation pa-4 px-md-0"
+          class="prompt__actions navigation pa-4 px-md-0"
         >
           <template v-if="desktopActions.length">
             <v-btn

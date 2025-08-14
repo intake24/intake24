@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="prompt">
     <v-card class="mb-4" :tile="$vuetify.display.mobile">
       <breadcrumbs v-bind="{ food, meal, promptName: i18n.name }" />
       <slot name="prompt-text">
-        <v-card-text v-if="i18n.text" class="pt-0">
+        <v-card-text v-if="i18n.text" class="prompt__text pt-0">
           <v-divider class="mb-2" />
           <h3>{{ i18n.text }}</h3>
         </v-card-text>
@@ -13,7 +13,7 @@
       <slot name="prompt-description">
         <div
           v-if="i18n.description"
-          class="px-4 pt-4"
+          class="prompt__description px-4 pt-4"
           :class="{ 'pb-4': !hasDefaultSlot }"
           v-html="i18n.description"
         />
@@ -21,7 +21,7 @@
       <slot />
       <prompt-actions
         id="actions"
-        class="navigation px-4 pt-0 pb-4"
+        class="prompt__actions navigation px-4 pt-0 pb-4"
       >
         <template v-if="desktopActions.length">
           <v-btn
@@ -42,7 +42,7 @@
           <slot name="actions" />
         </template>
       </prompt-actions>
-      <div v-if="!isInMultiPrompt && $vuetify.display.mobile" id="actions" class="bottom-navigation">
+      <div v-if="!isInMultiPrompt && $vuetify.display.mobile" id="actions" class="prompt__actions bottom-navigation">
         <div v-if="showSummary" class="bottom-navigation__summary">
           <meal-list-mobile v-bind="{ meals }" @action="action" />
         </div>
