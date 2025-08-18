@@ -1747,6 +1747,11 @@
                                                   "minLength": 1,
                                                   "maxLength": 256
                                                 },
+                                                "shortLabel": {
+                                                  "type": "string",
+                                                  "minLength": 1,
+                                                  "maxLength": 256
+                                                },
                                                 "value": {
                                                   "type": "number",
                                                   "nullable": true
@@ -1780,6 +1785,11 @@
                                                 "type": "number"
                                               },
                                               "label": {
+                                                "type": "string",
+                                                "minLength": 1,
+                                                "maxLength": 256
+                                              },
+                                              "shortLabel": {
                                                 "type": "string",
                                                 "minLength": 1,
                                                 "maxLength": 256
@@ -1843,6 +1853,11 @@
                                                           "minLength": 1,
                                                           "maxLength": 256
                                                         },
+                                                        "shortLabel": {
+                                                          "type": "string",
+                                                          "minLength": 1,
+                                                          "maxLength": 256
+                                                        },
                                                         "value": {
                                                           "type": "number",
                                                           "nullable": true
@@ -1876,6 +1891,11 @@
                                                         "type": "number"
                                                       },
                                                       "label": {
+                                                        "type": "string",
+                                                        "minLength": 1,
+                                                        "maxLength": 256
+                                                      },
+                                                      "shortLabel": {
                                                         "type": "string",
                                                         "minLength": 1,
                                                         "maxLength": 256
@@ -1925,6 +1945,11 @@
                                                         "minLength": 1,
                                                         "maxLength": 256
                                                       },
+                                                      "shortLabel": {
+                                                        "type": "string",
+                                                        "minLength": 1,
+                                                        "maxLength": 256
+                                                      },
                                                       "value": {
                                                         "type": "number",
                                                         "nullable": true
@@ -1958,6 +1983,11 @@
                                                       "type": "number"
                                                     },
                                                     "label": {
+                                                      "type": "string",
+                                                      "minLength": 1,
+                                                      "maxLength": 256
+                                                    },
+                                                    "shortLabel": {
                                                       "type": "string",
                                                       "minLength": 1,
                                                       "maxLength": 256
@@ -4161,6 +4191,133 @@
         }
       }
     },
+    "/surveys/{slug}/faqs": {
+      "get": {
+        "description": "Returns survey FAQs, if any.",
+        "summary": "Survey faqs",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "en": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "en"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        ]
+                      },
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "en": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "en"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                }
+                              ]
+                            },
+                            "content": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "en": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "en"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "content"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "title",
+                      "items"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/surveys/{slug}/parameters": {
       "get": {
         "description": "Returns survey parameters such as the scheme ID, current status, custom HTML content etc.",
@@ -5461,6 +5618,9 @@
                         "type"
                       ]
                     },
+                    "faqs": {
+                      "type": "boolean"
+                    },
                     "numberOfSubmissionsForFeedback": {
                       "type": "number"
                     },
@@ -5510,6 +5670,7 @@
                     "state",
                     "locale",
                     "surveyScheme",
+                    "faqs",
                     "numberOfSubmissionsForFeedback",
                     "session",
                     "suspensionReason",
@@ -10183,6 +10344,2108 @@
         "responses": {
           "200": {
             "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/faqs": {
+      "get": {
+        "description": "Browse faqs (paginated list)",
+        "summary": "Browse faqs",
+        "tags": [
+          "default",
+          "admin",
+          "faq"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 256
+                          },
+                          "content": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                },
+                                "items": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "allOf": [
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "en": {
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "en"
+                                            ]
+                                          },
+                                          {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                              "type": "string",
+                                              "nullable": true
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "content": {
+                                        "allOf": [
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "en": {
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "en"
+                                            ]
+                                          },
+                                          {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                              "type": "string",
+                                              "nullable": true
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "content"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "items"
+                              ]
+                            }
+                          },
+                          "ownerId": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "visibility": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "restricted"
+                            ]
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "owner": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "email": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "email"
+                            ]
+                          },
+                          "securables": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "userId": {
+                                  "type": "string"
+                                },
+                                "securableId": {
+                                  "type": "string"
+                                },
+                                "securableType": {
+                                  "type": "string"
+                                },
+                                "action": {
+                                  "type": "string"
+                                },
+                                "fields": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "nullable": true
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "userId",
+                                "securableId",
+                                "securableType",
+                                "action",
+                                "fields",
+                                "createdAt",
+                                "updatedAt"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "content",
+                          "ownerId",
+                          "visibility",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create new faq",
+        "summary": "Create faq",
+        "tags": [
+          "default",
+          "admin",
+          "faq"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "content": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "en": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "en"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          ]
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              },
+                              "content": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "content"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "items"
+                      ]
+                    }
+                  },
+                  "visibility": {
+                    "type": "string",
+                    "enum": [
+                      "public",
+                      "restricted"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "content",
+                  "visibility"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "en": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "en"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            ]
+                          },
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                },
+                                "content": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "content"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "items"
+                        ]
+                      }
+                    },
+                    "ownerId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "visibility": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "restricted"
+                      ]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "email": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "email"
+                      ]
+                    },
+                    "securables": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string"
+                          },
+                          "securableId": {
+                            "type": "string"
+                          },
+                          "securableType": {
+                            "type": "string"
+                          },
+                          "action": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "securableId",
+                          "securableType",
+                          "action",
+                          "fields",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "content",
+                    "ownerId",
+                    "visibility",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/faqs/{faqId}": {
+      "get": {
+        "description": "Get faq by id",
+        "summary": "Get faq",
+        "tags": [
+          "default",
+          "admin",
+          "faq"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "en": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "en"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            ]
+                          },
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                },
+                                "content": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "content"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "items"
+                        ]
+                      }
+                    },
+                    "ownerId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "visibility": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "restricted"
+                      ]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "email": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "email"
+                      ]
+                    },
+                    "securables": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string"
+                          },
+                          "securableId": {
+                            "type": "string"
+                          },
+                          "securableType": {
+                            "type": "string"
+                          },
+                          "action": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "securableId",
+                          "securableType",
+                          "action",
+                          "fields",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "content",
+                    "ownerId",
+                    "visibility",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update faq by id",
+        "summary": "Update faq",
+        "tags": [
+          "default",
+          "admin",
+          "faq"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "content": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "en": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "en"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          ]
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              },
+                              "content": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "content"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "items"
+                      ]
+                    }
+                  },
+                  "visibility": {
+                    "type": "string",
+                    "enum": [
+                      "public",
+                      "restricted"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "content",
+                  "visibility"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "en": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "en"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            ]
+                          },
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                },
+                                "content": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "content"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "items"
+                        ]
+                      }
+                    },
+                    "ownerId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "visibility": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "restricted"
+                      ]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "email": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "email"
+                      ]
+                    },
+                    "securables": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string"
+                          },
+                          "securableId": {
+                            "type": "string"
+                          },
+                          "securableType": {
+                            "type": "string"
+                          },
+                          "action": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "securableId",
+                          "securableType",
+                          "action",
+                          "fields",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "content",
+                    "ownerId",
+                    "visibility",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete faq by id",
+        "summary": "Delete faq",
+        "tags": [
+          "default",
+          "admin",
+          "faq"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/faqs/{faqId}/copy": {
+      "post": {
+        "description": "Copy faq record",
+        "summary": "Copy faq",
+        "tags": [
+          "default",
+          "admin",
+          "faq"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "en": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "en"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            ]
+                          },
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                },
+                                "content": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "content"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "items"
+                        ]
+                      }
+                    },
+                    "ownerId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "visibility": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "restricted"
+                      ]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "email": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "email"
+                      ]
+                    },
+                    "securables": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string"
+                          },
+                          "securableId": {
+                            "type": "string"
+                          },
+                          "securableType": {
+                            "type": "string"
+                          },
+                          "action": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "securableId",
+                          "securableType",
+                          "action",
+                          "fields",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "content",
+                    "ownerId",
+                    "visibility",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/faqs/{faqId}/securables": {
+      "get": {
+        "description": "FAQ: Browse securable users (paginated list)",
+        "summary": "FAQ: Browse securable users",
+        "tags": [
+          "default",
+          "admin",
+          "faqSecurable"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "email": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "securables": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "userId": {
+                                  "type": "string"
+                                },
+                                "securableId": {
+                                  "type": "string"
+                                },
+                                "securableType": {
+                                  "type": "string"
+                                },
+                                "action": {
+                                  "type": "string"
+                                },
+                                "fields": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "nullable": true
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "userId",
+                                "securableId",
+                                "securableType",
+                                "action",
+                                "fields",
+                                "createdAt",
+                                "updatedAt"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "email",
+                          "securables"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "FAQ: Create new user for securable",
+        "summary": "FAQ: Create user for securable",
+        "tags": [
+          "default",
+          "admin",
+          "faqSecurable"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "name": {
+                    "type": "string",
+                    "maxLength": 512,
+                    "nullable": true
+                  },
+                  "phone": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "nullable": true
+                  },
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "read",
+                        "edit",
+                        "delete",
+                        "securables",
+                        "use"
+                      ]
+                    },
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "email",
+                  "actions"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/faqs/{faqId}/securables/users": {
+      "get": {
+        "description": "FAQ: Browse available users (paginated list)",
+        "summary": "FAQ: Browse available users",
+        "tags": [
+          "default",
+          "admin",
+          "faqSecurable"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "email": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "securables": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "userId": {
+                                  "type": "string"
+                                },
+                                "securableId": {
+                                  "type": "string"
+                                },
+                                "securableType": {
+                                  "type": "string"
+                                },
+                                "action": {
+                                  "type": "string"
+                                },
+                                "fields": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "nullable": true
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "userId",
+                                "securableId",
+                                "securableType",
+                                "action",
+                                "fields",
+                                "createdAt",
+                                "updatedAt"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "email",
+                          "securables"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/faqs/{faqId}/securables/owner": {
+      "post": {
+        "description": "FAQ: Set securable owner",
+        "summary": "FAQ: Set securable owner",
+        "tags": [
+          "default",
+          "admin",
+          "faqSecurable"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "userId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/faqs/{faqId}/securables/{userId}": {
+      "patch": {
+        "description": "FAQ: Update user's securable access",
+        "summary": "FAQ: Update user's securable access",
+        "tags": [
+          "default",
+          "admin",
+          "faqSecurable"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "actions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "read",
+                        "edit",
+                        "delete",
+                        "securables",
+                        "use"
+                      ]
+                    },
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "actions"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "FAQ: Remove user's securable access",
+        "summary": "FAQ: Remove user's securable access",
+        "tags": [
+          "default",
+          "admin",
+          "faqSecurable"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
             "content": {
               "application/json": {
                 "schema": {}
@@ -37217,6 +39480,313 @@
         }
       }
     },
+    "/admin/references/faqs": {
+      "get": {
+        "description": "FAQs (paginated reference list)",
+        "summary": "FAQs",
+        "tags": [
+          "default",
+          "admin",
+          "reference"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 256
+                          },
+                          "content": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "en": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "en"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    }
+                                  ]
+                                },
+                                "items": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "allOf": [
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "en": {
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "en"
+                                            ]
+                                          },
+                                          {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                              "type": "string",
+                                              "nullable": true
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "content": {
+                                        "allOf": [
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "en": {
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "en"
+                                            ]
+                                          },
+                                          {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                              "type": "string",
+                                              "nullable": true
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "content"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "items"
+                              ]
+                            }
+                          },
+                          "ownerId": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "visibility": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "restricted"
+                            ]
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "owner": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "email": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "email"
+                            ]
+                          },
+                          "securables": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "userId": {
+                                  "type": "string"
+                                },
+                                "securableId": {
+                                  "type": "string"
+                                },
+                                "securableType": {
+                                  "type": "string"
+                                },
+                                "action": {
+                                  "type": "string"
+                                },
+                                "fields": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "nullable": true
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              },
+                              "required": [
+                                "userId",
+                                "securableId",
+                                "securableType",
+                                "action",
+                                "fields",
+                                "createdAt",
+                                "updatedAt"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "content",
+                          "ownerId",
+                          "visibility",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/references/feedback-schemes": {
       "get": {
         "description": "Feedback schemes (paginated reference list)",
@@ -41673,6 +44243,10 @@
                     "maxLength": 512,
                     "nullable": true
                   },
+                  "faqId": {
+                    "type": "string",
+                    "nullable": true
+                  },
                   "feedbackSchemeId": {
                     "type": "string",
                     "nullable": true
@@ -42148,6 +44722,10 @@
                       "maxLength": 512,
                       "nullable": true
                     },
+                    "faqId": {
+                      "type": "string",
+                      "nullable": true
+                    },
                     "feedbackSchemeId": {
                       "type": "string",
                       "nullable": true
@@ -42617,6 +45195,145 @@
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
+                        "ownerId",
+                        "visibility",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    },
+                    "faq": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 256
+                        },
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              },
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "en": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "en"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "content": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "en": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "en"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "content"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "items"
+                            ]
+                          }
+                        },
+                        "ownerId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "visibility": {
+                          "type": "string",
+                          "enum": [
+                            "public",
+                            "restricted"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "content",
                         "ownerId",
                         "visibility",
                         "createdAt",
@@ -44056,6 +46773,7 @@
                     "surveyMonkeyUrl",
                     "supportEmail",
                     "originatingUrl",
+                    "faqId",
                     "feedbackSchemeId",
                     "numberOfSubmissionsForFeedback",
                     "notifications",
@@ -44189,6 +46907,10 @@
                       "maxLength": 512,
                       "nullable": true
                     },
+                    "faqId": {
+                      "type": "string",
+                      "nullable": true
+                    },
                     "feedbackSchemeId": {
                       "type": "string",
                       "nullable": true
@@ -44658,6 +47380,145 @@
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
+                        "ownerId",
+                        "visibility",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    },
+                    "faq": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 256
+                        },
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              },
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "en": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "en"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "content": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "en": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "en"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "content"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "items"
+                            ]
+                          }
+                        },
+                        "ownerId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "visibility": {
+                          "type": "string",
+                          "enum": [
+                            "public",
+                            "restricted"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "content",
                         "ownerId",
                         "visibility",
                         "createdAt",
@@ -46097,6 +48958,7 @@
                     "surveyMonkeyUrl",
                     "supportEmail",
                     "originatingUrl",
+                    "faqId",
                     "feedbackSchemeId",
                     "numberOfSubmissionsForFeedback",
                     "notifications",
@@ -46218,6 +49080,10 @@
                   "originatingUrl": {
                     "type": "string",
                     "maxLength": 512,
+                    "nullable": true
+                  },
+                  "faqId": {
+                    "type": "string",
                     "nullable": true
                   },
                   "feedbackSchemeId": {
@@ -46684,6 +49550,10 @@
                       "maxLength": 512,
                       "nullable": true
                     },
+                    "faqId": {
+                      "type": "string",
+                      "nullable": true
+                    },
                     "feedbackSchemeId": {
                       "type": "string",
                       "nullable": true
@@ -47153,6 +50023,145 @@
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
+                        "ownerId",
+                        "visibility",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    },
+                    "faq": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 256
+                        },
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              },
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "en": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "en"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "content": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "en": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "en"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "content"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "items"
+                            ]
+                          }
+                        },
+                        "ownerId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "visibility": {
+                          "type": "string",
+                          "enum": [
+                            "public",
+                            "restricted"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "content",
                         "ownerId",
                         "visibility",
                         "createdAt",
@@ -48592,6 +51601,7 @@
                     "surveyMonkeyUrl",
                     "supportEmail",
                     "originatingUrl",
+                    "faqId",
                     "feedbackSchemeId",
                     "numberOfSubmissionsForFeedback",
                     "notifications",
@@ -48713,6 +51723,10 @@
                   "originatingUrl": {
                     "type": "string",
                     "maxLength": 512,
+                    "nullable": true
+                  },
+                  "faqId": {
+                    "type": "string",
                     "nullable": true
                   },
                   "feedbackSchemeId": {
@@ -49102,6 +52116,7 @@
                   "surveyMonkeyUrl",
                   "supportEmail",
                   "originatingUrl",
+                  "faqId",
                   "feedbackSchemeId",
                   "numberOfSubmissionsForFeedback",
                   "notifications",
@@ -49207,6 +52222,10 @@
                     "originatingUrl": {
                       "type": "string",
                       "maxLength": 512,
+                      "nullable": true
+                    },
+                    "faqId": {
+                      "type": "string",
                       "nullable": true
                     },
                     "feedbackSchemeId": {
@@ -49678,6 +52697,145 @@
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
+                        "ownerId",
+                        "visibility",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    },
+                    "faq": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 256
+                        },
+                        "content": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              },
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "en": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "en"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "content": {
+                                      "allOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "en": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "en"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "additionalProperties": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "title",
+                                    "content"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "items"
+                            ]
+                          }
+                        },
+                        "ownerId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "visibility": {
+                          "type": "string",
+                          "enum": [
+                            "public",
+                            "restricted"
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "content",
                         "ownerId",
                         "visibility",
                         "createdAt",
@@ -51117,6 +54275,7 @@
                     "surveyMonkeyUrl",
                     "supportEmail",
                     "originatingUrl",
+                    "faqId",
                     "feedbackSchemeId",
                     "numberOfSubmissionsForFeedback",
                     "notifications",
