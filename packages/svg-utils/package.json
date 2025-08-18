@@ -1,6 +1,6 @@
 {
   "name": "@intake24/svg-utils",
-  "version": "2025.2",
+  "version": "2025.3",
   "description": "Helper functions to extract outline coordinate data for drink scales and image maps from legacy SVG files",
   "author": "",
   "license": "Apache-2.0",
