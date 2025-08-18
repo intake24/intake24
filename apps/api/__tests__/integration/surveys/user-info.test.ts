@@ -36,7 +36,7 @@ export default () => {
     );
   });
 
-  it('should return 200 and public survey record', async () => {
+  it('should return 200 and user info', async () => {
     const { status, body } = await request(suite.app)
       .get(`${url}?tzOffset=-60`)
       .set('Accept', 'application/json')

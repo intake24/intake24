@@ -21,7 +21,7 @@ export default () => {
     });
   });
 
-  it('should return 200 and public survey record', async () => {
+  it('should return 200 and public survey parameters', async () => {
     const { status, body } = await request(suite.app)
       .get(url)
       .set('Accept', 'application/json')
@@ -36,6 +36,7 @@ export default () => {
       'locale',
       'surveyScheme',
       'feedbackScheme',
+      'faqs',
       'numberOfSubmissionsForFeedback',
       'session',
       'suspensionReason',
