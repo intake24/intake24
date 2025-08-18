@@ -48,7 +48,7 @@ function duoProvider({
         throw new Error('Duo service not available.');
 
       const challengeId = duoClient.generateState();
-      const challengeUrl = duoClient.createAuthUrl(email, challengeId);
+      const challengeUrl = await duoClient.createAuthUrl(email, challengeId);
 
       return { challengeId, provider, challengeUrl };
     }

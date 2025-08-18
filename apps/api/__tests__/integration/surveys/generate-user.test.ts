@@ -36,7 +36,7 @@ export default () => {
     });
   });
 
-  it('should return 200 and public survey record', async () => {
+  it('should return 200 and generated credentials', async () => {
     await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: null });
 
     const { status, body } = await request(suite.app)
