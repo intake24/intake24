@@ -13,13 +13,13 @@ export function bootstrapAnalytics(app: App, router: Router) {
   if (!analytics)
     return;
 
-  const { VITE_GOOGLE_ANALYTICS_ID, VITE_GTM_CONTAINER_ID, VITE_CLARITY_PROJECT_ID } = import.meta.env;
+  const { DEV, VITE_APP_NAME, VITE_GOOGLE_ANALYTICS_ID, VITE_GTM_CONTAINER_ID, VITE_CLARITY_PROJECT_ID } = import.meta.env;
 
   // Google Analytics
   if (VITE_GOOGLE_ANALYTICS_ID) {
     configure({
-      appName: import.meta.env.VITE_APP_NAME,
-      tagId: import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
+      appName: VITE_APP_NAME,
+      tagId: VITE_GOOGLE_ANALYTICS_ID,
       initMode: analytics ? 'auto' : 'manual',
       pageTracker: {
         router,
@@ -32,7 +32,7 @@ export function bootstrapAnalytics(app: App, router: Router) {
     app.use(createGtm({
       id: VITE_GTM_CONTAINER_ID,
       enabled: analytics ?? false,
-      debug: import.meta.env.DEV,
+      debug: DEV,
       vueRouter: router,
     }));
   }
