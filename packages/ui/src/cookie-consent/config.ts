@@ -69,11 +69,13 @@ export function cookieConsentConfig(translations?: CookieConsentConfig['language
         autoClear: {
           cookies: [
             { name: /^_ga/ },
-            { name: '_gid' },
-            { name: /^_CLID/ },
-            { name: /^_MUID/ },
             { name: /^_clck/ },
             { name: /^_clsk/ },
+            { name: /^CLID/ },
+            { name: /^ANONCHK/ },
+            { name: /^MR/ },
+            { name: /^MUID/ },
+            { name: /^SM/ },
           ],
         },
       },

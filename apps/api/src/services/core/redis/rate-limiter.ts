@@ -1,5 +1,6 @@
 import type { Request } from 'express';
 import type { Options } from 'express-rate-limit';
+import type { RedisReply } from 'rate-limit-redis';
 import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 import type { IoC } from '@intake24/api/ioc';
@@ -32,8 +33,7 @@ export default class RateLimiter extends HasRedisClient {
       ...options,
 
       store: new RedisStore({
-        // @ts-expect-error - Known issue: the `call` function is not present in @types/ioredis
-        sendCommand: (...args: string[]) => this.redis.call(...args),
+        sendCommand: (command: string, ...args: string[]) => this.redis.call(command, ...args) as Promise<RedisReply>,
         prefix: this.config.keyPrefix,
       }),
     });
@@ -51,8 +51,7 @@ export default class RateLimiter extends HasRedisClient {
       ...options,
 
       store: new RedisStore({
-        // @ts-expect-error - Known issue: the `call` function is not present in @types/ioredis
-        sendCommand: (...args: string[]) => this.redis.call(...args),
+        sendCommand: (command: string, ...args: string[]) => this.redis.call(command, ...args) as Promise<RedisReply>,
         prefix: this.config.keyPrefix,
       }),
     });

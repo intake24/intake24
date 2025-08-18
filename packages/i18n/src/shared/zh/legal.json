@@ -31,19 +31,24 @@
             "cookieTable": {
               "headers": {
                 "name": "Name",
-                "exp": "Expiration",
-                "desc": "Description"
+                "desc": "Description",
+                "exp": "Expiration"
               },
               "body": [
                 {
+                  "name": "it24(a|s)_session",
+                  "desc": "Technical functionality of websites.",
+                  "exp": "1 hour"
+                },
+                {
                   "name": "it24(a|s)_refresh_token",
-                  "exp": "1 hour",
-                  "desc": "Technical functionality of websites."
+                  "desc": "Technical functionality of websites.",
+                  "exp": "1 hour"
                 },
                 {
                   "name": "it24_cc",
-                  "exp": "1 year",
-                  "desc": "Cookies consent preferences used by the website."
+                  "desc": "Cookies consent preferences used by the website.",
+                  "exp": "1 year"
                 }
               ]
             }
@@ -55,14 +60,14 @@
             "cookieTable": {
               "headers": {
                 "name": "Name",
-                "exp": "Expiration",
-                "desc": "Description"
+                "desc": "Description",
+                "exp": "Expiration"
               },
               "body": [
                 {
                   "name": "^it24(a|s)_",
-                  "exp": "1 year",
-                  "desc": "Stores user preferences and settings for the websites."
+                  "desc": "Stores user preferences and settings for the websites.",
+                  "exp": "1 year"
                 }
               ]
             }
@@ -74,39 +79,19 @@
             "cookieTable": {
               "headers": {
                 "name": "Name",
-                "exp": "Expiration",
-                "desc": "Description"
+                "desc": "Description",
+                "exp": "Expiration"
               },
               "body": [
                 {
                   "name": "^_ga",
-                  "exp": "2 years",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "desc": "Google Analytics cookies used to distinguish users and persist session state.",
+                  "exp": "2 years"
                 },
                 {
-                  "name": "^_gid",
-                  "exp": "1 day",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
-                },
-                {
-                  "name": "^_CLID",
-                  "exp": "1 year",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
-                },
-                {
-                  "name": "^_MUID",
-                  "exp": "390 days",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
-                },
-                {
-                  "name": "^_clck",
-                  "exp": "30 days",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
-                },
-                {
-                  "name": "^_clsk",
-                  "exp": "1 day",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "name": "_clck<br>_clsk<br>CLID<br>ANONCHK<br>MR<br>MUID<br>SM",
+                  "desc": "MS Clarity cookies used to distinguish users and persist session state.",
+                  "exp": "up to 1 year"
                 }
               ]
             }
