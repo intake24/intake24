@@ -99,6 +99,7 @@ export class FrenchAlbaneLocaleBuilder {
   private sourceFoodRecords: AlbaneFoodListRow[] | undefined;
   private foodSynonyms: Record<string, string[]> | undefined;
   private foodCategories: Record<string, string[]> | undefined;
+  private foodTags: Record<string, string[]> | undefined;
 
   private categoryNames: Record<string, string> | undefined;
 
@@ -134,22 +135,34 @@ export class FrenchAlbaneLocaleBuilder {
 
   private async readFoodCategories(): Promise<void> {
     this.foodCategories = {};
+    this.foodTags = {};
 
     const categoryRecords = this.readXLSX<AlbaneFoodCategoryRow>('CATEGORIES_I24_FOOD.xlsx');
 
     for (const row of categoryRecords) {
       const categoryCodes: string[] = [];
 
-      for (const code of [row.code1, row.code2, row.code3, row.code4, row.code5]) {
-        if (code === undefined)
-          continue;
-        const trimmed = trim(code);
-        if (trimmed.length > 0)
+      for (const code of [row.code1, row.code2, row.code3]) {
+        const trimmed = code?.trim();
+        if (trimmed) {
           categoryCodes.push(trimmed);
+        }
       }
 
       if (categoryCodes.length > 0)
         this.foodCategories[row.A_CODE] = categoryCodes;
+
+      const tags = [];
+
+      if (row.OFF_cat) {
+        for (const tag of row.OFF_cat.split(',')) {
+          if (tag.length > 0)
+            tags.push(tag);
+        }
+      }
+
+      if (tags.length > 0)
+        this.foodTags[row.A_CODE] = tags;
     }
   }
 
@@ -263,7 +276,7 @@ export class FrenchAlbaneLocaleBuilder {
         englishName: capitalize(row.A_LIBELLE_EN.substring(0, 128)),
         attributes: { sameAsBeforeOption: true, reasonableAmount: this.reasonableAmount![row.A_CODE] },
         alternativeNames,
-        tags: [...facetFlags, ...categoryTags],
+        tags: [...facetFlags, ...categoryTags, ...(this.foodTags?.[row.A_CODE] ?? [])],
         nutrientTableCodes: {
           FR_ALBANE: row.A_CODE,
         },
