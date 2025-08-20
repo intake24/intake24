@@ -46,6 +46,8 @@ import type {
   LocalCategoriesService,
   LocaleService,
   LocalFoodsService,
+  MediaService,
+  MediaStore,
   NutrientTableService,
   NutrientTypeService,
   NutrientUnitService,
@@ -84,6 +86,7 @@ export interface IoC extends Jobs {
   fsConfig: Config['filesystem'];
   logConfig: Config['log'];
   mailConfig: Config['mail'];
+  mediaConfig: Config['media'];
   pdfConfig: Config['pdf'];
   queueConfig: Config['queue'];
   rateLimiterConfig: Config['rateLimiter'];
@@ -184,6 +187,10 @@ export interface IoC extends Jobs {
   guideImageService: GuideImageService;
   imageMapService: ImageMapService;
   foodThumbnailImageService: FoodThumbnailImageService;
+
+  // Media
+  mediaService: MediaService;
+  mediaStore: MediaStore;
 
   // Survey / user
   adminSignupService: AdminSignupService;

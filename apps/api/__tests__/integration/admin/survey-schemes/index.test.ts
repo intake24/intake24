@@ -1,3 +1,5 @@
+import mediable from '../mediable/index.test';
+import securable from '../securable/index.test';
 import browse from './browse.test';
 import copy from './copy.test';
 import dataExport from './data-export.test';
@@ -18,4 +20,6 @@ export default () => {
   describe('delete /api/admin/survey-schemes/:surveySchemeId', destroy);
   describe('get /api/admin/survey-schemes/:surveySchemeId/templates', templates);
   describe('get /api/admin/survey-schemes/:surveySchemeId/data-export', dataExport);
+  mediable('/api/admin/survey-schemes/:surveySchemeId', 'SurveyScheme');
+  securable('/api/admin/survey-schemes/:surveySchemeId', 'SurveyScheme');
 };

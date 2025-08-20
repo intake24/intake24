@@ -40,6 +40,8 @@ import {
   localCategoriesService,
   localeService,
   localFoodsService,
+  mediaService,
+  mediaStores,
   nutrientTableService,
   nutrientTypeService,
   nutrientUnitService,
@@ -64,6 +66,8 @@ import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core
 import { logger, Mailer } from '@intake24/common-backend';
 
 export default (container: AwilixContainer<RequestIoC>): void => {
+  const mediaStore = container.cradle.mediaConfig.storage.provider;
+
   container.register({
     authenticationService: asFunction(authenticationService).singleton(),
     aclCache: asFunction(aclCache).singleton(),
@@ -111,6 +115,9 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     dataExportFields: asFunction(dataExportFields).singleton(),
     dataExportMapper: asFunction(dataExportMapper).singleton(),
     dataExportService: asFunction(dataExportService).singleton(),
+
+    mediaService: asFunction(mediaService).singleton(),
+    mediaStore: asFunction(mediaStores[mediaStore]).singleton(),
 
     adminSignupService: asFunction(adminSignupService).singleton(),
     adminSurveyService: asFunction(adminSurveyService).singleton(),

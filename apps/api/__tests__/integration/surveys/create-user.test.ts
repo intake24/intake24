@@ -18,7 +18,7 @@ export default () => {
     payload = { username: 'userIdentifier001', redirectUrl: 'https://redirect-me.here' };
     token = jwt.sign(payload, secret, { expiresIn: '15m' });
 
-    url = `/api/surveys/${suite.data.system.survey.slug}/create-user`;
+    url = `/api/surveys/${suite.data.system.Survey.slug}/create-user`;
     invalidUrl = `/api/surveys/invalid-survey/create-user`;
   });
 
@@ -43,7 +43,7 @@ export default () => {
   });
 
   it(`should return 403 when user generation disabled`, async () => {
-    await suite.data.system.survey.update({ allowGenUsers: false, genUserKey: null });
+    await suite.data.system.Survey.update({ allowGenUsers: false, genUserKey: null });
 
     await suite.sharedTests.assertMissingAuthorization('post', url, {
       bearer: null,
@@ -52,7 +52,7 @@ export default () => {
   });
 
   it(`should return 403 when JWT secret is not set in survey settings`, async () => {
-    await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: null });
+    await suite.data.system.Survey.update({ allowGenUsers: true, genUserKey: null });
 
     await suite.sharedTests.assertMissingAuthorization('post', url, {
       bearer: null,
@@ -62,7 +62,7 @@ export default () => {
 
   describe('for correct survey settings', () => {
     beforeAll(async () => {
-      await suite.data.system.survey.update({
+      await suite.data.system.Survey.update({
         allowGenUsers: true,
         genUserKey: secret,
         userCustomFields: false,
@@ -174,7 +174,7 @@ export default () => {
     });
 
     it('should return 200 and respondent record with name', async () => {
-      await suite.data.system.survey.update({ userCustomFields: false, userPersonalIdentifiers: true });
+      await suite.data.system.Survey.update({ userCustomFields: false, userPersonalIdentifiers: true });
 
       const payload = {
         username: 'userIdentifier004',
@@ -194,7 +194,7 @@ export default () => {
     });
 
     it('should return 200 and respondent record with custom fields', async () => {
-      await suite.data.system.survey.update({ userCustomFields: true, userPersonalIdentifiers: false });
+      await suite.data.system.Survey.update({ userCustomFields: true, userPersonalIdentifiers: false });
 
       const payload = {
         username: 'userIdentifier005',

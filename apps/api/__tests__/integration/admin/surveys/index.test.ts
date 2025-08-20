@@ -1,3 +1,4 @@
+import securable from '../securable/index.test';
 import browse from './browse.test';
 // import put from './put.test';
 import destroy from './destroy.test';
@@ -41,4 +42,6 @@ export default () => {
 
   // Surveys tasks
   describe('post /api/admin/surveys/:surveyId/tasks', tasks);
+
+  securable('/api/admin/surveys/:surveyId', 'Survey');
 };

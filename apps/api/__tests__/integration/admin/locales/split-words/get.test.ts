@@ -14,7 +14,7 @@ export default () => {
   let splitWords: SplitWordRequest[];
 
   beforeAll(async () => {
-    const { id, code: localeId } = suite.data.system.locale;
+    const { id, code: localeId } = suite.data.system.Locale;
 
     splitWords = [
       { localeId, words: 'first1 first2 first3' },

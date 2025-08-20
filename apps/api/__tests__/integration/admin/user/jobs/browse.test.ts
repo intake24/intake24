@@ -11,7 +11,7 @@ export default () => {
   };
 
   beforeAll(async () => {
-    const { id, startDate, endDate } = suite.data.system.survey;
+    const { id, startDate, endDate } = suite.data.system.Survey;
     input = {
       type: 'SurveyDataExport',
       params: {
@@ -29,7 +29,7 @@ export default () => {
   it('should return 200 and data list', async () => {
     // Admin user job
     await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.system.survey.id}/tasks`)
+      .post(`/api/admin/surveys/${suite.data.system.Survey.id}/tasks`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .send(input);
@@ -37,7 +37,7 @@ export default () => {
     // Test user job
     await suite.util.setPermission(['surveys', 'surveys:tasks']);
     await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.system.survey.id}/tasks`)
+      .post(`/api/admin/surveys/${suite.data.system.Survey.id}/tasks`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user)
       .send(input);

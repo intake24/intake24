@@ -10,8 +10,8 @@ export default () => {
   let userId: string;
 
   beforeAll(async () => {
-    surveyId = suite.data.system.survey.id;
-    surveySlug = suite.data.system.survey.slug;
+    surveyId = suite.data.system.Survey.id;
+    surveySlug = suite.data.system.Survey.slug;
     userId = suite.data.system.respondent.userId;
 
     await SurveySubmission.create(mocker.system.submission(surveyId, userId));

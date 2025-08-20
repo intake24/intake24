@@ -9,7 +9,7 @@ export default () => {
   let output: SystemLocaleCreationAttributes;
 
   beforeAll(async () => {
-    const { code } = suite.data.system.language;
+    const { code } = suite.data.system.Language;
     input = {
       code: 'en-cb',
       englishName: 'English - Caribbean',
@@ -86,7 +86,7 @@ export default () => {
     });
 
     it('should return 409 for duplicate id', async () => {
-      const { code } = suite.data.system.language;
+      const { code } = suite.data.system.Language;
 
       await suite.sharedTests.assertInvalidInput('post', url, ['code'], {
         input: {

@@ -7,7 +7,7 @@ export default () => {
   let url: string;
 
   beforeAll(async () => {
-    languageId = suite.data.system.language.id;
+    languageId = suite.data.system.Language.id;
 
     url = `/api/admin/languages/${languageId}/translations`;
   });

@@ -262,6 +262,10 @@ export const sidebar = {
           text: 'Drinkware sets',
           link: '/admin/images/drinkware-sets',
         },
+        {
+          text: 'Media',
+          link: '/admin/media',
+        },
       ],
     },
     {
@@ -295,6 +299,10 @@ export const sidebar = {
         {
           text: 'Prompt templates',
           link: '/admin/surveys/prompt-templates',
+        },
+        {
+          text: 'FAQs',
+          link: '/admin/surveys/faqs',
         },
       ],
     },

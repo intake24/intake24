@@ -1,12 +1,12 @@
 # Integrations
 
-Looking to integrate with Intake24? Here's how to do it.
+Intake24 provides access to [REST API](/api/), which is consumed by its 1<sup>st</sup> party applications, i.e. [admin tool](/admin/) and [survey app](/survey/) and can be used to integrate with any other 3<sup>rd</sup> party systems.
 
-Intake24 provides access to [REST API](/api/), consumed by 1<sup>st</sup> party applications, [admin tool](/admin/) and [survey app](/survey/).
+::: warning
+For machine-to-machine communication, [personal access tokens](/admin/user/personal-access-tokens) should be used rather than primary user credentials.
+:::
 
-[REST API](/api/) can be used to integrate with any other 3<sup>rd</sup> party system. For machine-to-machine communication, [personal access tokens](/admin/user/personal-access-tokens) can be used rather than primary user credentials.
-
-While REST API is a generic interface to be used to implement custom flow, there are few features that can simplify the 3<sup>rd</sup> party integration into survey flow without delving too much into the API details:
+While REST API is a generic interface to be used to implement custom integrations, there are few features that can simplify the 3<sup>rd</sup> party integration into survey flow without delving too much into the API details:
 
 - Respondent account creation
 
@@ -106,9 +106,9 @@ app.domain.com/{surveyId}/create-user/{token}?redirect=recall
 Pick suitable option based on integration use case, depending whether you need to process API response (`A`) or not (`B`).
 :::
 
-## Survey notifications
+## Survey notifications / webhooks
 
-Intake24 can notify 3<sup>rd</sup> party system about survey progression using registered notifications. To enable this feature, read [survey notifications](/admin/surveys/#notifications) section.
+Intake24 can notify 3<sup>rd</sup> party system about survey progression using registered notifications / webhooks. To enable this feature, read [survey notifications](/admin/surveys/#notifications) section.
 
 ## Redirection to 3<sup>rd</sup> party system
 
@@ -116,6 +116,6 @@ Intake24 can redirect respondent to 3<sup>rd</sup> party system upon survey reca
 
 ## Missing integration?
 
-Please note options described above are not exhaustive. It is a list of most used methods, for more details consult [API documentation](/api/).
+Please note options described above are not exhaustive. It is a list of most frequently used methods, for more details consult [API documentation](/api/).
 
 Not found the integration you're looking for? We appreciate that every system is a bit different, so we're happy to advise and where possible extend Intake24 to allow for seamless integration and wider adoption. Open an issue on [GitHub](https://github.com/intake24/intake24/issues) and we will try to help.
