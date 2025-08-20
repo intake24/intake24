@@ -9,10 +9,10 @@ export default () => {
   let output: PublicSurveyEntry;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.slug}`;
+    url = `/api/surveys/${suite.data.system.Survey.slug}`;
     invalidUrl = `/api/surveys/invalid-survey`;
 
-    output = publicSurveyEntryResponse(suite.data.system.survey);
+    output = publicSurveyEntryResponse(suite.data.system.Survey);
   });
 
   it(`should return 404 when record doesn't exist`, async () => {

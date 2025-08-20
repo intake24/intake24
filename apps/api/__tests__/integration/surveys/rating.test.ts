@@ -10,11 +10,11 @@ export default () => {
   let input: SurveyRatingRequest;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.slug}/rating`;
+    url = `/api/surveys/${suite.data.system.Survey.slug}/rating`;
     invalidUrl = `/api/surveys/invalid-survey/rating`;
 
     const submission = mocker.system.submission(
-      suite.data.system.survey.id,
+      suite.data.system.Survey.id,
       suite.data.system.respondent.id,
     );
     await SurveySubmission.create(submission);

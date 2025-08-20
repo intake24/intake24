@@ -15,8 +15,8 @@ export default () => {
   let input: Omit<QueueJob, 'userId'>;
 
   beforeAll(async () => {
-    sourceLocaleId = suite.data.system.locale.id;
-    const { code } = suite.data.system.language;
+    sourceLocaleId = suite.data.system.Locale.id;
+    const { code } = suite.data.system.Language;
 
     const localeInput = mocker.system.locale(code, code);
 

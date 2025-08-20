@@ -10,6 +10,7 @@ import images from './images';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
+import media from './media';
 import nutrientTables from './nutrient-tables';
 import nutrientTypes from './nutrient-types';
 import nutrientUnits from './nutrient-units';
@@ -35,6 +36,7 @@ const views: Dictionary = {
   jobs,
   languages,
   locales,
+  media,
   'nutrient-tables': nutrientTables,
   'nutrient-types': nutrientTypes,
   'nutrient-units': nutrientUnits,

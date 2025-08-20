@@ -204,7 +204,7 @@ export default defineComponent({
       }
 
       const name = parent ? `${parent}-${module}` : module;
-      const title = parent && module !== 'securables' ? `${parent}.${module}` : module;
+      const title = parent && !['media', 'securables'].includes(module) ? `${parent}.${module}` : module;
       const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
       const { [identifier]: currentId, id } = currentParams;
 

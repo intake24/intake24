@@ -45,79 +45,59 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { DataTableHeader } from './use-data-table';
-import { mapActions } from 'pinia';
-
-import { computed, defineComponent } from 'vue';
+import { computed } from 'vue';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { useResource } from '@intake24/admin/stores';
-
 import type { Dictionary } from '@intake24/common/types';
 import { ActionBar } from './action-bar';
 import DataTableFilter from './data-table-filter.vue';
 import { useDataTable } from './use-data-table';
 
-export default defineComponent({
-  name: 'DataTable',
-
-  components: { ActionBar, DataTableFilter, ToolBar },
-
-  props: {
-    actions: {
-      type: Array as PropType<string[]>,
-      default: () => ['create', 'read', 'edit', 'delete'],
-    },
-    apiUrl: {
-      type: String,
-    },
-    headers: {
-      type: Array as PropType<DataTableHeader[]>,
-      required: true,
-    },
-    trackBy: {
-      type: String,
-      default: 'id',
-    },
-    variant: {
-      type: String as PropType<'flat' | 'text' | 'elevated' | 'tonal' | 'outlined' | 'plain'>,
-      default: 'elevated',
-    },
+const props = defineProps({
+  actions: {
+    type: Array as PropType<string[]>,
+    default: () => ['create', 'read', 'edit', 'delete'],
   },
-
-  setup(props) {
-    const resource = useResource();
-    const filter = computed(() => resource.getFilter);
-    const { api, fetch, items, meta, options, selected, tracked } = useDataTable(props, filter);
-
-    return { api, fetch, items, meta, options, selected, tracked, filter };
+  apiUrl: {
+    type: String,
   },
-
-  methods: {
-    ...mapActions(useResource, {
-      setResourceFilter: 'setFilter',
-      resetResourceFilter: 'resetFilter',
-    }),
-
-    async setFilter(data: Dictionary) {
-      // this.clearSelected();
-      await this.setResourceFilter(data);
-      await this.fetch();
-    },
-
-    async resetFilter() {
-      // this.clearSelected();
-      await this.resetResourceFilter();
-      await this.fetch();
-    },
-
-    async onRefresh() {
-      // this.clearSelected();
-      await this.fetch();
-    },
+  headers: {
+    type: Array as PropType<DataTableHeader[]>,
+    required: true,
+  },
+  trackBy: {
+    type: String,
+    default: 'id',
+  },
+  variant: {
+    type: String as PropType<'flat' | 'text' | 'elevated' | 'tonal' | 'outlined' | 'plain'>,
+    default: 'elevated',
   },
 });
+
+const resource = useResource();
+const filter = computed(() => resource.getFilter);
+const { api, fetch, items, meta, options, selected, tracked } = useDataTable(props, filter);
+
+async function setFilter(data: Dictionary) {
+  // this.clearSelected();
+  await resource.setFilter(data);
+  await fetch();
+};
+
+async function resetFilter() {
+  // this.clearSelected();
+  await resource.resetFilter();
+  await fetch();
+};
+
+async function onRefresh() {
+  // this.clearSelected();
+  await fetch();
+};
 </script>
 
 <style lang="scss" scoped></style>

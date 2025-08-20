@@ -7,8 +7,8 @@ import ioc from '@intake24/api/ioc';
 import type { SecurableContract } from '@intake24/common/contracts/admin';
 import { isSecurableType } from '@intake24/common/security';
 import {
-  getRequestParamFromSecurable,
   getResourceFromSecurable,
+  modelToRequestParam,
   randomString,
 } from '@intake24/common/util';
 import type {
@@ -28,7 +28,7 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
     throw new Error('Invalid securable type');
 
   const resource = getResourceFromSecurable(securableType);
-  const paramId = getRequestParamFromSecurable(securableType);
+  const paramId = modelToRequestParam(securableType);
 
   const addSecurableAccess = async (
     user: User,

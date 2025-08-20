@@ -14,7 +14,7 @@ export default () => {
   let updateTranslations: LanguageTranslationAttributes[];
 
   beforeAll(async () => {
-    languageId = suite.data.system.language.id;
+    languageId = suite.data.system.Language.id;
     url = `/api/admin/languages/${languageId}/translations`;
 
     translations = await ioc.cradle.languageService.getOrCreateLanguageTranslations(languageId);

@@ -18,6 +18,7 @@ export const standardSecurableActions = ['read', 'edit', 'delete', 'securables']
 export const securableDefs = {
   FAQ: [
     ...standardSecurableActions,
+    'media',
     'use',
   ] as const,
   FeedbackScheme: [
@@ -28,6 +29,7 @@ export const securableDefs = {
     'cards',
     'demographic-groups',
     'henry-coefficients',
+    'media',
     'use',
   ] as const,
   Language: [...standardSecurableActions, 'translations', 'use'] as const,
@@ -42,7 +44,14 @@ export const securableDefs = {
     'tasks',
     'use',
   ] as const,
-  SurveyScheme: [...standardSecurableActions, 'copy', 'prompts', 'data-export', 'use'] as const,
+  SurveyScheme: [
+    ...standardSecurableActions,
+    'copy',
+    'prompts',
+    'data-export',
+    'media',
+    'use',
+  ] as const,
   Survey: [
     ...standardSecurableActions,
     'overrides',

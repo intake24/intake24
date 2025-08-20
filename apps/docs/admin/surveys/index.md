@@ -22,6 +22,8 @@ Edit tab allows to modify selected survey.
 
 - `Scheme` - Associated [survey scheme](/admin/surveys/schemes)
 
+- `FAQ` - Associated [FAQ](/admin/surveys/faqs)
+
 - `Start date` - Start date of the survey
 
 - `End date` - End date of the survey

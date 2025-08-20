@@ -31,7 +31,7 @@ function generateResourceRoutes(resourceName: string, pathSegments: string[], vi
   const resourceRoutes = Object.keys(viewsPath);
   const name = parent ? `${parent}-${resourceName}` : resourceName;
   const title
-    = parent && resourceName !== 'securables' ? `${parent}.${resourceName}` : resourceName;
+    = parent && !['media', 'securables'].includes(resourceName) ? `${parent}.${resourceName}` : resourceName;
   const identifier = parent ? `${singular(resourceName)}Id` : 'id';
 
   const meta = { module: { current: resourceName, parent } };

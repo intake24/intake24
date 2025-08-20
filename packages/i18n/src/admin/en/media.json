@@ -1,0 +1,44 @@
+{
+  "_": "Media",
+  "title": "Media",
+  "tab": "Media",
+  "read": "Media detail",
+  "create": "Add media",
+  "edit": "Edit media",
+  "delete": "Delete media",
+  "modelType": "Attached resource",
+  "modelId": "Attached resource ID",
+  "name": "Name",
+  "file": "File",
+  "filename": "Filename",
+  "disk": "Disk",
+  "mimetype": "MIME type",
+  "size": "Size",
+  "collections": {
+    "_": "Collection",
+    "title": "Collections",
+    "default": "Default",
+    "tinymce": "HTML editor",
+    "feedback-schemes": {
+      "card": "Card thumbnail"
+    },
+    "survey-schemes": {
+      "carousel": "Carousel image"
+    }
+  },
+  "disks": {
+    "_": "Disk",
+    "title": "Disks",
+    "public": "Public",
+    "private": "Private"
+  },
+  "urls": {
+    "_": "URL",
+    "title": "URLs",
+    "sm": "Small",
+    "md": "Medium",
+    "lg": "Large",
+    "xl": "Extra large",
+    "original": "Original"
+  }
+}

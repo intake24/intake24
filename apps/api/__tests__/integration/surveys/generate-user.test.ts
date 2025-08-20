@@ -7,7 +7,7 @@ export default () => {
   let invalidUrl: string;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.slug}/generate-user`;
+    url = `/api/surveys/${suite.data.system.Survey.slug}/generate-user`;
     invalidUrl = `/api/surveys/invalid-survey/generate-user`;
   });
 
@@ -19,7 +19,7 @@ export default () => {
   });
 
   it(`should return 403 when user generation disabled`, async () => {
-    await suite.data.system.survey.update({ allowGenUsers: false });
+    await suite.data.system.Survey.update({ allowGenUsers: false });
 
     await suite.sharedTests.assertMissingAuthorization('post', url, {
       bearer: null,
@@ -28,7 +28,7 @@ export default () => {
   });
 
   it(`should return 403 when user generation enabled and JWT secret set`, async () => {
-    await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: 'aSuperSecret' });
+    await suite.data.system.Survey.update({ allowGenUsers: true, genUserKey: 'aSuperSecret' });
 
     await suite.sharedTests.assertMissingAuthorization('post', url, {
       bearer: null,
@@ -37,7 +37,7 @@ export default () => {
   });
 
   it('should return 200 and generated credentials', async () => {
-    await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: null });
+    await suite.data.system.Survey.update({ allowGenUsers: true, genUserKey: null });
 
     const { status, body } = await request(suite.app)
       .post(url)

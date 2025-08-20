@@ -1,3 +1,5 @@
+import mediable from '../mediable/index.test';
+import securable from '../securable/index.test';
 import browse from './browse.test';
 import copy from './copy.test';
 import destroy from './destroy.test';
@@ -14,4 +16,6 @@ export default () => {
   describe('patch /api/admin/feedback-schemes/:feedbackSchemeId', patch);
   describe('delete /api/admin/feedback-schemes/:feedbackSchemeId', destroy);
   describe('post /api/admin/feedback-schemes/:feedbackSchemeId/copy', copy);
+  mediable('/api/admin/feedback-schemes/:feedbackSchemeId', 'FeedbackScheme');
+  securable('/api/admin/feedback-schemes/:feedbackSchemeId', 'FeedbackScheme');
 };

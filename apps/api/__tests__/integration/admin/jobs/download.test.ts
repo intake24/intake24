@@ -14,7 +14,7 @@ export default () => {
   let job: JobAttributes;
 
   beforeAll(async () => {
-    const { id, startDate, endDate } = suite.data.system.survey;
+    const { id, startDate, endDate } = suite.data.system.Survey;
     const input = {
       type: 'SurveyDataExport',
       params: {
@@ -25,7 +25,7 @@ export default () => {
     };
 
     const { body } = await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.system.survey.id}/tasks`)
+      .post(`/api/admin/surveys/${suite.data.system.Survey.id}/tasks`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .send(input);

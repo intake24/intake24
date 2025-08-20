@@ -1,5 +1,4 @@
 import type { CamelCase } from 'type-fest';
-import type { SecurableType } from '../security';
 import camelCase from 'lodash/camelCase';
 import { customAlphabet, nanoid } from 'nanoid';
 import { plural } from 'pluralize';
@@ -22,15 +21,19 @@ export function kebabCase(string: string): string {
     .toLowerCase();
 }
 
+export function modelToResource<T extends string>(modelType: T): string {
+  return kebabCase(plural(modelType));
+}
+
+export function modelToRequestParam<T extends string>(modelType: T): `${CamelCase<T>}Id` {
+  return `${camelCase(modelType)}Id` as `${CamelCase<T>}Id`;
+}
+
 export function getResourceFromSecurable(securableType: any): string {
   if (!isSecurableType(securableType))
     throw new Error('Invalid securable type');
 
-  return kebabCase(plural(securableType));
-}
-
-export function getRequestParamFromSecurable<T extends SecurableType>(securableType: T): `${CamelCase<T>}Id` {
-  return `${camelCase(securableType)}Id` as `${CamelCase<T>}Id`;
+  return modelToResource(securableType);
 }
 
 /**

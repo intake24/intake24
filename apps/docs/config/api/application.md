@@ -152,3 +152,16 @@ URL of images.
 ::: tip
 Default setup allows local images serving - ideal for development purposes. For production, use reverse proxy, CDN etc.
 :::
+
+### Media URL
+
+URL of media files.
+
+- object-path: `urls.media`
+- dotenv var: `APP_URL_MEDIA`
+- type: `string`
+- default: `'localhost:3100/media'`
+
+::: tip
+Default setup allows local media serving - ideal for development purposes. For production, use reverse proxy, CDN etc.
+:::

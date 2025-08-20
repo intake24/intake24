@@ -12,7 +12,7 @@ export default () => {
   let input: UserSurveySessionCreationAttributes;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.slug}/session`;
+    url = `/api/surveys/${suite.data.system.Survey.slug}/session`;
     invalidUrl = `/api/surveys/invalid-survey/session`;
 
     const sessionData: SurveyState = {
@@ -35,12 +35,12 @@ export default () => {
 
     input = {
       id: sessionData.uxSessionId,
-      surveyId: suite.data.system.survey.id,
+      surveyId: suite.data.system.Survey.id,
       userId: suite.data.system.respondent.userId,
       sessionData,
     };
 
-    await UserSurveySession.destroy({ where: { surveyId: suite.data.system.survey.id, userId: suite.data.system.respondent.userId } });
+    await UserSurveySession.destroy({ where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId } });
   });
 
   it('should return 401 when no / invalid token', async () => {

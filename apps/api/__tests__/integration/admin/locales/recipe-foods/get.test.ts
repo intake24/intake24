@@ -12,7 +12,7 @@ export default () => {
   let recipeFoods: RecipeFoodRequest[];
 
   beforeAll(async () => {
-    const { id, code: localeId } = suite.data.system.locale;
+    const { id, code: localeId } = suite.data.system.Locale;
 
     recipeFoods = [
       {

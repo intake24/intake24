@@ -8,7 +8,7 @@ export default () => {
   let input: SurveyHelpRequest;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.slug}/request-help`;
+    url = `/api/surveys/${suite.data.system.Survey.slug}/request-help`;
     invalidUrl = `/api/surveys/invalid-survey/request-help`;
 
     input = {

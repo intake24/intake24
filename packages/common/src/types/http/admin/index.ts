@@ -11,6 +11,7 @@ export * from './image-maps';
 export * from './jobs';
 export * from './languages';
 export * from './locales';
+export * from './media';
 export * from './mfa-devices';
 export * from './nutrient-tables';
 export * from './nutrient-types';

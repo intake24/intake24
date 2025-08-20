@@ -13,7 +13,7 @@ export default () => {
   let splitLists: SplitListRequest[];
 
   beforeAll(async () => {
-    const { id, code: localeId } = suite.data.system.locale;
+    const { id, code: localeId } = suite.data.system.Locale;
 
     splitLists = [
       { localeId, firstWord: 'first word', words: 'first1 first2 first3' },

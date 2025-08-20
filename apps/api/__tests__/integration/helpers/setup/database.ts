@@ -18,6 +18,7 @@ import {
 import type { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
 import type { User, UserSurveyAlias } from '@intake24/db';
 import {
+  FAQ,
   FeedbackScheme,
   FoodsLocale,
   FoodsNutrientType,
@@ -38,11 +39,12 @@ export type MockData = {
     locale: FoodsLocale;
   };
   system: {
-    language: Language;
-    locale: SystemLocale;
-    feedbackScheme: FeedbackScheme;
-    surveyScheme: SurveyScheme;
-    survey: Survey;
+    Language: Language;
+    Locale: SystemLocale;
+    FAQ: FAQ;
+    FeedbackScheme: FeedbackScheme;
+    SurveyScheme: SurveyScheme;
+    Survey: Survey;
     role: Role;
     admin: User;
     user: User;
@@ -151,6 +153,8 @@ export async function initDatabase(): Promise<MockData> {
     SystemNutrientType.bulkCreate(nutrientTypes),
   ]);
 
+  const faq = await FAQ.create({ name: 'Test FAQ', content: [] });
+
   const [feedbackScheme, surveyScheme] = await Promise.all([
     FeedbackScheme.create({
       name: 'Default',
@@ -229,11 +233,12 @@ export async function initDatabase(): Promise<MockData> {
       locale: foodsLocale,
     },
     system: {
-      language,
-      locale: systemLocale,
-      feedbackScheme,
-      surveyScheme,
-      survey,
+      Language: language,
+      Locale: systemLocale,
+      FAQ: faq,
+      FeedbackScheme: feedbackScheme,
+      SurveyScheme: surveyScheme,
+      Survey: survey,
       role,
       admin,
       user,

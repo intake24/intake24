@@ -13,7 +13,7 @@ export default () => {
   let synonymSets: SynonymSetRequest[];
 
   beforeAll(async () => {
-    const { id, code: localeId } = suite.data.system.locale;
+    const { id, code: localeId } = suite.data.system.Locale;
 
     synonymSets = [
       { localeId, synonyms: 'first1 first2 first3' },

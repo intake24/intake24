@@ -102,6 +102,11 @@ export default (app: Express, { config }: Ops): void => {
   if (urls.images.startsWith(urls.base))
     app.use('/images', express.static(config.filesystem.local.images, { index: false }));
 
+  // Register media folder if locally hosted
+  if (urls.media.startsWith(urls.base) && config.media.storage.provider === 'local') {
+    app.use('/media', express.static(config.media.storage.local.public, { index: false }));
+  }
+
   // Check if any site is hosted locally
   const localSite = Object.keys(sites).some(site => !isUrlAbsolute(urls[site as Site]));
   if (!localSite) {

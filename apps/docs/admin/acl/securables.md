@@ -2,6 +2,7 @@
 
 Following resources / record types implement `securable` per-record access.
 
+- `FAQ`
 - `Feedback scheme`
 - `Language`
 - `Locale`
@@ -29,6 +30,7 @@ Securable permissions can be granted / revoked for any specific record in `Secur
 | read       | Read record details             |
 | edit       | Edit record                     |
 | delete     | Delete record                   |
+| media      | Control `media` permissions     |
 | securables | Control `securable` permissions |
 | use        | Control record `visibility`     |
 | [action]   | Specific record action          |
@@ -49,6 +51,7 @@ Owner of the record has full access to the record, without the need to grant add
 
 It is possible to set record visibility on following resources:
 
+- [FAQ](/admin/surveys/faqs)
 - [Languages](/admin/localization/languages)
 - [Locales](/admin/localization/locales)
 - [Feedback schemes](/admin/feedback/schemes)
@@ -60,7 +63,7 @@ Visibility defines if record can be used, i.e. assigned to other records. For ex
 
 - `Language` can be assigned to `Locale`
 - `Locale` can be assigned to `Survey`
-- `Feedback or survey scheme` can be assigned to `Survey`
+- `FAQ` / `Feedback scheme` / `Survey scheme` can be assigned to `Survey`
 
 #### Public
 
@@ -71,4 +74,4 @@ Public visibility means that record is visible for the use to all users.
 Restricted visibility means that record is visible for the use to users
 
 1. with `resource:use` permission granted
-2. with `resource:securables` securable granted
+2. with `use` securable granted

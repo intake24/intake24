@@ -20,6 +20,7 @@ function configureContainer() {
     fsConfig: asValue(config.filesystem),
     logConfig: asValue(config.log),
     mailConfig: asValue(config.mail),
+    mediaConfig: asValue(config.media),
     pdfConfig: asValue(config.pdf),
     queueConfig: asValue(config.queue),
     rateLimiterConfig: asValue(config.rateLimiter),

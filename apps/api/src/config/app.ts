@@ -4,7 +4,7 @@ import type { Environment } from '@intake24/common/types';
 
 import pkg from '../../package.json';
 
-export type Site = 'base' | 'admin' | 'survey' | 'images' | 'docs';
+export type Site = 'base' | 'admin' | 'survey' | 'images' | 'media' | 'docs';
 export type SiteUrls = Record<Site, string>;
 
 export type AppConfig = {
@@ -68,6 +68,7 @@ const appConfig: AppConfig = {
     admin: process.env.APP_URL_ADMIN || '/admin',
     survey: process.env.APP_URL_SURVEY || '/survey',
     images: process.env.APP_URL_IMAGES || `${domain}/images`,
+    media: process.env.APP_URL_MEDIA || `${domain}/media`,
     docs: process.env.APP_URL_DOCS || '/docs',
   },
 };

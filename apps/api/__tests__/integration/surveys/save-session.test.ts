@@ -10,7 +10,7 @@ export default () => {
   let input: { session: SurveyState };
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.slug}/session`;
+    url = `/api/surveys/${suite.data.system.Survey.slug}/session`;
     invalidUrl = `/api/surveys/invalid-survey/session`;
 
     const session: SurveyState = {
@@ -45,7 +45,7 @@ export default () => {
   });
 
   it(`should return 403 when user session disabled`, async () => {
-    await suite.data.system.survey.update({ session: { store: false, age: '12h', fixed: '1d+0h' } });
+    await suite.data.system.Survey.update({ session: { store: false, age: '12h', fixed: '1d+0h' } });
 
     await suite.sharedTests.assertMissingAuthorization('put', url, {
       bearer: 'respondent',
@@ -55,7 +55,7 @@ export default () => {
 
   describe('user session enabled', () => {
     beforeAll(async () => {
-      await suite.data.system.survey.update({ session: { store: true, age: '12h', fixed: '1d+0h' } });
+      await suite.data.system.Survey.update({ session: { store: true, age: '12h', fixed: '1d+0h' } });
     });
 
     it('should return 400 for missing input data', async () => {

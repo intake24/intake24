@@ -1,3 +1,4 @@
+import securable from '../securable/index.test';
 import browse from './browse.test';
 import destroy from './destroy.test';
 import read from './read.test';
@@ -27,4 +28,6 @@ export default () => {
   describe('post /api/admin/locales/:localeId/split-words', splitWords.set);
   describe('get /api/admin/locales/:localeId/synonym-sets', synonymSets.get);
   describe('post /api/admin/locales/:localeId/synonym-sets', synonymSets.set);
+
+  securable('/api/admin/locales/:localeId', 'Locale');
 };

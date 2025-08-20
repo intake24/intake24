@@ -7,7 +7,7 @@ export default () => {
   let invalidUrl: string;
 
   beforeAll(async () => {
-    url = `/api/surveys/${suite.data.system.survey.slug}/parameters`;
+    url = `/api/surveys/${suite.data.system.Survey.slug}/parameters`;
     invalidUrl = `/api/surveys/invalid-survey/parameters`;
   });
 
