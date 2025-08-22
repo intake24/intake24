@@ -196,14 +196,14 @@ function surveyService({
     const survey
       = typeof slug === 'string'
         ? await Survey.findBySlug(slug, {
-          attributes: [
-            'id',
-            'feedbackSchemeId',
-            'maximumTotalSubmissions',
-            'maximumDailySubmissions',
-            'numberOfSubmissionsForFeedback',
-          ],
-        })
+            attributes: [
+              'id',
+              'feedbackSchemeId',
+              'maximumTotalSubmissions',
+              'maximumDailySubmissions',
+              'numberOfSubmissionsForFeedback',
+            ],
+          })
         : slug;
     if (!survey)
       throw new NotFoundError();

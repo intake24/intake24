@@ -55,5 +55,6 @@ export default await antfu({
     'vue/component-name-in-template-casing': ['error', 'kebab-case'],
     'vue/multi-word-component-names': 'warn',
     'vue/valid-v-slot': ['error', { allowModifiers: true }],
+    'style/operator-linebreak': 'off',
   },
 });

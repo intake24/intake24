@@ -6,6 +6,8 @@ export * from './embedding-loader.service';
 export { default as embeddingLoaderService } from './embedding-loader.service';
 export * from './food-data.service';
 export { default as foodDataService } from './food-data.service';
+export * from './food-or-category-lookup.service';
+export { foodOrCategoryLookupService, FoodOrCategoryLookupService } from './food-or-category-lookup.service';
 export * from './food-search.service';
 export { default as foodSearchService } from './food-search.service';
 export * from './inheritable-attributes-service';

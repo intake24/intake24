@@ -25,6 +25,7 @@ import {
   fidoProvider,
   Filesystem,
   foodDataService,
+  foodOrCategoryLookupService,
   foodSearchService,
   foodThumbnailImageService,
   globalCategoriesService,
@@ -90,6 +91,7 @@ export default (container: AwilixContainer): void => {
 
     feedbackService: asFunction(feedbackService).singleton(),
     foodDataService: asFunction(foodDataService).singleton(),
+    foodOrCategoryLookupService: asValue(foodOrCategoryLookupService),
     foodSearchService: asFunction(foodSearchService).singleton(),
     foodIndex: asValue(foodIndex),
     portionSizeMethodsService: asFunction(portionSizeMethodsService).singleton(),

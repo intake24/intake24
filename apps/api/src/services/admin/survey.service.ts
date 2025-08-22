@@ -72,15 +72,15 @@ function adminSurveyService({
     const surveyEntry
       = typeof survey === 'string'
         ? await Survey.findByPk(survey, {
-          attributes: [
-            'id',
-            'slug',
-            'authUrlTokenCharset',
-            'authUrlTokenLength',
-            'userCustomFields',
-            'userPersonalIdentifiers',
-          ],
-        })
+            attributes: [
+              'id',
+              'slug',
+              'authUrlTokenCharset',
+              'authUrlTokenLength',
+              'userCustomFields',
+              'userPersonalIdentifiers',
+            ],
+          })
         : survey;
     if (!surveyEntry)
       throw new NotFoundError();

@@ -11,6 +11,7 @@ import type {
   AdminGlobalFoodsController,
   AdminLocalCategoriesController,
   AdminLocalFoodsController,
+  CodeLookupController,
   DrinkScaleController,
 } from '@intake24/api/http/controllers';
 import type { Jobs } from '@intake24/api/jobs';
@@ -75,6 +76,7 @@ import type {
 } from '@intake24/api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import type { CachedParentCategoriesService } from '@intake24/api/services/foods/cached-parent-categories-service';
+import type { FoodOrCategoryLookupService } from '@intake24/api/services/foods/food-or-category-lookup.service';
 import type { InheritableAttributesService } from '@intake24/api/services/foods/inheritable-attributes-service';
 import type { Logger, Mailer } from '@intake24/common-backend';
 import type { TokenPayload } from '@intake24/common/security';
@@ -119,6 +121,7 @@ export interface IoC extends Jobs {
   adminLocalFoodsController: AdminLocalFoodsController;
   adminGlobalCategoriesController: AdminGlobalCategoriesController;
   adminLocalCategoriesController: AdminLocalCategoriesController;
+  codeLookupController: CodeLookupController;
 
   // Images
   drinkScaleController: DrinkScaleController;
@@ -184,6 +187,7 @@ export interface IoC extends Jobs {
 
   // Foods
   foodDataService: FoodDataService;
+  foodOrCategoryLookupService: FoodOrCategoryLookupService;
   foodIndex: FoodIndex;
   portionSizeMethodsService: PortionSizeMethodsService;
   portionSizeService: PortionSizeService;

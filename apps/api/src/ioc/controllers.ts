@@ -12,6 +12,7 @@ export default (container: AwilixContainer): void => {
     adminLocalFoodsController: asFunction(controllers.admin.foods.localFoods),
     adminGlobalCategoriesController: asFunction(controllers.admin.categories.globalCategories),
     adminLocalCategoriesController: asFunction(controllers.admin.categories.localCategories),
+    codeLookupController: asFunction(controllers.admin.codeLookup),
 
     // Images
     drinkScaleController: asFunction(controllers.admin.images.drinkScale),

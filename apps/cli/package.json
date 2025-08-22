@@ -24,12 +24,6 @@
     "cli:dev:tsx": "tsx src/index.ts"
   },
   "dependencies": {
-    "@intake24/api-client-v4": "workspace:*",
-    "@intake24/common": "workspace:*",
-    "@intake24/common-backend": "workspace:*",
-    "@intake24/db": "workspace:*",
-    "@intake24/excel-reader": "workspace:*",
-    "@intake24/food-tools": "workspace:*",
     "ajv": "^8.17.1",
     "commander": "^14.0.0",
     "csv-parse": "^5.6.0",

@@ -49,7 +49,14 @@ export function task() {
 
         const bullJob = await req.scope.cradle.scheduler.tasks.getScheduledJobById(taskId);
 
-        return { status: 200, body: { ...task.get(), bullJob } };
+        const transformedBullJob = bullJob
+          ? {
+              ...bullJob,
+              every: bullJob.every?.toString(),
+            }
+          : undefined;
+
+        return { status: 200, body: { ...task.get(), bullJob: transformedBullJob } };
       },
     },
     update: {
@@ -65,7 +72,14 @@ export function task() {
         await req.scope.cradle.scheduler.tasks.updateTaskInQueue(task);
         const bullJob = await req.scope.cradle.scheduler.tasks.getScheduledJobById(taskId);
 
-        return { status: 200, body: { ...task.get(), bullJob } };
+        const transformedBullJob = bullJob
+          ? {
+              ...bullJob,
+              every: bullJob.every?.toString(),
+            }
+          : undefined;
+
+        return { status: 200, body: { ...task.get(), bullJob: transformedBullJob } };
       },
     },
     destroy: {

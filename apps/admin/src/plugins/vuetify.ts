@@ -1,12 +1,11 @@
 import type { IconAliases } from 'vuetify';
 
 import { createVuetify } from 'vuetify';
+import { VTimePicker, VTreeview } from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { VStepperVertical, VStepperVerticalItem } from 'vuetify/labs/VStepperVertical';
-import { VTimePicker } from 'vuetify/labs/VTimePicker';
-import { VTreeview } from 'vuetify/labs/VTreeview';
 import { colors } from '@intake24/common/theme';
 
 import resources from '../router/resources';

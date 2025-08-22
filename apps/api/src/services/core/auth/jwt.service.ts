@@ -1,13 +1,9 @@
-import type { Secret, SignOptions } from 'jsonwebtoken';
+import type { Secret, SignOptions, VerifyOptions } from 'jsonwebtoken';
 import jwt, { decode } from 'jsonwebtoken';
 
 import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import {
-
-  createAmrMethod,
-
-} from '@intake24/common/security';
+import { createAmrMethod } from '@intake24/common/security';
 import type { AdminSignPayload, SignPayload, TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
@@ -54,7 +50,7 @@ function jwtService({
   const verify = async <T = TokenPayload>(
     token: string,
     secret: Secret,
-    options: SignOptions = {},
+    options: VerifyOptions = {},
   ): Promise<T> =>
     new Promise((resolve, reject) => {
       const { issuer } = securityConfig.jwt;
@@ -120,7 +116,17 @@ function jwtService({
    */
   const verifyRefreshToken = async (token: string, frontEnd: FrontEnd): Promise<TokenPayload> => {
     const { secret, audience } = securityConfig.jwt[frontEnd].refresh;
-    return verify(token, secret, { audience });
+    if (!secret)
+      throw new InternalServerError('No refresh token secret defined.');
+    const options: VerifyOptions = {};
+    if (typeof audience === 'string') {
+      options.audience = audience;
+    }
+    else if (Array.isArray(audience) && audience.length > 0) {
+      const [first, ...rest] = audience;
+      options.audience = [first, ...rest] as [string | RegExp, ...(string | RegExp)[]];
+    }
+    return verify(token, secret, options);
   };
 
   /**

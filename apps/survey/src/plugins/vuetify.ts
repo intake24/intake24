@@ -1,8 +1,8 @@
 import { createVuetify } from 'vuetify';
 
+import { VTimePicker } from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
-import { VTimePicker } from 'vuetify/labs/VTimePicker';
 import { colors } from '@intake24/common/theme';
 
 import 'vuetify/styles';
