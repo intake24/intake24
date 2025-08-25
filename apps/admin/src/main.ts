@@ -14,6 +14,8 @@ import { errorHandler, httpService } from './services';
 import { useAuth } from './stores';
 import { cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui/cookie-consent';
 
+import './scss/flags.scss';
+
 guards(router);
 
 const app = createApp(App);

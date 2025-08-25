@@ -15,6 +15,8 @@ import { createManager } from '@vue-youtube/core';
 import { createGtm } from '@gtm-support/vue-gtm';
 import Clarity from '@microsoft/clarity';
 
+import './scss/flags.scss';
+
 import { useAuth } from './stores';
 
 const app = createApp(App);
