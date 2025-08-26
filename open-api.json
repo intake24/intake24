@@ -11878,6 +11878,622 @@
         }
       }
     },
+    "/admin/faqs/{faqId}/media": {
+      "get": {
+        "description": "FAQ: Browse media (paginated list)",
+        "summary": "FAQ: Browse media",
+        "tags": [
+          "default",
+          "admin",
+          "faqMedia"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "modelId": {
+                            "nullable": true
+                          },
+                          "modelType": {
+                            "type": "string",
+                            "maxLength": 64
+                          },
+                          "disk": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ]
+                          },
+                          "collection": {
+                            "type": "string",
+                            "maxLength": 64
+                          },
+                          "name": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "filename": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "mimetype": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "size": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "sizes": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "modelId",
+                          "modelType",
+                          "disk",
+                          "collection",
+                          "name",
+                          "filename",
+                          "mimetype",
+                          "size",
+                          "createdAt",
+                          "updatedAt",
+                          "url",
+                          "sizes"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "FAQ: Upload new media",
+        "summary": "FAQ: Upload media",
+        "tags": [
+          "default",
+          "admin",
+          "faqMedia"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "collection": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "disk": {
+                    "type": "string",
+                    "enum": [
+                      "public",
+                      "private"
+                    ]
+                  }
+                },
+                "required": [
+                  "collection",
+                  "disk"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/faqs/{faqId}/media/{mediaId}": {
+      "get": {
+        "description": "FAQ: Update media",
+        "summary": "FAQ: Update media",
+        "tags": [
+          "default",
+          "admin",
+          "faqMedia"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "FAQ: Update media",
+        "summary": "FAQ: Update media",
+        "tags": [
+          "default",
+          "admin",
+          "faqMedia"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "collection": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "FAQ: Remove media",
+        "summary": "FAQ: Remove media",
+        "tags": [
+          "default",
+          "admin",
+          "faqMedia"
+        ],
+        "parameters": [
+          {
+            "name": "faqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/faqs/{faqId}/securables": {
       "get": {
         "description": "FAQ: Browse securable users (paginated list)",
@@ -12102,6 +12718,7 @@
                         "edit",
                         "delete",
                         "securables",
+                        "media",
                         "use"
                       ]
                     },
@@ -12395,6 +13012,7 @@
                         "edit",
                         "delete",
                         "securables",
+                        "media",
                         "use"
                       ]
                     },
@@ -23111,6 +23729,622 @@
         }
       }
     },
+    "/admin/feedback-schemes/{feedbackSchemeId}/media": {
+      "get": {
+        "description": "FeedbackScheme: Browse media (paginated list)",
+        "summary": "FeedbackScheme: Browse media",
+        "tags": [
+          "default",
+          "admin",
+          "feedbackSchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "feedbackSchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "modelId": {
+                            "nullable": true
+                          },
+                          "modelType": {
+                            "type": "string",
+                            "maxLength": 64
+                          },
+                          "disk": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ]
+                          },
+                          "collection": {
+                            "type": "string",
+                            "maxLength": 64
+                          },
+                          "name": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "filename": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "mimetype": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "size": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "sizes": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "modelId",
+                          "modelType",
+                          "disk",
+                          "collection",
+                          "name",
+                          "filename",
+                          "mimetype",
+                          "size",
+                          "createdAt",
+                          "updatedAt",
+                          "url",
+                          "sizes"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "FeedbackScheme: Upload new media",
+        "summary": "FeedbackScheme: Upload media",
+        "tags": [
+          "default",
+          "admin",
+          "feedbackSchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "feedbackSchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "collection": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "disk": {
+                    "type": "string",
+                    "enum": [
+                      "public",
+                      "private"
+                    ]
+                  }
+                },
+                "required": [
+                  "collection",
+                  "disk"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/feedback-schemes/{feedbackSchemeId}/media/{mediaId}": {
+      "get": {
+        "description": "FeedbackScheme: Update media",
+        "summary": "FeedbackScheme: Update media",
+        "tags": [
+          "default",
+          "admin",
+          "feedbackSchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "feedbackSchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "FeedbackScheme: Update media",
+        "summary": "FeedbackScheme: Update media",
+        "tags": [
+          "default",
+          "admin",
+          "feedbackSchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "feedbackSchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "collection": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "FeedbackScheme: Remove media",
+        "summary": "FeedbackScheme: Remove media",
+        "tags": [
+          "default",
+          "admin",
+          "feedbackSchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "feedbackSchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/feedback-schemes/{feedbackSchemeId}/securables": {
       "get": {
         "description": "FeedbackScheme: Browse securable users (paginated list)",
@@ -23341,6 +24575,7 @@
                         "cards",
                         "demographic-groups",
                         "henry-coefficients",
+                        "media",
                         "use"
                       ]
                     },
@@ -23640,6 +24875,7 @@
                         "cards",
                         "demographic-groups",
                         "henry-coefficients",
+                        "media",
                         "use"
                       ]
                     },
@@ -36538,6 +37774,601 @@
             "in": "path",
             "required": true,
             "schema": {}
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/media": {
+      "get": {
+        "description": "Browse media (paginated list)",
+        "summary": "Browse media",
+        "tags": [
+          "default",
+          "admin",
+          "media"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "modelId": {
+                            "nullable": true
+                          },
+                          "modelType": {
+                            "type": "string",
+                            "maxLength": 64
+                          },
+                          "disk": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ]
+                          },
+                          "collection": {
+                            "type": "string",
+                            "maxLength": 64
+                          },
+                          "name": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "filename": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "mimetype": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "size": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "sizes": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "modelId",
+                          "modelType",
+                          "disk",
+                          "collection",
+                          "name",
+                          "filename",
+                          "mimetype",
+                          "size",
+                          "createdAt",
+                          "updatedAt",
+                          "url",
+                          "sizes"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Upload new media",
+        "summary": "Upload media",
+        "tags": [
+          "default",
+          "admin",
+          "media"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "collection": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "disk": {
+                    "type": "string",
+                    "enum": [
+                      "public",
+                      "private"
+                    ]
+                  },
+                  "modelId": {
+                    "nullable": true
+                  },
+                  "modelType": {
+                    "type": "string",
+                    "maxLength": 64
+                  }
+                },
+                "required": [
+                  "collection",
+                  "disk",
+                  "modelId",
+                  "modelType"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/media/{mediaId}": {
+      "get": {
+        "description": "Update media",
+        "summary": "Update media",
+        "tags": [
+          "default",
+          "admin",
+          "media"
+        ],
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update media",
+        "summary": "Update media",
+        "tags": [
+          "default",
+          "admin",
+          "media"
+        ],
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "collection": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "modelId": {
+                    "nullable": true
+                  },
+                  "modelType": {
+                    "type": "string",
+                    "maxLength": 64
+                  }
+                },
+                "required": [
+                  "modelId",
+                  "modelType"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Remove media",
+        "summary": "Remove media",
+        "tags": [
+          "default",
+          "admin",
+          "media"
+        ],
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -60934,6 +62765,622 @@
         }
       }
     },
+    "/admin/survey-schemes/{surveySchemeId}/media": {
+      "get": {
+        "description": "SurveyScheme: Browse media (paginated list)",
+        "summary": "SurveyScheme: Browse media",
+        "tags": [
+          "default",
+          "admin",
+          "surveySchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "surveySchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "modelId": {
+                            "nullable": true
+                          },
+                          "modelType": {
+                            "type": "string",
+                            "maxLength": 64
+                          },
+                          "disk": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "private"
+                            ]
+                          },
+                          "collection": {
+                            "type": "string",
+                            "maxLength": 64
+                          },
+                          "name": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "filename": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "mimetype": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "size": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "sizes": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "modelId",
+                          "modelType",
+                          "disk",
+                          "collection",
+                          "name",
+                          "filename",
+                          "mimetype",
+                          "size",
+                          "createdAt",
+                          "updatedAt",
+                          "url",
+                          "sizes"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "SurveyScheme: Upload new media",
+        "summary": "SurveyScheme: Upload media",
+        "tags": [
+          "default",
+          "admin",
+          "surveySchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "surveySchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "collection": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "disk": {
+                    "type": "string",
+                    "enum": [
+                      "public",
+                      "private"
+                    ]
+                  }
+                },
+                "required": [
+                  "collection",
+                  "disk"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/survey-schemes/{surveySchemeId}/media/{mediaId}": {
+      "get": {
+        "description": "SurveyScheme: Update media",
+        "summary": "SurveyScheme: Update media",
+        "tags": [
+          "default",
+          "admin",
+          "surveySchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "surveySchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "SurveyScheme: Update media",
+        "summary": "SurveyScheme: Update media",
+        "tags": [
+          "default",
+          "admin",
+          "surveySchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "surveySchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  },
+                  "collection": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "modelId": {
+                      "nullable": true
+                    },
+                    "modelType": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "disk": {
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private"
+                      ]
+                    },
+                    "collection": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "filename": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "mimetype": {
+                      "type": "string",
+                      "maxLength": 128
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "sizes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "modelId",
+                    "modelType",
+                    "disk",
+                    "collection",
+                    "name",
+                    "filename",
+                    "mimetype",
+                    "size",
+                    "createdAt",
+                    "updatedAt",
+                    "url",
+                    "sizes"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "SurveyScheme: Remove media",
+        "summary": "SurveyScheme: Remove media",
+        "tags": [
+          "default",
+          "admin",
+          "surveySchemeMedia"
+        ],
+        "parameters": [
+          {
+            "name": "surveySchemeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/survey-schemes/{surveySchemeId}/securables": {
       "get": {
         "description": "SurveyScheme: Browse securable users (paginated list)",
@@ -61161,6 +63608,7 @@
                         "copy",
                         "prompts",
                         "data-export",
+                        "media",
                         "use"
                       ]
                     },
@@ -61457,6 +63905,7 @@
                         "copy",
                         "prompts",
                         "data-export",
+                        "media",
                         "use"
                       ]
                     },
