@@ -147,18 +147,6 @@ export interface FoodAttributes {
   useInRecipes: number | null;
 }
 
-export interface FoodGroupLocals {
-  foodGroupId: Int8;
-  id: Generated<Int8>;
-  localeId: string;
-  name: string;
-}
-
-export interface FoodGroups {
-  id: Generated<Int8>;
-  name: string;
-}
-
 export interface FoodLocals {
   altNames: Generated<string>;
   foodCode: string;
@@ -183,7 +171,6 @@ export interface FoodPortionSizeMethods {
 
 export interface Foods {
   code: string;
-  foodGroupId: Int8;
   name: string;
   version: string;
 }
@@ -441,8 +428,6 @@ export interface DB {
   drinkwareSets: DrinkwareSets;
   drinkwareVolumeSamples: DrinkwareVolumeSamples;
   foodAttributes: FoodAttributes;
-  foodGroupLocals: FoodGroupLocals;
-  foodGroups: FoodGroups;
   foodLocals: FoodLocals;
   foodPortionSizeMethods: FoodPortionSizeMethods;
   foods: Foods;

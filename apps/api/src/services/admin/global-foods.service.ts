@@ -37,7 +37,6 @@ function globalFoodsService({ db }: Pick<IoC, 'db'>) {
       const affectedRows = await Food.update(
         {
           name: input.name,
-          foodGroupId: input.foodGroupId,
           version: randomUUID(),
         },
         { where: { code: globalFoodId, version }, transaction: t },

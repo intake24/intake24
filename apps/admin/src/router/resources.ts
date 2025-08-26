@@ -24,14 +24,6 @@ export const resources: Resource[] = [
   },
   {
     group: 'fdb',
-    name: 'food-groups',
-    icon: 'fas fa-plate-wheat',
-    api: 'admin/food-groups',
-    generateRoutes: true,
-    routes: [...routes],
-  },
-  {
-    group: 'fdb',
     name: 'nutrient-tables',
     icon: 'fas fa-table-cells',
     api: 'admin/nutrient-tables',

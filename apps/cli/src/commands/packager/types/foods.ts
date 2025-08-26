@@ -9,7 +9,6 @@ export interface PkgGlobalFood {
   version: string;
   code: string;
   englishDescription: string;
-  groupCode: number;
   attributes: PkgInheritableAttributes;
   parentCategories: string[];
 }

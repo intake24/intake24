@@ -220,9 +220,6 @@ Contains `encoded food` and `missing food` records data
 - `readyMeal` - Flag indicating if food is ready meal
 - `searchTerm` - Search term used to find the food
 - `reasonableAmount` - Flag indicating if food amount is reasonable
-- `foodGroupId` - Food group identifier, sequence number
-- `foodGroupEnglishName` - Food group name (English)
-- `foodGroupLocalName` - Food group name (local)
 - `brand` - Food brand
 - `barcode` - Food barcode
 - `nutrientTableId` - Nutrient table identifier

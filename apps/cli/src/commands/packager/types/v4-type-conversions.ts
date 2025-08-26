@@ -89,7 +89,6 @@ function fromPackageGlobalFood(globalFood: PkgGlobalFood): CreateGlobalFoodReque
   return {
     code: globalFood.code,
     name: globalFood.englishDescription,
-    foodGroupId: globalFood.groupCode.toString(),
     parentCategories: globalFood.parentCategories,
     attributes: {
       readyMealOption: globalFood.attributes.readyMealOption,
@@ -428,7 +427,6 @@ function packageGlobalFood(food: FoodEntry): PkgGlobalFood {
     version: food.version,
     code: food.code,
     englishDescription: food.name,
-    groupCode: Number.parseInt(food.foodGroupId),
     attributes,
     parentCategories,
   };

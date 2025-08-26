@@ -57,8 +57,7 @@
     "global": {
       "_": "Global food settings",
       "code": "Food code",
-      "name": "English name",
-      "foodGroup": "Food group"
+      "name": "English name"
     },
     "local": {
       "_": "Local food settings",

@@ -4,7 +4,6 @@ import { faq } from './faq.contract';
 import { foodThumbnailImages } from './fdbs/food-thumbnail-images.contract';
 import { feedbackScheme } from './feedback-scheme.contract';
 import { foodDb } from './food-db.contract';
-import { foodGroup } from './food-group.contract';
 import images from './images';
 import { job } from './job.contract';
 import { languageTranslation } from './language-translation.contract';
@@ -36,7 +35,6 @@ export default {
   feedbackSchemeMedia: mediable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   feedbackSchemeSecurable: securable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   foodDb,
-  foodGroup,
   foodThumbnailImages,
   images,
   job,

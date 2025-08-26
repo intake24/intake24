@@ -270,27 +270,6 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of local food portion size methods created: ${npResult.numInsertedOrUpdatedRows}`);
   }
 
-  private async foodGroups({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
-    const delResult = await trx.deleteFrom('foodGroupLocals').where('localeId', '=', code).executeTakeFirst();
-    this.logger.debug(`Number of local food groups cleared: ${delResult.numDeletedRows}`);
-
-    const insResult = await trx.insertInto('foodGroupLocals')
-      .columns(['foodGroupId', 'localeId', 'name'])
-      .expression(eb => eb
-        .selectFrom('foodGroupLocals')
-        .select(eb => [
-          'foodGroupId',
-          eb.val(code).as('localeId'),
-          'name',
-        ])
-        .where('localeId', '=', sourceCode)
-        .orderBy('id'),
-      )
-      .executeTakeFirst();
-
-    this.logger.debug(`Number of local food groups created: ${insResult.numInsertedOrUpdatedRows}`);
-  }
-
   private async associatedFoods({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('associatedFoods').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of associated foods cleared: ${delResult.numDeletedRows}`);

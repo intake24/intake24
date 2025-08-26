@@ -5,7 +5,6 @@ import drinkwareSets from './drinkware-sets.json';
 import faqs from './faqs.json';
 import fdbs from './fdbs.json';
 import feedbackSchemes from './feedback-schemes.json';
-import foodGroups from './food-groups.json';
 import guideImages from './guide-images.json';
 import imageMaps from './image-maps.json';
 import jobs from './jobs.json';
@@ -35,7 +34,6 @@ const messages = {
   faqs,
   fdbs,
   'feedback-schemes': feedbackSchemes,
-  'food-groups': foodGroups,
   'as-served-sets': asServedSets,
   'guide-images': guideImages,
   'image-maps': imageMaps,

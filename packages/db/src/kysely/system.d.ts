@@ -404,9 +404,6 @@ export interface SurveySubmissionFoods {
   brand: string | null;
   code: string;
   englishName: string;
-  foodGroupEnglishName: string;
-  foodGroupId: Int8;
-  foodGroupLocalName: string | null;
   id: string;
   index: number;
   localName: string | null;

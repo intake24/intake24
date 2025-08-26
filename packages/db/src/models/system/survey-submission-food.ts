@@ -105,24 +105,6 @@ export default class SurveySubmissionFood extends BaseModel<
   declare reasonableAmount: boolean;
 
   @Column({
-    allowNull: false,
-    type: DataType.BIGINT,
-  })
-  declare foodGroupId: string;
-
-  @Column({
-    allowNull: false,
-    type: DataType.STRING(256),
-  })
-  declare foodGroupEnglishName: string;
-
-  @Column({
-    allowNull: true,
-    type: DataType.STRING(256),
-  })
-  declare foodGroupLocalName: CreationOptional<string | null>;
-
-  @Column({
     allowNull: true,
     type: DataType.STRING(128),
   })

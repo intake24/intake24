@@ -157,7 +157,6 @@ function buildGlobalFoods(recipeData: Dictionary<GoustoRecipeData>): PkgGlobalFo
       code: codeTransform(recipeId),
       attributes: {},
       englishDescription: recipeData.recipeTitle,
-      groupCode: 1,
       parentCategories: [makeCategoryCode(recipeData.primaryProteinSource)],
       version: randomUUID(),
     };

@@ -29,7 +29,6 @@ import {
   CategoryPortionSizeMethod,
   Food,
   FoodCategory,
-  FoodGroup,
   FoodLocal,
 } from '@intake24/db';
 
@@ -210,12 +209,9 @@ async function createCategories(): Promise<void> {
 }
 
 async function createFoods(sequelize: SequelizeTS): Promise<void> {
-  const { id: foodGroupId } = await FoodGroup.create({ name: 'Test food group' });
-
   const food1 = new Food({
     code: 'FOOD1',
     name: 'Test food 1',
-    foodGroupId,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -248,7 +244,6 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
   const food2 = new Food({
     code: 'FOOD2',
     name: 'Test food 2',
-    foodGroupId,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -274,7 +269,6 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
   const food3 = new Food({
     code: 'FOOD3',
     name: 'Test food 3',
-    foodGroupId,
     version: '00000000-0000-0000-0000-000000000000',
   });
 
@@ -295,7 +289,6 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
   await new Food({
     code: 'FOOD4',
     name: 'Test food 4',
-    foodGroupId,
     version: '00000000-0000-0000-0000-000000000000',
   }).save();
 
@@ -307,7 +300,6 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
   await Food.create({
     code: 'FOOD5',
     name: 'Test food 5',
-    foodGroupId,
     version: '00000000-0000-0000-0000-000000000000',
   });
 

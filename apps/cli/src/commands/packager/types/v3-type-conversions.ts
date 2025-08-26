@@ -298,7 +298,6 @@ function packageGlobalFood(mainFood: MainFoodRecordV3): PkgGlobalFood {
     code: mainFood.code,
     englishDescription: mainFood.englishDescription,
     version: mainFood.version,
-    groupCode: mainFood.groupCode,
     parentCategories: mainFood.parentCategories.map(header => header.code),
     attributes: {
       readyMealOption: parseOption(mainFood.attributes.readyMealOption) ?? undefined,

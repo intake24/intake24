@@ -15,8 +15,6 @@ import DrinkwareVolumeSample from './drinkware-volume-sample';
 import Food from './food';
 import FoodAttribute from './food-attribute';
 import FoodCategory from './food-category';
-import FoodGroup from './food-group';
-import FoodGroupLocal from './food-group-local';
 import FoodLocal from './food-local';
 import FoodLocalList from './food-local-list';
 import FoodNutrient from './food-nutrient';
@@ -82,10 +80,6 @@ export { default as FoodAttribute } from './food-attribute';
 export * from './food-attribute';
 export { default as FoodCategory } from './food-category';
 export * from './food-category';
-export { default as FoodGroup } from './food-group';
-export * from './food-group';
-export { default as FoodGroupLocal } from './food-group-local';
-export * from './food-group-local';
 export { default as FoodLocal } from './food-local';
 export * from './food-local';
 export { default as FoodLocalList } from './food-local-list';
@@ -165,8 +159,6 @@ export const foods = {
   Food,
   FoodAttribute,
   FoodCategory,
-  FoodGroup,
-  FoodGroupLocal,
   FoodLocal,
   FoodLocalList,
   FoodNutrient,

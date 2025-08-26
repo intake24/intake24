@@ -28,10 +28,6 @@ System-wide unique code, uppercase alphanumeric string, 1-8 characters long (by 
 
 Descriptive name for admin purposes (in English by convention).
 
-### Food group (`food-only`)
-
-[Food group record](/admin/foods/food-groups) attached to the food record.
-
 ### Hidden (`category-only`)
 
 Option to set category record as hidden. Will be excluded from global food search.

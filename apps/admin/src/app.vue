@@ -38,7 +38,6 @@
         v-if="
           can([
             'locales',
-            'food-groups:browse',
             'nutrient-tables:browse',
             'nutrient-types:browse',
             'nutrient-units:browse',

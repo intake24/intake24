@@ -107,7 +107,6 @@ export default async (options: UAELocaleOptions): Promise<void> => {
         version: sourceFood.version,
         code: codeTransform(sourceFood.code),
         englishDescription: globalFoodData.englishDescription,
-        groupCode: globalFoodData.groupCode,
         attributes: globalFoodData.attributes,
         parentCategories: globalFoodData.parentCategories,
       };

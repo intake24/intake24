@@ -4,7 +4,7 @@ import type { Schema } from 'express-validator';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import type { FindOptions } from '@intake24/db';
-import { FoodGroup, FoodLocal, Op, SystemLocale } from '@intake24/db';
+import { FoodLocal, Op, SystemLocale } from '@intake24/db';
 
 const defaults: Schema = {
   name: {
@@ -46,20 +46,6 @@ const defaults: Schema = {
 
         if (!(await unique({ model: FoodLocal, condition: { field: 'foodCode', value }, options })))
           throw new Error(customTypeErrorMessage('unique._', meta));
-      },
-    },
-  },
-  'main.foodGroupId': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
-    isString: { bail: true },
-    isEmpty: { negated: true, bail: true },
-    optional: true,
-    custom: {
-      options: async (value, meta): Promise<void> => {
-        const foodGroup = await FoodGroup.findByPk(value, { attributes: ['id'] });
-        if (!foodGroup)
-          throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },

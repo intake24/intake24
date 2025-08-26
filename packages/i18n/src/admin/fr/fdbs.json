@@ -52,8 +52,7 @@
     "global": {
       "_": "Paramètres pour les aliments globaux",
       "code": "Code de l'aliment",
-      "name": "Nom anglais",
-      "foodGroup": "Groupe alimentaire"
+      "name": "Nom anglais"
     },
     "local": {
       "_": "Paramètres pour les aliments régionaux",

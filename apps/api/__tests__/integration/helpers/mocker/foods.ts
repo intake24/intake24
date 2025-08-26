@@ -24,18 +24,11 @@ function category() {
   };
 }
 
-function food(foodGroupId: string) {
+function food() {
   return {
     code: randomString(8),
-    foodGroupId,
     name: faker.word.words(5),
     version: randomUUID(),
-  };
-}
-
-function foodGroup() {
-  return {
-    name: faker.word.words(10),
   };
 }
 
@@ -142,7 +135,6 @@ function standardUnit(): StandardUnitCreationAttributes {
 export default {
   category,
   food,
-  foodGroup,
   asServedSet,
   // locale,
   nutrientTable,

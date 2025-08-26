@@ -3,7 +3,6 @@ import categories from './categories.test';
 import drinkwareSets from './drinkware-sets.test';
 import faqs from './faqs.test';
 import feedbackSchemes from './feedback-schemes.test';
-import foodGroups from './food-groups.test';
 import foods from './foods.test';
 import guideImages from './guide-images.test';
 import imageMaps from './image-maps.test';
@@ -22,7 +21,7 @@ export default () => {
   describe('get /api/admin/references/drinkware-sets', drinkwareSets);
   describe('get /api/admin/references/faqs', faqs);
   describe('get /api/admin/references/feedback-schemes', feedbackSchemes);
-  describe('get /api/admin/references/food-groups', foodGroups);
+
   describe('get /api/admin/references/foods', foods);
   describe('get /api/admin/references/guide-images', guideImages);
   describe('get /api/admin/references/image-maps', imageMaps);

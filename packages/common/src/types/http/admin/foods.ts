@@ -1,7 +1,5 @@
 import type { Pagination } from '../generic';
 import type { AssociatedFood } from './associated-food';
-
-import { z } from 'zod';
 import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
 import type { UseInRecipeType } from '@intake24/common/types';
 
@@ -28,7 +26,6 @@ export type InheritableAttributes = {
 export type CreateGlobalFoodRequest = {
   code: string;
   name: string;
-  foodGroupId: string;
   attributes: InheritableAttributes;
   parentCategories?: string[];
 };
@@ -91,7 +88,7 @@ export type LocalCategoryEntry = {
   portionSizeMethods: PortionSizeMethod[];
 };
 
-export type FoodInput = Pick<FoodAttributes, 'code' | 'name' | 'foodGroupId'> & {
+export type FoodInput = Pick<FoodAttributes, 'code' | 'name'> & {
   parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
 };
 
@@ -100,7 +97,6 @@ export type FoodLocalInput = {
   main?: {
     code?: string;
     name?: string;
-    foodGroupId?: string;
     attributes?: FoodAttributeAttributes;
     locales?: FoodsLocaleAttributes[];
     parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
@@ -134,20 +130,8 @@ export type FoodListEntry = {
 
 export type FoodsResponse = Pagination<FoodListEntry>;
 
-export const foodGroupRequest = z.object({
-  name: z.string().min(1).max(256),
-});
-
-export const foodGroupAttributes = z.object({
-  id: z.string(),
-  name: z.string(),
-});
-
-export type FoodGroupAttributes = z.infer<typeof foodGroupAttributes>;
-
 export type FoodEntry = FoodAttributes & {
   attributes?: FoodAttributeAttributes;
-  foodGroup?: FoodGroupAttributes;
   parentCategories?: CategoryAttributes[];
   locales?: FoodsLocaleAttributes[];
 };
@@ -158,5 +142,3 @@ export interface FoodLocalEntry extends FoodLocalAttributes {
   portionSizeMethods?: FoodPortionSizeMethodAttributes[];
   nutrientRecords?: NutrientTableRecordAttributes[];
 }
-
-export type FoodGroupsResponse = Pagination<FoodGroupAttributes>;

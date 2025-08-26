@@ -9,7 +9,6 @@ import {
   drinkwareSetListEntry,
   faqEntry,
   feedbackSchemeEntry,
-  foodGroupReference,
   foodReference,
   guideImageListEntry,
   imageMapListEntry,
@@ -88,19 +87,6 @@ export const reference = initContract().router({
     },
     summary: 'Feedback schemes',
     description: 'Feedback schemes (paginated reference list)',
-  },
-  foodGroups: {
-    method: 'GET',
-    path: '/admin/references/food-groups',
-    query: paginationRequest,
-    responses: {
-      200: z.object({
-        data: foodGroupReference.array(),
-        meta: paginationMeta,
-      }),
-    },
-    summary: 'Food groups',
-    description: 'Food groups (paginated reference list)',
   },
   foods: {
     method: 'GET',

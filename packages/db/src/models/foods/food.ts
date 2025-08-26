@@ -6,7 +6,6 @@ import type {
   NonAttribute,
 } from 'sequelize';
 import {
-  BelongsTo,
   BelongsToMany,
   Column,
   DataType,
@@ -22,7 +21,6 @@ import {
   Category,
   FoodAttribute,
   FoodCategory,
-  FoodGroup,
   FoodLocal,
   FoodLocalList,
 } from '.';
@@ -57,12 +55,6 @@ export default class Food extends BaseModel<InferAttributes<Food>, InferCreation
 
   @Column({
     allowNull: false,
-    type: DataType.BIGINT,
-  })
-  declare foodGroupId: string;
-
-  @Column({
-    allowNull: false,
     type: DataType.UUID,
   })
   declare version: string;
@@ -87,9 +79,6 @@ export default class Food extends BaseModel<InferAttributes<Food>, InferCreation
 
   @HasMany(() => AssociatedFood, 'associatedFoodCode')
   declare foodAssociations?: NonAttribute<AssociatedFood[]>;
-
-  @BelongsTo(() => FoodGroup, 'foodGroupId')
-  declare foodGroup?: NonAttribute<FoodGroup>;
 
   @HasMany(() => FoodLocal, 'foodCode')
   declare locals?: NonAttribute<FoodLocal[]>;

@@ -3,7 +3,6 @@ import { asServedSets } from './as-served-sets';
 import { drinkwareScales } from './drinkware-scales';
 import { drinkwareSets } from './drinkware-sets';
 import { drinkwareVolumes } from './drinkware-volumes';
-import { foodGroups } from './food-groups';
 import { guideImageObjects } from './guide-image-objects';
 import { guideImages } from './guide-images';
 import { imageMapObjects } from './image-map-objects';
@@ -19,7 +18,6 @@ export default {
   'drinkware-sets': drinkwareSets,
   'drinkware-sets.scales': drinkwareScales,
   'drinkware-sets.volumes': drinkwareVolumes,
-  'food-groups': foodGroups,
   'guide-images': guideImages,
   'guide-images.objects': guideImageObjects,
   'image-maps': imageMaps,

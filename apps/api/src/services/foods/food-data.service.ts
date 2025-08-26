@@ -220,7 +220,6 @@ function foodDataService() {
       brandNames,
       code: foodRecord.code,
       englishName: foodRecord.name,
-      groupCode: foodRecord.foodGroupId,
       kcalPer100g,
       localName: foodLocal.name,
       portionSizeMethods,

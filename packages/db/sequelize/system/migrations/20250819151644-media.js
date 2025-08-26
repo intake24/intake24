@@ -12,6 +12,7 @@ const permissions = [
   { name: 'survey-schemes:media', display_name: 'Survey schemes media' },
 ];
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {

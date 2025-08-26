@@ -1,7 +1,6 @@
 import type { SequelizeTS } from '@intake24/db';
 import {
   Food,
-  FoodGroup,
   FoodLocal,
   FoodNutrient,
   FoodsNutrientType,
@@ -50,12 +49,9 @@ export default async (foodDatabase: SequelizeTS) => {
     },
   );
 
-  const { id: foodGroupId } = await FoodGroup.create({ name: 'Test food group' });
-
   await Food.create({
     code: 'FOOD1',
     name: 'Test food 1',
-    foodGroupId,
     version: '00000000-0000-0000-0000-000000000000',
   });
 

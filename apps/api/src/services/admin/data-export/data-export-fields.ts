@@ -298,17 +298,6 @@ function dataExportFields() {
     { id: 'readyMeal', label: 'Ready meal', value: 'food.readyMeal' },
     { id: 'searchTerm', label: 'Search term', value: 'food.searchTerm' },
     { id: 'reasonableAmount', label: 'Reasonable amount', value: 'food.reasonableAmount' },
-    { id: 'foodGroupId', label: 'Food group code', value: 'food.foodGroupId' },
-    {
-      id: 'foodGroupEnglishName',
-      label: 'Food group (en)',
-      value: 'food.foodGroupEnglishName',
-    },
-    {
-      id: 'foodGroupLocalName',
-      label: 'Food group (local)',
-      value: 'food.foodGroupLocalName',
-    },
     {
       id: 'barcode',
       label: 'Barcode',

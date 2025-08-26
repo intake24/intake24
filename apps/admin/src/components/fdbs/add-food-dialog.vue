@@ -36,16 +36,6 @@
               />
             </v-col>
             <v-col cols="12">
-              <select-resource
-                v-model="data.foodGroupId"
-                :error-messages="errors.get('foodGroupId')"
-                :label="$t('fdbs.foods.global.foodGroup')"
-                name="foodGroupId"
-                resource="food-groups"
-                @update:model-value="errors.clear('foodGroupId')"
-              />
-            </v-col>
-            <v-col cols="12">
               <category-list
                 v-model="data.parentCategories"
                 class="mb-6"
@@ -79,8 +69,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-
-import { SelectResource } from '@intake24/admin/components/dialogs';
 import { useForm } from '@intake24/admin/composables';
 import type { FoodInput, FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
@@ -93,7 +81,7 @@ export type CreateFoodForm = Required<FoodInput>;
 export default defineComponent({
   name: 'AddFoodDialog',
 
-  components: { CategoryList, SelectResource },
+  components: { CategoryList },
 
   props: {
     localeId: {
@@ -110,7 +98,7 @@ export default defineComponent({
     const dialog = ref(false);
 
     const { clearError, data, errors, post } = useForm<CreateFoodForm>({
-      data: { code: '', name: '', foodGroupId: '0', parentCategories: [] },
+      data: { code: '', name: '', parentCategories: [] },
     });
 
     const close = () => {

@@ -248,7 +248,6 @@ export class FrenchAlbaneLocaleBuilder {
         code: getIntake24FoodCode(row.A_CODE),
         parentCategories: categories ?? [],
         attributes: { sameAsBeforeOption: true, reasonableAmount: this.reasonableAmount![row.A_CODE] },
-        groupCode: 1,
         englishDescription: capitalize(row.A_LIBELLE_EN.substring(0, 128)),
       });
     }

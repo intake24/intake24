@@ -32,18 +32,6 @@
                   variant="outlined"
                 />
               </v-col>
-              <v-col cols="12">
-                <select-resource
-                  v-model="data.main.foodGroupId"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.foodGroupId')"
-                  :initial-item="entry?.main?.foodGroup"
-                  :label="$t('fdbs.foods.global.foodGroup')"
-                  name="main.foodGroup"
-                  resource="food-groups"
-                  @update:model-value="errors.clear('main.foodGroupId')"
-                />
-              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
@@ -150,8 +138,6 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
-
-import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
   AssociatedFoodList,
@@ -188,7 +174,6 @@ export default defineComponent({
     LocaleList,
     NutrientList,
     PortionSizeMethodList,
-    SelectResource,
   },
 
   props: {
@@ -228,7 +213,6 @@ export default defineComponent({
         main: {
           name: '',
           code: '',
-          foodGroupId: '0',
           attributes: {
             readyMealOption: null,
             reasonableAmount: null,

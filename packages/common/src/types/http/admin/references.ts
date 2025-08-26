@@ -12,12 +12,6 @@ export const categoryReference = z.object({
 });
 export type CategoryReference = z.infer<typeof categoryReference>;
 
-export const foodGroupReference = z.object({
-  id: z.string(),
-  name: z.string(),
-});
-export type FoodGroupReference = z.infer<typeof foodGroupReference>;
-
 export const foodReference = z.object({
   code: z.string(),
   name: z.string(),

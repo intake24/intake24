@@ -12,7 +12,6 @@ import {
   FAQ,
   FeedbackScheme,
   Food,
-  FoodGroup,
   FoodsNutrientType,
   GuideImage,
   ImageMap,
@@ -125,19 +124,6 @@ export function reference() {
         });
 
         return { status: 200, body: feedbackSchemes };
-      },
-    },
-    foodGroups: {
-      middleware: [anyPermission('locales')],
-      handler: async ({ query }) => {
-        const foodGroups = await FoodGroup.paginate({
-          query,
-          attributes: ['id', 'name'],
-          columns: ['id', 'name'],
-          order: [['name', 'ASC']],
-        });
-
-        return { status: 200, body: foodGroups };
       },
     },
     foods: {

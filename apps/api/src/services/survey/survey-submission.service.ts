@@ -26,7 +26,6 @@ import type {
   SurveySubmissionPortionSizeFieldCreationAttributes,
 } from '@intake24/db';
 import {
-  FoodGroup,
   FoodLocal,
   Survey,
   SurveySubmission,
@@ -51,7 +50,6 @@ export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
 };
 
 export type CollectFoodsOps = {
-  foodGroups: FoodGroupMap;
   foods: FoodLocalMap;
   mealId: string;
   parentId?: string;
@@ -71,9 +69,8 @@ export type CollectedNutrientInfo = {
 };
 
 export type FoodLocalMap = Record<string, FoodLocal>;
-export type FoodGroupMap = Record<string, FoodGroup>;
 
-export type FoodCodes = { foodCodes: string[]; groupCodes: string[] };
+export type FoodCodes = { foodCodes: string[] };
 
 function surveySubmissionService({
   cache,
@@ -100,18 +97,16 @@ function surveySubmissionService({
 
         if (type === 'encoded-food') {
           acc.foodCodes.push(food.data.code);
-          acc.groupCodes.push(food.data.groupCode);
         }
 
         if (linkedFoods.length) {
-          const { foodCodes, groupCodes } = collectFoodCodes(linkedFoods);
+          const { foodCodes } = collectFoodCodes(linkedFoods);
           acc.foodCodes.push(...foodCodes);
-          acc.groupCodes.push(...groupCodes);
         }
 
         return acc;
       },
-      { foodCodes: [], groupCodes: [] },
+      { foodCodes: [] },
     );
 
   /**
@@ -122,7 +117,7 @@ function surveySubmissionService({
   const collectFoods
     = (ops: CollectFoodsOps) =>
       (collectedFoods: CollectedFoods, foodState: FoodState): CollectedFoods => {
-        const { foodGroups, foods, mealId, parentId } = ops;
+        const { foods, mealId, parentId } = ops;
 
         if (foodState.type === 'free-text') {
           logger.warn(`Submission: ${foodState.type} food record present in submission, skipping...`);
@@ -151,17 +146,6 @@ function surveySubmissionService({
         if (foodState.type === 'recipe-builder') {
           const { linkedFoods, searchTerm, template } = foodState;
 
-          const foodGroupRecord = foodGroups['0'];
-
-          if (!foodGroupRecord) {
-            logger.warn(`Submission: food group '0' not found, skipping...`);
-            return collectedFoods;
-          }
-
-          if (!foodGroupRecord.localGroups)
-            throw new Error('Submission: not loaded foodGroupRecord relationships');
-
-          const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;
           const id = randomUUID();
 
           collectedFoods.inputs.push({
@@ -176,9 +160,6 @@ function surveySubmissionService({
             searchTerm: (searchTerm ?? '').slice(0, 256),
             portionSizeMethodId: 'recipe-builder',
             reasonableAmount: true,
-            foodGroupId,
-            foodGroupEnglishName,
-            foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
             brand: null,
             barcode: null,
             nutrientTableId: '',
@@ -187,13 +168,13 @@ function surveySubmissionService({
           collectedFoods.states.push(foodState);
 
           return linkedFoods.reduce(
-            collectFoods({ foodGroups, foods, mealId, parentId: id }),
+            collectFoods({ foods, mealId, parentId: id }),
             collectedFoods,
           );
         }
 
         const {
-          data: { code, groupCode, reasonableAmount, localName },
+          data: { code, reasonableAmount, localName },
           flags,
           linkedFoods,
           portionSize,
@@ -201,26 +182,19 @@ function surveySubmissionService({
         } = foodState;
 
         const foodRecord = foods[code];
-        const foodGroupRecord = foodGroups[groupCode];
 
         if (!foodRecord) {
           logger.warn(`Submission: food '${code}' not found, skipping...`);
           return collectedFoods;
         }
 
-        if (!foodGroupRecord) {
-          logger.warn(`Submission: food group '${groupCode}' not found, skipping...`);
-          return collectedFoods;
-        }
-
-        if (!foodRecord.main || !foodRecord.nutrientRecords || !foodGroupRecord.localGroups)
-          throw new Error('Submission: not loaded foodRecord/foodGroupRecord relationships');
+        if (!foodRecord.main || !foodRecord.nutrientRecords)
+          throw new Error('Submission: not loaded foodRecord relationships');
 
         const {
           nutrientRecords,
           main: { name: englishName },
         } = foodRecord;
-        const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;
 
         if (!portionSize) {
           logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
@@ -243,9 +217,6 @@ function surveySubmissionService({
           searchTerm: (searchTerm ?? '').slice(0, 256),
           portionSizeMethodId: portionSize.method,
           reasonableAmount: reasonableAmount >= portionSizeWeight,
-          foodGroupId,
-          foodGroupEnglishName,
-          foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
           brand: null,
           barcode: null,
           nutrientTableId: nutrientRecords[0]?.nutrientTableId ?? '0',
@@ -254,7 +225,7 @@ function surveySubmissionService({
         collectedFoods.states.push(foodState);
 
         return linkedFoods.reduce(
-          collectFoods({ foodGroups, foods, mealId, parentId: id }),
+          collectFoods({ foods, mealId, parentId: id }),
           collectedFoods,
         );
       };
@@ -381,7 +352,7 @@ function surveySubmissionService({
    *
    * @param {string} slug
    * @param {string} userId
-   * @param {SurveyState} state
+   * @param {SurveyState} surveyState
    * @param {number} tzOffset
    * @returns {Promise<SurveySubmissionResponse>}
    */
@@ -532,16 +503,15 @@ function surveySubmissionService({
         duration,
       }));
 
-      // Collect food & group codes
-      const { foodCodes, groupCodes } = state.meals.reduce<FoodCodes>(
+      // Collect food
+      const { foodCodes } = state.meals.reduce<FoodCodes>(
         (acc, meal) => {
-          const { foodCodes, groupCodes } = collectFoodCodes(meal.foods);
+          const { foodCodes } = collectFoodCodes(meal.foods);
           acc.foodCodes.push(...foodCodes);
-          acc.groupCodes.push(...groupCodes);
 
           return acc;
         },
-        { foodCodes: [], groupCodes: ['0'] },
+        { foodCodes: [] },
       );
 
       // Store survey custom fields & meals
@@ -561,33 +531,20 @@ function surveySubmissionService({
 
       // Fetch food & group records
       // TODO: if food record not found, look for prototype?
-      const [foodRecords, foodGroups] = await Promise.all([
-        FoodLocal.findAll({
-          where: { foodCode: foodCodes, localeId: localeCode },
-          include: [
-            { association: 'main' },
-            {
-              association: 'nutrientRecords',
-              through: { attributes: [] },
-              include: [{ association: 'fields' }, { association: 'nutrients' }],
-            },
-          ],
-        }),
-        FoodGroup.findAll({
-          where: { id: groupCodes },
-          include: [
-            { association: 'localGroups', where: { localeId: localeCode }, required: false },
-          ],
-        }),
-      ]);
+      const foodRecords = await FoodLocal.findAll({
+        where: { foodCode: foodCodes, localeId: localeCode },
+        include: [
+          { association: 'main' },
+          {
+            association: 'nutrientRecords',
+            through: { attributes: [] },
+            include: [{ association: 'fields' }, { association: 'nutrients' }],
+          },
+        ],
+      });
 
       const foodMap = foodRecords.reduce<Record<string, FoodLocal>>((acc, item) => {
         acc[item.foodCode] = item;
-        return acc;
-      }, {});
-
-      const foodGroupMap = foodGroups.reduce<Record<string, FoodGroup>>((acc, item) => {
-        acc[item.id] = item;
         return acc;
       }, {});
 
@@ -605,7 +562,7 @@ function surveySubmissionService({
 
         // Collect meal foods
         const collectedFoods = mealState.foods.reduce(
-          collectFoods({ foods: foodMap, foodGroups: foodGroupMap, mealId }),
+          collectFoods({ foods: foodMap, mealId }),
           {
             inputs: [],
             states: [],

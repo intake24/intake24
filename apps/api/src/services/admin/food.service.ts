@@ -59,7 +59,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
           include: [
             { association: 'attributes' },
             { association: 'brands', where, required: false, separate: true },
-            { association: 'foodGroup' },
             { association: 'locales', through: { attributes: [] } },
             {
               association: 'parentCategories',
@@ -231,7 +230,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       ];
 
       if (input.main) {
-        promises.push(main.update(pick(input.main, ['name', 'foodGroupId']), { transaction }));
+        promises.push(main.update(pick(input.main, ['name']), { transaction }));
 
         if (input.main.locales) {
           const locales = input.main.locales.map(({ id }) => id);
@@ -300,7 +299,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
           defaults: {
             code: input.code,
             name: input.name,
-            foodGroupId: sourceFoodLocal.main!.foodGroupId,
             version: randomUUID(),
           },
           transaction,

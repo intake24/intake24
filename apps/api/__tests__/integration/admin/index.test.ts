@@ -3,7 +3,6 @@ import categories from './categories/index.test';
 import faqs from './faqs/index.test';
 import fdbs from './fdbs/index.test';
 import feedbackSchemes from './feedback-schemes/index.test';
-import foodGroups from './food-groups/index.test';
 import images from './images/index.test';
 import jobs from './jobs/index.test';
 import languages from './languages/index.test';
@@ -31,7 +30,6 @@ export default () => {
   describe('/api/admin/faqs', faqs);
   describe('/api/admin/fdbs', fdbs);
   describe('/api/admin/feedback-schemes', feedbackSchemes);
-  describe('/api/admin/food-groups', foodGroups);
   describe('/api/admin/images', images);
   describe('/api/admin/jobs', jobs);
   describe('/api/admin/languages', languages);

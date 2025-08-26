@@ -205,10 +205,6 @@ export const sidebar = {
           link: '/admin/foods/fdbs',
         },
         {
-          text: 'Food groups',
-          link: '/admin/foods/food-groups',
-        },
-        {
           text: 'Nutrient tables',
           link: '/admin/foods/nutrient-tables',
         },

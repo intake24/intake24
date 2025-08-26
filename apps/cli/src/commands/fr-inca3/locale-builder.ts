@@ -367,7 +367,6 @@ export class FrenchAnsesLocaleBuilder {
         code: getIntake24FoodCode(row.A_CODE),
         parentCategories: categories ?? [],
         attributes: { sameAsBeforeOption: true },
-        groupCode: 1,
         englishDescription: capitalize(this.getFoodEnglishDescription(row.A_CODE)),
       });
     }
@@ -383,7 +382,6 @@ export class FrenchAnsesLocaleBuilder {
         code: getIntake24RecipeCode(row.R_CODE),
         parentCategories: categories ?? [],
         attributes: {},
-        groupCode: 1,
         englishDescription: capitalize(this.getRecipeEnglishDescription(row.R_CODE)),
       });
     }

@@ -69,7 +69,6 @@
         "useInRecipes": "Use in recipes"
       },
       "code": "Global code",
-      "foodGroupId": "Food group ID",
       "isHidden": "Is hidden",
       "name": "Global name",
       "parentCategories": "Parent categories"
