@@ -29,60 +29,26 @@
     "alreadyIncluded": "Category '{code}' is already included in current list.",
     "none": "No category found for provided search.",
     "copy": "Copy category",
-    "global": {
-      "_": "Global category settings",
-      "code": "Category code",
-      "name": "English name",
-      "isHidden": "Is hidden"
-    },
-    "local": {
-      "_": "Local category settings",
-      "id": "Local category ID",
-      "name": "Local name",
-      "altNames": "Alternative names",
-      "tags": "Tags"
-    },
-    "attributes": {
-      "_": "Category attributes"
-    },
-    "parentCategories": {
-      "_": "Parent categories"
-    }
+    "id": "category ID",
+    "code": "Category code",
+    "hidden": "Is hidden",
+    "englishName": "English name",
+    "name": "Local name",
+    "altNames": "Alternative names",
+    "tags": "Tags"
   },
-
   "foods": {
     "_": "Food",
     "title": "Foods",
     "add": "Add food",
     "copy": "Copy food",
-    "global": {
-      "_": "Global food settings",
-      "code": "Food code",
-      "name": "English name"
-    },
-    "local": {
-      "_": "Local food settings",
-      "id": "Local food ID",
-      "name": "Local name",
-      "altNames": "Alternative names",
-      "tags": "Tags"
-    },
-    "attributes": {
-      "_": "Food attributes"
-    },
-    "parentCategories": {
-      "_": "Parent categories"
-    }
+    "id": "Food ID",
+    "code": "Food code",
+    "englishName": "English name",
+    "name": "Local name",
+    "altNames": "Alternative names",
+    "tags": "Tags"
   },
-
-  "locales": {
-    "_": "Use in locales",
-    "title": "Use in locales",
-    "description": "Food is included in {count} locales.",
-    "add": "Add locale",
-    "remove": "Remove locale"
-  },
-
   "attributes": {
     "_": "Attributes",
     "title": "Attributes",

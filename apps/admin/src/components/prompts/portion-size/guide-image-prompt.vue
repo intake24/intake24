@@ -55,7 +55,6 @@
               </template>
               <template #[`item.action`]="{ item }">
                 <select-resource
-                  v-if="!item.unit"
                   item-name="id"
                   resource="standard-units"
                   @update:model-value="updateLQUnit(item.code, $event)"
@@ -90,13 +89,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-
 import { SelectResource } from '@intake24/admin/components/dialogs';
-import type { CategoryListItem } from '@intake24/admin/components/fdbs';
 import { CategoryList } from '@intake24/admin/components/fdbs';
 import type { Prompts } from '@intake24/common/prompts';
+import type { CategoryReference } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
-
 import { basePrompt, ImageMapSettings } from '../partials';
 
 export default defineComponent({
@@ -122,7 +119,7 @@ export default defineComponent({
   },
 
   methods: {
-    updateLQParent(items: CategoryListItem[]) {
+    updateLQParent(items: CategoryReference[]) {
       const linkedQuantity = {
         ...this.linkedQuantity,
         parent: items.map(({ name }) => ({ code: name })),
@@ -130,7 +127,7 @@ export default defineComponent({
       this.update('linkedQuantity', linkedQuantity);
     },
 
-    updateLQSource(items: CategoryListItem[]) {
+    updateLQSource(items: CategoryReference[]) {
       const linkedQuantity = {
         ...this.linkedQuantity,
         source: items.map(({ code }) => code),

@@ -10,14 +10,17 @@ describe('phrase index', () => {
     {
       phrase: 'banana with banana tea',
       key: 'P1',
+      id: '1',
     },
     {
       phrase: 'dog helicopter with coffee rice',
       key: 'P2',
+      id: '2',
     },
     {
       phrase: 'pizza and chips with strawberry jam and vodka',
       key: 'P3',
+      id: '3',
     },
   ];
 

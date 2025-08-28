@@ -10,8 +10,8 @@ import removeBOM from 'remove-bom-stream';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { Dictionary } from '@intake24/common/types';
 import { PackageWriter } from '../packager/package-writer';
-import { PkgGlobalCategory, PkgLocalCategory } from '../packager/types/categories';
-import { PkgGlobalFood, PkgLocalFood } from '../packager/types/foods';
+import { PkgCategory } from '../packager/types/categories';
+import { PkgFood } from '../packager/types/foods';
 
 export interface GoustoLocaleOptions {
   sourcePath: string;
@@ -121,15 +121,17 @@ function codeTransform(recipeId: string): string {
   return `G${recipeId.replace('-', '')}`;
 }
 
-function buildLocalFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFileNames: string[], usedFileNames: Set<string>): PkgLocalFood[] {
-  function buildLocalFood(recipeId: string, recipeData: GoustoRecipeData): PkgLocalFood {
+function buildFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFileNames: string[], usedFileNames: Set<string>): PkgFood[] {
+  function buildlFood(recipeId: string, recipeData: GoustoRecipeData): PkgFood {
     return {
       code: codeTransform(recipeId),
       associatedFoods: [],
+      attributes: {},
       brandNames: [],
       nutrientTableCodes: {
         FR_TEMP: 'FRPH1',
       },
+      parentCategories: [makeCategoryCode(recipeData.primaryProteinSource)],
       portionSize: [{
         method: 'standard-portion',
         conversionFactor: 1,
@@ -142,27 +144,15 @@ function buildLocalFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFile
         useForRecipes: false,
       }],
       alternativeNames: {},
-      localDescription: `Gousto ${recipeData.recipeTitle}`,
+      name: `Gousto ${recipeData.recipeTitle}`,
+      englishName: recipeData.recipeTitle,
       tags: ['gousto-recipe'],
       thumbnailPath: getThumbnailImagePath(thumbnailFileNames, recipeId, usedFileNames),
-    };
-  }
-
-  return Object.entries(recipeData).map(([recipeId, recipeData]) => buildLocalFood(recipeId, recipeData));
-}
-
-function buildGlobalFoods(recipeData: Dictionary<GoustoRecipeData>): PkgGlobalFood[] {
-  function buildGlobalFood(recipeId: string, recipeData: GoustoRecipeData): PkgGlobalFood {
-    return {
-      code: codeTransform(recipeId),
-      attributes: {},
-      englishDescription: recipeData.recipeTitle,
-      parentCategories: [makeCategoryCode(recipeData.primaryProteinSource)],
       version: randomUUID(),
     };
   }
 
-  return Object.entries(recipeData).map(([recipeId, recipeData]) => buildGlobalFood(recipeId, recipeData));
+  return Object.entries(recipeData).map(([recipeId, recipeData]) => buildlFood(recipeId, recipeData));
 }
 
 function makeCategoryCode(proteinSource: string): string {
@@ -178,37 +168,27 @@ function getProteinSources(recipeData: Dictionary<GoustoRecipeData>): string[] {
   return array;
 }
 
-function buildGlobalCategories(proteinSources: string[]): PkgGlobalCategory[] {
+function buildCategories(proteinSources: string[]): PkgCategory[] {
   const proteinCategories = proteinSources.map(s => ({
     code: makeCategoryCode(s),
+    name: s,
+    englishName: s,
+    hidden: false,
     attributes: {},
-    englishDescription: s,
-    isHidden: false,
     parentCategories: ['GOUSTO'],
+    portionSize: [],
     version: randomUUID(),
   }));
 
   return [{
     code: 'GOUSTO',
+    name: 'Gousto recipes',
+    englishName: 'Gousto recipes',
+    hidden: false,
     attributes: {},
-    englishDescription: 'Gousto recipes',
-    isHidden: false,
     parentCategories: [],
+    portionSize: [],
     version: randomUUID(),
-  }, ...proteinCategories];
-}
-
-function buildLocalCategories(proteinSources: string[]): PkgLocalCategory[] {
-  const proteinCategories = proteinSources.map(s => ({
-    localDescription: s,
-    portionSize: [],
-    code: makeCategoryCode(s),
-  }));
-
-  return [{
-    code: 'GOUSTO',
-    portionSize: [],
-    localDescription: 'Gousto recipes',
   }, ...proteinCategories];
 }
 
@@ -252,34 +232,25 @@ export default async (options: GoustoLocaleOptions): Promise<void> => {
 
   const proteinSources = getProteinSources(recipeData);
 
-  const globalCategories = buildGlobalCategories(proteinSources);
-
-  const localCategories = buildLocalCategories(proteinSources);
-
-  const globalFoods = buildGlobalFoods(recipeData);
+  const categories = buildCategories(proteinSources);
 
   const usedThumbnailNames = new Set<string>();
-
-  const localFoods = buildLocalFoods(recipeData, thumbnailFileNames, usedThumbnailNames);
+  const foods = buildFoods(recipeData, thumbnailFileNames, usedThumbnailNames);
 
   const writer = new PackageWriter(logger, options.outputPath);
 
   await Promise.all([
-    writer.writeGlobalCategories(globalCategories),
-    writer.writeLocalCategories({
-      [options.localeId]: localCategories,
+    writer.writeCategories({
+      [options.localeId]: categories,
     }),
-    writer.writeLocalFoods(
+    writer.writeFoods(
       {
-        [options.localeId]: localFoods,
+        [options.localeId]: foods,
       },
-    ),
-    writer.writeGlobalFoods(
-      globalFoods,
     ),
     writer.writeEnabledLocalFoods(
       {
-        [options.localeId]: globalFoods.map(f => f.code),
+        [options.localeId]: foods.map(f => f.code),
       },
     ),
     writer.writePackageInfo(),

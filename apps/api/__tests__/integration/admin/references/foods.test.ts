@@ -9,10 +9,17 @@ export default () => {
   });
 
   for (const permission of permissions) {
-    it(`should return 200 and paginated results ('${permission}')`, async () => {
-      await suite.util.setPermission(permission);
+    describe('authenticated / resource authorized', () => {
+      beforeAll(async () => {
+        await suite.util.setPermission(permissions);
+      });
+      it('should return 400 for missing query data', async () => {
+        await suite.sharedTests.assertInvalidInput('get', url, ['localeId']);
+      });
 
-      await suite.sharedTests.assertPaginatedResult('get', url);
+      it(`should return 200 and paginated results ('${permission}')`, async () => {
+        await suite.sharedTests.assertPaginatedResult('get', `${url}?localeId=en_GB`);
+      });
     });
   }
 };

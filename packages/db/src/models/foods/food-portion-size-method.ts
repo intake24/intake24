@@ -8,10 +8,8 @@ import type {
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
 import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
-import { FoodLocal } from '@intake24/db';
-
+import { Food } from '@intake24/db';
 import BaseModel from '../model';
 
 @Table({
@@ -36,7 +34,7 @@ export default class FoodPortionSizeMethod extends BaseModel<
     allowNull: false,
     type: DataType.BIGINT,
   })
-  declare foodLocalId: ForeignKey<FoodLocal['id']>;
+  declare foodId: ForeignKey<Food['id']>;
 
   @Column({
     allowNull: false,
@@ -81,8 +79,8 @@ export default class FoodPortionSizeMethod extends BaseModel<
     this.setDataValue('parameters', JSON.stringify(value ?? {}));
   }
 
-  @BelongsTo(() => FoodLocal, 'foodLocalId')
-  declare foodLocal?: NonAttribute<FoodLocal>;
+  @BelongsTo(() => Food, 'foodId')
+  declare food?: NonAttribute<Food>;
 }
 
 export type FoodPortionSizeMethodAttributes = Attributes<FoodPortionSizeMethod>;

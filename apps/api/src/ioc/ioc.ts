@@ -4,8 +4,6 @@ import type {
   // Admin
   AdminCategoryController,
   AdminFoodController,
-  AdminGlobalCategoriesController,
-  AdminGlobalFoodsController,
   AdminLocalCategoriesController,
   AdminLocalFoodsController,
   DrinkScaleController,
@@ -22,6 +20,7 @@ import type {
   AsServedService,
   AuthenticationService,
   Cache,
+  CachedParentCategoriesService,
   CategoryContentsService,
   DataExportFields,
   DataExportMapper,
@@ -34,12 +33,11 @@ import type {
   FoodDataService,
   FoodSearchService,
   FoodThumbnailImageService,
-  GlobalCategoriesService,
-  GlobalFoodsService,
   GuideImageService,
   I18nService,
   I18nStore,
   ImageMapService,
+  InheritableAttributesService,
   JwtRotationService,
   JwtService,
   LanguageService,
@@ -69,8 +67,6 @@ import type {
   UserService,
 } from '@intake24/api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
-import type { CachedParentCategoriesService } from '@intake24/api/services/foods/cached-parent-categories-service';
-import type { InheritableAttributesService } from '@intake24/api/services/foods/inheritable-attributes-service';
 import type { Logger, Mailer } from '@intake24/common-backend';
 import type { TokenPayload } from '@intake24/common/security';
 import type { Environment } from '@intake24/common/types';
@@ -107,9 +103,7 @@ export interface IoC extends Jobs {
   // Admin controllers
   adminCategoryController: AdminCategoryController;
   adminFoodController: AdminFoodController;
-  adminGlobalFoodsController: AdminGlobalFoodsController;
   adminLocalFoodsController: AdminLocalFoodsController;
-  adminGlobalCategoriesController: AdminGlobalCategoriesController;
   adminLocalCategoriesController: AdminLocalCategoriesController;
 
   // Images
@@ -156,9 +150,7 @@ export interface IoC extends Jobs {
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
   localFoodsService: LocalFoodsService;
-  globalFoodsService: GlobalFoodsService;
   localCategoriesService: LocalCategoriesService;
-  globalCategoriesService: GlobalCategoriesService;
   languageService: LanguageService;
   localeService: LocaleService;
   nutrientTableService: NutrientTableService;
@@ -172,9 +164,9 @@ export interface IoC extends Jobs {
   foodIndex: FoodIndex;
   portionSizeMethodsService: PortionSizeMethodsService;
   portionSizeService: PortionSizeService;
-  inheritableAttributesService: InheritableAttributesService;
   foodSearchService: FoodSearchService;
   cachedParentCategoriesService: CachedParentCategoriesService;
+  inheritableAttributesService: InheritableAttributesService;
 
   // Categories
   categoryContentsService: CategoryContentsService;

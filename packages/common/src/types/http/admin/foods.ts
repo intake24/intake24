@@ -1,120 +1,76 @@
+import type { Nullable } from '../../common';
 import type { Pagination } from '../generic';
 import type { AssociatedFood } from './associated-food';
+import type { CategoryAttributes } from './categories';
+import type { PortionSizeMethodAttributes } from './portion-size-methods';
+import { z } from 'zod';
 import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
-import type { UseInRecipeType } from '@intake24/common/types';
-
 import type {
   AssociatedFoodAttributes,
   AssociatedFoodCreationAttributes,
-  CategoryAttributes,
-  FoodAttributeAttributes,
-  FoodAttributes,
-  FoodLocalAttributes,
   FoodPortionSizeMethodAttributes,
-  FoodPortionSizeMethodCreationAttributes,
   FoodsLocaleAttributes,
   NutrientTableRecordAttributes,
 } from '@intake24/db';
 
-export type InheritableAttributes = {
-  readyMealOption?: boolean;
-  sameAsBeforeOption?: boolean;
-  reasonableAmount?: number;
-  useInRecipes?: UseInRecipeType;
-};
+export const inheritableAttributes = z.object({
+  readyMealOption: z.boolean().optional(),
+  sameAsBeforeOption: z.boolean().optional(),
+  reasonableAmount: z.number().optional(),
+  useInRecipes: z.union([z.literal(0), z.literal(1), z.literal(2)]).optional(),
+});
+export type InheritableAttributes = z.infer<typeof inheritableAttributes>;
 
-export type CreateGlobalFoodRequest = {
+export type CreateFoodRequest = {
   code: string;
-  name: string;
-  attributes: InheritableAttributes;
-  parentCategories?: string[];
-};
-
-export type UpdateGlobalFoodRequest = Omit<CreateGlobalFoodRequest, 'code'>;
-
-export type CreateLocalFoodRequest = {
-  code: string;
+  englishName: string;
   name: string;
   altNames?: Record<string, string[]>;
   tags?: string[];
+  attributes: InheritableAttributes;
+  parentCategories?: string[];
   nutrientTableCodes: Record<string, string>;
   portionSizeMethods: PortionSizeMethod[];
   associatedFoods: AssociatedFood[];
 };
 
-export type CreateLocalFoodRequestOptions = {
+export type CreateFoodRequestOptions = {
   update: boolean;
   return: boolean;
 };
 
-export type UpdateLocalFoodRequest = Omit<CreateLocalFoodRequest, 'code'>;
+export const foodAttributes = z.object({
+  id: z.string(),
+  code: z.string().min(1).max(64),
+  localeId: z.string().min(1).max(64),
+  englishName: z.string().min(1).max(256),
+  name: z.string().min(1).max(256).nullable(),
+  simpleName: z.string().nullable(),
+  altNames: z.record(z.string().array()),
+  tags: z.string().array(),
+  version: z.string().uuid(),
+});
+export type FoodAttributes = z.infer<typeof foodAttributes>;
 
-export type CreateGlobalCategoryRequest = {
+export type FoodInput = {
   code: string;
-  version?: string;
   name: string;
-  isHidden: boolean;
-  attributes: InheritableAttributes;
-  parentCategories?: string[];
-};
-
-export type UpdateGlobalCategoryRequest = Omit<CreateGlobalCategoryRequest, 'code' | 'version'>;
-
-export type GlobalCategoryEntry = {
-  code: string;
-  version: string;
-  name: string;
-  isHidden: boolean;
-  attributes: InheritableAttributes;
-  parentCategories: string[];
-};
-
-export type CreateLocalCategoryRequest = {
-  code: string;
-  version?: string;
-  name: string;
-  portionSizeMethods: PortionSizeMethod[];
-  tags?: string[];
-};
-
-export type UpdateLocalCategoryRequest = Omit<CreateLocalCategoryRequest, 'code' | 'version'>;
-
-export type LocalCategoryEntry = {
-  id: string;
-  categoryCode: string;
-  localeId: string;
-  version: string;
-  name: string;
-  portionSizeMethods: PortionSizeMethod[];
-};
-
-export type FoodInput = Pick<FoodAttributes, 'code' | 'name'> & {
-  parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
-};
-
-export type FoodLocalInput = {
-  name: string;
-  main?: {
-    code?: string;
-    name?: string;
-    attributes?: FoodAttributeAttributes;
-    locales?: FoodsLocaleAttributes[];
-    parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
-  };
+  englishName: string;
+  parentCategories?: CategoryAttributes[];
   altNames?: Record<string, string[]>;
   tags?: string[];
-  nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];
-  portionSizeMethods: FoodPortionSizeMethodCreationAttributes[];
+  attributes?: Nullable<InheritableAttributes>;
   associatedFoods: AssociatedFoodCreationAttributes[];
+  nutrientRecords: NutrientTableRecordAttributes[];
+  portionSizeMethods: PortionSizeMethodAttributes[];
 };
 
-export type FoodLocalCopySource = {
+export type FoodCopySource = {
   foodId: string;
   localeId: string;
-  localeCode: string;
 };
 
-export type FoodLocalCopyInput = {
+export type FoodCopyInput = {
   localeId: string;
   code: string;
   name: string;
@@ -130,15 +86,11 @@ export type FoodListEntry = {
 
 export type FoodsResponse = Pagination<FoodListEntry>;
 
-export type FoodEntry = FoodAttributes & {
-  attributes?: FoodAttributeAttributes;
+export interface FoodEntry extends FoodAttributes {
+  associatedFoods?: AssociatedFoodAttributes[];
+  attributes?: Nullable<InheritableAttributes>;
   parentCategories?: CategoryAttributes[];
   locales?: FoodsLocaleAttributes[];
-};
-
-export interface FoodLocalEntry extends FoodLocalAttributes {
-  main?: FoodEntry;
-  associatedFoods?: AssociatedFoodAttributes[];
   portionSizeMethods?: FoodPortionSizeMethodAttributes[];
   nutrientRecords?: NutrientTableRecordAttributes[];
 }

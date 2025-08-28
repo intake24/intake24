@@ -92,6 +92,10 @@
             <template #title>
               {{ $t(`fdbs.categories.title`) }}
             </template>
+            <template #item="{ item }">
+              <v-list-item-title>{{ item.code }}</v-list-item-title>
+              <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+            </template>
           </select-resource>
           <v-checkbox-btn
             v-model="currentValue.category.value"

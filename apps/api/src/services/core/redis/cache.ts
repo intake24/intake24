@@ -16,10 +16,12 @@ export type CacheKeyPrefix
     | typeof ACL_ROLES_KEY
     | 'category-attributes'
     | 'category-all-categories'
+    | 'category-all-category-codes'
     | 'category-parent-categories'
     | 'food-attributes'
     | 'food-entry'
     | 'food-all-categories'
+    | 'food-all-category-codes'
     | 'food-parent-categories'
     | 'survey-search-settings'
     | 'user-submissions';

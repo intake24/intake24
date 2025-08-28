@@ -1,10 +1,8 @@
 import fs, { constants } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-
 import decompress from 'decompress';
 import { omit } from 'lodash';
-
 import type { ApiClientV4, DrinkwareScaleUpdate } from '@intake24/api-client-v4';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import type {
@@ -12,21 +10,19 @@ import type {
   PkgAsServedSet,
 } from '@intake24/cli/commands/packager/types/as-served';
 import type {
-  PkgGlobalCategory,
-  PkgLocalCategory,
+  PkgCategory,
 } from '@intake24/cli/commands/packager/types/categories';
 import type {
   PkgDrinkScale,
   PkgDrinkwareSet,
 } from '@intake24/cli/commands/packager/types/drinkware';
-import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
+import type { PkgFood } from '@intake24/cli/commands/packager/types/foods';
 import { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import logger from '@intake24/common-backend/services/logger/logger';
 import { Dictionary } from '@intake24/common/types';
-
 import { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
 import typeConverters from './types/v4-type-conversions';
 
@@ -41,12 +37,9 @@ export const importerSpecificModulesExecutionOptions = [
   'drinkware-sets',
   'locales',
   'nutrients',
-  'global-foods',
   'verify-local-foods',
-  'local-foods',
-  'global-categories',
-  'local-categories',
-  'enabled-local-foods',
+  'foods',
+  'categories',
   'image-labels',
   'all',
 ] as const;
@@ -86,11 +79,9 @@ export class ImporterV4 {
   private compressedPackage: boolean = false;
 
   private locales: PkgLocale[] | undefined;
-  private globalFoods: PkgGlobalFood[] | undefined;
-  private localFoods: Record<string, PkgLocalFood[]> | undefined;
+  private localFoods: Record<string, PkgFood[]> | undefined;
   private enabledLocalFoods: Record<string, string[]> | undefined;
-  private globalCategories: PkgGlobalCategory[] | undefined;
-  private localCategories: Record<string, PkgLocalCategory[]> | undefined;
+  private localCategories: Record<string, PkgCategory[]> | undefined;
   private nutrientTables: PkgNutrientTable[] | undefined;
   private asServedSets: PkgAsServedSet[] | undefined;
   private drinkwareSets: Record<string, PkgDrinkwareSet> | undefined;
@@ -147,29 +138,17 @@ export class ImporterV4 {
       await this.readGuideImages();
       await this.importGuideImages();
     },
-    'global-categories': async () => {
-      await this.readGlobalCategories();
-      await this.importGlobalCategories();
+    categories: async () => {
+      await this.readCategories();
+      await this.importCategories();
     },
-    'local-categories': async () => {
-      await this.readLocalCategories();
-      await this.importLocalCategories();
-    },
-    'global-foods': async () => {
-      await this.readGlobalFoods();
-      await this.importGlobalFoods();
+    foods: async () => {
+      await this.readFoods();
+      await this.importFoods();
     },
     'verify-local-foods': async () => {
-      await this.readLocalFoods();
+      await this.readFoods();
       await this.verifyPortionSizeImages();
-    },
-    'local-foods': async () => {
-      await this.readLocalFoods();
-      await this.importLocalFoods();
-    },
-    'enabled-local-foods': async () => {
-      await this.readEnabledLocalFoods();
-      await this.importEnabledLocalFoods();
     },
     'drinkware-sets': async () => {
       await this.readDrinkwareSets();
@@ -186,11 +165,8 @@ export class ImporterV4 {
       await this.importAsServedSets();
       await this.importImageMaps();
       await this.importDrinkwareSets();
-      await this.importGlobalCategories();
-      await this.importLocalCategories();
-      await this.importGlobalFoods();
-      await this.importLocalFoods();
-      await this.importEnabledLocalFoods();
+      await this.importCategories();
+      await this.importFoods();
     },
   };
 
@@ -629,48 +605,10 @@ export class ImporterV4 {
     }
   }
 
-  private async importGlobalCategory(category: PkgGlobalCategory): Promise<void> {
-    const request = typeConverters.fromPackageGlobalCategory(category);
+  private async importCategory(localeId: string, category: PkgCategory): Promise<void> {
+    const request = typeConverters.fromPackageCategory(category);
 
-    const result = await this.apiClient.categories.createCategory(request);
-
-    if (result.type === 'conflict') {
-      switch (this.options.onConflict) {
-        case 'skip':
-          logger.info(`Skipping category "${category.code}" due to a conflict`);
-          return;
-        case 'abort': {
-          const message = `Failed to import global category "${category.code}" due to a conflict`;
-          logger.error(message);
-          logger.error(JSON.stringify(result.details, null, 2));
-          throw new Error(message);
-        }
-        case 'overwrite': {
-          const existing = result.details;
-
-          if (existing !== null) {
-            await this.apiClient.categories.updateCategory(
-              category.code,
-              existing.version,
-              omit(request, 'code'),
-            );
-          }
-        }
-      }
-    }
-  }
-
-  private async importGlobalCategories(): Promise<void> {
-    if (this.globalCategories !== undefined) {
-      await this.batchImport(this.globalCategories, 'global category record', 50, category =>
-        this.importGlobalCategory(category));
-    }
-  }
-
-  private async importLocalCategory(localeId: string, category: PkgLocalCategory): Promise<void> {
-    const request = typeConverters.fromPackageLocalCategory(category);
-
-    const result = await this.apiClient.categories.createCategoryLocal(localeId, request);
+    const result = await this.apiClient.categories.createCategory(localeId, request);
 
     if (result.type === 'conflict') {
       switch (this.options.onConflict) {
@@ -687,7 +625,7 @@ export class ImporterV4 {
           const existing = result.details;
 
           if (existing !== null) {
-            await this.apiClient.categories.updateCategoryLocal(
+            await this.apiClient.categories.updateCategory(
               localeId,
               category.code,
               existing.version,
@@ -699,60 +637,21 @@ export class ImporterV4 {
     }
   }
 
-  private async importLocalCategories(): Promise<void> {
+  private async importCategories(): Promise<void> {
     if (this.localCategories !== undefined) {
-      for (const [localeId, localCategories] of Object.entries(this.localCategories)) {
+      for (const [localeId, categories] of Object.entries(this.localCategories)) {
         logger.info(`Importing local category record(s) for locale ${localeId}...`);
-        await this.batchImport(localCategories, 'local category record', 50, category =>
-          this.importLocalCategory(localeId, category));
+        await this.batchImport(categories, 'local category record', 50, category =>
+          this.importCategory(localeId, category));
       }
     }
   }
 
-  private async importGlobalFood(food: PkgGlobalFood): Promise<void> {
-    const foodEntry = typeConverters.fromPackageGlobalFood(food);
-
-    const result = await this.apiClient.foods.createGlobalFood(foodEntry);
-
-    if (result.type === 'conflict') {
-      switch (this.options.onConflict) {
-        case 'skip':
-          logger.info(`Skipping food "${food.code}" due to a conflict`);
-          return;
-        case 'abort': {
-          const message = `Failed to import food "${food.code}" due to a conflict`;
-          logger.error(message);
-          logger.error(JSON.stringify(result.details, null, 2));
-          throw new Error(message);
-        }
-        case 'overwrite': {
-          // This looks terribly inefficient, maybe give create an on conflict option instead?
-          const existing = await this.apiClient.foods.findGlobalFood(food.code);
-
-          if (existing !== null) {
-            await this.apiClient.foods.updateGlobalFood(
-              food.code,
-              existing.version,
-              omit(foodEntry, 'code'),
-            );
-          }
-        }
-      }
-    }
-  }
-
-  private async importGlobalFoods(): Promise<void> {
-    if (this.globalFoods !== undefined) {
-      await this.batchImport(this.globalFoods.filter(food => !this.options.foodIds || this.options.foodIds.includes(food.code)), 'global food record', 50, food =>
-        this.importGlobalFood(food));
-    }
-  }
-
-  private async importLocalFood(localeId: string, food: PkgLocalFood): Promise<void> {
-    const createRequest = typeConverters.fromPackageLocalFood(food);
+  private async importFood(localeId: string, food: PkgFood): Promise<void> {
+    const createRequest = typeConverters.fromPackageFood(food);
 
     if (this.options.onConflict === 'skip' || this.options.onConflict === 'abort') {
-      const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
+      const result = await this.apiClient.foods.createFood(localeId, createRequest, {
         update: false,
         return: false,
       });
@@ -770,7 +669,7 @@ export class ImporterV4 {
       }
     }
     else {
-      const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
+      const result = await this.apiClient.foods.createFood(localeId, createRequest, {
         update: true,
         return: false,
       });
@@ -788,17 +687,17 @@ export class ImporterV4 {
     }
   }
 
-  private async importLocalFoods(): Promise<void> {
+  private async importFoods(): Promise<void> {
     if (this.localFoods !== undefined) {
       for (const [localeId, localFoods] of Object.entries(this.localFoods)) {
         logger.info(`Importing local food record(s) for locale ${localeId}...`);
         await this.batchImport(localFoods.filter(food => !this.options.foodIds || this.options.foodIds.includes(food.code)), 'local food record', 50, food =>
-          this.importLocalFood(localeId, food));
+          this.importFood(localeId, food));
       }
     }
   }
 
-  private async verifyPortionSizeImagesForFood(localeId: string, food: PkgLocalFood): Promise<void> {
+  private async verifyPortionSizeImagesForFood(localeId: string, food: PkgFood): Promise<void> {
     for (const psm of food.portionSize) {
       switch (psm.method) {
         case 'as-served': {
@@ -824,34 +723,9 @@ export class ImporterV4 {
 
   private async verifyPortionSizeImages(): Promise<void> {
     if (this.localFoods !== undefined) {
-      for (const [localeId, localFoods] of Object.entries(this.localFoods)) {
+      for (const [localeId, foods] of Object.entries(this.localFoods)) {
         logger.info(`Verifying portion size image references for ${localeId}...`);
-        await this.batchOperation(localFoods, 50, food => this.verifyPortionSizeImagesForFood(localeId, food));
-      }
-    }
-  }
-
-  private async importEnabledLocalFoods(): Promise<void> {
-    if (this.enabledLocalFoods !== undefined) {
-      for (const [localeId, enabledFoods] of Object.entries(this.enabledLocalFoods)) {
-        logger.info(`Updating enabled food codes for locale ${localeId}`);
-
-        const uniqueCodes = new Set<string>();
-
-        if (this.options.append) {
-          const enabledFoodsResponse = await this.apiClient.foods.getEnabledFoods(localeId);
-          if (enabledFoodsResponse !== null) {
-            for (const code of enabledFoodsResponse.enabledFoods) {
-              uniqueCodes.add(code);
-            }
-          }
-        }
-
-        for (const code of enabledFoods) {
-          uniqueCodes.add(code);
-        }
-
-        await this.apiClient.foods.updateEnabledFoods(localeId, [...uniqueCodes]);
+        await this.batchOperation(foods, 50, food => this.verifyPortionSizeImagesForFood(localeId, food));
       }
     }
   }
@@ -933,29 +807,14 @@ export class ImporterV4 {
     this.locales = await this.readJSON(PkgConstants.LOCALES_FILE_NAME);
   }
 
-  private async readGlobalFoods(): Promise<void> {
-    logger.info('Loading global foods');
-    this.globalFoods = await this.readJSON(PkgConstants.GLOBAL_FOODS_FILE_NAME);
+  private async readFoods(): Promise<void> {
+    logger.info('Loading foods');
+    this.localFoods = await this.readJSON(PkgConstants.FOODS_FILE_NAME);
   }
 
-  private async readLocalFoods(): Promise<void> {
-    logger.info('Loading local foods');
-    this.localFoods = await this.readJSON(PkgConstants.LOCAL_FOODS_FILE_NAME);
-  }
-
-  private async readGlobalCategories(): Promise<void> {
+  private async readCategories(): Promise<void> {
     logger.info('Loading global categories');
-    this.globalCategories = await this.readJSON(PkgConstants.GLOBAL_CATEGORIES_FILE_NAME);
-  }
-
-  private async readLocalCategories(): Promise<void> {
-    logger.info('Loading local categories');
-    this.localCategories = await this.readJSON(PkgConstants.LOCAL_CATEGORIES_FILE_NAME);
-  }
-
-  private async readEnabledLocalFoods(): Promise<void> {
-    logger.info('Loading enabled local foods');
-    this.enabledLocalFoods = await this.readJSON(PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME);
+    this.localCategories = await this.readJSON(PkgConstants.CATEGORIES_FILE_NAME);
   }
 
   private async readNutrientTables(): Promise<void> {
@@ -1001,9 +860,7 @@ export class ImporterV4 {
   public async readPackage(): Promise<void> {
     await Promise.all([
       this.readLocales(),
-      this.readGlobalFoods(),
-      this.readLocalFoods(),
-      this.readEnabledLocalFoods(),
+      this.readFoods(),
       this.readNutrientTables(),
       this.readImageMaps(),
       this.readGuideImages(),

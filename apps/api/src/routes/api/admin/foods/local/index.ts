@@ -9,11 +9,9 @@ export default () => {
 
   router
     .route('/:localeId/enabled-foods')
-    .get(wrapAsync(adminLocalFoodsController.readEnabledFoods))
-    .post(wrapAsync(adminLocalFoodsController.updateEnabledFoods));
+    .get(wrapAsync(adminLocalFoodsController.readEnabledFoods));
 
   router.route('/:localeId').post(wrapAsync(adminLocalFoodsController.store));
-
   router.route('/:localeId/:foodId').get(wrapAsync(adminLocalFoodsController.read));
 
   return router;

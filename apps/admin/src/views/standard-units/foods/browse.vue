@@ -43,7 +43,7 @@ export default defineComponent({
 
     const headers: DataTableHeader[] = [
       {
-        title: t('fdbs.foods.global.code'),
+        title: t('fdbs.foods.code'),
         sortable: true,
         key: 'foodCode',
       },
@@ -53,12 +53,12 @@ export default defineComponent({
         key: 'localeCode',
       },
       {
-        title: t('fdbs.foods.local.id'),
+        title: t('fdbs.foods.id'),
         sortable: true,
         key: 'id',
       },
       {
-        title: t('fdbs.foods.local.name'),
+        title: t('fdbs.foods.name'),
         sortable: true,
         key: 'name',
       },

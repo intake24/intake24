@@ -1,5 +1,4 @@
-import { getParentLocale } from '@intake24/api/services/foods/common';
-import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
+import type { IoC } from '@intake24/api/ioc';
 import type {
   UserAssociatedFoodPrompt,
   UserFoodData,
@@ -7,83 +6,57 @@ import type {
 import {
   AssociatedFood,
   Brand,
-  CategoryCategory,
-  CategoryLocal,
+  Category,
   Food,
-  FoodCategory,
-  FoodLocal,
-  FoodLocalList,
-  FoodsLocale,
+  NutrientTableRecordNutrient,
 } from '@intake24/db';
-
 import InheritableAttributesImpl from './inheritable-attributes-service';
+import InvalidIdError from './invalid-id-error';
 import PortionSizeMethodsImpl from './portion-size-methods.service';
 
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
 
-function foodDataService() {
+function foodDataService({ imagesBaseUrl, cachedParentCategoriesService }: Pick<IoC, 'imagesBaseUrl' | 'cachedParentCategoriesService'>) {
   const inheritableAttributesImpl = InheritableAttributesImpl();
-  const portionSizeMethodsImpl = PortionSizeMethodsImpl();
+  const portionSizeMethodsImpl = PortionSizeMethodsImpl(imagesBaseUrl);
 
-  const getNutrientKCalPer100G = async (localeId: string, foodCode: string): Promise<number> => {
-    const foodNutrientData = await FoodLocal.findOne({
-      where: { localeId, foodCode },
-      attributes: [],
+  const getNutrientKCalPer100G = async (foodId: string): Promise<number> => {
+    const nutrients = await NutrientTableRecordNutrient.findAll({
+      attributes: ['unitsPer100g'],
+      where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
       include: [
         {
-          association: 'nutrientRecords',
-          attributes: ['id'], // these attributes should be empty, but sequelize crashes if that is the case
-          through: { attributes: [] },
-          duplicating: true,
+          association: 'record',
+          attributes: ['id'],
+          required: true,
           include: [
             {
-              association: 'nutrients',
-              where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
-              attributes: ['unitsPer100g'],
+              association: 'foodMappings',
+              where: { foodId },
             },
           ],
         },
       ],
     });
 
-    if (!foodNutrientData) {
-      throw new InvalidIdError(
-        `Either locale id '${localeId}' or food code '${foodCode}' is `
-        + 'invalid, food isn\'t linked to a nutrient table record, or the energy (kcal) nutrient '
-        + 'data is missing',
-      );
-    }
-
-    let kcal = foodNutrientData?.nutrientRecords?.map((el) => {
-      return el.nutrients ? el.nutrients[0].unitsPer100g : 0;
-    })[0];
-    kcal = kcal || 0;
-    if (!kcal) {
-      const parentLocale = await getParentLocale(localeId);
-      if (parentLocale && parentLocale.prototypeLocaleId)
-        kcal = await getNutrientKCalPer100G(parentLocale.prototypeLocaleId, foodCode);
-    }
-    return kcal;
+    return nutrients.at(0)?.unitsPer100g ?? 0;
   };
 
   /**
    *
    * Get all associated Foods that link to this locale and Food Code
    *
-   * @param {string} localeId
-   * @param {string} foodCode
+   * @param {string} foodId
    * @returns {Promise<AssociatedFoodsResponse[]>}
    */
-  const getLocalAssociatedFoodPrompts = async (
-    localeId: string,
-    foodCode: string,
-  ): Promise<UserAssociatedFoodPrompt[]> => {
+  const getAssociatedFoodPrompts = async (foodId: string): Promise<UserAssociatedFoodPrompt[]> => {
     const associatedFoods = await AssociatedFood.findAll({
-      where: { localeId, foodCode },
+      where: { foodId },
       attributes: [
-        'associatedFoodCode',
+        'id',
         'associatedCategoryCode',
+        'associatedFoodCode',
         'text',
         'linkAsMain',
         'genericName',
@@ -93,6 +66,7 @@ function foodDataService() {
     });
 
     return associatedFoods.map(row => ({
+      id: row.id,
       foodCode: row.associatedFoodCode ?? undefined,
       categoryCode: row.associatedCategoryCode ?? undefined,
       promptText: row.text,
@@ -106,127 +80,57 @@ function foodDataService() {
    *
    * Get food brands based on the code of the food and localeId
    *
-   * @param {string} localeId
-   * @param {string} foodCode
+   * @param {string} foodId
    * @returns {Promise<string[]>}
    */
-  const getBrands = async (localeId: string, foodCode: string): Promise<string[]> => {
-    const brands = await Brand.findAll({ where: { localeId, foodCode }, attributes: ['name'] });
+  const getBrands = async (foodId: string): Promise<string[]> => {
+    const brands = await Brand.findAll({ where: { foodId }, attributes: ['name'] });
 
     return brands.length ? brands.map(brand => brand.name) : [];
   };
 
-  /**
-   * Finds all parent categories including transitive for foodCode
-   * @param foodCode
-   */
-  const getAllCategories = async (foodCode: string): Promise<string[]> => {
-    const visited = new Set<string>();
-
-    let queue: { categoryCode: string }[] = await FoodCategory.findAll({
-      where: { foodCode },
-      attributes: ['categoryCode'],
-    });
-
-    while (queue.length > 0) {
-      const newCodes = queue.map(row => row.categoryCode).filter(code => !visited.has(code));
-
-      newCodes.forEach(code => visited.add(code));
-
-      queue = await CategoryCategory.findAll({
-        where: { subcategoryCode: newCodes },
-        attributes: ['categoryCode'],
-      });
-    }
-
-    return [...visited.values()];
-  };
-
-  const getAllTags = async (categoryCode: string[], foodTags: string[] = []) => {
-    const categories = await CategoryLocal.findAll({ where: { categoryCode }, attributes: ['tags'] });
+  const getAllTags = async (id: string[], foodTags: string[] = []) => {
+    const categories = await Category.findAll({ where: { id }, attributes: ['tags'] });
 
     return [...new Set(categories.reduce((acc, { tags }) => acc.concat(tags), foodTags))];
   };
 
-  const resolveAssociatedFoodPrompts = async (
-    localeId: string,
-    foodCode: string,
-  ): Promise<UserAssociatedFoodPrompt[]> => {
-    const localPrompts = await getLocalAssociatedFoodPrompts(localeId, foodCode);
+  const getFoodData = async (ops: { id: string } | { localeId: string; code: string }): Promise<UserFoodData> => {
+    const food = await Food.findOne({ where: ops });
+    if (!food)
+      throw new InvalidIdError(`Invalid food, locale code: ${ops.toString()}`);
 
-    if (localPrompts.length)
-      return localPrompts;
-
-    const locale = await FoodsLocale.findOne({
-      where: { id: localeId },
-      include: [{ association: 'parent' }],
-    });
-
-    if (!locale)
-      throw new InvalidIdError(`Unknown locale ID: ${localeId}`);
-
-    if (locale.parent && locale.respondentLanguageId === locale.parent.respondentLanguageId)
-      return resolveAssociatedFoodPrompts(locale.parent.id, foodCode);
-
-    return [];
-  };
-
-  const getFoodData = async (localeId: string, foodCode: string): Promise<UserFoodData> => {
-    const foodRecord = await Food.findOne({ where: { code: foodCode } });
-
-    if (!foodRecord)
-      throw new InvalidIdError(`Invalid food code: ${foodCode}`);
-
-    const foodListCheck = await FoodLocalList.findOne({
-      where: { foodCode, localeId },
-      attributes: ['food_code'],
-    });
-
-    if (!foodListCheck)
-      throw new InvalidIdError(`${foodCode} is not in the food list for locale ${localeId}`);
-
-    const localeCheck = await FoodsLocale.findOne({ where: { id: localeId }, attributes: ['id'] });
-    if (!localeCheck)
-      throw new InvalidIdError(`Invalid locale ID: ${localeId}`);
-
-    const foodLocal = await FoodLocal.findOne({ where: { foodCode, localeId } });
-
-    if (!foodLocal) {
-      throw new InvalidIdError(
-        `No local food data for food code ${foodCode} in locale ${localeId}`,
-      );
-    }
-
-    const categories = await getAllCategories(foodCode);
+    const { id, code, localeId } = food;
+    const categories = await cachedParentCategoriesService.getFoodAllCategories(id);
 
     const [
       associatedFoodPrompts,
       brandNames,
+      inheritableAttributes,
       kcalPer100g,
       portionSizeMethods,
-      inheritableAttributes,
       tags,
     ] = await Promise.all([
-      resolveAssociatedFoodPrompts(localeId, foodCode),
-      getBrands(localeId, foodCode),
-      getNutrientKCalPer100G(localeId, foodCode),
-      portionSizeMethodsImpl.resolveUserPortionSizeMethods(localeId, foodCode),
-      inheritableAttributesImpl.resolveFoodAttributes(foodCode),
-      getAllTags(categories, foodLocal.tags),
+      getAssociatedFoodPrompts(id),
+      getBrands(id),
+      inheritableAttributesImpl.resolveFoodAttributes(id),
+      getNutrientKCalPer100G(id),
+      portionSizeMethodsImpl.resolveUserPortionSizeMethods(id),
+      getAllTags(categories, food.tags),
     ]);
 
     return {
+      id,
       associatedFoodPrompts,
       brandNames,
-      code: foodRecord.code,
-      englishName: foodRecord.name,
+      code,
+      localeId,
+      englishName: food.englishName,
       kcalPer100g,
-      localName: foodLocal.name,
-      portionSizeMethods,
-      readyMealOption: inheritableAttributes.readyMealOption,
-      reasonableAmount: inheritableAttributes.reasonableAmount,
-      sameAsBeforeOption: inheritableAttributes.sameAsBeforeOption,
+      localName: food.name ?? food.englishName,
       categories,
+      ...inheritableAttributes,
+      portionSizeMethods,
       tags,
     };
   };

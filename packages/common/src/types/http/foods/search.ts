@@ -1,11 +1,10 @@
 import { z } from 'zod';
-
 import { searchSortingAlgorithms } from '@intake24/common/surveys';
-import { localeTranslation } from '@intake24/common/types';
-
+import { recipeFood } from '@intake24/common/types';
 import { paginationMeta } from '../generic';
 
 export const categoryHeader = z.object({
+  id: z.string(),
   code: z.string(),
   name: z.string(),
 });
@@ -13,6 +12,7 @@ export const categoryHeader = z.object({
 export type CategoryHeader = z.infer<typeof categoryHeader>;
 
 export const foodHeader = z.object({
+  id: z.string(),
   code: z.string(),
   name: z.string(),
   searchTerm: z.string().nullish(),
@@ -33,14 +33,12 @@ export const categoryContents = z.object({
   foods: foodHeader.array(),
   subcategories: categoryHeader.array(),
 });
-
 export type CategoryContents = z.infer<typeof categoryContents>;
 
 export const categorySearch = z.object({
   data: foodHeader.array(),
   meta: paginationMeta,
 });
-
 export type CategorySearch = z.infer<typeof categorySearch>;
 
 export const foodSearchQuery = z.object({
@@ -66,26 +64,5 @@ export const surveyFoodSearchQuery = z.object({
 
 export type SurveyFoodSearchQuery = z.infer<typeof surveyFoodSearchQuery>;
 
-export const recipeFoodResponse = z.object({
-  code: z.string(),
-  name: z.string(),
-  localeId: z.string(),
-  recipeWord: z.string(),
-  synonyms: z.object({ synonyms: z.string() }).optional(),
-  steps: z
-    .array(
-      z.object({
-        code: z.string(),
-        name: localeTranslation,
-        description: localeTranslation,
-        order: z.number(),
-        localeId: z.string(),
-        categoryCode: z.string().nullable(),
-        repeatable: z.boolean(),
-        required: z.boolean(),
-      }),
-    )
-    .optional(),
-});
-
+export const recipeFoodResponse = recipeFood;
 export type RecipeFoodResponse = z.infer<typeof recipeFoodResponse>;

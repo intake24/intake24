@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
 import { faker } from '@faker-js/faker';
-import slugify from 'slugify';
 
+import slugify from 'slugify';
 import type {
   CreateAsServedSetInput,
   // LocaleRequest,
@@ -11,22 +11,27 @@ import type {
   NutrientUnitRequest,
 } from '@intake24/common/types/http/admin';
 import { randomString, toStandardUnitId } from '@intake24/common/util';
-import type { StandardUnitCreationAttributes } from '@intake24/db';
 
+import type { StandardUnitCreationAttributes } from '@intake24/db';
 import { downloadImage } from '../util';
 
 function category() {
   return {
-    code: randomString(8),
+    code: randomString(32),
+    localeId: 'en_GB',
+    englishName: faker.word.words(5),
     name: faker.word.words(5),
-    isHidden: faker.datatype.boolean(),
+    simpleName: faker.word.words(5),
+    hidden: faker.datatype.boolean(),
     version: randomUUID(),
   };
 }
 
 function food() {
   return {
-    code: randomString(8),
+    code: randomString(32),
+    localeId: 'en_GB',
+    englishName: faker.word.words(5),
     name: faker.word.words(5),
     version: randomUUID(),
   };
@@ -57,7 +62,6 @@ async function asServedSet(asServedSetId?: string): Promise<CreateAsServedSetInp
   const respondentLanguageId = respLangId ?? faker.location.countryCode();
   const adminLanguageId = adminLangId ?? faker.location.countryCode();
   const countryFlagCode = faker.location.countryCode();
-  const prototypeLocaleId = null;
   const textDirection = 'ltr';
   const foodIndexLanguageBackendId = 'en';
 
@@ -68,7 +72,6 @@ async function asServedSet(asServedSetId?: string): Promise<CreateAsServedSetInp
     respondentLanguageId,
     adminLanguageId,
     countryFlagCode,
-    prototypeLocaleId,
     textDirection,
     foodIndexLanguageBackendId,
   };

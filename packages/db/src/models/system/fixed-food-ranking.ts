@@ -29,13 +29,13 @@ export default class FixedFoodRanking extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.STRING(64),
   })
   declare localeId: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.STRING(64),
   })
   declare foodCode: string;
 

@@ -5,7 +5,6 @@ export interface PkgLocale {
   respondentLanguage: string;
   adminLanguage: string;
   flagCode: string;
-  prototypeLocale: string | null;
   textDirection: 'ltr' | 'rtl';
   foodIndexLanguageBackendId?: string;
 }

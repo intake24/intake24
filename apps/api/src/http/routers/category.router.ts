@@ -14,7 +14,7 @@ export function category() {
         pick(req.query, ['page', 'limit', 'sort', 'search']),
       );
 
-      foods.data = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(localeId, foods.data);
+      foods.data = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(foods.data);
 
       return { status: 200, body: foods };
     },
@@ -26,7 +26,7 @@ export function category() {
         code,
       );
 
-      categoryContents.foods = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(localeId, categoryContents.foods);
+      categoryContents.foods = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(categoryContents.foods);
 
       return { status: 200, body: categoryContents };
     },
@@ -36,7 +36,7 @@ export function category() {
       const categoryContents
         = await req.scope.cradle.categoryContentsService.getRootCategories(localeId);
 
-      categoryContents.foods = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(localeId, categoryContents.foods);
+      categoryContents.foods = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(categoryContents.foods);
 
       return { status: 200, body: categoryContents };
     },
@@ -44,7 +44,7 @@ export function category() {
       const { localeId, code } = params;
 
       const categoryHeader
-        = await req.scope.cradle.categoryContentsService.getCategoryHeader(localeId, null, code);
+        = await req.scope.cradle.categoryContentsService.getCategoryHeader(localeId, code);
 
       return { status: 200, body: categoryHeader };
     },

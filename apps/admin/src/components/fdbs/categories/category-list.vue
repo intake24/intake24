@@ -1,5 +1,5 @@
 <template>
-  <v-card v-bind="{ flat, outlined, tile }">
+  <v-card v-bind="{ border, flat, tile }">
     <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         <slot name="title">
@@ -7,12 +7,27 @@
         </slot>
       </v-toolbar-title>
       <v-spacer />
-      <add-category-dialog
+      <select-resource
         v-if="!disabled"
-        :current-items="items"
-        :locale-id="localeId"
-        @add="add"
-      />
+        :except="items"
+        item-id="code"
+        :label="$t('fdbs.categories._')"
+        :query="{ localeId }"
+        resource="categories"
+        return-object
+        @update:model-value="add"
+      >
+        <template #activator="{ props }">
+          <v-btn color="primary" icon="$add" size="small" :title="$t('fdbs.categories.add')" v-bind="props" />
+        </template>
+        <template #title>
+          {{ $t(`fdbs.categories.title`) }}
+        </template>
+        <template #item="{ item }">
+          <v-list-item-title>{{ item.code }}</v-list-item-title>
+          <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+        </template>
+      </select-resource>
     </v-toolbar>
     <v-list class="list-border py-0">
       <v-list-item v-for="item in items" :key="item.code" link>
@@ -39,73 +54,61 @@
       </v-list-item>
     </v-list>
     <error-list
-      v-if="errors?.has('main.parentCategories')"
+      v-if="errors?.has('parentCategories')"
       class="px-4 pb-2"
-      :errors="errors.get('main.parentCategories')"
+      :errors="errors.get('parentCategories')"
     />
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { CategoryListItem } from './categories';
 import { useVModel } from '@vueuse/core';
-
-import { defineComponent } from 'vue';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
-
 import { ConfirmDialog } from '@intake24/ui';
 import { ErrorList } from '../../forms';
-import AddCategoryDialog from './add-category-dialog.vue';
 
-export default defineComponent({
-  name: 'CategoryList',
-
-  components: { AddCategoryDialog, ConfirmDialog, ErrorList },
-
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    errors: {
-      type: Object as PropType<ReturnUseErrors>,
-    },
-    flat: {
-      type: Boolean,
-    },
-    localeId: {
-      type: String,
-    },
-    outlined: {
-      type: Boolean,
-    },
-    tile: {
-      type: Boolean,
-    },
-    modelValue: {
-      type: Array as PropType<CategoryListItem[]>,
-      required: true,
-    },
+const props = defineProps({
+  border: {
+    type: [Boolean, String, Number],
   },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const items = useVModel(props, 'modelValue', emit, {
-      passive: true,
-      deep: true,
-    });
-
-    const add = (categories: CategoryListItem[]) => {
-      items.value.push(...categories);
-    };
-
-    const remove = (code: string) => {
-      items.value = items.value.filter(item => item.code !== code);
-    };
-
-    return { add, items, remove };
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  errors: {
+    type: Object as PropType<ReturnUseErrors>,
+  },
+  flat: {
+    type: Boolean,
+    default: true,
+  },
+  localeId: {
+    type: String,
+  },
+  tile: {
+    type: Boolean,
+  },
+  modelValue: {
+    type: Array as PropType<CategoryListItem[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const items = useVModel(props, 'modelValue', emit, {
+  passive: true,
+  deep: true,
+});
+
+function add(categories: CategoryListItem) {
+  items.value.push(categories);
+}
+
+function remove(code: string) {
+  items.value = items.value.filter(item => item.code !== code);
+}
 </script>

@@ -71,6 +71,7 @@ const associatedFoodsPromptProps = computed<Prompts['associated-foods-prompt']>(
 }));
 
 const associatedFoodPrompts = computed(() => ([{
+  id: props.prompt.id,
   categoryCode: props.prompt.categoryCode,
   promptText: props.prompt.promptText,
   linkAsMain: false,
