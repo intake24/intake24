@@ -125,11 +125,11 @@ const foodIndex = {
    * @returns { RecipeFood }
    */
   // TODO: shouldn't be here in index.ts
-  async getRecipeFood(localeId: string, code: string): Promise<RecipeFood> {
+  async getRecipeFood(localeCode: string, code: string): Promise<RecipeFood> {
     if (indexReady) {
       // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
       const result = await RecipeFood.findOne({
-        where: { localeId, code },
+        where: { localeId: localeCode, code },
         attributes: ['code', 'name', 'localeId', 'recipeWord', 'synonymsId'],
         include: [
           {
@@ -155,10 +155,10 @@ const foodIndex = {
         order: [['steps', 'order', 'ASC']],
       });
 
-      if (result)
-        return result;
-      else
+      if (!result)
         throw new NotFoundError('Recipe food not found');
+
+      return result;
     }
     throw new IndexNotReadyError();
   },

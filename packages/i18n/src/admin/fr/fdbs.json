@@ -25,56 +25,25 @@
     "alreadyIncluded": "La catégorie '{code}' est déjà présente dans la liste actuelle.",
     "none": "Pas de catégorie trouvée pour cette recherche.",
     "copy": "Copy category",
-    "global": {
-      "_": "Paramètre des catégories globales",
-      "code": "Code de la catégorie",
-      "name": "Nom anglais",
-      "isHidden": "Est caché"
-    },
-    "local": {
-      "_": "Paramètres des catégories régionales",
-      "id": "Code de la catégorie régionale",
-      "name": "Nom régional",
-      "altNames": "Autres noms",
-      "tags": "Tags"
-    },
-    "attributes": {
-      "_": "Attributs de la catégorie"
-    },
-    "parentCategories": {
-      "_": "Catégories parent"
-    }
+    "id": "Identifiant de la catégorie",
+    "code": "Code de la catégorie",
+    "hidden": "Est caché",
+    "englishName": "Nom anglais",
+    "name": "Nom régional",
+    "altNames": "Autres noms",
+    "tags": "Tags"
   },
   "foods": {
     "_": "Aliment",
     "title": "Aliments",
     "add": "Add food",
     "copy": "Copy food",
-    "global": {
-      "_": "Paramètres pour les aliments globaux",
-      "code": "Code de l'aliment",
-      "name": "Nom anglais"
-    },
-    "local": {
-      "_": "Paramètres pour les aliments régionaux",
-      "id": "Identifiant régional de l'aliment",
-      "name": "Nom régional",
-      "altNames": "Autres noms",
-      "tags": "Tags"
-    },
-    "attributes": {
-      "_": "Attributs des aliments"
-    },
-    "parentCategories": {
-      "_": "Catégories parent"
-    }
-  },
-  "locales": {
-    "_": "Use in locales",
-    "title": "Use in locales",
-    "description": "Food is included in {count} locales.",
-    "add": "Add locale",
-    "remove": "Remove locale"
+    "id": "Identifiant de l'aliment",
+    "code": "Code de l'aliment",
+    "engishName": "Nom anglais",
+    "name": "Nom régional",
+    "altNames": "Autres noms",
+    "tags": "Tags"
   },
   "attributes": {
     "_": "Attributs",

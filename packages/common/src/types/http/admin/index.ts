@@ -18,6 +18,7 @@ export * from './nutrient-types';
 export * from './nutrient-units';
 export * from './permissions';
 export * from './personal-access-tokens';
+export * from './portion-size-methods';
 export * from './references';
 export * from './roles';
 export * from './securables';

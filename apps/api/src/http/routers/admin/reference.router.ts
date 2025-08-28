@@ -46,8 +46,11 @@ export function reference() {
     categories: {
       middleware: [anyPermission('locales')],
       handler: async ({ query }) => {
+        const { localeId, ...rest } = query;
+
         const categories = await Category.paginate({
-          query,
+          query: rest,
+          where: { localeId },
           attributes: ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],
@@ -129,8 +132,11 @@ export function reference() {
     foods: {
       middleware: [anyPermission('locales')],
       handler: async ({ query }) => {
+        const { localeId, ...rest } = query;
+
         const foods = await Food.paginate({
-          query,
+          query: rest,
+          where: { localeId },
           attributes: ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],

@@ -13,7 +13,7 @@ import {
   Database,
   databaseConfig,
   Food,
-  FoodLocal,
+
   FoodNutrient,
   FoodPortionSizeMethod,
   FoodsNutrientType,
@@ -276,168 +276,157 @@ async function findPortionSizeImages(
 
   while (true) {
     const currentBatch = await Food.findAll({
+      where: {
+        localeId: config.locale,
+        ...(config.foodFilter.length > 0 ? { code: config.foodFilter } : {}),
+      },
       include: [
         {
-          model: FoodLocal,
-          as: 'locals',
-          where: { localeId: config.locale },
+          model: FoodPortionSizeMethod,
+          separate: true,
+          required: false,
+        },
+        {
+          model: FoodNutrient,
+          separate: true,
           include: [
             {
-              model: FoodPortionSizeMethod,
-              separate: true,
-              required: false,
-            },
-            {
-              model: FoodNutrient,
-              separate: true,
-              include: [
-                {
-                  model: NutrientTableRecord,
-                  include: [NutrientTableRecordNutrient],
-                },
-              ],
+              model: NutrientTableRecord,
+              include: [NutrientTableRecordNutrient],
             },
           ],
         },
       ],
-      where:
-        config.foodFilter.length > 0
-          ? {
-              code: config.foodFilter,
-            }
-          : undefined,
       order: ['code'],
       limit: config.batchSize,
       offset,
     });
 
     for (let i = 0; i < currentBatch.length; ++i) {
-      const local = currentBatch[i]?.locals?.[0];
+      const food = currentBatch[i];
 
-      if (local) {
-        console.log(currentBatch[i].code, local.name);
+      console.log(currentBatch[i].code, food.name);
 
-        const nutrientMapping = local.nutrientMappings?.[0];
+      const nutrientMapping = food.nutrientMappings?.[0];
 
-        if (!nutrientMapping) {
-          console.log(`Nutrient mapping is undefined for food ${currentBatch[i].code}, skipping`);
-          continue;
-        }
+      if (!nutrientMapping) {
+        console.log(`Nutrient mapping is undefined for food ${currentBatch[i].code}, skipping`);
+        continue;
+      }
 
-        if (!local.portionSizeMethods) {
-          console.log(
-            `Portion size methods are undefined for food ${currentBatch[i].code}, skipping`,
-          );
-          continue;
-        }
+      if (!food.portionSizeMethods) {
+        console.log(
+          `Portion size methods are undefined for food ${currentBatch[i].code}, skipping`,
+        );
+        continue;
+      }
 
-        const energyKcalRecord
+      const energyKcalRecord
           = nutrientMapping.nutrientTableRecord?.getNutrientByType(energyKcalNutrientType);
 
-        if (!energyKcalRecord) {
-          console.log(`No energy (kcal) available for food ${currentBatch[i].code}, skipping`);
-          continue;
-        }
-
-        console.log(
-          nutrientMapping.nutrientTableRecord?.nutrientTableId,
-          nutrientMapping.nutrientTableRecord?.nutrientTableRecordId,
-        );
-        console.log(`${energyKcalRecord.unitsPer100g} calories per 100g`);
-
-        const asServedImages: ImageDataWithNutrients<AsServedImageData>[] = [];
-        const guideImages: ImageDataWithNutrients<GuideImageData>[] = [];
-
-        for (const psm of local.portionSizeMethods) {
-          const targetWeight = (config.energyValueKcal * 100.0) / energyKcalRecord.unitsPer100g;
-
-          if (psm.method === 'as-served') {
-            const asServedSetId = (psm.parameters as PortionSizeParameters['as-served'])
-              .servingImageSet;
-
-            if (!asServedSetId) {
-              console.log(
-                `Portion size method ${psm.id} for ${local.foodCode} has no "serving-image-set" parameter`,
-              );
-              continue;
-            }
-
-            if (
-              config.portionSizeFilter.length > 0
-              && !config.portionSizeFilter.includes(asServedSetId)
-            ) {
-              continue;
-            }
-
-            const asServedImageData = asServedHelper.findClosestPortionSize(
-              asServedSetId,
-              targetWeight / psm.conversionFactor,
-            );
-
-            if (asServedImageData) {
-              asServedImages.push({
-                imageData: asServedImageData,
-                adjustedWeight: asServedImageData.imageWeight * psm.conversionFactor,
-                nutrients: calculateNutrients(
-                  asServedImageData.imageWeight * psm.conversionFactor,
-                  nutrientIds,
-                  nutrientMapping.nutrientTableRecord!,
-                ),
-              });
-            }
-          }
-
-          if (psm.method === 'guide-image') {
-            const guideImageId = (psm.parameters as PortionSizeParameters['guide-image'])
-              .guideImageId;
-
-            if (!guideImageId) {
-              console.log(
-                `Portion size method ${psm.id} for ${local.foodCode} has no "guide-image-id" parameter`,
-              );
-              continue;
-            }
-
-            if (
-              config.portionSizeFilter.length > 0
-              && !config.portionSizeFilter.includes(guideImageId)
-            ) {
-              continue;
-            }
-
-            const guideImageData = guideHelper.findClosestPortionSize(
-              guideImageId,
-              targetWeight / psm.conversionFactor,
-            );
-
-            if (guideImageData) {
-              guideImages.push({
-                imageData: guideImageData,
-                adjustedWeight: guideImageData.imageWeight * psm.conversionFactor,
-                nutrients: calculateNutrients(
-                  guideImageData.imageWeight * psm.conversionFactor,
-                  nutrientIds,
-                  nutrientMapping.nutrientTableRecord!,
-                ),
-              });
-            }
-          }
-        }
-
-        portionSizeImages.push({
-          food: {
-            code: local.foodCode,
-            name: local.name,
-          },
-          composition: {
-            fct: nutrientMapping.nutrientTableRecord!.nutrientTableId,
-            recordId: nutrientMapping.nutrientTableRecord!.nutrientTableRecordId,
-            recordName: nutrientMapping.nutrientTableRecord!.name,
-          },
-          asServedImages,
-          guideImages,
-        });
+      if (!energyKcalRecord) {
+        console.log(`No energy (kcal) available for food ${currentBatch[i].code}, skipping`);
+        continue;
       }
+
+      console.log(
+        nutrientMapping.nutrientTableRecord?.nutrientTableId,
+        nutrientMapping.nutrientTableRecord?.nutrientTableRecordId,
+      );
+      console.log(`${energyKcalRecord.unitsPer100g} calories per 100g`);
+
+      const asServedImages: ImageDataWithNutrients<AsServedImageData>[] = [];
+      const guideImages: ImageDataWithNutrients<GuideImageData>[] = [];
+
+      for (const psm of food.portionSizeMethods) {
+        const targetWeight = (config.energyValueKcal * 100.0) / energyKcalRecord.unitsPer100g;
+
+        if (psm.method === 'as-served') {
+          const asServedSetId = (psm.parameters as PortionSizeParameters['as-served'])
+            .servingImageSet;
+
+          if (!asServedSetId) {
+            console.log(
+              `Portion size method ${psm.id} for ${food.code} has no "serving-image-set" parameter`,
+            );
+            continue;
+          }
+
+          if (
+            config.portionSizeFilter.length > 0
+            && !config.portionSizeFilter.includes(asServedSetId)
+          ) {
+            continue;
+          }
+
+          const asServedImageData = asServedHelper.findClosestPortionSize(
+            asServedSetId,
+            targetWeight / psm.conversionFactor,
+          );
+
+          if (asServedImageData) {
+            asServedImages.push({
+              imageData: asServedImageData,
+              adjustedWeight: asServedImageData.imageWeight * psm.conversionFactor,
+              nutrients: calculateNutrients(
+                asServedImageData.imageWeight * psm.conversionFactor,
+                nutrientIds,
+                nutrientMapping.nutrientTableRecord!,
+              ),
+            });
+          }
+        }
+
+        if (psm.method === 'guide-image') {
+          const guideImageId = (psm.parameters as PortionSizeParameters['guide-image'])
+            .guideImageId;
+
+          if (!guideImageId) {
+            console.log(
+              `Portion size method ${psm.id} for ${food.code} has no "guide-image-id" parameter`,
+            );
+            continue;
+          }
+
+          if (
+            config.portionSizeFilter.length > 0
+            && !config.portionSizeFilter.includes(guideImageId)
+          ) {
+            continue;
+          }
+
+          const guideImageData = guideHelper.findClosestPortionSize(
+            guideImageId,
+            targetWeight / psm.conversionFactor,
+          );
+
+          if (guideImageData) {
+            guideImages.push({
+              imageData: guideImageData,
+              adjustedWeight: guideImageData.imageWeight * psm.conversionFactor,
+              nutrients: calculateNutrients(
+                guideImageData.imageWeight * psm.conversionFactor,
+                nutrientIds,
+                nutrientMapping.nutrientTableRecord!,
+              ),
+            });
+          }
+        }
+      }
+
+      portionSizeImages.push({
+        food: {
+          code: food.code,
+          name: food.name ?? food.englishName,
+        },
+        composition: {
+          fct: nutrientMapping.nutrientTableRecord!.nutrientTableId,
+          recordId: nutrientMapping.nutrientTableRecord!.nutrientTableRecordId,
+          recordName: nutrientMapping.nutrientTableRecord!.name,
+        },
+        asServedImages,
+        guideImages,
+      });
     }
 
     if (currentBatch.length === 0)

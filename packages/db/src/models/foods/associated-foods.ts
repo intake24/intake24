@@ -6,17 +6,13 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
-import { Category, Food, FoodsLocale } from '@intake24/db';
+import { Category, Food } from '@intake24/db';
 
 import BaseModel from '../model';
 
-@Scopes(() => ({
-  locale: { include: [{ model: FoodsLocale }] },
-  category: { include: [{ model: Category }] },
-}))
 @Table({
   modelName: 'AssociatedFood',
   tableName: 'associated_foods',
@@ -35,31 +31,21 @@ export default class AssociatedFood extends BaseModel<
   })
   declare id: CreationOptional<string>;
 
-  @ForeignKey(() => Food)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  declare foodCode: string;
+  declare foodId: string;
 
-  @ForeignKey(() => FoodsLocale)
-  @Column({
-    allowNull: false,
-    type: DataType.STRING(16),
-  })
-  declare localeId: string;
-
-  @ForeignKey(() => Food)
   @Column({
     allowNull: true,
-    type: DataType.STRING(8),
+    type: DataType.STRING(64),
   })
   declare associatedFoodCode: string | null;
 
-  @ForeignKey(() => Category)
   @Column({
     allowNull: true,
-    type: DataType.STRING(8),
+    type: DataType.STRING(64),
   })
   declare associatedCategoryCode: string | null;
 
@@ -109,16 +95,13 @@ export default class AssociatedFood extends BaseModel<
   })
   declare orderBy: string;
 
-  @BelongsTo(() => Food, 'foodCode')
+  @BelongsTo(() => Food, 'foodId')
   declare food?: Food;
 
-  @BelongsTo(() => FoodsLocale, 'localeId')
-  declare locale?: NonAttribute<FoodsLocale>;
-
-  @BelongsTo(() => Category, 'associatedCategoryCode')
+  @BelongsTo(() => Category, { foreignKey: 'associatedCategoryCode', targetKey: 'code', constraints: false })
   declare associatedCategory?: NonAttribute<Category>;
 
-  @BelongsTo(() => Food, 'associatedFoodCode')
+  @BelongsTo(() => Food, { foreignKey: 'associatedFoodCode', targetKey: 'code', constraints: false })
   declare associatedFood?: NonAttribute<Food>;
 }
 

@@ -27,13 +27,13 @@ export default class PACoOccurrence extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(50),
+    type: DataType.STRING(64),
   })
   declare antecedentFoodCode: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(50),
+    type: DataType.STRING(64),
   })
   declare consequentFoodCode: string;
 

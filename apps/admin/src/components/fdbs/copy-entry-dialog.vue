@@ -36,7 +36,7 @@
                 v-model="data.code"
                 :error-messages="errors.get('code')"
                 hide-details="auto"
-                :label="$t(`fdbs.${type}.global.code`)"
+                :label="$t(`fdbs.${type}.code`)"
                 name="code"
                 variant="outlined"
               />
@@ -46,7 +46,7 @@
                 v-model="data.name"
                 :error-messages="errors.get('name')"
                 hide-details="auto"
-                :label="$t(`fdbs.${type}.global.name`)"
+                :label="$t(`fdbs.${type}.name`)"
                 name="name"
                 variant="outlined"
               />
@@ -77,12 +77,12 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from '@intake24/admin/composables';
-import type { FoodLocalCopyInput } from '@intake24/common/types/http/admin';
+import type { FoodCopyInput } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 import { SelectResource } from '../dialogs';
 
-export type CopyEntityForm = FoodLocalCopyInput;
+export type CopyEntityForm = FoodCopyInput;
 
 export default defineComponent({
   name: 'CopyEntryDialog',

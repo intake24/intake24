@@ -2,14 +2,13 @@ import type {
   Attributes,
   CreationAttributes,
   CreationOptional,
-  ForeignKey,
+  ForeignKey as ForeignKeyType,
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
-import { FoodLocal, ProcessedImage } from '.';
+import { Food, ProcessedImage } from '.';
 import BaseModel from '../model';
 
 @Scopes(() => ({
@@ -37,13 +36,16 @@ export default class FoodThumbnailImage extends BaseModel<
     allowNull: false,
     type: DataType.BIGINT,
   })
-  declare foodLocalId: ForeignKey<FoodLocal['id']>;
+  declare foodId: ForeignKeyType<Food['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  declare imageId: ForeignKey<ProcessedImage['id']>;
+  declare imageId: ForeignKeyType<ProcessedImage['id']>;
+
+  @BelongsTo(() => Food, 'foodId')
+  declare food?: NonAttribute<Food>;
 
   @BelongsTo(() => ProcessedImage, 'imageId')
   declare image?: NonAttribute<ProcessedImage>;

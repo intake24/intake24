@@ -2,9 +2,7 @@
 import '@intake24/api/bootstrap';
 
 import type InterpretedPhrase from '../interpreted-phrase';
-
 import { parentPort as parentPortNullable, workerData } from 'node:worker_threads';
-
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import type { PhraseMatchResult, PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
@@ -15,13 +13,8 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import { logger as servicesLogger } from '@intake24/common-backend';
 import { Database, FoodsLocale, RecipeFood, SynonymSet } from '@intake24/db';
-
-import {
-  fetchLocalCategories,
-  fetchLocalFoods,
-  fetchRecipeFoodsList,
-} from './food-data';
-import type { LocalCategoryData } from './food-data';
+import type { CategoryData } from './food-data';
+import { fetchCategories, fetchFoods, fetchRecipeFoodsList } from './food-data';
 
 if (parentPortNullable === null)
   throw new Error('This file can only be run as a worker thread');
@@ -96,15 +89,15 @@ async function getLanguageBackendId(localeId: string): Promise<string> {
 // Building index for each locale
 async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
   const [
-    localFoods,
-    allLocalCategories,
+    foods,
+    allCategories,
     synonymSets,
     recipeFoodsSynomSet,
     languageBackendId,
     recipeFoodslist,
   ] = await Promise.all([
-    fetchLocalFoods(localeId),
-    fetchLocalCategories(localeId),
+    fetchFoods(localeId),
+    fetchCategories(localeId),
     getSynonymSets(localeId),
     getRecipeFoodsSynomSets(localeId),
     getLanguageBackendId(localeId),
@@ -119,32 +112,32 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     );
   }
 
-  const parentCategoryIndex = new ParentCategoryIndex(localFoods, allLocalCategories, logger);
+  const parentCategoryIndex = new ParentCategoryIndex(foods, allCategories, logger);
 
-  const localCategories = allLocalCategories.filter(category => parentCategoryIndex.nonEmptyCategories.has(category.code));
+  const categories = allCategories.filter(category => parentCategoryIndex.nonEmptyCategories.has(category.code));
 
   const foodDescriptions = new Array<PhraseWithKey<string>>();
 
-  for (const food of localFoods) {
+  for (const food of foods) {
     if (!food.name)
       continue;
 
-    foodDescriptions.push({ phrase: food.name, key: food.code });
+    foodDescriptions.push({ phrase: food.name, key: food.code, id: food.id });
 
     const altNames = food.altNames[languageBackend.languageCode];
 
     if (altNames !== undefined) {
-      for (const name of altNames) foodDescriptions.push({ phrase: name, key: food.code });
+      for (const name of altNames) foodDescriptions.push({ phrase: name, key: food.code, id: food.id });
     }
   }
 
   const categoryDescriptions = new Array<PhraseWithKey<string>>();
 
-  for (const category of localCategories) {
-    if (!category.name || category.isHidden)
+  for (const category of categories) {
+    if (!category.name || category.hidden)
       continue;
 
-    categoryDescriptions.push({ phrase: category.name, key: category.code });
+    categoryDescriptions.push({ phrase: category.name, key: category.code, id: category.id });
   }
 
   const foodIndex = new PhraseIndex<string>(
@@ -192,6 +185,7 @@ async function matchRecipeFoods(
       word.interpretations.forEach((interpretation) => {
         if (recipeFood[1].synonyms.has(interpretation.dictionaryWord) || asTypedExactMatch) {
           return recipeFoodHeaders.push({
+            id: recipeFood[1].id,
             code: recipeFood[1].code,
             name: recipeFood[1].description,
           });
@@ -212,7 +206,7 @@ async function matchRecipeFoods(
 
 function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchResult<string>[], categoryResults: PhraseMatchResult<string>[], transitiveLimit: number): PhraseMatchResult<string>[] {
   const foodCodes = foodResults.map(matchResult => matchResult.key);
-  const relevantCategories: Map<string, LocalCategoryData> = new Map<string, LocalCategoryData>();
+  const relevantCategories: Map<string, CategoryData> = new Map<string, CategoryData>();
 
   for (const foodCode of foodCodes) {
     const transitiveParentCategories = index.parentCategoryIndex.getFoodTransitiveParentCategories(foodCode, transitiveLimit);
@@ -226,6 +220,7 @@ function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchRe
   }
 
   return [...relevantCategories.entries()].map(([categoryCode, categoryData]) => ({
+    id: categoryData.id,
     key: categoryCode,
     phrase: categoryData.name,
     quality: 0,

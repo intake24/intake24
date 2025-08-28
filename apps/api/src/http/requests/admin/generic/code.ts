@@ -8,11 +8,11 @@ export default (param: string): ValidationMiddleware[] => {
     checkSchema({
       [param]: {
         in: ['params'],
-        errorMessage: typeErrorMessage('string.max', { max: 16 }),
+        errorMessage: typeErrorMessage('string.max', { max: 64 }),
         isString: true,
         isLength: {
           options: {
-            max: 16,
+            max: 64,
           },
         },
       },

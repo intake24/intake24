@@ -46,8 +46,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 
 import { useHttp } from '@intake24/admin/services';
@@ -68,159 +68,142 @@ export type TreeItem = ((CategoryListEntry & { children: TreeItem[] }) | FoodLis
   type: string;
 };
 
-export default defineComponent({
-  name: 'FoodExplorer',
+defineOptions({ name: 'FoodExplorer' });
 
-  components: { AddFoodDialog, FoodSearch },
-
-  props: {
-    localeId: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  localeId: {
+    type: String,
+    required: true,
   },
+});
 
-  setup(props) {
-    const router = useRouter();
-    const route = useRoute();
-    const http = useHttp();
-    const { i18n } = useI18n();
+const router = useRouter();
+const route = useRoute();
+const http = useHttp();
+const { i18n } = useI18n();
 
-    const activated = ref<string[]>([]);
-    const opened = ref<string[]>([]);
-    const items = ref<TreeItem[]>([]);
-    const showGlobalName = ref<boolean>(false);
-    const activatedEntryId = ref<string | null>(null);
-    const activatedEntryCategories = ref<string[]>([]);
+const activated = ref<string[]>([]);
+const opened = ref<string[]>([]);
+const items = ref<TreeItem[]>([]);
+const showGlobalName = ref<boolean>(false);
+const activatedEntryId = ref<string | null>(null);
+const activatedEntryCategories = ref<string[]>([]);
 
-    const itemText = computed(() => (showGlobalName.value ? 'englishName' : 'name'));
+const itemText = computed(() => (showGlobalName.value ? 'englishName' : 'name'));
 
-    const fetchRootCategories = async () => {
-      const { data } = await http.get<RootCategoriesResponse>(
-        `admin/fdbs/${props.localeId}/categories/root`,
-      );
+async function fetchRootCategories() {
+  const { data } = await http.get<RootCategoriesResponse>(
+    `admin/fdbs/${props.localeId}/categories/root`,
+  );
 
-      const noCategory: TreeItem = {
-        key: randomString(8),
-        type: 'categories',
-        id: 'no-category',
-        code: 'no-category',
-        localeId: props.localeId,
-        name: i18n.t('fdbs.categories.noCategory'),
-        englishName: i18n.t('fdbs.categories.noCategory'),
-        isHidden: false,
-        children: [],
-      };
+  const noCategory: TreeItem = {
+    key: randomString(8),
+    type: 'categories',
+    id: 'no-category',
+    code: 'no-category',
+    localeId: props.localeId,
+    name: i18n.t('fdbs.categories.noCategory'),
+    englishName: i18n.t('fdbs.categories.noCategory'),
+    hidden: false,
+    children: [],
+  };
 
-      items.value = [
-        noCategory,
-        ...data.map(category => ({
-          ...category,
-          key: randomString(8),
-          type: 'categories',
-          children: [],
-        })),
-      ];
-    };
+  items.value = [
+    noCategory,
+    ...data.map(category => ({
+      ...category,
+      key: randomString(8),
+      type: 'categories',
+      children: [],
+    })),
+  ];
+}
 
-    const fetchCategoryContent = async (category: TreeItem) => {
-      const {
-        data: { categories, foods },
-      } = await http.get<CategoryContentsResponse>(
-        `admin/fdbs/${props.localeId}/categories/${category.id}/contents`,
-      );
+async function fetchCategoryContent(category: TreeItem) {
+  const {
+    data: { categories, foods },
+  } = await http.get<CategoryContentsResponse>(
+    `admin/fdbs/${props.localeId}/categories/${category.id}/contents`,
+  );
 
-      if (!('children' in category))
-        return;
+  if (!('children' in category))
+    return;
 
-      category.children = [];
-      category.children.push(
-        ...categories.map(item => ({
-          ...item,
-          key: randomString(8),
-          type: 'categories',
-          children: [],
-        })),
-        ...foods.map(item => ({
-          ...item,
-          key: randomString(8),
-          type: 'foods',
-        })),
-      );
-    };
+  category.children.push(
+    ...categories.map(item => ({
+      ...item,
+      key: randomString(8),
+      type: 'categories',
+      children: [],
+    })),
+    ...foods.map(item => ({
+      ...item,
+      key: randomString(8),
+      type: 'foods',
+    })),
+  );
+}
 
-    const openItem = async (item: TreeItem) => {
-      if (activatedEntryId.value === item.id)
-        return;
+async function openItem(item: TreeItem) {
+  if (activatedEntryId.value === item.id)
+    return;
 
-      activatedEntryId.value = item.id;
-      activatedEntryCategories.value = [];
+  activatedEntryId.value = item.id;
+  activatedEntryCategories.value = [];
 
-      await router.push({
-        name: `fdbs-${item.type}`,
-        params: { id: props.localeId, entryId: item.id },
-      });
-    };
+  await router.push({
+    name: `fdbs-${item.type}`,
+    params: { id: props.localeId, entryId: item.id },
+  });
+}
 
-    const findActiveInChildren = async (children: TreeItem[]) => {
-      if (!children.length)
-        return;
+async function findActiveInChildren(children: TreeItem[]) {
+  if (!children.length)
+    return;
 
-      for (const child of children) {
-        if (activatedEntryId.value === child.id) {
-          activated.value = [child.key];
-          return true;
-        }
+  for (const child of children) {
+    if (activatedEntryId.value === child.id) {
+      activated.value = [child.key];
+      return true;
+    }
 
-        if (activatedEntryCategories.value.includes(child.code)) {
-          await fetchCategoryContent(child);
-          opened.value.push(child.key);
+    if (activatedEntryCategories.value.includes(child.id)) {
+      await fetchCategoryContent(child);
+      opened.value.push(child.key);
 
-          if (!('children' in child) || !child.children.length)
-            continue;
+      if (!('children' in child) || !child.children.length)
+        continue;
 
-          const found = await findActiveInChildren(child.children);
-          if (found)
-            return true;
-        }
-      }
-    };
+      const found = await findActiveInChildren(child.children);
+      if (found)
+        return true;
+    }
+  }
+}
 
-    const findActiveInTree = async (entryId: string, type: string) => {
-      if (!['categories', 'foods'].includes(type))
-        return;
+async function findActiveInTree(entryId: string, type: string) {
+  if (!['categories', 'foods'].includes(type))
+    return;
 
-      const { data } = await http.get<{ categories: string[] }>(
-        `admin/fdbs/${props.localeId}/${type}/${entryId}/categories`,
-      );
+  const { data } = await http.get<{ categories: string[] }>(
+    `admin/fdbs/${props.localeId}/${type}/${entryId}/categories`,
+  );
 
-      activatedEntryId.value = entryId;
-      activatedEntryCategories.value = data.categories.reverse();
+  activatedEntryId.value = entryId;
+  activatedEntryCategories.value = data.categories.reverse();
 
-      await findActiveInChildren(items.value);
-    };
+  await findActiveInChildren(items.value);
+}
 
-    onBeforeRouteUpdate((to, from, next) => {
-      if (to.params.entryId !== activatedEntryId.value)
-        findActiveInTree(to.params.entryId?.toString(), to.meta.module.current);
+onBeforeRouteUpdate((to, from, next) => {
+  if (to.params.entryId !== activatedEntryId.value)
+    findActiveInTree(to.params.entryId?.toString(), to.meta.module.current);
 
-      next();
-    });
+  next();
+});
 
-    onMounted(async () => {
-      await fetchRootCategories();
-      await findActiveInTree(route.params.entryId?.toString(), route.meta.module.current);
-    });
-
-    return {
-      fetchCategoryContent,
-      items,
-      itemText,
-      opened,
-      openItem,
-      activated,
-      showGlobalName,
-    };
-  },
+onMounted(async () => {
+  await fetchRootCategories();
+  await findActiveInTree(route.params.entryId?.toString(), route.meta.module.current);
 });
 </script>

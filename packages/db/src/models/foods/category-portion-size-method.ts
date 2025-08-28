@@ -2,7 +2,7 @@ import type {
   Attributes,
   CreationAttributes,
   CreationOptional,
-  ForeignKey,
+  ForeignKey as ForeignKeyType,
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,
@@ -12,7 +12,7 @@ import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
 
 import BaseModel from '../model';
-import CategoryLocal from './category-local';
+import Category from './category';
 
 @Table({
   modelName: 'CategoryPortionSizeMethod',
@@ -36,7 +36,7 @@ export default class CategoryPortionSizeMethod extends BaseModel<
     allowNull: false,
     type: DataType.BIGINT,
   })
-  declare categoryLocalId: ForeignKey<CategoryLocal['id']>;
+  declare categoryId: ForeignKeyType<Category['id']>;
 
   @Column({
     allowNull: false,
@@ -81,8 +81,8 @@ export default class CategoryPortionSizeMethod extends BaseModel<
     this.setDataValue('parameters', JSON.stringify(value ?? {}));
   }
 
-  @BelongsTo(() => CategoryLocal, 'categoryLocalId')
-  declare categoryLocal?: NonAttribute<CategoryLocal>;
+  @BelongsTo(() => Category, 'categoryId')
+  declare category?: NonAttribute<Category>;
 }
 
 export type CategoryPortionSizeMethodAttributes = Attributes<CategoryPortionSizeMethod>;

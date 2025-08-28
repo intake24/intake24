@@ -5,7 +5,7 @@ import { permission } from '@intake24/api/http/middleware';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { imageMulterFile } from '@intake24/common/types/http/admin/source-images';
-import { FoodLocal } from '@intake24/db';
+import { Food } from '@intake24/db';
 
 export function foodThumbnailImages() {
   const upload = multer({ dest: ioc.cradle.fsConfig.local.uploads });
@@ -31,12 +31,12 @@ export function foodThumbnailImages() {
           throw ValidationError.from({ path: 'image', i18n: { type: 'file._' } });
         }
 
-        const foodLocal = await FoodLocal.findOne({ where: { localeId, foodCode } });
+        const food = await Food.findOne({ where: { localeId, code: foodCode } });
 
-        if (foodLocal === null)
+        if (!food)
           return { status: 404 as const, body: undefined };
 
-        await foodThumbnailImageService.createImage(user.userId, foodLocal.id, res.data);
+        await foodThumbnailImageService.createImage(user.userId, food.id, res.data);
 
         return { status: 200 as const, body: undefined };
       },

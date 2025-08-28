@@ -19,7 +19,6 @@ export async function locales({ kyselyDb }: ResourceOps) {
         'respondentLanguageId',
         'adminLanguageId',
         'countryFlagCode',
-        'prototypeLocaleId',
         'textDirection',
         'foodIndexEnabled',
         'foodIndexLanguageBackendId',

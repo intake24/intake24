@@ -6,16 +6,12 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import { Food, FoodsLocale } from '@intake24/db';
+import { Food } from '@intake24/db';
 
 import BaseModel from '../model';
 
-@Scopes(() => ({
-  locale: { include: [{ model: FoodsLocale }] },
-  food: { include: [{ model: Food }] },
-}))
 @Table({
   modelName: 'Brand',
   tableName: 'brands',
@@ -34,19 +30,11 @@ export default class Brand extends BaseModel<
   })
   declare id: CreationOptional<string>;
 
-  @ForeignKey(() => Food)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  declare foodCode: string;
-
-  @ForeignKey(() => FoodsLocale)
-  @Column({
-    allowNull: false,
-    type: DataType.STRING(16),
-  })
-  declare localeId: string;
+  declare foodId: string;
 
   @Column({
     allowNull: false,
@@ -54,11 +42,8 @@ export default class Brand extends BaseModel<
   })
   declare name: string;
 
-  @BelongsTo(() => Food, 'foodCode')
+  @BelongsTo(() => Food, 'foodId')
   declare food?: NonAttribute<Food>;
-
-  @BelongsTo(() => FoodsLocale, 'localeId')
-  declare locale?: NonAttribute<FoodsLocale>;
 }
 
 export type BrandAttributes = Attributes<Brand>;

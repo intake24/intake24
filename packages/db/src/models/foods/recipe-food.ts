@@ -49,7 +49,7 @@ export default class RecipeFood extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.STRING(64),
     unique: false,
   })
   declare code: string;
@@ -62,7 +62,7 @@ export default class RecipeFood extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.STRING(64),
   })
   declare localeId: string;
 
