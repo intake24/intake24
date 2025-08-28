@@ -1,7 +1,9 @@
 export class PkgConstants {
   public static readonly IMAGE_DIRECTORY_NAME = 'images';
   public static readonly PORTION_SIZE_DIRECTORY_NAME = 'portion-size';
+  public static readonly FOODS_FILE_NAME = 'foods.json';
   public static readonly GLOBAL_FOODS_FILE_NAME = 'global-foods.json';
+  public static readonly CATEGORIES_FILE_NAME = 'categories.json';
   public static readonly GLOBAL_CATEGORIES_FILE_NAME = 'global-categories.json';
   public static readonly LOCALES_FILE_NAME = 'locales.json';
   public static readonly LOCAL_FOODS_FILE_NAME = 'local-foods.json';

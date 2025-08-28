@@ -97,10 +97,10 @@
                 <v-card-title>{{ $t('fdbs.associatedFoods.association') }}</v-card-title>
                 <select-resource
                   v-model="dialog.item.associatedCategoryCode"
-                  :initial-item="dialog.item.associatedCategory"
                   item-id="code"
                   :label="$t('fdbs.categories._')"
                   name="associatedCategoryCode"
+                  :query="{ localeId }"
                   resource="categories"
                   @update:model-value="clearFood"
                 >
@@ -114,10 +114,10 @@
                 </select-resource>
                 <select-resource
                   v-model="dialog.item.associatedFoodCode"
-                  :initial-item="dialog.item.associatedFood"
                   item-id="code"
                   :label="$t('fdbs.foods._')"
                   name="associatedFoodCode"
+                  :query="{ localeId }"
                   resource="foods"
                   @update:model-value="clearCategory"
                 >
@@ -209,7 +209,7 @@ const props = defineProps({
     type: Object as PropType<ReturnUseErrors>,
     required: true,
   },
-  foodCode: {
+  foodId: {
     type: String,
     required: true,
   },
@@ -229,7 +229,7 @@ const { translate } = useI18n();
 
 function newItem() {
   return {
-    ...createDefaultAssociatedFood(props.foodCode, props.localeId),
+    ...createDefaultAssociatedFood(props.foodId),
     _id: randomString(6),
   };
 }

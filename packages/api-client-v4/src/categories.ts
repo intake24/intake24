@@ -1,15 +1,11 @@
 import type { BaseClientV4 } from './base-client-v4';
 import type { CreateResult } from './create-response';
 import type { CategoryContents } from '@intake24/common/types/http';
-
 import type {
-  CreateGlobalCategoryRequest,
-  CreateLocalCategoryRequest,
-  GlobalCategoryEntry,
-  LocalCategoryEntry,
+  CreateCategoryRequest,
   MainCategoriesResponse,
-  UpdateGlobalCategoryRequest,
-  UpdateLocalCategoryRequest,
+  SimpleCategoryEntry,
+  UpdateCategoryRequest,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { parseCreateResponse } from './create-response';
@@ -46,30 +42,9 @@ export class CategoriesApiV4 {
   }
 
   public async createCategory(
-    request: CreateGlobalCategoryRequest,
-  ): Promise<CreateResult<any, GlobalCategoryEntry>> {
-    const response = await this.baseClient.postResponse(
-      `${CategoriesApiV4.adminApiPath}/global`,
-      request,
-    );
-
-    return parseCreateResponse(response, this.baseClient.logger);
-  }
-
-  public async updateCategory(
-    categoryCode: string,
-    version: string,
-    request: UpdateGlobalCategoryRequest,
-  ): Promise<void> {
-    await this.baseClient.put(`${CategoriesApiV4.adminApiPath}/global/${categoryCode}`, request, {
-      version,
-    });
-  }
-
-  public async createCategoryLocal(
     localeId: string,
-    request: CreateLocalCategoryRequest,
-  ): Promise<CreateResult<any, LocalCategoryEntry>> {
+    request: CreateCategoryRequest,
+  ): Promise<CreateResult<any, SimpleCategoryEntry>> {
     const response = await this.baseClient.postResponse(
       `${CategoriesApiV4.adminApiPath}/local/${localeId}`,
       request,
@@ -78,11 +53,11 @@ export class CategoriesApiV4 {
     return parseCreateResponse(response, this.baseClient.logger, request);
   }
 
-  public async updateCategoryLocal(
+  public async updateCategory(
     localeId: string,
     categoryCode: string,
     version: string,
-    request: UpdateLocalCategoryRequest,
+    request: UpdateCategoryRequest,
   ): Promise<void> {
     await this.baseClient.put(
       `${CategoriesApiV4.adminApiPath}/local/${localeId}/${categoryCode}`,

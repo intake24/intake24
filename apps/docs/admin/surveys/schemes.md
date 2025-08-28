@@ -217,6 +217,7 @@ Contains `encoded food` and `missing food` records data
 - `code` - Food code
 - `englishName` - Food name (English)
 - `localName` - Food name (local)
+- `locale` - Locale code
 - `readyMeal` - Flag indicating if food is ready meal
 - `searchTerm` - Search term used to find the food
 - `reasonableAmount` - Flag indicating if food amount is reasonable

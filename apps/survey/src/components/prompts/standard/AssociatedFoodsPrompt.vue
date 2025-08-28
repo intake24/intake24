@@ -433,7 +433,7 @@ function onConfirmStateChanged(index: number) {
   const state = promptStates.value[index];
   if (state.mainFoodConfirmed && prompt.foodCode && !state.foods.length) {
     foodSelected(
-      { code: prompt.foodCode, name: translate(prompt.genericName) },
+      { id: prompt.id, code: prompt.foodCode, name: translate(prompt.genericName) },
       index,
     );
   }

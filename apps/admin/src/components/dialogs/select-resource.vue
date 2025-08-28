@@ -127,6 +127,10 @@ const props = defineProps({
   name: {
     type: String,
   },
+  query: {
+    type: Object as PropType<Dictionary>,
+    default: () => ({}),
+  },
   resource: {
     type: String,
     required: true,
@@ -151,7 +155,7 @@ const selectedItemId = ref<string[]>(
 );
 
 const { dialog, get, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
-  `/admin/references/${props.resource}`,
+  { query: props.query, url: `/admin/references/${props.resource}` },
 );
 
 if (props.initialItem)

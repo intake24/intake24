@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { ExternalSource } from '@intake24/common/prompts';
@@ -26,7 +25,7 @@ import type {
   SurveySubmissionPortionSizeFieldCreationAttributes,
 } from '@intake24/db';
 import {
-  FoodLocal,
+  Food,
   Survey,
   SurveySubmission,
   SurveySubmissionCustomField,
@@ -43,6 +42,8 @@ import {
 
 import { portionSizeMappers } from './portion-size-mapper';
 
+export type FoodMap = Record<string, Food>;
+
 export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
   id: string;
   name: string;
@@ -50,7 +51,7 @@ export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
 };
 
 export type CollectFoodsOps = {
-  foods: FoodLocalMap;
+  foods: FoodMap;
   mealId: string;
   parentId?: string;
 };
@@ -67,8 +68,6 @@ export type CollectedNutrientInfo = {
   fields: SurveySubmissionFieldCreationAttributes[];
   portionSizes: SurveySubmissionPortionSizeFieldCreationAttributes[];
 };
-
-export type FoodLocalMap = Record<string, FoodLocal>;
 
 export type FoodCodes = { foodCodes: string[] };
 
@@ -156,6 +155,7 @@ function surveySubmissionService({
             code: template.code,
             englishName: template.name,
             localName: template.name,
+            locale: template.localeId,
             readyMeal: false,
             searchTerm: (searchTerm ?? '').slice(0, 256),
             portionSizeMethodId: 'recipe-builder',
@@ -174,7 +174,7 @@ function surveySubmissionService({
         }
 
         const {
-          data: { code, reasonableAmount, localName },
+          data: { code, reasonableAmount },
           flags,
           linkedFoods,
           portionSize,
@@ -188,12 +188,14 @@ function surveySubmissionService({
           return collectedFoods;
         }
 
-        if (!foodRecord.main || !foodRecord.nutrientRecords)
+        if (!foodRecord.nutrientRecords)
           throw new Error('Submission: not loaded foodRecord relationships');
 
         const {
           nutrientRecords,
-          main: { name: englishName },
+          name,
+          englishName,
+          localeId,
         } = foodRecord;
 
         if (!portionSize) {
@@ -212,7 +214,8 @@ function surveySubmissionService({
           index: collectedFoods.inputs.length + collectedFoods.missingInputs.length,
           code,
           englishName,
-          localName,
+          localName: name,
+          locale: localeId,
           readyMeal: flags.includes('ready-meal'),
           searchTerm: (searchTerm ?? '').slice(0, 256),
           portionSizeMethodId: portionSize.method,
@@ -233,7 +236,7 @@ function surveySubmissionService({
   const collectFoodCompositionData = (
     foodId: string,
     foodState: EncodedFood | RecipeBuilder,
-    foods: FoodLocalMap,
+    foods: FoodMap,
   ) => {
     const collectedData: CollectedNutrientInfo = { fields: [], nutrients: [], portionSizes: [] };
 
@@ -252,7 +255,7 @@ function surveySubmissionService({
       return collectedData;
     }
 
-    if (!foodRecord.main || !foodRecord.nutrientRecords)
+    if (!foodRecord.nutrientRecords)
       throw new Error('Submission: not loaded foodRecord relationships');
 
     if (!portionSize) {
@@ -531,10 +534,9 @@ function surveySubmissionService({
 
       // Fetch food & group records
       // TODO: if food record not found, look for prototype?
-      const foodRecords = await FoodLocal.findAll({
-        where: { foodCode: foodCodes, localeId: localeCode },
+      const foodRecords = await Food.findAll({
+        where: { code: foodCodes, localeId: localeCode },
         include: [
-          { association: 'main' },
           {
             association: 'nutrientRecords',
             through: { attributes: [] },
@@ -543,8 +545,8 @@ function surveySubmissionService({
         ],
       });
 
-      const foodMap = foodRecords.reduce<Record<string, FoodLocal>>((acc, item) => {
-        acc[item.foodCode] = item;
+      const foodMap = foodRecords.reduce<Record<string, Food>>((acc, item) => {
+        acc[item.code] = item;
         return acc;
       }, {});
 

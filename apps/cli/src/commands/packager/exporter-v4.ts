@@ -1,12 +1,12 @@
 import path from 'node:path';
 
-import { uniqBy, zip } from 'lodash';
+import { zip } from 'lodash';
 import { ApiClientV4 } from '@intake24/api-client-v4';
 import typeConverters from '@intake24/cli/commands/packager/types/v4-type-conversions';
 import logger from '@intake24/common-backend/services/logger/logger';
 import { PkgConstants } from './constants';
 import { PackageWriter } from './package-writer';
-import { PkgGlobalFood, PkgLocalFood } from './types/foods';
+import { PkgFood } from './types/foods';
 import { PkgLocale } from './types/locale';
 
 export type Logger = typeof logger;
@@ -25,11 +25,10 @@ const defaultOptions: ExporterOptions = {
 
 interface LocaleData {
   properties: PkgLocale;
-  localFoods: PkgLocalFood[];
+  foods: PkgFood[];
+  // TODO ?
+  // categories: PkgCategory[];
   enabledLocalFoods: string[];
-  globalFoods: PkgGlobalFood[];
-  // localCategories: PkgLocalCategory[];
-  // globalCategories: PkgGlobalCategory[];
 }
 
 export class ExporterV4 {
@@ -88,21 +87,18 @@ export class ExporterV4 {
     if (enabledFoods === null)
       throw new Error(`Failed to fetch enabled foods for locale: ${localeCode} (Not Found)`);
 
-    const sortedEnabledCodes = enabledFoods.enabledFoods.sort();
+    const sortedEnabledCodes = enabledFoods.toSorted();
 
     const foodData = await Promise.all(
       sortedEnabledCodes
         .map(foodCode => this.getFoodData(properties.id, foodCode)),
     );
 
-    const localFoods = foodData.map(food => typeConverters.packageLocalFood(food.foodCode, properties.respondentLanguageId, food));
-
-    const globalFoods = foodData.map(food => typeConverters.packageGlobalFood(food.main!));
+    const foods = foodData.map(food => typeConverters.packageFood(food.code, properties.respondentLanguageId, food));
 
     return {
       properties: typeConverters.packageLocale(properties),
-      localFoods,
-      globalFoods,
+      foods,
       enabledLocalFoods: sortedEnabledCodes,
     };
   }
@@ -112,25 +108,17 @@ export class ExporterV4 {
 
     const localeData = await Promise.all(sortedLocaleIds.map(id => this.getLocaleData(id)));
 
-    const uniqueGlobalFoods = uniqBy(
-      localeData.flatMap(data => data.globalFoods),
-      globalFood => globalFood.code,
-    );
-
     const writer = new PackageWriter(logger, this.workingDir, this.options);
 
     await Promise.all([
       writer.writeLocales(localeData.map(data => data.properties)),
-      writer.writeLocalFoods(
+      writer.writeFoods(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
-            localeData.map(data => data.localFoods),
+            localeData.map(data => data.foods),
           ),
         ),
-      ),
-      writer.writeGlobalFoods(
-        uniqueGlobalFoods,
       ),
       writer.writePackageInfo(),
     ]);

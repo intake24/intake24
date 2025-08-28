@@ -7,13 +7,13 @@ import type { IoC } from '@intake24/api/ioc';
 import type {
   CategoriesResponse,
   CategoryContentsResponse,
+  CategoryEntry,
   CategoryInput,
-  CategoryLocalEntry,
   MainCategoriesResponse,
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { CategoryLocal, SystemLocale } from '@intake24/db';
+import { Category, SystemLocale } from '@intake24/db';
 
 function adminCategoryController({
   adminCategoryService,
@@ -52,7 +52,7 @@ function adminCategoryController({
 
   const store = async (
     req: Request<{ localeId: string }, any, CategoryInput>,
-    res: Response<CategoryLocalEntry>,
+    res: Response<CategoryEntry>,
   ): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -62,14 +62,14 @@ function adminCategoryController({
       where: { id: localeId },
     });
 
-    const categoryLocal = await adminCategoryService.createCategory(code, req.body);
+    const category = await adminCategoryService.createCategory(code, req.body);
 
-    res.json(categoryLocal);
+    res.json(category);
   };
 
   const read = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response<CategoryLocalEntry>,
+    res: Response<CategoryEntry>,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -79,16 +79,16 @@ function adminCategoryController({
       where: { id: localeId },
     });
 
-    const categoryLocal = await adminCategoryService.getCategory(categoryId, code);
-    if (!categoryLocal)
+    const category = await adminCategoryService.getCategory(code, categoryId);
+    if (!category)
       throw new NotFoundError();
 
-    res.json(categoryLocal);
+    res.json(category);
   };
 
   const update = async (
     req: Request<{ categoryId: string; localeId: string }>,
-    res: Response<CategoryLocalEntry>,
+    res: Response<CategoryEntry>,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -98,21 +98,9 @@ function adminCategoryController({
       where: { id: localeId },
     });
 
-    const { main, ...rest } = req.body;
+    const category = await adminCategoryService.updateCategory(code, categoryId, req.body);
 
-    const canUpdateMain = !!(
-      main?.code
-      && ((await aclService.hasPermission('locales:food-list'))
-        || (await CategoryLocal.count({ where: { categoryCode: main.code } })) === 1)
-    );
-
-    const categoryLocal = await adminCategoryService.updateCategory(
-      categoryId,
-      code,
-      canUpdateMain ? req.body : rest,
-    );
-
-    res.json(categoryLocal);
+    res.json(category);
   };
 
   const destroy = async (
@@ -127,14 +115,14 @@ function adminCategoryController({
       where: { id: localeId },
     });
 
-    const categoryLocal = await CategoryLocal.findOne({
+    const category = await Category.findOne({
       attributes: ['id'],
       where: { id: categoryId, localeId: code },
     });
-    if (!categoryLocal)
+    if (!category)
       throw new NotFoundError();
 
-    await categoryLocal.destroy();
+    await category.destroy();
 
     res.json();
   };
@@ -174,14 +162,7 @@ function adminCategoryController({
       return;
     }
 
-    const categoryLocal = await CategoryLocal.findOne({
-      attributes: ['id', 'categoryCode'],
-      where: { id: categoryId, localeId: code },
-    });
-    if (!categoryLocal)
-      throw new NotFoundError();
-
-    const data = await adminCategoryService.getCategoryContents(categoryLocal.categoryCode, code);
+    const data = await adminCategoryService.getCategoryContents(code, categoryId);
 
     res.json(categoryContentsResponse(data));
   };
@@ -198,9 +179,9 @@ function adminCategoryController({
       where: { id: localeId },
     });
 
-    const categoryLocal = await adminCategoryService.copyCategory(categoryId, code, req.body);
+    const category = await adminCategoryService.copyCategory(code, categoryId, req.body);
 
-    res.json(categoryLocal);
+    res.json(category);
   };
 
   const categories = async (
@@ -210,21 +191,12 @@ function adminCategoryController({
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
 
-    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+    await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
       attributes: ['code'],
       where: { id: localeId },
     });
 
-    const categoryLocal = await CategoryLocal.findOne({
-      attributes: ['id', 'categoryCode'],
-      where: { id: categoryId, localeId: code },
-    });
-    if (!categoryLocal)
-      throw new NotFoundError();
-
-    const categories = await cachedParentCategoriesService.getCategoryAllCategories(
-      categoryLocal.categoryCode,
-    );
+    const categories = await cachedParentCategoriesService.getCategoryAllCategories(categoryId);
 
     res.json({ categories });
   };

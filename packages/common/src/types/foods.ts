@@ -13,30 +13,31 @@ export type UseInRecipeType = (typeof useInRecipeTypes)[keyof typeof useInRecipe
 export const foodTypes = ['free-text', 'encoded-food', 'missing-food', 'recipe-builder'] as const;
 export type FoodType = (typeof foodTypes)[number];
 
-// Special Foods | Foods Builder section
-
-export const recipeFoodStepsType = z.object({
-  order: z.number(),
+export const recipeFoodStep = z.object({
+  recipeFoodsId: z.string(),
   code: z.string(),
-  recipeFoodsCode: z.string(),
+  localeId: z.string(),
   name: requiredLocaleTranslation,
   description: requiredLocaleTranslation,
-  localeId: z.string(),
   categoryCode: z.string(),
   repeatable: z.boolean(),
   required: z.boolean(),
+  order: z.number(),
 });
-export type RecipeFoodStepsType = z.infer<typeof recipeFoodStepsType>;
+export type RecipeFoodStep = z.infer<typeof recipeFoodStep>;
 
 export const recipeFood = z.object({
   code: z.string(),
   name: z.string(),
+  localeId: z.string(),
   recipeWord: z.string(),
-  steps: recipeFoodStepsType.array(),
+  synonyms: z.object({ synonyms: z.string() }).optional(),
+  steps: recipeFoodStep.array(),
 });
 export type RecipeFood = z.infer<typeof recipeFood>;
 
 export const recipeFoodsHeader = z.object({
+  id: z.string(),
   code: z.string(),
   description: z.string(),
   name: z.string(),

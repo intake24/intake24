@@ -86,9 +86,9 @@ const items = ref<FoodSearchItem[]>([]);
 
 const headers: DataTableHeader[] = [
   { title: '', key: 'resource', sortable: false },
-  { title: i18n.t('fdbs.foods.global.code'), key: 'code' },
-  { title: i18n.t('fdbs.foods.global.name'), key: 'englishName' },
-  { title: i18n.t('fdbs.foods.local.name'), key: 'name' },
+  { title: i18n.t('fdbs.foods.code'), key: 'code' },
+  { title: i18n.t('fdbs.foods.englishName'), key: 'englishName' },
+  { title: i18n.t('fdbs.foods.name'), key: 'name' },
 ];
 
 async function clear() {

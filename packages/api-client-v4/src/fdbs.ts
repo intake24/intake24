@@ -1,8 +1,5 @@
 import type { BaseClientV4 } from './base-client-v4';
-
-import type {
-  FoodLocalEntry,
-} from '@intake24/common/types/http/admin';
+import type { FoodEntry } from '@intake24/common/types/http/admin';
 
 export class FoodDatabasesApiV4 {
   private static readonly apiPath = '/api/admin/fdbs';
@@ -16,8 +13,8 @@ export class FoodDatabasesApiV4 {
   public async getFood(
     localeId: string,
     foodId: string,
-  ): Promise<FoodLocalEntry | null> {
-    return this.baseClient.getOptional<FoodLocalEntry>(
+  ): Promise<FoodEntry | null> {
+    return this.baseClient.getOptional<FoodEntry>(
       `${FoodDatabasesApiV4.apiPath}/${localeId}/foods/${foodId}`,
     );
   }
@@ -25,8 +22,8 @@ export class FoodDatabasesApiV4 {
   public async getFoodByCode(
     localeId: string,
     foodId: string,
-  ): Promise<FoodLocalEntry | null> {
-    return this.baseClient.getOptional<FoodLocalEntry>(
+  ): Promise<FoodEntry | null> {
+    return this.baseClient.getOptional<FoodEntry>(
       `${FoodDatabasesApiV4.apiPath}/${localeId}/foods/by-code/${foodId}`,
     );
   }

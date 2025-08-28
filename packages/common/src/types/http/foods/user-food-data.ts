@@ -16,6 +16,7 @@ export const userPortionSizeMethod = z.object({
 export type UserPortionSizeMethod = z.infer<typeof userPortionSizeMethod>;
 
 export const userAssociatedFoodPrompt = z.object({
+  id: z.string(),
   foodCode: z.string().optional(),
   categoryCode: z.string().optional(),
   promptText: localeTranslation,
@@ -27,7 +28,9 @@ export const userAssociatedFoodPrompt = z.object({
 export type UserAssociatedFoodPrompt = z.infer<typeof userAssociatedFoodPrompt>;
 
 export const userFoodData = z.object({
+  id: z.string(),
   code: z.string(),
+  localeId: z.string(),
   englishName: z.string(),
   localName: z.string(),
   kcalPer100g: z.number(),

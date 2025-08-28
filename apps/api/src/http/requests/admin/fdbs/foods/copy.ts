@@ -7,23 +7,23 @@ import {
 } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import type { FindOptions } from '@intake24/db';
-import { FoodLocal, SystemLocale } from '@intake24/db';
+import { Food, SystemLocale } from '@intake24/db';
 
 export default validate(
   checkSchema({
     name: {
       in: ['body'],
-      errorMessage: typeErrorMessage('string.minMax', { min: 3, max: 128 }),
+      errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 128 }),
       isString: true,
       isEmpty: { negated: true },
-      isLength: { options: { min: 3, max: 128 } },
+      isLength: { options: { min: 1, max: 128 } },
     },
     code: {
       in: ['body'],
-      errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 8 }),
+      errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 64 }),
       isString: { bail: true },
       isEmpty: { negated: true, bail: true },
-      isLength: { options: { min: 1, max: 8 }, bail: true },
+      isLength: { options: { min: 1, max: 64 }, bail: true },
       custom: {
         options: async (value, meta): Promise<void> => {
           const { localeId } = meta.req.body;
@@ -32,13 +32,10 @@ export default validate(
           if (!locale)
             throw new Error(customTypeErrorMessage('unique._', meta));
 
-          const options: FindOptions<FoodLocal> = {
-            where: { localeId: locale.code },
-            include: [{ association: 'main', attributes: [], required: true }],
-          };
+          const options: FindOptions<Food> = { where: { localeId: locale.code } };
 
           if (
-            !(await unique({ model: FoodLocal, condition: { field: 'foodCode', value }, options }))
+            !(await unique({ model: Food, condition: { field: 'code', value }, options }))
           )
             throw new Error(customTypeErrorMessage('unique._', meta));
         },

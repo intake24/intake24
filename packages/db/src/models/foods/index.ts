@@ -6,7 +6,6 @@ import Brand from './brand';
 import Category from './category';
 import CategoryAttribute from './category-attributes';
 import CategoryCategory from './category-category';
-import CategoryLocal from './category-local';
 import CategoryPortionSizeMethod from './category-portion-size-method';
 import DrinkwareScale from './drinkware-scale';
 import DrinkwareScaleV2 from './drinkware-scale-v2';
@@ -15,8 +14,6 @@ import DrinkwareVolumeSample from './drinkware-volume-sample';
 import Food from './food';
 import FoodAttribute from './food-attribute';
 import FoodCategory from './food-category';
-import FoodLocal from './food-local';
-import FoodLocalList from './food-local-list';
 import FoodNutrient from './food-nutrient';
 import FoodPortionSizeMethod from './food-portion-size-method';
 import FoodThumbnailImage from './food-thumbnail-image';
@@ -62,8 +59,6 @@ export { default as CategoryAttribute } from './category-attributes';
 export * from './category-attributes';
 export { default as CategoryCategory } from './category-category';
 export * from './category-category';
-export { default as CategoryLocal } from './category-local';
-export * from './category-local';
 export { default as CategoryPortionSizeMethod } from './category-portion-size-method';
 export * from './category-portion-size-method';
 export { default as DrinkwareScale } from './drinkware-scale';
@@ -80,10 +75,6 @@ export { default as FoodAttribute } from './food-attribute';
 export * from './food-attribute';
 export { default as FoodCategory } from './food-category';
 export * from './food-category';
-export { default as FoodLocal } from './food-local';
-export * from './food-local';
-export { default as FoodLocalList } from './food-local-list';
-export * from './food-local-list';
 export { default as FoodNutrient } from './food-nutrient';
 export * from './food-nutrient';
 export { default as FoodPortionSizeMethod } from './food-portion-size-method';
@@ -147,20 +138,17 @@ export const foods = {
   AssociatedFood,
   AttributeDefaults,
   Brand,
+  CategoryCategory,
   Category,
   CategoryAttribute,
-  CategoryCategory,
-  CategoryLocal,
   CategoryPortionSizeMethod,
   DrinkwareScale,
   DrinkwareScaleV2,
   DrinkwareSet,
   DrinkwareVolumeSample,
+  FoodCategory,
   Food,
   FoodAttribute,
-  FoodCategory,
-  FoodLocal,
-  FoodLocalList,
   FoodNutrient,
   FoodPortionSizeMethod,
   FoodThumbnailImage,

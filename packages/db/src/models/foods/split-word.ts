@@ -31,7 +31,7 @@ export default class SplitWord extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.STRING(64),
   })
   declare localeId: string;
 

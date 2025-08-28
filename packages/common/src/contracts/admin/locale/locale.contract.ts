@@ -58,7 +58,7 @@ export const locale = initContract().router({
   getByCode: {
     method: 'GET',
     path: '/admin/locales/by-code/:code',
-    pathParams: z.object({ code: z.string().min(1).max(16) }),
+    pathParams: z.object({ code: z.string().min(1).max(64) }),
     responses: {
       200: localeEntry,
     },

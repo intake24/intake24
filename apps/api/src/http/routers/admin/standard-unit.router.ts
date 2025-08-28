@@ -5,9 +5,9 @@ import { permission } from '@intake24/api/http/middleware';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import {
-  CategoryLocal,
+  Category,
   CategoryPortionSizeMethod,
-  FoodLocal,
+  Food,
   FoodPortionSizeMethod,
   StandardUnit,
   SystemLocale,
@@ -122,9 +122,9 @@ export function standardUnit() {
         if (!standardUnit)
           throw new NotFoundError();
 
-        const categories = await CategoryLocal.paginate({
+        const categories = await Category.paginate({
           query,
-          columns: ['categoryCode', 'name'],
+          columns: ['id', 'code', 'name'],
           subQuery: false,
           include: [
             {
@@ -138,7 +138,7 @@ export function standardUnit() {
               required: true,
             },
           ],
-          order: [['categoryCode', 'ASC']],
+          order: [['code', 'ASC']],
         });
 
         const localeMap = await getLocaleMap([
@@ -163,9 +163,9 @@ export function standardUnit() {
         if (!standardUnit)
           throw new NotFoundError();
 
-        const foods = await FoodLocal.paginate({
+        const foods = await Food.paginate({
           query,
-          columns: ['foodCode', 'name'],
+          columns: ['id', 'code', 'name'],
           subQuery: false,
           include: [
             {
@@ -179,7 +179,7 @@ export function standardUnit() {
               required: true,
             },
           ],
-          order: [['foodCode', 'ASC']],
+          order: [['code', 'ASC']],
         });
 
         const localeMap = await getLocaleMap([

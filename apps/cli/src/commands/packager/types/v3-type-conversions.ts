@@ -16,8 +16,7 @@ import type {
 } from '@intake24/api-client-v3';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type {
-  PkgGlobalCategory,
-  PkgLocalCategory,
+  PkgCategory,
 } from '@intake24/cli/commands/packager/types/categories';
 import type {
   PkgDrinkScaleV1,
@@ -28,9 +27,8 @@ import type {
   PkgAssociatedFood,
   PkgCerealPsm,
   PkgDrinkScalePsm,
-  PkgGlobalFood,
+  PkgFood,
   PkgGuideImagePsm,
-  PkgLocalFood,
   PkgMilkInHotDrinkPsm,
   PkgMilkOnCerealPsm,
   PkgPizzaPsm,
@@ -159,7 +157,6 @@ function packageLocale(locale: LocaleV3): PkgLocale {
     id: locale.id,
     englishName: locale.englishName,
     localName: locale.localName,
-    prototypeLocale: parseOption(locale.prototypeLocale),
     adminLanguage: locale.adminLanguage,
     respondentLanguage: locale.respondentLanguage,
     textDirection: parseTextDirection(locale.textDirection),
@@ -279,61 +276,44 @@ function packagePortionSize(portionSize: PortionSizeMethodV3): PkgPortionSizeMet
   }
 }
 
-function packageLocalFood(code: string, language: string, localFood: LocalFoodRecordV3): PkgLocalFood {
+function packageFood(code: string, language: string, mainFood: MainFoodRecordV3, localFood: LocalFoodRecordV3): PkgFood {
   return {
     code,
     version: localFood.version ?? undefined,
-    localDescription:
-      localFood.localDescription.length === 1 ? localFood.localDescription[0] : undefined,
+    name:
+      localFood.localDescription.length === 1 ? localFood.localDescription[0] : 'Missing local name',
+    englishName: mainFood.englishDescription,
     alternativeNames: {},
     associatedFoods: localFood.associatedFoods.map(af => packageAssociatedFood(language, af)),
-    brandNames: localFood.brandNames,
-    nutrientTableCodes: localFood.nutrientTableCodes,
-    portionSize: localFood.portionSize.map(packagePortionSize),
-  };
-}
-
-function packageGlobalFood(mainFood: MainFoodRecordV3): PkgGlobalFood {
-  return {
-    code: mainFood.code,
-    englishDescription: mainFood.englishDescription,
-    version: mainFood.version,
-    parentCategories: mainFood.parentCategories.map(header => header.code),
     attributes: {
       readyMealOption: parseOption(mainFood.attributes.readyMealOption) ?? undefined,
       reasonableAmount: parseOption(mainFood.attributes.reasonableAmount) ?? undefined,
       sameAsBeforeOption: parseOption(mainFood.attributes.sameAsBeforeOption) ?? undefined,
       useInRecipes: parseOption(mainFood.attributes.useInRecipes) ?? undefined,
     },
+    brandNames: localFood.brandNames,
+    nutrientTableCodes: localFood.nutrientTableCodes,
+    parentCategories: mainFood.parentCategories.map(header => header.code),
+    portionSize: localFood.portionSize.map(packagePortionSize),
   };
 }
 
-function packageLocalCategory(
-  code: string,
-  localCategory: LocalCategoryRecordV3,
-): PkgLocalCategory {
+function packageCategory(code: string, mainCategory: MainCategoryRecordV3, localCategory: LocalCategoryRecordV3): PkgCategory {
   return {
     code,
     version: localCategory.version ?? undefined,
-    localDescription:
-      localCategory.localDescription.length === 1 ? localCategory.localDescription[0] : undefined,
-    portionSize: localCategory.portionSize.map(packagePortionSize),
-  };
-}
-
-function packageGlobalCategory(mainCategory: MainCategoryRecordV3): PkgGlobalCategory {
-  return {
-    code: mainCategory.code,
-    englishDescription: mainCategory.englishDescription,
-    version: mainCategory.version,
-    isHidden: mainCategory.isHidden,
-    parentCategories: mainCategory.parentCategories.map(header => header.code),
+    name:
+      localCategory.localDescription.length === 1 ? localCategory.localDescription[0] : 'Missing local name',
+    englishName: mainCategory.englishDescription,
+    hidden: mainCategory.hidden,
     attributes: {
       readyMealOption: parseOption(mainCategory.attributes.readyMealOption) ?? undefined,
       reasonableAmount: parseOption(mainCategory.attributes.reasonableAmount) ?? undefined,
       sameAsBeforeOption: parseOption(mainCategory.attributes.sameAsBeforeOption) ?? undefined,
       useInRecipes: parseOption(mainCategory.attributes.useInRecipes) ?? undefined,
     },
+    parentCategories: mainCategory.parentCategories.map(header => header.code),
+    portionSize: localCategory.portionSize.map(packagePortionSize),
   };
 }
 
@@ -351,10 +331,8 @@ function packageDrinkwareSet(drinkwareSet: PortableDrinkwareSetV3): PkgDrinkware
 }
 
 export default {
-  packageLocalFood,
-  packageGlobalFood,
-  packageLocalCategory,
-  packageGlobalCategory,
+  packageFood,
+  packageCategory,
   packageLocale,
   packageAsServedSet,
   packageDrinkwareSet,

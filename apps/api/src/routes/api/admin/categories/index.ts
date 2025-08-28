@@ -5,7 +5,6 @@ import validation from '@intake24/api/http/requests/admin/fdbs';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
-import global from './global';
 import local from './local';
 
 export default () => {
@@ -19,7 +18,6 @@ export default () => {
   router.get('', validation.browse, wrapAsync(adminCategoryController.browseMain));
 
   router.use('/local', local());
-  router.use('/global', global());
 
   return router;
 };

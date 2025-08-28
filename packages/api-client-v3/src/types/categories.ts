@@ -4,14 +4,14 @@ export interface CategoryHeaderV3 {
   code: string;
   englishDescription: string;
   localDescription: string[];
-  isHidden: boolean;
+  hidden: boolean;
 }
 
 export interface MainCategoryRecordV3 {
   version: string;
   code: string;
   englishDescription: string;
-  isHidden: boolean;
+  hidden: boolean;
   attributes: InheritableAttributesV3;
   parentCategories: CategoryHeaderV3[];
 }

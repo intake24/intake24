@@ -1,22 +1,22 @@
-import type { LocalCategoryData, LocalFoodData } from '@intake24/api/food-index/workers/food-data';
+import type { CategoryData, FoodData } from '@intake24/api/food-index/workers/food-data';
 import type Logger from '@intake24/common-backend/services/logger/logger';
 
 interface TransitiveParentCategory {
   transitiveLevel: number;
-  categoryData: LocalCategoryData;
+  categoryData: CategoryData;
 }
 
 export class ParentCategoryIndex {
   private readonly logger: typeof Logger;
-  private readonly foodParentCategories: Map<string, Map<string, LocalCategoryData>>;
-  private readonly categoryParentCategories: Map<string, Map<string, LocalCategoryData>>;
-  private readonly categoryData: Map<string, LocalCategoryData>;
+  private readonly foodParentCategories: Map<string, Map<string, CategoryData>>;
+  private readonly categoryParentCategories: Map<string, Map<string, CategoryData>>;
+  private readonly categoryData: Map<string, CategoryData>;
   private readonly foodTransitiveParentCategories: Map<string, Map<string, TransitiveParentCategory>>;
   private readonly categoryTransitiveParentCategories: Map<string, Map<string, TransitiveParentCategory>>;
 
   public readonly nonEmptyCategories: Set<string>;
 
-  private addTransitiveParentCategories(categories: Map<string, LocalCategoryData>): Map<string, TransitiveParentCategory> {
+  private addTransitiveParentCategories(categories: Map<string, CategoryData>): Map<string, TransitiveParentCategory> {
     const transitiveParentCategories = new Map<string, TransitiveParentCategory>();
 
     let currentSet = categories;
@@ -26,7 +26,7 @@ export class ParentCategoryIndex {
       for (const [code, categoryData] of currentSet)
         transitiveParentCategories.set(code, { transitiveLevel, categoryData });
 
-      const nextSet = new Map<string, LocalCategoryData>();
+      const nextSet = new Map<string, CategoryData>();
 
       for (const code of currentSet.keys()) {
         const parentCategories = this.categoryParentCategories.get(code);
@@ -46,8 +46,8 @@ export class ParentCategoryIndex {
     return transitiveParentCategories;
   }
 
-  private attachCategoryData(categories: Set<string>): Map<string, LocalCategoryData> {
-    const result = new Map<string, LocalCategoryData>();
+  private attachCategoryData(categories: Set<string>): Map<string, CategoryData> {
+    const result = new Map<string, CategoryData>();
 
     for (const categoryCode of categories) {
       const data = this.categoryData.get(categoryCode);
@@ -78,8 +78,8 @@ export class ParentCategoryIndex {
     return parentCategories.has(parentCategoryCode);
   }
 
-  public getFoodTransitiveParentCategories(foodCode: string, transitiveLimit?: number): Map<string, LocalCategoryData> {
-    const result = new Map<string, LocalCategoryData>();
+  public getFoodTransitiveParentCategories(foodCode: string, transitiveLimit?: number): Map<string, CategoryData> {
+    const result = new Map<string, CategoryData>();
     const parentCategories = this.foodTransitiveParentCategories.get(foodCode);
     if (parentCategories !== undefined) {
       for (const [categoryCode, category] of parentCategories) {
@@ -94,10 +94,10 @@ export class ParentCategoryIndex {
   // having that category as parent, directly or transitively.
   //
   // Such categories must be omitted from search results.
-  private getNonEmptyCategories(localFoods: LocalFoodData[]): Set<string> {
+  private getNonEmptyCategories(foods: FoodData[]): Set<string> {
     const nonEmptyCategories = new Set<string>();
 
-    for (const food of localFoods) {
+    for (const food of foods) {
       const parentCategories = this.foodTransitiveParentCategories.get(food.code);
 
       if (parentCategories !== undefined) {
@@ -115,7 +115,7 @@ export class ParentCategoryIndex {
       this.logger.error(`No category data for ${categoryCode}!`);
       return false;
     }
-    return categoryData.isHidden;
+    return categoryData.hidden;
   }
 
   public isFoodHidden(foodCode: string): boolean {
@@ -139,7 +139,7 @@ export class ParentCategoryIndex {
     return true;
   }
 
-  constructor(foods: LocalFoodData[], categories: LocalCategoryData[], logger: typeof Logger) {
+  constructor(foods: FoodData[], categories: CategoryData[], logger: typeof Logger) {
     this.logger = logger;
     this.categoryData = new Map(categories.map(data => [data.code, data]));
     this.foodParentCategories = new Map(foods.map(food => [food.code, this.attachCategoryData(food.parentCategories)]));

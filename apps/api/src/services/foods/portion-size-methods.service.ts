@@ -2,7 +2,6 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import {
   getCategoryParentCategories,
   getFoodParentCategories,
-  getParentLocale,
 } from '@intake24/api/services/foods/common';
 import type { PortionSizeMethod } from '@intake24/common/surveys';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods/user-food-data';
@@ -11,19 +10,18 @@ import {
   AsServedSet,
   CategoryPortionSizeMethod,
   DrinkwareSet,
-  FoodLocal,
+  Food,
   GuideImage,
 } from '@intake24/db';
 
-function portionSizeMethodsService() {
+function portionSizeMethodsService(imagesBaseUrl: string) {
   /**
    *
-   * Get Portion Size Methods and their Parameters associated with the supplied category and locale.
+   * Get Portion Size Methods and their Parameters associated with the supplied category.
    *
-   * @param {string} localeId
-   * @param {string} categoryCode
+   * @param {string} categoryId
    */
-  const getCategoryPortionSizeMethods = async (localeId: string, categoryCode: string) =>
+  const getCategoryPortionSizeMethods = async (categoryId: string) =>
     CategoryPortionSizeMethod.findAll({
       attributes: [
         'method',
@@ -34,39 +32,34 @@ function portionSizeMethodsService() {
         'parameters',
       ],
       order: [['orderBy', 'ASC']],
-      include: [{ association: 'categoryLocal', attributes: [], where: { localeId, categoryCode } }],
+      where: { categoryId },
     });
 
-  const getNearestLocalCategoryPortionSizeMethods = async (
-    localeId: string,
-    categoryCodes: string[],
-  ): Promise<CategoryPortionSizeMethod[]> => {
-    for (let i = 0; i < categoryCodes.length; ++i) {
-      const methods = await getCategoryPortionSizeMethods(localeId, categoryCodes[i]);
+  const getNearestCategoryPortionSizeMethods = async (categoryIds: string[]): Promise<CategoryPortionSizeMethod[]> => {
+    for (let i = 0; i < categoryIds.length; ++i) {
+      const methods = await getCategoryPortionSizeMethods(categoryIds[i]);
 
       if (methods.length)
         return methods;
     }
 
-    const parents = await getCategoryParentCategories(categoryCodes);
+    const parents = await getCategoryParentCategories(categoryIds);
 
     if (parents.length)
-      return getNearestLocalCategoryPortionSizeMethods(localeId, parents);
+      return getNearestCategoryPortionSizeMethods(parents);
 
     return [];
   };
 
   /**
    *
-   * Get local food data record
+   * Get food data record
    *
-   * @param {string} localeId
-   * @param {string} foodCode
-   * @returns {Promise<FoodLocal>}
+   * @param {string} foodId
+   * @returns {Promise<Food>}
    */
-  const getFoodLocal = async (localeId: string, foodCode: string): Promise<FoodLocal | null> =>
-    FoodLocal.findOne({
-      where: { localeId, foodCode },
+  const getFood = async (foodId: string): Promise<Food | null> =>
+    Food.findByPk(foodId, {
       include: [
         {
           association: 'portionSizeMethods',
@@ -84,28 +77,19 @@ function portionSizeMethodsService() {
       ],
     });
 
-  const resolvePortionSizeMethods = async (
-    localeId: string,
-    foodCode: string,
-  ): Promise<(CategoryPortionSizeMethod | FoodPortionSizeMethod)[]> => {
-    const foodLocal = await getFoodLocal(localeId, foodCode);
-    if (foodLocal?.portionSizeMethods?.length)
-      return foodLocal.portionSizeMethods;
+  const resolvePortionSizeMethods = async (foodId: string): Promise<(CategoryPortionSizeMethod | FoodPortionSizeMethod)[]> => {
+    const food = await getFood(foodId);
+    if (!food)
+      return [];
 
-    const parentCategories = await getFoodParentCategories(foodCode);
+    if (food.portionSizeMethods?.length)
+      return food.portionSizeMethods;
 
-    if (parentCategories.length) {
-      const categoryPortionSizeMethods = await getNearestLocalCategoryPortionSizeMethods(
-        localeId,
-        parentCategories,
-      );
-      if (categoryPortionSizeMethods.length)
-        return categoryPortionSizeMethods;
-    }
+    const parentCategories = await getFoodParentCategories(food.id);
+    if (!parentCategories.length)
+      return [];
 
-    const prototypeLocale = await getParentLocale(localeId);
-
-    return prototypeLocale ? resolvePortionSizeMethods(prototypeLocale.id, foodCode) : [];
+    return await getNearestCategoryPortionSizeMethods(parentCategories);
   };
 
   async function getPortionSizeImageUrl(psm: PortionSizeMethod): Promise<string> {
@@ -194,16 +178,13 @@ function portionSizeMethodsService() {
     }
   }
 
-  const resolveUserPortionSizeMethods = async (
-    localeId: string,
-    foodCode: string,
-  ): Promise<UserPortionSizeMethod[]> => {
-    const psms = await resolvePortionSizeMethods(localeId, foodCode);
+  const resolveUserPortionSizeMethods = async (foodId: string): Promise<UserPortionSizeMethod[]> => {
+    const psms = await resolvePortionSizeMethods(foodId);
 
     return Promise.all(
       psms.map(async psm => ({
         ...psm.get(),
-        imageUrl: await getPortionSizeImageUrl(psm as PortionSizeMethod),
+        imageUrl: `${imagesBaseUrl}/${await getPortionSizeImageUrl(psm as PortionSizeMethod)}`,
       })),
     );
   };

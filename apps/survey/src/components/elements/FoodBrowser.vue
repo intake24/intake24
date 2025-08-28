@@ -323,6 +323,7 @@ const promptI18n = computed(() => {
 const limitToRootCategory = ref(true);
 
 const rootHeader = computed(() => ({
+  id: '',
   code: props.rootCategory ?? '',
   name: props.rootCategory ?? promptI18n.value.root,
 }));

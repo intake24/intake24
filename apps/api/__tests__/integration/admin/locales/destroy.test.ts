@@ -23,7 +23,6 @@ export default () => {
       respondentLanguageId: code,
       adminLanguageId: code,
       countryFlagCode: 'en-au',
-      prototypeLocaleId: null,
       textDirection: 'ltr',
       foodIndexEnabled: true,
       foodIndexLanguageBackendId: 'en',

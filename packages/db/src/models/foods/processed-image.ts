@@ -8,7 +8,7 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
-import { AsServedImage, AsServedSet, ImageMap, SourceImage } from '.';
+import { AsServedImage, AsServedSet, FoodThumbnailImage, ImageMap, SourceImage } from '.';
 import BaseModel from '../model';
 
 export enum ProcessedImagePurposes {
@@ -86,6 +86,9 @@ export default class ProcessedImage extends BaseModel<
 
   @HasMany(() => ImageMap, 'baseImageId')
   declare imageMaps?: NonAttribute<ImageMap[]>;
+
+  @HasMany(() => FoodThumbnailImage, 'imageId')
+  declare thumbnailImages?: NonAttribute<FoodThumbnailImage[]>;
 }
 
 export type ProcessedImageAttributes = Attributes<ProcessedImage>;

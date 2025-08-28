@@ -295,6 +295,7 @@ function dataExportFields() {
     { id: 'code', label: 'Food code', value: 'food.code' },
     { id: 'englishName', label: 'Name (en)', value: 'food.englishName' },
     { id: 'localName', label: 'Name (local)', value: 'food.localName' },
+    { id: 'locale', label: 'Locale code', value: 'food.locale' },
     { id: 'readyMeal', label: 'Ready meal', value: 'food.readyMeal' },
     { id: 'searchTerm', label: 'Search term', value: 'food.searchTerm' },
     { id: 'reasonableAmount', label: 'Reasonable amount', value: 'food.reasonableAmount' },

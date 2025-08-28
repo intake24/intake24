@@ -1,22 +1,16 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { keys, sortBy, uniqBy, zip } from 'lodash';
+import { keys, sortBy, zip } from 'lodash';
 
 import type { ApiClientV3 } from '@intake24/api-client-v3';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
-import type {
-  PkgGlobalCategory,
-  PkgLocalCategory,
+import type { PkgCategory,
 } from '@intake24/cli/commands/packager/types/categories';
 import type { PkgDrinkwareSet } from '@intake24/cli/commands/packager/types/drinkware';
-import type {
-  PkgGlobalFood,
-  PkgLocalFood,
-  PkgPortionSizeMethod,
-} from '@intake24/cli/commands/packager/types/foods';
+import type { PkgFood, PkgPortionSizeMethod } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
@@ -39,21 +33,9 @@ const defaultOptions: ExporterOptions = {
 
 interface LocaleData {
   properties: PkgLocale;
-  localFoods: PkgLocalFood[];
   enabledLocalFoods: string[];
-  globalFoods: PkgGlobalFood[];
-  localCategories: PkgLocalCategory[];
-  globalCategories: PkgGlobalCategory[];
-}
-
-interface FoodData {
-  localFood: PkgLocalFood;
-  globalFood: PkgGlobalFood;
-}
-
-interface CategoryData {
-  localCategory: PkgLocalCategory;
-  globalCategory: PkgGlobalCategory;
+  foods: PkgFood[];
+  categories: PkgCategory[];
 }
 
 export class ExporterV3 {
@@ -162,7 +144,7 @@ export class ExporterV3 {
       return typeConverters.packageDrinkwareSet(drinkwareSet);
   }
 
-  async getLocalFoodData(localeId: string, respondentLanguage: string, foodCode: string): Promise<FoodData> {
+  async getLocalFoodData(localeId: string, respondentLanguage: string, foodCode: string): Promise<PkgFood> {
     logger.info(`Fetching data for food (${localeId}, ${foodCode})`);
 
     const foodRecord = await this.apiClient.foods.getFoodRecord(localeId, foodCode);
@@ -170,13 +152,10 @@ export class ExporterV3 {
     if (foodRecord === null)
       throw new Error(`Food record not found: (${localeId}, ${foodCode})`);
 
-    return {
-      localFood: typeConverters.packageLocalFood(foodRecord.main.code, respondentLanguage, foodRecord.local),
-      globalFood: typeConverters.packageGlobalFood(foodRecord.main),
-    };
+    return typeConverters.packageFood(foodRecord.main.code, respondentLanguage, foodRecord.main, foodRecord.local);
   }
 
-  async getLocalCategoryData(localeId: string, categoryCode: string): Promise<CategoryData> {
+  async getLocalCategoryData(localeId: string, categoryCode: string): Promise<PkgCategory> {
     logger.info(`Fetching data for category (${localeId}, ${categoryCode})`);
 
     const categoryRecord = await this.apiClient.categories.getCategoryRecord(
@@ -187,13 +166,7 @@ export class ExporterV3 {
     if (categoryRecord === null)
       throw new Error(`Category record not found: (${localeId}, ${categoryCode})`);
 
-    return {
-      localCategory: typeConverters.packageLocalCategory(
-        categoryRecord.main.code,
-        categoryRecord.local,
-      ),
-      globalCategory: typeConverters.packageGlobalCategory(categoryRecord.main),
-    };
+    return typeConverters.packageCategory(categoryRecord.main.code, categoryRecord.main, categoryRecord.local);
   }
 
   async getLocaleData(localeId: string): Promise<LocaleData> {
@@ -212,43 +185,24 @@ export class ExporterV3 {
 
     const sortedEnabledCodes = enabledLocalFoods.sort();
 
-    const foodData = await Promise.all(
+    const foods = await Promise.all(
       localFoodRecordCodes
         .filter(code => !this.skipFoodCodes.has(code))
         .map(foodCode => this.getLocalFoodData(localeId, properties.respondentLanguage, foodCode)),
     );
 
-    const categoryData = await Promise.all(
+    const categories = await Promise.all(
       categoryCodes.map(categoryCode => this.getLocalCategoryData(localeId, categoryCode)),
     );
 
-    const sortedLocalFoods = sortBy(
-      foodData.map(data => data.localFood),
-      localFood => localFood.code,
-    );
-
-    const sortedGlobalFoods = sortBy(
-      foodData.map(data => data.globalFood),
-      globalFood => globalFood.code,
-    );
-
-    const sortedLocalCategories = sortBy(
-      categoryData.map(data => data.localCategory),
-      localData => localData.code,
-    );
-
-    const sortedGlobalCategories = sortBy(
-      categoryData.map(data => data.globalCategory),
-      globalData => globalData.code,
-    );
+    const sortedFoods = sortBy(foods, food => food.code);
+    const sortedCategories = sortBy(categories, category => category.code);
 
     return {
       properties: typeConverters.packageLocale(properties),
-      localFoods: sortedLocalFoods,
-      globalFoods: sortedGlobalFoods,
+      foods: sortedFoods,
       enabledLocalFoods: sortedEnabledCodes,
-      localCategories: sortedLocalCategories,
-      globalCategories: sortedGlobalCategories,
+      categories: sortedCategories,
     };
   }
 
@@ -287,7 +241,7 @@ export class ExporterV3 {
     await Promise.all([...this.images].map(imagePath => this.downloadImage(imagePath)));
   }
 
-  private collectFoodCompositionTableDependencies(localFoods: PkgLocalFood[]): void {
+  private collectFoodCompositionTableDependencies(localFoods: PkgFood[]): void {
     for (const localFood of localFoods)
       keys(localFood.nutrientTableCodes).forEach(id => this.foodCompositionTableIds.add(id));
   }
@@ -332,14 +286,14 @@ export class ExporterV3 {
     }
   }
 
-  private collectFoodPortionSizeDependencies(localFoods: PkgLocalFood[]): void {
+  private collectFoodPortionSizeDependencies(localFoods: PkgFood[]): void {
     for (const localFood of localFoods) {
       for (const portionSize of localFood.portionSize)
         this.addPortionSizeDependencies(portionSize);
     }
   }
 
-  private collectCategoryPortionSizeDependencies(localCategories: PkgLocalCategory[]): void {
+  private collectCategoryPortionSizeDependencies(localCategories: PkgCategory[]): void {
     for (const localCategory of localCategories) {
       for (const portionSize of localCategory.portionSize)
         this.addPortionSizeDependencies(portionSize);
@@ -385,24 +339,14 @@ export class ExporterV3 {
   }
 
   public async export() {
-    const sortedLocaleIds = [...this.localeIds].sort();
+    const sortedLocaleIds = [...this.localeIds].toSorted();
 
     const localeData = await Promise.all(sortedLocaleIds.map(id => this.getLocaleData(id)));
 
     localeData.forEach((data) => {
-      this.collectFoodPortionSizeDependencies(data.localFoods);
-      this.collectCategoryPortionSizeDependencies(data.localCategories);
+      this.collectFoodPortionSizeDependencies(data.foods);
+      this.collectCategoryPortionSizeDependencies(data.categories);
     });
-
-    const uniqueGlobalFoods = uniqBy(
-      localeData.flatMap(data => data.globalFoods),
-      globalFood => globalFood.code,
-    );
-
-    const uniqueGlobalCategories = uniqBy(
-      localeData.flatMap(data => data.globalCategories),
-      globalFood => globalFood.code,
-    );
 
     // Drinkware sets and guide images contain references to image maps, download these first
     // and collect dependencies before downloading image map data
@@ -430,22 +374,20 @@ export class ExporterV3 {
     const writer = new PackageWriter(logger, this.workingDir, this.options);
 
     await Promise.all([
-      writer.writeGlobalFoods(uniqueGlobalFoods),
-      writer.writeGlobalCategories(uniqueGlobalCategories),
       writer.writeLocales(localeData.map(data => data.properties)),
-      writer.writeLocalFoods(
+      writer.writeFoods(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
-            localeData.map(data => data.localFoods),
+            localeData.map(data => data.foods),
           ),
         ),
       ),
-      writer.writeLocalCategories(
+      writer.writeCategories(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
-            localeData.map(data => data.localCategories),
+            localeData.map(data => data.categories),
           ),
         ),
       ),

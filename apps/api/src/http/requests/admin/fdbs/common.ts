@@ -7,31 +7,29 @@ import {
   portionSizeMethods as portionSizeMethodIds,
   portionSizeParameter,
 } from '@intake24/common/surveys';
-import {
-  useInRecipeTypes,
-} from '@intake24/common/types';
-import { Category, Food, FoodsLocale, NutrientTableRecord } from '@intake24/db';
+import { useInRecipeTypes } from '@intake24/common/types';
+import { Category, Food, NutrientTableRecord } from '@intake24/db';
 
 export const attributes: Schema = {
-  'main.attributes.readyMealOption': {
+  'attributes.readyMealOption': {
     in: ['body'],
     errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
-  'main.attributes.reasonableAmount': {
+  'attributes.reasonableAmount': {
     in: ['body'],
     errorMessage: typeErrorMessage('int._'),
     isInt: true,
     optional: { options: { nullable: true } },
   },
-  'main.attributes.sameAsBeforeOption': {
+  'attributes.sameAsBeforeOption': {
     in: ['body'],
     errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
     optional: { options: { nullable: true } },
   },
-  'main.attributes.useInRecipes': {
+  'attributes.useInRecipes': {
     in: ['body'],
     errorMessage: typeErrorMessage('in.options', { options: Object.values(useInRecipeTypes) }),
     isIn: { options: [Object.values(useInRecipeTypes)] },
@@ -46,28 +44,6 @@ export const categories: ParamSchema = {
   optional: true,
   custom: {
     options: async (value: any[], meta): Promise<void> => {
-      if (value.some(({ code }) => !code || typeof code !== 'string'))
-        throw new Error(customTypeErrorMessage('array.string', meta));
-
-      if (!value.length)
-        return;
-
-      const code = value.map(({ code }) => code);
-
-      const availableCategories = await Category.count({ where: { code } });
-      if (availableCategories !== value.length)
-        throw new Error(customTypeErrorMessage('exists._', meta));
-    },
-  },
-};
-
-export const locales: ParamSchema = {
-  in: ['body'],
-  errorMessage: typeErrorMessage('array._'),
-  isArray: { bail: true },
-  optional: true,
-  custom: {
-    options: async (value: any[], meta): Promise<void> => {
       if (value.some(({ id }) => !id || typeof id !== 'string'))
         throw new Error(customTypeErrorMessage('array.string', meta));
 
@@ -76,8 +52,8 @@ export const locales: ParamSchema = {
 
       const id = value.map(({ id }) => id);
 
-      const availableLocales = await FoodsLocale.count({ where: { id } });
-      if (availableLocales !== value.length)
+      const availableCategories = await Category.count({ where: { id } });
+      if (availableCategories !== value.length)
         throw new Error(customTypeErrorMessage('exists._', meta));
     },
   },
@@ -186,8 +162,8 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedCategoryCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'main.code' }),
-    isLength: { bail: true, options: { max: 8 } },
+    errorMessage: typeErrorMessage('string.max', { max: 64, attributePath: 'code' }),
+    isLength: { bail: true, options: { max: 64 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
@@ -200,10 +176,10 @@ export const associatedFoods: Schema = {
           if (associatedFoodCode)
             throw new Error('Either category or food code can be defined.');
 
-          const category = await Category.findByPk(value, { attributes: ['code'] });
+          const category = await Category.findOne({ where: { code: value }, attributes: ['code'] });
           if (!category) {
             throw new Error(
-              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' }),
+              customTypeErrorMessage('exists._', meta, { attributePath: 'code' }),
             );
           }
         }
@@ -216,8 +192,8 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedFoodCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'main.code' }),
-    isLength: { bail: true, options: { max: 8 } },
+    errorMessage: typeErrorMessage('string.max', { max: 64, attributePath: 'code' }),
+    isLength: { bail: true, options: { max: 64 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
@@ -230,10 +206,10 @@ export const associatedFoods: Schema = {
           if (associatedCategoryCode)
             throw new Error('Either category or food code can be defined.');
 
-          const food = await Food.findByPk(value, { attributes: ['code'] });
+          const food = await Food.findOne({ where: { code: value }, attributes: ['code'] });
           if (!food) {
             throw new Error(
-              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' }),
+              customTypeErrorMessage('exists._', meta, { attributePath: 'code' }),
             );
           }
         }

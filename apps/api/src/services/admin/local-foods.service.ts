@@ -7,14 +7,14 @@ import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
 import type { PortionSizeMethod } from '@intake24/common/surveys';
 import type {
-  CreateLocalFoodRequest,
-  CreateLocalFoodRequestOptions,
+  CreateFoodRequest,
+  CreateFoodRequestOptions,
 } from '@intake24/common/types/http/admin';
 import type { AssociatedFood as HttpAssociatedFood } from '@intake24/common/types/http/admin/associated-food';
 import {
   AssociatedFood,
-  FoodLocal,
-  FoodLocalList,
+  Food,
+  FoodAttribute,
   FoodNutrient,
   FoodPortionSizeMethod,
   NutrientTableRecord,
@@ -22,11 +22,11 @@ import {
 
 function localFoodsService({ db }: Pick<IoC, 'db'>) {
   async function toPortionSizeMethodAttrs(
-    foodLocalId: string,
+    foodId: string,
     psm: PortionSizeMethod,
   ): Promise<CreationAttributes<FoodPortionSizeMethod>> {
     return {
-      foodLocalId,
+      foodId,
       method: psm.method,
       description: psm.description,
       useForRecipes: psm.useForRecipes,
@@ -37,14 +37,12 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
   }
 
   function toAssociatedFoodAttrs(
-    localeId: string,
-    foodCode: string,
+    foodId: string,
     index: number,
     httpAssociatedFood: HttpAssociatedFood,
   ): CreationAttributes<AssociatedFood> {
     return {
-      foodCode,
-      localeId,
+      foodId,
       associatedFoodCode: httpAssociatedFood.foodCode,
       associatedCategoryCode: httpAssociatedFood.categoryCode,
       text: httpAssociatedFood.promptText,
@@ -56,34 +54,33 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
   }
 
   async function updateAssociatedFoodsImpl(
-    localeId: string,
-    foodCode: string,
+    foodId: string,
     associatedFoods: HttpAssociatedFood[],
     transaction: Transaction,
   ) {
-    const creationAttributes = associatedFoods.map((af, index) => toAssociatedFoodAttrs(localeId, foodCode, index, af));
+    const creationAttributes = associatedFoods.map((af, index) => toAssociatedFoodAttrs(foodId, index, af));
 
-    await AssociatedFood.destroy({ where: { localeId, foodCode }, transaction });
+    await AssociatedFood.destroy({ where: { foodId }, transaction });
 
     await AssociatedFood.bulkCreate(creationAttributes, { transaction });
   }
 
   async function updatePortionSizeMethodsImpl(
-    foodLocalId: string,
+    foodId: string,
     methods: PortionSizeMethod[],
     transaction: Transaction,
   ) {
     const creationAttributes = await Promise.all(
-      methods.map(psm => toPortionSizeMethodAttrs(foodLocalId, psm)),
+      methods.map(psm => toPortionSizeMethodAttrs(foodId, psm)),
     );
 
-    await FoodPortionSizeMethod.destroy({ where: { foodLocalId }, transaction });
+    await FoodPortionSizeMethod.destroy({ where: { foodId }, transaction });
 
     await FoodPortionSizeMethod.bulkCreate(creationAttributes, { transaction });
   }
 
   async function updateNutrientMappingImpl(
-    foodLocalId: string,
+    foodId: string,
     nutrientTableReferences: Record<string, string>,
     transaction: Transaction,
   ) {
@@ -122,19 +119,19 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     });
 
     const creationAttributes = nutrientTableRecordIds.map(nutrientTableRecordId => ({
-      foodLocalId,
+      foodId,
       nutrientTableRecordId,
     }));
 
-    await FoodNutrient.destroy({ where: { foodLocalId }, transaction });
+    await FoodNutrient.destroy({ where: { foodId }, transaction });
 
     await FoodNutrient.bulkCreate(creationAttributes, { transaction });
   }
 
   async function createImpl(
     localeId: string,
-    request: CreateLocalFoodRequest,
-    options: CreateLocalFoodRequestOptions,
+    request: CreateFoodRequest,
+    options: CreateFoodRequestOptions,
     transaction: Transaction,
   ): Promise<boolean> {
     let created = false;
@@ -147,13 +144,11 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     // Manually checking for an existing record is not ideal (database constraints could change and
     // become out of sync with this code) but good enough.
 
-    let instance = await FoodLocal.findOne({
-      where: { localeId, foodCode: request.code },
-      transaction,
-    });
+    let instance = await Food.findOne({ where: { localeId, code: request.code }, transaction });
 
     if (instance !== null) {
       if (options.update) {
+        instance.englishName = request.englishName;
         instance.name = request.name;
         instance.simpleName = toSimpleName(request.name);
         instance.altNames = request.altNames ?? {};
@@ -169,10 +164,11 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       }
     }
     else {
-      instance = await FoodLocal.create(
+      instance = await Food.create(
         {
           localeId,
-          foodCode: request.code,
+          code: request.code,
+          englishName: request.englishName,
           name: request.name,
           altNames: request.altNames,
           tags: request.tags,
@@ -185,34 +181,39 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       created = true;
     }
 
-    await updatePortionSizeMethodsImpl(instance.id, request.portionSizeMethods, transaction);
+    await Promise.all([
+      updatePortionSizeMethodsImpl(instance.id, request.portionSizeMethods, transaction),
+      updateNutrientMappingImpl(instance.id, request.nutrientTableCodes, transaction),
+      updateAssociatedFoodsImpl(instance.id, request.associatedFoods, transaction),
+      request.parentCategories ? instance.$set('parentCategories', request.parentCategories, { transaction }) : null,
+    ].filter(Boolean));
 
-    await updateNutrientMappingImpl(instance.id, request.nutrientTableCodes, transaction);
-
-    await updateAssociatedFoodsImpl(localeId, request.code, request.associatedFoods, transaction);
+    // Should be an upsert, but the Sequelize implementation is weird
+    await FoodAttribute.destroy({ where: { foodId: instance.id }, transaction });
+    await FoodAttribute.create({ ...request.attributes, foodId: instance.id }, { transaction });
 
     return created;
   }
 
   const updatePortionSizeMethods = async (
-    foodLocalId: string,
+    foodId: string,
     methods: PortionSizeMethod[],
     transaction?: Transaction,
   ): Promise<void> => {
     if (transaction !== undefined) {
-      await updatePortionSizeMethodsImpl(foodLocalId, methods, transaction);
+      await updatePortionSizeMethodsImpl(foodId, methods, transaction);
     }
     else {
       await db.foods.transaction(async (t) => {
-        await updatePortionSizeMethodsImpl(foodLocalId, methods, t);
+        await updatePortionSizeMethodsImpl(foodId, methods, t);
       });
     }
   };
 
   const create = async (
     localeId: string,
-    request: CreateLocalFoodRequest,
-    options: CreateLocalFoodRequestOptions,
+    request: CreateFoodRequest,
+    options: CreateFoodRequestOptions,
     transaction?: Transaction,
   ): Promise<boolean> => {
     if (transaction !== undefined) {
@@ -230,17 +231,14 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     foodCode: string,
     transaction: Transaction,
   ) => {
-    const foodLocal = await FoodLocal.findOne({
-      where: { localeId, foodCode },
-      transaction,
-    });
+    const food = await Food.findOne({ where: { localeId, code: foodCode }, transaction });
 
-    if (foodLocal === null)
+    if (food === null)
       throw new NotFoundError();
 
     const portionSizeRows = await FoodPortionSizeMethod.findAll(
       {
-        where: { foodLocalId: foodLocal.id },
+        where: { foodId: food.id },
         attributes: ['method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy', 'parameters'],
         transaction,
       },
@@ -259,9 +257,9 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     return {
       foodCode,
       localeId,
-      id: foodLocal.id,
-      version: foodLocal.version,
-      name: foodLocal.name,
+      id: food.id,
+      version: food.version,
+      name: food.name,
       portionSizeMethods,
     };
   };
@@ -277,25 +275,16 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     }
   };
 
-  const readEnabledFoods = async (localeId: string): Promise<string[]> => {
-    const rows = await FoodLocalList.findAll({ where: { localeId }, attributes: ['foodCode'] });
-    return rows.map(row => row.foodCode);
-  };
-
-  const updateEnabledFoods = async (localeId: string, enabledFoods: string[]) => {
-    return await db.foods.transaction(async (transaction) => {
-      await FoodLocalList.destroy({ where: { localeId }, transaction });
-      const records = enabledFoods.map(foodCode => ({ localeId, foodCode }));
-      await FoodLocalList.bulkCreate(records, { transaction });
-    });
+  const getFoodCodes = async (localeId: string): Promise<string[]> => {
+    const rows = await Food.findAll({ where: { localeId }, attributes: ['code'] });
+    return rows.map(row => row.code);
   };
 
   return {
     create,
     read,
-    readEnabledFoods,
+    getFoodCodes,
     updatePortionSizeMethods,
-    updateEnabledFoods,
   };
 }
 
