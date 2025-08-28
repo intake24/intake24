@@ -1587,9 +1587,6 @@
                     "localName": {
                       "type": "string"
                     },
-                    "groupCode": {
-                      "type": "string"
-                    },
                     "kcalPer100g": {
                       "type": "number"
                     },
@@ -2161,7 +2158,6 @@
                     "code",
                     "englishName",
                     "localName",
-                    "groupCode",
                     "kcalPer100g",
                     "reasonableAmount",
                     "readyMealOption",
@@ -25892,309 +25888,6 @@
         }
       }
     },
-    "/admin/food-groups": {
-      "get": {
-        "description": "Browse food groups (paginated list)",
-        "summary": "Browse food groups",
-        "tags": [
-          "default",
-          "admin",
-          "foodGroup"
-        ],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "maxLength": 128,
-              "nullable": true
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name"
-                        ]
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Create new food group",
-        "summary": "Create food group",
-        "tags": [
-          "default",
-          "admin",
-          "foodGroup"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "description": "Body",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 256
-                  }
-                },
-                "required": [
-                  "name"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "201",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/admin/food-groups/{foodGroupId}": {
-      "get": {
-        "description": "Get food group by id",
-        "summary": "Get food group",
-        "tags": [
-          "default",
-          "admin",
-          "foodGroup"
-        ],
-        "parameters": [
-          {
-            "name": "foodGroupId",
-            "in": "path",
-            "required": true,
-            "schema": {}
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "description": "Update food group by id",
-        "summary": "Update food group",
-        "tags": [
-          "default",
-          "admin",
-          "foodGroup"
-        ],
-        "parameters": [
-          {
-            "name": "foodGroupId",
-            "in": "path",
-            "required": true,
-            "schema": {}
-          }
-        ],
-        "requestBody": {
-          "description": "Body",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 256
-                  }
-                },
-                "required": [
-                  "name"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "description": "Delete food group by id",
-        "summary": "Delete food group",
-        "tags": [
-          "default",
-          "admin",
-          "foodGroup"
-        ],
-        "parameters": [
-          {
-            "name": "foodGroupId",
-            "in": "path",
-            "required": true,
-            "schema": {}
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "204",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
     "/admin/fdbs/{localeId}/{foodCode}/thumbnail": {
       "put": {
         "description": "Update food image thumbnail",
@@ -29416,7 +29109,6 @@
                                         "foods",
                                         "associatedFoods",
                                         "brands",
-                                        "foodGroups",
                                         "recipeFoods",
                                         "splitLists",
                                         "splitWords",
@@ -29552,7 +29244,6 @@
                                       "drinkware-sets.volumes",
                                       "guide-images",
                                       "guide-images.objects",
-                                      "food-groups",
                                       "image-maps",
                                       "image-maps.objects",
                                       "languages",
@@ -30197,7 +29888,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -30333,7 +30023,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -31042,7 +30731,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -31178,7 +30866,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -35460,7 +35147,6 @@
                                 "foods",
                                 "associatedFoods",
                                 "brands",
-                                "foodGroups",
                                 "recipeFoods",
                                 "splitLists",
                                 "splitWords",
@@ -35707,7 +35393,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -35843,7 +35528,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -39479,7 +39163,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -39615,7 +39298,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -42840,124 +42522,6 @@
                           "visibility",
                           "createdAt",
                           "updatedAt"
-                        ]
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/admin/references/food-groups": {
-      "get": {
-        "description": "Food groups (paginated reference list)",
-        "summary": "Food groups",
-        "tags": [
-          "default",
-          "admin",
-          "reference"
-        ],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "maxLength": 128,
-              "nullable": true
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name"
                         ]
                       }
                     },
@@ -56527,7 +56091,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -56663,7 +56226,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -64140,7 +63702,6 @@
                                         "foods",
                                         "associatedFoods",
                                         "brands",
-                                        "foodGroups",
                                         "recipeFoods",
                                         "splitLists",
                                         "splitWords",
@@ -64276,7 +63837,6 @@
                                       "drinkware-sets.volumes",
                                       "guide-images",
                                       "guide-images.objects",
-                                      "food-groups",
                                       "image-maps",
                                       "image-maps.objects",
                                       "languages",
@@ -64807,7 +64367,6 @@
                                 "foods",
                                 "associatedFoods",
                                 "brands",
-                                "foodGroups",
                                 "recipeFoods",
                                 "splitLists",
                                 "splitWords",
@@ -64943,7 +64502,6 @@
                               "drinkware-sets.volumes",
                               "guide-images",
                               "guide-images.objects",
-                              "food-groups",
                               "image-maps",
                               "image-maps.objects",
                               "languages",
@@ -65419,7 +64977,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -65555,7 +65112,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -66059,7 +65615,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -66195,7 +65750,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -66745,7 +66299,6 @@
                                 "foods",
                                 "associatedFoods",
                                 "brands",
-                                "foodGroups",
                                 "recipeFoods",
                                 "splitLists",
                                 "splitWords",
@@ -66881,7 +66434,6 @@
                               "drinkware-sets.volumes",
                               "guide-images",
                               "guide-images.objects",
-                              "food-groups",
                               "image-maps",
                               "image-maps.objects",
                               "languages",
@@ -67357,7 +66909,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -67493,7 +67044,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -68086,7 +67636,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -68222,7 +67771,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -68957,7 +68505,6 @@
                                         "foods",
                                         "associatedFoods",
                                         "brands",
-                                        "foodGroups",
                                         "recipeFoods",
                                         "splitLists",
                                         "splitWords",
@@ -69093,7 +68640,6 @@
                                       "drinkware-sets.volumes",
                                       "guide-images",
                                       "guide-images.objects",
-                                      "food-groups",
                                       "image-maps",
                                       "image-maps.objects",
                                       "languages",
@@ -69630,7 +69176,6 @@
                           "drinkware-sets.volumes",
                           "guide-images",
                           "guide-images.objects",
-                          "food-groups",
                           "image-maps",
                           "image-maps.objects",
                           "languages",
@@ -69785,7 +69330,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -69921,7 +69465,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
@@ -70527,7 +70070,6 @@
                                   "foods",
                                   "associatedFoods",
                                   "brands",
-                                  "foodGroups",
                                   "recipeFoods",
                                   "splitLists",
                                   "splitWords",
@@ -70663,7 +70205,6 @@
                                 "drinkware-sets.volumes",
                                 "guide-images",
                                 "guide-images.objects",
-                                "food-groups",
                                 "image-maps",
                                 "image-maps.objects",
                                 "languages",
