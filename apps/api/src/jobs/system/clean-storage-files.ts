@@ -1,12 +1,9 @@
 import type { Job } from 'bullmq';
-
 import path from 'node:path';
 import fs from 'fs-extra';
-
 import type { LocalLocation } from '@intake24/api/config/filesystem';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
-
 import BaseJob from '../job';
 
 export default class CleanStorageFiles extends BaseJob<'CleanStorageFiles'> {
@@ -57,13 +54,13 @@ export default class CleanStorageFiles extends BaseJob<'CleanStorageFiles'> {
 
     for (const file of files) {
       const filepath = path.resolve(dir, file);
-      const { ctime } = await fs.stat(filepath);
-      const expiresAt = addTime(expiresIn, ctime);
+      const stats = await fs.stat(filepath);
+      const expiresAt = addTime(expiresIn, stats.ctime);
 
       if (expiresAt > now)
         continue;
 
-      await fs.unlink(filepath);
+      await fs.rm(filepath, { recursive: true, force: true });
     }
 
     this.logger.debug(`Cleaning of '${dir}' folder finished.`);
