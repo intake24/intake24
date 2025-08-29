@@ -5,6 +5,7 @@ import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/sea
 import type { IoC } from '@intake24/api/ioc';
 import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
+import { OpenSearchJapaneseService } from './opensearch-japanese-service';
 
 // const ATTR_USE_ANYWHERE = 0;
 const ATTR_AS_REGULAR_FOOD_ONLY = 1;
@@ -19,6 +20,13 @@ function foodSearchService({
   semanticSearchService,
   hybridScorerService,
 }: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig' | 'logger' | 'semanticSearchService' | 'hybridScorerService'>) {
+  const openSearchJapaneseService = new OpenSearchJapaneseService({ logger });
+
+  // Initialize OpenSearch on startup
+  openSearchJapaneseService.initialize().catch((error) => {
+    logger.error('Failed to initialize OpenSearch Japanese service:', error);
+  });
+
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -45,6 +53,54 @@ function foodSearchService({
   };
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
+    // Use OpenSearch for Japanese locale
+    if (localeId === 'ja-JP' || localeId === 'jp-JP' || localeId === 'jp_JP_2024') {
+      try {
+        logger.debug(`Using OpenSearch for Japanese search: locale=${localeId}, query="${description}"`);
+
+        const { results, total, took } = await openSearchJapaneseService.searchFoods({
+          query: description,
+          limit: options.limit || 50,
+          enablePhonetic: options.enablePhonetic ?? true,
+        });
+
+        // Transform OpenSearch results to FoodSearchResponse format
+        // Note: OpenSearch doesn't have useInRecipes field yet, so we'll accept all for now
+        const foods = results
+          .map(result => ({
+            code: result.foodCode,
+            name: result.name,
+          }));
+
+        // Get inheritable attributes for foods
+        const foodCodes = foods.map(f => f.code);
+        const attributes = await getInheritableAttributes(foodCodes);
+
+        // Get thumbnail images for foods
+        const thumbnailImages = await foodThumbnailImageService.resolveImages(localeId, foodCodes);
+
+        // Combine all data and filter by recipe type
+        const enhancedFoods = foods
+          .filter(food => acceptForQuery(isRecipe, attributes[food.code]?.useInRecipes))
+          .map(food => ({
+            ...food,
+            thumbnailImageUrl: thumbnailImages[food.code] || undefined,
+          }));
+
+        logger.info(`OpenSearch Japanese search completed: found ${total} results in ${took}ms`);
+
+        return {
+          foods: enhancedFoods,
+          categories: [], // OpenSearch doesn't return categories currently
+        };
+      }
+      catch (error) {
+        logger.error(`OpenSearch Japanese search failed, falling back to default search:`, error);
+        // Fall back to default search if OpenSearch fails
+      }
+    }
+
+    // Default search logic for non-Japanese locales or fallback
     const optimizedOptions = await localeOptimizer.applySearchOptimizations(localeId, options, logger);
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, optimizedOptions);
 

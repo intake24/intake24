@@ -1,10 +1,11 @@
 import type { AppConfig } from './app';
 import type { CacheConfig } from './cache';
 import type { FileSystemConfig } from './filesystem';
+import type opensearchConfig from './opensearch';
 import type { PdfConfig } from './pdf';
 import type { PublisherConfig, SubscriberConfig } from './pub-sub';
-import type { QueueConfig } from './queue';
 
+import type { QueueConfig } from './queue';
 import type { RateLimiterConfig } from './rate-limiter';
 import type { SecurityConfig } from './security';
 import type { ServicesConfig } from './services';
@@ -18,6 +19,7 @@ import { databaseConfig as database } from '@intake24/db';
 import app from './app';
 import cache from './cache';
 import filesystem from './filesystem';
+import opensearch from './opensearch';
 import pdf from './pdf';
 import { publisherConfig as publisher, subscriberConfig as subscriber } from './pub-sub';
 import queue from './queue';
@@ -46,6 +48,7 @@ export type Config = {
   filesystem: FileSystemConfig;
   log: LogConfig;
   mail: MailConfig;
+  opensearch: typeof opensearchConfig;
   pdf: PdfConfig;
   queue: QueueConfig;
   rateLimiter: RateLimiterConfig;
@@ -65,6 +68,7 @@ const config: Config = {
   filesystem,
   log,
   mail,
+  opensearch,
   pdf,
   queue,
   rateLimiter,
