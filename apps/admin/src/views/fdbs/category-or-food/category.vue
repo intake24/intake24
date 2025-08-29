@@ -44,6 +44,26 @@
                   @update:model-value="errors.clear('allowGenUsers')"
                 />
               </v-col>
+              <v-col cols="12">
+                <language-selector
+                  v-model="data.altNames"
+                  border
+                  :label="$t('fdbs.categories.local.altNames')"
+                >
+                  <template v-for="lang in Object.keys(data.altNames)" :key="lang" #[`lang.${lang}`]>
+                    <div v-for="(item, idx) in data.altNames[lang]" :key="item" class="mb-2">
+                      <v-text-field
+                        v-model="data.altNames[lang][idx]"
+                        density="compact"
+                        hide-details="auto"
+                        :label="$t('fdbs.categories.local.altNames')"
+                        :name="`altNames.${lang}.${idx}`"
+                        variant="outlined"
+                      />
+                    </div>
+                  </template>
+                </language-selector>
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
@@ -131,6 +151,7 @@ import {
   CopyEntryDialog,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { useUser } from '@intake24/admin/stores';
@@ -150,6 +171,7 @@ export default defineComponent({
     CategoryList,
     ConfirmLeaveDialog,
     CopyEntryDialog,
+    LanguageSelector,
     PortionSizeMethodList,
   },
 
@@ -196,6 +218,7 @@ export default defineComponent({
           },
           parentCategories: [],
         },
+        altNames: {},
         tags: [],
         portionSizeMethods: [],
       },

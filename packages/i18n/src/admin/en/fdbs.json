@@ -39,6 +39,7 @@
       "_": "Local category settings",
       "id": "Local category ID",
       "name": "Local name",
+      "altNames": "Alternative names",
       "tags": "Tags"
     },
     "attributes": {
@@ -63,6 +64,7 @@
       "_": "Local food settings",
       "id": "Local food ID",
       "name": "Local name",
+      "altNames": "Alternative names",
       "tags": "Tags"
     },
     "attributes": {

@@ -35,6 +35,7 @@
       "_": "Paramètres des catégories régionales",
       "id": "Code de la catégorie régionale",
       "name": "Nom régional",
+      "altNames": "Autres noms",
       "tags": "Tags"
     },
     "attributes": {
@@ -58,6 +59,7 @@
       "_": "Paramètres pour les aliments régionaux",
       "id": "Identifiant régional de l'aliment",
       "name": "Nom régional",
+      "altNames": "Autres noms",
       "tags": "Tags"
     },
     "attributes": {

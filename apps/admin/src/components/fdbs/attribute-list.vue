@@ -7,7 +7,7 @@
     </v-toolbar>
     <v-card-text>
       <v-row>
-        <v-col cols="auto">
+        <v-col align-self="center" cols="auto">
           <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('sameAsBeforeOption')">
             {{ title('sameAsBeforeOption') }}
           </v-btn>
