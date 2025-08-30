@@ -104,7 +104,7 @@
           <template #extension>
             <v-container fluid>
               <v-tabs v-model="tab" bg-color="secondary">
-                <v-tab v-for="item in ['general', 'json']" :key="item" :tab-value="item">
+                <v-tab v-for="item in ['general', 'json']" :key="item" :value="item">
                   {{ item }}
                 </v-tab>
               </v-tabs>
@@ -115,7 +115,7 @@
           <v-container class="dialog-container" fluid>
             <error-list :errors="errors.get(`meals.${dialog.index}.*`)" />
             <v-tabs-window v-model="tab" class="pt-1 flex-grow-1">
-              <v-tabs-window-item key="general" value="general">
+              <v-tabs-window-item value="general">
                 <v-row>
                   <v-col cols="12" md="6">
                     <language-selector
@@ -160,7 +160,7 @@
                   </v-col>
                 </v-row>
               </v-tabs-window-item>
-              <v-tabs-window-item key="json" value="json">
+              <v-tabs-window-item value="json">
                 <json-editor v-model="dialog.meal" />
               </v-tabs-window-item>
             </v-tabs-window>
@@ -233,7 +233,7 @@ function newDialog(show = false): MealDialog {
   return {
     show,
     index: -1,
-    meal: { name: { en: '' }, time: '8:00', flags: [] },
+    meal: { name: { en: '' }, time: '08:00', flags: [] },
   };
 }
 
@@ -270,10 +270,12 @@ function clearErrors(index?: number) {
 
 function add() {
   dialog.value = newDialog(true);
+  tab.value = 'general';
 };
 
 function edit(index: number, meal: Meal) {
   dialog.value = { show: true, index, meal: copy(meal) };
+  tab.value = 'general';
 };
 
 async function save() {
@@ -299,6 +301,7 @@ function remove(index: number) {
 function reset() {
   dialog.value = newDialog();
   form.value?.resetValidation();
+  tab.value = 'general';
 };
 
 function load(items: Meal[]) {
