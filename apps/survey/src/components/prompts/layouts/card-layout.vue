@@ -42,11 +42,7 @@
           <slot name="actions" />
         </template>
       </prompt-actions>
-      <div v-if="!isInMultiPrompt && $vuetify.display.mobile" id="actions" class="bottom-navigation">
-        <div v-if="showSummary" class="bottom-navigation__summary">
-          <meal-list-mobile v-bind="{ meals }" @action="action" />
-        </div>
-      </div>
+      <meal-list-mobile :disabled="!showSummary || isInMultiPrompt" :meals @action="action" />
     </v-card>
   </div>
 </template>

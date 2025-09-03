@@ -2,7 +2,6 @@
   "_": "Intake24",
   "home": "Utama",
   "dashboard": "Halaman utama",
-  "navigation": "Navigasi",
   "welcome": {
     "_": "Selamat datang ke Intake24",
     "subtitle": "Intake24 ialah sistem berkomputer sumber terbuka ingatan semula diet, yang dilengkapi oleh pengguna berdasarkan rekod ingatan semula multiple-pass 24 jam.."
@@ -23,6 +22,15 @@
   "logout": {
     "_": "Log keluar",
     "text": "Log keluar daripada aplikasi"
+  },
+  "nav": {
+    "_": "Navigation",
+    "home": "Home",
+    "feedback": "Feedback",
+    "recall": "Recall",
+    "review": "Review",
+    "help": "Help",
+    "options": "Options"
   },
   "username": "Nama pengguna",
   "name": "Nama",

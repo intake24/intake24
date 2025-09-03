@@ -100,7 +100,7 @@ export default createVuetify({
       edit: 'fas fa-edit',
       expandImage: 'fas fa-arrows-alt',
       faqs: 'fas fa-question-circle',
-      feedback: 'fas fa-comments',
+      feedback: 'fas fa-chart-pie',
       food: 'fas fa-bowl-food',
       info: 'fas fa-circle-info',
       home: 'fas fa-home',
