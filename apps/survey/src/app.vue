@@ -127,7 +127,7 @@
             :to="{ name: 'survey-profile', params: { surveyId } }"
           >
             <span>{{ $t('profile._') }}</span>
-            <v-icon icon="$profile" />
+            <v-icon end icon="$profile" />
           </v-btn>
           <confirm-dialog
             :label="$t('common.logout._')"
