@@ -2,7 +2,7 @@
   "_": "Dietary feedback",
   "info": "Dietary feedback information",
   "status": {
-    "available": "Dietary Feedback is available",
+    "available": "Dietary feedback is available",
     "lowRecalls": "Dietary feedback will be available once you submitted at least {minRecalls} recalls.",
     "notAvailable": "Dietary feedback is not available for this survey."
   },
