@@ -36,11 +36,7 @@
         <slot name="actions" />
       </template>
     </prompt-actions>
-    <div v-if="$vuetify.display.mobile" id="actions" class="bottom-navigation">
-      <div v-if="showSummary" class="bottom-navigation__summary">
-        <meal-list-mobile v-if="showSummary" v-bind="{ meals }" @action="action" />
-      </div>
-    </div>
+    <meal-list-mobile :disabled="!showSummary || isInMultiPrompt" :meals @action="action" />
   </div>
 </template>
 

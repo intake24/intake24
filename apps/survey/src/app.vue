@@ -1,18 +1,35 @@
 <template>
   <v-app :class="{ mobile: $vuetify.display.mobile }">
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-model="sidebar">
+    <v-navigation-drawer
+      v-model="navDrawer"
+      height="auto"
+      :location="$vuetify.display.mobile ? 'bottom' : undefined"
+      temporary
+    >
       <template v-if="loggedIn && surveyId">
-        <v-list>
-          <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
-            <template #prepend>
-              <v-icon color="info" icon="fas fa-circle-user" size="30" />
+        <div class="py-3 d-flex flex-row justify-space-between align-center">
+          <v-btn
+            :to="{ name: 'survey-profile', params: { surveyId } }"
+            variant="plain"
+          >
+            <v-icon class="me-4" color="info" icon="fas fa-circle-user" size="30" />
+            {{ userName ?? $t('profile._') }}
+          </v-btn>
+          <confirm-dialog
+            v-if="$vuetify.display.mobile"
+            :label="$t('common.logout._')"
+            @confirm="logout"
+          >
+            <template #activator="{ props }">
+              <v-btn v-bind="props" class="me-2" color="grey-darken-2" rounded variant="tonal">
+                <v-icon icon="$logout" start />
+                <span>{{ $t('common.logout._') }}</span>
+              </v-btn>
             </template>
-            <v-list-item-title class="font-weight-medium text-h6">
-              {{ userName ?? $t('profile._') }}
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
+            {{ $t('common.logout.text') }}
+          </confirm-dialog>
+        </div>
         <v-divider />
       </template>
       <v-list density="compact" nav>
@@ -50,20 +67,10 @@
             </template>
             <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
           </v-list-item>
-          <v-list-item
-            v-if="faqsEnabled"
-            link
-            :to="{ name: 'faqs', params: { surveyId } }"
-          >
-            <template #prepend>
-              <v-icon icon="$faqs" />
-            </template>
-            <v-list-item-title>{{ $t('common.faqs._') }}</v-list-item-title>
-          </v-list-item>
         </template>
       </v-list>
       <template #append>
-        <div v-if="loggedIn" class="pa-2">
+        <div v-if="loggedIn && !$vuetify.display.mobile" class="pa-2">
           <confirm-dialog
             :label="$t('common.logout._')"
             @confirm="logout"
@@ -71,7 +78,7 @@
             <template #activator="{ props }">
               <v-btn v-bind="props" block color="grey-darken-2" rounded variant="tonal">
                 <v-icon icon="$logout" start />
-                <span class="me-2">{{ $t('common.logout._') }}</span>
+                {{ $t('common.logout._') }}
               </v-btn>
             </template>
             {{ $t('common.logout.text') }}
@@ -80,8 +87,12 @@
         <app-nav-footer :contact="showContact" />
       </template>
     </v-navigation-drawer>
-    <v-app-bar color="primary" flat scroll-behavior="hide">
-      <v-app-bar-nav-icon :title="$t('common.navigation')" @click.stop="toggleSidebar" />
+    <v-app-bar class="px-2 px-md-0" color="primary" flat scroll-behavior="hide">
+      <v-app-bar-nav-icon
+        v-if="!$vuetify.display.mobile"
+        :title="$t('common.nav._')"
+        @click.stop="toggleNavDrawer"
+      />
       <template v-if="loggedIn">
         <div v-if="surveyName" class="app-bar-survey-info">
           <i18n-t keypath="recall.survey" tag="span">
@@ -98,31 +109,29 @@
             </i18n-t>
           </template>
         </div>
-        <v-spacer v-if="$vuetify.display.smAndUp" />
-        <v-btn
-          v-if="surveyId && !$vuetify.display.mobile"
-          :icon="$vuetify.display.mobile"
-          :size="$vuetify.display.mobile ? 'large' : undefined"
-          :title="$t('profile._')"
-          :to="{ name: 'survey-profile', params: { surveyId } }"
-          :variant="!$vuetify.display.mobile ? 'text' : undefined"
-        >
-          <span v-if="!$vuetify.display.mobile" class="me-2">{{ $t('profile._') }}</span>
-          <v-icon>$profile</v-icon>
-        </v-btn>
-        <confirm-dialog
-          v-if="!$vuetify.display.mobile"
-          :label="$t('common.logout._')"
-          @confirm="logout"
-        >
-          <template #activator="{ props }">
-            <v-btn variant="text" v-bind="props">
-              <span v-if="!$vuetify.display.mobile" class="me-2">{{ $t('common.logout._') }}</span>
-              <v-icon end icon="$logout" />
-            </v-btn>
-          </template>
-          {{ $t('common.logout.text') }}
-        </confirm-dialog>
+        <template v-if="!$vuetify.display.mobile">
+          <v-spacer />
+          <v-btn
+            v-if="surveyId"
+            :title="$t('profile._')"
+            :to="{ name: 'survey-profile', params: { surveyId } }"
+          >
+            <span>{{ $t('profile._') }}</span>
+            <v-icon end icon="$profile" />
+          </v-btn>
+          <confirm-dialog
+            :label="$t('common.logout._')"
+            @confirm="logout"
+          >
+            <template #activator="{ props }">
+              <v-btn variant="text" v-bind="props">
+                <span>{{ $t('common.logout._') }}</span>
+                <v-icon end icon="$logout" />
+              </v-btn>
+            </template>
+            {{ $t('common.logout.text') }}
+          </confirm-dialog>
+        </template>
       </template>
       <template v-else>
         <v-app-bar-title>{{ $t('common._') }}</v-app-bar-title>
@@ -133,7 +142,13 @@
     </v-main>
     <navigation
       v-if="showNav && surveyId"
-      v-bind="{ surveyId, recall: recallAllowed, feedback: feedbackAllowed }"
+      v-model="navDrawer"
+      v-bind="{
+        surveyId,
+        recall: recallAllowed,
+        feedback: feedbackAllowed,
+      }"
+      @toggle-nav="toggleNavDrawer"
     />
     <service-worker />
     <message-box />
@@ -141,13 +156,11 @@
   </v-app>
 </template>
 
-<script lang="ts">
-import { mapState } from 'pinia';
-import { computed, defineComponent, ref, watch } from 'vue';
+<script lang="ts" setup>
+import { storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
 import { useLocale } from 'vuetify';
-
 import { useI18n } from '@intake24/i18n';
 import { Navigation } from '@intake24/survey/components/layouts';
 import { sendGtmEvent } from '@intake24/survey/util';
@@ -155,75 +168,52 @@ import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWork
 import { useHttp } from './services';
 import { useAuth, useSurvey } from './stores';
 
-export default defineComponent({
-  name: 'App',
+const http = useHttp();
+const route = useRoute();
+const router = useRouter();
+const vI18n = useLocale();
+const { i18n: { t } } = useI18n();
+useLanguage('survey', http, vI18n);
+const auth = useAuth();
+const survey = useSurvey();
 
-  components: { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, Navigation, ServiceWorker },
+const { loggedIn } = storeToRefs(auth);
+const { feedbackAllowed, recallAllowed, recallNumber } = storeToRefs(survey);
 
-  setup() {
-    const http = useHttp();
-    const route = useRoute();
-    const router = useRouter();
-    const vI18n = useLocale();
-    const { i18n: { t } } = useI18n();
-    useLanguage('survey', http, vI18n);
+const surveyName = computed(() => survey.parameters?.name);
+const userName = computed(() => survey.user?.name);
 
-    const sidebar = ref(false);
+const surveyId = computed<string | undefined>(() => route.params.surveyId?.toString());
+const showNav = computed(() => loggedIn.value && !!surveyId.value);
+const navDrawer = ref(false);
+const title = computed(() => t(route.meta?.title ?? 'common._'));
+const showContact = computed(() => route.name === 'home');
 
-    const title = computed(() => t(route.meta?.title ?? 'common._'));
-    const windowInnerHeight = computed(() => window.innerHeight);
+function toggleNavDrawer() {
+  navDrawer.value = !navDrawer.value;
+};
 
-    const surveyId = computed<string | undefined>(() => route.params.surveyId?.toString());
-    const showContact = computed(() => route.name === 'home');
+async function logout() {
+  await useAuth().logout(true);
+  sendGtmEvent({
+    event: 'surveyLogout',
+  });
+  await router.push(
+    surveyId.value ? { name: 'survey-login', params: { surveyId: surveyId.value } } : { name: 'home' },
+  );
+};
 
-    function toggleSidebar() {
-      sidebar.value = !sidebar.value;
-    };
-
-    async function logout() {
-      await useAuth().logout(true);
-      sendGtmEvent({
-        event: 'surveyLogout',
-      });
-      await router.push(
-        surveyId.value ? { name: 'survey-login', params: { surveyId: surveyId.value } } : { name: 'home' },
-      );
-    };
-
-    watch(title, () => {
-      document.title = title.value;
-    });
-
-    return {
-      logout,
-      showContact,
-      sidebar,
-      surveyId,
-      toggleSidebar,
-      windowInnerHeight,
-    };
-  },
-
-  computed: {
-    ...mapState(useAuth, ['loggedIn']),
-    ...mapState(useSurvey, {
-      faqsEnabled: 'faqsEnabled',
-      feedbackAllowed: 'feedbackAllowed',
-      recallAllowed: 'recallAllowed',
-      recallNumber: 'recallNumber',
-      surveyName: state => state.parameters?.name,
-      userName: state => state.user?.name,
-    }),
-
-    showNav(): boolean {
-      return this.loggedIn && !!this.surveyId && this.$route.name !== 'survey-recall';
-    },
-  },
+watch(title, () => {
+  document.title = title.value;
 });
 </script>
 
 <style lang="scss">
 @use '@intake24/survey/scss/app.scss';
+
+.v-navigation-drawer.v-navigation-drawer--active {
+  height: auto !important;
+}
 
 .app-bar-survey-info {
   background-color: #ffffff;
@@ -238,8 +228,6 @@ export default defineComponent({
   flex-direction: row;
   align-items: center;
 
-  margin-left: 8px;
-  margin-right: 12px;
   padding: 8px 16px 8px 16px;
 
   overflow: hidden;
@@ -262,9 +250,5 @@ export default defineComponent({
 
     padding: 0px 16px 0px 16px;
   }
-}
-
-.v-main:has(.bottom-navigation) {
-  padding-bottom: 65px !important;
 }
 </style>

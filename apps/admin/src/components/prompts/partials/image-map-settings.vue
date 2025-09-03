@@ -26,7 +26,7 @@
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
 import type { ImageMap } from '@intake24/common/prompts';
-import { useI18n } from '@intake24/i18n/index';
+import { useI18n } from '@intake24/i18n';
 
 const props = defineProps({
   modelValue: {

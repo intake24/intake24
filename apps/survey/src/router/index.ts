@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import {
   authGuard,
   createUserGuard,
-  faqsGuard,
   feedbackParametersGuard,
   globalGuard,
   surveyParametersErrorGuard,
@@ -107,15 +106,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/feedback/physical-data.vue'),
     meta: { module: 'feedback', title: 'feedback._' },
     beforeEnter: feedbackParametersGuard,
-    props: true,
-  },
-  // FAQ
-  {
-    path: '/:surveyId/faqs',
-    name: 'faqs',
-    component: () => import('../views/faqs.vue'),
-    meta: { module: 'faqs', title: 'common.faqs._' },
-    beforeEnter: faqsGuard,
     props: true,
   },
   // Catch any unmatched routes

@@ -2,7 +2,6 @@
   "_": "Intake24",
   "home": "முகப்பு",
   "dashboard": "முகப்பலகம்",
-  "navigation": "Navigation",
   "welcome": {
     "_": "Intake24க்கு வரவேற்கிறோம்",
     "subtitle": "Intake2 என்பது மல்டிபிள் பாஸ் 24 மணி நேர நினைவுட்டு  அடிப்படையிலான ஒரு திறந்த மூல சுய-நிறைவு செய்யப்பட்ட கணினிமயமாக்கப்பட்ட உணவுமுறை திரும்ப மென்பொருள் அமைப்பாகும்."
@@ -23,6 +22,15 @@
   "logout": {
     "_": "வெளியேறு",
     "text": "பயன்பாட்டில் இருந்து வெளியேறவும்"
+  },
+  "nav": {
+    "_": "Navigation",
+    "home": "Home",
+    "feedback": "Feedback",
+    "recall": "Recall",
+    "review": "Review",
+    "help": "Help",
+    "options": "Options"
   },
   "username": "பயனர் பெயர்",
   "name": "பெயர்",

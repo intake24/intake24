@@ -74,7 +74,7 @@ import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { commonCollections } from '@intake24/common/types/http/admin';
 import type { MediaEntry } from '@intake24/common/types/http/admin';
 import { modelToResource } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n/index';
+import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
   name: 'MediaDetail',
