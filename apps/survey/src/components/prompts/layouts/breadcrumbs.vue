@@ -5,31 +5,21 @@
         <v-icon icon="fas fa-caret-right" />
       </template>
     </v-breadcrumbs>
-    <v-spacer />
-    <request-help
-      v-if="!!helpSettings?.available.length" :settings="helpSettings" :survey-id="$route.params.surveyId.toString()"
-    >
-      <template v-if="$vuetify.display.mobile" #activator="{ props }">
-        <v-btn
-          v-bind="props"
-          color="grey"
-          icon="$info"
-          size="small"
-          :title="$t('common.help.title')"
-        />
-      </template>
-    </request-help>
+    <template v-if="!$vuetify.display.mobile">
+      <v-spacer />
+      <help-nav :survey-id />
+    </template>
   </v-toolbar>
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import type { FoodState, MealState } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
-import { useSurvey } from '@intake24/survey/stores';
-import { RequestHelp } from '../../elements';
+import { HelpNav } from '../../elements';
 
 type BreadcrumbsElement = {
   title: string;
@@ -52,7 +42,8 @@ const props = defineProps({
 const { i18n: { t } } = useI18n();
 const { getFoodName } = useFoodUtils();
 const { getMealName, getMealNameWithTime } = useMealUtils();
-const helpSettings = computed(() => useSurvey().parameters?.surveyScheme.settings.help);
+const route = useRoute();
+const surveyId = computed(() => route.params.surveyId.toString());
 
 function getMealLabel(meal: MealState, mealTime = true) {
   return mealTime && !meal.flags.includes('meal-time:hidden') ? getMealNameWithTime(meal) : getMealName(meal);

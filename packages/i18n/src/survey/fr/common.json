@@ -2,7 +2,6 @@
   "_": "Intake24",
   "home": "Accueil",
   "dashboard": "Tableau de bord",
-  "navigation": "Navigation",
   "welcome": {
     "_": "Bienvenue sur Intake24",
     "subtitle": "Intake24 est un outil utilisé dans le cadre d'études pour collecter des informations sur ce que les gens mangent et boivent."
@@ -23,6 +22,15 @@
   "logout": {
     "_": "Se déconnecter",
     "text": "Se déconnecter de l'application"
+  },
+  "nav": {
+    "_": "Navigation",
+    "home": "Accueil",
+    "feedback": "Retour",
+    "recall": "Enquête",
+    "review": "Récap",
+    "help": "Aide",
+    "options": "Possibilités"
   },
   "username": "Nom d'utilisateur",
   "name": "Nom",

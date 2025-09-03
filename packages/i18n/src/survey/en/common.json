@@ -2,7 +2,6 @@
   "_": "Intake24",
   "home": "Home",
   "dashboard": "Dashboard",
-  "navigation": "Navigation",
   "welcome": {
     "_": "Welcome to Intake24",
     "subtitle": "Intake24 is an open-source computerised dietary assessment system based on the multiple pass 24-hour recall."
@@ -24,6 +23,15 @@
   "logout": {
     "_": "Sign out",
     "text": "Sign out of the application"
+  },
+  "nav": {
+    "_": "Navigation",
+    "home": "Home",
+    "feedback": "Feedback",
+    "recall": "Recall",
+    "review": "Review",
+    "help": "Help",
+    "options": "Options"
   },
 
   "username": "Username",
