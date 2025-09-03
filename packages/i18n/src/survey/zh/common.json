@@ -2,7 +2,6 @@
   "_": "Intake24",
   "home": "主页",
   "dashboard": "仪表板",
-  "navigation": "导航",
   "welcome": {
     "_": "欢迎来到Intake24",
     "subtitle": "Intake24 是一个基于通过多次 24 小时召回的开源自完成计算机化饮食回忆系统。"
@@ -23,6 +22,15 @@
   "logout": {
     "_": "登出",
     "text": "登出应用程序"
+  },
+  "nav": {
+    "_": "Navigation",
+    "home": "Home",
+    "feedback": "Feedback",
+    "recall": "Recall",
+    "review": "Review",
+    "help": "Help",
+    "options": "Options"
   },
   "username": "用户名",
   "name": "名字",
