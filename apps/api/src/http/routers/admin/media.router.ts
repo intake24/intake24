@@ -23,7 +23,13 @@ export function media() {
     store: {
       middleware: [permission('media', 'media:create'), upload.single('file')],
       handler: async ({ body, file, req }) => {
-        const { mediaService } = req.scope.cradle;
+        const { mediaService, kyselyDb } = req.scope.cradle;
+
+        if (body.id) {
+          const dup = await kyselyDb.system.selectFrom('media').select('id').where('id', '=', body.id).executeTakeFirst();
+          if (dup)
+            throw ValidationError.from({ code: '$unique', path: 'id', i18n: { type: 'unique._' } });
+        }
 
         const { data, success } = imageMulterFile.safeParse(file);
         if (!success)

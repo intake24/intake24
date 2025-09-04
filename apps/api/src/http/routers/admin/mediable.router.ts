@@ -36,7 +36,13 @@ export function mediable(securable: ModelStatic<FAQ | FeedbackScheme | SurveySch
       middleware: [permission(resource), upload.single('file')],
       handler: async ({ body, file, req }) => {
         const { params: { [paramId]: modelId } } = req;
-        const { aclService, mediaService } = req.scope.cradle;
+        const { aclService, kyselyDb, mediaService } = req.scope.cradle;
+
+        if (body.id) {
+          const dup = await kyselyDb.system.selectFrom('media').select('id').where('id', '=', body.id).executeTakeFirst();
+          if (dup)
+            throw ValidationError.from({ code: '$unique', path: 'id', i18n: { type: 'unique._' } });
+        }
 
         await aclService.findAndCheckRecordAccess(securable, 'media', { attributes: ['id'], where: { id: modelId } });
 

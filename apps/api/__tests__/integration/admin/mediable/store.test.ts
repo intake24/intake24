@@ -79,13 +79,14 @@ export default (type: MediaModel) => () => {
         .post(url)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
+        .field('id', 'not-an-uuid')
         .field('name', 'a'.repeat(129))
         .field('disk', 'not-a-disk')
         .field('collection', '');
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
-      expect(body.errors).toContainAllKeys(['name', 'disk', 'collection']);
+      expect(body.errors).toContainAllKeys(['id', 'name', 'disk', 'collection']);
     });
 
     it('should return 400 for invalid input file', async () => {

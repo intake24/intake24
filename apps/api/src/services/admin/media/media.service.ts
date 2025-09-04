@@ -91,33 +91,43 @@ function mediaService({ mediaStore, appConfig, kyselyDb, mediaConfig }: Pick<IoC
       ));
   };
 
-  const createObject = async (disk: MediaDisk, { originalname, path }: ImageMulterFile) => {
-    const id = randomUUID();
+  const createObject = async (input: { id?: string; disk: MediaDisk }, { originalname, path }: ImageMulterFile) => {
+    const {
+      id = randomUUID(),
+      disk,
+    } = input;
+
     const filename = filenamify(originalname, { maxLength: 128 }).replace(extname(originalname), '.jpg');
     const objectPath = join(dirname(path), ...baseObjectPath(id));
     await ensureDir(resolve(objectPath));
 
-    await sharp(join(path))
+    const { size } = await sharp(join(path))
       .jpeg({ mozjpeg: true })
       .resize({ width: 2048, withoutEnlargement: true })
       .toFile(resolve(objectPath, filename));
+
     await generateConversions(objectPath, filename);
     await Promise.all([
       mediaStore.storeObject(disk, id, objectPath),
       unlink(resolve(path)),
     ]);
 
-    return { id, filename, disk };
+    return {
+      id,
+      filename,
+      disk,
+      mimetype: 'image/jpeg',
+      size,
+    };
   };
 
   const createMedia = async (input: CreateMediaWithModelRequest, file: ImageMulterFile): Promise<MediaEntry> => {
-    const { mimetype, size } = file;
     const { name, ...rest } = input;
-    const { id, filename } = await createObject(rest.disk, file);
+    const { id, filename, mimetype, size } = await createObject(input, file);
 
     const media = await kyselyDb.system.insertInto('media').values({
-      id,
       ...rest,
+      id,
       name: name ?? filename,
       filename,
       mimetype,
