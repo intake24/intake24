@@ -14,6 +14,11 @@
   "disk": "Disk",
   "mimetype": "MIME type",
   "size": "Size",
+  "id": {
+    "_": "Media UUID",
+    "custom": "Custom ID",
+    "help": "A unique identifier for media item in UUID format. If left blank, a random UUID will be generated."
+  },
   "collections": {
     "_": "Collection",
     "title": "Collections",

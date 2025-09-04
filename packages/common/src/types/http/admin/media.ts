@@ -20,6 +20,7 @@ export const withModel = z.object({
 });
 
 export const createMediaRequest = z.object({
+  id: z.string().uuid().nullish().transform(val => val || undefined),
   name: z.string().max(128).nullish().transform(val => val || undefined),
   collection: z.string().min(1).max(128),
   disk: z.enum(mediaDisks),
