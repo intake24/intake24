@@ -27,6 +27,7 @@ export type CreateGlobalFoodRequest = {
   code: string;
   name: string;
   attributes: InheritableAttributes;
+  foodGroupId?: number;
   parentCategories?: string[];
 };
 
