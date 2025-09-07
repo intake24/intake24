@@ -118,7 +118,7 @@ function buildRecipeData(rows: GoustoRecipeRow[]): Dictionary<GoustoRecipeData> 
 }
 
 function codeTransform(recipeId: string): string {
-  return `G${recipeId.replace('-', '')}`;
+  return `G${recipeId.replaceAll('-', '')}`;
 }
 
 function buildLocalFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFileNames: string[], usedFileNames: Set<string>): PkgLocalFood[] {
