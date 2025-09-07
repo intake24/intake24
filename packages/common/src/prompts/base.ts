@@ -1,4 +1,4 @@
-import type { BasePortionPrompt, BasePrompt } from './prompts';
+import type { BasePortionPrompt, BasePrompt, FoodBrowser } from './prompts';
 import { CurrentPromptVersion } from './prompts';
 
 export const basePrompt: Pick<BasePrompt, 'i18n' | 'conditions' | 'actions' | 'useGraph' | 'graph' | 'version'> = {
@@ -28,4 +28,11 @@ export const promptValidation = {
     required: false,
     message: {},
   },
+};
+
+export const foodBrowserDefaults: FoodBrowser = {
+  categoriesFirst: { browse: false, search: false },
+  allowThumbnails: false,
+  enableGrid: false,
+  gridThreshold: 70,
 };
