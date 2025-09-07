@@ -15,6 +15,7 @@ export type PromptType = (typeof promptTypes)[number];
 
 export const customComponentTypes = [
   'aggregate-choice-prompt',
+  'general-associated-foods-prompt',
   'info-prompt',
   'date-picker-prompt',
   'food-selection-prompt',
@@ -33,7 +34,6 @@ export type CustomComponentType = (typeof customComponentTypes)[number];
 export const standardComponentTypes = [
   'addon-foods-prompt',
   'associated-foods-prompt',
-  'general-associated-foods-prompt',
   'edit-meal-prompt',
   'external-source-prompt',
   'final-prompt',
@@ -177,6 +177,17 @@ const aggregateChoicePrompt = baseCustomPrompt.extend({
   component: z.literal('aggregate-choice-prompt'),
   options: localeOptionList(),
   foodFilter: condition.optional(),
+});
+
+const generalAssociatedFoodsPrompt = baseCustomPrompt.merge(foodBrowser).extend({
+  component: z.literal('general-associated-foods-prompt'),
+  categoryCode: z.string(),
+  promptText: localeTranslation,
+  genericName: localeTranslation,
+  hints: foodSearchHint.array(),
+  multiple: z.boolean(),
+  dontKnow: z.boolean(),
+  skipPortionSize: z.boolean(),
 });
 
 const checkboxListPrompt = baseCustomPrompt
@@ -333,16 +344,7 @@ const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
   component: z.literal('associated-foods-prompt'),
   hints: foodSearchHint.array(),
   multiple: z.boolean(),
-});
-
-const generalAssociatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
-  component: z.literal('general-associated-foods-prompt'),
-  categoryCode: z.string(),
-  promptText: localeTranslation,
-  genericName: localeTranslation,
-  hints: foodSearchHint.array(),
-  multiple: z.boolean(),
-  skipPortionSize: z.boolean(),
+  dontKnow: z.boolean(),
 });
 
 const editMealPrompt = baseStandardPrompt.extend({
