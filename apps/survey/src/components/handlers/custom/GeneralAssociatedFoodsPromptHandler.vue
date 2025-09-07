@@ -67,6 +67,7 @@ const associatedFoodsPromptState = computed<PromptStates['associated-foods-promp
 
 const associatedFoodsPromptProps = computed<Prompts['associated-foods-prompt']>(() => ({
   ...props.prompt,
+  type: 'standard',
   component: 'associated-foods-prompt',
 }));
 
@@ -206,7 +207,7 @@ async function commitAnswer() {
     survey.updateFood({ foodId, update: { linkedFoods } });
   }
 
-  survey.addFoodFlag(foodId, `${props.prompt.id}-complete`);
+  survey.setFoodCustomPromptAnswer({ foodId, promptId: props.prompt.id, answer: state.value.mainFoodConfirmed ?? null });
 
   clearStoredState();
 
