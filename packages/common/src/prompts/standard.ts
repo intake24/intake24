@@ -1,15 +1,8 @@
-import type { FoodBrowser, Prompts } from './prompts';
+import type { Prompts } from './prompts';
 
 import { copy } from '@intake24/common/util';
-import { basePrompt } from './base';
+import { basePrompt, foodBrowserDefaults } from './base';
 import { timePickerDefaults } from './partials';
-
-export const foodBrowserDefaults: FoodBrowser = {
-  categoriesFirst: { browse: false, search: false },
-  allowThumbnails: false,
-  enableGrid: false,
-  gridThreshold: 70,
-};
 
 export const addonFoodsPrompt: Prompts['addon-foods-prompt'] = copy({
   ...basePrompt,
@@ -28,6 +21,7 @@ export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
   name: 'Associated foods prompt',
   hints: [],
   multiple: false,
+  dontKnow: false,
   ...foodBrowserDefaults,
 });
 
@@ -209,25 +203,9 @@ export const submitPrompt: Prompts['submit-prompt'] = copy({
   },
 });
 
-export const generalAssociatedFoodsPrompt: Prompts['general-associated-foods-prompt'] = copy({
-  ...basePrompt,
-  component: 'general-associated-foods-prompt',
-  type: 'standard',
-  id: 'general-associated-foods-prompt',
-  name: 'Generalised associated foods prompt',
-  categoryCode: '',
-  promptText: {},
-  genericName: {},
-  hints: [],
-  multiple: false,
-  skipPortionSize: false,
-  ...foodBrowserDefaults,
-});
-
 export const standardPrompts = [
   addonFoodsPrompt,
   associatedFoodsPrompt,
-  generalAssociatedFoodsPrompt,
   editMealPrompt,
   externalSourcePrompt,
   finalPrompt,
