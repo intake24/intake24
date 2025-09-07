@@ -1,7 +1,6 @@
 import type { Prompts } from './prompts';
 import { copy } from '../util';
-import { basePortionPrompt } from './base';
-import { foodBrowserDefaults } from './standard';
+import { basePortionPrompt, foodBrowserDefaults } from './base';
 
 export const asServedPrompt: Prompts['as-served-prompt'] = copy({
   ...basePortionPrompt,
