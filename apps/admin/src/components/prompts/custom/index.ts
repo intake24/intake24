@@ -2,6 +2,7 @@ import AggregateChoicePrompt from './aggregate-choice-prompt.vue';
 import CheckboxListPrompt from './checkbox-list-prompt.vue';
 import DatePickerPrompt from './date-picker-prompt.vue';
 import FoodSelectionPrompt from './food-selection-prompt.vue';
+import GeneralAssociatedFoodsPrompt from './general-associated-foods-prompt.vue';
 import InfoPrompt from './info-prompt.vue';
 import NoMoreInformationPrompt from './no-more-information-prompt.vue';
 import RadioListPrompt from './radio-list-prompt.vue';
@@ -24,4 +25,5 @@ export default {
   TimePickerPrompt,
   TextareaPrompt,
   YesNoPrompt,
+  GeneralAssociatedFoodsPrompt,
 };
