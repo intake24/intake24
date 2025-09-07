@@ -96,6 +96,7 @@ function fromPackageGlobalFood(globalFood: PkgGlobalFood): CreateGlobalFoodReque
       sameAsBeforeOption: globalFood.attributes.sameAsBeforeOption,
       useInRecipes: validateUseInRecipes(globalFood.attributes.useInRecipes),
     },
+    foodGroupId: 0,
   };
 }
 
