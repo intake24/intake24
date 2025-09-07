@@ -18,13 +18,20 @@
               false-icon="fa-regular fa-circle"
               :label="promptI18n.no"
               true-icon="$yes"
-              :value="false"
+              value="no"
             />
             <v-radio
               false-icon="fa-regular fa-circle"
               :label="promptI18n.yes"
               true-icon="$yes"
-              :value="true"
+              value="yes"
+            />
+            <v-radio
+              v-if="prompt.dontKnow"
+              false-icon="fa-regular fa-circle"
+              :label="promptI18n.dontKnow"
+              true-icon="$yes"
+              value="dontknow"
             />
           </v-radio-group>
 
@@ -33,7 +40,7 @@
             <div
               v-if="
                 !associatedFoodPrompts[index].foodCode
-                  && promptState.mainFoodConfirmed
+                  && promptState.mainFoodConfirmed === 'yes'
                   && promptState.foods.length > 0
                   && !showFoodChooser(index)
               "
@@ -218,10 +225,9 @@ const props = defineProps({
 const emit = defineEmits(['action', 'update:modelValue']);
 
 function isPromptValid(prompt: AssociatedFoodPrompt): boolean {
-  return prompt.mainFoodConfirmed === false
-    || (prompt.mainFoodConfirmed === true
-      && prompt.foods.length > 0
-      && prompt.additionalFoodConfirmed === false);
+  const noValid = prompt.mainFoodConfirmed === 'no' || prompt.mainFoodConfirmed === 'dontknow';
+  const yesValid = prompt.mainFoodConfirmed === 'yes' && prompt.foods.length > 0 && prompt.additionalFoodConfirmed === false;
+  return yesValid || noValid;
 }
 
 function getNextPrompt(prompts: AssociatedFoodPrompt[]) {
@@ -237,6 +243,7 @@ const promptI18n = computed(() =>
     'yes',
     'yesAnother',
     'no',
+    'dontKnow',
     'moreFoodsQuestion',
     'databaseLookupTitle',
     'databaseLookupWithExisting',
@@ -338,7 +345,7 @@ function showFoodChooser(promptIndex: number): boolean {
 
   return !!(
     replaceFoodIndex.value[promptIndex] !== undefined
-    || (prompt.mainFoodConfirmed && !prompt.foods.length)
+    || (prompt.mainFoodConfirmed === 'yes' && !prompt.foods.length)
     || prompt.additionalFoodConfirmed
   );
 };
@@ -351,7 +358,7 @@ function showMoreFoodsQuestion(promptIndex: number): boolean {
     !associatedPrompt.foodCode
     && allowMultiple.value
     && associatedFoodPrompts.value[promptIndex].multiple
-    && state.mainFoodConfirmed
+    && state.mainFoodConfirmed === 'yes'
     && state.foods.length > 0
     && replaceFoodIndex.value[promptIndex] === undefined
   );
@@ -431,7 +438,7 @@ function onFoodSelected(selectedFood: AssociatedFoodPromptItem, promptIndex: num
 function onConfirmStateChanged(index: number) {
   const prompt = associatedFoodPrompts.value[index];
   const state = promptStates.value[index];
-  if (state.mainFoodConfirmed && prompt.foodCode && !state.foods.length) {
+  if (state.mainFoodConfirmed === 'yes' && prompt.foodCode && !state.foods.length) {
     foodSelected(
       { id: prompt.id, code: prompt.foodCode, name: translate(prompt.genericName) },
       index,

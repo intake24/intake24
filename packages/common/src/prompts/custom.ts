@@ -1,6 +1,6 @@
 import type { Prompts } from './prompts';
 import { copy } from '../util';
-import { basePrompt, promptValidation } from './base';
+import { basePrompt, foodBrowserDefaults, promptValidation } from './base';
 import { timePickerDefaults } from './partials';
 
 export const aggregateChoicePrompt: Prompts['aggregate-choice-prompt'] = copy({
@@ -11,6 +11,22 @@ export const aggregateChoicePrompt: Prompts['aggregate-choice-prompt'] = copy({
   name: 'Aggregate choice question prompt',
   options: { en: [] },
   foodFilter: undefined,
+});
+
+export const generalAssociatedFoodsPrompt: Prompts['general-associated-foods-prompt'] = copy({
+  ...basePrompt,
+  component: 'general-associated-foods-prompt',
+  type: 'custom',
+  id: 'general-associated-foods-prompt',
+  name: 'Generalised associated foods prompt',
+  categoryCode: '',
+  promptText: {},
+  genericName: {},
+  hints: [],
+  multiple: false,
+  dontKnow: false,
+  skipPortionSize: false,
+  ...foodBrowserDefaults,
 });
 
 export const checkboxListPrompt: Prompts['checkbox-list-prompt'] = copy({
@@ -131,6 +147,7 @@ export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({
 
 export const customPrompts = [
   aggregateChoicePrompt,
+  generalAssociatedFoodsPrompt,
   checkboxListPrompt,
   datePickerPrompt,
   foodSelectionPrompt,

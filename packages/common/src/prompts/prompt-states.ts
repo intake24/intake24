@@ -18,7 +18,7 @@ export type AssociatedFoodPromptItem = {
 };
 
 export type AssociatedFoodPrompt = {
-  mainFoodConfirmed?: boolean;
+  mainFoodConfirmed?: 'yes' | 'no' | 'dontknow';
   additionalFoodConfirmed?: boolean;
   foods: AssociatedFoodPromptItem[];
 };
@@ -163,7 +163,7 @@ export type PromptStates = {
     promptStates: AssociatedFoodPrompt[];
   };
   'general-associated-foods-prompt': {
-    mainFoodConfirmed?: boolean;
+    mainFoodConfirmed?: 'yes' | 'no' | 'dontknow';
     additionalFoodConfirmed?: boolean;
     foods: AssociatedFoodPromptItem[];
   };

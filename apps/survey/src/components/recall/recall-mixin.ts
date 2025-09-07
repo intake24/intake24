@@ -66,7 +66,7 @@ export default defineComponent({
 
       switch (prompt.type) {
         case 'custom':
-          return ['multi-prompt', 'aggregate-choice-prompt', 'food-selection-prompt', 'yes-no-prompt'].includes(prompt.component)
+          return ['multi-prompt', 'aggregate-choice-prompt', 'general-associated-foods-prompt', 'food-selection-prompt', 'yes-no-prompt'].includes(prompt.component)
             ? `${prompt.component}-handler`
             : 'custom-prompt-handler';
         case 'standard':

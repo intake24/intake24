@@ -43,6 +43,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['postMeals'],
   },
+  'general-associated-foods-prompt': {
+    tabs: [...tabs],
+    sections: ['foods', 'foodsDeferred'],
+  },
   'checkbox-list-prompt': {
     tabs: [...tabsWithValidation],
     sections: [...promptSectionsExceptSubmission],
@@ -99,10 +103,6 @@ export const promptSettings: PromptSettings = {
   'associated-foods-prompt': {
     tabs: [...tabs],
     sections: ['foods'],
-  },
-  'general-associated-foods-prompt': {
-    tabs: [...tabs],
-    sections: ['foods', 'foodsDeferred'],
   },
   'edit-meal-prompt': {
     tabs: [...tabs],
