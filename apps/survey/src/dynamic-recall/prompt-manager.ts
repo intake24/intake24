@@ -719,7 +719,9 @@ function checkFoodStandardConditions(surveyStore: SurveyStore, mealState: MealSt
       if (mealIndex !== undefined && !mealPortionSizeComplete(surveyState.data.meals[mealIndex]))
         return false;
 
-      return !(foodState.flags.includes(`${prompt.id}-complete`) || foodState.flags.includes('disable-general-associated-foods'));
+      const hasAnswer = foodState.customPromptAnswers[prompt.id] !== undefined;
+
+      return !(hasAnswer || foodState.flags.includes('disable-general-associated-foods'));
     }
 
     case 'no-more-information-prompt': {
