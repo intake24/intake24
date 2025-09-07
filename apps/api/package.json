@@ -18,7 +18,7 @@
     "postinstall": "pnpm tsx scripts/clean-puppeteer-cache.ts",
     "build": "pnpm build:clean && webpack --env NODE_ENV=production",
     "build:clean": "rimraf dist",
-    "dev": "webpack --env NODE_ENV=development",
+    "dev": "cross-env webpack --env NODE_ENV=development NODE_INSPECT_PORT=$I24_API_NODE_INSPECT_PORT",
     "dev-break": "webpack --env NODE_ENV=development NODE_INSPECT_BREAK=true",
     "start": "node dist/server.js",
     "test:build": "pnpm build:clean && webpack --env NODE_ENV=test",
