@@ -49,6 +49,12 @@
           />
           <v-switch
             hide-details="auto"
+            :label="$t('survey-schemes.prompts.general-associated-foods-prompt.dontKnow')"
+            :model-value="dontKnow"
+            @update:model-value="update('dontKnow', $event)"
+          />
+          <v-switch
+            hide-details="auto"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.skipPortionSize')"
             :model-value="skipPortionSize"
             @update:model-value="update('skipPortionSize', $event)"
@@ -97,6 +103,10 @@ const props = defineProps({
   },
   multiple: {
     type: Boolean as PropType<Prompts['general-associated-foods-prompt']['multiple']>,
+    required: true,
+  },
+  dontKnow: {
+    type: Boolean as PropType<Prompts['general-associated-foods-prompt']['dontKnow']>,
     required: true,
   },
   skipPortionSize: {
