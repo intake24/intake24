@@ -19,7 +19,7 @@ export const generalAssociatedFoodsPrompt: Prompts['general-associated-foods-pro
   type: 'custom',
   id: 'general-associated-foods-prompt',
   name: 'Generalised associated foods prompt',
-  categoryCode: '',
+  categoryCode: 'DRNK',
   promptText: {},
   genericName: {},
   hints: [],
