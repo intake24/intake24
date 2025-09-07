@@ -6,7 +6,7 @@ const nodeExternals = require('webpack-node-externals');
 const WebpackBar = require('webpackbar');
 
 module.exports = (env) => {
-  const { NODE_ENV = 'development', NODE_INSPECT_BREAK } = env;
+  const { NODE_ENV = 'development', NODE_INSPECT_BREAK, NODE_INSPECT_PORT = 5959 } = env;
   const isDev = NODE_ENV === 'development';
   const inspectBreak = !!NODE_INSPECT_BREAK;
   const mode = NODE_ENV === 'test' ? 'none' : NODE_ENV;
@@ -21,7 +21,7 @@ module.exports = (env) => {
       new NodemonPlugin({
         script: './dist/server.js',
         watch: ['./dist', '.env'],
-        nodeArgs: ['--trace-warnings', inspectBreak ? '--inspect-brk=9229' : '--inspect=5959'],
+        nodeArgs: ['--trace-warnings', inspectBreak ? '--inspect-brk=9229' : `--inspect=${NODE_INSPECT_PORT}`],
       }),
     );
   }
