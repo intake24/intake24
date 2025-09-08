@@ -33,7 +33,7 @@
       </v-toolbar>
       <v-form @keydown="clearError" @submit.prevent="save">
         <v-tabs-window v-model="tab">
-          <v-tabs-window-item key="search">
+          <v-tabs-window-item>
             <v-card-text>
               <v-row>
                 <v-col cols="12">
@@ -69,7 +69,7 @@
               </v-row>
             </v-card-text>
           </v-tabs-window-item>
-          <v-tabs-window-item key="create">
+          <v-tabs-window-item>
             <v-card flat>
               <v-card-text>
                 <v-row>

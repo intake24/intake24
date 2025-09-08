@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="conditions" value="conditions">
+  <v-tabs-window-item value="conditions">
     <div class="d-flex flex-row ga-2">
       <div>
         <v-btn class="my-4 ignore-item" color="primary" @click="add">

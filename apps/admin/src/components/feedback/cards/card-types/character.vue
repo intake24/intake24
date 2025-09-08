@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="content" value="content">
+  <v-tabs-window-item value="content">
     <v-container>
       <v-row>
         <v-col cols="12" md="6">
@@ -28,7 +28,7 @@
       />
     </v-container>
   </v-tabs-window-item>
-  <v-tabs-window-item key="json" value="json">
+  <v-tabs-window-item value="json">
     <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
   </v-tabs-window-item>
 </template>

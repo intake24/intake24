@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item :key="type">
+  <v-tabs-window-item>
     <v-container fluid>
       <v-alert v-if="prompts.length === 0" color="secondary" type="info">
         {{ $t(`survey-schemes.prompts.${type}.noPrompts`) }}

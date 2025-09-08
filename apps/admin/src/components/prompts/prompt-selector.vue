@@ -27,7 +27,7 @@
               <v-tab
                 v-for="item in promptSettings[dialog.prompt.component].tabs"
                 :key="item"
-                :tab-value="item"
+                :value="item"
               >
                 {{ item }}
               </v-tab>
@@ -39,7 +39,7 @@
         <v-container class="prompt-container" :fluid="$vuetify.display.mdAndDown">
           <error-list v-bind="{ errors }" />
           <v-tabs-window v-model="tab" class="pt-1 flex-grow-1">
-            <v-tabs-window-item key="general" value="general">
+            <v-tabs-window-item value="general">
               <v-row>
                 <v-col cols="12">
                   <v-card border flat>

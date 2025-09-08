@@ -5,7 +5,7 @@
     @update:high="update('high', $event)"
     @update:low="update('low', $event)"
   />
-  <v-tabs-window-item key="json" value="json">
+  <v-tabs-window-item value="json">
     <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
   </v-tabs-window-item>
 </template>

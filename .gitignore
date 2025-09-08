@@ -42,3 +42,12 @@ apps/survey/components.d.ts
 apps/admin/components.d.ts
 
 **/.serena/**
+**/.claude/**
+docs/**
+
+# Data files - CSV datasets and reports
+**/japan-food-list*.csv
+**/DCDforJapan*.csv
+
+packages/food-tools/**
+packages/excel-reader/**

@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="actions" value="actions">
+  <v-tabs-window-item value="actions">
     <v-row>
       <v-col cols="6">
         <v-switch

@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="options" value="options">
+  <v-tabs-window-item value="options">
     <div class="d-flex flex-row ga-2">
       <div>
         <v-btn class="mb-4" color="primary" @click="add">

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tabs-window-item key="options" value="options">
+    <v-tabs-window-item value="options">
       <v-row class="mb-3">
         <v-col cols="12" md="6">
           <v-card border flat>

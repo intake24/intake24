@@ -21,7 +21,11 @@
     "cli": "node dist/cli.js",
     "cli:debug": "node --inspect-brk dist/cli.js",
     "cli:dev": "ts-node -r tsconfig-paths/register src/index.ts",
-    "cli:dev:tsx": "tsx src/index.ts"
+    "cli:dev:tsx": "tsx src/index.ts",
+    "migrate:japanese:dev": "ts-node src/commands/opensearch/migrate-japanese-env.ts --env=development",
+    "migrate:japanese:staging": "ts-node src/commands/opensearch/migrate-japanese-env.ts --env=staging",
+    "migrate:japanese:prod": "ts-node src/commands/opensearch/migrate-japanese-env.ts --env=production --dry-run",
+    "test:japanese:connection": "ts-node src/commands/opensearch/test-connection.ts"
   },
   "dependencies": {
     "@opensearch-project/opensearch": "^3.5.1",

@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="unit" value="unit">
+  <v-tabs-window-item value="unit">
     <language-selector
       v-model="internalUnit.name"
       border

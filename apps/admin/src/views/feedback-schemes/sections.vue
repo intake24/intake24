@@ -113,7 +113,7 @@
           <template #extension>
             <v-container>
               <v-tabs v-model="tab" bg-color="secondary">
-                <v-tab v-for="item in ['general', 'json']" :key="item" :tab-value="item">
+                <v-tab v-for="item in ['general', 'json']" :key="item" :value="item">
                   {{ $t(`feedback-schemes.sections.tabs.${item}`) }}
                 </v-tab>
               </v-tabs>
@@ -123,7 +123,7 @@
         <v-form ref="form" @submit.prevent="save">
           <v-container>
             <v-tabs-window v-model="tab" class="pt-1">
-              <v-tabs-window-item key="general" value="general">
+              <v-tabs-window-item value="general">
                 <language-selector
                   v-model="dialog.item.title"
                   border
@@ -149,7 +149,7 @@
                   </template>
                 </language-selector>
               </v-tabs-window-item>
-              <v-tabs-window-item key="json" value="json">
+              <v-tabs-window-item value="json">
                 <v-container>
                   <json-editor v-model="dialog.item" />
                 </v-container>

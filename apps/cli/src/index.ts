@@ -7,6 +7,16 @@ import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-f
 import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import buildGoustoLocaleCommand from './commands/gousto/build-gousto-locale-command';
 import buildUaeLocaleCommand from './commands/uae/build-uae-locale-command';
+import {
+  checkNutrientsCommand,
+  convertReportCommand,
+  crossCheckImportCommand,
+  importFoodsCommand,
+  rollbackImportCommand,
+  syncFoodsCommand,
+  validateNutrientsBatchCommand,
+  verifyConsistencyCommand,
+} from '@intake24/food-tools';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image-map';
 import pkg from '../package.json';
@@ -20,6 +30,7 @@ import {
   generateKey,
   generateVapidKeys,
   hashPassword,
+  opensearchMigrate,
   packageExportV3,
   packageExportV4,
   packageImportV4,
@@ -293,6 +304,319 @@ async function run() {
     .requiredOption('-t, --thumbnail-dir [locale ID]', 'Food thumbnail image directory path')
     .action(async (options) => {
       await buildGoustoLocaleCommand(options);
+    });
+
+  program
+    .command('import-foods')
+    .description('Import food list to locale using API validation')
+    .requiredOption('-i, --input-path [input path]', 'Food list CSV file path')
+    .requiredOption('-l, --locale-id [locale ID]', 'Target locale ID (e.g., jp_JP_2024, en_GB, fr_FR)')
+    .option('--dry-run', 'Validate and preview without importing', false)
+    .option('-b, --batch-size [size]', 'Batch size for API requests', '10')
+    .option('--skip-header-rows [rows]', 'Number of header rows to skip', '2')
+    .option('--tags [tags...]', 'Additional tags to add to foods')
+    .option('--food-group [id]', 'Default food group ID', '1')
+    .option('--preset [preset]', 'Use preset configuration for specific locales', 'custom')
+    .option('--skip-existing', 'Skip foods that already exist in the locale', false)
+    .option('--skip-invalid-nutrients', 'Skip nutrient table mappings to avoid 500 errors', false)
+    .option('--skip-associated-foods', 'Skip associated foods (for multi-pass import)', false)
+    .option('--report-path [path]', 'Path to save import report')
+    .option('--report-format [format]', 'Report format (csv, json, markdown)', 'json')
+    .action(async (options) => {
+      // Define presets for different locales
+      const presets = {
+        japan: {
+          skipHeaderRows: 2,
+          tags: ['japanese'],
+          nutrientTableMapping: {
+            AUSNUT: 'AUSNUT',
+            STFCJ: 'STFCJ',
+            'DCD for Japan': 'DCDJapan',
+          },
+        },
+        uk: {
+          skipHeaderRows: 1,
+          tags: ['uk'],
+          nutrientTableMapping: {
+            NDNS: 'NDNS',
+            McCance: 'MCCANCE',
+          },
+        },
+        france: {
+          skipHeaderRows: 1,
+          tags: ['french'],
+          nutrientTableMapping: {
+            CIQUAL: 'CIQUAL',
+            ANSES: 'ANSES',
+          },
+        },
+        usa: {
+          skipHeaderRows: 1,
+          tags: ['usa'],
+          nutrientTableMapping: {
+            USDA: 'USDA',
+            SR: 'USDA_SR',
+          },
+        },
+        custom: {
+          skipHeaderRows: Number.parseInt(options.skipHeaderRows, 10),
+          tags: options.tags || [],
+          nutrientTableMapping: {},
+        },
+      };
+
+      const presetConfig = presets[options.preset as keyof typeof presets] || presets.custom;
+
+      await importFoodsCommand({
+        inputPath: options.inputPath,
+        localeId: options.localeId,
+        dryRun: options.dryRun,
+        batchSize: Number.parseInt(options.batchSize, 10),
+        skipHeaderRows: presetConfig.skipHeaderRows,
+        tags: presetConfig.tags,
+        defaultFoodGroup: options.foodGroup,
+        nutrientTableMapping: presetConfig.nutrientTableMapping,
+        skipExisting: options.skipExisting,
+        skipInvalidNutrients: options.skipInvalidNutrients,
+        skipAssociatedFoods: options.skipAssociatedFoods,
+        reportPath: options.reportPath,
+        reportFormat: options.reportFormat,
+      });
+    });
+
+  // Enhanced import command with multi-pass support
+  program
+    .command('import-foods-mp')
+    .description('Import food list with multi-pass processing for proper dependency handling')
+    .requiredOption('-i, --input-path [input path]', 'Food list CSV file path')
+    .requiredOption('-l, --locale-id [locale ID]', 'Target locale ID (e.g., jp_JP_2024)')
+    .option('--dry-run', 'Validate and preview without importing', false)
+    .option('-b, --batch-size [size]', 'Batch size for API requests', '10')
+    .option('--skip-header-rows [rows]', 'Number of header rows to skip', '2')
+    .option('--tags [tags...]', 'Additional tags to add to foods')
+    .option('--food-group [id]', 'Default food group ID', '1')
+    .option('--skip-existing', 'Skip foods that already exist in the locale', false)
+    .option('--skip-invalid-nutrients', 'Skip nutrient table mappings to avoid 500 errors', false)
+    .option('--skip-associations', 'Skip processing associations (for manual processing later)', false)
+    .option('--multi-pass', 'Use multi-pass processing (default: true)', 'true')
+    .option('--report-path [path]', 'Path to save import report')
+    .option('--report-format [format]', 'Report format (csv, json, markdown)', 'json')
+    .action(async (options) => {
+      // Multi-pass import is now handled by the basic import command
+      await importFoodsCommand({
+        inputPath: options.inputPath,
+        localeId: options.localeId,
+        dryRun: options.dryRun,
+        batchSize: Number.parseInt(options.batchSize, 10),
+        skipHeaderRows: Number.parseInt(options.skipHeaderRows, 10),
+        tags: options.tags || [],
+        defaultFoodGroup: options.foodGroup,
+        nutrientTableMapping: {}, // Custom mapping can be added if needed
+        skipExisting: options.skipExisting,
+        skipInvalidNutrients: options.skipInvalidNutrients,
+        reportPath: options.reportPath,
+        reportFormat: options.reportFormat,
+      });
+    });
+
+  // Note: Use 'import-foods --preset japan' for Japanese food imports
+
+  // Note: For batch category sync, use 'import-foods' with appropriate batch size and retry options
+
+  // Rollback command for food import failures
+  program
+    .command('rollback-import')
+    .description('Rollback a failed food import using report file')
+    .requiredOption('-r, --report-path [path]', 'Path to import report JSON file')
+    .option('--dry-run', 'Preview rollback actions without executing', false)
+    .action(async (options) => {
+      await rollbackImportCommand({
+        reportPath: options.reportPath,
+        dryRun: options.dryRun,
+      });
+    });
+
+  // Check nutrient records command
+  program
+    .command('check-nutrients')
+    .description('Check if specific nutrient table records exist')
+    .requiredOption('-t, --table [table]', 'Nutrient table ID (e.g., AUSNUT)')
+    .requiredOption('-r, --record-id [recordId]', 'Nutrient record ID (e.g., 02D10267)')
+    .option('--dry-run', 'Preview check without creating test food', false)
+    .action(async (options) => {
+      await checkNutrientsCommand({
+        table: options.table,
+        recordId: options.recordId,
+        dryRun: options.dryRun,
+      });
+    });
+
+  // Batch nutrient validation command
+  program
+    .command('validate-nutrients-batch')
+    .description('Validate all nutrient mappings in a CSV file before import')
+    .requiredOption('-i, --input-path [input path]', 'Food list CSV file path')
+    .requiredOption('-l, --locale-id [locale ID]', 'Target locale ID (e.g., jp_JP_2024)')
+    .option('--skip-header-rows [rows]', 'Number of header rows to skip', '2')
+    .option('--skip-invalid-nutrients', 'Allow validation to pass even with invalid nutrients', false)
+    .option('--report-path [path]', 'Path for validation report file')
+    .option('--dry-run', 'Preview validation without testing', false)
+    .action(async (options) => {
+      await validateNutrientsBatchCommand({
+        inputPath: options.inputPath,
+        localeId: options.localeId,
+        skipHeaderRows: Number.parseInt(options.skipHeaderRows),
+        skipInvalidNutrients: options.skipInvalidNutrients,
+        reportPath: options.reportPath,
+        dryRun: options.dryRun,
+      });
+    });
+
+  // Convert report formats command
+  program
+    .command('convert-report')
+    .description('Convert import report between different formats (JSON ↔ CSV ↔ Markdown)')
+    .requiredOption('-i, --input-path [path]', 'Path to input report file')
+    .requiredOption('-f, --output-format [format]', 'Output format (csv, json, markdown)')
+    .option('-o, --output-path [path]', 'Output file path (auto-generated if not specified)')
+    .option('--input-format [format]', 'Input format (auto-detected if not specified)')
+    .action(async (options) => {
+      await convertReportCommand({
+        inputPath: options.inputPath,
+        outputPath: options.outputPath,
+        outputFormat: options.outputFormat,
+        inputFormat: options.inputFormat,
+      });
+    });
+
+  // Cross-check import results command
+  program
+    .command('cross-check-import')
+    .description('Cross-check import results against original CSV using validation analysis')
+    .requiredOption('-c, --csv-path [path]', 'Path to original CSV file')
+    .requiredOption('-r, --report-path [path]', 'Path to import report JSON file')
+    .requiredOption('-l, --locale-id [locale]', 'Locale ID (e.g., jp_JP_2024)')
+    .option('-o, --output-path [path]', 'Path to save cross-check report')
+    .option('--check-existing-foods', 'Check if foods exist in database via API', false)
+    .option('--generate-validation-report', 'Generate detailed validation analysis using excel-reader', false)
+    .option('--dry-run', 'Skip database checks (for faster analysis)', false)
+    .action(async (options) => {
+      await crossCheckImportCommand({
+        csvPath: options.csvPath,
+        reportPath: options.reportPath,
+        localeId: options.localeId,
+        outputPath: options.outputPath,
+        checkExistingFoods: options.checkExistingFoods,
+        generateValidationReport: options.generateValidationReport,
+        dryRun: options.dryRun,
+      });
+    });
+
+  // Database-CSV consistency verification command
+  program
+    .command('verify-consistency')
+    .description('Verify consistency between CSV food data and database records')
+    .requiredOption('-i, --input-path [input path]', 'Food list CSV file path')
+    .requiredOption('-l, --locale-id [locale ID]', 'Target locale ID (e.g., jp_JP_2024)')
+    .option('-r, --report-path [path]', 'Path to save consistency report')
+    .option('-f, --report-format [format]', 'Report format (csv, json, markdown)', 'json')
+    .option('--skip-header-rows [rows]', 'Number of header rows to skip', '3')
+    .option('--no-check-categories', 'Skip category consistency checks')
+    .option('--no-check-names', 'Skip name consistency checks')
+    .option('--no-check-attributes', 'Skip attribute consistency checks (ready meal, same as before, etc.)')
+    .option('--no-check-nutrients', 'Skip nutrient table consistency checks')
+    .option('--no-check-portion-sizes', 'Skip portion size method consistency checks')
+    .option('--no-check-associated-foods', 'Skip associated food consistency checks')
+    .option('--include-valid-rows', 'Include perfectly matching rows in detailed report', false)
+    .action(async (options) => {
+      await verifyConsistencyCommand({
+        inputPath: options.inputPath,
+        localeId: options.localeId,
+        reportPath: options.reportPath,
+        reportFormat: options.reportFormat,
+        skipHeaderRows: Number.parseInt(options.skipHeaderRows),
+        checkCategories: options.checkCategories,
+        checkNames: options.checkNames,
+        checkAttributes: options.checkAttributes,
+        checkNutrients: options.checkNutrients,
+        checkPortionSizes: options.checkPortionSizes,
+        checkAssociatedFoods: options.checkAssociatedFoods,
+        includeValidRows: options.includeValidRows,
+      });
+    });
+
+  // Sync foods from CSV to database command
+  program
+    .command('sync-foods')
+    .description('Sync foods from CSV (source of truth) to database, ensuring DB matches CSV exactly')
+    .requiredOption('-i, --input-path [input path]', 'Food list CSV file path')
+    .requiredOption('-l, --locale-id [locale ID]', 'Target locale ID (e.g., jp_JP_2024)')
+    .option('--dry-run', 'Preview changes without applying them', false)
+    .option('-r, --report-path [path]', 'Path to save sync report')
+    .option('--skip-header-rows [rows]', 'Number of header rows to skip', '3')
+    .option('--force-update', 'Force update even for minor changes like quote differences', false)
+    .option('--enable-all', 'Enable all foods from CSV in the locale', false)
+    .option('--preset [preset]', 'Use preset configuration for specific locales', 'custom')
+    .action(async (options) => {
+      // Define presets for different locales (same as import-foods)
+      const presets = {
+        japan: {
+          nutrientTableMapping: {
+            AUSNUT: 'AUSNUT',
+            STFCJ: 'STFCJ',
+            'DCD for Japan': 'DCDJapan',
+          },
+        },
+        uk: {
+          nutrientTableMapping: {
+            NDNS: 'NDNS',
+            McCance: 'MCCANCE',
+          },
+        },
+        france: {
+          nutrientTableMapping: {
+            CIQUAL: 'CIQUAL',
+            ANSES: 'ANSES',
+          },
+        },
+        usa: {
+          nutrientTableMapping: {
+            USDA: 'USDA',
+            SR: 'USDA_SR',
+          },
+        },
+        custom: {
+          nutrientTableMapping: {},
+        },
+      };
+
+      const presetConfig = presets[options.preset as keyof typeof presets] || presets.custom;
+
+      await syncFoodsCommand({
+        inputPath: options.inputPath,
+        localeId: options.localeId,
+        dryRun: options.dryRun,
+        reportPath: options.reportPath,
+        skipHeaderRows: Number.parseInt(options.skipHeaderRows),
+        forceUpdate: options.forceUpdate,
+        enableAll: options.enableAll,
+        nutrientTableMapping: presetConfig.nutrientTableMapping,
+      });
+    });
+
+  // OpenSearch migration command for Japanese locale
+  program
+    .command('opensearch-migrate')
+    .description('Migrate Japanese food data to OpenSearch for enhanced search capabilities')
+    .option('-l, --locale [locale]', 'Locale to migrate (currently only ja-JP supported)', 'ja-JP')
+    .option('-b, --batch-size [size]', 'Batch size for bulk indexing', '500')
+    .option('-r, --recreate-index', 'Recreate the index (delete if exists)', false)
+    .action(async (options) => {
+      await opensearchMigrate.handler({
+        locale: options.locale,
+        batchSize: Number.parseInt(options.batchSize, 10),
+        recreateIndex: options.recreateIndex,
+      });
     });
 
   await program.parseAsync(process.argv);

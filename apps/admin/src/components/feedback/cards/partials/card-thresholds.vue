@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="thresholds" value="thresholds">
+  <v-tabs-window-item value="thresholds">
     <v-container>
       <v-row>
         <v-col v-for="(item, key) in { low, high }" :key="key" cols="12" md="6">

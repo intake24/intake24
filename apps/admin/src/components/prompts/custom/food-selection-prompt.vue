@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="options" value="options">
+  <v-tabs-window-item value="options">
     <v-container>
       <v-row class="ml-2" dense>
         <v-col cols="12" md="6">

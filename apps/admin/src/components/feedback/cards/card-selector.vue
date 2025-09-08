@@ -25,7 +25,7 @@
             <v-tabs v-model="tab" bg-color="secondary">
               <v-tab
                 v-for="item in cardSettings[dialog.card.type].tabs" :key="item"
-                :tab-value="item"
+                :value="item"
               >
                 {{ $t(`feedback-schemes.cards.tabs.${item}`) }}
               </v-tab>
@@ -36,7 +36,7 @@
       <v-form ref="form" @submit.prevent="save">
         <v-container>
           <v-tabs-window v-model="tab" class="pt-1">
-            <v-tabs-window-item key="general" value="general">
+            <v-tabs-window-item value="general">
               <v-container>
                 <v-row>
                   <v-col cols="12">
@@ -250,6 +250,7 @@ export default defineComponent({
 
     add() {
       this.dialog = this.newDialog(true);
+      this.tab = 'general';
     },
 
     edit(index: number, card: Card) {
@@ -264,6 +265,7 @@ export default defineComponent({
         index,
         card: copy(merge<Card>(defaults, card)),
       };
+      this.tab = 'general';
     },
 
     async save() {

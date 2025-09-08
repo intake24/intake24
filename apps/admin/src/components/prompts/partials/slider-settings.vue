@@ -14,8 +14,8 @@
               <v-tab
                 v-for="item in tabs"
                 :key="item"
-                :tab-value="item"
                 :title="$t(`survey-schemes.prompts.slider.${item}.value`)"
+                :value="item"
               >
                 {{ $t(`survey-schemes.prompts.slider.${item}.value`) }}
               </v-tab>

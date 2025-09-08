@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="options" value="options">
+  <v-tabs-window-item value="options">
     <language-selector
       border
       :default="[]"

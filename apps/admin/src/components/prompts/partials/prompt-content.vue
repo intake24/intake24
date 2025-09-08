@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="content" value="content">
+  <v-tabs-window-item value="content">
     <div class="d-flex flex-row">
       <v-tabs v-model="selectedKey" direction="vertical">
         <v-tab v-for="key in keys" :key="key" class="justify-start">
