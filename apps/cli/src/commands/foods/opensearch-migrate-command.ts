@@ -116,6 +116,9 @@ const opensearchMigrate = {
       const health = await opensearchClient.cluster.health();
       console.log(`✅ OpenSearch cluster status: ${health.body.status}`);
 
+      // Always use Sudachi settings for index creation
+      console.log('🔎 Using Sudachi analyzers for index creation');
+
       // Create or recreate index
       if (recreateIndex) {
         console.log('Deleting existing index if it exists...');
@@ -134,160 +137,13 @@ const opensearchMigrate = {
       const indexExists = await opensearchClient.indices.exists({ index: opensearchConfigLocal.indexName });
 
       if (!indexExists.body) {
-        console.log('Creating Japanese index using central configuration...');
-
-        // Use settings from central opensearch.ts config file
-        // Use a simplified version of the index settings without synonyms for now
-        const indexSettings: any = {
-          settings: {
-            number_of_shards: 1,
-            number_of_replicas: 0,
-            analysis: {
-              char_filter: {
-                icu_nfkc_cf: opensearchConfig.japaneseIndexSettings.settings.analysis.char_filter.icu_nfkc_cf,
-                katakana_to_hiragana_mapping: opensearchConfig.japaneseIndexSettings.settings.analysis.char_filter.katakana_to_hiragana_mapping,
-              },
-              tokenizer: {
-                kuromoji_user_dict: opensearchConfig.japaneseIndexSettings.settings.analysis.tokenizer.kuromoji_user_dict,
-              },
-              analyzer: {
-                ja_search: {
-                  type: 'custom',
-                  tokenizer: 'kuromoji_user_dict',
-                  char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
-                  filter: [
-                    'kuromoji_baseform',
-                    'kuromoji_part_of_speech',
-                    'ja_stop',
-                    'lowercase',
-                    'icu_folding',
-                  ],
-                },
-                ja_reading: {
-                  type: 'custom',
-                  tokenizer: 'kuromoji_user_dict',
-                  char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
-                  filter: [
-                    'kuromoji_readingform',
-                    'lowercase',
-                    'icu_folding',
-                  ],
-                },
-                ja_reading_romaji: {
-                  type: 'custom',
-                  tokenizer: 'kuromoji_user_dict',
-                  char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
-                  filter: [
-                    'reading_romaji',
-                    'lowercase',
-                    'icu_folding',
-                  ],
-                },
-                ja_query: {
-                  type: 'custom',
-                  tokenizer: 'kuromoji_user_dict',
-                  char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
-                  filter: [
-                    'synonym_graph_filter',
-                    'kuromoji_baseform',
-                    'kuromoji_part_of_speech',
-                    'ja_stop',
-                    'kuromoji_number',
-                    'kuromoji_stemmer',
-                    'lowercase',
-                    'icu_folding',
-                  ],
-                },
-              },
-              filter: {
-                icu_folding: {
-                  type: 'icu_folding',
-                  unicodeSetFilter: '[^ぁ-ゟァ-ヿ]',
-                },
-                reading_romaji: {
-                  type: 'kuromoji_readingform',
-                  use_romaji: true,
-                },
-                synonym_graph_filter: {
-                  type: 'synonym_graph',
-                  lenient: true,
-                  synonyms: [
-                    // Basic synonyms for testing
-                    'チャーハン,炒飯,焼き飯,やきめし,fried rice',
-                    'ラーメン,拉麺,らーめん,中華そば,ramen',
-                    '寿司,すし,鮨,スシ,sushi',
-                    '天ぷら,てんぷら,天麩羅,テンプラ,tempura',
-                    'ご飯,ごはん,御飯,米飯,ライス,rice',
-                    '味噌汁,みそ汁,みそしる,お味噌汁,miso soup',
-                    '牛肉,ぎゅうにく,ビーフ,beef',
-                    '鶏肉,とりにく,チキン,chicken',
-                  ],
-                },
-              },
-            },
-          },
-          mappings: {
-            properties: {
-              food_code: { type: 'keyword' },
-              locale_id: { type: 'keyword' },
-              name: {
-                type: 'text',
-                analyzer: 'ja_search',
-                search_analyzer: 'ja_query', // Use query-time synonyms
-                fields: {
-                  reading: {
-                    type: 'text',
-                    analyzer: 'ja_reading',
-                  },
-                  romaji: {
-                    type: 'text',
-                    analyzer: 'ja_reading_romaji',
-                  },
-                  keyword: { type: 'keyword' },
-                },
-              },
-              description: {
-                type: 'text',
-                analyzer: 'ja_search',
-              },
-              brand_names: {
-                type: 'text',
-                analyzer: 'ja_search',
-                fields: {
-                  keyword: { type: 'keyword' },
-                },
-              },
-              categories: { type: 'keyword' },
-              tags: { type: 'keyword' },
-              popularity: { type: 'float' },
-              ready_meal_option: { type: 'boolean' },
-              same_as_before_option: { type: 'boolean' },
-              reasonable_amount: { type: 'integer' },
-              use_in_recipes: { type: 'integer' },
-              associated_food_prompt: { type: 'keyword' },
-              nutrient_table_id: { type: 'keyword' },
-              nutrient_table_code: { type: 'keyword' },
-              energy_kcal: { type: 'float' },
-              energy_kj: { type: 'float' },
-              protein: { type: 'float' },
-              fat: { type: 'float' },
-              carbohydrate: { type: 'float' },
-              alcohol: { type: 'float' },
-              sugars: { type: 'float' },
-              fibre: { type: 'float' },
-              sodium: { type: 'float' },
-              salt: { type: 'float' },
-              created_at: { type: 'date' },
-              updated_at: { type: 'date' },
-            },
-          },
-        };
-
+        console.log('Creating Japanese index using Sudachi configuration...');
+        const chosen = opensearchConfig.japaneseIndexSettingsSudachi;
         await opensearchClient.indices.create({
           index: opensearchConfigLocal.indexName,
-          body: indexSettings,
+          body: chosen as any,
         });
-        console.log('✅ Japanese index created with settings from opensearch.ts');
+        console.log('✅ Japanese index created with Sudachi settings');
       }
 
       // Fetch Japanese foods from database
@@ -385,7 +241,7 @@ const opensearchMigrate = {
 
       // Test search with central configuration
       console.log('\n🎯 Testing search functionality with central config...');
-      const testQueries = ['すし', '寿司', 'ラーメン', 'てんぷら', 'sushi', 'ramen'];
+      const testQueries = ['ビール', '黒ビール', 'ラーメン', '寿司'];
 
       for (const query of testQueries) {
         const searchResponse = await opensearchClient.search({
@@ -398,12 +254,10 @@ const opensearchMigrate = {
                   'name^3',
                   'name.reading^2',
                   'name.romaji^2',
-                  'name.synonym^2',
+                  'brand_names^2',
                   'description',
-                  'brand_names',
                 ],
                 type: 'best_fields',
-                fuzziness: 'AUTO',
               },
             },
             size: 5,

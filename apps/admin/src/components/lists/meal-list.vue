@@ -270,12 +270,10 @@ function clearErrors(index?: number) {
 
 function add() {
   dialog.value = newDialog(true);
-  tab.value = 'general';
 };
 
 function edit(index: number, meal: Meal) {
   dialog.value = { show: true, index, meal: copy(meal) };
-  tab.value = 'general';
 };
 
 async function save() {
@@ -301,7 +299,6 @@ function remove(index: number) {
 function reset() {
   dialog.value = newDialog();
   form.value?.resetValidation();
-  tab.value = 'general';
 };
 
 function load(items: Meal[]) {

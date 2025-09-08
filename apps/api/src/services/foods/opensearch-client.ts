@@ -1,6 +1,7 @@
 import type { ClientOptions } from '@opensearch-project/opensearch';
 import { Client } from '@opensearch-project/opensearch';
 import config from '@intake24/api/config';
+import { SearchPatternMatcher } from '@intake24/api/services/search/search-pattern-matcher';
 import type { Logger } from '@intake24/common-backend';
 
 export class OpenSearchClient {
@@ -8,11 +9,13 @@ export class OpenSearchClient {
   private readonly logger: Logger;
   private readonly indexPrefix: string;
   private readonly japaneseIndex: string;
+  private readonly patternMatcher: SearchPatternMatcher;
 
   constructor({ logger }: { logger: Logger }) {
     this.logger = logger.child({ service: 'OpenSearchClient' });
     this.indexPrefix = config.opensearch.indexPrefix;
     this.japaneseIndex = config.opensearch.japaneseIndex;
+    this.patternMatcher = new SearchPatternMatcher();
 
     const clientOptions: ClientOptions = {
       node: config.opensearch.host,
@@ -24,7 +27,6 @@ export class OpenSearchClient {
         rejectUnauthorized: false, // For development; use true in production with proper certificates
       },
     };
-    console.log('clientOptions', clientOptions);
 
     this.client = new Client(clientOptions);
     this.logger.info(`OpenSearch client initialized for ${config.opensearch.host}`);
@@ -74,10 +76,10 @@ export class OpenSearchClient {
         return;
       }
 
-      // Create index with Japanese analyzers
+      // Create index with Japanese analyzers (always use Sudachi settings)
       const response = await this.client.indices.create({
         index: this.japaneseIndex,
-        body: config.opensearch.japaneseIndexSettings as any, // Type assertion for complex mapping
+        body: config.opensearch.japaneseIndexSettingsSudachi as any, // Type assertion for complex mapping
       });
 
       this.logger.info(`Created Japanese index ${this.japaneseIndex}:`, response.body);
@@ -157,120 +159,61 @@ export class OpenSearchClient {
     const { limit = 50, offset = 0, categories, tags } = options;
 
     try {
-      const must: any[] = [];
-      const filter: any[] = [];
+      let body: any;
 
-      // Main search query with improved matching strategy
       if (query) {
-        must.push({
-          bool: {
-            should: [
-              // Exact phrase match gets highest score
-              {
-                match_phrase: {
-                  name: {
-                    query,
-                    boost: 5,
-                  },
-                },
-              },
-              // Synonym field for mapped variations
-              {
-                match_phrase: {
-                  'name.synonym': {
-                    query,
-                    boost: 4,
-                  },
-                },
-              },
-              // Reading field for phonetic matching
-              {
-                match: {
-                  'name.reading': {
-                    query,
-                    boost: 3,
-                  },
-                },
-              },
-              // Romaji field for Latin character input
-              {
-                match: {
-                  'name.romaji': {
-                    query,
-                    boost: 2.5,
-                  },
-                },
-              },
-              // Multi-match for broader search
-              {
-                multi_match: {
-                  query,
-                  fields: [
-                    'name^2',
-                    'description',
-                    'brand_names',
-                  ],
-                  type: 'cross_fields',
-                  operator: 'and',
-                  minimum_should_match: '75%',
-                },
-              },
-              // Fuzzy match as fallback
-              {
-                multi_match: {
-                  query,
-                  fields: [
-                    'name',
-                    'name.reading',
-                  ],
-                  type: 'best_fields',
-                  fuzziness: 'AUTO',
-                  prefix_length: 2,
-                  boost: 0.5,
-                },
-              },
-            ],
-            minimum_should_match: 1,
-          },
+        // Use the configurable pattern matcher to build the complete search query
+        body = this.patternMatcher.buildSearchQuery(query, {
+          size: limit,
+          from: offset,
+          isJapanese: true,
         });
-      }
 
-      // Category filter
-      if (categories && categories.length > 0) {
-        filter.push({
-          terms: { categories },
-        });
-      }
+        // Add category and tag filters if provided
+        if ((categories && categories.length > 0) || (tags && tags.length > 0)) {
+          const filter: any[] = [];
 
-      // Tags filter
-      if (tags && tags.length > 0) {
-        filter.push({
-          terms: { tags },
-        });
-      }
+          if (categories && categories.length > 0) {
+            filter.push({ terms: { categories } });
+          }
 
-      const body: any = {
-        from: offset,
-        size: limit,
-        query: {
-          bool: {
-            must: must.length > 0 ? must : { match_all: {} },
-            filter,
+          if (tags && tags.length > 0) {
+            filter.push({ terms: { tags } });
+          }
+
+          // Modify the query to include filters
+          const originalQuery = body.query.function_score.query;
+          body.query.function_score.query = {
+            bool: {
+              must: [originalQuery],
+              filter,
+            },
+          };
+        }
+      }
+      else {
+        // No query provided, just filter by categories/tags if specified
+        const filter: any[] = [];
+
+        if (categories && categories.length > 0) {
+          filter.push({ terms: { categories } });
+        }
+
+        if (tags && tags.length > 0) {
+          filter.push({ terms: { tags } });
+        }
+
+        body = {
+          from: offset,
+          size: limit,
+          query: {
+            bool: {
+              must: { match_all: {} },
+              filter: filter.length > 0 ? filter : undefined,
+            },
           },
-        },
-        sort: [
-          { _score: { order: 'desc' } },
-          { popularity: { order: 'desc' } },
-        ],
-        highlight: {
-          fields: {
-            name: {},
-            description: {},
-          },
-          pre_tags: ['<mark>'],
-          post_tags: ['</mark>'],
-        },
-      };
+        };
+      }
 
       const response = await this.client.search({
         index: this.japaneseIndex,

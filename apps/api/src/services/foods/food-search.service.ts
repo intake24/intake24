@@ -53,10 +53,13 @@ function foodSearchService({
   };
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
-    // Use OpenSearch for Japanese locale
-    if (localeId === 'ja-JP' || localeId === 'jp-JP' || localeId === 'jp_JP_2024') {
+    // Use OpenSearch for Japanese locale (accepts 'ja', 'ja-JP', and legacy jp variants)
+    const isJapaneseLocale = /^ja(?:[-_]|$)/.test(localeId) || localeId === 'ja' ||
+      localeId === 'jp-JP' || localeId === 'jp_JP_2024';
+    if (isJapaneseLocale) {
       try {
         logger.debug(`Using OpenSearch for Japanese search: locale=${localeId}, query="${description}"`);
+        logger.debug(`Search options:`, { limit: options.limit || 50, ...options });
 
         const { results, total, took } = await openSearchJapaneseService.searchFoods({
           query: description,
@@ -72,12 +75,15 @@ function foodSearchService({
             name: result.name,
           }));
 
+        // Map locale for database queries - database uses jp_JP_2024 for Japanese
+        const dbLocaleId = localeId === 'ja' ? 'jp_JP_2024' : localeId;
+
         // Get inheritable attributes for foods
         const foodCodes = foods.map(f => f.code);
         const attributes = await getInheritableAttributes(foodCodes);
 
-        // Get thumbnail images for foods
-        const thumbnailImages = await foodThumbnailImageService.resolveImages(localeId, foodCodes);
+        // Get thumbnail images for foods (using mapped locale)
+        const thumbnailImages = await foodThumbnailImageService.resolveImages(dbLocaleId, foodCodes);
 
         // Combine all data and filter by recipe type
         const enhancedFoods = foods

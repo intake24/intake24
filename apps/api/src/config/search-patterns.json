@@ -1,0 +1,373 @@
+{
+  "patterns": [
+    {
+      "id": "beer",
+      "description": "Beer and beer-related products",
+      "triggers": [
+        "ビール",
+        "ビア",
+        "びーる",
+        "びいる",
+        "beer",
+        "ginger beer",
+        "root beer",
+        "gingerbeer",
+        "rootbeer",
+        "biiru"
+      ],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "prefix",
+              "field": "name.keyword",
+              "template": "{query}*",
+              "boost": 12,
+              "comment": "Matches ビール* (e.g., ビール風味)"
+            },
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*{query}",
+              "boost": 10,
+              "comment": "Matches *ビール (e.g., 黒ビール, ライトビール)"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*{query}*",
+              "boost": 6,
+              "comment": "Matches anything containing ビール (low boost to minimize noise)"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*クラフトビール*",
+              "boost": 12,
+              "comment": "Explicitly match craft beer compounds"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*ジンジャービア*",
+              "boost": 14,
+              "comment": "Target ginger beer explicitly"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*ルートビア*",
+              "boost": 14,
+              "comment": "Target root beer explicitly"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*発泡酒*",
+              "boost": 12,
+              "comment": "Covers happoshu items commonly grouped with beer"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*麦酒*",
+              "boost": 12,
+              "comment": "Covers kanji form for beer"
+            }
+          ]
+        },
+        "minScore": 25,
+        "rescoreBoost": 4
+      }
+    },
+    {
+      "id": "chinese",
+      "description": "Chinese food and cuisine",
+      "triggers": ["中華", "中国"],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "prefix",
+              "field": "name.keyword",
+              "template": "{query}*",
+              "boost": 6,
+              "comment": "Matches 中華* (moderate boost for items starting with 中華)"
+            },
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*{query}",
+              "boost": 12,
+              "comment": "Matches *中華 (e.g., 冷やし中華)"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*{query}*",
+              "boost": 3,
+              "comment": "Matches anything containing 中華 (low boost for general matches)"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*冷やし中華*",
+              "boost": 24,
+              "comment": "Explicitly cover 冷やし中華 variants"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*冷し中華*",
+              "boost": 24,
+              "comment": "Explicit variant for 冷し中華"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*ひやし中華*",
+              "boost": 24,
+              "comment": "Hiragana variant for 冷やし中華"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*中華まん*",
+              "boost": 28,
+              "comment": "Explicitly cover 中華まん and related items"
+            },
+            { "type": "contains", "field": "name.keyword", "template": "*中華丼*", "boost": 16, "comment": "Core dish: Chinese-style rice bowl" },
+            { "type": "contains", "field": "name.keyword", "template": "*餃子*", "boost": 15, "comment": "Core Chinese dish: gyoza" },
+            { "type": "contains", "field": "name.keyword", "template": "*春巻*", "boost": 15, "comment": "Core Chinese dish: spring roll" },
+            { "type": "contains", "field": "name.keyword", "template": "*焼売*", "boost": 14, "comment": "Core Chinese dish: shumai (kanji)" },
+            { "type": "contains", "field": "name.keyword", "template": "*シュウマイ*", "boost": 14, "comment": "Core Chinese dish: shumai (katakana)" },
+            { "type": "contains", "field": "name.keyword", "template": "*麻婆豆腐*", "boost": 15, "comment": "Core Chinese dish: mapo tofu" },
+            { "type": "contains", "field": "name.keyword", "template": "*酢豚*", "boost": 17, "comment": "Core Chinese dish: sweet and sour pork" },
+            { "type": "contains", "field": "name.keyword", "template": "*青椒肉絲*", "boost": 14, "comment": "Core Chinese dish: pepper steak" },
+            { "type": "contains", "field": "name.keyword", "template": "*回鍋肉*", "boost": 14, "comment": "Core Chinese dish: twice-cooked pork" },
+            { "type": "contains", "field": "name.keyword", "template": "*天津飯*", "boost": 14, "comment": "Core Chinese dish: tenshin-han" },
+            { "type": "contains", "field": "name.keyword", "template": "*チャーハン*", "boost": 15, "comment": "Core Chinese dish: chahan" },
+            { "type": "contains", "field": "name.keyword", "template": "*炒飯*", "boost": 15, "comment": "Kanji variant for fried rice" },
+            { "type": "contains", "field": "name.keyword", "template": "*八宝菜*", "boost": 16, "comment": "Core Chinese dish: eight treasure stir-fry" },
+            { "type": "contains", "field": "name.keyword", "template": "*担々麺*", "boost": 13, "comment": "Chinese-style spicy noodles: tantanmen" },
+            { "type": "contains", "field": "name.keyword", "template": "*坦々麺*", "boost": 13, "comment": "Alternate kanji for tantanmen" }
+          ]
+        },
+        "minScore": 0,
+        "rescoreBoost": 2
+      }
+    },
+    {
+      "id": "ramen",
+      "description": "Ramen and noodle dishes",
+      "triggers": ["ラーメン", "拉麺", "らーめん"],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*{query}*",
+              "boost": 8,
+              "comment": "Matches various ramen types"
+            }
+          ]
+        },
+        "minScore": 10,
+        "rescoreBoost": 2
+      }
+    },
+    {
+      "id": "curry",
+      "description": "Curry dishes",
+      "triggers": ["カレー", "カリー"],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "prefix",
+              "field": "name.keyword",
+              "template": "{query}*",
+              "boost": 10,
+              "comment": "Matches カレー* (e.g., カレーライス, カレーパン)"
+            },
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*{query}",
+              "boost": 10,
+              "comment": "Matches *カレー (e.g., ビーフカレー, チキンカレー)"
+            }
+          ]
+        },
+        "minScore": 10,
+        "rescoreBoost": 2
+      }
+    },
+    {
+      "id": "sushi",
+      "description": "Sushi and related items",
+      "triggers": ["寿司", "すし", "スシ", "鮨", "ずし", "ズシ"],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*{query}",
+              "boost": 15,
+              "comment": "Matches *寿司 (e.g., にぎり寿司, ちらし寿司)"
+            },
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*寿司",
+              "boost": 14,
+              "comment": "Explicit match for items ending with 寿司"
+            },
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*ずし",
+              "boost": 14,
+              "comment": "Match hiragana variant ending (e.g., ちらしずし)"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*{query}*",
+              "boost": 10,
+              "comment": "Matches various sushi types"
+            },
+            {
+              "type": "prefix",
+              "field": "name.keyword",
+              "template": "{query}*",
+              "boost": 12,
+              "comment": "Matches items starting with sushi"
+            }
+          ]
+        },
+        "minScore": 8,
+        "rescoreBoost": 3
+      }
+    },
+    {
+      "id": "bread",
+      "description": "Bread and bakery items",
+      "triggers": ["パン", "ブレッド"],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*{query}",
+              "boost": 12,
+              "comment": "Matches *パン (e.g., 食パン, メロンパン, カレーパン)"
+            },
+            {
+              "type": "prefix",
+              "field": "name.keyword",
+              "template": "{query}*",
+              "boost": 8,
+              "comment": "Matches パン* (e.g., パンケーキ)"
+            }
+          ]
+        },
+        "minScore": 10,
+        "rescoreBoost": 2
+      }
+    },
+    {
+      "id": "tea",
+      "description": "Tea and tea-based drinks",
+      "triggers": ["茶", "ティー", "ティ"],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*{query}",
+              "boost": 12,
+              "comment": "Matches *茶 (e.g., 緑茶, 麦茶, ウーロン茶)"
+            },
+            {
+              "type": "contains",
+              "field": "name.keyword",
+              "template": "*{query}*",
+              "boost": 6,
+              "comment": "Matches tea variations"
+            }
+          ]
+        },
+        "minScore": 10,
+        "rescoreBoost": 2
+      }
+    },
+    {
+      "id": "juice",
+      "description": "Juice and fruit drinks",
+      "triggers": ["ジュース"],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*{query}",
+              "boost": 12,
+              "comment": "Matches *ジュース (e.g., オレンジジュース, アップルジュース)"
+            }
+          ]
+        },
+        "minScore": 10,
+        "rescoreBoost": 2
+      }
+    },
+    {
+      "id": "cake",
+      "description": "Cakes and similar desserts",
+      "triggers": ["ケーキ"],
+      "strategies": {
+        "wildcard": {
+          "enabled": true,
+          "patterns": [
+            {
+              "type": "suffix",
+              "field": "name.keyword",
+              "template": "*{query}",
+              "boost": 12,
+              "comment": "Matches *ケーキ (e.g., チーズケーキ, ショートケーキ)"
+            },
+            {
+              "type": "prefix",
+              "field": "name.keyword",
+              "template": "{query}*",
+              "boost": 8,
+              "comment": "Matches ケーキ* variations"
+            }
+          ]
+        },
+        "minScore": 10,
+        "rescoreBoost": 2
+      }
+    }
+  ],
+  "defaultStrategy": {
+    "wildcard": {
+      "enabled": false
+    },
+    "minScore": 10,
+    "rescoreBoost": 2
+  }
+}
