@@ -29,7 +29,7 @@ const emit = defineEmits(['action']);
 const infoPrompts = ['info-prompt'];
 
 const { commitPromptAnswer, resolvePromptAnswer, foodOptional, mealOptional }
-      = useCustomPromptHandler(props);
+  = useCustomPromptHandler(props);
 const survey = useSurvey();
 
 const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));

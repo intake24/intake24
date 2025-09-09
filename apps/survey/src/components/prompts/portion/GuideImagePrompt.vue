@@ -197,10 +197,10 @@ function update() {
 
     state.value.portionSize.objectWeight = imageData.value.objects[id].weight ?? 0;
     state.value.portionSize.servingWeight
-          = imageData.value.objects[id].weight
-            * state.value.portionSize.quantity
-            * conversionFactor.value
-            * state.value.portionSize.linkedQuantity;
+      = imageData.value.objects[id].weight
+        * state.value.portionSize.quantity
+        * conversionFactor.value
+        * state.value.portionSize.linkedQuantity;
   }
 
   emit('update:modelValue', state.value);

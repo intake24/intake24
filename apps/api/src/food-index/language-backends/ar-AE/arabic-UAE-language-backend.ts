@@ -3,24 +3,24 @@ import Stemmer from 'arabic-stem';
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
 
 const indexFilter
-= [
-  'و', // "And"
-  'أو', // "Or"
-  'ب', // "In" or "with"
-  'بشكل', // "In the form of"
-  'بين', // "Between"
-  'ثم', // "Then"
-  'إلا', // "Except"
-  'من', // "From" or "of"
-  'في', // "In"
-  'مع', // "With"
-  'كما', // "As" or "like"
-  'لكن', // "But"
-  'ل', // "For" or "to"
-  'أي', // "Which"
-  'إما', // "Either"
-  'بعض', // "Some"
-];
+  = [
+    'و', // "And"
+    'أو', // "Or"
+    'ب', // "In" or "with"
+    'بشكل', // "In the form of"
+    'بين', // "Between"
+    'ثم', // "Then"
+    'إلا', // "Except"
+    'من', // "From" or "of"
+    'في', // "In"
+    'مع', // "With"
+    'كما', // "As" or "like"
+    'لكن', // "But"
+    'ل', // "For" or "to"
+    'أي', // "Which"
+    'إما', // "Either"
+    'بعض', // "Some"
+  ];
 
 const stemmer = new Stemmer();
 

@@ -371,9 +371,9 @@ function confirmQuantity() {
 function update() {
   if (scale.value) {
     state.value.portionSize.servingWeight
-          = calculateVolume(scale.value, state.value.portionSize.fillLevel) * state.value.portionSize.quantity;
+      = calculateVolume(scale.value, state.value.portionSize.fillLevel) * state.value.portionSize.quantity;
     state.value.portionSize.leftoversWeight
-          = calculateVolume(scale.value, state.value.portionSize.leftoversLevel) * state.value.portionSize.quantity;
+      = calculateVolume(scale.value, state.value.portionSize.leftoversLevel) * state.value.portionSize.quantity;
   }
 
   emit('update:modelValue', state.value);

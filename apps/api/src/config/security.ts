@@ -1,10 +1,11 @@
+import type { StringValue } from 'ms';
 import type { CookieSettings, SameSiteCookieOptions } from './common';
-
 import ms from 'ms';
+import { parseToMs } from '@intake24/common/util';
 
 export type JwtTokenSettings = {
   secret: string;
-  lifetime: string;
+  lifetime: StringValue;
   audience: [string, ...string[]];
 };
 
@@ -45,7 +46,7 @@ export type MultiFactorAuthentication = {
 };
 
 export type PasswordsConfig = {
-  expiresIn: string;
+  expiresIn: StringValue;
 };
 
 export type AuthTokensConfig = {
@@ -80,16 +81,16 @@ const securityConfig: SecurityConfig = {
     admin: {
       access: {
         audience: ['admin', 'access'],
-        lifetime: process.env.JWT_ADMIN_ACCESS_LIFETIME || '15m',
+        lifetime: parseToMs(process.env.JWT_ADMIN_ACCESS_LIFETIME) || '15m',
       },
       refresh: {
         audience: ['admin', 'refresh'],
         secret: process.env.JWT_ADMIN_REFRESH_SECRET ?? '',
-        lifetime: process.env.JWT_ADMIN_REFRESH_LIFETIME || '1d',
+        lifetime: parseToMs(process.env.JWT_ADMIN_REFRESH_LIFETIME) || '1d',
       },
       cookie: {
         name: 'it24a_refresh_token',
-        maxAge: ms(process.env.JWT_ADMIN_REFRESH_LIFETIME || '1d'),
+        maxAge: ms(parseToMs(process.env.JWT_ADMIN_REFRESH_LIFETIME) || '1d'),
         httpOnly: true,
         path: process.env.JWT_ADMIN_COOKIE_PATH || '/api/admin/auth',
         sameSite: (process.env.JWT_ADMIN_COOKIE_SAMESITE || 'lax') as SameSiteCookieOptions,
@@ -99,16 +100,16 @@ const securityConfig: SecurityConfig = {
     survey: {
       access: {
         audience: ['survey', 'access'],
-        lifetime: process.env.JWT_SURVEY_ACCESS_LIFETIME || '15m',
+        lifetime: parseToMs(process.env.JWT_SURVEY_ACCESS_LIFETIME) || '15m',
       },
       refresh: {
         audience: ['survey', 'refresh'],
         secret: process.env.JWT_SURVEY_REFRESH_SECRET ?? '',
-        lifetime: process.env.JWT_SURVEY_REFRESH_LIFETIME || '1d',
+        lifetime: parseToMs(process.env.JWT_SURVEY_REFRESH_LIFETIME) || '1d',
       },
       cookie: {
         name: 'it24s_refresh_token',
-        maxAge: ms(process.env.JWT_SURVEY_REFRESH_LIFETIME || '1d'),
+        maxAge: ms(parseToMs(process.env.JWT_SURVEY_REFRESH_LIFETIME) || '1d'),
         httpOnly: true,
         path: process.env.JWT_SURVEY_COOKIE_PATH || '/api/auth',
         sameSite: (process.env.JWT_SURVEY_COOKIE_SAMESITE || 'lax') as SameSiteCookieOptions,
@@ -133,7 +134,7 @@ const securityConfig: SecurityConfig = {
     },
   },
   passwords: {
-    expiresIn: process.env.PASSWORDS_EXPIRES_IN || '1h',
+    expiresIn: parseToMs(process.env.PASSWORDS_EXPIRES_IN) || '1h',
   },
   authTokens: {
     size: Number.parseInt(process.env.AUTH_TOKENS_SIZE || '32', 10),

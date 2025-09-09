@@ -1,7 +1,7 @@
 import type { Options } from 'express-rate-limit';
 import type { RedisOptions } from './redis';
-
 import ms from 'ms';
+import { parseToMs } from '@intake24/common/util';
 
 export type RateLimit = {
   windowMs: number;
@@ -10,7 +10,7 @@ export type RateLimit = {
 
 export type RateLimits = Record<
 'generic' | 'login' | 'password' | 'verify' | 'generateUser' | 'feedback' | 'rating',
-  Partial<Options>
+Partial<Options>
 >;
 
 export interface RateLimiterConfig extends RateLimits {
@@ -26,31 +26,31 @@ const rateLimiterConfig: RateLimiterConfig = {
     keyPrefix: process.env.RATE_LIMITER_REDIS_PREFIX || 'it24:rate-limiter:',
   },
   generic: {
-    windowMs: ms(process.env.RATE_LIMITER_GENERIC_WINDOW || '5m'),
+    windowMs: ms(parseToMs(process.env.RATE_LIMITER_GENERIC_WINDOW) || '5m'),
     limit: Number.parseInt(process.env.RATE_LIMITER_GENERIC_LIMIT || '300', 10),
   },
   login: {
-    windowMs: ms(process.env.RATE_LIMITER_LOGIN_WINDOW || '15m'),
+    windowMs: ms(parseToMs(process.env.RATE_LIMITER_LOGIN_WINDOW) || '15m'),
     limit: Number.parseInt(process.env.RATE_LIMITER_LOGIN_LIMIT || '5', 10),
   },
   password: {
-    windowMs: ms(process.env.RATE_LIMITER_PASSWORD_WINDOW || '5m'),
+    windowMs: ms(parseToMs(process.env.RATE_LIMITER_PASSWORD_WINDOW) || '5m'),
     limit: Number.parseInt(process.env.RATE_LIMITER_PASSWORD_LIMIT || '1', 10),
   },
   verify: {
-    windowMs: ms(process.env.RATE_LIMITER_VERIFY_WINDOW || '5m'),
+    windowMs: ms(parseToMs(process.env.RATE_LIMITER_VERIFY_WINDOW) || '5m'),
     limit: Number.parseInt(process.env.RATE_LIMITER_VERIFY_LIMIT || '1', 10),
   },
   generateUser: {
-    windowMs: ms(process.env.RATE_LIMITER_GEN_USER_WINDOW || '5m'),
+    windowMs: ms(parseToMs(process.env.RATE_LIMITER_GEN_USER_WINDOW) || '5m'),
     limit: Number.parseInt(process.env.RATE_LIMITER_GEN_USER_LIMIT || '1', 10),
   },
   feedback: {
-    windowMs: ms(process.env.RATE_LIMITER_FEEDBACK_WINDOW || '1m'),
+    windowMs: ms(parseToMs(process.env.RATE_LIMITER_FEEDBACK_WINDOW) || '1m'),
     limit: Number.parseInt(process.env.RATE_LIMITER_FEEDBACK_LIMIT || '1', 10),
   },
   rating: {
-    windowMs: ms(process.env.RATE_LIMITER_RATING_WINDOW || '15m'),
+    windowMs: ms(parseToMs(process.env.RATE_LIMITER_RATING_WINDOW) || '15m'),
     limit: Number.parseInt(process.env.RATE_LIMITER_RATING_LIMIT || '1', 10),
   },
 };

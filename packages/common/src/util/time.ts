@@ -1,4 +1,26 @@
+import type { StringValue } from 'ms';
+import ms from 'ms';
 import { z } from 'zod';
+
+/*
+*  Temp quick validation function
+* - for process config load
+* - should be provided in v3 or use zod validation in config in future
+* */
+
+export function parseToMs(value?: string): StringValue | undefined {
+  if (!value)
+    return undefined;
+
+  const parsed = ms(value as StringValue);
+  if (!parsed)
+    return undefined;
+
+  if (parsed.toString() === value)
+    throw new Error(`Invalid time format: ${value}`);
+
+  return value as StringValue | undefined;
+}
 
 export const time = z.object({
   hours: z.number(),

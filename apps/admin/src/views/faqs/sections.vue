@@ -188,7 +188,7 @@ const { translate } = useI18n();
 const newSection = () => ({ id: randomString(6), title: { en: '' }, items: [] });
 
 const { dialog, form, items, add, edit, load, remove, reset: resetItem, save, update }
-      = useListWithDialog<FAQSection>(props, { emit }, { newItem: newSection, watch: true });
+  = useListWithDialog<FAQSection>(props, { emit }, { newItem: newSection, watch: true });
 
 const tab = ref('general');
 

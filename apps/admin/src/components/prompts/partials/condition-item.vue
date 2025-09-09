@@ -72,10 +72,10 @@ const condition = useVModel(props, 'modelValue', emit, { passive: true, deep: tr
 const { i18n } = useI18n();
 
 const objectSelectList: { object: ConditionObjectId; title: string }[]
-      = props.objects.map(object => ({ object, title: i18n.t(`survey-schemes.conditions.object.${object}`) }));
+  = props.objects.map(object => ({ object, title: i18n.t(`survey-schemes.conditions.object.${object}`) }));
 
 const propertySelectList: Record<ConditionObjectId, { type: string; title: string }[]>
-      = mapValues(promptConditionDefaults, properties => Object.keys(properties).map(id => ({ type: id, title: i18n.t(`survey-schemes.conditions.property.${id}`) })));
+  = mapValues(promptConditionDefaults, properties => Object.keys(properties).map(id => ({ type: id, title: i18n.t(`survey-schemes.conditions.property.${id}`) })));
 
 function updateCondition(newFilter: Condition) {
   condition.value = newFilter;

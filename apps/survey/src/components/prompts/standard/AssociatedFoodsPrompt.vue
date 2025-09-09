@@ -281,14 +281,14 @@ const availableFoods = computed(() => {
         continue;
 
       const matchesFood
-            = prompt.foodCode !== undefined
-              && food.type === 'encoded-food'
-              && food.data.code === prompt.foodCode;
+        = prompt.foodCode !== undefined
+          && food.type === 'encoded-food'
+          && food.data.code === prompt.foodCode;
 
       const matchesCategory
-            = prompt.categoryCode !== undefined
-              && food.type === 'encoded-food'
-              && food.data.categories.includes(prompt.categoryCode);
+        = prompt.categoryCode !== undefined
+          && food.type === 'encoded-food'
+          && food.data.categories.includes(prompt.categoryCode);
 
       if (matchesFood || matchesCategory)
         availableFoods.push(food.id);

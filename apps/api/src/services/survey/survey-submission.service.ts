@@ -202,7 +202,7 @@ function surveySubmissionService({
         }
 
         const portionSizeWeight
-        = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
+          = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
         const id = randomUUID();
 
         collectedFoods.inputs.push({

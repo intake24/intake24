@@ -138,9 +138,9 @@ const currentNutrientTypes = computed(() =>
 function loadMoreNutrientTypes() {
   const startIndex = visibleNutrientTypes.value.length;
   const endIndex
-        = startIndex + 15 > filteredNutrientTypes.value.length
-          ? filteredNutrientTypes.value.length
-          : startIndex + 15;
+    = startIndex + 15 > filteredNutrientTypes.value.length
+      ? filteredNutrientTypes.value.length
+      : startIndex + 15;
 
   const items = filteredNutrientTypes.value.slice(startIndex, endIndex);
   visibleNutrientTypes.value.push(...items);

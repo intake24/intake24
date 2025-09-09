@@ -17,6 +17,7 @@ import {
   defaultPrompts,
   defaultSchemeSettings,
   searchSortingAlgorithms,
+  SessionSettings,
   spellingCorrectionPreferences,
 } from '@intake24/common/surveys';
 import { defaultJobsParams } from '@intake24/common/types';
@@ -283,7 +284,7 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
   const suspensionReason = faker.word.words(10);
 
   const numberOfSubmissionsForFeedback = faker.number.int({ min: 1, max: 10 });
-  const session = {
+  const session: SessionSettings = {
     store: faker.datatype.boolean(),
     age: '12h',
     fixed: '1d+0h',

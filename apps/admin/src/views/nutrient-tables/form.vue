@@ -334,9 +334,9 @@ export default defineComponent({
 
       const startIndex = nutrients.value.length;
       const endIndex
-          = startIndex + chunk > data.value.csvMappingNutrients.length
-            ? data.value.csvMappingNutrients.length
-            : startIndex + chunk;
+        = startIndex + chunk > data.value.csvMappingNutrients.length
+          ? data.value.csvMappingNutrients.length
+          : startIndex + chunk;
 
       const items = data.value.csvMappingNutrients.slice(startIndex, endIndex);
       nutrients.value.push(...items);

@@ -279,9 +279,9 @@ function confirmLinkedQuantity() {
 
 function update() {
   state.value.portionSize.servingWeight
-        = (state.value.portionSize.serving?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity;
+    = (state.value.portionSize.serving?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity;
   state.value.portionSize.leftoversWeight
-        = (state.value.portionSize.leftovers?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity;
+    = (state.value.portionSize.leftovers?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity;
 
   emit('update:modelValue', state.value);
 };

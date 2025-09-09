@@ -45,7 +45,7 @@ const props = defineProps({
 const emit = defineEmits(['action']);
 
 const { foodOptional, mealOptional }
-      = useCustomPromptHandler(props);
+  = useCustomPromptHandler(props);
 const survey = useSurvey();
 
 function getFlagInitialState(flag: string, flags: string[]): boolean | null {

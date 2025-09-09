@@ -1,7 +1,7 @@
 import type { CookieSettings, SameSiteCookieOptions } from './common';
-
 import type { RedisOptions } from './redis';
 import ms from 'ms';
+import { parseToMs } from '@intake24/common/util';
 
 export type SessionConfig = {
   redis: RedisOptions;
@@ -18,7 +18,7 @@ const sessionConfig: SessionConfig = {
   },
   cookie: {
     name: process.env.SESSION_COOKIE_NAME || 'it24_session',
-    maxAge: ms(process.env.SESSION_COOKIE_LIFETIME || '15m'),
+    maxAge: ms(parseToMs(process.env.SESSION_COOKIE_LIFETIME) || '15m'),
     httpOnly: true,
     path: process.env.SESSION_COOKIE_PATH || '/api/admin',
     sameSite: (process.env.SESSION_COOKIE_SAME_SITE || 'lax') as SameSiteCookieOptions,

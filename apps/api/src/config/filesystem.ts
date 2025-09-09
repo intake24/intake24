@@ -1,8 +1,10 @@
+import type { StringValue } from 'ms';
+
 export type LocalLocation = 'public' | 'downloads' | 'uploads' | 'images';
 
 export type FileSystemConfig = {
   local: Record<LocalLocation, string>;
-  urlExpiresAt: string;
+  urlExpiresAt: StringValue;
 };
 
 const fsConfig: FileSystemConfig = {

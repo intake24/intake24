@@ -1,7 +1,10 @@
+import type { StringValue } from 'ms';
+import { parseToMs } from '@intake24/common/util';
+
 export type ACLConfig = {
   cache: {
     enabled: boolean;
-    ttl: number | string;
+    ttl: number | StringValue;
   };
   roles: {
     superuser: string;
@@ -16,7 +19,7 @@ export type ACLConfig = {
 export const aclConfig: ACLConfig = {
   cache: {
     enabled: process.env.ACL_CACHE_ENABLED === 'true',
-    ttl: process.env.ACL_CACHE_TTL || '7d',
+    ttl: parseToMs(process.env.ACL_CACHE_TTL) || '7d',
   },
   roles: {
     superuser: 'superuser',

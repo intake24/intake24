@@ -121,6 +121,7 @@ function canUseUserSession(state: CurrentSurveyState, settings?: SessionSettings
   if (!startTime)
     return false;
 
+  // @ts-expect-error too complex union type
   const { age = null, fixed = null } = settings ?? {};
   const startDt = new Date(startTime);
 

@@ -304,7 +304,7 @@ function update() {
   const { portionSize } = state.value;
 
   state.value.portionSize.servingWeight
-        = sliceWeight(
+    = sliceWeight(
       Number(portionSize.type.id) - 1,
       Number(portionSize.slice.id),
       Number(portionSize.thickness.id) - 1,

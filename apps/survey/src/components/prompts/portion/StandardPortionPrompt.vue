@@ -183,10 +183,10 @@ function update() {
   const { portionSize } = state.value;
 
   state.value.portionSize.servingWeight
-        = (portionSize.unit?.weight ?? 0)
-          * portionSize.quantity
-          * conversionFactor.value
-          * portionSize.linkedQuantity;
+    = (portionSize.unit?.weight ?? 0)
+      * portionSize.quantity
+      * conversionFactor.value
+      * portionSize.linkedQuantity;
 
   emit('update:modelValue', state.value);
 };

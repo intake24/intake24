@@ -1,5 +1,5 @@
+import type { StringValue } from 'ms';
 import { z } from 'zod';
-
 import { singlePrompt } from '../prompts';
 import { meal } from './meals';
 import { schemeSettings } from './scheme';
@@ -76,8 +76,8 @@ export const defaultSearchSettings: SurveySearchSettings = {
 
 export const sessionSettings = z.object({
   store: z.boolean(), // TODO: possibly extend to be more configurable to -> z.union([z.boolean(), z.enum(['client', 'server']), z.enum(['client', 'server']).array()]),
-  age: z.string().regex(/^\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$/).nullable(),
-  fixed: z.string().regex(/^\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\+\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$/).nullable(),
+  age: z.custom<StringValue>(() => z.string().regex(/^\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$/)).nullable(),
+  fixed: z.custom<`${StringValue}+${StringValue}`>(() => z.string().regex(/^\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\+\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$/)).nullable(),
 });
 
 export type SessionSettings = z.infer<typeof sessionSettings>;

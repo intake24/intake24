@@ -226,13 +226,13 @@ function getPortionWeight(food: EncodedFood) {
 
   const servingWeight = food.portionSize?.servingWeight ?? 0;
   const linkedServingWeight
-        = (
-          food.linkedFoods.find(
-            linkedFood =>
-              linkedFood.type === 'encoded-food'
-              && linkedFood.portionSize?.method === 'milk-in-a-hot-drink',
-          ) as EncodedFood | undefined
-        )?.portionSize?.servingWeight ?? 0;
+    = (
+      food.linkedFoods.find(
+        linkedFood =>
+          linkedFood.type === 'encoded-food'
+          && linkedFood.portionSize?.method === 'milk-in-a-hot-drink',
+      ) as EncodedFood | undefined
+    )?.portionSize?.servingWeight ?? 0;
 
   return Math.round((servingWeight + linkedServingWeight) / getQuantity(food));
 }

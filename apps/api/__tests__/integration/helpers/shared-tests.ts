@@ -101,7 +101,6 @@ function sharedTests(suite: typeof Suite) {
       keyErrorMessages.push(`Unexpected errors: ${unexpected.join(', ')}`);
 
     if (keyErrorMessages.length > 0) {
-      // eslint-disable-next-line unicorn/error-message
       throw new Error(keyErrorMessages.join('\n\n'));
     }
 

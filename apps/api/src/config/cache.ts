@@ -1,9 +1,11 @@
+import type { StringValue } from 'ms';
 import type { RedisOptions } from './redis';
+import { parseToMs } from '@intake24/common/util';
 
 export type CacheConfig = {
   redis: RedisOptions;
-  ttl: string;
-  surveySettingsTTL: string;
+  ttl: StringValue;
+  surveySettingsTTL: StringValue;
 };
 
 const cacheConfig: CacheConfig = {
@@ -14,8 +16,8 @@ const cacheConfig: CacheConfig = {
     db: Number.parseInt(process.env.CACHE_REDIS_DATABASE || process.env.REDIS_DATABASE || '0', 10),
     keyPrefix: process.env.CACHE_REDIS_PREFIX || 'it24:cache:',
   },
-  ttl: process.env.CACHE_TTL || '7d',
-  surveySettingsTTL: process.env.CACHE_SURVEY_SETTINGS_TTL || '120s',
+  ttl: parseToMs(process.env.CACHE_TTL) || '7d',
+  surveySettingsTTL: parseToMs(process.env.CACHE_SURVEY_SETTINGS_TTL) || '120s',
 };
 
 export default cacheConfig;

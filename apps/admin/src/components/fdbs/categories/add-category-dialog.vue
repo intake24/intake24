@@ -95,7 +95,7 @@ export default defineComponent({
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
       (CategoriesResponse | MainCategoriesResponse)['data'][number]
-        >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
+    >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
 
     return { dialog, loading, items, page, lastPage, search, selected, clear };
   },

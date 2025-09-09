@@ -69,9 +69,9 @@ export default defineComponent({
 
       const startIndex = loadedKeys.value.length;
       const endIndex
-          = startIndex + chunk > allKeys.value.length
-            ? allKeys.value.length
-            : startIndex + chunk;
+        = startIndex + chunk > allKeys.value.length
+          ? allKeys.value.length
+          : startIndex + chunk;
 
       const items = allKeys.value.slice(startIndex, endIndex);
       loadedMessages.value = { ...loadedMessages.value, ...pick(allMessages.value, items) };

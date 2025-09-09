@@ -355,13 +355,13 @@ export default defineComponent({
     };
 
     const volumeMethodSelectList
-     = [{
-       method: 'lookUpTable',
-       title: t('drinkware-sets.volumeMethod.lookUpTable'),
-     }, {
-       method: 'cylindrical',
-       title: t('drinkware-sets.volumeMethod.cylindrical'),
-     }];
+      = [{
+        method: 'lookUpTable',
+        title: t('drinkware-sets.volumeMethod.lookUpTable'),
+      }, {
+        method: 'cylindrical',
+        title: t('drinkware-sets.volumeMethod.cylindrical'),
+      }];
 
     return {
       entry,

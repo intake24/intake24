@@ -217,9 +217,9 @@ function isCustomField(id: string) {
 function loadMoreFields() {
   const startIndex = visibleFields.value.length;
   const endIndex
-        = startIndex + 15 > filteredFields.value.length
-          ? filteredFields.value.length
-          : startIndex + 15;
+    = startIndex + 15 > filteredFields.value.length
+      ? filteredFields.value.length
+      : startIndex + 15;
 
   const items = filteredFields.value.slice(startIndex, endIndex);
   visibleFields.value.push(...items);

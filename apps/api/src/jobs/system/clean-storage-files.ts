@@ -1,4 +1,5 @@
 import type { Job } from 'bullmq';
+import type { StringValue } from 'ms';
 import path from 'node:path';
 import fs from 'fs-extra';
 import type { LocalLocation } from '@intake24/api/config/filesystem';
@@ -46,7 +47,7 @@ export default class CleanStorageFiles extends BaseJob<'CleanStorageFiles'> {
    * @returns {Promise<void>}
    * @memberof CleanStorageFiles
    */
-  private async cleanDir(dir: string, expiresIn = '1h'): Promise<void> {
+  private async cleanDir(dir: string, expiresIn: StringValue = '1h'): Promise<void> {
     this.logger.debug(`Cleaning of '${dir}' folder started.`);
 
     const files = await fs.readdir(path.resolve(dir));

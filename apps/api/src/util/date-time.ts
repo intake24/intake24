@@ -1,3 +1,4 @@
+import type { StringValue } from 'ms';
 import ms from 'ms';
 
 /**
@@ -7,7 +8,7 @@ import ms from 'ms';
  * @param {Date} [since]
  * @returns {Date}
  */
-export function addTime(offset: string | number, since: Date = new Date()): Date {
+export function addTime(offset: StringValue | number, since: Date = new Date()): Date {
   return new Date(since.getTime() + (typeof offset === 'string' ? ms(offset) : offset));
 }
 
@@ -18,7 +19,7 @@ export function addTime(offset: string | number, since: Date = new Date()): Date
  * @param {Date} [since]
  * @returns {Date}
  */
-export function subtractTime(offset: string | number, since: Date = new Date()): Date {
+export function subtractTime(offset: StringValue | number, since: Date = new Date()): Date {
   return new Date(since.getTime() - (typeof offset === 'string' ? ms(offset) : offset));
 }
 
