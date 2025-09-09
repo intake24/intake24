@@ -5627,20 +5627,14 @@
                           "type": "boolean"
                         },
                         "age": {
-                          "type": "string",
-                          "pattern": "^\\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$",
                           "nullable": true
                         },
                         "fixed": {
-                          "type": "string",
-                          "pattern": "^\\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\\+\\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$",
                           "nullable": true
                         }
                       },
                       "required": [
-                        "store",
-                        "age",
-                        "fixed"
+                        "store"
                       ]
                     },
                     "suspensionReason": {
@@ -12086,6 +12080,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "nullable": true
+                  },
                   "name": {
                     "type": "string",
                     "maxLength": 128,
@@ -23937,6 +23936,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "nullable": true
+                  },
                   "name": {
                     "type": "string",
                     "maxLength": 128,
@@ -37667,6 +37671,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "nullable": true
+                  },
                   "name": {
                     "type": "string",
                     "maxLength": 128,
@@ -45750,20 +45759,14 @@
                         "type": "boolean"
                       },
                       "age": {
-                        "type": "string",
-                        "pattern": "^\\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$",
                         "nullable": true
                       },
                       "fixed": {
-                        "type": "string",
-                        "pattern": "^\\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\\+\\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$",
                         "nullable": true
                       }
                     },
                     "required": [
-                      "store",
-                      "age",
-                      "fixed"
+                      "store"
                     ]
                   },
                   "maximumDailySubmissions": {
@@ -46229,20 +46232,14 @@
                           "type": "boolean"
                         },
                         "age": {
-                          "type": "string",
-                          "pattern": "^\\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$",
                           "nullable": true
                         },
                         "fixed": {
-                          "type": "string",
-                          "pattern": "^\\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\\+\\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$",
                           "nullable": true
                         }
                       },
                       "required": [
-                        "store",
-                        "age",
-                        "fixed"
+                        "store"
                       ]
                     },
                     "maximumDailySubmissions": {
@@ -48414,20 +48411,14 @@
                           "type": "boolean"
                         },
                         "age": {
-                          "type": "string",
-                          "pattern": "^\\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$",
                           "nullable": true
                         },
                         "fixed": {
-                          "type": "string",
-                          "pattern": "^\\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\\+\\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$",
                           "nullable": true
                         }
                       },
                       "required": [
-                        "store",
-                        "age",
-                        "fixed"
+                        "store"
                       ]
                     },
                     "maximumDailySubmissions": {
@@ -50589,20 +50580,14 @@
                         "type": "boolean"
                       },
                       "age": {
-                        "type": "string",
-                        "pattern": "^\\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$",
                         "nullable": true
                       },
                       "fixed": {
-                        "type": "string",
-                        "pattern": "^\\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\\+\\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$",
                         "nullable": true
                       }
                     },
                     "required": [
-                      "store",
-                      "age",
-                      "fixed"
+                      "store"
                     ]
                   },
                   "maximumDailySubmissions": {
@@ -51057,20 +51042,14 @@
                           "type": "boolean"
                         },
                         "age": {
-                          "type": "string",
-                          "pattern": "^\\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$",
                           "nullable": true
                         },
                         "fixed": {
-                          "type": "string",
-                          "pattern": "^\\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\\+\\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$",
                           "nullable": true
                         }
                       },
                       "required": [
-                        "store",
-                        "age",
-                        "fixed"
+                        "store"
                       ]
                     },
                     "maximumDailySubmissions": {
@@ -53232,20 +53211,14 @@
                         "type": "boolean"
                       },
                       "age": {
-                        "type": "string",
-                        "pattern": "^\\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$",
                         "nullable": true
                       },
                       "fixed": {
-                        "type": "string",
-                        "pattern": "^\\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\\+\\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$",
                         "nullable": true
                       }
                     },
                     "required": [
-                      "store",
-                      "age",
-                      "fixed"
+                      "store"
                     ]
                   },
                   "maximumDailySubmissions": {
@@ -53731,20 +53704,14 @@
                           "type": "boolean"
                         },
                         "age": {
-                          "type": "string",
-                          "pattern": "^\\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$",
                           "nullable": true
                         },
                         "fixed": {
-                          "type": "string",
-                          "pattern": "^\\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\\+\\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$",
                           "nullable": true
                         }
                       },
                       "required": [
-                        "store",
-                        "age",
-                        "fixed"
+                        "store"
                       ]
                     },
                     "maximumDailySubmissions": {
@@ -62539,6 +62506,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "nullable": true
+                  },
                   "name": {
                     "type": "string",
                     "maxLength": 128,
