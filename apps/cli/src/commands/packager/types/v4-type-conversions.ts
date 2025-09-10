@@ -1,16 +1,14 @@
 import type {
-  PkgGlobalCategory,
-  PkgLocalCategory,
+  PkgCategory,
 } from '@intake24/cli/commands/packager/types/categories';
 import type {
   PkgAsServedPsm,
   PkgAssociatedFood,
   PkgCerealPsm,
   PkgDrinkScalePsm,
-  PkgGlobalFood,
+  PkgFood,
   PkgGuideImagePsm,
   PkgInheritableAttributes,
-  PkgLocalFood,
   PkgMilkInHotDrinkPsm,
   PkgMilkOnCerealPsm,
   PkgPizzaPsm,
@@ -24,12 +22,9 @@ import type { AsServedPsm, CerealPsm, DrinkScalePsm, GuideImagePsm, MilkInHotDri
 import type { UseInRecipeType } from '@intake24/common/types';
 import { useInRecipeTypes } from '@intake24/common/types';
 import type {
-  CreateGlobalCategoryRequest,
-  CreateGlobalFoodRequest,
-  CreateLocalCategoryRequest,
-  CreateLocalFoodRequest,
+  CreateCategoryRequest,
+  CreateFoodRequest,
   FoodEntry,
-  FoodLocalEntry,
   GuideImageInputObject,
   ImageMapEntryObject,
   LocaleEntry,
@@ -68,7 +63,6 @@ function fromPackageLocale(locale: PkgLocale): LocaleRequest {
     localName: locale.localName,
     englishName: locale.englishName,
     adminLanguageId: locale.adminLanguage,
-    prototypeLocaleId: locale.prototypeLocale,
     countryFlagCode: locale.flagCode,
     foodIndexLanguageBackendId: locale.foodIndexLanguageBackendId ?? 'en',
     respondentLanguageId: locale.respondentLanguage,
@@ -83,35 +77,6 @@ function validateUseInRecipes(useInRecipes: number | undefined): UseInRecipeType
   if (value === undefined)
     throw new Error(`Invalid useInRecipes value: ${useInRecipes}`);
   return value[1];
-}
-
-function fromPackageGlobalFood(globalFood: PkgGlobalFood): CreateGlobalFoodRequest {
-  return {
-    code: globalFood.code,
-    name: globalFood.englishDescription,
-    parentCategories: globalFood.parentCategories,
-    attributes: {
-      readyMealOption: globalFood.attributes.readyMealOption,
-      reasonableAmount: globalFood.attributes.reasonableAmount,
-      sameAsBeforeOption: globalFood.attributes.sameAsBeforeOption,
-      useInRecipes: validateUseInRecipes(globalFood.attributes.useInRecipes),
-    },
-  };
-}
-
-function fromPackageGlobalCategory(globalCategory: PkgGlobalCategory): CreateGlobalCategoryRequest {
-  return {
-    code: globalCategory.code,
-    name: globalCategory.englishDescription,
-    parentCategories: globalCategory.parentCategories,
-    isHidden: globalCategory.isHidden,
-    attributes: {
-      readyMealOption: globalCategory.attributes.readyMealOption,
-      reasonableAmount: globalCategory.attributes.reasonableAmount,
-      sameAsBeforeOption: globalCategory.attributes.sameAsBeforeOption,
-      useInRecipes: validateUseInRecipes(globalCategory.attributes.useInRecipes),
-    },
-  };
 }
 
 function fromPackageAssociatedFood(associatedFood: PkgAssociatedFood): AssociatedFood {
@@ -222,24 +187,41 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod, orderBy: string
   }
 }
 
-function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
+function fromPackageFood(food: PkgFood): CreateFoodRequest {
   return {
-    code: localFood.code,
-    name: localFood.localDescription ?? 'Missing local description!',
-    altNames: localFood.alternativeNames,
-    tags: localFood.tags,
-    associatedFoods: localFood.associatedFoods.map(af => fromPackageAssociatedFood(af)),
-    portionSizeMethods: localFood.portionSize.map((psm, idx) => fromPackagePortionSizeMethod(psm, idx.toString())),
-    nutrientTableCodes: localFood.nutrientTableCodes,
+    code: food.code,
+    name: food.name ?? 'Missing local description!',
+    englishName: food.englishName ?? 'Missing local description!',
+    altNames: food.alternativeNames,
+    tags: food.tags,
+    parentCategories: food.parentCategories,
+    attributes: {
+      readyMealOption: food.attributes.readyMealOption,
+      reasonableAmount: food.attributes.reasonableAmount,
+      sameAsBeforeOption: food.attributes.sameAsBeforeOption,
+      useInRecipes: validateUseInRecipes(food.attributes.useInRecipes),
+    },
+    associatedFoods: food.associatedFoods.map(af => fromPackageAssociatedFood(af)),
+    portionSizeMethods: food.portionSize.map((psm, idx) => fromPackagePortionSizeMethod(psm, idx.toString())),
+    nutrientTableCodes: food.nutrientTableCodes,
   };
 }
 
-function fromPackageLocalCategory(localCategory: PkgLocalCategory): CreateLocalCategoryRequest {
+function fromPackageCategory(category: PkgCategory): CreateCategoryRequest {
   return {
-    code: localCategory.code,
-    version: localCategory.version,
-    name: localCategory.localDescription ?? 'Missing description!',
-    portionSizeMethods: localCategory.portionSize.map((psm, idx) => fromPackagePortionSizeMethod(psm, idx.toString())),
+    code: category.code,
+    version: category.version,
+    name: category.name,
+    englishName: category.englishName,
+    parentCategories: category.parentCategories,
+    hidden: category.hidden,
+    attributes: {
+      readyMealOption: category.attributes.readyMealOption,
+      reasonableAmount: category.attributes.reasonableAmount,
+      sameAsBeforeOption: category.attributes.sameAsBeforeOption,
+      useInRecipes: validateUseInRecipes(category.attributes.useInRecipes),
+    },
+    portionSizeMethods: category.portionSize.map((psm, idx) => fromPackagePortionSizeMethod(psm, idx.toString())),
   };
 }
 
@@ -286,11 +268,20 @@ function packageAssociatedFoodPrompt(language: string, assocFood: AssociatedFood
   };
 }
 
-function packageLocalFood(code: string, language: string, localFood: FoodLocalEntry): PkgLocalFood {
+function packageFood(code: string, language: string, food: FoodEntry): PkgFood {
+  const parentCategories = food.parentCategories ? food.parentCategories.map(category => category.code) : [];
+
+  const attributes: PkgInheritableAttributes = {
+    readyMealOption: food.attributes?.readyMealOption ?? undefined,
+    sameAsBeforeOption: food.attributes?.sameAsBeforeOption ?? undefined,
+    reasonableAmount: food.attributes?.reasonableAmount ?? undefined,
+    useInRecipes: food.attributes?.useInRecipes ?? undefined,
+  };
+
   const nutrientTableCodes: Record<string, string> = {};
 
-  if (localFood.nutrientRecords !== undefined) {
-    for (const record of localFood.nutrientRecords) {
+  if (food.nutrientRecords !== undefined) {
+    for (const record of food.nutrientRecords) {
       nutrientTableCodes[record.nutrientTableId] = record.nutrientTableRecordId;
     }
   }
@@ -298,13 +289,15 @@ function packageLocalFood(code: string, language: string, localFood: FoodLocalEn
   return {
     code,
     version: undefined,
-    localDescription:
-        localFood.name,
-    alternativeNames: localFood.altNames,
-    associatedFoods: localFood.associatedFoods?.map(af => packageAssociatedFoodPrompt(language, af)) || [],
+    name: food.name ?? food.englishName,
+    englishName: food.englishName,
+    alternativeNames: food.altNames,
+    associatedFoods: food.associatedFoods?.map(af => packageAssociatedFoodPrompt(language, af)) || [],
+    attributes,
     brandNames: [],
     nutrientTableCodes,
-    portionSize: localFood.portionSizeMethods?.map(packagePortionSize) || [],
+    parentCategories,
+    portionSize: food.portionSizeMethods?.map(packagePortionSize) || [],
   };
 }
 
@@ -413,31 +406,11 @@ function packagePortionSize(portionSize: FoodPortionSizeMethodAttributes): PkgPo
   }
 }
 
-function packageGlobalFood(food: FoodEntry): PkgGlobalFood {
-  const parentCategories = food.parentCategories ? food.parentCategories.map(category => category.code) : [];
-
-  const attributes: PkgInheritableAttributes = {
-    readyMealOption: food.attributes?.readyMealOption ?? undefined,
-    sameAsBeforeOption: food.attributes?.sameAsBeforeOption ?? undefined,
-    reasonableAmount: food.attributes?.reasonableAmount ?? undefined,
-    useInRecipes: food.attributes?.useInRecipes ?? undefined,
-  };
-
-  return {
-    version: food.version,
-    code: food.code,
-    englishDescription: food.name,
-    attributes,
-    parentCategories,
-  };
-}
-
 function packageLocale(locale: LocaleEntry): PkgLocale {
   return {
     id: locale.id,
     englishName: locale.englishName,
     localName: locale.localName,
-    prototypeLocale: locale.prototypeLocaleId,
     adminLanguage: locale.adminLanguage?.code || locale.adminLanguageId,
     respondentLanguage: locale.respondentLanguage?.code || locale.respondentLanguageId,
     textDirection: locale.textDirection,
@@ -449,13 +422,10 @@ export default {
   fromPackageImageMapObjects,
   fromPackageGuideImageObjects,
   fromPackageLocale,
-  fromPackageGlobalFood,
-  fromPackageLocalFood,
-  fromPackageGlobalCategory,
-  fromPackageLocalCategory,
+  fromPackageFood,
+  fromPackageCategory,
   fromPackageNutrientTable,
   fromPackageNutrientTableRecords,
   packageLocale,
-  packageLocalFood,
-  packageGlobalFood,
+  packageFood,
 };

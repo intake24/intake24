@@ -17,20 +17,6 @@
               />
             </v-col>
             <v-col cols="12" md="6">
-              <select-resource
-                v-model="data.prototypeLocaleId"
-                clearable
-                :error-messages="errors.get('prototypeLocaleId')"
-                :initial-item="entry.parent"
-                item-id="code"
-                item-name="englishName"
-                :label="$t('locales.prototypeLocaleId')"
-                name="prototypeLocaleId"
-                resource="locales"
-                @update:model-value="errors.clear('prototypeLocaleId')"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
               <v-text-field
                 v-model="data.englishName"
                 :error-messages="errors.get('englishName')"
@@ -202,7 +188,6 @@ import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin'
 type LocaleForm = {
   id: string | null;
   code: string | null;
-  prototypeLocaleId: string | null;
   englishName: string | null;
   localName: string | null;
   respondentLanguageId: string;
@@ -232,7 +217,6 @@ export default defineComponent({
       data: {
         id: null,
         code: null,
-        prototypeLocaleId: null,
         englishName: null,
         localName: null,
         respondentLanguageId: 'en',

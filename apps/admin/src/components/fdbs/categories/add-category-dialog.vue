@@ -64,72 +64,59 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { CategoryListItem } from './categories';
-
-import { defineComponent, ref, toRefs } from 'vue';
+import { computed, ref } from 'vue';
 import { useFetchList } from '@intake24/admin/composables';
 import type { CategoriesResponse, MainCategoriesResponse } from '@intake24/common/types/http/admin';
-
 import { copy } from '@intake24/common/util';
 
-export default defineComponent({
-  name: 'AddCategoryDialog',
-
-  props: {
-    currentItems: {
-      type: Array as PropType<CategoryListItem[]>,
-      required: true,
-    },
-    localeId: {
-      type: String,
-    },
+const props = defineProps({
+  currentItems: {
+    type: Array as PropType<CategoryListItem[]>,
+    required: true,
   },
-
-  emits: ['add'],
-
-  setup(props) {
-    const { localeId } = toRefs(props);
-    const selected = ref<string[]>([]);
-
-    const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
-      (CategoriesResponse | MainCategoriesResponse)['data'][number]
-    >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
-
-    return { dialog, loading, items, page, lastPage, search, selected, clear };
-  },
-
-  computed: {
-    selectedItems() {
-      const { selected } = this;
-      if (!selected.length)
-        return [];
-
-      return this.items.filter(item => selected.includes(item.code));
-    },
-    isAlreadyIncluded() {
-      if (!this.currentItems.length || !this.selectedItems.length)
-        return false;
-      const codes = this.currentItems.map(item => item.code);
-
-      return this.selectedItems.some(item => codes.includes(item.code));
-    },
-  },
-
-  methods: {
-    close() {
-      this.selected = [];
-      this.dialog = false;
-    },
-
-    confirm() {
-      if (!this.selectedItems.length)
-        return;
-
-      this.$emit('add', copy(this.selectedItems));
-      this.close();
-    },
+  localeId: {
+    type: String,
   },
 });
+
+const emit = defineEmits<{
+  (e: 'add', items: CategoryListItem[]): void;
+}>();
+
+const selected = ref<string[]>([]);
+
+const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
+  (CategoriesResponse | MainCategoriesResponse)['data'][number]
+>({ url: props.localeId ? 'admin/fdbs/:id/categories' : 'admin/categories', id: props.localeId });
+
+const selectedItems = computed(() => {
+  if (!selected.value.length)
+    return [];
+
+  return items.value.filter(item => selected.value.includes(item.code));
+});
+const isAlreadyIncluded = computed(() => {
+  if (!props.currentItems.length || !selectedItems.value.length)
+    return false;
+
+  const codes = props.currentItems.map(item => item.code);
+
+  return selectedItems.value.some(item => codes.includes(item.code));
+});
+
+function close() {
+  selected.value = [];
+  dialog.value = false;
+};
+
+function confirm() {
+  if (!selectedItems.value.length)
+    return;
+
+  emit('add', copy(selectedItems.value));
+  close();
+};
 </script>

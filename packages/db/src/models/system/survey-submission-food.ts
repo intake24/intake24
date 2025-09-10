@@ -64,7 +64,7 @@ export default class SurveySubmissionFood extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(32),
+    type: DataType.STRING(64),
   })
   declare code: string;
 
@@ -79,6 +79,12 @@ export default class SurveySubmissionFood extends BaseModel<
     type: DataType.STRING(256),
   })
   declare localName: CreationOptional<string | null>;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(64),
+  })
+  declare locale: string;
 
   @Column({
     allowNull: false,

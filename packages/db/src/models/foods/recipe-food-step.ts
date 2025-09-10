@@ -11,16 +11,13 @@ import {
   Column,
   CreatedAt,
   DataType,
-  ForeignKey,
   Scopes,
   Sequelize,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import type { LocaleTranslation } from '@intake24/common/types';
-import { FoodCategory, FoodsLocale } from '@intake24/db';
-
+import type { RequiredLocaleTranslation } from '@intake24/common/types';
+import { FoodsLocale } from '@intake24/db';
 import BaseModel from '../model';
 import RecipeFood from './recipe-food';
 
@@ -56,7 +53,6 @@ export default class RecipeFoodStep extends BaseModel<
   })
   declare id: CreationOptional<string>;
 
-  @ForeignKey(() => RecipeFood)
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
@@ -72,16 +68,15 @@ export default class RecipeFoodStep extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.STRING(64),
   })
   declare localeId: string;
 
-  @ForeignKey(() => FoodCategory)
   @Column({
     allowNull: true,
-    type: DataType.STRING(16),
+    type: DataType.STRING(64),
   })
-  declare categoryCode: string | null;
+  declare categoryCode: string;
 
   @Column({
     allowNull: false,
@@ -93,21 +88,15 @@ export default class RecipeFoodStep extends BaseModel<
       ]),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get name(): LocaleTranslation {
+  get name(): RequiredLocaleTranslation {
     const val = this.getDataValue('name') as unknown;
-    return val ? JSON.parse(val as string) : {};
+    return JSON.parse(val as string);
   }
 
-  set name(value: LocaleTranslation) {
+  set name(value: RequiredLocaleTranslation) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('name', JSON.stringify(value ?? {}));
   }
-
-  @Column({
-    allowNull: false,
-    type: DataType.INTEGER,
-  })
-  declare order: number;
 
   @Column({
     allowNull: false,
@@ -119,12 +108,12 @@ export default class RecipeFoodStep extends BaseModel<
       }),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get description(): LocaleTranslation {
+  get description(): RequiredLocaleTranslation {
     const val = this.getDataValue('description') as unknown;
-    return val ? JSON.parse(val as string) : {};
+    return JSON.parse(val as string);
   }
 
-  set description(value: LocaleTranslation) {
+  set description(value: RequiredLocaleTranslation) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('description', JSON.stringify(value ?? {}));
   }
@@ -143,6 +132,12 @@ export default class RecipeFoodStep extends BaseModel<
   })
   declare required: boolean;
 
+  @Column({
+    allowNull: false,
+    type: DataType.INTEGER,
+  })
+  declare order: number;
+
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
 
@@ -154,9 +149,6 @@ export default class RecipeFoodStep extends BaseModel<
 
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
-
-  @BelongsTo(() => FoodCategory, 'categoryCode')
-  declare category?: NonAttribute<FoodCategory>;
 }
 
 export type RecipeFoodStepAttributes = Attributes<RecipeFoodStep>;

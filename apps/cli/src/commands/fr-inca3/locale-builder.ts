@@ -22,12 +22,10 @@ import type { INCA3RecipeStandardUnitRow } from '@intake24/cli/commands/fr-inca3
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type {
-  PkgGlobalCategory,
-  PkgLocalCategory,
+  PkgCategory,
 } from '@intake24/cli/commands/packager/types/categories';
 import type {
-  PkgGlobalFood,
-  PkgLocalFood,
+  PkgFood,
   PkgPortionSizeMethod,
   PkgStandardUnit,
 } from '@intake24/cli/commands/packager/types/foods';
@@ -43,7 +41,6 @@ const locale: PkgLocale = {
   localName: 'France (ANSES)',
   englishName: 'France (ANSES)',
   textDirection: 'ltr',
-  prototypeLocale: null,
   respondentLanguage: 'fr',
   flagCode: 'fr',
   adminLanguage: 'fr',
@@ -353,42 +350,6 @@ export class FrenchAnsesLocaleBuilder {
     this.recipeStandardUnits = groupBy(rows, row => row.R_CODE);
   }
 
-  private buildGlobalFoods(): PkgGlobalFood[] {
-    const globalFoods: PkgGlobalFood[] = [];
-
-    for (const row of this.sourceFoodRecords!) {
-      const categories = this.foodCategories![row.A_CODE];
-
-      if (!categories)
-        console.warn(`Food ${row.A_CODE} is not assigned to any categories`);
-
-      globalFoods.push({
-        version: randomUUID(),
-        code: getIntake24FoodCode(row.A_CODE),
-        parentCategories: categories ?? [],
-        attributes: { sameAsBeforeOption: true },
-        englishDescription: capitalize(this.getFoodEnglishDescription(row.A_CODE)),
-      });
-    }
-
-    for (const row of this.sourceRecipeRecords!) {
-      const categories = this.recipeCategories![row.R_CODE];
-
-      if (!categories)
-        console.warn(`Recipe ${row.R_CODE} is not assigned to any categories`);
-
-      globalFoods.push({
-        version: randomUUID(),
-        code: getIntake24RecipeCode(row.R_CODE),
-        parentCategories: categories ?? [],
-        attributes: {},
-        englishDescription: capitalize(this.getRecipeEnglishDescription(row.R_CODE)),
-      });
-    }
-
-    return globalFoods;
-  }
-
   private photoListToAsServed(photoList: string): PkgPortionSizeMethod[] {
     const portionSizeMethods: PkgPortionSizeMethod[] = [];
 
@@ -583,17 +544,25 @@ export class FrenchAnsesLocaleBuilder {
     return portionSizeMethods;
   }
 
-  private buildLocalFoods(): PkgLocalFood[] {
-    const localFoods: PkgLocalFood[] = [];
+  private buildFoods(): PkgFood[] {
+    const foods: PkgFood[] = [];
 
     for (const row of this.sourceFoodRecords!) {
+      const categories = this.foodCategories![row.A_CODE];
+
+      if (!categories)
+        console.warn(`Food ${row.A_CODE} is not assigned to any categories`);
+
       const foodSynonyms = this.foodSynonyms![row.A_CODE];
       const alternativeNames = foodSynonyms === undefined ? undefined : { fr: foodSynonyms };
 
-      localFoods.push({
+      foods.push({
         version: randomUUID(),
         code: getIntake24FoodCode(row.A_CODE),
-        localDescription: capitalize(row.A_LIBELLE),
+        parentCategories: categories ?? [],
+        attributes: { sameAsBeforeOption: true },
+        name: capitalize(row.A_LIBELLE),
+        englishName: capitalize(this.getFoodEnglishDescription(row.A_CODE)),
         alternativeNames,
         nutrientTableCodes: {
           FR_TEMP: 'FRPH1',
@@ -605,13 +574,21 @@ export class FrenchAnsesLocaleBuilder {
     }
 
     for (const row of this.sourceRecipeRecords!) {
+      const categories = this.recipeCategories![row.R_CODE];
+
+      if (!categories)
+        console.warn(`Recipe ${row.R_CODE} is not assigned to any categories`);
+
       const recipeSynonyms = this.recipeSynonyms![row.R_CODE];
       const alternativeNames = recipeSynonyms === undefined ? undefined : { fr: recipeSynonyms };
 
-      localFoods.push({
+      foods.push({
         version: randomUUID(),
         code: getIntake24RecipeCode(row.R_CODE),
-        localDescription: capitalize(row.R_LIBELLE),
+        parentCategories: categories ?? [],
+        attributes: {},
+        englishName: capitalize(this.getRecipeEnglishDescription(row.R_CODE)),
+        name: capitalize(row.R_LIBELLE),
         alternativeNames,
         nutrientTableCodes: {
           FR_TEMP: 'FRPH1',
@@ -622,101 +599,83 @@ export class FrenchAnsesLocaleBuilder {
       });
     }
 
-    return localFoods;
+    return foods;
   }
 
-  private buildGlobalCategories(): PkgGlobalCategory[] {
-    return [
+  private buildCategories(): PkgCategory[] {
+    const localCategories: PkgCategory[] = [
       {
         code: 'FRPEPO',
         attributes: {},
-        englishDescription: 'Baby food and savoury snacks',
+        name: 'Petits pots salés & plats infantiles',
+        englishName: 'Baby food and savoury snacks',
         parentCategories: ['19TODSFD'],
+        portionSize: [],
         version: '0fd3f027-6f2a-47f3-9838-7bb0037a4fd4',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRDEIN',
         attributes: {},
-        englishDescription: 'Baby desserts',
+        name: 'Desserts infantiles',
+        englishName: 'Baby desserts',
         parentCategories: ['19TODSFD'],
+        portionSize: [],
         version: '64f6bd7b-0f0b-41b6-ab20-afac96078a28',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRCEBI',
         attributes: {},
-        englishDescription: 'Baby cereals and biscuits',
+        name: 'Céréales & biscuits infantiles',
+        englishName: 'Baby cereals and biscuits',
         parentCategories: ['19TODSFD'],
+        portionSize: [],
         version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRLABO',
         attributes: {},
-        englishDescription: 'Baby milk and drinks',
+        name: 'Laits & boissons infantiles',
+        englishName: 'Baby milk and drinks',
         parentCategories: ['19TODSFD'],
+        portionSize: [],
         version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRLAMA',
         attributes: {},
-        englishDescription: 'Breast milk',
+        name: 'Lait maternel',
+        englishName: 'Breast milk',
         parentCategories: ['FRLABO'],
+        portionSize: [],
         version: 'e309274c-12be-49d0-88e2-26744ce7f3c1',
-        isHidden: false,
+        hidden: false,
       },
       {
         code: 'FRCIT',
         attributes: {},
-        englishDescription: 'Lemon juice for cooking',
+        name: 'Jus de citron',
+        englishName: 'Lemon juice for cooking',
         parentCategories: ['COND'],
+        portionSize: [],
         version: '0555155a-8073-4a00-b30c-26691082b7d1',
-        isHidden: false,
-      },
-    ];
-  }
-
-  private buildLocalCategories(): PkgLocalCategory[] {
-    const localCategories: PkgLocalCategory[] = [
-      {
-        code: 'FRPEPO',
-        localDescription: 'Petits pots salés & plats infantiles',
-        portionSize: [],
-      },
-      {
-        code: 'FRDEIN',
-        localDescription: 'Desserts infantiles',
-        portionSize: [],
-      },
-      {
-        code: 'FRCEBI',
-        localDescription: 'Céréales & biscuits infantiles',
-        portionSize: [],
-      },
-      {
-        code: 'FRLABO',
-        localDescription: 'Laits & boissons infantiles',
-        portionSize: [],
-      },
-      {
-        code: 'FRLAMA',
-        localDescription: 'Lait maternel',
-        portionSize: [],
-      },
-      {
-        code: 'FRCIT',
-        localDescription: 'Jus de citron',
-        portionSize: [],
+        hidden: false,
       },
     ];
 
-    for (const [code, localDescription] of Object.entries(this.categoryNames!)) {
+    for (const [code, name] of Object.entries(this.categoryNames!)) {
       localCategories.push({
         code,
-        localDescription,
+        name,
+        englishName: name,
+        hidden: false,
+        attributes: {},
+        parentCategories: [],
         portionSize: [],
+        version: randomUUID(),
       });
     }
 
@@ -750,22 +709,19 @@ export class FrenchAnsesLocaleBuilder {
     await this.readFoodStandardUnits();
     await this.readRecipeStandardUnits();
 
-    const globalFoods = this.buildGlobalFoods();
-    const localFoods = this.buildLocalFoods();
+    const foods = this.buildFoods();
+    const categories = this.buildCategories();
 
-    const globalCategories = this.buildGlobalCategories();
-    const localCategories = this.buildLocalCategories();
-
-    const localFoodsRecord = {
-      [locale.id]: localFoods,
+    const foodsRecord = {
+      [locale.id]: foods,
     };
 
-    const enabledLocalFoods = {
-      [locale.id]: localFoods.map(f => f.code),
+    const enabledFoods = {
+      [locale.id]: foods.map(f => f.code),
     };
 
-    const localCategoriesRecord = {
-      [locale.id]: localCategories,
+    const categoriesRecord = {
+      [locale.id]: categories,
     };
 
     const asServedSets = this.buildAsServed();
@@ -773,11 +729,9 @@ export class FrenchAnsesLocaleBuilder {
     const writer = new PackageWriter(this.logger, this.outputDirPath);
 
     await writer.writeLocales([locale]);
-    await writer.writeGlobalFoods(globalFoods);
-    await writer.writeLocalFoods(localFoodsRecord);
-    await writer.writeGlobalCategories(globalCategories);
-    await writer.writeLocalCategories(localCategoriesRecord);
-    await writer.writeEnabledLocalFoods(enabledLocalFoods);
+    await writer.writeCategories(categoriesRecord);
+    await writer.writeFoods(foodsRecord);
+    await writer.writeEnabledLocalFoods(enabledFoods);
     await writer.writeNutrientTables([dummyNutrientTable]);
     await writer.writeAsServedSets(asServedSets);
   }

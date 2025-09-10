@@ -46,6 +46,7 @@
       "subTasks": {
         "_": "Subtasks",
         "associatedFoods": "Associated foods",
+        "attributes": "Attributes",
         "brands": "Brands",
         "categories": "Categories",
         "foods": "Foods",

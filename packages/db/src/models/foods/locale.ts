@@ -6,11 +6,9 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
-
+import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import type { TextDirection } from '@intake24/common/types';
-
-import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';
+import { Category, Food, SplitList, SplitWord, SynonymSet } from '.';
 import BaseModel from '../model';
 
 @Table({
@@ -26,7 +24,7 @@ export default class Locale extends BaseModel<
 > {
   @Column({
     primaryKey: true,
-    type: DataType.STRING(16),
+    type: DataType.STRING(64),
   })
   declare id: string;
 
@@ -61,12 +59,6 @@ export default class Locale extends BaseModel<
   declare countryFlagCode: string;
 
   @Column({
-    allowNull: true,
-    type: DataType.STRING(16),
-  })
-  declare prototypeLocaleId: CreationOptional<string | null>;
-
-  @Column({
     allowNull: false,
     defaultValue: 'ltr',
     type: DataType.STRING(8),
@@ -87,14 +79,11 @@ export default class Locale extends BaseModel<
   })
   declare foodIndexLanguageBackendId: CreationOptional<string>;
 
-  @BelongsTo(() => Locale, 'prototypeLocaleId')
-  declare parent?: NonAttribute<Locale | null>;
+  @HasMany(() => Category, 'localeId')
+  declare categories?: NonAttribute<Category[]>;
 
-  @HasMany(() => Locale, 'prototypeLocaleId')
-  declare children?: NonAttribute<Locale[]>;
-
-  @HasMany(() => AssociatedFood, 'localeId')
-  declare associatedFoods?: AssociatedFood[];
+  @HasMany(() => Food, 'localeId')
+  declare foods?: NonAttribute<Food[]>;
 
   @HasMany(() => SplitList, 'localeId')
   declare splitLists?: NonAttribute<SplitList[]>;

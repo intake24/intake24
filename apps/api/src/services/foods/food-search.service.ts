@@ -28,53 +28,53 @@ function foodSearchService({
     }
   }
 
-  const resolveCategoryAttributes = async (categoryCodes: string[]): Promise<Record<string, InheritableAttributes>> => {
+  const resolveCategoryAttributes = async (categoryIds: string[]): Promise<Record<string, InheritableAttributes>> => {
     const data = await Promise.all(
-      categoryCodes.map(code => inheritableAttributesService.resolveCategoryAttributes(code)),
+      categoryIds.map(id => inheritableAttributesService.resolveCategoryAttributes(id)),
     );
 
-    return Object.fromEntries(categoryCodes.map((code, index) => [code, data[index]]));
+    return Object.fromEntries(categoryIds.map((id, index) => [id, data[index]]));
   };
 
-  const resolveFoodAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes>> => {
+  const resolveFoodAttributes = async (foodIds: string[]): Promise<Record<string, InheritableAttributes>> => {
     const data = await Promise.all(
-      foodCodes.map(code => inheritableAttributesService.resolveFoodAttributes(code)),
+      foodIds.map(id => inheritableAttributesService.resolveFoodAttributes(id)),
     );
 
-    return Object.fromEntries(foodCodes.map((code, index) => [code, data[index]]));
+    return Object.fromEntries(foodIds.map((id, index) => [id, data[index]]));
   };
 
-  const getCategoryAttributes = async (categoryCodes: string[]): Promise<Record<string, InheritableAttributes | null>> => {
-    return cache.rememberMany(categoryCodes, 'category-attributes', cacheConfig.ttl, resolveCategoryAttributes);
+  const getCategoryAttributes = async (categoryIds: string[]): Promise<Record<string, InheritableAttributes | null>> => {
+    return cache.rememberMany(categoryIds, 'category-attributes', cacheConfig.ttl, resolveCategoryAttributes);
   };
 
-  const getFoodAttributes = async (foodCodes: string[]): Promise<Record<string, InheritableAttributes | null>> => {
-    return cache.rememberMany(foodCodes, 'food-attributes', cacheConfig.ttl, resolveFoodAttributes);
+  const getFoodAttributes = async (foodIds: string[]): Promise<Record<string, InheritableAttributes | null>> => {
+    return cache.rememberMany(foodIds, 'food-attributes', cacheConfig.ttl, resolveFoodAttributes);
   };
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);
     const results = await foodIndex.search(queryParameters);
 
-    const catCodes = results.categories.map(({ code }) => code);
-    const foodCodes = results.foods.map(({ code }) => code);
+    const catIds = results.categories.map(({ id }) => id);
+    const foodIds = results.foods.map(({ id }) => id);
 
     const [categoryAttrs, foodAttrs, thumbnailImages] = await Promise.all([
-      getCategoryAttributes(catCodes),
-      getFoodAttributes(foodCodes),
-      foodThumbnailImageService.resolveImages(localeId, foodCodes),
+      getCategoryAttributes(catIds),
+      getFoodAttributes(foodIds),
+      foodThumbnailImageService.resolveImages(foodIds),
     ]);
 
     const withFilteredIngredients = {
       foods: results.foods.reduce<FoodSearchResponse['foods']>((acc, food) => {
-        if (!acceptForQuery(isRecipe, foodAttrs[food.code]?.useInRecipes))
+        if (!acceptForQuery(isRecipe, foodAttrs[food.id]?.useInRecipes))
           return acc;
 
-        acc.push({ ...food, thumbnailImageUrl: thumbnailImages[food.code] });
+        acc.push({ ...food, thumbnailImageUrl: thumbnailImages[food.id] });
 
         return acc;
       }, []),
-      categories: results.categories.filter(category => acceptForQuery(isRecipe, categoryAttrs[category.code]?.useInRecipes)),
+      categories: results.categories.filter(category => acceptForQuery(isRecipe, categoryAttrs[category.id]?.useInRecipes)),
     };
 
     return withFilteredIngredients;

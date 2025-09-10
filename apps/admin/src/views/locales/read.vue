@@ -7,10 +7,6 @@
           <td>{{ entry.code }}</td>
         </tr>
         <tr>
-          <th>{{ $t('locales.prototypeLocaleId') }}</th>
-          <td>{{ entry.prototypeLocaleId || $t('common.none') }}</td>
-        </tr>
-        <tr>
           <th>{{ $t('locales.englishName') }}</th>
           <td>{{ entry.englishName }}</td>
         </tr>

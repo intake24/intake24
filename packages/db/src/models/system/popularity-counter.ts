@@ -22,7 +22,7 @@ export default class PopularityCounter extends BaseModel<
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: DataType.STRING(8),
+    type: DataType.STRING(64),
   })
   declare foodCode: string;
 

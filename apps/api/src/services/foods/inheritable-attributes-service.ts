@@ -1,7 +1,4 @@
-import {
-  getCategoryParentCategories,
-  getFoodParentCategories,
-} from '@intake24/api/services/foods/common';
+import { getCategoryParentCategories, getFoodParentCategories } from '@intake24/api/services/foods/common';
 import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import { AttributeDefaults, CategoryAttribute, FoodAttribute } from '@intake24/db';
 
@@ -60,8 +57,8 @@ function inheritableAttributesService() {
       return completeAttributesWithDefaults(attributes);
 
     const parentAttributesRows = await CategoryAttribute.findAll({
-      where: { categoryCode: parentCategories },
-      order: [['categoryCode', 'ASC']],
+      where: { categoryId: parentCategories },
+      order: [['categoryId', 'ASC']],
     });
 
     const newAttributes: InheritableAttributesTemp = {
@@ -91,8 +88,8 @@ function inheritableAttributesService() {
     return resolveAttributesRec(nextParents, newAttributes);
   };
 
-  async function resolveCategoryAttributes(categoryCode: string): Promise<InheritableAttributes> {
-    const catAttributes = await CategoryAttribute.findOne({ where: { categoryCode } });
+  async function resolveCategoryAttributes(categoryId: string): Promise<InheritableAttributes> {
+    const catAttributes = await CategoryAttribute.findOne({ where: { categoryId } });
 
     const attributes: InheritableAttributesTemp = {
       readyMealOption: null,
@@ -112,13 +109,13 @@ function inheritableAttributesService() {
     if (maybeComplete)
       return maybeComplete;
 
-    const parentCategories = await getCategoryParentCategories([categoryCode]);
+    const parentCategories = await getCategoryParentCategories([categoryId]);
 
     return resolveAttributesRec(parentCategories, attributes);
   }
 
-  async function resolveFoodAttributes(foodCode: string): Promise<InheritableAttributes> {
-    const foodAttributesRow = await FoodAttribute.findOne({ where: { foodCode } });
+  async function resolveFoodAttributes(foodId: string): Promise<InheritableAttributes> {
+    const foodAttributesRow = await FoodAttribute.findOne({ where: { foodId } });
 
     const attributes: InheritableAttributesTemp = {
       readyMealOption: null,
@@ -138,7 +135,7 @@ function inheritableAttributesService() {
     if (maybeComplete)
       return maybeComplete;
 
-    const parentCategories = await getFoodParentCategories(foodCode);
+    const parentCategories = await getFoodParentCategories(foodId);
 
     return resolveAttributesRec(parentCategories, attributes);
   }

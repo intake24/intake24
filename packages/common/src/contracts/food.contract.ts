@@ -1,6 +1,5 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-
 import {
   foodSearchQuery,
   foodSearchResponse,
@@ -9,9 +8,19 @@ import {
 } from '../types/http';
 
 export const food = initContract().router({
+  entry: {
+    method: 'GET',
+    path: '/foods/:foodId',
+    responses: {
+      200: userFoodData,
+    },
+    summary: 'Food entry',
+    description:
+      'Get portion size estimation options, associated foods and related data for a food from the database.',
+  },
   search: {
     method: 'GET',
-    path: '/foods/:localeId',
+    path: '/locales/:localeId/foods',
     query: foodSearchQuery,
     responses: {
       200: foodSearchResponse,
@@ -19,9 +28,9 @@ export const food = initContract().router({
     summary: 'Food search',
     description: 'Returns a list of foods from the food database that match the description.',
   },
-  entry: {
+  codeEntry: {
     method: 'GET',
-    path: '/foods/:localeId/:code',
+    path: '/locales/:localeId/foods/:code',
     responses: {
       200: userFoodData,
     },
@@ -31,7 +40,7 @@ export const food = initContract().router({
   },
   recipeFood: {
     method: 'GET',
-    path: '/foods/:localeId/:code/recipe-food',
+    path: '/locales/:localeId/foods/:code/recipe-food',
     responses: {
       200: recipeFoodResponse,
     },
@@ -40,7 +49,7 @@ export const food = initContract().router({
   },
   categories: {
     method: 'GET',
-    path: '/foods/:localeId/:code/categories',
+    path: '/locales/:localeId/foods/:code/categories',
     responses: {
       200: z.array(z.string()),
     },

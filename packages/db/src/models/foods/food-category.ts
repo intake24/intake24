@@ -5,16 +5,12 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import { Category, Food } from '@intake24/db';
 
 import BaseModel from '../model';
 
-@Scopes(() => ({
-  food: { include: [{ model: Food }] },
-  category: { include: [{ model: Category }] },
-}))
 @Table({
   timestamps: false,
   underscored: true,
@@ -25,24 +21,22 @@ export default class FoodCategory extends BaseModel<
   InferAttributes<FoodCategory>,
   InferCreationAttributes<FoodCategory>
 > {
-  @ForeignKey(() => Food)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  declare foodCode: string;
+  declare foodId: string;
 
-  @ForeignKey(() => Category)
   @Column({
     allowNull: false,
-    type: DataType.STRING(8),
+    type: DataType.BIGINT,
   })
-  declare categoryCode: string;
+  declare categoryId: string;
 
-  @BelongsTo(() => Food, 'foodCode')
+  @BelongsTo(() => Food, 'foodId')
   declare food?: NonAttribute<Food>;
 
-  @BelongsTo(() => Category, 'categoryCode')
+  @BelongsTo(() => Category, 'categoryId')
   declare category?: NonAttribute<Category>;
 }
 

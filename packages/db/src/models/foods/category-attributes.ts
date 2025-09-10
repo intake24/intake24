@@ -6,11 +6,9 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
-
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import type { UseInRecipeType } from '@intake24/common/types';
-import { Category } from '@intake24/db';
-
+import { Category } from '.';
 import BaseModel from '../model';
 
 @Scopes(() => ({
@@ -28,18 +26,10 @@ export default class CategoryAttribute extends BaseModel<
   InferCreationAttributes<CategoryAttribute>
 > {
   @Column({
-    autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  declare id: CreationOptional<string>;
-
-  @ForeignKey(() => Category)
-  @Column({
-    allowNull: false,
-    type: DataType.STRING(8),
-  })
-  declare categoryCode: string;
+  declare categoryId: string;
 
   @Column({
     allowNull: true,
@@ -65,7 +55,7 @@ export default class CategoryAttribute extends BaseModel<
   })
   declare useInRecipes: CreationOptional<UseInRecipeType | null>;
 
-  @BelongsTo(() => Category, 'categoryCode')
+  @BelongsTo(() => Category, 'categoryId')
   declare category?: NonAttribute<Category>;
 }
 

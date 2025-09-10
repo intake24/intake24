@@ -1,21 +1,16 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-
 import { merge } from 'lodash';
-
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
-import type {
-  PkgGlobalCategory,
-  PkgLocalCategory,
-} from '@intake24/cli/commands/packager/types/categories';
+import type { PkgCategory } from '@intake24/cli/commands/packager/types/categories';
 import type { PkgDrinkwareSet } from '@intake24/cli/commands/packager/types/drinkware';
-import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import type logger from '@intake24/common-backend/services/logger/logger';
+import { PkgFood } from './types/foods';
 import { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
 
 export type Logger = typeof logger;
@@ -75,33 +70,22 @@ export class PackageWriter {
     }
   }
 
-  public async writeGlobalFoods(globalFoods: PkgGlobalFood[]) {
+  public async writeFoods(foods: Record<string, PkgFood[]>) {
     await this.writeJSON(
-      globalFoods,
-      path.join(this.outputDir, PkgConstants.GLOBAL_FOODS_FILE_NAME),
+      foods,
+      path.join(this.outputDir, PkgConstants.FOODS_FILE_NAME),
     );
   }
 
-  public async writeGlobalCategories(globalCategories: PkgGlobalCategory[]) {
+  public async writeCategories(categories: Record<string, PkgCategory[]>) {
     await this.writeJSON(
-      globalCategories,
-      path.join(this.outputDir, PkgConstants.GLOBAL_CATEGORIES_FILE_NAME),
+      categories,
+      path.join(this.outputDir, PkgConstants.CATEGORIES_FILE_NAME),
     );
   }
 
   public async writeLocales(locales: PkgLocale[]) {
     await this.writeJSON(locales, path.join(this.outputDir, PkgConstants.LOCALES_FILE_NAME));
-  }
-
-  public async writeLocalFoods(localFoods: Record<string, PkgLocalFood[]>) {
-    await this.writeJSON(localFoods, path.join(this.outputDir, PkgConstants.LOCAL_FOODS_FILE_NAME));
-  }
-
-  public async writeLocalCategories(localCategories: Record<string, PkgLocalCategory[]>) {
-    await this.writeJSON(
-      localCategories,
-      path.join(this.outputDir, PkgConstants.LOCAL_CATEGORIES_FILE_NAME),
-    );
   }
 
   public async writeEnabledLocalFoods(enabledFoods: Record<string, string[]>) {

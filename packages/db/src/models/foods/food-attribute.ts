@@ -6,16 +6,13 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import type { UseInRecipeType } from '@intake24/common/types';
 
 import BaseModel from '../model';
 import Food from './food';
 
-@Scopes(() => ({
-  food: { include: [{ model: Food }] },
-}))
 @Table({
   modelName: 'FoodAttribute',
   tableName: 'food_attributes',
@@ -28,17 +25,10 @@ export default class FoodAttribute extends BaseModel<
   InferCreationAttributes<FoodAttribute>
 > {
   @Column({
-    autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  declare id: CreationOptional<string>;
-
-  @Column({
-    allowNull: false,
-    type: DataType.STRING(8),
-  })
-  declare foodCode: string;
+  declare foodId: string;
 
   @Column({
     allowNull: true,
@@ -64,7 +54,7 @@ export default class FoodAttribute extends BaseModel<
   })
   declare useInRecipes: CreationOptional<UseInRecipeType | null>;
 
-  @BelongsTo(() => Food, 'foodCode')
+  @BelongsTo(() => Food, 'foodId')
   declare food?: NonAttribute<Food>;
 }
 

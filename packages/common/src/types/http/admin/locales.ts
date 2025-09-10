@@ -4,20 +4,19 @@ import { isLocale } from 'validator';
 import { z } from 'zod';
 import { recordVisibilities } from '@intake24/common/security';
 
-import { localeTranslation, textDirections } from '../../common';
+import { requiredLocaleTranslation, textDirections } from '../../common';
 import { languageAttributes } from './languages';
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';
 
 export const systemLocaleAttributes = z.object({
   id: z.string(),
-  code: z.string().min(1).max(16),
+  code: z.string().min(1).max(64),
   englishName: z.string().min(1).max(64),
   localName: z.string().min(1).max(64),
   respondentLanguageId: languageAttributes.shape.code,
   adminLanguageId: languageAttributes.shape.code,
   countryFlagCode: z.string().min(1).max(16).refine(val => isLocale(val)),
-  prototypeLocaleId: z.string().min(1).max(16).nullable(),
   textDirection: z.enum(textDirections),
   foodIndexEnabled: z.boolean(),
   foodIndexLanguageBackendId: z.string().min(1).max(16),
@@ -35,7 +34,6 @@ export const localeRequest = systemLocaleAttributes.omit({
   createdAt: true,
   updatedAt: true,
 }).partial({
-  prototypeLocaleId: true,
   textDirection: true,
   foodIndexEnabled: true,
   foodIndexLanguageBackendId: true,
@@ -113,10 +111,10 @@ export const recipeFoodStepAttributes = z.object({
   id: z.string(),
   recipeFoodsId: z.string(),
   code: z.string().min(1).max(128),
-  localeId: z.string().min(1).max(16),
-  categoryCode: z.string().max(16).nullable(),
-  name: localeTranslation,
-  description: localeTranslation,
+  localeId: z.string().min(1).max(64),
+  categoryCode: z.string().max(64),
+  name: requiredLocaleTranslation,
+  description: requiredLocaleTranslation,
   order: z.number(),
   repeatable: z.boolean(),
   required: z.boolean(),
@@ -128,8 +126,8 @@ export type RecipeFoodStepRequest = z.infer<typeof recipeFoodStepRequest>;
 
 export const recipeFoodAttributes = z.object({
   id: z.string(),
-  localeId: z.string().min(1).max(16),
-  code: z.string().min(1).max(16),
+  localeId: z.string().min(1).max(64),
+  code: z.string().min(1).max(64),
   name: z.string().min(1).max(128),
   recipeWord: z.string().min(1).max(512),
   synonymsId: z.string().nullable(),

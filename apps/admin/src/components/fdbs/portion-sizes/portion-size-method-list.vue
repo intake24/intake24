@@ -83,10 +83,6 @@ export default defineComponent({
       type: Object as PropType<ReturnUseErrors>,
       required: true,
     },
-    localeId: {
-      type: String,
-      required: true,
-    },
     modelValue: {
       type: Array as PropType<PortionSizeMethodItem[]>,
       required: true,

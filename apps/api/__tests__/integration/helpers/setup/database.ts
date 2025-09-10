@@ -84,7 +84,6 @@ export async function initDatabase(): Promise<MockData> {
     respondentLanguageId: language.code,
     adminLanguageId: language.code,
     countryFlagCode: 'gb',
-    prototypeLocaleId: null,
     textDirection: 'ltr',
     foodIndexEnabled: true,
     foodIndexLanguageBackendId: 'en',

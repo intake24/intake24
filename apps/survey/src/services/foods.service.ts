@@ -20,14 +20,16 @@ export default {
     });
     return data;
   },
-
-  getData: async (localeId: string, foodCode: string): Promise<UserFoodData> => {
-    const { data } = await http.get<UserFoodData>(`foods/${localeId}/${foodCode}`);
+  getData: async (localeId: string, code: string): Promise<UserFoodData> => {
+    const { data } = await http.get<UserFoodData>(`/locales/${localeId}/foods/${code}`);
     return data;
   },
-
   getRecipeFood: async (localeId: string, code: string): Promise<RecipeFood> => {
-    const { data } = await http.get<RecipeFood>(`foods/${localeId}/${code}/recipe-food`);
+    const { data } = await http.get<RecipeFood>(`/locales/${localeId}/foods/${code}/recipe-food`);
+    return data;
+  },
+  categories: async (localeId: string, code: string): Promise<string[]> => {
+    const { data } = await http.get<string[]>(`/locales/${localeId}/foods/${code}/categories`);
     return data;
   },
 };

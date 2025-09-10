@@ -3,18 +3,13 @@ import type {
   PkgPortionSizeMethod,
 } from '@intake24/cli/commands/packager/types/foods';
 
-export interface PkgGlobalCategory {
-  version: string;
-  code: string;
-  englishDescription: string;
-  isHidden: boolean;
-  attributes: PkgInheritableAttributes;
-  parentCategories: string[];
-}
-
-export interface PkgLocalCategory {
+export interface PkgCategory {
   version?: string;
   code: string;
-  localDescription?: string;
+  englishName: string;
+  name: string;
+  hidden: boolean;
+  attributes: PkgInheritableAttributes;
+  parentCategories: string[];
   portionSize: PkgPortionSizeMethod[];
 }

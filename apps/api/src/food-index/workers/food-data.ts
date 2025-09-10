@@ -1,86 +1,75 @@
 import type { RecipeFoodTuple } from '../phrase-index';
 import type { AlternativeFoodNames } from '@intake24/db';
 
-import { CategoryLocal, FoodLocalList, RecipeFood } from '@intake24/db';
+import { Category, Food, RecipeFood } from '@intake24/db';
 
-export type LocalFoodData = {
+export type FoodData = {
+  id: string;
   code: string;
-  name: string;
+  englishName: string;
+  name: string | null;
   altNames: AlternativeFoodNames;
   parentCategories: Set<string>;
 };
 
-export type LocalCategoryData = {
+export type CategoryData = {
+  id: string;
   code: string;
+  englishName: string;
   name: string;
-  isHidden: boolean;
+  hidden: boolean;
   parentCategories: Set<string>;
 };
 
 // FIXME: all below requests should be limited to a constant amount of rows (paginated)
 
-export async function fetchLocalFoods(localeId: string): Promise<LocalFoodData[]> {
-  const localFoods = await FoodLocalList.findAll({
-    attributes: ['foodCode'],
+export async function fetchFoods(localeId: string): Promise<FoodData[]> {
+  const foods = await Food.findAll({
+    attributes: ['id', 'code', 'englishName', 'name', 'altNames'],
     where: { localeId },
-    include: [{
-      required: true,
-      association: 'foodLocal',
-      attributes: ['name', 'altNames'],
-      where: { localeId },
-      include: [
-        {
-          required: true,
-          association: 'main',
-          attributes: ['code'],
-          include: [
-            {
-              association: 'parentCategories',
-              attributes: ['code'],
-            },
-          ],
-        },
-      ],
-    }],
+    include: [
+      {
+        association: 'parentCategories',
+        attributes: ['code'],
+      },
+    ],
   });
 
-  return localFoods.map((row) => {
-    const parentCategories = new Set(row.foodLocal!.main!.parentCategories!.map(row => row.code));
+  return foods.map((row) => {
+    const parentCategories = new Set(row.parentCategories!.map(row => row.code));
+
     return {
-      code: row.foodCode,
-      name: row.foodLocal!.name,
-      altNames: row.foodLocal!.altNames,
+      id: row.id,
+      code: row.code,
+      englishName: row.englishName,
+      name: row.name,
+      altNames: row.altNames,
       parentCategories,
     };
   });
 }
 
-export async function fetchLocalCategories(localeId: string): Promise<LocalCategoryData[]> {
-  const localCategories = await CategoryLocal.findAll({
+export async function fetchCategories(localeId: string): Promise<CategoryData[]> {
+  const categories = await Category.findAll({
     where: { localeId },
-    attributes: ['categoryCode', 'name'],
+    attributes: ['id', 'code', 'englishName', 'name', 'hidden'],
     include: [
       {
-        required: true,
-        association: 'main',
-        attributes: ['code', 'isHidden'],
-        include: [
-          {
-            association: 'parentCategories',
-            attributes: ['code'],
-          },
-        ],
+        association: 'parentCategories',
+        attributes: ['code'],
       },
     ],
   });
 
-  return localCategories.map((row) => {
-    const parentCategories = new Set(row.main!.parentCategories!.map(row => row.code));
+  return categories.map((row) => {
+    const parentCategories = new Set(row.parentCategories!.map(row => row.code));
 
     return ({
-      code: row.categoryCode,
+      id: row.id,
+      code: row.code,
+      englishName: row.englishName,
       name: row.name,
-      isHidden: row.main!.isHidden,
+      hidden: row.hidden,
       parentCategories,
     });
   });
@@ -93,7 +82,7 @@ export async function fetchLocalCategories(localeId: string): Promise<LocalCateg
  */
 export async function fetchRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
   const recipeFoods = await RecipeFood.findAll({
-    attributes: ['code', 'name', 'recipeWord'],
+    attributes: ['id', 'code', 'name', 'recipeWord'],
     where: { localeId },
     include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
   });
@@ -103,6 +92,7 @@ export async function fetchRecipeFoodsList(localeId: string): Promise<RecipeFood
     recipeFoodsList.push([
       recipeFoodEntry.name.toLowerCase(),
       {
+        id: recipeFoodEntry.id,
         code: recipeFoodEntry.code,
         name: recipeFoodEntry.name.toLowerCase(),
         recipeWord: recipeFoodEntry.recipeWord,

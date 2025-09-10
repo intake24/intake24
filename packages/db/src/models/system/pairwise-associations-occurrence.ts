@@ -28,7 +28,7 @@ export default class PAOccurrence extends BaseModel<
 
   @Column({
     primaryKey: true,
-    type: DataType.STRING(50),
+    type: DataType.STRING(64),
   })
   declare foodCode: string;
 

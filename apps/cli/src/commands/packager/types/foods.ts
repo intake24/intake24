@@ -5,14 +5,6 @@ export interface PkgInheritableAttributes {
   useInRecipes?: number;
 }
 
-export interface PkgGlobalFood {
-  version: string;
-  code: string;
-  englishDescription: string;
-  attributes: PkgInheritableAttributes;
-  parentCategories: string[];
-}
-
 export const PortionSizeMethodTypes = [
   'as-served',
   'guide-image',
@@ -113,12 +105,15 @@ export interface PkgAssociatedFood {
   genericName: Record<string, string>;
 }
 
-export interface PkgLocalFood {
+export interface PkgFood {
   code: string;
   version?: string;
-  localDescription?: string;
+  name: string;
+  englishName: string;
   alternativeNames?: Record<string, string[]>;
   tags?: string[];
+  attributes: PkgInheritableAttributes;
+  parentCategories: string[];
   nutrientTableCodes: Record<string, string>;
   portionSize: PkgPortionSizeMethod[];
   associatedFoods: PkgAssociatedFood[];

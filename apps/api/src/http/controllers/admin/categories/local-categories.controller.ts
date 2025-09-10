@@ -1,20 +1,21 @@
 import type { Request, Response } from 'express';
 import { HttpStatusCode } from 'axios';
-
-import { ConflictError, ForbiddenError } from '@intake24/api/http/errors';
+import { ConflictError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
-import type { LocalCategoryEntry } from '@intake24/common/types/http/admin';
+import type { SimpleCategoryEntry } from '@intake24/common/types/http/admin';
+import { SystemLocale } from '@intake24/db';
 
 function localCategoriesController({
   localCategoriesService,
 }: Pick<IoC, 'localCategoriesService'>) {
   const store = async (req: Request, res: Response): Promise<void> => {
+    const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
 
-    const { localeId } = req.params;
-
-    if (!(await aclService.hasPermission('fdbs:edit')))
-      throw new ForbiddenError();
+    await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { code: localeId },
+    });
 
     try {
       await localCategoriesService.create(localeId, req.body);
@@ -33,13 +34,14 @@ function localCategoriesController({
   };
 
   const update = async (req: Request, res: Response): Promise<void> => {
-    const { aclService } = req.scope.cradle;
-
     const { localeId, categoryId } = req.params;
     const { version } = req.query;
+    const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs:edit')))
-      throw new ForbiddenError();
+    await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { code: localeId },
+    });
 
     await localCategoriesService.update(
       categoryId,
@@ -48,21 +50,21 @@ function localCategoriesController({
       req.body,
     );
 
-    res.status(HttpStatusCode.Ok);
     res.end();
   };
 
-  const read = async (req: Request, res: Response<LocalCategoryEntry>): Promise<void> => {
+  const read = async (req: Request, res: Response<SimpleCategoryEntry>): Promise<void> => {
+    const { localeId, categoryId } = req.params;
     const { aclService } = req.scope.cradle;
 
-    if (!(await aclService.hasPermission('fdbs:read')))
-      throw new ForbiddenError();
-
-    const { localeId, categoryId } = req.params;
+    await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { code: localeId },
+    });
 
     const result = await localCategoriesService.read(localeId, categoryId);
 
-    res.status(HttpStatusCode.Ok).json(result);
+    res.json(result);
   };
 
   return {

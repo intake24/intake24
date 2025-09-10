@@ -173,14 +173,14 @@ function processedImageService({
   };
 
   const createFoodThumbnailImage = async (
-    foodLocalId: string,
+    foodId: string,
     sourceImage: SourceImage | string,
   ): Promise<ProcessedImage> => {
     const image
       = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
-    const fileDir = path.posix.join('food_thumbnails', foodLocalId);
+    const fileDir = path.posix.join('food_thumbnails', foodId);
     const fullPath = path.posix.join(fileDir, fileName);
 
     await fs.ensureDir(path.join(imagesPath, fileDir));

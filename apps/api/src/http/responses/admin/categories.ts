@@ -1,29 +1,23 @@
-import { InternalServerError } from '@intake24/api/http/errors';
 import type {
   CategoryContentsResponse,
   CategoryListEntry,
 } from '@intake24/common/types/http/admin';
-import type { CategoryLocal, FoodLocal } from '@intake24/db';
+import type { Category, Food } from '@intake24/db';
 
 import { foodsResponse } from './foods';
 
-export function categoryResponse(category: CategoryLocal): CategoryListEntry {
-  const { id, categoryCode: code, localeId, name, main } = category;
+export function categoryResponse(category: Category): CategoryListEntry {
+  const { id, code, localeId, englishName, name, hidden } = category;
 
-  if (!main)
-    throw new InternalServerError(`categoryContentsResponse: 'main' not loaded relationships.`);
-
-  const { name: englishName, isHidden } = main;
-
-  return { id, code, localeId, name, englishName, isHidden };
+  return { id, code, localeId, englishName, name, hidden };
 }
 
 export function categoryContentsResponse({
   categories,
   foods,
 }: {
-  categories: CategoryLocal[];
-  foods: FoodLocal[];
+  categories: Category[];
+  foods: Food[];
 }): CategoryContentsResponse {
   return {
     categories: categories.map(categoryResponse),

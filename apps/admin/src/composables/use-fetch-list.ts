@@ -5,9 +5,15 @@ import { computed, ref, unref, watch } from 'vue';
 import { useHttp } from '@intake24/admin/services';
 import type { Pagination } from '@intake24/common/types/http';
 
-export function useFetchList<T = any>(url: string, id?: string | Ref<string>) {
+export type UseFetchListProps = {
+  url: string;
+  id?: string | Ref<string>;
+  query?: Record<string, any>;
+};
+
+export function useFetchList<T = any>(props: UseFetchListProps) {
   const http = useHttp();
-  const apiUrl = computed(() => (id ? url.replace(':id', unref(id)) : url));
+  const apiUrl = computed(() => (props.id ? props.url.replace(':id', unref(props.id)) : props.url));
 
   const dialog = ref(false);
   const loading = ref(false);
@@ -25,7 +31,7 @@ export function useFetchList<T = any>(url: string, id?: string | Ref<string>) {
       const {
         data: { data, meta },
       } = await http.get<Pagination<T>>(apiUrl.value, {
-        params: { search: search.value, page: page.value, limit: 6 },
+        params: { ...props.query, search: search.value, page: page.value, limit: 6 },
       });
 
       items.value = data;
@@ -40,7 +46,7 @@ export function useFetchList<T = any>(url: string, id?: string | Ref<string>) {
     loading.value = true;
 
     try {
-      const { data: { data } } = await http.get<Pagination<T>>(apiUrl.value, { params: { search, page: 1, limit: 6 } });
+      const { data: { data } } = await http.get<Pagination<T>>(apiUrl.value, { params: { ...props.query, search, page: 1, limit: 6 } });
 
       return data;
     }
