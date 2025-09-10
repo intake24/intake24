@@ -24,6 +24,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="data.main.name"
+                  counter
                   :disabled="!globalEdit"
                   :error-messages="errors.get('main.name')"
                   hide-details="auto"

@@ -16,10 +16,10 @@ const defaults: Schema = {
   },
   'main.name': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 128 }),
+    errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 384 }),
     isString: true,
     isEmpty: { negated: true },
-    isLength: { options: { min: 1, max: 128 } },
+    isLength: { options: { min: 1, max: 384 } },
     optional: true,
   },
   'main.code': {
