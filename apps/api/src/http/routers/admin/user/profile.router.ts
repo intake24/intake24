@@ -35,6 +35,7 @@ export function profile() {
         status: 200,
         body: {
           profile: { id, name, email: email as string, phone, verifiedAt },
+          aal: !!req.aal,
           permissions,
           roles,
         },

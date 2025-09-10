@@ -117,114 +117,108 @@
   </v-list>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { HttpStatusCode, isAxiosError } from 'axios';
-import { defineComponent, ref } from 'vue';
-
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHttp } from '@intake24/admin/services';
 import { useMessages } from '@intake24/admin/stores';
 import { mfaProviders } from '@intake24/common/security';
 import type { MFADeviceResponse, MFADevicesResponse } from '@intake24/common/types/http/admin';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
-
 import Duo from './duo.vue';
 import Fido from './fido.vue';
 import Otp from './otp.vue';
 
-export default defineComponent({
+defineOptions({
   name: 'UserMFA',
+  components: { Duo, Otp, Fido },
+});
 
-  components: { ConfirmDialog, Duo, Otp, Fido },
+const { i18n: { t } } = useI18n();
+const http = useHttp();
+const route = useRoute();
 
-  setup() {
-    const providerRefs = ref<InstanceType<typeof Otp | typeof Fido | typeof Duo>[]>();
+const providerRefs = ref<InstanceType<typeof Otp | typeof Fido | typeof Duo>[]>();
 
-    return { providerRefs };
-  },
+const dialog = ref(false);
+const tab = ref(mfaProviders[0]);
+const status = ref(false);
+const devices = ref<MFADeviceResponse[]>([]);
+const providers = ref(mfaProviders);
 
-  data() {
-    return {
-      dialog: false,
-      tab: mfaProviders[0],
-      status: false,
-      devices: [] as MFADeviceResponse[],
-      providers: mfaProviders,
-    };
-  },
+onMounted(async () => {
+  const { data } = await http.get<MFADevicesResponse>('admin/user/mfa');
 
-  async mounted() {
-    const {
-      data: { status, devices },
-    } = await this.$http.get<MFADevicesResponse>('admin/user/mfa');
+  status.value = data.status;
+  devices.value = data.devices;
 
-    this.status = status;
-    this.devices = devices;
+  await checkDuoRegistrationResponse();
+});
 
-    await this.checkDuoRegistrationResponse();
-  },
+async function checkDuoRegistrationResponse() {
+  const { state: challengeId, code: token } = route.query;
+  if (typeof challengeId !== 'string' || typeof token !== 'string')
+    return;
 
-  methods: {
-    async checkDuoRegistrationResponse() {
-      const { state: challengeId, code: token } = this.$route.query;
-      if (typeof challengeId !== 'string' || typeof token !== 'string')
-        return;
+  tab.value = 'duo';
+  dialog.value = true;
+};
 
-      this.tab = 'duo';
-      this.dialog = true;
-    },
+async function toggle() {
+  if (!devices.value.length) {
+    useMessages().info(t('user.mfa.devices.none'));
+    return;
+  }
 
-    async toggle() {
-      if (!this.devices.length) {
-        useMessages().info(this.$t('user.mfa.devices.none'));
-        return;
-      }
+  try {
+    await http.post('admin/user/mfa/toggle', { status: status.value });
+  }
+  catch (err) {
+    if (isAxiosError(err) && err.response?.status === HttpStatusCode.NotFound) {
+      useMessages().info(t('user.mfa.devices.none'));
+      return;
+    }
 
-      try {
-        await this.$http.post('admin/user/mfa/toggle', { status: this.status });
-      }
-      catch (err) {
-        if (isAxiosError(err) && err.response?.status === HttpStatusCode.Forbidden) {
-          useMessages().info(this.$t('user.mfa.devices.none'));
-          return;
-        }
+    throw err;
+  }
+};
 
-        throw err;
-      }
-    },
+async function promote(id: string, idx: number) {
+  const { data } = await http.patch<MFADeviceResponse>(`admin/user/mfa/devices/${id}`, { preferred: true });
+  devices.value[0].preferred = false;
+  devices.value.splice(idx, 1);
+  devices.value.splice(0, 0, data);
+};
 
-    async promote(id: string, idx: number) {
-      const { data } = await this.$http.patch<MFADeviceResponse>(`admin/user/mfa/devices/${id}`, {
-        preferred: true,
-      });
-      this.devices[0].preferred = false;
-      this.devices.splice(idx, 1);
-      this.devices.splice(0, 0, data);
-    },
+function add(device: MFADeviceResponse) {
+  devices.value.push(device);
+};
 
-    add(device: MFADeviceResponse) {
-      this.devices.push(device);
-    },
+async function remove(deviceId: string) {
+  await http.delete(`admin/user/mfa/devices/${deviceId}`);
+  devices.value = devices.value.filter(device => device.id !== deviceId);
+  if (!devices.value.length || devices.value.find(device => device.preferred))
+    return;
 
-    async remove(deviceId: string) {
-      await this.$http.delete(`admin/user/mfa/devices/${deviceId}`);
-      this.devices = this.devices.filter(device => device.id !== deviceId);
-      if (!this.devices.length || this.devices.find(device => device.preferred))
-        return;
+  const { data } = await http.patch<MFADeviceResponse>(
+    `admin/user/mfa/devices/${devices.value[0].id}`,
+    { preferred: true },
+  );
+  devices.value.splice(0, 1, data);
+};
 
-      const { data } = await this.$http.patch<MFADeviceResponse>(
-        `admin/user/mfa/devices/${this.devices[0].id}`,
-        { preferred: true },
-      );
-      this.devices.splice(0, 1, data);
-    },
+function clear() {
+  providerRefs.value?.forEach(item => item.clear());
+};
 
-    clear() {
-      this.providerRefs?.forEach(item => item.clear());
-    },
+function close() {
+  dialog.value = false;
+};
 
-    close() {
-      this.clear();
-      this.dialog = false;
-    },
-  },
+watch(dialog, (val) => {
+  if (!val)
+    clear();
 });
 </script>

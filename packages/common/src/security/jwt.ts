@@ -33,7 +33,7 @@ export type SignPayload = AdminSignPayload | SurveySignPayload;
 export type BaseSignedPayload = {
   sub: string;
   jti: string;
-  aud: string[];
+  aud: string | string[];
   iss: string;
   iat: number;
   exp: number;

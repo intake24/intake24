@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-if="loggedIn && isVerified" v-model="sidebar" color="secondary">
+    <v-navigation-drawer v-if="loggedIn" v-model="sidebar" color="secondary">
       <v-list>
         <v-list-item link to="/">
           <template #prepend>
@@ -23,13 +23,28 @@
           <v-list-item link prepend-icon="fas fa-tachometer-alt" :to="{ name: 'dashboard' }">
             <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
           </v-list-item>
-          <v-list-item link prepend-icon="fas fa-circle-user" :to="{ name: 'user' }">
+          <v-list-item
+            v-if="isVerified"
+            link
+            prepend-icon="fas fa-circle-user"
+            :to="{ name: 'user' }"
+          >
             <v-list-item-title>{{ $t('user.profile') }}</v-list-item-title>
           </v-list-item>
-          <v-list-item link prepend-icon="fas fa-key" :to="{ name: 'user.personal-access-tokens' }">
+          <v-list-item
+            v-if="isAalSatisfied && isVerified"
+            link
+            prepend-icon="fas fa-key"
+            :to="{ name: 'user.personal-access-tokens' }"
+          >
             <v-list-item-title>{{ $t('user.personalAccessTokens.title') }}</v-list-item-title>
           </v-list-item>
-          <v-list-item link prepend-icon="$jobs" :to="{ name: 'user.jobs' }">
+          <v-list-item
+            v-if="isAalSatisfied && isVerified"
+            link
+            prepend-icon="$jobs"
+            :to="{ name: 'user.jobs' }"
+          >
             <v-list-item-title>{{ $t('user.jobs.title') }}</v-list-item-title>
           </v-list-item>
         </v-list-group>
@@ -85,7 +100,7 @@
     </v-navigation-drawer>
 
     <v-app-bar v-if="loggedIn" color="primary">
-      <v-app-bar-nav-icon :disabled="!isVerified" @click.stop="toggleSidebar" />
+      <v-app-bar-nav-icon @click.stop="toggleSidebar" />
       <v-spacer />
       <v-btn :href="app.docs" target="_blank" :title="$t('common.docs')" variant="text">
         <v-icon :start="!$vuetify.display.mobile">
@@ -128,23 +143,20 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { RouteLocationRaw } from 'vue-router';
 import groupBy from 'lodash/groupBy';
-import { mapState } from 'pinia';
 import pluralize from 'pluralize';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay, useLocale } from 'vuetify';
-
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
-import webPush from '@intake24/admin/components/web-push/web-push';
-import resources from '@intake24/admin/router/resources';
+import { useWebPush } from '@intake24/admin/components/web-push';
+import defaultResources from '@intake24/admin/router/resources';
 import { useApp, useAuth, useEntry, useResource, useUser } from '@intake24/admin/stores';
-import { iconWhite } from '@intake24/common/theme/assets';
+import { iconWhite as logo } from '@intake24/common/theme/assets';
 import type { Dictionary } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
-
 import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
 import { useHttp } from './services';
 
@@ -157,155 +169,137 @@ type Breadcrumbs = {
   to?: string | RouteLocationRaw;
 };
 
-export default defineComponent({
-  name: 'App',
+const http = useHttp();
+const vI18n = useLocale();
+const display = useDisplay();
+const entry = useEntry();
+const resource = useResource();
+const route = useRoute();
+const router = useRouter();
+const user = useUser();
+const webPush = useWebPush();
+const { i18n: { t } } = useI18n();
 
-  components: { AppFooter, AppNavFooter, ConfirmDialog, Loader, MenuTree, MessageBox, ServiceWorker },
+useLanguage('admin', http, vI18n);
 
-  mixins: [webPush],
+const sidebar = ref(display.lgAndUp);
+const resources = groupBy(defaultResources, 'group');
 
-  setup() {
-    const http = useHttp();
-    const vI18n = useLocale();
-    const display = useDisplay();
-    const entry = useEntry();
-    const resource = useResource();
-    const route = useRoute();
-    const router = useRouter();
-    const { i18n: { t } } = useI18n();
+const app = computed(() => useApp().app);
+const loggedIn = computed(() => useAuth().loggedIn);
+const isVerified = computed(() => user.isVerified);
+const isAalSatisfied = computed(() => user.isAalSatisfied);
 
-    useLanguage('admin', http, vI18n);
+const title = computed(() => {
+  const { meta: { title } = {} } = route;
+  if (title)
+    return t(title);
 
-    const sidebar = ref(display.lgAndUp);
+  if (!resource.name)
+    return t('common._');
 
-    const title = computed(() => {
-      const { meta: { title } = {} } = route;
-      if (title)
-        return t(title);
+  const { id, name, englishName, description } = entry.data;
 
-      if (!resource.name)
-        return t('common._');
+  // TODO: we should resole breadcrumb name in better way based on entry field
+  return name ?? englishName ?? description ?? id ?? t(`${resource.name}.title`);
+});
 
-      const { id, name, englishName, description } = entry.data;
+function buildBreadCrumb(module: string, action: string, currentParams: Dictionary, parent?: string) {
+  const defaults = { disabled: false, exact: true, link: true };
+  const items: Breadcrumbs[] = [];
 
-      // TODO: we should resole breadcrumb name in better way based on entry field
-      return name ?? englishName ?? description ?? id ?? t(`${resource.name}.title`);
+  if (parent) {
+    items.push(
+      ...buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams),
+    );
+  }
+
+  const name = parent ? `${parent}-${module}` : module;
+  const title = parent && !['media', 'securables'].includes(module) ? `${parent}.${module}` : module;
+  const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
+  const { [identifier]: currentId, id } = currentParams;
+
+  const params: Dictionary<string> = { [identifier]: currentId };
+  if (parent)
+    params.id = id;
+
+  items.push({ ...defaults, title: t(`${title}.title`), to: { name } });
+
+  if (!currentId)
+    return items;
+
+  if (currentId === 'create') {
+    items.push({
+      ...defaults,
+      title: t(`${title}.${action}`),
+      to: { name: `${name}-${action}`, params },
     });
+    return items;
+  }
 
-    function buildBreadCrumb(module: string, action: string, currentParams: Dictionary, parent?: string) {
-      const defaults = { disabled: false, exact: true, link: true };
-      const items: Breadcrumbs[] = [];
+  // TODO: we should resole breadcrumb name in better way based on entry field
+  const { id: entryId, name: entryName, englishName, description } = entry.data;
+  const text = entryName ?? englishName ?? description ?? entryId ?? t(`${title}.read`);
 
-      if (parent) {
-        items.push(
-          ...buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams),
-        );
-      }
+  items.push({
+    ...defaults,
+    title: parent ? t(`${title}.${action}`) : text,
+    to: { name: `${name}-${action === 'edit' ? 'read' : action}`, params },
+  });
 
-      const name = parent ? `${parent}-${module}` : module;
-      const title = parent && !['media', 'securables'].includes(module) ? `${parent}.${module}` : module;
-      const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
-      const { [identifier]: currentId, id } = currentParams;
-
-      const params: Dictionary<string> = { [identifier]: currentId };
-      if (parent)
-        params.id = id;
-
-      items.push({ ...defaults, title: t(`${title}.title`), to: { name } });
-
-      if (!currentId)
-        return items;
-
-      if (currentId === 'create') {
-        items.push({
-          ...defaults,
-          title: t(`${title}.${action}`),
-          to: { name: `${name}-${action}`, params },
-        });
-        return items;
-      }
-
-      // TODO: we should resole breadcrumb name in better way based on entry field
-      const { id: entryId, name: entryName, englishName, description } = entry.data;
-      const text = entryName ?? englishName ?? description ?? entryId ?? t(`${title}.read`);
-
-      items.push({
-        ...defaults,
-        title: parent ? t(`${title}.${action}`) : text,
-        to: { name: `${name}-${action === 'edit' ? 'read' : action}`, params },
-      });
-
-      if (['edit'].includes(action)) {
-        items.push({
-          ...defaults,
-          title: t(`${title}.${action}`),
-          to: { name: `${name}-${action}`, params },
-        });
-      }
-
-      return items;
-    };
-
-    const breadcrumbs = computed(() => {
-      const { meta: { module, action } = {}, params } = route;
-      if (!module || !action)
-        return [];
-
-      const { current, parent } = module;
-      return buildBreadCrumb(current, action, params, parent);
+  if (['edit'].includes(action)) {
+    items.push({
+      ...defaults,
+      title: t(`${title}.${action}`),
+      to: { name: `${name}-${action}`, params },
     });
+  }
 
-    function toggleSidebar() {
-      sidebar.value = !sidebar.value;
-    };
+  return items;
+};
 
-    async function logout() {
-      await useAuth().logout(true);
-      await router.push({ name: 'login' });
-    };
+const breadcrumbs = computed(() => {
+  const { meta: { module, action } = {}, params } = route;
+  if (!module || !action)
+    return [];
 
-    watch(title, (val) => {
-      document.title = val;
-    });
+  const { current, parent } = module;
+  return buildBreadCrumb(current, action, params, parent);
+});
 
-    return {
-      breadcrumbs,
-      logo: iconWhite,
-      logout,
-      resources: groupBy(resources, 'group'),
-      sidebar,
-      title,
-      toggleSidebar,
-    };
-  },
+function toggleSidebar() {
+  sidebar.value = !sidebar.value;
+};
 
-  computed: {
-    ...mapState(useApp, ['app']),
-    ...mapState(useAuth, ['loggedIn']),
-    ...mapState(useUser, ['isVerified']),
-  },
+async function logout() {
+  await useAuth().logout(true);
+  await router.push({ name: 'login' });
+};
 
-  async mounted() {
-    if (!this.loggedIn && this.$route.name === 'login') {
-      const { state, code } = this.$route.query;
+watch(title, (val) => {
+  document.title = val;
+});
 
-      // MFA verification -> do not refresh yet
-      if ([state, code].every(item => typeof item === 'string' && item.length))
-        return;
+onMounted(async () => {
+  if (!loggedIn.value && route.name === 'login') {
+    const { state, code } = route.query;
 
-      await useAuth().refresh();
-      await this.$router.push({ name: this.isVerified ? 'dashboard' : 'verify' });
-    }
-
-    if (!this.loggedIn)
+    // MFA verification -> do not refresh yet
+    if ([state, code].every(item => typeof item === 'string' && item.length))
       return;
 
-    // Send subscription to server to keep it up-to-date
-    setTimeout(async () => {
-      if (this.isPermissionGranted)
-        await this.subscribe();
-    }, 5 * 1000);
-  },
+    await useAuth().refresh();
+    await router.push({ name: 'dashboard' });
+  }
+
+  if (!loggedIn.value)
+    return;
+
+  // Send subscription to server to keep it up-to-date
+  setTimeout(async () => {
+    if (webPush.isPermissionGranted.value)
+      await webPush.subscribe();
+  }, 5 * 1000);
 });
 </script>
 

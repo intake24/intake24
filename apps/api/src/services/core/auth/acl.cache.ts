@@ -1,7 +1,8 @@
+import { Op } from 'sequelize';
 import type { IoC } from '@intake24/api/ioc';
-import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
+import { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import type { Permission, Role } from '@intake24/db';
-import { User } from '@intake24/db';
+import { PersonalAccessToken, User } from '@intake24/db';
 
 function aclCache({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) {
   const { enabled, ttl } = aclConfig.cache;
@@ -72,8 +73,37 @@ function aclCache({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) {
     return roles.map(({ name }) => name);
   };
 
+  /**
+   * Get personal access token by token id for authentication
+   *
+   * @param {string} userId
+   * @param {string} token
+   * @returns {(Promise<PersonalAccessToken | null>)}
+   */
+  const getPersonalAccessToken = async (userId: string, token: string): Promise<PersonalAccessToken | null> => {
+    return await cache.remember<PersonalAccessToken | null>(`${ACL_PAT_KEY}:${token}`, ttl, async () =>
+      PersonalAccessToken.findOne({
+        attributes: ['id', 'token', 'userId', 'createdAt'],
+        where: {
+          userId,
+          token,
+          revoked: false,
+          expiresAt: { [Op.gt]: new Date() },
+        },
+        include: [
+          {
+            association: 'user',
+            attributes: [],
+            required: true,
+            where: { disabledAt: null, verifiedAt: { [Op.ne]: null } },
+          },
+        ],
+      }));
+  };
+
   return {
     getPermissions,
+    getPersonalAccessToken,
     getRoles,
   };
 }

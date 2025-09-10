@@ -40,13 +40,13 @@ Several `FIDO2` / `WebAuthn` authentication methods are available based on user'
 
 - hardware security key (e.g. YubiKey)
 
-- platform `passkey` authentication flows (e.g. Windows Hello / Phone prompts)
+- platform `passkey` authentication flows (e.g. Windows Hello on Windows, Touch ID / Face ID on macOS / iOS)
 
 ### Duo Security
 
 Optionally, [Duo Security](https://duo.com) can be used as a multi-factor authentication provider. Intake24 supports [Universal Prompt](https://duo.com/docs/duoweb) authentication method.
 
-Please check that relevant intake24 instance is available, configured and that user is enrolled.
+Please check that relevant intake24 instance has this option available, configured and that user is enrolled in Duo Security.
 
 :::tip To set up Duo Security as a multi-factor authentication provider:
 

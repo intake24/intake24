@@ -1,7 +1,9 @@
 import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/server';
 
-export const mfaProviders = ['duo', 'fido', 'otp'] as const;
+export const mfaModes = ['optional', 'required'] as const;
+export type MFAMode = (typeof mfaModes)[number];
 
+export const mfaProviders = ['duo', 'fido', 'otp'] as const;
 export type MFAProvider = (typeof mfaProviders)[number];
 
 export function isMFAProvider(provider: any): provider is MFAProvider {
