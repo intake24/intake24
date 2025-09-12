@@ -1,0 +1,274 @@
+{
+  "attributes": {
+    "actions": "操作",
+    "active": "有効",
+    "allowGenUsers": "ユーザー自動生成を許可",
+    "app": "アプリケーション",
+    "adminLanguageId": "管理言語ID",
+    "authUrlDomainOverride": "認証URLドメインの上書き",
+    "authUrlTokenCharset": "認証URLトークン文字セット",
+    "authUrlTokenLength": "認証URLトークン長",
+    "baseImage": "ベース画像",
+    "birthdate": "生年月日",
+    "captcha": "CAPTCHA",
+    "countryFlagCode": "国旗コード",
+    "code": "コード",
+    "conversionFactor": "変換係数",
+    "copy": "コピー",
+    "cron": "CRON",
+    "csvMapping": {
+      "rowOffset": "行オフセット",
+      "idColumnOffset": "ID列オフセット",
+      "descriptionColumnOffset": "説明列オフセット",
+      "localDescriptionColumnOffset": "ローカル説明列オフセット"
+    },
+    "csvMappingFields": "フィールド列マッピング",
+    "csvMappingNutrients": "栄養素列マッピング",
+    "customFields": "カスタムフィールド",
+    "dataExport": "データエクスポート",
+    "demographicGroups": "人口統計グループ",
+    "description": "説明",
+    "disabledAt": "無効化日時",
+    "displayName": "表示名",
+    "endDate": "終了日",
+    "email": "メールアドレス",
+    "emailConfirm": "メールアドレス確認",
+    "emailNotifications": "メール通知",
+    "email|phone": "メールまたは電話",
+    "englishName": "英語名",
+    "estimateIn": "推定単位",
+    "expiresAt": "失効日時",
+    "feedbackSchemeId": "フィードバックスキームID",
+    "file": "ファイル",
+    "genericName": "一般名",
+    "genUserKey": "JWTシークレット",
+    "guideImageId": "ガイド画像ID",
+    "heightCm": "身長",
+    "henryCoefficients": "Henry係数",
+    "howMany": "いくつ",
+    "i18n": {
+      "defaults": "既定翻訳の不足",
+      "keys": "翻訳キーの不一致",
+      "messages": "無効な翻訳"
+    },
+    "id": "ID",
+    "imageMapId": "イメージマップID",
+    "images": "画像",
+    "job": "ジョブ",
+    "label": "ラベル",
+    "languageId": "言語ID",
+    "localeId": "ロケールID",
+    "limit": "上限",
+    "linkAsMain": "メインとしてリンク",
+    "localName": "現地名",
+    "main": {
+      "attributes": {
+        "readyMealOption": "出来合いオプション",
+        "reasonableAmount": "妥当な量",
+        "sameAsBeforeOption": "前回と同じオプション",
+        "useInRecipes": "レシピで使用"
+      },
+      "code": "グローバルコード",
+      "foodGroupId": "食品群ID",
+      "isHidden": "非表示",
+      "name": "グローバル名",
+      "parentCategories": "親カテゴリ"
+    },
+    "maximumDailySubmissions": "1日あたりの最大提出数",
+    "maximumTotalSubmissions": "合計最大提出数",
+    "meals": "食事",
+    "method": "方法",
+    "message": "メッセージ",
+    "minimumSubmissionInterval": "提出の最小間隔",
+    "multiFactorAuthentication": "多要素認証",
+    "name": "名前",
+    "numberOfSubmissionsForFeedback": "フィードバックに必要な提出数",
+    "nutrientRecords": "栄養素レコード",
+    "objects": "オブジェクト",
+    "outlineCoordinates": "アウトライン座標",
+    "outputs": "出力",
+    "orderBy": "並び順",
+    "ownerId": "所有者ID",
+    "page": "ページ",
+    "password": "パスワード",
+    "passwordConfirm": "パスワード確認",
+    "params": {
+      "_": "パラメータ",
+      "file": "ファイル",
+      "targetAlgorithm": "ソートアルゴリズム種別"
+    },
+    "permissions": "権限",
+    "phone": "電話番号",
+    "physicalActivityLevelId": "身体活動レベル",
+    "physicalDataFields": "身体データ項目",
+    "prompt": "プロンプト",
+    "prompts": "プロンプト",
+    "prototypeLocaleId": "プロトタイプロケールID",
+    "respondentLanguageId": "回答者言語ID",
+    "roles": "役割",
+    "sessionData": "セッションデータ",
+    "search": "検索",
+    "searchCollectData": "検索データ収集",
+    "searchMatchScoreWeight": "検索一致スコアの重み",
+    "searchSortingAlgorithm": "検索ソートアルゴリズム",
+    "searchMinWordLength1": "1回のスペル修正の最小単語長",
+    "searchMinWordLength2": "2回のスペル修正の最小単語長",
+    "section": "セクション",
+    "selectionImage": "選択画像",
+    "session": {
+      "store": "サーバー側セッション",
+      "age": "セッション有効期間",
+      "fixed": "セッション固定期間"
+    },
+    "sex": "性別",
+    "slug": "スラッグ",
+    "smsNotifications": "SMS通知",
+    "sort": "並べ替え",
+    "startDate": "開始日",
+    "state": "状態",
+    "submissions": "提出",
+    "supportEmail": "サポート用メール",
+    "survey": "調査",
+    "surveySchemeId": "調査スキームID",
+    "surveySchemeOverrides": "調査スキームの上書き",
+    "suspensionReason": "停止理由",
+    "symbol": "記号",
+    "textDirection": "文字方向",
+    "text": "テキスト",
+    "terms": "規約",
+    "token": "トークン",
+    "topFoods": {
+      "max": "最大食品数",
+      "colors": "色",
+      "nutrientTypes": "栄養素タイプ"
+    },
+    "translations": "翻訳",
+    "type": "種別",
+    "tzOffset": "タイムゾーンオフセット",
+    "useForRecipes": "レシピで使用",
+    "userId": "ユーザーID",
+    "userPersonalIdentifiers": "ユーザー個人識別子",
+    "userCustomFields": "ユーザーカスタムフィールド",
+    "username": "ユーザー名",
+    "value": "値",
+    "verifiedAt": "検証日時",
+    "weight": "重み",
+    "weightKg": "体重",
+    "weightTarget": "体重目標"
+  },
+  "types": {
+    "array": {
+      "_": "「{attribute}」は配列である必要があります。",
+      "min": "「{attribute}」は配列である必要があります（最小: {min}）。",
+      "max": "「{attribute}」は配列である必要があります（最大: {max}）。",
+      "minMax": "「{attribute}」は配列である必要があります（最小: {min}, 最大: {max}）。",
+      "even": "「{attribute}」の要素数は偶数である必要があります。",
+      "number": "「{attribute}」は数値の配列である必要があります。",
+      "string": "「{attribute}」は文字列の配列である必要があります。",
+      "colors": "「{attribute}」は色の配列である必要があります。"
+    },
+    "boolean": {
+      "_": "「{attribute}」は真偽値（true/false）である必要があります。"
+    },
+    "cron": {
+      "_": "「{attribute}」は有効なCRONエントリである必要があります。"
+    },
+    "date": {
+      "_": "「{attribute}」は日付である必要があります。",
+      "after": "「{attribute}」は{after}より後の日付である必要があります。",
+      "before": "「{attribute}」は{before}より前の日付である必要があります。",
+      "between": "「{attribute}」は{after}から{before}の間の日付である必要があります。",
+      "ms": "「{attribute}」は期間形式（例: 30m, 1h, 2d）である必要があります。"
+    },
+    "duplicate": {
+      "_": "「{attribute}」に重複する要素を含めることはできません。"
+    },
+    "float": {
+      "_": "「{attribute}」は浮動小数点数である必要があります。",
+      "min": "「{attribute}」は浮動小数点数である必要があります（最小: {min}）。",
+      "max": "「{attribute}」は浮動小数点数である必要があります（最大: {max}）。",
+      "minMax": "「{attribute}」は浮動小数点数である必要があります（最小: {min}, 最大: {max}）。"
+    },
+    "exists": {
+      "_": "「{attribute}」は既存のデータベースレコードを参照する必要があります。"
+    },
+    "either": {
+      "_": "{one} または {two} のいずれかを入力する必要があります。"
+    },
+    "email": {
+      "_": "「{attribute}」は有効なメールアドレスである必要があります。"
+    },
+    "file": {
+      "_": "「{attribute}」はファイルである必要があります。",
+      "ext": "「{attribute}」の拡張子が無効です（期待値: {ext}）。",
+      "mime": "「{attribute}」のMIMEタイプが無効です（期待値: {mime}）。"
+    },
+    "in": {
+      "_": "「{attribute}」は許可された値である必要があります。",
+      "options": "「{attribute}」は次のいずれかの値である必要があります: {options}。"
+    },
+    "integer": {
+      "_": "「{attribute}」は整数である必要があります。",
+      "min": "「{attribute}」は整数である必要があります（最小: {min}）。",
+      "max": "「{attribute}」は整数である必要があります（最大: {max}）。",
+      "minMax": "「{attribute}」は整数である必要があります（最小: {min}, 最大: {max}）。"
+    },
+    "json": {
+      "_": "「{attribute}」は有効なJSONオブジェクトである必要があります。"
+    },
+    "jwt": {
+      "_": "「{attribute}」は有効なJWTである必要があります。"
+    },
+    "locale": {
+      "_": "「{attribute}」は有効なロケールコードである必要があります。"
+    },
+    "number": {
+      "_": "「{attribute}」は数値である必要があります。"
+    },
+    "match": {
+      "_": "「{attribute}」は{match}の値と一致する必要があります。"
+    },
+    "object": {
+      "_": "「{attribute}」はオブジェクトである必要があります。"
+    },
+    "password": {
+      "_": "パスワードは英小文字・英大文字・数字を含む10文字以上である必要があります。"
+    },
+    "phone": {
+      "_": "「{attribute}」は有効な電話番号である必要があります。"
+    },
+    "regEx": {
+      "_": "「{attribute}」は無効です。"
+    },
+    "restricted": {
+      "_": "「{attribute}」は許可された値に制限されています。"
+    },
+    "safeChars": {
+      "_": "「{attribute}」は一意のコードである必要があります（使用可能文字: [a-zA-Z0-9-_]）。"
+    },
+    "string": {
+      "_": "「{attribute}」には文字列を入力してください。",
+      "max": "「{attribute}」は最大{max}文字までです。",
+      "minMax": "「{attribute}」は{min}〜{max}文字で入力してください。",
+      "or": {
+        "array": "「{attribute}」は文字列または配列である必要があります。"
+      },
+      "unique": "「{attribute}」は重複しない文字からなる文字列である必要があります。"
+    },
+    "structure": {
+      "_": "「{attribute}」は有効な構造である必要があります。"
+    },
+    "terms": {
+      "_": "「{attribute}」への同意が必要です。"
+    },
+    "unique": {
+      "_": "同じ「{attribute}」の値を持つレコードが既に存在します。"
+    },
+    "url": {
+      "_": "「{attribute}」は有効なURLである必要があります。"
+    },
+    "uuid": {
+      "_": "「{attribute}」は有効なUUIDである必要があります。"
+    }
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "_": "食品データベース",
+  "id": "食品DB ID",
+  "title": "食品データベース",
+  "read": "食品DB詳細",
+  "create": "食品DBを追加",
+  "edit": "食品DBを編集",
+  "delete": "食品DBを削除",
+  "showGlobalName": "グローバル名を表示",
+  "food-list": {
+    "_": "食品リスト",
+    "title": "食品リスト",
+    "tab": "食品リスト"
+  },
+  "search": {
+    "_": "検索",
+    "title": "カテゴリと食品を検索"
+  },
+  "categories": {
+    "_": "カテゴリ",
+    "title": "カテゴリ",
+    "add": "カテゴリを追加",
+    "remove": "カテゴリを削除",
+    "noCategory": "未分類",
+    "alreadyIncluded": "カテゴリ '{code}' は既に現在のリストに含まれています。",
+    "none": "提供された検索でカテゴリが見つかりませんでした。",
+    "copy": "カテゴリをコピー",
+    "global": {
+      "_": "グローバルカテゴリ設定",
+      "code": "カテゴリコード",
+      "name": "英語名",
+      "isHidden": "非表示"
+    },
+    "local": {
+      "_": "ローカルカテゴリ設定",
+      "id": "ローカルカテゴリID",
+      "name": "ローカル名",
+      "tags": "タグ"
+    },
+    "attributes": {
+      "_": "カテゴリ属性"
+    },
+    "parentCategories": {
+      "_": "親カテゴリ"
+    }
+  },
+  "foods": {
+    "_": "食品",
+    "title": "食品",
+    "add": "食品を追加",
+    "copy": "食品をコピー",
+    "global": {
+      "_": "グローバル食品設定",
+      "code": "食品コード",
+      "name": "英語名",
+      "foodGroup": "食品群"
+    },
+    "local": {
+      "_": "ローカル食品設定",
+      "id": "ローカル食品ID",
+      "name": "ローカル名",
+      "tags": "タグ"
+    },
+    "attributes": {
+      "_": "食品属性"
+    },
+    "parentCategories": {
+      "_": "親カテゴリ"
+    }
+  },
+  "locales": {
+    "_": "ロケールで使用",
+    "title": "ロケールで使用",
+    "description": "食品は {count} のロケールに含まれています。",
+    "add": "ロケールを追加",
+    "remove": "ロケールを削除"
+  },
+  "attributes": {
+    "_": "属性",
+    "title": "属性",
+    "inherit": "継承",
+    "override": "上書き",
+    "sameAsBeforeOption": "前回と同じオプション",
+    "readyMealOption": "これは調理済みの食事や食品でしたか（例：調理済み/食べられる状態/包装済み）？",
+    "reasonableAmount": "妥当な量（g/ml）",
+    "useInRecipes": {
+      "0": "どこでも使用",
+      "1": "通常の食品としてのみ使用",
+      "2": "レシピの材料としてのみ使用",
+      "_": "レシピでの使用"
+    }
+  },
+  "nutrients": {
+    "_": "栄養表レコード",
+    "title": "栄養表レコード",
+    "add": "栄養レコードを追加",
+    "remove": "栄養レコードを削除",
+    "alreadyIncluded": "栄養表レコード '{id}' は既に現在のリストに含まれています。",
+    "none": "提供された検索で栄養表レコードが見つかりませんでした。"
+  },
+  "associatedFoods": {
+    "_": "関連食品",
+    "title": "関連食品",
+    "add": "関連食品を追加",
+    "edit": "関連食品を編集",
+    "remove": "関連食品を削除",
+    "association": "関連",
+    "genericName": "一般名",
+    "text": "テキスト",
+    "linkAsMain": "メイン食品としてリンク",
+    "multiple": "複数の食品を許可"
+  },
+  "portionSizes": {
+    "_": "分量推定方法",
+    "title": "分量推定方法",
+    "add": "分量推定方法を追加",
+    "edit": "分量推定方法を編集",
+    "remove": "分量推定方法を削除",
+    "parameters": "パラメータ",
+    "noParameters": "この方法には追加のパラメータはありません。",
+    "description": "説明",
+    "useForRecipes": "レシピで使用",
+    "conversionFactor": "変換係数",
+    "labels": "画像マップラベル",
+    "multiple": "複数項目の指定を許可",
+    "methods": {
+      "_": "推定方法",
+      "as-served": {
+        "_": "提供時",
+        "servingImageSet": "提供画像セット",
+        "leftoverImageSet": "残り物画像セット",
+        "removeLeftoverImageSet": "残り物画像セットを削除"
+      },
+      "cereal": {
+        "_": "シリアル"
+      },
+      "direct-weight": {
+        "_": "重量"
+      },
+      "drink-scale": {
+        "_": "飲み物スケール",
+        "drinkwareSet": "食器セット",
+        "initialLevel": "初期充填レベル",
+        "skipFillLevelPrompt": "充填レベルのプロンプトをスキップ"
+      },
+      "guide-image": {
+        "_": "ガイド画像"
+      },
+      "milk-in-a-hot-drink": {
+        "_": "温かい飲み物の牛乳"
+      },
+      "milk-on-cereal": {
+        "_": "シリアルの牛乳",
+        "options": "分量オプション"
+      },
+      "parent-food-portion": {
+        "_": "親食品の分量",
+        "options": "分量オプション"
+      },
+      "pizza": {
+        "_": "ピザ"
+      },
+      "pizza-v2": {
+        "_": "ピザ V2"
+      },
+      "standard-portion": {
+        "_": "標準分量",
+        "unit": "単位",
+        "weight": "重量（g）",
+        "omitFoodDescription": "食品説明を省略"
+      },
+      "unknown": {
+        "_": "不明"
+      }
+    }
+  }
+}

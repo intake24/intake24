@@ -1,0 +1,52 @@
+{
+  "_": "言語",
+  "code": "言語コード",
+  "title": "言語",
+  "all": "すべての言語",
+  "read": "言語詳細",
+  "create": "言語を追加",
+  "edit": "言語を編集",
+  "delete": "言語を削除",
+  "englishName": "英語名",
+  "localName": "現地語名",
+  "countryFlagCode": "国旗コード",
+  "textDirections": {
+    "_": "文字方向",
+    "ltr": "左から右",
+    "rtl": "右から左"
+  },
+  "translations": {
+    "_": "翻訳",
+    "title": "翻訳",
+    "tab": "翻訳",
+    "create": "翻訳を初期化",
+    "edit": "セクションを編集",
+    "delete": "言語翻訳を削除",
+    "sync": "言語翻訳を同期",
+    "path": "キーパス",
+    "applications": {
+      "admin": "管理者",
+      "api": "API",
+      "survey": "調査",
+      "shared": "共有"
+    },
+    "sections": {
+      "breadcrumbs": "パンくずリスト",
+      "feedback": "フィードバック",
+      "flags": "フラグ",
+      "login": "ログイン",
+      "portion": "分量サイズ",
+      "profile": "プロファイル",
+      "prompts": "プロンプト",
+      "recall": "想起",
+      "rateLimit": "レート制限",
+      "standard-units": "標準単位",
+      "survey": "調査",
+      "validation": "検証"
+    },
+    "created": "言語翻訳（{name}）が作成されました。",
+    "updated": "言語翻訳（{name}）が更新されました。",
+    "deleted": "言語翻訳（{name}）が削除されました。",
+    "synced": "言語翻訳（{name}）が同期されました。"
+  }
+}

@@ -1,338 +1,338 @@
 {
   "checkboxList": {
     "name": "複数選択リスト",
-    "text": "",
-    "description": "",
-    "label": "",
-    "other": "その他 - 詳細を記入してください",
+    "text": null,
+    "description": null,
+    "label": null,
+    "other": "その他 - 具体的にご入力ください。",
     "validation": {
-      "required": "少なくとも1つの選択肢を選ぶ必要があります。"
+      "required": "少なくとも1つの選択肢を選んでください。"
     }
   },
   "datePicker": {
-    "name": "日付を選択",
-    "text": "",
-    "description": "",
+    "name": "日付を選択する",
+    "text": null,
+    "description": null,
     "validation": {
-      "required": "この欄は必須です。"
+      "required": "この欄は入力必須です。"
     }
   },
   "info": {
-    "name": "情報 / 確認",
-    "text": "",
-    "description": ""
+    "name": "確認",
+    "text": null,
+    "description": null
   },
   "noMoreInformation": {
-    "name": "これ以上の情報は不要",
-    "text": "",
-    "description": "<p>{item}について、現時点で必要な情報はすべて揃いました。</p><p>調査を続けるには、下の「続行」ボタンを選択してください。まだ情報が必要な次の食品や食事を自動的に選択します。</p><p>または、特定の項目に注目したい場合は、左側の食事や食品を選択してください。</p>"
+    "name": "入力が完了しました",
+    "text": "この食品の入力は完了しました",
+    "description": "<p>これで、<strong>{item}</strong> について必要な情報が揃いました。</p><p>回答を続けるには、下の「続ける」ボタンをクリックしてください。詳しい情報の入力が必要な食品や食事が自動的に選択されます。</p><p>また、ご自分で食品や食事を選択したい場合は、左側の一覧でそのアイテムをクリックしてください。</p>"
   },
   "select": {
-    "name": "リストから値を選択",
-    "text": "",
-    "description": "",
-    "label": "オプションを選択"
+    "name": "リストから値を選択してください。",
+    "text": null,
+    "description": null,
+    "label": "項目を選択してください。"
   },
   "slider": {
-    "name": "スライダーで値を選択",
-    "text": "",
-    "description": ""
+    "name": "スライダーで値を選択してください。",
+    "text": null,
+    "description": null
   },
   "radioList": {
     "name": "単一選択リスト",
-    "text": "",
-    "description": "",
-    "label": "",
-    "other": "その他 - 詳細を記入してください",
+    "text": null,
+    "description": null,
+    "label": "1つ選択してください。",
+    "other": "その他 - 具体的にご入力ください。",
     "validation": {
-      "required": "選択肢の中から1つ選ぶ必要があります。"
+      "required": "どれか一つを選択する必要があります。"
     }
   },
   "textarea": {
-    "name": "Free text",
-    "text": "",
-    "description": "",
-    "label": "Enter your answer in textarea",
+    "name": "自由記述欄",
+    "text": null,
+    "description": null,
+    "label": "回答を自由記述欄に入力してください。",
     "validation": {
-      "required": "This field is required to be filled in."
+      "required": "この欄は入力必須です。"
     }
   },
   "timePicker": {
-    "name": "Select time",
-    "text": "",
-    "description": "",
+    "name": "時刻を選択する",
+    "text": null,
+    "description": null,
     "validation": {
-      "required": "This field is required to be filled in."
+      "required": "この欄は入力必須です。"
     },
     "picker": {
-      "title": "Select time",
-      "hours": "Hours",
-      "minutes": "Minutes",
-      "24h": "24-hour",
-      "amPm": "AM / PM",
-      "am": "AM",
-      "pm": "PM"
+      "title": "時刻を選択",
+      "hours": "時",
+      "minutes": "分",
+      "24h": "24時間制",
+      "amPm": "午前 / 午後",
+      "am": "午前",
+      "pm": "午後"
     }
   },
   "yesNo": {
-    "name": "Yes / No confirmation",
-    "text": "",
-    "description": ""
+    "name": "はい・いいえの確認",
+    "text": null,
+    "description": null
   },
   "addonFoods": {
-    "name": "Add-on foods",
-    "text": "",
-    "description": "Have you had any add-on foods with following foods?",
-    "food": "Food",
-    "portion": "Portion",
-    "quantity": "Quantity",
-    "didNotHave": "No"
+    "name": "追加の食品",
+    "text": null,
+    "description": "以下の食品と一緒に、ほかに何か追加で食べましたか？",
+    "food": "食品",
+    "portion": "ポーション",
+    "quantity": "量",
+    "didNotHave": "いいえ"
   },
   "associatedFoods": {
-    "name": "Associated foods",
-    "text": "",
-    "description": "",
-    "yes": "Yes, I had some",
-    "yesAnother": "Yes, I had another",
-    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
-    "no": "No, I did not",
-    "moreFoodsQuestion": "Did you have any other foods from this category?",
-    "databaseLookupTitle": "What was it?",
-    "databaseLookupWithExisting": "If not, what was it?",
-    "existingFoodsTitle": "Was it something you already entered?",
+    "name": "一緒に食べた食品",
+    "text": null,
+    "description": null,
+    "yes": "はい",
+    "yesAnother": "はい",
+    "existingFoodHint": "すでに入力済みの場合は「はい」を選択してください。",
+    "no": "いいえ",
+    "moreFoodsQuestion": "このカテゴリの中で、他に食べた食品はありますか？",
+    "databaseLookupTitle": "その食品の名前を入力してください。",
+    "databaseLookupWithExisting": "そうでない場合は、何を食べましたか？",
+    "existingFoodsTitle": "それは、すでに入力したものですか？",
     "select": {
-      "different": "Change",
-      "remove": "Remove"
+      "different": "変更する",
+      "remove": "削除する"
     },
-    "browse": "Browse all foods",
-    "search": "Search for a food",
-    "results": "Search results",
-    "relatedCategories": "Related Categories/Subcategories",
-    "showLess": "Show Less",
-    "showAll": "Show All Related Categories",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
-    "none": "No food results. Try refining your search.",
-    "refine": "Getting lots of matches — try being more specific to find the right one.",
+    "browse": "すべての食品をみる",
+    "search": "食品を探す",
+    "results": "検索結果",
+    "relatedCategories": "食品カテゴリから選ぶ",
+    "showLess": "表示を減らす",
+    "showAll": "関連するすべてのカテゴリを表示する",
+    "root": "すべての食品カテゴリ",
+    "back": "{category}に戻る",
+    "none": "食品が見つかりませんでした。検索条件を変更してください。",
+    "refine": "検索結果が多数見つかりました。検索条件を絞り込んでみてください。",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again",
-      "placeholder": "Missing food"
+      "label": "食品が見つからない",
+      "description": "<p>上記の食品カテゴリの中から、食品を探してみてください。</p><p>もし見つからない場合は、「食品を自分で追加する」を選んでください。</p>",
+      "report": "食品を自分で追加する",
+      "tryAgain": "わかりました。もう一度試してみます。",
+      "placeholder": "見つからない食品"
     }
   },
   "generalAssociatedFoods": {
-    "name": "Associated foods (general)",
-    "text": "",
-    "description": "",
-    "yes": "Yes, I had some",
-    "yesAnother": "Yes, I had another",
-    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
-    "no": "No, I did not",
-    "moreFoodsQuestion": "Did you have any other foods from this category?",
-    "databaseLookupTitle": "What was it?",
-    "databaseLookupWithExisting": "If not, what was it?",
-    "existingFoodsTitle": "Was it something you already entered?",
+    "name": "関連する食品 (general)",
+    "text": null,
+    "description": null,
+    "yes": "はい",
+    "yesAnother": "はい",
+    "existingFoodHint": "すでに入力済みの場合は「はい」を選択してください。",
+    "no": "いいえ",
+    "moreFoodsQuestion": "このカテゴリの中で、他に食べた食品はありますか？",
+    "databaseLookupTitle": "それは何でしたか？",
+    "databaseLookupWithExisting": "そうでない場合は、何を食べましたか？",
+    "existingFoodsTitle": "それは、すでに入力したものですか？",
     "select": {
-      "different": "Change",
-      "remove": "Remove"
+      "different": "変更する",
+      "remove": "削除する"
     },
-    "browse": "Browse all foods",
-    "search": "Search for a food",
-    "results": "Search results",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
-    "none": "No food results. Try refining your search.",
+    "browse": "全ての食品を見る",
+    "search": "食品を探す",
+    "results": "検索結果",
+    "root": "全ての食品カテゴリー",
+    "back": "{category}に戻る",
+    "none": "該当する食品が見つかりませんでした。検索条件を変更してお試しください。",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again",
-      "placeholder": "Missing food"
+      "label": "食品を自分で追加する",
+      "description": "<p>上に表示されている食品カテゴリから、食品を探してみてください。</p><p>もし見つからない場合は、「食品を自分で追加する」を選択してください。</p>",
+      "report": "食品を自分で追加する",
+      "tryAgain": "検索をやり直す",
+      "placeholder": "見つからない食品"
     }
   },
   "editMeal": {
-    "name": "Edit Meal",
-    "text": "",
-    "description": "<p>Tell us everything you had for your <strong>{meal}</strong>.</p><p>Enter each food and drink separately.</p><p>Press <span class=\"fas fa-turn-down fa-rotate-90 mx-2\"></span> or the Enter/Return key to add each food and drink.</p><p><strong>Do not</strong> enter how much you had, just the food names.</p>",
-    "add": "Add",
-    "drinksOnly": "Drinks",
-    "foods": "Foods and drinks",
-    "foodsOnly": "Foods"
+    "name": "食事を編集する",
+    "text": "{meal}で食べたすべての食品を、1行に1品ずつ入力してください。",
+    "description": "入力例:<p></p><ul><li>バナナ</li><li>ポテトチップス</li><li>ご飯</li><li>紅茶</li></ul><p></p><p>食品を入力したら、Enterキーか「追加する」を押すと、次の食品を入力できます。</p><p><strong>量は入力せず</strong>、食べ物や飲み物の名前だけを入力してください。</p><p><strong>調味料も忘れずに入力してください</strong>（例：寿司のしょうゆ、サラダのドレッシング）。</p>",
+    "add": "追加する",
+    "drinksOnly": "飲み物",
+    "foods": "食べ物と飲み物",
+    "foodsOnly": "食べ物"
   },
   "externalSource": {
-    "name": "External source",
-    "text": "",
-    "description": "",
-    "search": "Search",
-    "back": "Back to search",
-    "select": "Select",
-    "missing": "Not found",
+    "name": "外部ソース",
+    "text": null,
+    "description": null,
+    "search": "検索する",
+    "back": "検索に戻る",
+    "select": "選択する",
+    "missing": "見つかりませんでした。",
     "products": {
-      "results": "Products found: {count}.",
-      "none": "No products found",
-      "name": "Name",
-      "code": "Code",
-      "quantity": "Quantity",
-      "packaging": "Packaging"
+      "results": "見つかった食品数: {count}.",
+      "none": "食品が見つかりませんでした",
+      "name": "名前",
+      "code": "コード",
+      "quantity": "量",
+      "packaging": "包装"
     }
   },
   "final": {
-    "name": "Final page",
-    "text": "",
-    "description": ""
+    "name": "最終ページ",
+    "text": null,
+    "description": null
   },
   "foodSearch": {
-    "name": "Search Food",
-    "text": "",
-    "description": "<p>Below is the list of foods from our database that look like \"<strong>{food}</strong>\".</p><p>Choose the item you had or the closest match.</p>",
-    "browse": "Browse all foods",
-    "search": "Search for a food",
-    "results": "Search results",
-    "relatedCategories": "Related Categories/Subcategories",
-    "showLess": "Show Less",
-    "showAll": "Show All Related Categories",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
-    "none": "No food results. Try refining your search.",
-    "refine": "Getting lots of matches — try being more specific to find the right one.",
-    "pizza": "If your pizza was from a takeaway or restaurant, select that option in the list.",
-    "rootCategory": "Food search restricted to '{category}'",
-    "rootCategoryToggle": "Restrict food search to '{category}'",
+    "name": "食品を探す",
+    "text": "「{food}」に近い食品の候補です。",
+    "description": "<p>あなたがとったものに一番近い食品を、以下のリストから選んでください。</p><p>食品が見つからない場合は、いくつかの食べ物に分けて個別に入力してみてください（例：「天ざるそば」→「天ぷら」と「ざるそば」、「納豆餅」→「納豆」と「餅」）。</p>",
+    "browse": "すべての食品を表示する",
+    "search": "食品を探す",
+    "results": "検索結果",
+    "relatedCategories": "関連する食品カテゴリ",
+    "showLess": "表示を減らす",
+    "showAll": "すべての関連カテゴリを表示する",
+    "root": "すべての食品カテゴリ",
+    "back": "{category}に戻る",
+    "none": "該当する食品が見つかりませんでした。検索条件を変更してお試しください。",
+    "refine": "検索結果が多数見つかりました。検索条件を絞り込んでみてください。",
+    "pizza": "ピザがテイクアウトやレストランのものであれば、リストの中からその選択肢を選んでください。",
+    "rootCategory": "食品検索は'{category}'に制限されています",
+    "rootCategoryToggle": "食品検索を'{category}'に制限する",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again"
+      "label": "食品が見つからない",
+      "description": "<p>食品が見つからない場合は、上の検索ボックスで表現を変えて再検索してみてください。</p><p>料理名が見つからない場合でも、食材を組み合わせて入力することもできます（例：からみ餅→餅＋大根おろし）。</p><p>または「すべての食品を表示」を選んで、食品カテゴリから探すこともできます。</p><p>それでも見つからない場合は、「食品を自分で追加する」を選択してください。</p>",
+      "report": "食品を自分で追加する",
+      "tryAgain": "検索をやり直す"
     },
     "confirmDiscardFood": {
-      "label": "Yes",
-      "messageUnsafe": "<p>You have already answered some questions about <strong>\"{discardedFoodName}\"</strong>!</p><p>If you change it to <strong>\"{selectedFoodName}\"</strong> now, you might have to answer some of those questions again.</p><p>Are you sure you would like to replace this food?</p>",
-      "message": "You have already answered some questions about \"{discardedFoodName}\"! If you change it to \"{selectedFoodName}\" now, you might have to answer some of those questions again. Are you sure you would like to replace this food?"
+      "label": "はい",
+      "messageUnsafe": "<p><strong>\"{discardedFoodName}\"</strong>について、すでにいくつかの質問に回答しています。</p><p>今これを<strong>\"{selectedFoodName}\"</strong>に変更すると、一部の回答をもう一度やり直す必要があるかもしれません。 </p><p>本当にこの食品に置き換えてもよろしいですか？</p>",
+      "message": "\"{discardedFoodName}\"については、すでにいくつかの質問に回答しています。今\"{selectedFoodName}\"に変更すると、一部の回答をもう一度やり直す必要があるかもしれません。 本当にこの食品に置き換えてもよろしいですか？"
     }
   },
   "foodSelection": {
-    "name": "Select foods",
-    "text": "",
-    "description": "<p>Select foods from the list below.</p>",
-    "none": "None of the above"
+    "name": "食品を選択",
+    "text": null,
+    "description": "<p>下のリストから食品を選択してください。</p>",
+    "none": "上記のいずれでもない"
   },
   "mealAdd": {
-    "name": "Add Meal",
-    "text": "",
-    "description": "<p>Select one from the list below if it is appropriate.</p>",
-    "label": "Select predefined meal",
+    "name": "食事を追加する",
+    "text": "追加する食事の種類",
+    "description": "<p>追加する食事の種類を、下の入力欄をクリックしてリストから選んでください。</p>",
+    "label": "食事の種類を選択",
     "custom": {
-      "text": "",
-      "description": "<p>Enter the name of this meal. You can either type your own name, or select one from the list below if it is appropriate.</p>",
-      "label": "Select predefined or enter meal name"
+      "text": "追加する食事の種類を入力してください",
+      "description": "<p>食事の種類を下のリストから選ぶか、ご自分で入力してください。</p>",
+      "label": "リストから選択、または自由入力"
     },
-    "yes": "Add this meal",
-    "no": "Cancel",
-    "exists": "Entered meal already exists, select another meal.",
-    "noMeal": "No meals remaining, add at least one"
+    "yes": "この食事を追加する",
+    "no": "キャンセル",
+    "exists": "その食事はすでに入力されています。別の食事を選んでください。",
+    "noMeal": "食事が1つもありません。少なくとも1つ入力してください"
   },
   "mealDuration": {
-    "name": "Meal duration",
-    "text": "",
-    "description": "<p>How long did it take you to eat <strong>{mealName}</strong>?</p>",
-    "minutes": "mins",
-    "confirm": "Continue"
+    "name": "食事にかかった時間",
+    "text": null,
+    "description": "<p><strong>{mealName}</strong>を食べるのに、どれくらい時間がかかりましたか?</p>",
+    "minutes": "分",
+    "confirm": "続ける"
   },
   "mealGap": {
-    "name": "Meal gap",
-    "text": "",
-    "description": "",
-    "before": "<p>Did you have any meals, snacks or drinks before your <strong>{meal}</strong> at {mealTime}?</p>",
-    "after": "<p>Did you have any meals, snacks or drinks after your <strong>{meal}</strong> at {mealTime}?</p>",
-    "between": "<p>Did you have any meals, snacks or drinks between your <strong>{startMeal}</strong> (at {startMealTime}) and your <strong>{endMeal}</strong> (at {endMealTime})?</p>",
-    "yes": "Yes, add a meal",
-    "no": "No, I did not"
+    "name": "食事の抜けもれの確認",
+    "text": null,
+    "description": null,
+    "before": "<p>{mealTime}に<strong>{meal}</strong>をとる前に、食事やおやつ、飲み物をとりましたか?</p>",
+    "after": "<p>{mealTime}に<strong>{meal}</strong>をとった後に、食事やおやつ、飲み物をとりましたか？</p>",
+    "between": "<p><strong>{startMeal}</strong> ({startMealTime})と<strong>{endMeal}</strong> ({endMealTime})の間に、食事やおやつ、飲み物をとりましたか？</p>",
+    "yes": "はい、とりました。（食事を追加する）",
+    "no": "いいえ、とりませんでした。"
   },
   "mealTime": {
-    "name": "Edit Time",
-    "text": "",
-    "description": "<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>",
-    "yes": "Around that time",
-    "no": "Did not have",
+    "name": "時刻を編集する",
+    "text": "{meal}をとりましたか？食べた時間を教えてください。",
+    "description": "<p><strong>{meal}</strong>をとった時刻を24時間制で選択してください（例：午後1時 → 13:00）。</p><p><strong>飲み物だけをとった場合も</strong>{meal}として入力してください。<strong>サプリメントや薬を服用したときの飲み物も含めて</strong>ご回答ください。</p>",
+    "yes": "この時刻にとった",
+    "no": "食べなかった",
     "picker": {
-      "title": "Select time",
-      "hours": "Hours",
-      "minutes": "Minutes",
-      "24h": "24-hour",
-      "amPm": "AM / PM",
-      "am": "AM",
-      "pm": "PM"
+      "title": "時刻を選択",
+      "hours": "時",
+      "minutes": "分",
+      "24h": "24時間制",
+      "amPm": "午前 / 午後",
+      "am": "午前",
+      "pm": "午後"
     }
   },
   "recallDate": {
-    "name": "Recall date",
-    "text": "",
-    "description": "Select the date for which you are filling the recall in."
+    "name": "想起日",
+    "text": null,
+    "description": "思い出し調査を行う日付を選択してください。"
   },
   "readyMeal": {
-    "name": "Ready meal",
-    "text": "",
-    "description": "<p>Was this a ready-made meal or food?</p>"
+    "name": "市販品",
+    "text": "この食事や食品は市販品でしたか？",
+    "description": "<p>以下の各食品について、ファストフードやレストランなどの外食、または市販の惣菜・冷凍食品・インスタント食品などの既製品であれば「はい」、そうでなければ「いいえ」にチェックを入れてください。</p>"
   },
   "redirect": {
-    "name": "Redirect",
-    "text": "",
-    "description": "",
-    "missingUrl": "Missing redirection URL",
-    "goTo": "Go to questionnaire"
+    "name": "リダイレクト",
+    "text": null,
+    "description": null,
+    "missingUrl": "リダイレクト先のURLが設定されていません。",
+    "goTo": "質問票に進む"
   },
   "reviewConfirm": {
-    "name": "Review and Confirm",
-    "text": "",
-    "description": "",
-    "item": "Reviewed",
-    "meal": "I have reviewed all foods and drinks.",
-    "survey": "I have reviewed all meals and foods and drinks."
+    "name": "見直しと確認",
+    "text": null,
+    "description": null,
+    "item": "確認済み",
+    "meal": "すべての食べ物と飲み物の確認が完了しました。",
+    "survey": "すべての食事、食べ物、飲み物が入力されていることを確認しました"
   },
   "sameAsBefore": {
-    "name": "Same as before",
-    "text": "",
-    "description": "<p>Was this <strong>{food}</strong> the same as the one you had before?</p>",
-    "serving": "{amount} serving size",
-    "leftovers": "Left about {amount}",
+    "name": "前回入力したものと同じ",
+    "text": null,
+    "description": "<p><strong>{food}</strong>の量や種類は、前回入力した内容と同じですか？</p>",
+    "serving": "口に入った量：{amount}",
+    "leftovers": "残した量：{amount}",
     "quantity": "{quantity} servings",
     "noLeftovers": {
-      "drink": "Drank it all",
-      "food": "Ate everything"
+      "drink": "すべて飲みました",
+      "food": "すべて食べました"
     },
-    "hadWith": "Had it with:",
-    "noAddedFoods": "Nothing added (e.g. milk, sugar, sauces)",
-    "same": "Yes, I had the same",
-    "notSame": "No, I had a different one"
+    "hadWith": "一緒にとったもの：",
+    "noAddedFoods": "何も加えなかった（牛乳・砂糖など不使用）",
+    "same": "はい、前回と同じです。",
+    "notSame": "いいえ、前回とは異なります。"
   },
   "splitFood": {
-    "name": "Split food",
-    "text": "",
-    "description": "You have searched for <strong>{food}</strong>.",
-    "split": "Are these separate foods?",
-    "separate": "Yes",
-    "single": "No"
+    "name": "食品を分ける",
+    "text": "1行に複数の食品が入力されたようです。",
+    "description": "1行に複数の食品を入力したようです。",
+    "split": "これらは別々の食品ですか？",
+    "separate": "食品を分ける",
+    "single": "単一の食品として保存する"
   },
   "submit": {
-    "name": "Submit page",
-    "text": "",
-    "description": ""
+    "name": "送信する",
+    "text": null,
+    "description": null
   },
   "quantity": {
-    "_": "Quantity",
-    "whole": "Whole",
-    "fraction": "Fraction",
-    "and": "and",
-    "confirm": "I had that many",
-    "more": "More",
-    "less": "Less"
+    "_": "量",
+    "whole": "整数",
+    "fraction": "端数",
+    "and": "と",
+    "confirm": "この量にする",
+    "more": "もっと多かった",
+    "less": "もっと少なかった"
   },
   "portionSizeOption": {
-    "name": "Portion method",
-    "text": "",
-    "description": "分量をどのように推定しますか？",
+    "name": "量の見積もり",
+    "text": "「{food}」の量をどの方法で答えますか？",
+    "description": "<p>量の答え方を以下の中から選んでください。</p><p>※外食などで量がわからない場合は、だいたいの量で選んでください。</p>",
     "selections": {
       "grated": "すりおろし",
       "in_a_bag": "袋で",
@@ -343,267 +343,267 @@
       "in_a_glass": "グラスで",
       "in_a_mug": "マグカップで",
       "in_a_pot": "鍋で",
-      "in_a_takeaway_cup": "In a takeaway cup",
-      "in_baby_carrots": "In baby carrots",
-      "in_bars": "In bars",
-      "in_batons": "In batons",
-      "in_berries": "In berries",
-      "in_burgers": "In burgers",
-      "in_chopped_fruit": "In chopped fruit",
-      "in_crinkle_cut_chips": "In crinkle cut chips",
-      "in_cubes": "In cubes",
-      "in_curly_fries": "In curly fries",
-      "in_dollops": "In dollops",
-      "in_french_fries": "In French fries",
-      "in_individual_cakes": "In individual cakes",
-      "in_individual_packs": "In individual packs",
-      "in_individual_puddings": "In individual puddings",
-      "in_individual_sweets": "In individual sweets",
+      "in_a_takeaway_cup": "テイクアウト用カップで",
+      "in_baby_carrots": "ベビーキャロットで数える",
+      "in_bars": "バー（本数）で",
+      "in_batons": "棒状で",
+      "in_berries": "ベリーの個数で",
+      "in_burgers": "バーガーで",
+      "in_chopped_fruit": "カットフルーツで",
+      "in_crinkle_cut_chips": "クリンクルカットのチップスで",
+      "in_cubes": "角切りで",
+      "in_curly_fries": "カーリーフライで",
+      "in_dollops": "ひとすくいで",
+      "in_french_fries": "フレンチフライで",
+      "in_individual_cakes": "小さなケーキで",
+      "in_individual_packs": "個包装で",
+      "in_individual_puddings": "カッププリンで",
+      "in_individual_sweets": "個包装の菓子で",
       "in_slices": "スライスで",
       "in_spoonfuls": "スプーンで",
-      "in_straight_cut_chips": "In straight cut chips",
-      "in_thick_cut_chips": "In thick cut chips",
-      "in_unwrapped_bars": "In unwrapped bars",
-      "in_whole_fruit_vegetables": "In whole fruit / vegetables",
-      "in_wrapped_bars": "In wrapped bars",
+      "in_straight_cut_chips": "ストレートカットのチップスで",
+      "in_thick_cut_chips": "厚切りチップスで",
+      "in_unwrapped_bars": "包装なしのバーで",
+      "in_whole_fruit_vegetables": "丸ごとの果物／野菜で",
+      "in_wrapped_bars": "包装されたバーで",
       "milk_on_cereal": "シリアルにかけたミルク",
       "cereal": "シリアル",
       "on_a_knife": "ナイフで",
       "on_a_plate": "お皿で",
-      "slice_from_a_large_cake": "Slice from a large cake",
-      "slice_from_a_large_pudding": "Slice from a large pudding",
-      "spread_on_a_cracker": "Spread on a cracker",
-      "spread_on_a_scone": "Spread on a scone",
-      "spread_on_bread": "Spread on bread",
+      "slice_from_a_large_cake": "ホールケーキからのスライスで",
+      "slice_from_a_large_pudding": "大きなプリンからのスライスで",
+      "spread_on_a_cracker": "クラッカーに塗った量で",
+      "spread_on_a_scone": "スコーンに塗った量で",
+      "spread_on_bread": "パンに塗った量で",
       "use_a_standard_measure": "標準計量を使用",
       "use_a_standard_portion": "標準分量を使用",
       "use_an_image": "画像を使用",
-      "use_these_crisps_in_a_bag": "Use these crisps in a bag",
-      "use_tortilla_chips_in_a_bowl": "Use tortilla chips in a bowl",
+      "use_these_crisps_in_a_bag": "袋入りポテトチップスを使用",
+      "use_tortilla_chips_in_a_bowl": "ボウルのトルティーヤチップスを使用",
       "use_a_drink_scale": "ドリンクスケールを使用",
       "use_a_guide_image": "ガイド画像を使用",
       "unknown": "不明",
       "weight": "重量・容量を入力"
     },
-    "unknown": "There is currently no portion size estimation method for {food}."
+    "unknown": "現在、{food} の量を推定する方法がありません。"
   },
   "linkedAmount": {
-    "label": "{unit} (out of {quantity}) did you have {food} on?",
-    "unit": "How many slices",
-    "all": "On all of them"
+    "label": "{quantity}のうち何切れに{food}を塗りましたか?",
+    "unit": "何枚",
+    "all": "すべてに塗った"
   },
   "asServed": {
-    "name": "As served",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
+    "name": "盛り付けた量",
+    "text": "あなたがとった「{food}」の量をおたずねします。",
+    "description": null,
+    "method": "分量をどのように推定しますか？",
     "serving": {
-      "header": "Using these pictures, choose how much {food} you had.",
-      "less": "I had less",
-      "more": "I had more",
-      "confirm": "I had that much"
+      "header": "実際にとった量に近い写真を選び、「この量にする」のボタンをクリックしてください。",
+      "less": "これより少ない",
+      "more": "これより多い",
+      "confirm": "この量にする"
     },
     "leftovers": {
-      "header": "Did you leave some of your {food}?",
-      "label": "Using these pictures, choose how much {food} you left.",
-      "less": "I left less",
-      "more": "I left more",
-      "confirm": "I left that much"
+      "header": "残した量を決める",
+      "label": "写真の中から、あなたが残した「{food}」の量を選んでください。",
+      "less": "これより少ない",
+      "more": "これより多い",
+      "confirm": "この量にする"
     },
-    "quantity": "How many of these portions did you have?",
+    "quantity": "これらの分量のうち、何人前とりましたか？",
     "weightFactor": {
       "serving": {
-        "more": "I had {whole} and {fraction}",
-        "less": "I had {fraction}"
+        "more": "わたしが食べた量は {whole} と {fraction}",
+        "less": "わたしが食べた量は {fraction}"
       },
       "leftovers": {
-        "more": "I left {whole} and {fraction}",
-        "less": "I left {fraction}"
+        "more": "わたしが残した量は {whole} と {fraction}",
+        "less": "わたしが残した量は {fraction}"
       },
-      "less": "of the smallest portion",
-      "more": "of the largest portion"
+      "less": "（一番少ない量に対して）",
+      "more": "（一番多い量に対して）"
     }
   },
   "cereal": {
-    "name": "Cereal",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
-    "container": "Select the bowl that looks most like the one you used for your {food}."
+    "name": "シリアル",
+    "text": "{food}",
+    "description": null,
+    "method": "分量をどのように推定しますか？",
+    "container": "{food} を食べるのに使った器に最も近いものを選んでください。"
   },
   "directWeight": {
-    "name": "Weight",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
-    "quantity": "Enter how much you had in grams or mls."
+    "name": "重量",
+    "text": null,
+    "description": "食べた（または飲んだ）量をグラムまたはミリリットルで入力してください。",
+    "method": "分量をどのように推定しますか？",
+    "quantity": "グラムまたはミリリットルで、どのくらいとったか入力してください。"
   },
   "drinkScale": {
-    "name": "Drink scale",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
-    "container": "Select the cup or glass that looks most like the one you used for your {food}.",
+    "name": "飲み物のスケール",
+    "text": "{food}",
+    "description": null,
+    "method": "分量をどのように推定しますか？",
+    "container": "あなたが 「{food} 」を飲むのに使った容器に最も近いものを選んでください。",
     "serving": {
-      "header": "Use the slider or tap on the cup or glass to indicate how much you had.",
-      "less": "I had less",
-      "more": "I had more",
-      "confirm": "I had that much"
+      "header": "飲んだ量に合わせてスライダーを調整し、「この量にする」を押してください。",
+      "less": "もっと少ない",
+      "more": "もっと多い",
+      "confirm": "この量にする"
     },
     "leftovers": {
-      "header": "Did you leave some of your {food}?",
-      "label": "Use the slider on the right to choose how much you had left.",
-      "less": "I left less",
-      "more": "I left more",
-      "confirm": "I left that much"
+      "header": "飲み残した量を決める",
+      "label": "残した量に合わせてスライダーを調整し、「この量にする」を押してください。",
+      "less": "もっと少ない",
+      "more": "もっと多い",
+      "confirm": "この量にする"
     },
-    "quantity": "How many of these drinks did you have?"
+    "quantity": "このような飲み物を何杯飲みましたか？"
   },
   "guideImage": {
-    "name": "Guide image",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
-    "label": "Select the image that is the closest match to the size of {food} you had.",
-    "quantity": "Choose how many of {food} you had.",
-    "confirm": "I had that many",
-    "expand": "Expand Image"
+    "name": "食品の種類を選ぶ",
+    "text": "{food}",
+    "description": null,
+    "method": "分量をどのように推定しますか？",
+    "label": "あなたがとった「 {food}」 に最も近いものを選んでください。（似た食品の画像が表示されることがありますが、気にせずお答えください）",
+    "quantity": "あなたがとった量を選んでください。",
+    "confirm": "この量にする",
+    "expand": "画像を拡大する"
   },
   "milkInAHotDrink": {
-    "name": "Milk in a hot drink",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
-    "label": "How much {food} did you have in your tea or coffee?",
-    "confirm": "I had that much"
+    "name": "飲み物に加えた牛乳",
+    "text": "紅茶やコーヒーに{food}をどのくらい加えましたか？",
+    "description": null,
+    "method": "分量をどのように推定しますか？",
+    "label": "あなたが入れた量を選んでください。",
+    "confirm": "この量にする"
   },
   "milkOnCereal": {
-    "name": "Milk on cereal",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
-    "container": "Select the bowl that looks most like the one you used for your {food}.",
-    "milk": "Choose the level your milk came up to (without cereal)."
+    "name": "シリアルの牛乳",
+    "text": "{food}",
+    "description": null,
+    "method": "分量をどのように推定しますか？",
+    "container": "{food} を食べるのに使った器に最も近いものを選んでください。",
+    "milk": "シリアルがない状態での牛乳の量を選んでください。"
   },
   "missingFood": {
-    "name": "Missing food",
-    "text": "",
-    "description": "You said you were unable to find a good match for \"{food}\". Provide as much detail as you can to the following questions, to help us identify your food or drink.",
-    "source": "Was it homemade?",
-    "homemade": "Provide further details e.g. description of dish or ingredients.",
-    "purchased": "Tell us where you purchased it from and the brand name if you know it.",
-    "barcode": "If you are completing this on a mobile phone, scan the barcode on the food package.",
-    "portionSize": "How much did you eat? e.g. 1 pack, 2 teaspoons, 1 handful, 125 grams."
+    "name": "見つからない食品",
+    "text": null,
+    "description": "「{food}」に関する情報を登録します。食品が特定できるように、以下の質問にお答えください。",
+    "source": "その食品は家庭で調理されたものですか？",
+    "homemade": "料理の内容や材料などを、できるだけ詳しく入力してください。",
+    "purchased": "購入したお店やブランド名がわかれば教えてください。 商品名がわからない場合は、料理の内容や材料などを、できるだけ詳しく入力してください。",
+    "barcode": "携帯電話で回答している場合は、食品パッケージのバーコードをスキャンしてください。",
+    "portionSize": "どれくらいとりましたか？（例：1袋、ティースプーン2杯、ひとつかみ、125グラム、全部食べた など）"
   },
   "recipeBuilder": {
-    "name": "{food} recipe builder",
-    "text": "",
-    "description": "Follow the steps below to build your own recipe for {food}.",
-    "label": "Add your own {searchTerm}",
-    "browse": "{category} categories",
-    "search": "Search for a food",
-    "results": "Search results",
-    "relatedCategories": "Related Categories/Subcategories",
-    "showLess": "Show Less",
-    "showAll": "Show All Related Categories",
-    "root": "all food categories",
-    "back": "Back to '{category}'",
-    "none": "No food results. Try refining your search.",
-    "refine": "Getting lots of matches — try being more specific to find the right one.",
+    "name": "{food}のレシピ作成",
+    "text": null,
+    "description": "以下の手順に従って、{food}のレシピを作成してください。",
+    "label": "独自の{searchTerm}を追加する",
+    "browse": "{category} カテゴリ",
+    "search": "食品を探す",
+    "results": "検索結果",
+    "relatedCategories": "関連するカテゴリ／サブカテゴリ",
+    "showLess": "表示を減らす",
+    "showAll": "すべての関連カテゴリを表示",
+    "root": "すべての食品カテゴリ",
+    "back": "{category}に戻る",
+    "none": "該当する食品が見つかりませんでした。検索条件を変更して再度お試しください。",
+    "refine": "検索結果が多数見つかりました。検索条件を絞り込んでみてください。",
     "optional": {
-      "confirm": "Yes",
-      "reject": "No",
-      "infoPrompt": "What was it?"
+      "confirm": "はい",
+      "reject": "いいえ",
+      "infoPrompt": "それは何でしたか？"
     },
-    "addMore": "Add another",
-    "noMore": "Done",
-    "remove": "Remove",
-    "missingAllIngredients": "Add at least one ingredient to continue.",
+    "addMore": "さらに追加する",
+    "noMore": "完了",
+    "remove": "削除する",
+    "missingAllIngredients": "続行するには、少なくとも1つの材料を追加してください。",
     "missing": {
-      "label": "I can't find my food",
-      "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find it, click the button below to report a missing food.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again",
-      "irrelevantIngredient": "I didn't have any"
+      "label": "食品が見つからない",
+      "description": "<p>上に表示されている食品カテゴリから食品を探してみてください。</p><p>もし見つからない場合は、「食品を自分で追加する」を選択してください。</p>",
+      "report": "食品を自分で追加する",
+      "tryAgain": "わかりました。もう一度試してみます。",
+      "irrelevantIngredient": "何もとらなかった"
     }
   },
   "parentFoodPortion": {
-    "name": "Parent food portion",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
-    "label": "How much {food} did you have in your {parentFood}?",
-    "confirm": "I had that much"
+    "name": "親食品の分量",
+    "text": null,
+    "description": null,
+    "method": "分量をどのように推定しますか？",
+    "label": "{parentFood}の中で、どれくらいの{food}をとりましたか？",
+    "confirm": "そのくらい食べた"
   },
   "pizza": {
-    "name": "Pizza",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
-    "typeLabel": "Select the pizza that is closest to the size you had.",
-    "thicknessLabel": "How thick was your pizza?",
-    "sizeLabel": "What size slice(s) did you have?",
+    "name": "ピザ",
+    "text": "{food}",
+    "description": null,
+    "method": "分量をどのように推定しますか？",
+    "typeLabel": "あなたが食べたピザの大きさに最も近いものを選んでください。",
+    "thicknessLabel": "ピザの厚みはどのくらいでしたか？",
+    "sizeLabel": "ピザの1切れの大きさはどのくらいでしたか？",
     "whole": {
-      "label": "How many of these pizzas did you have?",
-      "confirm": "I had the whole pizza"
+      "label": "何枚食べましたか？",
+      "confirm": "この量にする"
     },
     "slices": {
-      "label": "How many of these slices did you have?"
+      "label": "何切れ食べましたか？"
     },
-    "confirm": "I had that many"
+    "confirm": "この量にする"
   },
   "pizzaV2": {
-    "name": "Pizza",
-    "text": "",
-    "description": "",
-    "method": "How do you want to estimate your portion?",
+    "name": "ピザ",
+    "text": null,
+    "description": null,
+    "method": "分量をどのように推定しますか？",
     "sizes": {
-      "label": "What size pizza did you have?",
-      "personal": "Personal 7\"",
-      "small": "Small 9.5\"",
-      "medium": "Medium 11.5\"",
-      "large": "Large 13.5\"",
-      "xxl": "Extra large 15.5\""
+      "label": "どのサイズのピザを食べましたか？",
+      "personal": "Sサイズ（約18cm）",
+      "small": "Mサイズ（約24cm）",
+      "medium": "Lサイズ（約29cm）",
+      "large": "XLサイズ（約34cm）",
+      "xxl": "XXLサイズ（約39cm）"
     },
     "crusts": {
-      "label": "What type of pizza crust did you have?",
-      "classic": "Classic",
-      "italian-thin": "Italian / Thin",
-      "stuffed": "Stuffed"
+      "label": "どの種類のピザクラストを食べましたか？",
+      "classic": "クラシック",
+      "italian-thin": "イタリアン／薄焼き",
+      "stuffed": "チーズ入りクラスト"
     },
     "units": {
-      "label": "How do you want to estimate your portion?",
-      "slice": "In slices",
-      "whole": "In whole pizzas"
+      "label": "どのように量を答えますか？",
+      "slice": "切れ数（カットされたピザの数）",
+      "whole": "ピザの枚数（丸ごとのピザの数）"
     },
     "quantity": {
-      "slice": "How many slices did you have?",
-      "whole": "How many whole pizzas did you have?"
+      "slice": "何枚食べましたか？",
+      "whole": "何枚分のピザを食べましたか？"
     }
   },
   "standardPortion": {
-    "name": "標準量",
-    "text": "",
-    "description": "",
-    "method": "量をどのように推定しますか？",
-    "label": "{food}の量をどのように推定しますか？",
-    "estimateIn": "{unit}で",
+    "name": "数値で答える",
+    "text": "{food}",
+    "description": null,
+    "method": "分量をどのように推定しますか？",
+    "label": "{food}の量をどの方法で答えますか？",
+    "estimateIn": "{unit} で答える",
     "howMany": {
-      "_": "{unit}はいくつでしたか？",
-      "placeholder": "いくつでしたか？",
-      "withFood": "{food}の{unit}はいくつでしたか？"
+      "_": "{unit}とりましたか？",
+      "placeholder": "どのくらいとりましたか？",
+      "withFood": "{food}とりましたか？"
     },
-    "confirm": "その量でした"
+    "confirm": "この量にする"
   },
   "unknown": {
     "name": "不明",
-    "text": "",
-    "description": "",
-    "method": "量をどのように推定しますか？"
+    "text": null,
+    "description": null,
+    "method": "分量をどのように推定しますか？"
   },
   "aggregateChoice": {
-    "name": "集計選択",
-    "text": "",
-    "description": ""
+    "name": "集計食品質問",
+    "text": null,
+    "description": null
   }
 }

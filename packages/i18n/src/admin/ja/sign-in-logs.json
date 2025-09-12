@@ -1,0 +1,13 @@
+{
+  "_": "サインインログ",
+  "title": "サインインログ",
+  "read": "サインインログ詳細",
+  "delete": "サインインログを削除",
+  "date": "試行日時",
+  "provider": "プロバイダー",
+  "providerKey": "プロバイダーID",
+  "successful": "成功",
+  "userAgent": "ユーザーエージェント",
+  "remoteAddress": "リモートアドレス",
+  "message": "メッセージ"
+}

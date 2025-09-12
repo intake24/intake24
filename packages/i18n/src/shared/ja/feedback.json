@@ -3,85 +3,85 @@
   "info": "食事フィードバック情報",
   "status": {
     "available": "食事フィードバックが利用可能です",
-    "lowRecalls": "最低{minRecalls}回のリコールを提出すると、食事フィードバックが利用可能になります。",
+    "lowRecalls": "リコールを最低{minRecalls}回提出すると、食事フィードバックが利用できるようになります。",
     "notAvailable": "この調査では食事フィードバックは利用できません。"
   },
   "title": "{name}リコールからの食事フィードバック",
-  "missingFoods": "不明として報告された食品は食事フィードバックに含まれません",
+  "missingFoods": "「不明」として報告された食品は、食事フィードバックには含まれません。",
   "physicalData": {
-    "title": "About you",
-    "subtitle": "So we can present your feedback in the right way, enter the following details.",
-    "change": "Change my info",
-    "recall": "Record another day",
+    "title": "あなたについて",
+    "subtitle": "正確なフィードバックをお届けするため、以下の情報を入力してください。",
+    "change": "情報を変更する",
+    "recall": "別の日の記録を追加",
     "sexes": {
-      "_": "Sex",
-      "m": "Male",
-      "f": "Female"
+      "_": "性別",
+      "m": "男性",
+      "f": "女性"
     },
-    "sex": "Sex: {sex}",
-    "age": "Age: {age}",
-    "birthdate": "Year of birth",
-    "height": "Height: {height} cm",
-    "heightCm": "Height in centimeters",
-    "weight": "Weight: {weight} kg",
-    "weightKg": "Weight in kilograms",
-    "physicalActivityLevelId": "Physical Activity Level",
-    "weightTarget": "Target: {target}",
+    "sex": "性別: {sex}",
+    "age": "年齢: {age}",
+    "birthdate": "生年",
+    "height": "身長: {height} cm",
+    "heightCm": "身長（cm）",
+    "weight": "体重: {weight} kg",
+    "weightKg": "体重（kg）",
+    "physicalActivityLevelId": "身体活動レベル",
+    "weightTarget": "目標: {target}",
     "weightTargets": {
-      "_": "Weight target",
-      "title": "Weight targets",
-      "keep_weight": "Keep weight",
-      "lose_weight": "Lose weight",
-      "gain_weight": "Gain weight"
+      "_": "体重目標",
+      "title": "体重の目標",
+      "keep_weight": "体重を維持する",
+      "lose_weight": "体重を減らす",
+      "gain_weight": "体重を増やす"
     }
   },
   "outputs": {
-    "title": "Outputs",
+    "title": "出力",
     "download": {
-      "_": "Download",
-      "title": "Download as PDF",
-      "subtitle": "Download a copy of your dietary feedback as PDF file. It will take a couple of seconds, bear with us.",
-      "send": "Submit request",
-      "sent": "Dietary feedback PDF file has been saved."
+      "_": "ダウンロード",
+      "title": "PDFとしてダウンロード",
+      "subtitle": "食事フィードバックのPDFファイルをダウンロードします。数秒かかる場合がありますのでお待ちください。",
+      "send": "リクエストを送信",
+      "sent": "食事フィードバックのPDFファイルを保存しました。"
     },
     "email": {
-      "_": "Email",
-      "title": "Send to email",
-      "send": "Submit request",
-      "sent": "We have sent your dietary feedback to provided email address."
+      "_": "メール",
+      "title": "メールで送信",
+      "send": "リクエストを送信",
+      "sent": "食事フィードバックを指定されたメールアドレスに送信しました。"
     },
-    "retry": "Dietary feedback output has been recently requested, try again in {secs} s.",
-    "print": "Print"
+    "retry": "最近、食事フィードバック出力がリクエストされました。{secs}秒後に再試行してください。",
+    "print": "印刷"
   },
   "cards": {
-    "title": "Summary of your intake"
+    "title": "摂取状況の概要"
   },
   "topFoods": {
-    "title": "Foods contributing most to your nutrient intakes",
-    "chart": "Highest in {nutrient}"
+    "title": "栄養素摂取量に最も寄与している食品",
+    "chart": "{nutrient}の含有量が最も高い食品"
   },
   "meals": {
-    "title": "Meals per-day breakdown",
+    "title": "1日の食事別内訳",
     "chart": "{nutrient}"
   },
   "rating": {
-    "_": "Rate your experience",
-    "title": "How would you rate the dietary feedback?",
-    "comment": "Tell us more about the rating you gave the dietary feedback",
-    "send": "Send feedback",
-    "sent": "Feedback sent, thank you!"
+    "_": "体験を評価する",
+    "title": "食事フィードバックをどのように評価しますか？",
+    "comment": "食事フィードバックに対する評価の理由をお聞かせください",
+    "send": "フィードバックを送信",
+    "sent": "フィードバックを送信しました。ありがとうございます！"
   },
   "intake": {
-    "your": "Your {nutrient} intake is {amount}",
-    "estimated": "Estimated intake",
-    "recommended": "Recommended intake",
-    "tellMeMore": "Tell me more",
-    "gotIt": "Got it!"
+    "your": "あなたの{nutrient}摂取量は{amount}です",
+    "estimated": "推定摂取量",
+    "recommended": "推奨摂取量",
+    "tellMeMore": "詳細を見る",
+    "gotIt": "了解しました"
   },
   "unitDescription": {
-    "percentage_of_energy": "Feedback on this nutrient is based on the contribution to your energy intake from the foods and quantities you reported.",
-    "energy_divided_by_bmr": "Dietary feedback is based on your energy intake divided by BMR and how this compares to recommendations.",
-    "per_unit_of_weight": "Dietary feedback is based on your intake of this nutrient per kg of your body weight and how this compares with recommendations.",
-    "range": "Feedback on this nutrient is based on the food and quantities that you reported."
+    "percentage_of_energy": "この栄養素のフィードバックは、報告された食品とその量から算出したエネルギー摂取量への寄与割合に基づいています。",
+    "energy_divided_by_bmr": "このフィードバックは、エネルギー摂取量を基礎代謝量（BMR）で割り、推奨値と比較して算出しています。",
+    "per_unit_of_weight": "このフィードバックは、体重1kgあたりの栄養素摂取量を基に、推奨値と比較しています。",
+    "range": "この栄養素のフィードバックは、報告された食品とその量に基づいています。"
   }
 }

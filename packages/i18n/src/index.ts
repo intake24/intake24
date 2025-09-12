@@ -67,16 +67,23 @@ export function useI18n() {
 }
 
 export async function loadAppLanguage(app: Application, lang: string) {
+  // Check if the locale actually has messages loaded, not just if it exists
+  const existingMessages = i18n.global.getLocaleMessage(lang);
+  const hasMessages = existingMessages && Object.keys(existingMessages).length > 0;
+
   // @ts-expect-error - non-legacy is Ref
-  if (i18n.global.locale.value === lang || i18n.global.availableLocales.includes(lang))
+  if (hasMessages && i18n.global.locale.value === lang) {
     return;
+  }
 
   await Promise.allSettled([
     import(`./${app}/${lang}/index.ts`),
     import(`./shared/${lang}/index.ts`),
   ]).then(([app, shared]) => {
-    if (app.status !== 'fulfilled' || shared.status !== 'fulfilled')
+    if (app.status !== 'fulfilled' || shared.status !== 'fulfilled') {
+      console.error('[i18n] Failed to load translations for language:', lang);
       return;
+    }
 
     i18n.global.setLocaleMessage(lang, { ...app.value.default, ...shared.value.default });
     i18n.global.setDateTimeFormat(lang, dateFormats);

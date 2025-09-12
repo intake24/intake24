@@ -1,0 +1,28 @@
+{
+  "_": "通知",
+  "title": "通知",
+  "add": "通知を追加",
+  "edit": "通知を編集",
+  "remove": "通知を削除",
+  "channels": {
+    "_": "チャンネル",
+    "title": "チャンネル",
+    "email": "メール",
+    "slack": "Slack",
+    "webhook": "Webhook",
+    "channelId": "チャンネルID",
+    "url": "URL",
+    "to": "メールアドレス"
+  },
+  "events": {
+    "_": "イベント",
+    "title": "イベント",
+    "survey": {
+      "session": {
+        "started": "調査セッション開始",
+        "submitted": "調査セッション提出",
+        "cancelled": "調査セッションキャンセル"
+      }
+    }
+  }
+}

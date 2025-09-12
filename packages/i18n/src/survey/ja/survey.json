@@ -1,39 +1,39 @@
 {
   "_": "調査",
   "welcome": {
-    "_": "Welcome to Intake24",
-    "subtitle": "Intake24 is used in research, surveys and clinical studies to collect information about what people eat and drink."
+    "_": "Intake24へようこそ",
+    "subtitle": "Intake24は、人々が何を食べ、何を飲んだかに関する情報を収集するために、研究・調査・臨床研究で利用されています。"
   },
-  "info": "Survey information",
+  "info": "調査情報",
   "states": {
-    "_": "Survey status",
-    "notStarted": "Data collection has not started.",
-    "active": "Data collection is active.",
-    "suspended": "Data collection is suspended.",
-    "completed": "Data collection is completed."
+    "_": "調査ステータス",
+    "notStarted": "データ収集はまだ開始されていません。",
+    "active": "データ収集中です。",
+    "suspended": "データ収集は一時停止中です。",
+    "completed": "データ収集が完了しました。"
   },
   "participant": {
-    "_": "Are you a participant?",
-    "subtitle": "You have landed on the main page for Intake24.",
-    "link": "To access Intake24 you will need your <strong>own survey link</strong>.",
-    "info": "<p>If you have been invited to take part in an Intake24 survey you should have been provided with a link.</p><p>Please check your invitation to take part. If you are unsure, please contact your research study team.</p>"
+    "_": "調査の参加者ですか？",
+    "subtitle": "Intake24のメインページにアクセスしました。",
+    "link": "Intake24にアクセスするには、<strong>ご自身専用の調査リンク</strong>が必要です。",
+    "info": "<p>Intake24の調査に参加するよう招待されている場合は、調査用のリンクが送付されているはずです。</p><p>招待状をご確認ください。不明な場合は、調査研究チームまでお問い合わせください。</p>"
   },
   "visitor": {
-    "_": "Are you a visitor?",
-    "subtitle": "You can try our demo survey!",
-    "try": "Try demo now!"
+    "_": "ビジターの方ですか？",
+    "subtitle": "デモ調査をお試しいただけます！",
+    "try": "今すぐデモを試す"
   },
   "generateUser": {
-    "400": "Invalid captcha provided.",
-    "403": "Survey {surveyId} doesn't allow user generation.",
-    "404": "Survey {surveyId} hasn't been recognized.",
-    "429": "New user has just been generated, try again later.",
-    "_": "Generate access",
-    "subtitle": "This is open access study, you can get free access.",
-    "noAccount": "No account?",
-    "link": "link",
-    "info1": "Select 'Generate access' to generate new credentials. Note down these credentials if you would like to resume later.",
-    "info2": "This survey will take approximately 15 minutes.",
-    "info3": "If you close your browser window you can come back using this {action}."
+    "400": "無効なキャプチャが入力されました。",
+    "403": "調査 {surveyId} ではユーザーの生成が許可されていません。",
+    "404": "調査 {surveyId} が認識されませんでした。",
+    "429": "新しいユーザーはすでに作成されています。しばらくしてから再試行してください。",
+    "_": "アクセスを生成",
+    "subtitle": "この調査はオープンアクセスです。無料でアクセスできます。",
+    "noAccount": "アカウントをお持ちでない方",
+    "link": "リンク",
+    "info1": "「アクセスを生成」を選択すると、新しい認証情報が発行されます。後で再開する場合は、必ずこれらの情報を控えておいてください。",
+    "info2": "この調査はおよそ15分で完了します。",
+    "info3": "ブラウザを閉じても、この{action}を使って再度アクセスできます。"
   }
 }

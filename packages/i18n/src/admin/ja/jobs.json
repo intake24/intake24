@@ -1,0 +1,145 @@
+{
+  "_": "ジョブ",
+  "title": "ジョブ",
+  "read": "ジョブ詳細",
+  "delete": "ジョブを削除",
+  "downloadUrl": "ダウンロードURL",
+  "downloadUrlExpiresAt": "ダウンロードURL有効期限",
+  "progress": "進行状況",
+  "successful": "成功",
+  "message": "メッセージ",
+  "params": "ジョブパラメータ",
+  "stackTrace": "エラーメッセージ",
+  "repeat": {
+    "_": "ジョブを再実行",
+    "confirm": "ジョブをキューにプッシュ",
+    "confirmed": "ジョブがキューにプッシュされました",
+    "override": "ジョブパラメータを上書き"
+  },
+  "types": {
+    "_": "ジョブタイプ",
+    "CleanRedisStore": {
+      "_": "Redisストアをクリーンアップ",
+      "stores": {
+        "_": "Redisストア",
+        "cache": "キャッシュ",
+        "rateLimiter": "レート制限",
+        "session": "セッション"
+      }
+    },
+    "CleanStorageFiles": {
+      "_": "ストレージファイルをクリーンアップ"
+    },
+    "FeedbackSchemesSync": {
+      "_": "フィードバックスキーム - スキームを同期"
+    },
+    "PurgeExpiredTokens": {
+      "_": "期限切れアクセス/リフレッシュトークンを削除"
+    },
+    "LanguageTranslationsSync": {
+      "_": "言語 - 翻訳を同期"
+    },
+    "LocaleCopy": {
+      "_": "ロケール - データをコピー",
+      "localeId": "ロケールID",
+      "sourceLocaleId": "ソースロケールID",
+      "subTasks": {
+        "_": "サブタスク",
+        "associatedFoods": "関連食品",
+        "brands": "ブランド",
+        "categories": "カテゴリ",
+        "foods": "食品",
+        "foodGroups": "食品群",
+        "recipeFoods": "レシピ食品",
+        "searchPopularity": "検索 - 人気度",
+        "searchFixedRanking": "検索 - 固定ランキング",
+        "splitLists": "分割リスト",
+        "splitWords": "分割単語",
+        "synonymSets": "同義語セット"
+      }
+    },
+    "LocaleFoodNutrientMapping": {
+      "_": "ロケール - 食品栄養マッピングをエクスポート",
+      "localeId": "ロケールID"
+    },
+    "LocaleFoodRankingUpload": {
+      "_": "ロケール - 食品ランキングCSVアップロード",
+      "file": "CSVファイル",
+      "targetAlgorithm": "更新するソートアルゴリズムタイプ",
+      "warningTitle": "警告：データ損失のリスクがあります。注意して進行してください。",
+      "warningP1": "食品頻度データは、新しい調査が受信されるとシステムによって自動的に更新されます。",
+      "warningP2": "CSVファイルから頻度データをアップロードすると、データベース内の既存のレコードが上書きされ、データ損失の可能性があります。",
+      "warningP3": "この機能は、新しいロケールの初期化や既存の頻度データの問題修正のためのみに使用することを意図しています。",
+      "warningP4": "データをアップロードする前に、正しいロケールにいることを再確認してください。"
+    },
+    "LocaleFoods": {
+      "_": "ロケール - 食品をエクスポート",
+      "localeId": "ロケールID"
+    },
+    "LocaleIndexBuild": {
+      "_": "ロケール - 変更されたロケールの食品インデックスを再構築"
+    },
+    "NutrientTableMappingImport": {
+      "_": "栄養表 - NDBマッピングをインポート",
+      "file": "CSVファイル"
+    },
+    "NutrientTableDataImport": {
+      "_": "栄養表 - NDBデータをインポート",
+      "file": "CSVファイル"
+    },
+    "PopularitySearchUpdateCounters": {
+      "_": "検索 - 人気度カウンターを更新",
+      "foodCodes": "食品コード"
+    },
+    "ResourceExport": {
+      "_": "リソース - データをエクスポート",
+      "resource": "リソース"
+    },
+    "SurveyAuthUrlsExport": {
+      "_": "調査 - 認証URLをエクスポート",
+      "surveyId": "調査ID"
+    },
+    "SurveyDataExport": {
+      "_": "調査 - 提出データをエクスポート",
+      "surveyId": "調査ID"
+    },
+    "SurveyEventNotification": {
+      "_": "調査 - イベント通知"
+    },
+    "SurveyFeedbackNotification": {
+      "_": "調査 - 回答者フィードバックを送信",
+      "surveyId": "調査ID"
+    },
+    "SurveyHelpRequestNotification": {
+      "_": "調査 - ヘルプリクエスト通知",
+      "surveyId": "調査ID"
+    },
+    "SurveyNutrientsRecalculation": {
+      "_": "調査 - 栄養素再計算",
+      "surveyId": "調査ID"
+    },
+    "SurveyRatingsExport": {
+      "_": "調査 - 評価をエクスポート"
+    },
+    "SurveyRespondentsImport": {
+      "_": "調査 - 回答者をインポート",
+      "file": "CSVファイル"
+    },
+    "SurveySchemesSync": {
+      "_": "調査 - スキームを同期"
+    },
+    "SurveySessionsExport": {
+      "_": "調査 - セッションをエクスポート",
+      "surveyId": "調査ID"
+    },
+    "SurveySubmission": {
+      "_": "調査 - 提出を処理"
+    },
+    "UserEmailVerificationNotification": {
+      "_": "ユーザー - メール認証通知"
+    },
+    "UserPasswordResetNotification": {
+      "_": "ユーザー - パスワードリセットを送信"
+    }
+  }
+}

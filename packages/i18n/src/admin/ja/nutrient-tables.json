@@ -1,0 +1,37 @@
+{
+  "_": "栄養表",
+  "title": "栄養表",
+  "read": "栄養表詳細",
+  "create": "栄養表を追加",
+  "edit": "栄養表を編集",
+  "delete": "栄養表を削除",
+  "id": "栄養表ID",
+  "mapping": {
+    "source": {
+      "_": "ソーススプレッドシートマッピング",
+      "idColumnOffset": "レコードID列",
+      "descriptionColumnOffset": "説明列",
+      "localDescriptionColumnOffset": "ローカル説明列（該当なしの場合は空白のまま）",
+      "rowOffset": "スキップする行数（例：ヘッダーまたは空白行）"
+    },
+    "fields": {
+      "_": "フィールド列マッピング",
+      "create": "フィールドを追加",
+      "delete": "フィールドを削除",
+      "fieldName": "フィールド名",
+      "columnOffset": "CSV列"
+    },
+    "nutrients": {
+      "_": "栄養素列マッピング",
+      "create": "栄養素を追加",
+      "delete": "栄養素を削除",
+      "nutrient": "栄養素",
+      "columnOffset": "CSV列"
+    }
+  },
+  "tasks": {
+    "_": "タスク",
+    "title": "栄養表タスク",
+    "tab": "タスク"
+  }
+}

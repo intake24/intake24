@@ -1,0 +1,60 @@
+{
+  "_": "ユーザー",
+  "title": "ユーザー",
+  "all": "すべてのユーザー",
+  "read": "ユーザー詳細",
+  "create": "ユーザーを追加",
+  "edit": "ユーザーを編集",
+  "delete": "ユーザーを削除",
+  "id": "ユーザーID",
+  "name": "名前",
+  "simpleName": "シンプル名",
+  "username": "ユーザー名",
+  "verified": "認証済み",
+  "disabled": "無効",
+  "aliases": {
+    "_": "ユーザーエイリアス",
+    "title": "ユーザーエイリアス",
+    "surveyId": "調査ID",
+    "username": "ユーザー名",
+    "urlAuthToken": "URL認証トークン",
+    "none": "調査エイリアスが定義されていません"
+  },
+  "identifiers": {
+    "_": "識別子",
+    "title": "識別子"
+  },
+  "personalIdentifiers": {
+    "_": "個人識別子",
+    "title": "個人識別子"
+  },
+  "customFields": {
+    "_": "カスタムフィールド",
+    "title": "カスタムフィールド",
+    "add": "新しいフィールド",
+    "remove": "フィールドを削除",
+    "name": "フィールド名",
+    "value": "フィールド値",
+    "none": "カスタムフィールドが定義されていません",
+    "public": "公開"
+  },
+  "permissions": {
+    "_": "権限",
+    "title": "権限",
+    "tab": "権限",
+    "hint": "直接的な権限割り当てよりも、ロールを通じた権限割り当てを推奨します。"
+  },
+  "roles": {
+    "_": "ロール",
+    "title": "ロール",
+    "tab": "ロール"
+  },
+  "mfa": {
+    "_": "多要素認証",
+    "abbr": "2FA"
+  },
+  "notifications": {
+    "email": "メール通知",
+    "sms": "SMS通知"
+  }
+}

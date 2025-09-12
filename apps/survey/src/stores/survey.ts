@@ -275,7 +275,7 @@ export const useSurvey = defineStore('survey', {
           surveyService.userInfo(surveyId),
         ]);
 
-        this.setParameters(surveyInfo);
+        await this.setParameters(surveyInfo);
         this.setUserInfo(userInfo);
 
         const userSession = !this.isSubmitted && surveyInfo.session.store ? await surveyService.getUserSession(surveyId) : undefined;
@@ -336,7 +336,7 @@ export const useSurvey = defineStore('survey', {
       this.undo = null;
     },
 
-    setParameters(parameters: SurveyEntryResponse) {
+    async setParameters(parameters: SurveyEntryResponse) {
       this.parameters = parameters;
 
       useApp().restrictLanguages(parameters.surveyScheme.settings.languages);

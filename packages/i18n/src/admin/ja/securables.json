@@ -1,0 +1,49 @@
+{
+  "_": "セキュリティ",
+  "title": "セキュリティ",
+  "tab": "セキュリティ",
+  "add": "ユーザーアクセスを追加",
+  "edit": "ユーザーアクセスを編集",
+  "search": "ユーザーを検索",
+  "create": "新しいユーザーを作成",
+  "owner": {
+    "_": "所有者",
+    "title": "所有権"
+  },
+  "actions": {
+    "_": "リソースアクション",
+    "title": "リソースアクション",
+    "read": "レコードを読み取り",
+    "edit": "レコードを編集",
+    "delete": "レコードを削除",
+    "copy": "レコードをコピー",
+    "securables": "セキュリティ",
+    "use": "レコードを使用",
+    "cards": "カード",
+    "top-foods": "上位食品",
+    "meals": "食事",
+    "demographic-groups": "人口統計グループ",
+    "henry-coefficients": "ヘンリー係数",
+    "translations": "翻訳",
+    "food-list": "食品リスト",
+    "food-ranking": "食品ランキング",
+    "split-lists": "分割リスト",
+    "recipe-foods": "レシピ食品",
+    "split-words": "分割単語",
+    "synonym-sets": "同義語セット",
+    "tasks": "タスク",
+    "prompts": "プロンプト",
+    "data-export": "データエクスポート",
+    "overrides": "オーバーライド",
+    "respondents": "回答者",
+    "sessions": "セッション",
+    "submissions": "提出",
+    "support": "サポート"
+  },
+  "visibility": {
+    "_": "可視性",
+    "title": "レコードの可視性",
+    "public": "公開",
+    "restricted": "制限"
+  }
+}

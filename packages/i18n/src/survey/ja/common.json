@@ -17,68 +17,68 @@
       "captcha": "無効なキャプチャチャレンジレスポンスです。",
       "credentials": "無効なユーザー名またはパスワードです。",
       "token": "無効なアクセストークンです。",
-      "survey": "This survey ({surveyId}) doesn't look like to be a valid survey login URL."
+      "survey": "この調査 ({surveyId}) は有効な調査ログインURLではないようです。"
     }
   },
   "logout": {
-    "_": "Sign out",
-    "text": "Sign out of the application"
+    "_": "サインアウト",
+    "text": "アプリケーションからサインアウトする"
   },
-  "username": "Username",
-  "name": "Name",
-  "email": "Email",
-  "emailConfirm": "Confirm email",
-  "password": "Password",
-  "phone": "Phone",
-  "message": "Message",
-  "continue": "Continue",
+  "username": "ユーザー名",
+  "name": "氏名",
+  "email": "メールアドレス",
+  "emailConfirm": "メールアドレスを確認",
+  "password": "パスワード",
+  "phone": "電話番号",
+  "message": "メッセージ",
+  "continue": "続ける",
   "help": {
-    "_": "Help",
-    "title": "Request help",
-    "text": "Complete the form below and one of our support staff will get in touch as soon as they can.",
-    "sent": "Your help request has been sent."
+    "_": "ヘルプ",
+    "title": "ヘルプをリクエスト",
+    "text": "以下のフォームに記入してください。サポートスタッフができるだけ早くご連絡します。",
+    "sent": "ヘルプリクエストが送信されました。"
   },
   "app": {
-    "_": "App",
-    "info": "Application Information",
-    "build": "Build"
+    "_": "アプリ",
+    "info": "アプリケーション情報",
+    "build": "ビルド"
   },
   "clipboard": {
-    "_": "Copy to clipboard",
-    "copied": "Data copied to clipboard"
+    "_": "クリップボードにコピー",
+    "copied": "データをクリップボードにコピーしました"
   },
   "sw": {
-    "check": "Content update is available",
-    "update": "Update"
+    "check": "新しいコンテンツ更新があります",
+    "update": "更新する"
   },
   "action": {
-    "cancel": "Cancel",
-    "close": "Close",
-    "continue": "Continue",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "continue": "続ける",
     "confirm": {
-      "_": "Confirm",
-      "title": "Do you want to continue?",
-      "delete": "Do you want to delete {name}?"
+      "_": "確認",
+      "title": "この操作を続行しますか？",
+      "delete": "{name}を削除しますか？"
     },
     "ok": "OK",
-    "reload": "Reload",
-    "remove": "Remove",
-    "reset": "Reset",
-    "start": "Start",
-    "submit": "Submit",
-    "yes": "Yes",
-    "no": "No"
+    "reload": "再読み込み",
+    "remove": "削除",
+    "reset": "リセット",
+    "start": "開始",
+    "submit": "送信",
+    "yes": "はい",
+    "no": "いいえ"
   },
   "not": {
-    "provided": "Not provided",
-    "selected": "Not selected"
+    "provided": "未入力",
+    "selected": "未選択"
   },
   "errors": {
-    "500": "Something went wrong :(",
-    "retry": "Try again"
+    "500": "エラーが発生しました :(",
+    "retry": "再試行"
   },
   "validation": {
-    "tooLong": "Entered text is too long ({max} characters max)."
+    "tooLong": "入力されたテキストが長すぎます（最大{max}文字まで）。"
   },
-  "noImagePlaceholder": "No image available"
+  "noImagePlaceholder": "利用可能な画像はありません"
 }

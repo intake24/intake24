@@ -1,116 +1,116 @@
 {
   "_": "リコール",
-  "info": "Recall information",
-  "none": "No recall in progress at the moment.",
-  "startedAt": "Recall started at: {startedAt}.",
-  "finishedAt": "Recall finished at: {finishedAt}.",
-  "submittedAt": "Submitted at",
+  "info": "リコール情報",
+  "none": "現在、進行中のリコールはありません。",
+  "startedAt": "リコール開始時刻: {startedAt}",
+  "finishedAt": "リコール終了時刻: {finishedAt}",
+  "submittedAt": "提出日時",
   "limitReached": {
-    "daily": "You have reached the daily limit of recalls.",
-    "total": "You have reached the total limit of recalls."
+    "daily": "本日のリコール上限に達しました。",
+    "total": "リコールの合計上限に達しました。"
   },
   "rating": {
-    "_": "Rate your experience",
-    "title": "How would you rate the recall?",
-    "comment": "Tell us more about the rating you gave the recall",
-    "send": "Send feedback",
-    "sent": "Feedback sent, thank you!"
+    "_": "体験を評価する",
+    "title": "このリコールをどのように評価しますか？",
+    "comment": "リコールに対する評価について詳しくお聞かせください",
+    "send": "フィードバックを送信",
+    "sent": "フィードバックを送信しました。ありがとうございます！"
   },
-  "survey": "Study: {name}",
+  "survey": "調査: {name}",
   "submissions": {
-    "_": "Recall day",
-    "title": "Recall days",
-    "all": "all",
-    "past": "Past recalls",
-    "none": "You don't have any past recalls yet.",
-    "count": "Recall number: {count}"
+    "_": "リコール日",
+    "title": "リコール日一覧",
+    "all": "すべて",
+    "past": "過去のリコール",
+    "none": "過去のリコールはまだありません。",
+    "count": "リコール番号: {count}"
   },
   "start": {
-    "_": "Start recall",
-    "another": "Start another recall"
+    "_": "リコールを開始",
+    "another": "別のリコールを開始"
   },
   "continue": "続行",
   "abort": {
-    "_": "Abort",
-    "label": "Abort recall",
-    "confirm": "Abort current recall?"
+    "_": "中止",
+    "label": "リコールを中止",
+    "confirm": "現在のリコールを中止しますか？"
   },
   "surveyInfo": {
-    "recall": "Recall: {number}"
+    "recall": "リコール: {number}"
   },
   "menu": {
-    "title": "Review panel",
-    "mealSuggested": "This meal is suggested by the system but you have not yet confirmed that you have had it",
+    "title": "確認パネル",
+    "mealSuggested": "この食事はシステムによって提案されましたが、まだ確認されていません。",
     "food": {
-      "delete": "Delete food",
-      "deleteConfirm": "Do you want to delete {item}?",
-      "change": "Change food",
+      "delete": "食品を削除",
+      "deleteConfirm": "{item}を削除しますか？",
+      "change": "食品を変更",
       "free-text": {
-        "_": "This food has not yet been matched with a food from our database.",
-        "incomplete": "Portion size for this food is not yet known.",
-        "edit": "Edit search"
+        "_": "この食品はデータベース内の食品とまだ一致していません。",
+        "incomplete": "この食品の分量はまだ未設定です。",
+        "edit": "検索を編集"
       },
       "encoded-food": {
-        "_": "This food has been matched with a food from our database.",
-        "complete": "Portion size estimation for this food is complete.",
-        "incomplete": "Portion size for this food is not yet known.",
-        "edit": "Edit portion size"
+        "_": "この食品はデータベース内の食品と一致しています。",
+        "complete": "この食品の分量の見積もりは完了しています。",
+        "incomplete": "この食品の分量はまだ未設定です。",
+        "edit": "分量を編集"
       },
       "missing-food": {
-        "_": "This food has been marked as missing in our database.",
-        "complete": "Missing information for this food is complete.",
-        "incomplete": "Missing information for this food is not yet known.",
-        "edit": "Edit missing food"
+        "_": "この食品はデータベースに存在しない食品としてマークされています。",
+        "complete": "この食品の不足情報はすべて入力済みです。",
+        "incomplete": "この食品の不足情報はまだ未入力です。",
+        "edit": "不足食品を編集"
       },
       "recipe-builder": {
-        "_": "This food has been matched with a recipe from our database.",
-        "complete": "Recipe Steps for this food are complete.",
-        "incomplete": "Recipe Steps for this food are not yet finished.",
-        "edit": "Edit ingredients"
+        "_": "この食品はデータベース内のレシピと一致しています。",
+        "complete": "この食品のレシピ手順は完了しています。",
+        "incomplete": "この食品のレシピ手順は未完了です。",
+        "edit": "材料を編集"
       }
     },
     "meal": {
-      "add": "Add meal",
-      "delete": "Delete meal",
-      "deleteConfirm": "You are about to delete everything you had for {item}.",
-      "editFoods": "Update foods",
-      "editTime": "Change time"
+      "add": "食事を追加",
+      "delete": "食事を削除",
+      "deleteConfirm": "{item}に登録したすべての食品を削除しますか？",
+      "editFoods": "食品を更新",
+      "editTime": "時間を変更"
     }
   },
   "contextMenu": {
-    "close": "Close",
-    "select": "Continue with {name}",
-    "editMeal": "Revise foods",
-    "delete": "Delete {name}",
-    "confirmDeletion": "Are you sure you want to delete '{name}'?",
-    "confirm": "Confirm {name}",
-    "changeTime": "Change time"
+    "close": "閉じる",
+    "select": "{name}で続行",
+    "editMeal": "食品を修正",
+    "delete": "{name}を削除",
+    "confirmDeletion": "「{name}」を削除してもよろしいですか？",
+    "confirm": "{name}を確認",
+    "changeTime": "時間を変更"
   },
   "actions": {
-    "feedback": "Dietary feedback",
-    "next": "Continue",
-    "submit": "Submit the recall",
-    "addMeal": "Add meal",
-    "deleteFood": "Delete food",
-    "deleteMeal": "Delete meal",
-    "editFood": "Edit food",
-    "editMeal": "Add foods",
-    "mealTime": "Change meal time",
+    "feedback": "食事フィードバック",
+    "next": "続行",
+    "submit": "リコールを提出",
+    "addMeal": "食事を追加",
+    "deleteFood": "食品を削除",
+    "deleteMeal": "食事を削除",
+    "editFood": "食品を編集",
+    "editMeal": "食品を追加",
+    "mealTime": "食事時間を変更",
     "nav": {
-      "cancel": "Cancel",
-      "confirm": "Confirm",
-      "feedback": "Dietary feedback",
-      "next": "Continue",
-      "redirect": "Continue",
-      "remove": "Remove",
-      "review": "Review",
-      "submit": "Submit",
-      "addMeal": "Add meal",
-      "deleteFood": "Delete food",
-      "deleteMeal": "Delete meal",
-      "editFood": "Edit food",
-      "editMeal": "Add foods",
-      "mealTime": "Meal time"
+      "cancel": "キャンセル",
+      "confirm": "確認",
+      "feedback": "食事フィードバック",
+      "next": "続行",
+      "redirect": "続行",
+      "remove": "削除",
+      "review": "確認",
+      "submit": "送信",
+      "addMeal": "食事を追加",
+      "deleteFood": "食品を削除",
+      "deleteMeal": "食事を削除",
+      "editFood": "食品を編集",
+      "editMeal": "食品を追加",
+      "mealTime": "食事時間"
     }
   }
 }

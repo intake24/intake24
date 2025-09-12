@@ -1,0 +1,268 @@
+{
+  "_": "フィードバックスキーム",
+  "title": "フィードバックスキーム",
+  "read": "フィードバックスキーム詳細",
+  "create": "フィードバックスキームを追加",
+  "edit": "フィードバックスキームを編集",
+  "delete": "フィードバックスキームを削除",
+  "load": "スキームから読み込み",
+  "none": "フィードバックスキームが見つかりません",
+  "types": {
+    "_": "フィードバックタイプ",
+    "title": "フィードバックタイプ",
+    "default": "デフォルト",
+    "playful": "楽しい"
+  },
+  "outputs": {
+    "_": "出力",
+    "title": "出力",
+    "print": "印刷",
+    "email": "メール",
+    "download": "ダウンロード"
+  },
+  "physicalDataFields": {
+    "_": "身体データフィールド",
+    "title": "身体データフィールド",
+    "required": "フィールド {field} はフィードバックの計算に必要です。",
+    "notRequired": "フィールド {field} は必要ありません。削除できます。",
+    "sex": "性別",
+    "weightKg": "体重",
+    "heightCm": "身長",
+    "physicalActivityLevelId": "身体活動レベル",
+    "birthdate": "生年月日",
+    "weightTarget": "目標体重"
+  },
+  "copy": {
+    "_": "コピー",
+    "title": "フィードバックスキームをコピー",
+    "name": "新しいフィードバックスキーム名"
+  },
+  "preview": {
+    "_": "プレビュー",
+    "title": "フィードバックプレビュー"
+  },
+  "ranges": {
+    "_": "範囲",
+    "start": "開始",
+    "end": "終了"
+  },
+  "age": {
+    "_": "年齢",
+    "range": "年齢範囲間隔",
+    "start": "年齢範囲開始",
+    "end": "年齢範囲終了"
+  },
+  "height": {
+    "_": "身長"
+  },
+  "weight": {
+    "_": "体重"
+  },
+  "sexes": {
+    "_": "性別",
+    "m": "男性",
+    "f": "女性"
+  },
+  "sentiments": {
+    "_": "感情",
+    "title": "感情",
+    "add": "感情を追加",
+    "remove": "感情を削除",
+    "too_low": "非常に低い",
+    "low": "低い",
+    "bit_low": "少し低い",
+    "neutral": "普通",
+    "good": "良い",
+    "excellent": "優秀",
+    "high": "高い",
+    "bit_high": "少し高い",
+    "too_high": "非常に高い"
+  },
+  "characterSentimentTypes": {
+    "_": "キャラクター感情タイプ",
+    "title": "キャラクター感情タイプ",
+    "danger": "危険",
+    "warning": "警告",
+    "happy": "幸せ",
+    "exciting": "興奮"
+  },
+  "nutrientRuleTypes": {
+    "_": "栄養素ルールタイプ",
+    "title": "栄養素ルールタイプ",
+    "energy_divided_by_bmr": "エネルギー÷基礎代謝率",
+    "percentage_of_energy": "エネルギーの割合",
+    "per_unit_of_weight": "体重あたり",
+    "range": "範囲"
+  },
+  "colors": {
+    "_": "色",
+    "title": "色リスト",
+    "edit": "色を編集",
+    "max": {
+      "_": "色の数",
+      "title": "色の数",
+      "required": "値は整数である必要があります"
+    }
+  },
+  "physicalActivityLevels": {
+    "_": "身体活動レベル",
+    "title": "身体活動レベル"
+  },
+  "sections": {
+    "_": "セクション",
+    "title": "セクション",
+    "add": "セクションを追加",
+    "edit": "セクションを編集",
+    "remove": "セクションを削除",
+    "tabs": {
+      "general": "一般",
+      "json": "JSON"
+    }
+  },
+  "custom": {
+    "_": "カスタムセクション",
+    "title": "カスタムセクション",
+    "header": "ヘッダー",
+    "content": "コンテンツ"
+  },
+  "top-foods": {
+    "_": "上位食品",
+    "title": "上位食品",
+    "tab": "上位食品",
+    "max": {
+      "_": "食品数",
+      "title": "食品数"
+    },
+    "other": "その他の食品"
+  },
+  "meals": {
+    "_": "食事",
+    "title": "食事",
+    "tab": "食事",
+    "chart": "食事内訳チャート",
+    "table": "食事概要表",
+    "colors": {
+      "_": "食事の色",
+      "title": "食事の色"
+    },
+    "fields": {
+      "_": "食事フィールド",
+      "title": "食事フィールド",
+      "create": "フィールドを追加",
+      "edit": "フィールドを編集",
+      "remove": "フィールドを削除",
+      "reset": {
+        "_": "食事フィールドをリセット",
+        "text": "食事フィールドをデフォルトリストにリセット"
+      },
+      "id": "フィールドID",
+      "header": "フィールドヘッダー",
+      "value": "フィールド値",
+      "types": {
+        "_": "フィールドタイプ",
+        "title": "フィールドタイプ",
+        "standard": "標準フィールド",
+        "custom": "カスタムプロンプト",
+        "nutrient": "栄養素",
+        "name": "食事名",
+        "time": "食事時間",
+        "hours": "食事時間（時）",
+        "minutes": "食事時間（分）",
+        "duration": "食事時間の長さ"
+      },
+      "validation": {
+        "required": "フィールドは入力必須です。",
+        "unique": "フィールドは既に現在のリストに存在します。"
+      }
+    }
+  },
+  "cards": {
+    "_": "カード",
+    "title": "カード",
+    "tab": "カード",
+    "add": "カードを追加",
+    "edit": "カードを編集",
+    "remove": "カードを削除",
+    "type": "カードタイプ",
+    "options": "カードオプション",
+    "color": "カードの色",
+    "image": "画像",
+    "showRecommendations": "フィードバック推奨事項を表示",
+    "tabs": {
+      "general": "一般",
+      "content": "コンテンツ",
+      "unit": "単位",
+      "thresholds": "しきい値",
+      "nutrients": "栄養素",
+      "json": "JSON"
+    },
+    "character": {
+      "title": "キャラクター",
+      "subtitle": "キャラクター / 栄養素"
+    },
+    "nutrient-group": {
+      "title": "栄養素グループ",
+      "subtitle": "栄養素リストに基づく摂取量のフィードバックグループ化"
+    },
+    "five-a-day": {
+      "title": "1日5皿",
+      "subtitle": "1日5皿フィードバック"
+    },
+    "thresholds": {
+      "_": "しきい値",
+      "title": "しきい値",
+      "low": "下限しきい値",
+      "high": "上限しきい値",
+      "enabled": "しきい値を有効にする",
+      "message": "警告メッセージ"
+    },
+    "unit": {
+      "name": "単位名",
+      "description": "単位の説明",
+      "required": "単位名は必須です。"
+    }
+  },
+  "demographic-groups": {
+    "_": "人口統計グループ",
+    "title": "人口統計グループ",
+    "tab": "人口統計グループ",
+    "create": "新しい人口統計グループ",
+    "edit": "人口統計グループを編集",
+    "remove": "人口統計グループを削除",
+    "name": "名前",
+    "required": "名前は必須です。",
+    "summary": "概要",
+    "description": "説明",
+    "intake": "摂取量を表示",
+    "tabs": {
+      "general": "一般",
+      "sectors": "スケールセクター",
+      "json": "JSON"
+    },
+    "sectors": {
+      "_": "スケールセクター",
+      "title": "スケールセクター",
+      "add": "スケールセクターを追加",
+      "remove": "スケールセクターを削除"
+    }
+  },
+  "henry-coefficients": {
+    "_": "ヘンリー係数",
+    "title": "ヘンリー係数",
+    "tab": "ヘンリー係数",
+    "create": "新しいヘンリー係数",
+    "edit": "ヘンリー係数を編集",
+    "remove": "ヘンリー係数を削除",
+    "constant": "定数",
+    "weightCoefficient": "体重係数",
+    "heightCoefficient": "身長係数"
+  },
+  "rating": {
+    "_": "評価",
+    "title": "評価"
+  },
+  "submissions": {
+    "_": "提出",
+    "title": "提出"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "_": "アカウント",
+  "title": "アカウント",
+  "info": "情報",
+  "access": "アクセス",
+  "profile": "プロフィール",
+  "settings": "設定",
+  "name": "名前",
+  "email": "メールアドレス",
+  "phone": "電話番号",
+  "permissions": "割り当てられた権限",
+  "roles": "割り当てられたロール",
+  "languages": {
+    "_": "言語",
+    "title": "言語"
+  },
+  "jobs": {
+    "_": "ジョブ",
+    "title": "ジョブ",
+    "create": "新しいジョブ"
+  },
+  "personalAccessTokens": {
+    "_": "個人アクセストークン",
+    "title": "個人アクセストークン",
+    "issue": "トークンを発行",
+    "revoke": "トークンを取り消し",
+    "revoked": "取り消し済み",
+    "none": "個人アクセストークンが作成されていません。",
+    "save": "以下のトークンを安全に保存してください。再度アクセスすることはできません。"
+  },
+  "mfa": {
+    "_": "多要素認証",
+    "title": "多要素認証",
+    "enable": "多要素認証を有効にする",
+    "disable": "多要素認証を無効にする",
+    "disabled": "多要素認証は無効です。有効にするにはデバイスを追加してください。",
+    "devices": {
+      "_": "デバイス",
+      "title": "デバイス",
+      "add": "デバイスを追加",
+      "remove": "デバイスを削除",
+      "none": "多要素認証デバイスが登録されていません。",
+      "name": {
+        "_": "デバイス名",
+        "title": "デバイス名を入力"
+      },
+      "preferred": {
+        "_": "優先",
+        "promote": "優先として設定しますか？",
+        "promoteConfirm": "{name}を優先として設定しますか？"
+      },
+      "init": {
+        "_": "初期化",
+        "title": "デバイスを初期化"
+      },
+      "qr": {
+        "title": "QRコードをスキャンして確認",
+        "text": "認証アプリでQRコードをスキャンし、下にコードを入力してください。"
+      },
+      "registered": "デバイスが正常に登録されました",
+      "verify": "デバイスを確認"
+    },
+    "providers": {
+      "_": "プロバイダー",
+      "title": "プロバイダー",
+      "otp": {
+        "_": "ワンタイムパスワード",
+        "title": "ワンタイムパスワード",
+        "description": "認証アプリによって生成されるワンタイムパスワード。対応アプリ：Google Authenticator、Microsoft Authenticator、Authy、Duo Securityなど。"
+      },
+      "fido": {
+        "_": "FIDO",
+        "title": "FIDO / WebAuthn",
+        "description": "WebAuthn / FIDO2準拠デバイス。対応デバイス：ハードウェアキー、Windows Hello、Face IDなど。"
+      },
+      "duo": {
+        "_": "Duo",
+        "title": "Duo Security",
+        "description": "Duo Securityはクラウドベースの多要素認証プロバイダーです。このデバイスを追加する前に、アカウント（メールアドレス）がDuo Securityに登録されていることを確認してください。"
+      }
+    }
+  }
+}

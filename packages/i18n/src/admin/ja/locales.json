@@ -1,0 +1,77 @@
+{
+  "_": "ロケール",
+  "code": "ロケールコード",
+  "title": "ロケール",
+  "all": "すべてのロケール",
+  "read": "ロケール詳細",
+  "create": "ロケールを追加",
+  "edit": "ロケールを編集",
+  "delete": "ロケールを削除",
+  "prototypeLocaleId": "プロトタイプロケール",
+  "englishName": "英語名",
+  "localName": "現地語名",
+  "respondentLanguageId": "回答者UI言語",
+  "adminLanguageId": "管理者UI言語",
+  "countryFlagCode": "国旗コード",
+  "foodIndex": {
+    "_": "食品インデックス",
+    "enabled": "食品インデックス有効",
+    "languageBackend": "食品インデックス言語バックエンド"
+  },
+  "split-lists": {
+    "_": "分割リスト",
+    "title": "分割リスト",
+    "tab": "分割リスト",
+    "add": "分割リストを追加",
+    "remove": "分割リストを削除",
+    "firstWord": "最初の単語",
+    "words": "単語リスト（スペース区切り）"
+  },
+  "split-words": {
+    "_": "分割単語",
+    "title": "分割単語",
+    "tab": "分割単語",
+    "add": "分割単語を追加",
+    "remove": "分割単語を削除",
+    "words": "単語リスト（スペース区切り）"
+  },
+  "synonym-sets": {
+    "_": "同義語セット",
+    "title": "同義語セット",
+    "tab": "同義語セット",
+    "add": "同義語セットを追加",
+    "remove": "同義語セットを削除",
+    "synonyms": "同義語（スペース区切り）"
+  },
+  "recipe-foods": {
+    "_": "レシピ食品セット",
+    "title": "レシピ食品セット",
+    "tab": "レシピ食品",
+    "add": "レシピ食品を追加",
+    "remove": "レシピ食品を削除",
+    "special": "トリガー単語",
+    "code": "レシピ食品コード",
+    "step_code": "ステップコード（自動割り当て）",
+    "synonymsId": "同義語（スペース区切り）",
+    "steps": "レシピビルダーステップ",
+    "name": "ステップ名",
+    "description": "ステップ説明",
+    "ingredientsCategory": "ステップ材料カテゴリ",
+    "order": "ステップ順序",
+    "repeat": "複数の材料",
+    "require": "必須"
+  },
+  "food-ranking": {
+    "_": "食品ランキング",
+    "title": "食品ランキング",
+    "tab": "食品ランキング",
+    "delete": "削除",
+    "upload": "食品ランキングCSVをアップロード",
+    "description": "このロケールを使用する研究で「事前決定順序」食品ランキングアルゴリズムを有効にするには、\n食品ランキングスプレッドシートをアップロードしてください。"
+  },
+  "tasks": {
+    "_": "ロケールタスク",
+    "title": "ロケールタスク",
+    "tab": "タスク"
+  }
+}

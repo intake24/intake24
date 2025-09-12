@@ -1,0 +1,798 @@
+{
+  "_": "調査スキーム",
+  "title": "調査スキーム",
+  "all": "すべてのスキーム",
+  "read": "調査スキーム詳細",
+  "create": "調査スキームを追加",
+  "edit": "調査スキームを編集",
+  "delete": "調査スキームを削除",
+  "load": "スキームから読み込み",
+  "none": "調査スキームが見つかりません",
+  "copy": {
+    "_": "コピー",
+    "title": "調査スキームをコピー",
+    "name": "新しい調査スキーム名"
+  },
+  "settings": {
+    "_": "設定",
+    "title": "設定",
+    "types": {
+      "_": "タイプ",
+      "default": "デフォルト"
+    },
+    "flows": {
+      "_": "フロー",
+      "title": "フロー",
+      "1-pass": "1回通し",
+      "2-pass": "2回通し"
+    },
+    "help": {
+      "_": "ヘルプオプション",
+      "available": "利用可能フィールド",
+      "required": "必須フィールド",
+      "name": "名前",
+      "email": "メールアドレス",
+      "phone": "電話番号",
+      "email|phone": "メールアドレスまたは電話番号",
+      "message": "メッセージ"
+    },
+    "recallDate": "想起日のオフセット",
+    "languages": "許可された言語"
+  },
+  "meals": {
+    "_": "食事",
+    "title": "デフォルト食事",
+    "create": "新しい食事",
+    "edit": "食事を編集",
+    "remove": "食事を削除",
+    "name": "食事名",
+    "defaultTime": "デフォルト時間",
+    "flags": {
+      "title": "食事フラグ",
+      "add": "フラグを追加",
+      "edit": "フラグを編集",
+      "remove": "フラグを削除",
+      "standard": "標準",
+      "custom": "カスタム"
+    },
+    "reset": {
+      "_": "食事をリセット",
+      "text": "食事をデフォルトリストにリセット"
+    },
+    "validation": {
+      "required": "食事名は入力必須です。",
+      "unique": "食事名は既に現在のリストに存在します。"
+    }
+  },
+  "actions": {
+    "_": "アクション",
+    "title": "アクション",
+    "add": "新しいアクション",
+    "remove": "アクションを削除",
+    "enable": "カスタムプロンプトアクションを有効にする",
+    "both": "モバイルUIで両方のレイアウトアクションを表示",
+    "icon": "アイコン",
+    "label": "ラベル",
+    "text": "テキスト",
+    "parameters": "パラメータ",
+    "types": {
+      "_": "アクションタイプ",
+      "title": "アクションタイプ",
+      "next": "次へ",
+      "no-more-information": "これ以上情報なし",
+      "review": "レビュー",
+      "addFood": "食品を追加",
+      "addMeal": "食事を追加",
+      "changeFood": "食品を変更",
+      "deleteFood": "食品を削除",
+      "deleteMeal": "食事を削除",
+      "editFood": "食品を編集",
+      "editMeal": "食事を編集",
+      "mealTime": "食事時間",
+      "selectFood": "食品を選択",
+      "selectMeal": "食事を選択"
+    }
+  },
+  "conditions": {
+    "_": "条件",
+    "title": "条件",
+    "add": "新しい条件",
+    "remove": "条件を削除",
+    "object": {
+      "_": "条件オブジェクト",
+      "title": "条件オブジェクト",
+      "food": "現在の食品",
+      "meal": "現在の食事",
+      "survey": "現在の想起"
+    },
+    "property": {
+      "_": "条件プロパティ",
+      "title": "条件プロパティ",
+      "drinks": "報告された飲み物",
+      "energy": "エネルギー値",
+      "flag": "フラグ",
+      "tag": "タグ",
+      "foodTopLevel": "トップレベルか",
+      "foodCategory": "食品カテゴリ",
+      "numberOfFoods": "食品数",
+      "numberOfMeals": "食事数",
+      "promptAnswer": "プロンプト回答",
+      "property": "プロパティ値",
+      "recallNumber": "想起番号",
+      "userField": "ユーザーフィールド",
+      "mealCompletion": "完了状態",
+      "foodCompletion": "完了状態",
+      "externalSource": "外部ソース"
+    },
+    "foodCompletion": {
+      "freeEntryComplete": "自由テキスト入力完了",
+      "searchComplete": "識別完了",
+      "portionSizeComplete": "分量推定完了",
+      "complete": "関連食品プロンプト完了"
+    },
+    "category": {
+      "_": "カテゴリ",
+      "id": "カテゴリID",
+      "includeIfSet": "設定されている場合含める"
+    },
+    "flag": {
+      "_": "フラグ",
+      "id": "フラグID",
+      "includeIfSet": "設定されている場合含める"
+    },
+    "tag": {
+      "_": "タグ",
+      "id": "タグID",
+      "includeIfSet": "タグ付けされている場合含める"
+    },
+    "summary": {
+      "value": "<em><strong>{property}</strong></em> &nbsp;の&nbsp; <em><strong>{object}</strong></em>",
+      "entityValue": "<em><strong>{property}</strong></em> &nbsp;の&nbsp; <em><strong>{object}</strong></em>",
+      "boolean": "<em><strong>{object}</strong></em> の <em><strong>{property}</strong></em>: {value}",
+      "mealCompletion": {
+        "freeEntryComplete": "<em><strong>{object}</strong></em> の食品の <em><strong>自由テキスト入力</strong></em> が完了",
+        "searchComplete": "<em><strong>{object}</strong></em> の食品の <em><strong>識別</strong></em> が完了",
+        "portionSizeComplete": "<em><strong>{object}</strong></em> の食品の <em><strong>分量推定</strong></em> が完了",
+        "complete": "<em><strong>{object}</strong></em> の <em><strong>関連食品プロンプト</strong></em> が完了"
+      },
+      "foodCompletion": {
+        "freeEntryComplete": "<em><strong>{object}</strong></em> の <em><strong>自由テキスト入力</strong></em> が完了",
+        "searchComplete": "<em><strong>{object}</strong></em> の <em><strong>識別</strong></em> が完了",
+        "portionSizeComplete": "<em><strong>{object}</strong></em> の <em><strong>分量推定</strong></em> が完了",
+        "complete": "<em><strong>{object}</strong></em> の <em><strong>関連食品プロンプト</strong></em> が完了"
+      },
+      "externalSource": "<em><strong>{object}</strong></em> の <em><strong>外部ソース ({provider})</strong></em> {value} <em><strong>{state}</strong></em>",
+      "flag": {
+        "set": "<em><strong>{object}</strong></em> にフラグ <em><strong>{id}</strong></em> が設定されています",
+        "notSet": "<em><strong>{object}</strong></em> にフラグ <em><strong>{id}</strong></em> が設定されていません"
+      },
+      "tag": {
+        "present": "<em><strong>{object}</strong></em> は <em><strong>{id}</strong></em> でタグ付けされています",
+        "absent": "<em><strong>{object}</strong></em> は <em><strong>{id}</strong></em> でタグ付けされて<strong>いません</strong>"
+      },
+      "promptAnswer": "<em><strong>{object}</strong></em> の <em><strong>{property} ({promptId})</strong></em>",
+      "userField": "<em><strong>{object}</strong></em> の <em><strong>{property} ({field})</strong></em>",
+      "notRequired": "<strong>または</strong> &nbsp;設定されていない"
+    },
+    "promptAnswer": {
+      "promptId": "プロンプトID",
+      "required": "プロンプト回答が必要（回答が不明な場合にこのプロンプトがトリガーされるべき場合はチェックを外す）"
+    },
+    "userField": {
+      "field": "フィールド"
+    },
+    "ops": {
+      "_": "操作",
+      "eq": "等しい",
+      "setEq": "同じ値のセット",
+      "ne": "等しくない",
+      "in": "含まれる",
+      "notIn": "含まれない",
+      "gte": "以上",
+      "gt": "より大きい",
+      "lte": "以下",
+      "lt": "より小さい"
+    },
+    "value": "条件値",
+    "showIf": "プロンプトを表示する条件:",
+    "showIfTrue": "真の場合表示",
+    "showIfSet": "設定されている場合表示",
+    "orPrevious": "または前の",
+    "is": "である",
+    "isNot": "でない"
+  },
+  "data-export": {
+    "_": "データエクスポート",
+    "tab": "データエクスポート",
+    "title": "データエクスポートフィールド",
+    "current": "現在のエクスポートフィールド",
+    "available": "利用可能なエクスポートフィールド",
+    "add": "セクションを追加",
+    "edit": "セクションを編集",
+    "remove": "セクションを削除",
+    "fields": {
+      "_": "フィールドラベルを編集",
+      "id": "フィールドID",
+      "label": "フィールドラベル",
+      "custom": "カスタムを追加"
+    },
+    "sections": {
+      "_": "データエクスポートセクション",
+      "user": "ユーザーレコードフィールド",
+      "userCustom": "ユーザーカスタムフィールド",
+      "survey": "調査レコードフィールド",
+      "submission": "提出フィールド",
+      "submissionCustom": "提出カスタムフィールド",
+      "meal": "食事レコードフィールド",
+      "mealCustom": "食事カスタムフィールド",
+      "food": "食品レコードフィールド",
+      "foodCustom": "食品カスタムフィールド",
+      "foodFields": "食品組成フィールド",
+      "foodNutrients": "食品栄養素フィールド",
+      "portionSizes": "分量サイズフィールド",
+      "externalSources": "外部ソースフィールド"
+    }
+  },
+  "i18n": {
+    "_": "プロンプト翻訳",
+    "title": "プロンプト翻訳",
+    "core": "フィールド '{key}' のデフォルト翻訳",
+    "custom": "フィールド '{key}' のカスタム翻訳",
+    "init": "翻訳フィールドを初期化",
+    "none": "翻訳なし"
+  },
+  "overrides": {
+    "_": "スキームオーバーライド",
+    "title": "スキームオーバーライド",
+    "subtitle": "調査スキームの一部をオーバーライド",
+    "meals": {
+      "title": "スキーム食事オーバーライド",
+      "subtitle": "スキーム食事リストをオーバーライド。空の場合、スキームリストが使用されます。項目が追加された場合、リスト全体が使用されます。"
+    },
+    "prompts": {
+      "title": "スキームプロンプトオーバーライド",
+      "subtitle": "特定のスキームプロンプトをオーバーライド。変更はプロンプトIDでマージされます。"
+    },
+    "settings": {
+      "title": "スキーム設定オーバーライド",
+      "subtitle": "特定のスキーム設定をオーバーライド。"
+    }
+  },
+  "prompts": {
+    "_": "スキームプロンプト",
+    "tab": "プロンプト",
+    "title": "スキームプロンプト",
+    "create": "新しいプロンプト",
+    "edit": "プロンプトを編集",
+    "copy": "プロンプトをコピー",
+    "move": "プロンプトを移動",
+    "remove": "プロンプトを削除",
+    "section": "プロンプトセクション",
+    "preMeals": {
+      "title": "想起前プロンプト",
+      "subtitle": "個人プロンプトと初期指示を含む、食事想起前に尋ねる一般的なプロンプト。"
+    },
+    "postMeals": {
+      "title": "想起後プロンプト",
+      "subtitle": "食事想起後に尋ねる一般的なプロンプト。"
+    },
+    "submission": {
+      "title": "提出プロンプト",
+      "subtitle": "提出前に尋ねる最終プロンプト。"
+    },
+    "preFoods": {
+      "title": "食品前食事プロンプト",
+      "subtitle": "食事時間など、食品が入力される前に食事について尋ねるプロンプト。"
+    },
+    "foods": {
+      "title": "食品プロンプト",
+      "subtitle": "食品データベース検索と分量推定を含む、食品について尋ねるプロンプト。"
+    },
+    "postFoods": {
+      "title": "食品後食事プロンプト",
+      "subtitle": "食事内のすべての食品の分量推定が完了した後に食事について尋ねるプロンプト。"
+    },
+    "foodsDeferred": {
+      "title": "遅延食品プロンプト",
+      "subtitle": "食品後食事プロンプトが完了した後に食品について尋ねる追加の質問。"
+    },
+    "internal": {
+      "_": "内部識別子",
+      "id": {
+        "_": "プロンプトID",
+        "hint": "内部の一意識別子、データエクスポートなどでヘッダーとして使用"
+      },
+      "name": {
+        "_": "プロンプト名",
+        "hint": "より良い方向性のための内部記述名"
+      },
+      "group": {
+        "_": "プロンプトグループ",
+        "hint": "プロンプトをまとめるためのグループID"
+      }
+    },
+    "type": "プロンプトタイプ",
+    "component": "プロンプトコンポーネント",
+    "name": {
+      "_": "プロンプト名",
+      "hint": "短いプロンプト名（パンくずリストなどに使用）",
+      "required": "プロンプト名は必須です。"
+    },
+    "text": {
+      "_": "プロンプトテキスト",
+      "hint": "メインプロンプトテキスト",
+      "required": "プロンプトテキストは必須です。"
+    },
+    "description": {
+      "_": "プロンプト説明",
+      "hint": "追加のプロンプト情報",
+      "required": "プロンプト説明は必須です。"
+    },
+    "custom": {
+      "_": "カスタム",
+      "noPrompts": "このセクションにはカスタムプロンプトはありません"
+    },
+    "standard": {
+      "_": "標準",
+      "noPrompts": "このセクションには標準プロンプトはありません"
+    },
+    "portion-size": {
+      "_": "分量サイズ",
+      "noPrompts": "このセクションには分量サイズプロンプトはありません"
+    },
+    "badges": "数量バッジを表示",
+    "barcodes": {
+      "_": "バーコードスキャナー",
+      "title": "バーコードスキャナーオプション",
+      "providers": {
+        "_": "プロバイダー",
+        "title": "プロバイダー",
+        "none": "なし",
+        "quagga": "Quagga2",
+        "strich": "Strich"
+      },
+      "readers": {
+        "_": "リーダー",
+        "title": "リーダー"
+      },
+      "feedback": {
+        "_": "フィードバック",
+        "audio": "オーディオ",
+        "vibration": "振動"
+      }
+    },
+    "externalSources": {
+      "_": "外部ソース",
+      "title": "外部ソース設定",
+      "sources": {
+        "_": "ソース",
+        "title": "ソース",
+        "open-food-facts": "Open Food Facts"
+      },
+      "states": {
+        "_": "状態",
+        "title": "状態",
+        "false": "存在しない",
+        "true": "存在する（選択済みまたは不足）",
+        "selected": "選択済み",
+        "missing": "不足"
+      },
+      "countries": {
+        "_": "国",
+        "title": "国",
+        "world": "世界",
+        "uk": "イギリス",
+        "fr": "フランス"
+      }
+    },
+    "foodBrowser": {
+      "_": "食品ブラウザー設定",
+      "categoriesFirst": {
+        "_": "リストでカテゴリを最初に表示",
+        "browse": "食品ブラウズリスト",
+        "search": "食品検索リスト"
+      }
+    },
+    "imageMap": {
+      "_": "画像マップ設定",
+      "labels": {
+        "_": "ラベル",
+        "true": "常にラベルを表示",
+        "false": "ラベルを表示しない",
+        "null": "分量サイズ方法設定"
+      },
+      "pinchZoom": "モバイルUI用のピンチズームを表示"
+    },
+    "multiple": "複数項目の選択を許可",
+    "label": "オプションリストラベル",
+    "leftovers": "残り物を許可",
+    "linkedQuantity": {
+      "title": "リンクされた数量設定",
+      "subtitle": "リンクされた親食品の数量プロンプトをトリガーできます",
+      "auto": "リンクされた数量を自動適用",
+      "parent": "リンクする親カテゴリ",
+      "source": "トリガーするソースカテゴリ"
+    },
+    "other": "カスタムその他オプションを許可",
+    "orientation": {
+      "_": "方向",
+      "column": "列",
+      "row": "行"
+    },
+    "carousel": {
+      "_": "カルーセル",
+      "title": "カルーセル設定",
+      "required": "カルーセルの完了が必要",
+      "slides": {
+        "_": "スライド",
+        "title": "カルーセルスライド",
+        "add": "スライドを追加",
+        "edit": "スライドを編集",
+        "remove": "スライドを削除",
+        "text": "テキスト",
+        "image": "画像"
+      }
+    },
+    "counter": {
+      "_": "カウンター",
+      "title": "カウンター設定",
+      "current": "現在の値",
+      "min": "最小値",
+      "max": "最大値",
+      "confirm": "確認が必要",
+      "fraction": "分数を使用",
+      "whole": "整数を使用"
+    },
+    "slider": {
+      "_": "スライダー",
+      "title": "スライダー設定",
+      "current": {
+        "label": "現在のラベル",
+        "value": "現在の値",
+        "size": "ラベルサイズ"
+      },
+      "min": {
+        "label": "最小ラベル",
+        "value": "最小値"
+      },
+      "max": {
+        "label": "最大ラベル",
+        "value": "最大値"
+      },
+      "confirm": "確認が必要",
+      "step": "ステップ増分"
+    },
+    "timePicker": {
+      "_": "時刻ピッカー",
+      "title": "時刻ピッカーオプション",
+      "allowedMinutes": {
+        "_": "許可された分",
+        "item": "{item}分ごと"
+      },
+      "amPmToggle": "AM/PMトグル",
+      "format": {
+        "_": "時刻形式",
+        "ampm": "AM/PM",
+        "24hr": "24時間"
+      },
+      "ui": {
+        "_": "時刻ピッカーUI",
+        "digital": "デジタルピッカー",
+        "md-clock": "マテリアルデザイン時計"
+      }
+    },
+    "validation": {
+      "required": "プロンプトの入力が必要",
+      "message": "表示するエラーメッセージ",
+      "limits": {
+        "_": "回答の制限",
+        "min": "最小回答数",
+        "max": "最大回答数"
+      }
+    },
+    "video": {
+      "_": "動画",
+      "youtube": {
+        "_": "Youtube動画",
+        "videoId": "Youtube動画ID",
+        "height": "動画の高さ",
+        "width": "動画の幅",
+        "autoContinue": "動画終了時に続行",
+        "autoplay": "動画を自動再生",
+        "required": "動画の再生が必要"
+      }
+    },
+    "templates": {
+      "_": "プロンプトテンプレート",
+      "title": "プロンプトテンプレート",
+      "add": "テンプレートから読み込み",
+      "alreadyExists": "ID '{promptId}' のプロンプトは既にスキームに存在します",
+      "none": "プロンプトテンプレートが見つかりません",
+      "saveAs": {
+        "_": "テンプレートとして保存",
+        "title": "プロンプトをテンプレートとして保存"
+      }
+    },
+    "addon-foods-prompt": {
+      "title": "アドオン食品",
+      "subtitle": "この食品と一緒によく摂取される食品を提案",
+      "add": "アドオンを追加",
+      "remove": "アドオンを削除",
+      "name": "アドオン名",
+      "entity": "エンティティ",
+      "code": "コード",
+      "filter": "特定の食品のみ尋ねる"
+    },
+    "associated-foods-prompt": {
+      "title": "関連食品（食品固有）",
+      "subtitle": "一緒によく摂取される食品を提案。提案食品は食品データベースの食品レベルで定義されます。",
+      "multiple": "複数の食品選択を許可"
+    },
+    "general-associated-foods-prompt": {
+      "title": "関連食品（一般）",
+      "subtitle": "一緒によく摂取される食品を提案。提案食品はプロンプトレベルで定義され、その関連性は条件によって決定されます。",
+      "multiple": "複数の食品選択を許可",
+      "skipPortionSize": "選択された食品の分量推定をスキップ",
+      "categoryCode": "関連食品カテゴリ",
+      "promptText": "プロンプトテキスト",
+      "genericName": "関連食品のプレースホルダー名"
+    },
+    "edit-meal-prompt": {
+      "title": "食品リスト",
+      "subtitle": "この食事の食品を自由テキスト説明としてリストまたは編集",
+      "separateDrinks": "飲み物を別リストに",
+      "inputAutoFocus": "食品入力テキストフィールドに自動的にフォーカスを設定"
+    },
+    "external-source-prompt": {
+      "title": "外部ソース",
+      "subtitle": "食品マッチングの外部ソースのプロンプト"
+    },
+    "final-prompt": {
+      "title": "最終",
+      "subtitle": "提出後の最終ページ",
+      "rating": {
+        "_": "調査評価収集を有効にする",
+        "title": "調査評価"
+      }
+    },
+    "food-selection-prompt": {
+      "title": "食品選択",
+      "subtitle": "チェックボックスリストを使用して食事から食品を選択",
+      "filter": "特定の食品のみ尋ねる",
+      "useFlag": "カスタムプロンプト回答の代わりに選択した食品にフラグを設定",
+      "flag": "フラグ"
+    },
+    "food-search-prompt": {
+      "title": "食品データベース検索",
+      "subtitle": "説明に最も適合するデータベースから食品を選択",
+      "allowBrowsing": "回答者が食品カテゴリを自由にブラウズして食品を検索することを許可",
+      "dualLanguage": "別の言語で代替食品名を表示",
+      "allowThumbnails": "利用可能な場合は食品サムネイル画像を表示",
+      "enableGrid": "グリッドレイアウトを許可",
+      "gridThreshold": "食品の少なくとも{percent}%にサムネイルがある場合はグリッドレイアウトを使用"
+    },
+    "meal-add-prompt": {
+      "title": "食事を追加",
+      "subtitle": "食事リストに新しい食事を追加",
+      "custom": "カスタム食事名を許可",
+      "unique": "一意の食事名のみ許可"
+    },
+    "meal-duration-prompt": {
+      "title": "食事時間",
+      "subtitle": "食事時間について尋ねる"
+    },
+    "meal-gap-prompt": {
+      "title": "食事時間間隔",
+      "subtitle": "食事間の時間間隔をチェック",
+      "gap": "食事間の時間間隔（分）",
+      "startTime": "一日の開始時間",
+      "endTime": "一日の終了時間"
+    },
+    "meal-time-prompt": {
+      "title": "食事時間",
+      "subtitle": "食事の時間を確認または食事を削除"
+    },
+    "ready-meal-prompt": {
+      "title": "調理済み食事",
+      "subtitle": "調理済み食事について尋ねる"
+    },
+    "recall-date-prompt": {
+      "title": "想起日",
+      "subtitle": "想起日の指定を求める",
+      "current": "現在の日付オフセット",
+      "min": "今日より前に許可する日数",
+      "max": "今日より後に許可する日数"
+    },
+    "redirect-prompt": {
+      "title": "リダイレクト",
+      "subtitle": "外部サイトへのユーザーリダイレクト用最終ページ",
+      "rating": {
+        "_": "調査評価収集を有効にする",
+        "title": "調査評価"
+      },
+      "url": {
+        "_": "ベースURL",
+        "title": "URLオプション",
+        "subtitle": "ユーザー識別子を挿入する場所を示すために '{identifier}' を使用。",
+        "hint": "https://example.com/?arg={identifier}"
+      },
+      "identifier": {
+        "_": "URLに埋め込むユーザー識別子",
+        "subtitle": "リダイレクトURLに埋め込む識別子を指定",
+        "hint": "カスタム値は'ユーザーカスタムフィールド'で検索されます",
+        "options": {
+          "userId": "ユーザーID",
+          "username": "ユーザー名",
+          "urlAuthToken": "認証トークン"
+        }
+      },
+      "target": {
+        "_": "ターゲット",
+        "subtitle": "URLを開く場所を選択",
+        "_self": "同じウィンドウで開く",
+        "_blank": "新しいウィンドウで開く"
+      },
+      "timer": {
+        "_": "リダイレクトまでの秒数",
+        "title": "タイマーオプション"
+      }
+    },
+    "review-confirm-prompt": {
+      "title": "レビューと確認",
+      "subtitle": "想起の完了と進行状況をレビューと確認"
+    },
+    "same-as-before-prompt": {
+      "title": "前回と同じ",
+      "subtitle": "食品が前回と同じかどうか尋ねる"
+    },
+    "split-food-prompt": {
+      "title": "食品を分割",
+      "subtitle": "分割食品の説明を求める"
+    },
+    "submit-prompt": {
+      "title": "提出",
+      "subtitle": "完了を確認し想起を提出",
+      "review": {
+        "title": "最終レビューオプション",
+        "subtitle": "最終レビューページで希望するオプションを選択。",
+        "false": "レビューしない",
+        "scroll": "レビューを通すために下にスクロール",
+        "checkbox": "レビューを通すために食事チェックをチェック",
+        "onecheckbox": "レビューを通すために一つの調査チェックをチェック"
+      }
+    },
+    "info-prompt": {
+      "title": "情報",
+      "subtitle": "メッセージまたは指示を表示し確認を求める"
+    },
+    "no-more-information-prompt": {
+      "title": "これ以上情報なし",
+      "subtitle": "現在の選択にこれ以上情報が不要であることを示すメッセージを表示"
+    },
+    "date-picker-prompt": {
+      "title": "日付",
+      "subtitle": "日付を選択するよう求める",
+      "current": "現在の日付オフセット",
+      "min": "今日より前に許可する日数",
+      "max": "今日より後に許可する日数"
+    },
+    "time-picker-prompt": {
+      "title": "時間",
+      "subtitle": "時間を選択するよう求める"
+    },
+    "checkbox-list-prompt": {
+      "title": "複数選択",
+      "subtitle": "リストから任意の数の項目を選択するよう求める"
+    },
+    "radio-list-prompt": {
+      "title": "単一選択",
+      "subtitle": "リストから一つの項目を選択するよう求める"
+    },
+    "select-prompt": {
+      "title": "選択",
+      "subtitle": "選択ボックスから値を選択するよう求める"
+    },
+    "slider-prompt": {
+      "title": "スライダー",
+      "subtitle": "スライダーで値を選択するよう求める"
+    },
+    "textarea-prompt": {
+      "title": "自由テキスト",
+      "subtitle": "自由テキストの回答または説明を入力するよう求める"
+    },
+    "yes-no-prompt": {
+      "title": "はい / いいえ選択",
+      "subtitle": "はいまたはいいえを選択するよう求める",
+      "useFlag": "カスタムプロンプト回答の代わりにフラグを設定",
+      "flag": "フラグ"
+    },
+    "aggregate-choice-prompt": {
+      "title": "集計選択質問",
+      "subtitle": "単一画面で報告されたすべての食品に対してオプションを選択するよう求める",
+      "filter": "特定の食品のみ尋ねる"
+    },
+    "as-served-prompt": {
+      "title": "提供時分量サイズ",
+      "subtitle": "「提供時」方法を使用して分量サイズを推定"
+    },
+    "cereal-prompt": {
+      "title": "シリアル",
+      "subtitle": "「シリアル」方法を使用して分量サイズを推定"
+    },
+    "direct-weight-prompt": {
+      "title": "直接重量",
+      "subtitle": "直接重量"
+    },
+    "drink-scale-prompt": {
+      "title": "飲み物スケール",
+      "subtitle": "「飲み物スケール」方法を使用して摂取した液体量を推定"
+    },
+    "guide-image-prompt": {
+      "title": "ガイド画像",
+      "subtitle": "「ガイド画像」方法を使用して分量サイズを推定"
+    },
+    "milk-in-a-hot-drink-prompt": {
+      "title": "温かい飲み物の牛乳",
+      "subtitle": "「温かい飲み物の牛乳」方法を使用して牛乳の量を推定"
+    },
+    "milk-on-cereal-prompt": {
+      "title": "シリアルの牛乳",
+      "subtitle": "「シリアルの牛乳」方法を使用して分量サイズを推定"
+    },
+    "missing-food-prompt": {
+      "title": "不足食品",
+      "subtitle": "不足食品に関する情報を収集"
+    },
+    "pizza-prompt": {
+      "title": "ピザ",
+      "subtitle": "「ピザ」方法を使用して分量サイズを推定"
+    },
+    "pizza-v2-prompt": {
+      "title": "ピザ V2",
+      "subtitle": "「ピザ v2」方法を使用して分量サイズを推定"
+    },
+    "parent-food-portion-prompt": {
+      "title": "親食品の分量",
+      "subtitle": "「親食品の分量」方法を使用して分量サイズを推定",
+      "portions": "カテゴリ分量リスト"
+    },
+    "portion-size-option-prompt": {
+      "title": "分量推定方法",
+      "subtitle": "食品に複数の方法が利用可能な場合に使用する分量推定方法を選択"
+    },
+    "recipe-builder-prompt": {
+      "title": "オリジナル料理を作る",
+      "subtitle": "材料からオリジナル料理を作る"
+    },
+    "standard-portion-prompt": {
+      "title": "標準分量",
+      "subtitle": "「標準分量」方法を使用して分量サイズを推定"
+    },
+    "unknown-prompt": {
+      "title": "不明",
+      "subtitle": "不明な分量サイズ"
+    }
+  },
+  "theme": {
+    "colors": {
+      "_": "色",
+      "title": "色"
+    },
+    "layouts": {
+      "_": "レイアウト",
+      "title": "レイアウト",
+      "desktop": "デスクトップ",
+      "mobile": "モバイル"
+    },
+    "variants": {
+      "_": "バリエーション",
+      "title": "バリエーション",
+      "elevated": "浮上",
+      "flat": "平面",
+      "outlined": "外枠",
+      "plain": "無地",
+      "tonal": "トーナル",
+      "text": "テキスト"
+    }
+  }
+}

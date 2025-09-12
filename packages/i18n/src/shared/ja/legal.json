@@ -1,100 +1,100 @@
 {
-  "_": "Legal",
-  "contact": "Contact",
+  "_": "法的情報",
+  "contact": "お問い合わせ",
   "copyright": "{name} © {team} {year}",
-  "privacy": "Privacy Policy",
-  "terms": "Terms of Use",
+  "privacy": "プライバシーポリシー",
+  "terms": "利用規約",
   "cookies": {
-    "_": "Cookies",
+    "_": "クッキー",
     "consent": {
       "consentModal": {
-        "label": "Cookies",
-        "title": "Intake24 uses cookies!",
-        "description": "Intake24 uses <strong>necessary cookies</strong> for the proper functioning of the website. <strong>Analytics & statistical</strong> cookies help us to understand how visitors use the websites to improve the services offered.",
-        "acceptAllBtn": "Accept",
-        "showPreferencesBtn": "Change preferences"
+        "label": "クッキー",
+        "title": "Intake24はクッキーを使用しています",
+        "description": "Intake24は、ウェブサイトを正しく機能させるために<strong>必要なクッキー</strong>を使用しています。<strong>分析・統計クッキー</strong>は、訪問者がサイトをどのように利用しているかを把握し、サービス改善に役立てるために使用されます。",
+        "acceptAllBtn": "すべて許可",
+        "showPreferencesBtn": "設定を変更"
       },
       "preferencesModal": {
-        "title": "Cookies preferences",
-        "acceptAllBtn": "Accept all",
-        "savePreferencesBtn": "Save preferences",
-        "closeIconLabel": "Close",
+        "title": "クッキー設定",
+        "acceptAllBtn": "すべて許可",
+        "savePreferencesBtn": "設定を保存",
+        "closeIconLabel": "閉じる",
         "sections": [
           {
-            "title": "How we use cookies 📢",
-            "description": "Intake24 uses <strong>necessary cookies</strong> for the proper functioning of the website. <strong>Analytics & statistical</strong> cookies help us to understand how visitors use the websites to improve the services offered."
+            "title": "クッキーの使用について 📢",
+            "description": "Intake24は、ウェブサイトを正しく機能させるために<strong>必要なクッキー</strong>を使用しています。<strong>分析・統計クッキー</strong>は、訪問者がサイトをどのように利用しているかを把握し、サービス改善に役立てるために使用されます。"
           },
           {
-            "title": "Necessary cookies <span class=\"pm__badge\">Always Enabled</span>",
-            "description": "Cookies that are strictly necessary for the proper functioning of the website.",
+            "title": "必須クッキー <span class=\"pm__badge\">常に有効</span>",
+            "description": "ウェブサイトを正しく機能させるために必要不可欠なクッキーです。",
             "linkedCategory": "necessary",
             "cookieTable": {
               "headers": {
-                "name": "Name",
-                "exp": "Expiration",
-                "desc": "Description"
+                "name": "名前",
+                "exp": "有効期限",
+                "desc": "説明"
               },
               "body": [
                 {
                   "name": "it24(a|s)_refresh_token",
-                  "exp": "1 hour",
-                  "desc": "Technical functionality of websites."
+                  "exp": "1時間",
+                  "desc": "ウェブサイトの技術的な機能を維持するために使用されます。"
                 },
                 {
                   "name": "it24_cc_consent",
-                  "exp": "1 year",
-                  "desc": "Cookies consent preferences used by the website."
+                  "exp": "1年",
+                  "desc": "ウェブサイトで使用するクッキーの同意設定を保持します。"
                 }
               ]
             }
           },
           {
-            "title": " Analytics and statistical cookies",
-            "description": "Analytics and statistical cookies help us to understand how visitors use the websites to improve the services offered. Information is collected and stored anonymously.",
+            "title": "分析・統計クッキー",
+            "description": "分析・統計クッキーは、訪問者がウェブサイトをどのように利用しているかを理解し、サービス改善に役立てるために使用されます。収集される情報は匿名で保存されます。",
             "linkedCategory": "analytics",
             "cookieTable": {
               "headers": {
-                "name": "Name",
-                "exp": "Expiration",
-                "desc": "Description"
+                "name": "名前",
+                "exp": "有効期限",
+                "desc": "説明"
               },
               "body": [
                 {
                   "name": "^_ga",
-                  "exp": "2 years",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "exp": "2年",
+                  "desc": "訪問者のサイト利用状況に関する統計データを生成するための一意のIDです。"
                 },
                 {
                   "name": "^_gid",
-                  "exp": "1 day",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "exp": "1日",
+                  "desc": "訪問者のサイト利用状況に関する統計データを生成するための一意のIDです。"
                 },
                 {
                   "name": "^_CLID",
-                  "exp": "1 year",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "exp": "1年",
+                  "desc": "訪問者のサイト利用状況に関する統計データを生成するための一意のIDです。"
                 },
                 {
                   "name": "^_MUID",
-                  "exp": "390 days",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "exp": "390日",
+                  "desc": "訪問者のサイト利用状況に関する統計データを生成するための一意のIDです。"
                 },
                 {
                   "name": "^_clck",
-                  "exp": "30 days",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "exp": "30日",
+                  "desc": "訪問者のサイト利用状況に関する統計データを生成するための一意のIDです。"
                 },
                 {
                   "name": "^_clsk",
-                  "exp": "1 day",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "exp": "1日",
+                  "desc": "訪問者のサイト利用状況に関する統計データを生成するための一意のIDです。"
                 }
               ]
             }
           },
           {
-            "title": "More information",
-            "description": "If you have any questions, please contact us."
+            "title": "詳しい情報",
+            "description": "ご不明な点がありましたら、お問い合わせください。"
           }
         ]
       }
