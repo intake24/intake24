@@ -25,12 +25,12 @@
                     <template #item="{ props, item }">
                       <v-list-item v-bind="props" :title="item.raw.text">
                         <template #prepend>
-                          <span :class="`${item.raw.icon} me-3`" />
+                          <!-- <span :class="`${item.raw.icon} me-3`" /> -->
                         </template>
                       </v-list-item>
                     </template>
                     <template #selection="{ item }">
-                      <span :class="`${item.raw.icon} me-3`" />
+                      <!-- <span :class="`${item.raw.icon} me-3`" /> -->
                       {{ item.raw.text }}
                     </template>
                   </v-select>

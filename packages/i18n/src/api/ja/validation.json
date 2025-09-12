@@ -223,7 +223,10 @@
       "_": "「{attribute}」は有効なロケールコードである必要があります。"
     },
     "number": {
-      "_": "「{attribute}」は数値である必要があります。"
+      "_": "「{attribute}」は数値である必要があります。",
+      "min": "「{attribute}」は{min}以上である必要があります。",
+      "max": "「{attribute}」は{max}以下である必要があります。",
+      "multipleOf": "「{attribute}」は{multipleOf}の倍数である必要があります。"
     },
     "match": {
       "_": "「{attribute}」は{match}の値と一致する必要があります。"
@@ -248,6 +251,7 @@
     },
     "string": {
       "_": "「{attribute}」には文字列を入力してください。",
+      "min": "「{attribute}」は{min}文字以上である必要があります。",
       "max": "「{attribute}」は最大{max}文字までです。",
       "minMax": "「{attribute}」は{min}〜{max}文字で入力してください。",
       "or": {

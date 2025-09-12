@@ -42,7 +42,29 @@ function i18nStore({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
       return acc;
     }, {});
 
-    store = { ...store, ...dbStore };
+    // Deep-merge DB translations into built-in without losing nested sections
+    const deepMerge = (target: any, source: any): any => {
+      if (typeof target !== 'object' || target === null)
+        return source;
+      if (typeof source !== 'object' || source === null)
+        return source;
+      const out: any = Array.isArray(target) ? [...target] : { ...target };
+      for (const key of Object.keys(source)) {
+        if (key in out)
+          out[key] = deepMerge(out[key], source[key]);
+        else out[key] = source[key];
+      }
+      return out;
+    };
+
+    const merged: TranslationStore = { ...store } as TranslationStore;
+    for (const code of Object.keys(dbStore)) {
+      const baseLang = (store as TranslationStore)[code] ?? {};
+      const dbLang = dbStore[code] ?? {};
+      merged[code] = deepMerge(baseLang, dbLang);
+    }
+
+    store = merged;
     availableLanguages = [...new Set([...Object.keys(dbStore), ...Object.keys(shared)])];
   };
 

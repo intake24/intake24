@@ -102,6 +102,89 @@ export function formatZodIssueMessage(issue: ZodIssue, i18nService?: I18nService
       return i18nService.translate(`validation.types.${issue.expected}._`, {
         attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
       });
+    case 'too_small':
+      if (issue.type === 'number') {
+        return i18nService.translate('validation.types.number.min', {
+          attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+          min: (issue as any).minimum,
+        });
+      }
+      if (issue.type === 'string') {
+        return i18nService.translate('validation.types.string.min', {
+          attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+          min: (issue as any).minimum,
+        });
+      }
+      if (issue.type === 'array' || issue.type === 'set') {
+        return i18nService.translate('validation.types.array.min', {
+          attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+          min: (issue as any).minimum,
+        });
+      }
+      return issue.message;
+    case 'too_big':
+      if (issue.type === 'number') {
+        return i18nService.translate('validation.types.number.max', {
+          attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+          max: (issue as any).maximum,
+        });
+      }
+      if (issue.type === 'string') {
+        return i18nService.translate('validation.types.string.max', {
+          attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+          max: (issue as any).maximum,
+        });
+      }
+      if (issue.type === 'array' || issue.type === 'set') {
+        return i18nService.translate('validation.types.array.max', {
+          attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+          max: (issue as any).maximum,
+        });
+      }
+      return issue.message;
+    case 'invalid_string': {
+      const attribute = i18nService.translate(`validation.attributes.${issue.path.join('.')}`);
+      // Map common Zod string validations to existing keys
+      switch ((issue as any).validation) {
+        case 'email':
+          return i18nService.translate('validation.types.email._', { attribute });
+        case 'url':
+          return i18nService.translate('validation.types.url._', { attribute });
+        case 'uuid':
+          return i18nService.translate('validation.types.uuid._', { attribute });
+        case 'datetime':
+          return i18nService.translate('validation.types.date._', { attribute });
+        default:
+          return issue.message;
+      }
+    }
+    case 'invalid_enum_value': {
+      const options = (issue as any).options ?? [];
+      return i18nService.translate('validation.types.in.options', {
+        attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+        options: options.join(', '),
+      });
+    }
+    case 'invalid_literal': {
+      const expected = (issue as any).expected;
+      return i18nService.translate('validation.types.in.options', {
+        attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+        options: Array.isArray(expected) ? expected.join(', ') : `${expected}`,
+      });
+    }
+    case 'invalid_date':
+      return i18nService.translate('validation.types.date._', {
+        attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+      });
+    case 'not_finite':
+      return i18nService.translate('validation.types.number._', {
+        attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+      });
+    case 'not_multiple_of':
+      return i18nService.translate('validation.types.number.multipleOf', {
+        attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+        multipleOf: (issue as any).multipleOf,
+      });
     default:
       return issue.message;
   }

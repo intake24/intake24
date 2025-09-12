@@ -223,7 +223,10 @@
       "_": "\"{attribute}\" must be a valid locale code."
     },
     "number": {
-      "_": "\"{attribute}\" must be a number."
+      "_": "\"{attribute}\" must be a number.",
+      "min": "\"{attribute}\" must be at least {min}.",
+      "max": "\"{attribute}\" must be at most {max}.",
+      "multipleOf": "\"{attribute}\" must be a multiple of {multipleOf}."
     },
     "match": {
       "_": "\"{attribute}\" must match with {match} value."
@@ -248,6 +251,7 @@
     },
     "string": {
       "_": "\"{attribute}\" must be filled in.",
+      "min": "\"{attribute}\" must be at least {min} characters.",
       "max": "\"{attribute}\" must be filled in (max: {max}).",
       "minMax": "\"{attribute}\" must be a filled in (min: {min}, max: {max}).",
       "or": {
