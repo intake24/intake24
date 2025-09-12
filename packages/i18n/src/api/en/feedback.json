@@ -1,0 +1,7 @@
+{
+  "physicalActivityLevels": {
+    "1": "Sedentary or light activity lifestyle",
+    "2": "Active or moderately active lifestyle",
+    "3": "Vigorous or vigorously active lifestyle"
+  }
+}
