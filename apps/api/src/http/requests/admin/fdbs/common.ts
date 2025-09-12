@@ -186,8 +186,8 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedCategoryCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'main.code' }),
-    isLength: { bail: true, options: { max: 8 } },
+    errorMessage: typeErrorMessage('string.max', { max: 32, attributePath: 'main.code' }),
+    isLength: { bail: true, options: { max: 32 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
@@ -216,8 +216,8 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedFoodCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'main.code' }),
-    isLength: { bail: true, options: { max: 8 } },
+    errorMessage: typeErrorMessage('string.max', { max: 32, attributePath: 'main.code' }),
+    isLength: { bail: true, options: { max: 32 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');

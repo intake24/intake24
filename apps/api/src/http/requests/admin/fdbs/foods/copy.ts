@@ -20,10 +20,10 @@ export default validate(
     },
     code: {
       in: ['body'],
-      errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 8 }),
+      errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 32 }),
       isString: { bail: true },
       isEmpty: { negated: true, bail: true },
-      isLength: { options: { min: 1, max: 8 }, bail: true },
+      isLength: { options: { min: 1, max: 32 }, bail: true },
       custom: {
         options: async (value, meta): Promise<void> => {
           const { localeId } = meta.req.body;
