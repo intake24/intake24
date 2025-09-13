@@ -23,7 +23,7 @@
     "@pinia/plugin-debounce": "^1.0.1",
     "@pixelverse/strichjs-sdk": "^1.10.0",
     "@vueuse/core": "^13.9.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.1",
     "echarts": "^6.0.0",
     "js-file-download": "^0.4.12",
     "jwt-decode": "^4.0.0",
@@ -37,11 +37,11 @@
     "vue-i18n": "^11.1.12",
     "vue-recaptcha": "^2.0.3",
     "vue-router": "^4.5.1",
-    "vuetify": "^3.9.7"
+    "vuetify": "^3.10.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.3.1",
+    "@types/node": "^24.3.3",
     "type-fest": "^4.41.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.5",

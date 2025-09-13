@@ -24,9 +24,9 @@
     "@simplewebauthn/browser": "^13.1.2",
     "@tinymce/tinymce-vue": "^6.3.0",
     "@vueuse/core": "^13.9.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.1",
     "axios-retry": "^4.5.0",
-    "cronstrue": "^3.2.0",
+    "cronstrue": "^3.3.0",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.2",
     "dotenv-expand": "^12.0.3",
@@ -47,14 +47,14 @@
     "vue-gtag": "^3.6.1",
     "vue-i18n": "^11.1.12",
     "vue-router": "^4.5.1",
-    "vuetify": "^3.9.7"
+    "vuetify": "^3.10.0"
   },
   "devDependencies": {
-    "@intlify/unplugin-vue-i18n": "^11.0.0",
+    "@intlify/unplugin-vue-i18n": "^11.0.1",
     "@tsconfig/node22": "^22.0.2",
     "@types/jsdom": "^21.1.7",
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.3.1",
+    "@types/node": "^24.3.3",
     "@types/pluralize": "^0.0.33",
     "@vite-pwa/assets-generator": "^1.0.1",
     "@vitejs/plugin-vue": "^6.0.1",
@@ -68,11 +68,11 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-mkcert": "^1.17.8",
     "vite-plugin-pwa": "^1.0.3",
-    "vite-plugin-vue-devtools": "^8.0.1",
+    "vite-plugin-vue-devtools": "^8.0.2",
     "vite-plugin-vuetify": "^2.1.2",
     "vite-plugin-webfont-dl": "^3.11.1",
     "vitest": "^3.2.4",
-    "vue-tsc": "^3.0.6",
+    "vue-tsc": "^3.0.7",
     "workbox-window": "^7.3.0",
     "zod": "^3.25.76"
   }
