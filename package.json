@@ -3,7 +3,7 @@
   "type": "module",
   "version": "2025.3",
   "private": true,
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.16.0",
   "description": "Dietary recall system",
   "author": "",
   "license": "Apache-2.0",
@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.3.0",
-    "@types/node": "^24.3.1",
+    "@types/node": "^24.3.3",
     "@types/prompts": "^2.4.9",
     "calver": "^24.1.0",
     "conventional-changelog-cli": "^5.0.0",
