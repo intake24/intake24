@@ -52,7 +52,7 @@
       </v-btn>
     </template>
     <v-tabs-window v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab" v-scroll="onScroll">
-      <v-tabs-window-item key="browse">
+      <v-tabs-window-item value="browse">
         <v-alert
           v-if="requestFailed"
           class="mb-4"
@@ -89,7 +89,7 @@
           @food-selected="foodSelected"
         />
       </v-tabs-window-item>
-      <v-tabs-window-item key="search">
+      <v-tabs-window-item value="search">
         <image-placeholder v-if="requestInProgress" class="my-6" />
         <category-contents-view
           v-if="!requestInProgress"
@@ -114,7 +114,7 @@
       class="d-flex flex-column flex-md-row py-4 ga-2"
     >
       <v-btn
-        v-if="type === 'foodSearch' && tab === 1"
+        v-if="type === 'foodSearch' && tab === 'search'"
         color="primary"
         :disabled="missingDialog"
         size="large"
@@ -255,7 +255,7 @@ const requestFailed = ref(false);
 const recipeBuilderFoods = ref<FoodHeader[]>([]);
 const recipeFoods = ref<RecipeFood[]>([]);
 const recipeBuilderToggle = ref(false);
-const tab = ref(0);
+const tab = ref<'browse' | 'search'>('browse');
 const searchCount = ref(1);
 const percentScrolled = ref(0);
 const rootCategoryName = ref('...');
@@ -373,7 +373,7 @@ async function closeMissingDialog() {
 async function browseCategory(categoryCode: string | undefined, makeHistoryEntry: boolean) {
   requestInProgress.value = true;
   retryCode.value = categoryCode;
-  tab.value = 0;
+  tab.value = 'browse';
 
   try {
     const contents = await categoriesService.contents(props.localeId, categoryCode);
@@ -497,11 +497,11 @@ function navigateBack() {
   );
 
   if (lastItem === 'search') {
-    tab.value = 1;
+    tab.value = 'search';
     currentCategoryContents.value = undefined;
   }
   else {
-    tab.value = 0;
+    tab.value = 'browse';
     browseCategory(lastItem.code, false);
   }
 }
@@ -513,7 +513,7 @@ onMounted(async () => {
 
   if (searchTerm.value) {
     await search();
-    tab.value = 1;
+    tab.value = 'search';
     return;
   }
 
@@ -530,7 +530,7 @@ watchDebounced(
       await search();
       currentCategoryContents.value = undefined;
       navigationHistory.value = [];
-      tab.value = 1;
+      tab.value = 'search';
       percentScrolled.value = 0;
       return;
     }

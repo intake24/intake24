@@ -113,7 +113,7 @@
           <v-container class="dialog-container" fluid>
             <error-list :errors="errors.get(`meals.${dialog.index}.*`)" />
             <v-tabs-window v-model="tab" class="pt-1 flex-grow-1">
-              <v-tabs-window-item key="general" value="general">
+              <v-tabs-window-item value="general">
                 <v-row>
                   <v-col cols="12" md="6">
                     <language-selector
@@ -160,7 +160,7 @@
                   </v-col>
                 </v-row>
               </v-tabs-window-item>
-              <v-tabs-window-item key="json" value="json">
+              <v-tabs-window-item value="json">
                 <json-editor v-model="dialog.meal" />
               </v-tabs-window-item>
             </v-tabs-window>

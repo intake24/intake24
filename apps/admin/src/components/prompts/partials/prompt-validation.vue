@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="validation" value="validation">
+  <v-tabs-window-item value="validation">
     <v-row>
       <v-col cols="6">
         <v-switch

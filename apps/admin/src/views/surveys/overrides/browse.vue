@@ -10,7 +10,7 @@
       </v-tab>
     </v-tabs>
     <v-tabs-window v-model="tab">
-      <v-tabs-window-item key="settings" value="settings">
+      <v-tabs-window-item value="settings">
         <v-card>
           <v-card-title>{{ $t('survey-schemes.overrides.settings.title') }}</v-card-title>
           <v-card-text>
@@ -21,7 +21,7 @@
           </v-card-text>
         </v-card>
       </v-tabs-window-item>
-      <v-tabs-window-item key="prompts" value="prompts">
+      <v-tabs-window-item value="prompts">
         <v-expansion-panels v-model="panels" flat>
           <prompt-list
             v-bind="{ errors, mode: 'override', promptIds, templates: prompts }"
@@ -29,7 +29,7 @@
           />
         </v-expansion-panels>
       </v-tabs-window-item>
-      <v-tabs-window-item key="meals" value="meals">
+      <v-tabs-window-item value="meals">
         <meal-list
           v-model="data.surveySchemeOverrides.meals"
           :errors="errors"

@@ -91,7 +91,7 @@
               </v-tab>
             </v-tabs>
             <v-tabs-window v-model="tab">
-              <v-tabs-window-item key="hours" value="hours">
+              <v-tabs-window-item value="hours">
                 <v-container>
                   <v-row>
                     <v-col>
@@ -110,7 +110,7 @@
                   </v-row>
                 </v-container>
               </v-tabs-window-item>
-              <v-tabs-window-item key="minutes" value="minutes">
+              <v-tabs-window-item value="minutes">
                 <v-container>
                   <v-row>
                     <v-col cols="auto">

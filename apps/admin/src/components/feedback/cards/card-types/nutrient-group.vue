@@ -5,7 +5,7 @@
     @update:high="update('high', $event)"
     @update:low="update('low', $event)"
   />
-  <v-tabs-window-item key="nutrients" value="nutrients">
+  <v-tabs-window-item value="nutrients">
     <v-container>
       <v-row>
         <v-col cols="12" md="6">
@@ -81,7 +81,7 @@
       </v-row>
     </v-container>
   </v-tabs-window-item>
-  <v-tabs-window-item key="json" value="json">
+  <v-tabs-window-item value="json">
     <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
   </v-tabs-window-item>
 </template>

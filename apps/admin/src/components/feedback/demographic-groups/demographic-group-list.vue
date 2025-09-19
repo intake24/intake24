@@ -114,7 +114,7 @@
         <v-form ref="form" @submit.prevent="save">
           <v-container>
             <v-tabs-window v-model="tab" class="pt-1">
-              <v-tabs-window-item key="general" value="general">
+              <v-tabs-window-item value="general">
                 <v-container>
                   <v-row>
                     <v-col cols="12" md="6">
@@ -196,14 +196,14 @@
                   </v-row>
                 </v-container>
               </v-tabs-window-item>
-              <v-tabs-window-item key="sectors" value="sectors">
+              <v-tabs-window-item value="sectors">
                 <v-container>
                   <demographic-group-sectors
                     v-model="dialog.item.scaleSectors"
                   />
                 </v-container>
               </v-tabs-window-item>
-              <v-tabs-window-item key="json" value="json">
+              <v-tabs-window-item value="json">
                 <json-editor v-model="dialog.item" />
               </v-tabs-window-item>
             </v-tabs-window>

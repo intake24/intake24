@@ -123,7 +123,7 @@
         <v-form ref="form" @submit.prevent="save">
           <v-container>
             <v-tabs-window v-model="tab" class="pt-1">
-              <v-tabs-window-item key="general" value="general">
+              <v-tabs-window-item value="general">
                 <language-selector
                   v-model="dialog.item.title"
                   border
@@ -149,7 +149,7 @@
                   </template>
                 </language-selector>
               </v-tabs-window-item>
-              <v-tabs-window-item key="json" value="json">
+              <v-tabs-window-item value="json">
                 <json-editor v-model="dialog.item" />
               </v-tabs-window-item>
             </v-tabs-window>

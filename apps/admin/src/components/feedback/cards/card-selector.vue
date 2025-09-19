@@ -36,7 +36,7 @@
       <v-form ref="form" @submit.prevent="save">
         <v-container>
           <v-tabs-window v-model="tab" class="pt-1">
-            <v-tabs-window-item key="general" value="general">
+            <v-tabs-window-item value="general">
               <v-container>
                 <v-row>
                   <v-col cols="12">

@@ -33,7 +33,7 @@
       </v-toolbar>
       <v-form @keydown="clearError" @submit.prevent="save">
         <v-tabs-window v-model="tab">
-          <v-tabs-window-item key="search">
+          <v-tabs-window-item value="search">
             <v-card-text>
               <v-row>
                 <v-col cols="12">
@@ -69,7 +69,7 @@
               </v-row>
             </v-card-text>
           </v-tabs-window-item>
-          <v-tabs-window-item key="create">
+          <v-tabs-window-item value="create">
             <v-card flat>
               <v-card-text>
                 <v-row>
@@ -194,7 +194,7 @@ export default defineComponent({
     const http = useHttp();
 
     const dialog = ref(false);
-    const tab = ref(0);
+    const tab = ref<'create' | 'search'>('search');
     const selected = ref<UserSecurableListEntry | null>(null);
 
     const form = useForm<UserDialogForm>({ data: {
@@ -210,7 +210,7 @@ export default defineComponent({
     const isLoading = ref(false);
 
     const isEdit = computed(() => !!selected.value);
-    const isNew = computed(() => tab.value === 1);
+    const isNew = computed(() => tab.value === 'create');
     const nonInputErrors = computed(() => Object.values(pick(errors.all.value, nonInputErrorKeys)));
 
     function add() {
@@ -230,7 +230,7 @@ export default defineComponent({
       dialog.value = false;
       form.reset();
       selected.value = null;
-      tab.value = 0;
+      tab.value = 'search';
     };
 
     async function save() {

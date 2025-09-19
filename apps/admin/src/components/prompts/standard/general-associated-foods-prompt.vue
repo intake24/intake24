@@ -1,5 +1,5 @@
 <template>
-  <v-tabs-window-item key="options" value="options">
+  <v-tabs-window-item value="options">
     <v-container>
       <v-row>
         <v-col class="d-flex flex-column gr-4" cols="12" md="6">
