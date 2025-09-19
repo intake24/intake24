@@ -155,6 +155,7 @@ export default class Model<
       offset: startOffset = 0,
       include,
       transform,
+      attributes,
       ...params
     } = options;
 
@@ -173,6 +174,7 @@ export default class Model<
         const difference = batchSize + offset - max;
         const items = await this.findAll<M>({
           ...params,
+          attributes,
           include,
           offset,
           limit: difference > 0 ? batchSize - difference : batchSize,
