@@ -1,10 +1,9 @@
 import type { ExportFieldInfo, ExportRow } from './data-export-fields';
-
 import { Readable } from 'node:stream';
 import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
-
 import { groupBy } from 'lodash';
+import { literal } from 'sequelize';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportSection } from '@intake24/common/surveys';
@@ -17,7 +16,6 @@ import type {
   SurveySubmissionAttributes,
   WhereOptions,
 } from '@intake24/db';
-
 import {
   Op,
   Survey,
@@ -102,12 +100,20 @@ function dataExportService({
     ];
 
     const meals: StreamFindOptions = {
+      attributes: [
+        'id',
+        'surveySubmissionId',
+        'hours',
+        'minutes',
+        'name',
+        'duration',
+        [literal(`CASE WHEN submission.wake_up_time is not null and CONCAT(hours, ':', minutes)::time < submission.wake_up_time THEN CONCAT(hours,':',minutes)::interval  + '1440m'::interval ELSE CONCAT(hours,':',minutes)::interval end`), 'interval'],
+      ],
       include: [{ association: 'submission', required: true, where: surveySubmissionConditions }],
       order: [
         ['submission', 'submissionTime', 'ASC'],
         ['submission', 'id', 'ASC'],
-        ['hours', 'ASC'],
-        ['minutes', 'ASC'],
+        ['interval', 'ASC'],
         ['name', 'ASC'],
         /*
         * Ensure order for pagination (offset/limit)
@@ -157,7 +163,13 @@ function dataExportService({
     inputStream: Readable,
     options: SubmissionFindOptions,
   ): Promise<void> => {
-    const { batchSize = 25, limit, offset: startOffset = 0, ...params } = options.meals;
+    const {
+      batchSize = 25,
+      limit,
+      offset: startOffset = 0,
+      attributes,
+      ...params
+    } = options.meals;
 
     try {
       const max = limit ?? (await SurveySubmissionMeal.count(params));
@@ -176,6 +188,7 @@ function dataExportService({
         const difference = batchSize + offset - max;
         const meals = await SurveySubmissionMeal.findAll({
           ...params,
+          attributes,
           offset,
           limit: difference > 0 ? batchSize - difference : batchSize,
         });
