@@ -237,10 +237,31 @@ Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.co
 
 System supports multi-factor authentication (`MFA`) for admin login.
 
+#### Mode
+
+Mode of MFA enforcement:
+
+- object-path: `mfa.mode`
+- dotenv var: `MFA_MODE`
+- type: `optional | required`
+- default: `optional`
+
+### Compatibility date
+
+Compatibility date cut-off for personal access tokens.
+
+- if set to a date (e.g. `2025-01-01`) and user has personal access tokens issued before this date, they will be allowed to pass authentication
+- if set to `null`, no cut-off is applied for personal access tokens and user needs to issue new tokens with MFA enabled
+
+- object-path: `mfa.compat`
+- dotenv var: `MFA_COMPAT_DATE`
+- type: `string | null`
+- default: `null`
+
 Supported providers:
 
-- OTP (one-time password)
-- WebAuthn (FIDO2)
+- OTP (one-time password) - any TOTP-compatible app, e.g. Google Authenticator, Authy, etc.
+- WebAuthn (FIDO2) - any FIDO2-compatible device, e.g. YubiKey, built-in platform authenticator (e.g. Windows Hello, Apple Touch ID), passkeys, etc.
 - [Duo Security](https://duo.com)
 
 User can add multiple MFA providers to their account.

@@ -3,6 +3,7 @@ import jwt, { decode } from 'jsonwebtoken';
 import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import {
+  ACL_PAT_KEY,
   createAmrMethod,
 } from '@intake24/common/security';
 import type { AdminSignPayload, SignPayload, TokenPayload } from '@intake24/common/security';
@@ -16,9 +17,10 @@ export type Tokens = {
 };
 
 function jwtService({
+  cache,
   jwtRotationService,
   securityConfig,
-}: Pick<IoC, 'jwtRotationService' | 'securityConfig'>) {
+}: Pick<IoC, 'cache' | 'jwtRotationService' | 'securityConfig'>) {
   /**
    * Sign a token
    *
@@ -199,7 +201,10 @@ function jwtService({
     if (!token)
       throw new NotFoundError();
 
-    await token.update({ revoked: true });
+    await Promise.all([
+      cache.forget(`${ACL_PAT_KEY}:${token.token}`),
+      token.update({ revoked: true }),
+    ]);
   };
 
   return {

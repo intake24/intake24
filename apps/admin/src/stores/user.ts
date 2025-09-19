@@ -1,37 +1,32 @@
 import { defineStore } from 'pinia';
-
 import { httpService } from '@intake24/admin/services';
-import type { AdminTokenPayload, Subject } from '@intake24/common/security';
-import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
+import type { AdminTokenPayload } from '@intake24/common/security';
+import type { AdminUserProfile } from '@intake24/common/types/http/admin';
 import { tokenService } from '@intake24/ui/services';
 import type { Permission } from '@intake24/ui/types';
-
 import { useResource } from './resource';
 
-export interface UserState {
-  payload: {
-    userId: string;
-    subject: Subject;
-  } | null;
-  profile: AdminUserProfileResponse['profile'] | null;
-  permissions: AdminUserProfileResponse['permissions'];
-  roles: AdminUserProfileResponse['roles'];
+export interface UserState extends Pick<AdminUserProfile, 'aal' | 'permissions' | 'roles'> {
+  payload: AdminTokenPayload | null;
+  profile: AdminUserProfile['profile'] | null;
 }
 
 export const useUser = defineStore('user', {
   state: (): UserState => ({
     payload: null,
     profile: null,
+    aal: false,
     permissions: [],
     roles: [],
   }),
   getters: {
-    isVerified: state => !!state.profile?.verifiedAt,
+    isAalSatisfied: state => state.aal,
+    isVerified: state => !!state.payload?.verified,
     loaded: state => !!state.profile,
   },
   actions: {
     can(permission: string | string[] | Permission, strict = false) {
-      if (!this.isVerified)
+      if (!this.isVerified || !this.isAalSatisfied)
         return false;
 
       if (typeof permission === 'string')
@@ -65,23 +60,17 @@ export const useUser = defineStore('user', {
 
     async request() {
       const {
-        data: { profile, permissions, roles },
-      } = await httpService.get<AdminUserProfileResponse>('admin/user', { withLoading: true });
+        data: { aal, profile, permissions, roles },
+      } = await httpService.get<AdminUserProfile>('admin/user', { withLoading: true });
 
+      this.aal = aal;
       this.profile = { ...profile };
       this.permissions = [...permissions];
       this.roles = [...roles];
     },
 
     loadPayload(accessToken: string) {
-      const { userId, sub } = tokenService.decodeAccessToken<AdminTokenPayload>(
-        accessToken,
-        'admin',
-      );
-
-      const subject: Subject = JSON.parse(atob(sub));
-
-      this.payload = { userId, subject };
+      this.payload = tokenService.decodeAccessToken<AdminTokenPayload>(accessToken, 'admin');
     },
   },
 });

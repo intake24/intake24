@@ -1,6 +1,5 @@
 import type { Request } from 'express';
 import { initServer } from '@ts-rest/express';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
@@ -19,13 +18,11 @@ export function profile() {
         user: { userId },
       } = req.scope.cradle;
 
-      const user = await User.findByPk(userId, {
-        attributes: ['id', 'name', 'email', 'phone', 'verifiedAt'],
-      });
+      const user = await User.findByPk(userId, { attributes: ['id', 'name', 'email', 'phone', 'multiFactorAuthentication'] });
       if (!user)
         throw new NotFoundError();
 
-      const { id, name, email, phone, verifiedAt } = user;
+      const { id, name, email, phone, multiFactorAuthentication: mfa } = user;
       const [permissions, roles] = await Promise.all([
         aclService.getPermissions(),
         aclService.getRoles(),
@@ -34,7 +31,8 @@ export function profile() {
       return {
         status: 200,
         body: {
-          profile: { id, name, email: email as string, phone, verifiedAt },
+          profile: { id, name, email: email as string, phone, mfa },
+          aal: !!req.aal,
           permissions,
           roles,
         },

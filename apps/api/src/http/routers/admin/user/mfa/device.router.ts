@@ -26,10 +26,16 @@ export function device() {
       };
     },
     toggle: async ({ body: { status }, req }) => {
-      const { userId } = req.scope.cradle.user;
+      const {
+        securityConfig: { mfa },
+        user: { userId },
+      } = req.scope.cradle;
 
       const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
       if (!devices.length)
+        throw new NotFoundError();
+
+      if (mfa.mode === 'required' && !status)
         throw new ForbiddenError();
 
       await User.update({ multiFactorAuthentication: status }, { where: { id: userId } });

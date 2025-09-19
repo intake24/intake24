@@ -1,53 +1,55 @@
+import type { Request } from 'express';
 import type { PassportStatic } from 'passport';
-import type { StrategyOptionsWithoutRequest } from 'passport-jwt';
+import type { StrategyOptionsWithRequest } from 'passport-jwt';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Op } from 'sequelize';
-
 import security from '@intake24/api/config/security';
 import type { TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
-import { User } from '@intake24/db';
 
 const { issuer, secret } = security.jwt;
 
-export const opts: Record<FrontEnd, StrategyOptionsWithoutRequest> = {
+export const opts: Record<FrontEnd, StrategyOptionsWithRequest> = {
   admin: {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: secret,
     issuer,
     audience: 'access',
+    passReqToCallback: true,
   },
   survey: {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: secret,
     issuer,
     audience: 'access',
+    passReqToCallback: true,
   },
 };
 
 export function buildJwtStrategy(frontEnd: FrontEnd): Strategy {
-  return new Strategy(opts[frontEnd], async (payload: TokenPayload, done) => {
+  return new Strategy(opts[frontEnd], async (req: Request, payload: TokenPayload, done) => {
+    const { mfa } = req.scope.cradle.securityConfig;
     const { userId, jti, aud } = payload;
 
+    if (!Array.isArray(aud)) {
+      done(null, false);
+      return;
+    }
+
+    if (!aud.includes('personal')) {
+      req.aal = mfa.mode === 'optional' || payload.aal === 'aal2';
+      done(null, payload);
+      return;
+    }
+
     try {
-      if (!Array.isArray(aud) || !aud.includes('personal')) {
-        done(null, payload ?? false);
+      const token = await req.scope.cradle.aclCache.getPersonalAccessToken(userId, jti);
+      if (!token) {
+        done(null, false);
         return;
       }
 
-      const user = await User.findOne({
-        attributes: ['id'],
-        where: { id: userId, disabledAt: null, verifiedAt: { [Op.ne]: null } },
-        include: [
-          {
-            association: 'personalAccessTokens',
-            attributes: ['token'],
-            where: { token: jti, revoked: false, expiresAt: { [Op.gt]: new Date() } },
-          },
-        ],
-      });
-
-      done(null, user ? payload : false);
+      req.aal = mfa.mode === 'optional' || payload.aal === 'aal2' || !!(mfa.compat && token.createdAt < mfa.compat);
+      done(null, payload);
     }
     catch (err) {
       done(err, false);

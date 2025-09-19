@@ -13,9 +13,13 @@ export default (router: Router): void => {
     // Login page
     if (unrestricted) {
       const name = user.isVerified ? 'dashboard' : 'verify';
-      if (auth.loggedIn && name !== to.name)
+      if (auth.loggedIn && to.name !== name) {
         next({ name });
-      else next();
+      }
+      else {
+        next();
+      }
+
       return;
     }
 
@@ -26,14 +30,6 @@ export default (router: Router): void => {
     // Any other page (requires to be logged in)
     if (!auth.loggedIn) {
       next({ name: 'login' });
-      return;
-    }
-
-    if (!user.isVerified) {
-      if (to.name === 'verify')
-        next();
-      else
-        next({ name: 'verify' });
       return;
     }
 

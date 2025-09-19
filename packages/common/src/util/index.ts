@@ -1,5 +1,6 @@
 export * from './arrays';
 export * from './errors';
+export * from './json';
 export * from './numbers';
 export * from './objects';
 export * from './portion-size-checks';

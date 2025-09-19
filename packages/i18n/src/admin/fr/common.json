@@ -28,7 +28,8 @@
     "subtitle": "Vérifiez votre compte à l'aide du lien envoyé sur votre boîte mail.",
     "text": "Si vous n'avez pas reçu de mail, vérifiez vos spams ou cliquez sur le bouton ci-dessous pour en recevoir un nouveau.",
     "resend": "Envoyer à nouveau l'email de vérification",
-    "resent": "Le mail de vérification a été envoyé sur votre boîte mail"
+    "resent": "Le mail de vérification a été envoyé sur votre boîte mail.",
+    "verified": "Votre compte a été vérifié avec succès."
   },
   "password": {
     "_": "Mot de passe",

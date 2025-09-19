@@ -31,75 +31,65 @@
   </app-entry-screen>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import axios, { HttpStatusCode } from 'axios';
-import { defineComponent, reactive } from 'vue';
-
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { ErrorList } from '@intake24/admin/components/forms';
+import { useHttp } from '@intake24/admin/services';
 import { useAuth, useMessages, useUser } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n/index';
 import { AppEntryScreen } from '@intake24/ui';
 
-export default defineComponent({
-  name: 'VerifyEmail',
+const http = useHttp();
+const { i18n: { t } } = useI18n();
+const auth = useAuth();
+const router = useRouter();
+const route = useRoute();
+const user = useUser();
+const messages = useMessages();
+const errors = ref(new Errors());
 
-  components: { AppEntryScreen, ErrorList },
+async function resend() {
+  await http.post('admin/user/verify', {}, { withLoading: true });
+  messages.info(t('common.verify.resent'));
+};
 
-  async beforeRouteEnter(to, from, next) {
-    await useAuth().refresh(false);
-    if (useUser().isVerified)
-      next({ name: 'dashboard' });
-    else
-      next();
-  },
+async function verify(token: string) {
+  try {
+    await http.post('admin/sign-up/verify', { token }, { withLoading: true });
+    useMessages().info(t('common.verify.verified'));
 
-  setup() {
-    return reactive({
-      user: useUser(),
-      errors: new Errors(),
-    });
-  },
+    await auth.refresh(false);
+    await router.push({ name: auth.loggedIn ? 'dashboard' : 'login' });
+  }
+  catch (err) {
+    if (axios.isAxiosError(err)) {
+      const { response: { status, data = {} } = {} } = err;
 
-  async mounted() {
-    const { token } = this.$route.query;
-    if (typeof token !== 'string')
-      return;
-
-    await this.verify(token);
-  },
-
-  methods: {
-    async resend() {
-      await this.$http.post('admin/user/verify', {}, { withLoading: true });
-      useMessages().success(this.$t('common.verify.resent'));
-    },
-
-    async verify(token: string) {
-      try {
-        await this.$http.post('admin/sign-up/verify', { token }, { withLoading: true });
-
-        if (useAuth().loggedIn) {
-          await this.user.request();
-          await this.$router.push({ name: 'dashboard' });
-        }
-        else {
-          await this.$router.push({ name: 'login' });
-        }
+      if (status === HttpStatusCode.BadRequest && 'errors' in data) {
+        errors.value.record(data.errors);
+        return;
       }
-      catch (err) {
-        if (axios.isAxiosError(err)) {
-          const { response: { status, data = {} } = {} } = err;
+    }
 
-          if (status === HttpStatusCode.BadRequest && 'errors' in data) {
-            this.errors.record(data.errors);
-            return;
-          }
-        }
+    throw err;
+  }
+};
 
-        throw err;
-      }
-    },
-  },
+onMounted(async () => {
+  const { token } = route.query;
+  if (typeof token === 'string') {
+    await verify(token);
+    return;
+  }
+
+  if (!user.loaded)
+    await auth.refresh(false);
+
+  if (user.isVerified)
+    await router.push({ name: 'dashboard' });
 });
 </script>
 

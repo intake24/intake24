@@ -28,7 +28,8 @@
     "subtitle": "Verify your account using the link we sent you to your inbox.",
     "text": "If you did not receive the email, check your spam folder or press the button below to request a new one.",
     "resend": "Resent verification email",
-    "resent": "Verification email was sent to your inbox"
+    "resent": "Verification email was sent to your inbox.",
+    "verified": "Your account has been successfully verified."
   },
   "password": {
     "_": "Password",

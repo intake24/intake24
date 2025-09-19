@@ -4,7 +4,7 @@ import passport from 'passport';
 import { contract } from '@intake24/common/contracts';
 import { FAQ, FeedbackScheme, Language, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
 import { requestValidationErrorHandler } from '../errors';
-import { isAccountVerified, isSurveyRespondent, registerACLScope } from '../middleware';
+import { isAalSatisfied, isAccountVerified, isSurveyRespondent, registerACLScope } from '../middleware';
 import admin from './admin';
 import { authentication } from './authentication.router';
 import { category } from './category.router';
@@ -100,26 +100,56 @@ export function registerRouters(express: Router) {
 
   // Admin endpoints - authenticated
   const adminAuthContract = {
-    job: contract.admin.user.job,
     profile: contract.admin.user.profile,
   };
 
   createExpressEndpoints(
     adminAuthContract,
     server.router(adminAuthContract, {
-      job: admin.user.job(),
       profile: admin.user.profile(),
     }),
     express,
     {
       responseValidation,
       requestValidationErrorHandler,
-      globalMiddleware: [passport.authenticate('admin', { session: false }), registerACLScope],
+      globalMiddleware: [
+        passport.authenticate('admin', { session: false }),
+        registerACLScope,
+      ],
     },
   );
 
   // Admin endpoints - authenticated & verified
   const adminAuthVerifiedContract = {
+    device: contract.admin.user.mfa.device,
+    duo: contract.admin.user.mfa.duo,
+    fido: contract.admin.user.mfa.fido,
+    otp: contract.admin.user.mfa.otp,
+  };
+
+  createExpressEndpoints(
+    adminAuthVerifiedContract,
+    server.router(adminAuthVerifiedContract, {
+      device: admin.user.mfa.device(),
+      duo: admin.user.mfa.duo(),
+      fido: admin.user.mfa.fido(),
+      otp: admin.user.mfa.otp(),
+    }),
+    express,
+    {
+      responseValidation,
+      // @ts-expect-error fix types (caused by 204/undefined)
+      requestValidationErrorHandler,
+      globalMiddleware: [
+        passport.authenticate('admin', { session: false }),
+        registerACLScope,
+        isAccountVerified,
+      ],
+    },
+  );
+
+  // Admin endpoints - authenticated & verified & MFA satisfied
+  const adminAuthVerifiedMfaContract = {
     asServedImage: contract.admin.images.asServedImage,
     asServedSet: contract.admin.images.asServedSet,
     drinkwareSet: contract.admin.images.drinkwareSet,
@@ -161,19 +191,16 @@ export function registerRouters(express: Router) {
     surveySession: contract.admin.survey.session,
     surveySubmission: contract.admin.survey.submission,
     task: contract.admin.task,
-    personalAccessToken: contract.admin.user.personalAccessToken,
-    device: contract.admin.user.mfa.device,
-    duo: contract.admin.user.mfa.duo,
-    fido: contract.admin.user.mfa.fido,
-    otp: contract.admin.user.mfa.otp,
     permission: contract.admin.acl.permission,
     role: contract.admin.acl.role,
     user: contract.admin.acl.user,
+    personalAccessToken: contract.admin.user.personalAccessToken,
+    userJob: contract.admin.user.job,
   };
 
   createExpressEndpoints(
-    adminAuthVerifiedContract,
-    server.router(adminAuthVerifiedContract, {
+    adminAuthVerifiedMfaContract,
+    server.router(adminAuthVerifiedMfaContract, {
       asServedImage: admin.images.asServedImage(),
       asServedSet: admin.images.asServedSet(),
       drinkwareSet: admin.images.drinkwareSet(),
@@ -215,14 +242,11 @@ export function registerRouters(express: Router) {
       surveySchemePrompt: admin.surveySchemePrompt(),
       surveySchemeSecurable: admin.securable(SurveyScheme, contract.admin.surveySchemeSecurable),
       task: admin.task(),
-      personalAccessToken: admin.user.personalAccessToken(),
-      device: admin.user.mfa.device(),
-      duo: admin.user.mfa.duo(),
-      fido: admin.user.mfa.fido(),
-      otp: admin.user.mfa.otp(),
       permission: admin.acl.permission(),
       role: admin.acl.role(),
       user: admin.acl.user(),
+      personalAccessToken: admin.user.personalAccessToken(),
+      userJob: admin.user.job(),
     }),
     express,
     {
@@ -233,6 +257,7 @@ export function registerRouters(express: Router) {
         passport.authenticate('admin', { session: false }),
         registerACLScope,
         isAccountVerified,
+        isAalSatisfied,
       ],
     },
   );

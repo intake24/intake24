@@ -16,6 +16,6 @@ export default () => {
       .set('Authorization', suite.bearer.user);
 
     expect(status).toBe(200);
-    expect(body).toContainAllKeys(['profile', 'permissions', 'roles']);
+    expect(body).toContainAllKeys(['profile', 'aal', 'permissions', 'roles']);
   });
 };

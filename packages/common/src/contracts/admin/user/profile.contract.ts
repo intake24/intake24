@@ -1,22 +1,13 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
+import { adminUserProfile } from '@intake24/common/types/http/admin';
 
 export const profile = initContract().router({
   profile: {
     method: 'GET',
     path: '/admin/user',
     responses: {
-      200: z.object({
-        profile: z.object({
-          id: z.string(),
-          name: z.string().nullable(),
-          email: z.string(),
-          phone: z.string().nullable(),
-          verifiedAt: z.date().nullable(),
-        }),
-        permissions: z.array(z.string()),
-        roles: z.array(z.string()),
-      }),
+      200: adminUserProfile,
     },
     summary: 'User profile data',
     description: 'Get logged-in user profile data',

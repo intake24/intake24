@@ -1,11 +1,17 @@
 import type { NextFunction, Request, Response, Router } from 'express';
 import { asValue } from 'awilix';
 import passport from 'passport';
-
 import { ForbiddenError } from '@intake24/api/http/errors';
 import type { TokenPayload } from '@intake24/common/security';
 import { surveyRespondent } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
+
+export function isAalSatisfied(req: Request, res: Response, next: NextFunction): void {
+  if (req.aal)
+    next();
+  else
+    next(new ForbiddenError('Insufficient aal'));
+}
 
 /**
  * Verify authenticated user has verified the email address

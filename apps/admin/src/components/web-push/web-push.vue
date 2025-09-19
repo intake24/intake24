@@ -2,9 +2,7 @@
   <v-alert
     v-if="isWebPushSupported"
     border="start"
-    class="my-4"
     closable
-    color="primary"
     prominent
     type="info"
   >
@@ -17,57 +15,33 @@
       have to re-check the status as you will get notified with push notification.
     </p>
     <v-divider class="my-4 bg-primary" style="opacity: 0.5" />
-    <v-row v-if="isPermissionGranted" align="center" no-gutters>
-      <v-col class="grow">
-        <div class="text-subtitle-2">
-          Push notifications are allowed. You can give it a test to see how it will look like.
-        </div>
-      </v-col>
-      <v-col class="shrink">
-        <v-btn color="secondary" @click="testWebPush">
-          Test PUSH
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row v-else align="center" no-gutters>
-      <v-col class="grow">
-        <div class="text-subtitle-2">
-          Click on "Allow PUSH" and confirm the notification in browser's pop-up.
-        </div>
-      </v-col>
-      <v-col class="shrink">
-        <v-btn color="secondary" @click="requestPermission">
-          Allow PUSH
-        </v-btn>
-      </v-col>
-    </v-row>
+    <div v-if="isPermissionGranted" class="d-flex flex-column ga-2 flex-md-row justify-md-space-between align-md-center">
+      <div class="text-subtitle-2">
+        Push notifications are allowed. You can give it a test to see how it will look like.
+      </div>
+      <v-btn color="info" @click="testWebPush">
+        Test PUSH
+      </v-btn>
+    </div>
+    <div v-else class="d-flex flex-column ga-2 flex-md-row justify-md-space-between align-md-center">
+      <div class="text-subtitle-2">
+        Click on "Allow PUSH" and confirm the notification in browser's pop-up.
+      </div>
+      <v-btn color="info" @click="requestPermission">
+        Allow PUSH
+      </v-btn>
+    </div>
   </v-alert>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { useHttp } from '@intake24/admin/services';
+import { useWebPush } from './use-web-push';
 
-import webPush from './web-push';
+const http = useHttp();
+const { isPermissionGranted, isWebPushSupported, requestPermission } = useWebPush();
 
-export default defineComponent({
-  name: 'WebPush',
-
-  mixins: [webPush],
-
-  methods: {
-    async requestPermission() {
-      if (!this.isWebPushSupported)
-        return;
-
-      this.permission = await Notification.requestPermission();
-
-      if (this.isPermissionGranted)
-        await this.subscribe();
-    },
-
-    async testWebPush() {
-      await this.$http.post('subscriptions/push');
-    },
-  },
-});
+async function testWebPush() {
+  await http.post('subscriptions/push');
+};
 </script>

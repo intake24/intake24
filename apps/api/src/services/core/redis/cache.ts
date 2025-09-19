@@ -5,13 +5,14 @@ import ms from 'ms';
 import stringify from 'safe-stable-stringify';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
-import { mapKeys } from '@intake24/common/util';
+import type { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
+import { jsonDateReviver, mapKeys } from '@intake24/common/util';
 
 import HasRedisClient from './redis-store';
 
 export type CacheKeyPrefix
-  = | typeof ACL_PERMISSIONS_KEY
+  = | typeof ACL_PAT_KEY
+    | typeof ACL_PERMISSIONS_KEY
     | typeof ACL_ROLES_KEY
     | 'category-attributes'
     | 'category-all-categories'
@@ -45,7 +46,7 @@ export default class Cache extends HasRedisClient {
   async get<T>(key: CacheKey): Promise<T | null> {
     const data = await this.redis.get(key);
 
-    return data ? (JSON.parse(data) as T) : null;
+    return data ? (JSON.parse(data, jsonDateReviver) as T) : null;
   }
 
   /**
@@ -62,7 +63,7 @@ export default class Cache extends HasRedisClient {
       return [];
 
     const cached = await this.redis.mget(keys);
-    return cached.map(item => (item ? (JSON.parse(item) as T) : null));
+    return cached.map(item => (item ? (JSON.parse(item, jsonDateReviver) as T) : null));
   }
 
   /**
@@ -173,7 +174,7 @@ export default class Cache extends HasRedisClient {
    * @returns {Promise<T>}
    * @memberof Cache
    */
-  async remember<T extends {}>(
+  async remember<T extends CacheValue>(
     key: CacheKey,
     ttl: number | StringValue,
     getData: () => Promise<T>,
