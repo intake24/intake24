@@ -71951,10 +71951,8 @@
                           "type": "string",
                           "nullable": true
                         },
-                        "verifiedAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "nullable": true
+                        "mfa": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -71962,8 +71960,11 @@
                         "name",
                         "email",
                         "phone",
-                        "verifiedAt"
+                        "mfa"
                       ]
+                    },
+                    "aal": {
+                      "type": "boolean"
                     },
                     "permissions": {
                       "type": "array",
@@ -71980,6 +71981,7 @@
                   },
                   "required": [
                     "profile",
+                    "aal",
                     "permissions",
                     "roles"
                   ]
