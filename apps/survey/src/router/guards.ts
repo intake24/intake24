@@ -3,13 +3,6 @@ import { HttpStatusCode, isAxiosError } from 'axios';
 import { surveyService } from '../services';
 import { useAuth, useSurvey, useUser } from '../stores';
 
-export const faqsGuard: NavigationGuard = async (to, from, next) => {
-  if (useSurvey().faqsEnabled)
-    next();
-  else
-    next(from);
-};
-
 export const feedbackParametersGuard: NavigationGuard = async (to, from, next) => {
   const {
     meta: { module } = {},
