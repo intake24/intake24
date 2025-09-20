@@ -67,16 +67,6 @@
             </template>
             <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
           </v-list-item>
-          <v-list-item
-            v-if="faqsEnabled"
-            link
-            :to="{ name: 'faqs', params: { surveyId } }"
-          >
-            <template #prepend>
-              <v-icon icon="$faqs" />
-            </template>
-            <v-list-item-title>{{ $t('common.faqs._') }}</v-list-item-title>
-          </v-list-item>
         </template>
       </v-list>
       <template #append>
@@ -188,7 +178,7 @@ const auth = useAuth();
 const survey = useSurvey();
 
 const { loggedIn } = storeToRefs(auth);
-const { faqsEnabled, feedbackAllowed, recallAllowed, recallNumber } = storeToRefs(survey);
+const { feedbackAllowed, recallAllowed, recallNumber } = storeToRefs(survey);
 
 const surveyName = computed(() => survey.parameters?.name);
 const userName = computed(() => survey.user?.name);

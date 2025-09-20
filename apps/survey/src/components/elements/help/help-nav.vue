@@ -29,6 +29,7 @@
   <help-faq
     v-else-if="!!faqs"
     :survey-id
+    @close="close"
   />
   <v-spacer v-else class="order-3" />
   <component
@@ -40,9 +41,13 @@
     :persistent="false"
   >
     <v-list>
-      <help-faq v-if="!!faqs" :survey-id>
-        <template #default="{ to }">
-          <v-list-item prepend-icon="far fa-circle-question" :to="to">
+      <help-faq
+        v-if="!!faqs"
+        :survey-id
+        @close="close"
+      >
+        <template #activator="{ props }">
+          <v-list-item v-bind="props" prepend-icon="far fa-circle-question">
             <v-list-item-title>{{ $t('common.faqs.title') }}</v-list-item-title>
           </v-list-item>
         </template>
