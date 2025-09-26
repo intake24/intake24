@@ -61,7 +61,7 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
     "cross-env": "^10.0.0",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.0.0",
     "sass": "^1.92.1",
     "terser": "^5.44.0",
     "type-fest": "^4.41.0",

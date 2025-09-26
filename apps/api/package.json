@@ -55,7 +55,7 @@
     "helmet": "^8.1.0",
     "ioredis": "^5.7.0",
     "jest-extended": "^6.0.0",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.0.0",
     "jsonwebtoken": "^9.0.2",
     "kysely": "^0.28.5",
     "liblevenshtein": "^2.0.4",
