@@ -991,261 +991,7 @@
         }
       }
     },
-    "/categories/{localeId}": {
-      "get": {
-        "description": "Get the list of root categories & foods for the \"browse all foods\" options.",
-        "summary": "Root category contents",
-        "tags": [
-          "default",
-          "category"
-        ],
-        "parameters": [
-          {
-            "name": "localeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "header": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "code",
-                        "name"
-                      ]
-                    },
-                    "foods": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "code": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "searchTerm": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "thumbnailImageUrl": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "code",
-                          "name"
-                        ]
-                      }
-                    },
-                    "subcategories": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "code": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "code",
-                          "name"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "header",
-                    "foods",
-                    "subcategories"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/categories/{localeId}/{code}": {
-      "get": {
-        "description": "Get the category contents, i.e. foods and subcategories listed under the given category.",
-        "summary": "Category contents",
-        "tags": [
-          "default",
-          "category"
-        ],
-        "parameters": [
-          {
-            "name": "localeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "header": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "code",
-                        "name"
-                      ]
-                    },
-                    "foods": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "code": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "searchTerm": {
-                            "type": "string",
-                            "nullable": true
-                          },
-                          "thumbnailImageUrl": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "code",
-                          "name"
-                        ]
-                      }
-                    },
-                    "subcategories": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "code": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "code",
-                          "name"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "header",
-                    "foods",
-                    "subcategories"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/category-header/{localeId}/{code}": {
-      "get": {
-        "description": "Get the category header, useful if only the local name is required",
-        "summary": "Category header",
-        "tags": [
-          "default",
-          "category"
-        ],
-        "parameters": [
-          {
-            "name": "localeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "name"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/categories/{localeId}/{code}/{search}": {
+    "/locales/{localeId}/categories/{code}": {
       "get": {
         "description": "Browse and search category contents for foods and subcategories listed under the given category.",
         "summary": "Browse category contents",
@@ -1264,14 +1010,6 @@
           },
           {
             "name": "code",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "search",
             "in": "path",
             "required": true,
             "schema": {
@@ -1326,6 +1064,9 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "code": {
                             "type": "string"
                           },
@@ -1341,6 +1082,7 @@
                           }
                         },
                         "required": [
+                          "id",
                           "code",
                           "name"
                         ]
@@ -1393,89 +1135,19 @@
         }
       }
     },
-    "/foods/{localeId}": {
+    "/locales/{localeId}/category-contents": {
       "get": {
-        "description": "Returns a list of foods from the food database that match the description.",
-        "summary": "Food search",
+        "description": "Get the list of root categories & foods for the \"browse all foods\" options.",
+        "summary": "Root category contents",
         "tags": [
           "default",
-          "food"
+          "category"
         ],
         "parameters": [
           {
             "name": "localeId",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "maxLength": 120
-            }
-          },
-          {
-            "name": "previous",
-            "in": "query",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "nullable": true
-            }
-          },
-          {
-            "name": "rankingAlgorithm",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "popularity",
-                "globalPop",
-                "fixed"
-              ]
-            }
-          },
-          {
-            "name": "matchScoreWeight",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 100,
-              "nullable": true
-            }
-          },
-          {
-            "name": "recipe",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "category",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "hidden",
-            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -1489,11 +1161,33 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "header": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "code": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "code",
+                        "name"
+                      ]
+                    },
                     "foods": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "code": {
                             "type": "string"
                           },
@@ -1509,16 +1203,20 @@
                           }
                         },
                         "required": [
+                          "id",
                           "code",
                           "name"
                         ]
                       }
                     },
-                    "categories": {
+                    "subcategories": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "code": {
                             "type": "string"
                           },
@@ -1527,6 +1225,7 @@
                           }
                         },
                         "required": [
+                          "id",
                           "code",
                           "name"
                         ]
@@ -1534,8 +1233,9 @@
                     }
                   },
                   "required": [
+                    "header",
                     "foods",
-                    "categories"
+                    "subcategories"
                   ]
                 }
               }
@@ -1544,13 +1244,13 @@
         }
       }
     },
-    "/foods/{localeId}/{code}": {
+    "/locales/{localeId}/category-contents/{code}": {
       "get": {
-        "description": "Get portion size estimation options, associated foods and related data for a food from the database.",
-        "summary": "Food entry",
+        "description": "Get the category contents, i.e. foods and subcategories listed under the given category.",
+        "summary": "Category contents",
         "tags": [
           "default",
-          "food"
+          "category"
         ],
         "parameters": [
           {
@@ -1578,7 +1278,178 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "header": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "code": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "code",
+                        "name"
+                      ]
+                    },
+                    "foods": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "searchTerm": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "thumbnailImageUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "code",
+                          "name"
+                        ]
+                      }
+                    },
+                    "subcategories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "code",
+                          "name"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "header",
+                    "foods",
+                    "subcategories"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locales/{localeId}/category-headers/{code}": {
+      "get": {
+        "description": "Get the category header, useful if only the local name is required",
+        "summary": "Category header",
+        "tags": [
+          "default",
+          "category"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
                     "code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "code",
+                    "name"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/foods/{foodId}": {
+      "get": {
+        "description": "Get portion size estimation options, associated foods and related data for a food from the database.",
+        "summary": "Food entry",
+        "tags": [
+          "default",
+          "food"
+        ],
+        "parameters": [
+          {
+            "name": "foodId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "localeId": {
                       "type": "string"
                     },
                     "englishName": {
@@ -2097,6 +1968,9 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "foodCode": {
                             "type": "string"
                           },
@@ -2125,6 +1999,7 @@
                           }
                         },
                         "required": [
+                          "id",
                           "promptText",
                           "linkAsMain",
                           "genericName",
@@ -2155,7 +2030,9 @@
                     }
                   },
                   "required": [
+                    "id",
                     "code",
+                    "localeId",
                     "englishName",
                     "localName",
                     "kcalPer100g",
@@ -2175,7 +2052,809 @@
         }
       }
     },
-    "/foods/{localeId}/{code}/recipe-food": {
+    "/locales/{localeId}/foods": {
+      "get": {
+        "description": "Returns a list of foods from the food database that match the description.",
+        "summary": "Food search",
+        "tags": [
+          "default",
+          "food"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 120
+            }
+          },
+          {
+            "name": "previous",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          },
+          {
+            "name": "rankingAlgorithm",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "popularity",
+                "globalPop",
+                "fixed"
+              ]
+            }
+          },
+          {
+            "name": "matchScoreWeight",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100,
+              "nullable": true
+            }
+          },
+          {
+            "name": "recipe",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hidden",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "foods": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "searchTerm": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "thumbnailImageUrl": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "code",
+                          "name"
+                        ]
+                      }
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "code",
+                          "name"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "foods",
+                    "categories"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locales/{localeId}/foods/{code}": {
+      "get": {
+        "description": "Get portion size estimation options, associated foods and related data for a food from the database.",
+        "summary": "Food entry",
+        "tags": [
+          "default",
+          "food"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "localeId": {
+                      "type": "string"
+                    },
+                    "englishName": {
+                      "type": "string"
+                    },
+                    "localName": {
+                      "type": "string"
+                    },
+                    "kcalPer100g": {
+                      "type": "number"
+                    },
+                    "reasonableAmount": {
+                      "type": "number"
+                    },
+                    "readyMealOption": {
+                      "type": "boolean"
+                    },
+                    "sameAsBeforeOption": {
+                      "type": "boolean"
+                    },
+                    "portionSizeMethods": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "as-served",
+                              "cereal",
+                              "direct-weight",
+                              "drink-scale",
+                              "guide-image",
+                              "milk-in-a-hot-drink",
+                              "milk-on-cereal",
+                              "parent-food-portion",
+                              "pizza",
+                              "pizza-v2",
+                              "recipe-builder",
+                              "standard-portion",
+                              "unknown"
+                            ]
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "imageUrl": {
+                            "type": "string"
+                          },
+                          "useForRecipes": {
+                            "type": "boolean"
+                          },
+                          "conversionFactor": {
+                            "type": "number"
+                          },
+                          "orderBy": {
+                            "type": "string"
+                          },
+                          "parameters": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "servingImageSet": {
+                                    "type": "string"
+                                  },
+                                  "leftoversImageSet": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "labels": {
+                                    "type": "boolean"
+                                  },
+                                  "multiple": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "servingImageSet"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "hoop",
+                                      "flake",
+                                      "rkris"
+                                    ]
+                                  },
+                                  "labels": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "type"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {}
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "drinkwareId": {
+                                    "type": "string"
+                                  },
+                                  "initialFillLevel": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "skipFillLevel": {
+                                    "type": "boolean"
+                                  },
+                                  "labels": {
+                                    "type": "boolean"
+                                  },
+                                  "multiple": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "drinkwareId",
+                                  "initialFillLevel",
+                                  "skipFillLevel"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "guideImageId": {
+                                    "type": "string"
+                                  },
+                                  "labels": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "guideImageId"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "options": {
+                                    "allOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "en": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "id": {
+                                                  "type": "number"
+                                                },
+                                                "label": {
+                                                  "type": "string",
+                                                  "minLength": 1,
+                                                  "maxLength": 256
+                                                },
+                                                "shortLabel": {
+                                                  "type": "string",
+                                                  "minLength": 1,
+                                                  "maxLength": 256
+                                                },
+                                                "value": {
+                                                  "type": "number",
+                                                  "nullable": true
+                                                },
+                                                "exclusive": {
+                                                  "type": "boolean"
+                                                },
+                                                "selected": {
+                                                  "type": "boolean"
+                                                }
+                                              },
+                                              "required": [
+                                                "label",
+                                                "value"
+                                              ]
+                                            }
+                                          }
+                                        },
+                                        "required": [
+                                          "en"
+                                        ]
+                                      },
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "number"
+                                              },
+                                              "label": {
+                                                "type": "string",
+                                                "minLength": 1,
+                                                "maxLength": 256
+                                              },
+                                              "shortLabel": {
+                                                "type": "string",
+                                                "minLength": 1,
+                                                "maxLength": 256
+                                              },
+                                              "value": {
+                                                "type": "number",
+                                                "nullable": true
+                                              },
+                                              "exclusive": {
+                                                "type": "boolean"
+                                              },
+                                              "selected": {
+                                                "type": "boolean"
+                                              }
+                                            },
+                                            "required": [
+                                              "label",
+                                              "value"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "options"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "labels": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "options": {
+                                    "allOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "_default": {
+                                            "allOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "en": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "id": {
+                                                          "type": "number"
+                                                        },
+                                                        "label": {
+                                                          "type": "string",
+                                                          "minLength": 1,
+                                                          "maxLength": 256
+                                                        },
+                                                        "shortLabel": {
+                                                          "type": "string",
+                                                          "minLength": 1,
+                                                          "maxLength": 256
+                                                        },
+                                                        "value": {
+                                                          "type": "number",
+                                                          "nullable": true
+                                                        },
+                                                        "exclusive": {
+                                                          "type": "boolean"
+                                                        },
+                                                        "selected": {
+                                                          "type": "boolean"
+                                                        }
+                                                      },
+                                                      "required": [
+                                                        "label",
+                                                        "value"
+                                                      ]
+                                                    }
+                                                  }
+                                                },
+                                                "required": [
+                                                  "en"
+                                                ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                  "type": "array",
+                                                  "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "id": {
+                                                        "type": "number"
+                                                      },
+                                                      "label": {
+                                                        "type": "string",
+                                                        "minLength": 1,
+                                                        "maxLength": 256
+                                                      },
+                                                      "shortLabel": {
+                                                        "type": "string",
+                                                        "minLength": 1,
+                                                        "maxLength": 256
+                                                      },
+                                                      "value": {
+                                                        "type": "number",
+                                                        "nullable": true
+                                                      },
+                                                      "exclusive": {
+                                                        "type": "boolean"
+                                                      },
+                                                      "selected": {
+                                                        "type": "boolean"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "label",
+                                                      "value"
+                                                    ]
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "_default"
+                                        ]
+                                      },
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "allOf": [
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "en": {
+                                                  "type": "array",
+                                                  "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "id": {
+                                                        "type": "number"
+                                                      },
+                                                      "label": {
+                                                        "type": "string",
+                                                        "minLength": 1,
+                                                        "maxLength": 256
+                                                      },
+                                                      "shortLabel": {
+                                                        "type": "string",
+                                                        "minLength": 1,
+                                                        "maxLength": 256
+                                                      },
+                                                      "value": {
+                                                        "type": "number",
+                                                        "nullable": true
+                                                      },
+                                                      "exclusive": {
+                                                        "type": "boolean"
+                                                      },
+                                                      "selected": {
+                                                        "type": "boolean"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "label",
+                                                      "value"
+                                                    ]
+                                                  }
+                                                }
+                                              },
+                                              "required": [
+                                                "en"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "additionalProperties": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "id": {
+                                                      "type": "number"
+                                                    },
+                                                    "label": {
+                                                      "type": "string",
+                                                      "minLength": 1,
+                                                      "maxLength": 256
+                                                    },
+                                                    "shortLabel": {
+                                                      "type": "string",
+                                                      "minLength": 1,
+                                                      "maxLength": 256
+                                                    },
+                                                    "value": {
+                                                      "type": "number",
+                                                      "nullable": true
+                                                    },
+                                                    "exclusive": {
+                                                      "type": "boolean"
+                                                    },
+                                                    "selected": {
+                                                      "type": "boolean"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "label",
+                                                    "value"
+                                                  ]
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "options"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "labels": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "labels": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {}
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "units": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "weight": {
+                                          "type": "number",
+                                          "nullable": true
+                                        },
+                                        "omitFoodDescription": {
+                                          "type": "boolean"
+                                        },
+                                        "inlineHowMany": {
+                                          "type": "string"
+                                        },
+                                        "inlineEstimateIn": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "name",
+                                        "weight",
+                                        "omitFoodDescription"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "units"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {}
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "method",
+                          "description",
+                          "imageUrl",
+                          "useForRecipes",
+                          "conversionFactor",
+                          "orderBy",
+                          "parameters"
+                        ]
+                      }
+                    },
+                    "associatedFoodPrompts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "foodCode": {
+                            "type": "string"
+                          },
+                          "categoryCode": {
+                            "type": "string"
+                          },
+                          "promptText": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "linkAsMain": {
+                            "type": "boolean"
+                          },
+                          "genericName": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "multiple": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "promptText",
+                          "linkAsMain",
+                          "genericName",
+                          "multiple"
+                        ]
+                      }
+                    },
+                    "brandNames": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "thumbnailImageUrl": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "code",
+                    "localeId",
+                    "englishName",
+                    "localName",
+                    "kcalPer100g",
+                    "reasonableAmount",
+                    "readyMealOption",
+                    "sameAsBeforeOption",
+                    "portionSizeMethods",
+                    "associatedFoodPrompts",
+                    "brandNames",
+                    "categories",
+                    "tags"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locales/{localeId}/foods/{code}/recipe-food": {
       "get": {
         "description": "Get the recipe food data for a food if any.",
         "summary": "Recipe food",
@@ -2237,49 +2916,82 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "code": {
+                          "recipeFoodsId": {
                             "type": "string"
                           },
-                          "name": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "string",
-                              "nullable": true
-                            }
-                          },
-                          "description": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "string",
-                              "nullable": true
-                            }
-                          },
-                          "order": {
-                            "type": "number"
+                          "code": {
+                            "type": "string"
                           },
                           "localeId": {
                             "type": "string"
                           },
+                          "name": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "en": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "en"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            ]
+                          },
+                          "description": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "en": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "en"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              }
+                            ]
+                          },
                           "categoryCode": {
-                            "type": "string",
-                            "nullable": true
+                            "type": "string"
                           },
                           "repeatable": {
                             "type": "boolean"
                           },
                           "required": {
                             "type": "boolean"
+                          },
+                          "order": {
+                            "type": "number"
                           }
                         },
                         "required": [
+                          "recipeFoodsId",
                           "code",
+                          "localeId",
                           "name",
                           "description",
-                          "order",
-                          "localeId",
                           "categoryCode",
                           "repeatable",
-                          "required"
+                          "required",
+                          "order"
                         ]
                       }
                     }
@@ -2288,7 +3000,8 @@
                     "code",
                     "name",
                     "localeId",
-                    "recipeWord"
+                    "recipeWord",
+                    "steps"
                   ]
                 }
               }
@@ -2297,7 +3010,7 @@
         }
       }
     },
-    "/foods/{localeId}/{code}/categories": {
+    "/locales/{localeId}/foods/{code}/categories": {
       "get": {
         "description": "Get the list of categories for a food.",
         "summary": "Food categories",
@@ -7289,6 +8002,9 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "code": {
                             "type": "string"
                           },
@@ -7304,6 +8020,7 @@
                           }
                         },
                         "required": [
+                          "id",
                           "code",
                           "name"
                         ]
@@ -7314,6 +8031,9 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "code": {
                             "type": "string"
                           },
@@ -7322,6 +8042,7 @@
                           }
                         },
                         "required": [
+                          "id",
                           "code",
                           "name"
                         ]
@@ -25000,7 +25721,7 @@
                           "code": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": 16
+                            "maxLength": 64
                           },
                           "englishName": {
                             "type": "string",
@@ -25026,12 +25747,6 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 16
-                          },
-                          "prototypeLocaleId": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 16,
-                            "nullable": true
                           },
                           "textDirection": {
                             "type": "string",
@@ -25076,7 +25791,7 @@
                               "code": {
                                 "type": "string",
                                 "minLength": 1,
-                                "maxLength": 16
+                                "maxLength": 64
                               },
                               "englishName": {
                                 "type": "string",
@@ -25102,12 +25817,6 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "maxLength": 16
-                              },
-                              "prototypeLocaleId": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 16,
-                                "nullable": true
                               },
                               "textDirection": {
                                 "type": "string",
@@ -25152,7 +25861,6 @@
                               "respondentLanguageId",
                               "adminLanguageId",
                               "countryFlagCode",
-                              "prototypeLocaleId",
                               "textDirection",
                               "foodIndexEnabled",
                               "foodIndexLanguageBackendId",
@@ -25368,7 +26076,6 @@
                           "respondentLanguageId",
                           "adminLanguageId",
                           "countryFlagCode",
-                          "prototypeLocaleId",
                           "textDirection",
                           "foodIndexEnabled",
                           "foodIndexLanguageBackendId",
@@ -25508,7 +26215,7 @@
                     "code": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 16
+                      "maxLength": 64
                     },
                     "englishName": {
                       "type": "string",
@@ -25534,12 +26241,6 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 16
-                    },
-                    "prototypeLocaleId": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 16,
-                      "nullable": true
                     },
                     "textDirection": {
                       "type": "string",
@@ -25584,7 +26285,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -25610,12 +26311,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -25660,7 +26355,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -25876,7 +26570,6 @@
                     "respondentLanguageId",
                     "adminLanguageId",
                     "countryFlagCode",
-                    "prototypeLocaleId",
                     "textDirection",
                     "foodIndexEnabled",
                     "foodIndexLanguageBackendId",
@@ -29112,6 +29805,7 @@
                                         "categories",
                                         "foods",
                                         "associatedFoods",
+                                        "attributes",
                                         "brands",
                                         "recipeFoods",
                                         "splitLists",
@@ -29891,6 +30585,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -30734,6 +31429,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -33138,7 +33834,7 @@
                           "code": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": 16
+                            "maxLength": 64
                           },
                           "englishName": {
                             "type": "string",
@@ -33231,7 +33927,7 @@
                   "code": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 16
+                    "maxLength": 64
                   },
                   "englishName": {
                     "type": "string",
@@ -33257,12 +33953,6 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 16
-                  },
-                  "prototypeLocaleId": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 16,
-                    "nullable": true
                   },
                   "textDirection": {
                     "type": "string",
@@ -33313,7 +34003,7 @@
                     "code": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 16
+                      "maxLength": 64
                     },
                     "englishName": {
                       "type": "string",
@@ -33339,12 +34029,6 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 16
-                    },
-                    "prototypeLocaleId": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 16,
-                      "nullable": true
                     },
                     "textDirection": {
                       "type": "string",
@@ -33389,7 +34073,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -33415,12 +34099,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -33465,7 +34143,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -33681,7 +34358,6 @@
                     "respondentLanguageId",
                     "adminLanguageId",
                     "countryFlagCode",
-                    "prototypeLocaleId",
                     "textDirection",
                     "foodIndexEnabled",
                     "foodIndexLanguageBackendId",
@@ -33777,7 +34453,7 @@
                     "code": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 16
+                      "maxLength": 64
                     },
                     "englishName": {
                       "type": "string",
@@ -33803,12 +34479,6 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 16
-                    },
-                    "prototypeLocaleId": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 16,
-                      "nullable": true
                     },
                     "textDirection": {
                       "type": "string",
@@ -33853,7 +34523,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -33879,12 +34549,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -33929,7 +34593,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -34145,7 +34808,6 @@
                     "respondentLanguageId",
                     "adminLanguageId",
                     "countryFlagCode",
-                    "prototypeLocaleId",
                     "textDirection",
                     "foodIndexEnabled",
                     "foodIndexLanguageBackendId",
@@ -34209,12 +34871,6 @@
                     "minLength": 1,
                     "maxLength": 16
                   },
-                  "prototypeLocaleId": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 16,
-                    "nullable": true
-                  },
                   "textDirection": {
                     "type": "string",
                     "enum": [
@@ -34263,7 +34919,7 @@
                     "code": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 16
+                      "maxLength": 64
                     },
                     "englishName": {
                       "type": "string",
@@ -34289,12 +34945,6 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 16
-                    },
-                    "prototypeLocaleId": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 16,
-                      "nullable": true
                     },
                     "textDirection": {
                       "type": "string",
@@ -34339,7 +34989,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -34365,12 +35015,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -34415,7 +35059,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -34631,7 +35274,6 @@
                     "respondentLanguageId",
                     "adminLanguageId",
                     "countryFlagCode",
-                    "prototypeLocaleId",
                     "textDirection",
                     "foodIndexEnabled",
                     "foodIndexLanguageBackendId",
@@ -34693,7 +35335,7 @@
             "schema": {
               "type": "string",
               "minLength": 1,
-              "maxLength": 16
+              "maxLength": 64
             }
           }
         ],
@@ -34711,7 +35353,7 @@
                     "code": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 16
+                      "maxLength": 64
                     },
                     "englishName": {
                       "type": "string",
@@ -34737,12 +35379,6 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 16
-                    },
-                    "prototypeLocaleId": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 16,
-                      "nullable": true
                     },
                     "textDirection": {
                       "type": "string",
@@ -34787,7 +35423,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -34813,12 +35449,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -34863,7 +35493,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -35079,7 +35708,6 @@
                     "respondentLanguageId",
                     "adminLanguageId",
                     "countryFlagCode",
-                    "prototypeLocaleId",
                     "textDirection",
                     "foodIndexEnabled",
                     "foodIndexLanguageBackendId",
@@ -35150,6 +35778,7 @@
                                 "categories",
                                 "foods",
                                 "associatedFoods",
+                                "attributes",
                                 "brands",
                                 "recipeFoods",
                                 "splitLists",
@@ -35396,6 +36025,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -36021,12 +36651,12 @@
                       "localeId": {
                         "type": "string",
                         "minLength": 1,
-                        "maxLength": 16
+                        "maxLength": 64
                       },
                       "code": {
                         "type": "string",
                         "minLength": 1,
-                        "maxLength": 16
+                        "maxLength": 64
                       },
                       "name": {
                         "type": "string",
@@ -36092,12 +36722,12 @@
                     "localeId": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 16
+                      "maxLength": 64
                     },
                     "code": {
                       "type": "string",
                       "minLength": 1,
-                      "maxLength": 16
+                      "maxLength": 64
                     },
                     "name": {
                       "type": "string",
@@ -36142,12 +36772,12 @@
                       "localeId": {
                         "type": "string",
                         "minLength": 1,
-                        "maxLength": 16
+                        "maxLength": 64
                       },
                       "code": {
                         "type": "string",
                         "minLength": 1,
-                        "maxLength": 16
+                        "maxLength": 64
                       },
                       "name": {
                         "type": "string",
@@ -36232,26 +36862,55 @@
                       "localeId": {
                         "type": "string",
                         "minLength": 1,
-                        "maxLength": 16
+                        "maxLength": 64
                       },
                       "categoryCode": {
                         "type": "string",
-                        "maxLength": 16,
-                        "nullable": true
+                        "maxLength": 64
                       },
                       "name": {
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string",
-                          "nullable": true
-                        }
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "en": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "en"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        ]
                       },
                       "description": {
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string",
-                          "nullable": true
-                        }
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "en": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "en"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        ]
                       },
                       "order": {
                         "type": "number"
@@ -36335,26 +36994,55 @@
                         "localeId": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "categoryCode": {
                           "type": "string",
-                          "maxLength": 16,
-                          "nullable": true
+                          "maxLength": 64
                         },
                         "name": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "string",
-                            "nullable": true
-                          }
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "en": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "en"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          ]
                         },
                         "description": {
-                          "type": "object",
-                          "additionalProperties": {
-                            "type": "string",
-                            "nullable": true
-                          }
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "en": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "en"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          ]
                         },
                         "order": {
                           "type": "number"
@@ -36411,26 +37099,55 @@
                       "localeId": {
                         "type": "string",
                         "minLength": 1,
-                        "maxLength": 16
+                        "maxLength": 64
                       },
                       "categoryCode": {
                         "type": "string",
-                        "maxLength": 16,
-                        "nullable": true
+                        "maxLength": 64
                       },
                       "name": {
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string",
-                          "nullable": true
-                        }
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "en": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "en"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        ]
                       },
                       "description": {
-                        "type": "object",
-                        "additionalProperties": {
-                          "type": "string",
-                          "nullable": true
-                        }
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "en": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "en"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        ]
                       },
                       "order": {
                         "type": "number"
@@ -39171,6 +39888,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -40799,6 +41517,14 @@
               "type": "string",
               "maxLength": 128,
               "nullable": true
+            }
+          },
+          {
+            "name": "localeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1
             }
           }
         ],
@@ -42624,6 +43350,15 @@
               "maxLength": 128,
               "nullable": true
             }
+          },
+          {
+            "name": "localeId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         ],
         "responses": {
@@ -43149,7 +43884,7 @@
                           "code": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": 16
+                            "maxLength": 64
                           },
                           "englishName": {
                             "type": "string",
@@ -45431,7 +46166,7 @@
                               "code": {
                                 "type": "string",
                                 "minLength": 1,
-                                "maxLength": 16
+                                "maxLength": 64
                               }
                             },
                             "required": [
@@ -46507,7 +47242,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -46533,12 +47268,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -46583,7 +47312,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -48686,7 +49414,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -48712,12 +49440,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -48762,7 +49484,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -51317,7 +52038,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -51343,12 +52064,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -51393,7 +52108,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -53979,7 +54693,7 @@
                         "code": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 16
+                          "maxLength": 64
                         },
                         "englishName": {
                           "type": "string",
@@ -54005,12 +54719,6 @@
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 16
-                        },
-                        "prototypeLocaleId": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 16,
-                          "nullable": true
                         },
                         "textDirection": {
                           "type": "string",
@@ -54055,7 +54763,6 @@
                         "respondentLanguageId",
                         "adminLanguageId",
                         "countryFlagCode",
-                        "prototypeLocaleId",
                         "textDirection",
                         "foodIndexEnabled",
                         "foodIndexLanguageBackendId",
@@ -56057,6 +56764,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -63673,6 +64381,7 @@
                                         "categories",
                                         "foods",
                                         "associatedFoods",
+                                        "attributes",
                                         "brands",
                                         "recipeFoods",
                                         "splitLists",
@@ -64338,6 +65047,7 @@
                                 "categories",
                                 "foods",
                                 "associatedFoods",
+                                "attributes",
                                 "brands",
                                 "recipeFoods",
                                 "splitLists",
@@ -64948,6 +65658,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -65586,6 +66297,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -66270,6 +66982,7 @@
                                 "categories",
                                 "foods",
                                 "associatedFoods",
+                                "attributes",
                                 "brands",
                                 "recipeFoods",
                                 "splitLists",
@@ -66880,6 +67593,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -67607,6 +68321,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -68476,6 +69191,7 @@
                                         "categories",
                                         "foods",
                                         "associatedFoods",
+                                        "attributes",
                                         "brands",
                                         "recipeFoods",
                                         "splitLists",
@@ -69301,6 +70017,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
@@ -70041,6 +70758,7 @@
                                   "categories",
                                   "foods",
                                   "associatedFoods",
+                                  "attributes",
                                   "brands",
                                   "recipeFoods",
                                   "splitLists",
