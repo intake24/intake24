@@ -1,0 +1,18 @@
+{
+  "_": "Perfil",
+  "info": "Informações",
+  "settings": "Configurações",
+  "provider": "Provedor",
+  "providerId": "ID do provedor",
+  "languages": {
+    "_": "Idioma",
+    "title": "Idiomas",
+    "ar": "Árabe",
+    "de": "Alemão",
+    "dk": "Dinamarquês",
+    "en": "Inglês",
+    "es": "Espanhol",
+    "fr": "Francês",
+    "pt": "Português"
+  }
+}

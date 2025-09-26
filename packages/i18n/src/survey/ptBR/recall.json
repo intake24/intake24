@@ -1,0 +1,116 @@
+{
+  "_": "Recordação",
+  "info": "Informações da recordação",
+  "none": "Nenhuma recordação em andamento no momento.",
+  "startedAt": "Recordação iniciada em: {startedAt}.",
+  "finishedAt": "Recordação finalizada em: {finishedAt}.",
+  "submittedAt": "Enviado em",
+  "limitReached": {
+    "daily": "Você atingiu o limite diário de recordações.",
+    "total": "Você atingiu o limite total de recordações."
+  },
+  "rating": {
+    "_": "Avalie sua experiência",
+    "title": "Como você avaliaria a recordação?",
+    "comment": "Conte-nos mais sobre a avaliação que você deu à recordação",
+    "send": "Enviar feedback",
+    "sent": "Feedback enviado, obrigado!"
+  },
+  "survey": "Estudo: {name}",
+  "submissions": {
+    "_": "Dia da recordação",
+    "title": "Dias de recordação",
+    "all": "todos",
+    "past": "Recordações anteriores",
+    "none": "Você ainda não tem recordações anteriores.",
+    "count": "Número da recordação: {count}"
+  },
+  "start": {
+    "_": "Iniciar recordação",
+    "another": "Iniciar outra recordação"
+  },
+  "continue": "Continuar",
+  "abort": {
+    "_": "Abortar",
+    "label": "Abortar recordação",
+    "confirm": "Abortar recordação atual?"
+  },
+  "surveyInfo": {
+    "recall": "Recordação: {number}"
+  },
+  "menu": {
+    "title": "Painel de revisão",
+    "mealSuggested": "Esta refeição foi sugerida pelo sistema, mas você ainda não confirmou que a consumiu",
+    "food": {
+      "delete": "Excluir alimento",
+      "deleteConfirm": "Deseja excluir {item}?",
+      "change": "Alterar alimento",
+      "free-text": {
+        "_": "Este alimento ainda não foi correspondido a um da nossa base de dados.",
+        "incomplete": "O tamanho da porção deste alimento ainda não é conhecido.",
+        "edit": "Editar pesquisa"
+      },
+      "encoded-food": {
+        "_": "Este alimento foi correspondido a um da nossa base de dados.",
+        "complete": "A estimativa de porção deste alimento está completa.",
+        "incomplete": "O tamanho da porção deste alimento ainda não é conhecido.",
+        "edit": "Editar tamanho de porção"
+      },
+      "missing-food": {
+        "_": "Este alimento foi marcado como ausente em nossa base de dados.",
+        "complete": "As informações ausentes deste alimento estão completas.",
+        "incomplete": "As informações ausentes deste alimento ainda não são conhecidas.",
+        "edit": "Editar alimento ausente"
+      },
+      "recipe-builder": {
+        "_": "Este alimento foi correspondido a uma receita da nossa base de dados.",
+        "complete": "Etapas da receita para este alimento estão completas.",
+        "incomplete": "Etapas da receita para este alimento ainda não foram concluídas.",
+        "edit": "Editar ingredientes"
+      }
+    },
+    "meal": {
+      "add": "Adicionar refeição",
+      "delete": "Excluir refeição",
+      "deleteConfirm": "Você está prestes a excluir tudo o que informou para {item}.",
+      "editFoods": "Atualizar alimentos",
+      "editTime": "Alterar hora"
+    }
+  },
+  "contextMenu": {
+    "close": "Fechar",
+    "select": "Continuar com {name}",
+    "editMeal": "Revisar alimentos",
+    "delete": "Excluir {name}",
+    "confirmDeletion": "Tem certeza de que deseja excluir '{name}'?",
+    "confirm": "Confirmar {name}",
+    "changeTime": "Alterar hora"
+  },
+  "actions": {
+    "feedback": "Feedback dietético",
+    "next": "Continuar",
+    "submit": "Enviar recordação",
+    "addMeal": "Adicionar refeição",
+    "deleteFood": "Excluir alimento",
+    "deleteMeal": "Excluir refeição",
+    "editFood": "Editar alimento",
+    "editMeal": "Adicionar alimentos",
+    "mealTime": "Alterar hora da refeição",
+    "nav": {
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "feedback": "Feedback dietético",
+      "next": "Continuar",
+      "redirect": "Continuar",
+      "remove": "Remover",
+      "review": "Revisar",
+      "submit": "Enviar",
+      "addMeal": "Adicionar refeição",
+      "deleteFood": "Excluir alimento",
+      "deleteMeal": "Excluir refeição",
+      "editFood": "Editar alimento",
+      "editMeal": "Adicionar alimentos",
+      "mealTime": "Hora da refeição"
+    }
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "attributes": {
+    "actions": "Ações",
+    "active": "Ativo",
+    "allowGenUsers": "Permitir gerar usuários",
+    "app": "Aplicativo",
+    "adminLanguageId": "ID do idioma administrativo",
+    "authUrlDomainOverride": "Substituição de domínio da URL de autenticação",
+    "authUrlTokenCharset": "Conjunto de caracteres do token de URL de autenticação",
+    "authUrlTokenLength": "Comprimento do token de URL de autenticação",
+    "baseImage": "Imagem base",
+    "birthdate": "Data de nascimento",
+    "captcha": "CAPTCHA",
+    "countryFlagCode": "Código da bandeira do país",
+    "code": "Código",
+    "conversionFactor": "Fator de conversão",
+    "copy": "Copiar",
+    "cron": "CRON",
+    "csvMapping": {
+      "rowOffset": "Deslocamento de linha",
+      "idColumnOffset": "Deslocamento da coluna de ID",
+      "descriptionColumnOffset": "Deslocamento da coluna de descrição",
+      "localDescriptionColumnOffset": "Deslocamento da coluna de descrição local"
+    },
+    "csvMappingFields": "Mapeamento de colunas de campos",
+    "csvMappingNutrients": "Mapeamento de colunas de nutrientes",
+    "customFields": "Campos personalizados",
+    "dataExport": "Exportação de dados",
+    "demographicGroups": "Grupos demográficos",
+    "description": "Descrição",
+    "disabledAt": "Desativado em",
+    "displayName": "Nome exibido",
+    "endDate": "Data de término",
+    "email": "E-mail",
+    "emailConfirm": "Confirmar e-mail",
+    "emailNotifications": "Notificações por e-mail",
+    "englishName": "Nome em inglês",
+    "estimateIn": "Estimar em",
+    "expiresAt": "Expira em",
+    "feedbackSchemeId": "ID do esquema de feedback",
+    "file": "Arquivo",
+    "genericName": "Nome genérico",
+    "genUserKey": "Segredo JWT",
+    "guideImageId": "ID da imagem guia",
+    "heightCm": "Altura (cm)",
+    "henryCoefficients": "Coeficientes de Henry",
+    "howMany": "Quantos",
+    "i18n": {
+      "defaults": "Traduções padrão ausentes",
+      "keys": "Chaves de tradução incompatíveis",
+      "messages": "Traduções inválidas"
+    },
+    "id": "ID",
+    "imageMapId": "ID do mapa de imagem",
+    "images": "Imagens",
+    "job": "Job",
+    "label": "Rótulo",
+    "languageId": "ID de idioma",
+    "localeId": "ID de localidade",
+    "limit": "Limite",
+    "linkAsMain": "Vincular como principal",
+    "localName": "Nome local",
+    "main": {
+      "attributes": {
+        "readyMealOption": "Opção de refeição pronta",
+        "reasonableAmount": "Quantidade razoável",
+        "sameAsBeforeOption": "Opção “mesmo que antes”",
+        "useInRecipes": "Usar em receitas"
+      },
+      "code": "Código global",
+      "foodGroupId": "ID do grupo de alimentos",
+      "isHidden": "Está oculto",
+      "name": "Nome global",
+      "parentCategories": "Categorias pai"
+    },
+    "maximumDailySubmissions": "Máximo de envios diários",
+    "maximumTotalSubmissions": "Máximo total de envios",
+    "meals": "Refeições",
+    "method": "Método",
+    "message": "Mensagem",
+    "minimumSubmissionInterval": "Intervalo mínimo entre envios",
+    "multiFactorAuthentication": "Autenticação multifator",
+    "name": "Nome",
+    "numberOfSubmissionsForFeedback": "Número de envios para feedback",
+    "nutrientRecords": "Registros de nutrientes",
+    "objects": "Objetos",
+    "outlineCoordinates": "Coordenadas do contorno",
+    "outputs": "Saídas",
+    "orderBy": "Ordenar por",
+    "ownerId": "ID do proprietário",
+    "page": "Página",
+    "password": "Senha",
+    "passwordConfirm": "Confirmar senha",
+    "params": {
+      "_": "Parâmetros",
+      "file": "Arquivo",
+      "targetAlgorithm": "Algoritmo de ordenação"
+    },
+    "permissions": "Permissões",
+    "phone": "Telefone",
+    "physicalActivityLevelId": "ID do nível de atividade física",
+    "physicalDataFields": "Campos de dados físicos",
+    "prompt": "Prompt",
+    "prompts": "Prompts",
+    "prototypeLocaleId": "ID da localidade protótipo",
+    "respondentLanguageId": "ID do idioma do respondente",
+    "roles": "Funções",
+    "sessionData": "Dados da sessão",
+    "search": "Pesquisar",
+    "searchCollectData": "Coletar dados de pesquisa",
+    "searchMatchScoreWeight": "Peso de correspondência na pesquisa",
+    "searchSortingAlgorithm": "Algoritmo de ordenação na pesquisa",
+    "searchMinWordLength1": "Comprimento mínimo da palavra para 1 correção ortográfica",
+    "searchMinWordLength2": "Comprimento mínimo da palavra para 2 correções ortográficas",
+    "section": "Seção",
+    "selectionImage": "Imagem de seleção",
+    "session": {
+      "store": "Sessão no servidor",
+      "age": "Idade da sessão",
+      "fixed": "Duração fixa da sessão"
+    },
+    "sex": "Sexo",
+    "slug": "Slug",
+    "smsNotifications": "Notificações por SMS",
+    "sort": "Ordenar",
+    "startDate": "Data de início",
+    "state": "Estado",
+    "submissions": "Envios",
+    "supportEmail": "E-mail de suporte",
+    "survey": "Pesquisa",
+    "surveySchemeId": "ID do esquema de pesquisa",
+    "surveySchemeOverrides": "Sobrescritas do esquema de pesquisa",
+    "suspensionReason": "Motivo da suspensão",
+    "symbol": "Símbolo",
+    "textDirection": "Direção do texto",
+    "text": "Texto",
+    "terms": "Termos",
+    "token": "Token",
+    "topFoods": {
+      "max": "Número máximo de alimentos",
+      "colors": "Cores",
+      "nutrientTypes": "Tipos de nutrientes"
+    },
+    "translations": "Traduções",
+    "type": "Tipo",
+    "tzOffset": "Deslocamento de fuso horário",
+    "useForRecipes": "Usar em receitas",
+    "userId": "ID do usuário",
+    "userPersonalIdentifiers": "Identificadores pessoais do usuário",
+    "userCustomFields": "Campos personalizados do usuário",
+    "username": "Nome de usuário",
+    "value": "Valor",
+    "verifiedAt": "Verificado em",
+    "weight": "Peso",
+    "weightKg": "Peso (kg)",
+    "weightTarget": "Meta de peso"
+  },
+  "types": {
+    "array": {
+      "_": "\"{attribute}\" deve ser um array.",
+      "min": "\"{attribute}\" deve ser um array (mínimo: {min}).",
+      "max": "\"{attribute}\" deve ser um array (máximo: {max}).",
+      "minMax": "\"{attribute}\" deve ser um array (mínimo: {min}, máximo: {max}).",
+      "even": "\"{attribute}\" deve ter um número par de elementos.",
+      "number": "\"{attribute}\" deve ser um array de números.",
+      "string": "\"{attribute}\" deve ser um array de strings.",
+      "colors": "\"{attribute}\" deve ser um array de cores."
+    },
+    "boolean": {
+      "_": "\"{attribute}\" deve ser um booleano (true/false)."
+    },
+    "cron": {
+      "_": "\"{attribute}\" deve ser uma expressão cron."
+    },
+    "date": {
+      "_": "\"{attribute}\" deve ser uma data.",
+      "after": "\"{attribute}\" deve ser uma data após {after}.",
+      "before": "\"{attribute}\" deve ser uma data antes de {before}.",
+      "between": "\"{attribute}\" deve ser uma data entre {after} e {before}.",
+      "ms": "\"{attribute}\" deve estar em formato de duração (30m, 1h, 2d)."
+    },
+    "duplicate": {
+      "_": "\"{attribute}\" não pode ter itens duplicados."
+    },
+    "float": {
+      "_": "\"{attribute}\" deve ser um número decimal.",
+      "min": "\"{attribute}\" deve ser um número decimal (mínimo: {min}).",
+      "max": "\"{attribute}\" deve ser um número decimal (máximo: {max}).",
+      "minMax": "\"{attribute}\" deve ser um número decimal (mínimo: {min}, máximo: {max})."
+    },
+    "exists": {
+      "_": "\"{attribute}\" deve referenciar um registro existente no banco de dados."
+    },
+    "either": {
+      "_": "Ou {one} ou {two} deve ser preenchido."
+    },
+    "email": {
+      "_": "\"{attribute}\" deve ser um endereço de e-mail válido."
+    },
+    "file": {
+      "_": "\"{attribute}\" deve ser um arquivo.",
+      "ext": "\"{attribute}\" tem extensão inválida, esperado: {ext}.",
+      "mime": "\"{attribute}\" tem tipo MIME inválido, esperado: {mime}."
+    },
+    "in": {
+      "_": "\"{attribute}\" deve ser um valor permitido.",
+      "options": "\"{attribute}\" deve ser um dos seguintes valores: {options}."
+    },
+    "integer": {
+      "_": "\"{attribute}\" deve ser um inteiro.",
+      "min": "\"{attribute}\" deve ser um inteiro (mínimo: {min}).",
+      "max": "\"{attribute}\" deve ser um inteiro (máximo: {max}).",
+      "minMax": "\"{attribute}\" deve ser um inteiro (mínimo: {min}, máximo: {max})."
+    },
+    "json": {
+      "_": "\"{attribute}\" deve ser um objeto JSON válido."
+    },
+    "jwt": {
+      "_": "\"{attribute}\" deve ser um JWT válido."
+    },
+    "locale": {
+      "_": "\"{attribute}\" deve ser um código de localidade válido."
+    },
+    "number": {
+      "_": "\"{attribute}\" deve ser um número."
+    },
+    "match": {
+      "_": "\"{attribute}\" deve corresponder ao valor {match}."
+    },
+    "object": {
+      "_": "\"{attribute}\" deve ser um objeto."
+    },
+    "password": {
+      "_": "A senha deve conter pelo menos 10 caracteres entre minúsculas, maiúsculas e números."
+    },
+    "phone": {
+      "_": "\"{attribute}\" deve ser um número de telefone válido."
+    },
+    "regEx": {
+      "_": "\"{attribute}\" é inválido."
+    },
+    "restricted": {
+      "_": "\"{attribute}\" está restrito aos valores permitidos."
+    },
+    "safeChars": {
+      "_": "\"{attribute}\" deve ser um código único (conjunto de caracteres [a-zA-Z0-9-_])."
+    },
+    "string": {
+      "_": "\"{attribute}\" deve ser preenchido.",
+      "max": "\"{attribute}\" deve ser preenchido (máximo: {max}).",
+      "minMax": "\"{attribute}\" deve ser preenchido (mínimo: {min}, máximo: {max}).",
+      "or": {
+        "array": "\"{attribute}\" deve ser uma string ou um array."
+      },
+      "unique": "\"{attribute}\" deve ser uma string de caracteres únicos."
+    },
+    "structure": {
+      "_": "\"{attribute}\" deve ter estrutura válida."
+    },
+    "terms": {
+      "_": "\"{attribute}\" deve ser aceito."
+    },
+    "unique": {
+      "_": "Já existe um registro com o mesmo valor de \"{attribute}\"."
+    },
+    "url": {
+      "_": "\"{attribute}\" deve ser uma URL válida."
+    },
+    "uuid": {
+      "_": "\"{attribute}\" deve ser um UUID válido."
+    }
+  }
+}

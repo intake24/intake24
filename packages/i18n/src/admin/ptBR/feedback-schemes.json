@@ -1,0 +1,268 @@
+{
+  "_": "Esquema de feedback",
+  "title": "Esquemas de feedback",
+  "read": "Detalhe do esquema de feedback",
+  "create": "Adicionar esquema de feedback",
+  "edit": "Editar esquema de feedback",
+  "delete": "Excluir esquema de feedback",
+  "load": "Carregar de esquema",
+  "none": "Nenhum esquema de feedback encontrado",
+  "types": {
+    "_": "Tipo de feedback",
+    "title": "Tipos de feedback",
+    "default": "Padrão",
+    "playful": "Lúdico"
+  },
+  "outputs": {
+    "_": "Saída",
+    "title": "Saídas",
+    "print": "Imprimir",
+    "email": "Email",
+    "download": "Baixar"
+  },
+  "physicalDataFields": {
+    "_": "Campos de dados físicos",
+    "title": "Campos de dados físicos",
+    "required": "O campo {field} é necessário para calcular o feedback.",
+    "notRequired": "O campo {field} não é necessário e pode ser removido.",
+    "sex": "Sexo",
+    "weightKg": "Peso",
+    "heightCm": "Altura",
+    "physicalActivityLevelId": "Nível de atividade física",
+    "birthdate": "Data de nascimento",
+    "weightTarget": "Meta de peso"
+  },
+  "copy": {
+    "_": "Copiar",
+    "title": "Copiar esquema de feedback",
+    "name": "Nome do novo esquema de feedback"
+  },
+  "preview": {
+    "_": "Pré-visualização",
+    "title": "Pré-visualização do feedback"
+  },
+  "ranges": {
+    "_": "Intervalo",
+    "start": "Início",
+    "end": "Fim"
+  },
+  "age": {
+    "_": "Idade",
+    "range": "Intervalo de idade",
+    "start": "Início do intervalo de idade",
+    "end": "Fim do intervalo de idade"
+  },
+  "height": {
+    "_": "Altura"
+  },
+  "weight": {
+    "_": "Peso"
+  },
+  "sexes": {
+    "_": "Sexo",
+    "m": "Masculino",
+    "f": "Feminino"
+  },
+  "sentiments": {
+    "_": "Sentimento",
+    "title": "Sentimentos",
+    "add": "Adicionar sentimento",
+    "remove": "Remover sentimento",
+    "too_low": "Muito baixo",
+    "low": "Baixo",
+    "bit_low": "Um pouco baixo",
+    "neutral": "Neutro",
+    "good": "Bom",
+    "excellent": "Excelente",
+    "high": "Alto",
+    "bit_high": "Um pouco alto",
+    "too_high": "Muito alto"
+  },
+  "characterSentimentTypes": {
+    "_": "Tipo de sentimento de personagem",
+    "title": "Tipos de sentimento de personagem",
+    "danger": "Perigo",
+    "warning": "Aviso",
+    "happy": "Feliz",
+    "exciting": "Empolgante"
+  },
+  "nutrientRuleTypes": {
+    "_": "Tipo de regra de nutriente",
+    "title": "Tipos de regra de nutriente",
+    "energy_divided_by_bmr": "Energia dividida pelo BMR",
+    "percentage_of_energy": "Porcentagem de energia",
+    "per_unit_of_weight": "Por unidade de peso",
+    "range": "Intervalo"
+  },
+  "colors": {
+    "_": "Cor",
+    "title": "Lista de cores",
+    "edit": "Editar cor",
+    "max": {
+      "_": "Número de cores",
+      "title": "Número de cores",
+      "required": "O valor deve ser um número inteiro"
+    }
+  },
+  "physicalActivityLevels": {
+    "_": "Nível de atividade física",
+    "title": "Níveis de atividade física"
+  },
+  "sections": {
+    "_": "Seção",
+    "title": "Seções",
+    "add": "Adicionar seção",
+    "edit": "Editar seção",
+    "remove": "Remover seção",
+    "tabs": {
+      "general": "Geral",
+      "json": "JSON"
+    }
+  },
+  "custom": {
+    "_": "Seção personalizada",
+    "title": "Seção personalizada",
+    "header": "Cabeçalho",
+    "content": "Conteúdo"
+  },
+  "top-foods": {
+    "_": "Principal alimento",
+    "title": "Principais alimentos",
+    "tab": "Principais alimentos",
+    "max": {
+      "_": "Número de alimentos",
+      "title": "Número de alimentos"
+    },
+    "other": "Outro alimento"
+  },
+  "meals": {
+    "_": "Refeições",
+    "title": "Refeições",
+    "tab": "Refeições",
+    "chart": "Gráfico de distribuição de refeições",
+    "table": "Tabela resumo de refeições",
+    "colors": {
+      "_": "Cor da refeição",
+      "title": "Cores das refeições"
+    },
+    "fields": {
+      "_": "Campo de refeição",
+      "title": "Campos de refeição",
+      "create": "Adicionar campo",
+      "edit": "Editar campo",
+      "remove": "Remover campo",
+      "reset": {
+        "_": "Redefinir campos de refeição",
+        "text": "Redefinir campos de refeição para a lista padrão"
+      },
+      "id": "ID do campo",
+      "header": "Cabeçalho do campo",
+      "value": "Valor do campo",
+      "types": {
+        "_": "Tipo de campo",
+        "title": "Tipos de campo",
+        "standard": "Campo padrão",
+        "custom": "Prompt personalizado",
+        "nutrient": "Nutrientes",
+        "name": "Nome da refeição",
+        "time": "Horário da refeição",
+        "hours": "Horas do horário da refeição",
+        "minutes": "Minutos do horário da refeição",
+        "duration": "Duração da refeição"
+      },
+      "validation": {
+        "required": "O campo deve ser preenchido.",
+        "unique": "O campo já existe na lista atual."
+      }
+    }
+  },
+  "cards": {
+    "_": "Cartão",
+    "title": "Cartões",
+    "tab": "Cartões",
+    "add": "Adicionar cartão",
+    "edit": "Editar cartão",
+    "remove": "Remover cartão",
+    "type": "Tipo de cartão",
+    "options": "Opções de cartão",
+    "color": "Cor do cartão",
+    "image": "Imagem",
+    "showRecommendations": "Mostrar recomendações de feedback",
+    "tabs": {
+      "general": "Geral",
+      "content": "Conteúdo",
+      "unit": "Unidade",
+      "thresholds": "Limiares",
+      "nutrients": "Nutrientes",
+      "json": "JSON"
+    },
+    "character": {
+      "title": "Personagem",
+      "subtitle": "Personagem / Nutriente"
+    },
+    "nutrient-group": {
+      "title": "Grupo de nutrientes",
+      "subtitle": "Agrupamento de feedback baseado na lista de nutrientes"
+    },
+    "five-a-day": {
+      "title": "Cinco por dia",
+      "subtitle": "Feedback Cinco por dia"
+    },
+    "thresholds": {
+      "_": "Limiar",
+      "title": "Limiares",
+      "low": "Limite inferior",
+      "high": "Limite superior",
+      "enabled": "Habilitar limiar",
+      "message": "Mensagem de aviso"
+    },
+    "unit": {
+      "name": "Nome da unidade",
+      "description": "Descrição da unidade",
+      "required": "O nome da unidade é obrigatório."
+    }
+  },
+  "demographic-groups": {
+    "_": "Grupo demográfico",
+    "title": "Grupos demográficos",
+    "tab": "Grupos demográficos",
+    "create": "Novo grupo demográfico",
+    "edit": "Editar grupo demográfico",
+    "remove": "Remover grupo demográfico",
+    "name": "Nome",
+    "required": "O nome é obrigatório.",
+    "summary": "Resumo",
+    "description": "Descrição",
+    "intake": "Mostrar ingestão em",
+    "tabs": {
+      "general": "Geral",
+      "sectors": "Setores da escala",
+      "json": "JSON"
+    },
+    "sectors": {
+      "_": "Setor da escala",
+      "title": "Setores da escala",
+      "add": "Adicionar setor da escala",
+      "remove": "Remover setor da escala"
+    }
+  },
+  "henry-coefficients": {
+    "_": "Coeficiente de Henry",
+    "title": "Coeficientes de Henry",
+    "tab": "Coeficientes de Henry",
+    "create": "Novo coeficiente de Henry",
+    "edit": "Editar coeficiente de Henry",
+    "remove": "Remover coeficiente de Henry",
+    "constant": "Constante",
+    "weightCoefficient": "Coeficiente de peso",
+    "heightCoefficient": "Coeficiente de altura"
+  },
+  "rating": {
+    "_": "Avaliação",
+    "title": "Avaliação"
+  },
+  "submissions": {
+    "_": "Envio",
+    "title": "Envios"
+  }
+}

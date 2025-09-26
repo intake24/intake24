@@ -1,0 +1,17 @@
+{
+  "_": "Conjunto servido",
+  "title": "Conjuntos servidos",
+  "read": "Detalhe do conjunto servido",
+  "create": "Adicionar conjunto servido",
+  "edit": "Editar conjunto servido",
+  "delete": "Excluir conjunto servido",
+  "id": "ID do conjunto servido",
+  "selectionImage": "Imagem de seleção",
+  "images": {
+    "_": "Imagem servida",
+    "title": "Imagens servidas",
+    "add": "Adicionar imagem servida",
+    "delete": "Excluir imagem servida"
+  },
+  "weight": "Peso"
+}

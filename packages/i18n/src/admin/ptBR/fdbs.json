@@ -1,0 +1,177 @@
+{
+  "_": "Banco de dados de alimentos",
+  "id": "ID do FoodDB",
+  "title": "Bancos de dados de alimentos",
+  "read": "Detalhe do FoodDB",
+  "create": "Adicionar FoodDB",
+  "edit": "Editar FoodDB",
+  "delete": "Excluir FoodDB",
+  "showGlobalName": "Mostrar nome global",
+  "food-list": {
+    "_": "Lista de alimentos",
+    "title": "Lista de alimentos",
+    "tab": "Lista de alimentos"
+  },
+  "search": {
+    "_": "Pesquisar",
+    "title": "Pesquisar categorias e alimentos"
+  },
+  "categories": {
+    "_": "Categoria",
+    "title": "Categorias",
+    "add": "Adicionar categoria",
+    "remove": "Remover categoria",
+    "noCategory": "Sem categoria",
+    "alreadyIncluded": "Categoria '{code}' já está incluída na lista atual.",
+    "none": "Nenhuma categoria encontrada para a pesquisa.",
+    "copy": "Copiar categoria",
+    "global": {
+      "_": "Configurações globais da categoria",
+      "code": "Código da categoria",
+      "name": "Nome em inglês",
+      "isHidden": "Está oculta"
+    },
+    "local": {
+      "_": "Configurações locais da categoria",
+      "id": "ID local da categoria",
+      "name": "Nome local",
+      "tags": "Etiquetas"
+    },
+    "attributes": {
+      "_": "Atributos da categoria"
+    },
+    "parentCategories": {
+      "_": "Categorias pai"
+    }
+  },
+  "foods": {
+    "_": "Alimento",
+    "title": "Alimentos",
+    "add": "Adicionar alimento",
+    "copy": "Copiar alimento",
+    "global": {
+      "_": "Configurações globais do alimento",
+      "code": "Código do alimento",
+      "name": "Nome em inglês",
+      "foodGroup": "Grupo alimentar"
+    },
+    "local": {
+      "_": "Configurações locais do alimento",
+      "id": "ID local do alimento",
+      "name": "Nome local",
+      "tags": "Etiquetas"
+    },
+    "attributes": {
+      "_": "Atributos do alimento"
+    },
+    "parentCategories": {
+      "_": "Categorias pai"
+    }
+  },
+  "locales": {
+    "_": "Usar em locais",
+    "title": "Usar em locais",
+    "description": "O alimento está incluído em {count} locais.",
+    "add": "Adicionar local",
+    "remove": "Remover local"
+  },
+  "attributes": {
+    "_": "Atributos",
+    "title": "Atributos",
+    "inherit": "Herdar",
+    "override": "Sobrescrever",
+    "sameAsBeforeOption": "Mesmo da opção anterior",
+    "readyMealOption": "Esta foi uma refeição pronta ou alimento (por ex.: pronto para cozinhar/comer/pré-embalado)?",
+    "reasonableAmount": "Quantidade razoável (g/ml)",
+    "useInRecipes": {
+      "0": "Usar em qualquer lugar",
+      "1": "Usar somente como alimento regular",
+      "2": "Usar somente como ingrediente de receita",
+      "_": "Usar em receitas"
+    }
+  },
+  "nutrients": {
+    "_": "Registro da tabela de nutrientes",
+    "title": "Registros da tabela de nutrientes",
+    "add": "Adicionar registro de nutrientes",
+    "remove": "Remover registro de nutrientes",
+    "alreadyIncluded": "Registro de tabela de nutrientes '{id}' já está incluído na lista atual.",
+    "none": "Nenhum registro de tabela de nutrientes encontrado para a pesquisa."
+  },
+  "associatedFoods": {
+    "_": "Alimento associado",
+    "title": "Alimentos associados",
+    "add": "Adicionar alimento associado",
+    "edit": "Editar alimento associado",
+    "remove": "Remover alimento associado",
+    "association": "Associação",
+    "genericName": "Nome genérico",
+    "text": "Texto",
+    "linkAsMain": "Vincular como alimento principal",
+    "multiple": "Permitir múltiplos alimentos"
+  },
+  "portionSizes": {
+    "_": "Método de tamanho de porção",
+    "title": "Métodos de tamanho de porção",
+    "add": "Adicionar método de tamanho de porção",
+    "edit": "Editar método de tamanho de porção",
+    "remove": "Remover método de tamanho de porção",
+    "parameters": "Parâmetros",
+    "noParameters": "O método não possui parâmetros adicionais.",
+    "description": "Descrição",
+    "useForRecipes": "Usar em receitas",
+    "conversionFactor": "Fator de conversão",
+    "methods": {
+      "_": "Método de estimativa",
+      "as-served": {
+        "_": "Como servido",
+        "servingImageSet": "Conjunto de imagens de porção",
+        "leftoverImageSet": "Conjunto de imagens de sobras",
+        "removeLeftoverImageSet": "Remover conjunto de imagens de sobras"
+      },
+      "cereal": {
+        "_": "Cereal"
+      },
+      "direct-weight": {
+        "_": "Peso"
+      },
+      "drink-scale": {
+        "_": "Escala de bebida",
+        "drinkwareSet": "Conjunto de recipientes",
+        "initialLevel": "Nível inicial de preenchimento",
+        "skipFillLevelPrompt": "Pular solicitação de nível de preenchimento",
+        "imageMapLabels": "Rótulos do mapa de imagem",
+        "multiple": "Permitir especificar múltiplos itens"
+      },
+      "guide-image": {
+        "_": "Imagem guia",
+        "imageMapLabels": "Rótulos do mapa de imagem"
+      },
+      "milk-in-a-hot-drink": {
+        "_": "Leite em bebida quente"
+      },
+      "milk-on-cereal": {
+        "_": "Leite no cereal",
+        "imageMapLabels": "Rótulos do mapa de imagem",
+        "options": "Opções de porção"
+      },
+      "parent-food-portion": {
+        "_": "Porção de alimento pai",
+        "options": "Opções de porção"
+      },
+      "pizza": {
+        "_": "Pizza",
+        "imageMapLabels": "Rótulos do mapa de imagem"
+      },
+      "pizza-v2": {
+        "_": "Pizza V2"
+      },
+      "standard-portion": {
+        "_": "Porção padrão",
+        "unit": "Unidade",
+        "weight": "Peso (g)",
+        "omitFoodDescription": "Omitir descrição do alimento"
+      }
+    }
+  }
+}

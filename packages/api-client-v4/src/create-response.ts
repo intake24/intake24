@@ -32,7 +32,19 @@ export function parseCreateResponse<T, CT = any>(
     };
   }
   else {
-    const message = `Unexpected HTTP status: ${response.status} for ${response.request.method} ${response.request.path}`;
+    let detail: string | undefined;
+    if (response.data && typeof response.data === 'object') {
+      const data = response.data as Record<string, unknown>;
+      if (typeof data.message === 'string')
+        detail = data.message;
+      else if (typeof data.error === 'string')
+        detail = data.error;
+    }
+
+    const method = response.request?.method ?? response.config.method ?? 'REQUEST';
+    const url = response.request?.path ?? response.config.url ?? 'unknown URL';
+    const baseMessage = `Unexpected HTTP status: ${response.status} for ${method} ${url}`;
+    const message = detail ? `${baseMessage} - ${detail}` : baseMessage;
 
     logger.error(message);
 
@@ -42,6 +54,10 @@ export function parseCreateResponse<T, CT = any>(
     if (request !== undefined)
       logger.error(`Request body: ${JSON.stringify(request, null, 2)}`);
 
-    throw new Error(message);
+    const error = new Error(message);
+    (error as any).status = response.status;
+    (error as any).detail = detail ?? response.data;
+
+    throw error;
   }
 }

@@ -1,0 +1,83 @@
+{
+  "_": "Legal",
+  "contact": "Contato",
+  "copyright": "{name} © {team} {year}",
+  "privacy": "Política de Privacidade",
+  "terms": "Termos de Uso",
+  "cookies": {
+    "_": "Cookies",
+    "consent": {
+      "consentModal": {
+        "label": "Cookies",
+        "title": "Intake24 usa cookies!",
+        "description": "Intake24 utiliza <strong>cookies necessários</strong> para o funcionamento adequado do site. Cookies de <strong>análise e estatística</strong> nos ajudam a entender como os visitantes usam o site para melhorar os serviços oferecidos.",
+        "acceptAllBtn": "Aceitar",
+        "showPreferencesBtn": "Alterar preferências"
+      },
+      "preferencesModal": {
+        "title": "Preferências de cookies",
+        "acceptAllBtn": "Aceitar tudo",
+        "savePreferencesBtn": "Salvar preferências",
+        "closeIconLabel": "Fechar",
+        "sections": [
+          {
+            "title": "Como usamos cookies 📢",
+            "description": "Intake24 utiliza <strong>cookies necessários</strong> para o funcionamento adequado do site. Cookies de <strong>análise e estatística</strong> nos ajudam a entender como os visitantes usam o site para melhorar os serviços oferecidos."
+          },
+          {
+            "title": "Cookies necessários <span class=\"pm__badge\">Sempre habilitados</span>",
+            "description": "Cookies estritamente necessários para o funcionamento adequado do site.",
+            "linkedCategory": "necessary",
+            "cookieTable": {
+              "headers": {
+                "name": "Nome",
+                "exp": "Expiração",
+                "desc": "Descrição"
+              },
+              "body": [
+                {
+                  "name": "it24(a|s)_refresh_token",
+                  "exp": "1 hora",
+                  "desc": "Funcionalidade técnica do site."
+                },
+                {
+                  "name": "it24_cc_consent",
+                  "exp": "1 ano",
+                  "desc": "Preferências de consentimento de cookies usadas pelo site."
+                }
+              ]
+            }
+          },
+          {
+            "title": "Cookies de análise e estatística",
+            "description": "Cookies de análise e estatística nos ajudam a entender como os visitantes usam o site para melhorar os serviços oferecidos. As informações são coletadas e armazenadas anonimamente.",
+            "linkedCategory": "analytics",
+            "cookieTable": {
+              "headers": {
+                "name": "Nome",
+                "exp": "Expiração",
+                "desc": "Descrição"
+              },
+              "body": [
+                {
+                  "name": "^_ga",
+                  "exp": "2 anos",
+                  "desc": "ID único usado para gerar dados estatísticos sobre como os visitantes usam o site."
+                },
+                {
+                  "name": "^_gid",
+                  "exp": "1 dia",
+                  "desc": "ID único usado para gerar dados estatísticos sobre como os visitantes usam o site."
+                }
+              ]
+            }
+          },
+          {
+            "title": "Mais informações",
+            "description": "Se você tiver alguma dúvida, entre em contato conosco."
+          }
+        ]
+      }
+    }
+  }
+}

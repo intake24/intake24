@@ -1,0 +1,52 @@
+{
+  "_": "Idiomas",
+  "code": "Código do idioma",
+  "title": "Idiomas",
+  "all": "Todos os idiomas",
+  "read": "Detalhe do idioma",
+  "create": "Adicionar idioma",
+  "edit": "Editar idioma",
+  "delete": "Excluir idioma",
+  "englishName": "Nome em inglês",
+  "localName": "Nome local",
+  "countryFlagCode": "Código da bandeira do país",
+  "textDirections": {
+    "_": "Direção do texto",
+    "ltr": "Esquerda para direita",
+    "rtl": "Direita para esquerda"
+  },
+  "translations": {
+    "_": "Traduções",
+    "title": "Traduções",
+    "tab": "Traduções",
+    "create": "Inicializar traduções",
+    "edit": "Editar seção",
+    "delete": "Excluir traduções do idioma",
+    "sync": "Sincronizar traduções do idioma",
+    "path": "Caminho da chave",
+    "applications": {
+      "admin": "Admin",
+      "api": "API",
+      "survey": "Pesquisa",
+      "shared": "Compartilhado"
+    },
+    "sections": {
+      "breadcrumbs": "Breadcrumbs",
+      "feedback": "Feedback",
+      "flags": "Bandeiras",
+      "login": "Login",
+      "portion": "Tamanhos de porção",
+      "profile": "Perfil",
+      "prompts": "Mensagens",
+      "recall": "Recall",
+      "rateLimit": "Limites de taxa",
+      "standard-units": "Unidades padrão",
+      "survey": "Pesquisa",
+      "validation": "Validação"
+    },
+    "created": "As traduções do idioma ({name}) foram criadas.",
+    "updated": "As traduções do idioma ({name}) foram atualizadas.",
+    "deleted": "As traduções do idioma ({name}) foram excluídas.",
+    "synced": "As traduções do idioma ({name}) foram sincronizadas."
+  }
+}

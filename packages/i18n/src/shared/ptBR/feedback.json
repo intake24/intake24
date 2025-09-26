@@ -1,0 +1,87 @@
+{
+  "_": "Feedback dietético",
+  "info": "Informações sobre o feedback dietético",
+  "status": {
+    "available": "O feedback dietético está disponível.",
+    "lowRecalls": "O feedback dietético estará disponível assim que você enviar pelo menos {minRecalls} recordações.",
+    "notAvailable": "O feedback dietético não está disponível para esta pesquisa."
+  },
+  "title": "Feedback dietético de {name} recordações",
+  "missingFoods": "Quaisquer alimentos relatados como ausentes não serão incluídos no feedback dietético",
+  "physicalData": {
+    "title": "Sobre você",
+    "subtitle": "Para que possamos apresentar seu feedback corretamente, insira os seguintes dados.",
+    "change": "Alterar minhas informações",
+    "recall": "Registrar outro dia",
+    "sexes": {
+      "_": "Sexo",
+      "m": "Masculino",
+      "f": "Feminino"
+    },
+    "sex": "Sexo: {sex}",
+    "age": "Idade: {age}",
+    "birthdate": "Ano de nascimento",
+    "height": "Altura: {height} cm",
+    "heightCm": "Altura em centímetros",
+    "weight": "Peso: {weight} kg",
+    "weightKg": "Peso em quilogramas",
+    "physicalActivityLevelId": "Nível de atividade física",
+    "weightTarget": "Meta: {target}",
+    "weightTargets": {
+      "_": "Meta de peso",
+      "title": "Metas de peso",
+      "keep_weight": "Manter peso",
+      "lose_weight": "Perder peso",
+      "gain_weight": "Ganhar peso"
+    }
+  },
+  "outputs": {
+    "title": "Saídas",
+    "download": {
+      "_": "Download",
+      "title": "Baixar como PDF",
+      "subtitle": "Baixe uma cópia do seu feedback dietético como arquivo PDF. Isso levará alguns segundos, aguarde.",
+      "send": "Enviar solicitação",
+      "sent": "O arquivo PDF do feedback dietético foi salvo."
+    },
+    "email": {
+      "_": "E-mail",
+      "title": "Enviar por e-mail",
+      "send": "Enviar solicitação",
+      "sent": "Enviamos seu feedback dietético para o e-mail fornecido."
+    },
+    "retry": "O feedback dietético já foi solicitado recentemente, tente novamente em {secs} s.",
+    "print": "Imprimir"
+  },
+  "cards": {
+    "title": "Resumo da sua ingestão"
+  },
+  "topFoods": {
+    "title": "Alimentos que mais contribuem para sua ingestão de nutrientes",
+    "chart": "Maior em {nutrient}"
+  },
+  "meals": {
+    "title": "Distribuição de refeições por dia",
+    "chart": "{nutrient}"
+  },
+  "rating": {
+    "_": "Avalie sua experiência",
+    "title": "Como você avaliaria o feedback dietético?",
+    "comment": "Conte-nos mais sobre a avaliação que você deu ao feedback dietético",
+    "send": "Enviar feedback",
+    "sent": "Feedback enviado, obrigado!"
+  },
+  "intake": {
+    "your": "Seu consumo de {nutrient} é {amount}",
+    "estimated": "Consumo estimado",
+    "recommended": "Consumo recomendado",
+    "tellMeMore": "Me conte mais",
+    "gotIt": "Entendi!"
+  },
+  "unitDescription": {
+    "percentage_of_energy": "O feedback sobre este nutriente é baseado na contribuição dele para a sua ingestão de energia pelos alimentos e quantidades que você relatou.",
+    "energy_divided_by_bmr": "O feedback dietético é baseado na sua ingestão de energia dividida pelo BMR e em como isso se compara às recomendações.",
+    "per_unit_of_weight": "O feedback dietético é baseado no seu consumo deste nutriente por kg do seu peso corporal e em como isso se compara às recomendações.",
+    "range": "O feedback sobre este nutriente é baseado nos alimentos e quantidades que você relatou."
+  }
+}

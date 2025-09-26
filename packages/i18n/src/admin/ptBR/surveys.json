@@ -1,0 +1,211 @@
+{
+  "_": "Pesquisa",
+  "title": "Pesquisas",
+  "all": "Todas as pesquisas",
+  "read": "Detalhe da pesquisa",
+  "create": "Adicionar pesquisa",
+  "edit": "Editar pesquisa",
+  "delete": "Excluir pesquisa",
+  "id": "ID da pesquisa",
+  "name": "Nome da pesquisa",
+  "states": {
+    "_": "Estado",
+    "notStarted": "Não iniciada",
+    "active": "Ativa",
+    "suspended": "Suspensa",
+    "completed": "Concluída"
+  },
+  "startDate": "Data de início",
+  "endDate": "Data de término",
+  "supportEmail": "E-mail de suporte",
+  "auth": {
+    "_": "Configurações de autenticação",
+    "captcha": "Verificação de Captcha",
+    "urlDomainOverride": "Substituição de domínio da URL",
+    "urlTokenCharset": "Conjunto de caracteres do token de URL",
+    "urlTokenLength": "Comprimento do token de URL"
+  },
+  "externalComm": {
+    "_": "Comunicação externa",
+    "allowGenUsers": "Permitir geração de usuários",
+    "secret": {
+      "_": "Segredo JWT para comunicação M2M",
+      "generate": {
+        "_": "Gerar",
+        "text": "Gerar segredo JWT"
+      }
+    }
+  },
+  "users": {
+    "_": "Configurações de usuários",
+    "personalIdentifiers": "Permitir identificadores pessoais do usuário",
+    "customFields": "Permitir campos personalizados do usuário"
+  },
+  "search": {
+    "_": "Opções de pesquisa",
+    "collectData": "Coletar dados de pesquisa",
+    "maxResults": "Número máximo de resultados de alimentos",
+    "sorting": "Ordenação",
+    "spellingCorrection": "Correção ortográfica",
+    "sortingAlgorithm": "Método de ordenação de alimentos",
+    "matchQuality": "Qualidade de correspondência",
+    "matchQualityCriteria": "Critérios de qualidade de correspondência",
+    "matchScoreWeight": "Preferência de ordenação",
+    "firstWordCost": "Primeira palavra",
+    "wordOrderCost": "Ordem das palavras",
+    "wordDistanceCost": "Distância entre palavras",
+    "unmatchedWordCost": "Contagem de palavras não correspondentes",
+    "foodOrdering": "Ordenação de alimentos",
+    "enableEditDistance": "Usar correção ortográfica por distância de edição",
+    "minWordLength1": "Comprimento mínimo da palavra para 1 correção",
+    "minWordLength2": "Comprimento mínimo da palavra para 2 correções",
+    "enablePhonetic": "Usar correção ortográfica fonética",
+    "minWordLengthPhonetic": "Comprimento mínimo da palavra para correção fonética",
+    "spellingCorrectionPreference": "Método de correção preferido",
+    "spellingCorrectionOptions": {
+      "phonetic": "Fonético",
+      "edit-distance": "Distância de edição",
+      "both": "Ambos"
+    },
+    "relevantCategories": "Categorias relevantes",
+    "enableRelevantCategories": "Mostrar categorias relevantes",
+    "relevantCategoryDepth": "Profundidade de categorias relevantes",
+    "algorithms": {
+      "paRules": "Associações pareadas (ML)",
+      "popularity": "Popularidade (freqüência de relato)",
+      "globalPop": "Popularidade global (freqüência de relato)",
+      "fixed": "Ordem predeterminada"
+    },
+    "information": {
+      "matchScoreWeightInfo": {
+        "title": "Preferência de ordenação",
+        "p1": "O Intake24 emprega dois métodos para determinar a prioridade dos alimentos nos resultados de pesquisa:",
+        "foodOrdering": "<strong>Ordenação de alimentos</strong> é a ordem dos itens no banco de dados conforme o “Método de ordenação de alimentos” escolhido, normalmente priorizando alimentos mais frequentemente relatados.",
+        "matchQuality": "<strong>Qualidade de correspondência</strong> é uma estimativa de quão bem a entrada do usuário combina com o nome de um alimento no banco de dados, baseada em contagem de palavras correspondentes e consistência na ordem.",
+        "p2": "Esta configuração controla como esses dois valores são combinados para definir a ordenação final dos resultados.",
+        "p3": "Se o controle deslizar para “Ordenação de alimentos”, a frequência de relato terá mais peso; se deslizar para “Qualidade de correspondência”, correspondências mais precisas serão priorizadas."
+      },
+      "sortingAlgorithmInfo": {
+        "title": "Método de ordenação de alimentos",
+        "p1": "Define como priorizar alimentos na lista de resultados.",
+        "popularity": "<strong>Popularidade (freqüência de relato)</strong> prioriza itens com maior frequência de relato, atualizada a cada envio de recordação, por localidade.",
+        "globalPopularity": "<strong>Popularidade global</strong> é similar, mas usa dados globais; não é recomendado pois códigos de alimentos raramente são compartilhados entre localidades.",
+        "predeterminedOrder": "<strong>Ordem predeterminada</strong> atribui uma prioridade fixa; permanece estática após upload."
+      },
+      "matchQualityInfo": {
+        "title": "Critérios de qualidade de correspondência",
+        "p1": "Define a importância de cada critério no cálculo de similaridade entre entrada do usuário e descrições de alimentos.",
+        "p2": "Cada critério gera um custo; a soma representa o “custo de correspondência”. Menor custo = melhor correspondência.",
+        "p3": "Valores maiores no controle aumentam o impacto do critério; zero ignora o critério.",
+        "firstWord": "<strong>Primeira palavra</strong> penaliza se a primeira palavra não for encontrada no nome do alimento.",
+        "wordOrder": "<strong>Ordem das palavras</strong> penaliza violação na sequência de palavras.",
+        "wordDistance": "<strong>Distância entre palavras</strong> penaliza quando palavras adjacentes na entrada não estão adjacentes no nome.",
+        "wordCount": "<strong>Contagem de palavras</strong> penaliza por cada palavra sem correspondência."
+      },
+      "spellingCorrectionInfo": {
+        "title": "Correção ortográfica",
+        "p1": "Configura algoritmos quando não há correspondência exata.",
+        "editDistance": "<strong>Distância de edição</strong> (Levenshtein) mede o número mínimo de operações para transformar uma palavra em outra.",
+        "minimumWordLength": "Define o comprimento mínimo para aplicar correção de até 2 edições, evitando correspondências inadequadas em palavras curtas.",
+        "phonetic": "<strong>Correção fonética</strong> usa codificação fonética para comparar pela pronúncia.",
+        "phoneticMinWordLength": "Define comprimento mínimo para correção fonética.",
+        "preferredMethod": "Escolhe qual método aplicar primeiro (Fonético, Distância de edição ou Ambos)."
+      },
+      "relevantCategoriesInfo": {
+        "title": "Categorias relevantes",
+        "p1": "Controla se categorias “pais” também aparecem nos resultados.",
+        "p2": "Desligado: só categorias com nome exato; ligado: inclui categorias pai.",
+        "p3": "Ex.: “bananas” sem a função retorna nada; com ela, “Frutas” aparece.",
+        "relevantCategoryDepth": "Níveis de pais a incluir (0 = só pais diretos, 1 = pais dos pais, etc.)."
+      }
+    }
+  },
+  "submissionLimits": {
+    "_": "Limites de envio",
+    "maxDaily": "Máximo de envios por dia",
+    "maxTotal": "Máximo total de envios",
+    "minInterval": "Intervalo mínimo entre envios (s)"
+  },
+  "suspensionReason": "Motivo da suspensão",
+  "session": {
+    "_": "Configurações de sessão",
+    "age": {
+      "_": "Idade da sessão",
+      "hint": "Especifique duração desde o início da pesquisa, ex.: 30m, 12h, 2d."
+    },
+    "fixed": {
+      "_": "Duração fixa da sessão",
+      "hint": "Especifique duração fixa, ex.: 1d+0h, 2d+4h"
+    },
+    "store": "Armazenar sessão no servidor"
+  },
+  "feedback": {
+    "_": "Configurações de feedback",
+    "enabled": "Feedback habilitado",
+    "numberOfSubmissions": "Número de envios para feedback"
+  },
+  "tasks": {
+    "_": "Tarefa de pesquisa",
+    "title": "Tarefas de pesquisa",
+    "tab": "Tarefas"
+  },
+  "overrides": {
+    "_": "Sobrescritas de esquema",
+    "tab": "Sobrescritas",
+    "title": "Sobrescritas de esquema"
+  },
+  "respondents": {
+    "_": "Respondentes",
+    "tab": "Respondentes",
+    "title": "Respondentes da pesquisa",
+    "add": "Novo respondente",
+    "edit": "Editar respondente",
+    "upload": {
+      "_": "Envio em massa",
+      "title": "Envio em massa de respondentes",
+      "submit": "Enviar"
+    },
+    "authUrls": {
+      "_": "URLs de autenticação",
+      "title": "URLs de autenticação de respondentes",
+      "submit": "Gerar arquivo",
+      "download": "Download",
+      "surveyAuthUrl": "URL da pesquisa",
+      "feedbackAuthUrl": "URL de feedback",
+      "copiedToClipboard": "URL copiada para a área de transferência"
+    },
+    "feedback": {
+      "_": "Feedback",
+      "title": "Feedback do respondente",
+      "details": "Detalhes do respondente",
+      "open": "Abrir",
+      "download": "Download",
+      "email": {
+        "title": "Enviar feedback por e-mail",
+        "recipient": "E-mail do destinatário",
+        "sent": "Enviar",
+        "copy": {
+          "_": "Me copiar:",
+          "cc": "CC",
+          "bcc": "BCC",
+          "none": "Nenhum"
+        }
+      }
+    }
+  },
+  "sessions": {
+    "_": "Sessão",
+    "tab": "Sessões",
+    "title": "Sessões da pesquisa",
+    "id": "ID da sessão"
+  },
+  "submissions": {
+    "_": "Envio",
+    "tab": "Envios",
+    "title": "Envios da pesquisa",
+    "id": "ID do envio",
+    "startTime": "Hora de início",
+    "endTime": "Hora de término",
+    "submissionTime": "Hora do envio"
+  }
+}

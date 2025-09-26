@@ -1,0 +1,21 @@
+{
+  "_": "Imagem guia",
+  "title": "Imagens guia",
+  "read": "Detalhe da imagem guia",
+  "create": "Adicionar imagem guia",
+  "edit": "Editar imagem guia",
+  "delete": "Excluir imagem guia",
+  "id": "ID da imagem guia",
+  "objects": {
+    "_": "Objeto de imagem guia",
+    "title": "Objetos de imagem guia",
+    "id": "ID do objeto",
+    "add": "Adicionar objeto de imagem guia",
+    "delete": "Excluir objeto",
+    "label": {
+      "_": "Rótulo",
+      "hint": "Use a variável '{weight}' para incluir o peso do objeto."
+    },
+    "weight": "Peso"
+  }
+}

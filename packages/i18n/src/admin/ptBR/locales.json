@@ -1,0 +1,77 @@
+{
+  "_": "Localidade",
+  "code": "Código da localidade",
+  "title": "Localidades",
+  "all": "Todas as localidades",
+  "read": "Detalhe da localidade",
+  "create": "Adicionar localidade",
+  "edit": "Editar localidade",
+  "delete": "Excluir localidade",
+  "prototypeLocaleId": "Localidade protótipo",
+  "englishName": "Nome em inglês",
+  "localName": "Nome local",
+  "respondentLanguageId": "Idioma da interface do respondente",
+  "adminLanguageId": "Idioma da interface de administração",
+  "countryFlagCode": "Código da bandeira do país",
+  "foodIndex": {
+    "_": "Índice de alimentos",
+    "enabled": "Índice de alimentos habilitado",
+    "languageBackend": "Backend de idioma do índice de alimentos"
+  },
+  "split-lists": {
+    "_": "Lista dividida",
+    "title": "Listas divididas",
+    "tab": "Listas divididas",
+    "add": "Adicionar lista dividida",
+    "remove": "Remover lista dividida",
+    "firstWord": "Primeira palavra",
+    "words": "Lista de palavras (separadas por espaço)"
+  },
+  "split-words": {
+    "_": "Palavra dividida",
+    "title": "Palavras divididas",
+    "tab": "Palavras divididas",
+    "add": "Adicionar palavra dividida",
+    "remove": "Remover palavra dividida",
+    "words": "Lista de palavras (separadas por espaço)"
+  },
+  "synonym-sets": {
+    "_": "Conjunto de sinônimos",
+    "title": "Conjuntos de sinônimos",
+    "tab": "Conjuntos de sinônimos",
+    "add": "Adicionar conjunto de sinônimos",
+    "remove": "Remover conjunto de sinônimos",
+    "synonyms": "Sinônimos (separados por espaço)"
+  },
+  "recipe-foods": {
+    "_": "Conjuntos de alimentos de receita",
+    "title": "Conjunto de alimentos de receita",
+    "tab": "Alimentos de receita",
+    "add": "Adicionar alimento de receita",
+    "remove": "Remover alimento de receita",
+    "special": "Palavra-chave",
+    "code": "Código do alimento de receita",
+    "step_code": "Código da etapa (atribuído automaticamente)",
+    "synonymsId": "Sinônimos (separados por espaço)",
+    "steps": "Etapas do construtor de receita",
+    "name": "Nome da etapa",
+    "description": "Descrição da etapa",
+    "ingredientsCategory": "Categoria de ingredientes da etapa",
+    "order": "Ordem da etapa",
+    "repeat": "Vários ingredientes",
+    "require": "Obrigatório"
+  },
+  "food-ranking": {
+    "_": "Classificação de alimentos",
+    "title": "Classificação de alimentos",
+    "tab": "Classificação de alimentos",
+    "delete": "Excluir",
+    "upload": "Enviar CSV de classificação de alimentos",
+    "description": "Para habilitar o algoritmo de classificação de alimentos de \"ordem predeterminada\" em estudos que utilizem esta localidade,\nenvie uma planilha de classificação de alimentos."
+  },
+  "tasks": {
+    "_": "Tarefa de localidade",
+    "title": "Tarefas de localidade",
+    "tab": "Tarefas"
+  }
+}

@@ -4,6 +4,7 @@ export { default as findPortionImages } from './find-portion-images';
 export { default as evaluateSearch } from './foods/evaluate-search-command';
 export { default as opensearchMigrate } from './foods/opensearch-migrate-command';
 export { default as opensearchTest } from './foods/opensearch-test-command';
+export { default as syncFoodAttributes } from './foods/sync-food-attributes-command';
 export { default as buildFrenchLocale } from './fr-inca3/build-fr-locale-command';
 export { default as generateEnv } from './generate-env';
 export { default as generateKey } from './generate-key';

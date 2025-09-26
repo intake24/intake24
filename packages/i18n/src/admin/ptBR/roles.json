@@ -1,0 +1,19 @@
+{
+  "_": "Função",
+  "title": "Funções",
+  "all": "Todas as funções",
+  "read": "Detalhe da função",
+  "create": "Adicionar função",
+  "edit": "Editar função",
+  "delete": "Excluir função",
+  "permissions": {
+    "_": "Permissão",
+    "title": "Permissões",
+    "tab": "Permissões"
+  },
+  "users": {
+    "_": "Usuário",
+    "title": "Usuários",
+    "tab": "Usuários"
+  }
+}

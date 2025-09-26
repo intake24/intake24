@@ -1,0 +1,20 @@
+{
+  "_": "Tarefa",
+  "title": "Tarefas",
+  "read": "Detalhe da tarefa",
+  "create": "Adicionar tarefa",
+  "edit": "Editar tarefa",
+  "delete": "Excluir tarefa",
+  "none": "Nenhuma tarefa",
+  "cron": "CRON",
+  "invalidCron": "Entrada CRON inválida",
+  "schedule": "Agendamento",
+  "job": "Job",
+  "run": {
+    "_": "Acionar job",
+    "confirm": "Enviar job para a fila",
+    "next": "Próxima execução do job"
+  },
+  "bullJob": "Job Bull (entrada na fila)",
+  "file": "Localização do arquivo"
+}

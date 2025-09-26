@@ -1,0 +1,143 @@
+{
+  "_": "Tarefa",
+  "title": "Tarefas",
+  "read": "Detalhe da tarefa",
+  "delete": "Excluir tarefa",
+  "downloadUrl": "URL de download",
+  "downloadUrlExpiresAt": "URL de download expira em",
+  "progress": "Progresso",
+  "successful": "Bem-sucedido",
+  "message": "Mensagem",
+  "params": "Parâmetros da tarefa",
+  "stackTrace": "Mensagem de erro",
+  "repeat": {
+    "_": "Repetir tarefa",
+    "confirm": "Enviar a tarefa para a fila"
+  },
+  "types": {
+    "_": "Tipos de tarefa",
+    "CleanRedisStore": {
+      "_": "Limpar armazenamento Redis",
+      "stores": {
+        "_": "Armazenamento Redis",
+        "cache": "Cache",
+        "rateLimiter": "Limitador de taxa",
+        "session": "Sessão"
+      }
+    },
+    "CleanStorageFiles": {
+      "_": "Limpar arquivos de armazenamento"
+    },
+    "FeedbackSchemesSync": {
+      "_": "Sincronizar esquemas de feedback"
+    },
+    "PurgeExpiredTokens": {
+      "_": "Limpar tokens expirados de acesso/refresh"
+    },
+    "LanguageTranslationsSync": {
+      "_": "Sincronizar traduções de idioma"
+    },
+    "LocaleCopy": {
+      "_": "Localização - Copiar dados",
+      "localeId": "ID de localidade",
+      "sourceLocaleId": "ID da localidade de origem",
+      "subTasks": {
+        "_": "Subtarefas",
+        "associatedFoods": "Alimentos associados",
+        "brands": "Marcas",
+        "categories": "Categorias",
+        "foods": "Alimentos",
+        "foodGroups": "Grupos alimentares",
+        "recipeFoods": "Alimentos de receita",
+        "searchPopularity": "Pesquisa - popularidade",
+        "searchFixedRanking": "Pesquisa - classificação fixa",
+        "splitLists": "Listas divididas",
+        "splitWords": "Palavras divididas",
+        "synonymSets": "Conjuntos de sinônimos"
+      }
+    },
+    "LocaleFoodNutrientMapping": {
+      "_": "Localização - Exportar mapeamento de nutrientes de alimento",
+      "localeId": "ID de localidade"
+    },
+    "LocaleFoodRankingUpload": {
+      "_": "Localização - upload de ranking de alimentos CSV",
+      "file": "Arquivo CSV",
+      "targetAlgorithm": "Tipo de algoritmo de ordenação a atualizar",
+      "warningTitle": "Aviso: risco de perda de dados. Proceda com cautela.",
+      "warningP1": "Os dados de frequência de alimentos são atualizados automaticamente pelo sistema conforme novos registros são recebidos.",
+      "warningP2": "Carregar dados de frequência de um arquivo CSV substituirá registros existentes no banco de dados, podendo levar à perda de dados.",
+      "warningP3": "Este recurso destina-se apenas à inicialização de novas localidades ou correção de problemas com dados de frequência existentes.",
+      "warningP4": "Verifique duas vezes se você está na localidade correta antes de carregar os dados."
+    },
+    "LocaleFoods": {
+      "_": "Localização - Exportar alimentos",
+      "localeId": "ID de localidade"
+    },
+    "LocaleIndexBuild": {
+      "_": "Localização - Reconstruir índices de alimentos para localidades modificadas"
+    },
+    "NutrientTableMappingImport": {
+      "_": "Tabela de nutrientes - Importar mapeamento NDB",
+      "file": "Arquivo CSV"
+    },
+    "NutrientTableDataImport": {
+      "_": "Tabela de nutrientes - Importar dados NDB",
+      "file": "Arquivo CSV"
+    },
+    "PopularitySearchUpdateCounters": {
+      "_": "Pesquisa - Atualizar contadores de popularidade",
+      "foodCodes": "Códigos de alimentos"
+    },
+    "ResourceExport": {
+      "_": "Recurso - Exportar dados",
+      "resource": "Recurso"
+    },
+    "SurveyAuthUrlsExport": {
+      "_": "Pesquisa - Exportar URLs de autenticação",
+      "surveyId": "ID da pesquisa"
+    },
+    "SurveyDataExport": {
+      "_": "Pesquisa - Exportar dados de submissão",
+      "surveyId": "ID da pesquisa"
+    },
+    "SurveyEventNotification": {
+      "_": "Pesquisa - Notificação de evento"
+    },
+    "SurveyFeedbackNotification": {
+      "_": "Pesquisa - Enviar feedback ao respondente",
+      "surveyId": "ID da pesquisa"
+    },
+    "SurveyHelpRequestNotification": {
+      "_": "Pesquisa - Notificação de solicitação de ajuda",
+      "surveyId": "ID da pesquisa"
+    },
+    "SurveyNutrientsRecalculation": {
+      "_": "Pesquisa - Recalcular nutrientes",
+      "surveyId": "ID da pesquisa"
+    },
+    "SurveyRatingsExport": {
+      "_": "Pesquisa - Exportar avaliações"
+    },
+    "SurveyRespondentsImport": {
+      "_": "Pesquisa - Importar respondentes",
+      "file": "Arquivo CSV"
+    },
+    "SurveySchemesSync": {
+      "_": "Pesquisa - Sincronizar esquemas"
+    },
+    "SurveySessionsExport": {
+      "_": "Pesquisa - Exportar sessões",
+      "surveyId": "ID da pesquisa"
+    },
+    "SurveySubmission": {
+      "_": "Pesquisa - Processar submissão"
+    },
+    "UserEmailVerificationNotification": {
+      "_": "Usuário - Notificação de verificação de email"
+    },
+    "UserPasswordResetNotification": {
+      "_": "Usuário - Enviar redefinição de senha"
+    }
+  }
+}

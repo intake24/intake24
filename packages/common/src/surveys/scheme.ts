@@ -15,11 +15,23 @@ export type HelpAvailableField = (typeof helpAvailableFields)[number];
 export const helpRequiredFields = [...helpAvailableFields, 'email|phone'] as const;
 export type HelpRequiredField = (typeof helpRequiredFields)[number];
 
+const localePattern = /^[a-z]{2}(?:[-_][A-Za-z0-9]+|[A-Z][A-Za-z0-9]*)?$/;
+
+function isSupportedLocale(value: string): boolean {
+  if (isLocale(value))
+    return true;
+
+  if (localePattern.test(value))
+    return true;
+
+  return false;
+}
+
 export const schemeSettings = z.object({
   type: z.enum(schemeTypes),
   flow: z.enum(recallFlows),
   recallDate: z.coerce.number().int().nullable(),
-  languages: z.string().refine(val => isLocale(val)).array(),
+  languages: z.string().refine(isSupportedLocale).array(),
   help: z.object({
     available: z.enum(helpAvailableFields).array(),
     required: z.enum(helpRequiredFields).array(),

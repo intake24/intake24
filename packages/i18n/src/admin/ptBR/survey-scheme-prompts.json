@@ -1,0 +1,20 @@
+{
+  "_": "Prompt de esquema",
+  "id": "ID do esquema",
+  "title": "Prompts de esquema",
+  "read": "Detalhe do prompt de esquema",
+  "create": "Adicionar prompt de esquema",
+  "edit": "Editar prompt de esquema",
+  "delete": "Excluir prompt de esquema",
+  "editTemplate": "Editar modelo de prompt",
+  "sync": {
+    "_": "Sincronização",
+    "tab": "Sincronização",
+    "synchronize": "Sincronizar",
+    "confirm": "Sincronizar modelo com o esquema",
+    "title": "Lista de esquemas contendo prompt com ID: {id}",
+    "true": "Prompt está sincronizado",
+    "false": "Prompt não está sincronizado",
+    "noSchemes": "Nenhum esquema contém este modelo de prompt ainda."
+  }
+}

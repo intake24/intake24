@@ -84,33 +84,72 @@ export class BaseClientV4 {
 
     this.accessClient.interceptors.response.use(
       async (response) => {
-        if (response.status === HttpStatusCode.Unauthorized) {
-          this.logger.debug(
-            `Access token rejected for request: ${response.config.method} ${response.config.url}`,
-          );
+        if (response.status >= 400) {
+          const detail = BaseClientV4.extractErrorDetail(response.data);
+          const message = BaseClientV4.composeErrorMessage(response, detail);
 
-          await this.refresh();
+          if (response.status === HttpStatusCode.Unauthorized) {
+            this.logger.debug(
+              `Access token rejected for request: ${response.config.method} ${response.config.url}`,
+            );
 
-          const response2 = (await this.requestQueue.add(async () =>
-            this.rawClient.request({
-              ...response.config,
-              headers: { ...response.config.headers, Authorization: `Bearer ${this.accessToken}` },
-            }),
-          )) as AxiosResponse;
+            await this.refresh();
 
-          if (response2.status === HttpStatusCode.Unauthorized)
-            throw new Error('Access token rejected by the API server again after refreshing.');
+            const response2 = (await this.requestQueue.add(async () =>
+              this.rawClient.request({
+                ...response.config,
+                headers: { ...response.config.headers, Authorization: `Bearer ${this.accessToken}` },
+              }),
+            )) as AxiosResponse;
 
-          return response2;
+            if (response2.status === HttpStatusCode.Unauthorized)
+              throw new Error('Access token rejected by the API server again after refreshing.');
+
+            if (response2.status >= 400) {
+              const detail2 = BaseClientV4.extractErrorDetail(response2.data);
+              const message2 = BaseClientV4.composeErrorMessage(response2, detail2);
+
+              const err2 = new Error(message2);
+              (err2 as any).status = response2.status;
+              (err2 as any).detail = detail2 ?? response2.data;
+              throw err2;
+            }
+
+            return response2;
+          }
+
+          const err = new Error(message);
+          (err as any).status = response.status;
+          (err as any).detail = detail ?? response.data;
+          throw err;
         }
-        else {
-          return response;
-        }
+
+        return response;
       },
       (error) => {
         throw error;
       },
     );
+  }
+
+  private static extractErrorDetail(data: unknown): string | undefined {
+    if (data && typeof data === 'object') {
+      const record = data as Record<string, unknown>;
+      const detail = record.message ?? record.error ?? record.detail;
+      if (typeof detail === 'string')
+        return detail;
+    }
+
+    if (typeof data === 'string')
+      return data;
+
+    return undefined;
+  }
+
+  private static composeErrorMessage(response: AxiosResponse, detail?: string): string {
+    const baseMessage
+      = `Unexpected HTTP status: ${response.status} for ${response.config.method?.toUpperCase()} ${response.config.url}`;
+    return detail ? `${baseMessage} - ${detail}` : baseMessage;
   }
 
   private async refreshImpl(): Promise<void> {

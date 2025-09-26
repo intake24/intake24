@@ -1,0 +1,194 @@
+{
+  "_": "Ferramenta Admin do Intake24",
+  "title": "Comum",
+  "docs": "Documentação",
+  "login": {
+    "_": "Entrar",
+    "subtitle": "Entrar na conta da Ferramenta Admin do Intake24",
+    "back": "Voltar ao login"
+  },
+  "mfa": {
+    "_": "MFA",
+    "title": "Confirmar desafio de autenticação",
+    "devices": "Outros dispositivos",
+    "otp": "Digite a senha de uso único",
+    "error": "Desafio de autenticação inválido. Tente novamente."
+  },
+  "logout": {
+    "_": "Sair",
+    "text": "Sair do aplicativo"
+  },
+  "signup": {
+    "_": "Registrar-se",
+    "subtitle": "Registre uma nova conta na Ferramenta Admin do Intake24",
+    "noAccount": "Ainda não possui conta?"
+  },
+  "verify": {
+    "_": "Verificação de conta",
+    "subtitle": "Verifique sua conta usando o link que enviamos para sua caixa de entrada.",
+    "text": "Se você não recebeu o email, verifique sua pasta de spam ou pressione o botão abaixo para solicitar um novo.",
+    "resend": "Reenviar email de verificação",
+    "resent": "O email de verificação foi enviado para sua caixa de entrada"
+  },
+  "password": {
+    "_": "Senha",
+    "current": "Senha atual",
+    "new": "Nova senha",
+    "confirm": "Confirme a nova senha",
+    "forgot": "Esqueceu a senha?",
+    "change": "Alterar senha atual",
+    "changed": "Senha alterada com sucesso.",
+    "request": {
+      "_": "Solicitar nova senha",
+      "subtitle": "Digite seu endereço de email para receber instruções de redefinição de senha.",
+      "captcha": "Desafio captcha inválido",
+      "send": "Enviar solicitação",
+      "sent": "As instruções de redefinição de senha foram enviadas para o email informado."
+    },
+    "reset": {
+      "_": "Redefinir senha",
+      "subtitle": "Digite seu email e a nova senha."
+    },
+    "update": "Atualizar senha",
+    "updated": "Sua senha foi atualizada com sucesso."
+  },
+  "email": "Email",
+  "emailConfirm": "Confirmar email",
+  "phone": "Telefone",
+  "spam": "Se você não recebeu o email, verifique sua pasta de spam/lixo ou pressione o botão abaixo para solicitar um novo.",
+  "terms": {
+    "_": "Termos",
+    "text": "Concordo com a {privacy} e com os {tos} do Intake24.",
+    "privacy": "Política de Privacidade",
+    "tos": "Termos de Serviço"
+  },
+  "admin": "Admin",
+  "fdb": "Bancos de Dados de Alimentos",
+  "local": "Localização",
+  "images": "Imagens",
+  "surveyMgmt": "Gerenciamento de Pesquisas",
+  "acl": "Controle de Acesso",
+  "system": "Sistema",
+  "disabled": "Desabilitado",
+  "yes": "Sim",
+  "true": "Sim",
+  "no": "Não",
+  "false": "Não",
+  "none": "Nenhum",
+  "na": "Não se aplica",
+  "name": "Nome",
+  "displayName": "Rótulo",
+  "description": "Descrição",
+  "id": "ID",
+  "type": "Tipo",
+  "status": "Status",
+  "options": {
+    "_": "Opções",
+    "title": "Lista de opções",
+    "add": "Nova opção",
+    "remove": "Remover opção",
+    "key": "Chave",
+    "label": "Rótulo",
+    "value": "Valor",
+    "exclusive": "Exclusiva"
+  },
+  "date": "Data",
+  "expiredAt": "Expirado em",
+  "expiresAt": "Expira em",
+  "startedAt": "Iniciado em",
+  "completedAt": "Concluído em",
+  "createdAt": "Criado em",
+  "updatedAt": "Atualizado em",
+  "deletedAt": "Excluído em",
+  "app": {
+    "_": "App",
+    "info": "Informações do Aplicativo",
+    "build": "Compilação"
+  },
+  "clipboard": {
+    "_": "Copiar para área de transferência",
+    "na": "API de área de transferência não disponível",
+    "copied": "Dados copiados para a área de transferência"
+  },
+  "sw": {
+    "check": "Atualização de conteúdo disponível",
+    "update": "Atualizar"
+  },
+  "action": {
+    "_": "Ação",
+    "active": "Ativo",
+    "add": "Adicionar",
+    "audit": "Auditar",
+    "back": "Voltar",
+    "cancel": "Cancelar",
+    "clear": "Limpar",
+    "close": "Fechar",
+    "continue": "Continuar",
+    "create": "Adicionar",
+    "delete": "Excluir",
+    "destroy": "Excluir permanentemente",
+    "read": "Detalhe",
+    "download": "Baixar",
+    "edit": "Editar",
+    "export": "Exportar",
+    "load": "Carregar",
+    "ok": "Confirmar",
+    "print": "Imprimir",
+    "remove": "Remover",
+    "redirect": "Redirecionar",
+    "restore": "Restaurar",
+    "reset": "Redefinir",
+    "retry": "Tentar novamente",
+    "save": "Salvar",
+    "securables": "Segurança",
+    "submit": "Enviar",
+    "sync": "Sincronizar",
+    "transfer": "Transferir",
+    "upload": "Enviar",
+    "confirm": {
+      "_": "Confirmar",
+      "title": "Deseja continuar?",
+      "msg": "Você está prestes a sair da página com alterações não salvas. Deseja continuar?",
+      "delete": "Você está prestes a excluir {name}.",
+      "remove": "Você está prestes a remover {name}.",
+      "revoke": "Você está prestes a revogar {name}.",
+      "multi": {
+        "delete": "Deseja excluir os itens selecionados: {count}"
+      },
+      "typed": "Digite {name} para confirmar."
+    }
+  },
+  "msg": {
+    "created": "Registro ({name}) foi criado.",
+    "updated": "Registro ({name}) foi atualizado.",
+    "deleted": "Registro ({name}) foi excluído.",
+    "revoked": "Registro ({name}) foi revogado.",
+    "multi": {
+      "deleted": "Itens selecionados foram excluídos ({count})."
+    },
+    "sent": "Sua mensagem foi enviada."
+  },
+  "search": {
+    "_": "Pesquisar",
+    "filter": "Filtrar",
+    "clear": "Limpar filtro",
+    "count": "Total de registros",
+    "selected": "Registros selecionados",
+    "none": "Nenhum registro encontrado"
+  },
+  "redirect": "Redirecionar para nova entrada",
+  "selected": "{count} itens selecionados",
+  "not": {
+    "assigned": "Não atribuído",
+    "found": "Não encontrado",
+    "provided": "Não fornecido",
+    "selected": "Não selecionado"
+  },
+  "json": {
+    "_": "Editor JSON",
+    "title": "Editor de conteúdo JSON"
+  },
+  "file": {
+    "csv": "Arquivo CSV para upload"
+  }
+}

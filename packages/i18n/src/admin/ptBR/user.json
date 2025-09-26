@@ -1,0 +1,83 @@
+{
+  "_": "Conta",
+  "title": "Conta",
+  "info": "Informações",
+  "access": "Acesso",
+  "profile": "Perfil",
+  "settings": "Configurações",
+  "name": "Nome",
+  "email": "E-mail",
+  "phone": "Telefone",
+  "permissions": "Permissões atribuídas",
+  "roles": "Funções atribuídas",
+  "languages": {
+    "_": "Idioma",
+    "title": "Idiomas"
+  },
+  "jobs": {
+    "_": "Tarefa",
+    "title": "Tarefas",
+    "create": "Nova tarefa"
+  },
+  "personalAccessTokens": {
+    "_": "Token de acesso pessoal",
+    "title": "Tokens de acesso pessoal",
+    "issue": "Emitir token",
+    "revoke": "Revogar token",
+    "revoked": "Revogado",
+    "none": "Nenhum token de acesso pessoal criado.",
+    "save": "Armazene o token abaixo com segurança. Você não poderá acessá-lo novamente."
+  },
+  "mfa": {
+    "_": "MFA",
+    "title": "Autenticação multifator",
+    "enable": "Habilitar autenticação multifator",
+    "disable": "Desabilitar autenticação multifator",
+    "disabled": "A autenticação multifator está desativada; adicione um dispositivo para habilitá-la.",
+    "devices": {
+      "_": "Dispositivo",
+      "title": "Dispositivos",
+      "add": "Adicionar dispositivo",
+      "remove": "Remover dispositivo",
+      "none": "Nenhum dispositivo de autenticação multifator registrado.",
+      "name": {
+        "_": "Nome do dispositivo",
+        "title": "Informe o nome do dispositivo"
+      },
+      "preferred": {
+        "_": "Preferencial",
+        "promote": "Promover como preferencial?",
+        "promoteConfirm": "Promover {name} como preferencial?"
+      },
+      "init": {
+        "_": "Inicializar",
+        "title": "Inicializar dispositivo"
+      },
+      "qr": {
+        "title": "Digitalizar QR e verificar",
+        "text": "Digitalize o código QR com seu app autenticador e insira o código abaixo."
+      },
+      "registered": "Dispositivo registrado com sucesso",
+      "verify": "Verificar dispositivo"
+    },
+    "providers": {
+      "_": "Provedor",
+      "title": "Provedores",
+      "otp": {
+        "_": "OTP",
+        "title": "Senha única",
+        "description": "Senhas únicas geradas por app autenticador. Apps suportados: Google Authenticator, Microsoft Authenticator, Authy, Duo Security etc."
+      },
+      "fido": {
+        "_": "FIDO",
+        "title": "FIDO / WebAuthn",
+        "description": "Dispositivos compatíveis com WebAuthn / FIDO2. Dispositivos suportados: chaves de hardware, Windows Hello, Face ID etc."
+      },
+      "duo": {
+        "_": "Duo",
+        "title": "Duo Security",
+        "description": "Duo Security é um provedor de autenticação multifator em nuvem. Certifique-se de que sua conta (e-mail) esteja inscrita no Duo Security antes de adicionar este dispositivo."
+      }
+    }
+  }
+}

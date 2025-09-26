@@ -1,0 +1,8 @@
+{
+  "generic": "Muitas solicitações. Tente novamente mais tarde.",
+  "login": "Muitas tentativas de login mal-sucedidas. Tente novamente mais tarde.",
+  "password": "O link de redefinição de senha foi solicitado recentemente. Tente novamente mais tarde.",
+  "verify": "O link de verificação de e-mail foi solicitado recentemente. Tente novamente mais tarde.",
+  "generateUser": "Um novo usuário acabou de ser gerado. Tente novamente mais tarde.",
+  "feedback": "Você solicitou o feedback recentemente. Tente novamente mais tarde."
+}

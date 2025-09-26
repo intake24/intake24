@@ -1,0 +1,73 @@
+{
+  "_": "Conjunto de recipientes",
+  "title": "Conjuntos de recipientes",
+  "read": "Detalhe do conjunto de recipientes",
+  "create": "Adicionar conjunto de recipientes",
+  "edit": "Editar conjunto de recipientes",
+  "delete": "Excluir conjunto de recipientes",
+  "id": "ID do conjunto de recipientes",
+  "imageMapTitle": "Recipientes neste conjunto",
+  "imageMapSubtitle": "Selecione um recipiente na imagem abaixo para editar o formato da escala deslizante e especificar as medidas de volume do líquido.",
+  "scales": {
+    "_": "Escala de recipientes",
+    "title": "Escalas de recipientes"
+  },
+  "volumes": {
+    "_": "Volume de recipientes",
+    "title": "Volumes de recipientes"
+  },
+  "selector": {
+    "empty": {
+      "title": "Nenhum objeto selecionado",
+      "text": "Selecione um recipiente do conjunto de recipientes para editar a escala deslizante."
+    }
+  },
+  "label": {
+    "title": "Nome do recipiente"
+  },
+  "slidingScale": {
+    "title": "Formato da escala deslizante",
+    "missing": {
+      "title": "Dados da escala deslizante ausentes",
+      "text": "Ainda não foi criada uma escala deslizante para este objeto. Selecione uma imagem base para criar uma nova escala deslizante."
+    },
+    "obsolete": "Dados da escala deslizante obsoletos",
+    "legacy": {
+      "p1": "Os dados da escala deslizante para este objeto não são editáveis porque estão no formato legado.",
+      "p2": "Escalas deslizantes no formato legado ainda podem ser usadas para estimativa de tamanho de porção, porém para fazer qualquer alteração é necessário converter os dados para o novo formato.",
+      "p3": "O formato da área de preenchimento de volume (contorno da escala deslizante) <strong>não será</strong> convertido automaticamente!",
+      "p4": "A escala deslizante <strong>ficará inutilizável</strong> após a conversão até que o formato da área de preenchimento de volume seja definido.",
+      "convert": "Converter"
+    },
+    "imagePreview": "Pré-visualização da imagem selecionada",
+    "baseImageFile": "Arquivo de imagem base",
+    "createButtonLabel": "Criar",
+    "editInstructions": "<strong>Clique duas vezes</strong> para adicionar um ponto · <strong>clique simples</strong> para selecionar um ponto · <strong>clique e arraste</strong> para mover um ponto · <strong>tecla delete</strong> para excluir um ponto",
+    "fillableAreaToggle": "Mostrar sobreposição da imagem de área preenchível antiga",
+    "deleteSelected": "Excluir selecionado",
+    "deleteAll": "Limpar",
+    "replaceBaseImage": "Substituir imagem base",
+    "replaceButtonLabel": "Substituir"
+  },
+  "clearScaleDialog": {
+    "title": "Tem certeza?",
+    "msg": "Você está prestes a excluir os dados do formato da escala deslizante.\nEsta ação não pode ser desfeita."
+  },
+  "volumeMethod": {
+    "title": "Método de estimativa de volume",
+    "lookUpTable": "Tabela de consulta",
+    "cylindrical": "Simetria cilíndrica (volume máximo de preenchimento)"
+  },
+  "volumeTable": {
+    "title": "Medições de volume",
+    "legacy": {
+      "p1": "Essas medições de volume provavelmente vêm do formato legado da escala deslizante que armazena apenas os valores normalizados da altura do líquido, remapeados para o intervalo [0, 1].",
+      "p2": "Os cálculos de estimativa de tamanho de porção usam os valores normalizados, então esses dados ainda são válidos, mas as medições originais de altura em mm não estão disponíveis."
+    },
+    "addRow": "Adicionar linha",
+    "removeRow": "Remover última linha",
+    "paste": "Colar dados",
+    "heightLabel": "Altura do líquido (mm)",
+    "volumeLabel": "Volume do líquido (ml)"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "_": "Registro de login",
+  "title": "Registro de login",
+  "read": "Detalhe do registro de login",
+  "delete": "Excluir registro de login",
+  "date": "Tentativa em",
+  "provider": "Provedor",
+  "providerKey": "ID do provedor",
+  "successful": "Bem-sucedido",
+  "userAgent": "Agente do usuário",
+  "remoteAddress": "Endereço remoto",
+  "message": "Mensagem"
+}

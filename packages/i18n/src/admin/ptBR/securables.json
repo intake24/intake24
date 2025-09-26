@@ -1,0 +1,49 @@
+{
+  "_": "Segurança",
+  "title": "Segurança",
+  "tab": "Segurança",
+  "add": "Adicionar acesso de usuário",
+  "edit": "Editar acesso de usuário",
+  "search": "Pesquisar usuário",
+  "create": "Criar novo usuário",
+  "owner": {
+    "_": "Proprietário",
+    "title": "Propriedade"
+  },
+  "actions": {
+    "_": "Ação de recurso",
+    "title": "Ações de recurso",
+    "read": "Ler registro",
+    "edit": "Editar registro",
+    "delete": "Excluir registro",
+    "copy": "Copiar registro",
+    "securables": "Segurança",
+    "use": "Usar registro",
+    "cards": "Cartões",
+    "top-foods": "Principais alimentos",
+    "meals": "Refeições",
+    "demographic-groups": "Grupos demográficos",
+    "henry-coefficients": "Coeficientes de Henry",
+    "translations": "Traduções",
+    "food-list": "Lista de alimentos",
+    "food-ranking": "Classificação de alimentos",
+    "split-lists": "Listas divididas",
+    "recipe-foods": "Alimentos de receita",
+    "split-words": "Palavras divididas",
+    "synonym-sets": "Conjuntos de sinônimos",
+    "tasks": "Tarefas",
+    "prompts": "Mensagens",
+    "data-export": "Exportação de dados",
+    "overrides": "Substituições",
+    "respondents": "Respondentes",
+    "sessions": "Sessões",
+    "submissions": "Envios",
+    "support": "Suporte"
+  },
+  "visibility": {
+    "_": "Visibilidade",
+    "title": "Visibilidade de registro",
+    "public": "Público",
+    "restricted": "Restrito"
+  }
+}

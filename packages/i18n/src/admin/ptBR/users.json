@@ -1,0 +1,60 @@
+{
+  "_": "Usuário",
+  "title": "Usuários",
+  "all": "Todos os usuários",
+  "read": "Detalhe do usuário",
+  "create": "Adicionar usuário",
+  "edit": "Editar usuário",
+  "delete": "Excluir usuário",
+  "id": "ID do usuário",
+  "name": "Nome",
+  "simpleName": "Nome simples",
+  "username": "Nome de usuário",
+  "verified": "Verificado",
+  "disabled": "Desativado",
+  "aliases": {
+    "_": "Apelido de usuário",
+    "title": "Apelidos de usuário",
+    "surveyId": "ID da pesquisa",
+    "username": "Nome de usuário",
+    "urlAuthToken": "Token de autenticação de URL",
+    "none": "Nenhum apelido de pesquisa definido"
+  },
+  "identifiers": {
+    "_": "Identificador",
+    "title": "Identificadores"
+  },
+  "personalIdentifiers": {
+    "_": "Identificador pessoal",
+    "title": "Identificadores pessoais"
+  },
+  "customFields": {
+    "_": "Campo personalizado",
+    "title": "Campos personalizados",
+    "add": "Novo campo",
+    "remove": "Remover campo",
+    "name": "Nome do campo",
+    "value": "Valor do campo",
+    "none": "Nenhum campo personalizado definido",
+    "public": "Público"
+  },
+  "permissions": {
+    "_": "Permissão",
+    "title": "Permissões",
+    "tab": "Permissões",
+    "hint": "Prefira atribuir permissões por meio de funções em vez de atribuição direta."
+  },
+  "roles": {
+    "_": "Função",
+    "title": "Funções",
+    "tab": "Funções"
+  },
+  "mfa": {
+    "_": "Autenticação multifator",
+    "abbr": "2FA"
+  },
+  "notifications": {
+    "email": "Notificações por e-mail",
+    "sms": "Notificações por SMS"
+  }
+}

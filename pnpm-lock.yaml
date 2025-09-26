@@ -609,7 +609,7 @@ importers:
         version: 3.3.11
       openai:
         specifier: ^5.8.3
-        version: 5.12.2(ws@8.18.3)(zod@3.25.76)
+        version: 5.12.2(ws@8.18.3)(zod@4.1.8)
       pg:
         specifier: ^8.16.0
         version: 8.16.3
@@ -634,6 +634,9 @@ importers:
       xlsx:
         specifier: ^0.18.5
         version: 0.18.5
+      zod:
+        specifier: ^4.1.8
+        version: 4.1.8
     devDependencies:
       '@types/decompress':
         specifier: ^4.2.7
@@ -694,7 +697,7 @@ importers:
     devDependencies:
       '@ts-rest/open-api':
         specifier: ^3.52.1
-        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@22.17.2)(zod@3.25.76))(zod@3.25.76)
+        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@22.17.2)(zod@4.1.8))(zod@4.1.8)
       '@types/node':
         specifier: ^22.15.29
         version: 22.17.2
@@ -11517,6 +11520,9 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.1.8:
+    resolution: {integrity: sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ==}
+
   zrender@5.6.1:
     resolution: {integrity: sha512-OFXkDJKcrlx5su2XbzJvj/34Q3m6PvyCZkVPHGYpcCJ52ek4U/ymZyfuV1nKE23AyBJ51E/6Yr0mhZ7xGTO4ag==}
 
@@ -11642,11 +11648,11 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.30
 
-  '@anatine/zod-openapi@1.14.2(openapi3-ts@2.0.2)(zod@3.25.76)':
+  '@anatine/zod-openapi@1.14.2(openapi3-ts@2.0.2)(zod@4.1.8)':
     dependencies:
       openapi3-ts: 2.0.2
       ts-deepmerge: 6.2.1
-      zod: 3.25.76
+      zod: 4.1.8
 
   '@anatine/zod-openapi@2.2.8(openapi3-ts@2.0.2)(zod@3.25.76)':
     dependencies:
@@ -14834,6 +14840,11 @@ snapshots:
       '@types/node': 22.17.2
       zod: 3.25.76
 
+  '@ts-rest/core@3.52.1(@types/node@22.17.2)(zod@4.1.8)':
+    optionalDependencies:
+      '@types/node': 22.17.2
+      zod: 4.1.8
+
   '@ts-rest/express@3.52.1(@ts-rest/core@3.52.1(@types/node@22.17.2)(zod@3.25.76))(express@4.21.2)(zod@3.25.76)':
     dependencies:
       '@ts-rest/core': 3.52.1(@types/node@22.17.2)(zod@3.25.76)
@@ -14841,12 +14852,12 @@ snapshots:
     optionalDependencies:
       zod: 3.25.76
 
-  '@ts-rest/open-api@3.52.1(@ts-rest/core@3.52.1(@types/node@22.17.2)(zod@3.25.76))(zod@3.25.76)':
+  '@ts-rest/open-api@3.52.1(@ts-rest/core@3.52.1(@types/node@22.17.2)(zod@4.1.8))(zod@4.1.8)':
     dependencies:
-      '@anatine/zod-openapi': 1.14.2(openapi3-ts@2.0.2)(zod@3.25.76)
-      '@ts-rest/core': 3.52.1(@types/node@22.17.2)(zod@3.25.76)
+      '@anatine/zod-openapi': 1.14.2(openapi3-ts@2.0.2)(zod@4.1.8)
+      '@ts-rest/core': 3.52.1(@types/node@22.17.2)(zod@4.1.8)
       openapi3-ts: 2.0.2
-      zod: 3.25.76
+      zod: 4.1.8
 
   '@tsconfig/node10@1.0.11': {}
 
@@ -20416,6 +20427,11 @@ snapshots:
       ws: 8.18.3
       zod: 3.25.76
 
+  openai@5.12.2(ws@8.18.3)(zod@4.1.8):
+    optionalDependencies:
+      ws: 8.18.3
+      zod: 4.1.8
+
   openapi3-ts@2.0.2:
     dependencies:
       yaml: 1.10.2
@@ -23559,6 +23575,8 @@ snapshots:
       zod: 3.25.76
 
   zod@3.25.76: {}
+
+  zod@4.1.8: {}
 
   zrender@5.6.1:
     dependencies:

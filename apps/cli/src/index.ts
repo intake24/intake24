@@ -35,6 +35,7 @@ import {
   packageExportV4,
   packageImportV4,
   searchTest,
+  syncFoodAttributes,
   validateEmbeddings,
 } from './commands';
 import {
@@ -618,6 +619,8 @@ async function run() {
         recreateIndex: options.recreateIndex,
       });
     });
+
+  syncFoodAttributes.command(program);
 
   await program.parseAsync(process.argv);
 }

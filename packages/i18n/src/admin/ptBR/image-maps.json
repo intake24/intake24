@@ -1,0 +1,15 @@
+{
+  "_": "Mapa de imagem",
+  "title": "Mapas de imagem",
+  "read": "Detalhe do mapa de imagem",
+  "create": "Adicionar mapa de imagem",
+  "edit": "Editar mapa de imagem",
+  "delete": "Excluir mapa de imagem",
+  "id": "ID do mapa de imagem",
+  "baseImage": "Arquivo de imagem base do mapa",
+  "objects": {
+    "_": "Objeto do mapa de imagem",
+    "title": "Objetos do mapa de imagem",
+    "delete": "Excluir objeto"
+  }
+}

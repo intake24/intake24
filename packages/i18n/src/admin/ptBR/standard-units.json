@@ -1,0 +1,24 @@
+{
+  "_": "Unidade padrão",
+  "title": "Unidades padrão",
+  "read": "Detalhe da unidade padrão",
+  "add": "Adicionar unidade padrão",
+  "create": "Adicionar unidade padrão",
+  "edit": "Editar unidade padrão",
+  "remove": "Remover unidade padrão",
+  "id": "ID da unidade padrão",
+  "estimateIn": "Estimativa em",
+  "howMany": "Quantos",
+  "categories": {
+    "_": "Categoria",
+    "tab": "Categorias",
+    "title": "Categorias",
+    "subtitle": "Categorias que usam a unidade padrão"
+  },
+  "foods": {
+    "_": "Alimento",
+    "tab": "Alimentos",
+    "title": "Alimentos",
+    "subtitle": "Alimentos que usam a unidade padrão"
+  }
+}

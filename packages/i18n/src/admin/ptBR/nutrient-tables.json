@@ -1,0 +1,37 @@
+{
+  "_": "Tabela de nutrientes",
+  "title": "Tabelas de nutrientes",
+  "read": "Detalhe da tabela de nutrientes",
+  "create": "Adicionar tabela de nutrientes",
+  "edit": "Editar tabela de nutrientes",
+  "delete": "Excluir tabela de nutrientes",
+  "id": "ID da tabela de nutrientes",
+  "mapping": {
+    "source": {
+      "_": "Mapeamento da planilha de origem",
+      "idColumnOffset": "Coluna de ID do registro",
+      "descriptionColumnOffset": "Coluna de descrição",
+      "localDescriptionColumnOffset": "Coluna de descrição local (deixe em branco se não se aplica)",
+      "rowOffset": "Número de linhas a pular (por ex.: cabeçalho ou linhas em branco)"
+    },
+    "fields": {
+      "_": "Mapeamento de colunas de campos",
+      "create": "Adicionar campo",
+      "delete": "Remover campo",
+      "fieldName": "Nome do campo",
+      "columnOffset": "Coluna do CSV"
+    },
+    "nutrients": {
+      "_": "Mapeamento de colunas de nutrientes",
+      "create": "Adicionar nutriente",
+      "delete": "Remover nutriente",
+      "nutrient": "Nutriente",
+      "columnOffset": "Coluna do CSV"
+    }
+  },
+  "tasks": {
+    "_": "Tarefas",
+    "title": "Tarefas da tabela de nutrientes",
+    "tab": "Tarefas"
+  }
+}

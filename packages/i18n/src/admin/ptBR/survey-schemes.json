@@ -1,0 +1,761 @@
+{
+  "_": "Esquema de pesquisa",
+  "title": "Esquemas de pesquisa",
+  "all": "Todos os esquemas",
+  "read": "Detalhe do esquema de pesquisa",
+  "create": "Adicionar esquema de pesquisa",
+  "edit": "Editar esquema de pesquisa",
+  "delete": "Excluir esquema de pesquisa",
+  "load": "Carregar de esquema",
+  "none": "Nenhum esquema de pesquisa encontrado",
+  "copy": {
+    "_": "Copiar",
+    "title": "Copiar esquema de pesquisa",
+    "name": "Nome do novo esquema de pesquisa"
+  },
+  "settings": {
+    "_": "Configuração",
+    "title": "Configurações",
+    "types": {
+      "_": "Tipo",
+      "default": "Padrão"
+    },
+    "flows": {
+      "_": "Fluxo",
+      "title": "Fluxos",
+      "1-pass": "1 passagem",
+      "2-pass": "2 passagens"
+    },
+    "recallDate": "Deslocamento da data de recordação",
+    "languages": "Idiomas permitidos"
+  },
+  "meals": {
+    "_": "Refeição",
+    "title": "Refeições padrão",
+    "create": "Nova refeição",
+    "edit": "Editar refeição",
+    "remove": "Remover refeição",
+    "name": "Nome da refeição",
+    "defaultTime": "Hora padrão",
+    "flags": {
+      "title": "Indicadores de refeição",
+      "add": "Adicionar indicador",
+      "edit": "Editar indicador",
+      "remove": "Remover indicador",
+      "standard": "Padrão",
+      "custom": "Personalizado"
+    },
+    "reset": {
+      "_": "Redefinir refeições",
+      "text": "Redefinir refeições para a lista padrão"
+    },
+    "validation": {
+      "required": "O nome da refeição deve ser preenchido.",
+      "unique": "O nome da refeição já existe na lista atual."
+    }
+  },
+  "actions": {
+    "_": "Ação",
+    "title": "Ações",
+    "add": "Nova ação",
+    "remove": "Remover ação",
+    "enable": "Habilitar ações de prompt personalizadas",
+    "both": "Exibir ambas ações de layout na interface móvel",
+    "icon": "Ícone",
+    "label": "Rótulo",
+    "text": "Texto",
+    "parameters": "Parâmetros",
+    "types": {
+      "_": "Tipo de ação",
+      "title": "Tipos de ação",
+      "next": "Próximo",
+      "no-more-information": "Sem mais informações",
+      "review": "Revisar",
+      "addFood": "Adicionar alimento",
+      "addMeal": "Adicionar refeição",
+      "changeFood": "Alterar alimento",
+      "deleteFood": "Excluir alimento",
+      "deleteMeal": "Excluir refeição",
+      "editFood": "Editar alimento",
+      "editMeal": "Editar refeição",
+      "mealTime": "Hora da refeição",
+      "selectFood": "Selecionar alimento",
+      "selectMeal": "Selecionar refeição"
+    }
+  },
+  "conditions": {
+    "_": "Condição",
+    "title": "Condições",
+    "add": "Nova condição",
+    "remove": "Remover condição",
+    "object": {
+      "_": "Objeto de condição",
+      "title": "Objeto de condição",
+      "food": "Alimento atual",
+      "meal": "Refeição atual",
+      "survey": "Recordação atual"
+    },
+    "property": {
+      "_": "Propriedade de condição",
+      "title": "Propriedades de condição",
+      "drinks": "Bebidas informadas",
+      "energy": "Valor de energia",
+      "flag": "Indicador",
+      "tag": "Etiqueta",
+      "foodCategory": "Categoria de alimento",
+      "numberOfFoods": "Número de alimentos",
+      "numberOfMeals": "Número de refeições",
+      "promptAnswer": "Resposta do prompt",
+      "property": "Valor da propriedade",
+      "recallNumber": "Número de recordação",
+      "userField": "Campo do usuário",
+      "mealCompletion": "Estado de conclusão",
+      "foodCompletion": "Estado de conclusão"
+    },
+    "foodCompletion": {
+      "freeEntryComplete": "Entrada de texto livre concluída",
+      "searchComplete": "Identificação concluída",
+      "portionSizeComplete": "Estimativa de tamanho de porção concluída",
+      "complete": "Prompts de alimento associados concluídos"
+    },
+    "category": {
+      "_": "Categoria",
+      "id": "ID da categoria",
+      "includeIfSet": "Incluir se definido",
+      "showIfSet": "Mostrar se definido"
+    },
+    "flag": {
+      "_": "Indicador",
+      "id": "ID do indicador",
+      "includeIfSet": "Incluir se definido",
+      "showIfSet": "Mostrar se definido"
+    },
+    "tag": {
+      "_": "Etiqueta",
+      "id": "ID da etiqueta",
+      "includeIfSet": "Incluir se etiquetado",
+      "showIfSet": "Mostrar se etiquetado"
+    },
+    "summary": {
+      "value": "<em><strong>{property}</strong></em> de <em><strong>{object}</strong></em>",
+      "entityValue": "<em><strong>{property}</strong></em> de <em><strong>{object}</strong></em>",
+      "boolean": "<em><strong>{property}</strong></em> em <em><strong>{object}</strong></em>: {value}",
+      "mealCompletion": {
+        "freeEntryComplete": "<em><strong>entrada de texto livre</strong></em> de alimentos para o <em><strong>{object}</strong></em> está concluída",
+        "searchComplete": "<em><strong>identificação</strong></em> de alimentos no <em><strong>{object}</strong></em> está concluída",
+        "portionSizeComplete": "<em><strong>estimativa de tamanho de porção</strong></em> de alimentos no <em><strong>{object}</strong></em> está concluída",
+        "complete": "<em><strong>prompts de alimento associados</strong></em> no <em><strong>{object}</strong></em> estão concluídos"
+      },
+      "foodCompletion": {
+        "freeEntryComplete": "<em><strong>entrada de texto livre</strong></em> para o <em><strong>{object}</strong></em> está concluída",
+        "searchComplete": "<em><strong>identificação</strong></em> do <em><strong>{object}</strong></em> está concluída",
+        "portionSizeComplete": "<em><strong>estimativa de tamanho de porção</strong></em> para o <em><strong>{object}</strong></em> está concluída",
+        "complete": "<em><strong>prompts de alimento associados</strong></em> para o <em><strong>{object}</strong></em> estão concluídos"
+      },
+      "flag": {
+        "set": "indicador <em><strong>{id}</strong></em> definido em <em><strong>{object}</strong></em>",
+        "notSet": "indicador <em><strong>{id}</strong></em> não definido em <em><strong>{object}</strong></em>"
+      },
+      "tag": {
+        "present": "<em><strong>{object}</strong></em> está etiquetado com <em><strong>{id}</strong></em>",
+        "absent": "<em><strong>{object}</strong></em> NÃO está etiquetado com <em><strong>{id}</strong></em>"
+      },
+      "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> para <em><strong>{object}</strong></em>",
+      "userField": "<em><strong>{property} ({field})</strong></em> para <em><strong>{object}</strong></em>",
+      "notRequired": "<strong>OU</strong> não definido"
+    },
+    "promptAnswer": {
+      "promptId": "ID do prompt",
+      "required": "Resposta do prompt é obrigatória (desmarque se este prompt deve ser acionado caso a resposta não seja conhecida)"
+    },
+    "userField": {
+      "field": "Campo"
+    },
+    "ops": {
+      "_": "Operação",
+      "eq": "igual",
+      "setEq": "mesmo conjunto de valores",
+      "ne": "diferente",
+      "in": "está em",
+      "notIn": "não está em",
+      "gte": "maior ou igual a",
+      "gt": "maior que",
+      "lte": "menor ou igual a",
+      "lt": "menor que"
+    },
+    "value": "Valor da condição",
+    "showIf": "Exibir prompt se: ",
+    "showIfTrue": "Exibir se verdadeiro",
+    "orPrevious": "Ou anterior"
+  },
+  "data-export": {
+    "_": "Exportação de dados",
+    "tab": "Exportação de dados",
+    "title": "Campos de exportação de dados",
+    "current": "Campos de exportação atuais",
+    "available": "Campos de exportação disponíveis",
+    "add": "Adicionar seção",
+    "edit": "Editar seção",
+    "remove": "Remover seção",
+    "fields": {
+      "_": "Editar rótulo do campo",
+      "id": "ID do campo",
+      "label": "Rótulo do campo",
+      "custom": "Adicionar personalizado"
+    },
+    "sections": {
+      "_": "Seções de exportação de dados",
+      "user": "Campos de registro do usuário",
+      "userCustom": "Campos personalizados do usuário",
+      "survey": "Campos de registro da pesquisa",
+      "submission": "Campos de envio",
+      "submissionCustom": "Campos personalizados de envio",
+      "meal": "Campos de registro de refeição",
+      "mealCustom": "Campos personalizados de refeição",
+      "food": "Campos de registro de alimento",
+      "foodCustom": "Campos personalizados de alimento",
+      "foodFields": "Campos de composição de alimentos",
+      "foodNutrients": "Campos de nutrientes de alimentos",
+      "portionSizes": "Campos de tamanho de porção",
+      "externalSources": "Campos de fonte externa"
+    }
+  },
+  "i18n": {
+    "_": "Tradução de prompt",
+    "title": "Traduções de prompt",
+    "core": "Traduções padrão para o campo '{key}'",
+    "custom": "Traduções personalizadas para o campo '{key}'",
+    "init": "Inicializar campo de tradução",
+    "none": "Sem tradução"
+  },
+  "overrides": {
+    "_": "Substituição de esquema",
+    "title": "Substituições de esquema",
+    "subtitle": "Substituir partes do esquema de pesquisa",
+    "meals": {
+      "title": "Substituições de refeições do esquema",
+      "subtitle": "Substituir lista de refeições do esquema. Se deixado vazio, usa-se a lista do esquema. Se qualquer item for adicionado, toda a lista será utilizada."
+    },
+    "prompts": {
+      "title": "Substituições de prompts do esquema",
+      "subtitle": "Substituir prompt específico do esquema. As alterações serão mescladas pelo ID do prompt."
+    },
+    "settings": {
+      "title": "Substituições de configurações do esquema",
+      "subtitle": "Substituir configuração específica do esquema."
+    }
+  },
+  "prompts": {
+    "_": "Prompt de esquema",
+    "tab": "Prompts",
+    "title": "Prompts de esquema",
+    "create": "Novo prompt",
+    "edit": "Editar prompt",
+    "copy": "Copiar prompt",
+    "move": "Mover prompt",
+    "remove": "Remover prompt",
+    "section": "Seção de prompts",
+    "preMeals": {
+      "title": "Prompts pré-recordação",
+      "subtitle": "Prompts gerais solicitados antes da recordação dietética, incluindo prompts pessoais e instruções iniciais."
+    },
+    "postMeals": {
+      "title": "Prompts pós-recordação",
+      "subtitle": "Prompts gerais solicitados após a recordação dietética."
+    },
+    "submission": {
+      "title": "Prompts de envio",
+      "subtitle": "Prompts finais solicitados antes do envio."
+    },
+    "preFoods": {
+      "title": "Prompts de refeição pré-alimentos",
+      "subtitle": "Prompts solicitados sobre refeições antes do registro de alimentos, como o horário da refeição."
+    },
+    "foods": {
+      "title": "Prompts de alimentos",
+      "subtitle": "Prompts solicitados sobre alimentos, incluindo pesquisa em banco de dados de alimentos e estimativa de tamanho de porção."
+    },
+    "postFoods": {
+      "title": "Prompts de refeição pós-alimentos",
+      "subtitle": "Prompts solicitados sobre refeições após a conclusão da estimativa de tamanho de porção para todos os alimentos na refeição."
+    },
+    "foodsDeferred": {
+      "title": "Prompts de alimentos adiados",
+      "subtitle": "Perguntas adicionais sobre alimentos após a conclusão dos prompts de refeição pós-alimentos."
+    },
+    "internal": {
+      "_": "Identificadores internos",
+      "id": {
+        "_": "ID do prompt",
+        "hint": "Identificador exclusivo interno, usado por exemplo em exportações de dados como cabeçalho"
+      },
+      "name": {
+        "_": "Nome do prompt",
+        "hint": "Nome descritivo interno para melhor orientação"
+      },
+      "group": {
+        "_": "Grupo de prompt",
+        "hint": "ID de grupo para agrupar prompts"
+      }
+    },
+    "type": "Tipo de prompt",
+    "component": "Componente de prompt",
+    "name": {
+      "_": "Nome do prompt",
+      "hint": "Nome curto do prompt (ex. para breadcrumb)",
+      "required": "O nome do prompt é obrigatório."
+    },
+    "text": {
+      "_": "Texto do prompt",
+      "hint": "Texto principal do prompt",
+      "required": "O texto do prompt é obrigatório."
+    },
+    "description": {
+      "_": "Descrição do prompt",
+      "hint": "Informações adicionais do prompt",
+      "required": "A descrição do prompt é obrigatória."
+    },
+    "custom": {
+      "_": "Personalizado",
+      "noPrompts": "Nenhum prompt personalizado disponível para esta seção"
+    },
+    "standard": {
+      "_": "Padrão",
+      "noPrompts": "Nenhum prompt padrão disponível para esta seção"
+    },
+    "portion-size": {
+      "_": "Tamanho de porção",
+      "noPrompts": "Nenhum prompt de tamanho de porção disponível para esta seção"
+    },
+    "badges": "Exibir distintivos de quantidade",
+    "barcodes": {
+      "_": "Scanner de código de barras",
+      "title": "Opções de scanner de código de barras",
+      "providers": {
+        "_": "Provedor",
+        "title": "Provedores",
+        "none": "Nenhum",
+        "quagga": "Quagga2",
+        "strich": "Strich"
+      },
+      "readers": {
+        "_": "Leitor",
+        "title": "Leitores"
+      },
+      "feedback": {
+        "_": "Feedback",
+        "audio": "Áudio",
+        "vibration": "Vibração"
+      }
+    },
+    "externalSources": {
+      "_": "Fonte externa",
+      "title": "Configurações de fonte externa",
+      "sources": {
+        "_": "Fonte",
+        "title": "Fontes",
+        "open-food-facts": "Open Food Facts"
+      },
+      "countries": {
+        "_": "País",
+        "title": "Países",
+        "world": "Mundo",
+        "uk": "Reino Unido",
+        "fr": "França"
+      }
+    },
+    "foodBrowser": {
+      "_": "Configurações do navegador de alimentos",
+      "categoriesFirst": {
+        "_": "Exibir categorias primeiro na lista",
+        "browse": "Lista de navegação de alimentos",
+        "search": "Lista de pesquisa de alimentos"
+      }
+    },
+    "imageMap": {
+      "_": "Configurações de mapa de imagem",
+      "labels": "Exibir rótulos",
+      "pinchZoom": "Exibir PinchZoom para interface móvel"
+    },
+    "multiple": "Permitir seleção de múltiplos itens",
+    "label": "Rótulo da lista de opções",
+    "leftovers": "Permitir sobras",
+    "linkedQuantity": {
+      "title": "Configurações de quantidade vinculada",
+      "subtitle": "Permite acionar prompt de quantidade para alimento pai vinculado",
+      "auto": "Aplicar quantidade vinculada automaticamente",
+      "parent": "Categorias pai para vincular",
+      "source": "Categorias de origem para acionar"
+    },
+    "other": "Permitir opção 'outro' personalizada",
+    "orientation": {
+      "_": "Orientação",
+      "column": "Coluna",
+      "row": "Linha"
+    },
+    "carousel": {
+      "_": "Carrossel",
+      "title": "Configurações de carrossel",
+      "required": "Carrossel é obrigatório",
+      "slides": {
+        "_": "Slide",
+        "title": "Slides do carrossel",
+        "add": "Adicionar slide",
+        "edit": "Editar slide",
+        "remove": "Remover slide",
+        "text": "Texto",
+        "image": "Imagem"
+      }
+    },
+    "counter": {
+      "_": "Contador",
+      "title": "Configurações do contador",
+      "current": "Valor atual",
+      "min": "Valor mínimo",
+      "max": "Valor máximo",
+      "confirm": "Exigir confirmação",
+      "fraction": "Usar frações",
+      "whole": "Usar números inteiros"
+    },
+    "slider": {
+      "_": "Controle deslizante",
+      "title": "Configurações do controle deslizante",
+      "current": {
+        "label": "Rótulo atual",
+        "value": "Valor atual",
+        "size": "Tamanho do rótulo"
+      },
+      "min": {
+        "label": "Rótulo mínimo",
+        "value": "Valor mínimo"
+      },
+      "max": {
+        "label": "Rótulo máximo",
+        "value": "Valor máximo"
+      },
+      "confirm": "Exigir confirmação",
+      "step": "Incremento de passo"
+    },
+    "timePicker": {
+      "_": "Seletor de hora",
+      "title": "Opções do seletor de hora",
+      "allowedMinutes": {
+        "_": "Minutos permitidos",
+        "item": "A cada {item} minutos"
+      },
+      "amPmToggle": "Alternar AM/PM",
+      "format": {
+        "_": "Formato de hora",
+        "ampm": "AM/PM",
+        "24hr": "24 horas"
+      }
+    },
+    "validation": {
+      "required": "O prompt é obrigatório",
+      "message": "Mensagem de erro a ser exibida",
+      "limits": {
+        "_": "Limites de resposta",
+        "min": "Número mínimo de respostas",
+        "max": "Número máximo de respostas"
+      }
+    },
+    "video": {
+      "_": "Vídeo",
+      "youtube": {
+        "_": "Vídeo do Youtube",
+        "videoId": "ID do vídeo do Youtube",
+        "height": "Altura do vídeo",
+        "width": "Largura do vídeo",
+        "autoContinue": "Continuar ao final do vídeo",
+        "autoplay": "Reproduzir vídeo automaticamente",
+        "required": "O vídeo é obrigatório"
+      }
+    },
+    "templates": {
+      "_": "Modelo de prompt",
+      "title": "Modelos de prompt",
+      "add": "Carregar de modelo",
+      "alreadyExists": "Prompt com ID '{promptId}' já existe no esquema",
+      "none": "Nenhum modelo de prompt encontrado",
+      "saveAs": {
+        "_": "Salvar como modelo",
+        "title": "Salvar prompt como modelo"
+      }
+    },
+    "addon-foods-prompt": {
+      "title": "Alimentos adicionais",
+      "subtitle": "Sugerir alimentos normalmente consumidos com este alimento",
+      "multiple": "Permitir seleção de múltiplos alimentos",
+      "trigger": {
+        "_": "Gatilho",
+        "type": "Tipo",
+        "value": "Valor",
+        "any": "Qualquer",
+        "afp": "Prompt de alimento associado",
+        "category": "Categoria",
+        "food": "Alimento",
+        "tag": "Etiqueta"
+      },
+      "lookup": {
+        "_": "Pesquisa",
+        "type": "Tipo",
+        "value": "Valor"
+      }
+    },
+    "associated-foods-prompt": {
+      "title": "Alimentos associados (por alimento)",
+      "subtitle": "Sugerir alimentos normalmente consumidos juntos. Alimentos sugeridos são definidos no nível do alimento no banco de dados.",
+      "multiple": "Permitir seleção de múltiplos alimentos"
+    },
+    "general-associated-foods-prompt": {
+      "title": "Alimentos associados (geral)",
+      "subtitle": "Sugerir alimentos normalmente consumidos juntos. Alimentos sugeridos são definidos no nível do prompt, e sua relevância é determinada pelas condições.",
+      "multiple": "Permitir seleção de múltiplos alimentos",
+      "skipPortionSize": "Ignorar estimativa de tamanho de porção para alimentos selecionados",
+      "categoryCode": "Categoria de alimentos associados",
+      "promptText": "Texto do prompt",
+      "genericName": "Nome genérico para alimentos associados"
+    },
+    "edit-meal-prompt": {
+      "title": "Lista de alimentos",
+      "subtitle": "Listar ou editar alimentos nesta refeição como descrições de texto livre",
+      "separateDrinks": "Listar bebidas separadamente",
+      "inputAutoFocus": "Definir foco automaticamente no campo de entrada de alimentos"
+    },
+    "external-source-prompt": {
+      "title": "Fonte externa",
+      "subtitle": "Prompt para fonte externa de correspondência de alimentos"
+    },
+    "final-prompt": {
+      "title": "Final",
+      "subtitle": "Página final após o envio",
+      "rating": {
+        "_": "Habilitar coleta de avaliação da pesquisa",
+        "title": "Avaliação da pesquisa"
+      }
+    },
+    "food-search-prompt": {
+      "title": "Pesquisa no banco de dados de alimentos",
+      "subtitle": "Escolher um alimento do banco de dados que melhor corresponda à descrição",
+      "allowBrowsing": "Permitir que os respondentes pesquisem alimentos navegando livremente pelas categorias",
+      "dualLanguage": "Exibir nomes alternativos de alimentos em outro idioma"
+    },
+    "meal-add-prompt": {
+      "title": "Adicionar refeição",
+      "subtitle": "Adicionar uma nova refeição à lista de refeições",
+      "custom": "Permitir nomes de refeição personalizados",
+      "unique": "Permitir apenas nomes de refeição únicos"
+    },
+    "meal-duration-prompt": {
+      "title": "Duração da refeição",
+      "subtitle": "Perguntar sobre a duração da refeição"
+    },
+    "meal-gap-prompt": {
+      "title": "Intervalo de tempo entre refeições",
+      "subtitle": "Verificar intervalo de tempo entre refeições",
+      "gap": "Intervalo de tempo entre refeições (minutos)",
+      "startTime": "Hora de início do dia",
+      "endTime": "Hora de término do dia"
+    },
+    "meal-time-prompt": {
+      "title": "Hora da refeição",
+      "subtitle": "Confirmar a hora da refeição ou remover a refeição"
+    },
+    "ready-meal-prompt": {
+      "title": "Refeição pronta",
+      "subtitle": "Perguntar sobre refeições prontas"
+    },
+    "recall-date-prompt": {
+      "title": "Data de recordação",
+      "subtitle": "Perguntar para indicar a data de recordação",
+      "current": "Deslocamento da data atual",
+      "min": "Número de dias antes de hoje que permite",
+      "max": "Número de dias após hoje que permite"
+    },
+    "redirect-prompt": {
+      "title": "Redirecionar",
+      "subtitle": "Página final para redirecionar o usuário para site externo",
+      "rating": {
+        "_": "Habilitar coleta de avaliação da pesquisa",
+        "title": "Avaliação da pesquisa"
+      },
+      "url": {
+        "_": "URL base",
+        "title": "Opções de URL",
+        "subtitle": "Use '{identifier}' para indicar onde o identificador do usuário deve ser inserido.",
+        "hint": "https://example.com/?arg={identifier}"
+      },
+      "identifier": {
+        "_": "Identificador do usuário para inserir na URL",
+        "subtitle": "Especificar qual identificador inserir na URL de redirecionamento",
+        "hint": "O valor personalizado será buscado em 'campos personalizados do usuário'",
+        "options": {
+          "userId": "ID do usuário",
+          "username": "Nome de usuário",
+          "urlAuthToken": "Token de autenticação"
+        }
+      },
+      "target": {
+        "_": "Destino",
+        "subtitle": "Escolher onde abrir a URL",
+        "_self": "Abrir na mesma janela",
+        "_blank": "Abrir em uma nova janela"
+      },
+      "timer": {
+        "_": "Número de segundos para redirecionamento",
+        "title": "Opções de temporizador"
+      }
+    },
+    "review-confirm-prompt": {
+      "title": "Revisar e Confirmar",
+      "subtitle": "Revisar e confirmar conclusão e progresso da recordação"
+    },
+    "same-as-before-prompt": {
+      "title": "Mesmo de antes",
+      "subtitle": "Perguntar se o alimento foi o mesmo de antes"
+    },
+    "split-food-prompt": {
+      "title": "Dividir alimento",
+      "subtitle": "Solicitar descrição de alimento dividido"
+    },
+    "submit-prompt": {
+      "title": "Enviar",
+      "subtitle": "Confirmar conclusão e enviar recordação",
+      "review": {
+        "title": "Opções de revisão final",
+        "subtitle": "Escolher a opção desejada para a página de revisão final.",
+        "false": "Não revisar",
+        "scroll": "Rolar até o fim para passar na revisão",
+        "checkbox": "Marcar verificação da refeição para passar na revisão",
+        "onecheckbox": "Marcar uma verificação da pesquisa para passar na revisão"
+      }
+    },
+    "info-prompt": {
+      "title": "Informação",
+      "subtitle": "Exibir uma mensagem ou instruções e pedir confirmação"
+    },
+    "no-more-information-prompt": {
+      "title": "Sem mais informações",
+      "subtitle": "Exibir uma mensagem de que não são necessárias mais informações para a seleção atual"
+    },
+    "date-picker-prompt": {
+      "title": "Data",
+      "subtitle": "Pedir para escolher uma data",
+      "current": "Deslocamento da data atual",
+      "min": "Número de dias antes de hoje a permitir",
+      "max": "Número de dias após hoje a permitir"
+    },
+    "time-picker-prompt": {
+      "title": "Hora",
+      "subtitle": "Pedir para escolher um horário do dia"
+    },
+    "checkbox-list-prompt": {
+      "title": "Escolha múltipla",
+      "subtitle": "Pedir para escolher qualquer número de itens de uma lista"
+    },
+    "radio-list-prompt": {
+      "title": "Escolha única",
+      "subtitle": "Pedir para escolher um item de uma lista"
+    },
+    "select-prompt": {
+      "title": "Selecionar",
+      "subtitle": "Pedir para escolher um valor da caixa de seleção"
+    },
+    "slider-prompt": {
+      "title": "Controle deslizante",
+      "subtitle": "Pedir para escolher um valor no controle deslizante"
+    },
+    "textarea-prompt": {
+      "title": "Texto livre",
+      "subtitle": "Pedir para inserir uma resposta ou descrição em texto livre"
+    },
+    "yes-no-prompt": {
+      "title": "Escolha Sim / Não",
+      "subtitle": "Pedir para escolher sim ou não"
+    },
+    "aggregate-choice-prompt": {
+      "title": "Pergunta de escolha agregada",
+      "subtitle": "Pedir para escolher uma opção para cada alimento relatado em uma única tela"
+    },
+    "as-served-prompt": {
+      "title": "Tamanho de porção servida",
+      "subtitle": "Usar o método \"como servido\" para estimar o tamanho da porção"
+    },
+    "cereal-prompt": {
+      "title": "Cereal",
+      "subtitle": "Usar o método \"cereal\" para estimar o tamanho da porção"
+    },
+    "direct-weight-prompt": {
+      "title": "Peso direto",
+      "subtitle": "Peso direto"
+    },
+    "drink-scale-prompt": {
+      "title": "Escala de bebida",
+      "subtitle": "Usar o método \"escala de bebida\" para estimar a quantidade de líquido consumido",
+      "multiple": "Permitir especificar múltiplos itens"
+    },
+    "guide-image-prompt": {
+      "title": "Imagem guia",
+      "subtitle": "Usar o método \"imagem guia\" para estimar o tamanho da porção"
+    },
+    "milk-in-a-hot-drink-prompt": {
+      "title": "Leite em bebida quente",
+      "subtitle": "Usar o método \"leite em bebida quente\" para estimar a quantidade de leite"
+    },
+    "milk-on-cereal-prompt": {
+      "title": "Leite no cereal",
+      "subtitle": "Usar o método \"leite no cereal\" para estimar o tamanho da porção"
+    },
+    "missing-food-prompt": {
+      "title": "Alimento ausente",
+      "subtitle": "Coletar informações sobre alimento ausente"
+    },
+    "pizza-prompt": {
+      "title": "Pizza",
+      "subtitle": "Usar o método \"pizza\" para estimar o tamanho da porção"
+    },
+    "pizza-v2-prompt": {
+      "title": "Pizza V2",
+      "subtitle": "Usar o método \"pizza v2\" para estimar o tamanho da porção"
+    },
+    "parent-food-portion-prompt": {
+      "title": "Porção de alimento pai",
+      "subtitle": "Usar o método \"porção de alimento pai\" para estimar o tamanho da porção",
+      "portions": "Lista de porções da categoria"
+    },
+    "portion-size-option-prompt": {
+      "title": "Método de estimativa de tamanho de porção",
+      "subtitle": "Escolher qual método de estimativa de tamanho de porção usar caso mais de um esteja disponível para o alimento"
+    },
+    "recipe-builder-prompt": {
+      "title": "Construa seu próprio prato",
+      "subtitle": "Construa seu próprio prato a partir dos ingredientes"
+    },
+    "standard-portion-prompt": {
+      "title": "Porção padrão",
+      "subtitle": "Usar o método \"porção padrão\" para estimar o tamanho da porção"
+    }
+  },
+  "theme": {
+    "colors": {
+      "_": "Cor",
+      "title": "Cores"
+    },
+    "layouts": {
+      "_": "Layout",
+      "title": "Layouts",
+      "desktop": "Desktop",
+      "mobile": "Móvel"
+    },
+    "variants": {
+      "_": "Variante",
+      "title": "Variantes",
+      "elevated": "Elevado",
+      "flat": "Plano",
+      "outlined": "Contornado",
+      "plain": "Simples",
+      "tonal": "Tonal",
+      "text": "Texto"
+    }
+  }
+}

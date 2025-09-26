@@ -1,0 +1,560 @@
+{
+  "checkboxList": {
+    "name": "Lista de múltipla escolha",
+    "text": "",
+    "description": "",
+    "label": "",
+    "other": "Outro – por favor especifique",
+    "validation": {
+      "required": "Pelo menos uma opção deve ser selecionada."
+    }
+  },
+  "datePicker": {
+    "name": "Selecionar data",
+    "text": "",
+    "description": "",
+    "validation": {
+      "required": "Este campo é obrigatório."
+    }
+  },
+  "info": {
+    "name": "Informação / confirmação",
+    "text": "",
+    "description": ""
+  },
+  "noMoreInformation": {
+    "name": "Nenhuma informação adicional necessária",
+    "text": "",
+    "description": "<p>Já temos todas as informações necessárias sobre <strong>{item}</strong> no momento.</p><p>Para continuar com a pesquisa, selecione o botão “Continuar” abaixo e automaticamente selecionaremos o próximo alimento ou refeição para o qual ainda precisamos de informações.</p><p>Alternativamente, selecione uma refeição ou alimento à esquerda se quiser focar em um item específico.</p>"
+  },
+  "select": {
+    "name": "Selecionar valor da lista",
+    "text": "",
+    "description": "",
+    "label": "Selecionar opção"
+  },
+  "slider": {
+    "name": "Selecionar valor no controle deslizante",
+    "text": "",
+    "description": ""
+  },
+  "radioList": {
+    "name": "Lista de escolha única",
+    "text": "",
+    "description": "",
+    "label": "",
+    "other": "Outro – por favor especifique",
+    "validation": {
+      "required": "Uma das opções deve ser selecionada."
+    }
+  },
+  "textarea": {
+    "name": "Texto livre",
+    "text": "",
+    "description": "",
+    "label": "Digite sua resposta",
+    "validation": {
+      "required": "Este campo é obrigatório."
+    }
+  },
+  "timePicker": {
+    "name": "Selecionar hora",
+    "text": "",
+    "description": "",
+    "validation": {
+      "required": "Este campo é obrigatório."
+    }
+  },
+  "yesNo": {
+    "name": "Confirmação Sim / Não",
+    "text": "",
+    "description": ""
+  },
+  "addonFoods": {
+    "name": "Alimentos adicionais",
+    "text": "",
+    "description": "Você consumiu algum alimento adicional com os seguintes?",
+    "food": "Alimento",
+    "portion": "Porção",
+    "quantity": "Quantidade",
+    "didNotHave": "Não"
+  },
+  "associatedFoods": {
+    "name": "Alimentos associados",
+    "text": "",
+    "description": "",
+    "yes": "Sim, consumi",
+    "yesAnother": "Sim, consumi outro",
+    "existingFoodHint": "Escolha “Sim, consumi” se você já o registrou.",
+    "no": "Não, não consumi",
+    "moreFoodsQuestion": "Você consumiu outros alimentos desta categoria?",
+    "databaseLookupTitle": "Qual era?",
+    "databaseLookupWithExisting": "Se não, qual era?",
+    "existingFoodsTitle": "Era algo que você já registrou?",
+    "select": {
+      "different": "Alterar",
+      "remove": "Remover"
+    },
+    "browse": "Navegar por todos os alimentos",
+    "search": "Pesquisar um alimento",
+    "results": "Resultados da pesquisa",
+    "relatedCategories": "Categorias/Subcategorias Relacionadas",
+    "showLess": "Mostrar menos",
+    "showAll": "Mostrar todas as categorias relacionadas",
+    "root": "todas as categorias de alimentos",
+    "back": "Voltar para '{category}'",
+    "none": "Nenhum resultado. Tente refinar sua pesquisa.",
+    "refine": "A pesquisa retornou muitos resultados. Você pode tentar refinar.",
+    "missing": {
+      "label": "Não encontro meu alimento",
+      "description": "<p>Tente navegar pelas categorias acima para encontrar seu alimento.</p><p>Se ainda não encontrar, selecione 'Reportar alimento ausente'.</p>",
+      "report": "Reportar alimento ausente",
+      "tryAgain": "OK, deixe-me tentar novamente",
+      "placeholder": "Alimento ausente"
+    }
+  },
+  "generalAssociatedFoods": {
+    "name": "Alimentos associados (geral)",
+    "text": "",
+    "description": "",
+    "yes": "Sim, consumi",
+    "yesAnother": "Sim, consumi outro",
+    "existingFoodHint": "Escolha “Sim, consumi” se você já o registrou.",
+    "no": "Não, não consumi",
+    "moreFoodsQuestion": "Você consumiu outros alimentos desta categoria?",
+    "databaseLookupTitle": "Qual era?",
+    "databaseLookupWithExisting": "Se não, qual era?",
+    "existingFoodsTitle": "Era algo que você já registrou?",
+    "select": {
+      "different": "Alterar",
+      "remove": "Remover"
+    },
+    "browse": "Navegar por todos os alimentos",
+    "search": "Pesquisar um alimento",
+    "results": "Resultados da pesquisa",
+    "root": "todas as categorias de alimentos",
+    "back": "Voltar para '{category}'",
+    "none": "Nenhum resultado. Tente refinar sua pesquisa.",
+    "missing": {
+      "label": "Não encontro meu alimento",
+      "description": "<p>Tente navegar pelas categorias acima para encontrar seu alimento.</p><p>Se ainda não encontrar, selecione 'Reportar alimento ausente'.</p>",
+      "report": "Reportar alimento ausente",
+      "tryAgain": "OK, deixe-me tentar novamente",
+      "placeholder": "Alimento ausente"
+    }
+  },
+  "editMeal": {
+    "name": "Editar Refeição",
+    "text": "",
+    "description": "<p>Conte tudo o que você consumiu na <strong>{meal}</strong>.</p><p>Digite cada alimento e bebida separadamente.</p><p>Pressione <span class=\"fas fa-turn-down fa-rotate-90 mx-2\"></span> ou Enter para adicionar.</p><p><strong>Não</strong> informe quantidades agora, apenas os nomes.</p>",
+    "add": "Adicionar",
+    "drinksOnly": "Bebidas",
+    "foods": "Alimentos e bebidas",
+    "foodsOnly": "Alimentos"
+  },
+  "externalSource": {
+    "name": "Fonte externa",
+    "text": "",
+    "description": "",
+    "search": "Pesquisar",
+    "back": "Voltar à pesquisa",
+    "select": "Selecionar",
+    "missing": "Não encontrado",
+    "products": {
+      "results": "Produtos encontrados: {count}.",
+      "none": "Nenhum produto encontrado",
+      "name": "Nome",
+      "code": "Código",
+      "quantity": "Quantidade",
+      "packaging": "Embalagem"
+    }
+  },
+  "final": {
+    "name": "Página final",
+    "text": "",
+    "description": ""
+  },
+  "foodSearch": {
+    "name": "Pesquisar alimento",
+    "text": "",
+    "description": "<p>A lista abaixo mostra os alimentos que correspondem a \"<strong>{food}</strong>\".</p><p>Escolha o item que você consumiu ou o mais próximo.</p>",
+    "browse": "Navegar por todos os alimentos",
+    "search": "Pesquisar um alimento",
+    "results": "Resultados da pesquisa",
+    "relatedCategories": "Categorias/Subcategorias Relacionadas",
+    "showLess": "Mostrar menos",
+    "showAll": "Mostrar todas as categorias relacionadas",
+    "root": "todas as categorias de alimentos",
+    "back": "Voltar para '{category}'",
+    "none": "Nenhum resultado. Tente refinar sua pesquisa.",
+    "refine": "A pesquisa retornou muitos resultados. Você pode tentar refinar.",
+    "pizza": "Se sua pizza era de delivery ou restaurante, selecione essa opção.",
+    "missing": {
+      "label": "Não encontro meu alimento",
+      "description": "<p>Se não encontrar na lista, tente reformular sua descrição.</p><p>Ou selecione 'Navegar por todos os alimentos'.</p><p>Se ainda não encontrar, selecione 'Reportar alimento ausente'.</p>",
+      "report": "Reportar alimento ausente",
+      "tryAgain": "OK, deixe-me tentar novamente"
+    },
+    "confirmDiscardFood": {
+      "label": "Sim",
+      "messageUnsafe": "<p>Você já respondeu perguntas sobre <strong>\"{discardedFoodName}\"</strong>!</p><p>Se trocar para <strong>\"{selectedFoodName}\"</strong>, poderá precisar responder novamente.</p><p>Tem certeza?</p>",
+      "message": "Você já respondeu perguntas sobre “{discardedFoodName}”! Se trocar para “{selectedFoodName}”, poderá precisar responder novamente. Tem certeza?"
+    }
+  },
+  "mealAdd": {
+    "name": "Adicionar Refeição",
+    "text": "",
+    "description": "<p>Selecione uma opção da lista abaixo se apropriado.</p>",
+    "label": "Selecionar refeição predefinida",
+    "custom": {
+      "text": "",
+      "description": "<p>Digite o nome da refeição ou selecione da lista.</p>",
+      "label": "Selecionar ou digitar nome da refeição"
+    },
+    "yes": "Adicionar esta refeição",
+    "no": "Cancelar",
+    "exists": "Refeição já inserida, selecione outra.",
+    "noMeal": "Sem refeições restantes, adicione pelo menos uma."
+  },
+  "mealDuration": {
+    "name": "Duração da refeição",
+    "text": "",
+    "description": "<p>Quanto tempo você levou para comer <strong>{mealName}</strong>?</p>",
+    "minutes": "min",
+    "confirm": "Continuar"
+  },
+  "mealGap": {
+    "name": "Intervalo entre refeições",
+    "text": "",
+    "description": "",
+    "before": "<p>Você consumiu algo antes de <strong>{meal}</strong> às {mealTime}?</p>",
+    "after": "<p>Você consumiu algo após <strong>{meal}</strong> às {mealTime}?</p>",
+    "between": "<p>Você consumiu algo entre <strong>{startMeal}</strong> ({startMealTime}) e <strong>{endMeal}</strong> ({endMealTime})?</p>",
+    "yes": "Sim, adicionar refeição",
+    "no": "Não, não consumi"
+  },
+  "mealTime": {
+    "name": "Editar hora",
+    "text": "",
+    "description": "<p>Você consumiu <strong>{meal}</strong>? Se sim, que horas?</p>",
+    "yes": "Por volta dessa hora",
+    "no": "Não consumi"
+  },
+  "recallDate": {
+    "name": "Data da recordação",
+    "text": "",
+    "description": "Selecione a data da recordação."
+  },
+  "readyMeal": {
+    "name": "Refeição pronta",
+    "text": "",
+    "description": "<p>Era uma refeição pronta ou alimento pré-cozido?</p>"
+  },
+  "redirect": {
+    "name": "Redirecionar",
+    "text": "",
+    "description": "",
+    "missingUrl": "URL de redirecionamento ausente",
+    "goTo": "Ir ao questionário"
+  },
+  "reviewConfirm": {
+    "name": "Revisar e confirmar",
+    "text": "",
+    "description": "",
+    "item": "Revisado",
+    "meal": "Revisei todas as refeições e alimentos.",
+    "survey": "Revisei todas as refeições, alimentos e bebidas."
+  },
+  "sameAsBefore": {
+    "name": "Mesmo de antes",
+    "text": "",
+    "description": "<p>Essa <strong>{food}</strong> foi a mesma que você consumiu antes?</p>",
+    "serving": "{amount} porção",
+    "leftovers": "Sobrou {amount}",
+    "count": "{count} porções",
+    "noLeftovers": {
+      "drink": "Bebi tudo",
+      "food": "Comi tudo"
+    },
+    "hadWith": "Veio com:",
+    "noAddedFoods": "Nada adicionado (ex.: leite, açúcar, molhos)",
+    "same": "Sim, foi a mesma",
+    "notSame": "Não, foi diferente"
+  },
+  "splitFood": {
+    "name": "Dividir alimento",
+    "text": "",
+    "description": "Você pesquisou por <strong>{food}</strong>.",
+    "split": "São alimentos diferentes?",
+    "separate": "Sim",
+    "single": "Não"
+  },
+  "submit": {
+    "name": "Enviar",
+    "text": "",
+    "description": ""
+  },
+  "quantity": {
+    "_": "Quantidade",
+    "whole": "Inteiro",
+    "fraction": "Frações",
+    "and": "e",
+    "confirm": "Foi essa quantidade",
+    "more": "Mais",
+    "less": "Menos"
+  },
+  "portionSizeOption": {
+    "name": "Método de porção",
+    "text": "",
+    "description": "Como deseja estimar sua porção?",
+    "selections": {
+      "grated": "Ralado",
+      "in_a_bag": "Em um saco",
+      "in_a_bottle": "Em uma garrafa",
+      "in_a_bowl": "Em uma tigela",
+      "in_a_can": "Em uma lata",
+      "in_a_carton": "Em uma caixa",
+      "in_a_glass": "Em um copo",
+      "in_a_mug": "Em uma caneca",
+      "in_a_pot": "Em uma panela",
+      "in_a_takeaway_cup": "Em um copo descartável",
+      "in_baby_carrots": "Em cenouras baby",
+      "in_bars": "Em barras",
+      "in_batons": "Em palitos",
+      "in_berries": "Em frutas vermelhas",
+      "in_burgers": "Em hambúrgueres",
+      "in_chopped_fruit": "Em frutas picadas",
+      "in_crinkle_cut_chips": "Em batatas onduladas",
+      "in_cubes": "Em cubos",
+      "in_curly_fries": "Em batatas frisadas",
+      "in_dollops": "Em colheradas",
+      "in_french_fries": "Em batatas fritas",
+      "in_individual_cakes": "Em bolos individuais",
+      "in_individual_packs": "Em pacotes individuais",
+      "in_individual_puddings": "Em pudins individuais",
+      "in_individual_sweets": "Em doces individuais",
+      "in_slices": "Em fatias",
+      "in_spoonfuls": "Em colheres",
+      "in_straight_cut_chips": "Em batatas fritas retas",
+      "in_thick_cut_chips": "Em batatas fritas grossas",
+      "in_unwrapped_bars": "Em barras sem embalagem",
+      "in_whole_fruit_vegetables": "Em frutas/vegetais inteiros",
+      "in_wrapped_bars": "Em barras com embalagem",
+      "milk_on_cereal": "Leite no cereal",
+      "on_a_knife": "Na ponta de faca",
+      "on_a_plate": "No prato",
+      "slice_from_a_large_cake": "Fatia de bolo grande",
+      "slice_from_a_large_pudding": "Fatia de pudim grande",
+      "spread_on_a_cracker": "Espalhar em bolacha",
+      "spread_on_a_scone": "Espalhar em scone",
+      "spread_on_bread": "Espalhar em pão",
+      "use_a_standard_measure": "Usar medida padrão",
+      "use_a_standard_portion": "Usar porção padrão",
+      "use_an_image": "Usar imagem",
+      "use_these_crisps_in_a_bag": "Use estas batatas em um saco",
+      "use_tortilla_chips_in_a_bowl": "Use nachos em uma tigela",
+      "weight": "Inserir peso/volume"
+    },
+    "unknown": "Não há método de estimativa de porção para {food}."
+  },
+  "linkedAmount": {
+    "label": "{unit} (de {quantity}) você consumiu de {food}?",
+    "unit": "Quantas fatias",
+    "all": "Em todas"
+  },
+  "asServed": {
+    "name": "Como servido",
+    "text": "",
+    "description": "",
+    "serving": {
+      "header": "Usando as imagens, escolha quanto de {food} você consumiu.",
+      "less": "Consumi menos",
+      "more": "Consumi mais",
+      "confirm": "Consumi essa quantidade"
+    },
+    "leftovers": {
+      "header": "Você deixou sobras de {food}?",
+      "label": "Usando as imagens, escolha quanto sobrou.",
+      "less": "Sobrou menos",
+      "more": "Sobrou mais",
+      "confirm": "Sobrou essa quantidade"
+    },
+    "weightFactor": {
+      "serving": {
+        "more": "Consumi {whole} e {fraction}",
+        "less": "Consumi {fraction}"
+      },
+      "leftovers": {
+        "more": "Sobrou {whole} e {fraction}",
+        "less": "Sobrou {fraction}"
+      },
+      "less": "da menor porção",
+      "more": "da maior porção"
+    }
+  },
+  "cereal": {
+    "name": "Cereal",
+    "text": "",
+    "description": "",
+    "container": "Selecione a tigela que mais se parece com a que você usou para {food}."
+  },
+  "directWeight": {
+    "name": "Peso",
+    "text": "",
+    "description": "Digite quanto você consumiu em gramas ou ml."
+  },
+  "drinkScale": {
+    "name": "Escala de bebida",
+    "text": "",
+    "description": "",
+    "container": "Selecione o copo que mais se parece com o que você usou para {food}.",
+    "serving": {
+      "header": "Use o controle deslizante ou toque no copo para indicar quanto consumiu.",
+      "less": "Consumi menos",
+      "more": "Consumi mais",
+      "confirm": "Consumi essa quantidade"
+    },
+    "leftovers": {
+      "header": "Sobrou algo de {food}?",
+      "label": "Use o controle deslizante para escolher quanto sobrou.",
+      "less": "Sobrou menos",
+      "more": "Sobrou mais",
+      "confirm": "Sobrou essa quantidade"
+    },
+    "count": "Quantos desses você consumiu?"
+  },
+  "guideImage": {
+    "name": "Imagem guia",
+    "text": "",
+    "description": "",
+    "label": "Selecione a imagem que melhor representa o tamanho de {food}.",
+    "quantity": "Escolha quantos de {food} você consumiu.",
+    "confirm": "Consumi essa quantidade",
+    "expand": "Expandir imagem"
+  },
+  "milkInAHotDrink": {
+    "name": "Leite em bebida quente",
+    "text": "",
+    "description": "",
+    "label": "Quanto de {food} você adicionou ao chá ou café?",
+    "confirm": "Consumi essa quantidade"
+  },
+  "milkOnCereal": {
+    "name": "Leite no cereal",
+    "text": "",
+    "description": "",
+    "container": "Selecione a tigela que mais se parece com a que você usou para {food}.",
+    "milk": "Escolha até onde o leite chegou (sem cereal)."
+  },
+  "missingFood": {
+    "name": "Alimento ausente",
+    "text": "",
+    "description": "Você disse que não encontrou um bom correspondente para “{food}”. Forneça detalhes para nos ajudar a identificar.",
+    "source": "Era caseiro?",
+    "homemade": "Descreva prato ou ingredientes.",
+    "purchased": "Onde comprou e marca, se souber.",
+    "barcode": "Se no celular, escaneie o código de barras.",
+    "portionSize": "Quanto você comeu? Ex.: 1 pacote, 2 colheres, 125 g."
+  },
+  "recipeBuilder": {
+    "name": "Construtor de receita de {food}",
+    "text": "",
+    "description": "Siga os passos abaixo para montar sua receita de {food}.",
+    "label": "Adicionar seu {searchTerm}",
+    "browse": "Categorias de {category}",
+    "search": "Pesquisar um alimento",
+    "results": "Resultados da pesquisa",
+    "relatedCategories": "Categorias/Subcategorias Relacionadas",
+    "showLess": "Mostrar menos",
+    "showAll": "Mostrar todas as categorias relacionadas",
+    "root": "todas as categorias de alimentos",
+    "back": "Voltar para '{category}'",
+    "none": "Nenhum resultado. Tente refinar.",
+    "refine": "A pesquisa retornou muitos resultados. Tente refinar.",
+    "optional": {
+      "confirm": "Sim",
+      "reject": "Não",
+      "infoPrompt": "Qual era?"
+    },
+    "addMore": "Adicionar outro",
+    "noMore": "Concluído",
+    "remove": "Remover",
+    "missingAllIngredients": "Adicione pelo menos um ingrediente para continuar.",
+    "missing": {
+      "label": "Não encontro meu alimento",
+      "description": "<p>Tente navegar pelas categorias acima.</p><p>Se não encontrar, clique em reportar.</p>",
+      "report": "Reportar alimento ausente",
+      "tryAgain": "OK, tentar novamente",
+      "irrelevantIngredient": "Não tive este ingrediente"
+    }
+  },
+  "parentFoodPortion": {
+    "name": "Porção de alimento pai",
+    "text": "",
+    "description": "",
+    "label": "Quanto de {food} você consumiu no seu {parentFood}?",
+    "confirm": "Consumi essa quantidade"
+  },
+  "pizza": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "typeLabel": "Selecione a pizza mais próxima do tamanho consumido.",
+    "thicknessLabel": "Quão grossa era sua pizza?",
+    "sizeLabel": "Qual tamanho de fatia você consumiu?",
+    "whole": {
+      "label": "Quantas pizzas assim você consumiu?",
+      "confirm": "Consumi a pizza inteira"
+    },
+    "slices": {
+      "label": "Quantas fatias você consumiu?"
+    },
+    "confirm": "Consumi essa quantidade"
+  },
+  "pizzaV2": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "sizes": {
+      "label": "Qual tamanho de pizza você consumiu?",
+      "personal": "Individual 7\"",
+      "small": "Pequena 9,5\"",
+      "medium": "Média 11,5\"",
+      "large": "Grande 13,5\"",
+      "xxl": "Extra grande 15,5\""
+    },
+    "crusts": {
+      "label": "Qual tipo de massa?",
+      "classic": "Clássica",
+      "italian-thin": "Italiana/Fina",
+      "stuffed": "Recheada"
+    },
+    "units": {
+      "label": "Como deseja estimar?",
+      "slice": "Em fatias",
+      "whole": "Em pizzas inteiras"
+    },
+    "quantity": {
+      "slice": "Quantas fatias?",
+      "whole": "Quantas pizzas inteiras?"
+    }
+  },
+  "standardPortion": {
+    "name": "Porção padrão",
+    "text": "",
+    "description": "",
+    "label": "Como deseja estimar a porção de {food}?",
+    "estimateIn": "Em {unit}",
+    "howMany": {
+      "_": "Quantos {unit} você consumiu?",
+      "placeholder": "Quantos você consumiu?",
+      "withFood": "{unit} de {food} consumidos"
+    },
+    "confirm": "Consumi essa quantidade"
+  },
+  "aggregateChoice": {
+    "name": "Pergunta agregada",
+    "text": "",
+    "description": ""
+  }
+}

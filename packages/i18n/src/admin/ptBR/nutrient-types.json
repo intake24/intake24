@@ -1,0 +1,22 @@
+{
+  "_": "Tipo de nutriente",
+  "title": "Tipos de nutrientes",
+  "read": "Detalhe do tipo de nutriente",
+  "add": "Adicionar tipo de nutriente",
+  "create": "Adicionar tipo de nutriente",
+  "edit": "Editar tipo de nutriente",
+  "remove": "Remover tipo de nutriente",
+  "label": "Rótulo do tipo de nutriente",
+  "current": "Tipos de nutrientes atuais",
+  "available": "Tipos de nutrientes disponíveis",
+  "id": "ID do tipo de nutriente",
+  "kcalPerUnit": "Kcal por unidade",
+  "reset": {
+    "_": "Redefinir tipos de nutrientes",
+    "text": "Redefinir tipos de nutrientes para a lista padrão"
+  },
+  "validation": {
+    "required": "O tipo de nutriente deve ser preenchido.",
+    "unique": "Esta combinação de tipos de nutrientes já existe na lista atual."
+  }
+}

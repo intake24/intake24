@@ -1,0 +1,80 @@
+{
+  "_": "Intake24",
+  "home": "Início",
+  "dashboard": "Painel",
+  "navigation": "Navegação",
+  "welcome": {
+    "_": "Bem-vindo ao Intake24",
+    "subtitle": "Intake24 é um sistema informatizado de avaliação dietética de código aberto baseado na recordação de 24 horas em múltiplas passagens."
+  },
+  "login": {
+    "_": "Entrar",
+    "start": "Vamos começar",
+    "subtitle": "Faça login com seu nome de usuário e senha",
+    "captcha": "Complete o desafio captcha",
+    "back": "Voltar ao login",
+    "err": {
+      "captcha": "Resposta de captcha inválida.",
+      "credentials": "Nome de usuário ou senha inválidos.",
+      "token": "Token de acesso inválido.",
+      "survey": "Esta pesquisa ({surveyId}) não parece ser uma URL de login válida."
+    }
+  },
+  "logout": {
+    "_": "Sair",
+    "text": "Sair da aplicação"
+  },
+  "username": "Nome de usuário",
+  "name": "Nome",
+  "email": "E-mail",
+  "emailConfirm": "Confirmar e-mail",
+  "password": "Senha",
+  "phone": "Telefone",
+  "message": "Mensagem",
+  "continue": "Continuar",
+  "help": {
+    "_": "Ajuda",
+    "title": "Solicitar ajuda",
+    "text": "Preencha o formulário abaixo e nossa equipe de suporte entrará em contato assim que possível.",
+    "sent": "Sua solicitação de ajuda foi enviada."
+  },
+  "app": {
+    "_": "Aplicativo",
+    "info": "Informações do aplicativo",
+    "build": "Build"
+  },
+  "clipboard": {
+    "_": "Copiar para a área de transferência",
+    "copied": "Dados copiados para a área de transferência"
+  },
+  "sw": {
+    "check": "Atualização de conteúdo disponível",
+    "update": "Atualizar"
+  },
+  "action": {
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "continue": "Continuar",
+    "confirm": {
+      "_": "Confirmar",
+      "title": "Deseja continuar?",
+      "delete": "Deseja excluir {name}?"
+    },
+    "ok": "OK",
+    "reload": "Recarregar",
+    "remove": "Remover",
+    "reset": "Redefinir",
+    "start": "Iniciar",
+    "submit": "Enviar",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "not": {
+    "provided": "Não fornecido",
+    "selected": "Não selecionado"
+  },
+  "errors": {
+    "500": "Algo deu errado :(",
+    "retry": "Tentar novamente"
+  }
+}

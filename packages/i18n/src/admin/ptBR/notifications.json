@@ -1,0 +1,28 @@
+{
+  "_": "Notificação",
+  "title": "Notificações",
+  "add": "Adicionar notificação",
+  "edit": "Editar notificação",
+  "remove": "Remover notificação",
+  "channels": {
+    "_": "Canal",
+    "title": "Canais",
+    "email": "Email",
+    "slack": "Slack",
+    "webhook": "Webhook",
+    "channelId": "ID do canal",
+    "url": "URL",
+    "to": "Endereço de email"
+  },
+  "events": {
+    "_": "Evento",
+    "title": "Eventos",
+    "survey": {
+      "session": {
+        "started": "Sessão de pesquisa iniciada",
+        "submitted": "Sessão de pesquisa enviada",
+        "cancelled": "Sessão de pesquisa cancelada"
+      }
+    }
+  }
+}

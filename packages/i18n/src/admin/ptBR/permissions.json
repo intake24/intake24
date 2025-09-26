@@ -1,0 +1,25 @@
+{
+  "_": "Permissão",
+  "title": "Permissões",
+  "all": "Todas as permissões",
+  "read": "Detalhe da permissão",
+  "create": "Adicionar permissão",
+  "edit": "Editar permissão",
+  "delete": "Excluir permissão",
+  "groups": {
+    "global": "Global",
+    "resources": "Recursos",
+    "surveys": "Pesquisas",
+    "fdbs": "Bancos de dados de alimentos"
+  },
+  "roles": {
+    "_": "Função",
+    "title": "Funções",
+    "tab": "Funções"
+  },
+  "users": {
+    "_": "Usuário",
+    "title": "Usuários",
+    "tab": "Usuários"
+  }
+}
