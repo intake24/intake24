@@ -48031,12 +48031,12 @@
                                       "type": "string"
                                     },
                                     "label": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "nullable": true
                                     }
                                   },
                                   "required": [
-                                    "id",
-                                    "label"
+                                    "id"
                                   ]
                                 }
                               }
@@ -50210,12 +50210,12 @@
                                       "type": "string"
                                     },
                                     "label": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "nullable": true
                                     }
                                   },
                                   "required": [
-                                    "id",
-                                    "label"
+                                    "id"
                                   ]
                                 }
                               }
@@ -52841,12 +52841,12 @@
                                       "type": "string"
                                     },
                                     "label": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "nullable": true
                                     }
                                   },
                                   "required": [
-                                    "id",
-                                    "label"
+                                    "id"
                                   ]
                                 }
                               }
@@ -55503,12 +55503,12 @@
                                       "type": "string"
                                     },
                                     "label": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "nullable": true
                                     }
                                   },
                                   "required": [
-                                    "id",
-                                    "label"
+                                    "id"
                                   ]
                                 }
                               }
@@ -59453,12 +59453,12 @@
                                 "type": "string"
                               },
                               "label": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               }
                             },
                             "required": [
-                              "id",
-                              "label"
+                              "id"
                             ]
                           }
                         }
@@ -59684,12 +59684,12 @@
                                   "type": "string"
                                 },
                                 "label": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "nullable": true
                                 }
                               },
                               "required": [
-                                "id",
-                                "label"
+                                "id"
                               ]
                             }
                           }
@@ -60053,12 +60053,12 @@
                                   "type": "string"
                                 },
                                 "label": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "nullable": true
                                 }
                               },
                               "required": [
-                                "id",
-                                "label"
+                                "id"
                               ]
                             }
                           }
@@ -60384,12 +60384,12 @@
                                 "type": "string"
                               },
                               "label": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               }
                             },
                             "required": [
-                              "id",
-                              "label"
+                              "id"
                             ]
                           }
                         }
@@ -60612,12 +60612,12 @@
                                   "type": "string"
                                 },
                                 "label": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "nullable": true
                                 }
                               },
                               "required": [
-                                "id",
-                                "label"
+                                "id"
                               ]
                             }
                           }
@@ -60943,12 +60943,12 @@
                                 "type": "string"
                               },
                               "label": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               }
                             },
                             "required": [
-                              "id",
-                              "label"
+                              "id"
                             ]
                           }
                         }
@@ -61179,12 +61179,12 @@
                                   "type": "string"
                                 },
                                 "label": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "nullable": true
                                 }
                               },
                               "required": [
-                                "id",
-                                "label"
+                                "id"
                               ]
                             }
                           }
@@ -61563,12 +61563,12 @@
                                   "type": "string"
                                 },
                                 "label": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "nullable": true
                                 }
                               },
                               "required": [
-                                "id",
-                                "label"
+                                "id"
                               ]
                             }
                           }
@@ -61825,12 +61825,12 @@
                           "type": "string"
                         },
                         "label": {
-                          "type": "string"
+                          "type": "string",
+                          "nullable": true
                         }
                       },
                       "required": [
-                        "id",
-                        "label"
+                        "id"
                       ]
                     }
                   }
