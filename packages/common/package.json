@@ -29,7 +29,7 @@
     "deepmerge": "^4.3.1",
     "dompurify": "^3.2.6",
     "fast-copy": "^3.0.2",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.0.0",
     "litegraph.js": "^0.7.18",
     "lodash": "^4.17.21",
     "ms": "^2.1.3",
