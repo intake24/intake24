@@ -1,151 +1,108 @@
 <template>
   <div>
-    <div v-if="isEntryLoaded">
+    <div v-if="isEntryLoaded" class="pa-2">
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card border class="mb-6" flat>
-          <v-toolbar color="grey-lighten-4">
-            <v-toolbar-title class="font-weight-medium">
-              {{ $t('fdbs.foods.global._') }}
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12">
+        <div class="d-flex flex-column gr-4">
+          <v-text-field
+            v-model="data.code"
+            :error-messages="errors.get('code')"
+            hide-details="auto"
+            :label="$t('fdbs.foods.code')"
+            name="code"
+            variant="outlined"
+          />
+          <v-text-field
+            v-model="data.englishName"
+            :error-messages="errors.get('englishName')"
+            hide-details="auto"
+            :label="$t('fdbs.foods.name')"
+            name="englishName"
+            variant="outlined"
+          />
+          <v-text-field
+            v-model="data.name"
+            :error-messages="errors.get('name')"
+            hide-details="auto"
+            :label="$t('fdbs.foods.name')"
+            name="name"
+            variant="outlined"
+          />
+          <v-combobox
+            v-model="data.tags"
+            chips
+            closable-chips
+            :error-messages="errors.get('tags')"
+            hide-details="auto"
+            :label="$t('fdbs.foods.tags')"
+            multiple
+            name="tags"
+            variant="outlined"
+          />
+          <language-selector
+            v-model="data.altNames"
+            border
+            :label="$t('fdbs.foods.altNames')"
+          >
+            <template v-for="lang in Object.keys(data.altNames)" :key="lang" #[`lang.${lang}`]>
+              <div v-for="(item, idx) in data.altNames[lang]" :key="item" class="mb-2">
                 <v-text-field
-                  v-model="data.main.code"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.code')"
+                  v-model="data.altNames[lang][idx]"
+                  density="compact"
                   hide-details="auto"
-                  :label="$t('fdbs.foods.global.code')"
-                  name="main.code"
+                  :label="$t('fdbs.foods.altNames')"
+                  :name="`altNames.${lang}.${idx}`"
                   variant="outlined"
                 />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="data.main.name"
-                  :disabled="!globalEdit"
-                  :error-messages="errors.get('main.name')"
-                  hide-details="auto"
-                  :label="$t('fdbs.foods.global.name')"
-                  name="main.name"
-                  variant="outlined"
-                />
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-        <v-card border class="mb-6" flat>
-          <v-toolbar color="grey-lighten-4">
-            <v-toolbar-title class="font-weight-medium">
-              {{ $t('fdbs.foods.local._') }}
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="data.name"
-                  :error-messages="errors.get('name')"
-                  hide-details="auto"
-                  :label="$t('fdbs.foods.local.name')"
-                  name="name"
-                  variant="outlined"
-                />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12">
-                <v-combobox
-                  v-model="data.tags"
-                  chips
-                  closable-chips
-                  :error-messages="errors.get('tags')"
-                  hide-details="auto"
-                  :label="$t('fdbs.foods.local.tags')"
-                  multiple
-                  name="tags"
-                  variant="outlined"
-                />
-              </v-col>
-              <v-col cols="12">
-                <language-selector
-                  v-model="data.altNames"
-                  border
-                  :label="$t('fdbs.foods.local.altNames')"
-                >
-                  <template v-for="lang in Object.keys(data.altNames)" :key="lang" #[`lang.${lang}`]>
-                    <div v-for="(item, idx) in data.altNames[lang]" :key="item" class="mb-2">
-                      <v-text-field
-                        v-model="data.altNames[lang][idx]"
-                        density="compact"
-                        hide-details="auto"
-                        :label="$t('fdbs.foods.local.altNames')"
-                        :name="`altNames.${lang}.${idx}`"
-                        variant="outlined"
-                      />
-                    </div>
-                  </template>
-                </language-selector>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-        <locale-list
-          v-model="data.main.locales"
-          class="mb-6"
-          :disabled="!globalEdit"
-          :errors="errors"
-        />
-        <attribute-list
-          v-model="data.main.attributes"
-          class="mb-6"
-          :disabled="!globalEdit"
-          :errors="errors"
-        />
-        <category-list
-          v-model="data.main.parentCategories"
-          class="mb-6"
-          :disabled="!globalEdit"
-          :errors="errors"
-          :locale-id="id"
-          outlined
-        />
-        <nutrient-list
-          v-model="data.nutrientRecords"
-          class="mb-6"
-          :errors="errors"
-          :nutrient-tables="refs?.nutrientTables ?? []"
-        />
-        <portion-size-method-list
-          v-model="data.portionSizeMethods"
-          class="mb-6"
-          :errors="errors"
-          :locale-id="id"
-        />
-        <associated-food-list
-          v-model="data.associatedFoods"
-          class="mb-6"
-          :errors="errors"
-          :food-code="data.main.code"
-          :locale-id="id"
-        />
+              </div>
+            </template>
+          </language-selector>
+          <attribute-list
+            v-model="data.attributes"
+            class="mb-6"
+            :errors="errors"
+          />
+          <category-list
+            v-model="data.parentCategories"
+            border
+            class="mb-6"
+            :errors="errors"
+            :locale-id="id"
+          />
+          <nutrient-list
+            v-model="data.nutrientRecords"
+            class="mb-6"
+            :errors="errors"
+            :nutrient-tables="refs?.nutrientTables ?? []"
+          />
+          <portion-size-method-list
+            v-model="data.portionSizeMethods"
+            class="mb-6"
+            :errors="errors"
+          />
+          <associated-food-list
+            v-model="data.associatedFoods"
+            class="mb-6"
+            :errors="errors"
+            :food-id="entryId"
+            :locale-id="localeEntry.code"
+          />
+        </div>
+        <div class="d-flex gc-2">
+          <v-btn color="secondary" type="submit" variant="outlined" @click="submit">
+            <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
+          </v-btn>
+          <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
+          <v-spacer />
+          <confirm-dialog
+            color="error"
+            icon-left="$delete"
+            :label="$t('common.action.delete')"
+            @confirm="remove"
+          >
+            {{ $t('common.action.confirm.delete', { name: entry?.name }) }}
+          </confirm-dialog>
+        </div>
       </v-form>
-      <div class="d-flex gc-2">
-        <v-btn color="secondary" type="submit" variant="outlined" @click="submit">
-          <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
-        </v-btn>
-        <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
-        <v-spacer />
-        <confirm-dialog
-          color="error"
-          icon-left="$delete"
-          :label="$t('common.action.delete')"
-          @confirm="remove"
-        >
-          {{ $t('common.action.confirm.delete', { name: entry?.name }) }}
-        </confirm-dialog>
-      </div>
     </div>
     <v-skeleton-loader
       v-else
@@ -164,18 +121,16 @@ import {
   AttributeList,
   CategoryList,
   CopyEntryDialog,
-  LocaleList,
   NutrientList,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import { useUser } from '@intake24/admin/stores';
 import type {
   FoodDatabaseRefs,
-  FoodLocalEntry,
-  FoodLocalInput,
+  FoodEntry,
+  FoodInput,
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
@@ -192,7 +147,6 @@ export default defineComponent({
     ConfirmDialog,
     ConfirmLeaveDialog,
     CopyEntryDialog,
-    LocaleList,
     LanguageSelector,
     NutrientList,
     PortionSizeMethodList,
@@ -213,42 +167,35 @@ export default defineComponent({
     const http = useHttp();
     const router = useRouter();
     const { i18n } = useI18n();
-    const user = useUser();
 
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);
 
     const loading = ref(false);
     const type = 'foods' as const;
-    const entry = ref<FoodLocalEntry | null>(null);
-    const globalEdit = computed(
-      () => user.can('locales:food-list') || entry.value?.main?.locales?.length === 1,
-    );
+    const entry = ref<FoodEntry | null>(null);
     const isEntryLoaded = computed(() => !!entry.value);
 
     const { refs } = useEntry<LocaleEntry, FoodDatabaseRefs>(props);
     const { clearError, form: { data, errors, put }, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
-      FoodLocalInput,
+      Required<FoodInput>,
       LocaleEntry
     >(props, {
       data: {
+        code: '',
+        englishName: '',
         name: '',
-        main: {
-          name: '',
-          code: '',
-          attributes: {
-            readyMealOption: null,
-            reasonableAmount: null,
-            sameAsBeforeOption: null,
-            useInRecipes: null,
-          },
-          locales: [],
-          parentCategories: [],
-        },
         altNames: {},
-        tags: [],
-        nutrientRecords: [],
-        portionSizeMethods: [],
+        attributes: {
+          readyMealOption: null,
+          reasonableAmount: null,
+          sameAsBeforeOption: null,
+          useInRecipes: null,
+        },
         associatedFoods: [],
+        nutrientRecords: [],
+        parentCategories: [],
+        portionSizeMethods: [],
+        tags: [],
       },
       config: { extractNestedKeys: true },
     });
@@ -261,7 +208,7 @@ export default defineComponent({
       entry.value = null;
 
       try {
-        const { data } = await http.get<FoodLocalEntry>(`admin/fdbs/${id}/${type}/${entryId}`);
+        const { data } = await http.get<FoodEntry>(`admin/fdbs/${id}/${type}/${entryId}`);
 
         toForm(data);
         entry.value = data;
@@ -272,10 +219,10 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      const data = await put<FoodLocalEntry>(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
+      const data = await put<FoodEntry>(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
       toForm(data);
 
-      const { name, main: { name: englishName = 'record' } = {} } = data;
+      const { name, name: englishName = 'record' } = data;
 
       useMessages().success(i18n.t('common.msg.updated', { name: name ?? englishName }));
     };
@@ -284,7 +231,7 @@ export default defineComponent({
       await http.delete(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
 
       useMessages().success(
-        i18n.t('common.msg.deleted', { name: entry.value?.main?.name }),
+        i18n.t('common.msg.deleted', { name: entry.value?.name }),
       );
 
       await router.push({
@@ -292,7 +239,7 @@ export default defineComponent({
         params: {
           id: props.id,
           // @ts-expect-error missing typed locals
-          entryId: entry.value?.main?.parentCategories?.at(0)?.locals?.at(0)?.id ?? 'no-category',
+          entryId: entry.value?.parentCategories?.at(0)?.locals?.at(0)?.id ?? 'no-category',
         },
       });
     };
@@ -319,7 +266,6 @@ export default defineComponent({
       originalEntry,
       routeLeave,
       toForm,
-      globalEdit,
       isEntryLoaded,
       remove,
       submit,

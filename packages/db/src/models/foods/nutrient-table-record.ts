@@ -11,7 +11,7 @@ import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequ
 
 import type { NutrientTableRecordNutrientCreationAttributes } from '@intake24/db';
 import {
-  FoodLocal,
+  Food,
   FoodNutrient,
   NutrientTable,
   NutrientTableRecordField,
@@ -66,8 +66,8 @@ export default class NutrientTableRecord extends BaseModel<
   })
   declare localName: CreationOptional<string | null>;
 
-  @BelongsToMany(() => FoodLocal, () => FoodNutrient)
-  declare foods?: FoodLocal[];
+  @BelongsToMany(() => Food, () => FoodNutrient, 'nutrientTableRecordId', 'foodId')
+  declare foods?: Food[];
 
   @HasMany(() => FoodNutrient, 'nutrientTableRecordId')
   declare foodMappings?: NonAttribute<FoodNutrient[]>;

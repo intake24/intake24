@@ -4,6 +4,7 @@ import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 import type { Ops } from '@intake24/api/app';
 import { IndexNotReadyError } from '@intake24/api/food-index';
+import { InvalidIdError } from '@intake24/api/services';
 import { DatabaseError } from '@intake24/db';
 import {
   ApplicationError,
@@ -45,7 +46,7 @@ export default (app: Express, { logger }: Ops): void => {
   });
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    if (err instanceof NotFoundError) {
+    if (err instanceof NotFoundError || err instanceof InvalidIdError) {
       const { message } = err;
       res.status(404).json({ message });
       return;

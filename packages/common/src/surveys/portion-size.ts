@@ -123,12 +123,13 @@ export const portionSizeParameters = z.object({
 
 export type PortionSizeParameters = z.infer<typeof portionSizeParameters>;
 
-export interface PortionSizeMethodBase {
-  description: string;
-  useForRecipes: boolean;
-  conversionFactor: number;
-  orderBy: string;
-}
+export const portionSizeMethodBase = z.object({
+  description: z.string().min(1).max(256),
+  useForRecipes: z.boolean(),
+  conversionFactor: z.number(),
+  orderBy: z.string(),
+});
+export type PortionSizeMethodBase = z.infer<typeof portionSizeMethodBase>;
 
 export interface AsServedPsm extends PortionSizeMethodBase {
   method: 'as-served';

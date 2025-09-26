@@ -26,15 +26,14 @@ async function uniqueMiddleware(value: any, { localeId, field }: { localeId?: st
   }
 }
 
-async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<Record<'respondentLanguageId' | 'adminLanguageId' | 'prototypeLocaleId', string | null | undefined>>, req: TsRestRequest<T>, locale?: SystemLocale) {
+async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<Record<'respondentLanguageId' | 'adminLanguageId', string | null | undefined>>, req: TsRestRequest<T>, locale?: SystemLocale) {
   const models: Record<string, ModelStatic<any>> = {
     respondentLanguageId: Language,
     adminLanguageId: Language,
-    prototypeLocaleId: SystemLocale,
   };
 
   for (const [key, value] of Object.entries(values)) {
-    const keyName = key as 'respondentLanguageId' | 'adminLanguageId' | 'prototypeLocaleId';
+    const keyName = key as 'respondentLanguageId' | 'adminLanguageId';
 
     if (!value || (locale && locale[keyName] === value))
       continue;
@@ -92,7 +91,7 @@ export function locale() {
           uniqueMiddleware(body.code, { field: 'code' }),
           uniqueMiddleware(body.englishName, { field: 'englishName' }),
           uniqueMiddleware(body.localName, { field: 'localName' }),
-          checkVisibility(pick(body, ['respondentLanguageId', 'adminLanguageId', 'prototypeLocaleId']), req),
+          checkVisibility(pick(body, ['respondentLanguageId', 'adminLanguageId']), req),
         ]);
 
         const { userId } = req.scope.cradle.user;
@@ -128,7 +127,6 @@ export function locale() {
         const locale = await req.scope.cradle.aclService.findAndCheckRecordAccess(SystemLocale, 'read', {
           where: { id: localeId },
           include: [
-            { association: 'parent' },
             { association: 'adminLanguage' },
             { association: 'respondentLanguage' },
           ],
@@ -153,7 +151,7 @@ export function locale() {
         await Promise.all([
           uniqueMiddleware(body.englishName, { field: 'englishName', localeId }),
           uniqueMiddleware(body.localName, { field: 'localName', localeId }),
-          checkVisibility(pick(body, ['respondentLanguageId', 'adminLanguageId', 'prototypeLocaleId']), req),
+          checkVisibility(pick(body, ['respondentLanguageId', 'adminLanguageId']), req),
         ]);
 
         const { aclService } = req.scope.cradle;
@@ -161,7 +159,6 @@ export function locale() {
         const systemLocale = await aclService.findAndCheckRecordAccess(SystemLocale, 'edit', {
           where: { id: localeId },
           include: [
-            { association: 'parent' },
             { association: 'adminLanguage' },
             { association: 'respondentLanguage' },
           ],
@@ -177,7 +174,6 @@ export function locale() {
 
         await systemLocale.reload({
           include: [
-            { association: 'parent' },
             { association: 'adminLanguage' },
             { association: 'respondentLanguage' },
           ],

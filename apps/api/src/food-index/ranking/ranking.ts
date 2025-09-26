@@ -15,7 +15,7 @@ export type RankingData = {
 function noAlgorithmRanking(results: PhraseMatchResult<string>[]): FoodHeader[] {
   return results
     .sort((a, b) => a.quality - b.quality)
-    .map(result => ({ code: result.key, name: result.phrase }));
+    .map(result => ({ id: result.id, code: result.key, name: result.phrase }));
 }
 
 function mapValues<T1, T2>(obj: { [s: string]: T1 }, fn: (value: T1) => T2): { [s: string]: T2 } {
@@ -65,10 +65,11 @@ function normaliseMatchCost(results: PhraseMatchResult<string>[]): PhraseMatchRe
 
   // Convert match cost to score, i.e. higher is better
   if (Math.abs(range) < 1e-6) {
-    return results.map(r => ({ key: r.key, phrase: r.phrase, quality: 1 }));
+    return results.map(r => ({ id: r.id, key: r.key, phrase: r.phrase, quality: 1 }));
   }
   else {
     return results.map(r => ({
+      id: r.id,
       key: r.key,
       phrase: r.phrase,
       quality: 1.0 - (r.quality - min) / range,
@@ -98,7 +99,7 @@ function applyRankingData(
         = rankingScore * (1 - matchScoreWeight) + result.quality * matchScoreWeight;
 
       return {
-        header: { code: result.key, name: result.phrase },
+        header: { id: result.id, code: result.key, name: result.phrase },
         rankingScore: combinedScore,
       };
     });
@@ -152,5 +153,5 @@ export async function rankFoodResults(
 export function rankCategoryResults(results: PhraseMatchResult<string>[]): CategoryHeader[] {
   return results
     .sort((a, b) => a.quality - b.quality)
-    .map(result => ({ code: result.key, name: result.phrase }));
+    .map(result => ({ id: result.id, code: result.key, name: result.phrase }));
 }

@@ -7,7 +7,6 @@
   "create": "Ajouter une version régionale",
   "edit": "Modifier la version régionale",
   "delete": "Supprimer la version régionale",
-  "prototypeLocaleId": "Version régionale prototypique",
   "englishName": "Nom anglais",
   "localName": "Nom régional",
   "respondentLanguageId": "Langage de l'interface utilisateur du répondant",

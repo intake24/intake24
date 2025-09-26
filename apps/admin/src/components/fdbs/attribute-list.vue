@@ -17,11 +17,11 @@
             v-model="attributes.sameAsBeforeOption"
             class="mt-0"
             :disabled="disabled || isInherited('sameAsBeforeOption')"
-            :error-messages="errors.get('main.attributes.sameAsBeforeOption')"
+            :error-messages="errors.get('attributes.sameAsBeforeOption')"
             hide-details="auto"
             :label="$t('fdbs.attributes.sameAsBeforeOption')"
             name="attributes.sameAsBeforeOption"
-            @update:model-value="errors.clear('main.attributes.sameAsBeforeOption')"
+            @update:model-value="errors.clear('attributes.sameAsBeforeOption')"
           />
         </v-col>
       </v-row>
@@ -36,11 +36,11 @@
             v-model="attributes.readyMealOption"
             class="mt-0"
             :disabled="disabled || isInherited('readyMealOption')"
-            :error-messages="errors.get('main.attributes.readyMealOption')"
+            :error-messages="errors.get('attributes.readyMealOption')"
             hide-details="auto"
             :label="$t('fdbs.attributes.readyMealOption')"
             name="attributes.readyMealOption"
-            @update:model-value="errors.clear('main.attributes.readyMealOption')"
+            @update:model-value="errors.clear('attributes.readyMealOption')"
           />
         </v-col>
       </v-row>
@@ -55,12 +55,12 @@
             v-model.number="attributes.reasonableAmount"
             density="compact"
             :disabled="disabled || isInherited('reasonableAmount')"
-            :error-messages="errors.get('main.attributes.reasonableAmount')"
+            :error-messages="errors.get('attributes.reasonableAmount')"
             hide-details="auto"
             :label="$t('fdbs.attributes.reasonableAmount')"
             name="attributes.reasonableAmount"
             variant="outlined"
-            @update:model-value="errors.clear('main.attributes.reasonableAmount')"
+            @update:model-value="errors.clear('attributes.reasonableAmount')"
           />
         </v-col>
       </v-row>
@@ -75,13 +75,13 @@
             v-model="attributes.useInRecipes"
             density="compact"
             :disabled="disabled || isInherited('useInRecipes')"
-            :error-messages="errors.get('main.attributes.useInRecipes')"
+            :error-messages="errors.get('attributes.useInRecipes')"
             hide-details="auto"
             :items="useInRecipeTypeItems"
             :label="$t('fdbs.attributes.useInRecipes._')"
             name="attributes.useInRecipes"
             variant="outlined"
-            @update:model-value="errors.clear('main.attributes.useInRecipes')"
+            @update:model-value="errors.clear('attributes.useInRecipes')"
           />
         </v-col>
       </v-row>
@@ -89,10 +89,9 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-
+import { computed } from 'vue';
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import type { Nullable } from '@intake24/common/types';
 import { useInRecipeTypes } from '@intake24/common/types';
@@ -106,6 +105,23 @@ type Attributes = Pick<
 
 type AttributeType = keyof Attributes;
 
+const props = defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  errors: {
+    type: Object as PropType<ReturnUseErrors>,
+    required: true,
+  },
+  modelValue: {
+    type: Object as PropType<Nullable<Attributes>>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
 const defaultAttributes: Attributes = {
   sameAsBeforeOption: false,
   readyMealOption: false,
@@ -113,72 +129,40 @@ const defaultAttributes: Attributes = {
   useInRecipes: 0,
 };
 
-export default defineComponent({
-  name: 'AttributeList',
+const { i18n } = useI18n();
 
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    errors: {
-      type: Object as PropType<ReturnUseErrors>,
-      required: true,
-    },
-    modelValue: {
-      type: Object as PropType<Nullable<Attributes>>,
-      required: true,
-    },
+const attributes = computed({
+  get() {
+    return props.modelValue;
   },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const { i18n } = useI18n();
-
-    const attributes = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(val) {
-        emit('update:modelValue', val);
-      },
-    });
-
-    const useInRecipeTypeItems = computed(() =>
-      Object.values(useInRecipeTypes).map(value => ({
-        value,
-        title: i18n.t(`fdbs.attributes.useInRecipes.${value}`),
-      })),
-    );
-
-    function isInherited(attribute: AttributeType) {
-      return attributes.value[attribute] === null;
-    };
-
-    function title(attribute: AttributeType): string {
-      const key = attributes.value[attribute] === null ? 'override' : 'inherit';
-      return i18n.t(`fdbs.attributes.${key}`);
-    };
-
-    function toggleInherit(attribute: AttributeType) {
-      if (attributes.value[attribute] !== null) {
-        attributes.value[attribute] = null;
-        return;
-      }
-
-      // @ts-expect-error it doesn't narrow the type correctly
-      this.attributes[attribute] = this.defaultAttributes[attribute];
-    };
-
-    return {
-      attributes,
-      defaultAttributes,
-      isInherited,
-      title,
-      toggleInherit,
-      useInRecipeTypeItems,
-    };
+  set(val) {
+    emit('update:modelValue', val);
   },
 });
+
+const useInRecipeTypeItems = computed(() =>
+  Object.values(useInRecipeTypes).map(value => ({
+    value,
+    title: i18n.t(`fdbs.attributes.useInRecipes.${value}`),
+  })),
+);
+
+function isInherited(attribute: AttributeType) {
+  return attributes.value[attribute] === null;
+};
+
+function title(attribute: AttributeType): string {
+  const key = attributes.value[attribute] === null ? 'override' : 'inherit';
+  return i18n.t(`fdbs.attributes.${key}`);
+};
+
+function toggleInherit(attribute: AttributeType) {
+  if (attributes.value[attribute] !== null) {
+    attributes.value[attribute] = null;
+    return;
+  }
+
+  // @ts-expect-error it doesn't narrow the type correctly
+  attributes.value[attribute] = defaultAttributes[attribute];
+};
 </script>

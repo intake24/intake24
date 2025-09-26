@@ -1,21 +1,15 @@
 import type { BaseClientV4 } from './base-client-v4';
-
 import type { CreateResult } from './create-response';
-import { FormData } from 'formdata-node';
 import type {
-  CreateGlobalFoodRequest,
-  CreateLocalFoodRequest,
-  CreateLocalFoodRequestOptions,
+  CreateFoodRequest,
+  CreateFoodRequestOptions,
   FoodEntry,
-  UpdateGlobalFoodRequest,
 } from '@intake24/common/types/http/admin';
 import { parseCreateResponse } from './create-response';
-
 import { fileFromPathWithType } from './form-data-helpers';
 
 export class FoodsApiV4 {
-  private static readonly globalApiPath = '/api/admin/foods/global';
-  private static readonly localApiPath = '/api/admin/foods/local';
+  private static readonly apiPath = '/api/admin/foods/local';
 
   private readonly baseClient: BaseClientV4;
 
@@ -23,40 +17,13 @@ export class FoodsApiV4 {
     this.baseClient = baseClient;
   }
 
-  public async createGlobalFood(
-    createRequest: CreateGlobalFoodRequest,
-  ): Promise<CreateResult<FoodEntry>> {
-    const response = await this.baseClient.postResponse<FoodEntry>(
-      `${FoodsApiV4.globalApiPath}`,
-      createRequest,
-      {},
-    );
-
-    return parseCreateResponse(response, this.baseClient.logger);
-  }
-
-  public async findGlobalFood(code: string): Promise<FoodEntry | null> {
-    return await this.baseClient.getOptional<FoodEntry>(`${FoodsApiV4.globalApiPath}/${code}`);
-  }
-
-  public async updateGlobalFood(
-    code: string,
-    version: string,
-    updateRequest: UpdateGlobalFoodRequest,
-  ): Promise<FoodEntry> {
-    return await this.baseClient.put(
-      `${FoodsApiV4.globalApiPath}/${code}?version=${version}`,
-      updateRequest,
-    );
-  }
-
-  public async createLocalFood(
+  public async createFood(
     localeId: string,
-    createRequest: CreateLocalFoodRequest,
-    options: CreateLocalFoodRequestOptions,
+    createRequest: CreateFoodRequest,
+    options: CreateFoodRequestOptions,
   ): Promise<CreateResult<FoodEntry>> {
     const response = await this.baseClient.postResponse<FoodEntry>(
-      `${FoodsApiV4.localApiPath}/${localeId}`,
+      `${FoodsApiV4.apiPath}/${localeId}`,
       createRequest,
       options,
     );
@@ -64,14 +31,19 @@ export class FoodsApiV4 {
     return parseCreateResponse(response, this.baseClient.logger);
   }
 
-  public async getEnabledFoods(localeId: string): Promise<{ enabledFoods: string[] } | null> {
-    return this.baseClient.getOptional<{ enabledFoods: string[] }>(`${FoodsApiV4.localApiPath}/${localeId}/enabled-foods`);
-  }
+  /* public async updateFood(
+    code: string,
+    version: string,
+    updateRequest: UpdateGlobalFoodRequest,
+  ): Promise<FoodEntry> {
+    return await this.baseClient.put(
+      `${FoodsApiV4.localApiPath}/${code}?version=${version}`,
+      updateRequest,
+    );
+  } */
 
-  public async updateEnabledFoods(localeId: string, enabledFoods: string[]) {
-    await this.baseClient.post<FoodEntry>(`${FoodsApiV4.localApiPath}/${localeId}/enabled-foods`, {
-      enabledFoods,
-    });
+  public async getEnabledFoods(localeId: string): Promise<string[] | null> {
+    return this.baseClient.getOptional<string[]>(`${FoodsApiV4.apiPath}/${localeId}/enabled-foods`);
   }
 
   public async updateThumbnail(localeId: string, foodCode: string, thumbnailImagePath: string) {

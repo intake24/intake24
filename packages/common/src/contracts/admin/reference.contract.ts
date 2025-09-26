@@ -39,7 +39,7 @@ export const reference = initContract().router({
   categories: {
     method: 'GET',
     path: '/admin/references/categories',
-    query: paginationRequest,
+    query: paginationRequest.extend({ localeId: z.string().min(1).optional() }),
     responses: {
       200: z.object({
         data: categoryReference.array(),
@@ -91,7 +91,7 @@ export const reference = initContract().router({
   foods: {
     method: 'GET',
     path: '/admin/references/foods',
-    query: paginationRequest,
+    query: paginationRequest.extend({ localeId: z.string().min(1) }),
     responses: {
       200: z.object({
         data: foodReference.array(),

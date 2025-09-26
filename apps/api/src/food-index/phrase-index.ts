@@ -20,6 +20,7 @@ const MAX_WORD_INTERPRETATIONS = 4;
 
 export interface PhraseWithKey<K> {
   phrase: string;
+  id: string;
   key: K;
 }
 
@@ -39,6 +40,7 @@ export interface LanguageBackend {
 export interface DictionaryPhrase<K> {
   asTyped: string;
   words: Array<string>;
+  id: string;
   key: K;
 }
 
@@ -61,6 +63,7 @@ interface PhraseMatch {
 
 export interface PhraseMatchResult<K> {
   phrase: string;
+  id: string;
   key: K;
   quality: number;
 }
@@ -316,16 +319,17 @@ export class PhraseIndex<K> {
 
     return uniqueMatches.map(m => ({
       phrase: this.phraseIndex[m.phraseIndex].asTyped,
+      id: this.phraseIndex[m.phraseIndex].id,
       key: this.phraseIndex[m.phraseIndex].key,
       quality: m.quality,
     }));
   }
 
   constructor(
-    phrases: Array<PhraseWithKey<K>>,
+    phrases: PhraseWithKey<K>[],
     wordOps: LanguageBackend,
-    synonymSets: Array<Set<string>>,
-    recipeFoodsSynonymsSet: Array<Set<string>> = [],
+    synonymSets: Set<string>[],
+    recipeFoodsSynonymsSet: Set<string>[] = [],
     recipeFoodsList: RecipeFoodTuple[] = [],
   ) {
     this.languageBackend = wordOps;
@@ -337,7 +341,7 @@ export class PhraseIndex<K> {
 
     for (let pi = 0; pi < phrases.length; pi += 1) {
       const words = this.getWordList(phrases[pi].phrase);
-      this.phraseIndex[pi] = { asTyped: phrases[pi].phrase, words, key: phrases[pi].key };
+      this.phraseIndex[pi] = { asTyped: phrases[pi].phrase, words, key: phrases[pi].key, id: phrases[pi].id };
 
       for (let wi = 0; wi < words.length; wi += 1) {
         const occurrences = this.wordIndex.get(words[wi]) || new Array<[number, number]>();

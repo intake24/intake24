@@ -4,6 +4,7 @@ import { anyPermission } from '@intake24/api/http/middleware';
 import { imageResponseCollection } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
+import { Pagination } from '@intake24/common/types/http';
 import type { PaginateOptions } from '@intake24/db';
 import {
   AsServedSet,
@@ -46,11 +47,15 @@ export function reference() {
     categories: {
       middleware: [anyPermission('locales')],
       handler: async ({ query }) => {
-        const categories = await Category.paginate({
-          query,
+        const { localeId, ...rest } = query;
+
+        const categories: Pagination<{ code: string; name: string }> = await Category.paginate({
+          query: rest,
+          where: localeId ? { localeId } : {},
           attributes: ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],
+          group: ['code', 'name'],
         });
 
         return { status: 200, body: categories };
@@ -80,6 +85,7 @@ export function reference() {
 
         const paginateOptions: PaginateOptions<FeedbackScheme> = {
           query,
+          attributes: ['id', 'name'],
           columns: ['id', 'name'],
           order: [[fn('lower', col('FAQ.name')), 'ASC']],
         };
@@ -129,8 +135,11 @@ export function reference() {
     foods: {
       middleware: [anyPermission('locales')],
       handler: async ({ query }) => {
+        const { localeId, ...rest } = query;
+
         const foods = await Food.paginate({
-          query,
+          query: rest,
+          where: { localeId },
           attributes: ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],

@@ -61,7 +61,6 @@ export default () => {
         respondentLanguageId: code,
         adminLanguageId: code,
         countryFlagCode: code,
-        prototypeLocaleId: null,
         textDirection: 'ltr',
         foodIndexEnabled: true,
         foodIndexLanguageBackendId: 'en',

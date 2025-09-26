@@ -32,11 +32,10 @@ export interface AsServedSets {
 export interface AssociatedFoods {
   associatedCategoryCode: string | null;
   associatedFoodCode: string | null;
-  foodCode: string;
+  foodId: Int8;
   genericName: string;
   id: Generated<Int8>;
   linkAsMain: boolean;
-  localeId: string;
   multiple: boolean;
   orderBy: Int8;
   text: string;
@@ -51,35 +50,15 @@ export interface AttributeDefaults {
 }
 
 export interface Brands {
-  foodCode: string;
+  foodId: Int8;
   id: Generated<Int8>;
-  localeId: string;
   name: string;
 }
 
 export interface Categories {
   code: string;
-  isHidden: boolean;
-  name: string;
-  version: string;
-}
-
-export interface CategoriesCategories {
-  categoryCode: string;
-  subcategoryCode: string;
-}
-
-export interface CategoryAttributes {
-  categoryCode: string;
-  id: Generated<Int8>;
-  readyMealOption: boolean | null;
-  reasonableAmount: number | null;
-  sameAsBeforeOption: boolean | null;
-  useInRecipes: number | null;
-}
-
-export interface CategoryLocals {
-  categoryCode: string;
+  englishName: string;
+  hidden: boolean;
   id: Generated<Int8>;
   localeId: string;
   name: string;
@@ -88,8 +67,21 @@ export interface CategoryLocals {
   version: string;
 }
 
+export interface CategoriesCategories {
+  categoryId: Int8;
+  subCategoryId: Int8;
+}
+
+export interface CategoryAttributes {
+  categoryId: Int8;
+  readyMealOption: boolean | null;
+  reasonableAmount: number | null;
+  sameAsBeforeOption: boolean | null;
+  useInRecipes: number | null;
+}
+
 export interface CategoryPortionSizeMethods {
-  categoryLocalId: Int8;
+  categoryId: Int8;
   conversionFactor: number;
   description: string;
   id: Generated<Int8>;
@@ -139,29 +131,17 @@ export interface DrinkwareVolumeSamples {
 }
 
 export interface FoodAttributes {
-  foodCode: string;
-  id: Generated<Int8>;
+  foodId: Int8;
   readyMealOption: boolean | null;
   reasonableAmount: number | null;
   sameAsBeforeOption: boolean | null;
   useInRecipes: number | null;
 }
 
-export interface FoodLocals {
-  altNames: Generated<string>;
-  foodCode: string;
-  id: Generated<Int8>;
-  localeId: string;
-  name: string | null;
-  simpleName: string | null;
-  tags: Generated<string>;
-  version: string;
-}
-
 export interface FoodPortionSizeMethods {
   conversionFactor: number;
   description: string;
-  foodLocalId: Int8;
+  foodId: Int8;
   id: Generated<Int8>;
   method: string;
   orderBy: Int8;
@@ -170,34 +150,30 @@ export interface FoodPortionSizeMethods {
 }
 
 export interface Foods {
+  altNames: Generated<string>;
   code: string;
-  name: string;
+  englishName: string;
+  id: Generated<Int8>;
+  localeId: string;
+  name: string | null;
+  simpleName: string | null;
+  tags: string;
   version: string;
 }
 
 export interface FoodsCategories {
-  categoryCode: string;
-  foodCode: string;
-}
-
-export interface FoodsLocalLists {
-  foodCode: string;
-  localeId: string;
+  categoryId: Int8;
+  foodId: Int8;
 }
 
 export interface FoodsNutrients {
-  foodLocalId: Int8;
+  foodId: Int8;
   nutrientTableRecordId: Int8;
-}
-
-export interface FoodsRestrictions {
-  foodCode: string;
-  localeId: string;
 }
 
 export interface FoodThumbnailImages {
   createdAt: Generated<Timestamp>;
-  foodLocalId: Int8;
+  foodId: Int8;
   id: Generated<Int8>;
   imageId: Int8;
   updatedAt: Generated<Timestamp>;
@@ -244,7 +220,6 @@ export interface Locales {
   foodIndexLanguageBackendId: Generated<string>;
   id: string;
   localName: string;
-  prototypeLocaleId: string | null;
   respondentLanguageId: string;
   textDirection: Generated<string>;
 }
@@ -353,7 +328,7 @@ export interface RecipeFoods {
 }
 
 export interface RecipeFoodsSteps {
-  categoryCode: string | null;
+  categoryCode: string;
   code: string;
   createdAt: Timestamp;
   description: string;
@@ -421,20 +396,16 @@ export interface DB {
   categories: Categories;
   categoriesCategories: CategoriesCategories;
   categoryAttributes: CategoryAttributes;
-  categoryLocals: CategoryLocals;
   categoryPortionSizeMethods: CategoryPortionSizeMethods;
   drinkwareScales: DrinkwareScales;
   drinkwareScalesV2: DrinkwareScalesV2;
   drinkwareSets: DrinkwareSets;
   drinkwareVolumeSamples: DrinkwareVolumeSamples;
   foodAttributes: FoodAttributes;
-  foodLocals: FoodLocals;
   foodPortionSizeMethods: FoodPortionSizeMethods;
   foods: Foods;
   foodsCategories: FoodsCategories;
-  foodsLocalLists: FoodsLocalLists;
   foodsNutrients: FoodsNutrients;
-  foodsRestrictions: FoodsRestrictions;
   foodThumbnailImages: FoodThumbnailImages;
   guideImageObjects: GuideImageObjects;
   guideImages: GuideImages;

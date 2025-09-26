@@ -208,7 +208,6 @@ function locale(respLangId: string | undefined, adminLangId: string | undefined)
   const respondentLanguageId = respLangId ?? faker.location.countryCode();
   const adminLanguageId = adminLangId ?? faker.location.countryCode();
   const countryFlagCode = faker.location.countryCode();
-  const prototypeLocaleId = null;
   const textDirection = 'ltr';
   const foodIndexEnabled = faker.datatype.boolean();
   const foodIndexLanguageBackendId = 'en';
@@ -221,7 +220,6 @@ function locale(respLangId: string | undefined, adminLangId: string | undefined)
     respondentLanguageId,
     adminLanguageId,
     countryFlagCode,
-    prototypeLocaleId,
     textDirection,
     foodIndexEnabled,
     foodIndexLanguageBackendId,

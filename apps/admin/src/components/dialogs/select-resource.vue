@@ -40,6 +40,9 @@
           variant="outlined"
           @click:clear="clear"
         />
+        <v-alert v-if="isAlreadyIncluded" type="error">
+          {{ $t('fdbs.categories.alreadyIncluded', { code: selectedItemId?.at(0) }) }}
+        </v-alert>
         <template v-if="items.length">
           <v-list
             v-model:selected="selectedItemId"
@@ -47,7 +50,7 @@
             density="compact"
             min-height="350px"
           >
-            <v-list-item v-for="item in items" :key="item[itemId]" :value="item[itemId]">
+            <v-list-item v-for="item in items" :key="`${item[itemId]}:${item[itemName]}`" :value="item[itemId]">
               <template #prepend="{ isSelected, select }">
                 <v-list-item-action class="mr-2">
                   <v-checkbox-btn :model-value="isSelected" @update:model-value="select" />
@@ -75,7 +78,7 @@
         <v-btn
           class="font-weight-bold"
           color="info"
-          :disabled="!selectedItemId.length"
+          :disabled="!selectedItemId.length || isAlreadyIncluded"
           variant="text"
           @click.stop="confirm"
         >
@@ -104,6 +107,9 @@ const props = defineProps({
   clearable: {
     type: Boolean,
   },
+  except: {
+    type: Array as PropType<Dictionary[]>,
+  },
   disabled: {
     type: Boolean,
   },
@@ -126,6 +132,10 @@ const props = defineProps({
   },
   name: {
     type: String,
+  },
+  query: {
+    type: Object as PropType<Dictionary>,
+    default: () => ({}),
   },
   resource: {
     type: String,
@@ -151,7 +161,7 @@ const selectedItemId = ref<string[]>(
 );
 
 const { dialog, get, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
-  `/admin/references/${props.resource}`,
+  { query: props.query, url: `/admin/references/${props.resource}` },
 );
 
 if (props.initialItem)
@@ -160,6 +170,15 @@ if (props.initialItem)
 const itemIcon = computed(() => getResource(props.resource)?.icon ?? 'fas fa-list');
 const selectedItem = computed(() => items.value.find(item => item[props.itemId] === selectedItemId.value.at(0)));
 const selectedItemName = computed(() => selectedItem.value?.[props.itemName] ?? props.modelValue);
+
+const isAlreadyIncluded = computed(() => {
+  if (!props.except?.length || !selectedItemId.value.length)
+    return false;
+
+  const codes = props.except.map(item => item[props.itemId]);
+
+  return selectedItemId.value.some(item => codes.includes(item));
+});
 
 function close() {
   dialog.value = false;
