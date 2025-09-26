@@ -85,7 +85,7 @@ function dataExportMapper({ dataExportFields }: Pick<IoC, 'dataExportFields'>) {
 
       const { id, label } = field;
 
-      return { label, value: match?.value ?? id };
+      return { label: label ?? id, value: match?.value ?? id };
     });
 
   /**

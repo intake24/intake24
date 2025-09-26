@@ -198,7 +198,7 @@ export type ExportSectionId = (typeof exportSectionIds)[number];
 
 export const exportField = z.object({
   id: z.string(),
-  label: z.string(),
+  label: z.string().nullish().transform(val => val || undefined),
 });
 export type ExportField = z.infer<typeof exportField>;
 

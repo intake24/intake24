@@ -147,7 +147,7 @@ Each section can be edited. Screen is divided in half to show included fields on
 Each field has:
 
 - `Field ID` - unique field identifier to internal link the data
-- `Field label` - customizable CSV column header in export file
+- `Field label` - customizable CSV column header in export file, if empty `Field ID` will be used
 
 #### User record fields
 
@@ -170,12 +170,12 @@ User custom fields are key-value pairs, set up during respondent account creatio
 #### Submission record fields
 
 - `submissionId` - unique submission identifier, UUIDv4
-- `recallDate` - client-recorded recall date, ISO 8601 format
+- `recallDate` - client-recorded recall date using [recall-prompt](/admin/surveys/prompt-types#recall-date-prompt), ISO 8601 format
 - `startTime` - client-recorded recall start time, ISO 8601 format
 - `endTime` - client-recorded recall end time, ISO 8601 format
 - `submissionTime` - server-recorded submission time, ISO 8601 format
 - `recallDuration` - recall duration in mins (calculated value `endTime - startTime`, `truncate`-rounded)
-- `userAgent` - client device raw user agent header
+- `userAgent` - client device [user agent header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/User-Agent)
 - `browser` - client device browser name (user-agent parsed)
 - `engine` - client device browser engine name (user-agent parsed)
 - `device` - client device name (user-agent parsed)
