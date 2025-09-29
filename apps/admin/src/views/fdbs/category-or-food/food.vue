@@ -244,14 +244,13 @@ export default defineComponent({
         i18n.t('common.msg.deleted', { name: entry.value?.name }),
       );
 
-      await router.push({
-        name: `fdbs-categories`,
-        params: {
-          id: props.id,
-          // @ts-expect-error missing typed locals
-          entryId: entry.value?.parentCategories?.at(0)?.locals?.at(0)?.id ?? 'no-category',
-        },
-      });
+      const parentEntryId = entry.value?.parentCategories?.at(0)?.id;
+      if (parentEntryId) {
+        await router.push({ name: `fdbs-categories`, params: { id: props.id, entryId: parentEntryId } });
+      }
+      else {
+        await router.push({ name: 'fdbs-food-list', params: { id: props.id } });
+      }
     };
 
     onMounted(async () => {

@@ -71,13 +71,14 @@ export type FoodCopyInput = {
   name: string;
 };
 
-export type FoodListEntry = {
-  id: string;
-  code: string;
-  localeId: string;
-  name: string;
-  englishName: string;
-};
+export const foodListEntry = foodAttributes.pick({
+  id: true,
+  code: true,
+  localeId: true,
+  name: true,
+  englishName: true,
+});
+export type FoodListEntry = z.infer<typeof foodListEntry>;
 
 export type FoodsResponse = Pagination<FoodListEntry>;
 

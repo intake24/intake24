@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-
 import { NotFoundError } from '@intake24/api/http/errors';
-import { categoryContentsResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
 import type {
   CategoriesResponse,
@@ -158,13 +156,13 @@ function adminCategoryController({
 
     if (categoryId === 'no-category') {
       const foods = await adminCategoryService.getNoCategoryContents(code);
-      res.json(categoryContentsResponse({ categories: [], foods }));
+      res.json({ categories: [], foods });
       return;
     }
 
     const data = await adminCategoryService.getCategoryContents(code, categoryId);
 
-    res.json(categoryContentsResponse(data));
+    res.json(data);
   };
 
   const copy = async (

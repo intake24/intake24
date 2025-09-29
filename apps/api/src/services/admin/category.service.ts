@@ -19,12 +19,11 @@ import {
   Category,
   CategoryAttribute,
   CategoryPortionSizeMethod,
-  Food,
   Op,
   QueryTypes,
 } from '@intake24/db';
 
-function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
+function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'kyselyDb'>) {
   const browseCategories = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<CategoryAttributes> = { where: { localeId } };
     const { search } = query;
@@ -103,46 +102,55 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
   const getCategoryContents = async (localeId: string, categoryId: string) => {
     const [categories, foods] = await Promise.all([
-      Category.findAll({
-        where: { localeId },
-        include: [
-          {
-            association: 'parentCategoryMappings',
-            attributes: [],
-            where: { categoryId },
-          },
-        ],
-        order: [['name', 'ASC']],
-      }),
-      Food.findAll({
-        where: { localeId },
-        include: [
-          {
-            association: 'parentCategoryMappings',
-            attributes: [],
-            where: { categoryId },
-          },
-        ],
-        order: [['name', 'ASC']],
-      }),
+      kyselyDb.foods
+        .selectFrom('categories')
+        .select([
+          'id',
+          'code',
+          'localeId',
+          'name',
+          'englishName',
+          'hidden',
+        ])
+        .where('localeId', '=', localeId)
+        .innerJoin('categoriesCategories', 'categories.id', 'categoriesCategories.subCategoryId')
+        .where('categoriesCategories.categoryId', '=', categoryId)
+        .orderBy('name')
+        .execute(),
+      kyselyDb.foods
+        .selectFrom('foods')
+        .select([
+          'id',
+          'code',
+          'localeId',
+          'name',
+          'englishName',
+        ])
+        .where('localeId', '=', localeId)
+        .innerJoin('foodsCategories', 'foods.id', 'foodsCategories.foodId')
+        .where('foodsCategories.categoryId', '=', categoryId)
+        .orderBy('name')
+        .execute(),
     ]);
 
     return { categories, foods };
   };
 
   const getNoCategoryContents = async (localeId: string) =>
-    Food.findAll({
-      where: { localeId },
-      include: [
-        {
-          association: 'parentCategoryMappings',
-          attributes: [],
-          required: false,
-          where: { categoryId: null },
-        },
-      ],
-      order: [['name', 'ASC']],
-    });
+    kyselyDb.foods
+      .selectFrom('foods')
+      .select([
+        'id',
+        'code',
+        'localeId',
+        'name',
+        'englishName',
+      ])
+      .where('localeId', '=', localeId)
+      .leftJoin('foodsCategories', 'foods.id', 'foodsCategories.foodId')
+      .where('foodsCategories.categoryId', 'is', null)
+      .orderBy('name')
+      .execute();
 
   const getCategory = async (categoryId: { id: string; localeId?: string } | { code: string; localeId: string }) => {
     return Category.findOne({
