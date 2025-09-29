@@ -6,7 +6,7 @@
       </v-toolbar-title>
       <v-spacer />
       <v-btn
-        v-if="!disabled"
+        v-if="!readonly"
         color="primary"
         icon="$add"
         size="small"
@@ -36,10 +36,10 @@
           </v-list-item-subtitle>
           <template #append>
             <list-item-error :errors="errors.get(`associatedFoods[${index}]*`)" />
-            <v-list-item-action v-if="!disabled">
-              <v-btn icon="$edit" :title="$t('fdbs.associatedFoods.edit')" @click.stop="edit(index, item)" />
+            <v-list-item-action>
+              <v-btn :icon="readonly ? '$read' : '$edit'" :title="$t('fdbs.associatedFoods.edit')" @click.stop="edit(index, item)" />
             </v-list-item-action>
-            <v-list-item-action v-if="!disabled">
+            <v-list-item-action v-if="!readonly">
               <confirm-dialog
                 color="error"
                 icon
@@ -69,15 +69,15 @@
           </v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
-            <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
+            <v-btn v-if="!readonly" :title="$t('common.action.ok')" variant="text" @click.stop="save">
               <v-icon icon="$success" start />{{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-form ref="form" @submit.prevent="save">
+        <v-form ref="form" :readonly @submit.prevent="save">
           <v-container>
-            <error-list v-if="dialog.index !== -1" :errors="errors.get(`associatedFoods[${dialog.index}]*`)" />
-            <v-row class="mt-2">
+            <error-list v-if="dialog.index !== -1" class="mb-2" :errors="errors.get(`associatedFoods[${dialog.index}]*`)" />
+            <v-row>
               <v-col cols="12" md="6">
                 <v-card-title>{{ $t('common.options._') }}</v-card-title>
                 <v-switch
@@ -93,7 +93,7 @@
                   name="multiple"
                 />
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col class="d-flex flex-column ga-2" cols="12" md="6">
                 <v-card-title>{{ $t('fdbs.associatedFoods.association') }}</v-card-title>
                 <select-resource
                   v-model="dialog.item.associatedCategoryCode"
@@ -101,6 +101,7 @@
                   :label="$t('fdbs.categories._')"
                   name="associatedCategoryCode"
                   :query="{ localeId }"
+                  readonly
                   resource="categories"
                   @update:model-value="clearFood"
                 >
@@ -118,6 +119,7 @@
                   :label="$t('fdbs.foods._')"
                   name="associatedFoodCode"
                   :query="{ localeId }"
+                  readonly
                   resource="foods"
                   @update:model-value="clearCategory"
                 >
@@ -137,6 +139,7 @@
                   v-model="dialog.item.genericName"
                   border
                   :label="$t('fdbs.associatedFoods.genericName')"
+                  :readonly
                   required
                 >
                   <template v-for="lang in Object.keys(dialog.item.genericName)" :key="lang" #[`lang.${lang}`]>
@@ -155,6 +158,7 @@
                   v-model="dialog.item.text"
                   border
                   :label="$t('fdbs.associatedFoods.text')"
+                  :readonly
                   required
                 >
                   <template v-for="lang in Object.keys(dialog.item.text)" :key="lang" #[`lang.${lang}`]>
@@ -174,7 +178,7 @@
                 <v-icon icon="$cancel" start />{{ $t('common.action.cancel') }}
               </v-btn>
               <v-spacer />
-              <v-btn class="font-weight-bold" color="info" type="submit" variant="text">
+              <v-btn v-if="!readonly" class="font-weight-bold" color="info" type="submit" variant="text">
                 <v-icon icon="$success" start />{{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
@@ -201,10 +205,6 @@ import { ConfirmDialog } from '@intake24/ui';
 import { createDefaultAssociatedFood } from './associated-foods';
 
 const props = defineProps({
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
   errors: {
     type: Object as PropType<ReturnUseErrors>,
     required: true,
@@ -220,6 +220,10 @@ const props = defineProps({
   modelValue: {
     type: Array as PropType<AssociatedFoodItem[]>,
     required: true,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
 

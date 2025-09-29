@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isEntryLoaded" class="pa-2">
-      <v-form @keydown="clearError" @submit.prevent="submit">
+      <v-form :readonly @keydown="clearError" @submit.prevent="submit">
         <div class="d-flex flex-column gr-4">
           <v-text-field
             v-model="data.code"
@@ -38,7 +38,7 @@
           <v-combobox
             v-model="data.tags"
             chips
-            closable-chips
+            :closable-chips="!readonly"
             :error-messages="errors.get('tags')"
             hide-details="auto"
             :label="$t('fdbs.categories.tags')"
@@ -50,6 +50,7 @@
             v-model="data.altNames"
             border
             :label="$t('fdbs.categories.altNames')"
+            :readonly
           >
             <template v-for="lang in Object.keys(data.altNames)" :key="lang" #[`lang.${lang}`]>
               <div v-for="(item, idx) in data.altNames[lang]" :key="item" class="mb-2">
@@ -67,23 +68,26 @@
           <attribute-list
             v-model="data.attributes"
             class="mb-6"
-            :errors="errors"
+            :errors
+            :readonly
           />
           <category-list
             v-model="data.parentCategories"
             border
             class="mb-6"
-            :errors="errors"
+            :errors
             :locale-id="id"
+            :readonly
           />
           <portion-size-method-list
             v-model="data.portionSizeMethods"
             class="mb-6"
-            :errors="errors"
+            :errors
             :locale-id="id"
+            :readonly
           />
         </div>
-        <div class="d-flex gc-2">
+        <div v-if="!readonly" class="d-flex gc-2">
           <v-btn color="secondary" variant="outlined" @click="submit">
             <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
           </v-btn>
@@ -141,6 +145,10 @@ export default defineComponent({
     entryId: {
       type: String,
       required: true,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
     },
   },
 

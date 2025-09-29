@@ -6,6 +6,7 @@
         item-name="description"
         :label="$t('fdbs.portionSizes.methods.as-served.servingImageSet')"
         name="serving-set-id"
+        :readonly
         resource="as-served-sets"
       />
     </v-col>
@@ -15,6 +16,7 @@
         clearable
         item-name="description"
         :label="$t('fdbs.portionSizes.methods.as-served.leftoverImageSet')"
+        :readonly
         resource="as-served-sets"
       />
     </v-col>
@@ -33,33 +35,26 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
-
 import { useParameters } from './use-parameters';
 
-export default defineComponent({
-  name: 'AsServedParameters',
+defineOptions({ name: 'AsServedParameters' });
 
-  components: { SelectResource },
-
-  props: {
-    modelValue: {
-      type: Object as PropType<PortionSizeParameters['as-served']>,
-      required: true,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<PortionSizeParameters['as-served']>,
+    required: true,
   },
-
-  setup(props, context) {
-    const { parameters } = useParameters<'as-served'>(props, context);
-
-    return {
-      parameters,
-    };
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const { parameters } = useParameters<'as-served'>(props, { emit });
 </script>

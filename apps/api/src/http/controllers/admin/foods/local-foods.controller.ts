@@ -13,7 +13,7 @@ function localFoodsController({
     const _return = req.query.return;
     const { aclService } = req.scope.cradle;
 
-    await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+    await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {
       attributes: ['code'],
       where: { code: localeId },
     });

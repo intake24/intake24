@@ -6,6 +6,7 @@ import type { Dictionary } from '@intake24/common/types';
 
 export type ListState = {
   name: string;
+  module?: string;
   api: string;
   refs: boolean;
   filter: Dictionary;
@@ -14,6 +15,7 @@ export type ListState = {
 export const useResource = defineStore('resource', {
   state: (): ListState => ({
     name: 'dashboard',
+    module: undefined,
     api: 'admin/dashboard',
     refs: false,
     filter: {},
@@ -28,8 +30,9 @@ export const useResource = defineStore('resource', {
     },
   },
   actions: {
-    update({ name, api, refs }: Pick<Resource, 'name' | 'api' | 'refs'>) {
+    update({ name, module, api, refs }: Pick<Resource, 'name' | 'module' | 'api' | 'refs'>) {
       this.name = name;
+      this.module = module;
       this.api = api;
       this.refs = !!refs;
     },

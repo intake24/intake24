@@ -14,15 +14,15 @@
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
-          <v-btn :title="$t('common.action.ok')" variant="text" @click.stop="save">
+          <v-btn v-if="!readonly" :title="$t('common.action.ok')" variant="text" @click.stop="save">
             <v-icon icon="$success" start />{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
-      <v-form ref="form" @submit.prevent="save">
+      <v-form ref="form" :readonly @submit.prevent="save">
         <v-container class="dialog-container" :fluid="$vuetify.display.mdAndDown">
-          <error-list v-bind="{ errors }" />
-          <v-row class="mt-2">
+          <error-list class="mb-2" v-bind="{ errors }" />
+          <v-row>
             <v-col cols="12" md="4">
               <v-card-title class="px-0">
                 {{ $t(`fdbs.portionSizes._`) }} {{ $t('fdbs.portionSizes.parameters') }}
@@ -65,6 +65,7 @@
                     :max="10"
                     :min="0.2"
                     name="conversionFactor"
+                    :readonly
                     :step="0.1"
                     thumb-label="always"
                   />
@@ -80,6 +81,7 @@
               <component
                 :is="dialog.item.method"
                 v-model="dialog.item.parameters"
+                :readonly
                 @validate="validate"
               />
             </v-col>
@@ -112,6 +114,13 @@ import { psmDefaults, usePortionSizeMethods } from './portion-sizes';
 defineOptions({
   name: 'PortionSizeMethodSelector',
   components: { ...portionSizeParams },
+});
+
+defineProps({
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['save']);

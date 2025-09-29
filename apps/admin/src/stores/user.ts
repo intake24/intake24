@@ -38,8 +38,8 @@ export const useUser = defineStore('user', {
           : permission.some(item => this.permissions.includes(item));
       }
 
-      const { name } = useResource();
-      const { resource = name, action, ownerId, securables = [] } = permission;
+      const { name, module } = useResource();
+      const { resource = module ?? name, action, ownerId, securables = [] } = permission;
 
       if (resource.startsWith('user.'))
         return true;

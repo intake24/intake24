@@ -2,6 +2,7 @@
   <v-row>
     <v-col class="d-flex flex-column" cols="12">
       <v-btn
+        v-if="!readonly"
         class="mb-4 align-self-end"
         color="secondary"
         rounded
@@ -35,9 +36,9 @@
               </v-icon>
             </td>
             <td>
-              <select-resource v-model="unit.name" resource="standard-units">
+              <select-resource v-model="unit.name" :readonly resource="standard-units">
                 <template #activator="{ props }">
-                  <v-btn v-bind="props" :title="$t('standard-units.add')" variant="text">
+                  <v-btn v-bind="props" :readonly :title="$t('standard-units.add')" variant="text">
                     <v-icon icon="$standard-units" start />
                     {{ unit.name }}
                   </v-btn>
@@ -60,6 +61,7 @@
             </td>
             <td>
               <confirm-dialog
+                v-if="!readonly"
                 color="error"
                 icon
                 icon-left="$delete"
@@ -78,61 +80,51 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
-
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import { ConfirmDialog } from '@intake24/ui';
-
 import { useParameters } from './use-parameters';
 
-export default defineComponent({
-  name: 'StandardPortionParameters',
+defineOptions({ name: 'StandardPortionParameters' });
 
-  components: { ConfirmDialog, SelectResource, VueDraggable },
-
-  props: {
-    modelValue: {
-      type: Object as PropType<PortionSizeParameters['standard-portion']>,
-      required: true,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<PortionSizeParameters['standard-portion']>,
+    required: true,
   },
-
-  setup(props, context) {
-    const { parameters } = useParameters<'standard-portion'>(props, context);
-
-    const add = () => {
-      parameters.value.units.push({
-        name: `unit-${parameters.value.units.length + 1}`,
-        weight: 1,
-        omitFoodDescription: false,
-      });
-    };
-
-    const remove = (index: number) => {
-      parameters.value.units.splice(index, 1);
-    };
-
-    const weightRules = [
-      (value: any): boolean | string => {
-        const msg = 'Value must be greater than 0';
-        const number = Number.parseFloat(value);
-        if (Number.isNaN(number))
-          return msg;
-
-        return number > 0 || msg;
-      },
-    ];
-
-    return {
-      parameters,
-      add,
-      remove,
-      weightRules,
-    };
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const { parameters } = useParameters<'standard-portion'>(props, { emit });
+
+function add() {
+  parameters.value.units.push({
+    name: `unit-${parameters.value.units.length + 1}`,
+    weight: 1,
+    omitFoodDescription: false,
+  });
+}
+
+function remove(index: number) {
+  parameters.value.units.splice(index, 1);
+}
+
+const weightRules = [
+  (value: any): boolean | string => {
+    const msg = 'Value must be greater than 0';
+    const number = Number.parseFloat(value);
+    if (Number.isNaN(number))
+      return msg;
+
+    return number > 0 || msg;
+  },
+];
 </script>

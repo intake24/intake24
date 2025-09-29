@@ -48,7 +48,6 @@
                 v-if="items[key]"
                 v-model="items[key]"
                 :label="$t(`survey-schemes.i18n.custom`, { key })"
-                :outlined="false"
                 tile
                 @lang-add="loadLanguage"
                 @lang-remove="removeKey(key)"

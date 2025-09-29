@@ -6,6 +6,7 @@
         item-name="id"
         :label="$t('fdbs.portionSizes.methods.guide-image._')"
         name="guide-image-id"
+        :readonly
         resource="guide-images"
       />
     </v-col>
@@ -18,33 +19,26 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
-
 import { useParameters } from './use-parameters';
 
-export default defineComponent({
-  name: 'GuideImageParameters',
+defineOptions({ name: 'GuideImageParameters' });
 
-  components: { SelectResource },
-
-  props: {
-    modelValue: {
-      type: Object as PropType<PortionSizeParameters['guide-image']>,
-      required: true,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<PortionSizeParameters['guide-image']>,
+    required: true,
   },
-
-  setup(props, context) {
-    const { parameters } = useParameters<'guide-image'>(props, context);
-
-    return {
-      parameters,
-    };
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const { parameters } = useParameters<'guide-image'>(props, { emit });
 </script>

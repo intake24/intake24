@@ -222,10 +222,7 @@ function aclService({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig
   const getResourceAccessActions = async (resource: string): Promise<string[]> =>
     (await getPermissions())
       .filter(permission => permission.startsWith(`${resource}:`))
-      .map((permission) => {
-        const [, action] = permission.split(':');
-        return action;
-      });
+      .map(permission => permission.replace(`${resource}:`, ''));
 
   /**
    * Get user's list of securable-based access actions

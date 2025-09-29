@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+  <v-dialog v-model="dialog" :disabled="readonly" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
     <template #activator="{ props }">
       <slot name="activator" v-bind="{ props }">
         <v-text-field
@@ -92,7 +92,6 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { computed, onMounted, ref, watch } from 'vue';
-
 import { useFetchList } from '@intake24/admin/composables';
 import { getResource } from '@intake24/admin/router/resources';
 import type { Dictionary } from '@intake24/common/types';
@@ -136,6 +135,10 @@ const props = defineProps({
   query: {
     type: Object as PropType<Dictionary>,
     default: () => ({}),
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
   resource: {
     type: String,

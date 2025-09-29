@@ -153,7 +153,6 @@
                     <language-selector
                       v-model="dialog.item.header"
                       :label="$t('feedback-schemes.meals.fields.header')"
-                      :outlined="false"
                       required
                     >
                       <template v-for="lang in Object.keys(dialog.item.header)" :key="lang" #[`lang.${lang}`]>
@@ -172,7 +171,6 @@
                     <language-selector
                       v-model="dialog.item.value"
                       :label="$t('feedback-schemes.meals.fields.value')"
-                      :outlined="false"
                       required
                     >
                       <template v-for="lang in Object.keys(dialog.item.value)" :key="lang" #[`lang.${lang}`]>

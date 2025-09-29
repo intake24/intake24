@@ -6,7 +6,7 @@
       </div>
     </v-toolbar-title>
     <v-spacer />
-    <v-btn color="primary" icon="$add" size="small" :title="$t('common.options.add')" @click.stop="add" />
+    <v-btn v-if="!readonly" color="primary" icon="$add" size="small" :title="$t('common.options.add')" @click.stop="add" />
   </v-toolbar>
   <v-divider />
   <v-list class="list-border" density="compact">
@@ -64,7 +64,7 @@
           </div>
         </div>
         <template #append>
-          <v-list-item-action>
+          <v-list-item-action v-if="!readonly">
             <v-btn color="error" icon="$delete" :title="$t('common.options.remove')" @click.stop="remove(idx)" />
           </v-list-item-action>
         </template>
@@ -79,7 +79,6 @@ import type { ZodNumber, ZodString } from 'zod';
 import { deepEqual } from 'fast-equals';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
-
 import type { RuleCallback } from '@intake24/admin/types';
 import { toIndexedList } from '@intake24/admin/util';
 import type { ListOption } from '@intake24/common/types';
@@ -96,6 +95,10 @@ const props = defineProps({
   options: {
     type: Array as PropType<ListOption<ZodString | ZodNumber>[]>,
     required: true,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
   rules: {
     type: Array as PropType<RuleCallback[]>,

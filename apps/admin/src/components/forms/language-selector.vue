@@ -1,11 +1,11 @@
 <template>
-  <v-card v-bind="{ border, disabled, flat, outlined, tile }">
+  <v-card v-bind="{ border, flat, outlined, tile }">
     <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         {{ label }}
       </v-toolbar-title>
       <v-spacer />
-      <v-menu location="bottom left">
+      <v-menu v-if="!readonly" location="bottom left">
         <template #activator="{ props }">
           <v-btn
             class="me-2"
@@ -39,7 +39,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="error" :disabled="isRemoveDisabled" variant="text" @click.stop="remove">
+          <v-btn v-if="!readonly" color="error" :disabled="isRemoveDisabled" variant="text" @click.stop="remove">
             <v-icon icon="$delete" start />{{ $t('common.action.delete') }}
           </v-btn>
         </v-card-actions>
@@ -66,7 +66,7 @@ export default defineComponent({
       type: [String, Array],
       default: '',
     },
-    disabled: {
+    readonly: {
       type: Boolean,
       default: false,
     },

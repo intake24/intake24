@@ -6,7 +6,7 @@
       </v-toolbar-title>
       <v-spacer />
       <add-nutrient-dialog
-        v-if="!disabled"
+        v-if="!readonly"
         :current-items="items"
         :nutrient-tables="nutrientTables"
         @add="add"
@@ -25,7 +25,7 @@
           {{ item.name }}
         </v-list-item-subtitle>
         <template #append>
-          <v-list-item-action v-if="!disabled">
+          <v-list-item-action v-if="!readonly">
             <confirm-dialog
               color="error"
               icon
@@ -50,12 +50,10 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
-
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import type { FoodDatabaseRefs, NutrientTableRecordAttributes } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
-
 import { ErrorList } from '../../forms';
 import AddNutrientDialog from './add-nutrient-dialog.vue';
 
@@ -65,10 +63,6 @@ export default defineComponent({
   components: { AddNutrientDialog, ConfirmDialog, ErrorList },
 
   props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
     errors: {
       type: Object as PropType<ReturnUseErrors>,
       required: true,
@@ -80,6 +74,10 @@ export default defineComponent({
     modelValue: {
       type: Array as PropType<NutrientTableRecordAttributes[]>,
       required: true,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
     },
   },
 

@@ -32,7 +32,8 @@
 
     "translations": "Translations",
 
-    "food-list": "Food list",
+    "food-list": "View food list",
+    "food-list:edit": "Edit food list",
     "food-ranking": "Food ranking",
     "split-lists": "Split lists",
     "recipe-foods": "Recipe foods",

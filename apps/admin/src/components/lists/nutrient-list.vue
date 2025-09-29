@@ -93,7 +93,6 @@
           <language-selector
             v-model="dialog.item.name"
             :label="$t('nutrient-types.label')"
-            :outlined="false"
             required
           >
             <template v-for="lang in Object.keys(dialog.item.name)" :key="lang" #[`lang.${lang}`]>

@@ -38,6 +38,7 @@ export const securableDefs = {
     ...standardSecurableActions,
     'copy',
     'food-list',
+    'food-list:edit',
     'split-lists',
     'recipe-foods',
     'split-words',

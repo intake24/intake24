@@ -57,7 +57,7 @@ function adminCategoryController({
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
 
-    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {
       attributes: ['code'],
       where: { id: localeId },
     });
@@ -93,7 +93,7 @@ function adminCategoryController({
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
 
-    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {
       attributes: ['code'],
       where: { id: localeId },
     });
@@ -110,7 +110,7 @@ function adminCategoryController({
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
 
-    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {
       attributes: ['code'],
       where: { id: localeId },
     });
@@ -174,7 +174,7 @@ function adminCategoryController({
     const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
 
-    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {
       attributes: ['code'],
       where: { id: localeId },
     });

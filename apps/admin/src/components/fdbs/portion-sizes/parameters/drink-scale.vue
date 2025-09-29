@@ -6,6 +6,7 @@
         item-name="description"
         :label="$t('fdbs.portionSizes.methods.drink-scale.drinkwareSet')"
         name="drinkwareSetId"
+        :readonly
         resource="drinkware-sets"
       />
     </v-col>
@@ -16,6 +17,7 @@
         :label="$t('fdbs.portionSizes.methods.drink-scale.initialLevel')"
         :max="1"
         :min="0"
+        :readonly
         :step="0.05"
         thumb-label="always"
       />
@@ -41,33 +43,25 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
-
 import { useParameters } from './use-parameters';
 
-export default defineComponent({
-  name: 'DrinkScaleParameters',
+defineOptions({ name: 'DrinkScaleParameters' });
 
-  components: { SelectResource },
-
-  props: {
-    modelValue: {
-      type: Object as PropType<PortionSizeParameters['drink-scale']>,
-      required: true,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<PortionSizeParameters['drink-scale']>,
+    required: true,
   },
-
-  setup(props, context) {
-    const { parameters } = useParameters<'drink-scale'>(props, context);
-
-    return {
-      parameters,
-    };
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
+const emit = defineEmits(['update:modelValue']);
+
+const { parameters } = useParameters<'drink-scale'>(props, { emit });
 </script>

@@ -6,7 +6,7 @@
       </v-toolbar-title>
       <v-spacer />
       <v-btn
-        v-if="!disabled"
+        v-if="!readonly"
         color="primary"
         icon="$add"
         size="small"
@@ -35,10 +35,10 @@
           <v-list-item-subtitle>{{ item.method }} </v-list-item-subtitle>
           <template #append>
             <list-item-error :errors="errors.get(`portionSizeMethods[${index}]*`)" />
-            <v-list-item-action v-if="!disabled">
-              <v-btn icon="$edit" :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })" />
+            <v-list-item-action>
+              <v-btn :icon="readonly ? '$read' : '$edit'" :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })" />
             </v-list-item-action>
-            <v-list-item-action v-if="!disabled">
+            <v-list-item-action v-if="!readonly">
               <confirm-dialog
                 color="error"
                 icon
@@ -53,7 +53,7 @@
         </v-list-item>
       </vue-draggable>
     </v-list>
-    <portion-size-method-selector ref="selector" @save="save" />
+    <portion-size-method-selector ref="selector" :readonly @save="save" />
   </v-card>
 </template>
 
@@ -75,10 +75,6 @@ export default defineComponent({
   components: { ConfirmDialog, ListItemError, PortionSizeMethodSelector, VueDraggable },
 
   props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
     errors: {
       type: Object as PropType<ReturnUseErrors>,
       required: true,
@@ -86,6 +82,10 @@ export default defineComponent({
     modelValue: {
       type: Array as PropType<PortionSizeMethodItem[]>,
       required: true,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
     },
   },
 

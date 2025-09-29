@@ -4,7 +4,7 @@
     <svg
       ref="svg"
       :style="svgCursor"
-      @dblclick.stop="isGuideImage || disabled ? undefined : addNode($event)"
+      @dblclick.stop="isGuideImage || readonly ? undefined : addNode($event)"
     >
       <g v-for="(object, objectIdx) in scaled" :key="objectIdx" class="guides-drawer-group">
         <polygon
@@ -14,7 +14,7 @@
           @click.stop="selectObject(objectIdx)"
           @keypress.stop="selectObject(objectIdx)"
         />
-        <g v-if="isImageMap && !disabled" class="guides-drawer-node-group">
+        <g v-if="isImageMap && !readonly" class="guides-drawer-node-group">
           <circle
             v-for="([x, y], nodeIdx) in object.coords"
             :key="nodeIdx"
@@ -46,7 +46,7 @@
                   {{ object.id }}
                   <v-spacer />
                   <confirm-dialog
-                    v-if="isImageMap && !disabled"
+                    v-if="isImageMap && !readonly"
                     color="error"
                     icon
                     :icon-color="isSelected ? `white` : `error`"
@@ -62,23 +62,23 @@
                 <v-card-text class="d-flex flex-column gr-4">
                   <v-text-field
                     v-model.trim="object.description"
-                    :disabled="isGuideImage || disabled"
                     :label="$t('common.description')"
                     :name="`description-${object.id}`"
+                    :readonly="isGuideImage || readonly"
                   />
                   <v-text-field
                     v-if="isGuideImage"
                     v-model.number="object.weight"
-                    :disabled="isImageMap || disabled"
                     :label="$t(`${resource}.objects.weight`)"
                     :name="`weight-${object.id}`"
                     prepend-inner-icon="fas fa-scale-balanced"
+                    :readonly="isImageMap || readonly"
                   />
                   <language-selector
                     v-model="object.label"
                     border
-                    :disabled="disabled"
                     :label="$t(`${resource}.objects.label._`)"
+                    :readonly
                   >
                     <template v-for="lang in Object.keys(object.label)" :key="lang" #[`lang.${lang}`]>
                       <v-text-field
@@ -94,7 +94,7 @@
               </v-card>
             </v-item>
           </v-col>
-          <v-col v-if="isImageMap && !disabled" cols="12" lg="4" sm="6">
+          <v-col v-if="isImageMap && !readonly" cols="12" lg="4" sm="6">
             <v-card
               border
               class="d-flex justify-center align-center"
@@ -139,13 +139,13 @@ type PathCoords = number[][][];
 defineOptions({ name: 'GuideDrawer' });
 
 const props = defineProps({
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
   entry: {
     type: Object as PropType<GuideImageEntry | ImageMapEntry>,
     required: true,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
   resource: {
     type: String as PropType<'image-maps' | 'guide-images'>,
@@ -180,7 +180,7 @@ const isImageMap = computed(() => props.resource === 'image-maps');
 const isGuideImage = computed(() => props.resource === 'guide-images');
 
 const svgCursor = computed(
-  () => `cursor: ${props.disabled || selectedObjectIdx.value === null ? 'no-drop' : 'pointer'}`,
+  () => `cursor: ${props.readonly || selectedObjectIdx.value === null ? 'no-drop' : 'pointer'}`,
 );
 
 const nodeCursor = computed(

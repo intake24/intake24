@@ -3,7 +3,7 @@
     <div class="d-flex flex-row justify-space-between">
       <div class="d-flex ga-2">
         <food-search v-bind="{ localeId }" />
-        <add-food-dialog v-bind="{ localeId }" />
+        <add-food-dialog v-if="!readonly" v-bind="{ localeId }" />
       </div>
       <v-menu :close-on-content-click="false" location="bottom left">
         <template #activator="{ props }">
@@ -49,7 +49,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
-
 import { useHttp } from '@intake24/admin/services';
 import type {
   CategoryContentsResponse,
@@ -59,7 +58,6 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-
 import AddFoodDialog from './add-food-dialog.vue';
 import FoodSearch from './food-search.vue';
 
@@ -74,6 +72,10 @@ const props = defineProps({
   localeId: {
     type: String,
     required: true,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
 

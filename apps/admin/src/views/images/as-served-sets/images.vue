@@ -9,7 +9,7 @@
             {{ $t(`as-served-sets.images._`) }}
             <v-spacer />
             <confirm-dialog
-              v-if="!disabled"
+              v-if="!readonly"
               color="error"
               icon
               icon-left="$delete"
@@ -25,16 +25,16 @@
           <v-card-text class="d-flex flex-column gr-4">
             <v-text-field
               v-model.number="image.weight"
-              :disabled="disabled"
               :label="$t('as-served-sets.weight')"
               :name="`description-${image.id}`"
+              :readonly
               @update:model-value="updateImages"
             />
             <language-selector
               v-model="image.label"
               border
-              :disabled="disabled"
               :label="$t(`as-served-sets.images.label._`)"
+              :readonly
             >
               <template v-for="lang in Object.keys(image.label)" :key="lang" #[`lang.${lang}`]>
                 <v-text-field
@@ -49,7 +49,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col v-if="!disabled" cols="12" md="4" sm="6">
+      <v-col v-if="!readonly" cols="12" md="4" sm="6">
         <v-card
           border
           flat
@@ -106,7 +106,7 @@ const props = defineProps({
     type: Array as PropType<AsServedImageEntry[]>,
     required: true,
   },
-  disabled: {
+  readonly: {
     type: Boolean,
     default: false,
   },

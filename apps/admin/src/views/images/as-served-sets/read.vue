@@ -20,7 +20,7 @@
         <v-img class="ma-2" rounded :src="entry.selectionImageUrl" />
       </v-col>
     </v-row>
-    <as-served-images disabled :items="entry.images" :set-id="entry.id" />
+    <as-served-images :items="entry.images" readonly :set-id="entry.id" />
   </layout>
 </template>
 

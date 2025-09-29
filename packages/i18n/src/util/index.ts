@@ -141,7 +141,7 @@ export function createTranslate(i18n: ReturnType<typeof useI18n<DefaultLocaleMes
     if (path && has(messages.value.en, path))
       return t(path, params);
 
-    return '';
+    return replaceParams(Object.values(content ?? {}).at(0) || '', params);
   };
 }
 

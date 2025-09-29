@@ -11,9 +11,9 @@
         />
         <language-selector
           border
-          :disabled="!validation.required"
           :label="$t('survey-schemes.prompts.validation.message')"
           :model-value="validation.message"
+          :readonly="!validation.required"
           @update:model-value="update('message', $event)"
         >
           <template v-for="lang in Object.keys(validation.message)" :key="lang" #[`lang.${lang}`]>

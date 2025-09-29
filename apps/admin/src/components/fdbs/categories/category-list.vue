@@ -8,7 +8,7 @@
       </v-toolbar-title>
       <v-spacer />
       <select-resource
-        v-if="!disabled"
+        v-if="!readonly"
         :except="items"
         item-id="code"
         :label="$t('fdbs.categories._')"
@@ -39,7 +39,7 @@
         </slot>
         <template #append>
           <slot name="item.action" v-bind="{ item }" />
-          <v-list-item-action v-if="!disabled">
+          <v-list-item-action v-if="!readonly">
             <confirm-dialog
               color="error"
               icon
@@ -74,10 +74,6 @@ const props = defineProps({
   border: {
     type: [Boolean, String, Number],
   },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
   errors: {
     type: Object as PropType<ReturnUseErrors>,
   },
@@ -94,6 +90,10 @@ const props = defineProps({
   modelValue: {
     type: Array as PropType<CategoryListItem[]>,
     required: true,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
 

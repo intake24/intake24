@@ -4,17 +4,13 @@
   </v-alert>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+defineOptions({ name: 'NoParameters' });
 
-export default defineComponent({
-  name: 'NoParameters',
-
-  props: {
-    modelValue: {
-      type: Object,
-      required: true,
-    },
+defineProps({
+  modelValue: {
+    type: Object,
+    required: true,
   },
 });
 </script>
