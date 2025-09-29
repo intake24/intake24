@@ -15,7 +15,7 @@
             v-model="data.englishName"
             :error-messages="errors.get('englishName')"
             hide-details="auto"
-            :label="$t('fdbs.foods.name')"
+            :label="$t('fdbs.foods.englishName')"
             name="englishName"
             variant="outlined"
           />
@@ -94,7 +94,7 @@
           />
         </div>
         <div v-if="!readonly" class="d-flex gc-2">
-          <v-btn color="secondary" type="submit" variant="outlined" @click="submit">
+          <v-btn color="secondary" type="submit" variant="outlined">
             <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
           </v-btn>
           <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />

@@ -65,11 +65,6 @@ export type FoodInput = {
   portionSizeMethods: PortionSizeMethodAttributes[];
 };
 
-export type FoodCopySource = {
-  foodId: string;
-  localeId: string;
-};
-
 export type FoodCopyInput = {
   localeId: string;
   code: string;

@@ -5,13 +5,9 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { foodsResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
-import type {
-  FoodCopyInput,
-  FoodCopySource,
-  FoodInput,
-} from '@intake24/common/types/http/admin';
+import type { FoodCopyInput, FoodInput } from '@intake24/common/types/http/admin';
 import type { FindOptions, FoodAttributes, PaginateQuery, Transaction } from '@intake24/db';
-import { AssociatedFood, Food, FoodAttribute, FoodPortionSizeMethod, Op } from '@intake24/db';
+import { AssociatedFood, Category, Food, FoodAttribute, FoodPortionSizeMethod, Op } from '@intake24/db';
 
 function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
@@ -214,7 +210,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     return (await getFood({ id: foodId, localeId }))!;
   };
 
-  const copyFood = async ({ foodId, localeId }: FoodCopySource, input: FoodCopyInput) => {
+  const copyFood = async (localeId: string, foodId: string, input: FoodCopyInput) => {
     const sourceFood = await getFood({ id: foodId, localeId });
     if (!sourceFood)
       throw new NotFoundError();
@@ -245,8 +241,23 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       }
 
       if (sourceFood.parentCategories?.length) {
-        const categories = sourceFood.parentCategories.map(({ id }) => id);
-        promises.push(food.$set('parentCategories', categories, { transaction }));
+        let categories: string[] = [];
+        if (localeId === input.localeId) {
+          categories = sourceFood.parentCategories.map(({ id }) => id);
+        }
+        else {
+          const code = sourceFood.parentCategories.map(({ code }) => code);
+          const destLocaleCategories = await Category.findAll({
+            attributes: ['id'],
+            where: { code, localeId: input.localeId },
+            transaction,
+          });
+
+          categories = destLocaleCategories.map(({ id }) => id);
+        }
+
+        if (categories.length)
+          promises.push(food.$set('parentCategories', categories, { transaction }));
       }
 
       if (sourceFood.nutrientRecords?.length) {
@@ -296,7 +307,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       return food;
     });
 
-    return (await getFood({ id: food.id, localeId }))!;
+    return (await getFood({ id: food.id, localeId: food.localeId }))!;
   };
 
   const deleteFood = async (localeId: string, foodId: string) => {

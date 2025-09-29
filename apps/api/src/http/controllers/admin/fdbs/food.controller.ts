@@ -129,14 +129,27 @@ function adminFoodController({
     res: Response<FoodEntry>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
+    const input = req.body;
     const { aclService } = req.scope.cradle;
 
-    await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {
       attributes: ['code'],
       where: { id: localeId },
     });
 
-    const food = await adminFoodService.copyFood({ foodId, localeId }, req.body);
+    if (input.localeId && localeId !== input.localeId) {
+      const { code: inputLocaleCode } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {
+        attributes: ['code'],
+        where: { id: input.localeId },
+      });
+
+      input.localeId = inputLocaleCode;
+    }
+    else {
+      input.localeId = code;
+    }
+
+    const food = await adminFoodService.copyFood(code, foodId, req.body);
 
     res.json(food);
   };

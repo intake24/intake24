@@ -25,8 +25,8 @@ import {
 } from '@intake24/db';
 
 function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
-  const browseCategories = async (localeCode: string, query: PaginateQuery) => {
-    const options: FindOptions<CategoryAttributes> = { where: { localeId: localeCode } };
+  const browseCategories = async (localeId: string, query: PaginateQuery) => {
+    const options: FindOptions<CategoryAttributes> = { where: { localeId } };
     const { search } = query;
 
     if (search) {
@@ -65,7 +65,7 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     return Category.paginate({ query, ...options });
   };
 
-  const getRootCategories = async (localeCode: string) => {
+  const getRootCategories = async (localeId: string) => {
     // TODO: verify for other dialects
     const query = `SELECT DISTINCT
       c.id, c.locale_id as "localeId", c.code, c.english_name as "englishName", c.name, c.hidden
@@ -75,12 +75,12 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
         SELECT * from categories_categories cc2 JOIN categories c2 ON cc2.category_id = c2.id
         WHERE c2.hidden = :hidden AND cc2.sub_category_id = c.id
       )
-      AND c.locale_id = :localeCode
+      AND c.locale_id = :localeId
       ORDER BY c.name`;
 
     return db.foods.query<CategoryListEntry>(query, {
       type: QueryTypes.SELECT,
-      replacements: { localeCode, hidden: false },
+      replacements: { localeId, hidden: false },
     });
 
     /* const categories = await Category.findAll({
@@ -101,10 +101,10 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     }); */
   };
 
-  const getCategoryContents = async (localeCode: string, categoryId: string) => {
+  const getCategoryContents = async (localeId: string, categoryId: string) => {
     const [categories, foods] = await Promise.all([
       Category.findAll({
-        where: { localeId: localeCode },
+        where: { localeId },
         include: [
           {
             association: 'parentCategoryMappings',
@@ -115,7 +115,7 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
         order: [['name', 'ASC']],
       }),
       Food.findAll({
-        where: { localeId: localeCode },
+        where: { localeId },
         include: [
           {
             association: 'parentCategoryMappings',
@@ -130,9 +130,9 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     return { categories, foods };
   };
 
-  const getNoCategoryContents = async (localeCode: string) =>
+  const getNoCategoryContents = async (localeId: string) =>
     Food.findAll({
-      where: { localeId: localeCode },
+      where: { localeId },
       include: [
         {
           association: 'parentCategoryMappings',
@@ -144,9 +144,9 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       order: [['name', 'ASC']],
     });
 
-  const getCategory = async (localeCode: string, categoryId: string) => {
+  const getCategory = async (categoryId: { id: string; localeId?: string } | { code: string; localeId: string }) => {
     return Category.findOne({
-      where: { localeId: localeCode, id: categoryId },
+      where: { ...categoryId },
       include: [
         {
           association: 'parentCategories',
@@ -200,12 +200,12 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     return [...methods, ...newMethods];
   };
 
-  const createCategory = async (localeCode: string, input: CategoryInput) => {
+  const createCategory = async (localeId: string, input: CategoryInput) => {
     const category = await db.foods.transaction(async (transaction) => {
       const category = await Category.create(
         {
           code: input.code,
-          localeId: localeCode,
+          localeId,
           englishName: input.englishName,
           name: input.name,
           simpleName: toSimpleName(input.name)!,
@@ -223,15 +223,11 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       return category;
     });
 
-    return (await getCategory(category.id, localeCode))!;
+    return (await getCategory({ id: category.id, localeId }))!;
   };
 
-  const updateCategory = async (
-    localeCode: string,
-    categoryId: string,
-    input: CategoryInput,
-  ) => {
-    const category = await getCategory(categoryId, localeCode);
+  const updateCategory = async (localeId: string, categoryId: string, input: CategoryInput) => {
+    const category = await getCategory({ id: categoryId, localeId });
     if (!category)
       throw new NotFoundError();
 
@@ -278,15 +274,11 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       `category-parent-categories:${categoryId}`,
     ]);
 
-    return (await getCategory(categoryId, localeCode))!;
+    return (await getCategory({ id: categoryId, localeId }))!;
   };
 
-  const copyCategory = async (
-    localeCode: string,
-    categoryId: string,
-    input: CategoryCopyInput,
-  ) => {
-    const sourceCategory = await getCategory(categoryId, localeCode);
+  const copyCategory = async (localeId: string, categoryId: string, input: CategoryCopyInput) => {
+    const sourceCategory = await getCategory({ id: categoryId, localeId });
     if (!sourceCategory)
       throw new NotFoundError();
 
@@ -346,7 +338,7 @@ function adminCategoryService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       return category;
     });
 
-    return (await getCategory(category.id, localeCode))!;
+    return (await getCategory({ id: category.id, localeId: category.localeId }))!;
   };
 
   return {

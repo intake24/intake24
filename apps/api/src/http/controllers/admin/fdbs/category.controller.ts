@@ -79,7 +79,7 @@ function adminCategoryController({
       where: { id: localeId },
     });
 
-    const category = await adminCategoryService.getCategory(code, categoryId);
+    const category = await adminCategoryService.getCategory({ id: categoryId, localeId: code });
     if (!category)
       throw new NotFoundError();
 
