@@ -324,6 +324,7 @@ const addonFoodsPrompt = baseStandardPrompt.extend({
 const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
   component: z.literal('associated-foods-prompt'),
   multiple: z.boolean(),
+  skipFollowUpPrompts: z.boolean().default(false),
 });
 
 const generalAssociatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({

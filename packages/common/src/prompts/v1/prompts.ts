@@ -289,6 +289,7 @@ const standardPortionPrompt = basePortionPrompt.extend({
 const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
   component: z.literal('associated-foods-prompt'),
   multiple: z.boolean(),
+  skipFollowUpPrompts: z.boolean().default(false),
 });
 
 const editMealPrompt = baseStandardPrompt.extend({

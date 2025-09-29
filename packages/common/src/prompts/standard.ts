@@ -26,6 +26,7 @@ export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
   id: 'associated-foods-prompt',
   name: 'Associated foods prompt',
   multiple: false,
+  skipFollowUpPrompts: false,
   ...foodBrowserDefaults,
 });
 

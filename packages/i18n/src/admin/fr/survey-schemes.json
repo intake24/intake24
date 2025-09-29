@@ -526,7 +526,8 @@
     "associated-foods-prompt": {
       "title": "Aliments associés",
       "subtitle": "Suggérer des aliments souvent consommés ensemble",
-      "multiple": "Permettre la sélection de plusieurs aliments"
+      "multiple": "Permettre la sélection de plusieurs aliments",
+      "skipFollowUpPrompts": "Ignorer les questions de suivi pour les aliments ajoutés"
     },
     "general-associated-foods-prompt": {
       "title": "Aliments associés",

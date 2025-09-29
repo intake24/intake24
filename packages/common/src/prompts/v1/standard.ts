@@ -11,6 +11,7 @@ export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
   name: 'Associated foods prompt',
   categoriesFirst: { browse: false, search: false },
   multiple: false,
+  skipFollowUpPrompts: false,
 });
 
 export const editMealPrompt: Prompts['edit-meal-prompt'] = copy({

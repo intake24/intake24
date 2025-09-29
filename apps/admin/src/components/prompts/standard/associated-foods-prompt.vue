@@ -8,6 +8,12 @@
           :model-value="multiple"
           @update:model-value="update('multiple', $event)"
         />
+        <v-switch
+          hide-details="auto"
+          :label="$t('survey-schemes.prompts.associated-foods-prompt.skipFollowUpPrompts')"
+          :model-value="skipFollowUpPrompts"
+          @update:model-value="update('skipFollowUpPrompts', $event)"
+        />
       </v-col>
       <v-col cols="12" md="6">
         <food-browser-settings
@@ -38,6 +44,11 @@ export default defineComponent({
     multiple: {
       type: Boolean as PropType<Prompts['associated-foods-prompt']['multiple']>,
       required: true,
+    },
+    skipFollowUpPrompts: {
+      type: Boolean as PropType<Prompts['associated-foods-prompt']['skipFollowUpPrompts']>,
+      required: false,
+      default: false,
     },
   },
 });

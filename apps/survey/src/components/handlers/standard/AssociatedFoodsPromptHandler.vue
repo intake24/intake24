@@ -165,7 +165,10 @@ async function commitAnswer() {
               info: null,
               searchTerm: capitalize(translate(promptDef.genericName)),
               customPromptAnswers: {},
-              flags: promptDef.linkAsMain ? ['link-as-main'] : [],
+              flags: [
+                ...(promptDef.linkAsMain ? ['link-as-main'] : []),
+                ...(props.prompt.skipFollowUpPrompts ? ['associated-foods-complete'] : []),
+              ] as FoodFlag[],
               linkedFoods: [],
             });
             break;
@@ -210,6 +213,8 @@ async function commitAnswer() {
     const flags: FoodFlag[] = [];
     if (hasOnePortionSizeMethod)
       flags.push('portion-size-option-complete');
+    if (props.prompt.skipFollowUpPrompts)
+      flags.push('associated-foods-complete');
     if (newFoods[index].linkAsMain)
       flags.push('link-as-main');
 

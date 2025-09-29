@@ -530,7 +530,8 @@
     "associated-foods-prompt": {
       "title": "Associated foods (food-specific)",
       "subtitle": "Suggest foods typically consumed together. Suggested foods are defined at the food level in the food database.",
-      "multiple": "Allow multiple foods to be selected"
+      "multiple": "Allow multiple foods to be selected",
+      "skipFollowUpPrompts": "Skip follow-up prompts for newly added foods"
     },
     "general-associated-foods-prompt": {
       "title": "Associated foods (general)",
