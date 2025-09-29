@@ -259,7 +259,7 @@
                 hide-details="auto"
                 :label="$t('surveys.search.minWordLength1')"
                 max="10"
-                min="2"
+                min="1"
                 name="searchMinWordLength1"
                 step="1"
                 thumb-label="always"

@@ -43,11 +43,14 @@ apps/admin/components.d.ts
 
 **/.serena/**
 **/.claude/**
-docs/**
+
+apps/docs/admin/**
+
 
 # Data files - CSV datasets and reports
-**/japan-food-list*.csv
+# **/japan-food-list*.csv
 **/DCDforJapan*.csv
 
 packages/food-tools/**
 packages/excel-reader/**
+

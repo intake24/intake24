@@ -41,7 +41,7 @@ export const surveySearchSettings = z.object({
   matchScoreWeight: z.number().int().min(0).max(100),
   sortingAlgorithm: z.enum(searchSortingAlgorithms),
   spellingCorrectionPreference: z.enum(spellingCorrectionPreferences),
-  minWordLength1: z.number().int().min(2).max(10),
+  minWordLength1: z.number().int().min(1).max(10),
   minWordLength2: z.number().int().min(3).max(10),
   enableEditDistance: z.boolean(),
   enablePhonetic: z.boolean(),

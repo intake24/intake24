@@ -105,9 +105,9 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
   }
 
   private async sendEmail(surveyName: string, username: string, to: string[]) {
-    const subject = `${this.appConfig.fullName}: Help request (${surveyName})`;
+    const subject = `${this.appConfig.fullName}: サポート依頼（${surveyName}）`;
 
-    const html = nunjucks.render('mail/surveys/help-request.njk', {
+    const html = nunjucks.render('mail/surveys/help-request-ja.njk', {
       ...this.params,
       title: subject,
       surveyName,

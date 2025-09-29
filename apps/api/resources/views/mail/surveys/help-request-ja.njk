@@ -1,0 +1,44 @@
+{% import "mail/layouts/elements.njk" as elements %}
+
+{% extends "mail/layouts/layout.njk" %}
+{% block preview %}
+リコール支援のご依頼
+{% endblock %}
+
+{% block body %}
+<p>関係者各位</p>
+<p>以下の内容で参加者からサポート依頼が届きました。ご対応をお願いいたします。</p>
+<p>
+  <strong>調査名:</strong> {{ surveyName }}<br>
+  <strong>利用者 ID:</strong> {{ username }}
+</p>
+<p>
+  {% if name %}
+  <strong>氏名:</strong> {{ name }}<br>
+  {% endif %}
+  {% if email %}
+  <strong>メールアドレス:</strong> {{ email }}<br>
+  {% endif %}
+  {% if phone %}
+  <strong>電話番号:</strong> {{ phone }}
+  {% endif %}
+</p>
+{% if message %}
+<p>
+  <strong>メッセージ:</strong><br>
+  {{ message }}
+</p>
+{% endif %}
+<p>
+どうぞよろしくお願いいたします。<br />
+{{ app.name }} チーム
+</p>
+{% endblock %}
+
+{% block subcopy %}
+<p>このメールはシステムから自動送信されています。返信しないでください。
+{% if app.replyTo %}
+ご不明な点は <a href="mailto:{{ app.replyTo }}" target="_blank" rel="noreferrer">{{ app.replyTo }}</a> までお問い合わせください。
+{% endif %}
+</p>
+{% endblock %}

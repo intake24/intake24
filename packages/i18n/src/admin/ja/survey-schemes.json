@@ -526,7 +526,8 @@
     "associated-foods-prompt": {
       "title": "関連食品（食品固有）",
       "subtitle": "一緒によく摂取される食品を提案。提案食品は食品データベースの食品レベルで定義されます。",
-      "multiple": "複数の食品選択を許可"
+      "multiple": "複数の食品選択を許可",
+      "skipFollowUpPrompts": "追加した食品への追跡質問をスキップ"
     },
     "general-associated-foods-prompt": {
       "title": "関連食品（一般）",

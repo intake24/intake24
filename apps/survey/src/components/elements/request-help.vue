@@ -157,11 +157,13 @@ const dialog = ref(false);
 const errors = ref(new Errors());
 
 function createForm(): SurveyHelpRequest {
+  const localeRegion = window.navigator.language?.split('-')[1]?.toUpperCase();
+
   return {
     name: '',
     email: '',
     phone: '',
-    phoneCountry: window.navigator.language.split('-')[1] ?? 'GB',
+    phoneCountry: localeRegion ?? 'JP',
     message: '',
   };
 }
