@@ -20,11 +20,11 @@
         </v-toolbar-title>
         <template v-if="!isEdit" #extension>
           <v-tabs v-model="tab" grow>
-            <v-tab key="search">
+            <v-tab value="search">
               <v-icon icon="$search" start />
               {{ $t('securables.search') }}
             </v-tab>
-            <v-tab key="create">
+            <v-tab value="create">
               <v-icon icon="fas fa-user-plus" start />
               {{ $t('securables.create') }}
             </v-tab>
