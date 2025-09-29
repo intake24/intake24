@@ -63,15 +63,6 @@
     "description": null,
     "validation": {
       "required": "この欄は入力必須です。"
-    },
-    "picker": {
-      "title": "時刻を選択",
-      "hours": "時",
-      "minutes": "分",
-      "24h": "24時間制",
-      "amPm": "午前 / 午後",
-      "am": "午前",
-      "pm": "午後"
     }
   },
   "yesNo": {
@@ -106,7 +97,7 @@
     },
     "browse": "すべての食品をみる",
     "search": "食品を探す",
-    "results": "検索結果",
+    "results": "Search results",
     "relatedCategories": "食品カテゴリから選ぶ",
     "showLess": "表示を減らす",
     "showAll": "関連するすべてのカテゴリを表示する",
@@ -140,7 +131,7 @@
     },
     "browse": "全ての食品を見る",
     "search": "食品を探す",
-    "results": "検索結果",
+    "results": "Search results",
     "root": "全ての食品カテゴリー",
     "back": "{category}に戻る",
     "none": "該当する食品が見つかりませんでした。検索条件を変更してお試しください。",
@@ -155,7 +146,7 @@
   "editMeal": {
     "name": "食事を編集する",
     "text": "{meal}で食べたすべての食品を、1行に1品ずつ入力してください。",
-    "description": "入力例:<p></p><ul><li>バナナ</li><li>ポテトチップス</li><li>ご飯</li><li>紅茶</li></ul><p></p><p>食品を入力したら、Enterキーか「追加する」を押すと、次の食品を入力できます。</p><p><strong>量は入力せず</strong>、食べ物や飲み物の名前だけを入力してください。</p><p><strong>調味料も忘れずに入力してください</strong>（例：寿司のしょうゆ、サラダのドレッシング）。</p>",
+    "description": "<p>食べた食品のキーワードを入力してください。</p><p>例：</p><p></p><ul><li>卵とひき肉の和風あんかけ丼→「丼」</li><li>わかめと豆腐の味噌汁→「みそ汁」</li><li>ご飯</li><li>紅茶</li></ul><p></p><p>食品を入力したら、Enterキーか「追加する」を押すと、次の食品を入力できます。</p><p><strong>量は入力せず</strong>、食べ物や飲み物の名前だけを入力してください。</p><p><strong>調味料も忘れずに入力してください</strong>（例：寿司のしょうゆ、サラダのドレッシング）。</p>",
     "add": "追加する",
     "drinksOnly": "飲み物",
     "foods": "食べ物と飲み物",
@@ -172,7 +163,7 @@
     "products": {
       "results": "見つかった食品数: {count}.",
       "none": "食品が見つかりませんでした",
-      "name": "名前",
+      "name": "Name",
       "code": "コード",
       "quantity": "量",
       "packaging": "包装"
@@ -189,7 +180,7 @@
     "description": "<p>あなたがとったものに一番近い食品を、以下のリストから選んでください。</p><p>食品が見つからない場合は、いくつかの食べ物に分けて個別に入力してみてください（例：「天ざるそば」→「天ぷら」と「ざるそば」、「納豆餅」→「納豆」と「餅」）。</p>",
     "browse": "すべての食品を表示する",
     "search": "食品を探す",
-    "results": "検索結果",
+    "results": "Search results",
     "relatedCategories": "関連する食品カテゴリ",
     "showLess": "表示を減らす",
     "showAll": "すべての関連カテゴリを表示する",
@@ -198,8 +189,6 @@
     "none": "該当する食品が見つかりませんでした。検索条件を変更してお試しください。",
     "refine": "検索結果が多数見つかりました。検索条件を絞り込んでみてください。",
     "pizza": "ピザがテイクアウトやレストランのものであれば、リストの中からその選択肢を選んでください。",
-    "rootCategory": "食品検索は'{category}'に制限されています",
-    "rootCategoryToggle": "食品検索を'{category}'に制限する",
     "missing": {
       "label": "食品が見つからない",
       "description": "<p>食品が見つからない場合は、上の検索ボックスで表現を変えて再検索してみてください。</p><p>料理名が見つからない場合でも、食材を組み合わせて入力することもできます（例：からみ餅→餅＋大根おろし）。</p><p>または「すべての食品を表示」を選んで、食品カテゴリから探すこともできます。</p><p>それでも見つからない場合は、「食品を自分で追加する」を選択してください。</p>",
@@ -211,12 +200,6 @@
       "messageUnsafe": "<p><strong>\"{discardedFoodName}\"</strong>について、すでにいくつかの質問に回答しています。</p><p>今これを<strong>\"{selectedFoodName}\"</strong>に変更すると、一部の回答をもう一度やり直す必要があるかもしれません。 </p><p>本当にこの食品に置き換えてもよろしいですか？</p>",
       "message": "\"{discardedFoodName}\"については、すでにいくつかの質問に回答しています。今\"{selectedFoodName}\"に変更すると、一部の回答をもう一度やり直す必要があるかもしれません。 本当にこの食品に置き換えてもよろしいですか？"
     }
-  },
-  "foodSelection": {
-    "name": "食品を選択",
-    "text": null,
-    "description": "<p>下のリストから食品を選択してください。</p>",
-    "none": "上記のいずれでもない"
   },
   "mealAdd": {
     "name": "食事を追加する",
@@ -237,7 +220,7 @@
     "name": "食事にかかった時間",
     "text": null,
     "description": "<p><strong>{mealName}</strong>を食べるのに、どれくらい時間がかかりましたか?</p>",
-    "minutes": "分",
+    "minutes": "分分",
     "confirm": "続ける"
   },
   "mealGap": {
@@ -255,19 +238,10 @@
     "text": "{meal}をとりましたか？食べた時間を教えてください。",
     "description": "<p><strong>{meal}</strong>をとった時刻を24時間制で選択してください（例：午後1時 → 13:00）。</p><p><strong>飲み物だけをとった場合も</strong>{meal}として入力してください。<strong>サプリメントや薬を服用したときの飲み物も含めて</strong>ご回答ください。</p>",
     "yes": "この時刻にとった",
-    "no": "食べなかった",
-    "picker": {
-      "title": "時刻を選択",
-      "hours": "時",
-      "minutes": "分",
-      "24h": "24時間制",
-      "amPm": "午前 / 午後",
-      "am": "午前",
-      "pm": "午後"
-    }
+    "no": "食べなかった"
   },
   "recallDate": {
-    "name": "想起日",
+    "name": "Recall date",
     "text": null,
     "description": "思い出し調査を行う日付を選択してください。"
   },
@@ -297,7 +271,7 @@
     "description": "<p><strong>{food}</strong>の量や種類は、前回入力した内容と同じですか？</p>",
     "serving": "口に入った量：{amount}",
     "leftovers": "残した量：{amount}",
-    "quantity": "{quantity} servings",
+    "count": "分量：{count} 人分",
     "noLeftovers": {
       "drink": "すべて飲みました",
       "food": "すべて食べました"
@@ -334,56 +308,52 @@
     "text": "「{food}」の量をどの方法で答えますか？",
     "description": "<p>量の答え方を以下の中から選んでください。</p><p>※外食などで量がわからない場合は、だいたいの量で選んでください。</p>",
     "selections": {
-      "grated": "すりおろし",
+      "grated": "すりおろした量で",
       "in_a_bag": "袋で",
-      "in_a_bottle": "ボトルで",
+      "in_a_bottle": "瓶で",
       "in_a_bowl": "ボウルで",
       "in_a_can": "缶で",
-      "in_a_carton": "パックで",
+      "in_a_carton": "箱で",
       "in_a_glass": "グラスで",
       "in_a_mug": "マグカップで",
       "in_a_pot": "鍋で",
-      "in_a_takeaway_cup": "テイクアウト用カップで",
-      "in_baby_carrots": "ベビーキャロットで数える",
-      "in_bars": "バー（本数）で",
+      "in_a_takeaway_cup": "持ち帰り用のカップで",
+      "in_baby_carrots": "小さい人参で",
+      "in_bars": "バーで",
       "in_batons": "棒状で",
-      "in_berries": "ベリーの個数で",
+      "in_berries": "粒で",
       "in_burgers": "バーガーで",
-      "in_chopped_fruit": "カットフルーツで",
-      "in_crinkle_cut_chips": "クリンクルカットのチップスで",
-      "in_cubes": "角切りで",
-      "in_curly_fries": "カーリーフライで",
-      "in_dollops": "ひとすくいで",
-      "in_french_fries": "フレンチフライで",
-      "in_individual_cakes": "小さなケーキで",
+      "in_chopped_fruit": "切った果物で",
+      "in_crinkle_cut_chips": "ギザギザポテトで",
+      "in_cubes": "サイコロ状で",
+      "in_curly_fries": "くるくるポテトで",
+      "in_dollops": "かたまりで",
+      "in_french_fries": "フライドポテトで",
+      "in_individual_cakes": "カットケーキで",
       "in_individual_packs": "個包装で",
-      "in_individual_puddings": "カッププリンで",
-      "in_individual_sweets": "個包装の菓子で",
+      "in_individual_puddings": "プリンの個数で",
+      "in_individual_sweets": "お菓子の個数で",
       "in_slices": "スライスで",
       "in_spoonfuls": "スプーンで",
-      "in_straight_cut_chips": "ストレートカットのチップスで",
-      "in_thick_cut_chips": "厚切りチップスで",
-      "in_unwrapped_bars": "包装なしのバーで",
-      "in_whole_fruit_vegetables": "丸ごとの果物／野菜で",
+      "in_straight_cut_chips": "フライドポテトで",
+      "in_thick_cut_chips": "厚切りフライドポテトで",
+      "in_unwrapped_bars": "包装からとったバーで",
+      "in_whole_fruit_vegetables": "野菜や果物の大きさで",
       "in_wrapped_bars": "包装されたバーで",
-      "milk_on_cereal": "シリアルにかけたミルク",
-      "cereal": "シリアル",
+      "milk_on_cereal": "シリアルにかけた牛乳",
       "on_a_knife": "ナイフで",
-      "on_a_plate": "お皿で",
-      "slice_from_a_large_cake": "ホールケーキからのスライスで",
-      "slice_from_a_large_pudding": "大きなプリンからのスライスで",
-      "spread_on_a_cracker": "クラッカーに塗った量で",
-      "spread_on_a_scone": "スコーンに塗った量で",
-      "spread_on_bread": "パンに塗った量で",
-      "use_a_standard_measure": "標準計量を使用",
-      "use_a_standard_portion": "標準分量を使用",
-      "use_an_image": "画像を使用",
-      "use_these_crisps_in_a_bag": "袋入りポテトチップスを使用",
-      "use_tortilla_chips_in_a_bowl": "ボウルのトルティーヤチップスを使用",
-      "use_a_drink_scale": "ドリンクスケールを使用",
-      "use_a_guide_image": "ガイド画像を使用",
-      "unknown": "不明",
-      "weight": "重量・容量を入力"
+      "on_a_plate": "皿で",
+      "slice_from_a_large_cake": "ホールケーキを切り分ける場合で",
+      "slice_from_a_large_pudding": "大きなプリンをとり分ける場合で",
+      "spread_on_a_cracker": "クラッカーに塗った状態で",
+      "spread_on_a_scone": "スコーンに塗った状態で",
+      "spread_on_bread": "パンに塗った状態で",
+      "use_a_standard_measure": "計量器具で",
+      "use_a_standard_portion": "数値で答える",
+      "use_an_image": "この画像を使う",
+      "use_these_crisps_in_a_bag": "ポテトチップスの袋で",
+      "use_tortilla_chips_in_a_bowl": "ボウルに入ったトルティーヤチップスで",
+      "weight": "量を直接入力する"
     },
     "unknown": "現在、{food} の量を推定する方法がありません。"
   },
@@ -396,7 +366,6 @@
     "name": "盛り付けた量",
     "text": "あなたがとった「{food}」の量をおたずねします。",
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "serving": {
       "header": "実際にとった量に近い写真を選び、「この量にする」のボタンをクリックしてください。",
       "less": "これより少ない",
@@ -410,7 +379,6 @@
       "more": "これより多い",
       "confirm": "この量にする"
     },
-    "quantity": "これらの分量のうち、何人前とりましたか？",
     "weightFactor": {
       "serving": {
         "more": "わたしが食べた量は {whole} と {fraction}",
@@ -428,21 +396,17 @@
     "name": "シリアル",
     "text": "{food}",
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "container": "{food} を食べるのに使った器に最も近いものを選んでください。"
   },
   "directWeight": {
     "name": "重量",
     "text": null,
-    "description": "食べた（または飲んだ）量をグラムまたはミリリットルで入力してください。",
-    "method": "分量をどのように推定しますか？",
-    "quantity": "グラムまたはミリリットルで、どのくらいとったか入力してください。"
+    "description": "食べた（または飲んだ）量をグラムまたはミリリットルで入力してください。"
   },
   "drinkScale": {
     "name": "飲み物のスケール",
     "text": "{food}",
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "container": "あなたが 「{food} 」を飲むのに使った容器に最も近いものを選んでください。",
     "serving": {
       "header": "飲んだ量に合わせてスライダーを調整し、「この量にする」を押してください。",
@@ -457,13 +421,12 @@
       "more": "もっと多い",
       "confirm": "この量にする"
     },
-    "quantity": "このような飲み物を何杯飲みましたか？"
+    "count": "この飲み物を何杯飲みましたか？"
   },
   "guideImage": {
     "name": "食品の種類を選ぶ",
     "text": "{food}",
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "label": "あなたがとった「 {food}」 に最も近いものを選んでください。（似た食品の画像が表示されることがありますが、気にせずお答えください）",
     "quantity": "あなたがとった量を選んでください。",
     "confirm": "この量にする",
@@ -473,7 +436,6 @@
     "name": "飲み物に加えた牛乳",
     "text": "紅茶やコーヒーに{food}をどのくらい加えましたか？",
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "label": "あなたが入れた量を選んでください。",
     "confirm": "この量にする"
   },
@@ -481,7 +443,6 @@
     "name": "シリアルの牛乳",
     "text": "{food}",
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "container": "{food} を食べるのに使った器に最も近いものを選んでください。",
     "milk": "シリアルがない状態での牛乳の量を選んでください。"
   },
@@ -492,7 +453,7 @@
     "source": "その食品は家庭で調理されたものですか？",
     "homemade": "料理の内容や材料などを、できるだけ詳しく入力してください。",
     "purchased": "購入したお店やブランド名がわかれば教えてください。 商品名がわからない場合は、料理の内容や材料などを、できるだけ詳しく入力してください。",
-    "barcode": "携帯電話で回答している場合は、食品パッケージのバーコードをスキャンしてください。",
+    "barcode": "バーコード読み取り（現在、この機能はご利用いただけません）",
     "portionSize": "どれくらいとりましたか？（例：1袋、ティースプーン2杯、ひとつかみ、125グラム、全部食べた など）"
   },
   "recipeBuilder": {
@@ -531,7 +492,6 @@
     "name": "親食品の分量",
     "text": null,
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "label": "{parentFood}の中で、どれくらいの{food}をとりましたか？",
     "confirm": "そのくらい食べた"
   },
@@ -539,7 +499,6 @@
     "name": "ピザ",
     "text": "{food}",
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "typeLabel": "あなたが食べたピザの大きさに最も近いものを選んでください。",
     "thicknessLabel": "ピザの厚みはどのくらいでしたか？",
     "sizeLabel": "ピザの1切れの大きさはどのくらいでしたか？",
@@ -556,7 +515,6 @@
     "name": "ピザ",
     "text": null,
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "sizes": {
       "label": "どのサイズのピザを食べましたか？",
       "personal": "Sサイズ（約18cm）",
@@ -585,7 +543,6 @@
     "name": "数値で答える",
     "text": "{food}",
     "description": null,
-    "method": "分量をどのように推定しますか？",
     "label": "{food}の量をどの方法で答えますか？",
     "estimateIn": "{unit} で答える",
     "howMany": {
@@ -595,14 +552,8 @@
     },
     "confirm": "この量にする"
   },
-  "unknown": {
-    "name": "不明",
-    "text": null,
-    "description": null,
-    "method": "分量をどのように推定しますか？"
-  },
   "aggregateChoice": {
-    "name": "集計食品質問",
+    "name": "Aggregate food question",
     "text": null,
     "description": null
   }

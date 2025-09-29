@@ -1,116 +1,116 @@
 {
-  "_": "リコール",
-  "info": "リコール情報",
-  "none": "現在、進行中のリコールはありません。",
-  "startedAt": "リコール開始時刻: {startedAt}",
-  "finishedAt": "リコール終了時刻: {finishedAt}",
-  "submittedAt": "提出日時",
+  "_": "思い出し",
+  "info": "回答状況",
+  "none": "途中保存された回答データはありません。最初から回答をはじめてください。",
+  "startedAt": "思い出しの開始日時: {startedAt}.",
+  "finishedAt": "思い出しの終了日時: {finishedAt}.",
+  "submittedAt": "送信日時",
   "limitReached": {
-    "daily": "本日のリコール上限に達しました。",
-    "total": "リコールの合計上限に達しました。"
+    "daily": "1日に行える思い出しの回数の上限に達しました。",
+    "total": "思い出しの合計回数の上限に達しました。"
   },
   "rating": {
-    "_": "体験を評価する",
-    "title": "このリコールをどのように評価しますか？",
-    "comment": "リコールに対する評価について詳しくお聞かせください",
-    "send": "フィードバックを送信",
-    "sent": "フィードバックを送信しました。ありがとうございます！"
+    "_": "ご利用体験を評価してください。",
+    "title": "このシステムをどのように評価しますか？",
+    "comment": "感想を詳しくお聞かせください。",
+    "send": "送信する",
+    "sent": "送信しました。ありがとうございます！"
   },
   "survey": "調査: {name}",
   "submissions": {
-    "_": "リコール日",
-    "title": "リコール日一覧",
+    "_": "調査日",
+    "title": "調査日一覧",
     "all": "すべて",
-    "past": "過去のリコール",
-    "none": "過去のリコールはまだありません。",
-    "count": "リコール番号: {count}"
+    "past": "これまでの調査の記録",
+    "none": "これまでの調査データは存在しません。",
+    "count": "思い出し回数: {count}"
   },
   "start": {
-    "_": "リコールを開始",
-    "another": "別のリコールを開始"
+    "_": "回答をはじめる",
+    "another": "新しくはじめる"
   },
-  "continue": "続行",
+  "continue": "回答を再開",
   "abort": {
-    "_": "中止",
-    "label": "リコールを中止",
-    "confirm": "現在のリコールを中止しますか？"
+    "_": "途中保存データを破棄",
+    "label": "データを破棄",
+    "confirm": "途中まで保存した回答データを破棄してもよろしいですか？"
   },
   "surveyInfo": {
-    "recall": "リコール: {number}"
+    "recall": "思い出し: {number}"
   },
   "menu": {
-    "title": "確認パネル",
-    "mealSuggested": "この食事はシステムによって提案されましたが、まだ確認されていません。",
+    "title": "食事一覧",
+    "mealSuggested": "この食事はシステムによって提案されましたが、あなたはまだ食べたことを確認していません。",
     "food": {
       "delete": "食品を削除",
-      "deleteConfirm": "{item}を削除しますか？",
+      "deleteConfirm": "{item} を削除しますか？",
       "change": "食品を変更",
       "free-text": {
-        "_": "この食品はデータベース内の食品とまだ一致していません。",
-        "incomplete": "この食品の分量はまだ未設定です。",
+        "_": "食品が未選択です",
+        "incomplete": "量について",
         "edit": "検索を編集"
       },
       "encoded-food": {
-        "_": "この食品はデータベース内の食品と一致しています。",
-        "complete": "この食品の分量の見積もりは完了しています。",
-        "incomplete": "この食品の分量はまだ未設定です。",
-        "edit": "分量を編集"
+        "_": "食品を選択済です",
+        "complete": "量を入力済です",
+        "incomplete": "量が未入力です",
+        "edit": "量を変更"
       },
       "missing-food": {
-        "_": "この食品はデータベースに存在しない食品としてマークされています。",
-        "complete": "この食品の不足情報はすべて入力済みです。",
-        "incomplete": "この食品の不足情報はまだ未入力です。",
-        "edit": "不足食品を編集"
+        "_": "食品が未選択です",
+        "complete": "この食品に関する不足していた情報はすべて揃いました。",
+        "incomplete": "この食品に関する不足している情報は、まだ確認されていません。",
+        "edit": "入力内容を修正"
       },
       "recipe-builder": {
-        "_": "この食品はデータベース内のレシピと一致しています。",
-        "complete": "この食品のレシピ手順は完了しています。",
-        "incomplete": "この食品のレシピ手順は未完了です。",
+        "_": "この食品は、データベース内のレシピと一致しました。",
+        "complete": "この食品のレシピ作成が完了しました。",
+        "incomplete": "この食品のレシピ作成は、まだ完了していません。",
         "edit": "材料を編集"
       }
     },
     "meal": {
       "add": "食事を追加",
       "delete": "食事を削除",
-      "deleteConfirm": "{item}に登録したすべての食品を削除しますか？",
-      "editFoods": "食品を更新",
-      "editTime": "時間を変更"
+      "deleteConfirm": "{item} に関するすべての入力内容を削除しようとしています。",
+      "editFoods": "食品を追加",
+      "editTime": "時刻を変更"
     }
   },
   "contextMenu": {
     "close": "閉じる",
-    "select": "{name}で続行",
-    "editMeal": "食品を修正",
-    "delete": "{name}を削除",
-    "confirmDeletion": "「{name}」を削除してもよろしいですか？",
-    "confirm": "{name}を確認",
-    "changeTime": "時間を変更"
+    "select": "{name} で続ける",
+    "editMeal": "量を変更",
+    "delete": "{name} を削除する",
+    "confirmDeletion": "{name}' を本当に削除しますか？",
+    "confirm": "{name} を確認する",
+    "changeTime": "時刻を変更"
   },
   "actions": {
-    "feedback": "食事フィードバック",
-    "next": "続行",
-    "submit": "リコールを提出",
+    "feedback": "結果を確認",
+    "next": "続ける",
+    "submit": "回答を送信",
     "addMeal": "食事を追加",
     "deleteFood": "食品を削除",
     "deleteMeal": "食事を削除",
-    "editFood": "食品を編集",
+    "editFood": "量を変更",
     "editMeal": "食品を追加",
-    "mealTime": "食事時間を変更",
+    "mealTime": "食事時刻を変更",
     "nav": {
       "cancel": "キャンセル",
       "confirm": "確認",
-      "feedback": "食事フィードバック",
-      "next": "続行",
-      "redirect": "続行",
+      "feedback": "結果",
+      "next": "続ける",
+      "redirect": "続ける",
       "remove": "削除",
-      "review": "確認",
+      "review": "見直す",
       "submit": "送信",
       "addMeal": "食事を追加",
       "deleteFood": "食品を削除",
       "deleteMeal": "食事を削除",
-      "editFood": "食品を編集",
+      "editFood": "食品を変更",
       "editMeal": "食品を追加",
-      "mealTime": "食事時間"
+      "mealTime": "食事の時刻"
     }
   }
 }
