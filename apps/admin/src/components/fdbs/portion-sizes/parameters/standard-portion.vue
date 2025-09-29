@@ -26,6 +26,7 @@
         <vue-draggable
           v-model="parameters.units"
           :animation="300"
+          :disabled="readonly"
           handle=".drag-and-drop__handle"
           tag="tbody"
         >

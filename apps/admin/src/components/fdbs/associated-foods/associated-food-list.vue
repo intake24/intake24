@@ -18,6 +18,7 @@
       <vue-draggable
         v-model="items"
         :animation="300"
+        :disabled="readonly"
         handle=".drag-and-drop__handle"
         @end="update"
       >
