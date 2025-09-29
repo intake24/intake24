@@ -1,6 +1,6 @@
 import type { Express } from 'express';
-
 import path from 'node:path';
+import { URL } from 'node:url';
 import { json, urlencoded } from 'body-parser';
 import CleanCSS from 'clean-css';
 import { RedisStore } from 'connect-redis';
@@ -9,7 +9,6 @@ import expressSession from 'express-session';
 import { pick } from 'lodash';
 import morgan from 'morgan';
 import nunjucks from 'nunjucks';
-
 import type { Ops } from '@intake24/api/app';
 import ioc from '@intake24/api/ioc';
 import { httpLogger as stream } from '@intake24/common-backend';
@@ -65,6 +64,6 @@ export default (express: Express, { config }: Ops) => {
       year: new Date().getFullYear(),
       replyTo: mail.replyTo,
     })
-    .addGlobal('asset', (content: string) => path.join(app.urls.base, content))
+    .addGlobal('asset', (content: string) => new URL(content, app.urls.base).href)
     .addFilter('inlineCSS', (content: string) => new CleanCSS().minify(content).styles);
 };
