@@ -39,11 +39,11 @@ export default class MFAAuthenticator extends BaseModel<
     allowNull: false,
     type: DataType.BLOB({ length: 'long' }),
   })
-  get publicKey(): Uint8Array {
+  get publicKey(): Uint8Array<ArrayBuffer> {
     return new Uint8Array(this.getDataValue('publicKey'));
   }
 
-  set publicKey(value: Uint8Array) {
+  set publicKey(value: Uint8Array<ArrayBuffer>) {
     this.setDataValue('publicKey', Buffer.from(value));
   }
 

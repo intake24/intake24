@@ -114,7 +114,7 @@ const selected = ref<NutrientTableRecordAttributes[]>([]);
 const selectedTableId = ref(props.nutrientTables.length ? props.nutrientTables[0].id : ':id');
 
 const { dialog, loading, page, lastPage, search, items, fetch, clear } = useFetchList<
-NutrientTableRecordReference
+  NutrientTableRecordReference
 >({ url: 'admin/references/nutrient-tables/:id/records', id: selectedTableId });
 
 const isSelected = computed(() => !!selected.value.length);

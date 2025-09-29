@@ -322,7 +322,7 @@ async function findPortionSizeImages(
       }
 
       const energyKcalRecord
-          = nutrientMapping.nutrientTableRecord?.getNutrientByType(energyKcalNutrientType);
+        = nutrientMapping.nutrientTableRecord?.getNutrientByType(energyKcalNutrientType);
 
       if (!energyKcalRecord) {
         console.log(`No energy (kcal) available for food ${currentBatch[i].code}, skipping`);
