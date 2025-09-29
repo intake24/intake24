@@ -1,6 +1,7 @@
 import type { Express } from 'express';
 
 import path from 'node:path';
+import { URL } from 'node:url';
 import { json, urlencoded } from 'body-parser';
 import CleanCSS from 'clean-css';
 import { RedisStore } from 'connect-redis';
@@ -54,6 +55,9 @@ export default (express: Express, { config }: Ops) => {
   express.engine('njk', nunjucks.render);
   express.set('view engine', 'njk');
 
+  const rawAssetBase = app.urls.base.endsWith('/') ? app.urls.base : `${app.urls.base}/`;
+  const assetBase = rawAssetBase.replace(/:\/{2,}/u, '://');
+
   nunjucks
     .configure([path.resolve('public'), path.resolve('resources/views')], {
       autoescape: true,
@@ -65,6 +69,6 @@ export default (express: Express, { config }: Ops) => {
       year: new Date().getFullYear(),
       replyTo: mail.replyTo,
     })
-    .addGlobal('asset', (content: string) => path.join(app.urls.base, content))
+    .addGlobal('asset', (content: string) => new URL(content, assetBase).toString())
     .addFilter('inlineCSS', (content: string) => new CleanCSS().minify(content).styles);
 };
