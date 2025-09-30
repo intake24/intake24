@@ -37,7 +37,13 @@
     "add": "Add split word",
     "remove": "Remove split word",
 
-    "words": "Word list (space-delimited)"
+    "words": "Word list (space-delimited)",
+    "hints": {
+      "_": "Word list parsing patterns",
+      "list": "Use space-delimited list of characters or words, e.g. 'and with &'",
+      "space": "Use '!_!' to represent a space, e.g. '!_!with!_!'",
+      "force": "Mark colon-delimited word pair with '!' to always split (e.g. '!burger:chips!')"
+    }
   },
 
   "synonym-sets": {
