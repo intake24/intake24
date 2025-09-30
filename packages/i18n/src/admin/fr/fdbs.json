@@ -40,7 +40,7 @@
     "copy": "Copy food",
     "id": "Identifiant de l'aliment",
     "code": "Code de l'aliment",
-    "engishName": "Nom anglais",
+    "englishName": "Nom anglais",
     "name": "Nom régional",
     "altNames": "Autres noms",
     "tags": "Tags"
