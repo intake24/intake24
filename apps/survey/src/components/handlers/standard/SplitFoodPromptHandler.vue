@@ -1,6 +1,6 @@
 <template>
   <split-food-prompt
-    v-bind="{ food, meal, prompt, section, suggestions }"
+    v-bind="{ food, meal, prompt, section, suggestions: splits.suggestions }"
     @action="action"
   />
 </template>
@@ -22,23 +22,34 @@ const survey = useSurvey();
 
 const food = freeTextFood.value;
 
-/* Temporary solution to V3 split lists
-*  TODO: server-side implementation for
-* - split words & lists
-* - force-split exception lists
-*/
-const suggestions = computed(() =>
-  food
-    .description
-    .split(/(?:,|&| and | with )+/i)
-    .map(item => item.trim()),
-);
+const splits = computed(() => {
+  const suggestionTokens: string[] = [];
+  const forceTokens: string[] = [];
 
-const forceSplits = ['burger:chips', 'chips:fish'];
+  const items = survey.parameters?.locale?.splitWords;
+  if (!items?.length)
+    return { suggestions: [], force: false };
 
-const forceSplit = computed(() => {
-  const check = [...suggestions.value].sort((a, b) => a.localeCompare(b)).join(':').toLowerCase();
-  return forceSplits.includes(check);
+  for (const item of items) {
+    if (item.match(/^!\w+:\w+!$/)) {
+      forceTokens.push(item
+        .replace(/!/g, '')
+        .split(':')
+        .sort((a, b) => a.localeCompare(b))
+        .join(':')
+        .toLowerCase(),
+      );
+      continue;
+    }
+
+    suggestionTokens.push(item.replace(/!_!/g, ' ').toLowerCase());
+  }
+
+  const suggestions = food.description.split(new RegExp(`(?:${suggestionTokens.join('|')})`, 'i')).map(item => item.trim());
+  const forceCheck = [...suggestions].sort((a, b) => a.localeCompare(b)).join(':').toLowerCase();
+  const force = forceTokens.includes(forceCheck);
+
+  return { suggestions, force };
 });
 
 function single() {
@@ -50,7 +61,7 @@ function separate() {
   const foodId = food.id;
   const { foodIndex } = getFoodIndexRequired(meals.value, foodId);
 
-  const [first, ...rest] = suggestions.value;
+  const [first, ...rest] = splits.value.suggestions;
 
   rest.forEach((suggestion, idx) => {
     survey.addFood({
@@ -84,12 +95,12 @@ function action(type: string, ...args: [id?: string, params?: object]) {
 }
 
 onMounted(() => {
-  if (forceSplit.value) {
+  if (splits.value.force) {
     separate();
     return;
   }
 
-  if (suggestions.value.length === 1)
+  if (splits.value.suggestions.length === 1)
     single();
 });
 </script>

@@ -32,7 +32,13 @@
     "tab": "Mots à découper",
     "add": "Ajouter un mot à découper",
     "remove": "Enlever un mot à découper",
-    "words": "Liste de mots (délimités par des espaces)"
+    "words": "Liste de mots (délimités par des espaces)",
+    "hints": {
+      "_": "Word list parsing patterns",
+      "list": "Use space-delimited list of characters or words, e.g. 'and with &'",
+      "space": "Use '!_!' to represent a space, e.g. '!_!with!_!'",
+      "force": "Mark colon-delimited word pair with '!' to always split (e.g. '!burger:chips!')"
+    }
   },
   "synonym-sets": {
     "_": "Série de synonymes",
