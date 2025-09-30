@@ -13,6 +13,29 @@
         @click.stop="add"
       />
     </v-toolbar>
+    <v-alert
+      class="ma-4"
+      closable
+      type="info"
+    >
+      <div class="d-flex flex-column gr-3">
+        <span class="font-weight-medium text-subtitle-1">
+          {{ $t('locales.split-words.hints._') }}
+        </span>
+        <span>
+          <v-icon icon="fas fa-arrow-right" size="sm" start />
+          {{ $t('locales.split-words.hints.list') }}
+        </span>
+        <span>
+          <v-icon icon="fas fa-arrow-right" size="sm" start />
+          {{ $t('locales.split-words.hints.space') }}
+        </span>
+        <span>
+          <v-icon icon="fas fa-arrow-right" size="sm" start />
+          {{ $t('locales.split-words.hints.force') }}
+        </span>
+      </div>
+    </v-alert>
     <v-list class="list-border">
       <v-list-item v-for="(item, idx) in data.items" :key="idx">
         <template #prepend>

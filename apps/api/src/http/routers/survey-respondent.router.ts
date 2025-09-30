@@ -9,7 +9,7 @@ import type { SinglePrompt } from '@intake24/common/prompts';
 import type { SurveyStatus } from '@intake24/common/surveys';
 import { flattenSchemeWithSection, groupSchemeMultiPrompts, isMealSection } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
-import { FAQ, Survey } from '@intake24/db';
+import { FAQ, SplitWord, Survey } from '@intake24/db';
 
 export function surveyRespondent() {
   const ratingRateLimiter = ioc.cradle.rateLimiter.createMiddleware('rating', {
@@ -65,6 +65,8 @@ export function surveyRespondent() {
       });
       if (!survey || !survey.locale || !survey.surveyScheme)
         throw new NotFoundError();
+
+      const words = await SplitWord.findAll({ where: { localeId: survey.locale.code }, attributes: ['words'] });
 
       const {
         id,
@@ -143,7 +145,11 @@ export function surveyRespondent() {
           slug,
           name,
           state,
-          locale,
+          locale: {
+            id: locale.id,
+            code: locale.code,
+            splitWords: words.flatMap(({ words }) => words.split(' ')),
+          },
           surveyScheme: { id: surveyScheme.id, meals, prompts, settings },
           faqs: !!faqId,
           feedbackScheme: feedbackScheme
