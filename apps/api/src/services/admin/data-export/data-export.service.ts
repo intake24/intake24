@@ -241,7 +241,7 @@ function dataExportService({
     const fields: ExportFieldInfo[] = [];
 
     for (const section of sections)
-      fields.push(...(await dataExportMapper[section.id](section.fields)));
+      fields.push(...(await dataExportMapper[section.id](section.id, section.fields)));
 
     return fields;
   };
