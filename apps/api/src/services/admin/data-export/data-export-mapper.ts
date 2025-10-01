@@ -5,8 +5,8 @@ import type {
   ExportRow,
 } from './data-export-fields';
 import { get } from 'lodash';
-
 import type { IoC } from '@intake24/api/ioc';
+import type { ExportSectionId } from '@intake24/common/surveys';
 
 export type ExportFieldTransformCallback<T = ExportRow> = (
   field: ExportField
@@ -72,141 +72,69 @@ function dataExportMapper({ dataExportFields }: Pick<IoC, 'dataExportFields'>) {
   /**
    * Map record based fields (Survey submission / meal / food)
    *
+   * @param {ExportSectionId} section
    * @param {ExportField[]} fields
    * @param {ExportField[]} referenceFields
    * @returns {Promise<ExportFieldInfo[]>}
    */
-  const getRecordFields = async (
-    fields: ExportField[],
-    referenceFields: ExportField[],
-  ): Promise<ExportFieldInfo[]> =>
+  const getRecordFields = async (section: ExportSectionId, fields: ExportField[], referenceFields: ExportField[]): Promise<ExportFieldInfo[]> =>
     fields.map((field) => {
       const match = referenceFields.find(refField => refField.id === field.id);
 
       const { id, label } = field;
 
-      return { label: label ?? id, value: match?.value ?? id };
+      return { label: label ?? `${section}:${id}`, value: match?.value ?? id };
     });
 
   /**
    * Map custom field based fields
    *
+   * @param {ExportSectionId} section
    * @param {ExportField[]} fields
    * @param {ExportFieldTransformCallback} value
    * @returns {Promise<ExportFieldInfo[]>}
    */
   const getCustomRecordFields = async (
+    section: ExportSectionId,
     fields: ExportField[],
     value: ExportFieldTransformCallback,
   ): Promise<ExportFieldInfo[]> =>
-    fields.map(field => ({ label: field.label, value: value(field) }));
+    fields.map(field => ({ label: field.label ?? `${section}:${field.id}`, value: value(field) }));
 
-  /**
-   * User fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const user = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getRecordFields(fields, await dataExportFields.user());
+  const user = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getRecordFields(section, fields, await dataExportFields.user());
 
-  /**
-   * User custom fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const userCustom = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, userCustomFieldValue);
+  const userCustom = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(section, fields, userCustomFieldValue);
 
-  /**
-   * Survey fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const survey = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getRecordFields(fields, await dataExportFields.survey());
+  const survey = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getRecordFields(section, fields, await dataExportFields.survey());
 
-  /**
-   * Submission fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const submission = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getRecordFields(fields, await dataExportFields.submission());
+  const submission = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getRecordFields(section, fields, await dataExportFields.submission());
 
-  /**
-   * Submission custom fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const submissionCustom = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, submissionCustomFieldValue);
+  const submissionCustom = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(section, fields, submissionCustomFieldValue);
 
-  /**
-   * Meal fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const meal = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getRecordFields(fields, await dataExportFields.meal());
+  const meal = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getRecordFields(section, fields, await dataExportFields.meal());
 
-  /**
-   * Meal custom fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const mealCustom = (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, mealCustomFieldValue);
+  const mealCustom = (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(section, fields, mealCustomFieldValue);
 
-  /**
-   * Food fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const food = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getRecordFields(fields, await dataExportFields.food());
+  const food = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getRecordFields(section, fields, await dataExportFields.food());
 
-  /**
-   * Food custom fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const foodCustom = (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, foodCustomFieldValue);
+  const foodCustom = (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(section, fields, foodCustomFieldValue);
 
-  /**
-   * Food composition fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const foodFields = (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, foodFieldValue);
+  const foodFields = (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(section, fields, foodFieldValue);
 
-  /**
-   * Food nutrient fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const foodNutrients = (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, foodNutrientValue);
+  const foodNutrients = (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(section, fields, foodNutrientValue);
 
-  /**
-   * Portion sizes fields
-   *
-   * @param {ExportField[]} fields
-   * @returns {Promise<ExportFieldInfo[]>}
-   */
-  const portionSizes = async (fields: ExportField[]): Promise<ExportFieldInfo[]> => {
+  const portionSizes = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> => {
     const portionSizeFields = await dataExportFields.portionSizes();
 
     const psfMap = portionSizeFields.reduce<Record<string, ExportField['value']>>(
@@ -219,13 +147,13 @@ function dataExportMapper({ dataExportFields }: Pick<IoC, 'dataExportFields'>) {
     );
 
     return fields.map(field => ({
-      label: field.label,
+      label: field.label ?? `${section}:${field.id}`,
       value: psfMap[field.id] ?? portionSizeValue(field),
     }));
   };
 
-  const externalSources = async (fields: ExportField[]): Promise<ExportFieldInfo[]> =>
-    getCustomRecordFields(fields, externalSourceField);
+  const externalSources = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
+    getCustomRecordFields(section, fields, externalSourceField);
 
   return {
     user,

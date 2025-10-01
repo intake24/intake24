@@ -37,26 +37,20 @@
                     <v-avatar class="drag-and-drop__handle" icon="$handle" />
                   </template>
                   <v-list-item-subtitle class="mb-1">
-                    <span class="text--secondary">{{ $t('survey-schemes.data-export.fields.id') }}:</span>
+                    {{ $t('survey-schemes.data-export.fields.id') }}:
                     {{ field.id }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle>
-                    <span class="text--secondary">
-                      {{ $t('survey-schemes.data-export.fields.label') }}:
-                    </span>
-                    {{ field.label }}
+                    {{ $t('survey-schemes.data-export.fields.label') }}:
+                    {{ field.label || `${section?.id}:${field.id}` }}
                   </v-list-item-subtitle>
                   <template #append>
                     <v-list-item-action>
                       <v-btn
-                        icon
+                        icon="$edit"
                         :title="$t('common.action.edit')"
                         @click.stop="edit(index, field)"
-                      >
-                        <v-icon color="secondary-lighten-2">
-                          $edit
-                        </v-icon>
-                      </v-btn>
+                      />
                     </v-list-item-action>
                     <v-list-item-action>
                       <v-btn color="error" icon="$delete" :title="$t('common.action.remove')" @click.stop="exclude(index)" />
@@ -96,13 +90,11 @@
                   link
                 >
                   <v-list-item-subtitle class="mb-1">
-                    <span class="text--secondary">{{ $t('survey-schemes.data-export.fields.id') }}:</span>
+                    {{ $t('survey-schemes.data-export.fields.id') }}:
                     {{ field.id }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle>
-                    <span class="text--secondary">
-                      {{ $t('survey-schemes.data-export.fields.label') }}:
-                    </span>
+                    {{ $t('survey-schemes.data-export.fields.label') }}:
                     {{ field.label }}
                   </v-list-item-subtitle>
                   <template #append>
@@ -124,28 +116,24 @@
       <v-dialog v-model="editDialog.show" max-width="500px">
         <v-card>
           <v-card-title>{{ $t('survey-schemes.data-export.fields._') }}</v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="editDialog.field.id"
-                  :disabled="!isCustomField(editDialog.field.id)"
-                  hide-details="auto"
-                  :label="$t('survey-schemes.data-export.fields.id')"
-                  name="id"
-                  variant="outlined"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="editDialog.field.label"
-                  hide-details="auto"
-                  :label="$t('survey-schemes.data-export.fields.label')"
-                  name="label"
-                  variant="outlined"
-                />
-              </v-col>
-            </v-row>
+          <v-card-text class="d-flex flex-column ga-4">
+            <v-text-field
+              v-model="editDialog.field.id"
+              :disabled="!editDialog.custom"
+              hide-details="auto"
+              :label="$t('survey-schemes.data-export.fields.id')"
+              name="id"
+              variant="outlined"
+            />
+            <v-text-field
+              v-model="editDialog.field.label"
+              hide-details="auto"
+              :label="$t('survey-schemes.data-export.fields.label')"
+              name="label"
+              persistent-placeholder
+              :placeholder="`${section?.id}:${editDialog.field.id}`"
+              variant="outlined"
+            />
           </v-card-text>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="editReset">
@@ -167,9 +155,15 @@ import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
-
 import { DataExportNutrients } from '@intake24/admin/components/schemes';
 import type { ExportField, ExportSection } from '@intake24/common/surveys';
+
+type EditDialog = {
+  show: boolean;
+  custom: boolean;
+  index: number;
+  field: ExportField;
+};
 
 defineOptions({ name: 'DataExportSection' });
 
@@ -186,7 +180,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'update']);
 
-function newEditDialog(show = false, custom = false) {
+function newEditDialog(show = false, custom = false): EditDialog {
   return {
     show,
     custom,
@@ -228,7 +222,7 @@ function loadMoreFields() {
 function loadFilteredFields() {
   filteredFields.value = search.value
     ? availableFields.value.filter(
-        field => !!field.label.match(new RegExp(search.value, 'i')),
+        field => !!field.label?.match(new RegExp(search.value, 'i')),
       )
     : [...availableFields.value];
 
@@ -254,7 +248,7 @@ function addCustom() {
 };
 
 function edit(index: number, field: ExportField) {
-  editDialog.value = { ...newEditDialog(true), index, field: { ...field } };
+  editDialog.value = { ...newEditDialog(true, isCustomField(field.id)), index, field: { ...field } };
 };
 
 function editConfirm() {
