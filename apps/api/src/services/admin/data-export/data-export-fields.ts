@@ -59,7 +59,7 @@ function dataExportFields() {
    */
   const user = async (): Promise<ExportField[]> => [
     {
-      id: 'userId',
+      id: 'id',
       label: 'User ID',
       value: ({ food }: ExportRow) => food.meal?.submission?.user?.id,
     },
@@ -109,7 +109,7 @@ function dataExportFields() {
    */
   const survey = async (): Promise<ExportField[]> => [
     {
-      id: 'surveyId',
+      id: 'id',
       label: 'Survey ID',
       value: ({ food }: ExportRow) => food.meal?.submission?.surveyId,
     },
@@ -135,7 +135,7 @@ function dataExportFields() {
    */
   const submission = async (): Promise<ExportField[]> => [
     {
-      id: 'submissionId',
+      id: 'id',
       label: 'Submission ID',
       value: ({ food }: ExportRow) => food.meal?.submission?.id,
     },
@@ -245,8 +245,8 @@ function dataExportFields() {
    * @returns {Promise<ExportField[]>}
    */
   const meal = async (): Promise<ExportField[]> => [
-    { id: 'mealIndex', label: 'Meal index', value: ({ custom }: ExportRow) => custom.mealIndex },
-    { id: 'mealId', label: 'Meal ID', value: ({ food }: ExportRow) => food.meal?.id },
+    { id: 'index', label: 'Meal index', value: ({ custom }: ExportRow) => custom.mealIndex },
+    { id: 'id', label: 'Meal ID', value: ({ food }: ExportRow) => food.meal?.id },
     { id: 'name', label: 'Meal name', value: ({ food }: ExportRow) => food.meal?.name },
     {
       id: 'time',
@@ -280,7 +280,7 @@ function dataExportFields() {
   const food = async (): Promise<ExportField[]> => [
     // Common fields for food and missing food
     {
-      id: 'foodIndex',
+      id: 'index',
       label: 'Food index',
       value: 'food.index',
     },
@@ -288,7 +288,7 @@ function dataExportFields() {
 
     // Food fields
     {
-      id: 'foodId',
+      id: 'id',
       label: 'Food ID',
       value: ({ food }: ExportRow) => (food instanceof SurveySubmissionFood ? food.id : undefined),
     },
@@ -383,7 +383,7 @@ function dataExportFields() {
    * @returns {Promise<ExportField[]>}
    */
   const portionSizes = async (): Promise<ExportField[]> => [
-    { id: 'portionMethod', label: 'Portion method', value: 'food.portionSizeMethodId' },
+    { id: 'method', label: 'Portion method', value: 'food.portionSizeMethodId' },
     // Stringified portion size fields
     {
       id: 'portion',
