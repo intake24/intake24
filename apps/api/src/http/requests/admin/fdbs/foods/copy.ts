@@ -11,12 +11,20 @@ import { Food, SystemLocale } from '@intake24/db';
 
 export default validate(
   checkSchema({
-    name: {
+    englishName: {
       in: ['body'],
       errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 128 }),
       isString: true,
       isEmpty: { negated: true },
       isLength: { options: { min: 1, max: 128 } },
+      optional: true,
+    },
+    name: {
+      in: ['body'],
+      errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 256 }),
+      isString: true,
+      isEmpty: { negated: true },
+      isLength: { options: { min: 1, max: 256 } },
     },
     code: {
       in: ['body'],

@@ -1,10 +1,10 @@
 import type { Pagination } from '../generic';
-import type { FoodListEntry, InheritableAttributes } from './foods';
+import type { InheritableAttributes } from './attributes';
+import type { FoodListEntry } from './foods';
 import { z } from 'zod';
 import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
-import { inheritableAttributes } from './foods';
-
-import { portionSizeMethodAttributes } from './portion-size-methods';
+import { inheritableAttributes } from './attributes';
+import { categoryPortionSizeMethodAttributes } from './portion-size-methods';
 
 export type CreateCategoryRequest = {
   code: string;
@@ -42,14 +42,15 @@ export const categoryInput = categoryAttributes.omit({
   version: true,
 }).extend({
   attributes: inheritableAttributes.optional(),
-  parentCategories: categoryAttributes.pick({ id: true }).array(),
-  portionSizeMethods: portionSizeMethodAttributes.partial({ id: true, categoryId: true }).array(),
+  parentCategories: categoryAttributes.pick({ id: true }).array().optional(),
+  portionSizeMethods: categoryPortionSizeMethodAttributes.partial({ id: true, categoryId: true }).array().optional(),
 });
 export type CategoryInput = z.infer<typeof categoryInput>;
 
 export const categoryCopyInput = categoryAttributes.pick({
   code: true,
   name: true,
+  englishName: true,
 });
 export type CategoryCopyInput = z.infer<typeof categoryCopyInput>;
 

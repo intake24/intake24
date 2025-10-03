@@ -19,10 +19,9 @@
           {{ $t('survey-schemes.prompts.templates.title') }}
         </v-toolbar-title>
       </v-toolbar>
-      <v-card-text class="pa-6">
+      <v-card-text class="pa-6 d-flex flex-column gr-4">
         <v-text-field
           v-model="search"
-          class="mb-4"
           clearable
           hide-details="auto"
           :label="$t('common.search._')"

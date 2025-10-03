@@ -12,30 +12,20 @@
       </p>
     </v-card-text>
     <v-form v-else @keydown="errors.clear($event.target.name)" @submit.prevent="submit">
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="data.email"
-                :error-messages="errors.get('email')"
-                hide-details="auto"
-                :label="$t('common.email')"
-                name="email"
-                prepend-inner-icon="fas fa-envelope"
-                required
-                variant="outlined"
-              />
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12">
-              <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
-                {{ $t('common.password.request.send') }}
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
+      <v-card-text class="pa-6 d-flex flex-column gr-4">
+        <v-text-field
+          v-model="data.email"
+          :error-messages="errors.get('email')"
+          hide-details="auto"
+          :label="$t('common.email')"
+          name="email"
+          prepend-inner-icon="fas fa-envelope"
+          required
+          variant="outlined"
+        />
+        <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
+          {{ $t('common.password.request.send') }}
+        </v-btn>
       </v-card-text>
       <captcha ref="captchaEl" @expired="expired" @verified="verified" />
     </v-form>
@@ -50,7 +40,6 @@
 
 <script lang="ts" setup>
 import { ref, useTemplateRef } from 'vue';
-
 import { useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
 import { AppEntryScreen, Captcha } from '@intake24/ui';

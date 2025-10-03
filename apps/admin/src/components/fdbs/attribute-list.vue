@@ -18,7 +18,6 @@
             class="mt-0"
             :disabled="isInherited('sameAsBeforeOption')"
             :error-messages="errors.get('attributes.sameAsBeforeOption')"
-            hide-details="auto"
             :label="$t('fdbs.attributes.sameAsBeforeOption')"
             name="attributes.sameAsBeforeOption"
             :readonly
@@ -38,7 +37,6 @@
             class="mt-0"
             :disabled="isInherited('readyMealOption')"
             :error-messages="errors.get('attributes.readyMealOption')"
-            hide-details="auto"
             :label="$t('fdbs.attributes.readyMealOption')"
             name="attributes.readyMealOption"
             :readonly
@@ -58,11 +56,9 @@
             density="compact"
             :disabled="isInherited('reasonableAmount')"
             :error-messages="errors.get('attributes.reasonableAmount')"
-            hide-details="auto"
             :label="$t('fdbs.attributes.reasonableAmount')"
             name="attributes.reasonableAmount"
             :readonly
-            variant="outlined"
             @update:model-value="errors.clear('attributes.reasonableAmount')"
           />
         </v-col>
@@ -79,12 +75,10 @@
             density="compact"
             :disabled="isInherited('useInRecipes')"
             :error-messages="errors.get('attributes.useInRecipes')"
-            hide-details="auto"
             :items="useInRecipeTypeItems"
             :label="$t('fdbs.attributes.useInRecipes._')"
             name="attributes.useInRecipes"
             :readonly
-            variant="outlined"
             @update:model-value="errors.clear('attributes.useInRecipes')"
           />
         </v-col>

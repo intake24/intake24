@@ -4,11 +4,7 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
-import type {
-  CategoryCopyInput,
-  CategoryInput,
-  CategoryListEntry,
-} from '@intake24/common/types/http/admin';
+import type { CategoryCopyInput, CategoryInput } from '@intake24/common/types/http/admin';
 import type {
   CategoryAttributes,
   FindOptions,
@@ -20,7 +16,6 @@ import {
   CategoryAttribute,
   CategoryPortionSizeMethod,
   Op,
-  QueryTypes,
 } from '@intake24/db';
 
 function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'kyselyDb'>) {
@@ -65,39 +60,30 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
   };
 
   const getRootCategories = async (localeId: string) => {
-    // TODO: verify for other dialects
-    const query = `SELECT DISTINCT
-      c.id, c.locale_id as "localeId", c.code, c.english_name as "englishName", c.name, c.hidden
-      FROM categories c
-      LEFT JOIN categories_categories cc ON c.id = cc.sub_category_id
-      WHERE NOT EXISTS (
-        SELECT * from categories_categories cc2 JOIN categories c2 ON cc2.category_id = c2.id
-        WHERE c2.hidden = :hidden AND cc2.sub_category_id = c.id
+    return await kyselyDb.foods
+      .selectFrom('categories')
+      .select([
+        'id',
+        'localeId',
+        'code',
+        'englishName',
+        'name',
+        'hidden',
+      ])
+      .leftJoin('categoriesCategories as cc', 'categories.id', 'cc.subCategoryId')
+      .where('categories.localeId', '=', localeId)
+      .where(eb =>
+        eb.not(
+          eb.exists(eb.selectFrom('categoriesCategories as cc2')
+            .innerJoin('categories as c2', 'cc2.categoryId', 'c2.id')
+            .select('cc2.categoryId')
+            .whereRef('cc2.subCategoryId', '=', eb.ref('categories.id'))
+            .where('c2.hidden', '=', false)),
+
+        ),
       )
-      AND c.locale_id = :localeId
-      ORDER BY c.name`;
-
-    return db.foods.query<CategoryListEntry>(query, {
-      type: QueryTypes.SELECT,
-      replacements: { localeId, hidden: false },
-    });
-
-    /* const categories = await Category.findAll({
-      attributes: ['code', 'description', 'hidden'],
-      include: [
-        { association: 'subcategoryMappings', attributes: [] },
-        {
-          association: 'locals',
-          attributes: ['name'],
-          where: { localeId },
-          required: false,
-        },
-      ],
-      order: [['locals', 'name', 'ASC']],
-      where: Sequelize.literal(`NOT EXISTS (SELECT cc2.category_code
-          FROM categories_categories cc2 JOIN categories c2 ON cc2.category_code = c2.code
-          WHERE c2.is_hidden = False AND cc2.subcategory_code = Category.code)`),
-    }); */
+      .orderBy('name')
+      .execute();
   };
 
   const getCategoryContents = async (localeId: string, categoryId: string) => {
@@ -174,7 +160,10 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     methods: CategoryPortionSizeMethod[],
     inputs: CategoryInput['portionSizeMethods'],
     { transaction }: { transaction: Transaction },
-  ) => {
+  ): Promise<void> => {
+    if (!inputs)
+      return;
+
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
 
     await CategoryPortionSizeMethod.destroy({
@@ -183,7 +172,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     });
 
     if (!inputs.length)
-      return [];
+      return;
 
     const newMethods: CategoryPortionSizeMethod[] = [];
 
@@ -204,8 +193,6 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
       );
       newMethods.push(newMethod);
     }
-
-    return [...methods, ...newMethods];
   };
 
   const createCategory = async (localeId: string, input: CategoryInput) => {
@@ -223,10 +210,23 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
         { transaction },
       );
 
+      const promises: Promise<any>[] = [
+        updatePortionSizeMethods(category.id, [], input.portionSizeMethods, { transaction }),
+      ];
+
       if (input.parentCategories?.length) {
         const categories = input.parentCategories.map(({ id }) => id);
-        await category.$set('parentCategories', categories, { transaction });
+        promises.push(category.$add('parentCategories', categories, { transaction }));
       }
+
+      if (input.attributes) {
+        const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+        if (Object.values(attributesInput).some(item => item !== null)) {
+          promises.push(CategoryAttribute.create({ categoryId: category.id, ...attributesInput }, { transaction }));
+        }
+      }
+
+      await Promise.all(promises);
 
       return category;
     });
@@ -349,6 +349,14 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     return (await getCategory({ id: category.id, localeId: category.localeId }))!;
   };
 
+  const deleteCategory = async (localeId: string, categoryId: string) => {
+    const category = await Category.findOne({ attributes: ['id', 'code'], where: { id: categoryId, localeId } });
+    if (!category)
+      throw new NotFoundError();
+
+    await category.destroy();
+  };
+
   return {
     browseCategories,
     browseMainCategories,
@@ -359,6 +367,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     getCategoryContents,
     getCategory,
     updateCategory,
+    deleteCategory,
   };
 }
 

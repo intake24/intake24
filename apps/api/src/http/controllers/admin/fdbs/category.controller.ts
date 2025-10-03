@@ -11,7 +11,7 @@ import type {
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
-import { Category, SystemLocale } from '@intake24/db';
+import { SystemLocale } from '@intake24/db';
 
 function adminCategoryController({
   adminCategoryService,
@@ -113,16 +113,9 @@ function adminCategoryController({
       where: { id: localeId },
     });
 
-    const category = await Category.findOne({
-      attributes: ['id'],
-      where: { id: categoryId, localeId: code },
-    });
-    if (!category)
-      throw new NotFoundError();
+    await adminCategoryService.deleteCategory(code, categoryId);
 
-    await category.destroy();
-
-    res.json();
+    res.status(204).json();
   };
 
   const root = async (

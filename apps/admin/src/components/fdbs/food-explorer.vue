@@ -2,8 +2,8 @@
   <div>
     <div class="d-flex flex-row justify-space-between">
       <div class="d-flex ga-2">
-        <food-search v-bind="{ localeId }" />
-        <add-food-dialog v-if="!readonly" v-bind="{ localeId }" />
+        <food-search v-bind="{ id, code }" />
+        <add-food-dialog v-if="!readonly" v-bind="{ id, code }" />
       </div>
       <v-menu :close-on-content-click="false" location="bottom left">
         <template #activator="{ props }">
@@ -35,9 +35,7 @@
       transition
     >
       <template #prepend="{ item }">
-        <v-icon v-if="item.type === 'foods'" start>
-          $foods
-        </v-icon>
+        <v-icon v-if="item.type === 'foods'" icon="$foods" start />
       </template>
       <template #title="{ item }">
         <a @click="openItem(item)">{{ item[itemText] }}</a>
@@ -69,7 +67,11 @@ export type TreeItem = ((CategoryListEntry & { children: TreeItem[] }) | FoodLis
 defineOptions({ name: 'FoodExplorer' });
 
 const props = defineProps({
-  localeId: {
+  id: {
+    type: String,
+    required: true,
+  },
+  code: {
     type: String,
     required: true,
   },
@@ -95,7 +97,7 @@ const itemText = computed(() => (showGlobalName.value ? 'englishName' : 'name'))
 
 async function fetchRootCategories() {
   const { data } = await http.get<RootCategoriesResponse>(
-    `admin/fdbs/${props.localeId}/categories/root`,
+    `admin/fdbs/${props.id}/categories/root`,
   );
 
   const noCategory: TreeItem = {
@@ -103,7 +105,7 @@ async function fetchRootCategories() {
     type: 'categories',
     id: 'no-category',
     code: 'no-category',
-    localeId: props.localeId,
+    localeId: props.id,
     name: i18n.t('fdbs.categories.noCategory'),
     englishName: i18n.t('fdbs.categories.noCategory'),
     hidden: false,
@@ -125,7 +127,7 @@ async function fetchCategoryContent(category: TreeItem) {
   const {
     data: { categories, foods },
   } = await http.get<CategoryContentsResponse>(
-    `admin/fdbs/${props.localeId}/categories/${category.id}/contents`,
+    `admin/fdbs/${props.id}/categories/${category.id}/contents`,
   );
 
   if (!('children' in category))
@@ -155,7 +157,7 @@ async function openItem(item: TreeItem) {
 
   await router.push({
     name: `fdbs-${item.type}`,
-    params: { id: props.localeId, entryId: item.id },
+    params: { id: props.id, entryId: item.id },
   });
 }
 
@@ -188,7 +190,7 @@ async function findActiveInTree(entryId: string, type: string) {
     return;
 
   const { data } = await http.get<{ categories: string[] }>(
-    `admin/fdbs/${props.localeId}/${type}/${entryId}/categories`,
+    `admin/fdbs/${props.id}/${type}/${entryId}/categories`,
   );
 
   activatedEntryId.value = entryId;

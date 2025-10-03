@@ -151,7 +151,7 @@ import type {
   PersonalAccessTokensResponse,
 } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui/components';
+import { ConfirmDialog } from '@intake24/ui';
 import { useClipboard } from '@intake24/ui/composables';
 
 export default defineComponent({

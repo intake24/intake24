@@ -10,35 +10,24 @@
           {{ $t('fdbs.nutrients.title') }}
         </v-toolbar-title>
       </v-toolbar>
-      <v-card-text class="pa-6">
-        <v-row>
-          <v-col cols="12">
-            <v-select
-              v-model="selectedTableId"
-              hide-details="auto"
-              item-title="description"
-              item-value="id"
-              :items="nutrientTables"
-              :label="$t('nutrient-tables._')"
-              name="selectedTableId"
-              variant="outlined"
-              @update:model-value="fetch"
-            />
-          </v-col>
-          <v-col cols="12">
-            <v-text-field
-              v-model="search"
-              class="mb-4"
-              clearable
-              hide-details="auto"
-              :label="$t('common.search._')"
-              :loading="loading"
-              prepend-inner-icon="$search"
-              variant="outlined"
-              @click:clear="clear"
-            />
-          </v-col>
-        </v-row>
+      <v-card-text class="pa-6 d-flex flex-column gr-4">
+        <v-select
+          v-model="selectedTableId"
+          item-title="description"
+          item-value="id"
+          :items="nutrientTables"
+          :label="$t('nutrient-tables._')"
+          name="selectedTableId"
+          @update:model-value="fetch"
+        />
+        <v-text-field
+          v-model="search"
+          clearable
+          :label="$t('common.search._')"
+          :loading="loading"
+          prepend-inner-icon="$search"
+          @click:clear="clear"
+        />
         <v-alert v-if="isAlreadyIncluded" type="error">
           {{ $t('fdbs.nutrients.alreadyIncluded', { id: selected.at(0)?.id }) }}
         </v-alert>
@@ -49,7 +38,7 @@
                 <v-list-item-action class="mr-2">
                   <v-checkbox-btn :model-value="isSelected" @update:model-value="select" />
                 </v-list-item-action>
-                <v-icon>fas fa-list</v-icon>
+                <v-icon icon="fas fa-list" />
               </template>
               <v-list-item-title>
                 {{ item.nutrientTableRecordId }} | {{ item.name }}
@@ -86,7 +75,6 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
-
 import { useFetchList } from '@intake24/admin/composables';
 import type {
   FoodDatabaseRefs,

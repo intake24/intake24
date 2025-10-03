@@ -1,6 +1,5 @@
 import type { Request } from 'express';
 import { checkSchema } from 'express-validator';
-
 import {
   customTypeErrorMessage,
   typeErrorMessage,
@@ -12,12 +11,19 @@ import { Category, SystemLocale } from '@intake24/db';
 
 export default validate(
   checkSchema({
-    name: {
+    englishName: {
       in: ['body'],
       errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 128 }),
       isString: true,
       isEmpty: { negated: true },
       isLength: { options: { min: 1, max: 128 } },
+    },
+    name: {
+      in: ['body'],
+      errorMessage: typeErrorMessage('string.minMax', { min: 1, max: 256 }),
+      isString: true,
+      isEmpty: { negated: true },
+      isLength: { options: { min: 1, max: 256 } },
     },
     code: {
       in: ['body'],

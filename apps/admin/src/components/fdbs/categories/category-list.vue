@@ -12,7 +12,7 @@
         :except="items"
         item-id="code"
         :label="$t('fdbs.categories._')"
-        :query="{ localeId }"
+        :query="{ localeId: code }"
         resource="categories"
         return-object
         @update:model-value="add"
@@ -71,6 +71,12 @@ import { ConfirmDialog } from '@intake24/ui';
 import { ErrorList } from '../../forms';
 
 const props = defineProps({
+  id: {
+    type: String,
+  },
+  code: {
+    type: String,
+  },
   border: {
     type: [Boolean, String, Number],
   },
@@ -80,9 +86,6 @@ const props = defineProps({
   flat: {
     type: Boolean,
     default: true,
-  },
-  localeId: {
-    type: String,
   },
   tile: {
     type: Boolean,

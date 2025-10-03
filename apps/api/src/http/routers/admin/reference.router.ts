@@ -49,13 +49,13 @@ export function reference() {
       handler: async ({ query }) => {
         const { localeId, ...rest } = query;
 
-        const categories: Pagination<{ code: string; name: string }> = await Category.paginate({
+        const categories: Pagination<{ id: string; code: string; name: string }> = await Category.paginate({
           query: rest,
           where: localeId ? { localeId } : {},
-          attributes: ['code', 'name'],
+          attributes: localeId ? ['id', 'code', 'name'] : ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],
-          group: ['code', 'name'],
+          group: localeId ? undefined : ['code', 'name'],
         });
 
         return { status: 200, body: categories };

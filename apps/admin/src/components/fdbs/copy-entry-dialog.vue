@@ -18,40 +18,36 @@
         </v-toolbar-title>
       </v-toolbar>
       <v-form @keydown="clearError" @submit.prevent="confirm">
-        <v-card-text class="pa-6">
-          <v-row>
-            <v-col cols="12">
-              <select-resource
-                v-model="data.localeId"
-                :error-messages="errors.get('localeId')"
-                item-name="englishName"
-                :label="$t('locales._')"
-                name="localeId"
-                resource="locales"
-                @update:model-value="errors.clear('localeId')"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="data.code"
-                :error-messages="errors.get('code')"
-                hide-details="auto"
-                :label="$t(`fdbs.${type}.code`)"
-                name="code"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="data.name"
-                :error-messages="errors.get('name')"
-                hide-details="auto"
-                :label="$t(`fdbs.${type}.name`)"
-                name="name"
-                variant="outlined"
-              />
-            </v-col>
-          </v-row>
+        <v-card-text class="pa-6 d-flex flex-column gr-4">
+          <select-resource
+            v-model="data.localeId"
+            :error-messages="errors.get('localeId')"
+            item-name="englishName"
+            :label="$t('locales._')"
+            name="localeId"
+            resource="locales"
+            @update:model-value="errors.clear('localeId')"
+          />
+          <v-text-field
+            v-model="data.code"
+            :error-messages="errors.get('code')"
+            :label="$t(`fdbs.${type}.code`)"
+            name="code"
+          />
+          <v-text-field
+            v-model="data.englishName"
+            :error-messages="errors.get('englishName')"
+            :label="$t(`fdbs.${type}.englishName`)"
+            name="englishName"
+          />
+          <v-text-field
+            v-model="data.name"
+            :error-messages="errors.get('name')"
+            hide-details="auto"
+            :label="$t(`fdbs.${type}.name`)"
+            name="name"
+            variant="outlined"
+          />
         </v-card-text>
       </v-form>
       <v-card-actions class="pb-4">
@@ -109,7 +105,12 @@ export default defineComponent({
     const router = useRouter();
 
     const { clearError, data, errors, post } = useForm<CopyEntityForm>({
-      data: { localeId: props.localeId, code: '', name: '' },
+      data: {
+        localeId: props.localeId,
+        code: '',
+        englishName: '',
+        name: '',
+      },
     });
 
     const dialog = ref(false);

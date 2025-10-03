@@ -6,31 +6,24 @@
           <v-text-field
             v-model="data.code"
             :error-messages="errors.get('code')"
-            hide-details="auto"
             :label="$t('fdbs.categories.code')"
             name="code"
-            variant="outlined"
           />
           <v-text-field
             v-model="data.englishName"
             :error-messages="errors.get('englishName')"
-            hide-details="auto"
             :label="$t('fdbs.categories.englishName')"
             name="englishName"
-            variant="outlined"
           />
           <v-text-field
             v-model="data.name"
             :error-messages="errors.get('name')"
-            hide-details="auto"
             :label="$t('fdbs.categories.name')"
             name="name"
-            variant="outlined"
           />
           <v-switch
             v-model="data.hidden"
             :error-messages="errors.get('hidden')"
-            hide-details="auto"
             :label="$t('fdbs.categories.hidden')"
             name="hidden"
             @update:model-value="errors.clear('hidden')"
@@ -40,11 +33,9 @@
             chips
             :closable-chips="!readonly"
             :error-messages="errors.get('tags')"
-            hide-details="auto"
             :label="$t('fdbs.categories.tags')"
             multiple
             name="tags"
-            variant="outlined"
           />
           <language-selector
             v-model="data.altNames"
@@ -57,31 +48,26 @@
                 <v-text-field
                   v-model="data.altNames[lang][idx]"
                   density="compact"
-                  hide-details="auto"
                   :label="$t('fdbs.categories.altNames')"
                   :name="`altNames.${lang}.${idx}`"
-                  variant="outlined"
                 />
               </div>
             </template>
           </language-selector>
           <attribute-list
             v-model="data.attributes"
-            class="mb-6"
             :errors
             :readonly
           />
           <category-list
             v-model="data.parentCategories"
             border
-            class="mb-6"
+            :code
             :errors
-            :locale-id="id"
             :readonly
           />
           <portion-size-method-list
             v-model="data.portionSizeMethods"
-            class="mb-6"
             :errors
             :locale-id="id"
             :readonly
@@ -93,6 +79,14 @@
           </v-btn>
           <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
           <v-spacer />
+          <confirm-dialog
+            color="error"
+            icon-left="$delete"
+            :label="$t('common.action.delete')"
+            @confirm="remove"
+          >
+            {{ $t('common.action.confirm.delete', { name: entry?.name }) }}
+          </confirm-dialog>
         </div>
       </v-form>
     </div>
@@ -106,7 +100,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
   AttributeList,
@@ -123,6 +117,7 @@ import type {
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
+import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
@@ -135,10 +130,15 @@ export default defineComponent({
     CopyEntryDialog,
     LanguageSelector,
     PortionSizeMethodList,
+    ConfirmDialog,
   },
 
   props: {
     id: {
+      type: String,
+      required: true,
+    },
+    code: {
       type: String,
       required: true,
     },
@@ -154,9 +154,8 @@ export default defineComponent({
 
   setup(props) {
     const http = useHttp();
+    const router = useRouter();
     const { i18n } = useI18n();
-
-    const { entry: localeEntry } = useEntry<LocaleEntry>(props);
 
     const loading = ref(false);
     const type = 'categories' as const;
@@ -195,9 +194,7 @@ export default defineComponent({
       entry.value = null;
 
       try {
-        const { data } = await http.get<CategoryEntry>(
-          `admin/fdbs/${props.id}/${type}/${entryId}`,
-        );
+        const { data } = await http.get<CategoryEntry>(`admin/fdbs/${props.id}/${type}/${entryId}`);
 
         toForm(data);
         entry.value = data;
@@ -218,6 +215,20 @@ export default defineComponent({
       useMessages().success(i18n.t('common.msg.updated', { name: name ?? englishName }));
     };
 
+    const remove = async () => {
+      await http.delete(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
+
+      useMessages().success(i18n.t('common.msg.deleted', { name: entry.value?.name }));
+
+      const parentEntryId = entry.value?.parentCategories?.at(0)?.id;
+      if (parentEntryId) {
+        await router.push({ name: `fdbs-categories`, params: { id: props.id, entryId: parentEntryId } });
+      }
+      else {
+        await router.push({ name: 'fdbs-food-list', params: { id: props.id } });
+      }
+    };
+
     onMounted(async () => {
       await fetchCategoryOrFood(props.id, props.entryId);
     });
@@ -230,7 +241,6 @@ export default defineComponent({
     });
 
     return {
-      localeEntry,
       entry,
       clearError,
       data,
@@ -240,6 +250,7 @@ export default defineComponent({
       routeLeave,
       toForm,
       isEntryLoaded,
+      remove,
       submit,
       type,
     };

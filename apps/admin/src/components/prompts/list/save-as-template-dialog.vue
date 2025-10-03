@@ -17,34 +17,26 @@
           {{ $t('survey-schemes.prompts.templates.saveAs.title') }}
         </v-toolbar-title>
       </v-toolbar>
-      <v-card-text class="pa-6">
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              v-model="data.prompt.id"
-              disabled
-              hide-details="auto"
-              :label="$t('survey-schemes.prompts.internal.id._')"
-              :messages="$t('survey-schemes.prompts.internal.id.hint')"
-              name="id"
-              variant="outlined"
-            />
-          </v-col>
-          <v-col cols="12">
-            <v-text-field
-              v-model="data.prompt.name"
-              disabled
-              hide-details="auto"
-              :label="$t('survey-schemes.prompts.internal.name._')"
-              :messages="$t('survey-schemes.prompts.internal.name.hint')"
-              name="name"
-              variant="outlined"
-            />
-          </v-col>
-          <v-col cols="12">
-            <v-checkbox-btn v-model="redirect" :label="$t('common.redirect')" />
-          </v-col>
-        </v-row>
+      <v-card-text class="pa-6 d-flex flex-column gr-4">
+        <v-text-field
+          v-model="data.prompt.id"
+          disabled
+          hide-details="auto"
+          :label="$t('survey-schemes.prompts.internal.id._')"
+          :messages="$t('survey-schemes.prompts.internal.id.hint')"
+          name="id"
+          variant="outlined"
+        />
+        <v-text-field
+          v-model="data.prompt.name"
+          disabled
+          hide-details="auto"
+          :label="$t('survey-schemes.prompts.internal.name._')"
+          :messages="$t('survey-schemes.prompts.internal.name.hint')"
+          name="name"
+          variant="outlined"
+        />
+        <v-checkbox-btn v-model="redirect" :label="$t('common.redirect')" />
       </v-card-text>
       <error-list :errors="nonInputErrors" tag="v-card-text" />
       <v-card-actions class="pb-4">

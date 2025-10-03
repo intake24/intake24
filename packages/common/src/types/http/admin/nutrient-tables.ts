@@ -98,7 +98,7 @@ export type NutrientTableRecordRequest = z.infer<typeof nutrientTableRecordReque
 export const nutrientTableRecordAttributes = z.object({
   id: z.string(),
   name: z.string(),
-  localName: z.string(),
+  localName: z.string().nullable(),
   nutrientTableId: z.string(),
   nutrientTableRecordId: z.string(),
 });

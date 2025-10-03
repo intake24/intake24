@@ -58,13 +58,16 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     methods: FoodPortionSizeMethod[],
     inputs: FoodInput['portionSizeMethods'],
     { transaction }: { transaction: Transaction },
-  ) => {
+  ): Promise<void> => {
+    if (!inputs)
+      return;
+
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
 
     await FoodPortionSizeMethod.destroy({ where: { foodId, id: { [Op.notIn]: ids } }, transaction });
 
     if (!inputs.length)
-      return [];
+      return;
 
     const newMethods: FoodPortionSizeMethod[] = [];
 
@@ -82,8 +85,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       const newMethod = await FoodPortionSizeMethod.create({ ...rest, foodId }, { transaction });
       newMethods.push(newMethod);
     }
-
-    return [...methods, ...newMethods];
   };
 
   const updateAssociatedFoods = async (
@@ -91,13 +92,16 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     foods: AssociatedFood[],
     inputs: FoodInput['associatedFoods'],
     { transaction }: { transaction: Transaction },
-  ) => {
+  ): Promise<void> => {
+    if (!inputs)
+      return;
+
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
 
     await AssociatedFood.destroy({ where: { foodId, id: { [Op.notIn]: ids } }, transaction });
 
     if (!inputs.length)
-      return [];
+      return;
 
     const newFoods: AssociatedFood[] = [];
 
@@ -115,8 +119,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       const newFood = await AssociatedFood.create({ ...rest, foodId }, { transaction });
       newFoods.push(newFood);
     }
-
-    return [...foods, ...newFoods];
   };
 
   const createFood = async (localeId: string, input: FoodInput) => {
@@ -134,10 +136,30 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
         },
         { transaction },
       );
+
+      const promises: Promise<any>[] = [
+        updatePortionSizeMethods(food.id, [], input.portionSizeMethods, { transaction }),
+        updateAssociatedFoods(food.id, [], input.associatedFoods, { transaction }),
+      ];
+
       if (input.parentCategories?.length) {
         const categories = input.parentCategories.map(({ id }) => id);
-        await food.$add('parentCategories', categories, { transaction });
+        promises.push(food.$add('parentCategories', categories, { transaction }));
       }
+
+      if (input.attributes) {
+        const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+        if (Object.values(attributesInput).some(item => item !== null)) {
+          promises.push(FoodAttribute.create({ foodId: food.id, ...attributesInput }, { transaction }));
+        }
+      }
+
+      if (input.nutrientRecords?.length) {
+        const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
+        promises.push(food.$set('nutrientRecords', nutrientRecords, { transaction }));
+      }
+
+      await Promise.all(promises);
 
       return food;
     });
@@ -166,15 +188,12 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     ];
 
     await db.foods.transaction(async (transaction) => {
-      const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
-
       const promises: Promise<any>[] = [
         food.update({
           ...pick(input, ['code', 'englishName', 'name', 'altNames', 'tags']),
           simpleName: toSimpleName(input.name),
           version: randomUUID(),
         }, { transaction }),
-        food.$set('nutrientRecords', nutrientRecords, { transaction }),
         updatePortionSizeMethods(foodId, portionSizeMethods, input.portionSizeMethods, { transaction }),
         updateAssociatedFoods(foodId, associatedFoods, input.associatedFoods, { transaction }),
       ];
@@ -197,6 +216,11 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
               : FoodAttribute.create({ foodId, ...attributesInput }, { transaction }),
           );
         }
+      }
+
+      if (input.nutrientRecords) {
+        const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
+        promises.push(food.$set('nutrientRecords', nutrientRecords, { transaction }));
       }
 
       await Promise.all(promises);

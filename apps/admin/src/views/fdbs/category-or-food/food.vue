@@ -6,37 +6,29 @@
           <v-text-field
             v-model="data.code"
             :error-messages="errors.get('code')"
-            hide-details="auto"
             :label="$t('fdbs.foods.code')"
             name="code"
-            variant="outlined"
           />
           <v-text-field
             v-model="data.englishName"
             :error-messages="errors.get('englishName')"
-            hide-details="auto"
             :label="$t('fdbs.foods.englishName')"
             name="englishName"
-            variant="outlined"
           />
           <v-text-field
             v-model="data.name"
             :error-messages="errors.get('name')"
-            hide-details="auto"
             :label="$t('fdbs.foods.name')"
             name="name"
-            variant="outlined"
           />
           <v-combobox
             v-model="data.tags"
             chips
             :closable-chips="!readonly"
             :error-messages="errors.get('tags')"
-            hide-details="auto"
             :label="$t('fdbs.foods.tags')"
             multiple
             name="tags"
-            variant="outlined"
           />
           <language-selector
             v-model="data.altNames"
@@ -49,38 +41,32 @@
                 <v-text-field
                   v-model="data.altNames[lang][idx]"
                   density="compact"
-                  hide-details="auto"
                   :label="$t('fdbs.foods.altNames')"
                   :name="`altNames.${lang}.${idx}`"
-                  variant="outlined"
                 />
               </div>
             </template>
           </language-selector>
           <attribute-list
             v-model="data.attributes"
-            class="mb-6"
             :errors
             :readonly
           />
           <category-list
             v-model="data.parentCategories"
             border
-            class="mb-6"
+            :code
             :errors
-            :locale-id="id"
             :readonly
           />
           <nutrient-list
             v-model="data.nutrientRecords"
-            class="mb-6"
             :errors
             :nutrient-tables="refs?.nutrientTables ?? []"
             :readonly
           />
           <portion-size-method-list
             v-model="data.portionSizeMethods"
-            class="mb-6"
             :errors
             :readonly
           />
@@ -89,7 +75,7 @@
             class="mb-6"
             :errors
             :food-id="entryId"
-            :locale-id="localeEntry.code"
+            :locale-id="code"
             :readonly
           />
         </div>
@@ -140,7 +126,7 @@ import type {
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui/components';
+import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
@@ -163,6 +149,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    code: {
+      type: String,
+      required: true,
+    },
     entryId: {
       type: String,
       required: true,
@@ -177,8 +167,6 @@ export default defineComponent({
     const http = useHttp();
     const router = useRouter();
     const { i18n } = useI18n();
-
-    const { entry: localeEntry } = useEntry<LocaleEntry>(props);
 
     const loading = ref(false);
     const type = 'foods' as const;
@@ -240,9 +228,7 @@ export default defineComponent({
     const remove = async () => {
       await http.delete(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
 
-      useMessages().success(
-        i18n.t('common.msg.deleted', { name: entry.value?.name }),
-      );
+      useMessages().success(i18n.t('common.msg.deleted', { name: entry.value?.name }));
 
       const parentEntryId = entry.value?.parentCategories?.at(0)?.id;
       if (parentEntryId) {
@@ -265,7 +251,6 @@ export default defineComponent({
     });
 
     return {
-      localeEntry,
       entry,
       refs,
       clearError,

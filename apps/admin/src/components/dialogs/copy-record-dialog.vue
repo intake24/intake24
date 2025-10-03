@@ -16,22 +16,15 @@
           {{ $t(`${resource}.copy.title`) }}
         </v-toolbar-title>
       </v-toolbar>
-      <v-card-text class="pa-6">
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              v-model="data.name"
-              :error-messages="errors.get('name')"
-              hide-details="auto"
-              :label="$t(`${resource}.copy.name`)"
-              name="name"
-              variant="outlined"
-            />
-          </v-col>
-          <!-- <v-col cols="12">
-            <v-checkbox-btn v-model="redirect" :label="$t('common.redirect')"></v-checkbox-btn>
-          </v-col> -->
-        </v-row>
+      <v-card-text class="pa-6 d-flex flex-column gr-4">
+        <v-text-field
+          v-model="data.name"
+          :error-messages="errors.get('name')"
+          hide-details="auto"
+          :label="$t(`${resource}.copy.name`)"
+          name="name"
+          variant="outlined"
+        />
       </v-card-text>
       <v-card-actions class="pb-4">
         <v-btn class="font-weight-bold" color="error" variant="text" @click.stop="close">

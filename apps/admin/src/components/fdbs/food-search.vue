@@ -5,31 +5,29 @@
         <v-icon icon="$search" start /> {{ $t('fdbs.search._') }}
       </v-btn>
     </template>
-    <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
+    <v-card :loading :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('fdbs.search.title') }}
         </v-toolbar-title>
       </v-toolbar>
-      <v-card-text class="pa-6">
+      <v-card-text class="pa-6 d-flex flex-column gr-4">
         <v-text-field
           ref="searchRef"
           v-model="search"
-          class="mb-4"
           clearable
-          hide-details="auto"
           :label="$t('common.search._')"
           :loading="loading"
           prepend-inner-icon="$search"
-          variant="outlined"
           @click:clear="clear"
         />
         <v-data-table
-          :headers="headers"
+          :headers
           item-key="_id"
           :items="items"
           :items-per-page="25"
+          :loading
           @click:row="selectItem"
         >
           <template #[`item.resource`]="{ item }">
@@ -64,7 +62,11 @@ export type FoodSearchItem = Category | Food;
 defineOptions({ name: 'FoodExplorerSearch' });
 
 const props = defineProps({
-  localeId: {
+  id: {
+    type: String,
+    required: true,
+  },
+  code: {
     type: String,
     required: true,
   },
@@ -102,7 +104,7 @@ function close() {
 async function fetchCategories() {
   const {
     data: { data },
-  } = await http.get<CategoriesResponse>(`admin/fdbs/${props.localeId}/categories`, {
+  } = await http.get<CategoriesResponse>(`admin/fdbs/${props.id}/categories`, {
     params: { limit: 25, search: search.value },
   });
 
@@ -114,7 +116,7 @@ async function fetchCategories() {
 async function fetchFoods() {
   const {
     data: { data },
-  } = await http.get<FoodsResponse>(`admin/fdbs/${props.localeId}/foods`, {
+  } = await http.get<FoodsResponse>(`admin/fdbs/${props.id}/foods`, {
     params: { limit: 25, search: search.value },
   });
 
@@ -133,7 +135,7 @@ async function fetchItems() {
     items.value = [
       ...categories.map(cat => ({ ...cat, resource: 'categories', _id: `cat:${cat.id}` })),
       ...foods.map(food => ({ ...food, resource: 'foods', _id: `food:${food.id}` })),
-    ].sort((a, b) => a.name.localeCompare(b.name));
+    ].sort((a, b) => (a.name ?? a.englishName).localeCompare(b.name ?? b.englishName));
   }
   finally {
     loading.value = false;
@@ -151,7 +153,7 @@ async function selectItem(event: PointerEvent, ops: { item: FoodSearchItem }) {
 
   await router.push({
     name: `fdbs-${resource}`,
-    params: { id: props.localeId, entryId },
+    params: { id: props.id, entryId },
   });
 }
 
