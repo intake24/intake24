@@ -300,6 +300,25 @@ export class SearchPatternMatcher {
 
       // If user typed in hiragana, convert to katakana and search
       if (hasHiragana) {
+        // Preserve wildcard matches for the original hiragana input to support mixed-script documents
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `*${query}*`,
+              boost: 35,
+            },
+          },
+        });
+
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `*${query}`,
+              boost: 30,
+            },
+          },
+        });
+
         // Add wildcard search for the katakana version (most reliable)
         allClauses.push({
           wildcard: {
