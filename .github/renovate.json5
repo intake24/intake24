@@ -1,39 +1,53 @@
 {
-  "extends": ["config:base", "schedule:earlyMondays"],
-  "labels": ["dependencies"],
-  "pin": false,
-  "packageRules": [
-    // Ignore major
-    {
-      "matchPackageNames": [
-        // Breaking changes
-        "execa", // ESM-only since 6.x.x
-        "formdata-node", // ESM-only since 5.x.x
-        "nanoid", // ESM-only since 4.x.x
-        "p-limit", // ESM-only since 4.x.x
-        "p-queue" // ESM-only since 7.x.x
-      ],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    },
-    // Typescript (major/minor)
-    {
-      "matchPackageNames": ["typescript"],
-      "matchUpdateTypes": ["major", "minor"],
-      "groupName": "typescript",
-      "groupSlug": "typescript"
-    },
-    // Rest of non-major dependencies
-    {
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
-    }
+  extends: [
+    'config:recommended',
+    'schedule:earlyMondays',
   ],
-  "rangeStrategy": "bump",
-  "ignoreDeps": [
-    // Manual
-    "node"
-  ]
+  labels: [
+    'dependencies',
+  ],
+  pin: {
+    enabled: false,
+  },
+  packageRules: [
+    {
+      matchPackageNames: [
+        'execa',
+        'formdata-node',
+        'nanoid',
+        'p-limit',
+        'p-queue',
+      ],
+      matchUpdateTypes: [
+        'major',
+      ],
+      enabled: false,
+    },
+    {
+      matchPackageNames: [
+        'typescript',
+      ],
+      matchUpdateTypes: [
+        'major',
+        'minor',
+      ],
+      groupName: 'typescript',
+      groupSlug: 'typescript',
+    },
+    {
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      groupName: 'all non-major dependencies',
+      groupSlug: 'all-minor-patch',
+      matchPackageNames: [
+        '*',
+      ],
+    },
+  ],
+  rangeStrategy: 'bump',
+  ignoreDeps: [
+    'node',
+  ],
 }
