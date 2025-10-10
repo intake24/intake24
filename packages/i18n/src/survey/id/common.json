@@ -2,23 +2,26 @@
   "_": "Intake24",
   "home": "Beranda",
   "dashboard": "Dasbor",
-  "navigation": "Navigasi",
   "welcome": {
     "_": "Selamat datang di Intake24",
-    "subtitle": "Intake24 adalah sistem penilaian diet terkomputer sumber terbuka berdasarkan metode multiple-pass untuk pencatatan recall 24 jam."
+    "subtitle": "Intake24 adalah sistem pengingat makanan terkomputerisasi secara mandiri berdasarkan pengingatan 24 jam dengan berbagai tahap."
   },
   "login": {
     "_": "Masuk",
-    "start": "Mulai",
     "subtitle": "Masuk dengan nama pengguna dan kata sandi Anda",
-    "captcha": "Selesaikan tantangan captcha",
-    "back": "Kembali ke halaman masuk",
+    "back": "Kembali ke masuk",
     "err": {
+      "invalidCredentials": "Nama pengguna & kata sandi yang diberikan tidak valid.",
+      "invalidToken": "Token akses tidak valid.",
+      "invalidSurvey": "Survei ini ({surveyId}) tidak terlihat sebagai URL masuk survei yang valid.",
+      "checkCredentials": "Periksa kredensial masuk yang Anda berikan.",
       "captcha": "Respons captcha tidak valid.",
       "credentials": "Nama pengguna atau kata sandi yang dimasukkan tidak valid.",
       "token": "Token akses yang dimasukkan tidak valid.",
       "survey": "Survei ({surveyId}) tidak terlihat seperti URL masuk survei yang valid."
-    }
+    },
+    "start": "Mulai",
+    "captcha": "Selesaikan tantangan captcha"
   },
   "logout": {
     "_": "Keluar",
@@ -30,22 +33,21 @@
   "emailConfirm": "Konfirmasi email",
   "password": "Kata sandi",
   "phone": "Telepon",
-  "message": "Pesan",
   "continue": "Lanjutkan",
   "help": {
     "_": "Bantuan",
     "title": "Minta bantuan",
-    "text": "Lengkapi formulir di bawah ini dan tim dukungan kami akan menghubungi Anda secepatnya.",
-    "sent": "Permintaan bantuan Anda telah dikirim."
+    "sent": "Permintaan bantuan Anda telah dikirim.",
+    "text": "Lengkapi formulir di bawah ini dan tim dukungan kami akan menghubungi Anda secepatnya."
   },
   "app": {
     "_": "Aplikasi",
-    "info": "Informasi aplikasi",
+    "info": "Informasi Aplikasi",
     "build": "Versi"
   },
   "clipboard": {
-    "_": "Salin ke papan klip",
-    "copied": "Data disalin ke papan klip"
+    "_": "Salin ke clipboard",
+    "copied": "Data disalin ke clipboard"
   },
   "sw": {
     "check": "Pembaruan konten tersedia",
@@ -61,22 +63,25 @@
       "delete": "Apakah Anda ingin menghapus {name}?"
     },
     "ok": "OK",
-    "reload": "Muat ulang",
+    "reload": "Muat Ulang",
     "remove": "Hapus",
-    "reset": "Atur ulang",
+    "reset": "Reset",
     "start": "Mulai",
     "submit": "Kirim",
     "yes": "Ya",
     "no": "Tidak"
   },
   "not": {
-    "provided": "Tidak tersedia",
+    "provided": "Tidak diberikan",
     "selected": "Tidak dipilih"
   },
   "errors": {
     "500": "Terjadi kesalahan :(",
+    "expansionIncomplete": "Lengkapi semua bagian yang ditandai dengan !",
     "retry": "Coba lagi"
   },
+  "navigation": "Navigasi",
+  "message": "Pesan",
   "validation": {
     "tooLong": "Teks yang dimasukkan terlalu panjang (maksimal {max} karakter)."
   },

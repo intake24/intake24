@@ -2,17 +2,20 @@
   "_": "Profil",
   "info": "Informasi",
   "settings": "Pengaturan",
-  "provider": "Penyedia",
-  "providerId": "ID Penyedia",
+  "name": "Nama",
+  "email": "Email",
+  "phone": "Telepon",
+  "provider": "Pemberi Layanan",
+  "providerId": "ID Pemberi Layanan",
   "languages": {
     "_": "Bahasa",
     "title": "Bahasa",
-    "ar": "Bahasa Arab",
-    "de": "Bahasa Jerman",
-    "dk": "Bahasa Denmark",
-    "en": "Bahasa Inggris",
-    "es": "Bahasa Spanyol",
-    "fr": "Bahasa Prancis",
-    "pt": "Bahasa Portugis"
+    "ar": "Arab",
+    "de": "Jerman",
+    "dk": "Dansk",
+    "en": "Inggris",
+    "es": "Spanyol",
+    "fr": "Prancis",
+    "pt": "Portugis"
   }
 }

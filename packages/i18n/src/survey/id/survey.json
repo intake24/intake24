@@ -1,16 +1,37 @@
 {
   "_": "Survei",
-  "welcome": {
-    "_": "Selamat datang di Intake24",
-    "subtitle": "Intake24 digunakan dalam penelitian untuk mengumpulkan informasi mengenai makanan dan minuman yang dikonsumsi."
-  },
-  "info": "Informasi survei",
+  "info": "Informasi Survei",
   "states": {
     "_": "Status",
     "notStarted": "Pengumpulan data belum dimulai.",
     "active": "Pengumpulan data sedang berlangsung.",
-    "suspended": "Pengumpulan data dihentikan sementara.",
+    "suspended": "Pengumpulan data dihentikan.",
     "completed": "Pengumpulan data telah selesai."
+  },
+  "openAccess": {
+    "_": "Studi akses terbuka",
+    "none": {
+      "_": "Tidak ada studi akses terbuka",
+      "subtitle": "Saat ini tidak ada studi akses terbuka yang tersedia."
+    }
+  },
+  "generateUser": {
+    "400": "Tantangan captcha yang diberikan tidak valid.",
+    "403": "Survei {surveyId} tidak mengizinkan pembuatan Survei {surveyId} tidak dikenali.",
+    "404": "Survei {surveyId} belum diakui.",
+    "422": "Captcha yang diberikan tidak valid.",
+    "429": "Pengguna baru telah dibuat, coba lagi nanti.",
+    "_": "Buat akses",
+    "subtitle": "Ini adalah studi akses terbuka, Anda dapat memperoleh akses gratis.",
+    "noAccount": "Belum punya akun?",
+    "link": "tautan",
+    "info1": "Pilih 'Buat akses' untuk menghasilkan kredensial baru. Catat kredensial ini jika Anda ingin melanjutkan nanti.",
+    "info2": "Survei ini memerlukan waktu sekitar 15 menit.",
+    "info3": "Jika Anda menutup jendela peramban, Anda dapat kembali menggunakan {action}."
+  },
+  "welcome": {
+    "_": "Selamat datang di Intake24",
+    "subtitle": "Intake24 digunakan dalam penelitian untuk mengumpulkan informasi mengenai makanan dan minuman yang dikonsumsi."
   },
   "participant": {
     "_": "Apakah Anda peserta?",
@@ -22,18 +43,5 @@
     "_": "Apakah Anda pengunjung?",
     "subtitle": "Anda dapat mencoba survei demo kami!",
     "try": "Coba demo sekarang!"
-  },
-  "generateUser": {
-    "400": "Tantangan captcha yang diberikan tidak valid.",
-    "403": "Survei {surveyId} tidak mengizinkan pembuatan pengguna.",
-    "404": "Survei {surveyId} tidak ditemukan.",
-    "429": "Pengguna baru baru saja dibuat, coba lagi beberapa saat lagi.",
-    "_": "Buat akses",
-    "subtitle": "Ini adalah studi dengan akses terbuka, Anda dapat masuk secara gratis.",
-    "noAccount": "Belum punya akun?",
-    "link": "tautan",
-    "info1": "Pilih 'Buat akses' untuk menghasilkan kredensial baru. Catat kredensial ini jika Anda ingin melanjutkan nanti.",
-    "info2": "Survei ini memerlukan waktu sekitar 15 menit.",
-    "info3": "Jika Anda menutup jendela peramban, Anda dapat kembali menggunakan {action}."
   }
 }
