@@ -1,0 +1,295 @@
+{
+  "_": "Skema umpan balik",
+  "title": "Skema umpan balik",
+  "read": "Detail skema umpan balik",
+  "create": "Tambah skema umpan balik",
+  "edit": "Edit skema umpan balik",
+  "delete": "Hapus skema umpan balik",
+  "load": "Muat dari skema",
+  "none": "Tidak ada skema umpan balik ditemukan",
+
+  "types": {
+    "_": "Jenis umpan balik",
+    "title": "Jenis umpan balik",
+    "default": "Default",
+    "playful": "Santai"
+  },
+
+  "outputs": {
+    "_": "Output",
+    "title": "Output",
+    "print": "Cetak",
+    "email": "Email",
+    "download": "Unduh"
+  },
+
+  "physicalDataFields": {
+    "_": "Kolom data fisik",
+    "title": "Kolom data fisik",
+    "required": "Kolom {field} diperlukan untuk menghitung umpan balik.",
+    "notRequired": "Kolom {field} tidak dibutuhkan, dapat dihapus.",
+    "sex": "Jenis kelamin",
+    "weightKg": "Berat badan",
+    "heightCm": "Tinggi badan",
+    "physicalActivityLevelId": "Tingkat aktivitas fisik",
+    "birthdate": "Tanggal lahir",
+    "weightTarget": "Target berat badan"
+  },
+
+  "copy": {
+    "_": "Salin",
+    "title": "Salin skema umpan balik",
+    "name": "Nama skema umpan balik baru"
+  },
+
+  "preview": {
+    "_": "Pratinjau",
+    "title": "Pratinjau umpan balik"
+  },
+
+  "ranges": {
+    "_": "Rentang",
+    "start": "Mulai",
+    "end": "Akhir"
+  },
+
+  "age": {
+    "_": "Usia",
+    "range": "Interval rentang usia",
+    "start": "Awal rentang usia",
+    "end": "Akhir rentang usia"
+  },
+
+  "height": {
+    "_": "Tinggi"
+  },
+
+  "weight": {
+    "_": "Berat"
+  },
+
+  "sexes": {
+    "_": "Jenis kelamin",
+    "m": "Laki-laki",
+    "f": "Perempuan"
+  },
+
+  "sentiments": {
+    "_": "Sentimen",
+    "title": "Sentimen",
+    "add": "Tambah sentimen",
+    "remove": "Hapus sentimen",
+    "too_low": "Terlalu rendah",
+    "low": "Rendah",
+    "bit_low": "Agak rendah",
+    "neutral": "Netral",
+    "good": "Baik",
+    "excellent": "Sangat baik",
+    "high": "Tinggi",
+    "bit_high": "Agak tinggi",
+    "too_high": "Terlalu tinggi"
+  },
+
+  "characterSentimentTypes": {
+    "_": "Jenis sentimen karakter",
+    "title": "Jenis sentimen karakter",
+    "danger": "Bahaya",
+    "warning": "Peringatan",
+    "happy": "Bahagia",
+    "exciting": "Seru"
+  },
+
+  "nutrientRuleTypes": {
+    "_": "Jenis aturan nutrien",
+    "title": "Jenis aturan nutrien",
+    "energy_divided_by_bmr": "Energi dibagi BMR",
+    "percentage_of_energy": "Persentase energi",
+    "per_unit_of_weight": "Per satuan berat",
+    "range": "Rentang"
+  },
+
+  "colors": {
+    "_": "Warna",
+    "title": "Daftar warna",
+    "edit": "Edit warna",
+    "max": {
+      "_": "Jumlah warna",
+      "title": "Jumlah warna",
+      "required": "Nilai harus berupa bilangan bulat"
+    }
+  },
+
+  "physicalActivityLevels": {
+    "_": "Tingkat aktivitas fisik",
+    "title": "Tingkat aktivitas fisik"
+  },
+
+  "sections": {
+    "_": "Bagian",
+    "title": "Bagian",
+    "add": "Tambah bagian",
+    "edit": "Edit bagian",
+    "remove": "Hapus bagian",
+    "tabs": {
+      "general": "Umum",
+      "json": "JSON"
+    }
+  },
+
+  "custom": {
+    "_": "Bagian khusus",
+    "title": "Bagian khusus",
+    "header": "Judul",
+    "content": "Konten"
+  },
+
+  "top-foods": {
+    "_": "Makanan teratas",
+    "title": "Makanan teratas",
+    "tab": "Makanan teratas",
+    "max": {
+      "_": "Jumlah makanan",
+      "title": "Jumlah makanan"
+    },
+    "other": "Makanan lainnya"
+  },
+
+  "meals": {
+    "_": "Waktu makan",
+    "title": "Waktu makan",
+    "tab": "Waktu makan",
+    "chart": "Bagan rincian waktu makan",
+    "table": "Tabel ringkasan waktu makan",
+    "colors": {
+      "_": "Warna makan",
+      "title": "Warna makan"
+    },
+    "fields": {
+      "_": "Kolom makan",
+      "title": "Kolom makan",
+      "create": "Tambah kolom",
+      "edit": "Edit kolom",
+      "remove": "Hapus kolom",
+      "reset": {
+        "_": "Atur ulang kolom makan",
+        "text": "Atur ulang kolom makan ke daftar default"
+      },
+      "id": "ID kolom",
+      "header": "Judul kolom",
+      "value": "Nilai kolom",
+      "types": {
+        "_": "Jenis kolom",
+        "title": "Jenis kolom",
+        "standard": "Kolom standar",
+        "custom": "Prompt kustom",
+        "nutrient": "Nutrien",
+        "name": "Nama makan",
+        "time": "Waktu makan",
+        "hours": "Jam makan",
+        "minutes": "Menit makan",
+        "duration": "Durasi makan"
+      },
+      "validation": {
+        "required": "Kolom harus diisi.",
+        "unique": "Kolom sudah ada dalam daftar ini."
+      }
+    }
+  },
+
+  "cards": {
+    "_": "Kartu",
+    "title": "Kartu",
+    "tab": "Kartu",
+    "add": "Tambah kartu",
+    "edit": "Edit kartu",
+    "remove": "Hapus kartu",
+    "type": "Jenis kartu",
+    "options": "Opsi kartu",
+    "color": "Warna kartu",
+    "image": "Gambar",
+    "showRecommendations": "Tampilkan rekomendasi umpan balik",
+
+    "tabs": {
+      "general": "Umum",
+      "content": "Konten",
+      "unit": "Satuan",
+      "thresholds": "Ambang",
+      "nutrients": "Nutrien",
+      "json": "JSON"
+    },
+
+    "character": {
+      "title": "Karakter",
+      "subtitle": "Karakter / Nutrien"
+    },
+    "nutrient-group": {
+      "title": "Kelompok nutrien",
+      "subtitle": "Pengelompokan umpan balik berdasarkan daftar nutrien"
+    },
+    "five-a-day": {
+      "title": "Lima Sehari",
+      "subtitle": "Umpan balik Lima Sehari"
+    },
+
+    "thresholds": {
+      "_": "Ambang",
+      "title": "Ambang",
+      "low": "Batas bawah ambang",
+      "high": "Batas atas ambang",
+      "enabled": "Aktifkan ambang",
+      "message": "Pesan peringatan"
+    },
+
+    "unit": {
+      "name": "Nama satuan",
+      "description": "Deskripsi satuan",
+      "required": "Nama satuan wajib diisi."
+    }
+  },
+
+  "demographic-groups": {
+    "_": "Kelompok demografis",
+    "title": "Kelompok demografis",
+    "tab": "Kelompok demografis",
+    "create": "Kelompok demografis baru",
+    "edit": "Edit kelompok demografis",
+    "remove": "Hapus kelompok demografis",
+    "name": "Nama",
+    "required": "Nama wajib diisi.",
+    "summary": "Ringkasan",
+    "description": "Deskripsi",
+    "intake": "Tampilkan asupan dalam",
+    "tabs": {
+      "general": "Umum",
+      "sectors": "Sektor skala",
+      "json": "JSON"
+    },
+    "sectors": {
+      "_": "Sektor skala",
+      "title": "Sektor skala",
+      "add": "Tambah sektor skala",
+      "remove": "Hapus sektor skala"
+    }
+  },
+
+  "henry-coefficients": {
+    "_": "Koefisien Henry",
+    "title": "Koefisien Henry",
+    "tab": "Koefisien Henry",
+    "create": "Koefisien Henry baru",
+    "edit": "Edit koefisien Henry",
+    "remove": "Hapus koefisien Henry",
+
+    "constant": "Konstanta",
+    "weightCoefficient": "Koefisien berat",
+    "heightCoefficient": "Koefisien tinggi"
+  },
+  "rating": {
+    "_": "Penilaian",
+    "title": "Penilaian"
+  },
+  "submissions": {
+    "_": "Pengajuan",
+    "title": "Pengajuan"
+  }
+}

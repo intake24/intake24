@@ -1,0 +1,212 @@
+{
+  "_": "Survei",
+  "title": "Survei",
+  "all": "Semua survei",
+  "read": "Detail survei",
+  "create": "Tambah survei",
+  "edit": "Edit survei",
+  "delete": "Hapus survei",
+
+  "id": "ID survei",
+  "name": "Nama survei",
+  "states": {
+    "_": "Status",
+    "notStarted": "Belum dimulai",
+    "active": "Aktif",
+    "suspended": "Ditangguhkan",
+    "completed": "Selesai"
+  },
+  "startDate": "Tanggal mulai",
+  "endDate": "Tanggal selesai",
+  "supportEmail": "Email dukungan",
+  "auth": {
+    "_": "Pengaturan autentikasi",
+    "captcha": "Verifikasi captcha",
+    "urlDomainOverride": "Override domain URL",
+    "urlTokenCharset": "Set karakter token URL",
+    "urlTokenLength": "Panjang token URL"
+  },
+  "externalComm": {
+    "_": "Komunikasi eksternal",
+    "allowGenUsers": "Izinkan pembuatan pengguna",
+    "secret": {
+      "_": "Rahasia JWT untuk komunikasi M2M",
+      "generate": {
+        "_": "Hasilkan",
+        "text": "Hasilkan rahasia JWT"
+      }
+    }
+  },
+  "users": {
+    "_": "Pengaturan pengguna",
+    "personalIdentifiers": "Izinkan pengenal pribadi pengguna",
+    "customFields": "Izinkan kolom kustom pengguna"
+  },
+  "search": {
+    "_": "Opsi pencarian",
+    "collectData": "Kumpulkan data pencarian",
+    "maxResults": "Jumlah maksimum hasil makanan",
+    "sorting": "Pengurutan",
+    "spellingCorrection": "Koreksi ejaan",
+    "sortingAlgorithm": "Metode pengurutan makanan",
+    "matchQuality": "Kualitas kecocokan",
+    "matchQualityCriteria": "Kriteria kualitas kecocokan",
+    "matchScoreWeight": "Preferensi pengurutan",
+    "firstWordCost": "Kata pertama",
+    "wordOrderCost": "Urutan kata",
+    "wordDistanceCost": "Jarak kata",
+    "unmatchedWordCost": "Jumlah kata",
+    "foodOrdering": "Pengurutan makanan",
+    "enableEditDistance": "Gunakan koreksi ejaan edit distance",
+    "minWordLength1": "Panjang kata minimum untuk 1 koreksi",
+    "minWordLength2": "Panjang kata minimum untuk 2 koreksi",
+    "enablePhonetic": "Gunakan koreksi ejaan fonetik",
+    "minWordLengthPhonetic": "Panjang kata minimum untuk koreksi ejaan fonetik",
+    "spellingCorrectionPreference": "Metode koreksi ejaan pilihan",
+    "spellingCorrectionOptions": {
+      "phonetic": "Fonetik",
+      "edit-distance": "Edit distance",
+      "both": "Keduanya"
+    },
+    "relevantCategories": "Kategori relevan",
+    "enableRelevantCategories": "Tampilkan kategori relevan",
+    "relevantCategoryDepth": "Kedalaman kategori relevan",
+    "algorithms": {
+      "paRules": "Asosiasi berpasangan (pembelajaran mesin)",
+      "popularity": "Popularitas (frekuensi pelaporan)",
+      "globalPop": "Popularitas global (frekuensi pelaporan)",
+      "fixed": "Urutan yang ditentukan"
+    },
+    "information": {
+      "matchScoreWeightInfo": {
+        "title": "Preferensi pengurutan",
+        "p1": "Intake24 menggunakan dua metode untuk menentukan prioritas makanan dalam daftar hasil pencarian:",
+        "foodOrdering": "<strong>Pengurutan makanan</strong> adalah urutan makanan dalam basis data sesuai opsi \"Metode pengurutan makanan\" yang dipilih, biasanya memprioritaskan item berdasarkan seberapa sering item tersebut dilaporkan. Makanan yang paling sering dilaporkan ditampilkan di bagian atas.",
+        "matchQuality": "<strong>Kualitas kecocokan</strong> adalah perkiraan seberapa dekat masukan pengguna dengan nama suatu makanan dalam basis data. Ini didasarkan pada faktor seperti jumlah kata yang cocok dan konsistensi urutan kata. Misalnya, \"boiled potato\" cocok persis dengan entri bernama \"Boiled potato\" dalam basis data, namun tidak sebaik kecocokan untuk \"baked potato\" (hanya \"potato\" yang cocok, bukan \"boiled\") atau \"Potato, boiled\" (kata-katanya sama tetapi urutannya berbeda).",
+        "p2": "Pengaturan ini mengendalikan bagaimana kedua nilai tersebut digabungkan untuk menghasilkan urutan akhir hasil pencarian.",
+        "p3": "Jika penggeser digeser ke arah \"pengurutan makanan\", hasil akan lebih mencerminkan data pengurutan makanan (frekuensi pelaporan atau urutan yang ditentukan). Jika digeser ke arah \"kualitas kecocokan\", pengurutan akan memprioritaskan kecocokan masukan pengguna yang lebih akurat."
+      },
+      "sortingAlgorithmInfo": {
+        "title": "Metode pengurutan makanan",
+        "p1": "Metode pengurutan makanan digunakan untuk menentukan prioritas relatif makanan dalam basis data.",
+        "popularity": "<strong>Popularitas (frekuensi pelaporan)</strong> memprioritaskan makanan yang sering dilaporkan. Data frekuensi dikumpulkan dan diperbarui secara terus-menerus setiap kali recall dikirimkan, sehingga kualitas data meningkat seiring bertambahnya pengajuan. Dalam mode ini, data frekuensi terkait dengan lokal tertentu dan tidak dibagikan antar lokal.",
+        "globalPopularity": "<strong>Popularitas global (frekuensi pelaporan)</strong> mirip dengan di atas, tetapi data dikumpulkan secara global dan dibagikan antar lokal. Metode ini <u>tidak direkomendasikan</u> karena dalam praktiknya kode makanan jarang sama antar lokal.",
+        "predeterminedOrder": "<strong>Urutan yang ditentukan</strong> memberikan nilai prioritas tetap untuk setiap makanan. Makanan dengan prioritas lebih tinggi muncul di bagian atas hasil pencarian, tanpa memperhatikan frekuensi pelaporannya. Tidak seperti metode berbasis frekuensi pelaporan, urutan ini bersifat statis setelah diunggah dan tidak diperbarui secara dinamis ketika terdapat lebih banyak pengajuan recall."
+      },
+      "matchQualityInfo": {
+        "title": "Kriteria kualitas kecocokan",
+        "p1": "Pengaturan ini menentukan tingkat kepentingan yang diberikan pada kriteria tertentu oleh komponen algoritme pencarian makanan yang menilai kemiripan antara masukan pengguna dan deskripsi makanan dalam basis data.",
+        "p2": "Setiap kriteria dievaluasi secara mandiri, kemudian hasilnya digabungkan. Nilai gabungan ini mewakili <em>biaya kecocokan</em>. Semakin tinggi biayanya, semakin rendah kualitas kecocokan. Hasil pencarian dengan biaya terendah akan ditampilkan di bagian atas.",
+        "p3": "Semakin tinggi nilai penggeser untuk suatu kriteria, semakin besar pengaruhnya pada biaya kecocokan akhir. Ketika penggeser disetel ke nol, kriteria tersebut diabaikan.",
+        "firstWord": "<strong>Kata pertama</strong> memprioritaskan kata pertama dalam masukan pengguna. Jika kata pertama tidak ditemukan pada nama makanan, penalti ini diterapkan (namun kata lain masih dapat cocok).",
+        "wordOrder": "<strong>Urutan kata</strong> memberi penalti pada pelanggaran urutan kata. Misalnya, masukan \"boiled potato\" akan cocok dengan \"potato, boiled\", namun karena urutan kata berbeda maka penalti urutan kata akan diterapkan. Penalti ini dapat terjadi beberapa kali untuk setiap pelanggaran urutan kata ketika masukan lebih panjang.",
+        "wordDistance": "<strong>Jarak kata</strong> memberi penalti pada pelanggaran jarak kata relatif (kedekatan). Sebagai contoh, masukan \"sweet chicken\" akan cocok dengan \"sweet and sour chicken\", tetapi karena kata-kata yang berdekatan dalam masukan pengguna tidak berdekatan dalam nama makanan, penalti ini diterapkan.",
+        "wordCount": "<strong>Jumlah kata</strong> memberi penalti untuk setiap kata yang tidak cocok. Misalnya, masukan \"boiled chicken\" akan cocok dengan \"sweet and sour chicken\", tetapi penalti ini diterapkan karena kata \"boiled\" tidak ditemukan pada nama makanan."
+      },
+      "spellingCorrectionInfo": {
+        "title": "Koreksi ejaan",
+        "p1": "Pengaturan ini mengendalikan algoritme koreksi ejaan yang digunakan ketika tidak ditemukan kecocokan kata persis.",
+        "editDistance": "<strong>Koreksi ejaan edit distance:</strong> algoritme ini membandingkan kata berdasarkan ejaannya. <em>Edit distance</em> (disebut juga jarak Levenshtein) mengukur kemiripan antara dua kata dengan menghitung jumlah operasi minimum (penyisipan, penghapusan, atau penggantian karakter) untuk mengubah satu kata menjadi kata lainnya.",
+        "minimumWordLength": "<strong>Panjang kata minimum:</strong> Intake24 dapat mengidentifikasi kata yang memiliki edit distance hingga 2. Namun, melakukan satu atau dua perubahan pada kata yang pendek dapat menghasilkan kecocokan yang menyesatkan. Misalnya, mengoreksi \"cake\" menjadi \"sage\" (edit distance 2: c→s, k→g) tidak terlalu membantu. Untuk mencegah hal ini, jumlah koreksi dapat dibatasi berdasarkan panjang kata masukan.",
+        "phonetic": "<strong>Koreksi ejaan fonetik</strong>: algoritme pengkodean fonetik mengubah kata menjadi representasi fonetik, yaitu rangkaian karakter yang mencerminkan pengucapan. Ini memudahkan perbandingan dan pencocokan kata berdasarkan bunyi, bukan ejaan.",
+        "phoneticMinWordLength": "<strong>Panjang kata minimum untuk koreksi ejaan fonetik:</strong> mirip dengan koreksi ejaan berbasis edit distance, koreksi ejaan berbasis pengkodean fonetik dapat dibatasi berdasarkan panjang kata masukan untuk menghindari kecocokan yang tidak diinginkan.",
+        "preferredMethod": "<strong>Metode koreksi ejaan pilihan:</strong> ketika disetel ke \"Fonetik\" atau \"Edit distance\", metode terkait diterapkan terlebih dahulu. Jika tidak ditemukan kecocokan, metode lainnya akan dicoba. Saat disetel ke \"Keduanya\", kedua metode selalu digunakan dan hasilnya digabungkan. Pengaturan ini hanya berlaku ketika kedua metode diaktifkan."
+      },
+      "relevantCategoriesInfo": {
+        "title": "Kategori relevan",
+        "p1": "Pengaturan ini mengontrol apakah kategori relevan tambahan ditampilkan dalam hasil pencarian.",
+        "p2": "Jika dimatikan, hanya kategori dengan nama yang langsung cocok dengan kueri pencarian yang akan ditampilkan. Jika diaktifkan, kategori induk dari makanan yang cocok juga disertakan.",
+        "p3": "Misalnya, jika kueri pencarian adalah \"bananas\" dan fitur ini dimatikan, tidak ada kategori yang ditampilkan karena tidak ada kategori bernama \"Bananas\". Jika fitur ini diaktifkan, kategori yang memuat \"bananas\" (seperti \"Fruit\") akan disertakan.",
+        "relevantCategoryDepth": "<strong>Kedalaman kategori relevan</strong>: mengontrol berapa banyak tingkat kategori induk yang disertakan. Jika disetel ke 0, hanya kategori induk langsung yang disertakan. Jika 1, maka kategori di atasnya juga disertakan (misalnya Pepsi → Minuman ringan → Minuman), dan seterusnya."
+      }
+    }
+  },
+  "submissionLimits": {
+    "_": "Batas pengajuan",
+    "maxDaily": "Jumlah pengajuan maksimum per hari kalender",
+    "maxTotal": "Total pengajuan maksimum",
+    "minInterval": "Interval minimum antar pengajuan (detik)"
+  },
+  "suspensionReason": "Alasan penangguhan",
+  "session": {
+    "_": "Pengaturan sesi",
+    "age": {
+      "_": "Usia sesi",
+      "hint": "Tentukkan usia sesi sejak survei dimulai, mis. 30m, 12h, 2d."
+    },
+    "fixed": {
+      "_": "Durasi sesi tetap",
+      "hint": "Tentukkan durasi sesi tetap, mis. 1d+0h, 2d+4h"
+    },
+    "store": "Simpan sesi pengguna di server"
+  },
+  "feedback": {
+    "_": "Pengaturan umpan balik",
+    "enabled": "Umpan balik aktif",
+    "numberOfSubmissions": "Jumlah pengajuan untuk umpan balik"
+  },
+  "tasks": {
+    "_": "Tugas survei",
+    "title": "Tugas survei",
+    "tab": "Tugas"
+  },
+  "overrides": {
+    "_": "Override skema",
+    "tab": "Override",
+    "title": "Override skema"
+  },
+  "respondents": {
+    "_": "Responden",
+    "tab": "Responden",
+    "title": "Responden survei",
+    "add": "Responden baru",
+    "edit": "Edit responden",
+    "upload": {
+      "_": "Unggah responden",
+      "title": "Unggah massal responden survei",
+      "submit": "Unggah"
+    },
+    "authUrls": {
+      "_": "URL autentikasi",
+      "title": "URL autentikasi responden survei",
+      "submit": "Hasilkan berkas",
+      "download": "Unduh",
+      "surveyAuthUrl": "URL survei",
+      "feedbackAuthUrl": "URL umpan balik",
+      "copiedToClipboard": "URL disalin ke papan klip."
+    },
+    "feedback": {
+      "_": "Umpan balik",
+      "title": "Umpan balik responden",
+      "details": "Detail responden",
+      "open": "Buka",
+      "download": "Unduh",
+      "email": {
+        "title": "Kirim umpan balik melalui email ke responden",
+        "recipient": "Email penerima",
+        "sent": "Kirim",
+        "copy": {
+          "_": "Kirim salinan: ",
+          "cc": "CC",
+          "bcc": "BCC",
+          "none": "Tidak ada"
+        }
+      }
+    }
+  },
+  "sessions": {
+    "_": "Sesi",
+    "tab": "Sesi",
+    "title": "Sesi survei",
+    "id": "ID sesi"
+  },
+  "submissions": {
+    "_": "Pengajuan",
+    "tab": "Pengajuan",
+    "title": "Pengajuan survei",
+    "id": "ID pengajuan",
+    "startTime": "Waktu mulai",
+    "endTime": "Waktu selesai",
+    "submissionTime": "Waktu pengajuan"
+  }
+}

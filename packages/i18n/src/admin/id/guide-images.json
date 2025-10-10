@@ -1,0 +1,20 @@
+{
+  "_": "Gambar panduan",
+  "title": "Gambar panduan",
+  "read": "Detail gambar panduan",
+  "create": "Tambah gambar panduan",
+  "edit": "Edit gambar panduan",
+  "delete": "Hapus gambar panduan",
+
+  "id": "ID gambar panduan",
+  "objects": {
+    "_": "Objek gambar panduan",
+    "title": "Objek gambar panduan",
+    "id": "ID objek",
+    "label": {
+      "_": "Label",
+      "hint": "Gunakan variabel '{'{weight}'}' untuk menyertakan berat objek."
+    },
+    "weight": "Berat"
+  }
+}

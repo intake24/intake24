@@ -1,0 +1,87 @@
+{
+  "_": "Umpan balik diet",
+  "info": "Informasi umpan balik diet",
+  "status": {
+    "available": "Umpan balik diet tersedia",
+    "lowRecalls": "Umpan balik diet akan tersedia setelah Anda mengirimkan setidaknya {minRecalls} catatan.",
+    "notAvailable": "Umpan balik diet tidak tersedia untuk survei ini."
+  },
+  "title": "Umpan balik diet dari {name} catatan",
+  "missingFoods": "Makanan yang Anda laporkan sebagai hilang tidak akan disertakan dalam umpan balik diet",
+  "physicalData": {
+    "title": "Tentang Anda",
+    "subtitle": "Agar kami dapat menampilkan umpan balik dengan tepat, masukkan detail berikut.",
+    "change": "Ubah informasi saya",
+    "recall": "Catat hari lain",
+    "sexes": {
+      "_": "Jenis kelamin",
+      "m": "Laki-laki",
+      "f": "Perempuan"
+    },
+    "sex": "Jenis kelamin: {sex}",
+    "age": "Usia: {age}",
+    "birthdate": "Tahun lahir",
+    "height": "Tinggi: {height} cm",
+    "heightCm": "Tinggi dalam sentimeter",
+    "weight": "Berat: {weight} kg",
+    "weightKg": "Berat dalam kilogram",
+    "physicalActivityLevelId": "Tingkat aktivitas fisik",
+    "weightTarget": "Target: {target}",
+    "weightTargets": {
+      "_": "Target berat badan",
+      "title": "Target berat badan",
+      "keep_weight": "Pertahankan berat badan",
+      "lose_weight": "Turunkan berat badan",
+      "gain_weight": "Naikkan berat badan"
+    }
+  },
+  "outputs": {
+    "title": "Keluaran",
+    "download": {
+      "_": "Unduh",
+      "title": "Unduh sebagai PDF",
+      "subtitle": "Unduh salinan umpan balik diet Anda sebagai file PDF. Proses ini membutuhkan beberapa detik, mohon tunggu.",
+      "send": "Kirim permintaan",
+      "sent": "File PDF umpan balik diet telah disimpan."
+    },
+    "email": {
+      "_": "Email",
+      "title": "Kirim ke email",
+      "send": "Kirim permintaan",
+      "sent": "Kami telah mengirimkan umpan balik diet Anda ke alamat email yang diberikan."
+    },
+    "retry": "Keluaran umpan balik diet baru saja diminta, coba lagi dalam {secs} detik.",
+    "print": "Cetak"
+  },
+  "cards": {
+    "title": "Ringkasan asupan Anda"
+  },
+  "topFoods": {
+    "title": "Makanan yang paling berkontribusi terhadap asupan nutrien Anda",
+    "chart": "Tertinggi untuk {nutrient}"
+  },
+  "meals": {
+    "title": "Rincian makan per hari",
+    "chart": "{nutrient}"
+  },
+  "rating": {
+    "_": "Nilai pengalaman Anda",
+    "title": "Bagaimana penilaian Anda terhadap umpan balik diet?",
+    "comment": "Ceritakan lebih lanjut tentang alasan penilaian yang Anda berikan untuk umpan balik diet",
+    "send": "Kirim umpan balik",
+    "sent": "Umpan balik terkirim, terima kasih!"
+  },
+  "intake": {
+    "your": "Asupan {nutrient} Anda adalah {amount}",
+    "estimated": "Perkiraan asupan",
+    "recommended": "Asupan yang disarankan",
+    "tellMeMore": "Beritahu saya lebih lanjut",
+    "gotIt": "Mengerti!"
+  },
+  "unitDescription": {
+    "percentage_of_energy": "Umpan balik nutrien ini didasarkan pada kontribusinya terhadap asupan energi Anda dari makanan dan porsi yang Anda laporkan.",
+    "energy_divided_by_bmr": "Umpan balik diet didasarkan pada asupan energi Anda yang dibagi BMR serta bagaimana perbandingannya dengan rekomendasi.",
+    "per_unit_of_weight": "Umpan balik diet didasarkan pada asupan nutrien ini per kg berat badan Anda serta bagaimana perbandingannya dengan rekomendasi.",
+    "range": "Umpan balik nutrien ini didasarkan pada makanan dan porsi yang Anda laporkan."
+  }
+}

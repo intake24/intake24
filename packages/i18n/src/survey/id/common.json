@@ -1,0 +1,84 @@
+{
+  "_": "Intake24",
+  "home": "Beranda",
+  "dashboard": "Dasbor",
+  "navigation": "Navigasi",
+  "welcome": {
+    "_": "Selamat datang di Intake24",
+    "subtitle": "Intake24 adalah sistem penilaian diet terkomputer sumber terbuka berdasarkan metode multiple-pass untuk pencatatan recall 24 jam."
+  },
+  "login": {
+    "_": "Masuk",
+    "start": "Mulai",
+    "subtitle": "Masuk dengan nama pengguna dan kata sandi Anda",
+    "captcha": "Selesaikan tantangan captcha",
+    "back": "Kembali ke halaman masuk",
+    "err": {
+      "captcha": "Respons captcha tidak valid.",
+      "credentials": "Nama pengguna atau kata sandi yang dimasukkan tidak valid.",
+      "token": "Token akses yang dimasukkan tidak valid.",
+      "survey": "Survei ({surveyId}) tidak terlihat seperti URL masuk survei yang valid."
+    }
+  },
+  "logout": {
+    "_": "Keluar",
+    "text": "Keluar dari aplikasi"
+  },
+  "username": "Nama pengguna",
+  "name": "Nama",
+  "email": "Email",
+  "emailConfirm": "Konfirmasi email",
+  "password": "Kata sandi",
+  "phone": "Telepon",
+  "message": "Pesan",
+  "continue": "Lanjutkan",
+  "help": {
+    "_": "Bantuan",
+    "title": "Minta bantuan",
+    "text": "Lengkapi formulir di bawah ini dan tim dukungan kami akan menghubungi Anda secepatnya.",
+    "sent": "Permintaan bantuan Anda telah dikirim."
+  },
+  "app": {
+    "_": "Aplikasi",
+    "info": "Informasi aplikasi",
+    "build": "Versi"
+  },
+  "clipboard": {
+    "_": "Salin ke papan klip",
+    "copied": "Data disalin ke papan klip"
+  },
+  "sw": {
+    "check": "Pembaruan konten tersedia",
+    "update": "Perbarui"
+  },
+  "action": {
+    "cancel": "Batal",
+    "close": "Tutup",
+    "continue": "Lanjutkan",
+    "confirm": {
+      "_": "Konfirmasi",
+      "title": "Apakah Anda ingin melanjutkan?",
+      "delete": "Apakah Anda ingin menghapus {name}?"
+    },
+    "ok": "OK",
+    "reload": "Muat ulang",
+    "remove": "Hapus",
+    "reset": "Atur ulang",
+    "start": "Mulai",
+    "submit": "Kirim",
+    "yes": "Ya",
+    "no": "Tidak"
+  },
+  "not": {
+    "provided": "Tidak tersedia",
+    "selected": "Tidak dipilih"
+  },
+  "errors": {
+    "500": "Terjadi kesalahan :(",
+    "retry": "Coba lagi"
+  },
+  "validation": {
+    "tooLong": "Teks yang dimasukkan terlalu panjang (maksimal {max} karakter)."
+  },
+  "noImagePlaceholder": "Tidak ada gambar tersedia"
+}

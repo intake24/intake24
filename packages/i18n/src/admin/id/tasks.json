@@ -1,0 +1,20 @@
+{
+  "_": "Tugas",
+  "title": "Tugas",
+  "read": "Detail tugas",
+  "create": "Tambah tugas",
+  "edit": "Edit tugas",
+  "delete": "Hapus tugas",
+  "none": "Tidak ada tugas",
+  "cron": "CRON",
+  "invalidCron": "Entri CRON tidak valid",
+  "schedule": "Jadwal",
+  "job": "Pekerjaan",
+  "run": {
+    "_": "Pemicu pekerjaan",
+    "confirm": "Dorong pekerjaan ke antrean",
+    "next": "Eksekusi pekerjaan berikutnya"
+  },
+  "bullJob": "Pekerjaan Bull (entri antrean)",
+  "file": "Lokasi berkas"
+}

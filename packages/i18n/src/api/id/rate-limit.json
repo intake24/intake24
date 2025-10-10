@@ -1,0 +1,9 @@
+{
+  "generic": "Terlalu banyak permintaan, coba lagi nanti.",
+  "login": "Terlalu banyak upaya masuk yang gagal, coba lagi nanti.",
+  "password": "Tautan pengaturan ulang kata sandi baru saja diminta, coba lagi nanti.",
+  "verify": "Tautan verifikasi email baru saja diminta, coba lagi nanti.",
+  "generateUser": "Pengguna baru baru saja dibuat, coba lagi nanti.",
+  "feedback": "Anda baru saja meminta keluaran umpan balik, coba lagi nanti.",
+  "rating": "Anda baru saja mengirim umpan balik, coba lagi nanti."
+}

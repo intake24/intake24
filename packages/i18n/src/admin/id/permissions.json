@@ -1,0 +1,27 @@
+{
+  "_": "Izin",
+  "title": "Izin",
+  "all": "Semua izin",
+  "read": "Detail izin",
+  "create": "Tambah izin",
+  "edit": "Edit izin",
+  "delete": "Hapus izin",
+
+  "groups": {
+    "global": "Global",
+    "resources": "Sumber daya",
+    "surveys": "Survei",
+    "fdbs": "Basis data makanan"
+  },
+
+  "roles": {
+    "_": "Peran",
+    "title": "Peran",
+    "tab": "Peran"
+  },
+  "users": {
+    "_": "Pengguna",
+    "title": "Pengguna",
+    "tab": "Pengguna"
+  }
+}

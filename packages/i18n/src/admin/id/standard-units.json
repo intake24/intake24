@@ -1,0 +1,27 @@
+{
+  "_": "Satuan standar",
+  "title": "Satuan standar",
+  "read": "Detail satuan standar",
+  "add": "Tambah satuan standar",
+  "create": "Tambah satuan standar",
+  "edit": "Edit satuan standar",
+  "remove": "Hapus satuan standar",
+
+  "id": "ID satuan standar",
+  "estimateIn": "Perkirakan dalam",
+  "howMany": "Berapa banyak",
+
+  "categories": {
+    "_": "Kategori",
+    "tab": "Kategori",
+    "title": "Kategori",
+    "subtitle": "Kategori yang menggunakan satuan standar"
+  },
+
+  "foods": {
+    "_": "Makanan",
+    "tab": "Makanan",
+    "title": "Makanan",
+    "subtitle": "Makanan yang menggunakan satuan standar"
+  }
+}

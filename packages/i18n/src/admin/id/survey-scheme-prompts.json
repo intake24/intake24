@@ -1,0 +1,21 @@
+{
+  "_": "Prompt skema",
+  "id": "ID skema",
+  "title": "Prompt skema",
+  "read": "Detail prompt skema",
+  "create": "Tambah prompt skema",
+  "edit": "Edit prompt skema",
+  "delete": "Hapus prompt skema",
+
+  "editTemplate": "Edit templat prompt",
+  "sync": {
+    "_": "Sinkronisasi",
+    "tab": "Sinkronisasi",
+    "synchronize": "Sinkronkan",
+    "confirm": "Sinkronkan templat dengan skema",
+    "title": "Daftar skema yang berisi prompt dengan ID: {id}",
+    "true": "Prompt tersinkron",
+    "false": "Prompt belum tersinkron",
+    "noSchemes": "Belum ada skema yang berisi templat ini."
+  }
+}

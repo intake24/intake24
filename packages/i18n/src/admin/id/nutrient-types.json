@@ -1,0 +1,24 @@
+{
+  "_": "Jenis nutrien",
+  "title": "Jenis nutrien",
+  "read": "Detail jenis nutrien",
+  "add": "Tambah jenis nutrien",
+  "create": "Tambah jenis nutrien",
+  "edit": "Edit jenis nutrien",
+  "remove": "Hapus jenis nutrien",
+  "label": "Label jenis nutrien",
+  "current": "Jenis nutrien saat ini",
+  "available": "Jenis nutrien tersedia",
+
+  "id": "ID jenis nutrien",
+  "kcalPerUnit": "Kkal per satuan",
+
+  "reset": {
+    "_": "Atur ulang jenis nutrien",
+    "text": "Atur ulang jenis nutrien ke daftar default"
+  },
+  "validation": {
+    "required": "Jenis nutrien harus diisi.",
+    "unique": "Kombinasi jenis nutrien sudah ada dalam daftar ini."
+  }
+}

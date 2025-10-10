@@ -1,0 +1,63 @@
+{
+  "_": "Pengguna",
+  "title": "Pengguna",
+  "all": "Semua pengguna",
+  "read": "Detail pengguna",
+  "create": "Tambah pengguna",
+  "edit": "Edit pengguna",
+  "delete": "Hapus pengguna",
+
+  "id": "ID pengguna",
+  "name": "Nama",
+  "simpleName": "Nama sederhana",
+  "username": "Nama pengguna",
+  "verified": "Terverifikasi",
+  "disabled": "Dinonaktifkan",
+  "aliases": {
+    "_": "Alias pengguna",
+    "title": "Alias pengguna",
+    "surveyId": "ID survei",
+    "username": "Nama pengguna",
+    "urlAuthToken": "Token autentikasi URL",
+    "none": "Tidak ada alias survei"
+  },
+  "identifiers": {
+    "_": "Pengenal",
+    "title": "Pengenal"
+  },
+  "personalIdentifiers": {
+    "_": "Pengenal pribadi",
+    "title": "Pengenal pribadi"
+  },
+  "customFields": {
+    "_": "Kolom kustom",
+    "title": "Kolom kustom",
+    "add": "Kolom baru",
+    "remove": "Hapus kolom",
+    "name": "Nama kolom",
+    "value": "Nilai kolom",
+    "none": "Tidak ada kolom kustom",
+    "public": "Publik"
+  },
+  "permissions": {
+    "_": "Izin",
+    "title": "Izin",
+    "tab": "Izin",
+    "hint": "Disarankan memberikan izin melalui peran daripada menetapkannya langsung."
+  },
+  "roles": {
+    "_": "Peran",
+    "title": "Peran",
+    "tab": "Peran"
+  },
+
+  "mfa": {
+    "_": "Autentikasi multi-faktor",
+    "abbr": "2FA"
+  },
+
+  "notifications": {
+    "email": "Notifikasi email",
+    "sms": "Notifikasi SMS"
+  }
+}

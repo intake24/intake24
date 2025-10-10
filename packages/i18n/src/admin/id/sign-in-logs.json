@@ -1,0 +1,13 @@
+{
+  "_": "Log masuk",
+  "title": "Log masuk",
+  "read": "Detail log masuk",
+  "delete": "Hapus log masuk",
+  "date": "Waktu percobaan",
+  "provider": "Penyedia",
+  "providerKey": "ID penyedia",
+  "successful": "Berhasil",
+  "userAgent": "User Agent",
+  "remoteAddress": "Alamat jarak jauh",
+  "message": "Pesan"
+}

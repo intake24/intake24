@@ -1,0 +1,39 @@
+{
+  "_": "Survei",
+  "welcome": {
+    "_": "Selamat datang di Intake24",
+    "subtitle": "Intake24 digunakan dalam penelitian untuk mengumpulkan informasi mengenai makanan dan minuman yang dikonsumsi."
+  },
+  "info": "Informasi survei",
+  "states": {
+    "_": "Status",
+    "notStarted": "Pengumpulan data belum dimulai.",
+    "active": "Pengumpulan data sedang berlangsung.",
+    "suspended": "Pengumpulan data dihentikan sementara.",
+    "completed": "Pengumpulan data telah selesai."
+  },
+  "participant": {
+    "_": "Apakah Anda peserta?",
+    "subtitle": "Anda berada di halaman utama Intake24.",
+    "link": "Untuk mengakses Intake24 Anda memerlukan <strong>tautan survei Anda sendiri</strong>.",
+    "info": "<p>Jika Anda diundang untuk mengikuti survei Intake24, Anda seharusnya menerima sebuah tautan.</p><p>Periksa kembali undangan Anda. Jika masih ragu, silakan hubungi tim penelitian Anda.</p>"
+  },
+  "visitor": {
+    "_": "Apakah Anda pengunjung?",
+    "subtitle": "Anda dapat mencoba survei demo kami!",
+    "try": "Coba demo sekarang!"
+  },
+  "generateUser": {
+    "400": "Tantangan captcha yang diberikan tidak valid.",
+    "403": "Survei {surveyId} tidak mengizinkan pembuatan pengguna.",
+    "404": "Survei {surveyId} tidak ditemukan.",
+    "429": "Pengguna baru baru saja dibuat, coba lagi beberapa saat lagi.",
+    "_": "Buat akses",
+    "subtitle": "Ini adalah studi dengan akses terbuka, Anda dapat masuk secara gratis.",
+    "noAccount": "Belum punya akun?",
+    "link": "tautan",
+    "info1": "Pilih 'Buat akses' untuk menghasilkan kredensial baru. Catat kredensial ini jika Anda ingin melanjutkan nanti.",
+    "info2": "Survei ini memerlukan waktu sekitar 15 menit.",
+    "info3": "Jika Anda menutup jendela peramban, Anda dapat kembali menggunakan {action}."
+  }
+}

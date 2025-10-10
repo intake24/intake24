@@ -1,0 +1,55 @@
+{
+  "_": "Bahasa",
+  "code": "Kode bahasa",
+  "title": "Bahasa",
+  "all": "Semua bahasa",
+  "read": "Detail bahasa",
+  "create": "Tambah bahasa",
+  "edit": "Edit bahasa",
+  "delete": "Hapus bahasa",
+
+  "englishName": "Nama bahasa Inggris",
+  "localName": "Nama lokal",
+  "countryFlagCode": "Kode bendera negara",
+  "textDirections": {
+    "_": "Arah teks",
+    "ltr": "Kiri ke kanan",
+    "rtl": "Kanan ke kiri"
+  },
+
+  "translations": {
+    "_": "Terjemahan",
+    "title": "Terjemahan",
+    "tab": "Terjemahan",
+    "create": "Inisialisasi terjemahan",
+    "edit": "Edit bagian",
+    "delete": "Hapus terjemahan bahasa",
+    "sync": "Sinkronkan terjemahan bahasa",
+    "path": "Jalur kunci",
+    "applications": {
+      "admin": "Admin",
+      "api": "API",
+      "survey": "Survei",
+      "shared": "Bersama"
+    },
+    "sections": {
+      "breadcrumbs": "Breadcrumb",
+      "feedback": "Umpan balik",
+      "flags": "Tanda",
+      "login": "Masuk",
+      "portion": "Ukuran porsi",
+      "profile": "Profil",
+      "prompts": "Prompt",
+      "recall": "Recall",
+      "rateLimit": "Batas laju",
+      "standard-units": "Satuan standar",
+      "survey": "Survei",
+      "validation": "Validasi"
+    },
+
+    "created": "Terjemahan bahasa ({name}) telah dibuat.",
+    "updated": "Terjemahan bahasa ({name}) telah diperbarui.",
+    "deleted": "Terjemahan bahasa ({name}) telah dihapus.",
+    "synced": "Terjemahan bahasa ({name}) telah disinkronkan."
+  }
+}

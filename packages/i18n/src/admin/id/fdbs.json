@@ -1,0 +1,190 @@
+{
+  "_": "Basis data makanan",
+  "id": "ID basis data makanan",
+  "title": "Basis data makanan",
+  "read": "Detail basis data makanan",
+  "create": "Tambah basis data makanan",
+  "edit": "Edit basis data makanan",
+  "delete": "Hapus basis data makanan",
+
+  "showGlobalName": "Tampilkan nama global",
+
+  "food-list": {
+    "_": "Daftar makanan",
+    "title": "Daftar makanan",
+    "tab": "Daftar makanan"
+  },
+
+  "search": {
+    "_": "Cari",
+    "title": "Cari kategori & makanan"
+  },
+
+  "categories": {
+    "_": "Kategori",
+    "title": "Kategori",
+    "add": "Tambah kategori",
+    "remove": "Hapus kategori",
+    "noCategory": "Tanpa kategori",
+    "alreadyIncluded": "Kategori '{code}' sudah termasuk dalam daftar saat ini.",
+    "none": "Tidak ada kategori ditemukan untuk pencarian tersebut.",
+    "copy": "Salin kategori",
+    "global": {
+      "_": "Pengaturan kategori global",
+      "code": "Kode kategori",
+      "name": "Nama bahasa Inggris",
+      "isHidden": "Disembunyikan"
+    },
+    "local": {
+      "_": "Pengaturan kategori lokal",
+      "id": "ID kategori lokal",
+      "name": "Nama lokal",
+      "tags": "Tag"
+    },
+    "attributes": {
+      "_": "Atribut kategori"
+    },
+    "parentCategories": {
+      "_": "Kategori induk"
+    }
+  },
+
+  "foods": {
+    "_": "Makanan",
+    "title": "Makanan",
+    "add": "Tambah makanan",
+    "copy": "Salin makanan",
+    "global": {
+      "_": "Pengaturan makanan global",
+      "code": "Kode makanan",
+      "name": "Nama bahasa Inggris",
+      "foodGroup": "Kelompok makanan"
+    },
+    "local": {
+      "_": "Pengaturan makanan lokal",
+      "id": "ID makanan lokal",
+      "name": "Nama lokal",
+      "tags": "Tag"
+    },
+    "attributes": {
+      "_": "Atribut makanan"
+    },
+    "parentCategories": {
+      "_": "Kategori induk"
+    }
+  },
+
+  "locales": {
+    "_": "Digunakan di lokal",
+    "title": "Digunakan di lokal",
+    "description": "Makanan termasuk dalam {count} lokal.",
+    "add": "Tambah lokal",
+    "remove": "Hapus lokal"
+  },
+
+  "attributes": {
+    "_": "Atribut",
+    "title": "Atribut",
+    "inherit": "Warisi",
+    "override": "Timpa",
+    "sameAsBeforeOption": "Sama seperti opsi sebelumnya",
+    "readyMealOption": "Apakah ini makanan atau bahan siap saji (mis. siap masak / makan / kemasan)?",
+    "reasonableAmount": "Jumlah wajar (g/ml)",
+    "useInRecipes": {
+      "_": "Gunakan untuk resep",
+      "0": "Gunakan di mana saja",
+      "1": "Hanya gunakan sebagai makanan biasa",
+      "2": "Hanya gunakan sebagai bahan resep"
+    }
+  },
+
+  "nutrients": {
+    "_": "Catatan tabel nutrien",
+    "title": "Catatan tabel nutrien",
+    "add": "Tambah catatan nutrien",
+    "remove": "Hapus catatan nutrien",
+    "alreadyIncluded": "Catatan tabel nutrien '{id}' sudah termasuk dalam daftar saat ini.",
+    "none": "Tidak ada catatan tabel nutrien ditemukan untuk pencarian tersebut."
+  },
+
+  "associatedFoods": {
+    "_": "Makanan terkait",
+    "title": "Makanan terkait",
+    "add": "Tambah makanan terkait",
+    "edit": "Edit makanan terkait",
+    "remove": "Hapus makanan terkait",
+
+    "association": "Asosiasi",
+    "genericName": "Nama generik",
+    "text": "Teks",
+    "linkAsMain": "Tautkan sebagai makanan utama",
+    "multiple": "Izinkan beberapa makanan"
+  },
+
+  "portionSizes": {
+    "_": "Metode ukuran porsi",
+    "title": "Metode ukuran porsi",
+    "add": "Tambah metode ukuran porsi",
+    "edit": "Edit metode ukuran porsi",
+    "remove": "Hapus metode ukuran porsi",
+
+    "parameters": "parameter",
+    "noParameters": "Metode tidak memiliki parameter tambahan.",
+    "description": "Deskripsi",
+    "useForRecipes": "Gunakan untuk resep",
+    "conversionFactor": "Faktor konversi",
+    "labels": "Label peta gambar",
+    "multiple": "Izinkan menentukan beberapa item",
+
+    "methods": {
+      "_": "Metode estimasi",
+      "as-served": {
+        "_": "Saat disajikan",
+        "servingImageSet": "Set gambar penyajian",
+        "leftoverImageSet": "Set gambar sisa",
+        "removeLeftoverImageSet": "Hapus set gambar sisa"
+      },
+      "cereal": {
+        "_": "Sereal"
+      },
+      "direct-weight": {
+        "_": "Berat"
+      },
+      "drink-scale": {
+        "_": "Skala minuman",
+        "drinkwareSet": "Set wadah minum",
+        "initialLevel": "Tingkat isi awal",
+        "skipFillLevelPrompt": "Lewati pertanyaan tingkat isi"
+      },
+      "guide-image": {
+        "_": "Gambar panduan"
+      },
+      "milk-in-a-hot-drink": {
+        "_": "Susu dalam minuman panas"
+      },
+      "milk-on-cereal": {
+        "_": "Susu pada sereal",
+        "options": "Opsi porsi"
+      },
+      "parent-food-portion": {
+        "_": "Porsi makanan induk",
+        "options": "Opsi porsi"
+      },
+      "pizza": {
+        "_": "Pizza"
+      },
+      "pizza-v2": {
+        "_": "Pizza V2"
+      },
+      "standard-portion": {
+        "_": "Porsi standar",
+        "unit": "Satuan",
+        "weight": "Berat (g)",
+        "omitFoodDescription": "Lewati deskripsi makanan"
+      },
+      "unknown": {
+        "_": "Tidak diketahui"
+      }
+    }
+  }
+}

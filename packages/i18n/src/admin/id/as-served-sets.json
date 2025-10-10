@@ -1,0 +1,22 @@
+{
+  "_": "Set saat disajikan",
+  "title": "Set saat disajikan",
+  "read": "Detail set saat disajikan",
+  "create": "Tambah set saat disajikan",
+  "edit": "Edit set saat disajikan",
+  "delete": "Hapus set saat disajikan",
+
+  "id": "ID set saat disajikan",
+  "selectionImage": "Gambar pilihan",
+  "images": {
+    "_": "Gambar saat disajikan",
+    "title": "Gambar saat disajikan",
+    "add": "Tambah gambar saat disajikan",
+    "delete": "Hapus gambar saat disajikan",
+    "label": {
+      "_": "Label",
+      "hint": "Gunakan variabel '{'{weight}'}' untuk menyertakan berat objek."
+    }
+  },
+  "weight": "Berat"
+}

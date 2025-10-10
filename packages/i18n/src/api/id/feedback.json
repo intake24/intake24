@@ -1,0 +1,7 @@
+{
+  "physicalActivityLevels": {
+    "1": "Gaya hidup sedentari atau aktivitas ringan",
+    "2": "Gaya hidup aktif atau cukup aktif",
+    "3": "Gaya hidup sangat aktif"
+  }
+}

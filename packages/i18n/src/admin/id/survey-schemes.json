@@ -1,0 +1,803 @@
+{
+  "_": "Skema survei",
+  "title": "Skema survei",
+  "all": "Semua skema",
+  "read": "Detail skema survei",
+  "create": "Tambah skema survei",
+  "edit": "Edit skema survei",
+  "delete": "Hapus skema survei",
+  "load": "Muat dari skema",
+  "none": "Tidak ada skema survei ditemukan",
+
+  "copy": {
+    "_": "Salin",
+    "title": "Salin skema survei",
+    "name": "Nama skema survei baru"
+  },
+
+  "settings": {
+    "_": "Pengaturan",
+    "title": "Pengaturan",
+    "types": {
+      "_": "Tipe",
+      "default": "Default"
+    },
+    "flows": {
+      "_": "Alur",
+      "title": "Alur",
+      "1-pass": "1-pass",
+      "2-pass": "2-pass"
+    },
+    "help": {
+      "_": "Opsi bantuan",
+      "available": "Kolom tersedia",
+      "required": "Kolom wajib",
+      "name": "Nama",
+      "email": "Email",
+      "phone": "Telepon",
+      "email|phone": "Email atau telepon",
+      "message": "Pesan"
+    },
+    "recallDate": "Offset tanggal recall",
+    "languages": "Bahasa yang diizinkan"
+  },
+
+  "meals": {
+    "_": "Waktu makan",
+    "title": "Waktu makan default",
+    "create": "Waktu makan baru",
+    "edit": "Edit waktu makan",
+    "remove": "Hapus waktu makan",
+    "name": "Nama waktu makan",
+    "defaultTime": "Waktu default",
+    "flags": {
+      "title": "Tanda waktu makan",
+      "add": "Tambah tanda",
+      "edit": "Edit tanda",
+      "remove": "Hapus tanda",
+      "standard": "Standar",
+      "custom": "Kustom"
+    },
+    "reset": {
+      "_": "Atur ulang waktu makan",
+      "text": "Atur ulang waktu makan ke daftar default"
+    },
+    "validation": {
+      "required": "Nama waktu makan harus diisi.",
+      "unique": "Nama waktu makan sudah ada dalam daftar ini."
+    }
+  },
+
+  "actions": {
+    "_": "Tindakan",
+    "title": "Tindakan",
+    "add": "Tindakan baru",
+    "remove": "Hapus tindakan",
+    "enable": "Aktifkan tindakan prompt kustom",
+    "both": "Tampilkan kedua tindakan tata letak di UI seluler",
+    "icon": "Ikon",
+    "label": "Label",
+    "text": "Teks",
+    "parameters": "Parameter",
+    "types": {
+      "_": "Jenis tindakan",
+      "title": "Jenis tindakan",
+      "next": "Berikutnya",
+      "no-more-information": "Tidak ada informasi lagi",
+      "review": "Tinjau",
+      "addFood": "Tambah makanan",
+      "addMeal": "Tambah waktu makan",
+      "changeFood": "Ubah makanan",
+      "deleteFood": "Hapus makanan",
+      "deleteMeal": "Hapus waktu makan",
+      "editFood": "Edit makanan",
+      "editMeal": "Edit waktu makan",
+      "mealTime": "Waktu makan",
+      "selectFood": "Pilih makanan",
+      "selectMeal": "Pilih waktu makan"
+    }
+  },
+  "conditions": {
+    "_": "Kondisi",
+    "title": "Kondisi",
+    "add": "Kondisi baru",
+    "remove": "Hapus kondisi",
+    "object": {
+      "_": "Objek kondisi",
+      "title": "Objek kondisi",
+      "food": "Makanan saat ini",
+      "meal": "Waktu makan saat ini",
+      "survey": "Recall saat ini"
+    },
+    "property": {
+      "_": "Properti kondisi",
+      "title": "Properti kondisi",
+      "drinks": "Minuman yang dilaporkan",
+      "energy": "Nilai energi",
+      "flag": "Tanda",
+      "tag": "Tag",
+      "foodTopLevel": "Apakah tingkat atas",
+      "foodCategory": "Kategori makanan",
+      "numberOfFoods": "Jumlah makanan",
+      "numberOfMeals": "Jumlah waktu makan",
+      "promptAnswer": "Jawaban prompt",
+      "property": "Nilai properti",
+      "recallNumber": "Nomor recall",
+      "userField": "Kolom pengguna",
+      "mealCompletion": "Status penyelesaian",
+      "foodCompletion": "Status penyelesaian",
+      "externalSource": "Sumber eksternal"
+    },
+    "foodCompletion": {
+      "freeEntryComplete": "Entri teks bebas selesai",
+      "searchComplete": "Identifikasi selesai",
+      "portionSizeComplete": "Estimasi ukuran porsi selesai",
+      "complete": "Prompt makanan terkait selesai"
+    },
+    "category": {
+      "_": "Kategori",
+      "id": "ID kategori",
+      "includeIfSet": "Sertakan jika diatur"
+    },
+    "flag": {
+      "_": "Tanda",
+      "id": "ID tanda",
+      "includeIfSet": "Sertakan jika diatur"
+    },
+    "tag": {
+      "_": "Tag",
+      "id": "ID tag",
+      "includeIfSet": "Sertakan jika diberi tag"
+    },
+    "summary": {
+      "value": "<em><strong>{property}</strong></em> &nbsp;dari&nbsp; <em><strong>{object}</strong></em>",
+      "entityValue": "<em><strong>{property}</strong></em> &nbsp;dari&nbsp; <em><strong>{object}</strong></em>",
+      "boolean": "<em><strong>{property}</strong></em> &nbsp;dalam&nbsp; <em><strong>{object}</strong></em>: {value}",
+      "mealCompletion": {
+        "freeEntryComplete": "<em><strong>entri teks bebas</em></strong> &nbsp;untuk&nbsp; makanan pada <em><strong>{object}</strong></em> telah selesai",
+        "searchComplete": "<em><strong>identifikasi</em></strong> &nbsp;untuk makanan dalam <em><strong>{object}</strong></em> telah selesai",
+        "portionSizeComplete": "<em><strong>estimasi ukuran porsi</em></strong> &nbsp;untuk makanan dalam <em><strong>{object}</strong></em> telah selesai",
+        "complete": "<em><strong>prompt makanan terkait</em></strong> &nbsp;di&nbsp; <em><strong>{object}</strong></em> telah selesai"
+      },
+      "foodCompletion": {
+        "freeEntryComplete": "<em><strong>entri teks bebas</em></strong> &nbsp;untuk&nbsp; <em><strong>{object}</strong></em> telah selesai",
+        "searchComplete": "<em><strong>identifikasi</em></strong> &nbsp;untuk&nbsp; <em><strong>{object}</strong></em> telah selesai",
+        "portionSizeComplete": "<em><strong>estimasi ukuran porsi</em></strong> &nbsp;untuk&nbsp; <em><strong>{object}</strong></em> telah selesai",
+        "complete": "<em><strong>prompt makanan terkait</em></strong> &nbsp;untuk&nbsp; <em><strong>{object}</strong></em> telah selesai"
+      },
+      "externalSource": "<em><strong>Sumber eksternal ({provider})</strong></em> &nbsp;untuk&nbsp; <em><strong>{object}</strong></em> &nbsp;{value}&nbsp; <em><strong>{state}</strong></em>",
+      "flag": {
+        "set": "tanda <em><strong>{id}</strong></em> &nbsp;ditetapkan dalam&nbsp; <em><strong>{object}</strong></em>",
+        "notSet": "tanda <em><strong>{id}</strong></em> &nbsp;tidak ditetapkan dalam&nbsp; <em><strong>{object}</strong></em>"
+      },
+      "tag": {
+        "present": "<em><strong>{object}</strong></em> &nbsp;diberi tag&nbsp; <em><strong>{id}</strong></em>",
+        "absent": "<em><strong>{object}</strong></em> &nbsp;<strong>TIDAK</strong> &nbsp;diberi tag&nbsp; <em><strong>{id}</strong></em>"
+      },
+      "promptAnswer": "<em><strong>{property} ({promptId})</strong></em> &nbsp;untuk&nbsp; <em><strong>{object}</strong></em>",
+      "userField": "<em><strong>{property} ({field})</strong></em> &nbsp;untuk&nbsp; <em><strong>{object}</strong></em>",
+      "notRequired": "<strong>ATAU</strong> &nbsp;tidak ditetapkan"
+    },
+    "promptAnswer": {
+      "promptId": "ID prompt",
+      "required": "Jawaban prompt wajib diisi (hapus centang jika prompt harus aktif ketika jawabannya tidak diketahui)"
+    },
+    "userField": {
+      "field": "Kolom"
+    },
+    "ops": {
+      "_": "Operasi",
+      "eq": "sama dengan",
+      "setEq": "set nilai yang sama",
+      "ne": "tidak sama dengan",
+      "in": "ada dalam",
+      "notIn": "tidak ada dalam",
+      "gte": "lebih besar atau sama dengan",
+      "gt": "lebih besar dari",
+      "lte": "lebih kecil atau sama dengan",
+      "lt": "lebih kecil dari"
+    },
+    "value": "Nilai kondisi",
+    "showIf": "Tampilkan prompt jika: ",
+    "showIfTrue": "Tampilkan jika benar",
+    "showIfSet": "Tampilkan jika diatur",
+    "orPrevious": "Atau sebelumnya",
+    "is": "adalah",
+    "isNot": "bukan"
+  },
+  "data-export": {
+    "_": "Ekspor data",
+    "tab": "Ekspor data",
+    "title": "Kolom ekspor data",
+    "current": "Kolom ekspor saat ini",
+    "available": "Kolom ekspor tersedia",
+    "add": "Tambah bagian",
+    "edit": "Edit bagian",
+    "remove": "Hapus bagian",
+    "fields": {
+      "_": "Edit label kolom",
+      "id": "ID kolom",
+      "label": "Label kolom",
+      "custom": "Tambah kolom kustom"
+    },
+    "sections": {
+      "_": "Bagian ekspor data",
+      "user": "Kolom catatan pengguna",
+      "userCustom": "Kolom kustom pengguna",
+      "survey": "Kolom catatan survei",
+      "submission": "Kolom pengajuan",
+      "submissionCustom": "Kolom kustom pengajuan",
+      "meal": "Kolom catatan waktu makan",
+      "mealCustom": "Kolom kustom waktu makan",
+      "food": "Kolom catatan makanan",
+      "foodCustom": "Kolom kustom makanan",
+      "foodFields": "Kolom komposisi makanan",
+      "foodNutrients": "Kolom nutrien makanan",
+      "portionSizes": "Kolom ukuran porsi",
+      "externalSources": "Kolom sumber eksternal"
+    }
+  },
+  "i18n": {
+    "_": "Terjemahan prompt",
+    "title": "Terjemahan prompt",
+    "core": "Terjemahan default untuk kolom '{key}'",
+    "custom": "Terjemahan kustom untuk kolom '{key}'",
+    "init": "Inisialisasi kolom terjemahan",
+    "none": "Tidak ada terjemahan"
+  },
+  "overrides": {
+    "_": "Override skema",
+    "title": "Override skema",
+    "subtitle": "Menimpa bagian tertentu dari skema survei",
+    "meals": {
+      "title": "Override waktu makan skema",
+      "subtitle": "Menimpa daftar waktu makan skema. Jika kosong, daftar skema digunakan. Jika ada item ditambahkan, seluruh daftar baru digunakan."
+    },
+    "prompts": {
+      "title": "Override prompt skema",
+      "subtitle": "Menimpa prompt skema tertentu. Perubahan digabungkan berdasarkan ID prompt."
+    },
+    "settings": {
+      "title": "Override pengaturan skema",
+      "subtitle": "Menimpa pengaturan skema tertentu."
+    }
+  },
+  "prompts": {
+    "_": "Prompt skema",
+    "tab": "Prompt",
+    "title": "Prompt skema",
+    "create": "Prompt baru",
+    "edit": "Edit prompt",
+    "copy": "Salin prompt",
+    "move": "Pindahkan prompt",
+    "remove": "Hapus prompt",
+    "section": "Bagian prompt",
+    "preMeals": {
+      "title": "Prompt pra-recall",
+      "subtitle": "Prompt umum yang ditanyakan sebelum recall diet, termasuk prompt personal dan instruksi awal."
+    },
+    "postMeals": {
+      "title": "Prompt pasca-recall",
+      "subtitle": "Prompt umum yang ditanyakan setelah recall diet."
+    },
+    "submission": {
+      "title": "Prompt pengajuan",
+      "subtitle": "Prompt terakhir sebelum pengajuan."
+    },
+    "preFoods": {
+      "title": "Prompt waktu makan pra-makanan",
+      "subtitle": "Prompt tentang waktu makan sebelum makanan dimasukkan, seperti waktu makan."
+    },
+    "foods": {
+      "title": "Prompt makanan",
+      "subtitle": "Prompt tentang makanan, termasuk pencarian basis data makanan dan estimasi ukuran porsi."
+    },
+    "postFoods": {
+      "title": "Prompt waktu makan pasca-makanan",
+      "subtitle": "Prompt tentang waktu makan setelah estimasi ukuran porsi semua makanan pada waktu makan selesai."
+    },
+    "foodsDeferred": {
+      "title": "Prompt makanan tertunda",
+      "subtitle": "Pertanyaan tambahan tentang makanan setelah prompt waktu makan pasca-makanan selesai."
+    },
+    "internal": {
+      "_": "Pengenal internal",
+      "id": {
+        "_": "ID prompt",
+        "hint": "Pengenal unik internal, digunakan misalnya sebagai header di ekspor data"
+      },
+      "name": {
+        "_": "Nama prompt",
+        "hint": "Nama deskriptif internal untuk memudahkan orientasi"
+      },
+      "group": {
+        "_": "Grup prompt",
+        "hint": "ID grup untuk mengelompokkan prompt"
+      }
+    },
+    "type": "Jenis prompt",
+    "component": "Komponen prompt",
+    "name": {
+      "_": "Nama prompt",
+      "hint": "Nama prompt pendek (mis. untuk breadcrumb)",
+      "required": "Nama prompt wajib diisi."
+    },
+    "text": {
+      "_": "Teks prompt",
+      "hint": "Teks utama prompt",
+      "required": "Teks prompt wajib diisi."
+    },
+    "description": {
+      "_": "Deskripsi prompt",
+      "hint": "Informasi prompt tambahan",
+      "required": "Deskripsi prompt wajib diisi."
+    },
+    "custom": {
+      "_": "Kustom",
+      "noPrompts": "Tidak ada prompt kustom untuk bagian ini"
+    },
+    "standard": {
+      "_": "Standar",
+      "noPrompts": "Tidak ada prompt standar untuk bagian ini"
+    },
+    "portion-size": {
+      "_": "Ukuran porsi",
+      "noPrompts": "Tidak ada prompt ukuran porsi untuk bagian ini"
+    },
+    "badges": "Tampilkan lencana jumlah",
+    "barcodes": {
+      "_": "Pemindai barcode",
+      "title": "Opsi pemindai barcode",
+      "providers": {
+        "_": "Penyedia",
+        "title": "Penyedia",
+        "none": "Tidak ada",
+        "quagga": "Quagga2",
+        "strich": "Strich"
+      },
+      "readers": {
+        "_": "Pembaca",
+        "title": "Pembaca"
+      },
+      "feedback": {
+        "_": "Umpan balik",
+        "audio": "Audio",
+        "vibration": "Getaran"
+      }
+    },
+    "externalSources": {
+      "_": "Sumber eksternal",
+      "title": "Pengaturan sumber eksternal",
+      "sources": {
+        "_": "Sumber",
+        "title": "Sumber",
+        "open-food-facts": "Open Food Facts"
+      },
+      "states": {
+        "_": "Status",
+        "title": "Status",
+        "false": "Tidak ada",
+        "true": "Ada (@:survey-schemes.prompts.externalSources.states.selected atau @:survey-schemes.prompts.externalSources.states.missing)",
+        "selected": "Dipilih",
+        "missing": "Tidak ada"
+      },
+      "countries": {
+        "_": "Negara",
+        "title": "Negara",
+        "world": "Dunia",
+        "uk": "Inggris",
+        "fr": "Prancis"
+      }
+    },
+    "foodBrowser": {
+      "_": "Pengaturan penelusuran makanan",
+      "categoriesFirst": {
+        "_": "Tampilkan kategori terlebih dahulu dalam daftar",
+        "browse": "Daftar telusur makanan",
+        "search": "Daftar pencarian makanan"
+      }
+    },
+    "imageMap": {
+      "_": "Pengaturan peta gambar",
+      "labels": {
+        "_": "Label",
+        "true": "Selalu tampilkan label",
+        "false": "Jangan pernah tampilkan label",
+        "null": "Mengikuti pengaturan metode ukuran porsi"
+      },
+      "pinchZoom": "Tampilkan PinchZoom untuk UI seluler"
+    },
+    "multiple": "Izinkan memilih beberapa item",
+    "label": "Label daftar opsi",
+    "leftovers": "Izinkan sisa makanan",
+    "linkedQuantity": {
+      "title": "Pengaturan jumlah tertaut",
+      "subtitle": "Memungkinkan memicu prompt jumlah untuk makanan induk yang tertaut",
+      "auto": "Terapkan jumlah tertaut secara otomatis",
+      "parent": "Kategori induk yang ditautkan",
+      "source": "Kategori sumber yang memicu"
+    },
+    "other": "Izinkan opsi lainnya",
+    "orientation": {
+      "_": "Orientasi",
+      "column": "Kolom",
+      "row": "Baris"
+    },
+    "carousel": {
+      "_": "Karosel",
+      "title": "Pengaturan karosel",
+      "required": "Karosel wajib diselesaikan",
+      "slides": {
+        "_": "Slide",
+        "title": "Slide karosel",
+        "add": "Tambah slide",
+        "edit": "Edit slide",
+        "remove": "Hapus slide",
+        "text": "Teks",
+        "image": "Gambar"
+      }
+    },
+    "counter": {
+      "_": "Penghitung",
+      "title": "Pengaturan penghitung",
+      "current": "Nilai saat ini",
+      "min": "Nilai minimum",
+      "max": "Nilai maksimum",
+      "confirm": "Wajib konfirmasi",
+      "fraction": "Gunakan pecahan",
+      "whole": "Gunakan bilangan bulat"
+    },
+    "slider": {
+      "_": "Penggeser",
+      "title": "Pengaturan penggeser",
+      "current": {
+        "label": "Label saat ini",
+        "value": "Nilai saat ini",
+        "size": "Ukuran label"
+      },
+      "min": {
+        "label": "Label minimum",
+        "value": "Nilai minimum"
+      },
+      "max": {
+        "label": "Label maksimum",
+        "value": "Nilai maksimum"
+      },
+      "confirm": "Wajib konfirmasi",
+      "step": "Kelipatan langkah"
+    },
+    "timePicker": {
+      "_": "Pemilih waktu",
+      "title": "Opsi pemilih waktu",
+      "allowedMinutes": {
+        "_": "Menit yang diizinkan",
+        "item": "Setiap {item} menit"
+      },
+      "amPmToggle": "Tombol AM/PM",
+      "format": {
+        "_": "Format waktu",
+        "ampm": "AM/PM",
+        "24hr": "24 jam"
+      },
+      "ui": {
+        "_": "UI pemilih waktu",
+        "digital": "Pemilih digital",
+        "md-clock": "Jam Material Design"
+      }
+    },
+    "validation": {
+      "required": "Prompt wajib diisi",
+      "message": "Pesan kesalahan yang ditampilkan",
+      "limits": {
+        "_": "Batas jawaban",
+        "min": "Jumlah jawaban minimum",
+        "max": "Jumlah jawaban maksimum"
+      }
+    },
+    "video": {
+      "_": "Video",
+      "youtube": {
+        "_": "Video YouTube",
+        "videoId": "ID video YouTube",
+        "height": "Tinggi video",
+        "width": "Lebar video",
+        "autoContinue": "Lanjutkan setelah video selesai",
+        "autoplay": "Putar otomatis",
+        "required": "Video wajib diputar"
+      }
+    },
+    "templates": {
+      "_": "Templat prompt",
+      "title": "Templat prompt",
+      "add": "Muat dari templat",
+      "alreadyExists": "Prompt dengan ID '{promptId}' sudah ada dalam skema",
+      "none": "Tidak ada templat prompt ditemukan",
+      "saveAs": {
+        "_": "Simpan sebagai templat",
+        "title": "Simpan prompt sebagai templat"
+      }
+    },
+    "addon-foods-prompt": {
+      "title": "Makanan tambahan",
+      "subtitle": "Sarankan makanan yang biasanya dikonsumsi bersama makanan ini",
+      "add": "Tambah makanan tambahan",
+      "remove": "Hapus makanan tambahan",
+      "name": "Nama makanan tambahan",
+      "entity": "Entitas",
+      "code": "Kode",
+      "filter": "Hanya menanyakan makanan tertentu"
+    },
+    "associated-foods-prompt": {
+      "title": "Makanan terkait (khusus makanan)",
+      "subtitle": "Sarankan makanan yang biasanya dikonsumsi bersama. Makanan yang disarankan ditentukan pada level makanan di basis data makanan.",
+      "multiple": "Izinkan memilih beberapa makanan",
+      "skipFollowUpPrompts": "Lewati prompt lanjutan untuk makanan yang baru ditambahkan"
+    },
+    "general-associated-foods-prompt": {
+      "title": "Makanan terkait (umum)",
+      "subtitle": "Sarankan makanan yang biasanya dikonsumsi bersama. Makanan yang disarankan ditentukan pada level prompt, dan relevansinya ditentukan oleh kondisi.",
+      "multiple": "Izinkan memilih beberapa makanan",
+      "skipPortionSize": "Lewati estimasi ukuran porsi untuk makanan yang dipilih",
+      "categoryCode": "Kategori makanan terkait",
+      "promptText": "Teks prompt",
+      "genericName": "Nama placeholder untuk makanan terkait"
+    },
+    "edit-meal-prompt": {
+      "title": "Daftar makanan",
+      "subtitle": "Daftar atau edit makanan pada waktu makan ini sebagai deskripsi teks bebas",
+      "separateDrinks": "Pisahkan daftar minuman",
+      "inputAutoFocus": "Fokus otomatis pada kolom entri makanan"
+    },
+    "external-source-prompt": {
+      "title": "Sumber eksternal",
+      "subtitle": "Prompt untuk sumber eksternal pencocokan makanan"
+    },
+    "final-prompt": {
+      "title": "Final",
+      "subtitle": "Halaman akhir setelah pengajuan",
+      "rating": {
+        "_": "Aktifkan pengumpulan penilaian survei",
+        "title": "Penilaian survei"
+      }
+    },
+    "food-selection-prompt": {
+      "title": "Pemilihan makanan",
+      "subtitle": "Pilih makanan dari waktu makan menggunakan daftar centang",
+      "filter": "Hanya menanyakan makanan tertentu",
+      "useFlag": "Tetapkan tanda pada makanan yang dipilih alih-alih jawaban prompt kustom",
+      "flag": "Tanda"
+    },
+    "food-search-prompt": {
+      "title": "Pencarian basis data makanan",
+      "subtitle": "Pilih makanan dari basis data yang paling sesuai dengan deskripsi",
+      "allowBrowsing": "Izinkan responden menelusuri kategori makanan secara bebas",
+      "dualLanguage": "Tampilkan nama makanan alternatif dalam bahasa lain",
+      "allowThumbnails": "Tampilkan gambar mini makanan jika tersedia",
+      "enableGrid": "Izinkan tata letak grid",
+      "gridThreshold": "Gunakan tata letak grid jika setidaknya {percent}% makanan memiliki gambar mini"
+    },
+    "meal-add-prompt": {
+      "title": "Tambah waktu makan",
+      "subtitle": "Tambah waktu makan baru ke daftar",
+      "custom": "Izinkan nama waktu makan kustom",
+      "unique": "Hanya izinkan nama waktu makan unik"
+    },
+    "meal-duration-prompt": {
+      "title": "Durasi waktu makan",
+      "subtitle": "Tanyakan durasi waktu makan"
+    },
+    "meal-gap-prompt": {
+      "title": "Jeda waktu antar makan",
+      "subtitle": "Periksa jeda waktu antar makan",
+      "gap": "Jeda antar makan (menit)",
+      "startTime": "Waktu mulai hari",
+      "endTime": "Waktu selesai hari"
+    },
+    "meal-time-prompt": {
+      "title": "Waktu makan",
+      "subtitle": "Konfirmasi waktu makan atau hapus waktu makan"
+    },
+    "ready-meal-prompt": {
+      "title": "Makanan siap saji",
+      "subtitle": "Tanyakan tentang makanan siap saji"
+    },
+    "recall-date-prompt": {
+      "title": "Tanggal recall",
+      "subtitle": "Tanyakan penentuan tanggal recall",
+      "current": "Offset tanggal sekarang",
+      "min": "Jumlah hari sebelum hari ini yang diizinkan",
+      "max": "Jumlah hari setelah hari ini yang diizinkan"
+    },
+    "redirect-prompt": {
+      "title": "Pengalihan",
+      "subtitle": "Halaman akhir untuk mengalihkan pengguna ke situs eksternal",
+      "rating": {
+        "_": "Aktifkan pengumpulan penilaian survei",
+        "title": "Penilaian survei"
+      },
+      "url": {
+        "_": "URL dasar",
+        "title": "Opsi URL",
+        "subtitle": "Gunakan '{identifier}' untuk menunjukkan posisi penyisipan pengenal pengguna.",
+        "hint": "https://example.com/?arg={identifier}"
+      },
+      "identifier": {
+        "_": "Pengenal pengguna yang disematkan ke URL",
+        "subtitle": "Tentukan pengenal mana yang akan disematkan dalam URL pengalihan",
+        "hint": "Nilai kustom akan dicari pada 'kolom kustom pengguna'",
+        "options": {
+          "userId": "ID pengguna",
+          "username": "Nama pengguna",
+          "urlAuthToken": "Token autentikasi"
+        }
+      },
+      "target": {
+        "_": "Target",
+        "subtitle": "Pilih di mana URL dibuka",
+        "_self": "Buka di jendela yang sama",
+        "_blank": "Buka di jendela baru"
+      },
+      "timer": {
+        "_": "Jumlah detik sebelum pengalihan",
+        "title": "Opsi timer"
+      }
+    },
+    "review-confirm-prompt": {
+      "title": "Tinjau dan Konfirmasi",
+      "subtitle": "Tinjau dan konfirmasi penyelesaian serta progres recall"
+    },
+    "same-as-before-prompt": {
+      "title": "Sama seperti sebelumnya",
+      "subtitle": "Tanyakan apakah makanan sama seperti sebelumnya"
+    },
+    "split-food-prompt": {
+      "title": "Pisahkan makanan",
+      "subtitle": "Tanyakan deskripsi makanan yang dipisah"
+    },
+    "submit-prompt": {
+      "title": "Kirim",
+      "subtitle": "Konfirmasi penyelesaian dan kirim recall",
+      "review": {
+        "title": "Opsi tinjauan akhir",
+        "subtitle": "Pilih opsi yang diinginkan untuk halaman tinjauan akhir.",
+        "false": "Tidak perlu meninjau",
+        "scroll": "Gulir ke bawah untuk menyelesaikan tinjauan",
+        "checkbox": "Centang peninjauan waktu makan untuk menyelesaikan",
+        "onecheckbox": "Centang satu peninjauan survei untuk menyelesaikan"
+      }
+    },
+    "info-prompt": {
+      "title": "Informasi",
+      "subtitle": "Tampilkan pesan atau instruksi dan minta konfirmasi"
+    },
+    "no-more-information-prompt": {
+      "title": "Tidak ada informasi lagi",
+      "subtitle": "Tampilkan pesan bahwa tidak ada informasi tambahan yang dibutuhkan untuk pilihan saat ini"
+    },
+    "date-picker-prompt": {
+      "title": "Tanggal",
+      "subtitle": "Minta memilih tanggal",
+      "current": "Offset tanggal sekarang",
+      "min": "Jumlah hari sebelum hari ini yang diizinkan",
+      "max": "Jumlah hari setelah hari ini yang diizinkan"
+    },
+    "time-picker-prompt": {
+      "title": "Waktu",
+      "subtitle": "Minta memilih waktu dalam sehari"
+    },
+    "checkbox-list-prompt": {
+      "title": "Pilihan berganda",
+      "subtitle": "Minta memilih sejumlah item dari daftar"
+    },
+    "radio-list-prompt": {
+      "title": "Pilihan tunggal",
+      "subtitle": "Minta memilih satu item dari daftar"
+    },
+    "select-prompt": {
+      "title": "Pilih",
+      "subtitle": "Minta memilih nilai dari kotak pilihan"
+    },
+    "slider-prompt": {
+      "title": "Penggeser",
+      "subtitle": "Minta memilih nilai pada penggeser"
+    },
+    "textarea-prompt": {
+      "title": "Teks bebas",
+      "subtitle": "Minta memasukkan jawaban atau deskripsi teks bebas"
+    },
+    "yes-no-prompt": {
+      "title": "Pilihan Ya / Tidak",
+      "subtitle": "Minta memilih ya atau tidak",
+      "useFlag": "Tetapkan tanda alih-alih jawaban prompt kustom",
+      "flag": "Tanda"
+    },
+    "aggregate-choice-prompt": {
+      "title": "Pertanyaan pilihan agregat",
+      "subtitle": "Minta memilih opsi untuk setiap makanan yang dilaporkan dalam satu layar",
+      "filter": "Hanya menanyakan makanan tertentu"
+    },
+    "as-served-prompt": {
+      "title": "Ukuran porsi saat disajikan",
+      "subtitle": "Gunakan metode \"saat disajikan\" untuk memperkirakan ukuran porsi"
+    },
+    "cereal-prompt": {
+      "title": "Sereal",
+      "subtitle": "Gunakan metode \"sereal\" untuk memperkirakan ukuran porsi"
+    },
+    "direct-weight-prompt": {
+      "title": "Berat langsung",
+      "subtitle": "Berat langsung"
+    },
+    "drink-scale-prompt": {
+      "title": "Skala minuman",
+      "subtitle": "Gunakan metode \"skala minuman\" untuk memperkirakan jumlah cairan yang dikonsumsi"
+    },
+    "guide-image-prompt": {
+      "title": "Gambar panduan",
+      "subtitle": "Gunakan metode \"gambar panduan\" untuk memperkirakan ukuran porsi"
+    },
+    "milk-in-a-hot-drink-prompt": {
+      "title": "Susu dalam minuman panas",
+      "subtitle": "Gunakan metode \"susu dalam minuman panas\" untuk memperkirakan jumlah susu"
+    },
+    "milk-on-cereal-prompt": {
+      "title": "Susu pada sereal",
+      "subtitle": "Gunakan metode \"susu pada sereal\" untuk memperkirakan ukuran porsi"
+    },
+    "missing-food-prompt": {
+      "title": "Makanan yang terlewat",
+      "subtitle": "Mengumpulkan informasi tentang makanan yang terlewat"
+    },
+    "pizza-prompt": {
+      "title": "Pizza",
+      "subtitle": "Gunakan metode \"pizza\" untuk memperkirakan ukuran porsi"
+    },
+    "pizza-v2-prompt": {
+      "title": "Pizza V2",
+      "subtitle": "Gunakan metode \"pizza v2\" untuk memperkirakan ukuran porsi"
+    },
+    "parent-food-portion-prompt": {
+      "title": "Porsi makanan induk",
+      "subtitle": "Gunakan metode \"porsi makanan induk\" untuk memperkirakan ukuran porsi",
+      "portions": "Daftar porsi kategori"
+    },
+    "portion-size-option-prompt": {
+      "title": "Metode estimasi ukuran porsi",
+      "subtitle": "Pilih metode ukuran porsi ketika tersedia lebih dari satu untuk makanan"
+    },
+    "recipe-builder-prompt": {
+      "title": "Buat hidangan sendiri",
+      "subtitle": "Buat hidangan sendiri dari bahan-bahan"
+    },
+    "standard-portion-prompt": {
+      "title": "Porsi standar",
+      "subtitle": "Gunakan metode \"porsi standar\" untuk memperkirakan ukuran porsi"
+    },
+    "unknown-prompt": {
+      "title": "Tidak diketahui",
+      "subtitle": "Ukuran porsi tidak diketahui"
+    }
+  },
+  "theme": {
+    "colors": {
+      "_": "Warna",
+      "title": "Warna"
+    },
+    "layouts": {
+      "_": "Tata letak",
+      "title": "Tata letak",
+      "desktop": "Desktop",
+      "mobile": "Seluler"
+    },
+    "variants": {
+      "_": "Varian",
+      "title": "Varian",
+      "elevated": "Timbul",
+      "flat": "Datar",
+      "outlined": "Garis luar",
+      "plain": "Sederhana",
+      "tonal": "Tonal",
+      "text": "Teks"
+    }
+  }
+}

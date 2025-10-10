@@ -1,0 +1,609 @@
+{
+  "checkboxList": {
+    "name": "Daftar pilihan ganda",
+    "text": "",
+    "description": "",
+    "label": "",
+    "other": "Lainnya - mohon sebutkan",
+    "validation": {
+      "required": "Minimal satu pilihan harus dipilih."
+    }
+  },
+  "datePicker": {
+    "name": "Pilih tanggal",
+    "text": "",
+    "description": "",
+    "validation": {
+      "required": "Kolom ini wajib diisi."
+    }
+  },
+  "info": {
+    "name": "Informasi / konfirmasi",
+    "text": "",
+    "description": ""
+  },
+  "noMoreInformation": {
+    "name": "Tidak ada informasi lain yang dibutuhkan",
+    "text": "",
+    "description": "<p>Saat ini kami sudah memiliki semua informasi yang diperlukan tentang <strong>{item}</strong>.</p><p>Untuk melanjutkan survei, pilih tombol \"Lanjutkan\" di bawah dan kami akan otomatis memilih makanan atau hidangan berikutnya yang masih perlu dilengkapi.</p><p>Anda juga bisa memilih hidangan atau makanan di sebelah kiri jika ingin fokus pada item tertentu.</p>"
+  },
+  "select": {
+    "name": "Pilih nilai dari daftar",
+    "text": "",
+    "description": "",
+    "label": "Pilih opsi"
+  },
+  "slider": {
+    "name": "Pilih nilai pada penggeser",
+    "text": "",
+    "description": ""
+  },
+  "radioList": {
+    "name": "Daftar pilihan tunggal",
+    "text": "",
+    "description": "",
+    "label": "",
+    "other": "Lainnya - mohon sebutkan",
+    "validation": {
+      "required": "Salah satu opsi harus dipilih."
+    }
+  },
+  "textarea": {
+    "name": "Teks bebas",
+    "text": "",
+    "description": "",
+    "label": "Masukkan jawaban Anda di kolom teks",
+    "validation": {
+      "required": "Kolom ini wajib diisi."
+    }
+  },
+  "timePicker": {
+    "name": "Pilih waktu",
+    "text": "",
+    "description": "",
+    "validation": {
+      "required": "Kolom ini wajib diisi."
+    },
+    "picker": {
+      "title": "Pilih waktu",
+      "hours": "Jam",
+      "minutes": "Menit",
+      "24h": "24 jam",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
+  },
+  "yesNo": {
+    "name": "Konfirmasi Ya / Tidak",
+    "text": "",
+    "description": ""
+  },
+  "addonFoods": {
+    "name": "Makanan tambahan",
+    "text": "",
+    "description": "Apakah Anda mengonsumsi makanan tambahan bersama makanan berikut?",
+    "food": "Makanan",
+    "portion": "Porsi",
+    "quantity": "Jumlah",
+    "didNotHave": "Tidak"
+  },
+  "associatedFoods": {
+    "name": "Makanan terkait",
+    "text": "",
+    "description": "",
+    "yes": "Ya, saya mengonsumsinya",
+    "yesAnother": "Ya, saya mengonsumsinya lagi",
+    "existingFoodHint": "Pilih \"Ya, saya mengonsumsinya\" jika Anda sudah memasukkannya.",
+    "no": "Tidak, saya tidak",
+    "moreFoodsQuestion": "Apakah Anda memiliki makanan lain dari kategori ini?",
+    "databaseLookupTitle": "Apa itu?",
+    "databaseLookupWithExisting": "Jika tidak, apa itu?",
+    "existingFoodsTitle": "Apakah itu sesuatu yang sudah Anda masukkan?",
+    "select": {
+      "different": "Ubah",
+      "remove": "Hapus"
+    },
+    "browse": "Jelajahi semua makanan",
+    "search": "Cari makanan",
+    "results": "Hasil pencarian",
+    "relatedCategories": "Kategori/Subkategori terkait",
+    "showLess": "Tampilkan lebih sedikit",
+    "showAll": "Tampilkan semua kategori terkait",
+    "root": "semua kategori makanan",
+    "back": "Kembali ke '{category}'",
+    "none": "Tidak ada makanan ditemukan. Coba persempit pencarian Anda.",
+    "refine": "Hasilnya terlalu banyak — coba lebih spesifik agar menemukan yang tepat.",
+    "missing": {
+      "label": "Saya tidak dapat menemukan makanan saya",
+      "description": "<p>Coba telusuri kategori makanan di atas untuk menemukan makanan Anda.</p><p>Jika masih belum ditemukan, pilih 'Laporkan makanan yang hilang'.</p>",
+      "report": "Laporkan makanan yang hilang",
+      "tryAgain": "Baik, saya coba lagi",
+      "placeholder": "Makanan yang hilang"
+    }
+  },
+  "generalAssociatedFoods": {
+    "name": "Makanan terkait (umum)",
+    "text": "",
+    "description": "",
+    "yes": "Ya, saya mengonsumsinya",
+    "yesAnother": "Ya, saya mengonsumsinya lagi",
+    "existingFoodHint": "Pilih \"Ya, saya mengonsumsinya\" jika Anda sudah memasukkannya.",
+    "no": "Tidak, saya tidak",
+    "moreFoodsQuestion": "Apakah Anda memiliki makanan lain dari kategori ini?",
+    "databaseLookupTitle": "Apa itu?",
+    "databaseLookupWithExisting": "Jika tidak, apa itu?",
+    "existingFoodsTitle": "Apakah itu sesuatu yang sudah Anda masukkan?",
+    "select": {
+      "different": "Ubah",
+      "remove": "Hapus"
+    },
+    "browse": "Jelajahi semua makanan",
+    "search": "Cari makanan",
+    "results": "Hasil pencarian",
+    "root": "semua kategori makanan",
+    "back": "Kembali ke '{category}'",
+    "none": "Tidak ada makanan ditemukan. Coba persempit pencarian Anda.",
+    "missing": {
+      "label": "Saya tidak dapat menemukan makanan saya",
+      "description": "<p>Coba telusuri kategori makanan di atas untuk menemukan makanan Anda.</p><p>Jika masih belum ditemukan, pilih 'Laporkan makanan yang hilang'.</p>",
+      "report": "Laporkan makanan yang hilang",
+      "tryAgain": "Baik, saya coba lagi",
+      "placeholder": "Makanan yang hilang"
+    }
+  },
+  "editMeal": {
+    "name": "Ubah hidangan",
+    "text": "",
+    "description": "<p>Sebutkan semua yang Anda konsumsi untuk <strong>{meal}</strong>.</p><p>Masukkan setiap makanan dan minuman secara terpisah.</p><p>Tekan <span class=\"fas fa-turn-down fa-rotate-90 mx-2\"></span> atau tombol Enter/Return untuk menambahkan setiap makanan dan minuman.</p><p><strong>Jangan</strong> masukkan jumlahnya, cukup nama makanannya.</p>",
+    "add": "Tambah",
+    "drinksOnly": "Minuman",
+    "foods": "Makanan dan minuman",
+    "foodsOnly": "Makanan"
+  },
+  "externalSource": {
+    "name": "Sumber eksternal",
+    "text": "",
+    "description": "",
+    "search": "Cari",
+    "back": "Kembali ke pencarian",
+    "select": "Pilih",
+    "missing": "Tidak ditemukan",
+    "products": {
+      "results": "Produk ditemukan: {count}.",
+      "none": "Tidak ada produk ditemukan",
+      "name": "Nama",
+      "code": "Kode",
+      "quantity": "Jumlah",
+      "packaging": "Kemasan"
+    }
+  },
+  "final": {
+    "name": "Halaman terakhir",
+    "text": "",
+    "description": ""
+  },
+  "foodSearch": {
+    "name": "Cari makanan",
+    "text": "",
+    "description": "<p>Berikut daftar makanan dari basis data kami yang mirip dengan \"<strong>{food}</strong>\".</p><p>Pilih makanan yang Anda konsumsi atau yang paling mendekatinya.</p>",
+    "browse": "Jelajahi semua makanan",
+    "search": "Cari makanan",
+    "results": "Hasil pencarian",
+    "relatedCategories": "Kategori/Subkategori terkait",
+    "showLess": "Tampilkan lebih sedikit",
+    "showAll": "Tampilkan semua kategori terkait",
+    "root": "semua kategori makanan",
+    "back": "Kembali ke '{category}'",
+    "none": "Tidak ada makanan ditemukan. Coba persempit pencarian Anda.",
+    "refine": "Hasilnya terlalu banyak — coba lebih spesifik agar menemukan yang tepat.",
+    "pizza": "Jika pizza Anda berasal dari restoran atau layanan antar, pilih opsi tersebut di daftar.",
+    "rootCategory": "Pencarian makanan dibatasi pada '{category}'",
+    "rootCategoryToggle": "Batasi pencarian makanan pada '{category}'",
+    "missing": {
+      "label": "Saya tidak dapat menemukan makanan saya",
+      "description": "<p>Jika makanan Anda tidak ditemukan di daftar, coba ubah kata pencarian pada kotak di atas.</p><p>Anda juga dapat memilih 'Jelajahi semua makanan' untuk menelusuri kategori makanan.</p><p>Jika masih belum ditemukan, pilih 'Laporkan makanan yang hilang'.</p>",
+      "report": "Laporkan makanan yang hilang",
+      "tryAgain": "Baik, saya coba lagi"
+    },
+    "confirmDiscardFood": {
+      "label": "Ya",
+      "messageUnsafe": "<p>Anda sudah menjawab beberapa pertanyaan tentang <strong>\"{discardedFoodName}\"</strong>!</p><p>Jika sekarang diganti menjadi <strong>\"{selectedFoodName}\"</strong>, Anda mungkin perlu menjawab ulang sebagian pertanyaan tersebut.</p><p>Apakah Anda yakin ingin mengganti makanan ini?</p>",
+      "message": "Anda sudah menjawab beberapa pertanyaan tentang \"{discardedFoodName}\"! Jika sekarang diganti menjadi \"{selectedFoodName}\", Anda mungkin perlu menjawab ulang sebagian pertanyaan tersebut. Apakah Anda yakin ingin mengganti makanan ini?"
+    }
+  },
+  "foodSelection": {
+    "name": "Pilih makanan",
+    "text": "",
+    "description": "<p>Pilih makanan dari daftar di bawah.</p>",
+    "none": "Tidak ada yang sesuai"
+  },
+  "mealAdd": {
+    "name": "Tambah hidangan",
+    "text": "",
+    "description": "<p>Pilih salah satu dari daftar di bawah jika sesuai.</p>",
+    "label": "Pilih hidangan yang sudah tersedia",
+    "custom": {
+      "text": "",
+      "description": "<p>Masukkan nama hidangan ini. Anda dapat menulis nama sendiri atau memilih salah satu dari daftar di bawah jika sesuai.</p>",
+      "label": "Pilih hidangan yang tersedia atau masukkan nama hidangan"
+    },
+    "yes": "Tambahkan hidangan ini",
+    "no": "Batal",
+    "exists": "Hidangan tersebut sudah ada, pilih hidangan lain.",
+    "noMeal": "Tidak ada hidangan tersisa, tambahkan setidaknya satu hidangan"
+  },
+  "mealDuration": {
+    "name": "Durasi hidangan",
+    "text": "",
+    "description": "<p>Berapa lama waktu yang Anda butuhkan untuk menghabiskan <strong>{mealName}</strong>?</p>",
+    "minutes": "menit",
+    "confirm": "Lanjutkan"
+  },
+  "mealGap": {
+    "name": "Jeda antar hidangan",
+    "text": "",
+    "description": "",
+    "before": "<p>Apakah Anda makan, ngemil, atau minum sebelum <strong>{meal}</strong> pada {mealTime}?</p>",
+    "after": "<p>Apakah Anda makan, ngemil, atau minum lagi setelah <strong>{meal}</strong> pada {mealTime}?</p>",
+    "between": "<p>Apakah Anda makan, ngemil, atau minum di antara <strong>{startMeal}</strong> (pukul {startMealTime}) dan <strong>{endMeal}</strong> (pukul {endMealTime})?</p>",
+    "yes": "Ya, tambahkan hidangan",
+    "no": "Tidak, saya tidak"
+  },
+  "mealTime": {
+    "name": "Ubah waktu",
+    "text": "",
+    "description": "<p>Apakah Anda mengonsumsi <strong>{meal}</strong>? Jika ya, pukul berapa?</p>",
+    "yes": "Sekitar waktu tersebut",
+    "no": "Tidak mengonsumsi",
+    "picker": {
+      "title": "Pilih waktu",
+      "hours": "Jam",
+      "minutes": "Menit",
+      "24h": "24 jam",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
+  },
+  "recallDate": {
+    "name": "Tanggal recall",
+    "text": "",
+    "description": "Pilih tanggal untuk recall yang sedang Anda isi."
+  },
+  "readyMeal": {
+    "name": "Makanan siap saji",
+    "text": "",
+    "description": "<p>Apakah ini makanan siap saji?</p>"
+  },
+  "redirect": {
+    "name": "Alihkan",
+    "text": "",
+    "description": "",
+    "missingUrl": "URL pengalihan hilang",
+    "goTo": "Buka kuesioner"
+  },
+  "reviewConfirm": {
+    "name": "Tinjau dan Konfirmasi",
+    "text": "",
+    "description": "",
+    "item": "Sudah ditinjau",
+    "meal": "Saya sudah meninjau semua makanan dan minuman.",
+    "survey": "Saya sudah meninjau semua hidangan beserta makanan dan minumannya."
+  },
+  "sameAsBefore": {
+    "name": "Sama seperti sebelumnya",
+    "text": "",
+    "description": "<p>Apakah <strong>{food}</strong> ini sama seperti yang pernah Anda konsumsi sebelumnya?</p>",
+    "serving": "Ukuran porsi {amount}",
+    "leftovers": "Sisa sekitar {amount}",
+    "quantity": "{quantity} porsi",
+    "noLeftovers": {
+      "drink": "Menghabiskan semuanya",
+      "food": "Menghabiskan semuanya"
+    },
+    "hadWith": "Disajikan dengan:",
+    "noAddedFoods": "Tidak menambahkan apa pun (mis. susu, gula, saus)",
+    "same": "Ya, sama seperti sebelumnya",
+    "notSame": "Tidak, saya memiliki yang berbeda"
+  },
+  "splitFood": {
+    "name": "Pisahkan makanan",
+    "text": "",
+    "description": "Anda mencari <strong>{food}</strong>.",
+    "split": "Apakah ini makanan yang terpisah?",
+    "separate": "Ya",
+    "single": "Tidak"
+  },
+  "submit": {
+    "name": "Kirim halaman",
+    "text": "",
+    "description": ""
+  },
+  "quantity": {
+    "_": "Jumlah",
+    "whole": "Utuh",
+    "fraction": "Fraksi",
+    "and": "dan",
+    "confirm": "Saya mengonsumsi sebanyak itu",
+    "more": "Lebih banyak",
+    "less": "Lebih sedikit"
+  },
+  "portionSizeOption": {
+    "name": "Metode porsi",
+    "text": "",
+    "description": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "selections": {
+      "grated": "Diparut",
+      "in_a_bag": "Dalam kantong",
+      "in_a_bottle": "Dalam botol",
+      "in_a_bowl": "Dalam mangkuk",
+      "in_a_can": "Dalam kaleng",
+      "in_a_carton": "Dalam karton",
+      "in_a_glass": "Dalam gelas",
+      "in_a_mug": "Dalam cangkir",
+      "in_a_pot": "Dalam panci",
+      "in_a_takeaway_cup": "Dalam gelas sekali pakai",
+      "in_baby_carrots": "Dalam wortel mini",
+      "in_bars": "Dalam batangan",
+      "in_batons": "Dalam potongan memanjang",
+      "in_berries": "Dalam buah beri",
+      "in_burgers": "Dalam burger",
+      "in_chopped_fruit": "Dalam buah potong",
+      "in_crinkle_cut_chips": "Dalam kentang keriting",
+      "in_cubes": "Dalam potongan dadu",
+      "in_curly_fries": "Dalam kentang goreng keriting",
+      "in_dollops": "Dalam sendokan kecil",
+      "in_french_fries": "Dalam kentang goreng",
+      "in_individual_cakes": "Dalam kue satuan",
+      "in_individual_packs": "Dalam kemasan satuan",
+      "in_individual_puddings": "Dalam puding satuan",
+      "in_individual_sweets": "Dalam permen satuan",
+      "in_slices": "Dalam potongan",
+      "in_spoonfuls": "Dalam sendok",
+      "in_straight_cut_chips": "Dalam kentang goreng lurus",
+      "in_thick_cut_chips": "Dalam kentang goreng tebal",
+      "in_unwrapped_bars": "Dalam batangan tanpa bungkus",
+      "in_whole_fruit_vegetables": "Dalam buah/sayur utuh",
+      "in_wrapped_bars": "Dalam batangan terbungkus",
+      "milk_on_cereal": "Susu pada sereal",
+      "cereal": "Sereal",
+      "on_a_knife": "Pada pisau",
+      "on_a_plate": "Pada piring",
+      "slice_from_a_large_cake": "Potongan dari kue besar",
+      "slice_from_a_large_pudding": "Potongan dari puding besar",
+      "spread_on_a_cracker": "Oleskan pada biskuit",
+      "spread_on_a_scone": "Oleskan pada scone",
+      "spread_on_bread": "Oleskan pada roti",
+      "use_a_standard_measure": "Gunakan takaran standar",
+      "use_a_standard_portion": "Gunakan porsi standar",
+      "use_an_image": "Gunakan gambar",
+      "use_these_crisps_in_a_bag": "Gunakan keripik dalam kantong ini",
+      "use_tortilla_chips_in_a_bowl": "Gunakan keripik tortilla dalam mangkuk",
+      "use_a_drink_scale": "Gunakan skala minuman",
+      "use_a_guide_image": "Gunakan gambar panduan",
+      "unknown": "Tidak diketahui",
+      "weight": "Masukkan berat/volume"
+    },
+    "unknown": "Saat ini belum ada metode perkiraan porsi untuk {food}."
+  },
+  "linkedAmount": {
+    "label": "{unit} (dari {quantity}) mana yang Anda gunakan untuk {food}?",
+    "unit": "Berapa banyak potong",
+    "all": "Pada semuanya"
+  },
+  "asServed": {
+    "name": "Sesuai penyajian",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "serving": {
+      "header": "Gunakan gambar ini untuk memilih seberapa banyak {food} yang Anda konsumsi.",
+      "less": "Saya mengonsumsi lebih sedikit",
+      "more": "Saya mengonsumsi lebih banyak",
+      "confirm": "Saya mengonsumsi sebanyak itu"
+    },
+    "leftovers": {
+      "header": "Apakah ada {food} yang tersisa?",
+      "label": "Gunakan gambar ini untuk memilih seberapa banyak {food} yang Anda sisakan.",
+      "less": "Sisa saya lebih sedikit",
+      "more": "Saya menyisakan lebih banyak",
+      "confirm": "Saya menyisakan sebanyak itu"
+    },
+    "quantity": "Berapa banyak porsi ini yang Anda konsumsi?",
+    "weightFactor": {
+      "serving": {
+        "more": "Saya mengonsumsi {whole} dan {fraction}",
+        "less": "Saya mengonsumsi {fraction}"
+      },
+      "leftovers": {
+        "more": "Saya menyisakan {whole} dan {fraction}",
+        "less": "Saya menyisakan {fraction}"
+      },
+      "less": "dari porsi terkecil",
+      "more": "dari porsi terbesar"
+    }
+  },
+  "cereal": {
+    "name": "Sereal",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "container": "Pilih mangkuk yang paling mirip dengan yang Anda gunakan untuk {food}."
+  },
+  "directWeight": {
+    "name": "Berat",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "quantity": "Masukkan jumlah yang Anda konsumsi dalam gram atau ml."
+  },
+  "drinkScale": {
+    "name": "Skala minuman",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "container": "Pilih cangkir atau gelas yang paling mirip dengan yang Anda gunakan untuk {food}.",
+    "serving": {
+      "header": "Gunakan penggeser atau ketuk pada cangkir atau gelas untuk menunjukkan sebanyak apa yang Anda konsumsi.",
+      "less": "Saya mengonsumsi lebih sedikit",
+      "more": "Saya mengonsumsi lebih banyak",
+      "confirm": "Saya mengonsumsi sebanyak itu"
+    },
+    "leftovers": {
+      "header": "Apakah ada {food} yang tersisa?",
+      "label": "Gunakan penggeser di sebelah kanan untuk menunjukkan sisa yang Anda tinggalkan.",
+      "less": "Sisa saya lebih sedikit",
+      "more": "Saya menyisakan lebih banyak",
+      "confirm": "Saya menyisakan sebanyak itu"
+    },
+    "quantity": "Berapa banyak minuman ini yang Anda konsumsi?"
+  },
+  "guideImage": {
+    "name": "Gambar panduan",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "label": "Pilih gambar yang paling mendekati ukuran {food} yang Anda konsumsi.",
+    "quantity": "Pilih berapa banyak {food} yang Anda konsumsi.",
+    "confirm": "Saya mengonsumsi sebanyak itu",
+    "expand": "Perbesar gambar"
+  },
+  "milkInAHotDrink": {
+    "name": "Susu dalam minuman panas",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "label": "Berapa banyak {food} yang Anda tambahkan ke teh atau kopi?",
+    "confirm": "Saya mengonsumsi sebanyak itu"
+  },
+  "milkOnCereal": {
+    "name": "Susu pada sereal",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "container": "Pilih mangkuk yang paling mirip dengan yang Anda gunakan untuk {food}.",
+    "milk": "Pilih tinggi susu Anda (tanpa sereal)."
+  },
+  "missingFood": {
+    "name": "Makanan yang hilang",
+    "text": "",
+    "description": "Anda mengatakan tidak dapat menemukan padanan yang tepat untuk \"{food}\". Berikan detail sebanyak mungkin pada pertanyaan berikut agar kami dapat mengidentifikasi makanan atau minuman tersebut.",
+    "source": "Apakah dibuat sendiri?",
+    "homemade": "Berikan rincian tambahan, misalnya deskripsi hidangan atau bahan-bahannya.",
+    "purchased": "Beritahu tempat Anda membelinya dan mereknya, jika Anda tahu.",
+    "barcode": "Jika Anda mengisi melalui ponsel, pindai kode batang pada kemasan makanan.",
+    "portionSize": "Berapa banyak yang Anda konsumsi? Contoh: 1 bungkus, 2 sendok teh, 1 genggam, 125 gram."
+  },
+  "recipeBuilder": {
+    "name": "Pembuat resep {food}",
+    "text": "",
+    "description": "Ikuti langkah-langkah berikut untuk membuat resep {food} Anda sendiri.",
+    "label": "Tambahkan {searchTerm} versi Anda sendiri",
+    "browse": "Kategori {category}",
+    "search": "Cari makanan",
+    "results": "Hasil pencarian",
+    "relatedCategories": "Kategori/Subkategori terkait",
+    "showLess": "Tampilkan lebih sedikit",
+    "showAll": "Tampilkan semua kategori terkait",
+    "root": "semua kategori makanan",
+    "back": "Kembali ke '{category}'",
+    "none": "Tidak ada makanan ditemukan. Coba persempit pencarian Anda.",
+    "refine": "Hasilnya terlalu banyak — coba lebih spesifik agar menemukan yang tepat.",
+    "optional": {
+      "confirm": "Ya",
+      "reject": "Tidak",
+      "infoPrompt": "Apa itu?"
+    },
+    "addMore": "Tambah lagi",
+    "noMore": "Selesai",
+    "remove": "Hapus",
+    "missingAllIngredients": "Tambahkan setidaknya satu bahan untuk melanjutkan.",
+    "missing": {
+      "label": "Saya tidak dapat menemukan makanan saya",
+      "description": "<p>Coba telusuri kategori makanan di atas untuk menemukan makanan Anda.</p><p>Jika masih belum ditemukan, klik tombol di bawah untuk melaporkan makanan yang hilang.</p>",
+      "report": "Laporkan makanan yang hilang",
+      "tryAgain": "Baik, saya coba lagi",
+      "irrelevantIngredient": "Saya tidak mengonsumsinya"
+    }
+  },
+  "parentFoodPortion": {
+    "name": "Porsi makanan induk",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "label": "Berapa banyak {food} yang Anda konsumsi di {parentFood}?",
+    "confirm": "Saya mengonsumsi sebanyak itu"
+  },
+  "pizza": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "typeLabel": "Pilih pizza yang paling mendekati ukuran yang Anda konsumsi.",
+    "thicknessLabel": "Seberapa tebal pizza Anda?",
+    "sizeLabel": "Ukuran potongan apa yang Anda konsumsi?",
+    "whole": {
+      "label": "Berapa banyak pizza ini yang Anda konsumsi?",
+      "confirm": "Saya menghabiskan seluruh pizza"
+    },
+    "slices": {
+      "label": "Berapa banyak potong ini yang Anda konsumsi?"
+    },
+    "confirm": "Saya mengonsumsi sebanyak itu"
+  },
+  "pizzaV2": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "sizes": {
+      "label": "Ukuran pizza apa yang Anda konsumsi?",
+      "personal": "Pribadi 7\"",
+      "small": "Kecil 9,5\"",
+      "medium": "Sedang 11,5\"",
+      "large": "Besar 13,5\"",
+      "xxl": "Sangat besar 15,5\""
+    },
+    "crusts": {
+      "label": "Jenis pinggiran pizza apa yang Anda konsumsi?",
+      "classic": "Klasik",
+      "italian-thin": "Italia / Tipis",
+      "stuffed": "Isi"
+    },
+    "units": {
+      "label": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+      "slice": "Dalam potongan",
+      "whole": "Dalam pizza utuh"
+    },
+    "quantity": {
+      "slice": "Berapa banyak potong yang Anda konsumsi?",
+      "whole": "Berapa banyak pizza utuh yang Anda konsumsi?"
+    }
+  },
+  "standardPortion": {
+    "name": "Porsi standar",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?",
+    "label": "Bagaimana Anda ingin memperkirakan porsi {food} Anda?",
+    "estimateIn": "Dalam {unit}",
+    "howMany": {
+      "_": "{unit} apa yang Anda gunakan?",
+      "placeholder": "Berapa banyak yang Anda konsumsi?",
+      "withFood": "Berapa {unit} {food} yang Anda konsumsi?"
+    },
+    "confirm": "Saya mengonsumsi sebanyak itu"
+  },
+  "unknown": {
+    "name": "Tidak diketahui",
+    "text": "",
+    "description": "",
+    "method": "Bagaimana Anda ingin memperkirakan porsi Anda?"
+  },
+  "aggregateChoice": {
+    "name": "Pertanyaan makanan gabungan",
+    "text": "",
+    "description": ""
+  }
+}

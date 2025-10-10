@@ -1,0 +1,18 @@
+{
+  "_": "Profil",
+  "info": "Informasi",
+  "settings": "Pengaturan",
+  "provider": "Penyedia",
+  "providerId": "ID Penyedia",
+  "languages": {
+    "_": "Bahasa",
+    "title": "Bahasa",
+    "ar": "Bahasa Arab",
+    "de": "Bahasa Jerman",
+    "dk": "Bahasa Denmark",
+    "en": "Bahasa Inggris",
+    "es": "Bahasa Spanyol",
+    "fr": "Bahasa Prancis",
+    "pt": "Bahasa Portugis"
+  }
+}

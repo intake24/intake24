@@ -1,0 +1,58 @@
+{
+  "_": "Keamanan",
+  "title": "Keamanan",
+  "tab": "Keamanan",
+
+  "add": "Tambah akses pengguna",
+  "edit": "Edit akses pengguna",
+  "search": "Cari pengguna",
+  "create": "Buat pengguna baru",
+
+  "owner": {
+    "_": "Pemilik",
+    "title": "Kepemilikan"
+  },
+
+  "actions": {
+    "_": "Aksi sumber daya",
+    "title": "Aksi sumber daya",
+    "read": "Baca catatan",
+    "edit": "Edit catatan",
+    "delete": "Hapus catatan",
+    "copy": "Salin catatan",
+    "securables": "Keamanan",
+    "use": "Gunakan catatan",
+
+    "cards": "Kartu",
+    "top-foods": "Makanan teratas",
+    "meals": "Waktu makan",
+    "demographic-groups": "Kelompok demografis",
+    "henry-coefficients": "Koefisien Henry",
+
+    "translations": "Terjemahan",
+
+    "food-list": "Daftar makanan",
+    "food-ranking": "Peringkat makanan",
+    "split-lists": "Daftar terpisah",
+    "recipe-foods": "Makanan resep",
+    "split-words": "Kata terpisah",
+    "synonym-sets": "Set sinonim",
+    "tasks": "Tugas",
+
+    "prompts": "Prompt",
+    "data-export": "Ekspor data",
+
+    "overrides": "Override",
+    "respondents": "Responden",
+    "sessions": "Sesi",
+    "submissions": "Pengajuan",
+    "support": "Dukungan"
+  },
+
+  "visibility": {
+    "_": "Visibilitas",
+    "title": "Visibilitas catatan",
+    "public": "Publik",
+    "restricted": "Terbatas"
+  }
+}

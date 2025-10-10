@@ -1,0 +1,87 @@
+{
+  "_": "Lokal",
+  "code": "Kode lokal",
+  "title": "Lokal",
+  "all": "Semua lokal",
+  "read": "Detail lokal",
+  "create": "Tambah lokal",
+  "edit": "Edit lokal",
+  "delete": "Hapus lokal",
+
+  "prototypeLocaleId": "Lokal prototipe",
+  "englishName": "Nama bahasa Inggris",
+  "localName": "Nama lokal",
+  "respondentLanguageId": "Bahasa antarmuka responden",
+  "adminLanguageId": "Bahasa antarmuka admin",
+  "countryFlagCode": "Kode bendera negara",
+  "foodIndex": {
+    "_": "Indeks makanan",
+    "enabled": "Indeks makanan aktif",
+    "languageBackend": "Backend bahasa indeks makanan"
+  },
+
+  "split-lists": {
+    "_": "Daftar pemisah",
+    "title": "Daftar pemisah",
+    "tab": "Daftar pemisah",
+    "add": "Tambah daftar pemisah",
+    "remove": "Hapus daftar pemisah",
+
+    "firstWord": "Kata pertama",
+    "words": "Daftar kata (dipisahkan spasi)"
+  },
+
+  "split-words": {
+    "_": "Kata pemisah",
+    "title": "Kata pemisah",
+    "tab": "Kata pemisah",
+    "add": "Tambah kata pemisah",
+    "remove": "Hapus kata pemisah",
+
+    "words": "Daftar kata (dipisahkan spasi)"
+  },
+
+  "synonym-sets": {
+    "_": "Set sinonim",
+    "title": "Set sinonim",
+    "tab": "Set sinonim",
+    "add": "Tambah set sinonim",
+    "remove": "Hapus set sinonim",
+
+    "synonyms": "Sinonim (dipisahkan spasi)"
+  },
+
+  "recipe-foods": {
+    "_": "Set makanan resep",
+    "title": "Set makanan resep",
+    "tab": "Makanan resep",
+    "add": "Tambah makanan resep",
+    "remove": "Hapus makanan resep",
+    "special": "Kata pemicu",
+    "code": "Kode makanan resep",
+    "step_code": "Kode langkah (ditetapkan otomatis)",
+    "synonymsId": "Sinonim (dipisahkan spasi)",
+    "steps": "Langkah pembuat resep",
+    "name": "Nama langkah",
+    "description": "Deskripsi langkah",
+    "ingredientsCategory": "Kategori bahan langkah",
+    "order": "Urutan langkah",
+    "repeat": "Banyak bahan",
+    "require": "Wajib"
+  },
+
+  "food-ranking": {
+    "_": "Peringkat makanan",
+    "title": "Peringkat makanan",
+    "tab": "Peringkat makanan",
+    "delete": "Hapus",
+    "upload": "Unggah CSV peringkat makanan",
+    "description": "Untuk mengaktifkan algoritma peringkat makanan \"urutan yang ditentukan\" pada studi yang menggunakan lokal ini,\n' unggah spreadsheet peringkat makanan."
+  },
+
+  "tasks": {
+    "_": "Tugas lokal",
+    "title": "Tugas lokal",
+    "tab": "Tugas"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "_": "Akun",
+  "title": "Akun",
+  "info": "Informasi",
+  "access": "Akses",
+  "profile": "Profil",
+  "settings": "Pengaturan",
+
+  "name": "Nama",
+  "email": "Email",
+  "phone": "Telepon",
+  "permissions": "Izin yang diberikan",
+  "roles": "Peran yang diberikan",
+
+  "languages": {
+    "_": "Bahasa",
+    "title": "Bahasa"
+  },
+
+  "jobs": {
+    "_": "Pekerjaan",
+    "title": "Pekerjaan",
+    "create": "Pekerjaan baru"
+  },
+
+  "personalAccessTokens": {
+    "_": "Token akses personal",
+    "title": "Token akses personal",
+    "issue": "Terbitkan token",
+    "revoke": "Cabut token",
+    "revoked": "Dicabut",
+    "none": "Belum ada token akses personal dibuat.",
+    "save": "Simpan token di bawah ini dengan aman. Anda tidak akan dapat mengaksesnya lagi."
+  },
+
+  "mfa": {
+    "_": "MFA",
+    "title": "Autentikasi multi-faktor",
+    "enable": "Aktifkan autentikasi multi-faktor",
+    "disable": "Nonaktifkan autentikasi multi-faktor",
+    "disabled": "Autentikasi multi-faktor dinonaktifkan, tambahkan perangkat untuk mengaktifkannya.",
+    "devices": {
+      "_": "Perangkat",
+      "title": "Perangkat",
+      "add": "Tambah perangkat",
+      "remove": "Hapus perangkat",
+      "none": "Belum ada perangkat autentikasi multi-faktor terdaftar.",
+      "name": {
+        "_": "Nama perangkat",
+        "title": "Masukkan nama perangkat"
+      },
+      "preferred": {
+        "_": "Perangkat utama",
+        "promote": "Jadikan sebagai perangkat utama?",
+        "promoteConfirm": "Jadikan {name} sebagai perangkat utama?"
+      },
+      "init": {
+        "_": "Inisialisasi",
+        "title": "Inisialisasi perangkat"
+      },
+      "qr": {
+        "title": "Pindai kode QR dan verifikasi",
+        "text": "Pindai kode QR dengan aplikasi autentikator Anda lalu masukkan kode di bawah ini."
+      },
+      "registered": "Perangkat berhasil terdaftar",
+      "verify": "Verifikasi perangkat"
+    },
+    "providers": {
+      "_": "Penyedia",
+      "title": "Penyedia",
+      "otp": {
+        "_": "OTP",
+        "title": "Kata sandi satu kali",
+        "description": "Kata sandi satu kali yang dihasilkan oleh aplikasi autentikator. Aplikasi yang didukung: Google Authenticator, Microsoft Authenticator, Authy, Duo Security, dll."
+      },
+      "fido": {
+        "_": "FIDO",
+        "title": "FIDO / WebAuthn",
+        "description": "Perangkat yang kompatibel dengan WebAuthn / FIDO2. Perangkat yang didukung: kunci perangkat keras, Windows Hello, Face ID, dll."
+      },
+      "duo": {
+        "_": "Duo",
+        "title": "Duo Security",
+        "description": "Duo Security adalah penyedia autentikasi multi-faktor berbasis cloud. Pastikan akun Anda (email) terdaftar di Duo Security sebelum menambahkan perangkat ini."
+      }
+    }
+  }
+}

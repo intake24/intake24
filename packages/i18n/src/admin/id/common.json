@@ -1,0 +1,211 @@
+{
+  "_": "Alat Admin Intake24",
+  "title": "Umum",
+  "docs": "Dokumentasi",
+  "login": {
+    "_": "Masuk",
+    "subtitle": "Masuk ke akun Alat Admin Intake24",
+    "back": "Kembali ke masuk"
+  },
+  "mfa": {
+    "_": "MFA",
+    "title": "Konfirmasi tantangan autentikasi",
+    "devices": "Perangkat lain",
+    "otp": "Masukkan kata sandi satu kali",
+    "error": "Tantangan autentikasi tidak valid. Coba lagi."
+  },
+  "logout": {
+    "_": "Keluar",
+    "text": "Keluar dari aplikasi"
+  },
+  "signup": {
+    "_": "Daftar",
+    "subtitle": "Daftar akun Alat Admin Intake24 baru",
+    "noAccount": "Belum punya akun?"
+  },
+  "verify": {
+    "_": "Verifikasi akun",
+    "subtitle": "Verifikasi akun Anda menggunakan tautan yang kami kirim ke kotak masuk Anda.",
+    "text": "Jika Anda tidak menerima email, periksa folder spam atau tekan tombol di bawah untuk meminta yang baru.",
+    "resend": "Kirim ulang email verifikasi",
+    "resent": "Email verifikasi telah dikirim ke kotak masuk Anda"
+  },
+  "password": {
+    "_": "Kata sandi",
+    "current": "Kata sandi saat ini",
+    "new": "Kata sandi baru",
+    "confirm": "Konfirmasi kata sandi baru",
+    "forgot": "Lupa kata sandi?",
+    "change": "Ubah kata sandi saat ini",
+    "changed": "Kata sandi telah diubah.",
+    "request": {
+      "_": "Minta kata sandi baru",
+      "subtitle": "Masukkan alamat email Anda untuk menerima instruksi pengaturan ulang kata sandi.",
+      "captcha": "Tantangan captcha tidak valid",
+      "send": "Kirim permintaan",
+      "sent": "Instruksi pengaturan ulang kata sandi telah dikirim ke alamat email yang diberikan."
+    },
+    "reset": {
+      "_": "Atur ulang kata sandi",
+      "subtitle": "Masukkan alamat email dan kata sandi baru."
+    },
+    "update": "Perbarui kata sandi",
+    "updated": "Kata sandi Anda berhasil diperbarui."
+  },
+  "email": "Email",
+  "emailConfirm": "Konfirmasi email",
+  "phone": "Telepon",
+  "spam": "Jika Anda tidak menerima email, periksa folder spam/junk atau tekan tombol di bawah untuk meminta yang baru.",
+  "terms": {
+    "_": "Ketentuan",
+    "text": "Saya setuju dengan {privacy} dan {tos} Intake24.",
+    "privacy": "Kebijakan Privasi",
+    "tos": "Ketentuan Layanan"
+  },
+
+  "admin": "Admin",
+  "fdb": "Basis Data Makanan",
+  "local": "Lokalisasi",
+  "images": "Gambar",
+  "surveyMgmt": "Manajemen Survei",
+  "acl": "Kontrol Akses",
+  "system": "Sistem",
+
+  "disabled": "Dinonaktifkan",
+  "yes": "Ya",
+  "true": "Ya",
+  "no": "Tidak",
+  "false": "Tidak",
+  "none": "Tidak ada",
+  "na": "Tidak berlaku",
+
+  "name": "Nama",
+  "displayName": "Nama tampilan",
+  "description": "Deskripsi",
+  "id": "ID",
+  "label": "Label",
+  "type": "Tipe",
+  "status": "Status",
+  "options": {
+    "_": "Opsi",
+    "title": "Daftar opsi",
+    "add": "Opsi baru",
+    "remove": "Hapus opsi",
+    "key": "Kunci",
+    "label": "Label",
+    "value": "Nilai",
+    "exclusive": "Eksklusif",
+    "selected": "Dipilih"
+  },
+
+  "date": "Tanggal",
+  "expiredAt": "Kedaluwarsa pada",
+  "expiresAt": "Berakhir pada",
+  "startedAt": "Dimulai pada",
+  "completedAt": "Selesai pada",
+  "createdAt": "Dibuat pada",
+  "updatedAt": "Diperbarui pada",
+  "deletedAt": "Dihapus pada",
+
+  "app": {
+    "_": "Aplikasi",
+    "info": "Informasi aplikasi",
+    "build": "Build"
+  },
+
+  "clipboard": {
+    "_": "Salin ke papan klip",
+    "na": "API papan klip tidak tersedia",
+    "copied": "Data disalin ke papan klip"
+  },
+
+  "sw": {
+    "check": "Pembaruan konten tersedia",
+    "update": "Perbarui"
+  },
+
+  "action": {
+    "_": "Tindakan",
+    "active": "Aktif",
+    "add": "Tambah",
+    "audit": "Audit",
+    "back": "Kembali",
+    "cancel": "Batal",
+    "clear": "Bersihkan",
+    "close": "Tutup",
+    "continue": "Lanjutkan",
+    "create": "Buat",
+    "delete": "Hapus",
+    "destroy": "Hapus permanen",
+    "read": "Detail",
+    "download": "Unduh",
+    "edit": "Edit",
+    "export": "Ekspor",
+    "load": "Muat",
+    "ok": "Konfirmasi",
+    "print": "Cetak",
+    "remove": "Hapus",
+    "redirect": "Alihkan",
+    "restore": "Pulihkan",
+    "reset": "Atur ulang",
+    "retry": "Coba lagi",
+    "save": "Simpan",
+    "securables": "Keamanan",
+    "submit": "Kirim",
+    "sync": "Sinkronkan",
+    "transfer": "Transfer",
+    "upload": "Unggah",
+    "confirm": {
+      "_": "Konfirmasi",
+      "title": "Apakah Anda ingin melanjutkan?",
+      "msg": "Anda akan meninggalkan halaman dengan perubahan yang belum disimpan. Apakah Anda ingin melanjutkan?",
+      "delete": "Anda akan menghapus {name}.",
+      "remove": "Anda akan menghapus {name}.",
+      "revoke": "Anda akan mencabut {name}.",
+      "multi": {
+        "delete": "Apakah Anda ingin menghapus item yang dipilih: {count}"
+      },
+      "typed": "Ketik {name} untuk konfirmasi."
+    }
+  },
+
+  "msg": {
+    "created": "Catatan ({name}) telah dibuat.",
+    "updated": "Catatan ({name}) telah diperbarui.",
+    "deleted": "Catatan ({name}) telah dihapus.",
+    "revoked": "Catatan ({name}) telah dicabut.",
+    "multi": {
+      "deleted": "Item yang dipilih telah dihapus ({count})."
+    },
+    "sent": "Pesan Anda telah dikirim."
+  },
+
+  "search": {
+    "_": "Cari",
+    "filter": "Filter",
+    "clear": "Hapus filter",
+    "count": "Jumlah catatan",
+    "selected": "Catatan yang dipilih",
+    "none": "Tidak ada catatan ditemukan"
+  },
+
+  "redirect": "Alihkan ke entri baru",
+
+  "selected": "{count} item dipilih",
+
+  "not": {
+    "assigned": "Tidak ditetapkan",
+    "found": "Tidak ditemukan",
+    "provided": "Tidak disediakan",
+    "selected": "Tidak dipilih"
+  },
+
+  "json": {
+    "_": "Editor JSON",
+    "title": "Editor konten JSON"
+  },
+
+  "file": {
+    "csv": "Berkas CSV untuk diunggah"
+  }
+}

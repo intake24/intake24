@@ -1,0 +1,22 @@
+{
+  "_": "Peta gambar",
+  "title": "Peta gambar",
+  "read": "Detail peta gambar",
+  "create": "Tambah peta gambar",
+  "edit": "Edit peta gambar",
+  "delete": "Hapus peta gambar",
+
+  "id": "ID peta gambar",
+  "baseImage": "Berkas peta gambar dasar",
+  "objects": {
+    "_": "Objek peta gambar",
+    "title": "Objek peta gambar",
+    "id": "ID objek",
+    "add": "Tambah objek",
+    "delete": "Hapus objek",
+    "label": {
+      "_": "Label",
+      "hint": "Gunakan variabel '{'{weight}'}' untuk menyertakan berat objek."
+    }
+  }
+}

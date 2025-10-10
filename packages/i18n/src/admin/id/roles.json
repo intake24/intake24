@@ -1,0 +1,20 @@
+{
+  "_": "Peran",
+  "title": "Peran",
+  "all": "Semua peran",
+  "read": "Detail peran",
+  "create": "Tambah peran",
+  "edit": "Edit peran",
+  "delete": "Hapus peran",
+
+  "permissions": {
+    "_": "Izin",
+    "title": "Izin",
+    "tab": "Izin"
+  },
+  "users": {
+    "_": "Pengguna",
+    "title": "Pengguna",
+    "tab": "Pengguna"
+  }
+}

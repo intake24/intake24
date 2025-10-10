@@ -1,0 +1,145 @@
+{
+  "_": "Pekerjaan",
+  "title": "Pekerjaan",
+  "read": "Detail pekerjaan",
+  "delete": "Hapus pekerjaan",
+  "downloadUrl": "URL unduhan",
+  "downloadUrlExpiresAt": "URL unduhan kedaluwarsa pada",
+  "progress": "Progres",
+  "successful": "Berhasil",
+  "message": "Pesan",
+  "params": "Parameter pekerjaan",
+  "stackTrace": "Pesan kesalahan",
+  "repeat": {
+    "_": "Ulangi pekerjaan",
+    "confirm": "Dorong pekerjaan ke antrean",
+    "confirmed": "Pekerjaan telah dimasukkan ke antrean",
+    "override": "Timpa parameter pekerjaan"
+  },
+  "types": {
+    "_": "Jenis pekerjaan",
+    "CleanRedisStore": {
+      "_": "Bersihkan penyimpanan Redis",
+      "stores": {
+        "_": "Penyimpanan Redis",
+        "cache": "Cache",
+        "rateLimiter": "Rate limiter",
+        "session": "Sesi"
+      }
+    },
+    "CleanStorageFiles": {
+      "_": "Bersihkan berkas penyimpanan"
+    },
+    "FeedbackSchemesSync": {
+      "_": "Sinkronisasi skema umpan balik"
+    },
+    "PurgeExpiredTokens": {
+      "_": "Hapus token akses/refresh yang kedaluwarsa"
+    },
+    "LanguageTranslationsSync": {
+      "_": "Bahasa - sinkronkan terjemahan"
+    },
+    "LocaleCopy": {
+      "_": "Lokal - salin data",
+      "localeId": "ID lokal",
+      "sourceLocaleId": "ID lokal sumber",
+      "subTasks": {
+        "_": "Subtugas",
+        "associatedFoods": "Makanan terkait",
+        "brands": "Merek",
+        "categories": "Kategori",
+        "foods": "Makanan",
+        "foodGroups": "Kelompok makanan",
+        "recipeFoods": "Makanan resep",
+        "searchPopularity": "Pencarian - popularitas",
+        "searchFixedRanking": "Pencarian - peringkat tetap",
+        "splitLists": "Daftar pemisah",
+        "splitWords": "Kata pemisah",
+        "synonymSets": "Set sinonim"
+      }
+    },
+    "LocaleFoodNutrientMapping": {
+      "_": "Lokal - ekspor pemetaan nutrien makanan",
+      "localeId": "ID lokal"
+    },
+    "LocaleFoodRankingUpload": {
+      "_": "Lokal - unggah CSV peringkat makanan",
+      "file": "Berkas CSV",
+      "targetAlgorithm": "Jenis algoritme pengurutan yang diperbarui",
+      "warningTitle": "Peringatan: risiko kehilangan data. Harap berhati-hati.",
+      "warningP1": "Data frekuensi makanan diperbarui secara otomatis oleh sistem saat recall baru diterima.",
+      "warningP2": "Mengunggah data frekuensi dari berkas CSV akan menimpa catatan yang ada di basis data dan dapat menyebabkan kehilangan data.",
+      "warningP3": "Fitur ini hanya ditujukan untuk menginisialisasi lokal baru atau memperbaiki masalah pada data frekuensi yang ada.",
+      "warningP4": "Pastikan Anda berada di lokal yang benar sebelum mengunggah data."
+    },
+    "LocaleFoods": {
+      "_": "Lokal - ekspor makanan",
+      "localeId": "ID lokal"
+    },
+    "LocaleIndexBuild": {
+      "_": "Lokal - bangun ulang indeks makanan untuk lokal yang diubah"
+    },
+    "NutrientTableMappingImport": {
+      "_": "Tabel nutrien - impor pemetaan NDB",
+      "file": "Berkas CSV"
+    },
+    "NutrientTableDataImport": {
+      "_": "Tabel nutrien - impor data NDB",
+      "file": "Berkas CSV"
+    },
+    "PopularitySearchUpdateCounters": {
+      "_": "Pencarian - perbarui penghitung popularitas",
+      "foodCodes": "Kode makanan"
+    },
+    "ResourceExport": {
+      "_": "Sumber daya - ekspor data",
+      "resource": "Sumber daya"
+    },
+    "SurveyAuthUrlsExport": {
+      "_": "Survei - ekspor URL autentikasi",
+      "surveyId": "ID survei"
+    },
+    "SurveyDataExport": {
+      "_": "Survei - ekspor data pengajuan",
+      "surveyId": "ID survei"
+    },
+    "SurveyEventNotification": {
+      "_": "Survei - notifikasi peristiwa"
+    },
+    "SurveyFeedbackNotification": {
+      "_": "Survei - kirim umpan balik responden",
+      "surveyId": "ID survei"
+    },
+    "SurveyHelpRequestNotification": {
+      "_": "Survei - notifikasi permintaan bantuan",
+      "surveyId": "ID survei"
+    },
+    "SurveyNutrientsRecalculation": {
+      "_": "Survei - perhitungan ulang nutrien",
+      "surveyId": "ID survei"
+    },
+    "SurveyRatingsExport": {
+      "_": "Survei - ekspor penilaian"
+    },
+    "SurveyRespondentsImport": {
+      "_": "Survei - impor responden",
+      "file": "Berkas CSV"
+    },
+    "SurveySchemesSync": {
+      "_": "Survei - sinkronkan skema"
+    },
+    "SurveySessionsExport": {
+      "_": "Survei - ekspor sesi",
+      "surveyId": "ID survei"
+    },
+    "SurveySubmission": {
+      "_": "Survei - proses pengajuan"
+    },
+    "UserEmailVerificationNotification": {
+      "_": "Pengguna - notifikasi verifikasi email"
+    },
+    "UserPasswordResetNotification": {
+      "_": "Pengguna - kirim pengaturan ulang kata sandi"
+    }
+  }
+}

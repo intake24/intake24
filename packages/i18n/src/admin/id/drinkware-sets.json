@@ -1,0 +1,73 @@
+{
+  "_": "Set wadah minum",
+  "title": "Set wadah minum",
+  "read": "Detail set wadah minum",
+  "create": "Tambah set wadah minum",
+  "edit": "Edit set wadah minum",
+  "delete": "Hapus set wadah minum",
+  "id": "ID set wadah minum",
+  "imageMapTitle": "Wadah dalam set ini",
+  "imageMapSubtitle": "Pilih wadah dari gambar di bawah untuk mengedit bentuk skala geser dan menentukan pengukuran volume cairan.",
+  "scales": {
+    "_": "Skala wadah minum",
+    "title": "Skala wadah minum"
+  },
+  "volumes": {
+    "_": "Volume wadah minum",
+    "title": "Volume wadah minum"
+  },
+  "selector": {
+    "empty": {
+      "title": "Tidak ada objek yang dipilih",
+      "text": "Pilih wadah dari set wadah minum untuk mengedit skala geser."
+    }
+  },
+  "label": {
+    "title": "Nama wadah"
+  },
+  "slidingScale": {
+    "title": "Bentuk skala geser",
+    "missing": {
+      "title": "Data skala geser tidak tersedia",
+      "text": "Skala geser belum dibuat untuk objek ini. Pilih gambar dasar untuk membuat skala geser baru."
+    },
+    "obsolete": "Data skala geser kedaluwarsa",
+    "legacy": {
+      "p1": "Data skala geser untuk objek ini tidak dapat diedit karena masih menggunakan format lama.",
+      "p2": "Skala geser dalam format lama tetap dapat dipakai untuk estimasi porsi, namun untuk membuat perubahan data skala geser harus dikonversi ke format baru.",
+      "p3": "Bentuk volume yang dapat diisi (garis luar skala geser) <strong>tidak akan</strong> dikonversi secara otomatis!",
+      "p4": "Skala geser <strong>tidak dapat digunakan</strong> setelah konversi sampai bentuk volume yang dapat diisi ditentukan.",
+      "convert": "Konversi"
+    },
+    "imagePreview": "Pratinjau gambar terpilih",
+    "baseImageFile": "Berkas gambar dasar",
+    "createButtonLabel": "Buat",
+    "editInstructions": "<strong>Klik dua kali</strong> untuk menambah titik · <strong>klik sekali</strong> untuk memilih titik · <strong>klik dan tarik</strong> untuk memindahkan titik · <strong>tombol delete</strong> untuk menghapus titik",
+    "fillableAreaToggle": "Tampilkan overlay gambar area isi lama",
+    "deleteSelected": "Hapus yang dipilih",
+    "deleteAll": "Bersihkan",
+    "replaceBaseImage": "Ganti gambar dasar",
+    "replaceButtonLabel": "Ganti"
+  },
+  "clearScaleDialog": {
+    "title": "Anda yakin?",
+    "msg": "Anda akan menghapus data bentuk skala geser.\n Tindakan ini tidak dapat dibatalkan."
+  },
+  "volumeMethod": {
+    "title": "Metode estimasi volume",
+    "lookUpTable": "Tabel rujukan",
+    "cylindrical": "Simetri silinder (volume isi maksimum)"
+  },
+  "volumeTable": {
+    "title": "Pengukuran volume",
+    "legacy": {
+      "p1": "Pengukuran volume ini kemungkinan berasal dari format skala geser lama yang hanya menyimpan nilai tinggi cairan ternormalisasi dalam rentang [0, 1].",
+      "p2": "Perhitungan estimasi porsi menggunakan nilai ternormalisasi sehingga data ini tetap valid, tetapi pengukuran tinggi asli dalam mm tidak tersedia."
+    },
+    "addRow": "Tambah baris",
+    "removeRow": "Hapus baris terakhir",
+    "paste": "Tempel data",
+    "heightLabel": "Tinggi cairan (mm)",
+    "volumeLabel": "Volume cairan (ml)"
+  }
+}

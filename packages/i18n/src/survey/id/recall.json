@@ -1,0 +1,116 @@
+{
+  "_": "Recall",
+  "info": "Informasi recall",
+  "none": "Tidak ada recall yang sedang berjalan saat ini.",
+  "startedAt": "Recall dimulai pada: {startedAt}.",
+  "finishedAt": "Recall selesai pada: {finishedAt}.",
+  "submittedAt": "Dikirim pada",
+  "limitReached": {
+    "daily": "Anda telah mencapai batas recall harian.",
+    "total": "Anda telah mencapai batas total recall."
+  },
+  "rating": {
+    "_": "Nilai pengalaman Anda",
+    "title": "Bagaimana penilaian Anda terhadap recall ini?",
+    "comment": "Ceritakan lebih lanjut tentang alasan penilaian yang Anda berikan.",
+    "send": "Kirim umpan balik",
+    "sent": "Terima kasih, umpan balik Anda telah dikirim!"
+  },
+  "survey": "Survei: {name}",
+  "submissions": {
+    "_": "Hari recall",
+    "title": "Hari recall",
+    "all": "Semua",
+    "past": "Recall sebelumnya",
+    "none": "Anda belum memiliki recall sebelumnya.",
+    "count": "Jumlah recall: {count}"
+  },
+  "start": {
+    "_": "Mulai",
+    "another": "Mulai yang lain"
+  },
+  "continue": "Lanjutkan",
+  "abort": {
+    "_": "Batalkan",
+    "label": "Batalkan recall",
+    "confirm": "Batalkan recall yang sedang Anda kerjakan?"
+  },
+  "surveyInfo": {
+    "recall": "Recall: {number}"
+  },
+  "menu": {
+    "title": "Panel peninjauan",
+    "mealSuggested": "Hidangan ini disarankan oleh sistem tetapi Anda belum mengonfirmasi bahwa Anda mengonsumsinya",
+    "food": {
+      "delete": "Hapus makanan",
+      "deleteConfirm": "Apakah Anda ingin menghapus {item}?",
+      "change": "Ganti makanan",
+      "free-text": {
+        "_": "Makanan ini belum dipasangkan dengan makanan di basis data kami.",
+        "incomplete": "Ukuran porsi untuk makanan ini belum diketahui.",
+        "edit": "Ubah pencarian"
+      },
+      "encoded-food": {
+        "_": "Makanan ini telah dipasangkan dengan makanan di basis data kami.",
+        "complete": "Perkiraan porsi untuk makanan ini sudah lengkap.",
+        "incomplete": "Ukuran porsi untuk makanan ini belum diketahui.",
+        "edit": "Ubah ukuran porsi"
+      },
+      "missing-food": {
+        "_": "Makanan ini ditandai sebagai hilang dalam basis data kami.",
+        "complete": "Informasi tambahan untuk makanan ini sudah lengkap.",
+        "incomplete": "Informasi tambahan untuk makanan ini masih belum tersedia.",
+        "edit": "Ubah detail makanan yang hilang"
+      },
+      "recipe-builder": {
+        "_": "Makanan ini dipasangkan dengan resep di basis data kami.",
+        "complete": "Langkah-langkah resep untuk makanan ini sudah lengkap.",
+        "incomplete": "Langkah-langkah resep untuk makanan ini masih belum lengkap.",
+        "edit": "Ubah bahan"
+      }
+    },
+    "meal": {
+      "add": "Tambah hidangan",
+      "delete": "Hapus hidangan",
+      "deleteConfirm": "Anda akan menghapus seluruh isian untuk {item}.",
+      "editFoods": "Ubah makanan",
+      "editTime": "Ubah waktu"
+    }
+  },
+  "contextMenu": {
+    "close": "Tutup",
+    "select": "Lanjutkan dengan {name}",
+    "editMeal": "Tinjau hidangan",
+    "delete": "Hapus {name}",
+    "confirmDeletion": "Apakah Anda yakin ingin menghapus '{name}'?",
+    "confirm": "Konfirmasi {name}",
+    "changeTime": "Ubah waktu"
+  },
+  "actions": {
+    "feedback": "Buka umpan balik",
+    "next": "Lanjutkan",
+    "submit": "Kirim recall",
+    "addMeal": "Tambah hidangan",
+    "deleteFood": "Hapus makanan",
+    "deleteMeal": "Hapus hidangan",
+    "editFood": "Ubah makanan",
+    "editMeal": "Tambah makanan",
+    "mealTime": "Ubah waktu hidangan",
+    "nav": {
+      "cancel": "Batal",
+      "confirm": "Konfirmasi",
+      "feedback": "Umpan balik",
+      "next": "Lanjutkan",
+      "redirect": "Lanjut",
+      "remove": "Hapus",
+      "review": "Tinjau",
+      "submit": "Kirim",
+      "addMeal": "Tambah hidangan",
+      "deleteFood": "Hapus makanan",
+      "deleteMeal": "Hapus hidangan",
+      "editFood": "Ubah makanan",
+      "editMeal": "Tambah makanan",
+      "mealTime": "Waktu hidangan"
+    }
+  }
+}

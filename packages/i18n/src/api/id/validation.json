@@ -1,0 +1,278 @@
+{
+  "attributes": {
+    "actions": "Tindakan",
+    "active": "Aktif",
+    "allowGenUsers": "Izinkan pembuatan pengguna",
+    "app": "Aplikasi",
+    "adminLanguageId": "ID bahasa admin",
+    "authUrlDomainOverride": "Penimpaan domain URL autentikasi",
+    "authUrlTokenCharset": "Karakter token URL autentikasi",
+    "authUrlTokenLength": "Panjang token URL autentikasi",
+    "baseImage": "Gambar dasar",
+    "birthdate": "Tanggal lahir",
+    "captcha": "CAPTCHA",
+    "countryFlagCode": "Kode bendera negara",
+    "code": "Kode",
+    "conversionFactor": "Faktor konversi",
+    "copy": "Salin",
+    "cron": "CRON",
+    "csvMapping": {
+      "rowOffset": "Offset baris",
+      "idColumnOffset": "Offset kolom ID",
+      "descriptionColumnOffset": "Offset kolom deskripsi",
+      "localDescriptionColumnOffset": "Offset kolom deskripsi lokal"
+    },
+    "csvMappingFields": "Pemetaan kolom bidang",
+    "csvMappingNutrients": "Pemetaan kolom nutrien",
+    "customFields": "Kolom kustom",
+    "dataExport": "Ekspor data",
+    "demographicGroups": "Kelompok demografis",
+    "description": "Deskripsi",
+    "disabledAt": "Dinonaktifkan pada",
+    "displayName": "Nama tampilan",
+    "endDate": "Tanggal akhir",
+    "email": "Email",
+    "emailConfirm": "Konfirmasi email",
+    "emailNotifications": "Notifikasi email",
+    "email|phone": "Email atau telepon",
+    "englishName": "Nama bahasa Inggris",
+    "estimateIn": "Perkirakan dalam",
+    "expiresAt": "Berakhir pada",
+    "feedbackSchemeId": "ID skema umpan balik",
+    "file": "Berkas",
+    "genericName": "Nama umum",
+    "genUserKey": "Rahasia JWT",
+    "guideImageId": "ID gambar panduan",
+    "heightCm": "Tinggi",
+    "henryCoefficients": "Koefisien Henry",
+    "howMany": "Berapa banyak",
+    "i18n": {
+      "defaults": "Terjemahan bawaan hilang",
+      "keys": "Kunci terjemahan tidak cocok",
+      "messages": "Terjemahan tidak valid"
+    },
+    "id": "ID",
+    "imageMapId": "ID peta gambar",
+    "images": "Gambar",
+    "job": "Pekerjaan",
+    "label": "Label",
+    "languageId": "ID bahasa",
+    "localeId": "ID locale",
+    "limit": "Batas",
+    "linkAsMain": "Tautkan sebagai utama",
+    "localName": "Nama lokal",
+    "main": {
+      "attributes": {
+        "readyMealOption": "Opsi makanan siap saji",
+        "reasonableAmount": "Jumlah wajar",
+        "sameAsBeforeOption": "Opsi sama seperti sebelumnya",
+        "useInRecipes": "Gunakan dalam resep"
+      },
+      "code": "Kode global",
+      "foodGroupId": "ID kelompok makanan",
+      "isHidden": "Disembunyikan",
+      "name": "Nama global",
+      "parentCategories": "Kategori induk"
+    },
+    "maximumDailySubmissions": "Jumlah kiriman harian maksimum",
+    "maximumTotalSubmissions": "Jumlah kiriman total maksimum",
+    "meals": "Hidangan",
+    "method": "Metode",
+    "message": "Pesan",
+    "minimumSubmissionInterval": "Jeda minimal antar kiriman",
+    "multiFactorAuthentication": "Autentikasi multi faktor",
+    "name": "Nama",
+    "numberOfSubmissionsForFeedback": "Jumlah kiriman untuk umpan balik",
+    "nutrientRecords": "Catatan nutrien",
+    "objects": "Objek",
+    "outlineCoordinates": "Koordinat garis besar",
+    "outputs": "Keluaran",
+    "orderBy": "Urutan",
+    "ownerId": "ID pemilik",
+    "page": "Halaman",
+    "password": "Kata sandi",
+    "passwordConfirm": "Konfirmasi kata sandi",
+    "params": {
+      "_": "Parameter",
+      "file": "Berkas",
+      "targetAlgorithm": "Jenis algoritma pengurutan"
+    },
+    "permissions": "Hak akses",
+    "phone": "Telepon",
+    "physicalActivityLevelId": "Tingkat aktivitas fisik",
+    "physicalDataFields": "Kolom data fisik",
+    "prompt": "Pertanyaan",
+    "prompts": "Pertanyaan",
+    "prototypeLocaleId": "ID prototipe locale",
+    "respondentLanguageId": "ID bahasa responden",
+    "roles": "Peran",
+    "sessionData": "Data sesi",
+    "search": "Cari",
+    "searchCollectData": "Pencarian kumpulan data",
+    "searchMatchScoreWeight": "Bobot skor kecocokan pencarian",
+    "searchSortingAlgorithm": "Algoritma pengurutan pencarian",
+    "searchMinWordLength1": "Panjang kata minimum untuk 1 koreksi ejaan",
+    "searchMinWordLength2": "Panjang kata minimum untuk 2 koreksi ejaan",
+    "section": "Bagian",
+    "selectionImage": "Gambar pilihan",
+    "session": {
+      "store": "Sesi sisi server",
+      "age": "Usia sesi",
+      "fixed": "Durasi sesi tetap"
+    },
+    "sex": "Jenis kelamin",
+    "slug": "Slug",
+    "smsNotifications": "Notifikasi SMS",
+    "sort": "Urutkan",
+    "startDate": "Tanggal mulai",
+    "state": "Status",
+    "submissions": "Kiriman",
+    "supportEmail": "Email dukungan",
+    "survey": "Survei",
+    "surveySchemeId": "ID skema survei",
+    "surveySchemeOverrides": "Penimpaan skema survei",
+    "suspensionReason": "Alasan penangguhan",
+    "symbol": "Simbol",
+    "textDirection": "Arah teks",
+    "text": "Teks",
+    "terms": "Ketentuan",
+    "token": "Token",
+    "topFoods": {
+      "max": "Jumlah maksimum makanan",
+      "colors": "Warna",
+      "nutrientTypes": "Jenis nutrien"
+    },
+    "translations": "Terjemahan",
+    "type": "Tipe",
+    "tzOffset": "Offset zona waktu",
+    "useForRecipes": "Gunakan untuk resep",
+    "userId": "ID pengguna",
+    "userPersonalIdentifiers": "Pengenal pribadi pengguna",
+    "userCustomFields": "Kolom kustom pengguna",
+    "username": "Nama pengguna",
+    "value": "Nilai",
+    "verifiedAt": "Diverifikasi pada",
+    "weight": "Berat",
+    "weightKg": "Berat",
+    "weightTarget": "Target berat badan"
+  },
+  "types": {
+    "array": {
+      "_": "\"{attribute}\" harus berupa larik.",
+      "min": "\"{attribute}\" harus berupa larik (min: {min}).",
+      "max": "\"{attribute}\" harus berupa larik (maks: {max}).",
+      "minMax": "\"{attribute}\" harus berupa larik (min: {min}, maks: {max}).",
+      "even": "\"{attribute}\" harus memiliki jumlah elemen genap.",
+      "number": "\"{attribute}\" harus berupa larik angka.",
+      "string": "\"{attribute}\" harus berupa larik teks.",
+      "colors": "\"{attribute}\" harus berupa larik warna."
+    },
+    "boolean": {
+      "_": "\"{attribute}\" harus berupa nilai boolean (true/false)."
+    },
+    "cron": {
+      "_": "\"{attribute}\" harus berupa entri cron."
+    },
+    "date": {
+      "_": "\"{attribute}\" harus berupa tanggal.",
+      "after": "\"{attribute}\" harus berupa tanggal setelah {after}.",
+      "before": "\"{attribute}\" harus berupa tanggal sebelum {before}.",
+      "between": "\"{attribute}\" harus berupa tanggal antara {after} dan {before}.",
+      "ms": "\"{attribute}\" harus menggunakan format durasi (30m, 1h, 2d)."
+    },
+    "duplicate": {
+      "_": "\"{attribute}\" tidak boleh memiliki item duplikat."
+    },
+    "float": {
+      "_": "\"{attribute}\" harus berupa bilangan desimal.",
+      "min": "\"{attribute}\" harus berupa bilangan desimal (min: {min}).",
+      "max": "\"{attribute}\" harus berupa bilangan desimal (maks: {max}).",
+      "minMax": "\"{attribute}\" harus berupa bilangan desimal (min: {min}, maks: {max})."
+    },
+    "exists": {
+      "_": "\"{attribute}\" harus merujuk pada data yang ada di basis data."
+    },
+    "either": {
+      "_": "{one} atau {two} harus diisi."
+    },
+    "email": {
+      "_": "\"{attribute}\" harus berupa alamat email yang valid."
+    },
+    "file": {
+      "_": "\"{attribute}\" harus berupa berkas.",
+      "ext": "Ekstensi file \"{attribute}\" tidak valid, seharusnya: {ext}.",
+      "mime": "Tipe MIME \"{attribute}\" tidak valid, seharusnya: {mime}."
+    },
+    "in": {
+      "_": "\"{attribute}\" harus bernilai sesuai ketentuan.",
+      "options": "\"{attribute}\" harus salah satu dari nilai berikut: {options}."
+    },
+    "integer": {
+      "_": "\"{attribute}\" harus berupa bilangan bulat.",
+      "min": "\"{attribute}\" harus berupa bilangan bulat (min: {min}).",
+      "max": "\"{attribute}\" harus berupa bilangan bulat (maks: {max}).",
+      "minMax": "\"{attribute}\" harus berupa bilangan bulat (min: {min}, maks: {max})."
+    },
+    "json": {
+      "_": "\"{attribute}\" harus berupa objek JSON yang valid."
+    },
+    "jwt": {
+      "_": "\"{attribute}\" harus berupa JWT yang valid."
+    },
+    "locale": {
+      "_": "\"{attribute}\" harus berupa kode locale yang valid."
+    },
+    "number": {
+      "_": "\"{attribute}\" harus berupa angka.",
+      "min": "\"{attribute}\" harus bernilai minimal {min}.",
+      "max": "\"{attribute}\" harus bernilai maksimal {max}.",
+      "multipleOf": "\"{attribute}\" harus merupakan kelipatan dari {multipleOf}."
+    },
+    "match": {
+      "_": "\"{attribute}\" harus sama dengan nilai {match}."
+    },
+    "object": {
+      "_": "\"{attribute}\" harus berupa objek."
+    },
+    "password": {
+      "_": "Kata sandi harus berisi minimal 10 karakter huruf kecil, huruf besar, dan angka."
+    },
+    "phone": {
+      "_": "\"{attribute}\" harus berupa nomor telepon yang valid."
+    },
+    "regEx": {
+      "_": "\"{attribute}\" tidak valid."
+    },
+    "restricted": {
+      "_": "\"{attribute}\" dibatasi pada nilai yang diizinkan."
+    },
+    "safeChars": {
+      "_": "\"{attribute}\" harus berupa kode unik (karakter [a-zA-Z0-9-_])."
+    },
+    "string": {
+      "_": "\"{attribute}\" harus diisi.",
+      "min": "\"{attribute}\" harus berisi setidaknya {min} karakter.",
+      "max": "\"{attribute}\" harus diisi (maks: {max}).",
+      "minMax": "\"{attribute}\" harus diisi (min: {min}, maks: {max}).",
+      "or": {
+        "array": "\"{attribute}\" harus berupa teks atau larik."
+      },
+      "unique": "\"{attribute}\" harus berupa teks dengan karakter unik."
+    },
+    "structure": {
+      "_": "\"{attribute}\" harus memiliki struktur yang valid."
+    },
+    "terms": {
+      "_": "\"{attribute}\" harus disetujui."
+    },
+    "unique": {
+      "_": "Data dengan nilai \"{attribute}\" yang sama sudah ada."
+    },
+    "url": {
+      "_": "\"{attribute}\" harus berupa URL yang valid."
+    },
+    "uuid": {
+      "_": "\"{attribute}\" harus berupa UUID yang valid."
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "_": "Notifikasi",
+  "title": "Notifikasi",
+  "add": "Tambah notifikasi",
+  "edit": "Edit notifikasi",
+  "remove": "Hapus notifikasi",
+
+  "channels": {
+    "_": "Kanal",
+    "title": "Kanal",
+    "email": "Email",
+    "slack": "Slack",
+    "webhook": "Webhook",
+    "channelId": "ID kanal",
+    "url": "URL",
+    "to": "Alamat email"
+  },
+
+  "events": {
+    "_": "Peristiwa",
+    "title": "Peristiwa",
+    "survey": {
+      "session": {
+        "started": "Sesi survei dimulai",
+        "submitted": "Sesi survei dikirim",
+        "cancelled": "Sesi survei dibatalkan"
+      }
+    }
+  }
+}

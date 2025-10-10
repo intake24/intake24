@@ -1,0 +1,103 @@
+{
+  "_": "Hukum",
+  "contact": "Kontak",
+  "copyright": "{name} © {team} {year}",
+  "privacy": "Kebijakan Privasi",
+  "terms": "Ketentuan Penggunaan",
+  "cookies": {
+    "_": "Cookie",
+    "consent": {
+      "consentModal": {
+        "label": "Cookie",
+        "title": "Intake24 menggunakan cookie!",
+        "description": "Intake24 menggunakan <strong>cookie yang wajib</strong> agar situs berfungsi dengan baik. <strong>Cookie analitik & statistik</strong> membantu kami memahami bagaimana pengunjung menggunakan situs untuk meningkatkan layanan yang diberikan.",
+        "acceptAllBtn": "Terima",
+        "showPreferencesBtn": "Ubah preferensi"
+      },
+      "preferencesModal": {
+        "title": "Preferensi cookie",
+        "acceptAllBtn": "Terima semua",
+        "savePreferencesBtn": "Simpan preferensi",
+        "closeIconLabel": "Tutup",
+        "sections": [
+          {
+            "title": "Cara kami menggunakan cookie 📢",
+            "description": "Intake24 menggunakan <strong>cookie yang wajib</strong> agar situs berfungsi dengan baik. <strong>Cookie analitik & statistik</strong> membantu kami memahami bagaimana pengunjung menggunakan situs untuk meningkatkan layanan yang diberikan."
+          },
+          {
+            "title": "Cookie yang wajib <span class=\"pm__badge\">Selalu Aktif</span>",
+            "description": "Cookie yang benar-benar diperlukan agar situs berfungsi dengan baik.",
+            "linkedCategory": "necessary",
+            "cookieTable": {
+              "headers": {
+                "name": "Nama",
+                "exp": "Kedaluwarsa",
+                "desc": "Deskripsi"
+              },
+              "body": [
+                {
+                  "name": "it24(a|s)_refresh_token",
+                  "exp": "1 jam",
+                  "desc": "Fungsi teknis situs."
+                },
+                {
+                  "name": "it24_cc_consent",
+                  "exp": "1 tahun",
+                  "desc": "Preferensi persetujuan cookie yang digunakan situs."
+                }
+              ]
+            }
+          },
+          {
+            "title": "Cookie analitik dan statistik",
+            "description": "Cookie analitik dan statistik membantu kami memahami bagaimana pengunjung menggunakan situs untuk meningkatkan layanan yang diberikan. Informasi dikumpulkan dan disimpan secara anonim.",
+            "linkedCategory": "analytics",
+            "cookieTable": {
+              "headers": {
+                "name": "Nama",
+                "exp": "Kedaluwarsa",
+                "desc": "Deskripsi"
+              },
+              "body": [
+                {
+                  "name": "^_ga",
+                  "exp": "2 tahun",
+                  "desc": "ID unik yang digunakan untuk membuat data statistik tentang cara pengunjung menggunakan situs."
+                },
+                {
+                  "name": "^_gid",
+                  "exp": "1 hari",
+                  "desc": "ID unik yang digunakan untuk membuat data statistik tentang cara pengunjung menggunakan situs."
+                },
+                {
+                  "name": "^_CLID",
+                  "exp": "1 tahun",
+                  "desc": "ID unik yang digunakan untuk membuat data statistik tentang cara pengunjung menggunakan situs."
+                },
+                {
+                  "name": "^_MUID",
+                  "exp": "390 hari",
+                  "desc": "ID unik yang digunakan untuk membuat data statistik tentang cara pengunjung menggunakan situs."
+                },
+                {
+                  "name": "^_clck",
+                  "exp": "30 hari",
+                  "desc": "ID unik yang digunakan untuk membuat data statistik tentang cara pengunjung menggunakan situs."
+                },
+                {
+                  "name": "^_clsk",
+                  "exp": "1 hari",
+                  "desc": "ID unik yang digunakan untuk membuat data statistik tentang cara pengunjung menggunakan situs."
+                }
+              ]
+            }
+          },
+          {
+            "title": "Informasi tambahan",
+            "description": "Jika Anda memiliki pertanyaan, silakan hubungi kami."
+          }
+        ]
+      }
+    }
+  }
+}

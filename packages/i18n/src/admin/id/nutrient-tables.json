@@ -1,0 +1,39 @@
+{
+  "_": "Tabel nutrien",
+  "title": "Tabel nutrien",
+  "read": "Detail tabel nutrien",
+  "create": "Tambah tabel nutrien",
+  "edit": "Edit tabel nutrien",
+  "delete": "Hapus tabel nutrien",
+  "id": "ID tabel nutrien",
+
+  "mapping": {
+    "source": {
+      "_": "Pemetaan spreadsheet sumber",
+      "idColumnOffset": "Kolom ID catatan",
+      "descriptionColumnOffset": "Kolom deskripsi",
+      "localDescriptionColumnOffset": "Kolom deskripsi lokal (biarkan kosong jika tidak ada)",
+      "rowOffset": "Jumlah baris yang dilewati (mis. header atau baris kosong)"
+    },
+    "fields": {
+      "_": "Pemetaan kolom bidang",
+      "create": "Tambah bidang",
+      "delete": "Hapus bidang",
+      "fieldName": "Nama bidang",
+      "columnOffset": "Kolom CSV"
+    },
+    "nutrients": {
+      "_": "Pemetaan kolom nutrien",
+      "create": "Tambah nutrien",
+      "delete": "Hapus nutrien",
+      "nutrient": "Nutrien",
+      "columnOffset": "Kolom CSV"
+    }
+  },
+
+  "tasks": {
+    "_": "Tugas",
+    "title": "Tugas tabel nutrien",
+    "tab": "Tugas"
+  }
+}
