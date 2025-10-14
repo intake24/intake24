@@ -77,6 +77,9 @@
     "500": "Something went wrong :(",
     "retry": "Try again"
   },
+  "notices": {
+    "nutrientDataUnavailable": "该食品的营养信息尚不可用。能量值显示为 0 千卡。"
+  },
   "validation": {
     "tooLong": "Entered text is too long ({max} characters max)."
   },

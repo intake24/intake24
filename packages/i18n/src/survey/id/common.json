@@ -80,6 +80,9 @@
     "expansionIncomplete": "Lengkapi semua bagian yang ditandai dengan !",
     "retry": "Coba lagi"
   },
+  "notices": {
+    "nutrientDataUnavailable": "Informasi nutrisi untuk makanan ini belum tersedia. Nilai energi ditampilkan sebagai 0 kkal."
+  },
   "navigation": "Navigasi",
   "message": "Pesan",
   "validation": {

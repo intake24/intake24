@@ -86,6 +86,9 @@
     "500": "Something went wrong :(",
     "retry": "Try again"
   },
+  "notices": {
+    "nutrientDataUnavailable": "Nutrient information is not yet available for this food. Energy values are shown as 0 kcal."
+  },
   "validation": {
     "tooLong": "Entered text is too long ({max} characters max)."
   },

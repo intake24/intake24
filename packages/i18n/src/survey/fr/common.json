@@ -77,6 +77,9 @@
     "500": "Il y a eu un problème :(",
     "retry": "Réessayer"
   },
+  "notices": {
+    "nutrientDataUnavailable": "Les informations nutritionnelles ne sont pas encore disponibles pour cet aliment. Les valeurs énergétiques sont affichées comme 0 kcal."
+  },
   "validation": {
     "tooLong": "Entered text is too long ({max} characters max)."
   },

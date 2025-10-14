@@ -14,10 +14,18 @@
         <div
           v-if="i18n.description"
           class="px-4 pt-4"
-          :class="{ 'pb-4': !hasDefaultSlot }"
+          :class="{ 'pb-4': !hasDefaultSlot && !showMissingNutrientNotice }"
           v-html="i18n.description"
         />
       </slot>
+      <v-alert
+        v-if="showMissingNutrientNotice"
+        class="mx-4 mt-4"
+        density="comfortable"
+        :text="t('common.notices.nutrientDataUnavailable')"
+        type="info"
+        variant="tonal"
+      />
       <slot />
       <v-card-actions
         v-if="!$vuetify.display.mobile || prompt.actions?.both"
@@ -86,10 +94,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useSlots } from 'vue';
+import { computed, useSlots } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, PromptSection } from '@intake24/common/surveys';
+import { useI18n } from '@intake24/i18n';
 import { MealListMobile } from '@intake24/survey/components/layouts/meal-list';
 
 import Breadcrumbs from './breadcrumbs.vue';
@@ -122,6 +131,7 @@ const props = defineProps(
 
 const emit = defineEmits(['action']);
 const slots = useSlots();
+const { i18n: { t } } = useI18n();
 
 const {
   action,
@@ -136,6 +146,10 @@ const {
   showSummary,
   translate,
 } = useLayout(props, { emit, slots });
+
+const encodedFood = computed(() => (props.food?.type === 'encoded-food' ? props.food : undefined));
+
+const showMissingNutrientNotice = computed(() => encodedFood.value?.data.nutrientDataAvailable === false);
 </script>
 
 <style lang="scss"></style>

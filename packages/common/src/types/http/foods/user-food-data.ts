@@ -31,6 +31,7 @@ export const userFoodData = z.object({
   englishName: z.string(),
   localName: z.string(),
   groupCode: z.string(),
+  nutrientDataAvailable: z.boolean(),
   kcalPer100g: z.number(),
   reasonableAmount: z.number(),
   readyMealOption: z.boolean(),

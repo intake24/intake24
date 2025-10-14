@@ -84,7 +84,7 @@ export class BaseClientV4 {
 
     this.accessClient.interceptors.response.use(
       async (response) => {
-        if (response.status >= 400) {
+        if (response.status >= 400 && response.status !== HttpStatusCode.NotFound) {
           const detail = BaseClientV4.extractErrorDetail(response.data);
           const message = BaseClientV4.composeErrorMessage(response, detail);
 
@@ -105,7 +105,7 @@ export class BaseClientV4 {
             if (response2.status === HttpStatusCode.Unauthorized)
               throw new Error('Access token rejected by the API server again after refreshing.');
 
-            if (response2.status >= 400) {
+            if (response2.status >= 400 && response2.status !== HttpStatusCode.NotFound) {
               const detail2 = BaseClientV4.extractErrorDetail(response2.data);
               const message2 = BaseClientV4.composeErrorMessage(response2, detail2);
 

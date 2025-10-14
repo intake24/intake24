@@ -57,6 +57,16 @@ export function useStandardUnits() {
     return item.name;
   };
 
+  const buildFallbackRefs = (names: string[]): StandardUnitRefs => {
+    return names.reduce<StandardUnitRefs>((acc, name) => {
+      acc[name] = {
+        estimateIn: { en: name },
+        howMany: { en: name },
+      };
+      return acc;
+    }, {});
+  };
+
   async function resolveStandardUnits(names: string[]) {
     if (!names.length) {
       hasApiData.value = true; // No API call needed, so we're "loaded"
@@ -86,20 +96,36 @@ export function useStandardUnits() {
         params: { id: missingNames },
       });
 
-      // Merge new data with existing data
-      const newRefs = data.reduce<StandardUnitRefs>((acc, unit) => {
+      const fetchedRefs = data.reduce<StandardUnitRefs>((acc, unit) => {
         const { id, estimateIn, howMany } = unit;
         acc[id] = { estimateIn, howMany };
         return acc;
       }, {});
 
-      // Update the global refs with new data
-      standardUnitRefs.value = { ...standardUnitRefs.value, ...newRefs };
+      const fetchedIds = new Set(Object.keys(fetchedRefs));
+      const fallbackRefs = buildFallbackRefs(
+        missingNames.filter(name => !fetchedIds.has(name)),
+      );
+
+      standardUnitRefs.value = {
+        ...standardUnitRefs.value,
+        ...fetchedRefs,
+        ...fallbackRefs,
+      };
+
+      if (fallbackRefs && Object.keys(fallbackRefs).length)
+        console.warn('Missing standard unit definitions, using fallback labels:', fallbackRefs);
 
       hasApiData.value = true;
     }
     catch (error) {
       console.error('Failed to fetch standard units:', error);
+
+      standardUnitRefs.value = {
+        ...standardUnitRefs.value,
+        ...buildFallbackRefs(missingNames),
+      };
+
       hasApiData.value = true; // Even on error, allow the component to render
     }
     finally {

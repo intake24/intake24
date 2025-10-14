@@ -77,6 +77,9 @@
     "500": "Something went wrong :(",
     "retry": "Try again"
   },
+  "notices": {
+    "nutrientDataUnavailable": "Maklumat nutrien untuk makanan ini belum tersedia. Nilai tenaga dipaparkan sebagai 0 kcal."
+  },
   "validation": {
     "tooLong": "Entered text is too long ({max} characters max)."
   },

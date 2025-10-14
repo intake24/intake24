@@ -76,5 +76,8 @@
   "errors": {
     "500": "Algo deu errado :(",
     "retry": "Tentar novamente"
+  },
+  "notices": {
+    "nutrientDataUnavailable": "As informações nutricionais ainda não estão disponíveis para este alimento. Os valores energéticos são exibidos como 0 kcal."
   }
 }

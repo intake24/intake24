@@ -77,6 +77,9 @@
     "500": "هناك شيء خاطئ    :(",
     "retry": "حاول مرة أخرى"
   },
+  "notices": {
+    "nutrientDataUnavailable": "Nutrient information is not yet available for this food. Energy values are shown as 0 kcal."
+  },
   "validation": {
     "tooLong": "Entered text is too long ({max} characters max)."
   },

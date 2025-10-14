@@ -26,45 +26,57 @@ function foodDataService() {
   const inheritableAttributesImpl = InheritableAttributesImpl();
   const portionSizeMethodsImpl = PortionSizeMethodsImpl();
 
-  const getNutrientKCalPer100G = async (localeId: string, foodCode: string): Promise<number> => {
-    const foodNutrientData = await FoodLocal.findOne({
+  interface NutrientEnergyResult {
+    kcalPer100g: number;
+    nutrientDataAvailable: boolean;
+  }
+
+  const getNutrientKCalPer100G = async (
+    localeId: string,
+    foodCode: string,
+  ): Promise<NutrientEnergyResult> => {
+    const foodLocal = await FoodLocal.findOne({
       where: { localeId, foodCode },
-      attributes: [],
+      attributes: ['id'],
+    });
+
+    if (!foodLocal) {
+      throw new InvalidIdError(
+        `Either locale id '${localeId}' or food code '${foodCode}' is `
+        + 'invalid, or local food data is missing',
+      );
+    }
+
+    const nutrientRecords = await foodLocal.$get('nutrientRecords', {
+      attributes: ['id'],
+      joinTableAttributes: [],
       include: [
         {
-          association: 'nutrientRecords',
-          attributes: ['id'], // these attributes should be empty, but sequelize crashes if that is the case
-          through: { attributes: [] },
-          duplicating: true,
-          include: [
-            {
-              association: 'nutrients',
-              where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
-              attributes: ['unitsPer100g'],
-            },
-          ],
+          association: 'nutrients',
+          attributes: ['unitsPer100g'],
+          where: { nutrientTypeId: KCAL_NUTRIENT_TYPE_ID },
+          required: false,
         },
       ],
     });
 
-    if (!foodNutrientData) {
-      throw new InvalidIdError(
-        `Either locale id '${localeId}' or food code '${foodCode}' is `
-        + 'invalid, food isn\'t linked to a nutrient table record, or the energy (kcal) nutrient '
-        + 'data is missing',
-      );
-    }
+    const nutrientRecord = nutrientRecords?.find(record =>
+      Array.isArray(record.nutrients) && record.nutrients.length > 0,
+    );
 
-    let kcal = foodNutrientData?.nutrientRecords?.map((el) => {
-      return el.nutrients ? el.nutrients[0].unitsPer100g : 0;
-    })[0];
-    kcal = kcal || 0;
-    if (!kcal) {
+    const kcalPer100g = nutrientRecord?.nutrients?.[0]?.unitsPer100g ?? 0;
+    const nutrientDataAvailable = nutrientRecord?.nutrients !== undefined
+      && nutrientRecord.nutrients.length > 0;
+
+    if (!nutrientDataAvailable) {
       const parentLocale = await getParentLocale(localeId);
       if (parentLocale && parentLocale.prototypeLocaleId)
-        kcal = await getNutrientKCalPer100G(parentLocale.prototypeLocaleId, foodCode);
+        return getNutrientKCalPer100G(parentLocale.prototypeLocaleId, foodCode);
+
+      return { kcalPer100g: 0, nutrientDataAvailable: false };
     }
-    return kcal;
+
+    return { kcalPer100g, nutrientDataAvailable: true };
   };
 
   /**
@@ -202,7 +214,7 @@ function foodDataService() {
     const [
       associatedFoodPrompts,
       brandNames,
-      kcalPer100g,
+      nutrientInfo,
       portionSizeMethods,
       inheritableAttributes,
       tags,
@@ -221,7 +233,8 @@ function foodDataService() {
       code: foodRecord.code,
       englishName: foodRecord.name,
       groupCode: foodRecord.foodGroupId,
-      kcalPer100g,
+      kcalPer100g: nutrientInfo.kcalPer100g,
+      nutrientDataAvailable: nutrientInfo.nutrientDataAvailable,
       localName: foodLocal.name,
       portionSizeMethods,
       readyMealOption: inheritableAttributes.readyMealOption,

@@ -8,9 +8,12 @@ import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-
 import buildGoustoLocaleCommand from './commands/gousto/build-gousto-locale-command';
 import buildUaeLocaleCommand from './commands/uae/build-uae-locale-command';
 import {
+  auditFoodListCommand,
   checkNutrientsCommand,
   convertReportCommand,
+  createLocaleCommand,
   crossCheckImportCommand,
+  exportTranslationsCommand,
   importFoodsCommand,
   rollbackImportCommand,
   syncFoodsCommand,
@@ -25,12 +28,14 @@ import {
   embeddingStats,
   extractCategories,
   findPortionImages,
+  generateAsServedPackage,
   generateEmbeddings,
   generateEnv,
   generateKey,
   generateVapidKeys,
   hashPassword,
   opensearchMigrate,
+  opensearchTest,
   packageExportV3,
   packageExportV4,
   packageImportV4,
@@ -70,6 +75,109 @@ async function run() {
     .description('Generate VAPID key pair.')
     .action(async () => {
       await generateVapidKeys();
+    });
+
+  program
+    .command('generate-as-served-package')
+    .description(
+      'Generate a v4-compatible as-served image package from either a manifest or a set of source folders.',
+    )
+    .option('--mode <mode>', 'Generation mode: manifest | folders', 'manifest')
+    .option('--manifest-path <path>', 'Excel manifest path (e.g., Filepath_*.xlsx)')
+    .requiredOption('--output-path <path>', 'Destination directory for the generated package')
+    .option(
+      '--images-root <path>',
+      'Directory to search for as-served image folders (repeatable, manifest mode only)',
+      (value: string, previous: string[]) => (previous ? [...previous, value] : [value]),
+      [],
+    )
+    .option(
+      '--folder-root <path>',
+      'Folder containing as-served image subdirectories (repeatable, folders mode only)',
+      (value: string, previous: string[]) => (previous ? [...previous, value] : [value]),
+      [],
+    )
+    .option('--set-prefix <prefix>', 'Prefix to prepend to folder-derived set IDs')
+    .option('--trim-suffix <suffix>', 'Suffix to trim from folder names before generating IDs')
+    .option('--clean-output', 'Remove the output directory before generating the package')
+    .option('--dry-run', 'Validate inputs without writing files')
+    .option(
+      '--no-overwrite-existing-images',
+      'Preserve existing images in the output directory instead of replacing them',
+    )
+    .action(async (options) => {
+      const mode = options.mode as 'manifest' | 'folders';
+      const imageRoots: string[] | undefined
+        = options.imagesRoot && options.imagesRoot.length > 0 ? options.imagesRoot : undefined;
+      const folderRoots: string[] | undefined
+        = options.folderRoot && options.folderRoot.length > 0 ? options.folderRoot : undefined;
+
+      if (mode === 'manifest' && !options.manifestPath) {
+        throw new Error('generate-as-served-package: --manifest-path is required in manifest mode');
+      }
+
+      if (mode === 'folders' && (!folderRoots || folderRoots.length === 0)) {
+        throw new Error('generate-as-served-package: at least one --folder-root is required in folders mode');
+      }
+
+      await generateAsServedPackage({
+        mode,
+        manifestPath: options.manifestPath,
+        outputPath: options.outputPath,
+        imageRoots,
+        folderRoots,
+        setIdPrefix: options.setPrefix,
+        trimSuffix: options.trimSuffix,
+        cleanOutput: Boolean(options.cleanOutput),
+        dryRun: Boolean(options.dryRun),
+        overwriteExistingImages: options.overwriteExistingImages ?? true,
+      });
+    });
+
+  const textDirectionOption = new Option(
+    '--text-direction [direction]',
+    'Text direction (ltr or rtl)',
+  )
+    .choices(['ltr', 'rtl'] as const)
+    .default('ltr');
+
+  const visibilityOption = new Option(
+    '--visibility [visibility]',
+    'Locale visibility (public or restricted)',
+  )
+    .choices(['public', 'restricted'] as const)
+    .default('restricted');
+
+  program
+    .command('create-locale')
+    .description('Create a locale record (optionally updating if it already exists)')
+    .requiredOption('-c, --code [code]', 'Locale code / identifier (e.g., id_ID_2025)')
+    .requiredOption('--english-name [name]', 'Locale English name')
+    .requiredOption('--local-name [name]', 'Locale localised name')
+    .requiredOption('--respondent-language [code]', 'Respondent language code (e.g., id)')
+    .requiredOption('--admin-language [code]', 'Admin language code (e.g., en)')
+    .requiredOption('--flag-code [code]', 'Country flag / locale code (e.g., id)')
+    .option('-p, --prototype [code]', 'Prototype locale code')
+    .addOption(textDirectionOption)
+    .option('--food-index-language [code]', 'Food index language backend ID', 'en')
+    .option('--food-index-enabled', 'Enable food index for this locale', false)
+    .addOption(visibilityOption)
+    .option('--overwrite', 'Update existing locale if one is found', false)
+    .action(async (options) => {
+      await createLocaleCommand({
+        code: options.code,
+        englishName: options.englishName,
+        localName: options.localName,
+        respondentLanguageId: options.respondentLanguage,
+        adminLanguageId: options.adminLanguage,
+        countryFlagCode: options.flagCode,
+        prototypeLocaleId: options.prototype,
+        textDirection: options.textDirection,
+        foodIndexLanguageBackendId: options.foodIndexLanguage,
+        foodIndexEnabled: options.foodIndexEnabled,
+        visibility: options.visibility,
+        overwrite: options.overwrite,
+      });
     });
 
   program
@@ -546,6 +654,42 @@ async function run() {
       });
     });
 
+  program
+    .command('audit-food-list')
+    .description('Audit a food list CSV for missing or invalid entries')
+    .requiredOption('-i, --input-path [input path]', 'Food list CSV file path')
+    .option('-r, --report-path [path]', 'Path to save audit report')
+    .option('-f, --report-format [format]', 'Report format (csv, json, markdown)', 'json')
+    .option('--include-valid', 'List rows without issues in the report', false)
+    .option('--skip-header-rows [rows]', 'Number of initial header rows to skip if auto-detection fails', '1')
+    .option('--baseline-path [path]', 'Reference CSV used to highlight changes')
+    .action(async (options) => {
+      await auditFoodListCommand({
+        inputPath: options.inputPath,
+        reportPath: options.reportPath,
+        reportFormat: options.reportFormat,
+        includeValid: options.includeValid,
+        skipHeaderRows: Number.parseInt(options.skipHeaderRows),
+        baselinePath: options.baselinePath,
+      });
+    });
+
+  program
+    .command('export-translations')
+    .description('Export translation JSON files to CSV for translation handoff')
+    .requiredOption('-t, --target-lang [code]', 'Target language code (e.g., id)')
+    .option('-s, --source-path [path]', 'Root directory containing translation modules', 'packages/i18n/src')
+    .option('-b, --base-lang [code]', 'Base language code to compare against', 'en')
+    .option('-o, --output-path [path]', 'Directory to write exported CSV files', 'reports/i18n')
+    .action(async (options) => {
+      await exportTranslationsCommand({
+        sourcePath: options.sourcePath,
+        baseLang: options.baseLang,
+        targetLang: options.targetLang,
+        outputPath: options.outputPath,
+      });
+    });
+
   // Sync foods from CSV to database command
   program
     .command('sync-foods')
@@ -617,6 +761,22 @@ async function run() {
         locale: options.locale,
         batchSize: Number.parseInt(options.batchSize, 10),
         recreateIndex: options.recreateIndex,
+      });
+    });
+
+  program
+    .command('opensearch-test')
+    .description('Run a direct OpenSearch query against the Japanese index')
+    .requiredOption('-q, --query <text>', 'Search query text')
+    .option('-l, --locale [locale]', 'Locale to test', 'jp_JP_2024')
+    .option('-s, --size [size]', 'Number of results to return', '10')
+    .option('-v, --verbose', 'Show analyzer output and stats', false)
+    .action(async (options) => {
+      await opensearchTest.handler({
+        query: options.query,
+        locale: options.locale,
+        size: Number.parseInt(options.size, 10),
+        verbose: options.verbose,
       });
     });
 
