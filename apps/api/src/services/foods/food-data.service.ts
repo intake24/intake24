@@ -1,3 +1,4 @@
+import type { AssociationGetOptions } from 'sequelize-typescript';
 import { getParentLocale } from '@intake24/api/services/foods/common';
 import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
 import type {
@@ -47,7 +48,7 @@ function foodDataService() {
       );
     }
 
-    const nutrientRecords = await foodLocal.$get('nutrientRecords', {
+    const nutrientAssociationOptions: AssociationGetOptions & { joinTableAttributes?: string[] } = {
       attributes: ['id'],
       joinTableAttributes: [],
       include: [
@@ -58,15 +59,16 @@ function foodDataService() {
           required: false,
         },
       ],
-    });
+    };
+
+    const nutrientRecords = await foodLocal.$get('nutrientRecords', nutrientAssociationOptions);
 
     const nutrientRecord = nutrientRecords?.find(record =>
       Array.isArray(record.nutrients) && record.nutrients.length > 0,
     );
 
     const kcalPer100g = nutrientRecord?.nutrients?.[0]?.unitsPer100g ?? 0;
-    const nutrientDataAvailable = nutrientRecord?.nutrients !== undefined
-      && nutrientRecord.nutrients.length > 0;
+    const nutrientDataAvailable = (nutrientRecord?.nutrients?.length ?? 0) > 0;
 
     if (!nutrientDataAvailable) {
       const parentLocale = await getParentLocale(localeId);
