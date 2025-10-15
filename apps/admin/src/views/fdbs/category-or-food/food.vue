@@ -72,27 +72,26 @@
           />
           <associated-food-list
             v-model="data.associatedFoods"
-            class="mb-6"
             :errors
             :food-id="entryId"
             :locale-id="code"
             :readonly
           />
-        </div>
-        <div v-if="!readonly" class="d-flex gc-2">
-          <v-btn color="secondary" type="submit" variant="outlined">
-            <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
-          </v-btn>
-          <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
-          <v-spacer />
-          <confirm-dialog
-            color="error"
-            icon-left="$delete"
-            :label="$t('common.action.delete')"
-            @confirm="remove"
-          >
-            {{ $t('common.action.confirm.delete', { name: entry?.name }) }}
-          </confirm-dialog>
+          <div v-if="!readonly" class="d-flex gc-2">
+            <v-btn color="secondary" type="submit" variant="outlined">
+              <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
+            </v-btn>
+            <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
+            <v-spacer />
+            <confirm-dialog
+              color="error"
+              icon-left="$delete"
+              :label="$t('common.action.delete')"
+              @confirm="remove"
+            >
+              {{ $t('common.action.confirm.delete', { name: entry?.name }) }}
+            </confirm-dialog>
+          </div>
         </div>
       </v-form>
     </div>

@@ -100,6 +100,7 @@ export type LocaleContentOptions = {
   path?: string;
   params?: Dictionary<string | number>;
   sanitize?: boolean;
+  force?: boolean;
 };
 
 export function sanitizeParams(content: Dictionary<string | number>) {
@@ -118,7 +119,7 @@ export function createTranslate(i18n: ReturnType<typeof useI18n<DefaultLocaleMes
     options: LocaleContentOptions = {},
   ) => {
     const { t, locale, messages } = i18n;
-    const { path, sanitize = false } = options;
+    const { path, sanitize = false, force = false } = options;
     let { params = {} } = options;
 
     if (sanitize)
@@ -141,7 +142,7 @@ export function createTranslate(i18n: ReturnType<typeof useI18n<DefaultLocaleMes
     if (path && has(messages.value.en, path))
       return t(path, params);
 
-    return replaceParams(Object.values(content ?? {}).at(0) || '', params);
+    return force ? replaceParams(Object.values(content ?? {}).at(0) || '', params) : '';
   };
 }
 

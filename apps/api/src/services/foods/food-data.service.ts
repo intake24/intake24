@@ -101,11 +101,12 @@ function foodDataService({ imagesBaseUrl, cachedParentCategoriesService }: Pick<
       throw new InvalidIdError(`Invalid food, locale code: ${ops.toString()}`);
 
     const { id, code, localeId } = food;
-    const categories = await cachedParentCategoriesService.getFoodAllCategories(id);
+    const categoryIds = await cachedParentCategoriesService.getFoodAllCategories(id);
 
     const [
       associatedFoodPrompts,
       brandNames,
+      categories,
       inheritableAttributes,
       kcalPer100g,
       portionSizeMethods,
@@ -113,10 +114,11 @@ function foodDataService({ imagesBaseUrl, cachedParentCategoriesService }: Pick<
     ] = await Promise.all([
       getAssociatedFoodPrompts(id),
       getBrands(id),
+      cachedParentCategoriesService.getFoodAllCategoryCodes(id),
       inheritableAttributesImpl.resolveFoodAttributes(id),
       getNutrientKCalPer100G(id),
       portionSizeMethodsImpl.resolveUserPortionSizeMethods(id),
-      getAllTags(categories, food.tags),
+      getAllTags(categoryIds, food.tags),
     ]);
 
     return {

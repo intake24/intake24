@@ -31,9 +31,9 @@
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />
           </template>
-          <v-list-item-title>{{ translate(item.genericName) }}</v-list-item-title>
+          <v-list-item-title>{{ translate(item.genericName, { force: true }) }}</v-list-item-title>
           <v-list-item-subtitle>
-            {{ translate(item.text) }}
+            {{ translate(item.text, { force: true }) }}
           </v-list-item-subtitle>
           <template #append>
             <list-item-error :errors="errors.get(`associatedFoods[${index}]*`)" />
