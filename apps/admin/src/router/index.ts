@@ -123,6 +123,12 @@ const routes: RouteRecordRaw[] = [
     meta: { module: { current: 'dashboard' }, action: 'browse', title: 'dashboard._' },
   },
   {
+    path: '/import',
+    name: 'import',
+    component: views.importPackage,
+    meta: { module: { current: 'import' }, title: 'io.import' },
+  },
+  {
     path: '/user',
     name: 'user',
     component: views.user.profile,
