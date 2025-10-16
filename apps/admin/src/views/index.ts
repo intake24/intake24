@@ -6,6 +6,7 @@ import faqs from './faqs';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
 import images from './images';
+import importExport from './import-export';
 import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
@@ -31,6 +32,7 @@ const views: Dictionary = {
   fdbs,
   'feedback-schemes': feedbackSchemes,
   images,
+  importPackage: importExport.importPackage,
   jobs,
   languages,
   locales,

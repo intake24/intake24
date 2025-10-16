@@ -49,6 +49,20 @@
           </v-list-item>
         </v-list-group>
       </v-list>
+
+      <v-list density="compact" nav>
+        <v-list-group color="grey-lighten-1" prepend-icon="fas fa-sync" :value="true">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props">
+              <v-list-item-title>{{ $t('io._') }}</v-list-item-title>
+            </v-list-item>
+          </template>
+          <v-list-item link prepend-icon="fas fa-upload" :to="{ name: 'import' }">
+            <v-list-item-title>{{ $t('io.import') }}</v-list-item-title>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
+
       <menu-tree
         v-if="
           can([

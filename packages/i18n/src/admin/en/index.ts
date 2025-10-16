@@ -7,6 +7,7 @@ import fdbs from './fdbs.json';
 import feedbackSchemes from './feedback-schemes.json';
 import guideImages from './guide-images.json';
 import imageMaps from './image-maps.json';
+import io from './io.json';
 import jobs from './jobs.json';
 import languages from './languages.json';
 import locales from './locales.json';
@@ -37,6 +38,7 @@ const messages = {
   'as-served-sets': asServedSets,
   'guide-images': guideImages,
   'image-maps': imageMaps,
+  io,
   jobs,
   languages,
   locales,
