@@ -1,3 +1,4 @@
+import type { CacheKey } from '../core/redis/cache';
 import { randomUUID } from 'node:crypto';
 import { pick } from 'lodash';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -19,6 +20,13 @@ import {
 } from '@intake24/db';
 
 function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'kyselyDb'>) {
+  function getCategoryCacheKeys(categoryId: string): CacheKey[] {
+    return [
+      `category-all-categories:${categoryId}`,
+      `category-parent-categories:${categoryId}`,
+    ];
+  }
+
   const browseCategories = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<CategoryAttributes> = { where: { localeId } };
     const { search } = query;
@@ -211,6 +219,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
       );
 
       const promises: Promise<any>[] = [
+        cache.push('indexing-locales', localeId),
         updatePortionSizeMethods(category.id, [], input.portionSizeMethods, { transaction }),
       ];
 
@@ -245,6 +254,8 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
 
     await db.foods.transaction(async (transaction) => {
       const promises: Promise<any>[] = [
+        cache.forget(getCategoryCacheKeys(categoryId)),
+        cache.push('indexing-locales', localeId),
         category.update({
           ...pick(input, ['code', 'englishName', 'name', 'simpleName', 'hidden', 'tags']),
           simpleName: toSimpleName(input.name)!,
@@ -276,12 +287,6 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
       await Promise.all(promises);
     });
 
-    await cache.forget([
-      `category-all-categories:${categoryId}`,
-      `category-all-category-codes:${category.localeId}:${category.id}`,
-      `category-parent-categories:${categoryId}`,
-    ]);
-
     return (await getCategory({ id: categoryId, localeId }))!;
   };
 
@@ -301,7 +306,9 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
         { transaction },
       );
 
-      const promises: Promise<any>[] = [];
+      const promises: Promise<any>[] = [
+        cache.push('indexing-locales', category.localeId),
+      ];
 
       if (sourceCategory?.attributes) {
         promises.push(
@@ -354,7 +361,11 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     if (!category)
       throw new NotFoundError();
 
-    await category.destroy();
+    await Promise.all([
+      category.destroy(),
+      cache.forget(getCategoryCacheKeys(categoryId)),
+      cache.push('indexing-locales', localeId),
+    ]);
   };
 
   return {

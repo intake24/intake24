@@ -16,7 +16,6 @@ export type CacheKeyPrefix
     | typeof ACL_ROLES_KEY
     | 'category-attributes'
     | 'category-all-categories'
-    | 'category-all-category-codes'
     | 'category-parent-categories'
     | 'food-attributes'
     | 'food-entry'

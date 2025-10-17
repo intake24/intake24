@@ -10,6 +10,17 @@ import type { FindOptions, FoodAttributes, PaginateQuery, Transaction } from '@i
 import { AssociatedFood, Category, Food, FoodAttribute, FoodPortionSizeMethod, Op } from '@intake24/db';
 
 function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
+  function getFoodCacheKeys(localeId: string, foodId: string, foodCode: string): CacheKey[] {
+    return [
+      `food-attributes:${foodId}`,
+      `food-entry:${foodId}`,
+      `food-entry:${localeId}:${foodCode}`,
+      `food-all-categories:${foodId}`,
+      `food-all-category-codes:${foodId}`,
+      `food-parent-categories:${foodId}`,
+    ];
+  }
+
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<FoodAttributes> = { where: { localeId } };
     const { search } = query;
@@ -138,6 +149,7 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       );
 
       const promises: Promise<any>[] = [
+        cache.push('indexing-locales', localeId),
         updatePortionSizeMethods(food.id, [], input.portionSizeMethods, { transaction }),
         updateAssociatedFoods(food.id, [], input.associatedFoods, { transaction }),
       ];
@@ -164,8 +176,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       return food;
     });
 
-    await cache.push('indexing-locales', localeId);
-
     return (await getFood({ id: food.id, localeId }))!;
   };
 
@@ -178,17 +188,10 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     if (!associatedFoods || !portionSizeMethods)
       throw new NotFoundError();
 
-    const foodCacheKeys: CacheKey[] = [
-      `food-attributes:${foodId}`,
-      `food-entry:${foodId}`,
-      `food-entry:${localeId}:${food.code}`,
-      `food-all-categories:${foodId}`,
-      `food-all-category-codes:${foodId}`,
-      `food-parent-categories:${foodId}`,
-    ];
-
     await db.foods.transaction(async (transaction) => {
       const promises: Promise<any>[] = [
+        cache.forget(getFoodCacheKeys(localeId, foodId, food.code)),
+        cache.push('indexing-locales', localeId),
         food.update({
           ...pick(input, ['code', 'englishName', 'name', 'altNames', 'tags']),
           simpleName: toSimpleName(input.name),
@@ -226,11 +229,6 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       await Promise.all(promises);
     });
 
-    await Promise.all([
-      cache.forget(foodCacheKeys),
-      cache.push('indexing-locales', localeId),
-    ]);
-
     return (await getFood({ id: foodId, localeId }))!;
   };
 
@@ -250,7 +248,9 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
         { transaction },
       );
 
-      const promises: Promise<any>[] = [];
+      const promises: Promise<any>[] = [
+        cache.push('indexing-locales', food.localeId),
+      ];
 
       if (sourceFood.attributes) {
         promises.push(
@@ -341,14 +341,8 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
     await Promise.all([
       food.destroy(),
-      cache.forget([
-        `food-attributes:${foodId}`,
-        `food-entry:${foodId}`,
-        `food-entry:${localeId}:${food.code}`,
-        `food-all-categories:${foodId}`,
-        `food-all-category-codes:${foodId}`,
-        `food-parent-categories:${foodId}`,
-      ]),
+      cache.forget(getFoodCacheKeys(localeId, foodId, food.code)),
+      cache.push('indexing-locales', localeId),
     ]);
   };
 
