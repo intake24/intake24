@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/html-to-text": "^9.0.4",
-    "@types/jsdom": "^21.1.7",
+    "@types/jsdom": "^27.0.0",
     "@types/ms": "^2.1.0",
     "@types/node": "^24.5.2",
     "@types/nodemailer": "^7.0.1",
