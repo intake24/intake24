@@ -54,14 +54,12 @@ import type {
   PortionSizeMethodsService,
   PortionSizeService,
   ProcessedImageService,
-  Publisher,
   Pusher,
   RateLimiter,
   Scheduler,
   Session,
   SignInService,
   SourceImageService,
-  Subscriber,
   SurveyService,
   SurveySubmissionService,
   UserService,
@@ -121,8 +119,6 @@ export interface IoC extends Jobs {
   mailer: Mailer;
   pusher: Pusher;
   rateLimiter: RateLimiter;
-  reindexingSubscriberService: Subscriber;
-  reindexingPublisherService: Publisher;
   scheduler: Scheduler;
   session: Session;
 

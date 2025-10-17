@@ -26,7 +26,7 @@ function localFoodsController({
     res.status(created ? HttpStatusCode.Created : HttpStatusCode.Ok);
 
     if (_return) {
-      await cache.push('indexing-locales', localeId);
+      await cache.setAdd('locales-index', localeId);
       const instance = await localFoodsService.read(localeId, req.body.code);
       res.json(instance);
     }

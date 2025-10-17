@@ -53,41 +53,11 @@ const foodIndex = {
     indexWorker.postMessage({ type: 'command', exit: true });
   },
 
-  async rebuild() {
-    if (indexReady) {
-      buildCounter++;
-      const buildId = buildCounter;
-
-      const rebuildListener = (msg: RebuildResponse) => {
-        if (msg.buildCommandId === buildId) {
-          indexWorker.removeListener('message', rebuildListener);
-
-          if (msg.success) {
-            indexReady = true;
-          }
-          else {
-            // TODO: should we throw an error here?
-            indexReady = false;
-            logger.error(msg.error);
-          }
-        }
-      };
-
-      indexWorker.on('message', rebuildListener);
-      indexWorker.postMessage({ type: 'command', buildId, rebuild: true });
-    }
-  },
-
-  async rebuildSpecificLocales(locales: string[]) {
-    const uniqueLocales = Array.from(new Set(locales));
-
-    const localesInDb = await FoodsLocale.findAll({ where: { id: uniqueLocales } });
-    if (localesInDb.length !== uniqueLocales.length) {
-      const missingLocales = uniqueLocales.filter(
-        locale => !localesInDb.find((localeInDb: FoodsLocale) => localeInDb.id === locale),
-      );
-      logger.error(`Locales ${missingLocales.join(', ')} not found`);
-    }
+  async rebuild(localeId?: string[]) {
+    const locales = localeId
+      ? (await FoodsLocale.findAll({ attributes: ['id'], where: { id: localeId } }))
+          .map(locale => locale.id)
+      : undefined;
 
     if (indexReady) {
       buildCounter++;
@@ -109,11 +79,11 @@ const foodIndex = {
       };
 
       indexWorker.on('message', rebuildListener);
-      // Post a message for indexWorker to rebuild the set of locales
       indexWorker.postMessage({
         type: 'command',
+        buildId,
         rebuild: true,
-        locales: localesInDb.map((locale: FoodsLocale) => locale.id),
+        locales,
       });
     }
   },

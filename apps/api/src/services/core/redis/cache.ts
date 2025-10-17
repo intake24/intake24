@@ -28,7 +28,7 @@ export type CacheKey
   = | `${CacheKeyPrefix}:${string}`
     | `${CacheKeyPrefix}:${string}:${string}`
     | 'feedback-data'
-    | 'indexing-locales';
+    | 'locales-index';
 export type CacheValue = string | number | unknown[] | string[] | null | boolean | object;
 
 export default class Cache extends HasRedisClient {
@@ -103,22 +103,12 @@ export default class Cache extends HasRedisClient {
     return !!result;
   }
 
-  /**
-   * Store an array of items in the cache, for a given key
-   * @param {CacheKey} key
-   * @param {CacheValue} value
-   * @returns {Promise<boolean>}
-   * @memberof Cache
-   */
-  async push(key: CacheKey, value: CacheValue): Promise<boolean> {
-    const newValues: CacheValue[] = [value];
-    if (value !== 'all') {
-      const existingValues = await this.get<CacheValue[]>(key);
-      if (existingValues && existingValues.length > 0)
-        newValues.push(...existingValues);
-    }
-    const result = await this.set(key, newValues);
-    return result;
+  async setAdd(key: CacheKey, ...value: string[]): Promise<number> {
+    return await this.redis.sadd(key, ...value);
+  }
+
+  async setMembers(key: CacheKey): Promise<string[]> {
+    return await this.redis.smembers(key);
   }
 
   /**

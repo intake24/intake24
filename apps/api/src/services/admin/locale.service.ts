@@ -144,7 +144,7 @@ function localeService({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) {
       newRecords.push(newRecord);
     }
 
-    await cache.push('indexing-locales', code);
+    await cache.setAdd('locales-index', code);
 
     return [...records, ...newRecords];
   };
@@ -220,7 +220,7 @@ function localeService({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) {
       });
       newRecords.push(newRecord);
     }
-    await cache.push('indexing-locales', localeCode);
+    await cache.setAdd('locales-index', localeCode);
 
     return [...records, ...newRecords];
   };
