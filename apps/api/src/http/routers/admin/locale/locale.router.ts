@@ -105,7 +105,7 @@ export function locale() {
         ]);
 
         if (body.foodIndexEnabled)
-          await req.scope.cradle.cache.push('indexing-locales', locale.id);
+          await req.scope.cradle.cache.setAdd('locales-index', locale.code);
 
         return { status: 201, body: localeResponse(locale) };
       },
@@ -168,7 +168,7 @@ export function locale() {
           throw new NotFoundError();
 
         if (body.foodIndexEnabled && !systemLocale.foodIndexEnabled)
-          await req.scope.cradle.cache.push('indexing-locales', localeId);
+          await req.scope.cradle.cache.setAdd('locales-index', systemLocale.code);
 
         await Promise.all([systemLocale.update(body), foodsLocale.update(body)]);
 

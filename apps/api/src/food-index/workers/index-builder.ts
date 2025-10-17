@@ -338,7 +338,7 @@ async function buildIndex() {
       // rebuild index
       if (msg.rebuild) {
         try {
-          if (msg.locales && msg.locales.length > 0) {
+          if (msg.locales?.length) {
             const setLocales = new Set(msg.locales);
             logger.debug(`Rebuilding index for ${msg.locales.length} locales`);
             for (const localeId of setLocales)

@@ -219,7 +219,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
       );
 
       const promises: Promise<any>[] = [
-        cache.push('indexing-locales', localeId),
+        cache.setAdd('locales-index', localeId),
         updatePortionSizeMethods(category.id, [], input.portionSizeMethods, { transaction }),
       ];
 
@@ -255,7 +255,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     await db.foods.transaction(async (transaction) => {
       const promises: Promise<any>[] = [
         cache.forget(getCategoryCacheKeys(categoryId)),
-        cache.push('indexing-locales', localeId),
+        cache.setAdd('locales-index', localeId),
         category.update({
           ...pick(input, ['code', 'englishName', 'name', 'simpleName', 'hidden', 'tags']),
           simpleName: toSimpleName(input.name)!,
@@ -307,7 +307,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
       );
 
       const promises: Promise<any>[] = [
-        cache.push('indexing-locales', category.localeId),
+        cache.setAdd('locales-index', category.localeId),
       ];
 
       if (sourceCategory?.attributes) {
@@ -364,7 +364,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     await Promise.all([
       category.destroy(),
       cache.forget(getCategoryCacheKeys(categoryId)),
-      cache.push('indexing-locales', localeId),
+      cache.setAdd('locales-index', localeId),
     ]);
   };
 
