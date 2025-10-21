@@ -38,45 +38,35 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
-import { defineAsyncComponent, defineComponent, ref, watch } from 'vue';
+<script lang="ts" setup>
+import { defineAsyncComponent, ref, watch } from 'vue';
 
-export default defineComponent({
-  name: 'JsonEditorDialog',
-
-  components: {
-    JsonEditorVue: defineAsyncComponent(() => import('json-editor-vue')),
-  },
-
-  props: {
-    modelValue: {
-      type: [Array, Object],
-    },
-  },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const dialog = ref(false);
-    const content = ref(props.modelValue);
-
-    watch(dialog, (val) => {
-      if (!val)
-        return;
-
-      content.value = props.modelValue;
-    });
-
-    const close = () => {
-      dialog.value = false;
-    };
-
-    const confirm = () => {
-      emit('update:modelValue', content.value);
-      close();
-    };
-
-    return { dialog, content, close, confirm };
+const props = defineProps({
+  modelValue: {
+    type: [Array, Object],
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const JsonEditorVue = defineAsyncComponent(() => import('json-editor-vue'));
+
+const dialog = ref(false);
+const content = ref(props.modelValue);
+
+watch(dialog, (val) => {
+  if (!val)
+    return;
+
+  content.value = props.modelValue;
+});
+
+function close() {
+  dialog.value = false;
+}
+
+function confirm() {
+  emit('update:modelValue', content.value);
+  close();
+}
 </script>
