@@ -9,34 +9,31 @@
   />
 </template>
 
-<script lang="ts">
-import { defineAsyncComponent, defineComponent } from 'vue';
+<script lang="ts" setup>
+import { defineAsyncComponent } from 'vue';
 
-export default defineComponent({
-  name: 'JsonEditor',
-
-  components: {
-    JsonEditorVue: defineAsyncComponent(() => import('json-editor-vue')),
+const props = defineProps({
+  modelValue: {
+    type: [Array, Object],
   },
-
-  props: {
-    readOnly: {
-      type: Boolean,
-      default: false,
-    },
-    modelValue: {
-      type: [Array, Object],
-    },
+  readOnly: {
+    type: Boolean,
+    default: false,
   },
-
-  emits: ['update:modelValue'],
-
-  setup(props, { emit }) {
-    const input = (value: string | object) => {
-      emit('update:modelValue', value);
-    };
-
-    return { input };
+  required: {
+    type: Boolean,
+    default: false,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const JsonEditorVue = defineAsyncComponent(() => import('json-editor-vue'));
+
+function input(value: string | object) {
+  if (!value && props.required)
+    return;
+
+  emit('update:modelValue', value);
+}
 </script>

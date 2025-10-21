@@ -1,6 +1,10 @@
 <template>
   <v-tabs-window-item value="json">
-    <json-editor v-bind="{ modelValue }" @update:model-value="$emit('update:modelValue', $event)" />
+    <json-editor
+      :model-value
+      required
+      @update:model-value="$emit('update:modelValue', $event)"
+    />
   </v-tabs-window-item>
 </template>
 
