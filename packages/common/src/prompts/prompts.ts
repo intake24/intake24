@@ -356,6 +356,7 @@ const externalSourcePrompt = baseStandardPrompt.extend({
   component: z.literal('external-source-prompt'),
   source: externalSourceOptions,
   barcode: barcodeScannerOptions,
+  initialSearch: z.union([z.literal(false), z.literal('searchTerm')]),
 });
 
 const finalPrompt = baseStandardPrompt.extend({
