@@ -1,5 +1,5 @@
 <template>
-  <v-card :tile="$vuetify.display.mobile">
+  <v-card :loading :tile="$vuetify.display.mobile">
     <v-card-text>
       <div class="d-flex gc-2">
         <component

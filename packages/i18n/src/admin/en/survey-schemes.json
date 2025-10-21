@@ -557,7 +557,12 @@
     },
     "external-source-prompt": {
       "title": "External source",
-      "subtitle": "Prompt for external source of food matching"
+      "subtitle": "Prompt for external source of food matching",
+      "initialSearch": {
+        "_": "Initial search term",
+        "false": "No initial search",
+        "searchTerm": "Use food search term"
+      }
     },
     "final-prompt": {
       "title": "Final",
