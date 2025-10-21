@@ -22,7 +22,7 @@ const { food } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 
 const getInitialState = computed<PromptStates['external-source-prompt']>(() => ({
-  searchTerm: getSearchTerm(food.value),
+  searchTerm: props.prompt.initialSearch === 'searchTerm' ? getSearchTerm(food.value) : null,
   type: undefined,
   data: undefined,
 }));

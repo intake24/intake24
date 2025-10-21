@@ -44,6 +44,10 @@ Edit meal prompt allows initial entry of food and drink before portion-size esti
 
 Prompt to collect external source of food matching.
 
+- `initialSearch` - initial search term
+  - `false` - no initial search
+  - `searchTerm` - use food search term
+
 #### Source options
 
 - `type` - external source type / provider
