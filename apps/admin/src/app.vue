@@ -54,7 +54,7 @@
         <v-list-group color="grey-lighten-1" prepend-icon="fas fa-sync" :value="true">
           <template #activator="{ props }">
             <v-list-item v-bind="props">
-              <v-list-item-title>{{ $t('io._') }}</v-list-item-title>
+              <span class="text-subtitle-2">{{ $t('io._') }}</span>
             </v-list-item>
           </template>
           <v-list-item link prepend-icon="fas fa-upload" :to="{ name: 'import' }">

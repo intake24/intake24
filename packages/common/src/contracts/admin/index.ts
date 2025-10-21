@@ -14,6 +14,7 @@ import { mediable } from './mediable.contract';
 import { nutrientTable } from './nutrient-table.contract';
 import { nutrientType } from './nutrient-type.contract';
 import { nutrientUnit } from './nutrient-unit.contract';
+import { packageImport } from './package-import.contract';
 import { reference } from './reference.contract';
 import { securable } from './securable.contract';
 import { signInLog } from './sign-in-log.contract';
@@ -48,6 +49,7 @@ export default {
   nutrientType,
   nutrientUnit,
   reference,
+  packageImport,
   signInLog,
   signUp,
   standardUnit,
