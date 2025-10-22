@@ -5079,11 +5079,18 @@
                         },
                         "code": {
                           "type": "string"
+                        },
+                        "splitWords": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         }
                       },
                       "required": [
                         "id",
-                        "code"
+                        "code",
+                        "splitWords"
                       ]
                     },
                     "surveyScheme": {
@@ -44149,7 +44156,8 @@
                             "type": "string"
                           },
                           "localName": {
-                            "type": "string"
+                            "type": "string",
+                            "nullable": true
                           },
                           "nutrientTableId": {
                             "type": "string"
