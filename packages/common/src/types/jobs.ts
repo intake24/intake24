@@ -178,6 +178,9 @@ export const UserPasswordResetNotification = z.object({
   email: z.string(),
   userAgent: z.string().optional(),
 });
+export const PackageVerification = z.object({
+  importId: z.string().uuid(),
+});
 
 export const jobParams = z.object({
   CleanRedisStore,
@@ -207,6 +210,7 @@ export const jobParams = z.object({
   SurveySubmission,
   UserEmailVerificationNotification,
   UserPasswordResetNotification,
+  PackageVerification,
 });
 export type JobParams = z.infer<typeof jobParams>;
 
@@ -339,6 +343,11 @@ export const userJobs = [
 ] as const;
 export type UserJob = (typeof userJobs)[number];
 
+export const ioJobs = [
+  'PackageVerification',
+] as const;
+export type IOJob = (typeof ioJobs)[number];
+
 export const jobTypes = [
   'CleanRedisStore',
   'CleanStorageFiles',
@@ -359,6 +368,7 @@ export const jobTypes = [
   ...nutrientTableJobs,
   ...surveyJobs,
   ...userJobs,
+  ...ioJobs,
 ] as const;
 
 export type JobType = keyof JobParams & (typeof jobTypes)[number];
@@ -463,6 +473,9 @@ export const defaultJobsParams: JobParams = {
   },
   UserPasswordResetNotification: {
     email: '',
+  },
+  PackageVerification: {
+    uploadedPath: '',
   },
 };
 

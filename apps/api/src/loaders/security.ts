@@ -23,7 +23,10 @@ export default (app: Express, { config }: Ops) => {
     cors({
       origin,
       credentials: true,
-      exposedHeaders: ['RateLimit', 'RateLimit-Policy', 'Retry-After'],
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+      exposedHeaders: ['RateLimit', 'RateLimit-Policy', 'Retry-After',
+        // For Tus protocol OPTIONS request
+        'Upload-Offset', 'Location', 'Upload-Length', 'Tus-Version', 'Tus-Resumable', 'Tus-Max-Size', 'Tus-Extension', 'Upload-Metadata', 'Upload-Defer-Length', 'Upload-Concat'],
     }),
   );
 };
