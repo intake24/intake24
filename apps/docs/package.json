@@ -19,9 +19,9 @@
   "devDependencies": {
     "@ts-rest/open-api": "^3.52.1",
     "@tsconfig/node22": "^22.0.2",
-    "@types/node": "^24.5.2",
+    "@types/node": "^24.9.1",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.2",
+    "typescript": "^5.9.3",
     "vitepress": "^1.6.4"
   }
 }
