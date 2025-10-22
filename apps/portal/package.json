@@ -23,18 +23,18 @@
   },
   "dependencies": {
     "@css-inline/css-inline": "^0.17.0",
-    "@fortawesome/fontawesome-free": "^7.0.1",
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "dotenv-expand": "^12.0.3",
     "express": "^5.1.0",
     "fs-extra": "^11.3.2",
     "helmet": "^8.1.0",
-    "jsdom": "^27.0.0",
+    "jsdom": "^27.0.1",
     "morgan": "^1.10.1",
     "nunjucks": "^3.2.4",
-    "sitemap": "^8.0.0"
+    "sitemap": "^8.0.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
@@ -54,10 +54,10 @@
     "supertest": "^7.1.4",
     "ts-loader": "^9.5.4",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.7",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.11",
     "vitest": "^3.2.4",
-    "webpack": "^5.101.3",
+    "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1",
     "webpack-node-externals": "^3.0.0",
     "webpackbar": "^7.0.0"

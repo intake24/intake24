@@ -21,8 +21,8 @@
     "@hcaptcha/vue3-hcaptcha": "^1.3.0",
     "@microsoft/clarity": "^1.0.0",
     "@pinia/plugin-debounce": "^1.0.1",
-    "@pixelverse/strichjs-sdk": "^1.10.0",
-    "@vueuse/core": "^13.9.0",
+    "@pixelverse/strichjs-sdk": "^1.10.1",
+    "@vueuse/core": "^14.0.0",
     "axios": "^1.12.2",
     "echarts": "^6.0.0",
     "js-file-download": "^0.4.12",
@@ -32,20 +32,20 @@
     "pinia-plugin-persistedstate": "^4.5.0",
     "vanilla-cookieconsent": "^3.1.0",
     "vue": "^3.5.22",
-    "vue-echarts": "^8.0.0",
-    "vue-gtag": "^3.6.1",
+    "vue-echarts": "^8.0.1",
+    "vue-gtag": "^3.6.2",
     "vue-i18n": "^11.1.12",
     "vue-recaptcha": "^2.0.3",
-    "vue-router": "^4.5.1",
-    "vuetify": "^3.10.3"
+    "vue-router": "^4.6.3",
+    "vuetify": "^3.10.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",
-    "@types/node": "^24.5.2",
-    "type-fest": "^5.0.1",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.7",
-    "vite-plugin-pwa": "^1.0.3",
+    "@types/node": "^24.9.1",
+    "type-fest": "^5.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.11",
+    "vite-plugin-pwa": "^1.1.0",
     "workbox-window": "^7.3.0"
   }
 }
