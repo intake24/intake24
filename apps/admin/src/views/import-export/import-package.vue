@@ -2,7 +2,7 @@
   <v-container class="file-upload-container">
     <v-row>
       <v-col>
-        <h2>File Upload</h2>
+        <h2>Import food database package</h2>
       </v-col>
     </v-row>
 
@@ -10,7 +10,7 @@
       <v-col>
         <v-card
           class="drop-zone"
-          :class="{ 'drag-over': isDragging && !isUploading && !isImporting, 'greyed-out': isUploading || isImporting }"
+          :class="{ 'drag-over': isDragging && uploadState === 'idle', 'greyed-out': uploadState !== 'idle' }"
           @dragleave="handleDragLeave"
           @dragover.prevent="handleDragOver"
           @drop.prevent="handleDrop"
@@ -23,7 +23,7 @@
               ref="fileInput"
               v-model="fileInputModel"
               class="file-input"
-              :disabled="isUploading || isImporting"
+              :disabled="uploadState !== 'idle'"
               hide-details
               @change="handleFileChange"
               @dragleave.prevent="handleDragLeave"
@@ -35,21 +35,21 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="isUploading || isImporting || message">
+    <v-row v-if="uploadState !== 'idle' || statusMessage">
       <v-col>
         <v-card>
-          <v-card-title>Uploading and verifying package file</v-card-title>
+          <v-card-title>{{ progressTitle }}</v-card-title>
           <v-card-text>
             <v-progress-linear
-              v-if="isUploading"
+              v-if="uploadState !== 'idle'"
               v-model="progress"
               color="primary"
               height="25"
             >
-              {{ progress }}%
+              {{ progress.toFixed(2) }}%
             </v-progress-linear>
             <v-btn
-              v-if="isUploading"
+              v-if="uploadState === 'uploading'"
               class="mt-2"
               color="error"
               @click="cancelUpload"
@@ -57,10 +57,10 @@
               Cancel Upload
             </v-btn>
             <v-alert
-              v-if="message"
+              v-if="statusMessage"
               class="mt-2"
-              :text="message"
-              :type="isError ? 'error' : 'success'"
+              :text="statusMessage"
+              :type="isErrorStatus ? 'error' : 'success'"
             />
           </v-card-text>
         </v-card>
@@ -71,7 +71,7 @@
       <v-col>
         <v-card>
           <v-card-title>Processing Options</v-card-title>
-          <v-card-text :disabled="isUploading || isImporting">
+          <v-card-text :disabled="uploadState !== 'idle'">
             <v-row>
               <v-col cols="12" sm="6">
                 <v-checkbox
@@ -138,7 +138,7 @@
         <v-card>
           <v-card-title>Conflict Handling</v-card-title>
           <v-card-text>
-            <v-radio-group v-model="conflictHandling" :disabled="isUploading || isImporting">
+            <v-radio-group v-model="conflictHandling" :disabled="uploadState !== 'idle'">
               <v-radio label="Skip" value="skip" />
               <v-radio label="Overwrite" value="overwrite" />
               <v-radio label="Abort" value="abort" />
@@ -152,7 +152,7 @@
       <v-col>
         <v-btn
           color="primary"
-          :disabled="isUploading || isImporting || !fileId"
+          :disabled="uploadState !== 'idle' || !fileId"
           @click="startImport"
         >
           Import
@@ -163,21 +163,132 @@
 </template>
 
 <script setup lang="ts">
-import type { AxiosProgressEvent, Canceler } from 'axios';
+import type { AxiosInstance, AxiosProgressEvent, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 import axios from 'axios';
-import { reactive, ref } from 'vue';
+import * as tus from 'tus-js-client';
+import { computed, reactive, ref } from 'vue';
+import { httpService } from '../../services';
+
+class AxiosHttpResponse implements tus.HttpResponse {
+  constructor(private axiosResponse: AxiosResponse) {}
+
+  getStatus(): number {
+    return this.axiosResponse.status;
+  }
+
+  getHeader(header: string): string | undefined {
+    return this.axiosResponse.headers[header.toLowerCase()];
+  }
+
+  getBody(): any {
+    return this.axiosResponse.data;
+  }
+
+  getUnderlyingObject(): any {
+    return this.axiosResponse;
+  }
+}
+
+// Custom HttpRequest builder for tus-js-client v4.x
+class AxiosHttpRequest implements tus.HttpRequest {
+  private headers: { [key: string]: string } = {};
+  private body: any = null;
+  private progressHandler: ((bytesSent: number) => void) | null = null;
+  private cancelTokenSource: CancelTokenSource = axios.CancelToken.source();
+
+  constructor(
+    private method: string,
+    private url: string,
+    private axiosInstance: AxiosInstance,
+  ) {}
+
+  getMethod(): string {
+    return this.method;
+  }
+
+  getURL(): string {
+    return this.url;
+  }
+
+  setHeader(header: string, value: string): void {
+    this.headers[header] = value;
+  }
+
+  getHeader(header: string): string | undefined {
+    return this.headers[header];
+  }
+
+  setProgressHandler(handler: (bytesSent: number) => void): void {
+    this.progressHandler = handler;
+  }
+
+  async send(body: any): Promise<tus.HttpResponse> {
+    this.body = body;
+
+    const config: AxiosRequestConfig = {
+      method: this.method,
+      url: this.url,
+      headers: {
+        ...this.headers,
+        // Ensure tus headers are preserved
+        // 'Tus-Resumable': '1.0.0',
+      },
+      data: body,
+      cancelToken: this.cancelTokenSource.token,
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+        if (this.progressHandler && progressEvent.lengthComputable) {
+          // Call tus progress handler with bytes sent
+          this.progressHandler(progressEvent.loaded);
+        }
+      },
+    };
+
+    try {
+      const response = await this.axiosInstance(config);
+      return new AxiosHttpResponse(response);
+    }
+    catch (error: any) {
+      if (axios.isCancel(error)) {
+        throw new Error('Request aborted');
+      }
+      throw error;
+    }
+  }
+
+  async abort(): Promise<void> {
+    this.cancelTokenSource.cancel('Upload aborted');
+  }
+
+  getUnderlyingObject(): CancelTokenSource {
+    return this.cancelTokenSource; // Expose for external control if needed
+  }
+}
+
+// Custom Axios-based HttpStack for tus-js-client v4.x
+class AxiosHttpStack implements tus.HttpStack {
+  constructor(private axiosInstance: AxiosInstance) {}
+
+  createRequest(method: string, url: string): tus.HttpRequest {
+    return new AxiosHttpRequest(method, url, this.axiosInstance);
+  }
+
+  getName(): string {
+    return 'axios-http-stack';
+  }
+}
+
+type UploadState = 'idle' | 'uploading' | 'verifying' | 'importing';
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const fileInputModel = ref<File | null>(null);
 const selectedFile = ref<File | null>(null);
 const fileId = ref<string | null>(null);
-const isUploading = ref(false);
-const isImporting = ref(false);
+const uploadState = ref<UploadState>('idle');
 const progress = ref(0);
-const message = ref('');
-const isError = ref(false);
+const statusMessage = ref('');
+const isErrorStatus = ref(false);
 const isDragging = ref(false);
-const cancelRequest = ref<Canceler | null>(null);
+let tusUpload: tus.Upload | null = null;
 
 const options = reactive({
   option1: true,
@@ -193,16 +304,29 @@ const options = reactive({
 });
 const conflictHandling = ref('skip');
 
+const progressTitle = computed(() => {
+  switch (uploadState.value) {
+    case 'uploading':
+      return 'Uploading Package File';
+    case 'verifying':
+      return 'Verifying Package File';
+    case 'importing':
+      return 'Importing Package File';
+    default:
+      return 'Processing Package File';
+  }
+});
+
 function handleFileChange(file: File | null) {
   selectedFile.value = file;
-  if (file && !isUploading.value) {
+  if (file && uploadState.value === 'idle') {
     startUpload();
   }
 }
 
 function handleDrop(event: DragEvent) {
   isDragging.value = false;
-  if (event.dataTransfer?.files && event.dataTransfer.files.length > 0 && !isUploading.value) {
+  if (event.dataTransfer?.files && event.dataTransfer.files.length > 0 && uploadState.value === 'idle') {
     selectedFile.value = event.dataTransfer.files[0];
     fileInputModel.value = selectedFile.value;
     startUpload();
@@ -211,7 +335,7 @@ function handleDrop(event: DragEvent) {
 
 function handleDragOver(event: DragEvent) {
   event.preventDefault();
-  if (!isUploading.value && !isImporting.value) {
+  if (uploadState.value === 'idle') {
     isDragging.value = true;
   }
 }
@@ -223,58 +347,49 @@ function handleDragLeave(event: DragEvent) {
 
 async function startUpload() {
   if (!selectedFile.value) {
-    message.value = 'Please select a file first';
-    isError.value = true;
+    statusMessage.value = 'Please select a file first';
+    isErrorStatus.value = true;
     return;
   }
 
-  isUploading.value = true;
-  message.value = '';
-  isError.value = false;
-
-  const formData = new FormData();
-  formData.append('file', selectedFile.value);
-
-  const source = axios.CancelToken.source();
-  cancelRequest.value = source.cancel;
+  uploadState.value = 'uploading';
+  statusMessage.value = '';
+  isErrorStatus.value = false;
 
   try {
-    const response = await axios.post('http://localhost:3000/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+    const file = selectedFile.value;
+
+    const upload = new tus.Upload(file, {
+      endpoint: '/admin/large-file-upload',
+      retryDelays: [0, 1000, 3000, 5000],
+      chunkSize: 5 * 1024 * 1024, // 5MB chunks
+      metadata: {
+        filename: file.name,
+        filetype: file.type,
       },
-      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-        if (progressEvent.total) {
-          progress.value = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total,
-          );
-        }
+
+      httpStack: new AxiosHttpStack(httpService.axios),
+      onError: (error) => {
+        statusMessage.value = error.message;
+        isErrorStatus.value = true;
+        uploadState.value = 'idle';
       },
-      cancelToken: source.token,
+      onProgress: (bytesUploaded, bytesTotal) => {
+        progress.value = (bytesUploaded / bytesTotal) * 100.0;
+      },
+      onSuccess: () => {
+        statusMessage.value = '';
+        isErrorStatus.value = false;
+        uploadState.value = 'idle';
+      },
     });
 
-    fileId.value = response.data.fileId;
-    message.value = 'File uploaded and verified. Click Import to start processing.';
-    isError.value = false;
+    upload.start();
   }
   catch (error: any) {
-    if (axios.isCancel(error)) {
-      message.value = 'Upload cancelled';
-    }
-    else {
-      message.value = error.response?.data?.message || error.message || 'An unexpected error occurred during upload';
-    }
-    isError.value = true;
-    selectedFile.value = null;
-    fileInputModel.value = null;
-    if (fileInput.value) {
-      fileInput.value.value = '';
-    }
-  }
-  finally {
-    isUploading.value = false;
-    progress.value = 0;
-    cancelRequest.value = null;
+    statusMessage.value = error.message || 'An unexpected error occurred during upload';
+    isErrorStatus.value = true;
+    resetUploadState();
   }
 }
 
@@ -282,38 +397,55 @@ async function startImport() {
   if (!fileId.value)
     return;
 
-  isImporting.value = true;
-  message.value = 'Importing file...';
-  isError.value = false;
+  uploadState.value = 'importing';
+  statusMessage.value = 'Importing file...';
+  isErrorStatus.value = false;
 
   try {
-    await axios.post('http://localhost:3000/import', {
+    // Simulate progress for import stage
+    for (let i = 0; i <= 100; i += 10) {
+      progress.value = i;
+      await new Promise(resolve => setTimeout(resolve, 300)); // Mock import progress
+    }
+
+    await httpService.post('/import', {
       fileId: fileId.value,
       options,
       conflictHandling: conflictHandling.value,
     });
 
-    message.value = 'File imported successfully';
-    isError.value = false;
+    statusMessage.value = 'File imported successfully';
+    isErrorStatus.value = false;
   }
   catch (error: any) {
-    message.value = error.response?.data?.message || error.message || 'An unexpected error occurred during import';
-    isError.value = true;
+    statusMessage.value = error.response?.data?.message || error.message || 'An unexpected error occurred during import';
+    isErrorStatus.value = true;
   }
   finally {
-    isImporting.value = false;
-    selectedFile.value = null;
-    fileId.value = null;
-    fileInputModel.value = null;
-    if (fileInput.value) {
-      fileInput.value.value = '';
-    }
+    resetUploadState();
   }
 }
 
 function cancelUpload() {
-  if (cancelRequest.value) {
-    cancelRequest.value('Upload cancelled by user');
+  if (tusUpload) {
+    tusUpload.abort(true).catch((err) => {
+      console.error('Error aborting upload:', err);
+    });
+    statusMessage.value = 'Upload cancelled';
+    isErrorStatus.value = true;
+    resetUploadState();
+  }
+}
+
+function resetUploadState() {
+  uploadState.value = 'idle';
+  progress.value = 0;
+  selectedFile.value = null;
+  fileId.value = null;
+  fileInputModel.value = null;
+  tusUpload = null;
+  if (fileInput.value) {
+    fileInput.value.value = '';
   }
 }
 </script>

@@ -1,10 +1,11 @@
 import type { RequestIoC } from './ioc';
-import { asClass, asValue, createContainer } from 'awilix';
+import { asClass, asFunction, asValue, createContainer } from 'awilix';
 import config from '@intake24/api/config';
 import { Database, KyselyDatabases, models } from '@intake24/db';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';
+import tusServer from './tus-server/tus-server';
 
 export * from './ioc';
 
@@ -37,6 +38,7 @@ function configureContainer() {
     db: asClass(Database).singleton(),
     kyselyDb: asClass(KyselyDatabases).singleton(),
     models: asValue(models),
+    tusServer: asFunction(tusServer).singleton(),
     resolveDynamic: asValue(resolveDynamic),
   });
 

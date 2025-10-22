@@ -1,6 +1,7 @@
 import type { JobType } from '@intake24/common/types';
 
 import feedbackSchemes from './feedback-schemes';
+import io from './io';
 import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
@@ -25,6 +26,7 @@ const jobs = {
   ...surveys,
   ...system,
   ...user,
+  ...io,
 };
 
 export type Jobs = {

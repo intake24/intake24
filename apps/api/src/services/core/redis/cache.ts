@@ -23,7 +23,8 @@ export type CacheKeyPrefix
     | 'food-all-category-codes'
     | 'food-parent-categories'
     | 'survey-search-settings'
-    | 'user-submissions';
+    | 'user-submissions'
+    | 'package-import';
 export type CacheKey
   = | `${CacheKeyPrefix}:${string}`
     | `${CacheKeyPrefix}:${string}:${string}`
