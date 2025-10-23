@@ -1,4 +1,3 @@
-import type { Server as TusServer } from '@tus/server';
 import type { Config } from '@intake24/api/config';
 import type { FoodIndex } from '@intake24/api/food-index';
 import type {
@@ -198,7 +197,6 @@ export interface IoC extends Jobs {
   surveySubmissionService: SurveySubmissionService;
   popularityCountersService: PopularityCountersService;
   userService: UserService;
-
   // Chunked file upload implementation for large file uploads
   tusServer: TusServer;
 

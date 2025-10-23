@@ -1,7 +1,6 @@
 import { createExpressEndpoints, initServer } from '@ts-rest/express';
 import { Router } from 'express';
 import passport from 'passport';
-import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { FAQ, FeedbackScheme, Language, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
 import { requestValidationErrorHandler } from '../errors';
@@ -13,6 +12,7 @@ import { feedback } from './feedback.router';
 import { food } from './food.router';
 import { health } from './health.router';
 import { i18n } from './i18n.router';
+import { createLargeFileUploadRouter } from './large-file-upload.router';
 import { password } from './password.router';
 import { portionSize } from './portion-size.router';
 import { subscription } from './subscription.router';
@@ -267,37 +267,7 @@ export function registerRouters(express: Router) {
     },
   );
 
-  // Tus protocol server has a protocol that is clunky to wrap in a ts-rest contract definition
-  // for example, OPTIONS
-
-  const tusServer = ioc.cradle.tusServer;
-  const tusRouter = Router();
-  tusRouter.use(adminAuthVerifiedMfaMiddleware);
-
-  // Workaround for a middleware conflict between Tus server and express-session 🤡🤡🤡
-  //
-  // The error occurs because srvx (used by @tus/server) calls res.end() with a callback function
-  // as the first argument (e.g., res.end(() => {...})) during Tus PATCH requests. express-session
-  // overrides res.end() to handle async session saving, misinterpreting the callback as the "chunk" argument,
-  // which must be a string, Buffer, or Uint8Array, causing a crash.
-
-  tusRouter.use((req, res, next) => {
-    const originalEnd = res.end;
-    res.end = function (chunk?: any, encoding?: any, callback?: () => void) {
-      if (typeof chunk === 'function') {
-      // Fix: Convert res.end(callback) to res.end(null, callback)
-        callback = chunk;
-        chunk = null;
-      }
-      return originalEnd.call(this, chunk, encoding, callback);
-    };
-    next();
-  });
-
-  tusRouter.all('*', (req, res) => {
-    console.log(`>>>> Tus request: ${req.path}`);
-    tusServer.handle(req, res);
-  });
-
-  express.use('/admin/large-file-upload', tusRouter);
+  // Tus protocol server has a protocol that is difficult to wrap in a ts-rest contract definition.
+  const largeFileUploadRouter = createLargeFileUploadRouter(adminAuthVerifiedMfaMiddleware);
+  express.use('/admin/large-file-upload', largeFileUploadRouter);
 }
