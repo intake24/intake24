@@ -21,16 +21,6 @@
   remote_user: deploy
   become: true
   vars:
-    app: 'portal'
-  roles:
-    - role: app-portal
-    - role: app-service
-      when: apps.portal.service.deploy | bool
-
-- hosts: all_in_one
-  remote_user: deploy
-  become: true
-  vars:
     app: 'admin'
   roles:
     - role: app-spa

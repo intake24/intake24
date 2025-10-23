@@ -11,18 +11,6 @@
       when: apps.api.service.deploy | bool
     - role: app-end
 
-- hosts: portal
-  remote_user: deploy
-  become: true
-  vars:
-    app: 'portal'
-  roles:
-    - role: app-init
-    - role: app-portal
-    - role: app-service
-      when: apps.portal.service.deploy | bool
-    - role: app-end
-
 - hosts: admin
   remote_user: deploy
   become: true
