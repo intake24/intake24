@@ -1,5 +1,5 @@
-import type { Express } from 'express';
-import cors from 'cors';
+import type { Express, Request } from 'express';
+import cors, { CorsOptions, CorsOptionsDelegate } from 'cors';
 
 import type { Ops } from '@intake24/api/app';
 
@@ -19,14 +19,28 @@ export default (app: Express, { config }: Ops) => {
   app.set('etag', false);
 
   // CORS
+  const defaultCorsOptions: CorsOptions = {
+    origin,
+    credentials: true,
+    exposedHeaders: ['RateLimit', 'RateLimit-Policy', 'Retry-After'],
+  };
+
+  const corsOptionsDelegate: CorsOptionsDelegate<Request> = (req, callback) => {
+    const corsOptions = { ...defaultCorsOptions };
+
+    console.log(req.path);
+
+    if (req.path === '/api/admin/large-file-upload') {
+      corsOptions.preflightContinue = true;
+    }
+
+    callback(null, corsOptions);
+  };
+
   app.use(
-    cors({
-      origin,
-      credentials: true,
-      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-      exposedHeaders: ['RateLimit', 'RateLimit-Policy', 'Retry-After',
-        // For Tus protocol OPTIONS request
-        'Upload-Offset', 'Location', 'Upload-Length', 'Tus-Version', 'Tus-Resumable', 'Tus-Max-Size', 'Tus-Extension', 'Upload-Metadata', 'Upload-Defer-Length', 'Upload-Concat'],
-    }),
+    cors(corsOptionsDelegate),
   );
+
+  // preflightContinue option will always try to call the OPTIONS handler even
+  // if there isn't one and return 404 in this case.
 };
