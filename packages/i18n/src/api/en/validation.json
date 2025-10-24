@@ -259,6 +259,9 @@
     "terms": {
       "_": "\"{attribute}\" must be accepted."
     },
+    "true": {
+      "_": "\"{attribute}\" must be accepted."
+    },
     "unique": {
       "_": "A record with the same \"{attribute}\" value already exists."
     },

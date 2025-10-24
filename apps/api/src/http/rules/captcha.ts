@@ -1,10 +1,7 @@
 import { URLSearchParams } from 'node:url';
-
 import axios from 'axios';
-
-import type { Captcha } from '@intake24/api/config';
+import type { CaptchaConfig } from '@intake24/api/config';
 import type { CaptchaProvider } from '@intake24/common/security';
-
 import { ValidationError } from '../errors';
 
 export type CaptchaResponse = {
@@ -54,7 +51,7 @@ const captchaProviders: Record<CaptchaProvider, CaptchaCallback> = {
   're-captcha': reCaptcha,
 };
 
-export async function captcha(response: string | undefined, options: Captcha): Promise<void> {
+export async function captcha(response: string | undefined, options: CaptchaConfig): Promise<void> {
   const { provider, secret } = options;
   if (!provider)
     return;
@@ -67,7 +64,7 @@ export async function captcha(response: string | undefined, options: Captcha): P
 
 export default captcha;
 
-export async function captchaCheck(token: string | undefined, options: Captcha) {
+export async function captchaCheck(token: string | undefined, options: CaptchaConfig) {
   try {
     await captcha(token, options);
   }

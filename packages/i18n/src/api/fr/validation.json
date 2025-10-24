@@ -259,6 +259,9 @@
     "terms": {
       "_": "\"{attribute}\" doit être accepté."
     },
+    "true": {
+      "_": "\"{attribute}\" doit être accepté."
+    },
     "unique": {
       "_": "Une entrée avec la même valeur de \"{attribute}\" existe déjà."
     },

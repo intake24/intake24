@@ -22,6 +22,8 @@ import type {
   Cache,
   CachedParentCategoriesService,
   CategoryContentsService,
+  CommsProvider,
+  CommsService,
   DataExportFields,
   DataExportMapper,
   DataExportService,
@@ -179,6 +181,10 @@ export interface IoC extends Jobs {
   // Media
   mediaService: MediaService;
   mediaStore: MediaStore;
+
+  // Comms
+  commsService: CommsService;
+  commsProvider: CommsProvider | null;
 
   // Survey / user
   adminSignupService: AdminSignupService;

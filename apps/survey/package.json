@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@coddicat/vue-pinch-scroll-zoom": "^4.7.1",
-    "@flatten-js/core": "^1.6.5",
+    "@flatten-js/core": "^1.6.6",
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@gtm-support/vue-gtm": "^3.1.0",
     "@microsoft/clarity": "^1.0.0",
@@ -46,7 +46,7 @@
     "vue-gtag": "^3.6.2",
     "vue-i18n": "^11.1.12",
     "vue-router": "^4.6.3",
-    "vuetify": "^3.10.6"
+    "vuetify": "^3.10.7"
   },
   "devDependencies": {
     "@iconify-json/fluent": "^1.2.33",
@@ -68,7 +68,7 @@
     "typescript": "^5.9.3",
     "unplugin-icons": "^22.5.0",
     "unplugin-vue-components": "^30.0.0",
-    "vite": "^7.1.11",
+    "vite": "^7.1.12",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-mkcert": "^1.17.9",
     "vite-plugin-pwa": "^1.1.0",

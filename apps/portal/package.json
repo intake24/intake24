@@ -37,7 +37,7 @@
     "sitemap": "^8.0.1"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3",
+    "@types/express": "^5.0.4",
     "@types/fs-extra": "^11.0.4",
     "@types/morgan": "^1.9.10",
     "@types/nunjucks": "^3.2.6",
@@ -55,7 +55,7 @@
     "ts-loader": "^9.5.4",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "typescript": "^5.9.3",
-    "vite": "^7.1.11",
+    "vite": "^7.1.12",
     "vitest": "^3.2.4",
     "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1",

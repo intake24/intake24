@@ -1,4 +1,5 @@
 export * from './admin';
+export * from './comms';
 export * from './core';
 export * from './feedback';
 export * from './foods';

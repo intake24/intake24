@@ -1,6 +1,5 @@
 import type { AwilixContainer } from 'awilix';
 import type { RequestIoC } from './ioc';
-
 import { asClass, asFunction, asValue } from 'awilix';
 import foodIndex from '@intake24/api/food-index';
 import {
@@ -16,6 +15,8 @@ import {
   Cache,
   cachedParentCategoriesService,
   categoryContentsService,
+  commsProviders,
+  commsService,
   dataExportFields,
   dataExportMapper,
   dataExportService,
@@ -63,6 +64,7 @@ import { logger, Mailer } from '@intake24/common-backend';
 
 export default (container: AwilixContainer<RequestIoC>): void => {
   const mediaStore = container.cradle.mediaConfig.storage.provider;
+  const commsProvider = container.cradle.servicesConfig.comms.provider;
 
   container.register({
     authenticationService: asFunction(authenticationService).singleton(),
@@ -121,6 +123,9 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     surveySubmissionService: asFunction(surveySubmissionService).singleton(),
     popularityCountersService: asClass(PopularityCountersService).singleton(),
     userService: asFunction(userService).singleton(),
+
+    commsService: asFunction(commsService).singleton(),
+    commsProvider: commsProvider ? asFunction(commsProviders[commsProvider]).singleton() : asValue(null),
 
     cache: asClass(Cache).singleton(),
     filesystem: asClass(Filesystem).singleton(),

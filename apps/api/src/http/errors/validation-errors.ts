@@ -99,6 +99,7 @@ export function formatZodIssueMessage(issue: ZodIssue, i18nService?: I18nService
 
   switch (issue.code) {
     case 'invalid_type':
+    case 'invalid_literal':
       return i18nService.translate(`validation.types.${issue.expected}._`, {
         attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
       });
