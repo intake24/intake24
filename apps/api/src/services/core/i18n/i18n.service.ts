@@ -7,8 +7,8 @@ function i18nService({
 }: Pick<RequestIoC, 'i18nStore' | 'clientLanguages'>) {
   const translate = (key: string, params?: I18nParams) => {
     const availableLanguages = i18nStore.getAvailableLanguages();
-    clientLanguages.filter(lang => availableLanguages.includes(lang));
-    const selectedLocale = clientLanguages.length ? clientLanguages[0] : 'en';
+    const langs = clientLanguages.filter(lang => availableLanguages.includes(lang));
+    const selectedLocale = langs.at(0) ?? 'en';
 
     return i18nStore.translate(key, selectedLocale, params);
   };
