@@ -45051,7 +45051,10 @@
                     "nullable": true
                   },
                   "terms": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "enum": [
+                      true
+                    ]
                   },
                   "captcha": {
                     "type": "string",
