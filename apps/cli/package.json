@@ -48,6 +48,7 @@
     "remove-bom-stream": "^2.0.0",
     "sequelize": "^6.37.7",
     "sequelize-typescript": "^2.1.6",
+    "wanakana": "^5.3.1",
     "web-push": "^3.6.7",
     "xlsx": "^0.18.5",
     "zod": "^4.1.8"

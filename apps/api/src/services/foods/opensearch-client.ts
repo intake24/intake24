@@ -2,6 +2,7 @@ import type { ClientOptions } from '@opensearch-project/opensearch';
 import { Client } from '@opensearch-project/opensearch';
 import config from '@intake24/api/config';
 import { SearchPatternMatcher } from '@intake24/api/services/search/search-pattern-matcher';
+import { normalizeJapaneseText } from '@intake24/api/utils/japanese-normalizer';
 import type { Logger } from '@intake24/common-backend';
 
 export class OpenSearchClient {
@@ -160,56 +161,58 @@ export class OpenSearchClient {
 
     try {
       let body: any;
+      const filterClauses: any[] = [];
+
+      if (categories && categories.length > 0)
+        filterClauses.push({ terms: { categories } });
+
+      if (tags && tags.length > 0)
+        filterClauses.push({ terms: { tags } });
 
       if (query) {
-        // Use the configurable pattern matcher to build the complete search query
-        body = this.patternMatcher.buildSearchQuery(query, {
-          size: limit,
-          from: offset,
-          isJapanese: true,
-        });
+        const normalizedQuery = normalizeJapaneseText(query);
+        const trimmedOriginal = query.trim();
+        const queryForSearch = normalizedQuery || trimmedOriginal;
 
-        // Add category and tag filters if provided
-        if ((categories && categories.length > 0) || (tags && tags.length > 0)) {
-          const filter: any[] = [];
+        if (queryForSearch) {
+          // Use the configurable pattern matcher to build the complete search query
+          body = this.patternMatcher.buildSearchQuery(queryForSearch, {
+            size: limit,
+            from: offset,
+            isJapanese: true,
+          });
 
-          if (categories && categories.length > 0) {
-            filter.push({ terms: { categories } });
+          if (filterClauses.length > 0) {
+            const originalQuery = body.query.function_score.query;
+            body.query.function_score.query = {
+              bool: {
+                must: [originalQuery],
+                filter: filterClauses,
+              },
+            };
           }
-
-          if (tags && tags.length > 0) {
-            filter.push({ terms: { tags } });
-          }
-
-          // Modify the query to include filters
-          const originalQuery = body.query.function_score.query;
-          body.query.function_score.query = {
-            bool: {
-              must: [originalQuery],
-              filter,
+        }
+        else {
+          body = {
+            from: offset,
+            size: limit,
+            query: {
+              bool: {
+                must: { match_all: {} },
+                filter: filterClauses.length > 0 ? filterClauses : undefined,
+              },
             },
           };
         }
       }
       else {
-        // No query provided, just filter by categories/tags if specified
-        const filter: any[] = [];
-
-        if (categories && categories.length > 0) {
-          filter.push({ terms: { categories } });
-        }
-
-        if (tags && tags.length > 0) {
-          filter.push({ terms: { tags } });
-        }
-
         body = {
           from: offset,
           size: limit,
           query: {
             bool: {
               must: { match_all: {} },
-              filter: filter.length > 0 ? filter : undefined,
+              filter: filterClauses.length > 0 ? filterClauses : undefined,
             },
           },
         };

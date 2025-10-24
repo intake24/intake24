@@ -1,5 +1,9 @@
+import { normalizeJapaneseText } from '@intake24/api/utils/japanese-normalizer';
 import type { Logger } from '@intake24/common-backend';
+import { normalizeJapaneseFoodDocument } from './japanese-food-document-normalizer';
 import { OpenSearchClient } from './opensearch-client';
+
+;
 
 export interface JapaneseSearchOptions {
   query: string;
@@ -41,6 +45,16 @@ export class OpenSearchJapaneseService {
     this.client = new OpenSearchClient({ logger });
   }
 
+  private normalizeQuery(query?: string): string {
+    const original = (query ?? '').trim();
+    if (!original)
+      return '';
+
+    const normalized = normalizeJapaneseText(original);
+
+    return normalized || original;
+  }
+
   /**
    * Initialize the service and ensure index exists
    */
@@ -80,6 +94,8 @@ export class OpenSearchJapaneseService {
       enableSynonyms = true,
     } = options;
 
+    const trimmedOriginalQuery = (query ?? '').trim();
+    const normalizedQuery = this.normalizeQuery(query);
     const startTime = Date.now();
 
     try {
@@ -97,7 +113,7 @@ export class OpenSearchJapaneseService {
       searchFields.push('description', 'brand_names');
 
       // Perform search
-      const searchResult = await this.client.searchJapaneseFoods(query, {
+      const searchResult = await this.client.searchJapaneseFoods(normalizedQuery, {
         limit,
         offset,
         categories,
@@ -123,7 +139,9 @@ export class OpenSearchJapaneseService {
 
       const took = Date.now() - startTime;
 
-      this.logger.debug(`Search for "${query}" returned ${searchResult.total} results in ${took}ms`);
+      const logQuery = normalizedQuery || trimmedOriginalQuery;
+      const normalizationNote = normalizedQuery !== trimmedOriginalQuery ? ` (normalized from "${query}")` : '';
+      this.logger.debug(`Search for "${logQuery}"${normalizationNote} returned ${searchResult.total} results in ${took}ms`);
 
       return {
         results,
@@ -173,7 +191,9 @@ export class OpenSearchJapaneseService {
    */
   async getAutocompleteSuggestions(prefix: string, limit = 10): Promise<string[]> {
     try {
-      const searchResult = await this.client.searchJapaneseFoods(prefix, {
+      const normalizedPrefix = this.normalizeQuery(prefix);
+
+      const searchResult = await this.client.searchJapaneseFoods(normalizedPrefix, {
         limit,
         offset: 0,
       });
@@ -242,7 +262,8 @@ export class OpenSearchJapaneseService {
    */
   async bulkIndexFoods(foods: any[]): Promise<void> {
     try {
-      await this.client.bulkIndexFoods(foods);
+      const normalizedFoods = await Promise.all(foods.map(food => normalizeJapaneseFoodDocument(food)));
+      await this.client.bulkIndexFoods(normalizedFoods);
       await this.client.refreshIndex();
       this.logger.info(`Successfully indexed ${foods.length} foods`);
     }
@@ -257,7 +278,8 @@ export class OpenSearchJapaneseService {
    */
   async updateFood(foodCode: string, updates: any): Promise<void> {
     try {
-      await this.client.updateFood(foodCode, updates);
+      const normalizedUpdates = await normalizeJapaneseFoodDocument(updates);
+      await this.client.updateFood(foodCode, normalizedUpdates);
       await this.client.refreshIndex();
       this.logger.info(`Successfully updated food ${foodCode}`);
     }

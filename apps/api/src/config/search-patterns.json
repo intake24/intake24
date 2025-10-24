@@ -365,7 +365,16 @@
   ],
   "defaultStrategy": {
     "wildcard": {
-      "enabled": false
+      "enabled": true,
+      "patterns": [
+        {
+          "type": "contains",
+          "field": "name.keyword",
+          "template": "*{query}*",
+          "boost": 35,
+          "comment": "High-boost exact substring matching to prioritize phrase matches over morpheme-level matches"
+        }
+      ]
     },
     "minScore": 10,
     "rescoreBoost": 2

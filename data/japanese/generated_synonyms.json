@@ -1,0 +1,4326 @@
+[
+  {
+    "foodCode": "jpf15068",
+    "canonical": "もろこしらくがん",
+    "terms": [
+      "諸越落雁",
+      "もろこし落雁"
+    ]
+  },
+  {
+    "foodCode": "jpf11113",
+    "canonical": "さらしくじら",
+    "terms": [
+      "クジラ"
+    ]
+  },
+  {
+    "foodCode": "jpf15049",
+    "canonical": "かわらせんべい",
+    "terms": [
+      "瓦煎餅",
+      "瓦せんべい"
+    ]
+  },
+  {
+    "foodCode": "jpd11429d",
+    "canonical": "じゃがりこ",
+    "terms": [
+      "スナック菓子"
+    ]
+  },
+  {
+    "foodCode": "jpf15013",
+    "canonical": "ぎゅうひ",
+    "terms": [
+      "求肥"
+    ]
+  },
+  {
+    "foodCode": "jpf2037",
+    "canonical": "くずきり（ゆで）",
+    "terms": [
+      "葛切り",
+      "くず切り"
+    ]
+  },
+  {
+    "foodCode": "jpf10379",
+    "canonical": "かまぼこ",
+    "terms": [
+      "蒲鉾",
+      "カマボコ"
+    ]
+  },
+  {
+    "foodCode": "jpd11601g",
+    "canonical": "ぎょうざのたれ",
+    "terms": [
+      "餃子のたれ",
+      "餃子のタレ",
+      "ぎょうざのタレ"
+    ]
+  },
+  {
+    "foodCode": "F255",
+    "canonical": "きびだんご",
+    "terms": [
+      "きび団子",
+      "キビ団子",
+      "吉備団子"
+    ]
+  },
+  {
+    "foodCode": "F233",
+    "canonical": "おしるこ（こしあん）",
+    "terms": [
+      "汁粉",
+      "お汁粉",
+      "しるこ"
+    ]
+  },
+  {
+    "foodCode": "jpf15143",
+    "canonical": "ずんだあん",
+    "terms": [
+      "枝豆",
+      "ずんだ餡",
+      "ズンダ餡"
+    ]
+  },
+  {
+    "foodCode": "PEPC",
+    "canonical": "こしょう",
+    "terms": [
+      "ペッパー"
+    ]
+  },
+  {
+    "foodCode": "jpf9047",
+    "canonical": "めかぶわかめ",
+    "terms": [
+      "めかぶ",
+      "メカブ",
+      "メカブワカメ"
+    ]
+  },
+  {
+    "foodCode": "jpf4101",
+    "canonical": "こしあん",
+    "terms": [
+      "あんこ",
+      "こし餡",
+      "漉し餡"
+    ]
+  },
+  {
+    "foodCode": "HONY",
+    "canonical": "はちみつ",
+    "terms": [
+      "蜂蜜",
+      "はち蜜",
+      "蜂みつ"
+    ]
+  },
+  {
+    "foodCode": "jpd10819",
+    "canonical": "きんぴらごぼう",
+    "terms": [
+      "牛蒡のきんぴら",
+      "ごぼうのきんぴら",
+      "ゴボウのきんぴら"
+    ]
+  },
+  {
+    "foodCode": "jpf15066",
+    "canonical": "らくがん",
+    "terms": [
+      "落雁"
+    ]
+  },
+  {
+    "foodCode": "jpf15053",
+    "canonical": "しおがま",
+    "terms": [
+      "塩釜"
+    ]
+  },
+  {
+    "foodCode": "jpd11425m",
+    "canonical": "おいももなか",
+    "terms": [
+      "最中",
+      "モナカ",
+      "アイスクリーム"
+    ]
+  },
+  {
+    "foodCode": "jpf8021",
+    "canonical": "なめこ（ゆで）",
+    "terms": [
+      "ナメコ"
+    ]
+  },
+  {
+    "foodCode": "jpf5004",
+    "canonical": "えごま",
+    "terms": [
+      "エゴマ",
+      "荏胡麻"
+    ]
+  },
+  {
+    "foodCode": "jpd11715d",
+    "canonical": "おでん ちくわぶ",
+    "terms": [
+      "竹輪ぶ",
+      "竹輪麩"
+    ]
+  },
+  {
+    "foodCode": "jpd11623",
+    "canonical": "ごましお",
+    "terms": [
+      "胡麻塩",
+      "ゴマシオ",
+      "胡麻しお"
+    ]
+  },
+  {
+    "foodCode": "jpf5017",
+    "canonical": "ごま",
+    "terms": [
+      "ゴマ",
+      "胡麻",
+      "セサミシード"
+    ]
+  },
+  {
+    "foodCode": "jpf15121",
+    "canonical": "くずもち",
+    "terms": [
+      "葛餅",
+      "くず餅"
+    ]
+  },
+  {
+    "foodCode": "jpf10349",
+    "canonical": "ほたるいか（ゆで）",
+    "terms": [
+      "蛍烏賊",
+      "ホタルイカ"
+    ]
+  },
+  {
+    "foodCode": "jpf10324",
+    "canonical": "さくらえび（ゆで）",
+    "terms": [
+      "桜エビ",
+      "桜海老",
+      "サクラエビ"
+    ]
+  },
+  {
+    "foodCode": "jpf9037",
+    "canonical": "おきなわもずく",
+    "terms": [
+      "沖縄もずく",
+      "沖縄モズク",
+      "オキナワモズク"
+    ]
+  },
+  {
+    "foodCode": "jpf10370",
+    "canonical": "くらげ",
+    "terms": [
+      "クラゲ"
+    ]
+  },
+  {
+    "foodCode": "jpd10504",
+    "canonical": "とろろ",
+    "terms": [
+      "自然薯"
+    ]
+  },
+  {
+    "foodCode": "jpf10384",
+    "canonical": "なると",
+    "terms": [
+      "鳴門",
+      "ナルト"
+    ]
+  },
+  {
+    "foodCode": "jpf15011",
+    "canonical": "かるかん",
+    "terms": [
+      "軽羹"
+    ]
+  },
+  {
+    "foodCode": "jpd11001b",
+    "canonical": "ねぎとろ／まぐろのたたき",
+    "terms": [
+      "鮪",
+      "マグロ",
+      "ネギトロ"
+    ]
+  },
+  {
+    "foodCode": "jpf15016",
+    "canonical": "きんつば",
+    "terms": [
+      "金鍔"
+    ]
+  },
+  {
+    "foodCode": "jpf15032",
+    "canonical": "とうまんじゅう",
+    "terms": [
+      "唐饅頭",
+      "とう饅頭",
+      "唐まんじゅう"
+    ]
+  },
+  {
+    "foodCode": "jpf1039",
+    "canonical": "ざるうどん／もりうどん",
+    "terms": [
+      "きしめん"
+    ]
+  },
+  {
+    "foodCode": "jpf10250",
+    "canonical": "からすみ",
+    "terms": [
+      "カラスミ"
+    ]
+  },
+  {
+    "foodCode": "jpd11403a",
+    "canonical": "おはぎ",
+    "terms": [
+      "お萩",
+      "ぼた餅",
+      "ぼたもち"
+    ]
+  },
+  {
+    "foodCode": "jpf4006",
+    "canonical": "つぶあん",
+    "terms": [
+      "あんこ",
+      "粒あん",
+      "小倉あん"
+    ]
+  },
+  {
+    "foodCode": "jpd10308c",
+    "canonical": "そばめし",
+    "terms": [
+      "そば飯",
+      "ソバ飯",
+      "ソバめし"
+    ]
+  },
+  {
+    "foodCode": "jpf1069",
+    "canonical": "ちくわぶ",
+    "terms": [
+      "竹輪麩"
+    ]
+  },
+  {
+    "foodCode": "jpd10104c",
+    "canonical": "クッパ",
+    "terms": [
+      "くっぱ"
+    ]
+  },
+  {
+    "foodCode": "jpd10813b",
+    "canonical": "バーニャカウダ",
+    "terms": [
+      "バーニャ・カウダ"
+    ]
+  },
+  {
+    "foodCode": "jpf6152",
+    "canonical": "メンマ",
+    "terms": [
+      "しなちく"
+    ]
+  },
+  {
+    "foodCode": "jpd11423g",
+    "canonical": "オールドファッション（プレーン）",
+    "terms": [
+      "ケーキドーナツ",
+      "ケーキドーナッツ",
+      "オールドファッションドーナツ"
+    ]
+  },
+  {
+    "foodCode": "PUFF",
+    "canonical": "シュークリーム",
+    "terms": [
+      "ダブルシュー",
+      "ツインシュー",
+      "ホイップシュー"
+    ]
+  },
+  {
+    "foodCode": "CLWH",
+    "canonical": "コールスロー",
+    "terms": [
+      "コールスローサラダ"
+    ]
+  },
+  {
+    "foodCode": "FROZ",
+    "canonical": "ベイクドチーズケーキ",
+    "terms": [
+      "スフレチーズケーキ",
+      "バスクチーズケーキ",
+      "ニューヨークチーズケーキ"
+    ]
+  },
+  {
+    "foodCode": "jpd11419l",
+    "canonical": "ビスケット／クッキー（レーズンサンド）",
+    "terms": [
+      "バターサンド"
+    ]
+  },
+  {
+    "foodCode": "CCCC",
+    "canonical": "チョコレートショートケーキ",
+    "terms": [
+      "チョコケーキ",
+      "チョコレートケーキ"
+    ]
+  },
+  {
+    "foodCode": "F323",
+    "canonical": "チキンベジタブルスープ",
+    "terms": [
+      "野菜",
+      "鶏肉",
+      "チキンスープ"
+    ]
+  },
+  {
+    "foodCode": "PNCE",
+    "canonical": "パンチェッタ",
+    "terms": [
+      "生ベーコン"
+    ]
+  },
+  {
+    "foodCode": "jpd10105f",
+    "canonical": "ハヤシライス",
+    "terms": [
+      "ハッシュドビーフ"
+    ]
+  },
+  {
+    "foodCode": "BBCT",
+    "canonical": "ベイクドビーンズ",
+    "terms": [
+      "いんげん豆",
+      "インゲン豆",
+      "インゲンマメ"
+    ]
+  },
+  {
+    "foodCode": "jpd11425t",
+    "canonical": "パピコ",
+    "terms": [
+      "アイスクリーム"
+    ]
+  },
+  {
+    "foodCode": "jpd10117h",
+    "canonical": "ロコモコ",
+    "terms": [
+      "丼ぶり",
+      "どんぶり",
+      "ロコモコ丼"
+    ]
+  },
+  {
+    "foodCode": "BDSS",
+    "canonical": "ゼリーキャンディー",
+    "terms": [
+      "ゼリー菓子"
+    ]
+  },
+  {
+    "foodCode": "BUBB",
+    "canonical": "トリュフチョコレート",
+    "terms": [
+      "ショコラ",
+      "チョコレートトリュフ"
+    ]
+  },
+  {
+    "foodCode": "WSUB",
+    "canonical": "コッペパン",
+    "terms": [
+      "ドックパン",
+      "ドッグパン"
+    ]
+  },
+  {
+    "foodCode": "jpd11427m",
+    "canonical": "ミルクレープ",
+    "terms": [
+      "ケーキ",
+      "ミル・クレープ"
+    ]
+  },
+  {
+    "foodCode": "F237",
+    "canonical": "チョコレートタルト",
+    "terms": [
+      "チョコタルト"
+    ]
+  },
+  {
+    "foodCode": "jpd10307a",
+    "canonical": "ナポリタン",
+    "terms": [
+      "ペンネ",
+      "スパゲティ",
+      "スパゲッティ"
+    ]
+  },
+  {
+    "foodCode": "TSPC",
+    "canonical": "トマトスープ",
+    "terms": [
+      "ポタージュ"
+    ]
+  },
+  {
+    "foodCode": "jpd10211b",
+    "canonical": "サンドイッチ（ポテトサラダ）",
+    "terms": [
+      "ポテサラ"
+    ]
+  },
+  {
+    "foodCode": "CCSH",
+    "canonical": "チキンスープ",
+    "terms": [
+      "鶏肉のスープ",
+      "チキンクリームスープ"
+    ]
+  },
+  {
+    "foodCode": "jpd11309b",
+    "canonical": "カニクリームコロッケ",
+    "terms": [
+      "蟹クリームコロッケ",
+      "かにクリームコロッケ"
+    ]
+  },
+  {
+    "foodCode": "GNOC",
+    "canonical": "ニョッキ",
+    "terms": [
+      "じゃがいものニョッキ",
+      "ほうれん草のニョッキ"
+    ]
+  },
+  {
+    "foodCode": "jpf15082a",
+    "canonical": "バターケーキ",
+    "terms": [
+      "焼き菓子"
+    ]
+  },
+  {
+    "foodCode": "jpd11418f",
+    "canonical": "ベビースタードデカイラーメン",
+    "terms": [
+      "スナック菓子",
+      "ベビースターラーメン",
+      "ベビースターどでかいラーメン"
+    ]
+  },
+  {
+    "foodCode": "WHEY",
+    "canonical": "ホエイプロテインパウダー",
+    "terms": [
+      "粉末プロテイン"
+    ]
+  },
+  {
+    "foodCode": "jpd10208k",
+    "canonical": "スティックパン（チョコレート）",
+    "terms": [
+      "スナックパン"
+    ]
+  },
+  {
+    "foodCode": "BNRL",
+    "canonical": "バナナケーキ／バナナブレッド",
+    "terms": [
+      "バナナパウンドケーキ"
+    ]
+  },
+  {
+    "foodCode": "FL-POTD",
+    "canonical": "ポテトサラダ",
+    "terms": [
+      "ポテサラ"
+    ]
+  },
+  {
+    "foodCode": "F260",
+    "canonical": "パッションフルーツカード",
+    "terms": [
+      "リリコイバター",
+      "パッションフルーツバター"
+    ]
+  },
+  {
+    "foodCode": "jpf16018",
+    "canonical": "ウオッカ",
+    "terms": [
+      "ウォッカ"
+    ]
+  },
+  {
+    "foodCode": "jpf11305",
+    "canonical": "ロースハム（フライ）",
+    "terms": [
+      "串揚げ",
+      "ハムカツ"
+    ]
+  },
+  {
+    "foodCode": "CCNM",
+    "canonical": "ココナッツミルク",
+    "terms": [
+      "ココナツミルク"
+    ]
+  },
+  {
+    "foodCode": "F295",
+    "canonical": "サンドイッチ（ステーキ）",
+    "terms": [
+      "ステーキサンド"
+    ]
+  },
+  {
+    "foodCode": "ICRM",
+    "canonical": "チョコレートソース",
+    "terms": [
+      "チョコソース",
+      "チョコシロップ",
+      "チョコレートシロップ"
+    ]
+  },
+  {
+    "foodCode": "OLVE",
+    "canonical": "オリーブオイル",
+    "terms": [
+      "オリーブ油"
+    ]
+  },
+  {
+    "foodCode": "CHMS",
+    "canonical": "チョコムース",
+    "terms": [
+      "ショコラムース",
+      "チョコレートムース"
+    ]
+  },
+  {
+    "foodCode": "CKCS",
+    "canonical": "チキンシチュー",
+    "terms": [
+      "鶏肉のシチュー",
+      "クリームシチュー",
+      "ホワイトシチュー"
+    ]
+  },
+  {
+    "foodCode": "jpd11601y",
+    "canonical": "ステーキソース",
+    "terms": [
+      "すてーき"
+    ]
+  },
+  {
+    "foodCode": "jpf16016",
+    "canonical": "ウイスキー",
+    "terms": [
+      "ウィスキー"
+    ]
+  },
+  {
+    "foodCode": "RBMF",
+    "canonical": "ローストビーフ",
+    "terms": [
+      "牛肉"
+    ]
+  },
+  {
+    "foodCode": "jpd11108a",
+    "canonical": "ハンバーグ",
+    "terms": [
+      "バーグステーキ"
+    ]
+  },
+  {
+    "foodCode": "F305",
+    "canonical": "クスクスサラダ",
+    "terms": [
+      "タブレ",
+      "クスクスのサラダ"
+    ]
+  },
+  {
+    "foodCode": "jpd11425s",
+    "canonical": "シューアイス",
+    "terms": [
+      "アイスクリーム"
+    ]
+  },
+  {
+    "foodCode": "jpd10208j",
+    "canonical": "チョコチップメロンパン",
+    "terms": [
+      "めろんぱん",
+      "チョコメロンパン"
+    ]
+  },
+  {
+    "foodCode": "jpd11718b",
+    "canonical": "スンドゥブ",
+    "terms": [
+      "純豆腐"
+    ]
+  },
+  {
+    "foodCode": "F366",
+    "canonical": "サンドイッチ（チーズ）",
+    "terms": [
+      "チーズサンド"
+    ]
+  },
+  {
+    "foodCode": "jpd11143b",
+    "canonical": "ササミチーズカツ",
+    "terms": [
+      "鶏肉",
+      "ささみ",
+      "チキン"
+    ]
+  },
+  {
+    "foodCode": "F072",
+    "canonical": "ホットサンド（チーズ）",
+    "terms": [
+      "チーズホットサンド"
+    ]
+  },
+  {
+    "foodCode": "COCW",
+    "canonical": "ココナッツウォーター",
+    "terms": [
+      "ココナツジュース",
+      "ココナッツジュース",
+      "ココナツウォーター"
+    ]
+  },
+  {
+    "foodCode": "F224",
+    "canonical": "ギリシャヨーグルト・プレーン",
+    "terms": [
+      "水切りヨーグルト",
+      "プレーンヨーグルト"
+    ]
+  },
+  {
+    "foodCode": "PAIN",
+    "canonical": "パン・オ・ショコラ／チョコデニッシュ",
+    "terms": [
+      "チョコパン",
+      "デニッシュショコラ",
+      "チョコレートデニッシュ"
+    ]
+  },
+  {
+    "foodCode": "SRFP",
+    "canonical": "ソーセージロール／ソーセージパン",
+    "terms": [
+      "ウインナーパン",
+      "ウィンナーロール",
+      "ウインナーロール"
+    ]
+  },
+  {
+    "foodCode": "SOYA",
+    "canonical": "ソイプロテインパウダー",
+    "terms": [
+      "粉末プロテイン"
+    ]
+  },
+  {
+    "foodCode": "PRSH",
+    "canonical": "カゼインプロテインパウダー",
+    "terms": [
+      "粉末プロテイン"
+    ]
+  },
+  {
+    "foodCode": "CHLI",
+    "canonical": "チリコンカン",
+    "terms": [
+      "チリビーンズ",
+      "チリコンカーン",
+      "ポークビーンズ"
+    ]
+  },
+  {
+    "foodCode": "PSTR",
+    "canonical": "パストラミ",
+    "terms": [
+      "牛肉",
+      "ビーフ"
+    ]
+  },
+  {
+    "foodCode": "FRSU",
+    "canonical": "フルーツパフェ",
+    "terms": [
+      "フルーツサンデー"
+    ]
+  },
+  {
+    "foodCode": "PPDM",
+    "canonical": "パパド",
+    "terms": [
+      "パパダム",
+      "パーパド"
+    ]
+  },
+  {
+    "foodCode": "PARA",
+    "canonical": "パン・オ・レザン／レーズンデニッシュ",
+    "terms": [
+      "干ブドウ",
+      "干しぶどう",
+      "干しブドウ"
+    ]
+  },
+  {
+    "foodCode": "CRYJ",
+    "canonical": "チェリージュース",
+    "terms": [
+      "さくらんぼ"
+    ]
+  },
+  {
+    "foodCode": "SSGE",
+    "canonical": "ソーセージシチュー",
+    "terms": [
+      "クリームシチュー",
+      "ホワイトシチュー",
+      "ウィンナーのシチュー"
+    ]
+  },
+  {
+    "foodCode": "SPGS",
+    "canonical": "ミートソース／ボロネーゼパスタ",
+    "terms": [
+      "ペンネ",
+      "スパゲティ",
+      "スパゲッティ"
+    ]
+  },
+  {
+    "foodCode": "CPCH",
+    "canonical": "白桃（缶詰）",
+    "terms": [
+      "もも缶",
+      "モモ缶",
+      "白桃缶"
+    ]
+  },
+  {
+    "foodCode": "jpf16009",
+    "canonical": "発泡酒",
+    "terms": [
+      "第三のビール"
+    ]
+  },
+  {
+    "foodCode": "jpf16051",
+    "canonical": "昆布茶（粉末）",
+    "terms": [
+      "こぶ茶",
+      "こんぶ茶",
+      "梅こぶ茶"
+    ]
+  },
+  {
+    "foodCode": "jpd11201c",
+    "canonical": "煮卵",
+    "terms": [
+      "味玉",
+      "味付け卵",
+      "味付け玉子"
+    ]
+  },
+  {
+    "foodCode": "F249",
+    "canonical": "湯葉",
+    "terms": [
+      "油皮",
+      "湯波",
+      "豆腐皮"
+    ]
+  },
+  {
+    "foodCode": "jpf9028",
+    "canonical": "寒天",
+    "terms": [
+      "かんてん",
+      "カンテン"
+    ]
+  },
+  {
+    "foodCode": "OMLK",
+    "canonical": "低脂肪乳",
+    "terms": [
+      "低脂肪牛乳"
+    ]
+  },
+  {
+    "foodCode": "jpd10117c",
+    "canonical": "中華丼",
+    "terms": [
+      "中華飯",
+      "丼ぶり",
+      "どんぶり"
+    ]
+  },
+  {
+    "foodCode": "jpf16022",
+    "canonical": "梅酒",
+    "terms": [
+      "果実酒"
+    ]
+  },
+  {
+    "foodCode": "jpd11504a",
+    "canonical": "氷",
+    "terms": [
+      "こおり"
+    ]
+  },
+  {
+    "foodCode": "jpf4036",
+    "canonical": "沖縄豆腐",
+    "terms": [
+      "島豆腐"
+    ]
+  },
+  {
+    "foodCode": "jpf16001",
+    "canonical": "日本酒",
+    "terms": [
+      "清酒",
+      "普通酒",
+      "純米酒"
+    ]
+  },
+  {
+    "foodCode": "jpd11407a",
+    "canonical": "大学芋",
+    "terms": [
+      "大学いも",
+      "大学イモ"
+    ]
+  },
+  {
+    "foodCode": "jpf1117",
+    "canonical": "餅",
+    "terms": [
+      "辛み餅",
+      "辛みもち",
+      "大根おろし餅"
+    ]
+  },
+  {
+    "foodCode": "MOON",
+    "canonical": "月餅",
+    "terms": [
+      "げっぺい"
+    ]
+  },
+  {
+    "foodCode": "PRSJ",
+    "canonical": "梨（缶詰）",
+    "terms": [
+      "なし",
+      "ナシ"
+    ]
+  },
+  {
+    "foodCode": "jpf17090",
+    "canonical": "黒酢",
+    "terms": [
+      "くろず",
+      "くろ酢"
+    ]
+  },
+  {
+    "foodCode": "jpf4053",
+    "canonical": "調整豆乳",
+    "terms": [
+      "とうにゅう",
+      "トウニュウ"
+    ]
+  },
+  {
+    "foodCode": "jpf5012",
+    "canonical": "栗甘露煮",
+    "terms": [
+      "栗の甘露煮",
+      "くりの甘露煮",
+      "クリの甘露煮"
+    ]
+  },
+  {
+    "foodCode": "CHCB",
+    "canonical": "白菜（生）",
+    "terms": [
+      "はくさい",
+      "ハクサイ"
+    ]
+  },
+  {
+    "foodCode": "KMLK",
+    "canonical": "無脂肪乳",
+    "terms": [
+      "無脂肪牛乳"
+    ]
+  },
+  {
+    "foodCode": "jpd10607a",
+    "canonical": "麻婆豆腐",
+    "terms": [
+      "マーボー",
+      "マーボー豆腐"
+    ]
+  },
+  {
+    "foodCode": "jpf17100",
+    "canonical": "二杯酢／酢醤油",
+    "terms": [
+      "酢じょうゆ"
+    ]
+  },
+  {
+    "foodCode": "jpf16015",
+    "canonical": "焼酎",
+    "terms": [
+      "芋焼酎",
+      "麦焼酎"
+    ]
+  },
+  {
+    "foodCode": "jpf7184",
+    "canonical": "黄桃（生）",
+    "terms": [
+      "もも",
+      "モモ",
+      "おうとう"
+    ]
+  },
+  {
+    "foodCode": "jpf15136",
+    "canonical": "牛乳寒天",
+    "terms": [
+      "牛乳寒",
+      "ミルク寒",
+      "ミルク寒天"
+    ]
+  },
+  {
+    "foodCode": "jpd10601b",
+    "canonical": "冷奴（木綿）",
+    "terms": [
+      "冷や奴",
+      "冷やっこ",
+      "冷ややっこ"
+    ]
+  },
+  {
+    "foodCode": "jpf1097",
+    "canonical": "五分粥",
+    "terms": [
+      "おかゆ",
+      "ごぶがゆ",
+      "五分がゆ"
+    ]
+  },
+  {
+    "foodCode": "jpd11705",
+    "canonical": "粕汁",
+    "terms": [
+      "かす汁"
+    ]
+  },
+  {
+    "foodCode": "jpd10117f",
+    "canonical": "天津飯／卵丼",
+    "terms": [
+      "天津丼",
+      "玉子丼",
+      "てんしん"
+    ]
+  },
+  {
+    "foodCode": "jpf17015",
+    "canonical": "穀物酢",
+    "terms": [
+      "おす",
+      "お酢"
+    ]
+  },
+  {
+    "foodCode": "jpf12005b",
+    "canonical": "温泉卵",
+    "terms": [
+      "温玉",
+      "おんたま",
+      "温泉たまご"
+    ]
+  },
+  {
+    "foodCode": "jpf1090",
+    "canonical": "玄米全粥",
+    "terms": [
+      "おかゆ",
+      "全がゆ",
+      "ぜんがゆ"
+    ]
+  },
+  {
+    "foodCode": "jpd11802c",
+    "canonical": "生姜昆布",
+    "terms": [
+      "生姜こんぶ",
+      "しょうが昆布",
+      "しょうがこんぶ"
+    ]
+  },
+  {
+    "foodCode": "SALT",
+    "canonical": "食塩（精製塩）",
+    "terms": [
+      "塩",
+      "しお"
+    ]
+  },
+  {
+    "foodCode": "CTNT",
+    "canonical": "甘栗",
+    "terms": [
+      "あま栗",
+      "あまぐり",
+      "アマぐり"
+    ]
+  },
+  {
+    "foodCode": "SPRO",
+    "canonical": "長ねぎ（生）",
+    "terms": [
+      "長葱",
+      "白ねぎ",
+      "長ネギ"
+    ]
+  },
+  {
+    "foodCode": "jpf10216",
+    "canonical": "なまずの刺身",
+    "terms": [
+      "ナマズ"
+    ]
+  },
+  {
+    "foodCode": "jpd11013a",
+    "canonical": "鯖の煮つけ",
+    "terms": [
+      "さば",
+      "サバ",
+      "煮魚"
+    ]
+  },
+  {
+    "foodCode": "jpf7094",
+    "canonical": "夏みかん（缶詰）",
+    "terms": [
+      "夏みかん缶",
+      "なつみかん缶"
+    ]
+  },
+  {
+    "foodCode": "jpf15019",
+    "canonical": "団子（みたらし）",
+    "terms": [
+      "串団子",
+      "くし団子",
+      "みたらし団子"
+    ]
+  },
+  {
+    "foodCode": "jpf4022",
+    "canonical": "ふき豆",
+    "terms": [
+      "富貴豆",
+      "そらまめ",
+      "ソラマメ"
+    ]
+  },
+  {
+    "foodCode": "ONSS",
+    "canonical": "たまねぎ（蒸し／ゆで）",
+    "terms": [
+      "玉葱",
+      "玉ねぎ",
+      "タマネギ"
+    ]
+  },
+  {
+    "foodCode": "jpd10822c",
+    "canonical": "れんこんの煮物／れんこんのきんぴら",
+    "terms": [
+      "蓮根の煮物",
+      "蓮根の煮もの",
+      "レンコンの煮物"
+    ]
+  },
+  {
+    "foodCode": "STCK",
+    "canonical": "かに風味かまぼこ",
+    "terms": [
+      "カニかま",
+      "カニカマ",
+      "かにかまぼこ"
+    ]
+  },
+  {
+    "foodCode": "jpf6343",
+    "canonical": "なすの天ぷら",
+    "terms": [
+      "なすの天婦羅",
+      "ナスの天ぷら",
+      "なすのてんぷら"
+    ]
+  },
+  {
+    "foodCode": "jpf4078",
+    "canonical": "大豆（いり）",
+    "terms": [
+      "だいず",
+      "ダイズ",
+      "節分豆"
+    ]
+  },
+  {
+    "foodCode": "jpf10215",
+    "canonical": "とびうおの刺身",
+    "terms": [
+      "あご",
+      "飛魚"
+    ]
+  },
+  {
+    "foodCode": "jpf6142",
+    "canonical": "大根のみそ漬け",
+    "terms": [
+      "漬物",
+      "漬け物",
+      "漬もの"
+    ]
+  },
+  {
+    "foodCode": "jpf7022a",
+    "canonical": "梅干し（種類不明）",
+    "terms": [
+      "梅ぼし",
+      "うめぼし"
+    ]
+  },
+  {
+    "foodCode": "SRBR",
+    "canonical": "いわし（水煮缶詰）",
+    "terms": [
+      "鰯",
+      "イワシ",
+      "いわし缶"
+    ]
+  },
+  {
+    "foodCode": "jpf10447",
+    "canonical": "鮭削り節",
+    "terms": [
+      "さけ",
+      "しゃけ",
+      "けずり節"
+    ]
+  },
+  {
+    "foodCode": "jpf10408",
+    "canonical": "真鯛の刺身（皮つき）",
+    "terms": [
+      "まだい",
+      "マダイ"
+    ]
+  },
+  {
+    "foodCode": "jpd11601l",
+    "canonical": "寿司のしょうゆ",
+    "terms": [
+      "醤油",
+      "じょうゆ",
+      "寿司醤油"
+    ]
+  },
+  {
+    "foodCode": "jpf10018",
+    "canonical": "甘鯛の刺身",
+    "terms": [
+      "あま鯛",
+      "あまだい",
+      "アマダイ"
+    ]
+  },
+  {
+    "foodCode": "jpd10801c",
+    "canonical": "胡麻和え",
+    "terms": [
+      "春菊",
+      "ほうれん草",
+      "さやいんげん"
+    ]
+  },
+  {
+    "foodCode": "jpf7129",
+    "canonical": "ぽんかん（生）",
+    "terms": [
+      "ポンカン"
+    ]
+  },
+  {
+    "foodCode": "jpf8027",
+    "canonical": "ひらたけ（蒸し／ゆで）",
+    "terms": [
+      "平茸",
+      "平たけ",
+      "ヒラタケ"
+    ]
+  },
+  {
+    "foodCode": "jpf10407",
+    "canonical": "さんまの刺身",
+    "terms": [
+      "サンマ",
+      "秋刀魚"
+    ]
+  },
+  {
+    "foodCode": "jpd11430c",
+    "canonical": "うまい棒",
+    "terms": [
+      "うまいぼう"
+    ]
+  },
+  {
+    "foodCode": "CANB",
+    "canonical": "白いんげん豆（缶詰、無糖）",
+    "terms": [
+      "白隠元豆",
+      "白インゲン豆",
+      "白いんげんまめ"
+    ]
+  },
+  {
+    "foodCode": "jpd11601i",
+    "canonical": "天ぷらのつゆ",
+    "terms": [
+      "天つゆ",
+      "てんつゆ",
+      "天ぷらつゆ"
+    ]
+  },
+  {
+    "foodCode": "jpf10381",
+    "canonical": "焼きちくわ",
+    "terms": [
+      "焼竹輪",
+      "焼き竹輪",
+      "焼ちくわ"
+    ]
+  },
+  {
+    "foodCode": "jpf10070",
+    "canonical": "うなぎの蒲焼き",
+    "terms": [
+      "鰻",
+      "ウナギ",
+      "うなぎのかば焼き"
+    ]
+  },
+  {
+    "foodCode": "jpf6230",
+    "canonical": "野沢菜の塩漬け",
+    "terms": [
+      "漬物",
+      "漬け物",
+      "漬もの"
+    ]
+  },
+  {
+    "foodCode": "jpd10827b",
+    "canonical": "野菜あんかけ（幼児用）",
+    "terms": [
+      "ベビーフード"
+    ]
+  },
+  {
+    "foodCode": "jpf8046",
+    "canonical": "しめじ（炒め）",
+    "terms": [
+      "シメジ"
+    ]
+  },
+  {
+    "foodCode": "jpf6265",
+    "canonical": "へちま（生）",
+    "terms": [
+      "いとうり",
+      "ナーベーラー"
+    ]
+  },
+  {
+    "foodCode": "PSFB",
+    "canonical": "青えんどう豆（蒸し／ゆで）",
+    "terms": [
+      "春エンドウ豆",
+      "春えんどうまめ",
+      "春エンドウマメ"
+    ]
+  },
+  {
+    "foodCode": "jpf10167",
+    "canonical": "あぶらつのざめの刺身",
+    "terms": [
+      "鮫",
+      "さめ",
+      "あぶらざめ"
+    ]
+  },
+  {
+    "foodCode": "EPRF",
+    "canonical": "洋なし（皮なし、生）",
+    "terms": [
+      "洋梨",
+      "洋ナシ"
+    ]
+  },
+  {
+    "foodCode": "CAST",
+    "canonical": "いちご（缶詰）",
+    "terms": [
+      "いちご缶"
+    ]
+  },
+  {
+    "foodCode": "CALA",
+    "canonical": "いか（焼き）",
+    "terms": [
+      "イカ",
+      "烏賊"
+    ]
+  },
+  {
+    "foodCode": "jpf11302",
+    "canonical": "牛かた肉（赤身肉、焼き）",
+    "terms": [
+      "肩",
+      "焼肉",
+      "牛肉"
+    ]
+  },
+  {
+    "foodCode": "jpf6040",
+    "canonical": "かぶの葉の塩漬け",
+    "terms": [
+      "漬物",
+      "漬け物",
+      "漬もの"
+    ]
+  },
+  {
+    "foodCode": "jpf15023",
+    "canonical": "大福もち",
+    "terms": [
+      "大福",
+      "大福餅",
+      "豆大福"
+    ]
+  },
+  {
+    "foodCode": "jpf10308",
+    "canonical": "はまぐり（焼き）",
+    "terms": [
+      "蛤",
+      "ハマグリ"
+    ]
+  },
+  {
+    "foodCode": "jpf10055",
+    "canonical": "しらす干し",
+    "terms": [
+      "シラス"
+    ]
+  },
+  {
+    "foodCode": "SHRI",
+    "canonical": "焼き餃子（海鮮）",
+    "terms": [
+      "ぎょうざ",
+      "ギョーザ",
+      "海鮮餃子"
+    ]
+  },
+  {
+    "foodCode": "F216",
+    "canonical": "にしん（水煮缶詰）",
+    "terms": [
+      "ニシン",
+      "にしん缶"
+    ]
+  },
+  {
+    "foodCode": "jpd11208",
+    "canonical": "かに玉",
+    "terms": [
+      "カニ",
+      "カニ玉",
+      "かにたま"
+    ]
+  },
+  {
+    "foodCode": "jpf15058",
+    "canonical": "甘辛せんべい／ざらめせんべい",
+    "terms": [
+      "煎餅",
+      "おせんべ",
+      "おせんべい"
+    ]
+  },
+  {
+    "foodCode": "jpf10015",
+    "canonical": "あなごの刺身",
+    "terms": [
+      "穴子",
+      "アナゴ"
+    ]
+  },
+  {
+    "foodCode": "jpf6318",
+    "canonical": "れんこん（蒸し／ゆで）",
+    "terms": [
+      "はす",
+      "蓮根",
+      "レンコン"
+    ]
+  },
+  {
+    "foodCode": "jpf10162",
+    "canonical": "さば開き干し／さばのみりん干し",
+    "terms": [
+      "鯖",
+      "サバ",
+      "開干し"
+    ]
+  },
+  {
+    "foodCode": "jpd10823d",
+    "canonical": "なすの煮物",
+    "terms": [
+      "ナスの煮物",
+      "なすの煮もの",
+      "ナスの煮もの"
+    ]
+  },
+  {
+    "foodCode": "jpf10307",
+    "canonical": "はまぐり（蒸し／ゆで）",
+    "terms": [
+      "蛤",
+      "ハマグリ"
+    ]
+  },
+  {
+    "foodCode": "jpf10033",
+    "canonical": "いかなごの刺身",
+    "terms": [
+      "イカナゴ"
+    ]
+  },
+  {
+    "foodCode": "MKTS",
+    "canonical": "さば（味付き缶詰）",
+    "terms": [
+      "鯖缶",
+      "さば缶",
+      "サバ缶"
+    ]
+  },
+  {
+    "foodCode": "jpf15124",
+    "canonical": "笹だんご",
+    "terms": [
+      "笹団子",
+      "ささだんご"
+    ]
+  },
+  {
+    "foodCode": "jpf10175",
+    "canonical": "さんま開き干し",
+    "terms": [
+      "サンマ",
+      "秋刀魚",
+      "開干し"
+    ]
+  },
+  {
+    "foodCode": "jpf6317",
+    "canonical": "れんこん（生）",
+    "terms": [
+      "はす",
+      "蓮根",
+      "レンコン"
+    ]
+  },
+  {
+    "foodCode": "jpd11133b",
+    "canonical": "羊肉の煮物／焼き物",
+    "terms": [
+      "ひつじ",
+      "ヒツジ",
+      "マトン"
+    ]
+  },
+  {
+    "foodCode": "jpd10839f",
+    "canonical": "れんこんの天ぷら",
+    "terms": [
+      "はす",
+      "蓮根",
+      "レンコン"
+    ]
+  },
+  {
+    "foodCode": "jpd11132c",
+    "canonical": "牛その他の部位（焼き）",
+    "terms": [
+      "焼肉",
+      "牛肉",
+      "焼き肉"
+    ]
+  },
+  {
+    "foodCode": "F198",
+    "canonical": "水餃子／蒸し餃子（野菜）",
+    "terms": [
+      "ぎょうざ",
+      "ギョーザ",
+      "野菜餃子"
+    ]
+  },
+  {
+    "foodCode": "jpd11016",
+    "canonical": "その他の魚の粕漬焼／味噌漬焼／西京焼き",
+    "terms": [
+      "焼き魚",
+      "西京漬け"
+    ]
+  },
+  {
+    "foodCode": "jpd10121a",
+    "canonical": "きなこ餅",
+    "terms": [
+      "きなこもち"
+    ]
+  },
+  {
+    "foodCode": "jpf6094",
+    "canonical": "ししとう（炒め）",
+    "terms": [
+      "獅子唐辛子",
+      "ししとうがらし",
+      "シシトウガラシ"
+    ]
+  },
+  {
+    "foodCode": "jpd11129r",
+    "canonical": "焼き鳥（その他）",
+    "terms": [
+      "焼鳥",
+      "やきとり",
+      "ヤキトリ"
+    ]
+  },
+  {
+    "foodCode": "jpf10348",
+    "canonical": "ほたるいかの刺身",
+    "terms": [
+      "蛍烏賊",
+      "ホタルイカ"
+    ]
+  },
+  {
+    "foodCode": "jpf6349",
+    "canonical": "にんにく（炒め）",
+    "terms": [
+      "大蒜",
+      "ニンニク"
+    ]
+  },
+  {
+    "foodCode": "jpd10306b",
+    "canonical": "つけ麺",
+    "terms": [
+      "ラーメン"
+    ]
+  },
+  {
+    "foodCode": "jpf10392",
+    "canonical": "あじのから揚げ",
+    "terms": [
+      "鯵",
+      "アジ",
+      "唐揚げ"
+    ]
+  },
+  {
+    "foodCode": "jpd11129o",
+    "canonical": "焼き鳥 肝臓（塩）",
+    "terms": [
+      "焼鳥",
+      "やきとり",
+      "焼きとり"
+    ]
+  },
+  {
+    "foodCode": "jpf10325",
+    "canonical": "さくらえび素干し",
+    "terms": [
+      "桜エビ",
+      "桜海老",
+      "サクラエビ"
+    ]
+  },
+  {
+    "foodCode": "jpf2041",
+    "canonical": "きくいも（蒸し／ゆで）",
+    "terms": [
+      "菊芋",
+      "きく芋"
+    ]
+  },
+  {
+    "foodCode": "jpd11129c",
+    "canonical": "焼き鳥 ねぎま（たれ）",
+    "terms": [
+      "焼鳥",
+      "やきとり",
+      "焼きとり"
+    ]
+  },
+  {
+    "foodCode": "PINT",
+    "canonical": "うずら豆（蒸し／ゆで、無糖）",
+    "terms": [
+      "鶉豆",
+      "ウズラ豆",
+      "うずらまめ"
+    ]
+  },
+  {
+    "foodCode": "OCRO",
+    "canonical": "にんじん（皮なし、揚げ）",
+    "terms": [
+      "人参",
+      "ニンジン"
+    ]
+  },
+  {
+    "foodCode": "jpf10372",
+    "canonical": "なまこの刺身",
+    "terms": [
+      "ナマコ"
+    ]
+  },
+  {
+    "foodCode": "jpd10820",
+    "canonical": "ふろふき大根",
+    "terms": [
+      "ふろふきだいこん"
+    ]
+  },
+  {
+    "foodCode": "SQUF",
+    "canonical": "いか（炒め）",
+    "terms": [
+      "イカ",
+      "烏賊"
+    ]
+  },
+  {
+    "foodCode": "jpd10607b",
+    "canonical": "豆腐のあんかけ",
+    "terms": [
+      "とうふ",
+      "トウフ",
+      "トーフ"
+    ]
+  },
+  {
+    "foodCode": "jpf10386",
+    "canonical": "さつま揚げ",
+    "terms": [
+      "平天",
+      "あげはん",
+      "ひらてん"
+    ]
+  },
+  {
+    "foodCode": "jpf7112",
+    "canonical": "日向夏（白皮つき、生）",
+    "terms": [
+      "ひゅうがなつ",
+      "ニューサマーオレンジ"
+    ]
+  },
+  {
+    "foodCode": "jpf7023",
+    "canonical": "梅干し（調味漬け）",
+    "terms": [
+      "ねり梅",
+      "梅ぼし",
+      "うめぼし"
+    ]
+  },
+  {
+    "foodCode": "jpd11601p",
+    "canonical": "刺身のしょうゆ",
+    "terms": [
+      "醤油",
+      "じょうゆ",
+      "刺身醤油"
+    ]
+  },
+  {
+    "foodCode": "RGPS",
+    "canonical": "ぶどう（皮なし、生）",
+    "terms": [
+      "葡萄",
+      "ブドウ",
+      "マスカット"
+    ]
+  },
+  {
+    "foodCode": "jpd10114b",
+    "canonical": "他人丼／開化丼（牛肉や豚肉を卵でとじた丼物）",
+    "terms": [
+      "丼ぶり",
+      "どんぶり"
+    ]
+  },
+  {
+    "foodCode": "SPRS",
+    "canonical": "まぐろ（蒸し）",
+    "terms": [
+      "鮪",
+      "マグロ"
+    ]
+  },
+  {
+    "foodCode": "jpd10118n",
+    "canonical": "にぎり寿司（えんがわ）",
+    "terms": [
+      "エンガワ",
+      "炙りえんがわ",
+      "炙りエンガワ"
+    ]
+  },
+  {
+    "foodCode": "jpf15036",
+    "canonical": "もなか／最中",
+    "terms": [
+      "モナカ"
+    ]
+  },
+  {
+    "foodCode": "jpd10503g",
+    "canonical": "粉ふきいも",
+    "terms": [
+      "粉ふき芋"
+    ]
+  },
+  {
+    "foodCode": "jpf6352",
+    "canonical": "葉ねぎ（炒め）",
+    "terms": [
+      "青葱",
+      "青ねぎ",
+      "青ネギ"
+    ]
+  },
+  {
+    "foodCode": "jpf7022b",
+    "canonical": "梅干し（塩漬け）",
+    "terms": [
+      "ねり梅",
+      "梅ぼし",
+      "うめぼし"
+    ]
+  },
+  {
+    "foodCode": "jpd10120a",
+    "canonical": "おにぎり（鮭）",
+    "terms": [
+      "さけ",
+      "サケ",
+      "おむすび"
+    ]
+  },
+  {
+    "foodCode": "SHPM",
+    "canonical": "真鯛（蒸し／ゆで）",
+    "terms": [
+      "まだい",
+      "マダイ"
+    ]
+  },
+  {
+    "foodCode": "jpd10118i",
+    "canonical": "にぎり寿司（たい）",
+    "terms": [
+      "鯛",
+      "タイ"
+    ]
+  },
+  {
+    "foodCode": "jpf15050",
+    "canonical": "巻きせんべい",
+    "terms": [
+      "巻き煎餅",
+      "まきせんべい"
+    ]
+  },
+  {
+    "foodCode": "F094",
+    "canonical": "いかのから揚げ",
+    "terms": [
+      "イカ",
+      "烏賊",
+      "唐揚げ"
+    ]
+  },
+  {
+    "foodCode": "jpd11130",
+    "canonical": "鶏肉の照り焼き",
+    "terms": [
+      "とり",
+      "チキン",
+      "鶏の照り焼き"
+    ]
+  },
+  {
+    "foodCode": "jpd11601w",
+    "canonical": "その他の酢",
+    "terms": [
+      "す",
+      "ス"
+    ]
+  },
+  {
+    "foodCode": "jpf7074",
+    "canonical": "さんぼうかん（生）",
+    "terms": [
+      "三宝柑"
+    ]
+  },
+  {
+    "foodCode": "jpf6158",
+    "canonical": "たらの芽（蒸し／ゆで）",
+    "terms": [
+      "タラの芽"
+    ]
+  },
+  {
+    "foodCode": "jpd11031e",
+    "canonical": "その他の魚の天ぷら",
+    "terms": [
+      "天婦羅",
+      "てんぷら",
+      "テンプラ"
+    ]
+  },
+  {
+    "foodCode": "jpf3014",
+    "canonical": "氷糖みつ",
+    "terms": [
+      "氷糖蜜"
+    ]
+  },
+  {
+    "foodCode": "jpf6353",
+    "canonical": "はやとうり（緑色、生）",
+    "terms": [
+      "隼人瓜",
+      "ハヤトウリ"
+    ]
+  },
+  {
+    "foodCode": "F257",
+    "canonical": "わかめ（水戻し）",
+    "terms": [
+      "ワカメ"
+    ]
+  },
+  {
+    "foodCode": "jpd11601n",
+    "canonical": "寿司のわさび",
+    "terms": [
+      "山葵",
+      "ワサビ"
+    ]
+  },
+  {
+    "foodCode": "jpf6255",
+    "canonical": "ひろしまなの塩漬け",
+    "terms": [
+      "漬物",
+      "漬け物",
+      "漬もの"
+    ]
+  },
+  {
+    "foodCode": "F172",
+    "canonical": "赤米ごはん",
+    "terms": [
+      "古代米"
+    ]
+  },
+  {
+    "foodCode": "SOYB",
+    "canonical": "枝豆（ゆで）",
+    "terms": [
+      "えだ豆",
+      "枝まめ",
+      "えだまめ"
+    ]
+  },
+  {
+    "foodCode": "jpf10207",
+    "canonical": "しらこの刺身",
+    "terms": [
+      "きくこ"
+    ]
+  },
+  {
+    "foodCode": "jpf12017",
+    "canonical": "たまご豆腐",
+    "terms": [
+      "卵豆腐",
+      "玉子豆腐",
+      "玉子とうふ"
+    ]
+  },
+  {
+    "foodCode": "jpf6095",
+    "canonical": "しそ／大葉（生）",
+    "terms": [
+      "紫蘇"
+    ]
+  },
+  {
+    "foodCode": "jpf10317",
+    "canonical": "みる貝の刺身",
+    "terms": [
+      "ミル貝",
+      "みるくい"
+    ]
+  },
+  {
+    "foodCode": "jpd11004",
+    "canonical": "まぐろの山かけ",
+    "terms": [
+      "マグロ",
+      "まぐろのとろろかけ",
+      "まぐろのとろろがけ"
+    ]
+  },
+  {
+    "foodCode": "DRFG",
+    "canonical": "乾燥いちじく",
+    "terms": [
+      "無花果",
+      "イチジク"
+    ]
+  },
+  {
+    "foodCode": "jpd11038c",
+    "canonical": "その他の貝類の揚げ物",
+    "terms": [
+      "フライ",
+      "天ぷら",
+      "てんぷら"
+    ]
+  },
+  {
+    "foodCode": "jpf10049",
+    "canonical": "いわし（焼き）",
+    "terms": [
+      "鰯",
+      "イワシ",
+      "焼き魚"
+    ]
+  },
+  {
+    "foodCode": "SHPS",
+    "canonical": "えびせんべい（えび満月など）",
+    "terms": [
+      "エビ",
+      "海老",
+      "煎餅"
+    ]
+  },
+  {
+    "foodCode": "jpf6347",
+    "canonical": "にんじんの皮（生）",
+    "terms": [
+      "人参の皮",
+      "ニンジンの皮"
+    ]
+  },
+  {
+    "foodCode": "jpf7061",
+    "canonical": "ぐみ（果実、生）",
+    "terms": [
+      "ぐみの実"
+    ]
+  },
+  {
+    "foodCode": "SPWE",
+    "canonical": "さつまいもの天ぷら",
+    "terms": [
+      "薩摩芋",
+      "さつま芋",
+      "サツマ芋"
+    ]
+  },
+  {
+    "foodCode": "jpf7083",
+    "canonical": "だいだい果汁",
+    "terms": [
+      "ダイダイ果汁"
+    ]
+  },
+  {
+    "foodCode": "jpf10179",
+    "canonical": "しいらの刺身",
+    "terms": [
+      "まんびき"
+    ]
+  },
+  {
+    "foodCode": "jpf10086",
+    "canonical": "かつおの刺身／かつおのたたき",
+    "terms": [
+      "鰹",
+      "カツオ",
+      "かつおたたき"
+    ]
+  },
+  {
+    "foodCode": "jpf10427",
+    "canonical": "くろあわびの刺身",
+    "terms": [
+      "アワビ"
+    ]
+  },
+  {
+    "foodCode": "F357",
+    "canonical": "豆腐の炒め物",
+    "terms": [
+      "とうふ",
+      "トウフ",
+      "トーフ"
+    ]
+  },
+  {
+    "foodCode": "jpf10050",
+    "canonical": "塩いわし",
+    "terms": [
+      "塩鰯",
+      "いわし",
+      "塩イワシ"
+    ]
+  },
+  {
+    "foodCode": "PRDS",
+    "canonical": "水餃子／蒸し餃子（海鮮）",
+    "terms": [
+      "ぎょうざ",
+      "ギョーザ",
+      "海鮮餃子"
+    ]
+  },
+  {
+    "foodCode": "jpf6199",
+    "canonical": "なすのしば漬け",
+    "terms": [
+      "漬物",
+      "漬け物",
+      "漬もの"
+    ]
+  },
+  {
+    "foodCode": "F109",
+    "canonical": "鶏肉の寿司",
+    "terms": [
+      "から揚げ",
+      "テリヤキチキン",
+      "照り焼きチキン"
+    ]
+  },
+  {
+    "foodCode": "LKSF",
+    "canonical": "長ねぎ（炒め）",
+    "terms": [
+      "長葱",
+      "白ねぎ",
+      "長ネギ"
+    ]
+  },
+  {
+    "foodCode": "BERW",
+    "canonical": "牛肉の刺身",
+    "terms": [
+      "牛肉",
+      "ビーフ"
+    ]
+  },
+  {
+    "foodCode": "jpd10818",
+    "canonical": "切干大根の煮物",
+    "terms": [
+      "切干し大根の煮物",
+      "切干大根の煮もの",
+      "切干し大根の煮もの"
+    ]
+  },
+  {
+    "foodCode": "jpf10355",
+    "canonical": "いかのくん製",
+    "terms": [
+      "いか燻製",
+      "イカ燻製",
+      "イカくん製"
+    ]
+  },
+  {
+    "foodCode": "jpf6172",
+    "canonical": "とうがらし（乾燥）",
+    "terms": [
+      "唐辛子",
+      "鷹の爪"
+    ]
+  },
+  {
+    "foodCode": "jpf15052",
+    "canonical": "南部せんべい",
+    "terms": [
+      "南部煎餅"
+    ]
+  },
+  {
+    "foodCode": "jpf6390",
+    "canonical": "つるにんじん（生）",
+    "terms": [
+      "蔓人参",
+      "ツルニンジン"
+    ]
+  },
+  {
+    "foodCode": "SROI",
+    "canonical": "いわし（油漬け缶詰）",
+    "terms": [
+      "鰯",
+      "イワシ",
+      "油漬けいわし缶"
+    ]
+  },
+  {
+    "foodCode": "jpf10320",
+    "canonical": "伊勢えびの刺身",
+    "terms": [
+      "伊勢エビ",
+      "伊勢海老"
+    ]
+  },
+  {
+    "foodCode": "jpf11173",
+    "canonical": "豚の軟骨（ゆで）",
+    "terms": [
+      "豚肉",
+      "ポーク",
+      "ふえがらみ"
+    ]
+  },
+  {
+    "foodCode": "jpf4024",
+    "canonical": "大豆（ゆで、無糖）",
+    "terms": [
+      "大豆水煮",
+      "だいず水煮",
+      "ダイズ水煮"
+    ]
+  },
+  {
+    "foodCode": "jpd10111b",
+    "canonical": "納豆ごはん",
+    "terms": [
+      "納豆ご飯",
+      "なっとうごはん"
+    ]
+  },
+  {
+    "foodCode": "jpd11107",
+    "canonical": "野菜などの肉巻き（ごぼうと肉の八幡巻など）",
+    "terms": [
+      "やわた巻"
+    ]
+  },
+  {
+    "foodCode": "jpd11002a",
+    "canonical": "ほたて（蒸し／ゆで）（貝柱のみ）",
+    "terms": [
+      "帆立",
+      "ホタテ"
+    ]
+  },
+  {
+    "foodCode": "jpd10823e",
+    "canonical": "その他の野菜の煮物（根菜以外）",
+    "terms": [
+      "くわい",
+      "たけのこ",
+      "とうがん"
+    ]
+  },
+  {
+    "foodCode": "jpf17099",
+    "canonical": "三杯酢／かに酢",
+    "terms": [
+      "蟹酢",
+      "カニ酢"
+    ]
+  },
+  {
+    "foodCode": "jpf10101",
+    "canonical": "かれい（蒸し／ゆで）",
+    "terms": [
+      "カレイ"
+    ]
+  },
+  {
+    "foodCode": "jpf4076",
+    "canonical": "しょうゆ豆",
+    "terms": [
+      "醤油豆",
+      "そらまめ",
+      "ソラマメ"
+    ]
+  },
+  {
+    "foodCode": "jpd11401i",
+    "canonical": "いきなり団子",
+    "terms": [
+      "いきなりだんご"
+    ]
+  },
+  {
+    "foodCode": "SESA",
+    "canonical": "並塩（あら塩）",
+    "terms": [
+      "塩",
+      "しお"
+    ]
+  },
+  {
+    "foodCode": "jpd11404e",
+    "canonical": "今川焼／回転焼き／大判焼き（その他）",
+    "terms": [
+      "御座候",
+      "二重焼き"
+    ]
+  },
+  {
+    "foodCode": "jpf10072",
+    "canonical": "うまづらはぎ開き干し",
+    "terms": [
+      "開干し"
+    ]
+  },
+  {
+    "foodCode": "jpf10135",
+    "canonical": "白鮭（蒸し／ゆで）",
+    "terms": [
+      "さけ",
+      "サケ",
+      "しゃけ"
+    ]
+  },
+  {
+    "foodCode": "jpf6066",
+    "canonical": "きゅうりの塩漬け",
+    "terms": [
+      "漬物",
+      "漬け物",
+      "漬もの"
+    ]
+  },
+  {
+    "foodCode": "jpf10094",
+    "canonical": "かつおの角煮",
+    "terms": [
+      "鰹",
+      "煮物",
+      "カツオ"
+    ]
+  },
+  {
+    "foodCode": "F197",
+    "canonical": "焼き餃子（肉）",
+    "terms": [
+      "肉餃子",
+      "ぎょうざ",
+      "ギョーザ"
+    ]
+  },
+  {
+    "foodCode": "DSTW",
+    "canonical": "乾燥いちご",
+    "terms": [
+      "苺",
+      "イチゴ",
+      "ストロベリー"
+    ]
+  },
+  {
+    "foodCode": "jpf10092",
+    "canonical": "かつお削り節",
+    "terms": [
+      "かつお節",
+      "花かつお",
+      "かつおぶし"
+    ]
+  },
+  {
+    "foodCode": "jpf10043",
+    "canonical": "うるめいわしの丸干し",
+    "terms": [
+      "いわし丸干"
+    ]
+  },
+  {
+    "foodCode": "jpf10098",
+    "canonical": "かますの刺身",
+    "terms": [
+      "カマス"
+    ]
+  },
+  {
+    "foodCode": "jpf10198",
+    "canonical": "たちうおの刺身",
+    "terms": [
+      "太刀魚",
+      "タチウオ"
+    ]
+  },
+  {
+    "foodCode": "jpd11129m",
+    "canonical": "焼き鳥 かわ（塩）",
+    "terms": [
+      "焼鳥",
+      "やきとり",
+      "焼きとり"
+    ]
+  },
+  {
+    "foodCode": "jpf10298",
+    "canonical": "たいらがい貝柱の刺身",
+    "terms": [
+      "たいらぎ"
+    ]
+  },
+  {
+    "foodCode": "jpf8022",
+    "canonical": "なめこ（缶詰）",
+    "terms": [
+      "ナメコ",
+      "なめこ缶"
+    ]
+  },
+  {
+    "foodCode": "jpd10802c",
+    "canonical": "小松菜のお浸し",
+    "terms": [
+      "おひたし",
+      "こまつな",
+      "コマツナ"
+    ]
+  },
+  {
+    "foodCode": "jpf10227",
+    "canonical": "はぜの甘露煮",
+    "terms": [
+      "ハゼ"
+    ]
+  },
+  {
+    "foodCode": "jpf6227",
+    "canonical": "葉ねぎ（生）",
+    "terms": [
+      "青葱",
+      "青ねぎ",
+      "青ネギ"
+    ]
+  },
+  {
+    "foodCode": "jpd11016d",
+    "canonical": "赤魚の粕漬焼／味噌漬焼／西京焼き",
+    "terms": [
+      "めぬけ",
+      "焼き魚",
+      "アラスカメヌケ"
+    ]
+  },
+  {
+    "foodCode": "jpd10111d",
+    "canonical": "のり弁の海苔ごはん",
+    "terms": [
+      "海苔弁",
+      "のり弁当",
+      "海苔弁当"
+    ]
+  },
+  {
+    "foodCode": "jpf10241",
+    "canonical": "ぶりの刺身",
+    "terms": [
+      "鰤",
+      "ブリ"
+    ]
+  },
+  {
+    "foodCode": "jpf10184",
+    "canonical": "したびらめの刺身",
+    "terms": [
+      "舌平目",
+      "シタビラメ"
+    ]
+  },
+  {
+    "foodCode": "jpf10431",
+    "canonical": "さくらえびの刺身",
+    "terms": [
+      "桜エビ",
+      "桜海老",
+      "サクラエビ"
+    ]
+  },
+  {
+    "foodCode": "jpf10278",
+    "canonical": "わかさぎのあめ煮",
+    "terms": [
+      "ワカサギ"
+    ]
+  },
+  {
+    "foodCode": "PSCS",
+    "canonical": "洋なし（缶詰）",
+    "terms": [
+      "洋梨缶",
+      "洋なし缶"
+    ]
+  },
+  {
+    "foodCode": "jpf6373",
+    "canonical": "冷凍ほうれん草（炒め）",
+    "terms": [
+      "冷凍法蓮草",
+      "冷凍ほうれんそう",
+      "冷凍ホウレンソウ"
+    ]
+  },
+  {
+    "foodCode": "F096",
+    "canonical": "きすの天ぷら",
+    "terms": [
+      "キス",
+      "きす天",
+      "キス天"
+    ]
+  },
+  {
+    "foodCode": "jpd10804",
+    "canonical": "野菜の塩もみ",
+    "terms": [
+      "かぶ",
+      "からしな",
+      "キャベツ"
+    ]
+  },
+  {
+    "foodCode": "jpf8041",
+    "canonical": "しいたけ（炒め）",
+    "terms": [
+      "椎茸",
+      "シイタケ"
+    ]
+  },
+  {
+    "foodCode": "RINO",
+    "canonical": "緑豆春雨（ゆで）",
+    "terms": [
+      "緑豆はるさめ"
+    ]
+  },
+  {
+    "foodCode": "jpf7093",
+    "canonical": "夏みかん（生）",
+    "terms": [
+      "甘夏",
+      "あまなつ",
+      "なつみかん"
+    ]
+  },
+  {
+    "foodCode": "jpd10117l",
+    "canonical": "ねぎとろ丼",
+    "terms": [
+      "ネギトロ丼",
+      "ねぎとろどん",
+      "ネギトロドン"
+    ]
+  },
+  {
+    "foodCode": "CKPS",
+    "canonical": "ひよこまめ（蒸し／ゆで）",
+    "terms": [
+      "ひよこ豆",
+      "ヒヨコマメ",
+      "ガルバンゾー"
+    ]
+  },
+  {
+    "foodCode": "jpf6107",
+    "canonical": "しろうりの塩漬け",
+    "terms": [
+      "漬物",
+      "漬け物",
+      "漬もの"
+    ]
+  },
+  {
+    "foodCode": "jpf17066",
+    "canonical": "さんしょう（粉）",
+    "terms": [
+      "山椒"
+    ]
+  },
+  {
+    "foodCode": "RCBR",
+    "canonical": "赤キャベツ（生）",
+    "terms": [
+      "紫キャベツ",
+      "レッドキャベツ"
+    ]
+  },
+  {
+    "foodCode": "HOGB",
+    "canonical": "ガーリックトースト（低脂肪）",
+    "terms": [
+      "にんにくトースト"
+    ]
+  },
+  {
+    "foodCode": "jpd10810j",
+    "canonical": "温野菜サラダ",
+    "terms": [
+      "にんじん",
+      "れんこん",
+      "ズッキーニ"
+    ]
+  },
+  {
+    "foodCode": "MXBC",
+    "canonical": "ミックスビーンズ缶",
+    "terms": [
+      "蒸しサラダ豆",
+      "ミックスサラダ豆"
+    ]
+  },
+  {
+    "foodCode": "jpd10812",
+    "canonical": "春雨サラダ／中華サラダ",
+    "terms": [
+      "拌三絲",
+      "バンサンスー",
+      "はるさめサラダ"
+    ]
+  },
+  {
+    "foodCode": "RASP",
+    "canonical": "ラズベリー（生）",
+    "terms": [
+      "フランボワーズ"
+    ]
+  },
+  {
+    "foodCode": "jpd10833",
+    "canonical": "ゴーヤチャンプルー／豆腐チャンプルー",
+    "terms": [
+      "苦瓜",
+      "にがうり",
+      "ニガウリ"
+    ]
+  },
+  {
+    "foodCode": "jpd11418g",
+    "canonical": "ベビースターラーメン丸",
+    "terms": [
+      "スナック菓子"
+    ]
+  },
+  {
+    "foodCode": "WHRL",
+    "canonical": "ロールパン（全粒粉）",
+    "terms": [
+      "バターロール"
+    ]
+  },
+  {
+    "foodCode": "DRFR",
+    "canonical": "ドラゴンフルーツ（生）",
+    "terms": [
+      "トロピカルフルーツ"
+    ]
+  },
+  {
+    "foodCode": "jpf16049",
+    "canonical": "ミルクココア（粉末）",
+    "terms": [
+      "インスタントココア"
+    ]
+  },
+  {
+    "foodCode": "SSOU",
+    "canonical": "スフレ（菓子）",
+    "terms": [
+      "スフレケーキ"
+    ]
+  },
+  {
+    "foodCode": "F110",
+    "canonical": "カリフォルニアロール（寿司）",
+    "terms": [
+      "アボガド",
+      "アボカドの巻き寿司"
+    ]
+  },
+  {
+    "foodCode": "jpd11031c",
+    "canonical": "鮭フライ",
+    "terms": [
+      "串揚げ",
+      "しゃけフライ",
+      "シャケフライ"
+    ]
+  },
+  {
+    "foodCode": "VEGO",
+    "canonical": "サラダ油",
+    "terms": [
+      "調合油",
+      "さらだ油",
+      "天ぷら油"
+    ]
+  },
+  {
+    "foodCode": "jpf7172",
+    "canonical": "乾燥ブルーベリー",
+    "terms": [
+      "ドライブルーベリー"
+    ]
+  },
+  {
+    "foodCode": "jpf7081",
+    "canonical": "プルーン（生）",
+    "terms": [
+      "生プルーン"
+    ]
+  },
+  {
+    "foodCode": "jpd11425o",
+    "canonical": "ハーゲンダッツ（棒アイス）",
+    "terms": [
+      "アイス",
+      "アイスクリーム"
+    ]
+  },
+  {
+    "foodCode": "jpf16046",
+    "canonical": "インスタントコーヒー（粉末）",
+    "terms": [
+      "スティックコーヒー"
+    ]
+  },
+  {
+    "foodCode": "DRPI",
+    "canonical": "乾燥パイナップル",
+    "terms": [
+      "パイン",
+      "パインアップル",
+      "トロピカルフルーツ"
+    ]
+  },
+  {
+    "foodCode": "CPOP",
+    "canonical": "ポップコーン（チョコレート味）",
+    "terms": [
+      "チョコポップコーン"
+    ]
+  },
+  {
+    "foodCode": "jpf10388",
+    "canonical": "魚肉ソーセージ",
+    "terms": [
+      "おさかなソーセージ",
+      "フィッシュソーセージ"
+    ]
+  },
+  {
+    "foodCode": "PRKS",
+    "canonical": "回鍋肉（ホイコーロー）",
+    "terms": [
+      "ぶた",
+      "ポーク",
+      "回鍋肉"
+    ]
+  },
+  {
+    "foodCode": "F075",
+    "canonical": "サンドイッチ（卵）",
+    "terms": [
+      "卵サンド",
+      "玉子サンド",
+      "たまごサンド"
+    ]
+  },
+  {
+    "foodCode": "BBTL",
+    "canonical": "ベイクドビーンズ（減塩）",
+    "terms": [
+      "いんげん豆",
+      "インゲン豆",
+      "インゲンマメ"
+    ]
+  },
+  {
+    "foodCode": "CLRY",
+    "canonical": "セロリ（生）",
+    "terms": [
+      "セルリー",
+      "セロリー",
+      "オランダみつば"
+    ]
+  },
+  {
+    "foodCode": "jpd10402c",
+    "canonical": "チヂミ（野菜）",
+    "terms": [
+      "韓国風お好み焼き"
+    ]
+  },
+  {
+    "foodCode": "LETH",
+    "canonical": "レモンタイム（乾燥）",
+    "terms": [
+      "シトラスタイム"
+    ]
+  },
+  {
+    "foodCode": "CANT",
+    "canonical": "メロン（赤肉、生）",
+    "terms": [
+      "夕張メロン",
+      "赤肉メロン"
+    ]
+  },
+  {
+    "foodCode": "DRMA",
+    "canonical": "乾燥マンゴー",
+    "terms": [
+      "ドライマンゴー"
+    ]
+  },
+  {
+    "foodCode": "jpd11710c",
+    "canonical": "春雨スープ",
+    "terms": [
+      "はるさめスープ"
+    ]
+  },
+  {
+    "foodCode": "SRLL",
+    "canonical": "ロールパン／黒糖ロール",
+    "terms": [
+      "黒糖パン",
+      "バターロール"
+    ]
+  },
+  {
+    "foodCode": "CASK",
+    "canonical": "カプチーノ（無脂肪乳）",
+    "terms": [
+      "コーヒー"
+    ]
+  },
+  {
+    "foodCode": "DRBA",
+    "canonical": "乾燥バナナ",
+    "terms": [
+      "ドライバナナ",
+      "バナナチップス"
+    ]
+  },
+  {
+    "foodCode": "jpd10910b",
+    "canonical": "桃ジュース（果汁100％）",
+    "terms": [
+      "もも",
+      "モモ",
+      "ネクター"
+    ]
+  },
+  {
+    "foodCode": "TOMB",
+    "canonical": "トマトジュース（無塩）",
+    "terms": [
+      "食塩不使用"
+    ]
+  },
+  {
+    "foodCode": "F101",
+    "canonical": "卵サラダ（カレー風味）",
+    "terms": [
+      "玉子",
+      "たまご",
+      "エッグサラダ"
+    ]
+  },
+  {
+    "foodCode": "MIXB",
+    "canonical": "冷凍ミックスベリー",
+    "terms": [
+      "ラズベリー",
+      "ストロベリー",
+      "ブルーベリー"
+    ]
+  },
+  {
+    "foodCode": "TKRS",
+    "canonical": "トマトケチャップ（減塩）",
+    "terms": [
+      "減塩ケチャップ"
+    ]
+  },
+  {
+    "foodCode": "jpf6329",
+    "canonical": "トウミョウ（生）",
+    "terms": [
+      "豆苗",
+      "とうみょう",
+      "とーみょー"
+    ]
+  },
+  {
+    "foodCode": "jpd11140",
+    "canonical": "チキン南蛮",
+    "terms": [
+      "鶏肉"
+    ]
+  },
+  {
+    "foodCode": "jpd11502b",
+    "canonical": "ストレートティー（市販品・微糖）",
+    "terms": [
+      "低糖",
+      "紅茶",
+      "アイスティー"
+    ]
+  },
+  {
+    "foodCode": "jpd11135b",
+    "canonical": "豚キムチ",
+    "terms": [
+      "ぶた",
+      "豚肉",
+      "ポーク"
+    ]
+  },
+  {
+    "foodCode": "jpf4054",
+    "canonical": "豆乳飲料／麦芽コーヒー",
+    "terms": [
+      "とうにゅう",
+      "トウニュウ"
+    ]
+  },
+  {
+    "foodCode": "jpf6393",
+    "canonical": "オレンジパプリカ（生）",
+    "terms": [
+      "ピーマン",
+      "オレンジピーマン"
+    ]
+  },
+  {
+    "foodCode": "jpd11502c",
+    "canonical": "ミルクティー（市販品・無糖）",
+    "terms": [
+      "紅茶",
+      "ロイヤルミルクティー"
+    ]
+  },
+  {
+    "foodCode": "SAUS",
+    "canonical": "ベジタリアン用ソーセージ",
+    "terms": [
+      "ビーガン",
+      "ヴィーガン"
+    ]
+  },
+  {
+    "foodCode": "jpd10402e",
+    "canonical": "チヂミ（肉）",
+    "terms": [
+      "チジミ",
+      "韓国風お好み焼き"
+    ]
+  },
+  {
+    "foodCode": "jpd10117a",
+    "canonical": "豚丼／チャーシュー丼",
+    "terms": [
+      "丼ぶり",
+      "どんぶり"
+    ]
+  },
+  {
+    "foodCode": "jpd11306g",
+    "canonical": "無糖ヨーグルト（無脂肪）・ジャムや果物などを入れた",
+    "terms": [
+      "脂肪0",
+      "脂肪ゼロ",
+      "無脂肪ヨーグルト"
+    ]
+  },
+  {
+    "foodCode": "jpf15085",
+    "canonical": "ワッフル（ジャム入り）",
+    "terms": [
+      "ワッフルサンド",
+      "デザートワッフル",
+      "ジャムサンドワッフル"
+    ]
+  },
+  {
+    "foodCode": "AJCS",
+    "canonical": "りんごの炭酸飲料（アップルタイザーなど）",
+    "terms": [
+      "林檎",
+      "リンゴ"
+    ]
+  },
+  {
+    "foodCode": "jpd11501i",
+    "canonical": "その他のコーヒー飲料",
+    "terms": [
+      "珈琲",
+      "コーヒー"
+    ]
+  },
+  {
+    "foodCode": "TSSG",
+    "canonical": "チキンソーセージ（焼き／炒め）",
+    "terms": [
+      "ウィンナー",
+      "ウインナー"
+    ]
+  },
+  {
+    "foodCode": "jpd11211b",
+    "canonical": "うずらの卵のフライ",
+    "terms": [
+      "鶉",
+      "うずらの卵フライ",
+      "うずらの卵の串揚げ"
+    ]
+  },
+  {
+    "foodCode": "DCMW",
+    "canonical": "カフェインレスのカフェモカ（普通牛乳）",
+    "terms": [
+      "コーヒー",
+      "ショコララテ",
+      "チョコレートラテ"
+    ]
+  },
+  {
+    "foodCode": "SNPB",
+    "canonical": "スナップえんどう（蒸し／ゆで）",
+    "terms": [
+      "えんどう",
+      "すなっぷえんどう",
+      "スナップエンドウ"
+    ]
+  },
+  {
+    "foodCode": "jpd10306d",
+    "canonical": "汁なし担々麺／まぜそば／ジャージャー麺",
+    "terms": [
+      "じゃじゃ麺",
+      "ジャジャ麺"
+    ]
+  },
+  {
+    "foodCode": "F365",
+    "canonical": "スムージー その他、チョコやホイップなし",
+    "terms": [
+      "フローズンドリンク"
+    ]
+  },
+  {
+    "foodCode": "jpd11145",
+    "canonical": "ウインナー／ソーセージの炒め物",
+    "terms": [
+      "ソテー",
+      "ウィンナー"
+    ]
+  },
+  {
+    "foodCode": "jpd10305h5",
+    "canonical": "担々麺、スープはほとんど飲まなかった",
+    "terms": [
+      "タンタン麺"
+    ]
+  },
+  {
+    "foodCode": "DCKC",
+    "canonical": "鴨のコンフィ",
+    "terms": [
+      "かも",
+      "鴨肉",
+      "鴨コンフィ"
+    ]
+  },
+  {
+    "foodCode": "jpd11425p",
+    "canonical": "棒アイス（パルム、バニラバー、パリパリバーなど）",
+    "terms": [
+      "アイスクリーム"
+    ]
+  },
+  {
+    "foodCode": "VGRT",
+    "canonical": "野菜／きのこのリゾット",
+    "terms": [
+      "野菜リゾット",
+      "野菜のリゾット"
+    ]
+  },
+  {
+    "foodCode": "TNPB",
+    "canonical": "かぶ（皮つき、蒸し／ゆで／レンジ）",
+    "terms": [
+      "蕪",
+      "カブ"
+    ]
+  },
+  {
+    "foodCode": "MOCi",
+    "canonical": "もちアイス（雪見大福など）",
+    "terms": [
+      "アイスクリーム"
+    ]
+  },
+  {
+    "foodCode": "jpd11420n",
+    "canonical": "ブラックチョコレート（高カカオではない）",
+    "terms": [
+      "ショコラ",
+      "ダークチョコ",
+      "ビターチョコ"
+    ]
+  },
+  {
+    "foodCode": "jpf15125",
+    "canonical": "その他の揚げパン",
+    "terms": [
+      "あげパン",
+      "シュガーあげパン",
+      "シュガー揚げパン"
+    ]
+  },
+  {
+    "foodCode": "jpd10302d4",
+    "canonical": "きつねそば、スープは2割くらい飲んだ",
+    "terms": [
+      "きつね蕎麦"
+    ]
+  },
+  {
+    "foodCode": "CHCI",
+    "canonical": "カップアイス（爽、スーパーカップなど）",
+    "terms": [
+      "ラクトアイス",
+      "アイスクリーム"
+    ]
+  },
+  {
+    "foodCode": "COMP",
+    "canonical": "果物の甘煮／コンポート",
+    "terms": [
+      "フルーツ"
+    ]
+  },
+  {
+    "foodCode": "MUCR",
+    "canonical": "低脂肪のクラッカー",
+    "terms": [
+      "低脂肪クラッカー"
+    ]
+  },
+  {
+    "foodCode": "F350",
+    "canonical": "ラムステーキ（脂身を除いたもの）",
+    "terms": [
+      "羊肉",
+      "ひつじ",
+      "ヒツジ"
+    ]
+  },
+  {
+    "foodCode": "jpd11427t",
+    "canonical": "その他のパイ（スイーツ）",
+    "terms": [
+      "ぱい"
+    ]
+  },
+  {
+    "foodCode": "jpf7165",
+    "canonical": "しらぬひ／デコポン（生）",
+    "terms": [
+      "不知火",
+      "しらぬい"
+    ]
+  },
+  {
+    "foodCode": "HSBG",
+    "canonical": "ハッシュドポテト／星形ポテト（焼き）",
+    "terms": [
+      "ハッシュポテト",
+      "ハッシュブラウン",
+      "ハッシュドブラウン"
+    ]
+  },
+  {
+    "foodCode": "KETT",
+    "canonical": "ポテトチップス（袋入り）",
+    "terms": [
+      "ポテチ",
+      "ポテトチップ"
+    ]
+  },
+  {
+    "foodCode": "jpd10301f4",
+    "canonical": "鍋焼きうどん／煮込みうどん（天ぷらなし）、スープは2割くらい飲んだ",
+    "terms": [
+      "煮込うどん",
+      "鍋焼うどん"
+    ]
+  },
+  {
+    "foodCode": "MLRP",
+    "canonical": "食事調整飲料（メイバランス、カロリーメイトリキッドなど）",
+    "terms": [
+      "流動食",
+      "栄養補助飲料",
+      "栄養補給飲料"
+    ]
+  },
+  {
+    "foodCode": "AERO",
+    "canonical": "気泡入りチョコレート（エアロなど）",
+    "terms": [
+      "ショコラ"
+    ]
+  },
+  {
+    "foodCode": "jpd11502j",
+    "canonical": "チャイ（その他）",
+    "terms": [
+      "ちゃい"
+    ]
+  },
+  {
+    "foodCode": "DANI",
+    "canonical": "カスタード入りデニッシュ",
+    "terms": [
+      "クリーム",
+      "デニッシュパン",
+      "カスタードクリーム"
+    ]
+  },
+  {
+    "foodCode": "jpd11402h",
+    "canonical": "黄身餡・ミルクまんじゅう（桃山、博多通りもんなど）",
+    "terms": [
+      "みるく饅頭",
+      "ミルク饅頭",
+      "みるくまんじゅう"
+    ]
+  },
+  {
+    "foodCode": "jpd10211d",
+    "canonical": "サンドイッチ（その他）",
+    "terms": [
+      "サンドウィッチ"
+    ]
+  },
+  {
+    "foodCode": "jpf13054",
+    "canonical": "無糖ヨーグルト（無脂肪）・何も入れなかった",
+    "terms": [
+      "脂肪0",
+      "脂肪ゼロ",
+      "無脂肪ヨーグルト"
+    ]
+  },
+  {
+    "foodCode": "F146",
+    "canonical": "その他のフルーツジュース（果汁100％）",
+    "terms": [
+      "果実",
+      "フルーツジュース",
+      "フルーツミックスジュース"
+    ]
+  },
+  {
+    "foodCode": "FFGR",
+    "canonical": "魚のパン粉焼き／オーブン焼き（鮭／サーモン）",
+    "terms": [
+      "さけ",
+      "サケ",
+      "しゃけ"
+    ]
+  },
+  {
+    "foodCode": "jpf7139",
+    "canonical": "フルーツ缶詰のシロップ（桃缶などのヘビーシロップ）",
+    "terms": [
+      "もも缶",
+      "モモ缶",
+      "白桃缶"
+    ]
+  },
+  {
+    "foodCode": "jpf10415",
+    "canonical": "バナメイえびの刺身",
+    "terms": [
+      "海老",
+      "バナメイエビ"
+    ]
+  },
+  {
+    "foodCode": "jpd10305g2",
+    "canonical": "二郎系ラーメン、スープは8割くらい飲んだ",
+    "terms": [
+      "中華そば",
+      "中華蕎麦",
+      "支那そば"
+    ]
+  },
+  {
+    "foodCode": "PCSF",
+    "canonical": "えびのカクテル（サンドイッチ用フィリング）",
+    "terms": [
+      "エビ",
+      "海老"
+    ]
+  },
+  {
+    "foodCode": "jpf11193",
+    "canonical": "肉と魚肉の混合ソーセージ",
+    "terms": [
+      "ウィンナー",
+      "ポールウインナー"
+    ]
+  },
+  {
+    "foodCode": "jpd10310",
+    "canonical": "焼きビーフン",
+    "terms": [
+      "焼ビーフン"
+    ]
+  },
+  {
+    "foodCode": "jpd10303a4",
+    "canonical": "にゅうめん、スープは2割くらい飲んだ",
+    "terms": [
+      "素麺",
+      "そうめん",
+      "ひやむぎ"
+    ]
+  },
+  {
+    "foodCode": "jpd11901",
+    "canonical": "餃子の皮／ワンタンの皮等の包み揚げ",
+    "terms": [
+      "チーズ包み揚げ"
+    ]
+  },
+  {
+    "foodCode": "jpd10302a5",
+    "canonical": "かけそば、スープはほとんど飲まなかった",
+    "terms": [
+      "かけ蕎麦"
+    ]
+  },
+  {
+    "foodCode": "jpd11118b",
+    "canonical": "鶏肉のトマト煮",
+    "terms": [
+      "カチャトラ",
+      "カチャトーラ",
+      "チキンのトマト煮込み"
+    ]
+  },
+  {
+    "foodCode": "BCTA",
+    "canonical": "その他の魚のフライ",
+    "terms": [
+      "串揚げ",
+      "魚フライ"
+    ]
+  },
+  {
+    "foodCode": "KBNO",
+    "canonical": "チョコレート菓子（ウエハースとヘーゼルナッツ入り）",
+    "terms": [
+      "チョコ菓子",
+      "ウエハースチョコ",
+      "チョコウエハース"
+    ]
+  },
+  {
+    "foodCode": "jpd11009b",
+    "canonical": "貝・いか・たこの蒸し料理（アサリの酒蒸しなど）",
+    "terms": [
+      "かい",
+      "イカ",
+      "カイ"
+    ]
+  },
+  {
+    "foodCode": "jpf17049",
+    "canonical": "即席みそ汁／インスタントみそ汁（フリーズドライ）",
+    "terms": [
+      "味噌汁",
+      "赤だし",
+      "みそしる"
+    ]
+  },
+  {
+    "foodCode": "jpd11425l",
+    "canonical": "カップアイス・やわもちアイス（井村屋）",
+    "terms": [
+      "もちアイス",
+      "アイスクリーム"
+    ]
+  },
+  {
+    "foodCode": "jpf10439",
+    "canonical": "鮭／サーモン（皮なし、ゆで）",
+    "terms": [
+      "サケ",
+      "しゃけ",
+      "シャケ"
+    ]
+  },
+  {
+    "foodCode": "BTEA",
+    "canonical": "ストレートティ／ミルクティー／レモンティー／フルーツティー（缶やペットボトルなどの市販品でないもの）",
+    "terms": [
+      "紅茶",
+      "アイスティー",
+      "ピーチティー"
+    ]
+  },
+  {
+    "foodCode": "F272",
+    "canonical": "テンペ（炒め）",
+    "terms": [
+      "てんぺ"
+    ]
+  },
+  {
+    "foodCode": "CHRC",
+    "canonical": "チョコせんべい（柿の種チョコなど）",
+    "terms": [
+      "煎餅",
+      "チョコあられ",
+      "チョコレートせんべい"
+    ]
+  },
+  {
+    "foodCode": "PSTM",
+    "canonical": "ラビオリのトマトソース煮（缶詰）",
+    "terms": [
+      "パスタ"
+    ]
+  },
+  {
+    "foodCode": "F235",
+    "canonical": "ベーグル（フルーツ入りの生地、ブルーベリーベーグルなど、焼き）",
+    "terms": [
+      "フルーツベーグル"
+    ]
+  },
+  {
+    "foodCode": "FL-GING",
+    "canonical": "おろししょうが／きざみしょうが（市販品、チューブや小袋など）",
+    "terms": [
+      "卸し",
+      "生姜",
+      "ショウガ"
+    ]
+  },
+  {
+    "foodCode": "jpd10301b4",
+    "canonical": "ほうとう、スープは2割くらい飲んだ",
+    "terms": [
+      "南瓜",
+      "かぼちゃ",
+      "カボチャ"
+    ]
+  },
+  {
+    "foodCode": "jpd10839l",
+    "canonical": "ピーマンの天ぷら",
+    "terms": [
+      "天婦羅",
+      "てんぷら",
+      "テンプラ"
+    ]
+  },
+  {
+    "foodCode": "PCHM",
+    "canonical": "チョウミン／ネパール風焼きそば",
+    "terms": [
+      "焼そば",
+      "やきそば",
+      "ヤキソバ"
+    ]
+  },
+  {
+    "foodCode": "jpd10305r3",
+    "canonical": "インスタント麺（詳細不明）、スープは4～6割飲んだ",
+    "terms": [
+      "即席麵",
+      "即席めん"
+    ]
+  },
+  {
+    "foodCode": "jpd11038b",
+    "canonical": "ホタテの天ぷら",
+    "terms": [
+      "かに天",
+      "たこ天",
+      "カニ天"
+    ]
+  },
+  {
+    "foodCode": "PLSC",
+    "canonical": "プレーンスコーン（焼き菓子）",
+    "terms": [
+      "ホットビスケット"
+    ]
+  },
+  {
+    "foodCode": "DLSS",
+    "canonical": "カフェインレスのカフェラテ／カフェオレ（低脂肪乳）",
+    "terms": [
+      "コーヒー",
+      "デカフェ",
+      "ノンカフェイン"
+    ]
+  },
+  {
+    "foodCode": "jpd11104c",
+    "canonical": "エビマヨ揚げ餃子",
+    "terms": [
+      "ぎょうざ",
+      "ギョウザ"
+    ]
+  },
+  {
+    "foodCode": "jpd11306f",
+    "canonical": "加糖ヨーグルト（低脂肪）・ジャムや果物などを入れた",
+    "terms": [
+      "低脂肪ヨーグルト"
+    ]
+  },
+  {
+    "foodCode": "jpd10814d",
+    "canonical": "その他のサラダ",
+    "terms": [
+      "さらだ"
+    ]
+  },
+  {
+    "foodCode": "jpf7120",
+    "canonical": "ぶどうジュース（果汁70％）",
+    "terms": [
+      "巨峰",
+      "葡萄",
+      "ブドウ"
+    ]
+  },
+  {
+    "foodCode": "jpd11414",
+    "canonical": "柿の種（ピーナッツ入り）",
+    "terms": [
+      "柿ピー"
+    ]
+  },
+  {
+    "foodCode": "SATY",
+    "canonical": "鶏肉のサテ（インドネシア風串焼き）",
+    "terms": [
+      "チキン"
+    ]
+  },
+  {
+    "foodCode": "jpd10305r5",
+    "canonical": "インスタント麺（詳細不明）、スープはほとんど飲まなかった",
+    "terms": [
+      "即席麵",
+      "即席めん"
+    ]
+  },
+  {
+    "foodCode": "ICED",
+    "canonical": "コーヒー（市販品・ミルク入り・加糖）",
+    "terms": [
+      "カフェオレ",
+      "カフェラテ",
+      "カフェ・ラッテ"
+    ]
+  },
+  {
+    "foodCode": "DCMS",
+    "canonical": "カフェインレスのカフェモカ（無脂肪乳）",
+    "terms": [
+      "コーヒー",
+      "ショコララテ",
+      "チョコレートラテ"
+    ]
+  },
+  {
+    "foodCode": "RDNT",
+    "canonical": "その他のドーナツ（穴あり）",
+    "terms": [
+      "ドーナッツ",
+      "焼きドーナツ"
+    ]
+  },
+  {
+    "foodCode": "CHSC",
+    "canonical": "チーズスコーン（焼き菓子）",
+    "terms": [
+      "チーズ味",
+      "ホットビスケット"
+    ]
+  },
+  {
+    "foodCode": "jpf5030",
+    "canonical": "ピーカンナッツ（揚げ、味付き）",
+    "terms": [
+      "ピカンナッツ",
+      "ペカンナッツ"
+    ]
+  },
+  {
+    "foodCode": "jpd10302h4",
+    "canonical": "月見そば、スープは2割くらい飲んだ",
+    "terms": [
+      "月見蕎麦"
+    ]
+  },
+  {
+    "foodCode": "FING",
+    "canonical": "ビスケット／クッキー（チョコ入り）",
+    "terms": [
+      "チョコクッキー",
+      "チョコビスケット",
+      "チョコレートクッキー"
+    ]
+  },
+  {
+    "foodCode": "PSRS",
+    "canonical": "減塩トマトソースパスタ（麵入り、缶詰）",
+    "terms": [
+      "ペンネ",
+      "スパゲティ",
+      "スパゲッティ"
+    ]
+  },
+  {
+    "foodCode": "jpd10305a2",
+    "canonical": "ラーメン（その他）、スープは8割くらい飲んだ",
+    "terms": [
+      "中華そば",
+      "中華蕎麦",
+      "支那そば"
+    ]
+  },
+  {
+    "foodCode": "jpf17085",
+    "canonical": "お好み焼きソース",
+    "terms": [
+      "お好みソース"
+    ]
+  },
+  {
+    "foodCode": "FETT",
+    "canonical": "卵入りパスタ（フェットチーネやタリアテッレなど、ソースなし）",
+    "terms": [
+      "ペンネ",
+      "スパゲティ",
+      "スパゲッティ"
+    ]
+  },
+  {
+    "foodCode": "F112",
+    "canonical": "サンドイッチ（ローストビーフと野菜）",
+    "terms": [
+      "ローストビーフサンド"
+    ]
+  },
+  {
+    "foodCode": "F276",
+    "canonical": "ベーグル（胡麻やシード入り、焼き）",
+    "terms": [
+      "ごまベーグル",
+      "胡麻べーぐる",
+      "セサミベーグル"
+    ]
+  },
+  {
+    "foodCode": "F287",
+    "canonical": "カフェインレスのカプチーノ（植物性ミルク）",
+    "terms": [
+      "コーヒー",
+      "デカフェ",
+      "ノンカフェイン"
+    ]
+  },
+  {
+    "foodCode": "jpd11501f",
+    "canonical": "コーヒー（市販品・ミルク入り・無糖）",
+    "terms": [
+      "カフェオレ",
+      "カフェラテ",
+      "カフェ・ラッテ"
+    ]
+  },
+  {
+    "foodCode": "FRSF",
+    "canonical": "具入りパスタ（ラビオリ、トリティーニなど）",
+    "terms": [
+      "ペンネ",
+      "スパゲティ",
+      "スパゲッティ"
+    ]
+  },
+  {
+    "foodCode": "F382",
+    "canonical": "シーフードサラダ（クリーミードレッシングで和えたタイプ）",
+    "terms": [
+      "魚介のサラダ"
+    ]
+  },
+  {
+    "foodCode": "jpf15084",
+    "canonical": "ワッフル（カスタードクリーム入り）",
+    "terms": [
+      "ワッフルサンド",
+      "デザートワッフル",
+      "クリームサンドワッフル"
+    ]
+  },
+  {
+    "foodCode": "SCMP",
+    "canonical": "えびのパン粉焼き／オーブン焼き",
+    "terms": [
+      "エビ",
+      "海老"
+    ]
+  },
+  {
+    "foodCode": "SSTF",
+    "canonical": "豚肉と牛肉のソーセージ（フライ）",
+    "terms": [
+      "串揚げ",
+      "ウインナーフライ",
+      "ソーセージフライ"
+    ]
+  },
+  {
+    "foodCode": "jpd10208g",
+    "canonical": "きなこ揚げパン",
+    "terms": [
+      "きな粉揚げパン",
+      "きなこの揚げパン",
+      "きな粉の揚げパン"
+    ]
+  },
+  {
+    "foodCode": "jpf13026",
+    "canonical": "加糖ヨーグルト（無脂肪）・何も入れなかった",
+    "terms": [
+      "脂肪0",
+      "脂肪ゼロ",
+      "無脂肪ヨーグルト"
+    ]
+  },
+  {
+    "foodCode": "jpf9044",
+    "canonical": "カットわかめ（乾燥）",
+    "terms": [
+      "カットワカメ"
+    ]
+  },
+  {
+    "foodCode": "CCNT",
+    "canonical": "ミルクチョコレート（ナッツ入り、アーモンドチョコ／マカダミアチョコなど）",
+    "terms": [
+      "チョコレート",
+      "ピーナッツチョコ",
+      "マカダミアナッツチョコレート"
+    ]
+  },
+  {
+    "foodCode": "RCDK",
+    "canonical": "鶏むね肉のロースト／ターキー（皮つき）",
+    "terms": [
+      "鶏胸",
+      "鶏ムネ",
+      "とりムネ"
+    ]
+  },
+  {
+    "foodCode": "jpd10407b",
+    "canonical": "ラザニア（その他）",
+    "terms": [
+      "ウドン"
+    ]
+  },
+  {
+    "foodCode": "RCCK",
+    "canonical": "おこし／ポン菓子",
+    "terms": [
+      "にんじん",
+      "岩おこし",
+      "雷おこし"
+    ]
+  },
+  {
+    "foodCode": "jpd10305e2",
+    "canonical": "塩ラーメン、スープは8割くらい飲んだ",
+    "terms": [
+      "中華そば",
+      "中華蕎麦",
+      "支那そば"
+    ]
+  },
+  {
+    "foodCode": "jpd10302g5",
+    "canonical": "肉そば、スープはほとんど飲まなかった",
+    "terms": [
+      "肉蕎麦"
+    ]
+  },
+  {
+    "foodCode": "jpd10302d1",
+    "canonical": "きつねそば、スープはほとんど全部飲んだ",
+    "terms": [
+      "きつね蕎麦"
+    ]
+  },
+  {
+    "foodCode": "STMO",
+    "canonical": "果物のムース",
+    "terms": [
+      "いちご",
+      "ストロベリー",
+      "フルーツムース"
+    ]
+  },
+  {
+    "foodCode": "jpd10113b",
+    "canonical": "カツ煮／カツ丼の具",
+    "terms": [
+      "かつ煮",
+      "丼ぶり",
+      "かつ丼の具"
+    ]
+  },
+  {
+    "foodCode": "jpf7177",
+    "canonical": "焼きパイナップル",
+    "terms": [
+      "パイン",
+      "パインアップル",
+      "トロピカルフルーツ"
+    ]
+  },
+  {
+    "foodCode": "jpf7011",
+    "canonical": "あんずジャム（低糖度）",
+    "terms": [
+      "杏",
+      "杏子"
+    ]
+  },
+  {
+    "foodCode": "jpf7014",
+    "canonical": "いちごジャム（低糖度）",
+    "terms": [
+      "苺",
+      "イチゴ"
+    ]
+  },
+  {
+    "foodCode": "jpd11012b",
+    "canonical": "その他の白身魚の煮つけ（鮭・たら・鯛・赤魚など）",
+    "terms": [
+      "鯉",
+      "きす",
+      "あなご"
+    ]
+  },
+  {
+    "foodCode": "jpd10301o3",
+    "canonical": "その他のうどん、スープは4～6割飲んだ",
+    "terms": [
+      "ウドン"
+    ]
+  },
+  {
+    "foodCode": "F307",
+    "canonical": "焼き野菜のサラダ",
+    "terms": [
+      "にんじん",
+      "れんこん",
+      "ズッキーニ"
+    ]
+  },
+  {
+    "foodCode": "THIS",
+    "canonical": "ノンオイル和風ドレッシング（青じそやノンオイルごまドレッシングを含む）",
+    "terms": [
+      "ゴマドレッシング",
+      "胡麻ドレッシング"
+    ]
+  },
+  {
+    "foodCode": "jpd11711d",
+    "canonical": "乾燥パスタスープ（クノールスープDELIなど）",
+    "terms": [
+      "スープパスタ"
+    ]
+  },
+  {
+    "foodCode": "jpd10305h2",
+    "canonical": "担々麺、スープは8割くらい飲んだ",
+    "terms": [
+      "タンタン麺"
+    ]
+  },
+  {
+    "foodCode": "F317",
+    "canonical": "わかめスープ／海藻スープ",
+    "terms": [
+      "めかぶスープ",
+      "もずくスープ",
+      "ワカメスープ"
+    ]
+  },
+  {
+    "foodCode": "F209",
+    "canonical": "その他のプロテインパウダー",
+    "terms": [
+      "粉末プロテイン"
+    ]
+  },
+  {
+    "foodCode": "jpd10305f2",
+    "canonical": "味噌ラーメン、スープは8割くらい飲んだ",
+    "terms": [
+      "中華そば",
+      "中華蕎麦",
+      "支那そば"
+    ]
+  },
+  {
+    "foodCode": "CHPA",
+    "canonical": "チキン・パルミジャーナ（チキンカツレツのトマト＆チーズ焼き）",
+    "terms": [
+      "鶏肉"
+    ]
+  },
+  {
+    "foodCode": "jpd11015",
+    "canonical": "いか・えび・たこ・貝の煮物",
+    "terms": [
+      "牡蠣",
+      "ほたて",
+      "煮つけ"
+    ]
+  },
+  {
+    "foodCode": "PLAU",
+    "canonical": "ピラフ（えび入り）",
+    "terms": [
+      "えびピラフ",
+      "エビピラフ",
+      "海老ピラフ"
+    ]
+  },
+  {
+    "foodCode": "BEBU",
+    "canonical": "大豆バーガーのパティ（バンズなし）",
+    "terms": [
+      "大豆ミート"
+    ]
+  },
+  {
+    "foodCode": "jpd10303a1",
+    "canonical": "にゅうめん、スープはほとんど全部飲んだ",
+    "terms": [
+      "素麺",
+      "そうめん",
+      "ひやむぎ"
+    ]
+  },
+  {
+    "foodCode": "jpd10305e3",
+    "canonical": "塩ラーメン、スープは4～6割飲んだ",
+    "terms": [
+      "中華そば",
+      "中華蕎麦",
+      "支那そば"
+    ]
+  },
+  {
+    "foodCode": "jpd10305g3",
+    "canonical": "二郎系ラーメン、スープは4～6割飲んだ",
+    "terms": [
+      "中華そば",
+      "中華蕎麦",
+      "支那そば"
+    ]
+  },
+  {
+    "foodCode": "CNUB",
+    "canonical": "チョコレートとナッツのブラウニー",
+    "terms": [
+      "くるみ",
+      "チョコブラウニー",
+      "チョコナッツブラウニー"
+    ]
+  },
+  {
+    "foodCode": "COBB",
+    "canonical": "とうもろこし（レンジ）",
+    "terms": [
+      "コーン",
+      "スイートコーン"
+    ]
+  },
+  {
+    "foodCode": "CRCR",
+    "canonical": "プレーンクラッカー（ルヴァンクラシカル、プレミアムなど）",
+    "terms": [
+      "ソーダクラッカー"
+    ]
+  },
+  {
+    "foodCode": "jpd11430n",
+    "canonical": "ベジたべる",
+    "terms": [
+      "べじたべる",
+      "ベジタベル",
+      "スナック菓子"
+    ]
+  },
+  {
+    "foodCode": "RCFT",
+    "canonical": "ささみのロースト",
+    "terms": [
+      "焼き",
+      "グリル",
+      "ササミ"
+    ]
+  },
+  {
+    "foodCode": "FSCS",
+    "canonical": "チキンとコーンのスープ",
+    "terms": [
+      "チキンスープ",
+      "チキンコーンスープ",
+      "チキンクリームスープ"
+    ]
+  },
+  {
+    "foodCode": "MXSL",
+    "canonical": "シーフードサラダ（ドレッシングなし）",
+    "terms": [
+      "魚介のサラダ"
+    ]
+  },
+  {
+    "foodCode": "CBFB",
+    "canonical": "ホキのフライ",
+    "terms": [
+      "串揚げ",
+      "ホキフライ"
+    ]
+  },
+  {
+    "foodCode": "jpf11303",
+    "canonical": "ロースハム（ゆで）",
+    "terms": [
+      "茹で",
+      "ボイル"
+    ]
+  },
+  {
+    "foodCode": "GTMK",
+    "canonical": "やぎミルク",
+    "terms": [
+      "ヤギ",
+      "やぎ乳"
+    ]
+  },
+  {
+    "foodCode": "BBFG",
+    "canonical": "ビーフバーガーのパティ（バンズなし）",
+    "terms": [
+      "牛肉"
+    ]
+  },
+  {
+    "foodCode": "QUIL",
+    "canonical": "うずらのロースト",
+    "terms": [
+      "うずらロースト"
+    ]
+  },
+  {
+    "foodCode": "jpf15029",
+    "canonical": "カステラまんじゅう",
+    "terms": [
+      "紅葉饅頭",
+      "もみじ饅頭",
+      "もみじまんじゅう"
+    ]
+  },
+  {
+    "foodCode": "SNOM",
+    "canonical": "マシュマロ（チョコレートがけ）",
+    "terms": [
+      "チョコマシュマロ",
+      "チョコ入りマシュマロ",
+      "チョコレートマシュマロ"
+    ]
+  },
+  {
+    "foodCode": "CSHP",
+    "canonical": "いちごのチョコレートがけ",
+    "terms": [
+      "苺チョコ",
+      "いちごチョコ",
+      "イチゴチョコ"
+    ]
+  },
+  {
+    "foodCode": "PUBR",
+    "canonical": "かぼちゃパン／パンプキンブレッド",
+    "terms": [
+      "パンプキンパン"
+    ]
+  },
+  {
+    "foodCode": "SWPF",
+    "canonical": "さつまいものフライドポテト",
+    "terms": [
+      "薩摩芋",
+      "さつま芋",
+      "サツマ芋"
+    ]
+  },
+  {
+    "foodCode": "GOYO",
+    "canonical": "やぎミルクヨーグルト・プレーン",
+    "terms": [
+      "ヤギ",
+      "ヤギ乳"
+    ]
+  },
+  {
+    "foodCode": "SLDC",
+    "canonical": "ごまドレッシング（クリーミータイプ）",
+    "terms": [
+      "ゴマドレッシング",
+      "胡麻ドレッシング"
+    ]
+  },
+  {
+    "foodCode": "jpd11402g",
+    "canonical": "パイまんじゅう（うすあわせなど）",
+    "terms": [
+      "パイ饅頭"
+    ]
+  },
+  {
+    "foodCode": "jpd11429e",
+    "canonical": "ポテコ／なげわ／こつぶポテコ",
+    "terms": [
+      "スナック菓子"
+    ]
+  },
+  {
+    "foodCode": "jpd10839i",
+    "canonical": "たまねぎのフライ",
+    "terms": [
+      "玉葱",
+      "玉ねぎ",
+      "タマネギ"
+    ]
+  },
+  {
+    "foodCode": "SWOR",
+    "canonical": "めかじきのソテー",
+    "terms": [
+      "かじき",
+      "メカジキ",
+      "かじきソテー"
+    ]
+  },
+  {
+    "foodCode": "VMSI",
+    "canonical": "シェイク（ホイップクリームあり）",
+    "terms": [
+      "フローズンドリンク"
+    ]
+  },
+  {
+    "foodCode": "jpf1210",
+    "canonical": "くるみパン",
+    "terms": [
+      "胡桃パン",
+      "クルミパン"
+    ]
+  },
+  {
+    "foodCode": "SKIT",
+    "canonical": "ソフトキャンディ（ぷっちょ／ハイチュウなど）",
+    "terms": [
+      "プッチョ"
+    ]
+  },
+  {
+    "foodCode": "TUNP",
+    "canonical": "ツナとトマトのパスタ",
+    "terms": [
+      "ペンネ",
+      "スパゲティ",
+      "スパゲッティ"
+    ]
+  },
+  {
+    "foodCode": "jpd10810f",
+    "canonical": "かぼちゃサラダ",
+    "terms": [
+      "南瓜サラダ",
+      "カボチャサラダ",
+      "パンプキンサラダ"
+    ]
+  },
+  {
+    "foodCode": "CHSG",
+    "canonical": "チキン・ストロガノフ（ごはんなし）",
+    "terms": [
+      "チキンストロガノフ"
+    ]
+  },
+  {
+    "foodCode": "jpf15062",
+    "canonical": "そばボーロ／そばぼうろ",
+    "terms": [
+      "蕎麦ぼうろ"
+    ]
+  },
+  {
+    "foodCode": "VMSH",
+    "canonical": "シェイク（ホイップクリームなし）",
+    "terms": [
+      "ミルクセーキ",
+      "フローズンドリンク"
+    ]
+  }
+]

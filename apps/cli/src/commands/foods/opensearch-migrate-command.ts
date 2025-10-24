@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import { Client } from '@opensearch-project/opensearch';
 import * as dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
+import wanakana from 'wanakana';
 
 // Load environment variables
 const possiblePaths = [
@@ -193,10 +194,14 @@ const opensearchMigrate = {
           // Ignore parsing errors
         }
 
+        // Convert Japanese text to romaji for better cross-script search
+        const nameRomaji = wanakana.toRomaji(food.name || '');
+
         processedFoods.push({
           food_code: food.food_code,
           locale_id: food.locale_id,
           name: food.name || '',
+          name_romaji: nameRomaji, // Add romaji field for client-side transliteration
           description: food.simple_name || '',
           ready_meal_option: food.ready_meal_option || false,
           same_as_before_option: food.same_as_before_option || false,

@@ -44,6 +44,9 @@
     "test:integration": "pnpm --filter ./apps/{api,portal} test:integration",
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",
     "@types/node": "^22.15.29",

@@ -4,7 +4,9 @@
  * Configurable search pattern matching system
  */
 
+import opensearchConfig from '@intake24/api/config/opensearch';
 import searchPatternsConfig from '@intake24/api/config/search-patterns.json';
+import { normalizeForSearch, normalizeJapaneseText, toHiragana, toKatakana } from '@intake24/api/utils/japanese-normalizer';
 
 export interface WildcardPattern {
   type: 'prefix' | 'suffix' | 'contains';
@@ -39,6 +41,7 @@ export class SearchPatternMatcher {
   private patterns: SearchPattern[];
   private defaultStrategy: SearchStrategy;
   private triggerMap: Map<string, SearchPattern>;
+  private readonly synonymCanonicalMap: Map<string, string>;
 
   constructor(config?: SearchPatternConfig) {
     const configToUse = config || searchPatternsConfig as SearchPatternConfig;
@@ -50,8 +53,22 @@ export class SearchPatternMatcher {
     for (const pattern of this.patterns) {
       for (const trigger of pattern.triggers) {
         this.triggerMap.set(trigger, pattern);
+
+        const normalizedTrigger = normalizeJapaneseText(trigger);
+        if (normalizedTrigger && normalizedTrigger !== trigger)
+          this.triggerMap.set(normalizedTrigger, pattern);
+
+        const hiraganaTrigger = this.katakanaToHiragana(trigger);
+        if (hiraganaTrigger && !this.triggerMap.has(hiraganaTrigger))
+          this.triggerMap.set(hiraganaTrigger, pattern);
+
+        const katakanaTrigger = this.hiraganaToKatakana(trigger);
+        if (katakanaTrigger && !this.triggerMap.has(katakanaTrigger))
+          this.triggerMap.set(katakanaTrigger, pattern);
       }
     }
+
+    this.synonymCanonicalMap = this.buildSynonymCanonicalMap();
   }
 
   /**
@@ -59,17 +76,69 @@ export class SearchPatternMatcher {
    * This handles cases where users type in hiragana but content is in katakana
    */
   private hiraganaToKatakana(text: string): string {
-    return text.replace(/[\u3041-\u3096]/g, (match) => {
-      // Convert hiragana (3041-3096) to katakana (30A1-30F6)
-      return String.fromCharCode(match.charCodeAt(0) + 0x60);
-    });
+    return toKatakana(text);
+  }
+
+  private katakanaToHiragana(text: string): string {
+    return toHiragana(text);
+  }
+
+  private buildSynonymCanonicalMap(): Map<string, string> {
+    const map = new Map<string, string>();
+
+    const synonymLists: string[] = (opensearchConfig as any)?.japaneseIndexSettingsSudachi?.settings?.analysis?.filter?.synonym_graph_filter?.synonyms
+      ?? (opensearchConfig as any)?.japaneseIndexSettings?.settings?.analysis?.filter?.synonym_graph_filter?.synonyms
+      ?? [];
+
+    for (const entry of synonymLists) {
+      if (!entry)
+        continue;
+
+      const variants = entry.split(',').map(token => token.trim()).filter(Boolean);
+      if (variants.length === 0)
+        continue;
+
+      const canonical = normalizeJapaneseText(variants[0]);
+
+      for (const variant of variants) {
+        const normalizedVariant = normalizeJapaneseText(variant);
+        if (normalizedVariant && !map.has(normalizedVariant))
+          map.set(normalizedVariant, canonical);
+
+        // Also register katakana/hiragana normalized forms to improve lookups
+        const kanaVariant = normalizedVariant ? this.hiraganaToKatakana(this.katakanaToHiragana(normalizedVariant)) : normalizedVariant;
+        if (kanaVariant && !map.has(kanaVariant))
+          map.set(kanaVariant, canonical);
+      }
+    }
+
+    return map;
+  }
+
+  private resolveCanonicalSynonym(query: string): string | null {
+    const normalizedQuery = normalizeJapaneseText(query);
+    const direct = normalizedQuery ? this.synonymCanonicalMap.get(normalizedQuery) : null;
+    if (direct)
+      return direct;
+
+    const hiragana = this.katakanaToHiragana(normalizedQuery);
+    const hiraganaCanonical = this.synonymCanonicalMap.get(hiragana);
+    if (hiraganaCanonical)
+      return hiraganaCanonical;
+
+    const katakana = this.hiraganaToKatakana(normalizedQuery);
+    const katakanaCanonical = this.synonymCanonicalMap.get(katakana);
+    if (katakanaCanonical)
+      return katakanaCanonical;
+
+    return null;
   }
 
   /**
    * Find matching pattern for a query
    */
   findPattern(query: string): SearchPattern | null {
-    const q = (query || '').trim().normalize('NFKC');
+    const q = normalizeJapaneseText(query || '');
     const qLower = q.toLowerCase();
     // Direct trigger match
     const direct = this.triggerMap.get(q);
@@ -177,13 +246,21 @@ export class SearchPatternMatcher {
   } = {}): any {
     const { size = 20, from = 0, isJapanese = false } = options;
 
-    // For Japanese searches, also create a katakana version of the query
-    // This handles cases where users type in hiragana (びーる) but content is in katakana (ビール)
-    const katakanaQuery = isJapanese ? this.hiraganaToKatakana(query) : query;
-    const hasHiragana = isJapanese && query !== katakanaQuery;
+    const normalized = normalizeForSearch(query || '');
 
-    const charLen = [...query].length;
-    const pattern = this.findPattern(query);
+    // For Japanese searches, also create canonical script variants of the query
+    const searchQuery = isJapanese ? normalized.normalized : (query || '').trim();
+    const katakanaQuery = isJapanese ? normalized.katakana : searchQuery;
+    const hiraganaQuery = isJapanese ? normalized.hiragana : searchQuery;
+    const hasHiragana = isJapanese && searchQuery !== katakanaQuery;
+
+    // Detect if query is romaji (Latin alphabet)
+    const isRomaji = isJapanese && /^[a-z0-9\s\-/()（）%％]+$/i.test(searchQuery);
+
+    const charLen = [...searchQuery].length;
+    const pattern = this.findPattern(searchQuery);
+    const hasKatakana = /[\u30A0-\u30FF]/.test(searchQuery);
+    const canonicalSynonym = isJapanese ? this.resolveCanonicalSynonym(searchQuery) : null;
 
     // Base query clauses that apply to all searches
     const baseClauses = [
@@ -192,70 +269,243 @@ export class SearchPatternMatcher {
         term: {
           // Use keyword field for true exact match (no analyzer)
           'name.keyword': {
-            value: query,
-            boost: 50,
+            value: searchQuery,
+            boost: 30, // Reduced from 50 for better boost hierarchy
           },
         },
       },
-      // Priority 2: Exact phrase match - reduced boost for Japanese due to analyzer issues
+      // Priority 2: Exact phrase match - balanced boost across languages
       {
         match_phrase: {
           name: {
-            query,
-            boost: isJapanese ? 5 : 30, // Reduced for Japanese
+            query: searchQuery,
+            boost: 25, // Balanced boost for all languages (was: isJapanese ? 5 : 30)
           },
         },
       },
-      // Priority 3: All terms must match (AND) - reduced boost for Japanese
+      // Priority 3: All terms must match (AND) - improved boost for Japanese
       {
         match: {
           name: {
-            query,
+            query: searchQuery,
             operator: 'AND',
-            boost: isJapanese ? 3 : 20, // Reduced for Japanese
+            boost: isJapanese ? 12 : 18, // Improved from 1 to 12 for Japanese
           },
         },
       },
-      // Priority 4: Standard match - reduced boost for Japanese
+      // Priority 4: Standard match - improved boost for Japanese
       {
         match: {
           name: {
-            query,
+            query: searchQuery,
             minimum_should_match: '85%',
-            boost: isJapanese ? 2 : 15, // Reduced for Japanese
+            boost: isJapanese ? 10 : 15, // Improved from 0.5 to 10 for Japanese
           },
         },
       },
-      // Priority 5: Multi-match - reduced boost for Japanese due to analyzer issues
+      // Priority 5: Multi-match - heavily reduced boost for Japanese due to morpheme tokenization
+      // Note: name.ngram removed from general multi_match to prevent character-level partial matches
+      // It's now only used for short queries (2-3 chars) where substring matching is beneficial
+      // For Japanese, morpheme-based fields (name, name.reading) have very low boosts to prevent single-morpheme matches
       {
         multi_match: {
-          query,
+          query: searchQuery,
           fields: isJapanese
-            ? ['name^3', 'name.katakana^2.5', 'name.ngram^2', 'brand_names^2', 'description']
+            ? ['name^2', 'name_romaji^4', 'name.reading^2', 'name.katakana^3', 'name_synonyms^3.5', 'name_variants^2.5', 'brand_names^1', 'description^0.5']
             : ['name^3', 'brand_names^2', 'description'],
           type: 'best_fields',
-          boost: isJapanese ? 2 : 10, // Significantly reduced for Japanese
+          boost: isJapanese ? 2 : 10, // Heavily reduced for Japanese to prevent morpheme-level noise
         },
       },
     ];
 
+    if (isJapanese && searchQuery) {
+      baseClauses.push({
+        term: {
+          name_normalized: {
+            value: searchQuery,
+            boost: 28,
+          },
+        },
+      } as any);
+
+      const containsKana = /[\u3040-\u30FF]/.test(searchQuery);
+
+      if (containsKana) {
+        baseClauses.push({
+          term: {
+            'name_hiragana.keyword': {
+              value: hiraganaQuery,
+              boost: 26,
+            },
+          },
+        } as any);
+
+        baseClauses.push({
+          term: {
+            'name_katakana.keyword': {
+              value: katakanaQuery,
+              boost: 24,
+            },
+          },
+        } as any);
+
+        baseClauses.push({
+          term: {
+            'name_variants.keyword': {
+              value: hiraganaQuery,
+              boost: 20,
+            },
+          },
+        } as any);
+
+        baseClauses.push({
+          term: {
+            'name_variants.keyword': {
+              value: katakanaQuery,
+              boost: 19,
+            },
+          },
+        } as any);
+
+        baseClauses.push({
+          term: {
+            'name_synonyms.keyword': {
+              value: hiraganaQuery,
+              boost: 21,
+            },
+          },
+        } as any);
+
+        baseClauses.push({
+          term: {
+            'name_synonyms.keyword': {
+              value: katakanaQuery,
+              boost: 21,
+            },
+          },
+        } as any);
+      }
+
+      baseClauses.push({
+        match_phrase: {
+          name_variants: {
+            query: searchQuery,
+            boost: 18,
+          },
+        },
+      } as any);
+
+      baseClauses.push({
+        match: {
+          name_variants: {
+            query: searchQuery,
+            operator: 'AND',
+            boost: 14,
+          },
+        },
+      } as any);
+
+      baseClauses.push({
+        match_phrase: {
+          name_synonyms: {
+            query: searchQuery,
+            boost: 20,
+          },
+        },
+      } as any);
+
+      baseClauses.push({
+        term: {
+          'name_synonyms.keyword': {
+            value: searchQuery,
+            boost: 22,
+          },
+        },
+      } as any);
+    }
+
+    // DEBUG: Log query details for Japanese searches
+    if (isJapanese) {
+      console.log('[SEARCH DEBUG] Japanese query:', searchQuery, 'charLen:', charLen, 'hasHiragana:', hasHiragana);
+      const matchedPattern = this.findPattern(searchQuery);
+      console.log('[SEARCH DEBUG] Matched pattern:', matchedPattern ? matchedPattern.id : 'defaultStrategy');
+    }
+
     // Add pattern-specific wildcard clauses
-    const wildcardClauses = this.buildWildcardClauses(query);
+    const wildcardClauses = this.buildWildcardClauses(searchQuery);
+    if (isJapanese) {
+      console.log('[SEARCH DEBUG] Wildcard clauses count:', wildcardClauses.length);
+      if (wildcardClauses.length > 0) {
+        console.log('[SEARCH DEBUG] First wildcard:', JSON.stringify(wildcardClauses[0]));
+      }
+    }
     const allClauses = [...baseClauses, ...wildcardClauses];
 
     // For Japanese: Add enhanced matching for better compound word support
     if (isJapanese) {
-      // Check if query contains katakana
-      const hasKatakana = /[\u30A0-\u30FF]/.test(query);
+      // Special handling for romaji queries
+      if (isRomaji) {
+        // Boost romaji field heavily for romaji queries
+        allClauses.push({
+          match: {
+            name_romaji: {
+              query: searchQuery,
+              boost: 22, // Balanced boost for direct romaji matching (was 40)
+              operator: 'AND',
+            },
+          },
+        });
 
+        // Also try fuzzy matching for romaji (handles minor typos)
+        allClauses.push({
+          match: {
+            name_romaji: {
+              query: searchQuery,
+              boost: 18, // Reduced from 25 for better balance
+              fuzziness: 'AUTO',
+            },
+          },
+        });
+
+        // Reading field might also contain romaji-like representations
+        allClauses.push({
+          match: {
+            'name.reading': {
+              query: searchQuery,
+              boost: 15, // Reduced from 20 for better hierarchy
+            },
+          },
+        });
+
+        allClauses.push({
+          match: {
+            name_synonyms: {
+              query: searchQuery,
+              boost: 16,
+            },
+          },
+        } as any);
+      }
       // For katakana queries, prioritize wildcard matching due to analyzer issues
       if (hasKatakana) {
+        // CRITICAL: Add exact term match on brand_names
+        allClauses.push({
+          term: {
+            'brand_names.keyword': {
+              value: searchQuery,
+              boost: 100, // Highest boost for exact brand name matches
+            },
+          },
+        });
+
         // Primary: Wildcard for exact substring matching (most reliable)
+        // CRITICAL: High boost to prioritize exact phrase/substring matches
         allClauses.push({
           wildcard: {
             'name.keyword': {
-              value: `*${query}*`,
-              boost: 35,
+              value: `*${searchQuery}*`,
+              boost: 80, // Dramatically increased from 20 to dominate morpheme matches
             },
           },
         });
@@ -264,19 +514,50 @@ export class SearchPatternMatcher {
         allClauses.push({
           wildcard: {
             'name.keyword': {
-              value: `*${query}`,
-              boost: 30,
+              value: `*${searchQuery}`,
+              boost: 70, // Increased from 18
             },
           },
         });
+
+        // IMPROVEMENT: Add prefix wildcard for partial matching
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `${searchQuery}*`, // Prefix match for compound words
+              boost: 75, // Increased from 20
+            },
+          },
+        });
+      }
+
+      if (canonicalSynonym) {
+        // Ensure canonical term gets high weight in substring matches as well
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `*${canonicalSynonym}*`,
+              boost: 20, // Reduced from 32 for consistency
+            },
+          },
+        });
+
+        allClauses.push({
+          term: {
+            'name_synonyms.keyword': {
+              value: canonicalSynonym,
+              boost: 24,
+            },
+          },
+        } as any);
       }
 
       // Add katakana field search if available (after reindexing)
       allClauses.push({
         match: {
           'name.katakana': {
-            query,
-            boost: 15,
+            query: searchQuery,
+            boost: 15, // Keep at 15 for standard katakana field matching
             // No analyzer specified - use the field's configured analyzer
           },
         },
@@ -288,8 +569,8 @@ export class SearchPatternMatcher {
         if (mmIndex >= 0) {
           allClauses[mmIndex] = {
             multi_match: {
-              query,
-              fields: ['name^4', 'name.katakana^3', 'brand_names^2'],
+              query: searchQuery,
+              fields: ['name^4', 'name_romaji^4.5', 'name.reading^3.5', 'name.katakana^3', 'brand_names^2'],
               type: 'best_fields',
               boost: 2,
               // Don't specify analyzer - let the field's configured search_analyzer be used
@@ -298,14 +579,36 @@ export class SearchPatternMatcher {
         }
       }
 
-      // If user typed in hiragana, convert to katakana and search
+      // IMPROVEMENT (Priority 2A & 2B): Bidirectional kana matching with fuzzy support
       if (hasHiragana) {
+        // CRITICAL: Add exact term match on brand_names for foods with alternative spellings
+        // Example: "みそしる" query matches brand_name "みそしる" in instant miso soup
+        allClauses.push({
+          term: {
+            'brand_names.keyword': {
+              value: hiraganaQuery,
+              boost: 100, // Highest boost for exact brand name matches
+            },
+          },
+        });
+
+        // Also match katakana version in brand_names
+        allClauses.push({
+          term: {
+            'brand_names.keyword': {
+              value: katakanaQuery,
+              boost: 100,
+            },
+          },
+        });
+
         // Preserve wildcard matches for the original hiragana input to support mixed-script documents
+        // CRITICAL: High boost to prioritize exact phrase/substring matches over morpheme-level matches
         allClauses.push({
           wildcard: {
             'name.keyword': {
-              value: `*${query}*`,
-              boost: 35,
+              value: `*${hiraganaQuery}*`,
+              boost: 80, // Dramatically increased from 20 to dominate morpheme matches
             },
           },
         });
@@ -313,8 +616,18 @@ export class SearchPatternMatcher {
         allClauses.push({
           wildcard: {
             'name.keyword': {
-              value: `*${query}`,
-              boost: 30,
+              value: `*${hiraganaQuery}`,
+              boost: 70, // Increased from 18
+            },
+          },
+        });
+
+        // Add prefix wildcard for compound words
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `${hiraganaQuery}*`, // Prefix match
+              boost: 75, // Increased from 20
             },
           },
         });
@@ -324,17 +637,27 @@ export class SearchPatternMatcher {
           wildcard: {
             'name.keyword': {
               value: `*${katakanaQuery}*`,
-              boost: 35,
+              boost: 85, // Increased from 22 - highest boost for cross-script matching
             },
           },
         });
 
-        // Also try prefix matching
+        // Also try prefix matching for katakana
         allClauses.push({
           wildcard: {
             'name.keyword': {
               value: `*${katakanaQuery}`,
-              boost: 30,
+              boost: 72, // Increased from 20
+            },
+          },
+        });
+
+        // Add prefix wildcard for katakana compounds
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `${katakanaQuery}*`, // Prefix match
+              boost: 78, // Increased from 22
             },
           },
         });
@@ -344,33 +667,86 @@ export class SearchPatternMatcher {
           match: {
             'name.katakana': {
               query: katakanaQuery,
-              boost: 20,
+              boost: 18, // Reduced from 20
             },
           },
         });
+
+        // NEW: Add fuzzy matching for long hiragana queries (handles typos like "おうるすぱいす")
+        if (charLen > 6) {
+          allClauses.push({
+            match: {
+              name: {
+                query: hiraganaQuery,
+                fuzziness: 'AUTO', // Allows 1-2 character differences
+                boost: 10,
+              },
+            },
+          });
+
+          // Also try fuzzy matching with katakana conversion
+          allClauses.push({
+            match: {
+              'name.katakana': {
+                query: katakanaQuery,
+                fuzziness: 'AUTO',
+                boost: 12,
+              },
+            },
+          });
+        }
       }
 
-      // For short queries (2-3 characters), add additional matching strategies
+      // IMPROVEMENT (Priority 1A): N-gram for short queries only (2-3 chars)
+      // For 4+ character queries, wildcard substring matching is more accurate
       if (charLen <= 3 && charLen >= 2) {
-        // Use ngram field for substring matching
+        // Use ngram field for substring matching - critical for very short partial matching
         allClauses.push({
           match: {
             'name.ngram': {
-              query,
-              boost: 12,
+              query: searchQuery,
+              boost: 6, // Reduced from 12/10 to prevent single-char morpheme noise
             },
           },
         });
 
-        // Also add prefix matching for Japanese short queries
+        // IMPROVEMENT (Priority 1C): Enhanced prefix matching for all short queries
         allClauses.push({
           prefix: {
             'name.keyword': {
-              value: query,
-              boost: 8,
+              value: searchQuery,
+              boost: charLen <= 3 ? 15 : 12, // Higher boost for very short queries
             },
           },
         });
+
+        // Also add wildcard prefix for better compound matching
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `${searchQuery}*`,
+              boost: charLen <= 3 ? 18 : 15, // IMPROVEMENT: Higher boost for prefix wildcards
+            },
+          },
+        });
+
+        allClauses.push({
+          prefix: {
+            'name_variants.keyword': {
+              value: searchQuery,
+              boost: charLen <= 3 ? 14 : 12,
+            },
+          },
+        } as any);
+
+        allClauses.push({
+          prefix: {
+            'name_synonyms.keyword': {
+              value: searchQuery,
+              boost: charLen <= 3 ? 16 : 13,
+            },
+          },
+        } as any);
       }
     }
 
@@ -380,15 +756,77 @@ export class SearchPatternMatcher {
       allClauses.push({
         match: {
           'name.substring': {
-            query,
+            query: searchQuery,
             boost: 8,
           },
         },
       });
     }
 
+    const phraseMustClauses: any[] = [];
+    const seenPhraseClauses = new Set<string>();
+    const registerPhraseClause = (clause: Record<string, any>) => {
+      const key = JSON.stringify(clause);
+      if (seenPhraseClauses.has(key))
+        return;
+
+      seenPhraseClauses.add(key);
+      phraseMustClauses.push(clause);
+    };
+
+    const registerMatchPhrase = (field: string, phrase: string, boost: number) => {
+      const normalizedPhrase = (phrase || '').trim();
+
+      if (!normalizedPhrase)
+        return;
+
+      registerPhraseClause({
+        match_phrase: {
+          [field]: {
+            query: normalizedPhrase,
+            boost,
+          },
+        },
+      });
+    };
+
+    const enforcePhraseGate = !isJapanese
+      ? true
+      : (isRomaji || charLen >= 3 || !!canonicalSynonym);
+
+    if (enforcePhraseGate) {
+      if (isJapanese) {
+        if (isRomaji)
+          registerMatchPhrase('name_romaji', searchQuery, 22);
+        else
+          registerMatchPhrase('name', hiraganaQuery, 15);
+
+        const hasKanaCharacters = hasHiragana || hasKatakana;
+
+        if (hasKanaCharacters) {
+          registerMatchPhrase('name.reading', katakanaQuery, 16);
+          registerMatchPhrase('name.katakana', katakanaQuery, 16);
+        }
+
+        if (hasHiragana && katakanaQuery !== hiraganaQuery)
+          registerMatchPhrase('name', katakanaQuery, 12);
+
+        if (canonicalSynonym) {
+          registerMatchPhrase('name', canonicalSynonym, 22);
+          registerMatchPhrase('name_synonyms', canonicalSynonym, 24);
+          const canonicalKatakana = this.hiraganaToKatakana(canonicalSynonym);
+          registerMatchPhrase('name.katakana', canonicalKatakana, 18);
+          registerMatchPhrase('name.reading', canonicalKatakana, 18);
+          registerMatchPhrase('name_synonyms', canonicalKatakana, 20);
+        }
+      }
+      else {
+        registerMatchPhrase('name', searchQuery, 30);
+      }
+    }
+
     // Explicitly promote 中華まん when searching for 中華
-    const p = this.findPattern(query);
+    const p = this.findPattern(searchQuery);
     if (p?.id === 'chinese') {
       allClauses.push({
         match_phrase: {
@@ -400,7 +838,7 @@ export class SearchPatternMatcher {
       });
     }
 
-    const rescoreBoost = this.getRescoreBoost(query);
+    const rescoreBoost = this.getRescoreBoost(searchQuery);
 
     // Pattern-specific hard constraints for beer to guarantee relevance
     let beerMust: any | null = null;
@@ -445,6 +883,26 @@ export class SearchPatternMatcher {
       },
     ];
 
+    if (isJapanese && charLen <= 2 && searchQuery) {
+      functions.push({
+        filter: {
+          prefix: {
+            'name.keyword': searchQuery,
+          },
+        },
+        weight: 25,
+      });
+
+      functions.push({
+        filter: {
+          prefix: {
+            'name_synonyms.keyword': searchQuery,
+          },
+        },
+        weight: 20,
+      });
+    }
+
     // Boost adjustments for Chinese query relevance
     // NOTE: OpenSearch doesn't support negative weights in function_score
     // Instead, we boost relevant items and rely on relative scoring
@@ -468,11 +926,27 @@ export class SearchPatternMatcher {
     }
 
     // Build the core bool query
-    const coreBool: any = { should: allClauses, minimum_should_match: 1 };
+    const mustClauses: any[] = [];
+
+    if (phraseMustClauses.length > 0) {
+      mustClauses.push({
+        bool: {
+          should: phraseMustClauses,
+          minimum_should_match: 1,
+        },
+      });
+    }
+
     if (beerMust)
-      coreBool.must = coreBool.must ? coreBool.must.concat(beerMust) : [beerMust];
+      mustClauses.push(beerMust);
+
+    const coreBool: any = { should: allClauses, minimum_should_match: 1 };
+
+    if (mustClauses.length > 0)
+      coreBool.must = mustClauses;
+
     if (beerMustNot.length > 0)
-      coreBool.must_not = coreBool.must_not ? coreBool.must_not.concat(beerMustNot) : beerMustNot;
+      coreBool.must_not = beerMustNot;
 
     return {
       size,
@@ -483,7 +957,7 @@ export class SearchPatternMatcher {
           // Boost by popularity and apply optional penalties
           functions,
           score_mode: 'sum',
-          boost_mode: 'sum',
+          boost_mode: 'multiply', // Changed from 'sum' to 'multiply' - popularity should multiply relevance, not add to it
         },
       },
       // Rescore to ensure exact matches are at the top
@@ -494,12 +968,12 @@ export class SearchPatternMatcher {
             bool: {
               should: [
                 // Heavily boost exact phrase matches with Japanese analyzer
-                { match_phrase: { name: { query, boost: 5 } } },
+                { match_phrase: { name: { query: searchQuery, boost: 5 } } },
                 // Also boost items that end with the search term
                 {
                   wildcard: {
                     'name.keyword': {
-                      value: `*${query}`,
+                      value: `*${searchQuery}`,
                       boost: 3,
                     },
                   },
@@ -507,11 +981,11 @@ export class SearchPatternMatcher {
                 // For Japanese, boost items containing the exact term in katakana field
                 ...(isJapanese
                   ? [
-                      { match: { name: { query, boost: 4 } } },
+                      { match: { name: { query: searchQuery, boost: 4 } } },
                       {
                         match: {
                           'name.katakana': {
-                            query,
+                            query: katakanaQuery,
                             boost: 5,
                           },
                         },
@@ -527,7 +1001,7 @@ export class SearchPatternMatcher {
       },
       // Add minimum score threshold to filter out noise
       // Use pattern-driven minScore; avoid overly strict katakana threshold
-      min_score: this.getMinScore(query),
+      min_score: this.getMinScore(searchQuery),
       // Highlight matching terms
       highlight: {
         fields: {
@@ -561,6 +1035,18 @@ export class SearchPatternMatcher {
     // Update trigger map
     for (const trigger of pattern.triggers) {
       this.triggerMap.set(trigger, pattern);
+
+      const normalizedTrigger = normalizeJapaneseText(trigger);
+      if (normalizedTrigger && normalizedTrigger !== trigger)
+        this.triggerMap.set(normalizedTrigger, pattern);
+
+      const hiraganaTrigger = this.katakanaToHiragana(trigger);
+      if (hiraganaTrigger && !this.triggerMap.has(hiraganaTrigger))
+        this.triggerMap.set(hiraganaTrigger, pattern);
+
+      const katakanaTrigger = this.hiraganaToKatakana(trigger);
+      if (katakanaTrigger && !this.triggerMap.has(katakanaTrigger))
+        this.triggerMap.set(katakanaTrigger, pattern);
     }
   }
 
@@ -573,6 +1059,18 @@ export class SearchPatternMatcher {
       // Remove from trigger map
       for (const trigger of pattern.triggers) {
         this.triggerMap.delete(trigger);
+
+        const normalizedTrigger = normalizeJapaneseText(trigger);
+        if (normalizedTrigger)
+          this.triggerMap.delete(normalizedTrigger);
+
+        const hiraganaTrigger = this.katakanaToHiragana(trigger);
+        if (hiraganaTrigger)
+          this.triggerMap.delete(hiraganaTrigger);
+
+        const katakanaTrigger = this.hiraganaToKatakana(trigger);
+        if (katakanaTrigger)
+          this.triggerMap.delete(katakanaTrigger);
       }
       // Remove from patterns array
       this.patterns = this.patterns.filter(p => p.id !== id);

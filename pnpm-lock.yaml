@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      xlsx:
+        specifier: ^0.18.5
+        version: 0.18.5
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^4.13.2
@@ -631,6 +635,9 @@ importers:
       sequelize-typescript:
         specifier: ^2.1.6
         version: 2.1.6(@types/node@22.17.2)(@types/validator@13.15.2)(reflect-metadata@0.2.2)(sequelize@6.37.7(mariadb@3.4.5)(pg-hstore@2.3.4)(pg@8.16.3)(tedious@18.6.1))
+      wanakana:
+        specifier: ^5.3.1
+        version: 5.3.1
       web-push:
         specifier: ^3.6.7
         version: 3.6.7
@@ -9880,6 +9887,7 @@ packages:
   sitemap@8.0.0:
     resolution: {integrity: sha512-+AbdxhM9kJsHtruUF39bwS/B0Fytw6Fr1o4ZAIAEqA6cke2xcoO2GleBw9Zw7nRzILVEgz7zBM5GiTJjie1G9A==}
     engines: {node: '>=14.0.0', npm: '>=6.0.0'}
+    deprecated: 'SECURITY: Multiple vulnerabilities fixed in 8.0.1 (XML injection, path traversal, command injection, protocol injection). Upgrade immediately: npm install sitemap@8.0.1'
     hasBin: true
 
   slash@3.0.0:
@@ -11142,6 +11150,10 @@ packages:
 
   walker@1.0.8:
     resolution: {integrity: sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==}
+
+  wanakana@5.3.1:
+    resolution: {integrity: sha512-OSDqupzTlzl2LGyqTdhcXcl6ezMiFhcUwLBP8YKaBIbMYW1wAwDvupw2T9G9oVaKT9RmaSpyTXjxddFPUcFFIw==}
+    engines: {node: '>=12'}
 
   watchpack@2.4.4:
     resolution: {integrity: sha512-c5EGNOiyxxV5qmTtAB7rbiXxi1ooX1pQKMLX/MIabJjRA0SJBQOjKF+KSVfHkr9U1cADPon0mRiVe/riyaiDUA==}
@@ -23074,6 +23086,8 @@ snapshots:
   walker@1.0.8:
     dependencies:
       makeerror: 1.0.12
+
+  wanakana@5.3.1: {}
 
   watchpack@2.4.4:
     dependencies:

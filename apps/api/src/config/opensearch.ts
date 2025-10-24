@@ -1,3 +1,86 @@
+import generatedSynonyms from '../../../../data/japanese/generated_synonyms.json';
+
+type GeneratedSynonymGroup = {
+  foodCode: string;
+  canonical: string;
+  terms: string[];
+};
+
+const generatedSynonymGroups = generatedSynonyms as GeneratedSynonymGroup[];
+
+const generatedSynonymStrings = Array.from(
+  new Set(
+    generatedSynonymGroups
+      .map(({ canonical, terms }) => {
+        const cleaned = [canonical, ...terms]
+          .map(term => (term || '').trim())
+          .filter(Boolean);
+        if (cleaned.length <= 1)
+          return null;
+        return Array.from(new Set(cleaned)).join(',');
+      })
+      .filter((entry): entry is string => entry !== null),
+  ),
+);
+
+const baseJapaneseSynonyms = [
+  // Beer variations
+  'ビール,ビア,麦酒,クラフトビール,地ビール,beer,craft beer',
+  '発泡酒,第3のビール,第三のビール,新ジャンル',
+  '黒ビール,スタウト,ダークビール',
+
+  // Rice variations - comprehensive mappings
+  '白飯,白ご飯,白ごはん,お白飯,おしろめし,white rice',
+  'ご飯,ごはん,御飯,おごはん,米飯,ライス,飯,めし,メシ,ゴハン,rice',
+  '米飯,ご飯,ごはん,御飯,ライス,rice',
+  '玄米,げんまい,玄米ご飯,玄米ごはん',
+  '赤飯,せきはん,お赤飯,おせきはん',
+  '炊き込みご飯,炊き込みごはん,たきこみごはん,炊込みご飯,炊込みごはん',
+  'チャーハン,炒飯,焼き飯,やきめし,焼飯,fried rice',
+  'おにぎり,お握り,御握り,にぎり飯,おむすび,御結び,rice ball',
+
+  // Soup variations
+  '味噌汁,みそ汁,みそしる,お味噌汁,おみそしる,miso soup',
+  'スープ,すーぷ,汁物,しるもの,soup',
+
+  // Noodle variations
+  'ラーメン,拉麺,らーめん,中華そば,中華麺,ramen',
+  'うどん,饂飩,ウドン,udon',
+  'そば,蕎麦,ソバ,soba',
+  'パスタ,スパゲッティ,スパゲティ,pasta,spaghetti',
+  '焼きそば,やきそば,ヤキソバ,yakisoba',
+  'つけ麺,つけめん,ツケメン,tsukemen',
+  '寿司,すし,鮨,スシ,SUSHI,sushi',
+  '刺身,さしみ,お刺身,おさしみ,sashimi',
+  '巻き寿司,まきずし,巻寿司,マキズシ',
+  'ちらし寿司,ちらしずし,チラシズシ,chirashi',
+  'いなり寿司,いなりずし,稲荷寿司,イナリズシ',
+  '天ぷら,てんぷら,天麩羅,天婦羅,テンプラ,tempura',
+  '肉,にく,ミート,お肉,おにく,meat',
+  '牛肉,ぎゅうにく,ビーフ,beef',
+  '豚肉,ぶたにく,ポーク,pork',
+  '鶏肉,とりにく,チキン,chicken',
+  '野菜,やさい,ベジタブル,お野菜,おやさい,vegetable',
+  '魚,さかな,フィッシュ,お魚,おさかな,fish',
+  '鮭,さけ,サケ,サーモン,しゃけ,salmon',
+  'まぐろ,マグロ,鮪,ツナ,tuna',
+  'パン,ぱん,ブレッド,食パン,しょくパン,bread',
+  '白パン,しろパン,ホワイトブレッド,white bread',
+  '卵,たまご,玉子,エッグ,タマゴ,egg',
+  '卵焼き,玉子焼き,たまごやき,だし巻き卵,tamagoyaki',
+  'カレー,かれー,カレーライス,curry',
+  'カレーライス,カレー,curry rice',
+  '弁当,べんとう,お弁当,おべんとう,ベントウ,bento',
+  '幕の内弁当,まくのうちべんとう,幕の内,makunouchi',
+  'とんかつ,トンカツ,豚カツ,tonkatsu',
+  '親子丼,おやこどん,オヤコドン,oyakodon',
+  '牛丼,ぎゅうどん,ギュウドン,gyudon',
+  '海鮮丼,かいせんどん,カイセンドン,kaisendon',
+  'すき焼き,すきやき,スキヤキ,sukiyaki',
+];
+
+const combinedJapaneseSynonyms = Array.from(new Set([...baseJapaneseSynonyms, ...generatedSynonymStrings]));
+
 export default {
   host: process.env.OPENSEARCH_HOST || 'https://localhost:9200',
   username: process.env.OPENSEARCH_USERNAME || 'admin',
@@ -161,7 +244,7 @@ export default {
           ja_reading: {
             type: 'custom',
             tokenizer: 'kuromoji_user_dict',
-            char_filter: ['icu_nfkc_cf'],
+            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
             filter: [
               'kuromoji_readingform',
               'lowercase',
@@ -172,7 +255,7 @@ export default {
           ja_reading_romaji: {
             type: 'custom',
             tokenizer: 'kuromoji_user_dict',
-            char_filter: ['icu_nfkc_cf'],
+            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
             filter: [
               'reading_romaji',
               'lowercase',
@@ -230,81 +313,7 @@ export default {
           synonym_graph_filter: {
             type: 'synonym_graph',
             lenient: true,
-            synonyms: [
-              // Beer variations
-              'ビール,ビア,麦酒,クラフトビール,地ビール,beer,craft beer',
-              '発泡酒,第3のビール,第三のビール,新ジャンル',
-              '黒ビール,スタウト,ダークビール',
-
-              // Rice variations - comprehensive mappings
-              '白飯,白ご飯,白ごはん,お白飯,おしろめし,white rice',
-              'ご飯,ごはん,御飯,おごはん,米飯,ライス,飯,めし,メシ,ゴハン,rice',
-              '米飯,ご飯,ごはん,御飯,ライス,rice',
-              '玄米,げんまい,玄米ご飯,玄米ごはん',
-              '赤飯,せきはん,お赤飯,おせきはん',
-              '炊き込みご飯,炊き込みごはん,たきこみごはん,炊込みご飯,炊込みごはん',
-              'チャーハン,炒飯,焼き飯,やきめし,焼飯,fried rice',
-              'おにぎり,お握り,御握り,にぎり飯,おむすび,御結び,rice ball',
-
-              // Soup variations
-              '味噌汁,みそ汁,みそしる,お味噌汁,おみそしる,miso soup',
-              'スープ,すーぷ,汁物,しるもの,soup',
-
-              // Noodle variations
-              'ラーメン,拉麺,らーめん,中華そば,中華麺,ramen',
-              'うどん,饂飩,ウドン,udon',
-              'そば,蕎麦,ソバ,soba',
-              'パスタ,スパゲッティ,スパゲティ,pasta,spaghetti',
-              '焼きそば,やきそば,ヤキソバ,yakisoba',
-              'つけ麺,つけめん,ツケメン,tsukemen',
-
-              // Sushi variations
-              '寿司,すし,鮨,スシ,SUSHI,sushi',
-              '刺身,さしみ,お刺身,おさしみ,sashimi',
-              '巻き寿司,まきずし,巻寿司,マキズシ',
-              'ちらし寿司,ちらしずし,チラシズシ,chirashi',
-              'いなり寿司,いなりずし,稲荷寿司,イナリズシ',
-
-              // Tempura variations
-              '天ぷら,てんぷら,天麩羅,天婦羅,テンプラ,tempura',
-
-              // Meat variations
-              '肉,にく,ミート,お肉,おにく,meat',
-              '牛肉,ぎゅうにく,ビーフ,beef',
-              '豚肉,ぶたにく,ポーク,pork',
-              '鶏肉,とりにく,チキン,chicken',
-
-              // Vegetable variations
-              '野菜,やさい,ベジタブル,お野菜,おやさい,vegetable',
-
-              // Fish variations
-              '魚,さかな,フィッシュ,お魚,おさかな,fish',
-              '鮭,さけ,サケ,サーモン,しゃけ,salmon',
-              'まぐろ,マグロ,鮪,ツナ,tuna',
-
-              // Bread variations
-              'パン,ぱん,ブレッド,食パン,しょくパン,bread',
-              '白パン,しろパン,ホワイトブレッド,white bread',
-
-              // Egg variations
-              '卵,たまご,玉子,エッグ,タマゴ,egg',
-              '卵焼き,玉子焼き,たまごやき,だし巻き卵,tamagoyaki',
-
-              // Curry variations
-              'カレー,かれー,カレーライス,curry',
-              'カレーライス,カレー,curry rice',
-
-              // Bento variations
-              '弁当,べんとう,お弁当,おべんとう,ベントウ,bento',
-              '幕の内弁当,まくのうちべんとう,幕の内,makunouchi',
-
-              // Popular dishes
-              'とんかつ,トンカツ,豚カツ,tonkatsu',
-              '親子丼,おやこどん,オヤコドン,oyakodon',
-              '牛丼,ぎゅうどん,ギュウドン,gyudon',
-              '海鮮丼,かいせんどん,カイセンドン,kaisendon',
-              'すき焼き,すきやき,スキヤキ,sukiyaki',
-            ],
+            synonyms: combinedJapaneseSynonyms,
           },
         },
       },
@@ -335,6 +344,41 @@ export default {
               analyzer: 'ja_ngram', // Edge n-gram for substring matching
               search_analyzer: 'ja_ngram_query',
             },
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_normalized: {
+          type: 'keyword',
+        },
+        name_hiragana: {
+          type: 'text',
+          analyzer: 'ja_search',
+          search_analyzer: 'ja_query',
+          fields: {
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_katakana: {
+          type: 'text',
+          analyzer: 'ja_katakana',
+          search_analyzer: 'ja_katakana',
+          fields: {
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_variants: {
+          type: 'text',
+          analyzer: 'ja_search',
+          search_analyzer: 'ja_query',
+          fields: {
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_synonyms: {
+          type: 'text',
+          analyzer: 'ja_search',
+          search_analyzer: 'ja_query',
+          fields: {
             keyword: { type: 'keyword' },
           },
         },
@@ -491,7 +535,7 @@ export default {
           ja_sudachi_index: {
             type: 'custom',
             tokenizer: 'sudachi_tokenizer',
-            char_filter: ['icu_nfkc_cf'],
+            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
             filter: [
               'sudachi_baseform',
               'sudachi_split_a',
@@ -502,7 +546,7 @@ export default {
           ja_sudachi_query: {
             type: 'custom',
             tokenizer: 'sudachi_tokenizer',
-            char_filter: ['icu_nfkc_cf'],
+            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
             filter: [
               'sudachi_baseform',
               'sudachi_split_a',
@@ -514,7 +558,7 @@ export default {
           ja_sudachi_reading: {
             type: 'custom',
             tokenizer: 'sudachi_tokenizer',
-            char_filter: ['icu_nfkc_cf'],
+            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
             filter: [
               'sudachi_readingform_ja',
               'lowercase',
@@ -534,7 +578,7 @@ export default {
           ja_katakana: {
             type: 'custom',
             tokenizer: 'sudachi_tokenizer',
-            char_filter: ['icu_nfkc_cf'],
+            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
             filter: [
               'sudachi_baseform',
               'lowercase',
@@ -584,54 +628,7 @@ export default {
           synonym_graph_filter: {
             type: 'synonym_graph',
             lenient: true,
-            synonyms: [
-              'ビール,ビア,麦酒,クラフトビール,地ビール,beer,craft beer',
-              '発泡酒,第3のビール,第三のビール,新ジャンル',
-              '黒ビール,スタウト,ダークビール',
-              '白飯,白ご飯,白ごはん,お白飯,おしろめし,white rice',
-              'ご飯,ごはん,御飯,おごはん,米飯,ライス,飯,めし,メシ,ゴハン,rice',
-              '米飯,ご飯,ごはん,御飯,ライス,rice',
-              '玄米,げんまい,玄米ご飯,玄米ごはん',
-              '赤飯,せきはん,お赤飯,おせきはん',
-              '炊き込みご飯,炊き込みごはん,たきこみごはん,炊込みご飯,炊込みごはん',
-              'チャーハン,炒飯,焼き飯,やきめし,焼飯,fried rice',
-              'おにぎり,お握り,御握り,にぎり飯,おむすび,御結び,rice ball',
-              '味噌汁,みそ汁,みそしる,お味噌汁,おみそしる,miso soup',
-              'スープ,すーぷ,汁物,しるもの,soup',
-              'ラーメン,拉麺,らーめん,中華そば,中華麺,ramen',
-              'うどん,饂飩,ウドン,udon',
-              'そば,蕎麦,ソバ,soba',
-              'パスタ,スパゲッティ,スパゲティ,pasta,spaghetti',
-              '焼きそば,やきそば,ヤキソバ,yakisoba',
-              'つけ麺,つけめん,ツケメン,tsukemen',
-              '寿司,すし,鮨,スシ,SUSHI,sushi',
-              '刺身,さしみ,お刺身,おさしみ,sashimi',
-              '巻き寿司,まきずし,巻寿司,マキズシ',
-              'ちらし寿司,ちらしずし,チラシズシ,chirashi',
-              'いなり寿司,いなりずし,稲荷寿司,イナリズシ',
-              '天ぷら,てんぷら,天麩羅,天婦羅,テンプラ,tempura',
-              '肉,にく,ミート,お肉,おにく,meat',
-              '牛肉,ぎゅうにく,ビーフ,beef',
-              '豚肉,ぶたにく,ポーク,pork',
-              '鶏肉,とりにく,チキン,chicken',
-              '野菜,やさい,ベジタブル,お野菜,おやさい,vegetable',
-              '魚,さかな,フィッシュ,お魚,おさかな,fish',
-              '鮭,さけ,サケ,サーモン,しゃけ,salmon',
-              'まぐろ,マグロ,鮪,ツナ,tuna',
-              'パン,ぱん,ブレッド,食パン,しょくパン,bread',
-              '白パン,しろパン,ホワイトブレッド,white bread',
-              '卵,たまご,玉子,エッグ,タマゴ,egg',
-              '卵焼き,玉子焼き,たまごやき,だし巻き卵,tamagoyaki',
-              'カレー,かれー,カレーライス,curry',
-              'カレーライス,カレー,curry rice',
-              '弁当,べんとう,お弁当,おべんとう,ベントウ,bento',
-              '幕の内弁当,まくのうちべんとう,幕の内,makunouchi',
-              'とんかつ,トンカツ,豚カツ,tonkatsu',
-              '親子丼,おやこどん,オヤコドン,oyakodon',
-              '牛丼,ぎゅうどん,ギュウドン,gyudon',
-              '海鮮丼,かいせんどん,カイセンドン,kaisendon',
-              'すき焼き,すきやき,スキヤキ,sukiyaki',
-            ],
+            synonyms: combinedJapaneseSynonyms,
           },
         },
       },
@@ -662,6 +659,48 @@ export default {
               analyzer: 'ja_ngram',
               search_analyzer: 'ja_ngram_query',
             },
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_normalized: {
+          type: 'keyword',
+        },
+        name_hiragana: {
+          type: 'text',
+          analyzer: 'ja_sudachi_index',
+          search_analyzer: 'ja_sudachi_query',
+          fields: {
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_katakana: {
+          type: 'text',
+          analyzer: 'ja_katakana',
+          search_analyzer: 'ja_katakana',
+          fields: {
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_variants: {
+          type: 'text',
+          analyzer: 'ja_sudachi_index',
+          search_analyzer: 'ja_sudachi_query',
+          fields: {
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_synonyms: {
+          type: 'text',
+          analyzer: 'ja_sudachi_index',
+          search_analyzer: 'ja_sudachi_query',
+          fields: {
+            keyword: { type: 'keyword' },
+          },
+        },
+        name_romaji: {
+          type: 'text',
+          analyzer: 'standard',
+          fields: {
             keyword: { type: 'keyword' },
           },
         },
