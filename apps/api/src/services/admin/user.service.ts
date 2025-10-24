@@ -24,9 +24,10 @@ export type CreateUserOptions = {
 function adminUserService({
   aclConfig,
   cache,
+  commsService,
   db,
   scheduler,
-}: Pick<IoC, 'aclConfig' | 'cache' | 'db' | 'scheduler'>) {
+}: Pick<IoC, 'aclConfig' | 'cache' | 'commsService' | 'db' | 'scheduler'>) {
   /**
    * Flush user ACL cache by user ID
    *
@@ -227,13 +228,17 @@ function adminUserService({
       return user;
     });
 
+    const promises: Promise<any>[] = [];
     const { email } = user;
-    if (notify && email) {
-      await scheduler.jobs.addJob({
-        type: 'UserEmailVerificationNotification',
-        params: { email, userAgent },
-      });
+    if (email) {
+      promises.push(commsService.subscribe('support', { email, name: user.name ?? undefined }));
+
+      if (notify) {
+        promises.push(scheduler.jobs.addJob({ type: 'UserEmailVerificationNotification', params: { email, userAgent } }));
+      }
     }
+
+    await Promise.all(promises);
 
     return user;
   };

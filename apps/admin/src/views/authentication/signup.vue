@@ -102,7 +102,7 @@
               </v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-checkbox-btn
+              <v-checkbox
                 v-model="data.terms"
                 :error-messages="errors.get('terms')"
                 hide-details="auto"
@@ -123,7 +123,7 @@
                     </template>
                   </i18n-t>
                 </template>
-              </v-checkbox-btn>
+              </v-checkbox>
             </v-col>
           </v-row>
           <v-row justify="center">

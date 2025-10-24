@@ -29,6 +29,59 @@ Captcha provider to use. Captcha will be disabled if left empty.
 - type: `string`
 - default: `''`
 
+## Communications
+
+Provides email communications functionality via third-party providers.
+
+### Provider
+
+Communications provider to use. Communications will be disabled if left empty.
+
+- object-path: `comms.provider`
+- dotenv var: `COMMS_PROVIDER`
+- type: `string`
+- default: `null`
+
+### Email Blaster
+
+Provides email communications via [Email Blaster](https://emailblaster.cloud).
+
+### URL
+
+Base URL for Email Blaster API.
+
+- object-path: `comms.emailBlaster.url`
+- dotenv var: `COMMS_EMAIL_BLASTER_URL`
+- type: `string`
+- default: `'https://api.emailblaster.cloud/2.0'`
+
+#### API key
+
+API key for Email Blaster.
+
+- object-path: `comms.emailBlaster.apiKey`
+- dotenv var: `COMMS_EMAIL_BLASTER_API_KEY`
+- type: `string`
+- default: `''`
+
+#### Newsletter ID
+
+Newsletter list ID for general communications.
+
+- object-path: `comms.emailBlaster.lists.newsletter`
+- dotenv var: `COMMS_EMAIL_BLASTER_NEWSLETTER`
+- type: `string`
+- default: `''`
+
+#### Support ID
+
+Support list ID for support-related communications.
+
+- object-path: `comms.emailBlaster.lists.support`
+- dotenv var: `COMMS_EMAIL_BLASTER_SUPPORT`
+- type: `string`
+- default: `''`
+
 ## Web-push
 
 Provides web-push functionality for supported browsers.

@@ -1,9 +1,9 @@
-import type { Captcha } from '@intake24/api/config';
+import type { CaptchaConfig } from '@intake24/api/config';
 import { captcha } from '@intake24/api/http/rules';
 
 describe('captcha middleware', () => {
   it('should pass when re-captcha disabled', async () => {
-    const config: Captcha = {
+    const config: CaptchaConfig = {
       provider: null,
       secret: 'aSuperSecret',
     };
@@ -13,7 +13,7 @@ describe('captcha middleware', () => {
   });
 
   it('should fail when token is not string', async () => {
-    const config: Captcha = {
+    const config: CaptchaConfig = {
       provider: 're-captcha',
       secret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
     };
@@ -29,7 +29,7 @@ describe('captcha middleware', () => {
   });
 
   it('should fail when token is missing', async () => {
-    const config: Captcha = {
+    const config: CaptchaConfig = {
       provider: 're-captcha',
       secret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
     };
@@ -45,7 +45,7 @@ describe('captcha middleware', () => {
   });
 
   it('should fail when secret is invalid', async () => {
-    const config: Captcha = {
+    const config: CaptchaConfig = {
       provider: 're-captcha',
       secret: 'invalidSecret',
     };
@@ -61,7 +61,7 @@ describe('captcha middleware', () => {
   });
 
   it('should pass token challenge', async () => {
-    const config: Captcha = {
+    const config: CaptchaConfig = {
       provider: 're-captcha',
       secret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
     };
