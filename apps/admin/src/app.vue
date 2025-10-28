@@ -58,7 +58,10 @@
             </v-list-item>
           </template>
           <v-list-item link prepend-icon="fas fa-upload" :to="{ name: 'import' }">
-            <v-list-item-title>{{ $t('io.import') }}</v-list-item-title>
+            <v-list-item-title>{{ $t('io.import._') }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item link prepend-icon="fas fa-download" :to="{ name: 'export' }">
+            <v-list-item-title>{{ $t('io.export._') }}</v-list-item-title>
           </v-list-item>
         </v-list-group>
       </v-list>

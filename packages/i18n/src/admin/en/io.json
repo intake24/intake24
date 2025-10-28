@@ -1,4 +1,41 @@
 {
   "_": "Import/export",
-  "import": "Import package"
+  "import": {
+    "_": "Import package",
+    "pageTitle": "Import food database package"
+  },
+  "export": {
+    "_": "Export package",
+    "pageTitle": "Export food database package",
+    "activeJobs": {
+      "_": "Active and recent exports",
+      "jobId": "Job ID",
+      "startedAt": "Started",
+      "action": "Action",
+      "status": {
+        "_": "Status",
+        "successful": "Completed",
+        "failed": "Failed",
+        "inProgress": "In progress"
+      }
+    },
+    "noActiveJobs": "No recent exports",
+    "requestExport": "Request new export",
+    "exportButtonLabel": "Request export",
+    "format": {
+      "_": "Export format",
+      "default": "Default (JSON)",
+      "xlsx": "MS Excel (XLSX)"
+    },
+    "locales": "Locales to include",
+    "includeOptions": {
+      "_": "Data to include",
+      "foods": "Food list",
+      "categories": "Category list",
+      "portionSizeMethods": "Quantification (portion size estimation)",
+      "associatedFoodPrompts": "Associated food prompts",
+      "asServedImages": "As served images",
+      "guideImages": "Guide images "
+    }
+  }
 }

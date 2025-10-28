@@ -182,6 +182,10 @@ export const PackageVerification = z.object({
   importId: z.string().uuid(),
 });
 
+export const PackageExport = z.object({});
+
+export const PackageConversionToXlsx = z.object({});
+
 export const jobParams = z.object({
   CleanRedisStore,
   CleanStorageFiles,
@@ -211,6 +215,8 @@ export const jobParams = z.object({
   UserEmailVerificationNotification,
   UserPasswordResetNotification,
   PackageVerification,
+  PackageExport,
+  PackageConversionToXlsx,
 });
 export type JobParams = z.infer<typeof jobParams>;
 
@@ -345,6 +351,8 @@ export type UserJob = (typeof userJobs)[number];
 
 export const ioJobs = [
   'PackageVerification',
+  'PackageExport',
+  'PackageConversionToXlsx',
 ] as const;
 export type IOJob = (typeof ioJobs)[number];
 

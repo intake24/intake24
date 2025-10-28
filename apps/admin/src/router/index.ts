@@ -126,7 +126,13 @@ const routes: RouteRecordRaw[] = [
     path: '/import',
     name: 'import',
     component: views.importPackage,
-    meta: { module: { current: 'import' }, title: 'io.import' },
+    meta: { module: { current: 'import' }, title: 'io.import._' },
+  },
+  {
+    path: '/export',
+    name: 'export',
+    component: views.exportPackage,
+    meta: { module: { current: 'export' }, title: 'io.export._' },
   },
   {
     path: '/user',

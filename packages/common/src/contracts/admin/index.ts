@@ -5,6 +5,7 @@ import { foodThumbnailImages } from './fdbs/food-thumbnail-images.contract';
 import { feedbackScheme } from './feedback-scheme.contract';
 import { foodDb } from './food-db.contract';
 import images from './images';
+import { packageExport } from './io/package-export.contract';
 import { packageImport } from './io/package-import.contract';
 import { job } from './job.contract';
 import { languageTranslation } from './language-translation.contract';
@@ -49,6 +50,7 @@ export default {
   nutrientType,
   nutrientUnit,
   reference,
+  packageExport,
   packageImport,
   signInLog,
   signUp,
