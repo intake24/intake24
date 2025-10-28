@@ -37,7 +37,7 @@
     "sitemap": "^8.0.1"
   },
   "devDependencies": {
-    "@types/express": "^5.0.4",
+    "@types/express": "^5.0.5",
     "@types/fs-extra": "^11.0.4",
     "@types/morgan": "^1.9.10",
     "@types/nunjucks": "^3.2.6",
