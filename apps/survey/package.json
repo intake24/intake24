@@ -1,7 +1,7 @@
 {
   "name": "@intake24/survey",
   "type": "module",
-  "version": "2025.3",
+  "version": "2025.4",
   "private": true,
   "description": "Intake24 Survey App",
   "license": "Apache-2.0",
