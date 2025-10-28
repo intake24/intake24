@@ -39,13 +39,13 @@ function categoryContentsService({
   const getCategoryHeader = async (localeCode: string, code: string): Promise<CategoryHeader> => {
     const category = await Category.findOne({
       where: { code, localeId: localeCode },
-      attributes: ['id', 'code'],
+      attributes: ['id', 'code', 'name'],
     });
 
     if (!category)
       throw new NotFoundError(`Category ${code} not found`);
 
-    return { id: category.name, code, name: category.name };
+    return { id: category.id, code, name: category.name };
   };
 
   const getCategoryContents = async (localeCode: string, code: string): Promise<CategoryContents> => {
