@@ -9,6 +9,7 @@ export * from './feedback-schemes';
 export * from './foods';
 export * from './guide-images';
 export * from './image-maps';
+export * from './io';
 export * from './jobs';
 export * from './languages';
 export * from './locales';
