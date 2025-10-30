@@ -37,7 +37,7 @@
     "pluralize": "^8.0.0",
     "slugify": "^1.6.6",
     "validator": "^13.15.20",
-    "zod": "^3.25.76"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@simplewebauthn/server": "^13.2.2",
