@@ -102,7 +102,7 @@
                   :label="$t('fdbs.categories._')"
                   name="associatedCategoryCode"
                   :query="{ localeId }"
-                  readonly
+                  :readonly
                   resource="categories"
                   @update:model-value="clearFood"
                 >
@@ -120,7 +120,7 @@
                   :label="$t('fdbs.foods._')"
                   name="associatedFoodCode"
                   :query="{ localeId }"
-                  readonly
+                  :readonly
                   resource="foods"
                   @update:model-value="clearCategory"
                 >
