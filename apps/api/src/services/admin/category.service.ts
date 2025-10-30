@@ -78,6 +78,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
         'name',
         'hidden',
       ])
+      .distinct()
       .leftJoin('categoriesCategories as cc', 'categories.id', 'cc.subCategoryId')
       .where('categories.localeId', '=', localeId)
       .where(eb =>
