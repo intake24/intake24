@@ -94,11 +94,11 @@ export async function normalizeJapaneseFoodDocument(food: JapaneseFoodDocument):
 
   const variantSet = new Set<string>();
   if (nameVariants) {
-    nameVariants.filter(Boolean).forEach(value => variantSet.add(value));
+    nameVariants.filter(Boolean).forEach((value: string) => variantSet.add(value));
   }
   if (synonymList)
-    synonymList.forEach(value => variantSet.add(value));
-  existingSynonyms.forEach(value => variantSet.add(value));
+    synonymList.forEach((value: string) => variantSet.add(value));
+  existingSynonyms.forEach((value: string) => variantSet.add(value));
 
   const uniqueVariants = variantSet.size > 0 ? Array.from(variantSet) : undefined;
 
