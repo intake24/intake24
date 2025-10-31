@@ -1,0 +1,119 @@
+{
+  "description": "Search boost configuration for Japanese food search",
+  "version": "1.0.0",
+  "boosts": {
+    "exact": {
+      "keywordMatch": 200,
+      "phraseMatch": 180,
+      "normalizedMatch": 190
+    },
+    "match": {
+      "allTerms": {
+        "japanese": 12,
+        "default": 18
+      },
+      "standard": {
+        "japanese": 10,
+        "default": 15
+      },
+      "multiMatch": {
+        "japanese": 2,
+        "default": 10
+      }
+    },
+    "kana": {
+      "hiraganaKeyword": 26,
+      "katakanaKeyword": 24,
+      "variantKeyword": 20,
+      "variantKatakana": 19,
+      "phraseMatch": 18,
+      "matchAll": 14,
+      "katakanaField": 15
+    },
+    "synonym": {
+      "keywordMatch": 22,
+      "phraseMatch": 20,
+      "hiraganaKeyword": 21,
+      "katakanaKeyword": 21,
+      "canonicalWildcard": 20,
+      "canonicalKeyword": 24,
+      "prefixMatch": 16
+    },
+    "variant": {
+      "keywordMatch": 20,
+      "katakanaKeyword": 19,
+      "phraseMatch": 18,
+      "matchAll": 14
+    },
+    "wildcard": {
+      "substring": 80,
+      "suffix": 70,
+      "prefix": 75,
+      "hiraganaSubstring": 80,
+      "hiraganaSuffix": 70,
+      "hiraganaPrefix": 75,
+      "katakanaSubstring": 85,
+      "katakanaSuffix": 72,
+      "katakanaPrefix": 78,
+      "synonymSubstring": 20
+    },
+    "brandName": {
+      "exactMatch": 250,
+      "hiraganaMatch": 240,
+      "katakanaMatch": 240
+    },
+    "romaji": {
+      "matchAll": 22,
+      "fuzzy": 18,
+      "reading": 15,
+      "synonym": 16,
+      "phraseMatch": 22
+    },
+    "fuzzy": {
+      "longHiragana": 10,
+      "longKatakana": 12
+    },
+    "ngram": {
+      "threeChar": 6
+    },
+    "prefix": {
+      "keyword": 15,
+      "keywordWildcard": 18,
+      "variant": 14,
+      "synonym": 16
+    },
+    "rescore": {
+      "windowSize": 100,
+      "weights": {
+        "matchPhrase": 5,
+        "wildcardSuffix": 3,
+        "nameMatch": 4,
+        "katakanaMatch": 5
+      },
+      "queryWeight": 1,
+      "rescoreQueryWeight": 2.0
+    },
+    "functionScore": {
+      "popularityFactor": 0.15,
+      "popularityModifier": "log1p",
+      "scoreMode": "sum",
+      "boostMode": "multiply",
+      "shortQueryPrefixWeight": 25,
+      "shortQuerySynonymWeight": 20
+    },
+    "chinese": {
+      "mainDishBoost": 10.0,
+      "steamedBunBoost": 8.0,
+      "mapoBoost": 6.0,
+      "gyozaBoost": 5.0,
+      "friedRiceBoost": 5.0,
+      "tantanmenBoost": 5.0
+    }
+  },
+  "thresholds": {
+    "minCharForNgram": 3,
+    "maxCharForNgram": 3,
+    "minCharForFuzzy": 7,
+    "minCharForPhrase": 3
+  }
+}

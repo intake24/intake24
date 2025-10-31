@@ -17,6 +17,7 @@ export default async (cmd: ValidateEmbeddingsArgs): Promise<void> => {
     sampleSize = 100,
     fixErrors = false,
   } = cmd;
+  const expectedDimension = Number.parseInt(process.env.OPENSEARCH_EMBEDDING_DIMENSION || '768', 10);
 
   logger.info('Starting embedding validation', { localeId, sampleSize, fixErrors });
 
@@ -95,12 +96,12 @@ export default async (cmd: ValidateEmbeddingsArgs): Promise<void> => {
         }
 
         // 2. Check embedding dimensions
-        if (!Array.isArray(parsedEmbedding) || parsedEmbedding.length !== 384) {
+        if (!Array.isArray(parsedEmbedding) || parsedEmbedding.length !== expectedDimension) {
           validationResults.wrongDimensions++;
           validationResults.errors.push({
             type: 'WRONG_DIMENSIONS',
             foodCode: food_code,
-            details: `Expected 384 dimensions, got ${Array.isArray(parsedEmbedding) ? parsedEmbedding.length : 'not array'}`,
+            details: `Expected ${expectedDimension} dimensions, got ${Array.isArray(parsedEmbedding) ? parsedEmbedding.length : 'not array'}`,
           });
           continue;
         }

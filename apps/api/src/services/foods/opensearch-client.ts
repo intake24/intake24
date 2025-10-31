@@ -4,6 +4,10 @@ import config from '@intake24/api/config';
 import { SearchPatternMatcher } from '@intake24/api/services/search/search-pattern-matcher';
 import { normalizeJapaneseText } from '@intake24/api/utils/japanese-normalizer';
 import type { Logger } from '@intake24/common-backend';
+import { JapaneseQueryClassifier } from './query-classifier';
+import { SageMakerEmbeddingService } from './sagemaker-embedding-service';
+
+;
 
 export class OpenSearchClient {
   private client: Client;
@@ -11,12 +15,55 @@ export class OpenSearchClient {
   private readonly indexPrefix: string;
   private readonly japaneseIndex: string;
   private readonly patternMatcher: SearchPatternMatcher;
+  private readonly searchPipeline?: string;
+  private readonly ingestPipeline?: string;
+  private readonly neuralModelId?: string;
+  private readonly neuralField: string;
+  private readonly neuralK: number;
+  private readonly neuralBoost?: number;
+  private readonly sagemakerService?: SageMakerEmbeddingService;
+  private readonly enableHybridSearch: boolean;
+  private readonly embeddingField: string;
+  private readonly knnK: number;
+  private readonly knnBoost: number;
+  private readonly useRRF: boolean;
+  private readonly rrfSearchPipeline?: string;
+  private neuralSearchEnabled: boolean;
+  private readonly queryClassifier: JapaneseQueryClassifier;
 
   constructor({ logger }: { logger: Logger }) {
     this.logger = logger.child({ service: 'OpenSearchClient' });
     this.indexPrefix = config.opensearch.indexPrefix;
     this.japaneseIndex = config.opensearch.japaneseIndex;
     this.patternMatcher = new SearchPatternMatcher();
+    this.queryClassifier = new JapaneseQueryClassifier(); // Tier 3: Query classification
+    this.searchPipeline = config.opensearch.japaneseSearchPipeline || undefined;
+    this.ingestPipeline = config.opensearch.japaneseIngestPipeline || undefined;
+    this.neuralModelId = config.opensearch.japaneseNeuralModelId || undefined;
+    this.neuralField = config.opensearch.japaneseNeuralField || 'embedding';
+    this.neuralK = config.opensearch.japaneseNeuralK ?? 100;
+    this.neuralBoost = config.opensearch.japaneseNeuralBoost ?? 50;
+
+    // Initialize hybrid search configuration
+    this.enableHybridSearch = config.opensearch.enableHybridSearch;
+    this.embeddingField = config.opensearch.embeddingField;
+    this.knnK = config.opensearch.knnK;
+    this.knnBoost = config.opensearch.knnBoost;
+    this.useRRF = config.opensearch.useRRF ?? false;
+    this.rrfSearchPipeline = config.opensearch.rrfSearchPipeline || undefined;
+    this.neuralSearchEnabled = Boolean(this.neuralModelId);
+
+    // Initialize SageMaker service if endpoint is configured
+    if (config.opensearch.sagemakerRuriEndpoint) {
+      this.sagemakerService = new SageMakerEmbeddingService(
+        {
+          endpointName: config.opensearch.sagemakerRuriEndpoint,
+          region: config.opensearch.sagemakerRuriRegion,
+        },
+        logger,
+      );
+      this.logger.info('SageMaker RURI embedding service initialized');
+    }
 
     const clientOptions: ClientOptions = {
       node: config.opensearch.host,
@@ -31,6 +78,22 @@ export class OpenSearchClient {
 
     this.client = new Client(clientOptions);
     this.logger.info(`OpenSearch client initialized for ${config.opensearch.host}`);
+
+    if (this.neuralSearchEnabled) {
+      this.logger.info(
+        `Hybrid search enabled with model ${this.neuralModelId}${this.searchPipeline ? ` via search pipeline "${this.searchPipeline}"` : ''}`,
+      );
+    }
+    else {
+      this.logger.warn('Hybrid neural search not configured; falling back to lexical search only');
+    }
+
+    if (this.useRRF && this.rrfSearchPipeline) {
+      this.logger.info(`RRF (Reciprocal Rank Fusion) enabled via search pipeline "${this.rrfSearchPipeline}"`);
+    }
+
+    if (this.ingestPipeline)
+      this.logger.info(`Japanese ingest pipeline set to "${this.ingestPipeline}"`);
   }
 
   /**
@@ -130,7 +193,12 @@ export class OpenSearchClient {
         food,
       ]);
 
-      const response = await this.client.bulk({ body });
+      const bulkParams = { body } as any;
+
+      if (this.ingestPipeline)
+        bulkParams.pipeline = this.ingestPipeline;
+
+      const response = await this.client.bulk(bulkParams);
 
       if (response.body.errors) {
         const errors = response.body.items
@@ -157,9 +225,35 @@ export class OpenSearchClient {
     categories?: string[];
     tags?: string[];
   } = {}): Promise<any> {
+    return this.searchJapaneseFoodsInternal(query, options, true);
+  }
+
+  private async searchJapaneseFoodsInternal(query: string, options: {
+    limit?: number;
+    offset?: number;
+    categories?: string[];
+    tags?: string[];
+  } = {}, allowNeural: boolean): Promise<any> {
     const { limit = 50, offset = 0, categories, tags } = options;
+    const neuralActive = allowNeural && this.neuralSearchEnabled && Boolean(this.neuralModelId);
 
     try {
+      // Generate query embedding if hybrid search is enabled
+      let queryEmbedding: number[] | null = null;
+
+      if (this.enableHybridSearch && this.sagemakerService && query) {
+        const normalizedQuery = normalizeJapaneseText(query) || query.trim();
+        if (normalizedQuery) {
+          try {
+            queryEmbedding = await this.sagemakerService.generateEmbedding(normalizedQuery);
+            this.logger.debug(`Generated ${queryEmbedding.length}D embedding for query: "${normalizedQuery}"`);
+          }
+          catch (error) {
+            this.logger.error('Failed to generate query embedding, falling back to lexical search:', error);
+          }
+        }
+      }
+
       let body: any;
       const filterClauses: any[] = [];
 
@@ -175,12 +269,41 @@ export class OpenSearchClient {
         const queryForSearch = normalizedQuery || trimmedOriginal;
 
         if (queryForSearch) {
+          // Tier 3: Classify query and determine optimal kNN K value
+          const queryCharacteristics = this.queryClassifier.classify(queryForSearch);
+          const knnK = this.queryClassifier.getRecommendedKnnK(
+            queryCharacteristics,
+            this.knnK, // default K (100)
+            200, // category K
+          );
+
+          this.logger.debug(
+            `Query classification: ${JSON.stringify(queryCharacteristics)} → K=${knnK}`,
+          );
+
+          const neuralOptions = neuralActive && this.neuralModelId
+            ? {
+                field: this.neuralField,
+                modelId: this.neuralModelId,
+                queryText: queryForSearch,
+                k: this.neuralK,
+                boost: this.neuralBoost,
+              }
+            : null;
+
           // Use the configurable pattern matcher to build the complete search query
           body = this.patternMatcher.buildSearchQuery(queryForSearch, {
             size: limit,
             from: offset,
             isJapanese: true,
+            queryEmbedding, // Add query embedding for hybrid search
+            knnK, // Tier 3: Pass query-adaptive K value
+            neuralOptions,
           });
+
+          if (neuralActive) {
+            this.logger.debug(`Using hybrid search with model "${this.neuralModelId}" for query: "${queryForSearch}"`);
+          }
 
           if (filterClauses.length > 0) {
             const originalQuery = body.query.function_score.query;
@@ -218,10 +341,20 @@ export class OpenSearchClient {
         };
       }
 
-      const response = await this.client.search({
+      const searchParams: Record<string, any> = {
         index: this.japaneseIndex,
         body,
-      });
+      };
+
+      // Use RRF search pipeline if enabled, otherwise use default search pipeline
+      if (this.useRRF && this.rrfSearchPipeline) {
+        searchParams.search_pipeline = this.rrfSearchPipeline;
+      }
+      else if (this.searchPipeline) {
+        searchParams.search_pipeline = this.searchPipeline;
+      }
+
+      const response = await this.client.search(searchParams);
 
       return {
         total: typeof response.body.hits.total === 'object'
@@ -236,9 +369,33 @@ export class OpenSearchClient {
       };
     }
     catch (error) {
+      if (neuralActive && this.isNeuralDimensionMismatch(error)) {
+        this.logger.error(
+          'Neural search failed due to embedding dimension mismatch. Disabling neural clause and retrying without it.',
+          error,
+        );
+        this.neuralSearchEnabled = false;
+        return this.searchJapaneseFoodsInternal(query, options, false);
+      }
+
       this.logger.error('Failed to search Japanese foods:', error);
       throw error;
     }
+  }
+
+  private isNeuralDimensionMismatch(error: any): boolean {
+    if (!error)
+      return false;
+
+    const messages = [
+      error?.meta?.body?.error?.root_cause?.[0]?.reason,
+      error?.meta?.body?.error?.reason,
+      error?.body?.error?.root_cause?.[0]?.reason,
+      error?.body?.error?.reason,
+      error?.message,
+    ];
+
+    return messages.some(message => typeof message === 'string' && message.includes('invalid dimension'));
   }
 
   /**

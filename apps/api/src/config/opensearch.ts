@@ -30,8 +30,9 @@ const baseJapaneseSynonyms = [
   '黒ビール,スタウト,ダークビール',
 
   // Rice variations - comprehensive mappings
+  // Note: Removed short 2-char synonyms "めし,メシ" to prevent false positives (e.g., めじな matching)
   '白飯,白ご飯,白ごはん,お白飯,おしろめし,white rice',
-  'ご飯,ごはん,御飯,おごはん,米飯,ライス,飯,めし,メシ,ゴハン,rice',
+  'ご飯,ごはん,御飯,おごはん,米飯,ライス,飯,ゴハン,rice',
   '米飯,ご飯,ごはん,御飯,ライス,rice',
   '玄米,げんまい,玄米ご飯,玄米ごはん',
   '赤飯,せきはん,お赤飯,おせきはん',
@@ -81,6 +82,8 @@ const baseJapaneseSynonyms = [
 
 const combinedJapaneseSynonyms = Array.from(new Set([...baseJapaneseSynonyms, ...generatedSynonymStrings]));
 
+const embeddingDimension = Number.parseInt(process.env.OPENSEARCH_EMBEDDING_DIMENSION || '768', 10);
+
 export default {
   host: process.env.OPENSEARCH_HOST || 'https://localhost:9200',
   username: process.env.OPENSEARCH_USERNAME || 'admin',
@@ -89,18 +92,51 @@ export default {
   japaneseIndex: process.env.OPENSEARCH_JAPANESE_INDEX ||
     (process.env.NODE_ENV === 'development' ? 'intake24_foods_ja_dev' : 'intake24_foods_ja'),
   batchSize: Number.parseInt(process.env.OPENSEARCH_BATCH_SIZE || '500', 10),
+  japaneseSearchPipeline: process.env.OPENSEARCH_JAPANESE_SEARCH_PIPELINE,
+  japaneseNeuralModelId: process.env.OPENSEARCH_JAPANESE_NEURAL_MODEL_ID,
+  japaneseNeuralField: process.env.OPENSEARCH_JAPANESE_NEURAL_FIELD || 'embedding',
+  japaneseNeuralK: Number.parseInt(process.env.OPENSEARCH_JAPANESE_NEURAL_K || '100', 10),
+  japaneseNeuralBoost: process.env.OPENSEARCH_JAPANESE_NEURAL_BOOST
+    ? Number.parseFloat(process.env.OPENSEARCH_JAPANESE_NEURAL_BOOST)
+    : undefined,
+  japaneseIngestPipeline: process.env.OPENSEARCH_JAPANESE_INGEST_PIPELINE,
+
+  // SageMaker RURI configuration for hybrid search
+  sagemakerRuriEndpoint: process.env.SAGEMAKER_RURI_ENDPOINT,
+  sagemakerRuriRegion: process.env.SAGEMAKER_RURI_REGION || 'ap-northeast-1',
+
+  // Hybrid search configuration
+  enableHybridSearch: process.env.OPENSEARCH_ENABLE_HYBRID_SEARCH === 'true',
+  embeddingField: process.env.OPENSEARCH_EMBEDDING_FIELD || 'embedding',
+  embeddingDimension,
+  knnK: Number.parseInt(process.env.OPENSEARCH_KNN_K || '100', 10),
+  knnBoost: Number.parseFloat(process.env.OPENSEARCH_KNN_BOOST || '50'),
+
+  // RRF (Reciprocal Rank Fusion) configuration - requires OpenSearch 2.11+
+  useRRF: process.env.OPENSEARCH_USE_RRF === 'true',
+  rrfRankConstant: Number.parseInt(process.env.OPENSEARCH_RRF_RANK_CONSTANT || '60', 10),
+  rrfWindowSize: Number.parseInt(process.env.OPENSEARCH_RRF_WINDOW_SIZE || '100', 10),
+  rrfSearchPipeline: process.env.OPENSEARCH_RRF_SEARCH_PIPELINE || 'rrf-pipeline',
 
   // Index settings for Japanese
   japaneseIndexSettings: {
     settings: {
       number_of_shards: 1,
       number_of_replicas: 0,
+      index: {
+        max_ngram_diff: 3,
+      },
       analysis: {
         char_filter: {
           // ICU NFKC_CF normalizer - normalizes full/half width, punctuation variants
           icu_nfkc_cf: {
             type: 'icu_normalizer',
             name: 'nfkc_cf',
+          },
+          strip_spacing_marks: {
+            type: 'pattern_replace',
+            pattern: '[\\s\\u3000・･·∙•◦]',
+            replacement: '',
           },
           // Note: Honorific stripping removed to preserve words like "ごはん"
           // Previously stripped お/ご prefixes but caused issues with common words
@@ -213,7 +249,7 @@ export default {
           ja_search: {
             type: 'custom',
             tokenizer: 'kuromoji_user_dict',
-            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
+            char_filter: ['icu_nfkc_cf', 'strip_spacing_marks', 'katakana_to_hiragana_mapping'],
             filter: [
               'kuromoji_baseform',
               'kuromoji_part_of_speech',
@@ -228,7 +264,7 @@ export default {
           ja_query: {
             type: 'custom',
             tokenizer: 'kuromoji_user_dict',
-            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
+            char_filter: ['icu_nfkc_cf', 'strip_spacing_marks', 'katakana_to_hiragana_mapping'],
             filter: [
               'synonym_graph_filter',
               'kuromoji_baseform',
@@ -244,7 +280,7 @@ export default {
           ja_reading: {
             type: 'custom',
             tokenizer: 'kuromoji_user_dict',
-            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
+            char_filter: ['icu_nfkc_cf', 'strip_spacing_marks', 'katakana_to_hiragana_mapping'],
             filter: [
               'kuromoji_readingform',
               'lowercase',
@@ -255,7 +291,7 @@ export default {
           ja_reading_romaji: {
             type: 'custom',
             tokenizer: 'kuromoji_user_dict',
-            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
+            char_filter: ['icu_nfkc_cf', 'strip_spacing_marks', 'katakana_to_hiragana_mapping'],
             filter: [
               'reading_romaji',
               'lowercase',
@@ -280,17 +316,17 @@ export default {
           // N-gram analyzer for substring matching
           ja_ngram: {
             type: 'custom',
-            tokenizer: 'standard',
-            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
+            tokenizer: 'keyword',
+            char_filter: ['icu_nfkc_cf', 'strip_spacing_marks', 'katakana_to_hiragana_mapping'],
             filter: [
               'lowercase',
-              'edge_ngram_2_10',
+              'ngram_2_5',
             ],
           },
           ja_ngram_query: {
             type: 'custom',
-            tokenizer: 'standard',
-            char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
+            tokenizer: 'keyword',
+            char_filter: ['icu_nfkc_cf', 'strip_spacing_marks', 'katakana_to_hiragana_mapping'],
             filter: [
               'lowercase',
             ],
@@ -305,10 +341,10 @@ export default {
             type: 'kuromoji_readingform',
             use_romaji: true,
           },
-          edge_ngram_2_10: {
-            type: 'edge_ngram',
+          ngram_2_5: {
+            type: 'ngram',
             min_gram: 2,
-            max_gram: 10,
+            max_gram: 5,
           },
           synonym_graph_filter: {
             type: 'synonym_graph',
@@ -348,6 +384,9 @@ export default {
           },
         },
         name_normalized: {
+          type: 'keyword',
+        },
+        name_compact: {
           type: 'keyword',
         },
         name_hiragana: {
@@ -425,6 +464,10 @@ export default {
     settings: {
       number_of_shards: 1,
       number_of_replicas: 0,
+      index: {
+        knn: true, // Enable k-NN for semantic search
+        max_ngram_diff: 3,
+      },
       analysis: {
         char_filter: {
           icu_nfkc_cf: {
@@ -587,16 +630,16 @@ export default {
           },
           ja_ngram: {
             type: 'custom',
-            tokenizer: 'standard',
+            tokenizer: 'keyword',
             char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
             filter: [
               'lowercase',
-              'edge_ngram_2_10',
+              'ngram_2_5',
             ],
           },
           ja_ngram_query: {
             type: 'custom',
-            tokenizer: 'standard',
+            tokenizer: 'keyword',
             char_filter: ['icu_nfkc_cf', 'katakana_to_hiragana_mapping'],
             filter: [
               'lowercase',
@@ -620,10 +663,10 @@ export default {
             type: 'sudachi_readingform',
             use_romaji: true,
           },
-          edge_ngram_2_10: {
-            type: 'edge_ngram',
+          ngram_2_5: {
+            type: 'ngram',
             min_gram: 2,
-            max_gram: 10,
+            max_gram: 5,
           },
           synonym_graph_filter: {
             type: 'synonym_graph',
@@ -739,6 +782,19 @@ export default {
         salt: { type: 'float' },
         created_at: { type: 'date' },
         updated_at: { type: 'date' },
+        embedding: {
+          type: 'knn_vector',
+          dimension: embeddingDimension,
+          method: {
+            name: 'hnsw',
+            space_type: 'cosinesimil', // Cosine similarity for semantic search
+            engine: 'nmslib',
+            parameters: {
+              ef_construction: 128,
+              m: 16,
+            },
+          },
+        },
       },
     },
   },

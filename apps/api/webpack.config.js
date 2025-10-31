@@ -11,6 +11,13 @@ module.exports = (env) => {
   const inspectBreak = !!NODE_INSPECT_BREAK;
   const mode = NODE_ENV === 'test' ? 'none' : NODE_ENV;
 
+  const awsExternals = ({ request }, callback) => {
+    if (/^@aws-sdk\//.test(request) || /^@smithy\//.test(request)) {
+      return callback(null, `commonjs ${request}`);
+    }
+    return callback();
+  };
+
   const plugins = [
     new ForkTsCheckerWebpackPlugin({ typescript: { memoryLimit: 3072 } }),
     new WebpackBar({ name: 'Server' }),
@@ -44,7 +51,7 @@ module.exports = (env) => {
     optimization: {
       minimize: false,
     },
-    externals: [nodeExternals(), { sharp: 'commonjs sharp' }],
+    externals: [nodeExternals(), awsExternals, { sharp: 'commonjs sharp' }],
     externalsPresets: { node: true },
     resolve: {
       extensions: ['.tsx', '.ts', '.js', '.json'],

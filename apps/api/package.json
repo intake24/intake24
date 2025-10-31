@@ -31,6 +31,7 @@
     "test:integration:watch": "pnpm test:integration --watch"
   },
   "dependencies": {
+    "@aws-sdk/client-sagemaker-runtime": "^3.917.0",
     "@duosecurity/duo_universal": "^2.1.0",
     "@json2csv/node": "^7.0.6",
     "@json2csv/plainjs": "^7.0.6",
@@ -49,7 +50,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.1",
     "dotenv-expand": "^12.0.2",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",

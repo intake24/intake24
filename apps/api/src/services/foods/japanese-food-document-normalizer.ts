@@ -36,6 +36,10 @@ export async function normalizeJapaneseFoodDocument(food: JapaneseFoodDocument):
   const romajiSource = nameHiragana && nameHiragana.length > 0 ? nameHiragana : nameNormalized;
   const nameRomaji = hasName && romajiSource ? toRomaji(romajiSource) : undefined;
 
+  const existingSynonyms = Array.isArray(food.name_synonyms)
+    ? (food.name_synonyms as string[]).map(term => term?.trim()).filter(Boolean)
+    : [];
+
   const hasBrandNames = Array.isArray(food.brand_names);
   const normalizedBrandNames = hasBrandNames
     ? (food.brand_names as string[]).map(item => normalizeJapaneseText(item)).filter(Boolean)
@@ -45,10 +49,25 @@ export async function normalizeJapaneseFoodDocument(food: JapaneseFoodDocument):
     ? await generateJapaneseOrthographicVariants(nameValue!, 48)
     : undefined;
   const synonymGroup = foodCode ? synonymLookup.get(foodCode) : undefined;
-  const synonymCandidates = synonymGroup
+  const generatedSynonymCandidates = synonymGroup
     ? [synonymGroup.canonical, ...synonymGroup.terms]
     : [];
-  const normalizedSynonymsRaw = synonymCandidates
+  const combinedSynonymCandidates = [
+    ...existingSynonyms,
+    ...generatedSynonymCandidates,
+  ];
+  const normalizedSynonymsRaw = combinedSynonymCandidates
+    .flatMap((term) => {
+      const normalized = normalizeJapaneseText(term);
+      const outputs = new Set<string>();
+      if (term)
+        outputs.add(term);
+      if (normalized)
+        outputs.add(normalized);
+      return Array.from(outputs);
+    })
+    .filter(Boolean);
+  const normalizedExistingSynonyms = existingSynonyms
     .flatMap((term) => {
       const normalized = normalizeJapaneseText(term);
       const outputs = new Set<string>();
@@ -64,13 +83,13 @@ export async function normalizeJapaneseFoodDocument(food: JapaneseFoodDocument):
     ? Array.from(new Set(normalizedSynonymsRaw))
     : undefined;
 
-  if (synonymList) {
-    const romajiSynonyms = synonymList
-      .map(value => toRomaji(value))
-      .filter(romaji => !!romaji && !synonymList!.includes(romaji));
-
-    if (romajiSynonyms.length > 0)
-      synonymList = Array.from(new Set([...synonymList, ...romajiSynonyms]));
+  if (normalizedExistingSynonyms.length > 0) {
+    if (!synonymList)
+      synonymList = [];
+    for (const value of normalizedExistingSynonyms) {
+      if (!synonymList.includes(value))
+        synonymList.push(value);
+    }
   }
 
   const variantSet = new Set<string>();
@@ -79,8 +98,7 @@ export async function normalizeJapaneseFoodDocument(food: JapaneseFoodDocument):
   }
   if (synonymList)
     synonymList.forEach(value => variantSet.add(value));
-  if (nameRomaji)
-    variantSet.add(nameRomaji);
+  existingSynonyms.forEach(value => variantSet.add(value));
 
   const uniqueVariants = variantSet.size > 0 ? Array.from(variantSet) : undefined;
 
@@ -91,6 +109,7 @@ export async function normalizeJapaneseFoodDocument(food: JapaneseFoodDocument):
     ...(hasName && nameHiragana ? { name_hiragana: nameHiragana } : {}),
     ...(hasName && nameKatakana ? { name_katakana: nameKatakana } : {}),
     ...(hasName && nameRomaji ? { name_romaji: nameRomaji } : {}),
+    ...(hasName && nameNormalized ? { name_compact: nameNormalized.replace(/[\s・･·∙•◦]/g, '') } : {}),
     ...(hasBrandNames ? { brand_names: normalizedBrandNames } : {}),
     ...(synonymList && synonymList.length > 0 ? { name_synonyms: synonymList } : {}),
     ...(uniqueVariants && uniqueVariants.length > 0 ? { name_variants: uniqueVariants } : {}),

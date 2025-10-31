@@ -90,8 +90,8 @@ export class OpenSearchJapaneseService {
       offset = 0,
       categories,
       tags,
-      enablePhonetic = true,
-      enableSynonyms = true,
+      enablePhonetic: _enablePhonetic = true,
+      enableSynonyms: _enableSynonyms = true,
     } = options;
 
     const trimmedOriginalQuery = (query ?? '').trim();
@@ -99,19 +99,6 @@ export class OpenSearchJapaneseService {
     const startTime = Date.now();
 
     try {
-      // Build search fields based on options
-      const searchFields = ['name^3'];
-
-      if (enablePhonetic) {
-        searchFields.push('name.reading^2');
-      }
-
-      if (enableSynonyms) {
-        searchFields.push('name.synonym^2');
-      }
-
-      searchFields.push('description', 'brand_names');
-
       // Perform search
       const searchResult = await this.client.searchJapaneseFoods(normalizedQuery, {
         limit,

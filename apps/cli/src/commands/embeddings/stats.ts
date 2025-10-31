@@ -103,7 +103,9 @@ async function showGlobalStats(database: any, detailed: boolean, _logger: any): 
   if (detailed) {
     // Model usage statistics
     console.log('\n=== Model Usage ===');
-    console.log('Model: text-embedding-3-small (384 dimensions)');
+    const embeddingModel = process.env.OPENSEARCH_EMBEDDING_MODEL || 'cl-nagoya/ruri-v3-310m';
+    const embeddingDimension = Number.parseInt(process.env.OPENSEARCH_EMBEDDING_DIMENSION || '768', 10);
+    console.log(`Model: ${embeddingModel} (${embeddingDimension} dimensions)`);
 
     // Storage statistics
     const storageQuery = `

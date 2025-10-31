@@ -1,9 +1,10 @@
 import type { ClientOptions } from '@opensearch-project/opensearch';
+import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { Client } from '@opensearch-project/opensearch';
 import * as dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
-import wanakana from 'wanakana';
+import { normalizeJapaneseFoodDocument } from '@intake24/api/services/foods/japanese-food-document-normalizer';
 
 // Load environment variables
 const possiblePaths = [
@@ -50,12 +51,16 @@ const opensearchMigrate = {
       password: opensearchConfig.password,
       indexName: opensearchConfig.japaneseIndex, // Use index name from central config
     };
+    const embeddingField = opensearchConfig.embeddingField;
+    const embeddingDimension = opensearchConfig.embeddingDimension;
 
     console.log('OpenSearch Config:', {
       host: opensearchConfigLocal.host,
       username: opensearchConfigLocal.username,
       password: opensearchConfigLocal.password ? '***' : 'NOT SET',
       indexName: opensearchConfigLocal.indexName,
+      embeddingField,
+      embeddingDimension,
     });
 
     if (!opensearchConfigLocal.username || !opensearchConfigLocal.password) {
@@ -174,9 +179,61 @@ const opensearchMigrate = {
       // is not needed since we're using the central opensearch.ts configuration
       // which handles all the necessary analyzers and mappings
 
+      // Load embeddings data for hybrid search
+      const embeddingsPath = path.resolve(process.cwd(), '../../data/japanese/food_embeddings.json');
+      let embeddingsLookup: Map<string, number[]> = new Map();
+
+      try {
+        const embeddingsContent = fs.readFileSync(embeddingsPath, 'utf-8');
+        const embeddingsData = JSON.parse(embeddingsContent);
+        const rawEmbeddings = embeddingsData?.embeddings ?? embeddingsData;
+
+        if (!rawEmbeddings || typeof rawEmbeddings !== 'object') {
+          throw new Error('Embeddings file has unexpected format');
+        }
+
+        const normalisedEntries: [string, number[]][] = [];
+
+        for (const [code, value] of Object.entries(rawEmbeddings)) {
+          const vector = Array.isArray(value)
+            ? value
+            : Array.isArray((value as any)?.embedding)
+              ? (value as any).embedding
+              : undefined;
+
+          if (Array.isArray(vector) && vector.length > 0)
+            normalisedEntries.push([code, vector]);
+        }
+
+        embeddingsLookup = new Map(normalisedEntries);
+
+        const reportedDimension =
+          embeddingsData?.metadata?.dimension ??
+          (normalisedEntries.length > 0 ? normalisedEntries[0][1].length : undefined);
+
+        console.log(`✅ Loaded ${embeddingsLookup.size} embeddings from ${embeddingsPath}`);
+        console.log(`   Embedding dimensions: ${reportedDimension ?? 'unknown'}`);
+
+        if (
+          embeddingDimension &&
+          typeof reportedDimension === 'number' &&
+          reportedDimension !== embeddingDimension
+        ) {
+          console.warn(
+            `⚠️  Embedding dimension mismatch: expected ${embeddingDimension}, got ${reportedDimension}`,
+          );
+        }
+      }
+      catch (error) {
+        console.warn('⚠️  Could not load embeddings data:', error);
+        console.warn(`    Tried path: ${embeddingsPath}`);
+        console.warn('    Hybrid search will not be available without embeddings.');
+      }
+
       // Process foods in batches
       const processedFoods: any[] = [];
 
+      console.log('Processing food documents...');
       for (const food of foods as any[]) {
         // Parse JSON fields
         let altNames = {};
@@ -194,25 +251,50 @@ const opensearchMigrate = {
           // Ignore parsing errors
         }
 
-        // Convert Japanese text to romaji for better cross-script search
-        const nameRomaji = wanakana.toRomaji(food.name || '');
+        const brandNames = Array.from(
+          new Set(
+            Object.values(altNames)
+              .flat()
+              .map((value: any) => typeof value === 'string' ? value.trim() : '')
+              .filter(Boolean),
+          ),
+        );
 
-        processedFoods.push({
+        const manualSynonyms = new Set<string>();
+        if (brandNames.length > 0)
+          brandNames.forEach(value => manualSynonyms.add(value));
+        if (food.simple_name)
+          manualSynonyms.add(food.simple_name);
+
+        // Build document with synonyms
+        const baseDoc: any = {
           food_code: food.food_code,
           locale_id: food.locale_id,
           name: food.name || '',
-          name_romaji: nameRomaji, // Add romaji field for client-side transliteration
           description: food.simple_name || '',
           ready_meal_option: food.ready_meal_option || false,
           same_as_before_option: food.same_as_before_option || false,
           reasonable_amount: food.reasonable_amount || 0,
           use_in_recipes: food.use_in_recipes || 0,
-          popularity: Math.random() * 100, // Random popularity for testing
+          popularity: 0,
           categories: [],
           tags,
-          brand_names: Object.values(altNames).flat() || [],
+          brand_names: brandNames,
           created_at: new Date(),
-        });
+        };
+
+        if (manualSynonyms.size > 0)
+          baseDoc.name_synonyms = Array.from(manualSynonyms);
+
+        const normalizedDoc = await normalizeJapaneseFoodDocument(baseDoc);
+
+        // Add embedding for hybrid search if available
+        const embedding = embeddingsLookup.get(food.food_code);
+        if (embedding) {
+          (normalizedDoc as any)[embeddingField] = embedding;
+        }
+
+        processedFoods.push(normalizedDoc);
       }
 
       // Index foods in batches

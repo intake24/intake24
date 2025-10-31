@@ -45,10 +45,13 @@
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "openai": "^5.12.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",
+    "@aws-sdk/client-sagemaker-runtime": "^3.917.0",
     "@types/node": "^22.15.29",
     "@types/prompts": "^2.4.9",
     "axios": "^1.11.0",
