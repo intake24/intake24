@@ -31,10 +31,10 @@
     "express": "^5.1.0",
     "fs-extra": "^11.3.2",
     "helmet": "^8.1.0",
-    "jsdom": "^27.0.1",
+    "jsdom": "^27.1.0",
     "morgan": "^1.10.1",
     "nunjucks": "^3.2.4",
-    "sitemap": "^8.0.1"
+    "sitemap": "^8.0.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.5",
@@ -49,8 +49,8 @@
     "nodemon-webpack-plugin": "^4.8.2",
     "npm-run-all2": "^8.0.4",
     "resolve-url-loader": "^5.0.0",
-    "rimraf": "^6.0.1",
-    "sass": "^1.93.2",
+    "rimraf": "^6.1.0",
+    "sass": "^1.93.3",
     "supertest": "^7.1.4",
     "ts-loader": "^9.5.4",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
