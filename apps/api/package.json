@@ -90,7 +90,7 @@
     "validator": "^13.15.20",
     "web-push": "^3.6.7",
     "zod": "^3.25.76",
-    "zod-validation-error": "^3.5.3"
+    "zod-validation-error": "^4.0.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^10.1.0",
