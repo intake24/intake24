@@ -237,4 +237,8 @@ export default class Cache extends HasRedisClient {
 
     return freshData;
   }
+
+  async publish(channel: string, message: object) {
+    await this.redis.publish(channel, JSON.stringify(message));
+  }
 }

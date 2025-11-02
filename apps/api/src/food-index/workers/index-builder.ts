@@ -48,7 +48,7 @@ type IndexCommand = {
   rebuild?: boolean;
 };
 
-const foodIndex: FoodIndex = {};
+const index: FoodIndex = {};
 
 const logger = servicesLogger.child({ service: 'Food index' });
 
@@ -88,6 +88,11 @@ async function getLanguageBackendId(localeId: string): Promise<string> {
 
 // Building index for each locale
 async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
+  if (index[localeId]) {
+    logger.debug(`Cleaning previous index for locale: ${localeId}`);
+    delete index[localeId];
+  }
+
   const [
     foods,
     allCategories,
@@ -172,7 +177,7 @@ async function matchRecipeFoods(
   interpretedQuery: InterpretedPhrase,
   query: SearchQuery,
 ): Promise<FoodHeader[]> {
-  const localeIndex = foodIndex[query.parameters.localeId];
+  const localeIndex = index[query.parameters.localeId];
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
   const recipeFoodsTuples = localeIndex.foodIndex.recipeFoodsList;
@@ -228,7 +233,7 @@ function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchRe
 }
 
 async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
-  const localeIndex = foodIndex[query.parameters.localeId];
+  const localeIndex = index[query.parameters.localeId];
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
 
@@ -312,17 +317,10 @@ async function buildIndex() {
 
   logger.debug(`Enabled locales: ${JSON.stringify(enabledLocales)}`);
 
-  if (Object.keys(foodIndex).length !== 0 && enabledLocales.length !== 0) {
-    logger.debug(`Cleaning previous index: ${Object.keys(foodIndex)}`);
-    Object.keys(foodIndex).forEach((key) => {
-      delete foodIndex[key];
-    });
-  }
-
   // Ideally this needs to be done on parallel threads, not sure if worth it in node.js
   for (const localeId of enabledLocales) {
     logger.debug(`Indexing ${localeId}`);
-    foodIndex[localeId] = await buildIndexForLocale(localeId);
+    index[localeId] = await buildIndexForLocale(localeId);
   }
 
   parentPort.postMessage('ready');
@@ -342,13 +340,13 @@ async function buildIndex() {
             const setLocales = new Set(msg.locales);
             logger.debug(`Rebuilding index for ${msg.locales.length} locales`);
             for (const localeId of setLocales)
-              foodIndex[localeId] = await buildIndexForLocale(localeId);
+              index[localeId] = await buildIndexForLocale(localeId);
           }
           else {
             logger.debug('Rebuilding All indexes');
             for (const localeId of enabledLocales) {
               logger.debug(`Rebuilding All Indexes including: ${localeId}`);
-              foodIndex[localeId] = await buildIndexForLocale(localeId);
+              index[localeId] = await buildIndexForLocale(localeId);
             }
           }
           parentPort.postMessage({

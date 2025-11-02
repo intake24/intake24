@@ -7,13 +7,11 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
   private readonly cacheKey = 'locales-index';
 
   private readonly cache;
-  private readonly foodIndex;
 
-  constructor({ cache, logger, foodIndex }: Pick<IoC, 'cache' | 'logger' | 'foodIndex'>) {
+  constructor({ cache, logger }: Pick<IoC, 'cache' | 'logger'>) {
     super({ logger });
 
     this.cache = cache;
-    this.foodIndex = foodIndex;
   }
 
   /**
@@ -34,7 +32,7 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
       this.logger.info('Locale Ids for rebuilding:', locales);
       await Promise.all([
         this.cache.forget(this.cacheKey),
-        this.foodIndex.rebuild(locales.includes('all') ? undefined : locales),
+        this.cache.publish(this.cacheKey, locales),
       ]);
     }
     else {

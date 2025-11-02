@@ -55,6 +55,7 @@ import {
   Session,
   signInService,
   sourceImageService,
+  Subscriber,
   surveyService,
   surveySubmissionService,
   userService,
@@ -137,6 +138,7 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     rateLimiter: asClass(RateLimiter).singleton(),
     scheduler: asClass(Scheduler).singleton(),
     session: asClass(Session).singleton(),
+    subscriber: asClass(Subscriber).singleton(),
 
     jobsQueueHandler: asClass(JobsQueueHandler).singleton(),
     tasksQueueHandler: asClass(TasksQueueHandler).singleton(),

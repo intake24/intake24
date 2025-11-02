@@ -17,9 +17,6 @@ async function exitSignalHandler() {
 }
 
 export default async (ops: Ops): Promise<void> => {
-  // Cache
-  ioc.cradle.cache.init();
-
   // Databases
   await Promise.all([
     ioc.cradle.db.init(),
@@ -28,8 +25,14 @@ export default async (ops: Ops): Promise<void> => {
   if (ops.config.app.env === 'test')
     await ioc.cradle.db.sync(true);
 
+  // Cache
+  ioc.cradle.cache.init();
+
   // Local filesystem
   await ioc.cradle.filesystem.init();
+
+  // i18n translations
+  await ioc.cradle.i18nStore.init();
 
   // Mailer
   ioc.cradle.mailer.init();
@@ -40,14 +43,15 @@ export default async (ops: Ops): Promise<void> => {
   // Rate limiter
   ioc.cradle.rateLimiter.init();
 
-  // Scheduler
-  await ioc.cradle.scheduler.init();
-
   // Food indexing and searching
   await ioc.cradle.foodIndex.init();
 
-  // i18n translations
-  await ioc.cradle.i18nStore.init();
+  // Redis indexing
+  ioc.cradle.subscriber.init();
+  await ioc.cradle.subscriber.subscribe();
+
+  // Scheduler
+  await ioc.cradle.scheduler.init();
 
   // Exit signal handlers
   process.on('SIGINT', exitSignalHandler);
