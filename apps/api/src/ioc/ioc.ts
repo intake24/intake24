@@ -62,6 +62,7 @@ import type {
   Session,
   SignInService,
   SourceImageService,
+  Subscriber,
   SurveyService,
   SurveySubmissionService,
   UserService,
@@ -123,6 +124,7 @@ export interface IoC extends Jobs {
   rateLimiter: RateLimiter;
   scheduler: Scheduler;
   session: Session;
+  subscriber: Subscriber;
 
   // Queues
   jobsQueueHandler: JobsQueueHandler;
