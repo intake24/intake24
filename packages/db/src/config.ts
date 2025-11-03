@@ -40,6 +40,9 @@ export const databaseConfig: DatabaseConfig = {
       password: process.env.DB_DEV_FOODS_PASSWORD,
       dialect: (process.env.DB_DEV_FOODS_DRIVER || 'postgres') as Dialect,
       dialectOptions: dialectOptions[process.env.DB_DEV_FOODS_DRIVER as OpsDialect],
+      pool: {
+        max: process.env.DB_DEV_FOODS_POOL_MAX ? Number.parseInt(process.env.DB_DEV_FOODS_POOL_MAX, 10) : 10,
+      },
       debugQueryLimit: Number.parseInt(process.env.DB_DEV_FOODS_DEBUG_QUERY_LIMIT || '0', 10),
     },
     system: {
@@ -53,6 +56,9 @@ export const databaseConfig: DatabaseConfig = {
       password: process.env.DB_DEV_SYSTEM_PASSWORD ?? '',
       dialect: (process.env.DB_DEV_SYSTEM_DRIVER || 'postgres') as Dialect,
       dialectOptions: dialectOptions[process.env.DB_DEV_SYSTEM_DRIVER as OpsDialect],
+      pool: {
+        max: process.env.DB_DEV_SYSTEM_POOL_MAX ? Number.parseInt(process.env.DB_DEV_SYSTEM_POOL_MAX, 10) : 10,
+      },
       debugQueryLimit: Number.parseInt(process.env.DB_DEV_SYSTEM_DEBUG_QUERY_LIMIT || '0', 10),
     },
   },
@@ -68,6 +74,9 @@ export const databaseConfig: DatabaseConfig = {
       password: process.env.DB_TEST_FOODS_PASSWORD,
       dialect: (process.env.DB_TEST_FOODS_DRIVER || 'postgres') as Dialect,
       dialectOptions: dialectOptions[process.env.DB_TEST_FOODS_DRIVER as OpsDialect],
+      pool: {
+        max: process.env.DB_TEST_FOODS_POOL_MAX ? Number.parseInt(process.env.DB_TEST_FOODS_POOL_MAX, 10) : 10,
+      },
       debugQueryLimit: Number.parseInt(process.env.DB_TEST_FOODS_DEBUG_QUERY_LIMIT || '0', 10),
     },
     system: {
@@ -81,6 +90,9 @@ export const databaseConfig: DatabaseConfig = {
       password: process.env.DB_TEST_SYSTEM_PASSWORD,
       dialect: (process.env.DB_TEST_SYSTEM_DRIVER || 'postgres') as Dialect,
       dialectOptions: dialectOptions[process.env.DB_TEST_SYSTEM_DRIVER as OpsDialect],
+      pool: {
+        max: process.env.DB_TEST_SYSTEM_POOL_MAX ? Number.parseInt(process.env.DB_TEST_SYSTEM_POOL_MAX, 10) : 10,
+      },
       debugQueryLimit: Number.parseInt(process.env.DB_TEST_SYSTEM_DEBUG_QUERY_LIMIT || '0', 10),
     },
   },
@@ -94,6 +106,9 @@ export const databaseConfig: DatabaseConfig = {
       password: process.env.DB_FOODS_PASSWORD,
       dialect: (process.env.DB_FOODS_DRIVER || 'postgres') as Dialect,
       dialectOptions: dialectOptions[process.env.DB_FOODS_DRIVER as OpsDialect],
+      pool: {
+        max: process.env.DB_FOODS_POOL_MAX ? Number.parseInt(process.env.DB_FOODS_POOL_MAX, 10) : 10,
+      },
       debugQueryLimit: Number.parseInt(process.env.DB_FOODS_DEBUG_QUERY_LIMIT || '0', 10),
     },
     system: {
@@ -105,6 +120,9 @@ export const databaseConfig: DatabaseConfig = {
       password: process.env.DB_SYSTEM_PASSWORD,
       dialect: (process.env.DB_SYSTEM_DRIVER || 'postgres') as Dialect,
       dialectOptions: dialectOptions[process.env.DB_SYSTEM_DRIVER as OpsDialect],
+      pool: {
+        max: process.env.DB_SYSTEM_POOL_MAX ? Number.parseInt(process.env.DB_SYSTEM_POOL_MAX, 10) : 10,
+      },
       debugQueryLimit: Number.parseInt(process.env.DB_SYSTEM_DEBUG_QUERY_LIMIT || '0', 10),
     },
   },
