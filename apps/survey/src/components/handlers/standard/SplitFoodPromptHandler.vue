@@ -100,7 +100,7 @@ onMounted(() => {
     return;
   }
 
-  if (splits.value.suggestions.length === 1)
+  if (splits.value.suggestions.length <= 1)
     single();
 });
 </script>
