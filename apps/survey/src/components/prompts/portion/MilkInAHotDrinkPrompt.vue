@@ -43,14 +43,13 @@
             <v-radio v-for="option in localeOptions" :key="option.value" :value="option.value">
               <template #label>
                 {{ option.label }}
-                <template v-if="prompt.badges">
-                  <v-spacer />
-                  <quantity-badge
-                    :amount="option.value * parentServing"
-                    unit="ml"
-                    :valid="state.portionSize.milkVolumePercentage === option.value"
-                  />
-                </template>
+                <quantity-badge
+                  v-if="prompt.badges"
+                  :amount="option.value * parentServing"
+                  class="ms-2"
+                  unit="ml"
+                  :valid="state.portionSize.milkVolumePercentage === option.value"
+                />
               </template>
             </v-radio>
           </v-radio-group>
