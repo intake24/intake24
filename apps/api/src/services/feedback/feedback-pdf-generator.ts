@@ -1,8 +1,6 @@
-import type { CookieParam } from 'puppeteer';
-
+import type { CookieData } from 'puppeteer';
 import { Readable } from 'node:stream';
 import puppeteer from 'puppeteer';
-
 import type { PuppeteerOptions } from '@intake24/api/config';
 
 export default class FeedbackPdfGenerator {
@@ -10,7 +8,7 @@ export default class FeedbackPdfGenerator {
   readonly refreshCookie;
   readonly options;
 
-  constructor(url: string, cookie: CookieParam, options: PuppeteerOptions) {
+  constructor(url: string, cookie: CookieData, options: PuppeteerOptions) {
     this.url = url;
     this.refreshCookie = cookie;
     this.options = options;
@@ -25,8 +23,8 @@ export default class FeedbackPdfGenerator {
     const browser = await puppeteer.launch({ headless: this.options.headless, args });
 
     try {
+      await browser.setCookie(this.refreshCookie);
       const page = await browser.newPage();
-      await page.setCookie(this.refreshCookie);
       await page.emulateMediaType('print');
 
       if (this.options.lang) {
@@ -39,7 +37,7 @@ export default class FeedbackPdfGenerator {
 
       await page.goto(this.url, { waitUntil: 'networkidle0' });
 
-      return { browser, page };
+      return page;
     }
     catch (error) {
       await browser.close();
@@ -54,7 +52,7 @@ export default class FeedbackPdfGenerator {
    * @memberof FeedbackPdfGenerator
    */
   async getPdf() {
-    const { browser, page } = await this.loadFeedback();
+    const page = await this.loadFeedback();
 
     const pdfBuffer = await page.pdf({
       format: 'a4',
@@ -62,7 +60,7 @@ export default class FeedbackPdfGenerator {
       printBackground: true,
     });
 
-    await browser.close();
+    await page.browser().close();
 
     return pdfBuffer;
   }
@@ -74,7 +72,7 @@ export default class FeedbackPdfGenerator {
    * @memberof FeedbackPdfGenerator
    */
   async getPdfStream() {
-    const { browser, page } = await this.loadFeedback();
+    const page = await this.loadFeedback();
 
     const pdfWebStream = await page.createPDFStream({
       format: 'a4',
@@ -86,10 +84,10 @@ export default class FeedbackPdfGenerator {
 
     pdfBuffer
       .on('end', async () => {
-        await browser.close();
+        await page.browser().close();
       })
       .on('error', async () => {
-        await browser.close();
+        await page.browser().close();
       });
 
     return pdfBuffer;
@@ -102,7 +100,7 @@ export default class FeedbackPdfGenerator {
    * @memberof FeedbackPdfGenerator
    */
   async getPdfFile(path: string) {
-    const { browser, page } = await this.loadFeedback();
+    const page = await this.loadFeedback();
 
     await page.pdf({
       path,
@@ -111,7 +109,7 @@ export default class FeedbackPdfGenerator {
       printBackground: true,
     });
 
-    await browser.close();
+    await page.browser().close();
 
     return path;
   }

@@ -1,8 +1,6 @@
-import type { CookieParam, CookieSameSite } from 'puppeteer';
+import type { CookieData, CookieSameSite } from 'puppeteer';
 import { resolve } from 'node:path';
-
 import { URL, URLSearchParams } from 'node:url';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { btoa, getFrontEndUrl } from '@intake24/api/util';
@@ -12,7 +10,6 @@ import type { Subject } from '@intake24/common/security';
 import type { NutrientType } from '@intake24/common/types/http/feedback';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { FoodsNutrientType, PhysicalActivityLevel, UserSurveyAlias } from '@intake24/db';
-
 import FeedbackPdfGenerator from './feedback-pdf-generator';
 
 export type CreateRefreshCookie = {
@@ -87,7 +84,7 @@ function feedbackService({
 
   const createRefreshCookie = async (
     options: CreateRefreshCookie,
-  ): Promise<CookieParam> => {
+  ): Promise<CookieData> => {
     const { slug, username, userId } = options;
     const { name, httpOnly, path, secure, sameSite } = securityConfig.jwt.survey.cookie;
     const subject: Subject = { provider: 'surveyAlias', providerKey: `${slug}#${username}` };
