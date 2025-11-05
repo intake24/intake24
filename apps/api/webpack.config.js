@@ -13,9 +13,18 @@ module.exports = (env) => {
   const inspectBreak = !!NODE_INSPECT_BREAK;
   const mode = NODE_ENV === 'test' ? 'none' : NODE_ENV;
 
+  const CircularDependencyPlugin = require('circular-dependency-plugin');
+
   const plugins = [
     new ForkTsCheckerWebpackPlugin({ typescript: { memoryLimit: 3072 } }),
     new WebpackBar({ name: 'Server' }),
+    new CircularDependencyPlugin({
+      exclude: /node_modules/,
+      failOnError: false,
+      onDetected({ paths, compilation }) {
+        compilation.warnings.push(new Error(`${paths[0]}: Circular dependency: ${paths.join(' -> ')}`));
+      },
+    }),
   ];
 
   if (isDev) {

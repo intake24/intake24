@@ -16,13 +16,12 @@ export function packageExport() {
     start: {
       middleware: [permission('export-package')],
       handler: async ({ req }) => {
-        // const body = req.body;
         const jobScheduler = req.scope.cradle.scheduler.jobs;
 
         const { userId } = req.scope.cradle.user;
 
         const job = await jobScheduler.addJob(
-          { userId, type: 'PackageExport', params: { } },
+          { userId, type: 'PackageExport', params: req.body },
         );
 
         return { status: 202, body: { jobId: job.id } };

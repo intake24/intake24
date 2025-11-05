@@ -5,6 +5,7 @@ import pick from 'lodash/pick';
 import { z } from 'zod';
 
 import { searchSortingAlgorithms } from '../surveys';
+import { packageExportOptions } from './http/admin';
 
 export const repeatableBullJob = z.object({
   key: z.string(),
@@ -184,7 +185,7 @@ export const PackageVerification = z.object({
   importId: z.string().uuid(),
 });
 
-export const PackageExport = z.object({});
+export const PackageExport = packageExportOptions;
 
 export const PackageConversionToXlsx = z.object({});
 

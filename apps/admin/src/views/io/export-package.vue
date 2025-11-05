@@ -310,7 +310,7 @@ async function startExport() {
   try {
     const response = await httpService.post('/admin/package-export', {
       format: exportFormat.value,
-      locales: exportLocales.value.map(i => i.id),
+      locales: exportLocales.value.map(i => i.code),
       options: { include: includeOptions.value },
     });
 

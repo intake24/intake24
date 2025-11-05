@@ -71,10 +71,23 @@ import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services
 import type { Logger, Mailer } from '@intake24/common-backend';
 import type { TokenPayload } from '@intake24/common/security';
 import type { Environment } from '@intake24/common/types';
+import { PackageFormat } from '@intake24/common/types/http/admin';
 import type { DatabasesInterface } from '@intake24/db';
 import { KyselyDatabases, models } from '@intake24/db';
+import { PackageExportService } from '../jobs/io/export/package-export.service';
+import { PackageWriter } from '../jobs/io/export/types';
 
-export interface IoC extends Jobs {
+export type PackageWriterInstances = {
+  [K in `packageWriter_${PackageFormat}`]: PackageWriter;
+};
+
+type PackageWritersAndJobs = PackageWriterInstances & Jobs;
+
+type PackageWriters = {
+  [K in PackageFormat]: PackageWriter;
+};
+
+export interface IoC extends PackageWritersAndJobs {
   config: Config;
   aclConfig: Config['acl'];
   appConfig: Config['app'];
@@ -146,6 +159,8 @@ export interface IoC extends Jobs {
   dataExportFields: DataExportFields;
   dataExportMapper: DataExportMapper;
   dataExportService: DataExportService;
+  packageExportService: PackageExportService;
+  packageWriters: PackageWriters;
 
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;

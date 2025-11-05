@@ -1,5 +1,6 @@
 import type { AwilixContainer } from 'awilix';
-import type { RequestIoC } from './ioc';
+import type { PackageWriterInstances, RequestIoC } from './ioc';
+
 import { asClass, asFunction, asValue } from 'awilix';
 import foodIndex from '@intake24/api/food-index';
 import {
@@ -62,6 +63,9 @@ import {
 } from '@intake24/api/services';
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import { logger, Mailer } from '@intake24/common-backend';
+import { createPackageExportService } from '../jobs/io/export/package-export.service';
+import { createPackageJsonWriter } from '../jobs/io/export/package-json-writer';
+import { createPackageXlsxWriter } from '../jobs/io/export/package-xlsx-writer';
 
 export default (container: AwilixContainer<RequestIoC>): void => {
   const mediaStore = container.cradle.mediaConfig.storage.provider;
@@ -112,6 +116,10 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     dataExportFields: asFunction(dataExportFields).singleton(),
     dataExportMapper: asFunction(dataExportMapper).singleton(),
     dataExportService: asFunction(dataExportService).singleton(),
+    packageExportService: asFunction(createPackageExportService).singleton(),
+    packageWriter_json: asFunction(createPackageJsonWriter).singleton(),
+    packageWriter_xlsx: asFunction(createPackageXlsxWriter).singleton(),
+    packageWriters: asFunction(({ packageWriter_json, packageWriter_xlsx }: PackageWriterInstances) => ({ json: packageWriter_json, xlsx: packageWriter_xlsx })).singleton(),
 
     mediaService: asFunction(mediaService).singleton(),
     mediaStore: asFunction(mediaStores[mediaStore]).singleton(),
