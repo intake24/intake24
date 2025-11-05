@@ -1,4 +1,5 @@
 const path = require('node:path');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -22,6 +23,16 @@ module.exports = (env) => {
         script: './dist/server.js',
         watch: ['./dist', '.env'],
         nodeArgs: ['--trace-warnings', inspectBreak ? '--inspect-brk=9229' : '--inspect=5959'],
+      }),
+    );
+
+    plugins.push(
+      new CircularDependencyPlugin({
+        exclude: /node_modules/,
+        failOnError: false,
+        onDetected({ paths, compilation }) {
+          compilation.warnings.push(new Error(`${paths[0]}: circular import: ${paths.join(' -> ')}`));
+        },
       }),
     );
   }
