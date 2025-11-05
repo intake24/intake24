@@ -9,9 +9,11 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import { FoodsNutrientType, NutrientTableRecord } from '@intake24/db';
-
 import BaseModel from '../model';
+import NutrientTableRecord from './nutrient-table-record';
+import FoodsNutrientType from './nutrient-type';
+
+;
 
 @Table({
   modelName: 'NutrientTableRecordNutrient',

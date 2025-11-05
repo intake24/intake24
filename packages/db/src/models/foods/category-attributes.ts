@@ -6,14 +6,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import type Category from './category';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import type { UseInRecipeType } from '@intake24/common/types';
-import { Category } from '.';
 import BaseModel from '../model';
 
-@Scopes(() => ({
-  category: { include: [{ model: Category }] },
-}))
 @Table({
   modelName: 'CategoryAttribute',
   tableName: 'category_attributes',
@@ -55,7 +52,6 @@ export default class CategoryAttribute extends BaseModel<
   })
   declare useInRecipes: CreationOptional<UseInRecipeType | null>;
 
-  @BelongsTo(() => Category, 'categoryId')
   declare category?: NonAttribute<Category>;
 }
 

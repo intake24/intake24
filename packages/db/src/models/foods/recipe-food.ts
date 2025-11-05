@@ -17,8 +17,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import { FoodsLocale, SynonymSet } from '@intake24/db';
-
+import { FoodsLocale, SynonymSet } from '.';
 import BaseModel from '../model';
 import RecipeFoodStep from './recipe-food-step';
 

@@ -6,24 +6,19 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import type AssociatedFood from './associated-foods';
+
+import type CategoryAttribute from './category-attributes';
+import type CategoryCategory from './category-category';
+import type CategoryPortionSizeMethod from './category-portion-size-method';
+import type Food from './food';
+import type FoodCategory from './food-category';
+import type FoodsLocale from './locale';
 import {
-  BelongsTo,
-  BelongsToMany,
   Column,
   DataType,
-  HasMany,
-  HasOne,
   Table,
 } from 'sequelize-typescript';
-import {
-  AssociatedFood,
-  CategoryAttribute,
-  CategoryCategory,
-  CategoryPortionSizeMethod,
-  Food,
-  FoodCategory,
-  FoodsLocale,
-} from '.';
 import BaseModel from '../model';
 
 @Table({
@@ -100,34 +95,24 @@ export default class Category extends BaseModel<
   })
   declare version: string;
 
-  @HasOne(() => CategoryAttribute, 'categoryId')
   declare attributes?: NonAttribute<CategoryAttribute>;
 
-  @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 
-  @HasMany(() => AssociatedFood, { foreignKey: 'associatedCategoryCode', sourceKey: 'code', constraints: false })
   declare categoryAssociations?: NonAttribute<AssociatedFood[]>;
 
-  @BelongsToMany(() => Category, () => CategoryCategory, 'subCategoryId', 'categoryId')
   declare parentCategories?: NonAttribute<Category[]>;
 
-  @HasMany(() => CategoryCategory, 'subCategoryId')
   declare parentCategoryMappings?: NonAttribute<CategoryCategory[]>;
 
-  @BelongsToMany(() => Category, () => CategoryCategory, 'categoryId', 'subCategoryId')
   declare subCategories?: NonAttribute<Category[]>;
 
-  @HasMany(() => CategoryCategory, 'categoryId')
   declare subcategoryMappings?: NonAttribute<CategoryCategory[]>;
 
-  @BelongsToMany(() => Food, () => FoodCategory, 'categoryId', 'foodId')
   declare foods?: NonAttribute<Food[]>;
 
-  @HasMany(() => FoodCategory, 'categoryId')
   declare foodLinks?: NonAttribute<FoodCategory[]>;
 
-  @HasMany(() => CategoryPortionSizeMethod, 'categoryId')
   declare portionSizeMethods?: NonAttribute<CategoryPortionSizeMethod[]>;
 }
 

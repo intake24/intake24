@@ -6,17 +6,15 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import type DrinkwareSet from './drinkware-set';
+
+import type ProcessedImage from './processed-image';
+import { Column, DataType, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { DrinkwareScaleVolumeMethod } from '@intake24/common/types/http/admin';
-
-import { DrinkwareSet, ProcessedImage } from '.';
 import BaseModel from '../model';
 
-@Scopes(() => ({
-  drinkwareSet: { include: [{ model: DrinkwareSet }] },
-}))
 @Table({
   modelName: 'DrinkwareScaleV2',
   tableName: 'drinkware_scales_v2',
@@ -53,7 +51,6 @@ export default class DrinkwareScaleV2 extends BaseModel<
   })
   declare baseImageId: string;
 
-  @BelongsTo(() => ProcessedImage, 'baseImageId')
   declare baseImage?: NonAttribute<ProcessedImage>;
 
   @Column({
@@ -119,7 +116,6 @@ export default class DrinkwareScaleV2 extends BaseModel<
   })
   declare volumeMethod: DrinkwareScaleVolumeMethod;
 
-  @BelongsTo(() => DrinkwareSet, 'drinkwareSetId')
   declare drinkwareSet?: NonAttribute<DrinkwareSet>;
 }
 

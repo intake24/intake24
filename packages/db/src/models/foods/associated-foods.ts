@@ -6,11 +6,12 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import type Category from './category';
 
-import type { LocaleTranslation } from '@intake24/common/types';
-import { Category, Food } from '@intake24/db';
+import type Food from './food';
 
+import { Column, DataType, Table } from 'sequelize-typescript';
+import type { LocaleTranslation } from '@intake24/common/types/common';
 import BaseModel from '../model';
 
 @Table({
@@ -95,13 +96,10 @@ export default class AssociatedFood extends BaseModel<
   })
   declare orderBy: string;
 
-  @BelongsTo(() => Food, 'foodId')
-  declare food?: Food;
+  declare food?: NonAttribute<Food>;
 
-  @BelongsTo(() => Category, { foreignKey: 'associatedCategoryCode', targetKey: 'code', constraints: false })
   declare associatedCategory?: NonAttribute<Category>;
 
-  @BelongsTo(() => Food, { foreignKey: 'associatedFoodCode', targetKey: 'code', constraints: false })
   declare associatedFood?: NonAttribute<Food>;
 }
 

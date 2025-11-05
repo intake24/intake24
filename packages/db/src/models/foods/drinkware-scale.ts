@@ -6,17 +6,14 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type DrinkwareSet from './drinkware-set';
 
+import type DrinkwareVolumeSample from './drinkware-volume-sample';
+
+import { Column, DataType, Table } from 'sequelize-typescript';
 import type { LocaleTranslation } from '@intake24/common/types';
-
-import { DrinkwareSet, DrinkwareVolumeSample } from '.';
 import BaseModel from '../model';
 
-@Scopes(() => ({
-  drinkwareSet: { include: [{ model: DrinkwareSet }] },
-  volumeSamples: { include: [{ model: DrinkwareVolumeSample }] },
-}))
 @Table({
   modelName: 'DrinkwareScale',
   tableName: 'drinkware_scales',
@@ -97,10 +94,8 @@ export default class DrinkwareScale extends BaseModel<
     this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
   }
 
-  @BelongsTo(() => DrinkwareSet, 'drinkwareSetId')
   declare drinkwareSet?: NonAttribute<DrinkwareSet>;
 
-  @HasMany(() => DrinkwareVolumeSample, 'drinkwareScaleId')
   declare volumeSamples?: NonAttribute<DrinkwareVolumeSample[]>;
 }
 

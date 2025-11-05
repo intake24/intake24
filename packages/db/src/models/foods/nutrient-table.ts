@@ -9,13 +9,12 @@ import type {
 import type { NutrientTableRecordCreationAttributes } from './nutrient-table-record';
 
 import { Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
-import {
-  NutrientTableCsvMapping,
-  NutrientTableCsvMappingField,
-  NutrientTableCsvMappingNutrient,
-  NutrientTableRecord,
-} from '.';
+
 import BaseModel from '../model';
+import NutrientTableCsvMapping from './nutrient-table-csv-mapping';
+import NutrientTableCsvMappingField from './nutrient-table-csv-mapping-field';
+import NutrientTableCsvMappingNutrient from './nutrient-table-csv-mapping-nutrient';
+import NutrientTableRecord from './nutrient-table-record';
 
 @Scopes(() => ({
   list: { order: [['id', 'ASC']] },

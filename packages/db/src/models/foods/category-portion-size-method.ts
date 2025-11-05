@@ -7,12 +7,12 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import type Category from './category';
+
+import { Column, DataType, Table } from 'sequelize-typescript';
 
 import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
-
 import BaseModel from '../model';
-import Category from './category';
 
 @Table({
   modelName: 'CategoryPortionSizeMethod',
@@ -81,7 +81,6 @@ export default class CategoryPortionSizeMethod extends BaseModel<
     this.setDataValue('parameters', JSON.stringify(value ?? {}));
   }
 
-  @BelongsTo(() => Category, 'categoryId')
   declare category?: NonAttribute<Category>;
 }
 

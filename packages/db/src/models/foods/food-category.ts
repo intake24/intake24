@@ -5,10 +5,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import type Category from './category';
 
-import { Category, Food } from '@intake24/db';
-
+import type Food from './food';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 
 @Table({
@@ -33,10 +33,8 @@ export default class FoodCategory extends BaseModel<
   })
   declare categoryId: string;
 
-  @BelongsTo(() => Food, 'foodId')
   declare food?: NonAttribute<Food>;
 
-  @BelongsTo(() => Category, 'categoryId')
   declare category?: NonAttribute<Category>;
 }
 

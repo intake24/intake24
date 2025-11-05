@@ -9,8 +9,12 @@ import type {
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
-import { DrinkwareSet, GuideImage, ImageMapObject, ProcessedImage } from '.';
+
 import BaseModel from '../model';
+import DrinkwareSet from './drinkware-set';
+import GuideImage from './guide-image';
+import ImageMapObject from './image-map-object';
+import ProcessedImage from './processed-image';
 
 @Scopes(() => ({
   guideImages: { include: [{ model: GuideImage }] },

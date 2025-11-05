@@ -7,16 +7,14 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type AsServedImage from './as-served-image';
+
+import { Column, DataType, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
-import { AsServedImage, ProcessedImage } from '.';
 import BaseModel from '../model';
+import ProcessedImage from './processed-image';
 
-@Scopes(() => ({
-  selectionImage: { include: [{ model: ProcessedImage }] },
-  asServedImages: { include: [{ model: AsServedImage }] },
-}))
 @Table({
   modelName: 'AsServedSet',
   tableName: 'as_served_sets',
@@ -61,10 +59,8 @@ export default class AsServedSet extends BaseModel<
     this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
   }
 
-  @BelongsTo(() => ProcessedImage, 'selectionImageId')
   declare selectionImage?: NonAttribute<ProcessedImage>;
 
-  @HasMany(() => AsServedImage, 'asServedSetId')
   declare asServedImages?: NonAttribute<AsServedImage[]>;
 }
 

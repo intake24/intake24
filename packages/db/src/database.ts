@@ -5,6 +5,7 @@ import type { Logger } from '@intake24/common-backend';
 
 import type { Environment } from '@intake24/common/types';
 import { foods, system } from './models';
+import { setupModelAssociations } from './models/setup-model-associations';
 
 export const models = { foods, system };
 
@@ -61,6 +62,8 @@ export class Database implements DatabasesInterface {
       };
 
       this[database] = url ? new Sequelize(url, config) : new Sequelize(config);
+
+      setupModelAssociations[database]();
     }
   }
 

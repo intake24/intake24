@@ -6,15 +6,15 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type DrinkwareScale from './drinkware-scale';
 
+import type DrinkwareScaleV2 from './drinkware-scale-v2';
+
+import type ImageMap from './image-map';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import type { LocaleTranslation } from '@intake24/common/types';
-import { DrinkwareScale, DrinkwareScaleV2, ImageMap } from '.';
 import BaseModel from '../model';
 
-@Scopes(() => ({
-  scales: { include: [{ model: DrinkwareScale }] },
-}))
 @Table({
   modelName: 'DrinkwareSet',
   tableName: 'drinkware_sets',
@@ -59,14 +59,11 @@ export default class DrinkwareSet extends BaseModel<
     this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
   }
 
-  @BelongsTo(() => ImageMap, 'imageMapId')
   declare imageMap?: NonAttribute<ImageMap>;
 
-  @HasMany(() => DrinkwareScale, 'drinkwareSetId')
   declare scales?: NonAttribute<DrinkwareScale[]>;
 
-  @HasMany(() => DrinkwareScaleV2, 'drinkwareSetId')
-  declare scalesV2?: NonAttribute<DrinkwareScale[]>;
+  declare scalesV2?: NonAttribute<DrinkwareScaleV2[]>;
 }
 
 export type DrinkwareSetAttributes = Attributes<DrinkwareSet>;

@@ -6,14 +6,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import type DrinkwareScale from './drinkware-scale';
 
-import { DrinkwareScale } from '.';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 
-@Scopes(() => ({
-  scale: { include: [{ model: DrinkwareScale }] },
-}))
 @Table({
   modelName: 'DrinkwareVolumeSample',
   tableName: 'drinkware_volume_samples',
@@ -50,7 +47,6 @@ export default class DrinkwareVolumeSample extends BaseModel<
   })
   declare volume: number;
 
-  @BelongsTo(() => DrinkwareScale, 'drinkwareScaleId')
   declare scale?: NonAttribute<DrinkwareScale>;
 }
 
