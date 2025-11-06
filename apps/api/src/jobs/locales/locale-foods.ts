@@ -1,5 +1,6 @@
 import type { Job } from 'bullmq';
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
 import fs from 'fs-extra';
@@ -123,131 +124,118 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
     let counter = 0;
     const progressInterval = setInterval(async () => {
       await this.setProgress(counter);
-    }, 1000);
+    }, 2000);
 
-    return new Promise((resolve, reject) => {
-      const filepath = path.resolve(this.fsConfig.local.downloads, filename);
-      const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
+    const filepath = path.resolve(this.fsConfig.local.downloads, filename);
+    const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
 
-      const foods = Food.findAllWithStream({
-        where: { localeId: localeCode },
-        include: [
-          { association: 'associatedFoods' },
-          { association: 'attributes' },
-          { association: 'brands' },
-          { association: 'nutrientRecords' },
-          { association: 'portionSizeMethods' },
-        ],
-        order: [['code', 'asc']],
-        transform: async (food: Food) => {
-          const [attributes, categories, portionSizeMethods] = await Promise.all([
-            this.foodSearchService.getFoodAttributes([food.id]),
-            this.cachedParentCategoriesService.getFoodAllCategories(food.id),
-            food.portionSizeMethods?.length
-              ? this.portionSizeMethodsService.resolvePortionSizeMethods(food.id)
-              : ([] as (CategoryPortionSizeMethod | FoodPortionSizeMethod)[]),
-          ]);
+    const foods = Food.findAllWithStream({
+      where: { localeId: localeCode },
+      include: [
+        { association: 'associatedFoods' },
+        { association: 'attributes' },
+        { association: 'brands' },
+        { association: 'nutrientRecords' },
+        { association: 'portionSizeMethods' },
+      ],
+      order: [['code', 'asc']],
+      transform: async (food: Food) => {
+        const [attributes, categories, portionSizeMethods] = await Promise.all([
+          this.foodSearchService.getFoodAttributes([food.id]),
+          this.cachedParentCategoriesService.getFoodAllCategories(food.id),
+          food.portionSizeMethods?.length
+            ? this.portionSizeMethodsService.resolvePortionSizeMethods(food.id)
+            : ([] as (CategoryPortionSizeMethod | FoodPortionSizeMethod)[]),
+        ]);
 
-          return { food, dat: { attributes, categories, portionSizeMethods } };
-        },
-      });
-
-      const transform = new Transform(
-        {
-          fields,
-          withBOM: true,
-          transforms: [
-            ({ food, dat }: ItemTransform) => {
-              const {
-                id,
-                code,
-                localeId,
-                englishName,
-                name,
-                altNames,
-                attributes,
-                brands = [],
-                associatedFoods = [],
-                nutrientRecords = [],
-                portionSizeMethods: foodPSMs = [],
-                tags,
-              } = food;
-              const { attributes: datAttributes, categories, portionSizeMethods: datPSMs } = dat;
-
-              return {
-                id,
-                code,
-                localeId,
-                englishName,
-                name,
-                altNames: Object.values(altNames).reduce<string[]>((acc, names) => {
-                  acc.push(...names);
-                  return acc;
-                }, []).join(', '),
-                tags: tags.join(', '),
-                nutrientTableId: nutrientRecords[0]?.nutrientTableId,
-                nutrientTableRecordId: nutrientRecords[0]?.nutrientTableRecordId,
-                readyMealOption: attributes?.readyMealOption ?? 'Inherited',
-                sameAsBeforeOption: attributes?.sameAsBeforeOption ?? 'Inherited',
-                reasonableAmount: attributes?.reasonableAmount ?? 'Inherited',
-                useInRecipes: attributes?.useInRecipes
-                  ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes]
-                  : 'Inherited',
-                readyMealOptionEffective: datAttributes[id]?.readyMealOption ?? 'N/A',
-                sameAsBeforeOptionEffective: datAttributes[id]?.sameAsBeforeOption ?? 'N/A',
-                reasonableAmountEffective: datAttributes[id]?.reasonableAmount ?? 'N/A',
-                useInRecipesEffective: datAttributes[id]?.useInRecipes
-                  ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][
-                      datAttributes[id]?.useInRecipes as number
-                    ]
-                  : 'N/A',
-                associatedFoods: associatedFoods
-                  .map(
-                    ({ associatedFoodCode, associatedCategoryCode }) =>
-                      associatedFoodCode ?? associatedCategoryCode,
-                  )
-                  .join(', '),
-                categories: categories.join(', '),
-                brands: brands.map(({ name }) => name).join(', '),
-                portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
-                  .map(
-                    ({ method, conversionFactor, parameters = [] }) =>
-                      `Method: ${method}, conversion: ${conversionFactor}, ${JSON.stringify(parameters)}`,
-                  )
-                  .join('\n'),
-              };
-            },
-          ],
-        },
-        {},
-        { objectMode: true },
-      );
-
-      foods.on('error', (err) => {
-        clearInterval(progressInterval);
-        reject(err);
-      });
-
-      transform
-        .on('error', (err) => {
-          clearInterval(progressInterval);
-          reject(err);
-        })
-        .on('data', () => {
-          counter++;
-        })
-        .on('end', async () => {
-          clearInterval(progressInterval);
-
-          await this.dbJob.update({
-            downloadUrl: filename,
-            downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-          });
-
-          resolve();
-        });
-
-      foods.pipe(transform).pipe(output);
+        return { food, dat: { attributes, categories, portionSizeMethods } };
+      },
     });
+
+    const transform = new Transform(
+      {
+        fields,
+        withBOM: true,
+        transforms: [
+          ({ food, dat }: ItemTransform) => {
+            const {
+              id,
+              code,
+              localeId,
+              englishName,
+              name,
+              altNames,
+              attributes,
+              brands = [],
+              associatedFoods = [],
+              nutrientRecords = [],
+              portionSizeMethods: foodPSMs = [],
+              tags,
+            } = food;
+            const { attributes: datAttributes, categories, portionSizeMethods: datPSMs } = dat;
+
+            return {
+              id,
+              code,
+              localeId,
+              englishName,
+              name,
+              altNames: Object.values(altNames).reduce<string[]>((acc, names) => {
+                acc.push(...names);
+                return acc;
+              }, []).join(', '),
+              tags: tags.join(', '),
+              nutrientTableId: nutrientRecords[0]?.nutrientTableId,
+              nutrientTableRecordId: nutrientRecords[0]?.nutrientTableRecordId,
+              readyMealOption: attributes?.readyMealOption ?? 'Inherited',
+              sameAsBeforeOption: attributes?.sameAsBeforeOption ?? 'Inherited',
+              reasonableAmount: attributes?.reasonableAmount ?? 'Inherited',
+              useInRecipes: attributes?.useInRecipes
+                ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes]
+                : 'Inherited',
+              readyMealOptionEffective: datAttributes[id]?.readyMealOption ?? 'N/A',
+              sameAsBeforeOptionEffective: datAttributes[id]?.sameAsBeforeOption ?? 'N/A',
+              reasonableAmountEffective: datAttributes[id]?.reasonableAmount ?? 'N/A',
+              useInRecipesEffective: datAttributes[id]?.useInRecipes
+                ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][
+                    datAttributes[id]?.useInRecipes as number
+                  ]
+                : 'N/A',
+              associatedFoods: associatedFoods
+                .map(
+                  ({ associatedFoodCode, associatedCategoryCode }) =>
+                    associatedFoodCode ?? associatedCategoryCode,
+                )
+                .join(', '),
+              categories: categories.join(', '),
+              brands: brands.map(({ name }) => name).join(', '),
+              portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
+                .map(
+                  ({ method, conversionFactor, parameters = [] }) =>
+                    `Method: ${method}, conversion: ${conversionFactor}, ${JSON.stringify(parameters)}`,
+                )
+                .join('\n'),
+            };
+          },
+        ],
+      },
+      {},
+      { objectMode: true },
+    );
+
+    transform.on('data', () => {
+      counter++;
+    });
+
+    try {
+      await pipeline(foods, transform, output);
+      await this.dbJob.update({
+        downloadUrl: filename,
+        downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
+      });
+    }
+    finally {
+      clearInterval(progressInterval);
+    }
   }
 }

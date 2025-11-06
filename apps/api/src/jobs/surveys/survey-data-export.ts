@@ -1,14 +1,12 @@
 import type { Job } from 'bullmq';
-
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 import { Transform } from '@json2csv/node';
 import fs from 'fs-extra';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
 import { Job as DbJob } from '@intake24/db';
-
 import BaseJob from '../job';
 
 export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
@@ -71,40 +69,27 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
     let counter = 0;
     const progressInterval = setInterval(async () => {
       await this.setProgress(counter);
-    }, 1000);
+    }, 2000);
 
-    return new Promise((resolve, reject) => {
-      const filepath = path.resolve(this.fsConfig.local.downloads, filename);
-      const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
+    const filepath = path.resolve(this.fsConfig.local.downloads, filename);
+    const foods = this.dataExportService.getSubmissionsWithStream(options);
+    const transform = new Transform({ fields, withBOM: true }, {}, { objectMode: true });
+    const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
 
-      const foods = this.dataExportService.getSubmissionsWithStream(options);
-      const transform = new Transform({ fields, withBOM: true }, {}, { objectMode: true });
-
-      foods.on('error', (err) => {
-        clearInterval(progressInterval);
-        reject(err);
-      });
-
-      transform
-        .on('error', (err) => {
-          clearInterval(progressInterval);
-          reject(err);
-        })
-        .on('data', () => {
-          counter++;
-        })
-        .on('end', async () => {
-          clearInterval(progressInterval);
-
-          await this.dbJob.update({
-            downloadUrl: filename,
-            downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-          });
-
-          resolve();
-        });
-
-      foods.pipe(transform).pipe(output);
+    transform.on('data', () => {
+      counter++;
     });
+
+    try {
+      await pipeline(foods, transform, output);
+      await this.dbJob.update({
+        downloadUrl: filename,
+        downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
+      });
+    }
+    finally {
+      this.logger.debug('Clearing progress interval.');
+      clearInterval(progressInterval);
+    }
   }
 }

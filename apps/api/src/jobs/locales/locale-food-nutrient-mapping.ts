@@ -1,16 +1,14 @@
 import type { Job } from 'bullmq';
-
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
 import fs from 'fs-extra';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { EMPTY } from '@intake24/api/services/admin/data-export';
 import { addTime } from '@intake24/api/util';
 import { Job as DbJob, Food, FoodsNutrientType, SystemLocale } from '@intake24/db';
-
 import BaseJob from '../job';
 
 export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrientMapping'> {
@@ -103,85 +101,72 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
     let counter = 0;
     const progressInterval = setInterval(async () => {
       await this.setProgress(counter);
-    }, 1000);
+    }, 2000);
 
-    return new Promise((resolve, reject) => {
-      const filepath = path.resolve(this.fsConfig.local.downloads, filename);
-      const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
+    const filepath = path.resolve(this.fsConfig.local.downloads, filename);
+    const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
 
-      const foods = Food.findAllWithStream({
-        where: { localeId: localeCode },
-        include: [
-          { association: 'nutrientRecords', include: [{ association: 'nutrients' }] },
-        ],
-        order: [['code', 'asc']],
-      });
-
-      const transform = new Transform(
-        {
-          fields,
-          withBOM: true,
-          transforms: [
-            (item: Food) => {
-              const {
-                code,
-                englishName,
-                name,
-                localeId,
-                nutrientRecords,
-              } = item;
-
-              if (!nutrientRecords?.length)
-                return { code, name, englishName, localeId };
-
-              const { nutrientTableId, nutrientTableRecordId, nutrients = [] } = nutrientRecords[0];
-
-              const nutrientData = nutrients.reduce<Record<string, number>>((acc, nutrient) => {
-                acc[`nt-${nutrient.nutrientTypeId}`] = nutrient.unitsPer100g;
-                return acc;
-              }, {});
-
-              return {
-                code,
-                name,
-                englishName,
-                localeId,
-                nutrientTableId,
-                nutrientTableRecordId,
-                ...nutrientData,
-              };
-            },
-          ],
-        },
-        {},
-        { objectMode: true },
-      );
-
-      foods.on('error', (err) => {
-        clearInterval(progressInterval);
-        reject(err);
-      });
-
-      transform
-        .on('error', (err) => {
-          clearInterval(progressInterval);
-          reject(err);
-        })
-        .on('data', () => {
-          counter++;
-        })
-        .on('end', async () => {
-          clearInterval(progressInterval);
-
-          await this.dbJob.update({
-            downloadUrl: filename,
-            downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-          });
-
-          resolve();
-        });
-
-      foods.pipe(transform).pipe(output);
+    const foods = Food.findAllWithStream({
+      where: { localeId: localeCode },
+      include: [
+        { association: 'nutrientRecords', include: [{ association: 'nutrients' }] },
+      ],
+      order: [['code', 'asc']],
     });
+
+    const transform = new Transform(
+      {
+        fields,
+        withBOM: true,
+        transforms: [
+          (item: Food) => {
+            const {
+              code,
+              englishName,
+              name,
+              localeId,
+              nutrientRecords,
+            } = item;
+
+            if (!nutrientRecords?.length)
+              return { code, name, englishName, localeId };
+
+            const { nutrientTableId, nutrientTableRecordId, nutrients = [] } = nutrientRecords[0];
+
+            const nutrientData = nutrients.reduce<Record<string, number>>((acc, nutrient) => {
+              acc[`nt-${nutrient.nutrientTypeId}`] = nutrient.unitsPer100g;
+              return acc;
+            }, {});
+
+            return {
+              code,
+              name,
+              englishName,
+              localeId,
+              nutrientTableId,
+              nutrientTableRecordId,
+              ...nutrientData,
+            };
+          },
+        ],
+      },
+      {},
+      { objectMode: true },
+    );
+
+    transform.on('data', () => {
+      counter++;
+    });
+
+    try {
+      await pipeline(foods, transform, output);
+      await this.dbJob.update({
+        downloadUrl: filename,
+        downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
+      });
+    }
+    finally {
+      clearInterval(progressInterval);
+    }
   }
 }

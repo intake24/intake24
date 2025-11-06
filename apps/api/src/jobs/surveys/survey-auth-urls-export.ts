@@ -1,16 +1,14 @@
 import type { Job } from 'bullmq';
-
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { surveyUrlService } from '@intake24/api/services';
 import { addTime } from '@intake24/api/util';
 import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
-
 import BaseJob from '../job';
 
 export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'> {
@@ -75,70 +73,56 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     const filename = `intake24-${this.name}-${slug}-${timestamp}.csv`;
 
     const total = await UserSurveyAlias.count({ where: { surveyId } });
-    const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
-
     this.initProgress(total);
 
     let counter = 0;
     const progressInterval = setInterval(async () => {
       await this.setProgress(counter);
-    }, 1000);
+    }, 2000);
 
-    return new Promise((resolve, reject) => {
-      const transform = new Transform(
-        {
-          fields: [
-            { label: 'UserID', value: 'userId' },
-            { label: 'Username', value: 'username' },
-            { label: 'AuthenticationToken', value: (row: UserSurveyAlias) => row.urlAuthToken },
-            {
-              label: 'ShortSurveyAuthenticationURL',
-              value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken),
-            },
-            {
-              label: 'SurveyAuthenticationURL',
-              value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken, true),
-            },
-            {
-              label: 'FeedbackAuthenticationURL',
-              value: (row: UserSurveyAlias) => urlService.getFeedbackUrl(row.urlAuthToken),
-            },
-          ],
-          withBOM: true,
-        },
-        {},
-        { objectMode: true },
-      );
-      const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
-        encoding: 'utf-8',
-        flags: 'w+',
-      });
-
-      aliases.on('error', (err) => {
-        clearInterval(progressInterval);
-        reject(err);
-      });
-
-      transform
-        .on('error', (err) => {
-          clearInterval(progressInterval);
-          reject(err);
-        })
-        .on('data', () => {
-          counter++;
-        })
-        .on('end', async () => {
-          clearInterval(progressInterval);
-
-          await this.dbJob.update({
-            downloadUrl: filename,
-            downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-          });
-
-          resolve();
-        });
-
-      aliases.pipe(transform).pipe(output);
+    const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
+    const transform = new Transform(
+      {
+        fields: [
+          { label: 'UserID', value: 'userId' },
+          { label: 'Username', value: 'username' },
+          { label: 'AuthenticationToken', value: (row: UserSurveyAlias) => row.urlAuthToken },
+          {
+            label: 'ShortSurveyAuthenticationURL',
+            value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken),
+          },
+          {
+            label: 'SurveyAuthenticationURL',
+            value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken, true),
+          },
+          {
+            label: 'FeedbackAuthenticationURL',
+            value: (row: UserSurveyAlias) => urlService.getFeedbackUrl(row.urlAuthToken),
+          },
+        ],
+        withBOM: true,
+      },
+      {},
+      { objectMode: true },
+    );
+    const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
+      encoding: 'utf-8',
+      flags: 'w+',
     });
+
+    transform.on('data', () => {
+      counter++;
+    });
+
+    try {
+      await pipeline(aliases, transform, output);
+      await this.dbJob.update({
+        downloadUrl: filename,
+        downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
+      });
+    }
+    finally {
+      clearInterval(progressInterval);
+    }
   }
 }

@@ -1,15 +1,13 @@
 import type { Job } from 'bullmq';
-
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
 import { Job as DbJob, Survey, UserSurveyRating } from '@intake24/db';
-
 import BaseJob from '../job';
 
 export default class SurveyRatingsExport extends BaseJob<'SurveyRatingsExport'> {
@@ -67,6 +65,13 @@ export default class SurveyRatingsExport extends BaseJob<'SurveyRatingsExport'> 
     const filename = `intake24-${this.name}-${slug}-${timestamp}.csv`;
 
     const total = await UserSurveyRating.count({ where: { surveyId } });
+    this.initProgress(total);
+
+    let counter = 0;
+    const progressInterval = setInterval(async () => {
+      await this.setProgress(counter);
+    }, 2000);
+
     const ratings = UserSurveyRating.findAllWithStream({
       where: { surveyId },
       include: [
@@ -78,65 +83,44 @@ export default class SurveyRatingsExport extends BaseJob<'SurveyRatingsExport'> 
         },
       ],
     });
-
-    this.initProgress(total);
-
-    let counter = 0;
-    const progressInterval = setInterval(async () => {
-      await this.setProgress(counter);
-    }, 1000);
-
-    return new Promise((resolve, reject) => {
-      const transform = new Transform(
-        {
-          fields: [
-            { label: 'UserID', value: 'userId' },
-            {
-              label: 'Username',
-              value: (row: UserSurveyRating) => row.user?.aliases?.at(0)?.username,
-            },
-            { label: 'SurveyID', value: 'surveyId' },
-            { label: 'SurveySlug', value: () => slug },
-            { label: 'SubmissionID', value: 'submissionId' },
-            { label: 'Type', value: 'type' },
-            { label: 'Rating', value: 'rating' },
-            { label: 'Comment', value: 'comment' },
-          ],
-          withBOM: true,
-        },
-        {},
-        { objectMode: true },
-      );
-      const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
-        encoding: 'utf-8',
-        flags: 'w+',
-      });
-
-      ratings.on('error', (err) => {
-        clearInterval(progressInterval);
-        reject(err);
-      });
-
-      transform
-        .on('error', (err) => {
-          clearInterval(progressInterval);
-          reject(err);
-        })
-        .on('data', () => {
-          counter++;
-        })
-        .on('end', async () => {
-          clearInterval(progressInterval);
-
-          await this.dbJob.update({
-            downloadUrl: filename,
-            downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-          });
-
-          resolve();
-        });
-
-      ratings.pipe(transform).pipe(output);
+    const transform = new Transform(
+      {
+        fields: [
+          { label: 'UserID', value: 'userId' },
+          {
+            label: 'Username',
+            value: (row: UserSurveyRating) => row.user?.aliases?.at(0)?.username,
+          },
+          { label: 'SurveyID', value: 'surveyId' },
+          { label: 'SurveySlug', value: () => slug },
+          { label: 'SubmissionID', value: 'submissionId' },
+          { label: 'Type', value: 'type' },
+          { label: 'Rating', value: 'rating' },
+          { label: 'Comment', value: 'comment' },
+        ],
+        withBOM: true,
+      },
+      {},
+      { objectMode: true },
+    );
+    const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
+      encoding: 'utf-8',
+      flags: 'w+',
     });
+
+    transform.on('data', () => {
+      counter++;
+    });
+
+    try {
+      await pipeline(ratings, transform, output);
+      await this.dbJob.update({
+        downloadUrl: filename,
+        downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
+      });
+    }
+    finally {
+      clearInterval(progressInterval);
+    }
   }
 }
