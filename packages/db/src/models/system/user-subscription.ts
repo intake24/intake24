@@ -17,8 +17,8 @@ import {
 } from 'sequelize-typescript';
 import type { Subscription, SubscriptionType } from '@intake24/common/types';
 
-import { User } from '.';
 import BaseModel from '../model';
+import User from './user';
 
 @Scopes(() => ({
   user: { include: [{ model: User }] },

@@ -6,14 +6,14 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type AsServedImage from './as-served-image';
 
+import type AsServedSet from './as-served-set';
+import type FoodThumbnailImage from './food-thumbnail-image';
+import type ImageMap from './image-map';
+import type SourceImage from './source-image';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import AsServedImage from './as-served-image';
-import AsServedSet from './as-served-set';
-import FoodThumbnailImage from './food-thumbnail-image';
-import ImageMap from './image-map';
-import SourceImage from './source-image';
 
 export enum ProcessedImagePurposes {
   AsServedMainImage = 1,
@@ -27,12 +27,6 @@ export enum ProcessedImagePurposes {
 
 export type ProcessedImagePurpose = ProcessedImagePurposes;
 
-@Scopes(() => ({
-  asServedSets: { include: [{ model: AsServedSet }] },
-  asServedImages: { include: [{ model: AsServedImage, as: 'asServedImages' }] },
-  asServedThumbnailImages: { include: [{ model: AsServedImage, as: 'asServedThumbnailImages' }] },
-  imageMaps: { include: [{ model: ImageMap }] },
-}))
 @Table({
   modelName: 'ProcessedImage',
   tableName: 'processed_images',
@@ -76,22 +70,16 @@ export default class ProcessedImage extends BaseModel<
   })
   declare createdAt: CreationOptional<Date>;
 
-  @BelongsTo(() => SourceImage, 'sourceId')
   declare sourceImage?: NonAttribute<SourceImage>;
 
-  @HasMany(() => AsServedSet, 'selectionImageId')
   declare asServedSets?: NonAttribute<AsServedSet[]>;
 
-  @HasMany(() => AsServedImage, 'imageId')
   declare asServedImages?: NonAttribute<AsServedImage[]>;
 
-  @HasMany(() => AsServedImage, 'thumbnailImageId')
   declare asServedThumbnailImages?: NonAttribute<AsServedImage[]>;
 
-  @HasMany(() => ImageMap, 'baseImageId')
   declare imageMaps?: NonAttribute<ImageMap[]>;
 
-  @HasMany(() => FoodThumbnailImage, 'imageId')
   declare thumbnailImages?: NonAttribute<FoodThumbnailImage[]>;
 }
 

@@ -11,8 +11,8 @@ import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequel
 import type { Application } from '@intake24/common/types';
 import type { LocaleMessageDictionary } from '@intake24/i18n';
 
-import { Language } from '.';
 import BaseModel from '../model';
+import Language from './language';
 
 @Table({
   modelName: 'LanguageTranslations',

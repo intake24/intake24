@@ -6,16 +6,12 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type ProcessedImage from './processed-image';
 
+import type SourceImageKeyword from './source-image-keyword';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import ProcessedImage from './processed-image';
-import SourceImageKeyword from './source-image-keyword';
 
-@Scopes(() => ({
-  keywords: { include: [{ model: SourceImageKeyword }] },
-  processedImages: { include: [{ model: ProcessedImage }] },
-}))
 @Table({
   modelName: 'SourceImage',
   tableName: 'source_images',
@@ -59,10 +55,8 @@ export default class SourceImage extends BaseModel<
   })
   declare uploadedAt: CreationOptional<Date>;
 
-  @HasMany(() => SourceImageKeyword, 'sourceImageId')
   declare keywords?: NonAttribute<SourceImageKeyword[]>;
 
-  @HasMany(() => ProcessedImage, 'sourceId')
   declare processedImages?: NonAttribute<ProcessedImage[]>;
 }
 

@@ -6,10 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import type NutrientTable from './nutrient-table';
 
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import NutrientTable from './nutrient-table';
 
 @Table({
   modelName: 'NutrientTableCsvMappingField',
@@ -47,14 +47,8 @@ export default class NutrientTableCsvMappingField extends BaseModel<
   })
   declare columnOffset: number;
 
-  @BelongsTo(() => NutrientTable, {
-    foreignKey: 'nutrientTableId',
-    onUpdate: 'cascade',
-    onDelete: 'cascade',
-  })
   declare nutrientTable?: NonAttribute<NutrientTable>;
 }
 
 export type NutrientTableCsvMappingFieldAttributes = Attributes<NutrientTableCsvMappingField>;
-export type NutrientTableCsvMappingFieldCreationAttributes
-  = CreationAttributes<NutrientTableCsvMappingField>;
+export type NutrientTableCsvMappingFieldCreationAttributes = CreationAttributes<NutrientTableCsvMappingField>;

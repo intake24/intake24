@@ -1,7 +1,7 @@
-import setupFoodDbAssociations from './foods/setup-food-db-associations';
-import finaliseSystemDbModels from './system/finalise-system-db-models';
+import { setupFoodDbAssociations } from './foods/setup-food-db-associations';
+import { setupSystemDbAssociations } from './system/setup-system-db-associations';
 
 export const setupModelAssociations = {
   foods: setupFoodDbAssociations,
-  system: finaliseSystemDbModels,
+  system: setupSystemDbAssociations,
 };

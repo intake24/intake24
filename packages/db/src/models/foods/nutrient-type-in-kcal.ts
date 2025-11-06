@@ -6,10 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import type FoodsNutrientType from './nutrient-type';
 
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import FoodsNutrientType from './nutrient-type';
 
 @Table({
   modelName: 'NutrientTypeInKcal',
@@ -41,7 +41,6 @@ export default class NutrientTypeInKcal extends BaseModel<
   })
   declare kcalPerUnit: number;
 
-  @BelongsTo(() => FoodsNutrientType, 'nutrientTypeId')
   declare nutrient?: NonAttribute<FoodsNutrientType>;
 }
 

@@ -5,18 +5,13 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasOne, Scopes, Table } from 'sequelize-typescript';
+import type NutrientTableRecordNutrient from './nutrient-table-record-nutrient';
 
+import type NutrientTypeInKcal from './nutrient-type-in-kcal';
+import type FoodsNutrientUnit from './nutrient-unit';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import NutrientTableRecordNutrient from './nutrient-table-record-nutrient';
-import NutrientTypeInKcal from './nutrient-type-in-kcal';
-import FoodsNutrientUnit from './nutrient-unit';
 
-@Scopes(() => ({
-  unit: { include: [{ model: FoodsNutrientUnit }] },
-  inKcal: { include: [{ model: NutrientTypeInKcal }] },
-  list: { order: [['id', 'ASC']] },
-}))
 @Table({
   modelName: 'NutrientType',
   tableName: 'nutrient_types',
@@ -46,13 +41,10 @@ export default class NutrientType extends BaseModel<
   })
   declare unitId: string;
 
-  @BelongsTo(() => FoodsNutrientUnit, 'unitId')
   declare unit?: NonAttribute<FoodsNutrientUnit>;
 
-  @HasOne(() => NutrientTypeInKcal, 'nutrientTypeId')
   declare inKcal?: NonAttribute<NutrientTypeInKcal>;
 
-  @HasOne(() => NutrientTableRecordNutrient, 'nutrientTypeId')
   declare nutrientTableRecordNutrient?: NonAttribute<NutrientTableRecordNutrient>;
 }
 

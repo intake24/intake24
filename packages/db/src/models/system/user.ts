@@ -19,31 +19,29 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import {
-  ClientErrorReport,
-  FeedbackScheme,
-  Job,
-  MFADevice,
-  Permission,
-  PermissionUser,
-  PersonalAccessToken,
-  RefreshToken,
-  Role,
-  RoleUser,
-  SignInLog,
-  Survey,
-  SurveyScheme,
-  SurveySubmission,
-  UserCustomField,
-  UserPassword,
-  UserPasswordReset,
-  UserPhysicalData,
-  UserSecurable,
-  UserSubscription,
-  UserSurveyAlias,
-  UserSurveySession,
-} from '.';
 import BaseModel from '../model';
+import ClientErrorReport from './client-error-report';
+import FeedbackScheme from './feedback-scheme';
+import Job from './job';
+import MFADevice from './mfa-device';
+import Permission from './permission';
+import PermissionUser from './permission-user';
+import PersonalAccessToken from './personal-access-token';
+import RefreshToken from './refresh-token';
+import Role from './role';
+import RoleUser from './role-user';
+import SignInLog from './sign-in-log';
+import Survey from './survey';
+import SurveyScheme from './survey-scheme';
+import SurveySubmission from './survey-submission';
+import UserCustomField from './user-custom-field';
+import UserPassword from './user-password';
+import UserPasswordReset from './user-password-reset';
+import UserPhysicalData from './user-physical-data';
+import UserSecurable from './user-securable';
+import UserSubscription from './user-subscription';
+import UserSurveyAlias from './user-survey-alias';
+import UserSurveySession from './user-survey-session';
 
 @Scopes(() => ({
   aliases: { include: [{ model: UserSurveyAlias, separate: true }] },

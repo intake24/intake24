@@ -7,15 +7,12 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import type Food from './food';
 
+import type ProcessedImage from './processed-image';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import Food from './food';
-import ProcessedImage from './processed-image';
 
-@Scopes(() => ({
-  image: { include: [{ model: ProcessedImage, as: 'image' }] },
-}))
 @Table({
   modelName: 'FoodThumbnailImage',
   tableName: 'food_thumbnail_images',
@@ -46,10 +43,8 @@ export default class FoodThumbnailImage extends BaseModel<
   })
   declare imageId: ForeignKeyType<ProcessedImage['id']>;
 
-  @BelongsTo(() => Food, 'foodId')
   declare food?: NonAttribute<Food>;
 
-  @BelongsTo(() => ProcessedImage, 'imageId')
   declare image?: NonAttribute<ProcessedImage>;
 }
 

@@ -6,15 +6,15 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
-import type { TextDirection } from '@intake24/common/types';
+import type Category from './category';
+import type Food from './food';
 
+import type SplitList from './split-list';
+import type SplitWord from './split-word';
+import type SynonymSet from './synonym-set';
+import { Column, DataType, Table } from 'sequelize-typescript';
+import type { TextDirection } from '@intake24/common/types';
 import BaseModel from '../model';
-import Category from './category';
-import Food from './food';
-import SplitList from './split-list';
-import SplitWord from './split-word';
-import SynonymSet from './synonym-set';
 
 @Table({
   modelName: 'Locale',
@@ -84,19 +84,14 @@ export default class Locale extends BaseModel<
   })
   declare foodIndexLanguageBackendId: CreationOptional<string>;
 
-  @HasMany(() => Category, 'localeId')
   declare categories?: NonAttribute<Category[]>;
 
-  @HasMany(() => Food, 'localeId')
   declare foods?: NonAttribute<Food[]>;
 
-  @HasMany(() => SplitList, 'localeId')
   declare splitLists?: NonAttribute<SplitList[]>;
 
-  @HasMany(() => SplitWord, 'localeId')
   declare splitWords?: NonAttribute<SplitWord[]>;
 
-  @HasMany(() => SynonymSet, 'localeId')
   declare synonymSets?: NonAttribute<SynonymSet[]>;
 }
 

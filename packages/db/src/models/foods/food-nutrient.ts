@@ -6,16 +6,15 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import type Food from './food';
+
+import type NutrientTableRecord from './nutrient-table-record';
 import {
-  BelongsTo,
   Column,
   DataType,
   Table,
 } from 'sequelize-typescript';
-
 import BaseModel from '../model';
-import Food from './food';
-import NutrientTableRecord from './nutrient-table-record';
 
 @Table({
   modelName: 'FoodNutrient',
@@ -40,10 +39,8 @@ export default class FoodNutrient extends BaseModel<
   })
   declare nutrientTableRecordId: ForeignKeyBrand<NutrientTableRecord['id']>;
 
-  @BelongsTo(() => Food, 'foodId')
   declare food?: NonAttribute<Food>;
 
-  @BelongsTo(() => NutrientTableRecord, 'nutrientTableRecordId')
   declare nutrientTableRecord?: NonAttribute<NutrientTableRecord>;
 }
 

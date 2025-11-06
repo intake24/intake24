@@ -5,14 +5,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type FoodsNutrientType from './nutrient-type';
 
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import FoodsNutrientType from './nutrient-type';
 
-@Scopes(() => ({
-  nutrientTypes: { include: [{ model: FoodsNutrientType }] },
-}))
 @Table({
   modelName: 'NutrientUnit',
   tableName: 'nutrient_units',
@@ -42,7 +39,6 @@ export default class NutrientUnit extends BaseModel<
   })
   declare symbol: string;
 
-  @HasMany(() => FoodsNutrientType, 'unitId')
   declare nutrientTypes?: NonAttribute<FoodsNutrientType[]>;
 }
 

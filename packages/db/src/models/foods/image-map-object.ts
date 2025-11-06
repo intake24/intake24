@@ -6,13 +6,13 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import type ImageMap from './image-map';
 
+import type ProcessedImage from './processed-image';
+
+import { Column, DataType, Table } from 'sequelize-typescript';
 import type { LocaleTranslation } from '@intake24/common/types';
-
 import BaseModel from '../model';
-import ImageMap from './image-map';
-import ProcessedImage from './processed-image';
 
 @Table({
   modelName: 'ImageMapObject',
@@ -85,10 +85,8 @@ export default class ImageMapObject extends BaseModel<
     this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
   }
 
-  @BelongsTo(() => ImageMap, 'imageMapId')
   declare imageMap?: NonAttribute<ImageMap>;
 
-  @BelongsTo(() => ProcessedImage, 'overlayImageId')
   declare overlayImage?: NonAttribute<ProcessedImage | null>;
 }
 

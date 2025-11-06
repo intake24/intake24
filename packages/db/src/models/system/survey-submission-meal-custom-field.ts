@@ -7,8 +7,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
-import { SurveySubmissionMeal } from '.';
 import BaseModel from '../model';
+import SurveySubmissionMeal from './survey-submission-meal';
 
 @Scopes(() => ({
   meal: { include: [{ model: SurveySubmissionMeal }] },

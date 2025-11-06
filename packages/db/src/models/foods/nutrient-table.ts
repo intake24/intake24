@@ -6,19 +6,16 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import type NutrientTableCsvMapping from './nutrient-table-csv-mapping';
+
+import type NutrientTableCsvMappingField from './nutrient-table-csv-mapping-field';
+
+import type NutrientTableCsvMappingNutrient from './nutrient-table-csv-mapping-nutrient';
 import type { NutrientTableRecordCreationAttributes } from './nutrient-table-record';
-
-import { Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
-
+import type NutrientTableRecord from './nutrient-table-record';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import NutrientTableCsvMapping from './nutrient-table-csv-mapping';
-import NutrientTableCsvMappingField from './nutrient-table-csv-mapping-field';
-import NutrientTableCsvMappingNutrient from './nutrient-table-csv-mapping-nutrient';
-import NutrientTableRecord from './nutrient-table-record';
 
-@Scopes(() => ({
-  list: { order: [['id', 'ASC']] },
-}))
 @Table({
   modelName: 'NutrientTable',
   tableName: 'nutrient_tables',
@@ -45,17 +42,13 @@ export default class NutrientTable extends BaseModel<
   })
   declare description: string;
 
-  @HasMany(() => NutrientTableRecord, 'nutrientTableId')
-  records?: NonAttribute<NutrientTableRecord[]>;
+  declare records?: NonAttribute<NutrientTableRecord[]>;
 
-  @HasOne(() => NutrientTableCsvMapping, 'nutrientTableId')
-  csvMapping?: NonAttribute<NutrientTableCsvMapping>;
+  declare csvMapping?: NonAttribute<NutrientTableCsvMapping>;
 
-  @HasMany(() => NutrientTableCsvMappingField, 'nutrientTableId')
-  csvMappingFields?: NonAttribute<NutrientTableCsvMappingField[]>;
+  declare csvMappingFields?: NonAttribute<NutrientTableCsvMappingField[]>;
 
-  @HasMany(() => NutrientTableCsvMappingNutrient, 'nutrientTableId')
-  csvMappingNutrients?: NonAttribute<NutrientTableCsvMappingNutrient[]>;
+  declare csvMappingNutrients?: NonAttribute<NutrientTableCsvMappingNutrient[]>;
 }
 
 export type NutrientTableAttributes = Attributes<NutrientTable>;

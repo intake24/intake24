@@ -6,21 +6,16 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type DrinkwareSet from './drinkware-set';
 
+import type GuideImage from './guide-image';
+
+import type ImageMapObject from './image-map-object';
+import type ProcessedImage from './processed-image';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import type { LocaleTranslation } from '@intake24/common/types';
-
 import BaseModel from '../model';
-import DrinkwareSet from './drinkware-set';
-import GuideImage from './guide-image';
-import ImageMapObject from './image-map-object';
-import ProcessedImage from './processed-image';
 
-@Scopes(() => ({
-  guideImages: { include: [{ model: GuideImage }] },
-  baseImage: { include: [{ model: ProcessedImage }] },
-  objects: { include: [{ model: ImageMapObject }] },
-}))
 @Table({
   modelName: 'ImageMap',
   tableName: 'image_maps',
@@ -65,16 +60,12 @@ export default class ImageMap extends BaseModel<
     this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
   }
 
-  @BelongsTo(() => ProcessedImage, 'baseImageId')
   declare baseImage?: NonAttribute<ProcessedImage>;
 
-  @HasMany(() => DrinkwareSet, 'imageMapId')
   declare drinkwareSets?: NonAttribute<DrinkwareSet[]>;
 
-  @HasMany(() => GuideImage, 'imageMapId')
   declare guideImages?: NonAttribute<GuideImage[]>;
 
-  @HasMany(() => ImageMapObject, 'imageMapId')
   declare objects?: NonAttribute<ImageMapObject[]>;
 }
 

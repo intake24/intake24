@@ -6,37 +6,20 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import type FoodsLocale from './locale';
+import type RecipeFood from './recipe-food';
+
 import {
-  BelongsTo,
   Column,
   CreatedAt,
   DataType,
-  Scopes,
   Sequelize,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
-
 import BaseModel from '../model';
-import FoodsLocale from './locale';
-import RecipeFood from './recipe-food';
 
-@Scopes(() => ({
-  list: {
-    attributes: [
-      'id',
-      'recipeFoodsId',
-      'code',
-      'order',
-      'name',
-      'description',
-      'repeatable',
-      'required',
-    ],
-    order: [['order', 'ASC']],
-  },
-}))
 @Table({
   modelName: 'RecipeFoodStep',
   tableName: 'recipe_foods_steps',
@@ -145,10 +128,8 @@ export default class RecipeFoodStep extends BaseModel<
   @UpdatedAt
   declare readonly updatedAt: CreationOptional<Date>;
 
-  @BelongsTo(() => RecipeFood, 'recipeFoodsId')
   declare recipeFood?: NonAttribute<RecipeFood>;
 
-  @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 }
 

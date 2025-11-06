@@ -6,7 +6,7 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import { Column, DataType, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
 
@@ -63,7 +63,6 @@ export default class GuideImageObject extends BaseModel<
     this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
   }
 
-  @BelongsTo(() => GuideImage, 'guideImageId')
   declare guideImage?: NonAttribute<GuideImage>;
 }
 

@@ -6,20 +6,15 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type GuideImageObject from './guide-image-object';
 
+import type ImageMap from './image-map';
+
+import type ProcessedImage from './processed-image';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import type { LocaleTranslation } from '@intake24/common/types';
-
 import BaseModel from '../model';
-import GuideImageObject from './guide-image-object';
-import ImageMap from './image-map';
-import ProcessedImage from './processed-image';
 
-@Scopes(() => ({
-  imageMap: { include: [{ model: ImageMap }] },
-  selectionImage: { include: [{ model: ProcessedImage }] },
-  objects: { include: [{ model: GuideImageObject }] },
-}))
 @Table({
   modelName: 'GuideImage',
   tableName: 'guide_images',
@@ -70,13 +65,10 @@ export default class GuideImage extends BaseModel<
     this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
   }
 
-  @BelongsTo(() => ImageMap, 'imageMapId')
   declare imageMap?: NonAttribute<ImageMap>;
 
-  @BelongsTo(() => ProcessedImage, 'selectionImageId')
   declare selectionImage?: NonAttribute<ProcessedImage>;
 
-  @HasMany(() => GuideImageObject, 'guideImageId')
   declare objects?: NonAttribute<GuideImageObject[]>;
 }
 

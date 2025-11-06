@@ -7,14 +7,15 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequelize-typescript';
+import type Food from './food';
 
+import type FoodNutrient from './food-nutrient';
+import type NutrientTable from './nutrient-table';
+import type NutrientTableRecordField from './nutrient-table-record-field';
+import type NutrientTableRecordNutrient from './nutrient-table-record-nutrient';
+import type { NutrientTableRecordNutrientCreationAttributes } from './nutrient-table-record-nutrient';
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import Food from './food';
-import FoodNutrient from './food-nutrient';
-import NutrientTable from './nutrient-table';
-import NutrientTableRecordField from './nutrient-table-record-field';
-import NutrientTableRecordNutrient, { NutrientTableRecordNutrientCreationAttributes } from './nutrient-table-record-nutrient';
 
 @Table({
   modelName: 'NutrientTableRecord',
@@ -62,19 +63,14 @@ export default class NutrientTableRecord extends BaseModel<
   })
   declare localName: CreationOptional<string | null>;
 
-  @BelongsToMany(() => Food, () => FoodNutrient, 'nutrientTableRecordId', 'foodId')
   declare foods?: Food[];
 
-  @HasMany(() => FoodNutrient, 'nutrientTableRecordId')
   declare foodMappings?: NonAttribute<FoodNutrient[]>;
 
-  @BelongsTo(() => NutrientTable, 'nutrientTableId')
   declare nutrientTable?: NonAttribute<NutrientTable>;
 
-  @HasMany(() => NutrientTableRecordNutrient, 'nutrientTableRecordId')
   declare nutrients?: NonAttribute<NutrientTableRecordNutrient[]>;
 
-  @HasMany(() => NutrientTableRecordField, 'nutrientTableRecordId')
   declare fields?: NonAttribute<NutrientTableRecordField[]>;
 
   getNutrientByType(nutrientTypeId: string): NutrientTableRecordNutrient | undefined {

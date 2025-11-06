@@ -6,10 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import type FoodsLocale from './locale';
 
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import FoodsLocale from './locale';
 
 @Table({
   modelName: 'SplitList',
@@ -47,7 +47,6 @@ export default class SplitList extends BaseModel<
   })
   declare words: string;
 
-  @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 }
 

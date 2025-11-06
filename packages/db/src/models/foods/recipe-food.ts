@@ -6,29 +6,19 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import type FoodsLocale from './locale';
+
+import type RecipeFoodStep from './recipe-food-step';
+import type SynonymSet from './synonym-set';
 import {
-  BelongsTo,
   Column,
   CreatedAt,
   DataType,
-  HasMany,
-  Scopes,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import { FoodsLocale, SynonymSet } from '.';
 import BaseModel from '../model';
-import RecipeFoodStep from './recipe-food-step';
 
-@Scopes(() => ({
-  list: {
-    attributes: ['id', 'code', 'name', 'localeId', 'recipeWord', 'synonyms'],
-    order: [['name', 'ASC']],
-  },
-  steps: { include: [{ model: RecipeFoodStep }] },
-  synonyms: { include: [{ model: SynonymSet }] },
-}))
 @Table({
   modelName: 'RecipeFood',
   tableName: 'recipe_foods',
@@ -84,13 +74,10 @@ export default class RecipeFood extends BaseModel<
   @UpdatedAt
   declare readonly updatedAt: CreationOptional<Date>;
 
-  @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 
-  @BelongsTo(() => SynonymSet, 'synonymsId')
   declare synonymSet?: Attributes<SynonymSet>;
 
-  @HasMany(() => RecipeFoodStep, 'recipeFoodsId')
   declare steps?: Attributes<RecipeFoodStep>[];
 
   static async findByCode(code: string): Promise<RecipeFood | null> {

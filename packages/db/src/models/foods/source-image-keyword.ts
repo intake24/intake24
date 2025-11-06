@@ -5,14 +5,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
+import type SourceImage from './source-image';
 
+import { Column, DataType, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
-import SourceImage from './source-image';
 
-@Scopes(() => ({
-  sourceImage: { include: [{ model: SourceImage }] },
-}))
 @Table({
   modelName: 'SourceImageKeyword',
   tableName: 'source_image_keywords',
@@ -36,7 +33,6 @@ export default class SourceImageKeyword extends BaseModel<
   })
   declare keyword: string;
 
-  @BelongsTo(() => SourceImage, 'sourceImageId')
   declare sourceImage?: NonAttribute<SourceImage>;
 }
 
