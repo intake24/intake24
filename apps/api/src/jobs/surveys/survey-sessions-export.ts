@@ -1,15 +1,13 @@
 import type { Job } from 'bullmq';
-
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
 import { Job as DbJob, Survey, UserSurveySession } from '@intake24/db';
-
 import BaseJob from '../job';
 
 export default class SurveySessionsExport extends BaseJob<'SurveySessionsExport'> {
@@ -77,58 +75,45 @@ export default class SurveySessionsExport extends BaseJob<'SurveySessionsExport'
     let counter = 0;
     const progressInterval = setInterval(async () => {
       await this.setProgress(counter);
-    }, 1000);
+    }, 2000);
 
-    return new Promise((resolve, reject) => {
-      const transform = new Transform(
-        {
-          fields: [
-            { label: 'sessionId', value: 'id' },
-            { label: 'surveyId', value: 'surveyId' },
-            { label: 'userId', value: 'userId' },
-            { label: 'username', value: 'alias.username' },
-            { label: 'createdAt', value: 'createdAt' },
-            { label: 'updatedAt', value: 'updatedAt' },
-            { label: 'startTime', value: 'sessionData.startTime' },
-            { label: 'endTime', value: 'sessionData.endTime' },
-            { label: 'submissionTime', value: 'sessionData.submissionTime' },
-            { label: 'state', value: 'sessionData' },
-          ],
-          withBOM: true,
-        },
-        {},
-        { objectMode: true },
-      );
-      const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
-        encoding: 'utf-8',
-        flags: 'w+',
-      });
-
-      sessions.on('error', (err) => {
-        clearInterval(progressInterval);
-        reject(err);
-      });
-
-      transform
-        .on('error', (err) => {
-          clearInterval(progressInterval);
-          reject(err);
-        })
-        .on('data', () => {
-          counter++;
-        })
-        .on('end', async () => {
-          clearInterval(progressInterval);
-
-          await this.dbJob.update({
-            downloadUrl: filename,
-            downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-          });
-
-          resolve();
-        });
-
-      sessions.pipe(transform).pipe(output);
+    const transform = new Transform(
+      {
+        fields: [
+          { label: 'sessionId', value: 'id' },
+          { label: 'surveyId', value: 'surveyId' },
+          { label: 'userId', value: 'userId' },
+          { label: 'username', value: 'alias.username' },
+          { label: 'createdAt', value: 'createdAt' },
+          { label: 'updatedAt', value: 'updatedAt' },
+          { label: 'startTime', value: 'sessionData.startTime' },
+          { label: 'endTime', value: 'sessionData.endTime' },
+          { label: 'submissionTime', value: 'sessionData.submissionTime' },
+          { label: 'state', value: 'sessionData' },
+        ],
+        withBOM: true,
+      },
+      {},
+      { objectMode: true },
+    );
+    const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
+      encoding: 'utf-8',
+      flags: 'w+',
     });
+
+    transform.on('data', () => {
+      counter++;
+    });
+
+    try {
+      await pipeline(sessions, transform, output);
+      await this.dbJob.update({
+        downloadUrl: filename,
+        downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
+      });
+    }
+    finally {
+      clearInterval(progressInterval);
+    }
   }
 }

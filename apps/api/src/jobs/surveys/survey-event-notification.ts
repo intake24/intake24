@@ -1,11 +1,9 @@
 import type { Job } from 'bullmq';
 import axios from 'axios';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { WebhookNotification } from '@intake24/common/types';
 import { submissionScope, Survey, SurveySubmission } from '@intake24/db';
-
 import NotificationJob from '../notification-job';
 
 export default class SurveyEventNotification extends NotificationJob<'SurveyEventNotification'> {
@@ -73,7 +71,7 @@ export default class SurveyEventNotification extends NotificationJob<'SurveyEven
     ]);
 
     await Promise.all(
-      webhooks.map((n, i) => axios.post(n.url, { ...this.params, data }, { headers: headers[i] })),
+      webhooks.map((n, i) => axios.post(n.url, { ...this.params, data }, { headers: headers[i], timeout: 15000 })),
     );
   }
 }

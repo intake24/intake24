@@ -1,14 +1,12 @@
 import type { Job } from 'bullmq';
-
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
 import { Job as DbJob } from '@intake24/db';
-
 import BaseJob from '../job';
 import resourceExports from './resources';
 
@@ -63,39 +61,25 @@ export default class ResourceExport extends BaseJob<'ResourceExport'> {
     let counter = 0;
     const progressInterval = setInterval(async () => {
       await this.setProgress(counter);
-    }, 1000);
+    }, 2000);
 
-    return new Promise((resolve, reject) => {
-      const output = fs.createWriteStream(
-        path.resolve(this.config.filesystem.local.downloads, filename),
-        { encoding: 'utf-8', flags: 'w+' },
-      );
-
-      records.on('error', (err) => {
-        clearInterval(progressInterval);
-        reject(err);
-      });
-
-      transform
-        .on('error', (err) => {
-          clearInterval(progressInterval);
-          reject(err);
-        })
-        .on('data', () => {
-          counter++;
-        })
-        .on('end', async () => {
-          clearInterval(progressInterval);
-
-          await this.dbJob.update({
-            downloadUrl: filename,
-            downloadUrlExpiresAt: addTime(this.config.filesystem.urlExpiresAt),
-          });
-
-          resolve();
-        });
-
-      records.pipe(transform).pipe(output);
+    const output = fs.createWriteStream(
+      path.resolve(this.config.filesystem.local.downloads, filename),
+      { encoding: 'utf-8', flags: 'w+' },
+    );
+    transform.on('data', () => {
+      counter++;
     });
+
+    try {
+      await pipeline(records, transform, output);
+      await this.dbJob.update({
+        downloadUrl: filename,
+        downloadUrlExpiresAt: addTime(this.config.filesystem.urlExpiresAt),
+      });
+    }
+    finally {
+      clearInterval(progressInterval);
+    }
   }
 }
