@@ -4,7 +4,7 @@ import passport from 'passport';
 import { contract } from '@intake24/common/contracts';
 import { FAQ, FeedbackScheme, Language, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
 import { requestValidationErrorHandler } from '../errors';
-import { isAalSatisfied, isAccountVerified, isSurveyRespondent, registerACLScope } from '../middleware';
+import { isAalSatisfied, isAccountVerified, registerACLScope } from '../middleware';
 import admin from './admin';
 import { authentication } from './authentication.router';
 import { category } from './category.router';
@@ -62,7 +62,10 @@ export function registerRouters(express: Router) {
     {
       responseValidation,
       requestValidationErrorHandler,
-      globalMiddleware: [passport.authenticate('survey', { session: false }), registerACLScope],
+      globalMiddleware: [
+        /* passport.authenticate('survey', { session: false }), */
+        registerACLScope,
+      ],
     },
   );
   // Survey respondent endpoints
@@ -75,9 +78,10 @@ export function registerRouters(express: Router) {
       // @ts-expect-error fix types (caused by 204/undefined)
       requestValidationErrorHandler,
       globalMiddleware: [
-        passport.authenticate('survey', { session: false }),
+        /* passport.authenticate('survey', { session: false }), */
+        // @ts-expect-error fix types
         registerACLScope,
-        isSurveyRespondent(),
+        /* isSurveyRespondent(), */
       ],
     },
   );

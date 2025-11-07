@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'API',
       script: './dist/server.js',
-      instances: 2,
+      instances: 1,
       exec_mode: 'cluster',
       watch: ['./dist'],
       watch_delay: 1000,
