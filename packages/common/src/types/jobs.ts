@@ -37,7 +37,9 @@ export const CleanRedisStore = z.object({
 export const CleanStorageFiles = z.record(z.never());
 export const FeedbackSchemesSync = z.record(z.never());
 export const LanguageTranslationsSync = z.record(z.never());
-export const LocaleIndexBuild = z.record(z.never());
+export const LocaleIndexBuild = z.object({
+  force: z.boolean().optional(),
+});
 
 export const localeCopyFoodsSubTasks = ['categories', 'foods', 'associatedFoods', 'attributes', 'brands', 'recipeFoods', 'splitLists', 'splitWords', 'synonymSets'] as const;
 export type LocaleCopyFoodsSubTasks = (typeof localeCopyFoodsSubTasks)[number];
@@ -376,7 +378,9 @@ export const defaultJobsParams: JobParams = {
   CleanStorageFiles: {},
   FeedbackSchemesSync: {},
   LanguageTranslationsSync: {},
-  LocaleIndexBuild: {},
+  LocaleIndexBuild: {
+    force: false,
+  },
   LocaleCopy: {
     localeId: '',
     sourceLocaleId: '',
