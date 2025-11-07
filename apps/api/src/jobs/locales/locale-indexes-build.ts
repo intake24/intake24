@@ -27,7 +27,7 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
 
     this.logger.debug('Job started.');
 
-    const locales = await this.cache.setMembers(this.cacheKey);
+    const locales = this.params.force ? ['all'] : await this.cache.setMembers(this.cacheKey);
     if (locales.length) {
       this.logger.info('Locale Ids for rebuilding:', locales);
       await Promise.all([

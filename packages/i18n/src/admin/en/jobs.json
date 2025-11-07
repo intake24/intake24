@@ -77,7 +77,8 @@
       "localeId": "Locale ID"
     },
     "LocaleIndexBuild": {
-      "_": "Locale - Rebuild Food Indexes for modified locales"
+      "_": "Locale - Rebuild Food Indexes for modified locales",
+      "force": "Force rebuild for all locales"
     },
     "NutrientTableMappingImport": {
       "_": "Nutrient table - Import NDB mapping",
