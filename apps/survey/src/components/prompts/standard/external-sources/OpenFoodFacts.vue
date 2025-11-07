@@ -19,7 +19,7 @@
         <v-btn
           v-if="$vuetify.display.smAndUp"
           color="primary"
-          :disabled="!searchTerm?.length"
+          :disabled="!canSearch"
           elevation="0"
           height="initial"
           size="x-large"
@@ -72,7 +72,7 @@
           </v-card-text>
         </v-card>
       </template>
-      <v-container v-if="!selected && response.searchTerm" class="pa-0" fluid>
+      <v-container v-if="!selected && canSearch" class="pa-0" fluid>
         <div class="d-flex flex-column flex-md-row justify-space-between align-center py-3 gr-2">
           <div>
             {{ promptI18n['products.results'] }}
@@ -219,6 +219,7 @@ const categoriesTags = computed(() => {
     return acc;
   }, []);
 });
+const hasSearchFilters = computed(() => !!(Object.keys(props.prompt.source.query).length || categoriesTags.value.length));
 
 const client = axios.create({ baseURL: baseUrl.value });
 let clientCtrl = new AbortController();
@@ -255,6 +256,7 @@ const response = ref<SearchResponse>({
 });
 const selected = ref<OOFProduct | undefined>();
 const searchTerm = ref(props.modelValue.searchTerm);
+const canSearch = computed(() => hasSearchFilters.value || !!searchTerm.value);
 
 const promptI18n = computed(() =>
   translatePrompt([
@@ -367,8 +369,8 @@ async function fetchProducts(search: string) {
 }
 
 async function search() {
-  const searchValue = searchTerm.value;
-  if (!searchValue) {
+  const searchValue = searchTerm.value ?? '';
+  if (!searchValue && !hasSearchFilters.value) {
     response.value = { searchTerm: '', data: { ...emptyResponse } };
     return;
   }
