@@ -33,7 +33,6 @@
     "help": "Help",
     "options": "Options"
   },
-
   "username": "Username",
   "name": "Name",
   "email": "Email",
@@ -42,19 +41,20 @@
   "phone": "Phone",
   "message": "Message",
   "continue": "Continue",
-
-  "faqs": {
-    "_": "FAQ",
-    "title": "Frequently Asked Questions",
-    "subtitle": "Find answers to common questions about Intake24"
-  },
   "help": {
-    "_": "Help",
-    "title": "Request help",
-    "text": "Complete the form below and one of our support staff will get in touch as soon as they can.",
-    "sent": "Your help request has been sent."
+    "_": "Help & FAQ",
+    "faqs": {
+      "_": "FAQ",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Find answers to common questions about Intake24"
+    },
+    "request": {
+      "_": "Help",
+      "title": "Request help",
+      "text": "Complete the form below and one of our support staff will get in touch as soon as they can.",
+      "sent": "Your help request has been sent."
+    }
   },
-
   "app": {
     "_": "App",
     "info": "Application Information",

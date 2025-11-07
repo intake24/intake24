@@ -30,7 +30,7 @@
     "recall": "Enquête",
     "review": "Récap",
     "help": "Aide",
-    "options": "Possibilités"
+    "options": "Menu"
   },
   "username": "Nom d'utilisateur",
   "name": "Nom",
@@ -40,16 +40,19 @@
   "phone": "Téléphone",
   "message": "Message",
   "continue": "Continuer",
-  "faqs": {
-    "_": "FAQ",
-    "title": "Foire aux Questions (FAQ)",
-    "subtitle": "Trouvez les réponses aux questions fréquemment posées sur l'enquête alimentaire"
-  },
   "help": {
-    "_": "Aide",
-    "title": "Envoyer le message",
-    "text": "Saisissez votre message dans le formulaire ci-dessous et une de nos diététiciennes vous contactera dès que possible.",
-    "sent": "Votre demande d'aide a été envoyée."
+    "_": "Aide & FAQ",
+    "faqs": {
+      "_": "FAQ",
+      "title": "Foire aux Questions (FAQ)",
+      "subtitle": "Trouvez les réponses aux questions fréquemment posées sur l'enquête alimentaire"
+    },
+    "request": {
+      "_": "Aide",
+      "title": "Envoyer un message",
+      "text": "Saisissez votre message dans le formulaire ci-dessous et une de nos diététiciennes vous contactera dès que possible.",
+      "sent": "Votre demande d'aide a été envoyée."
+    }
   },
   "app": {
     "_": "Application",

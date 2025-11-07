@@ -15,17 +15,17 @@
           value="help"
         >
           <v-icon icon="$info" />
-          <span>{{ $t('common.faqs._') }}</span>
+          <span>{{ $t('common.help.faqs._') }}</span>
         </v-btn>
         <v-btn
           v-else
           color="grey"
           v-bind="props"
-          :title="$t('common.faqs.title')"
+          :title="$t('common.help.faqs.title')"
           variant="flat"
         >
           <v-icon icon="$info" start />
-          {{ $t('common.faqs._') }}
+          {{ $t('common.help.faqs._') }}
         </v-btn>
       </slot>
     </template>
@@ -36,7 +36,7 @@
         extension-height="200"
       >
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" @click.stop="close" />
-        <v-toolbar-title>{{ $t('common.faqs.title') }}</v-toolbar-title>
+        <v-toolbar-title>{{ $t('common.help.faqs.title') }}</v-toolbar-title>
         <template #image>
           <v-img
             cover
@@ -48,10 +48,10 @@
           <div class="px-4 d-flex justify-center items-center flex-column mx-auto">
             <v-card class="px-4 py-4 py-md-6 faqs-hero__card rounded-lg d-flex flex-column gr-2" flat>
               <h1 class="text-h1 font-weight-medium text-center px-4">
-                {{ $t('common.faqs.title') }}
+                {{ $t('common.help.faqs.title') }}
               </h1>
               <h2 class="text-h6 font-weight-medium text-center px-4">
-                {{ $t('common.faqs.subtitle') }}
+                {{ $t('common.help.faqs.subtitle') }}
               </h2>
             </v-card>
           </div>

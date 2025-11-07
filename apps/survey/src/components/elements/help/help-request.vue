@@ -15,29 +15,29 @@
           value="help"
         >
           <v-icon icon="$info" />
-          <span>{{ $t('common.help._') }}</span>
+          <span>{{ $t('common.help.request._') }}</span>
         </v-btn>
         <v-btn
           v-else
           color="grey"
           v-bind="props"
-          :title="$t('common.help.title')"
+          :title="$t('common.help.request.title')"
           variant="flat"
         >
           <v-icon icon="$info" start />
-          {{ $t('common.help._') }}
+          {{ $t('common.help.request._') }}
         </v-btn>
       </slot>
     </template>
     <v-card :tile="mobile">
       <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" @click.stop="close" />
-        <v-toolbar-title>{{ $t('common.help.title') }}</v-toolbar-title>
+        <v-toolbar-title>{{ $t('common.help.request.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-form @keydown="errors.clear()" @submit.prevent="requestHelp">
         <v-card-text>
           <p class="mb-4">
-            {{ $t('common.help.text') }}
+            {{ $t('common.help.request.text') }}
           </p>
           <v-row>
             <v-col v-if="settings.available.includes('name')" cols="12">
@@ -113,12 +113,12 @@
                 :disabled="errors.any()"
                 rounded
                 size="x-large"
-                :title="$t('common.help.title')"
+                :title="$t('common.help.request.title')"
                 type="submit"
                 variant="outlined"
               >
                 <v-icon icon="fas fa-circle-question" start />
-                {{ $t('common.help.title') }}
+                {{ $t('common.help.request.title') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -201,7 +201,7 @@ async function requestHelp() {
 
   try {
     await surveyService.requestHelp(surveyId, form.value);
-    useMessages().info(t('common.help.sent'));
+    useMessages().info(t('common.help.request.sent'));
     close();
   }
   catch (err) {

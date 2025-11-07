@@ -4,7 +4,7 @@
       v-if="!$vuetify.display.mobile"
       class="menu__activator"
       color="grey"
-      :title="$t('common.help.title')"
+      :title="$t('common.help.request.title')"
       variant="flat"
     >
       <v-icon icon="$info" start />
@@ -17,7 +17,7 @@
       @click="toggleDrawer"
     >
       <v-icon icon="$info" />
-      <span>{{ $t('common.help._') }}</span>
+      <span>{{ $t('common.nav.help') }}</span>
     </v-btn>
   </template>
   <help-request
@@ -48,7 +48,7 @@
       >
         <template #activator="{ props }">
           <v-list-item v-bind="props" prepend-icon="far fa-circle-question">
-            <v-list-item-title>{{ $t('common.faqs.title') }}</v-list-item-title>
+            <v-list-item-title>{{ $t('common.help.faqs.title') }}</v-list-item-title>
           </v-list-item>
         </template>
       </help-faq>
@@ -60,7 +60,7 @@
       >
         <template #activator="{ props }">
           <v-list-item v-bind="props" prepend-icon="fas fa-hand">
-            <v-list-item-title>{{ $t('common.help.title') }}</v-list-item-title>
+            <v-list-item-title>{{ $t('common.help.request.title') }}</v-list-item-title>
           </v-list-item>
         </template>
       </help-request>
