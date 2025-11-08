@@ -3,7 +3,6 @@ import type { PushPayload } from '..';
 
 import { Queue, Worker } from 'bullmq';
 import type { IoC } from '@intake24/api/ioc';
-import ioc from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
 import type { JobData, JobParams, JobType } from '@intake24/common/types';
 
@@ -26,6 +25,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
   readonly name = 'jobs';
 
   private readonly pusher;
+  private readonly resolveDynamic;
 
   /**
    * Creates an instance of JobsQueueHandler
@@ -33,9 +33,10 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
    * @param {string} name
    * @memberof JobsQueueHandler
    */
-  constructor({ queueConfig, logger, pusher }: Pick<IoC, 'queueConfig' | 'logger' | 'pusher'>) {
+  constructor({ queueConfig, logger, pusher, resolveDynamic }: Pick<IoC, 'queueConfig' | 'logger' | 'pusher' | 'resolveDynamic'>) {
     super(queueConfig, logger.child({ service: 'JobsQueueHandler' }));
     this.pusher = pusher;
+    this.resolveDynamic = resolveDynamic;
   }
 
   /**
@@ -59,7 +60,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
     });
 
     for (let i = 0; i < this.config.workers; i++) {
-      const worker = new Worker(this.name, this.processor, options);
+      const worker = new Worker(this.name, this.processor.bind(this), options);
 
       worker
         .on('progress', async (job, progress) => {
@@ -183,7 +184,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
 
     await dbJob.update({ progress: 0, startedAt: new Date() });
 
-    const newJob = ioc.resolve<Job<typeof dbJob.type>>(name);
+    const newJob = this.resolveDynamic<Job<typeof dbJob.type>>(name);
     await newJob.run(job);
   }
 
