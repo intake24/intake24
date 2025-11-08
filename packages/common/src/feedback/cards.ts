@@ -1,4 +1,4 @@
-import { localeTranslation, requiredLocaleTranslation } from '../types';
+import { localeTranslation, requiredLocaleTranslation } from '../types/common';
 import { z } from '../util';
 import { characterSentiment } from './characters';
 

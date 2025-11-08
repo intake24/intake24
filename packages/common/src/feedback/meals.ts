@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { colors } from '../theme';
-import { requiredLocaleTranslation } from '../types';
+import { requiredLocaleTranslation } from '../types/common';
 import { nutrient } from './shared';
 
 export const feedbackMealChart = z.object({

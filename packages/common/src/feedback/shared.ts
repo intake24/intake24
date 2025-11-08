@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { localeTranslation } from '../types';
+import { localeTranslation } from '../types/common';
 
 export const feedbackTypes = ['default', 'playful'] as const;
 export type FeedbackType = (typeof feedbackTypes)[number];

@@ -1,4 +1,4 @@
-import { localeTranslation } from '../types';
+import { localeTranslation } from '../types/common';
 import { z } from '../util';
 import { sentiments } from './shared';
 
