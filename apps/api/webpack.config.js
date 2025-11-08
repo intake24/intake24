@@ -5,6 +5,7 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const WebpackBar = require('webpackbar');
+const { onlySequelizeDecoratorImports, isSubpath } = require('./circular-dependency-utils');
 
 module.exports = (env) => {
   const { NODE_ENV = 'development', NODE_INSPECT_BREAK } = env;
@@ -28,10 +29,20 @@ module.exports = (env) => {
 
     plugins.push(
       new CircularDependencyPlugin({
-        exclude: /node_modules/,
         failOnError: false,
+        exclude: /node_modules/,
+        allowAsyncCycles: false,
+
         onDetected({ paths, compilation }) {
-          compilation.warnings.push(new Error(`${paths[0]}: circular import: ${paths.join(' -> ')}`));
+          let ignore = false;
+          if (isSubpath('../../packages/db/src/models', paths[0])) {
+            const absPaths = paths.map(p => path.resolve(compilation.options.context || process.cwd(), p));
+            ignore = absPaths.slice(0, -1).every((_, i) =>
+              onlySequelizeDecoratorImports(absPaths[i], absPaths[i + 1]),
+            );
+          }
+          if (!ignore)
+            compilation.warnings.push(new Error(`${paths[0]}: circular import: ${paths.slice(1).join(' -> ')}`));
         },
       }),
     );

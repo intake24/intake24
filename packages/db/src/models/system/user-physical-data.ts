@@ -9,8 +9,8 @@ import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typesc
 
 import type { Sex, WeightTarget } from '@intake24/common/feedback';
 
-import { User } from '.';
 import BaseModel from '../model';
+import User from './user';
 
 @Table({
   modelName: 'UserPhysicalData',

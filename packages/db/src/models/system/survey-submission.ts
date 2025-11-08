@@ -17,8 +17,11 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
 import BaseModel from '../model';
+import Survey from './survey';
+import SurveySubmissionCustomField from './survey-submission-custom-field';
+import SurveySubmissionMeal from './survey-submission-meal';
+import User from './user';
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },

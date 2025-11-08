@@ -15,16 +15,15 @@ import {
   HasOne,
   Table,
 } from 'sequelize-typescript';
-import {
-  AssociatedFood,
-  CategoryAttribute,
-  CategoryCategory,
-  CategoryPortionSizeMethod,
-  Food,
-  FoodCategory,
-  FoodsLocale,
-} from '.';
+
 import BaseModel from '../model';
+import AssociatedFood from './associated-foods';
+import CategoryAttribute from './category-attributes';
+import CategoryCategory from './category-category';
+import CategoryPortionSizeMethod from './category-portion-size-method';
+import Food from './food';
+import FoodCategory from './food-category';
+import FoodsLocale from './locale';
 
 @Table({
   modelName: 'Category',

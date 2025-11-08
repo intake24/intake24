@@ -19,8 +19,12 @@ import {
 } from 'sequelize-typescript';
 import type { RecordVisibility } from '@intake24/common/security';
 import type { FAQSection } from '@intake24/common/types/http/admin';
-import { Survey, User, UserSecurable } from '.';
-import { BaseModel } from '..';
+
+import BaseModel from '../model';
+
+import Survey from './survey';
+import User from './user';
+import UserSecurable from './user-securable';
 
 @Table({
   modelName: 'FAQ',

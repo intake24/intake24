@@ -22,8 +22,11 @@ import {
 
 import { aclConfig } from '@intake24/common-backend';
 
-import { PermissionRole, PermissionUser, Role, User } from '.';
 import BaseModel from '../model';
+import PermissionRole from './permission-role';
+import PermissionUser from './permission-user';
+import Role from './role';
+import User from './user';
 
 export async function addPermissionsToAdmin(permissions: Permission[], options: { transaction?: Transaction } = {}): Promise<void> {
   const { transaction } = options;
