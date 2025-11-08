@@ -1,5 +1,5 @@
 import type { SiteUrls } from '@intake24/api/config';
-import { surveyUrlService } from '@intake24/api/services';
+import surveyUrlService from '@intake24/api/services/survey/survey-url.service';
 import type {
   RespondentEntry,
   RespondentListEntry,
