@@ -10,8 +10,9 @@ import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-t
 
 import type { LocaleTranslation } from '@intake24/common/types';
 
-import { DrinkwareSet, DrinkwareVolumeSample } from '.';
 import BaseModel from '../model';
+import DrinkwareSet from './drinkware-set';
+import DrinkwareVolumeSample from './drinkware-volume-sample';
 
 @Scopes(() => ({
   drinkwareSet: { include: [{ model: DrinkwareSet }] },

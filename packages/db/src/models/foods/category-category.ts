@@ -6,8 +6,8 @@ import type {
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-import { Category } from '@intake24/db';
 import BaseModel from '../model';
+import Category from './category';
 
 @Table({
   modelName: 'CategoryCategory',

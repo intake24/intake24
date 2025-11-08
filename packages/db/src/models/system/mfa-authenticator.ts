@@ -9,8 +9,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
-import { MFADevice } from '.';
 import BaseModel from '../model';
+import MFADevice from './mfa-device';
 
 @Table({
   modelName: 'MFAAuthenticator',

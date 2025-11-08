@@ -17,10 +17,10 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import { FoodsLocale, SynonymSet } from '@intake24/db';
-
 import BaseModel from '../model';
+import FoodsLocale from './locale';
 import RecipeFoodStep from './recipe-food-step';
+import SynonymSet from './synonym-set';
 
 @Scopes(() => ({
   list: {
