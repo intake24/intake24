@@ -9,8 +9,8 @@ import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'seque
 
 import type { SecurableType } from '@intake24/common/security';
 
-import { User } from '.';
 import BaseModel from '../model';
+import User from './user';
 
 @Table({
   modelName: 'UserSecurable',

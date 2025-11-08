@@ -8,8 +8,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
-import { User } from '.';
 import BaseModel from '../model';
+import User from './user';
 
 @Table({
   modelName: 'PersonalAccessToken',

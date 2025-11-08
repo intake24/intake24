@@ -8,8 +8,12 @@ import type {
 } from 'sequelize';
 import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import type { TextDirection } from '@intake24/common/types';
-import { Category, Food, SplitList, SplitWord, SynonymSet } from '.';
 import BaseModel from '../model';
+import Category from './category';
+import Food from './food';
+import SplitList from './split-list';
+import SplitWord from './split-word';
+import SynonymSet from './synonym-set';
 
 @Table({
   modelName: 'Locale',

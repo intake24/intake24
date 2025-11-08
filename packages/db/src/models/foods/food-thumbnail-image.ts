@@ -8,8 +8,10 @@ import type {
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-import { Food, ProcessedImage } from '.';
+
 import BaseModel from '../model';
+import Food from './food';
+import ProcessedImage from './processed-image';
 
 @Scopes(() => ({
   image: { include: [{ model: ProcessedImage, as: 'image' }] },

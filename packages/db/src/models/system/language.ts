@@ -22,9 +22,12 @@ import {
 import type { RecordVisibility } from '@intake24/common/security';
 
 import type { TextDirection } from '@intake24/common/types';
-import { LanguageTranslation, User, UserSecurable } from '.';
 import BaseModel from '../model';
+import LanguageTranslation from './language-translation';
 import SystemLocale from './locale';
+
+import User from './user';
+import UserSecurable from './user-securable';
 
 @Scopes(() => ({
   public: {

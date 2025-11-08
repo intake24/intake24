@@ -7,8 +7,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
-import { SourceImage } from '.';
 import BaseModel from '../model';
+import SourceImage from './source-image';
 
 @Scopes(() => ({
   sourceImage: { include: [{ model: SourceImage }] },

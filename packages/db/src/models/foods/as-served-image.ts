@@ -9,8 +9,10 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import type { LocaleTranslation } from '@intake24/common/types';
-import { AsServedSet, ProcessedImage } from '.';
+
 import BaseModel from '../model';
+import AsServedSet from './as-served-set';
+import ProcessedImage from './processed-image';
 
 @Scopes(() => ({
   asServedSet: { include: [{ model: AsServedSet }] },
