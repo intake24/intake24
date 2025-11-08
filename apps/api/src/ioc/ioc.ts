@@ -197,6 +197,9 @@ export interface IoC extends Jobs {
   surveySubmissionService: SurveySubmissionService;
   popularityCountersService: PopularityCountersService;
   userService: UserService;
+
+  // Dynamic dependency resolver
+  resolveDynamic: <T>(name: string) => T;
 }
 
 export interface RequestIoC extends IoC {
