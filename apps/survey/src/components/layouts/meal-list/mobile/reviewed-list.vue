@@ -4,6 +4,16 @@
       <v-toolbar-title>
         {{ $t('recall.menu.title') }}
       </v-toolbar-title>
+      <v-btn
+        color="primary"
+        rounded="pill"
+        :title="$t('recall.menu.meal.add')"
+        variant="outlined"
+        @click="action('addMeal')"
+      >
+        <v-icon icon="$add" start />
+        {{ $t('recall.menu.meal.add') }}
+      </v-btn>
     </v-toolbar>
     <v-divider />
     <v-list class="meal-list__list pt-0" density="compact" tile>
