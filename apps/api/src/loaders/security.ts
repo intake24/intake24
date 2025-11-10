@@ -28,8 +28,6 @@ export default (app: Express, { config }: Ops) => {
   const corsOptionsDelegate: CorsOptionsDelegate<Request> = (req, callback) => {
     const corsOptions = { ...defaultCorsOptions };
 
-    console.log(req.path);
-
     if (req.path === '/api/admin/large-file-upload') {
       corsOptions.preflightContinue = true;
     }

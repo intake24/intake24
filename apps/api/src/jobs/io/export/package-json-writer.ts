@@ -17,6 +17,8 @@ export function createPackageJsonWriter() {
       .filter(([_, localeStreams]) => localeStreams.foods !== undefined)
       .map(([localeId, localeStreams]) => [localeId, Readable.from(localeStreams.foods!)]));
 
+    console.log(foods);
+
     const jsonStream = new JsonStreamStringify(foods, undefined, 2);
 
     jsonStream.once('error', (err) => {

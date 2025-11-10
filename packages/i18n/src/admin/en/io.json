@@ -14,8 +14,8 @@
       "action": "Action",
       "status": {
         "_": "Status",
-        "successful": "Completed",
-        "failed": "Failed",
+        "success": "Completed",
+        "error": "Error",
         "inProgress": "In progress"
       }
     },

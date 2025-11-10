@@ -212,8 +212,6 @@ export interface IoC extends PackageWritersAndJobs {
   surveySubmissionService: SurveySubmissionService;
   popularityCountersService: PopularityCountersService;
   userService: UserService;
-  // Chunked file upload implementation for large file uploads
-  tusServer: TusServer;
 
   // Dynamic dependency resolver
   resolveDynamic: <T>(name: string) => T;

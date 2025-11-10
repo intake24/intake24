@@ -76,27 +76,27 @@
                     </v-btn>
                   </td>
                   <td>
-                    <v-chip v-if="job.successful === true" color="success" size="small">
-                      {{ $t('io.export.activeJobs.status.successful') }}
-                    </v-chip>
-                    <div v-else-if="job.successful === false">
-                      <v-chip color="error" size="small">
-                        {{ $t('io.export.activeJobs.status.failed') }}
-                      </v-chip>
-                      <v-tooltip location="top">
-                        <template #activator="{ props }">
-                          <v-icon
-                            v-bind="props"
-                            class="ml-1"
-                            color="error"
-                            size="x-small"
-                          >
-                            mdi-information-outline
-                          </v-icon>
-                        </template>
-                        <span>{{ job.message }}</span>
-                      </v-tooltip>
-                    </div>
+                    <v-alert
+                      v-if="job.successful === true"
+                      density="compact"
+                      icon-size="small"
+                      :title="$t('io.export.activeJobs.status.success')"
+                      type="success"
+                      variant="text"
+                    >
+                      {{ job.message }}
+                    </v-alert>
+
+                    <v-alert
+                      v-else-if="job.successful === false"
+                      density="compact"
+                      icon-size="small"
+                      :title="$t('io.export.activeJobs.status.error')"
+                      type="error"
+                      variant="text"
+                    >
+                      {{ job.message }}
+                    </v-alert>
                     <div v-else-if="job.successful === null" class="d-flex align-center">
                       <v-progress-linear
                         color="green"
@@ -107,7 +107,7 @@
                         :model-value="job.progress ?? 0"
                         rounded
                       >
-                        <span class>
+                        <span>
                           {{ $t('io.export.activeJobs.status.inProgress') }}: {{ ((job.progress ?? 0) * 100).toFixed(1) }}%
                         </span>
                       </v-progress-linear>
@@ -335,15 +335,8 @@ function handleExportError(error: any) {
   width: 100%;
 }
 
-.job-status-table th,
-.job-status-table td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .job-id-col {
-  width: 5%;
+  width: 10%;
 }
 .started-at-col {
   width: 10%;

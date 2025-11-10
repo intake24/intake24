@@ -5,7 +5,7 @@ import pick from 'lodash/pick';
 import { z } from 'zod';
 
 import { searchSortingAlgorithms } from '../surveys';
-import { packageExportOptions } from './http/admin';
+import { packageExportOptions } from './http/admin/io';
 
 export const repeatableBullJob = z.object({
   key: z.string(),

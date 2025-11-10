@@ -7,6 +7,7 @@
       "@intake24/api-tests/*": ["__tests__/*"],
       "@intake24/common/*": ["../../packages/common/src/*"],
       "@intake24/common-backend/*": ["../../packages/common-backend/src/*"],
+      "@intake24/db/*": ["../../packages/db/src/*"],
       /*
        * This syntax works nice, though few notes to be aware
        * - code also needs exported to level - this actually helps with package organization

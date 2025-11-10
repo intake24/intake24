@@ -44,12 +44,12 @@ export function onlySequelizeDecoratorImports(fromPath, toPath) {
     match = decoratorsRegex.exec(source);
   }
 
-  //   if (usedInDecorators.size > 0) {
-  //     console.warn(`Models used in Sequelize decorators: ${Array.from(usedInDecorators).join(', ')}`);
-  //   }
-  //   else {
-  //     console.warn(`No Sequelize decorators found.`);
-  //   }
+  // if (usedInDecorators.size > 0) {
+  //   console.warn(`Models used in Sequelize decorators: ${Array.from(usedInDecorators).join(', ')}`);
+  // }
+  // else {
+  //   console.warn(`No Sequelize decorators found.`);
+  // }
 
   if (usedInDecorators.size === 0) {
     return false;
@@ -99,12 +99,12 @@ export function onlySequelizeDecoratorImports(fromPath, toPath) {
 
   const isSafe = Array.from(importedNames).every(name => usedInDecorators.has(name));
 
-  //   if (isSafe) {
-  //     console.log(`Safe import from ${relativePath}: ${Array.from(importedNames).join(', ')} matches decorators`);
-  //   }
-  //   else {
-  //     console.warn(`Unsafe import from ${relativePath}: ${Array.from(importedNames).join(', ')} does not fully match decorators`);
-  //   }
+  // if (isSafe) {
+  //   console.log(`Safe import from ${relativePath}: ${Array.from(importedNames).join(', ')} matches decorators`);
+  // }
+  // else {
+  //   console.warn(`Unsafe import from ${relativePath}: ${Array.from(importedNames).join(', ')} does not fully match decorators`);
+  // }
 
   return isSafe;
 }
