@@ -13,6 +13,7 @@ import type { Ops } from '@intake24/api/app';
 
 import app from '@intake24/api/app';
 import ioc from '@intake24/api/ioc';
+import { getMemoryUsage } from './util';
 
 const appOps = { config: ioc.cradle.config, logger: ioc.cradle.logger };
 
@@ -38,6 +39,16 @@ async function startApp(ops: Ops): Promise<void> {
   server.listen(port, host, () => {
     logger.child({ service: 'Application' }).info(`${name} is listening on ${host}:${port}!`);
   });
+
+  setInterval(() => {
+    const memory = getMemoryUsage();
+    console.log(`Memory: RSS ${memory.rss} MB, Heap Used ${memory.heapUsed} MB, Heap Total ${memory.heapTotal} MB, External ${memory.external} MB, Array Buffers ${memory.arrayBuffers} MB`);
+    /* logger
+      .child({ service: 'MemoryUsage' })
+      .info(
+        `Memory Usage: RSS ${memory.rss} MB, Heap Used ${memory.heapUsed} MB, Heap Total ${memory.heapTotal} MB`,
+      ); */
+  }, 5000);
 }
 
 (async () => {

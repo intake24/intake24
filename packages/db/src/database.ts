@@ -47,17 +47,13 @@ export class Database implements DatabasesInterface {
   }
 
   init() {
-    const isDev = this.env === 'development';
-
     for (const database of Object.keys(this.config[this.env]) as DatabaseType[]) {
       const { debugQueryLimit, url, ...rest } = this.config[this.env][database];
 
       const config = {
         ...rest,
         models: Object.values(models[database]),
-        logging: isDev
-          ? (sql: string) => databaseLogQuery(sql, this.logger, debugQueryLimit)
-          : false,
+        logging: (sql: string) => databaseLogQuery(sql, this.logger, debugQueryLimit),
       };
 
       this[database] = url ? new Sequelize(url, config) : new Sequelize(config);
