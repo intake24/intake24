@@ -98,6 +98,7 @@ export default class SurveySubmission extends BaseModel<
 
   @Column({
     allowNull: false,
+    unique: true,
     type: DataType.UUID,
   })
   declare sessionId: string;
