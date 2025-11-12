@@ -22,6 +22,8 @@
     "noActiveJobs": "No recent exports",
     "requestExport": "Request new export",
     "exportButtonLabel": "Request export",
+    "downloadAvailable": "Download available: ",
+    "downloadExpired": "Download link expired",
     "format": {
       "_": "Export format",
       "default": "Default (JSON)",

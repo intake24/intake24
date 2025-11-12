@@ -1,7 +1,7 @@
 import { Selectable } from 'kysely';
 import { ZodError } from 'zod';
 import { asServedPortionSizeParameters, cerealPortionSizeParameters, drinkScalePortionSizeParameters, guideImagePortionSizeParameters, milkInHotDrinkPortionSizeParameters, milkOnCerealPortionSizeParameters, pizzaPortionSizeParameters, standardPortionSizeParameters } from '@intake24/common/surveys/portion-size';
-import { PkgV2AsServedPsm, PkgV2CerealPsm, PkgV2DrinkScalePsm, PkgV2GuideImagePsm, PkgV2MilkInHotDrinkPsm, PkgV2MilkOnCerealPsm, PkgV2PizzaPsm, PkgV2PortionSizeMethod, PkgV2StandardPortionPsm } from '@intake24/common/types/package/foods';
+import { PkgV2AsServedPsm, PkgV2CerealPsm, PkgV2DirectWeightPsm, PkgV2DrinkScalePsm, PkgV2GuideImagePsm, PkgV2MilkInHotDrinkPsm, PkgV2MilkOnCerealPsm, PkgV2PizzaPsm, PkgV2PortionSizeMethod, PkgV2StandardPortionPsm, PkgV2UnknownPsm } from '@intake24/common/types/package/foods';
 import type { FoodPortionSizeMethods } from '@intake24/db/kysely/foods';
 
 type FoodPortionSizeMethodsRow = Pick<Selectable<FoodPortionSizeMethods>, 'id' | 'method' | 'description' | 'conversionFactor' | 'useForRecipes' | 'parameters'>;
@@ -98,6 +98,24 @@ function packageMilkInHotDrink(portionSize: FoodPortionSizeMethodsRow): PkgV2Mil
   };
 }
 
+function packageDirectWeight(portionSize: FoodPortionSizeMethodsRow): PkgV2DirectWeightPsm {
+  return {
+    method: 'direct-weight',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+  };
+}
+
+function packageUnknown(portionSize: FoodPortionSizeMethodsRow): PkgV2UnknownPsm {
+  return {
+    method: 'unknown',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+  };
+}
+
 export function packagePortionSize(psmRowData: FoodPortionSizeMethodsRow): PkgV2PortionSizeMethod {
   try {
     switch (psmRowData.method) {
@@ -117,6 +135,10 @@ export function packagePortionSize(psmRowData: FoodPortionSizeMethodsRow): PkgV2
         return packagePizza(psmRowData);
       case 'milk-in-a-hot-drink':
         return packageMilkInHotDrink(psmRowData);
+      case 'direct-weight':
+        return packageDirectWeight(psmRowData);
+      case 'unknown':
+        return packageUnknown(psmRowData);
       default:
         throw new Error(`Unexpected portion size estimation method: ${psmRowData.method}`);
     }
@@ -124,6 +146,8 @@ export function packagePortionSize(psmRowData: FoodPortionSizeMethodsRow): PkgV2
   catch (err: unknown) {
     if (err instanceof ZodError)
       throw new Error(`Failed to parse portion size method parameters (record ID = ${psmRowData.id}, parameters = ${psmRowData.parameters})`, { cause: err });
-    throw new Error(`Failed to parse portion size method data (record ID = ${psmRowData.id}, parameters = ${psmRowData.parameters})`, { cause: err });
+    if (err instanceof Error)
+      throw new Error(`Failed to parse portion size method data (record ID = ${psmRowData.id}, parameters = ${psmRowData.parameters}): ${err.message}`, { cause: err });
+    throw err;
   }
 }

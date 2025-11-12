@@ -1,6 +1,12 @@
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import { IoC } from '@intake24/api/ioc';
+import { getTimestampedFileName } from '@intake24/api/util';
+import { createUniqueEmptyFile, zipDirectory } from '@intake24/api/util/files';
+import { localeTranslationStrict } from '@intake24/common/types/common';
 import { PackageExportOptions } from '@intake24/common/types/http/admin';
-import { PkgV2Food, PkgV2PortionSizeMethod } from '@intake24/common/types/package/foods';
+import { PkgV2AssociatedFood, PkgV2Food, PkgV2PortionSizeMethod } from '@intake24/common/types/package/foods';
 import { packagePortionSize } from './type-conversions';
 
 export type LocaleStreams = {
@@ -14,7 +20,8 @@ export type PackageDataStreams = {
 export function createPackageExportService({
   packageWriters,
   kyselyDb,
-}: Pick<IoC, 'kyselyDb' | 'packageWriters'>) {
+  fsConfig,
+}: Pick<IoC, 'kyselyDb' | 'packageWriters' | 'fsConfig'>) {
   async function* batchStream<T>(stream: AsyncIterable<T>, batchSize: number): AsyncIterable<T[]> {
     let batch: T[] = [];
     for await (const row of stream) {
@@ -32,7 +39,9 @@ export function createPackageExportService({
     const dbStream = kyselyDb.foods
       .selectFrom('foods')
       .leftJoin('foodAttributes', 'foodAttributes.foodId', 'foods.id')
-      .select(['foods.id', 'foods.code', 'foods.name', 'foods.altNames', 'foods.englishName', 'foods.tags', 'foodAttributes.readyMealOption', 'foodAttributes.reasonableAmount', 'foodAttributes.sameAsBeforeOption', 'foodAttributes.useInRecipes'])
+      .leftJoin('foodThumbnailImages', 'foodThumbnailImages.foodId', 'foods.id')
+      .leftJoin('processedImages', 'processedImages.id', 'foodThumbnailImages.imageId')
+      .select(['foods.id', 'foods.code', 'foods.name', 'foods.altNames', 'foods.englishName', 'foods.tags', 'foodAttributes.readyMealOption', 'foodAttributes.reasonableAmount', 'foodAttributes.sameAsBeforeOption', 'foodAttributes.useInRecipes', 'processedImages.path as thumbnailPath'])
       .where('foods.localeId', '=', localeId)
       .orderBy('foods.id', 'asc')
       .stream(batchSize);
@@ -84,6 +93,41 @@ export function createPackageExportService({
         return acc;
       }, {});
 
+      const associatedFoods = await kyselyDb.foods
+        .selectFrom('associatedFoods')
+        .select(['associatedFoods.foodId', 'associatedFoods.associatedFoodCode', 'associatedFoods.associatedCategoryCode', 'associatedFoods.text', 'associatedFoods.genericName', 'associatedFoods.linkAsMain', 'associatedFoods.genericName', 'associatedFoods.multiple'])
+        .where('associatedFoods.foodId', 'in', foodIds)
+        .execute();
+
+      const associatedFoodsIndex = associatedFoods.reduce<Record<string, PkgV2AssociatedFood[]>>((acc, row) => {
+        if (!acc[row.foodId])
+          acc[row.foodId] = [];
+
+        acc[row.foodId].push ({
+          genericName: localeTranslationStrict.parse(JSON.parse(row.genericName)),
+          promptText: localeTranslationStrict.parse(JSON.parse(row.text)),
+          linkAsMain: row.linkAsMain,
+          categoryCode: row.associatedCategoryCode ?? undefined,
+          foodCode: row.associatedFoodCode ?? undefined,
+          multiple: row.multiple,
+        });
+
+        return acc;
+      }, {});
+
+      const brandNames = await kyselyDb.foods
+        .selectFrom('brands')
+        .select(['brands.foodId', 'brands.name'])
+        .where('brands.foodId', 'in', foodIds)
+        .execute();
+
+      const brandNameIndex = brandNames.reduce<Record<string, string[]>>((acc, { foodId, name }) => {
+        if (!acc[foodId])
+          acc[foodId] = [];
+        acc[foodId].push (name);
+        return acc;
+      }, {});
+
       for (const row of batch) {
         yield {
           code: row.code,
@@ -100,9 +144,9 @@ export function createPackageExportService({
           parentCategories: parentCategoryIndex[row.id] ?? [],
           nutrientTableCodes: nutrientTableCodeIndex[row.id] ?? {},
           portionSize: foodPortionSizeMethodsIndex[row.id] ?? [],
-          associatedFoods: [],
-          brandNames: [],
-        // thumbnailPath?: string;
+          associatedFoods: associatedFoodsIndex[row.id] ?? [],
+          brandNames: brandNameIndex[row.id] ?? [],
+          thumbnailPath: row.thumbnailPath ?? undefined,
         };
       }
     }
@@ -114,12 +158,24 @@ export function createPackageExportService({
     };
   }
 
-  return async (options: PackageExportOptions): Promise<void> => {
+  return async (options: PackageExportOptions, _updateProgress: (progress: number) => Promise<void>): Promise<string> => {
+    const tempDirPrefix = path.join(os.tmpdir(), 'i24pkg-');
+    const tempDirPath = await fs.mkdtemp(tempDirPrefix);
+
+    console.log(`Package export temp path: ${tempDirPath}`);
+
     const writePackage = packageWriters[options.format];
 
     const packageStreams = Object.fromEntries(options.locales.map(localeId => [localeId, getLocaleStreams(localeId)]));
 
-    await writePackage('', options, packageStreams);
+    await writePackage(tempDirPath, options, packageStreams);
+
+    const fileName = getTimestampedFileName(`intake24-${options.locales.join('-').slice(0, 12)}`, 'zip');
+    const uniqueFilePath = await createUniqueEmptyFile(path.join(fsConfig.local.downloads, fileName));
+
+    await zipDirectory(tempDirPath, uniqueFilePath);
+
+    return path.relative(fsConfig.local.downloads, uniqueFilePath);
   };
 }
 

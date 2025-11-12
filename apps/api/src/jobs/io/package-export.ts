@@ -3,6 +3,7 @@ import type { Job } from 'bullmq';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 
+import { addTime } from '@intake24/api/util/date-time';
 import { Job as DbJob } from '@intake24/db';
 import BaseJob from '../job';
 
@@ -38,6 +39,11 @@ export default class PackageExport extends BaseJob<'PackageExport'> {
   }
 
   private async exportPackage(): Promise<void> {
-    await this.packageExportService(this.params);
+    const packageFilename = await this.packageExportService(this.params, async (progress: number) => this.job.updateProgress(progress));
+
+    await this.dbJob.update({
+      downloadUrl: packageFilename,
+      downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
+    });
   }
 }

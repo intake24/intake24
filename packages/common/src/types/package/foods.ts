@@ -1,5 +1,6 @@
 // portion-size.zod.ts
 import { z } from 'zod';
+import { localeOptionList, localeTranslationStrict } from '../common';
 
 export const pkgV2InheritableAttributes = z.object({
   readyMealOption: z.boolean().optional(),
@@ -88,6 +89,7 @@ export const pkgV2MilkOnCerealPsm = pkgV2PortionSizeMethodBase.extend({
 
 export const pkgV2MilkInHotDrinkPsm = pkgV2PortionSizeMethodBase.extend({
   method: z.literal('milk-in-a-hot-drink'),
+  options: localeOptionList({ valueSchema: z.coerce.number() }),
 });
 
 export const pkgV2PortionSizeMethod = z.union([
@@ -106,9 +108,10 @@ export const pkgV2PortionSizeMethod = z.union([
 export const pkgV2AssociatedFood = z.object({
   foodCode: z.string().optional(),
   categoryCode: z.string().optional(),
-  promptText: z.record(z.string()),
+  promptText: localeTranslationStrict,
   linkAsMain: z.boolean(),
-  genericName: z.record(z.string()),
+  genericName: localeTranslationStrict,
+  multiple: z.boolean().optional(),
 });
 
 export const pkgV2Food = z.object({

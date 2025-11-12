@@ -1,4 +1,5 @@
 import type { StringValue } from 'ms';
+import { formatDate } from 'date-fns/format';
 import ms from 'ms';
 
 /**
@@ -33,4 +34,12 @@ export function sleep(timeout: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, timeout);
   });
+}
+
+/**
+ * Generates a filename with a concise timestamp in YYYYMMDDHHmm format (e.g., file-20251112-1345.zip)
+ */
+export function getTimestampedFileName(baseName: string, extension: string): string {
+  const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmm');
+  return `${baseName}-${timestamp}.${extension}`;
 }

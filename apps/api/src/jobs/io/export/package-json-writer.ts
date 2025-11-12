@@ -13,21 +13,19 @@ export function createPackageJsonWriter() {
     const tempDirPrefix = path.join(os.tmpdir(), 'i24pkg-');
     const tempDirPath = await fs.mkdtemp(tempDirPrefix);
 
+    console.log(`Json Package Writer temp path: ${tempDirPath}`);
+
     const foods = Object.fromEntries(Object.entries(packageStreams)
       .filter(([_, localeStreams]) => localeStreams.foods !== undefined)
       .map(([localeId, localeStreams]) => [localeId, Readable.from(localeStreams.foods!)]));
 
-    console.log(foods);
-
     const jsonStream = new JsonStreamStringify(foods, undefined, 2);
 
     jsonStream.once('error', (err) => {
-      console.error('Stringify error at path:', '', err);
+      throw err;
     });
 
     const outputFileStream = createWriteStream(path.join(tempDirPath, 'foods.json'), { flags: 'w' });
-
-    console.log(`Json Package Writer: ${tempDirPath}`);
 
     await pipeline(jsonStream, outputFileStream);
 

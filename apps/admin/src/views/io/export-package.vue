@@ -30,9 +30,6 @@
                   <th class="text-left started-at-col">
                     {{ $t('io.export.activeJobs.startedAt') }}
                   </th>
-                  <th class="action-col">
-                    {{ $t('io.export.activeJobs.action') }}
-                  </th>
                   <th class="text-left status-col">
                     {{ $t('io.export.activeJobs.status._') }}
                   </th>
@@ -42,49 +39,38 @@
                 <tr v-for="job in jobs" :key="job.id">
                   <td>{{ job.id }}</td>
                   <td>{{ job.startedAt === null ? "N/A" : formatDate(job.startedAt.toString()) }}</td>
-
-                  <td>
-                    <v-btn
-                      v-if="job.successful === true"
-                      class="pl-2 pr-2"
-                      size="small"
-                      variant="text"
-                      @click="handleDownload(job)"
-                    >
-                      <v-icon>fa fa-download</v-icon>
-                      Download
-                    </v-btn>
-
-                    <v-btn
-                      v-else-if="job.successful === false"
-                      color="warning"
-                      flat
-                      size="small"
-                      @click="handleRetry(job)"
-                    >
-                      Retry
-                    </v-btn>
-
-                    <v-btn
-                      v-else-if="job.successful === null"
-                      color="error"
-                      size="small"
-                      variant="outlined"
-                      @click="handleCancel(job)"
-                    >
-                      Cancel
-                    </v-btn>
-                  </td>
                   <td>
                     <v-alert
-                      v-if="job.successful === true"
+                      v-if="job.successful === true && downloadUrlAvailable(job)"
                       density="compact"
                       icon-size="small"
                       :title="$t('io.export.activeJobs.status.success')"
                       type="success"
                       variant="text"
                     >
-                      {{ job.message }}
+                      <span class="text-black">
+                        {{ $t('io.export.downloadAvailable') }}
+                        <v-btn
+                          size="small"
+                          variant="text"
+                          @click="download(job)"
+                        >
+                          <v-icon>fa fa-download</v-icon>
+                          {{ $t('common.action.download') }}
+                        </v-btn>
+                      </span>
+                    </v-alert>
+                    <v-alert
+                      v-else-if="job.successful === true && !job.downloadUrl"
+                      color="#777777"
+                      density="compact"
+                      icon="$success"
+                      icon-size="small"
+                      :title="$t('io.export.activeJobs.status.success')"
+                      type="warning"
+                      variant="text"
+                    >
+                      {{ $t('io.export.downloadExpired') }}
                     </v-alert>
 
                     <v-alert
@@ -221,7 +207,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
-import { usePollsForJobs } from '@intake24/admin/components/jobs';
+import { useDownloadJob, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useErrors } from '@intake24/admin/composables';
 import type { Dictionary } from '@intake24/common/types';
 import SelectResourceMultiple from '../../components/dialogs/select-resource-multiple.vue';
@@ -231,6 +217,7 @@ type ExportFormat = 'json' | 'xlsx';
 
 const errors = useErrors();
 const { jobs, startPolling } = usePollsForJobs('PackageExport');
+const { download, downloadUrlAvailable } = useDownloadJob(true);
 
 const browserLocale = navigator.languages?.[0] ?? navigator.language ?? 'en-GB';
 
