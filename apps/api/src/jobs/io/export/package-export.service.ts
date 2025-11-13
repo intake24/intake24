@@ -43,7 +43,7 @@ export function createPackageExportService({
       .leftJoin('processedImages', 'processedImages.id', 'foodThumbnailImages.imageId')
       .select(['foods.id', 'foods.code', 'foods.name', 'foods.altNames', 'foods.englishName', 'foods.tags', 'foodAttributes.readyMealOption', 'foodAttributes.reasonableAmount', 'foodAttributes.sameAsBeforeOption', 'foodAttributes.useInRecipes', 'processedImages.path as thumbnailPath'])
       .where('foods.localeId', '=', localeId)
-      .orderBy('foods.id', 'asc')
+      .orderBy('foods.code', 'asc')
       .stream(batchSize);
 
     const batchedStream = batchStream(dbStream, batchSize);
