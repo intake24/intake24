@@ -4,6 +4,7 @@ import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/sea
 import type { IoC } from '@intake24/api/ioc';
 import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
+import { auxFoodSearch } from './aux-food-search';
 
 // const ATTR_USE_ANYWHERE = 0;
 const ATTR_AS_REGULAR_FOOD_ONLY = 1;
@@ -14,7 +15,9 @@ function foodSearchService({
   foodThumbnailImageService,
   cache,
   cacheConfig,
-}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig'>) {
+  logger: globalLogger,
+}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig' | 'logger'>) {
+  const logger = globalLogger.child({ service: 'FoodSearchService' });
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -56,8 +59,21 @@ function foodSearchService({
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);
     const results = await foodIndex.search(queryParameters);
 
+    // Modify food results by updating results.foods and results.categories
+    // add a prefix "abc" to each food name in results.foods
+
+    // Try auxiliary GenAI vector search; fall back to standard results on failure
+    let genAIFoods = results.foods;
+    try {
+      genAIFoods = await auxFoodSearch(queryParameters);
+      logger.debug('Food search: genAIFoods created', { count: genAIFoods.length });
+    }
+    catch (err) {
+      logger.warn('Aux GenAI search failed, falling back to standard results', { err });
+    }
+
     const catIds = results.categories.map(({ id }) => id);
-    const foodIds = results.foods.map(({ id }) => id);
+    const foodIds = genAIFoods.map(({ id }) => id);
 
     const [categoryAttrs, foodAttrs, thumbnailImages] = await Promise.all([
       getCategoryAttributes(catIds),
@@ -66,7 +82,7 @@ function foodSearchService({
     ]);
 
     const withFilteredIngredients = {
-      foods: results.foods.reduce<FoodSearchResponse['foods']>((acc, food) => {
+      foods: genAIFoods.reduce<FoodSearchResponse['foods']>((acc, food) => {
         if (!acceptForQuery(isRecipe, foodAttrs[food.id]?.useInRecipes))
           return acc;
 

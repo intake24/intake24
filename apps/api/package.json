@@ -28,6 +28,7 @@
   "dependencies": {
     "@css-inline/css-inline": "^0.17.0",
     "@duosecurity/duo_universal": "^3.0.0",
+    "@google/genai": "^1.25.0",
     "@json2csv/node": "^7.0.6",
     "@json2csv/plainjs": "^7.0.6",
     "@simplewebauthn/server": "^13.2.1",
@@ -111,6 +112,7 @@
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-jwt": "^4.0.1",
+    "@types/pg": "^8.15.5",
     "@types/pluralize": "^0.0.33",
     "@types/qrcode": "^1.5.5",
     "@types/supertest": "^6.0.3",
