@@ -75,17 +75,13 @@ import { PackageFormat } from '@intake24/common/types/http/admin';
 import type { DatabasesInterface } from '@intake24/db';
 import { KyselyDatabases, models } from '@intake24/db';
 import { PackageExportService } from '../jobs/io/export/package-export.service';
-import { PackageWriter } from '../jobs/io/export/types';
+import { PackageWriterFactory } from '../jobs/io/export/types';
 
-export type PackageWriterInstances = {
-  [K in `packageWriter_${PackageFormat}`]: PackageWriter;
+export type PackageWriterFactories = {
+  [K in `packageWriter.${PackageFormat}`]: PackageWriterFactory;
 };
 
-type PackageWritersAndJobs = PackageWriterInstances & Jobs;
-
-type PackageWriters = {
-  [K in PackageFormat]: PackageWriter;
-};
+type PackageWritersAndJobs = PackageWriterFactories & Jobs;
 
 export interface IoC extends PackageWritersAndJobs {
   config: Config;
@@ -160,7 +156,6 @@ export interface IoC extends PackageWritersAndJobs {
   dataExportMapper: DataExportMapper;
   dataExportService: DataExportService;
   packageExportService: PackageExportService;
-  packageWriters: PackageWriters;
 
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
@@ -214,7 +209,7 @@ export interface IoC extends PackageWritersAndJobs {
   userService: UserService;
 
   // Dynamic dependency resolver
-  resolveDynamic: <T>(name: string) => T;
+  resolveDynamic: <K extends keyof IoC>(name: K) => IoC[K];
 }
 
 export interface RequestIoC extends IoC {

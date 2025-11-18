@@ -1,8 +1,16 @@
 import { PackageExportOptions } from '@intake24/common/types/http/admin';
-import { PackageDataStreams } from './package-export.service';
+import { PkgV2AsServedSet } from '@intake24/common/types/package/as-served';
+import { PkgV2Food } from '@intake24/common/types/package/foods';
 
-export type PackageWriter = (path: string, options: PackageExportOptions, dataStreams: PackageDataStreams) => Promise<void>;
+export interface PackageWriter
+{
+  writeFood: (localeId: string, food: PkgV2Food) => Promise<void>;
+  writeAsServedSet: (asServedSet: PkgV2AsServedSet) => Promise<void>;
+  finish: () => Promise<void>;
+}
+
+export type PackageWriterFactory = (path: string, options: PackageExportOptions) => Promise<PackageWriter>;
 
 export type PackageWriters = {
-  [K in PackageExportOptions['format']]: PackageWriter;
+  [K in PackageExportOptions['format']]: PackageWriterFactory;
 };

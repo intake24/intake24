@@ -34,10 +34,8 @@
       "_": "Data to include",
       "foods": "Food list",
       "categories": "Category list",
-      "portionSizeMethods": "Quantification (portion size estimation)",
-      "associatedFoodPrompts": "Associated food prompts",
-      "asServedImages": "As served images",
-      "guideImages": "Guide images "
+      "portionSizeMethods": "Portion size data",
+      "portionSizeImages": "Portion size images"
     }
   }
 }

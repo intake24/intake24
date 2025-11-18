@@ -7,15 +7,21 @@ import { pipeline } from 'node:stream/promises';
 import { JsonStreamStringify } from 'json-stream-stringify';
 import { PackageExportOptions } from '@intake24/common/types/http/admin';
 import { PackageDataStreams } from './package-export.service';
+import { PackageWriter, PackageWriterFactory } from './types';
 
-export function createPackageJsonWriter() {
+export function createPackageJsonWriter(): PackageWriterFactory {
+  return async (_outputPath: string, _exportOptions: PackageExportOptions): Promise<PackageWriter> => {
+    return undefined as unknown as PackageWriter;
+  };
+
+  /*
   return async (_outputPath: string, _exportOptions: PackageExportOptions, packageStreams: PackageDataStreams): Promise<void> => {
     const tempDirPrefix = path.join(os.tmpdir(), 'i24pkg-');
     const tempDirPath = await fs.mkdtemp(tempDirPrefix);
 
     console.log(`Json Package Writer temp path: ${tempDirPath}`);
 
-    const foods = Object.fromEntries(Object.entries(packageStreams)
+    const foods = Object.fromEntries(Object.entries(packageStreams.localeStreams)
       .filter(([_, localeStreams]) => localeStreams.foods !== undefined)
       .map(([localeId, localeStreams]) => [localeId, Readable.from(localeStreams.foods!)]));
 
@@ -32,5 +38,5 @@ export function createPackageJsonWriter() {
     outputFileStream.on('error', (err) => {
       console.error('File write error:', err);
     });
-  };
+  }; */
 }

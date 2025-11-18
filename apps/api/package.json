@@ -19,7 +19,7 @@
     "build": "pnpm build:clean && webpack --env NODE_ENV=production",
     "build:clean": "rimraf dist",
     "dev": "webpack --env NODE_ENV=development",
-    "dev-break": "webpack --env NODE_ENV=development NODE_INSPECT_BREAK=true",
+    "dev-break": "webpack --env NODE_ENV=development",
     "start": "node dist/server.js",
     "test:build": "pnpm build:clean && webpack --env NODE_ENV=test",
     "test:unit": "vitest",

@@ -4,176 +4,52 @@ import path from 'node:path';
 import { IoC } from '@intake24/api/ioc';
 import { getTimestampedFileName } from '@intake24/api/util';
 import { createUniqueEmptyFile, zipDirectory } from '@intake24/api/util/files';
-import { localeTranslationStrict } from '@intake24/common/types/common';
+import { logger } from '@intake24/common-backend/services';
 import { PackageExportOptions } from '@intake24/common/types/http/admin';
-import { PkgV2AssociatedFood, PkgV2Food, PkgV2PortionSizeMethod } from '@intake24/common/types/package/foods';
-import { packagePortionSize } from './type-conversions';
-
-export type LocaleStreams = {
-  foods?: AsyncIterable<PkgV2Food>;
-};
-
-export type PackageDataStreams = {
-  [k: string]: LocaleStreams;
-};
+import { PackageExporter } from './package-exporter';
 
 export function createPackageExportService({
-  packageWriters,
   kyselyDb,
   fsConfig,
-}: Pick<IoC, 'kyselyDb' | 'packageWriters' | 'fsConfig'>) {
-  async function* batchStream<T>(stream: AsyncIterable<T>, batchSize: number): AsyncIterable<T[]> {
-    let batch: T[] = [];
-    for await (const row of stream) {
-      batch.push(row);
-      if (batch.length >= batchSize) {
-        yield batch;
-        batch = [];
-      }
-    }
-    if (batch.length > 0)
-      yield batch;
-  };
-
-  async function* streamFoods(localeId: string, batchSize = 100): AsyncIterable<PkgV2Food> {
-    const dbStream = kyselyDb.foods
-      .selectFrom('foods')
-      .leftJoin('foodAttributes', 'foodAttributes.foodId', 'foods.id')
-      .leftJoin('foodThumbnailImages', 'foodThumbnailImages.foodId', 'foods.id')
-      .leftJoin('processedImages', 'processedImages.id', 'foodThumbnailImages.imageId')
-      .select(['foods.id', 'foods.code', 'foods.name', 'foods.altNames', 'foods.englishName', 'foods.tags', 'foodAttributes.readyMealOption', 'foodAttributes.reasonableAmount', 'foodAttributes.sameAsBeforeOption', 'foodAttributes.useInRecipes', 'processedImages.path as thumbnailPath'])
-      .where('foods.localeId', '=', localeId)
-      .orderBy('foods.code', 'asc')
-      .stream(batchSize);
-
-    const batchedStream = batchStream(dbStream, batchSize);
-
-    for await (const batch of batchedStream) {
-      const foodIds = batch.map(row => row.id);
-
-      const parentCategories = await kyselyDb.foods
-        .selectFrom('foodsCategories')
-        .innerJoin('categories', 'categories.id', 'foodsCategories.categoryId')
-        .select(['foodId', 'categories.code'])
-        .where('foodsCategories.foodId', 'in', foodIds)
-        .execute();
-
-      const parentCategoryIndex = parentCategories.reduce<Record<string, string[]>>((acc, { foodId, code }) => {
-        if (!acc[foodId])
-          acc[foodId] = [];
-        acc[foodId].push(code);
-        return acc;
-      }, {});
-
-      const nutrientTableCodes = await kyselyDb.foods
-        .selectFrom('foodsNutrients')
-        .innerJoin('nutrientTableRecords', 'foodsNutrients.nutrientTableRecordId', 'nutrientTableRecords.id')
-        .select(['foodsNutrients.foodId', 'nutrientTableRecords.nutrientTableId', 'nutrientTableRecords.nutrientTableRecordId'])
-        .where('foodsNutrients.foodId', 'in', foodIds)
-        .execute();
-
-      const nutrientTableCodeIndex = nutrientTableCodes.reduce<Record<string, Record<string, string>>>((acc, { foodId, nutrientTableId, nutrientTableRecordId }) => {
-        if (!acc[foodId])
-          acc[foodId] = {};
-        acc[foodId][nutrientTableId] = nutrientTableRecordId;
-        return acc;
-      }, {});
-
-      const portionSizeMethods = await kyselyDb.foods
-        .selectFrom('foodPortionSizeMethods')
-        .select(['foodPortionSizeMethods.id', 'foodPortionSizeMethods.foodId', 'foodPortionSizeMethods.method', 'foodPortionSizeMethods.description', 'foodPortionSizeMethods.parameters', 'foodPortionSizeMethods.conversionFactor', 'foodPortionSizeMethods.useForRecipes'])
-        .where('foodPortionSizeMethods.foodId', 'in', foodIds)
-        .orderBy('foodPortionSizeMethods.orderBy', 'asc')
-        .execute();
-
-      const foodPortionSizeMethodsIndex = portionSizeMethods.reduce<Record<string, PkgV2PortionSizeMethod[]>>((acc, row) => {
-        if (!acc[row.foodId])
-          acc[row.foodId] = [];
-        acc[row.foodId].push(packagePortionSize(row));
-        return acc;
-      }, {});
-
-      const associatedFoods = await kyselyDb.foods
-        .selectFrom('associatedFoods')
-        .select(['associatedFoods.foodId', 'associatedFoods.associatedFoodCode', 'associatedFoods.associatedCategoryCode', 'associatedFoods.text', 'associatedFoods.genericName', 'associatedFoods.linkAsMain', 'associatedFoods.genericName', 'associatedFoods.multiple'])
-        .where('associatedFoods.foodId', 'in', foodIds)
-        .execute();
-
-      const associatedFoodsIndex = associatedFoods.reduce<Record<string, PkgV2AssociatedFood[]>>((acc, row) => {
-        if (!acc[row.foodId])
-          acc[row.foodId] = [];
-
-        acc[row.foodId].push ({
-          genericName: localeTranslationStrict.parse(JSON.parse(row.genericName)),
-          promptText: localeTranslationStrict.parse(JSON.parse(row.text)),
-          linkAsMain: row.linkAsMain,
-          categoryCode: row.associatedCategoryCode ?? undefined,
-          foodCode: row.associatedFoodCode ?? undefined,
-          multiple: row.multiple,
-        });
-
-        return acc;
-      }, {});
-
-      const brandNames = await kyselyDb.foods
-        .selectFrom('brands')
-        .select(['brands.foodId', 'brands.name'])
-        .where('brands.foodId', 'in', foodIds)
-        .execute();
-
-      const brandNameIndex = brandNames.reduce<Record<string, string[]>>((acc, { foodId, name }) => {
-        if (!acc[foodId])
-          acc[foodId] = [];
-        acc[foodId].push (name);
-        return acc;
-      }, {});
-
-      for (const row of batch) {
-        yield {
-          code: row.code,
-          name: row.name ?? row.englishName,
-          englishName: row.englishName,
-          alternativeNames: JSON.parse(row.altNames),
-          tags: JSON.parse(row.tags),
-          attributes: {
-            readyMealOption: row.readyMealOption ?? undefined,
-            reasonableAmount: row.reasonableAmount ?? undefined,
-            sameAsBeforeOption: row.sameAsBeforeOption ?? undefined,
-            useInRecipes: row.useInRecipes ?? undefined,
-          },
-          parentCategories: parentCategoryIndex[row.id] ?? [],
-          nutrientTableCodes: nutrientTableCodeIndex[row.id] ?? {},
-          portionSize: foodPortionSizeMethodsIndex[row.id] ?? [],
-          associatedFoods: associatedFoodsIndex[row.id] ?? [],
-          brandNames: brandNameIndex[row.id] ?? [],
-          thumbnailPath: row.thumbnailPath ?? undefined,
-        };
-      }
-    }
-  }
-
-  function getLocaleStreams(localeId: string): LocaleStreams {
-    return {
-      foods: streamFoods(localeId),
-    };
-  }
-
-  return async (options: PackageExportOptions, _updateProgress: (progress: number) => Promise<void>): Promise<string> => {
+  resolveDynamic,
+  logger,
+}: Pick<IoC, 'kyselyDb' | 'fsConfig' | 'resolveDynamic' | 'logger'>) {
+  return async (options: PackageExportOptions, updateProgress: (progress: number) => Promise<void>): Promise<string> => {
     const tempDirPrefix = path.join(os.tmpdir(), 'i24pkg-');
     const tempDirPath = await fs.mkdtemp(tempDirPrefix);
+    const imagesPath = path.join(tempDirPath, 'images');
+    const log = logger.child({ service: 'PackageExport' });
 
-    console.log(`Package export temp path: ${tempDirPath}`);
+    log.debug(`Package export temp path: ${tempDirPath}`);
 
-    const writePackage = packageWriters[options.format];
+    if (options.options.include.includes('portionSizeImages')) {
+      await fs.mkdir(imagesPath, { recursive: true });
+    }
 
-    const packageStreams = Object.fromEntries(options.locales.map(localeId => [localeId, getLocaleStreams(localeId)]));
+    const copyImage = async (relativePath: string): Promise<void> => {
+      const source = path.join(fsConfig.local.images, relativePath);
+      const dest = path.join(imagesPath, relativePath);
 
-    await writePackage(tempDirPath, options, packageStreams);
+      try {
+        await fs.copyFile(source, dest);
+      }
+      catch (err: any) {
+        log.warn('Failed to copy image file', err);
+      }
+    };
+
+    const packageWriter = await resolveDynamic(`packageWriter.${options.format}`)(tempDirPath, options);
+
+    const exporter = new PackageExporter(kyselyDb.foods, packageWriter, options, tempDirPath, updateProgress, copyImage);
+
+    await exporter.export();
 
     const fileName = getTimestampedFileName(`intake24-${options.locales.join('-').slice(0, 12)}`, 'zip');
     const uniqueFilePath = await createUniqueEmptyFile(path.join(fsConfig.local.downloads, fileName));
 
     await zipDirectory(tempDirPath, uniqueFilePath);
+
+    // fs.unlink(tempDirPath)
 
     return path.relative(fsConfig.local.downloads, uniqueFilePath);
   };

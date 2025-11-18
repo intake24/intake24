@@ -117,9 +117,8 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     dataExportMapper: asFunction(dataExportMapper).singleton(),
     dataExportService: asFunction(dataExportService).singleton(),
     packageExportService: asFunction(createPackageExportService).singleton(),
-    packageWriter_json: asFunction(createPackageJsonWriter).singleton(),
-    packageWriter_xlsx: asFunction(createPackageXlsxWriter).singleton(),
-    packageWriters: asFunction(({ packageWriter_json, packageWriter_xlsx }: PackageWriterInstances) => ({ json: packageWriter_json, xlsx: packageWriter_xlsx })).singleton(),
+    'packageWriter.json': asFunction(createPackageJsonWriter),
+    'packageWriter.xlsx': asFunction(createPackageXlsxWriter),
 
     mediaService: asFunction(mediaService).singleton(),
     mediaStore: asFunction(mediaStores[mediaStore]).singleton(),

@@ -23,7 +23,7 @@ module.exports = (env) => {
       new NodemonPlugin({
         script: './dist/server.js',
         watch: ['./dist', '.env'],
-        nodeArgs: ['--trace-warnings', inspectBreak ? '--inspect-brk=9229' : '--inspect=5959'],
+        nodeArgs: ['--trace-warnings'],
       }),
     );
 

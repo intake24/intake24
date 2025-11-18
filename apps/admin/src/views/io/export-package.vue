@@ -166,21 +166,9 @@
                   :label="$t('io.export.includeOptions.portionSizeMethods')"
                 />
                 <v-checkbox
-                  v-model="includeFlags.associatedFoodPrompts"
+                  v-model="includeFlags.portionSizeImages"
                   hide-details
-                  :label="$t('io.export.includeOptions.associatedFoodPrompts')"
-                />
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-checkbox
-                  v-model="includeFlags.asServedImages"
-                  hide-details
-                  :label="$t('io.export.includeOptions.asServedImages')"
-                />
-                <v-checkbox
-                  v-model="includeFlags.guideImages"
-                  hide-details
-                  :label="$t('io.export.includeOptions.guideImages')"
+                  :label="$t('io.export.includeOptions.portionSizeImages')"
                 />
               </v-col>
             </v-row>
@@ -210,6 +198,7 @@ import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
 import { useDownloadJob, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useErrors } from '@intake24/admin/composables';
 import type { Dictionary } from '@intake24/common/types';
+import type { PackageIncludeOption } from '@intake24/common/types/http/admin';
 import SelectResourceMultiple from '../../components/dialogs/select-resource-multiple.vue';
 import { httpService } from '../../services';
 
@@ -265,19 +254,20 @@ const includeFlags = reactive({
   foods: true,
   categories: true,
   portionSizeMethods: true,
-  associatedFoodPrompts: true,
-  asServedImages: true,
-  guideImages: true,
+  portionSizeImages: true,
 });
 
 const includeOptions = computed(() => {
-  const options: string[] = [];
+  const options: PackageIncludeOption[] = [];
 
   if (includeFlags.foods)
     options.push('foods');
   if (includeFlags.categories)
     options.push('categories');
-
+  if (includeFlags.portionSizeMethods)
+    options.push('portionSizeMethods');
+  if (includeFlags.portionSizeImages)
+    options.push('portionSizeImages');
   return options;
 });
 
