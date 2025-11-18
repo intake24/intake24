@@ -86,4 +86,8 @@ export class FoodsApiV4 {
       formData,
     );
   }
+
+  public async deleteLocalFood(localeId: string, foodCode: string): Promise<void> {
+    await this.baseClient.delete(`${FoodsApiV4.localApiPath}/${localeId}/${foodCode}`);
+  }
 }

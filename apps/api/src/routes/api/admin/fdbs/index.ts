@@ -13,5 +13,8 @@ export default () => {
   router.use('/:localeId/categories', categories());
   router.use('/:localeId/foods', foods());
 
+  router.use('/by-locale-code/:localeCode/categories', categories({ byCode: true }));
+  router.use('/by-locale-code/:localeCode/foods', foods({ byCode: true }));
+
   return router;
 };

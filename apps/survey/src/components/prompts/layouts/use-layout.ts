@@ -36,23 +36,32 @@ export function useLayout(props: UseLayoutProps, ctx: Pick<SetupContext<'action'
   });
 
   const loadPromptTranslations = () => {
-    const messages = globalI18n.getLocaleMessage(globalI18n.locale.value);
+    const locale = globalI18n.locale.value;
+    const messages = globalI18n.getLocaleMessage(locale);
 
     const defaultPromptMessages = get(
-      defaultMessages.getMessages(globalI18n.locale.value),
+      defaultMessages.getMessages(locale),
       `prompts.${type.value}`,
     );
 
     if (defaultPromptMessages === undefined) {
-      console.error(`Failed to load default translation messages using key "prompts.${type.value}", locale "${globalI18n.locale.value}". Please update the translation files!`);
+      console.error(`Failed to load default translation messages using key "prompts.${type.value}", locale "${locale}". Please update the translation files!`);
     }
     else {
       Object.entries(defaultPromptMessages).forEach(([key, value]) => {
-        set(messages, `prompts.${type.value}.${key}`, props.prompt.i18n[key]?.[globalI18n.locale.value] ?? value);
+        const targetPath = `prompts.${type.value}.${key}`;
+        if (get(messages, targetPath) === undefined)
+          set(messages, targetPath, value);
       });
     }
 
-    globalI18n.setLocaleMessage(globalI18n.locale.value, messages);
+    Object.entries(props.prompt.i18n).forEach(([key, translations]) => {
+      const translation = translations?.[locale];
+      if (typeof translation === 'string')
+        set(messages, `prompts.${type.value}.${key}`, translation);
+    });
+
+    globalI18n.setLocaleMessage(locale, messages);
   };
 
   const isItemValid = (item: ActionItem) => item.type !== 'next' || props.isValid;

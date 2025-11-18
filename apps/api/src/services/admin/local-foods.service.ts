@@ -209,6 +209,26 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     }
   };
 
+  const destroyImpl = async (
+    localeId: string,
+    foodCode: string,
+    transaction: Transaction,
+  ): Promise<void> => {
+    const foodLocal = await FoodLocal.findOne({
+      attributes: ['id', 'foodCode'],
+      where: { localeId, foodCode },
+      transaction,
+    });
+
+    if (foodLocal === null)
+      throw new NotFoundError();
+
+    await Promise.all([
+      foodLocal.destroy({ transaction }),
+      FoodLocalList.destroy({ where: { localeId, foodCode: foodLocal.foodCode }, transaction }),
+    ]);
+  };
+
   const create = async (
     localeId: string,
     request: CreateLocalFoodRequest,
@@ -221,6 +241,17 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     else {
       return await db.foods.transaction(async (transaction) => {
         return await createImpl(localeId, request, options, transaction);
+      });
+    }
+  };
+
+  const destroy = async (localeId: string, foodCode: string, transaction?: Transaction) => {
+    if (transaction !== undefined) {
+      await destroyImpl(localeId, foodCode, transaction);
+    }
+    else {
+      await db.foods.transaction(async (transaction) => {
+        await destroyImpl(localeId, foodCode, transaction);
       });
     }
   };
@@ -293,6 +324,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
   return {
     create,
     read,
+    destroy,
     readEnabledFoods,
     updatePortionSizeMethods,
     updateEnabledFoods,

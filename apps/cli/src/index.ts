@@ -429,6 +429,7 @@ async function run() {
     .option('--skip-existing', 'Skip foods that already exist in the locale', false)
     .option('--skip-invalid-nutrients', 'Skip nutrient table mappings to avoid 500 errors', false)
     .option('--skip-associated-foods', 'Skip associated foods (for multi-pass import)', false)
+    .option('--delete-action1-local', 'Delete local food records for action 1 foods', false)
     .option('--report-path [path]', 'Path to save import report')
     .option('--report-format [format]', 'Report format (csv, json, markdown)', 'json')
     .action(async (options) => {
@@ -488,6 +489,7 @@ async function run() {
         skipExisting: options.skipExisting,
         skipInvalidNutrients: options.skipInvalidNutrients,
         skipAssociatedFoods: options.skipAssociatedFoods,
+        deleteAction1Local: options.deleteAction1Local,
         reportPath: options.reportPath,
         reportFormat: options.reportFormat,
       });

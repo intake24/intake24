@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@intake24/cli/*": ["src/*"],
+      "@intake24/api/*": ["../api/src/*"],
       "@intake24/common/*": ["../../packages/common/src/*"],
       "@intake24/common-backend/*": ["../../packages/common-backend/src/*"],
       "@intake24/*": ["../../packages/*/src"]

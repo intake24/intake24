@@ -14,7 +14,10 @@ export default () => {
 
   router.route('/:localeId').post(wrapAsync(adminLocalFoodsController.store));
 
-  router.route('/:localeId/:foodId').get(wrapAsync(adminLocalFoodsController.read));
+  router
+    .route('/:localeId/:foodCode')
+    .get(wrapAsync(adminLocalFoodsController.read))
+    .delete(wrapAsync(adminLocalFoodsController.destroy));
 
   return router;
 };
