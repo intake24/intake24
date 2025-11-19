@@ -1,7 +1,7 @@
 import { Selectable } from 'kysely';
 import { ZodError } from 'zod';
-import { asServedPortionSizeParameters, cerealPortionSizeParameters, drinkScalePortionSizeParameters, guideImagePortionSizeParameters, milkInHotDrinkPortionSizeParameters, milkOnCerealPortionSizeParameters, pizzaPortionSizeParameters, standardPortionSizeParameters } from '@intake24/common/surveys/portion-size';
-import { PkgV2AsServedPsm, PkgV2CerealPsm, PkgV2DirectWeightPsm, PkgV2DrinkScalePsm, PkgV2GuideImagePsm, PkgV2MilkInHotDrinkPsm, PkgV2MilkOnCerealPsm, PkgV2PizzaPsm, PkgV2PortionSizeMethod, PkgV2StandardPortionPsm, PkgV2UnknownPsm } from '@intake24/common/types/package/foods';
+import { asServedPortionSizeParameters, cerealPortionSizeParameters, drinkScalePortionSizeParameters, guideImagePortionSizeParameters, milkInHotDrinkPortionSizeParameters, milkOnCerealPortionSizeParameters, parentFoodPortionParameters, pizzaPortionSizeParameters, pizzaV2PortionSizeParameters, standardPortionSizeParameters } from '@intake24/common/surveys/portion-size';
+import { PkgV2AsServedPsm, PkgV2CerealPsm, PkgV2DirectWeightPsm, PkgV2DrinkScalePsm, PkgV2GuideImagePsm, PkgV2MilkInHotDrinkPsm, PkgV2MilkOnCerealPsm, PkgV2ParentFoodPortionPsm, PkgV2PizzaPsm, PkgV2PizzaV2Psm, PkgV2PortionSizeMethod, PkgV2StandardPortionPsm, PkgV2UnknownPsm } from '@intake24/common/types/package/foods';
 import type { FoodPortionSizeMethods } from '@intake24/db/kysely/foods';
 
 type FoodPortionSizeMethodsRow = Pick<Selectable<FoodPortionSizeMethods>, 'id' | 'method' | 'description' | 'conversionFactor' | 'useForRecipes' | 'parameters'>;
@@ -87,10 +87,32 @@ function packagePizza(portionSize: FoodPortionSizeMethodsRow): PkgV2PizzaPsm {
   };
 }
 
+function packagePizzaV2(portionSize: FoodPortionSizeMethodsRow): PkgV2PizzaV2Psm {
+  const parameters = pizzaV2PortionSizeParameters.parse(JSON.parse(portionSize.parameters));
+  return {
+    method: 'pizza-v2',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+    labels: parameters.labels,
+  };
+}
+
 function packageMilkInHotDrink(portionSize: FoodPortionSizeMethodsRow): PkgV2MilkInHotDrinkPsm {
   const parameters = milkInHotDrinkPortionSizeParameters.parse(JSON.parse(portionSize.parameters));
   return {
     method: 'milk-in-a-hot-drink',
+    description: portionSize.description,
+    conversionFactor: portionSize.conversionFactor,
+    useForRecipes: portionSize.useForRecipes,
+    options: parameters.options,
+  };
+}
+
+function packageParentFoodPortion(portionSize: FoodPortionSizeMethodsRow): PkgV2ParentFoodPortionPsm {
+  const parameters = parentFoodPortionParameters.parse(JSON.parse(portionSize.parameters));
+  return {
+    method: 'parent-food-portion',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
     useForRecipes: portionSize.useForRecipes,
@@ -133,8 +155,12 @@ export function packagePortionSize(psmRowData: FoodPortionSizeMethodsRow): PkgV2
         return packageMilkOnCereal(psmRowData);
       case 'pizza':
         return packagePizza(psmRowData);
+      case 'pizza-v2':
+        return packagePizzaV2(psmRowData);
       case 'milk-in-a-hot-drink':
         return packageMilkInHotDrink(psmRowData);
+      case 'parent-food-portion':
+        return packageParentFoodPortion(psmRowData);
       case 'direct-weight':
         return packageDirectWeight(psmRowData);
       case 'unknown':

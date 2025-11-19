@@ -1,12 +1,15 @@
-import { PkgInheritableAttributes, PkgPortionSizeMethod } from './foods';
+import z from 'zod';
+import { pkgV2InheritableAttributes, pkgV2PortionSizeMethod } from './foods';
 
-export type PkgCategory = {
-  version?: string;
-  code: string;
-  englishName: string;
-  name: string;
-  hidden: boolean;
-  attributes: PkgInheritableAttributes;
-  parentCategories: string[];
-  portionSize: PkgPortionSizeMethod[];
-};
+export const pkgV2Category = z.object({
+  version: z.string().optional(),
+  code: z.string(),
+  englishName: z.string(),
+  name: z.string(),
+  hidden: z.boolean(),
+  attributes: pkgV2InheritableAttributes,
+  parentCategories: z.array(z.string()),
+  portionSize: z.array(pkgV2PortionSizeMethod),
+});
+
+export type PkgV2Category = z.infer<typeof pkgV2Category>;

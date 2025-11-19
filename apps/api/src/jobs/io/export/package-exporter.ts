@@ -2,9 +2,9 @@ import { Kysely, sql } from 'kysely';
 import { groupBy, mapValues } from 'lodash';
 import { localeTranslationStrict } from '@intake24/common/types/common';
 import { PackageExportOptions, PackageIncludeOption, packageIncludeOptions } from '@intake24/common/types/http/admin';
+import { PkgV2Category } from '@intake24/common/types/package/categories';
 import { PkgV2AssociatedFood, PkgV2PortionSizeMethod } from '@intake24/common/types/package/foods';
 import { FoodsDB } from '@intake24/db/kysely';
-import { locales } from '../../system/resources/locales';
 import { packagePortionSize } from './type-conversions';
 import { PackageWriter } from './types';
 
@@ -134,8 +134,6 @@ export class PackageExporter {
       .executeTakeFirstOrThrow();
 
     const foodRecordCount = Number(count);
-
-    console.log(`FOOD RECORD COUNT ESTIMATION = ${foodRecordCount}`);
 
     let foodsProcessed = 0;
 
@@ -269,6 +267,94 @@ export class PackageExporter {
         ++foodsProcessed;
       }
       await this.updateProgress(localeId, 'foods', foodsProcessed / foodRecordCount);
+    }
+  }
+
+  async processCategories(localeId: string): Promise<void> {
+    const { count } = await this.db
+      .selectFrom('categories')
+      .select(this.db.fn.countAll().as('count'))
+      .where('categories.localeId', '=', localeId)
+      .executeTakeFirstOrThrow();
+
+    const categoryRecordCount = Number(count);
+
+    let categoriesProcessed = 0;
+
+    const categoriesStream = this.db
+      .selectFrom('categories')
+      .leftJoin('categoryAttributes', 'categoryAttributes.categoryId', 'categories.id')
+      .select(['categories.id', 'categories.code', 'categories.name', 'categories.englishName', 'categories.hidden', 'categoryAttributes.readyMealOption', 'categoryAttributes.reasonableAmount', 'categoryAttributes.sameAsBeforeOption', 'categoryAttributes.useInRecipes'])
+      .where('categories.localeId', '=', localeId)
+      .orderBy('categories.code', 'asc')
+      .stream(this.dbBatchSize);
+
+    const batchedStream = batchStream(categoriesStream, this.dbBatchSize);
+
+    for await (const batch of batchedStream) {
+      const categoryIds = batch.map(row => row.id);
+
+      const parentCategories = await this.db
+        .selectFrom('categoriesCategories')
+        .innerJoin('categories', 'categories.id', 'categoriesCategories.categoryId')
+        .select(['categoriesCategories.subCategoryId', 'categories.code'])
+        .where('categoriesCategories.subCategoryId', 'in', categoryIds)
+        .execute();
+
+      const parentCategoryIndex = parentCategories.reduce<Record<string, string[]>>((acc, { subCategoryId, code }) => {
+        if (!acc[subCategoryId])
+          acc[subCategoryId] = [];
+        acc[subCategoryId].push(code);
+        return acc;
+      }, {});
+
+      const portionSizeMethods = await this.db
+        .selectFrom('categoryPortionSizeMethods')
+        .select(['categoryPortionSizeMethods.id', 'categoryPortionSizeMethods.categoryId', 'categoryPortionSizeMethods.method', 'categoryPortionSizeMethods.description', 'categoryPortionSizeMethods.parameters', 'categoryPortionSizeMethods.conversionFactor', 'categoryPortionSizeMethods.useForRecipes'])
+        .where('categoryPortionSizeMethods.categoryId', 'in', categoryIds)
+        .orderBy('categoryPortionSizeMethods.orderBy', 'asc')
+        .execute();
+
+      const categoryPortionSizeMethodsIndex = portionSizeMethods.reduce<Record<string, PkgV2PortionSizeMethod[]>>((acc, row) => {
+        if (!acc[row.categoryId])
+          acc[row.categoryId] = [];
+        acc[row.categoryId].push(packagePortionSize(row));
+        return acc;
+      }, {});
+
+      for (const row of batch) {
+        const categoryRecord: PkgV2Category = {
+          code: row.code,
+          name: row.name ?? row.englishName,
+          englishName: row.englishName,
+          hidden: row.hidden,
+          attributes: {
+            readyMealOption: row.readyMealOption ?? undefined,
+            reasonableAmount: row.reasonableAmount ?? undefined,
+            sameAsBeforeOption: row.sameAsBeforeOption ?? undefined,
+            useInRecipes: row.useInRecipes ?? undefined,
+          },
+          parentCategories: parentCategoryIndex[row.id] ?? [],
+          portionSize: categoryPortionSizeMethodsIndex[row.id] ?? [],
+        };
+
+        await this.packageWriter.writeCategory(localeId, categoryRecord);
+
+        for (const psm of categoryRecord.portionSize) {
+          switch (psm.method) {
+            case 'as-served':
+              this.asServedSetIds.add(psm.servingImageSet);
+              if (psm.leftoversImageSet !== undefined)
+                this.asServedSetIds.add(psm.leftoversImageSet);
+              break;
+            default:
+              break;
+          }
+        }
+
+        ++categoriesProcessed;
+      }
+      await this.updateProgress(localeId, 'categories', categoriesProcessed / categoryRecordCount);
     }
   }
 
@@ -479,6 +565,8 @@ export class PackageExporter {
     for (const localeId of this.exportOptions.locales) {
       if (this.include('foods'))
         await this.processFoods(localeId);
+      if (this.include('categories'))
+        await this.processCategories(localeId);
     }
 
     if (this.asServedSetIds.size > 0) {

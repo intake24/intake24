@@ -65,7 +65,7 @@ import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core
 import { logger, Mailer } from '@intake24/common-backend';
 import { createPackageExportService } from '../jobs/io/export/package-export.service';
 import { createPackageJsonWriter } from '../jobs/io/export/package-json-writer';
-import { createPackageXlsxWriter } from '../jobs/io/export/package-xlsx-writer';
+import { createPackageXlsxWriter } from '../jobs/io/export/xlsx/package-xlsx-writer';
 
 export default (container: AwilixContainer<RequestIoC>): void => {
   const mediaStore = container.cradle.mediaConfig.storage.provider;
