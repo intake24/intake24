@@ -122,7 +122,7 @@ Flag whether to allow admin tool sign-ups. Defaults to `true`. Flag only enables
 
 ### VITE_CAPTCHA_PROVIDER
 
-Captcha provider. Possible values `g-captcha` or `re-captcha`.
+Captcha provider. Possible values `h-captcha` or `re-captcha` to enable `generate user` functionality. Leave empty to disable but so does the `generate user` feature.
 
 ### VITE_CAPTCHA_SITEKEY
 

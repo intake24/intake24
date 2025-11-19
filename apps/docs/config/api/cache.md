@@ -51,3 +51,12 @@ Time to live (expiration time) as `ms-formatted` string (see [ms](https://github
 - dotenv var: `CACHE_TTL`
 - type: `string | number`
 - default: `'7d'`
+
+### Survey settings Time to live (TTL)
+
+Survey settings cache Time to live (expiration time) as `ms-formatted` string (see [ms](https://github.com/vercel/ms) for more information) or number in seconds.
+
+- object-path: `surveySettingsTTL`
+- dotenv var: `CACHE_SURVEY_SETTINGS_TTL`
+- type: `string | number`
+- default: `'120s'`
