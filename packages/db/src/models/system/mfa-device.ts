@@ -20,8 +20,9 @@ import {
 
 import type { MFAProvider } from '@intake24/common/security';
 
-import { MFAAuthenticator, User } from '.';
 import BaseModel from '../model';
+import MFAAuthenticator from './mfa-authenticator';
+import User from './user';
 
 @DefaultScope(() => ({
   attributes: { exclude: ['secret'] },

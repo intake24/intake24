@@ -9,8 +9,9 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
-import { Food } from '@intake24/db';
+
 import BaseModel from '../model';
+import Food from './food';
 
 @Table({
   modelName: 'FoodPortionSizeMethod',

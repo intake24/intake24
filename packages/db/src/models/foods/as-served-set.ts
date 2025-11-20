@@ -10,8 +10,10 @@ import type {
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
-import { AsServedImage, ProcessedImage } from '.';
+
 import BaseModel from '../model';
+import AsServedImage from './as-served-image';
+import ProcessedImage from './processed-image';
 
 @Scopes(() => ({
   selectionImage: { include: [{ model: ProcessedImage }] },

@@ -8,8 +8,9 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import { FoodsNutrientType, NutrientTable } from '.';
 import BaseModel from '../model';
+import NutrientTable from './nutrient-table';
+import FoodsNutrientType from './nutrient-type';
 
 @Table({
   modelName: 'NutrientTableCsvMappingNutrient',

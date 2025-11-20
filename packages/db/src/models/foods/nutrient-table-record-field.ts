@@ -8,9 +8,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import { NutrientTableRecord } from '@intake24/db';
-
 import BaseModel from '../model';
+import NutrientTableRecord from './nutrient-table-record';
 
 @Table({
   modelName: 'NutrientTableRecordField',

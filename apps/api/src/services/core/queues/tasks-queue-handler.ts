@@ -2,7 +2,6 @@ import type { Job as BullJob } from 'bullmq';
 import { Queue, Worker } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
-import ioc from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
 import type { JobData } from '@intake24/common/types';
 import { Task } from '@intake24/db';
@@ -12,13 +11,16 @@ import { QueueHandler } from './queue-handler';
 export default class TasksQueueHandler extends QueueHandler<JobData> {
   readonly name = 'tasks';
 
+  private readonly resolveDynamic;
+
   /**
    * Creates an instance of TasksQueueHandler.
    * @param {IoC} { logger }
    * @memberof TasksQueueHandler
    */
-  constructor({ logger, queueConfig }: Pick<IoC, 'logger' | 'queueConfig'>) {
+  constructor({ logger, queueConfig, resolveDynamic }: Pick<IoC, 'logger' | 'queueConfig' | 'resolveDynamic'>) {
     super(queueConfig, logger.child({ service: 'TasksQueueHandler' }));
+    this.resolveDynamic = resolveDynamic;
   }
 
   /**
@@ -40,7 +42,7 @@ export default class TasksQueueHandler extends QueueHandler<JobData> {
       this.logEventError(err);
     });
 
-    const worker = new Worker(this.name, this.processor, options);
+    const worker = new Worker(this.name, this.processor.bind(this), options);
 
     worker
       .on('completed', (job) => {
@@ -76,7 +78,7 @@ export default class TasksQueueHandler extends QueueHandler<JobData> {
       return;
     }
 
-    const newJob = ioc.resolve<Job<typeof type>>(type);
+    const newJob = this.resolveDynamic<Job<typeof type>>(type);
     await newJob.run(job);
   }
 

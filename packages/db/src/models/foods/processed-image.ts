@@ -8,8 +8,12 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
-import { AsServedImage, AsServedSet, FoodThumbnailImage, ImageMap, SourceImage } from '.';
 import BaseModel from '../model';
+import AsServedImage from './as-served-image';
+import AsServedSet from './as-served-set';
+import FoodThumbnailImage from './food-thumbnail-image';
+import ImageMap from './image-map';
+import SourceImage from './source-image';
 
 export enum ProcessedImagePurposes {
   AsServedMainImage = 1,

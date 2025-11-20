@@ -7,18 +7,15 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import type { NutrientTableRecordNutrientCreationAttributes } from './nutrient-table-record-nutrient';
 import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
-import type { NutrientTableRecordNutrientCreationAttributes } from '@intake24/db';
-import {
-  Food,
-  FoodNutrient,
-  NutrientTable,
-  NutrientTableRecordField,
-  NutrientTableRecordNutrient,
-} from '@intake24/db';
-
 import BaseModel from '../model';
+import Food from './food';
+import FoodNutrient from './food-nutrient';
+import NutrientTable from './nutrient-table';
+import NutrientTableRecordField from './nutrient-table-record-field';
+import NutrientTableRecordNutrient from './nutrient-table-record-nutrient';
 
 @Table({
   modelName: 'NutrientTableRecord',

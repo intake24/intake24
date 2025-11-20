@@ -11,6 +11,8 @@ export * from './ioc';
 function configureContainer() {
   const container = createContainer<RequestIoC>({ strict: true });
 
+  const resolveDynamic = <T>(name: string): T => container.resolve<T>(name);
+
   container.register({
     config: asValue(config),
     aclConfig: asValue(config.acl),
@@ -35,6 +37,7 @@ function configureContainer() {
     db: asClass(Database).singleton(),
     kyselyDb: asClass(KyselyDatabases).singleton(),
     models: asValue(models),
+    resolveDynamic: asValue(resolveDynamic),
   });
 
   controllers(container);

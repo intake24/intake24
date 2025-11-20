@@ -8,8 +8,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import { FoodsNutrientType } from '.';
 import BaseModel from '../model';
+import FoodsNutrientType from './nutrient-type';
 
 @Table({
   modelName: 'NutrientTypeInKcal',

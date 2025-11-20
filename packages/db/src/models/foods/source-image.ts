@@ -8,8 +8,9 @@ import type {
 } from 'sequelize';
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
-import { ProcessedImage, SourceImageKeyword } from '.';
 import BaseModel from '../model';
+import ProcessedImage from './processed-image';
+import SourceImageKeyword from './source-image-keyword';
 
 @Scopes(() => ({
   keywords: { include: [{ model: SourceImageKeyword }] },

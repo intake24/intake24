@@ -34,21 +34,20 @@ import {
   defaultSessionSettings,
 } from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
-import {
-  ClientErrorReport,
-  FAQ,
-  FeedbackScheme,
-  GenUserCounter,
-  Permission,
-  SurveyScheme,
-  SurveySubmission,
-  SystemLocale,
-  User,
-  UserSecurable,
-  UserSurveyAlias,
-  UserSurveySession,
-} from '.';
+
 import BaseModel from '../model';
+import ClientErrorReport from './client-error-report';
+import FAQ from './faq';
+import FeedbackScheme from './feedback-scheme';
+import GenUserCounter from './gen-user-counter';
+import SystemLocale from './locale';
+import Permission from './permission';
+import SurveyScheme from './survey-scheme';
+import SurveySubmission from './survey-submission';
+import User from './user';
+import UserSecurable from './user-securable';
+import UserSurveyAlias from './user-survey-alias';
+import UserSurveySession from './user-survey-session';
 
 @Scopes(() => ({
   counter: { include: [{ model: GenUserCounter }] },

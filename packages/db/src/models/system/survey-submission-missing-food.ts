@@ -8,8 +8,9 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
-import { SurveySubmissionExternalSource, SurveySubmissionMeal } from '.';
 import BaseModel from '../model';
+import SurveySubmissionExternalSource from './survey-submission-external-source';
+import SurveySubmissionMeal from './survey-submission-meal';
 
 @Scopes(() => ({
   meal: { include: [{ model: SurveySubmissionMeal }] },

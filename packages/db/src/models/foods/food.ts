@@ -6,10 +6,8 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import type {
-  FoodNutrientCreationAttributes,
-  FoodPortionSizeMethodCreationAttributes,
-} from '.';
+import type { FoodNutrientCreationAttributes } from './food-nutrient';
+import type { FoodPortionSizeMethodCreationAttributes } from './food-portion-size-method';
 import {
   BelongsTo,
   BelongsToMany,
@@ -19,19 +17,17 @@ import {
   HasOne,
   Table,
 } from 'sequelize-typescript';
-import {
-  AssociatedFood,
-  Brand,
-  Category,
-  FoodAttribute,
-  FoodCategory,
-  FoodNutrient,
-  FoodPortionSizeMethod,
-  FoodThumbnailImage,
-  NutrientTableRecord,
-} from '.';
 import BaseModel from '../model';
+import AssociatedFood from './associated-foods';
+import Brand from './brand';
+import Category from './category';
+import FoodAttribute from './food-attribute';
+import FoodCategory from './food-category';
+import FoodNutrient from './food-nutrient';
+import FoodPortionSizeMethod from './food-portion-size-method';
+import FoodThumbnailImage from './food-thumbnail-image';
 import FoodsLocale from './locale';
+import NutrientTableRecord from './nutrient-table-record';
 
 export type AlternativeFoodNames = Record<string, string[]>;
 

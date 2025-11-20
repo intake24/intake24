@@ -7,9 +7,9 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import { Category, Food } from '@intake24/db';
-
 import BaseModel from '../model';
+import Category from './category';
+import Food from './food';
 
 @Table({
   timestamps: false,

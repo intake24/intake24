@@ -13,8 +13,9 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Food, NutrientTableRecord } from '.';
 import BaseModel from '../model';
+import Food from './food';
+import NutrientTableRecord from './nutrient-table-record';
 
 @Table({
   modelName: 'FoodNutrient',

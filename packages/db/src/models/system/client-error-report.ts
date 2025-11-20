@@ -19,8 +19,9 @@ import {
 
 import type { Dictionary } from '@intake24/common/types';
 
-import { Survey, User } from '.';
 import BaseModel from '../model';
+import Survey from './survey';
+import User from './user';
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },

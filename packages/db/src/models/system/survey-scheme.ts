@@ -23,8 +23,10 @@ import type { RecordVisibility } from '@intake24/common/security';
 import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
 
 import { defaultExport, defaultMeals, defaultPrompts, defaultSchemeSettings } from '@intake24/common/surveys';
-import { Survey, User, UserSecurable } from '.';
-import { BaseModel } from '..';
+import BaseModel from '../model';
+import Survey from './survey';
+import User from './user';
+import UserSecurable from './user-securable';
 
 @Scopes(() => ({
   list: { attributes: ['id', 'name'], order: [['name', 'ASC']] },

@@ -16,8 +16,9 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import { Role, User } from '.';
 import BaseModel from '../model';
+import Role from './role';
+import User from './user';
 
 @Table({
   modelName: 'RoleUser',

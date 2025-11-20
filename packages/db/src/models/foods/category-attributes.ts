@@ -8,8 +8,9 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import type { UseInRecipeType } from '@intake24/common/types';
-import { Category } from '.';
+
 import BaseModel from '../model';
+import Category from './category';
 
 @Scopes(() => ({
   category: { include: [{ model: Category }] },

@@ -17,8 +17,9 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
-import { FoodsLocale } from '@intake24/db';
+
 import BaseModel from '../model';
+import FoodsLocale from './locale';
 import RecipeFood from './recipe-food';
 
 @Scopes(() => ({

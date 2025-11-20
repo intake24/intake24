@@ -18,8 +18,8 @@ import {
 
 import type { JobType, JobTypeParams } from '@intake24/common/types';
 
-import { User } from '.';
 import BaseModel from '../model';
+import User from './user';
 
 @Table({
   modelName: 'Job',

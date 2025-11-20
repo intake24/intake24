@@ -10,8 +10,8 @@ import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
 
-import { GuideImage } from '.';
 import BaseModel from '../model';
+import GuideImage from './guide-image';
 
 @Table({
   modelName: 'GuideImageObject',

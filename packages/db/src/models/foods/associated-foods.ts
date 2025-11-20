@@ -9,9 +9,10 @@ import type {
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
-import { Category, Food } from '@intake24/db';
 
 import BaseModel from '../model';
+import Category from './category';
+import Food from './food';
 
 @Table({
   modelName: 'AssociatedFood',

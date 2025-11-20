@@ -10,15 +10,13 @@ import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-t
 
 import type { PortionSizeMethodId } from '@intake24/common/surveys';
 
-import {
-  SurveySubmissionExternalSource,
-  SurveySubmissionField,
-  SurveySubmissionFoodCustomField,
-  SurveySubmissionMeal,
-  SurveySubmissionNutrient,
-  SurveySubmissionPortionSizeField,
-} from '.';
 import BaseModel from '../model';
+import SurveySubmissionExternalSource from './survey-submission-external-source';
+import SurveySubmissionField from './survey-submission-field';
+import SurveySubmissionFoodCustomField from './survey-submission-food-custom-field';
+import SurveySubmissionMeal from './survey-submission-meal';
+import SurveySubmissionNutrient from './survey-submission-nutrient';
+import SurveySubmissionPortionSizeField from './survey-submission-portion-size-field';
 
 @Scopes(() => ({
   meal: { include: [{ model: SurveySubmissionMeal }] },

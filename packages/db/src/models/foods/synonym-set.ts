@@ -8,8 +8,9 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
-import { FoodsLocale, RecipeFood } from '.';
 import BaseModel from '../model';
+import FoodsLocale from './locale';
+import RecipeFood from './recipe-food';
 
 @Table({
   modelName: 'SynonymSet',
