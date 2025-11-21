@@ -128,10 +128,9 @@ export class AppMetricsService {
   private watchKyselyConnectionDuration(labels: Dictionary<string>, pool: any) {
     pool.on('acquire', (conn: any) => conn.__acquiredAt = Date.now());
     pool.on('release', (conn: any) => {
-      if (conn.__acquiredAt) {
-        const durationMs = Date.now() - conn.__acquiredAt;
+      if (conn && conn.__acquiredAt) {
+        this.connectionDuration!.observe(labels, Date.now() - conn.__acquiredAt);
         delete conn.__acquiredAt;
-        this.connectionDuration!.observe(kyselySystemLabels, durationMs);
       }
     });
   }
