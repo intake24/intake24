@@ -38,3 +38,8 @@
   args:
     chdir: '{{ env.directory }}'
   when: apps[app].migrations.foods
+
+- name: '{{ app|upper }} | Configure prometheus-node-exporter if config section present'
+  include_role:
+    name: deps-prometheus
+  when: apps[app].metrics.prometheus_node_exporter.enabled is defined

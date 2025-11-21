@@ -1,0 +1,10 @@
+---
+- hosts: api
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'api'
+  vars_files:
+    - '../instances/{{ instance }}/shared/config.json'    
+  roles:
+    - role: deps-prometheus
