@@ -1,6 +1,7 @@
 import type { AppConfig } from './app';
 import type { CacheConfig } from './cache';
 import type { FileSystemConfig } from './filesystem';
+import type { MetricsConfig } from './metrics';
 import type { PdfConfig } from './pdf';
 import type { PublisherConfig, SubscriberConfig } from './pub-sub';
 import type { QueueConfig } from './queue';
@@ -18,6 +19,7 @@ import app from './app';
 import cache from './cache';
 import filesystem from './filesystem';
 import media, { MediaConfig } from './media';
+import metrics from './metrics';
 import pdf from './pdf';
 import { publisherConfig as publisher, subscriberConfig as subscriber } from './pub-sub';
 import queue from './queue';
@@ -48,6 +50,7 @@ export type Config = {
   log: LogConfig;
   mail: MailConfig;
   media: MediaConfig;
+  metrics: MetricsConfig;
   pdf: PdfConfig;
   queue: QueueConfig;
   rateLimiter: RateLimiterConfig;
@@ -68,6 +71,7 @@ const config: Config = {
   log,
   mail,
   media,
+  metrics,
   pdf,
   queue,
   rateLimiter,

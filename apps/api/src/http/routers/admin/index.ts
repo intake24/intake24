@@ -11,6 +11,7 @@ import { language } from './language.router';
 import locale from './locale';
 import { media } from './media.router';
 import { mediable } from './mediable.router';
+import { metrics } from './metrics.router';
 import { nutrientTable } from './nutrient-table.router';
 import { nutrientType } from './nutrient-type.router';
 import { nutrientUnit } from './nutrient-unit.router';
@@ -39,6 +40,7 @@ export default {
   locale,
   media,
   mediable,
+  metrics,
   nutrientTable,
   nutrientType,
   nutrientUnit,
