@@ -11,6 +11,7 @@ import { language } from './language.contract';
 import locale from './locale';
 import { media } from './media.contract';
 import { mediable } from './mediable.contract';
+import { metrics } from './metrics.contract';
 import { nutrientTable } from './nutrient-table.contract';
 import { nutrientType } from './nutrient-type.contract';
 import { nutrientUnit } from './nutrient-unit.contract';
@@ -44,6 +45,7 @@ export default {
   locale,
   localeSecurable: securable('Locale', '/admin/locales/:localeId'),
   media,
+  metrics,
   nutrientTable,
   nutrientType,
   nutrientUnit,

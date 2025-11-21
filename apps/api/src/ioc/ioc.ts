@@ -73,6 +73,7 @@ import type { TokenPayload } from '@intake24/common/security';
 import type { Environment } from '@intake24/common/types';
 import type { DatabasesInterface } from '@intake24/db';
 import { KyselyDatabases, models } from '@intake24/db';
+import { AppMetricsService } from '../services/metrics.service';
 
 export interface IoC extends Jobs {
   config: Config;
@@ -84,6 +85,7 @@ export interface IoC extends Jobs {
   logConfig: Config['log'];
   mailConfig: Config['mail'];
   mediaConfig: Config['media'];
+  metricsConfig: Config['metrics'];
   pdfConfig: Config['pdf'];
   queueConfig: Config['queue'];
   rateLimiterConfig: Config['rateLimiter'];
@@ -183,6 +185,9 @@ export interface IoC extends Jobs {
   // Media
   mediaService: MediaService;
   mediaStore: MediaStore;
+
+  // Metrics
+  appMetricsService: AppMetricsService;
 
   // Comms
   commsService: CommsService;

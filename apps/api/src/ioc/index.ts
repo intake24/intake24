@@ -23,6 +23,7 @@ function configureContainer() {
     logConfig: asValue(config.log),
     mailConfig: asValue(config.mail),
     mediaConfig: asValue(config.media),
+    metricsConfig: asValue(config.metrics),
     pdfConfig: asValue(config.pdf),
     queueConfig: asValue(config.queue),
     rateLimiterConfig: asValue(config.rateLimiter),

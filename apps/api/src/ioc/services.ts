@@ -60,7 +60,9 @@ import {
   surveySubmissionService,
   userService,
 } from '@intake24/api/services';
+
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
+import { AppMetricsService } from '@intake24/api/services/metrics.service';
 import { logger, Mailer } from '@intake24/common-backend';
 
 export default (container: AwilixContainer<RequestIoC>): void => {
@@ -71,6 +73,7 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     authenticationService: asFunction(authenticationService).singleton(),
     aclCache: asFunction(aclCache).singleton(),
     aclService: asFunction(aclService).scoped(),
+    appMetricsService: asClass(AppMetricsService).singleton(),
 
     duoProvider: asFunction(duoProvider).singleton(),
     fidoProvider: asFunction(fidoProvider).singleton(),

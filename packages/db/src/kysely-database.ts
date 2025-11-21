@@ -28,6 +28,9 @@ export class KyselyDatabases {
 
   public system!: Kysely<SystemDB>;
 
+  public foodsConnectionPool!: Pool;
+  public systemConnectionPool!: Pool;
+
   constructor({ environment, databaseConfig, logger }: DatabaseOptions) {
     this.env = environment;
     this.config = databaseConfig;
@@ -35,23 +38,30 @@ export class KyselyDatabases {
     this.dbLogger = logger.child({ service: 'Kysely DB' });
   }
 
-  private configKyselyDialect(database: DatabaseType): Dialect {
+  private configKyselyDialect(database: DatabaseType): { dialect: Dialect; pool: Pool } {
     // Postgres hard-coded for experimental Kysely code, in case we decide to keep using it
     // return the correct dialect type based on the database config
 
-    return new PostgresDialect({
-      pool: new Pool({
-        database: this.config[this.env][database].database,
-        host: this.config[this.env][database].host,
-        port: this.config[this.env][database].port,
-        user: this.config[this.env][database].username,
-        connectionString: this.config[this.env][database].url,
-        password: this.config[this.env][database].password,
-        max: this.config[this.env][database].pool?.max ?? 10,
-        log: (...messages: any[]) => this.poolLogger.debug(messages.join('; ')),
-      }),
+    const pool = new Pool({
+      database: this.config[this.env][database].database,
+      host: this.config[this.env][database].host,
+      port: this.config[this.env][database].port,
+      user: this.config[this.env][database].username,
+      connectionString: this.config[this.env][database].url,
+      password: this.config[this.env][database].password,
+      max: this.config[this.env][database].pool?.max ?? 10,
+      log: (...messages: any[]) => this.poolLogger.debug(messages.join('; ')),
+    });
+
+    const dialect = new PostgresDialect({
+      pool,
       cursor,
     });
+
+    return {
+      dialect,
+      pool,
+    };
   }
 
   configLogger(database: DatabaseType): KyselyLogFunc {
@@ -108,16 +118,25 @@ export class KyselyDatabases {
   }
 
   init() {
+    const { dialect: foodsDialect, pool: foodsConnectionPool } = this.configKyselyDialect('foods');
+
     this.foods = new Kysely<FoodsDB>({
-      dialect: this.configKyselyDialect('foods'),
+      dialect: foodsDialect,
       log: this.configLogger('foods'),
       plugins: [new CamelCasePlugin()],
     });
+
+    this.foodsConnectionPool = foodsConnectionPool;
+
+    const { dialect: systemDialect, pool: systemConnectionPool } = this.configKyselyDialect('system');
+
     this.system = new Kysely<SystemDB>({
-      dialect: this.configKyselyDialect('system'),
+      dialect: systemDialect,
       log: this.configLogger('system'),
       plugins: [new CamelCasePlugin()],
     });
+
+    this.systemConnectionPool = systemConnectionPool;
   }
 
   async close() {
