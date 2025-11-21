@@ -1,0 +1,66 @@
+---
+- name: Fail if prometheus_node_exporter.enabled is not explicitly set
+  ansible.builtin.fail:
+    msg: |
+      ERROR: The config variable 'apps.{{ app }}.metrics.prometheus_node_exporter.enabled' is not defined!
+
+      You must explicitly set it when including this role.
+  when: apps[app].metrics.prometheus_node_exporter.enabled is not defined
+  
+- name: Install prometheus-node-exporter
+  apt:
+    name: prometheus-node-exporter
+    state: latest
+    update_cache: yes
+  when: apps[app].metrics.prometheus_node_exporter.enabled
+
+- name: Create systemd override directory
+  file:
+    path: /etc/systemd/system/prometheus-node-exporter.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: apps[app].metrics.prometheus_node_exporter.enabled
+
+- name: Configure prometheus-node-exporter to bind to localhost with custom port
+  copy:
+    dest: /etc/systemd/system/prometheus-node-exporter.service.d/override.conf
+    content: |
+      [Service]
+      ExecStart=
+      ExecStart=/usr/bin/prometheus-node-exporter $ARGS --web.listen-address=127.0.0.1:{{ apps[app].metrics.prometheus_node_exporter.port }}
+    owner: root
+    group: root
+    mode: "0644"
+  when: apps[app].metrics.prometheus_node_exporter.enabled and apps[app].metrics.prometheus_node_exporter.port is defined
+  notify: Reload systemd and restart prometheus-node-exporter
+
+- name: Ensure prometheus-node-exporter is enabled and started
+  systemd:
+    name: prometheus-node-exporter
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  when: apps[app].metrics.prometheus_node_exporter.enabled
+
+- name: Stop and disable prometheus-node-exporter service
+  systemd:
+    name: prometheus-node-exporter
+    state: stopped
+    enabled: false
+  when: not apps[app].metrics.prometheus_node_exporter.enabled
+  ignore_errors: yes # if doesn't exist
+
+- name: Remove systemd override directory
+  file:
+    path: /etc/systemd/system/prometheus-node-exporter.service.d
+    state: absent
+  when: not apps[app].metrics.prometheus_node_exporter.enabled
+
+- name: Remove prometheus-node-exporter package
+  apt:
+    name: prometheus-node-exporter
+    state: absent
+    purge: yes
+  when: not apps[app].metrics.prometheus_node_exporter.enabled
