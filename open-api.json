@@ -38810,6 +38810,40 @@
         }
       }
     },
+    "/admin/metrics/app": {
+      "get": {
+        "description": "Returns internal app metrics for scraping by Prometheus",
+        "summary": "Get metrics (app)",
+        "tags": [
+          "default",
+          "admin",
+          "metrics"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200"
+          }
+        }
+      }
+    },
+    "/admin/metrics/node": {
+      "get": {
+        "description": "Returns prometheus-node-exporter metrics for the underlying machine",
+        "summary": "Get metrics (node)",
+        "tags": [
+          "default",
+          "admin",
+          "metrics"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200"
+          }
+        }
+      }
+    },
     "/admin/nutrient-tables": {
       "get": {
         "description": "Browse nutrient tables (paginated list)",
