@@ -1,8 +1,11 @@
-import cron from 'node-cron';
-import prom, { collectDefaultMetrics } from 'prom-client';
+import type { Express } from 'express';
+import { createMiddleware } from '@promster/express';
+import cron, { ScheduledTask } from 'node-cron';
+import prom, { collectDefaultMetrics, register as defaultRegister } from 'prom-client';
 import { IoC } from '@intake24/api/ioc';
 import { Dictionary } from '@intake24/common/types';
 import { DatabasesInterface, KyselyDatabases } from '@intake24/db';
+import { MetricsConfig } from '../config/metrics';
 
 const kyselySystemLabels = { db: 'system', interface: 'kysely' } as const;
 const kyselyFoodsLabels = { db: 'foods', interface: 'kysely' } as const;
@@ -10,99 +13,124 @@ const kyselyFoodsLabels = { db: 'foods', interface: 'kysely' } as const;
 const sequelizeSystemLabels = { db: 'system', interface: 'sequelize' } as const;
 const sequelizeFoodsLabels = { db: 'foods', interface: 'sequelize' } as const;
 
+export function getHttpStatusLabel(
+  statusCode: number,
+): number {
+  if (statusCode >= 200 && statusCode < 300) {
+    return 200;
+  }
+
+  // redirects
+  if (statusCode >= 100 && statusCode < 400) {
+    return 200;
+  }
+
+  if (statusCode >= 400 && statusCode < 500) {
+    return 400;
+  }
+
+  return 500;
+}
+
+type HttpMethodLabel = 'GET' | 'POST';
+
+export function getHttpMethodLabel(method: string): HttpMethodLabel {
+  if (['GET', 'HEAD', 'OPTIONS', 'TRACE'].includes(method)) {
+    return 'GET';
+  }
+
+  return 'POST';
+}
+
+export function normalizeRequestPath(path: string): string {
+  if (path.startsWith('/api/admin'))
+    return '/admin/**';
+  if (path.startsWith('/api/user'))
+    return '/user/**';
+  if (path.match(/^\/api\/surveys\/[^/]+\/submissions\/?(?:\?.*)?$/))
+    return '/surveys/*/submission';
+  if (path.match(/^\/api\/surveys\/[^/]+\/session$/))
+    return '/surveys/*/session';
+  if (path.match(/^\/api\/surveys\/[^/]+\/search\/?(?:\?.*)?$/))
+    return '/surveys/*/search';
+
+  return 'other';
+}
+
 export class AppMetricsService {
-  readonly registry: prom.Registry;
-
-  // readonly httpRequestsTotal: prom.Counter;
-  // readonly httpRequestDurationSeconds: prom.Histogram;
-
-  private readonly connectionPoolTotal?: prom.Gauge;
-  private readonly connectionPoolIdle?: prom.Gauge;
-  private readonly connectionPoolActive?: prom.Gauge;
-  private readonly connectionPoolPending?: prom.Gauge;
-  private readonly connectionDuration?: prom.Histogram;
+  private connectionPoolTotal?: prom.Gauge;
+  private connectionPoolIdle?: prom.Gauge;
+  private connectionPoolActive?: prom.Gauge;
+  private connectionPoolPending?: prom.Gauge;
+  private connectionDuration?: prom.Histogram;
 
   private readonly sequelizeDb: DatabasesInterface;
   private readonly kyselyDb: KyselyDatabases;
+  private readonly metricsConfig: MetricsConfig;
+  private readonly defaultLabels: Dictionary<string>;
+
+  private cronTask?: ScheduledTask;
 
   constructor({ db, kyselyDb, metricsConfig }: Pick<IoC, 'db' | 'kyselyDb' | 'metricsConfig'>) {
     this.sequelizeDb = db;
     this.kyselyDb = kyselyDb;
+    this.metricsConfig = metricsConfig;
 
-    this.registry = new prom.Registry();
-
-    const defaultLabels: Dictionary<string> = {
+    this.defaultLabels = {
       instance_id: metricsConfig.app.instanceId.intake24,
     };
 
     if (metricsConfig.app.instanceId.pm2 !== undefined)
-      defaultLabels.pm2_instance_id = metricsConfig.app.instanceId.pm2;
+      this.defaultLabels.pm2_instance_id = metricsConfig.app.instanceId.pm2;
 
-    this.registry.setDefaultLabels(defaultLabels);
+    defaultRegister.setDefaultLabels(this.defaultLabels);
 
-    // this.httpRequestsTotal = new prom.Counter({
-    //   name: 'it24_http_requests_total',
-    //   help: 'Total number of HTTP requests',
-    //   labelNames: ['method', 'route', 'status_code'],
-    //   registers: [this.registry],
-    // });
-
-    // this.httpRequestDurationSeconds = new prom.Histogram({
-    //   name: 'it24_http_request_duration_seconds',
-    //   help: 'Duration of HTTP requests in seconds',
-    //   labelNames: ['method', 'route', 'status_code'],
-    //   buckets: prom.exponentialBuckets(0.01, 2, 30),
-    //   registers: [this.registry],
-    // });
-
-    if (metricsConfig.app.collectDefaultMetrics) {
-      collectDefaultMetrics({ register: this.registry, labels: defaultLabels });
+    // HTTP metrics implementation currently forces collectDefaultMetrics
+    if (this.metricsConfig.app.collectDefaultMetrics && !this.metricsConfig.app.http.enabled) {
+      collectDefaultMetrics();
     }
+  }
 
+  initDatabaseMetrics() {
     const databaseLabelNames = ['db', 'interface', 'instance_id', 'pm2_instance_id'];
 
-    if (metricsConfig.app.db.collectConnectionPoolStats) {
+    if (this.metricsConfig.app.db.collectConnectionPoolStats) {
       this.connectionPoolTotal = new prom.Gauge({
         name: 'it24_db_total_connections',
         help: 'Total connections in the database connection pool',
         labelNames: databaseLabelNames,
-        registers: [this.registry],
       });
 
       this.connectionPoolIdle = new prom.Gauge({
         name: 'it24_db_idle_connections',
         help: 'Idle connections in the database connection pool',
         labelNames: databaseLabelNames,
-        registers: [this.registry],
       });
 
       this.connectionPoolActive = new prom.Gauge({
         name: 'it24_db_active_connections',
         help: 'Active connections in the database connection pool',
         labelNames: databaseLabelNames,
-        registers: [this.registry],
       });
 
       this.connectionPoolPending = new prom.Gauge({
         name: 'it24_db_pending_connections',
         help: 'Pending requests waiting for a connection in the database connection pool',
         labelNames: databaseLabelNames,
-        registers: [this.registry],
       });
 
-      cron.schedule('*/5 * * * * *', () => {
+      this.cronTask = cron.schedule('*/5 * * * * *', () => {
         this.collectSequelizeConnectionPoolStats();
         this.collectKyselyConnectionPoolStats();
       });
     }
 
-    if (metricsConfig.app.db.collectConnectionDuration) {
+    if (this.metricsConfig.app.db.collectConnectionDuration) {
       this.connectionDuration = new prom.Histogram({
-        name: 'it24_db_connection_duration',
+        name: 'it24_db_connection_duration_ms',
         help: 'Duration a database connection is used by clients',
         labelNames: databaseLabelNames,
         buckets: prom.exponentialBuckets(50, 2, 10),
-        registers: [this.registry],
       });
 
       this.watchKyselyConnectionDuration(kyselySystemLabels, this.kyselyDb.systemConnectionPool);
@@ -111,6 +139,58 @@ export class AppMetricsService {
       this.watchSequelizeConnectionDuration(sequelizeSystemLabels, (this.sequelizeDb.system!.connectionManager as any).pool);
       this.watchSequelizeConnectionDuration(sequelizeFoodsLabels, (this.sequelizeDb.foods!.connectionManager as any).pool);
     }
+  }
+
+  async useHttpMetricsMiddleware(app: Express) {
+    if (this.metricsConfig.app.http.enabled) {
+      const metricTypes = ['httpRequestsTotal'];
+
+      if (this.metricsConfig.app.http.collectRequestDuration)
+        metricTypes.push('httpRequestsHistogram');
+
+      if (this.metricsConfig.app.http.collectContentLength)
+        metricTypes.push('httpContentLengthHistogram');
+
+      const metricsMiddleware = createMiddleware(
+        {
+          app,
+          options: {
+            metricTypes,
+            normalizeMethod: (method, _) => getHttpMethodLabel(method),
+            normalizeStatusCode: (code, _) => getHttpStatusLabel(code),
+            normalizePath: path => normalizeRequestPath(path),
+            metricBuckets: {
+              httpRequestContentLengthInBytes: [
+                1000,
+                5000,
+                10000,
+                50000,
+                1000000,
+                10000000,
+              ],
+              httpRequestDurationInSeconds: [
+                0.05,
+                0.1,
+                0.2,
+                0.3,
+                0.5,
+                1,
+                2,
+                5,
+                10,
+              ],
+            },
+          },
+        },
+      );
+
+      app.use(metricsMiddleware);
+    }
+  }
+
+  shutdown() {
+    this.cronTask?.destroy();
+    this.cronTask = undefined;
   }
 
   watchSequelizeConnectionDuration(labels: Dictionary<string>, pool: any) {
@@ -183,6 +263,6 @@ export class AppMetricsService {
   }
 
   async getMetrics(): Promise<string> {
-    return this.registry.metrics();
+    return defaultRegister.metrics();
   }
 }

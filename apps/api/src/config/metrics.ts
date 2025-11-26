@@ -12,6 +12,11 @@ const metricsConfigSchema = z.object({
       collectConnectionDuration: z.boolean(),
       collectConnectionSource: z.boolean(),
     }),
+    http: z.object({
+      enabled: z.boolean(),
+      collectRequestDuration: z.boolean(),
+      collectContentLength: z.boolean(),
+    }),
     instanceId: z.object({
       pm2: z.string().optional(),
       intake24: z.string(),
@@ -33,6 +38,11 @@ export default metricsConfigSchema.parse({
       collectConnectionPoolStats: Boolean(process.env.METRICS_COLLECT_DB_CONNECTION_POOL_STATS),
       collectConnectionDuration: Boolean(process.env.METRICS_COLLECT_DB_CONNECTION_DURATION),
       collectConnectionSource: Boolean(process.env.METRICS_COLLECT_DB_CONNECTION_SOURCE),
+    },
+    http: {
+      enabled: Boolean(process.env.METRICS_HTTP_ENABLED),
+      collectRequestDuration: Boolean(process.env.METRICS_COLLECT_HTTP_REQUEST_DURATION),
+      collectContentLength: Boolean(process.env.METRICS_COLLECT_HTTP_CONTENT_LENGTH),
     },
     instanceId: {
       pm2: process.env.NODE_APP_INSTANCE,

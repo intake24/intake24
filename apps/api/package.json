@@ -30,6 +30,7 @@
     "@duosecurity/duo_universal": "^3.0.0",
     "@json2csv/node": "^7.0.6",
     "@json2csv/plainjs": "^7.0.6",
+    "@promster/express": "^15.4.2",
     "@simplewebauthn/server": "^13.2.2",
     "@ts-rest/core": "^3.52.1",
     "@ts-rest/express": "^3.52.1",
@@ -96,6 +97,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^10.1.0",
+    "@promster/types": "^15.4.2",
     "@types/body-parser": "^1.19.6",
     "@types/clean-css": "^4.2.11",
     "@types/cookie-parser": "^1.4.10",
