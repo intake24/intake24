@@ -223,6 +223,14 @@ export class AppMetricsService {
                 1000000,
                 10000000,
               ],
+              httpResponseContentLengthInBytes: [
+                1000,
+                5000,
+                10000,
+                50000,
+                1000000,
+                10000000,
+              ],
               httpRequestDurationInSeconds: [
                 0.05,
                 0.1,
