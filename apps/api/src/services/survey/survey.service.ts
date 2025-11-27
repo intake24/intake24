@@ -1,9 +1,7 @@
 import { URL } from 'node:url';
-
 import { addDays, addMinutes, startOfDay } from 'date-fns';
 import { Op } from 'sequelize';
 import { z, ZodError } from 'zod';
-
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { jwt } from '@intake24/api/util';
@@ -18,10 +16,8 @@ import type {
   SurveyUserInfoResponse,
 } from '@intake24/common/types/http';
 import { isSessionAgeValid, isSessionFixedPeriodValid, randomString } from '@intake24/common/util';
-import type { FindOptions, SubmissionScope } from '@intake24/db';
 import {
   GenUserCounter,
-  submissionScope,
   Survey,
   SurveySubmission,
   User,
@@ -394,12 +390,21 @@ function surveyService({
   /**
    * Get user's submissions
    *
-   * @param {SubmissionScope} scopeOptions
-   * @param {FindOptions} [options]
+   * @param {string | string[]} slug
+   * @param {string} userId
    * @returns {Promise<SurveySubmission[]>}
    */
-  const getSubmissions = async (scopeOptions: SubmissionScope, options: FindOptions = {}): Promise<SurveySubmission[]> =>
-    SurveySubmission.findAll(submissionScope(scopeOptions, options));
+  const getSubmissions = async (slug: string | string[], userId: string): Promise<SurveySubmission[]> =>
+    await SurveySubmission.findAll({
+      where: { userId },
+      include: [
+        {
+          association: 'survey',
+          attributes: ['id', 'slug'],
+          where: { slug },
+        },
+      ],
+    });
 
   /**
    * Resolve follow-up URL, if any

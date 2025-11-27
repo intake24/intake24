@@ -1,6 +1,5 @@
-import type { SurveySubmissionMealEntry } from '@intake24/common/types/http';
+import type { FeedbackSubmissionEntry } from '@intake24/common/types/http';
 import { fromTime } from '@intake24/common/util';
-
 import SurveyFood from './survey-food';
 
 export default class SurveyMeal {
@@ -27,7 +26,7 @@ export default class SurveyMeal {
     duration: number | null,
     customFields: { name: string; value: string }[],
     foods: SurveyFood[],
-    missingFoods: SurveySubmissionMealEntry['missingFoods'],
+    missingFoods: FeedbackSubmissionEntry['meals'][number]['missingFoods'],
   ) {
     const time = fromTime({ hours, minutes });
 
@@ -53,7 +52,7 @@ export default class SurveyMeal {
     );
   }
 
-  static fromJson(meal: SurveySubmissionMealEntry): SurveyMeal {
+  static fromJson(meal: FeedbackSubmissionEntry['meals'][number]): SurveyMeal {
     return new SurveyMeal(
       meal.name,
       meal.hours,

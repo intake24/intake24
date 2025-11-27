@@ -1,8 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-
 import { userPhysicalDataAttributes, userPhysicalDataResponse } from '@intake24/common/types/http';
-
+import { surveySubmissionAttributes } from '@intake24/common/types/http/admin';
 import { strongPasswordWithConfirm } from '../../security';
 
 export const profile = initContract().router({
@@ -53,8 +52,7 @@ export const profile = initContract().router({
       survey: z.union([z.string(), z.array(z.string())]),
     }),
     responses: {
-      // TODO: Add response schema
-      200: z.object({}),
+      200: surveySubmissionAttributes.array(),
     },
     summary: 'User submissions',
     description: 'Get user submissions for selected surveys.',

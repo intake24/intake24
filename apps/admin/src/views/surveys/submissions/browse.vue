@@ -43,7 +43,6 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import { JsonEditor } from '@intake24/admin/components/editors';

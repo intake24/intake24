@@ -1,7 +1,6 @@
 import type SurveyFood from './survey-food';
-
 import type SurveyMeal from './survey-meal';
-import type { SurveySubmissionEntry } from '@intake24/common/types/http';
+import type { FeedbackSubmissionEntry } from '@intake24/common/types/http';
 import AggregateFoodStats from './aggregate-food-stats';
 import SurveySubmission from './survey-submission';
 
@@ -30,7 +29,7 @@ export default class SurveyStats {
     return new SurveyStats(this.submissions);
   }
 
-  static fromJson(jsonList: SurveySubmissionEntry[]) {
+  static fromJson(jsonList: FeedbackSubmissionEntry[]) {
     return new SurveyStats(jsonList.map(js => SurveySubmission.fromJson(js)));
   }
 

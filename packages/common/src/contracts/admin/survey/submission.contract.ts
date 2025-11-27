@@ -1,10 +1,9 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-
 import { paginationMeta, paginationRequest, uuid as submissionId, bigIntString as surveyId } from '@intake24/common/types/http';
 import {
   surveySubmissionAttributes,
-  surveySubmissionWithUsername,
+  surveySubmissionListEntry,
 } from '@intake24/common/types/http/admin';
 
 export const submission = initContract().router({
@@ -15,7 +14,7 @@ export const submission = initContract().router({
     query: paginationRequest,
     responses: {
       200: z.object({
-        data: surveySubmissionWithUsername.array(),
+        data: surveySubmissionListEntry.array(),
         meta: paginationMeta,
       }),
     },

@@ -1,11 +1,8 @@
 import type { FieldValidationError } from 'express-validator';
 import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash';
-
 import { contract } from '@intake24/common/contracts';
-import type { SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { Survey, UserPassword } from '@intake24/db';
-
 import { ForbiddenError, NotFoundError, ValidationError } from '../../errors';
 
 export function profile() {
@@ -102,19 +99,9 @@ export function profile() {
       const { survey: slug } = query;
       const { userId } = req.scope.cradle.user;
 
-      const survey = await (typeof slug === 'string'
-        ? Survey.findBySlug(slug, { attributes: ['id'] })
-        : Survey.findOne({ attributes: ['id'], where: { slug } }));
-      if (!survey)
-        throw new NotFoundError();
+      const submissions = await req.scope.cradle.surveyService.getSubmissions(slug, userId);
 
-      const data = await req.scope.cradle.cache.remember(
-        `user-submissions:${userId}`,
-        req.scope.cradle.cacheConfig.ttl,
-        async () => req.scope.cradle.surveyService.getSubmissions({ userId, surveyId: survey.id }),
-      );
-
-      return { status: 200, body: data as SurveySubmissionEntry[] };
+      return { status: 200, body: submissions };
     },
   });
 }

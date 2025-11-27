@@ -116,7 +116,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
-
+import type { FeedbackSubmissionEntry, Pagination } from '@intake24/common/types/http';
 import { SurveyRating } from '@intake24/survey/components/elements';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
@@ -226,6 +226,7 @@ export default defineComponent({
       const { cards, demographicGroups: groups, henryCoefficients } = feedbackScheme;
 
       const { physicalData, submissions } = await this.getUserData(surveyId);
+
       if (feedbackScheme.physicalDataFields.some(item => physicalData[item] === null)) {
         this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
         return;
@@ -275,10 +276,31 @@ export default defineComponent({
       this.selectedSubmissions = submissionIds;
     },
 
+    async fetchSubmissions(survey: string): Promise<FeedbackSubmissionEntry[]> {
+      const { data: { data, meta } } = await this.$http.get<Pagination<FeedbackSubmissionEntry>>(
+        'user/feedback/submissions',
+        { params: { survey } },
+      );
+
+      if (meta.page >= meta.lastPage)
+        return data;
+
+      for (let page = meta.page + 1; page <= meta.lastPage; page++) {
+        const { data: { data: pageData } } = await this.$http.get<Pagination<FeedbackSubmissionEntry>>(
+          'user/feedback/submissions',
+          { params: { survey, page } },
+        );
+
+        data.push(...pageData);
+      }
+
+      return data;
+    },
+
     async getUserData(surveyId: string) {
       const [physicalData, submissions] = await Promise.all([
         userService.fetchPhysicalData(),
-        userService.submissions(surveyId),
+        this.fetchSubmissions(surveyId),
       ]);
 
       return { physicalData, submissions };

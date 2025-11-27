@@ -1,5 +1,5 @@
 import { NutrientTypeIdEnum } from '@intake24/common/feedback';
-import type { SurveySubmissionFoodEntry } from '@intake24/common/types/http';
+import type { FeedbackSubmissionEntry } from '@intake24/common/types/http';
 import { round } from '@intake24/common/util';
 
 export default class SurveyFood {
@@ -23,7 +23,7 @@ export default class SurveyFood {
     this.nutrientIdConsumptionMap = new Map(nutrients);
   }
 
-  static fromJson(food: SurveySubmissionFoodEntry): SurveyFood {
+  static fromJson(food: FeedbackSubmissionEntry['meals'][number]['foods'][number]): SurveyFood {
     const mp = new Map<string, number>();
     for (const nutrient of food.nutrients)
       mp.set(nutrient.nutrientTypeId, nutrient.amount);

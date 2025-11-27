@@ -1,6 +1,5 @@
 import type SurveyFood from './survey-food';
-
-import type { SurveySubmissionEntry } from '@intake24/common/types/http';
+import type { FeedbackSubmissionEntry } from '@intake24/common/types/http';
 import SurveyMeal from './survey-meal';
 
 export default class SurveySubmission {
@@ -27,7 +26,7 @@ export default class SurveySubmission {
     return this.meals.flatMap(({ foods }) => foods);
   }
 
-  static fromJson(submission: SurveySubmissionEntry): SurveySubmission {
+  static fromJson(submission: FeedbackSubmissionEntry): SurveySubmission {
     return new SurveySubmission(
       submission.id,
       new Date(submission.startTime),

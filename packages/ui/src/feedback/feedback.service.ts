@@ -1,16 +1,11 @@
 import type { HttpClient } from '../types/http';
 import type { CardWithDemGroups } from './cards-builder';
-
 import type {
   Card,
   DemographicGroup as FeedbackSchemeDemographicGroup,
   HenryCoefficient,
 } from '@intake24/common/feedback';
-import type {
-  FeedbackDataResponse,
-  SurveySubmissionEntry,
-  UserPhysicalDataResponse,
-} from '@intake24/common/types/http';
+import type { FeedbackDataResponse, FeedbackSubmissionEntry, UserPhysicalDataResponse } from '@intake24/common/types/http';
 import { CharacterRules, DemographicGroup, SurveyStats, UserDemographic } from './classes';
 
 export type FeedbackDictionaries = {
@@ -29,6 +24,7 @@ export type UserPhysicalData = NonNullable<UserPhysicalDataResponse>;
 
 function createFeedbackService(httpClient: HttpClient) {
   let cachedFeedbackData: FeedbackDataResponse | null = null;
+  let cachedSubmissions: FeedbackSubmissionEntry[] = [];
 
   const fetchFeedbackData = async (): Promise<FeedbackDataResponse> => {
     const { data } = await httpClient.get<FeedbackDataResponse>('feedback');
@@ -70,13 +66,14 @@ function createFeedbackService(httpClient: HttpClient) {
     groups: FeedbackSchemeDemographicGroup[];
     henryCoefficients: HenryCoefficient[];
     physicalData: UserPhysicalData;
-    submissions: SurveySubmissionEntry[];
+    submissions: FeedbackSubmissionEntry[];
   }): Promise<FeedbackResults> => {
-    const { cards, groups, henryCoefficients, physicalData, submissions } = ops;
+    const { cards, groups, henryCoefficients, physicalData } = ops;
+
+    cachedSubmissions &&= ops.submissions;
 
     const feedbackData = await getFeedbackData();
-
-    const surveyStats = SurveyStats.fromJson(submissions);
+    const surveyStats = SurveyStats.fromJson(cachedSubmissions);
 
     const demographicGroups = groups.reduce<DemographicGroup[]>((acc, item) => {
       const nutrientType = feedbackData.nutrientTypes.find(nt => nt.id === item.nutrientTypeId);

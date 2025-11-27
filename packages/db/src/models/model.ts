@@ -1,11 +1,9 @@
 import type { AbstractDataType, CountOptions, FindOptions } from 'sequelize';
-
 /* eslint-disable ts/no-empty-object-type */
 import { Readable } from 'node:stream';
 import { snakeCase } from 'lodash';
 import { cast, col, DataTypes, fn, Op, where } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
-
 import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
 
 export type PaginateQuery = {
@@ -22,6 +20,7 @@ export interface PaginateOptions<TAttributes = any, T extends PaginateTransform 
   query: PaginateQuery;
   columns?: string[];
   transform?: T;
+  topCount?: boolean;
 }
 
 // Sequelize options not indexable
@@ -68,7 +67,7 @@ export default class Model<
    */
   public static async paginate<T extends PaginateTransform, R = Model>(
     this: BaseModelStatic<R extends Model ? R : Model>,
-    { query, columns = [], transform, ...params }: PaginateOptions<any, T>,
+    { query, columns = [], transform, topCount, ...params }: PaginateOptions<any, T>,
   ): Promise<Pagination<T extends PaginateTransform ? ReturnType<T> : R>> {
     const { page = 1, limit = 50, sort, search } = query;
 
@@ -90,6 +89,10 @@ export default class Model<
     }
 
     const countOptions = Object.keys(options).reduce<BaseCountOptions>((acc, key) => {
+      // TODO: we should scan the where clause for include clauses instead
+      if (topCount && key === 'include')
+        return acc;
+
       if (!['order', 'attributes', 'limit', 'offset'].includes(key))
         acc[key] = options[key];
 

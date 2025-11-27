@@ -1,4 +1,5 @@
-import type { SurveySubmissionEntry, UserPhysicalDataAttributes } from '@intake24/common/types/http/user';
+import type { FeedbackSubmissionEntry } from '@intake24/common/types/http';
+import type { UserPhysicalDataAttributes } from '@intake24/common/types/http/user';
 
 import submissionsJson from './submissions.json';
 
@@ -12,4 +13,4 @@ export const physicalData: UserPhysicalDataAttributes = {
   weightTarget: 'lose_weight',
 };
 
-export const submissions = submissionsJson as unknown as SurveySubmissionEntry[];
+export const submissions = submissionsJson as unknown as FeedbackSubmissionEntry[];

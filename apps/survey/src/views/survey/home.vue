@@ -325,9 +325,8 @@
 <script lang="ts">
 import { mapState } from 'pinia';
 import { computed, defineComponent, onMounted, ref } from 'vue';
-
 import { useRouter } from 'vue-router';
-import type { SurveySubmissionEntry } from '@intake24/common/types/http';
+import type { SurveySubmissionAttributes } from '@intake24/common/types/http/admin';
 import { userService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 import { sendGtmEvent } from '@intake24/survey/util';
@@ -349,7 +348,7 @@ export default defineComponent({
     const survey = useSurvey();
     const router = useRouter();
 
-    const submissions = ref<SurveySubmissionEntry[]>([]);
+    const submissions = ref<SurveySubmissionAttributes[]>([]);
     const startTime = computed(() => survey.data.startTime);
     const endTime = computed(() => survey.data.endTime);
 
