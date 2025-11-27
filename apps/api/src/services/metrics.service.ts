@@ -52,7 +52,7 @@ export function normalizeRequestPath(path: string): string {
     return '/user/submissions';
   if (path.startsWith('/api/user'))
     return '/user/**';
-  if (path.match(/^\/api\/surveys\/[^/]+\/submissions\/?(?:\?.*)?$/))
+  if (path.match(/^\/api\/surveys\/[^/]+\/submission\/?(?:\?.*)?$/))
     return '/surveys/*/submission';
   if (path.match(/^\/api\/surveys\/[^/]+\/session$/))
     return '/surveys/*/session';
