@@ -3313,12 +3313,14 @@
             "schema": {
               "oneOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 128
                 },
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 128
                   }
                 }
               ]
@@ -4066,12 +4068,14 @@
             "schema": {
               "oneOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 128
                 },
                 {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 128
                   }
                 }
               ]
