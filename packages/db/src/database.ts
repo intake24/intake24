@@ -47,7 +47,7 @@ export class Database implements DatabasesInterface {
   }
 
   init() {
-    const isDev = this.env === 'development';
+    const isDebug = this.logger.level === 'debug';
 
     for (const database of Object.keys(this.config[this.env]) as DatabaseType[]) {
       const { debugQueryLimit, url, ...rest } = this.config[this.env][database];
@@ -55,9 +55,10 @@ export class Database implements DatabasesInterface {
       const config = {
         ...rest,
         models: Object.values(models[database]),
-        logging: isDev
-          ? (sql: string) => databaseLogQuery(sql, this.logger, debugQueryLimit)
-          : false,
+        benchmark: isDebug,
+        logging: (sql: string, timing?: number) => {
+          databaseLogQuery(`Query${isDebug ? ` [${timing} ms]` : ''}: ${sql}`, this.logger, debugQueryLimit);
+        },
       };
 
       this[database] = url ? new Sequelize(url, config) : new Sequelize(config);
