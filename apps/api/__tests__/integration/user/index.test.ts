@@ -1,3 +1,4 @@
+import feedback from './feedback/index.test';
 import getPhysicalData from './get-physical-data.test';
 import password from './password.test';
 import setPhysicalData from './set-physical-data.test';
@@ -8,6 +9,5 @@ export default () => {
   describe('post /api/user/physical-data', setPhysicalData);
   describe('get /api/user/submissions', submissions);
   describe('get /api/user/password', password);
-  // describe('GET /api/user/feedback', downloadFeedback);
-  // describe('POST /api/user/feedback', emailFeedback);
+  describe('/api/user/feedback', feedback);
 };

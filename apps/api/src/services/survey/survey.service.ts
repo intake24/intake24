@@ -400,7 +400,7 @@ function surveyService({
       include: [
         {
           association: 'survey',
-          attributes: ['id', 'slug'],
+          attributes: [],
           where: { slug },
         },
       ],

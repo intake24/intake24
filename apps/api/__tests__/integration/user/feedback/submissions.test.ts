@@ -1,20 +1,20 @@
-import request from 'supertest';
-
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveySubmission } from '@intake24/db';
 
 export default () => {
-  const url = '/api/user/submissions';
+  const url = '/api/user/feedback/submissions';
   let surveyId: string;
   let surveySlug: string;
   let userId: string;
+  let submissionId: string;
 
   beforeAll(async () => {
     surveyId = suite.data.system.Survey.id;
     surveySlug = suite.data.system.Survey.slug;
     userId = suite.data.system.respondent.userId;
 
-    await SurveySubmission.create(mocker.system.submission(surveyId, userId));
+    const submission = await SurveySubmission.create(mocker.system.submission(surveyId, userId));
+    submissionId = submission.id;
   });
 
   afterAll(async () => {
@@ -29,23 +29,16 @@ export default () => {
     await suite.sharedTests.assertInvalidInput('get', url, ['survey'], { bearer: 'respondent' });
   });
 
-  it('should return empty array for invalid survey', async () => {
-    const { status, body } = await request(suite.app)
-      .get(`${url}?survey=nonExistingSurvey`)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(200);
-    expect(body).toBeArrayOfSize(0);
+  it('should return 404 for invalid survey', async () => {
+    await suite.sharedTests.assertMissingRecord('get', `${url}?survey=nonExistingSurvey`, {
+      bearer: 'respondent',
+    });
   });
 
   it('should return 200 and array of submissions', async () => {
-    const { status, body } = await request(suite.app)
-      .get(`${url}?survey=${surveySlug}`)
-      .set('Accept', 'application/json')
-      .set('Authorization', suite.bearer.respondent);
-
-    expect(status).toBe(200);
-    expect(body).toBeArrayOfSize(1);
+    await suite.sharedTests.assertPaginatedResult('get', `${url}?survey=${surveySlug}`, {
+      bearer: 'respondent',
+      result: submissionId,
+    });
   });
 };

@@ -80,11 +80,8 @@ export function feedback() {
     submissions: async ({ query, req }) => {
       const { survey: slug, limit = 10, page } = query;
       const { userId } = req.scope.cradle.user;
-      console.log('Fetching submissions for survey:', slug);
 
-      const survey = await (typeof slug === 'string'
-        ? Survey.findBySlug(slug, { attributes: ['id'] })
-        : Survey.findOne({ attributes: ['id'], where: { slug } }));
+      const survey = await Survey.findOne({ attributes: ['id'], where: { slug } });
       if (!survey)
         throw new NotFoundError();
 

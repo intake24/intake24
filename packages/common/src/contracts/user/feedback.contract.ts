@@ -45,7 +45,7 @@ export const feedback = initContract().router({
     query: z.object({
       page: z.coerce.number().int().min(1).optional(),
       limit: z.coerce.number().int().min(1).max(10).optional(),
-      survey: z.union([z.string(), z.array(z.string())]),
+      survey: z.union([z.string().max(128), z.array(z.string().max(128))]),
     }),
     responses: {
       200: z.object({

@@ -49,7 +49,7 @@ export const profile = initContract().router({
     method: 'GET',
     path: '/user/submissions',
     query: z.object({
-      survey: z.union([z.string(), z.array(z.string())]),
+      survey: z.union([z.string().max(128), z.array(z.string().max(128))]),
     }),
     responses: {
       200: surveySubmissionAttributes.array(),
