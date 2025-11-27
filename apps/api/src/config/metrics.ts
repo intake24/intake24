@@ -17,6 +17,9 @@ const metricsConfigSchema = z.object({
       collectRequestDuration: z.boolean(),
       collectContentLength: z.boolean(),
     }),
+    jobs: z.object({
+      enabled: z.boolean(),
+    }),
     instanceId: z.object({
       pm2: z.string().optional(),
       intake24: z.string(),
@@ -47,6 +50,9 @@ export default metricsConfigSchema.parse({
     instanceId: {
       pm2: process.env.NODE_APP_INSTANCE,
       intake24: process.env.METRICS_INSTANCE_ID,
+    },
+    jobs: {
+      enabled: Boolean(process.env.METRICS_COLLECT_JOBS_DURATION),
     },
   },
 });

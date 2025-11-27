@@ -3,9 +3,10 @@ import { createMiddleware } from '@promster/express';
 import cron, { ScheduledTask } from 'node-cron';
 import prom, { collectDefaultMetrics, register as defaultRegister } from 'prom-client';
 import { IoC } from '@intake24/api/ioc';
-import { Dictionary } from '@intake24/common/types';
+import { Dictionary, JobData } from '@intake24/common/types';
 import { DatabasesInterface, KyselyDatabases } from '@intake24/db';
 import { MetricsConfig } from '../config/metrics';
+import { JobsQueueHandler, QueueHandler, TasksQueueHandler } from './core/queues';
 
 const kyselySystemLabels = { db: 'system', interface: 'kysely' } as const;
 const kyselyFoodsLabels = { db: 'foods', interface: 'kysely' } as const;
@@ -43,8 +44,12 @@ export function getHttpMethodLabel(method: string): HttpMethodLabel {
 }
 
 export function normalizeRequestPath(path: string): string {
+  if (path.startsWith('/api/admin/metrics'))
+    return '/admin/metrics/*';
   if (path.startsWith('/api/admin'))
     return '/admin/**';
+  if (path.startsWith('/api/user/submissions'))
+    return '/user/submissions';
   if (path.startsWith('/api/user'))
     return '/user/**';
   if (path.match(/^\/api\/surveys\/[^/]+\/submissions\/?(?:\?.*)?$/))
@@ -58,23 +63,28 @@ export function normalizeRequestPath(path: string): string {
 }
 
 export class AppMetricsService {
-  private connectionPoolTotal?: prom.Gauge;
-  private connectionPoolIdle?: prom.Gauge;
-  private connectionPoolActive?: prom.Gauge;
-  private connectionPoolPending?: prom.Gauge;
-  private connectionDuration?: prom.Histogram;
+  private dbConnectionPoolTotal?: prom.Gauge;
+  private dbConnectionPoolIdle?: prom.Gauge;
+  private dbConnectionPoolActive?: prom.Gauge;
+  private dbConnectionPoolPending?: prom.Gauge;
+  private dbConnectionDuration?: prom.Histogram;
+  private jobsDuration?: prom.Summary;
 
   private readonly sequelizeDb: DatabasesInterface;
   private readonly kyselyDb: KyselyDatabases;
+  private readonly jobsQueueHandler: JobsQueueHandler;
+  private readonly tasksQueueHandler: TasksQueueHandler;
   private readonly metricsConfig: MetricsConfig;
   private readonly defaultLabels: Dictionary<string>;
 
   private cronTask?: ScheduledTask;
 
-  constructor({ db, kyselyDb, metricsConfig }: Pick<IoC, 'db' | 'kyselyDb' | 'metricsConfig'>) {
+  constructor({ db, kyselyDb, jobsQueueHandler, tasksQueueHandler, metricsConfig }: Pick<IoC, 'db' | 'kyselyDb' | 'jobsQueueHandler' | 'tasksQueueHandler' | 'metricsConfig'>) {
     this.sequelizeDb = db;
     this.kyselyDb = kyselyDb;
     this.metricsConfig = metricsConfig;
+    this.jobsQueueHandler = jobsQueueHandler;
+    this.tasksQueueHandler = tasksQueueHandler;
 
     this.defaultLabels = {
       instance_id: metricsConfig.app.instanceId.intake24,
@@ -91,29 +101,29 @@ export class AppMetricsService {
     }
   }
 
-  initDatabaseMetrics() {
+  private initDatabaseMetrics() {
     const databaseLabelNames = ['db', 'interface', 'instance_id', 'pm2_instance_id'];
 
     if (this.metricsConfig.app.db.collectConnectionPoolStats) {
-      this.connectionPoolTotal = new prom.Gauge({
+      this.dbConnectionPoolTotal = new prom.Gauge({
         name: 'it24_db_total_connections',
         help: 'Total connections in the database connection pool',
         labelNames: databaseLabelNames,
       });
 
-      this.connectionPoolIdle = new prom.Gauge({
+      this.dbConnectionPoolIdle = new prom.Gauge({
         name: 'it24_db_idle_connections',
         help: 'Idle connections in the database connection pool',
         labelNames: databaseLabelNames,
       });
 
-      this.connectionPoolActive = new prom.Gauge({
+      this.dbConnectionPoolActive = new prom.Gauge({
         name: 'it24_db_active_connections',
         help: 'Active connections in the database connection pool',
         labelNames: databaseLabelNames,
       });
 
-      this.connectionPoolPending = new prom.Gauge({
+      this.dbConnectionPoolPending = new prom.Gauge({
         name: 'it24_db_pending_connections',
         help: 'Pending requests waiting for a connection in the database connection pool',
         labelNames: databaseLabelNames,
@@ -126,11 +136,20 @@ export class AppMetricsService {
     }
 
     if (this.metricsConfig.app.db.collectConnectionDuration) {
-      this.connectionDuration = new prom.Histogram({
+      this.dbConnectionDuration = new prom.Histogram({
         name: 'it24_db_connection_duration_ms',
         help: 'Duration a database connection is used by clients',
         labelNames: databaseLabelNames,
-        buckets: prom.exponentialBuckets(50, 2, 10),
+        buckets: [
+          50,
+          100,
+          200,
+          400,
+          1000,
+          2000,
+          5000,
+          10000,
+        ],
       });
 
       this.watchKyselyConnectionDuration(kyselySystemLabels, this.kyselyDb.systemConnectionPool);
@@ -141,7 +160,43 @@ export class AppMetricsService {
     }
   }
 
-  async useHttpMetricsMiddleware(app: Express) {
+  private watchQueue(queue: QueueHandler<JobData>) {
+    queue.queueEvents
+      .on('completed', (job) => {
+        if (job.finishedOn && job.processedOn) {
+          const durationMs = job.finishedOn - job.processedOn;
+          this.jobsDuration!.observe({ job: job.data.type, queue: queue.name, outcome: 'completed' }, durationMs);
+        }
+      });
+
+    queue.queueEvents.on('failed', (job, _) => {
+      if (job && job.processedOn && job.finishedOn) {
+        const durationMs = job.finishedOn - job.processedOn;
+        this.jobsDuration!.observe({ job: job.data.type, queue: queue.name, outcome: 'failed' }, durationMs);
+      }
+    });
+  }
+
+  private initJobsMetrics() {
+    if (this.metricsConfig.app.jobs.enabled) {
+      this.jobsDuration = new prom.Summary({
+        name: 'it24_jobs_duration_ms',
+        help: 'BullMQ job processing duration',
+        labelNames: ['job', 'queue', 'outcome'],
+        percentiles: [0.95],
+      });
+
+      this.watchQueue(this.jobsQueueHandler);
+      this.watchQueue(this.tasksQueueHandler);
+    }
+  }
+
+  public initMetrics() {
+    this.initDatabaseMetrics();
+    this.initJobsMetrics();
+  }
+
+  public async useHttpMetricsMiddleware(app: Express) {
     if (this.metricsConfig.app.http.enabled) {
       const metricTypes = ['httpRequestsTotal'];
 
@@ -172,8 +227,7 @@ export class AppMetricsService {
                 0.05,
                 0.1,
                 0.2,
-                0.3,
-                0.5,
+                0.4,
                 1,
                 2,
                 5,
@@ -188,7 +242,7 @@ export class AppMetricsService {
     }
   }
 
-  shutdown() {
+  async close() {
     this.cronTask?.destroy();
     this.cronTask = undefined;
   }
@@ -196,7 +250,7 @@ export class AppMetricsService {
   watchSequelizeConnectionDuration(labels: Dictionary<string>, pool: any) {
     const originalAcquire = pool.acquire;
     const originalRelease = pool.release;
-    const connectionDurationHistogram = this.connectionDuration;
+    const connectionDurationHistogram = this.dbConnectionDuration;
 
     pool.acquire = function (this: any, ...args: any[]) {
       return originalAcquire.apply(this, args).then((conn: any) => {
@@ -221,7 +275,7 @@ export class AppMetricsService {
     pool.on('acquire', (conn: any) => conn.__acquiredAt = Date.now());
     pool.on('release', (conn: any) => {
       if (conn && conn.__acquiredAt) {
-        this.connectionDuration!.observe(labels, Date.now() - conn.__acquiredAt);
+        this.dbConnectionDuration!.observe(labels, Date.now() - conn.__acquiredAt);
         delete conn.__acquiredAt;
       }
     });
@@ -232,34 +286,34 @@ export class AppMetricsService {
     const systemPool = (this.sequelizeDb.system!.connectionManager as any).pool;
     const foodsPool = (this.sequelizeDb.foods!.connectionManager as any).pool;
 
-    this.connectionPoolTotal!.set(sequelizeSystemLabels, systemPool.size);
-    this.connectionPoolTotal!.set(sequelizeFoodsLabels, foodsPool.size);
+    this.dbConnectionPoolTotal!.set(sequelizeSystemLabels, systemPool.size);
+    this.dbConnectionPoolTotal!.set(sequelizeFoodsLabels, foodsPool.size);
 
-    this.connectionPoolActive!.set(sequelizeSystemLabels, systemPool.using);
-    this.connectionPoolActive!.set(sequelizeFoodsLabels, foodsPool.using);
+    this.dbConnectionPoolActive!.set(sequelizeSystemLabels, systemPool.using);
+    this.dbConnectionPoolActive!.set(sequelizeFoodsLabels, foodsPool.using);
 
-    this.connectionPoolIdle!.set(sequelizeSystemLabels, systemPool.available);
-    this.connectionPoolIdle!.set(sequelizeFoodsLabels, foodsPool.available);
+    this.dbConnectionPoolIdle!.set(sequelizeSystemLabels, systemPool.available);
+    this.dbConnectionPoolIdle!.set(sequelizeFoodsLabels, foodsPool.available);
 
-    this.connectionPoolPending!.set(sequelizeSystemLabels, systemPool.waiting);
-    this.connectionPoolPending!.set(sequelizeFoodsLabels, foodsPool.waiting);
+    this.dbConnectionPoolPending!.set(sequelizeSystemLabels, systemPool.waiting);
+    this.dbConnectionPoolPending!.set(sequelizeFoodsLabels, foodsPool.waiting);
   }
 
   private collectKyselyConnectionPoolStats() {
     const systemPool = this.kyselyDb.systemConnectionPool;
     const foodsPool = this.kyselyDb.foodsConnectionPool;
 
-    this.connectionPoolTotal!.set(kyselySystemLabels, systemPool.totalCount);
-    this.connectionPoolTotal!.set(kyselyFoodsLabels, foodsPool.totalCount);
+    this.dbConnectionPoolTotal!.set(kyselySystemLabels, systemPool.totalCount);
+    this.dbConnectionPoolTotal!.set(kyselyFoodsLabels, foodsPool.totalCount);
 
-    this.connectionPoolActive!.set(kyselySystemLabels, systemPool.totalCount - systemPool.idleCount);
-    this.connectionPoolActive!.set(kyselyFoodsLabels, foodsPool.totalCount - foodsPool.idleCount);
+    this.dbConnectionPoolActive!.set(kyselySystemLabels, systemPool.totalCount - systemPool.idleCount);
+    this.dbConnectionPoolActive!.set(kyselyFoodsLabels, foodsPool.totalCount - foodsPool.idleCount);
 
-    this.connectionPoolIdle!.set(kyselySystemLabels, systemPool.idleCount);
-    this.connectionPoolIdle!.set(kyselyFoodsLabels, foodsPool.idleCount);
+    this.dbConnectionPoolIdle!.set(kyselySystemLabels, systemPool.idleCount);
+    this.dbConnectionPoolIdle!.set(kyselyFoodsLabels, foodsPool.idleCount);
 
-    this.connectionPoolPending!.set(kyselySystemLabels, systemPool.waitingCount);
-    this.connectionPoolPending!.set(kyselyFoodsLabels, foodsPool.waitingCount);
+    this.dbConnectionPoolPending!.set(kyselySystemLabels, systemPool.waitingCount);
+    this.dbConnectionPoolPending!.set(kyselyFoodsLabels, foodsPool.waitingCount);
   }
 
   async getMetrics(): Promise<string> {

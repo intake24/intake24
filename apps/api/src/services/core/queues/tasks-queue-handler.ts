@@ -64,6 +64,8 @@ export default class TasksQueueHandler extends QueueHandler<JobData> {
 
     this.workers.push(worker);
 
+    this.initQueueEvents();
+
     await this.clearScheduledJobs();
     await this.loadScheduledJobs();
 

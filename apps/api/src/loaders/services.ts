@@ -8,7 +8,7 @@ async function exitSignalHandler() {
    */
   await ioc.cradle.scheduler.closeWorkers();
 
-  ioc.cradle.appMetricsService.shutdown();
+  await ioc.cradle.appMetricsService.close();
 
   await Promise.all([
     ioc.cradle.db.close(),
@@ -56,7 +56,7 @@ export default async (ops: Ops): Promise<void> => {
   await ioc.cradle.scheduler.init();
 
   // Performance metrics
-  ioc.cradle.appMetricsService.initDatabaseMetrics();
+  ioc.cradle.appMetricsService.initMetrics();
 
   // Exit signal handlers
   process.on('SIGINT', exitSignalHandler);

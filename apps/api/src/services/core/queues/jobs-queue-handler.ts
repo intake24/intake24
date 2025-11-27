@@ -158,6 +158,8 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
       this.workers.push(worker);
     }
 
+    this.initQueueEvents();
+
     this.logger.info(`Queue ${this.name} has been loaded.`);
   }
 
