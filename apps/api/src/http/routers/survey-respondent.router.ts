@@ -227,13 +227,20 @@ export function surveyRespondent() {
       const settings = { ...survey.surveyScheme.settings, ...survey.surveySchemeOverrides.settings };
 
       const errors = settings.help.required.reduce<Partial<ExtendedFieldValidationError>[]>((acc, field) => {
-        if (field !== 'email|phone' && !body[field]) {
-          acc.push({ path: field, i18n: { type: 'string._' } });
+        if (field === 'email|phone') {
+          if (!body.email && !body.phone) {
+            acc.push(
+              { path: 'email', i18n: { type: 'string._', attr: 'email|phone' } },
+              { path: 'phone', i18n: { type: 'string._', attr: 'email|phone' } },
+            );
+          }
           return acc;
         }
 
-        if (!body.email && !body.phone)
-          acc.push({ path: 'email', i18n: { type: 'string._', attr: 'email|phone' } });
+        if (!body[field]) {
+          acc.push({ path: field, i18n: { type: 'string._' } });
+          return acc;
+        }
 
         return acc;
       }, []);

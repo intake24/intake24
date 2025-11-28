@@ -5,7 +5,7 @@
       <v-list>
         <v-list-item link to="/">
           <template #prepend>
-            <v-avatar :image="logo" rounded="0" />
+            <v-avatar :image="logo" rounded="0" variant="text" />
           </template>
           <v-list-item-title class="my-1 text-h6">
             {{ app.name }}
