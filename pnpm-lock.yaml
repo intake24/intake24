@@ -220,8 +220,8 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.13
+        version: 4.1.13
 
   apps/api:
     dependencies:
@@ -245,10 +245,10 @@ importers:
         version: 13.2.2
       '@ts-rest/core':
         specifier: ^3.52.1
-        version: 3.52.1(@types/node@24.10.1)(zod@3.25.76)
+        version: 3.52.1(@types/node@24.10.1)(zod@4.1.13)
       '@ts-rest/express':
         specifier: ^3.52.1
-        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@3.25.76))(express@4.21.2)(zod@3.25.76)
+        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.13))(express@4.21.2)(zod@4.1.13)
       arabic-stem:
         specifier: ^0.0.7
         version: 0.0.7
@@ -424,11 +424,11 @@ importers:
         specifier: ^3.6.7
         version: 3.6.7
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.13
+        version: 4.1.13
       zod-validation-error:
         specifier: ^3.5.4
-        version: 3.5.4(zod@3.25.76)
+        version: 3.5.4(zod@4.1.13)
     devDependencies:
       '@faker-js/faker':
         specifier: ^10.1.0
@@ -682,7 +682,7 @@ importers:
     devDependencies:
       '@ts-rest/open-api':
         specifier: ^3.52.1
-        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.12))(zod@4.1.12)
+        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.13))(zod@4.1.13)
       '@tsconfig/node22':
         specifier: ^22.0.2
         version: 22.0.2
@@ -986,8 +986,8 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.13
+        version: 4.1.13
 
   packages/api-client-v3:
     dependencies:
@@ -1043,10 +1043,10 @@ importers:
     dependencies:
       '@anatine/zod-openapi':
         specifier: ^2.2.8
-        version: 2.2.8(openapi3-ts@4.3.1)(zod@3.25.76)
+        version: 2.2.8(openapi3-ts@4.3.1)(zod@4.1.13)
       '@ts-rest/core':
         specifier: ^3.52.1
-        version: 3.52.1(@types/node@24.10.1)(zod@3.25.76)
+        version: 3.52.1(@types/node@24.10.1)(zod@4.1.13)
       ajv:
         specifier: ^8.17.1
         version: 8.17.1
@@ -1096,8 +1096,8 @@ importers:
         specifier: ^13.15.23
         version: 13.15.23
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.13
+        version: 4.1.13
     devDependencies:
       '@simplewebauthn/server':
         specifier: ^13.2.2
@@ -11733,8 +11733,8 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.1.12:
-    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+  zod@4.1.13:
+    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
 
   zrender@6.0.0:
     resolution: {integrity: sha512-41dFXEEXuJpNecuUQq6JlbybmnHaqqpGlbH1yxnA5V9MMP4SbohSVZsJIwz+zdjQXSSlR1Vc34EgH1zxyTDvhg==}
@@ -11858,17 +11858,17 @@ snapshots:
     dependencies:
       '@algolia/client-common': 5.42.0
 
-  '@anatine/zod-openapi@1.14.2(openapi3-ts@2.0.2)(zod@4.1.12)':
+  '@anatine/zod-openapi@1.14.2(openapi3-ts@2.0.2)(zod@4.1.13)':
     dependencies:
       openapi3-ts: 2.0.2
       ts-deepmerge: 6.2.1
-      zod: 4.1.12
+      zod: 4.1.13
 
-  '@anatine/zod-openapi@2.2.8(openapi3-ts@4.3.1)(zod@3.25.76)':
+  '@anatine/zod-openapi@2.2.8(openapi3-ts@4.3.1)(zod@4.1.13)':
     dependencies:
       openapi3-ts: 4.3.1
       ts-deepmerge: 6.2.1
-      zod: 3.25.76
+      zod: 4.1.13
 
   '@antfu/eslint-config@6.2.0(@vue/compiler-sfc@3.5.24)(eslint-plugin-format@1.0.2(eslint@9.39.1(jiti@2.6.1)))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.10.1)(jiti@2.6.1)(jsdom@27.2.0)(sass@1.94.0)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))':
     dependencies:
@@ -15293,29 +15293,24 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@3.25.76)':
+  '@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.13)':
     optionalDependencies:
       '@types/node': 24.10.1
-      zod: 3.25.76
+      zod: 4.1.13
 
-  '@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.12)':
-    optionalDependencies:
-      '@types/node': 24.10.1
-      zod: 4.1.12
-
-  '@ts-rest/express@3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@3.25.76))(express@4.21.2)(zod@3.25.76)':
+  '@ts-rest/express@3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.13))(express@4.21.2)(zod@4.1.13)':
     dependencies:
-      '@ts-rest/core': 3.52.1(@types/node@24.10.1)(zod@3.25.76)
+      '@ts-rest/core': 3.52.1(@types/node@24.10.1)(zod@4.1.13)
       express: 4.21.2
     optionalDependencies:
-      zod: 3.25.76
+      zod: 4.1.13
 
-  '@ts-rest/open-api@3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.12))(zod@4.1.12)':
+  '@ts-rest/open-api@3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.13))(zod@4.1.13)':
     dependencies:
-      '@anatine/zod-openapi': 1.14.2(openapi3-ts@2.0.2)(zod@4.1.12)
-      '@ts-rest/core': 3.52.1(@types/node@24.10.1)(zod@4.1.12)
+      '@anatine/zod-openapi': 1.14.2(openapi3-ts@2.0.2)(zod@4.1.13)
+      '@ts-rest/core': 3.52.1(@types/node@24.10.1)(zod@4.1.13)
       openapi3-ts: 2.0.2
-      zod: 4.1.12
+      zod: 4.1.13
 
   '@tsconfig/node10@1.0.11': {}
 
@@ -20025,7 +20020,7 @@ snapshots:
       micromatch: 4.0.8
       minimist: 1.2.8
       pluralize: 8.0.0
-      zod: 4.1.12
+      zod: 4.1.13
     optionalDependencies:
       '@tediousjs/connection-string': 0.5.0
       pg: 8.16.3
@@ -24210,13 +24205,13 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod-validation-error@3.5.4(zod@3.25.76):
+  zod-validation-error@3.5.4(zod@4.1.13):
     dependencies:
-      zod: 3.25.76
+      zod: 4.1.13
 
   zod@3.25.76: {}
 
-  zod@4.1.12: {}
+  zod@4.1.13: {}
 
   zrender@6.0.0:
     dependencies:
