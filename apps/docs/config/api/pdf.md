@@ -10,8 +10,8 @@ Puppeteer modes.
 
 - object-path: `puppeteer.headless`
 - dotenv var: `PUPPETEER_HEADLESS`
-- type: `boolean | 'shell'`
-- default: `true`
+- type: `boolean | 'shell' | undefined`
+- default: `undefined`
 
 ### Language
 

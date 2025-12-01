@@ -36,7 +36,7 @@ const certPath = process.env.DEV_MKCERT_PATH;
 const domain = `${https ? 'https' : 'http'}://${host}:${port}`;
 
 const name = process.env.APP_NAME || 'Intake24';
-const icon = process.env.APP_ICON;
+const icon = process.env.APP_ICON || '🍴';
 const fullName = [icon, name].filter(item => item).join(' ');
 
 const revision = childProcess

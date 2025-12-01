@@ -89,7 +89,7 @@ Provides web-push functionality for supported browsers.
 To enable the functionality, VAPID keys has to be generated.
 
 ```sh
-npx web-push generate-vapid-keys
+pnpx web-push generate-vapid-keys
 ```
 
 ### Subject

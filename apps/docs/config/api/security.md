@@ -233,7 +233,7 @@ Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.co
 - type: `boolean`
 - default: `false`
 
-## Multi-factor authentication (MFA)
+## Multi-factor authentication
 
 System supports multi-factor authentication (`MFA`) for admin login.
 

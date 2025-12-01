@@ -107,6 +107,14 @@ export const sidebar = {
           link: '/config/api/mail',
         },
         {
+          text: 'PDF generation',
+          link: '/config/api/pdf',
+        },
+        {
+          text: 'Pub-sub',
+          link: '/config/api/pub-sub',
+        },
+        {
           text: 'Queue',
           link: '/config/api/queue',
         },

@@ -27,7 +27,7 @@ Application icon - unicode character.
 - object-path: `env`
 - dotenv var: `APP_ICON`
 - type: `string | undefined`
-- default: undefined
+- default: 🍴
 
 ## Powered by
 
@@ -58,14 +58,11 @@ Internal port application listens on.
 
 ## Secret
 
-Secret key to use for in-app signing/encryption (cookie/session)
-
-(You need to replace the default value, e.g. verybigappsecret)
+Secret key to use for in-app signing / encryption (cookies / sessions)
 
 - object-path: `secret`
 - dotenv var: `APP_SECRET`
 - type: `string`
-- default: `''`
 
 ## HTTPS
 

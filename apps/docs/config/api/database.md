@@ -96,9 +96,19 @@ Examples
 - type: `'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql'`
 - default: `'postgres'`
 
+## Pool max connections
+
+- object-path: `[environment][database].pool.max`
+- dotenv vars:
+  - `development`: `DB_DEV_FOODS_POOL_MAX` and `DB_DEV_SYSTEM_POOL_MAX`
+  - `test`: `DB_TEST_FOODS_POOL_MAX` and `DB_TEST_SYSTEM_POOL_MAX`
+  - `production`: `DB_FOODS_POOL_MAX` and `DB_SYSTEM_POOL_MAX`
+- type: `number`
+- default: `10`
+
 ## Security
 
-In developement environment, `DB_CONNECTION_SSL` can set to `false` to skip using SSL protocol.
+SSL connection for database (only Postgresql dialect supported at the moment)
 
 - object-path: `[environment].security`
 - dotenv vars:
@@ -106,4 +116,4 @@ In developement environment, `DB_CONNECTION_SSL` can set to `false` to skip usin
   - `test`: `DB_CONNECTION_SSL`
   - `production`: `DB_CONNECTION_SSL`
 - type: `'true' | 'false'`
-- default: `'true'`
+- default: `'false'`
