@@ -1,5 +1,5 @@
 <template>
-  <v-app :class="{ mobile: $vuetify.display.mobile }">
+  <v-app>
     <loader :show="isAppLoading" />
     <v-navigation-drawer
       v-model="navDrawer"
@@ -87,7 +87,7 @@
         <app-nav-footer />
       </template>
     </v-navigation-drawer>
-    <v-app-bar class="px-2 px-md-0" color="primary" flat scroll-behavior="hide">
+    <v-app-bar class="px-2 px-md-0" color="primary" flat scroll-behavior="hide" :scroll-threshold>
       <v-app-bar-nav-icon
         v-if="!$vuetify.display.mobile"
         :title="$t('common.nav._')"
@@ -137,7 +137,7 @@
         <v-app-bar-title>{{ $t('common._') }}</v-app-bar-title>
       </template>
     </v-app-bar>
-    <v-main>
+    <v-main ref="main">
       <router-view />
     </v-main>
     <navigation
@@ -157,8 +157,9 @@
 </template>
 
 <script lang="ts" setup>
+import { useElementSize, useWindowSize } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLocale } from 'vuetify';
 import { useI18n } from '@intake24/i18n';
@@ -190,6 +191,19 @@ const title = computed(() => t(route.meta?.title ?? 'common._'));
 function toggleNavDrawer() {
   navDrawer.value = !navDrawer.value;
 };
+
+/*
+*  Adjust scroll threshold based on window and main content height
+*/
+const { height: wY } = useWindowSize();
+const main = useTemplateRef('main');
+const { height: eY } = useElementSize(main);
+
+const scrollThreshold = computed(() => {
+  const threshold = 300;
+  const diff = eY.value - wY.value + 56 + 64;
+  return diff - threshold < 64 ? 364 : threshold;
+});
 
 async function logout() {
   await useAuth().logout(true);
