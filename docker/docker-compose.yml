@@ -1,9 +1,9 @@
-name: intake24-dev
+name: intake24-local
 
 services:
   db:
     image: postgres:17-alpine
-    container_name: intake24-db
+    container_name: intake24-local-db
     restart: always
     env_file:
       # optionally used for local development to load environment variables for init scripts
@@ -12,11 +12,11 @@ services:
       - path: ../apps/api/.env
         required: false
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     healthcheck:
-      test: pg_isready
+      test: [CMD-SHELL, pg_isready]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -28,10 +28,10 @@ services:
 
   redis:
     image: redis:8-alpine
-    container_name: intake24-redis
+    container_name: intake24-local-redis
     restart: always
     healthcheck:
-      test: redis-cli ping
+      test: [CMD, redis-cli, ping]
       interval: 10s
       timeout: 5s
       retries: 5
