@@ -15,8 +15,10 @@ docker compose up -d
 After that, you should have PostgreSQL and Redis server set to bind with corresponding host ports (`5432` to PostgreSQL, `6379` to Redis)
 
 ::: warning
-The script may fail if you have existing services running on these ports
-:::
+
+- The script may fail if you have existing services running on these ports
+- The script will download database snapshot from remote storage. Make sure you have internet connection when you run the script for the first time.
+  :::
 
 Once it is completed, you can use the `redis-cli` to connect to and test the Redis server, e.g. using `PING` command. This should return `PONG` if the connection is successful.
 
