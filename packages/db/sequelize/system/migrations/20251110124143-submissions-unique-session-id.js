@@ -6,22 +6,6 @@ module.exports = {
         transaction,
       });
 
-      // De-duplicate existing data: keep most recent per session_id, null the rest
-      await queryInterface.sequelize.query(
-        `WITH RankedSubmissions AS (
-          SELECT id, session_id, submission_time,
-            ROW_NUMBER() OVER (PARTITION BY session_id ORDER BY submission_time DESC) AS rn
-          FROM survey_submissions
-        )
-        DELETE FROM survey_submissions
-        WHERE id IN (
-          SELECT id
-          FROM RankedSubmissions
-          WHERE rn > 1
-        );`,
-        { transaction },
-      );
-
       await queryInterface.addConstraint('survey_submissions', {
         fields: ['session_id'],
         type: 'unique',
