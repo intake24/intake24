@@ -21,17 +21,22 @@ export async function executeWithPagination<DB, TB extends keyof DB, O>(query: S
     );
   }
 
+  let sortColumn = sortColumns.at(0);
+  let order: 'asc' | 'desc' = 'asc';
   if (sort && typeof sort === 'string') {
-    const [column, order] = sort.split('|');
-    const sortColumn = sortColumns.find(refExpr => refExpr === column);
-    if (sortColumn !== undefined)
-      modifiedQuery = modifiedQuery.orderBy(sortColumn, order === 'desc' ? 'desc' : 'asc');
+    const [sColumn, sOrder] = sort.split('|');
+    sortColumn = sortColumns.find(refExpr => refExpr === sColumn);
+    order = sOrder === 'desc' ? 'desc' : 'asc';
   }
+
+  if (sortColumn !== undefined)
+    modifiedQuery = modifiedQuery.orderBy(sortColumn, order);
 
   const countQuery = modifiedQuery
     .clearSelect()
     .clearLimit()
     .clearOffset()
+    .clearOrderBy()
     .select(eb => eb.fn.countAll<string>().as('total'));
 
   const total = Number.parseInt(((await countQuery.executeTakeFirstOrThrow()) as { total: string }).total, 10);
