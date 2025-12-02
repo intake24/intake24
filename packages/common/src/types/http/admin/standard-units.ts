@@ -18,10 +18,10 @@ export type StandardUnitAttributes = z.infer<typeof standardUnitAttributes>;
 export const standardUnitRequest = z.object({
   id: z
     .string()
-    .min(3)
+    .min(1)
     .max(64)
     .transform(v => toStandardUnitId(v)),
-  name: z.string().min(3).max(128),
+  name: z.string().min(1).max(128),
   estimateIn: requiredLocaleTranslation,
   howMany: requiredLocaleTranslation,
 });
