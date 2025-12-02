@@ -24,7 +24,7 @@ export const carouselDefaults: Carousel = {
   slides: [],
 };
 
-const counterValue = z.number().positive().multipleOf(0.1).nullish().transform(val => val ?? undefined);
+const counterValue = z.number().positive().multipleOf(0.25).nullish().transform(val => val ?? undefined);
 export const counter = z.object({
   type: z.literal('counter'),
   current: counterValue,
@@ -38,7 +38,7 @@ export type Counter = z.infer<typeof counter>;
 
 export const counterDefaults: Counter = {
   type: 'counter',
-  min: 0.1,
+  min: 0.25,
   max: 30,
   current: 1,
   confirm: false,

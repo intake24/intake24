@@ -100,7 +100,7 @@ const props = defineProps({
   },
   min: {
     type: Number,
-    default: 0.1,
+    default: 0.25,
   },
   max: {
     type: Number,
@@ -130,7 +130,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'update:confirmed']);
 
-const fractions = [1 / 10, 1 / 8, 1 / 6, 1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4];
+const fractions = [1 / 4, 1 / 2, 3 / 4];
 const reversedFractions = computed(() => fractions.toReversed());
 
 const currentValue = defineModel('modelValue', { type: Number, default: 1 });
@@ -149,20 +149,10 @@ const fractionLabel = computed(() => {
   const fraction = currentFraction.value.toFixed(2);
 
   switch (fraction) {
-    case '0.10':
-      return '1/10';
-    case '0.13':
-      return '⅛';
-    case '0.17':
-      return '1/6';
     case '0.25':
       return '¼';
-    case '0.33':
-      return '⅓';
     case '0.50':
       return '½';
-    case '0.67':
-      return '⅔';
     case '0.75':
       return '¾';
     default:

@@ -152,20 +152,10 @@ export default defineComponent({
       const fraction = this.numerator / this.denominator - this.whole;
 
       switch (fraction) {
-        case 0.1:
-          return '1/10';
-        case 0.125:
-          return '⅛';
-        case 0.16666666666666666:
-          return '1/6';
         case 0.25:
           return '¼';
-        case 0.3333333333333333:
-          return '⅓';
         case 0.5:
           return '½';
-        case 0.6666666666666666:
-          return '⅔';
         case 0.75:
           return '¾';
         default:
