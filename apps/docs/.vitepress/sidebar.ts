@@ -39,18 +39,32 @@ export const sidebar = {
       ],
     },
   ],
-  '/guides/': [
+  '/guide/': [
     {
-      text: 'Guides',
+      text: 'Guide',
       collapsable: false,
       items: [
         {
           text: 'Introduction',
-          link: '/guides/',
+          link: '/guide/',
+        },
+        {
+          text: 'Get started',
+          link: '/guide/get-started',
         },
         {
           text: 'Integrations',
-          link: '/guides/integrations',
+          link: '/guide/integrations',
+        },
+      ],
+    },
+    {
+      text: 'Legacy',
+      collapsable: false,
+      items: [
+        {
+          text: 'Food groups',
+          link: '/guide/legacy/food-groups',
         },
       ],
     },

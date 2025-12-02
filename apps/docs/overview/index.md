@@ -4,7 +4,7 @@ This resource is intended to provide guidance for developers and researchers on 
 
 It's important to note that guidance will be continually updated and may not be entirely exhaustive in some sections.
 
-Contributions by system users to the [Guides](/guides/) section is welcome.
+Contributions by system users to the [Guide](/guide/) section is welcome.
 
 :::tip
 The whole content of documentation is a part of the actual source code, therefore, when the source code changes, this resource is updated accordingly.
