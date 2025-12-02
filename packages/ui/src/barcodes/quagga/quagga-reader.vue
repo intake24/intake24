@@ -87,6 +87,9 @@ const locate = ref(true);
 function drawScanBox() {
   const ctx = Quagga.canvas.ctx.overlay;
   const canvas = Quagga.canvas.dom.overlay;
+  if (!canvas || !ctx)
+    return;
+
   const canvasWidth = Number.parseInt(canvas.getAttribute('width') ?? '0');
   const canvasHeight = Number.parseInt(canvas.getAttribute('height') ?? '0');
 
@@ -119,6 +122,8 @@ function clearCanvas(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
 function drawResult(result: QuaggaJSResultObject) {
   const ctx = Quagga.canvas.ctx.overlay;
   const canvas = Quagga.canvas.dom.overlay;
+  if (!canvas || !ctx)
+    return;
 
   if (result.boxes.length) {
     clearCanvas(ctx, canvas);
@@ -180,7 +185,6 @@ async function start() {
   await Quagga.init(
     {
       inputStream: {
-        name: 'Live',
         type: 'LiveStream',
         target: reader.value,
         constraints: {
