@@ -308,6 +308,7 @@
     "text": "「{food}」の量をどの方法で答えますか？",
     "description": "<p>量の答え方を以下の中から選んでください。</p><p>※外食などで量がわからない場合は、だいたいの量で選んでください。</p>",
     "selections": {
+      "cereal": "シリアル",
       "grated": "すりおろした量で",
       "in_a_bag": "袋で",
       "in_a_bottle": "瓶で",
@@ -348,6 +349,9 @@
       "spread_on_a_cracker": "クラッカーに塗った状態で",
       "spread_on_a_scone": "スコーンに塗った状態で",
       "spread_on_bread": "パンに塗った状態で",
+      "unknown": "不明",
+      "use_a_drink_scale": "飲み物の目盛りを使う",
+      "use_a_guide_image": "ガイド画像を使う",
       "use_a_standard_measure": "計量器具で",
       "use_a_standard_portion": "数値で答える",
       "use_an_image": "この画像を使う",
