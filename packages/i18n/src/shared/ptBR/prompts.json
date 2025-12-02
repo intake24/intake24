@@ -308,6 +308,7 @@
     "text": "",
     "description": "Como deseja estimar sua porção?",
     "selections": {
+      "cereal": "Cereal",
       "grated": "Ralado",
       "in_a_bag": "Em um saco",
       "in_a_bottle": "Em uma garrafa",
@@ -348,6 +349,9 @@
       "spread_on_a_cracker": "Espalhar em bolacha",
       "spread_on_a_scone": "Espalhar em scone",
       "spread_on_bread": "Espalhar em pão",
+      "unknown": "Desconhecido",
+      "use_a_drink_scale": "Usar escala de bebida",
+      "use_a_guide_image": "Usar imagem de referência",
       "use_a_standard_measure": "Usar medida padrão",
       "use_a_standard_portion": "Usar porção padrão",
       "use_an_image": "Usar imagem",
