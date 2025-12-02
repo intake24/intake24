@@ -55,7 +55,7 @@
     "fs-extra": "^11.3.2",
     "helmet": "^8.1.0",
     "ioredis": "^5.8.2",
-    "jest-extended": "^6.0.0",
+    "jest-extended": "^7.0.0",
     "jsdom": "^27.2.0",
     "jsonwebtoken": "^9.0.2",
     "ky": "^1.14.0",

@@ -48,7 +48,7 @@
     "@types/pluralize": "^0.0.33",
     "@types/validator": "^13.15.7",
     "fs-extra": "^11.3.2",
-    "jest-extended": "^6.0.0",
+    "jest-extended": "^7.0.0",
     "svgo": "^4.0.0",
     "type-fest": "^5.2.0",
     "typescript": "^5.9.3",
