@@ -87,7 +87,7 @@
         <app-nav-footer />
       </template>
     </v-navigation-drawer>
-    <v-app-bar class="px-2 px-md-0" color="primary" flat scroll-behavior="hide">
+    <v-app-bar class="px-2 px-md-0" color="primary" flat>
       <v-app-bar-nav-icon
         v-if="!$vuetify.display.mobile"
         :title="$t('common.nav._')"
