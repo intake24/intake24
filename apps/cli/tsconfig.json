@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@intake24/api/*": ["../api/src/*"],
       "@intake24/cli/*": ["src/*"],
       "@intake24/common/*": ["../../packages/common/src/*"],
       "@intake24/common-backend/*": ["../../packages/common-backend/src/*"],

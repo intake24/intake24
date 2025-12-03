@@ -1,8 +1,6 @@
 /* eslint-disable perfectionist/sort-imports */
 import './bootstrap';
-
 import { Argument, Command, Option } from 'commander';
-
 import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-fr-albane-command';
 import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import buildGoustoLocaleCommand from './commands/gousto/build-gousto-locale-command';
@@ -10,14 +8,15 @@ import buildUaeLocaleCommand from './commands/uae/build-uae-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image-map';
 import pkg from '../package.json';
-
 import {
   extractCategories,
   findPortionImages,
-  generateEnv,
   generateKey,
   generateVapidKeys,
   hashPassword,
+  initDbSystem,
+  initEnv,
+  initFoodImages,
   packageExportV3,
   packageExportV4,
   packageImportV4,
@@ -27,6 +26,7 @@ import {
   conflictResolutionOptions,
   importerSpecificModulesExecutionOptions,
 } from './commands/packager/importer-v4';
+import prompts from 'prompts';
 
 async function run() {
   const program = new Command();
@@ -35,11 +35,89 @@ async function run() {
   program.version(pkg.version);
 
   program
-    .command('generate-env')
-    .description('Generate .env files for each application with fresh secrets and keys.')
+    .command('init:db:system')
+    .description('Initialize system databases')
+    .action(async () => {
+      console.log('Initialize system databases');
+      const { start } = await prompts(
+        {
+          type: 'toggle',
+          name: 'start',
+          message: 'This is a destructive operation and will erase existing system database data. Are you sure you want to continue?',
+          initial: false,
+          active: 'yes',
+          inactive: 'no',
+        },
+      );
+
+      if (!start)
+        return;
+
+      const superuser = await prompts([
+        {
+          type: 'text',
+          name: 'name',
+          message: 'Enter superuser name:',
+        },
+        {
+          type: 'text',
+          name: 'email',
+          message: 'Enter superuser email:',
+        },
+        {
+          type: 'password',
+          name: 'password',
+          message: 'Enter superuser password:',
+        },
+        {
+          type: 'password',
+          name: 'passwordConfirm',
+          message: 'Confirm superuser password:',
+        },
+      ]);
+
+      if (!superuser.name || !superuser.email || !superuser.password) {
+        console.error('Superuser creation aborted: invalid input data.');
+        return;
+      }
+
+      if (superuser.password !== superuser.passwordConfirm) {
+        console.error('Superuser creation aborted: passwords do not match.');
+        return;
+      }
+
+      delete superuser.passwordConfirm;
+
+      const { confirm } = await prompts(
+        {
+          type: 'toggle',
+          name: 'confirm',
+          message: 'Are you sure you want to proceed?',
+          initial: false,
+          active: 'yes',
+          inactive: 'no',
+        },
+      );
+      if (!confirm)
+        return;
+
+      await initDbSystem({ superuser });
+    });
+
+  program
+    .command('init:env')
+    .description('Initialize .env files for each application with fresh secrets and keys.')
     .option('-f, --force', 'override existing .env files')
     .action(async (cmd) => {
-      await generateEnv(cmd);
+      await initEnv(cmd);
+    });
+
+  program
+    .command('init:food-images')
+    .description('Download and prepare food images')
+    .argument('<url>', 'File URL to download')
+    .action(async (url) => {
+      await initFoodImages({ url });
     });
 
   program

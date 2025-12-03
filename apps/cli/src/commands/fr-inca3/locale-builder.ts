@@ -2,12 +2,10 @@ import type csvParser from 'csv-parser';
 import { randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
-
 import path from 'node:path';
 import parseCsv from 'csv-parser';
 import { groupBy } from 'lodash';
-import removeBOM from 'remove-bom-stream';
-
+import stripBomStream from 'strip-bom-stream';
 import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import type { INCA3EnglishDescription } from '@intake24/cli/commands/fr-inca3/types/english-description';
 import type { INCA3FoodListRow } from '@intake24/cli/commands/fr-inca3/types/food-list';
@@ -125,7 +123,7 @@ export class FrenchAnsesLocaleBuilder {
   ): Promise<void> {
     return new Promise((resolve) => {
       createReadStream(path.join(this.sourceDirPath, relativePath))
-        .pipe(removeBOM())
+        .pipe(stripBomStream())
         .pipe(parseCsv(optionsOrHeaders))
         .on('data', (data: any) => {
           onRowData(data);

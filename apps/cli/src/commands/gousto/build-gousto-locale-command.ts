@@ -6,7 +6,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import parseCsv from 'csv-parser';
 import { groupBy, mapValues } from 'lodash';
-import removeBOM from 'remove-bom-stream';
+import stripBomStream from 'strip-bom-stream';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { Dictionary } from '@intake24/common/types';
 import { PackageWriter } from '../packager/package-writer';
@@ -55,7 +55,7 @@ async function readCSV(
 ): Promise<void> {
   return new Promise((resolve) => {
     createReadStream(path)
-      .pipe(removeBOM())
+      .pipe(stripBomStream())
       .pipe(parseCsv(optionsOrHeaders))
       .on('data', (data: any) => {
         onRowData(data);

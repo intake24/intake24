@@ -39,9 +39,9 @@
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
-    "remove-bom-stream": "^2.0.0",
     "sequelize": "^6.37.7",
     "sequelize-typescript": "^2.1.6",
+    "strip-bom-stream": "^5.0.0",
     "web-push": "^3.6.7",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
@@ -54,6 +54,7 @@
     "@types/web-push": "^3.6.4",
     "@types/webpack-env": "^1.18.8",
     "fork-ts-checker-webpack-plugin": "^9.1.0",
+    "prompts": "^2.4.2",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",

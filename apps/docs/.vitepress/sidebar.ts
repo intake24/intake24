@@ -408,8 +408,12 @@ export const sidebar = {
           link: '/cli/',
         },
         {
-          text: 'Generate .env files',
-          link: '/cli/generate-env',
+          text: 'Initialize .env files',
+          link: '/cli/init-env',
+        },
+        {
+          text: 'Initialize system database',
+          link: '/cli/init-db-system',
         },
         {
           text: 'Generate key / secret',

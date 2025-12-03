@@ -4,9 +4,9 @@ import fs from 'fs-extra';
 import { nanoid } from 'nanoid';
 import webPush from 'web-push';
 
-export type GenerateEnvArgs = { force?: boolean };
+export type InitEnvArgs = { force?: boolean };
 
-export default async (cmd: GenerateEnvArgs): Promise<void> => {
+export default async (cmd: InitEnvArgs): Promise<void> => {
   const vapidKeys = webPush.generateVAPIDKeys();
 
   const apps = [

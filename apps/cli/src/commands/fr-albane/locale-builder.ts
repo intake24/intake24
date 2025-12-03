@@ -7,7 +7,7 @@ import path from 'node:path';
 
 import parseCsv from 'csv-parser';
 import { groupBy, mapValues, partition, sortBy, trim } from 'lodash';
-import removeBOM from 'remove-bom-stream';
+import stripBomStream from 'strip-bom-stream';
 import * as XLSX from 'xlsx';
 
 import { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';
@@ -473,7 +473,7 @@ export class FrenchAlbaneLocaleBuilder {
   ): Promise<void> {
     return new Promise((resolve) => {
       createReadStream(path.join(this.sourceDirPath, relativePath))
-        .pipe(removeBOM())
+        .pipe(stripBomStream())
         .pipe(parseCsv(optionsOrHeaders))
         .on('data', (data: any) => {
           onRowData(data);

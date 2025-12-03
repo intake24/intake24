@@ -1,10 +1,10 @@
 export { default as extractCategories } from './category-extract';
 export { default as findPortionImages } from './find-portion-images';
 export { default as buildFrenchLocale } from './fr-inca3/build-fr-locale-command';
-export { default as generateEnv } from './generate-env';
 export { default as generateKey } from './generate-key';
 export { default as generateVapidKeys } from './generate-vapid-keys';
 export { default as hashPassword } from './hash-password';
+export * from './init';
 export { default as packageExportV3 } from './packager/export-v3-command';
 export { default as packageExportV4 } from './packager/export-v4-command';
 export { default as packageImportV4 } from './packager/import-v4-command';
