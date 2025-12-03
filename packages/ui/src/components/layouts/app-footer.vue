@@ -28,7 +28,7 @@
           {{ $t('legal.cookies._') }}
         </a>
       </cookie-consent>
-      <template v-if="contact">
+      <template v-if="!loggedIn">
         <span class="d-none d-md-flex mx-2">|</span>
         <a class="text-decoration-none text-primary" :href="links.contact" target="_blank">
           {{ $t('legal.contact') }}
@@ -45,7 +45,7 @@ import { useFooter } from './use-footer';
 defineOptions({ name: 'AppFooter' });
 
 defineProps({
-  contact: {
+  loggedIn: {
     type: Boolean,
   },
 });

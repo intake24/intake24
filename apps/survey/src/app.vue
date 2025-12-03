@@ -84,7 +84,7 @@
             {{ $t('common.logout.text') }}
           </confirm-dialog>
         </div>
-        <app-nav-footer :contact="showContact" />
+        <app-nav-footer />
       </template>
     </v-navigation-drawer>
     <v-app-bar class="px-2 px-md-0" color="primary" flat scroll-behavior="hide">
@@ -152,7 +152,7 @@
     />
     <service-worker />
     <message-box />
-    <app-footer :contact="showContact" />
+    <app-footer />
   </v-app>
 </template>
 
@@ -187,7 +187,6 @@ const surveyId = computed<string | undefined>(() => route.params.surveyId?.toStr
 const showNav = computed(() => loggedIn.value && !!surveyId.value);
 const navDrawer = ref(false);
 const title = computed(() => t(route.meta?.title ?? 'common._'));
-const showContact = computed(() => route.name === 'home');
 
 function toggleNavDrawer() {
   navDrawer.value = !navDrawer.value;
