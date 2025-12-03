@@ -31,3 +31,17 @@ docker logs <postgres-container-name>
 ```
 
 Replace `<postgres-container-name>` by the postgreSQL container id.
+
+### Docker tear down
+
+To stop and remove the containers, networks, and volumes created by `docker-compose up`, you can run the following command in the same directory where your `docker-compose.yml` file is located:
+
+```bash
+docker compose down
+```
+
+If you want to remove the associated volumes (which will delete all data stored in the databases), you can add the `-v` flag:
+
+```bash
+docker compose down -v
+```

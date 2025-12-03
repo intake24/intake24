@@ -21,7 +21,7 @@ createdb -U $POSTGRES_USER --owner=$DB_DEV_FOODS_USERNAME $DB_DEV_FOODS_DATABASE
 psql -U $POSTGRES_USER -d $DB_DEV_FOODS_DATABASE -c "create extension if not exists \"uuid-ossp\";"
 psql -U $POSTGRES_USER -d $DB_DEV_FOODS_DATABASE -c "create extension if not exists \"btree_gist\";"
 echo "Downloading foods database snapshot..."
-wget -O /tmp/foods_snapshot.pgcustom https://storage.googleapis.com/intake24-docker/foods_snapshot.pgcustom
+wget -O /tmp/foods_snapshot.pgcustom https://storage.googleapis.com/intake24/snapshots/foods_snapshot.pgcustom
 echo "Restoring foods database from snapshot..."
 pg_restore -n public --no-owner --no-acl --role=$DB_DEV_FOODS_USERNAME --dbname $DB_DEV_FOODS_DATABASE /tmp/foods_snapshot.pgcustom
 

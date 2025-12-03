@@ -113,7 +113,7 @@ TRUNCATE TABLE `table` RESTART IDENTITY CASCADE;
 ```sh
 cd packages/db
 
-pnpm sequelize db:seed --seed populate-acl.js --options-path sequelize/system/options.js
+pnpm sequelize db:seed --seed populate-acl.ts --options-path sequelize/system/options.js
 ```
 
 :::danger

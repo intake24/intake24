@@ -1,15 +1,13 @@
-name: intake24-local
-
 services:
   db:
     image: postgres:17-alpine
-    container_name: intake24-local-db
+    container_name: intake24-db
     restart: always
     env_file:
       # optionally used for local development to load environment variables for init scripts
-      - path: ../apps/api/__tests__/.env-test
+      - path: ./apps/api/__tests__/.env-test
         required: false
-      - path: ../apps/api/.env
+      - path: ./apps/api/.env
         required: false
     environment:
       POSTGRES_USER: postgres
@@ -23,12 +21,12 @@ services:
     ports:
       - ${POSTGRES_PORT:-5432}:5432
     volumes:
-      - ./init:/docker-entrypoint-initdb.d/
+      - ./docker/init:/docker-entrypoint-initdb.d/
       - data-db:/var/lib/postgresql/data
 
   redis:
     image: redis:8-alpine
-    container_name: intake24-local-redis
+    container_name: intake24-redis
     restart: always
     healthcheck:
       test: [CMD, redis-cli, ping]
