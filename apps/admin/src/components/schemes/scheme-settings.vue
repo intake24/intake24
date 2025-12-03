@@ -73,9 +73,18 @@
         {{ $t('survey-schemes.settings.help._') }}
       </div>
       <template #addon>
+        <v-col v-if="settings.help" cols="12">
+          <v-switch
+            v-model="settings.help.enabled"
+            hide-details="auto"
+            :label="$t('survey-schemes.settings.help.enabled')"
+            name="settings.help.enabled"
+          />
+        </v-col>
         <v-col v-if="settings.help" cols="12" md="6">
           <v-select
             v-model="settings.help.available"
+            :disabled="!settings.help.enabled"
             :error-messages="errors.get('settings.help.available')"
             hide-details="auto"
             :items="helpAvailableFields"
@@ -88,6 +97,7 @@
         <v-col v-if="settings.help" cols="12" md="6">
           <v-select
             v-model="settings.help.required"
+            :disabled="!settings.help.enabled"
             :error-messages="errors.get('settings.help.required')"
             hide-details="auto"
             :items="helpRequiredFields"

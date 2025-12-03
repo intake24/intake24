@@ -30,6 +30,7 @@
     },
     "help": {
       "_": "Opsi bantuan",
+      "enabled": "Aktifkan tombol bantuan",
       "available": "Kolom tersedia",
       "required": "Kolom wajib",
       "name": "Nama",

@@ -7,7 +7,9 @@
     </v-breadcrumbs>
     <v-spacer />
     <request-help
-      v-if="!!helpSettings?.available.length" :settings="helpSettings" :survey-id="$route.params.surveyId.toString()"
+      v-if="helpSettings?.enabled && !!helpSettings?.available.length"
+      :settings="helpSettings"
+      :survey-id="$route.params.surveyId.toString()"
     >
       <template v-if="$vuetify.display.mobile" #activator="{ props }">
         <v-btn

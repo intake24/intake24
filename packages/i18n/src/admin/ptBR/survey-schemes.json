@@ -26,6 +26,17 @@
       "1-pass": "1 passagem",
       "2-pass": "2 passagens"
     },
+    "help": {
+      "_": "Opções de ajuda",
+      "enabled": "Ativar botão de ajuda",
+      "available": "Campos disponíveis",
+      "required": "Campos obrigatórios",
+      "name": "Nome",
+      "email": "Email",
+      "phone": "Telefone",
+      "email|phone": "Email ou telefone",
+      "message": "Mensagem"
+    },
     "recallDate": "Deslocamento da data de recordação",
     "languages": "Idiomas permitidos"
   },

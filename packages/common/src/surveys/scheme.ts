@@ -33,6 +33,7 @@ export const schemeSettings = z.object({
   recallDate: z.coerce.number().int().nullable(),
   languages: z.string().refine(isSupportedLocale).array(),
   help: z.object({
+    enabled: z.boolean().default(true),
     available: z.enum(helpAvailableFields).array(),
     required: z.enum(helpRequiredFields).array(),
   }),
@@ -45,6 +46,7 @@ export const defaultSchemeSettings: SchemeSettings = {
   recallDate: null,
   languages: [],
   help: {
+    enabled: true,
     available: ['name', 'email', 'phone', 'message'],
     required: ['name', 'email|phone', 'message'],
   },
