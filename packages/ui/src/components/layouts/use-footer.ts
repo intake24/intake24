@@ -6,7 +6,7 @@ export function useFooter() {
     copyright: import.meta.env.VITE_LEGAL_COPYRIGHT,
     privacy: import.meta.env.VITE_LEGAL_PRIVACY,
     terms: import.meta.env.VITE_LEGAL_TERMS,
-    contact: `${import.meta.env.VITE_LEGAL_HOME}/contacts`,
+    contact: `${import.meta.env.VITE_LEGAL_HOME}/contact`,
   }));
 
   return {
