@@ -164,8 +164,7 @@ import { useLocale } from 'vuetify';
 import { useI18n } from '@intake24/i18n';
 import { Navigation } from '@intake24/survey/components/layouts';
 import { sendGtmEvent } from '@intake24/survey/util';
-import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
-import { useHttp } from './services';
+import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useHttp, useLanguage } from '@intake24/ui';
 import { useAuth, useSurvey } from './stores';
 
 const http = useHttp();

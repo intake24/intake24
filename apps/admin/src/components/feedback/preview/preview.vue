@@ -54,12 +54,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
-
-import { feedbackService } from '@intake24/admin/services';
 import type { FeedbackImage, FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import {
   buildCardParams,
   buildTopFoods,
+  createFeedbackService,
   FeedbackCards,
   FeedbackCustomSection,
   FeedbackMeals,
@@ -86,6 +85,7 @@ export default defineComponent({
   },
 
   setup(props) {
+    const feedbackService = createFeedbackService();
     const dialog = ref(false);
 
     const imageMap = computed(() => props.images.reduce<Record<string, string>>((acc, item) => {

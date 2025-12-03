@@ -118,12 +118,13 @@
 import { computed, defineComponent, ref } from 'vue';
 import type { FeedbackSubmissionEntry, Pagination } from '@intake24/common/types/http';
 import { SurveyRating } from '@intake24/survey/components/elements';
-import { feedbackService, userService } from '@intake24/survey/services';
+import { userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 import type { UserDemographic } from '@intake24/ui/feedback';
 import {
   buildCardParams,
   buildTopFoods,
+  createFeedbackService,
   FeedbackCards,
   FeedbackCustomSection,
   FeedbackMeals,
@@ -161,6 +162,8 @@ export default defineComponent({
   },
 
   setup() {
+    const feedbackService = createFeedbackService();
+
     const survey = useSurvey();
     const parameters = computed(() => survey.parameters);
     const surveyName = computed(() => parameters.value?.name);
@@ -189,6 +192,7 @@ export default defineComponent({
       acc + curr.meals.reduce((a, b) => a + b.missingFoods.length, 0), 0));
 
     return {
+      feedbackService,
       hasMissingFoods,
       userDemographic,
       selectedSubmissions,
@@ -232,7 +236,7 @@ export default defineComponent({
         return;
       }
 
-      const { feedbackDicts, userDemographic } = await feedbackService.getFeedbackResults({
+      const { feedbackDicts, userDemographic } = await this.feedbackService.getFeedbackResults({
         cards,
         groups,
         henryCoefficients,

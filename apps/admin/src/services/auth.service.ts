@@ -4,8 +4,7 @@ import type {
   LoginResponse,
   MFAAuthenticationVerificationRequest,
 } from '@intake24/common/types/http';
-
-import http from './http.service';
+import { http } from '@intake24/ui';
 
 export default {
   /**

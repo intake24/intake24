@@ -5,7 +5,7 @@ import type {
   TokenLoginRequest,
 } from '@intake24/common/types/http';
 
-import http from './http.service';
+import { http } from '@intake24/ui';
 
 export default {
   async login(request: AliasLoginRequest): Promise<SurveyAuthResponse> {

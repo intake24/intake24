@@ -8,7 +8,7 @@ import { auth, loading, module } from './mixins';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import guards from './router/guards';
-import { errorHandler, httpService } from './services';
+import { errorHandler, mountInterceptors, useHttp } from './services';
 import { useAuth } from './stores';
 import { bootstrapAnalytics, cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui/cookie-consent';
 
@@ -19,7 +19,7 @@ const app = createApp(App);
 app.config.errorHandler = errorHandler;
 // app.config.warnHandler = warnHandler;
 
-app.config.globalProperties.$http = httpService;
+app.config.globalProperties.$http = useHttp();
 
 // @ts-expect-error vue mixin type issue
 app.mixin(auth);
@@ -43,4 +43,4 @@ bootstrapAnalytics(app, router);
 
 app.mount('#app');
 
-app.config.globalProperties.$http.init(router, useAuth);
+mountInterceptors(router, useAuth);

@@ -1,6 +1,5 @@
 import type { CategoryContents, CategoryHeader, CategorySearch } from '@intake24/common/types/http';
-
-import http from './http.service';
+import { http } from '@intake24/ui';
 
 export default {
   contents: async (localeId: string, code?: string) => {

@@ -129,7 +129,7 @@ import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
-import { useHttp } from '@intake24/survey/services';
+import { useHttp } from '@intake24/ui';
 import { BaseLayout } from '../layouts';
 import { ImageMapSelector, Next, QuantityCard, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';

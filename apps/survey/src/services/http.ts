@@ -1,11 +1,9 @@
-import type { AxiosError, AxiosResponse } from 'axios';
+import type { AxiosError } from 'axios';
+import type { Router } from 'vue-router';
 import type { AuthStoreDef } from '../stores';
-import axios, { HttpStatusCode } from 'axios';
-import axiosRetry, { linearDelay } from 'axios-retry';
-
-import trim from 'lodash/trim';
-
-import type { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
+import { HttpStatusCode } from 'axios';
+import { http } from '@intake24/ui';
+import type { SubscribeCallback } from '@intake24/ui';
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];
@@ -16,49 +14,9 @@ function onTokenRefreshed(errRefreshing?: AxiosError) {
   return tokenSubscribers.map(cb => cb(errRefreshing));
 }
 
-const httpClient: HttpClient = {
-  axios: axios.create({
-    baseURL: [import.meta.env.VITE_API_HOST, import.meta.env.VITE_API_URL]
-      .map(item => trim(item, '/'))
-      .join('/'),
-    headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } },
-  }),
-
-  init(router, useAuth: AuthStoreDef) {
-    this.mountInterceptors(router, useAuth);
-  },
-
-  async get(url, config) {
-    return this.request({ url, method: 'get', ...config });
-  },
-
-  async post(url, data, config) {
-    return this.request({ url, method: 'post', data, ...config });
-  },
-
-  async put(url, data, config) {
-    return this.request({ url, method: 'put', data, ...config });
-  },
-
-  async patch(url, data, config) {
-    return this.request({ url, method: 'patch', data, ...config });
-  },
-
-  async delete(url, config) {
-    return this.request({ url, method: 'delete', ...config });
-  },
-
-  async request<T = any, R = AxiosResponse<T>, D = any>(config: HttpRequestConfig<D>): Promise<R> {
-    return this.axios.request<T, R, D>(config);
-  },
-
-  mountInterceptors(router, useAuth: AuthStoreDef) {
-    this.mountBearerInterceptor(useAuth);
-    this.mount401Interceptor(router, useAuth);
-  },
-
-  mountBearerInterceptor(useAuth: AuthStoreDef) {
-    this.axios.interceptors.request.use((request) => {
+export function mountInterceptors(router: Router, useAuth: AuthStoreDef) {
+  function mountBearerInterceptor(useAuth: AuthStoreDef) {
+    http.axios.interceptors.request.use((request) => {
       const { accessToken } = useAuth();
 
       if (accessToken)
@@ -66,12 +24,12 @@ const httpClient: HttpClient = {
 
       return request;
     });
-  },
+  };
 
-  mount401Interceptor(router, useAuth: AuthStoreDef) {
+  function mount401Interceptor(router: Router, useAuth: AuthStoreDef) {
     const auth = useAuth();
 
-    this.axios.interceptors.response.use(
+    http.axios.interceptors.response.use(
       response => response,
       async (err: AxiosError) => {
         const { config, response: { status } = {} } = err;
@@ -120,16 +78,13 @@ const httpClient: HttpClient = {
             if (errRefreshing)
               return reject(errRefreshing);
 
-            return resolve(this.axios(config));
+            return resolve(http.axios(config));
           });
         });
       },
     );
-  },
+  }
+
+  mountBearerInterceptor(useAuth);
+  mount401Interceptor(router, useAuth);
 };
-
-axiosRetry(httpClient.axios, { retries: 5, retryDelay: linearDelay(300) });
-
-export default httpClient;
-
-export const useHttp = () => httpClient;

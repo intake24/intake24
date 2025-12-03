@@ -1,10 +1,8 @@
 import axios, { HttpStatusCode } from 'axios';
 import { defineStore } from 'pinia';
-
 import type { Dictionary } from '@intake24/common/types';
 import type { UserSecurableAttributes } from '@intake24/common/types/http/admin';
-
-import { httpService } from '../services';
+import { useHttp } from '../services';
 import { useResource } from './resource';
 
 export type ItemState = {
@@ -48,7 +46,7 @@ export const useEntry = defineStore('entry', {
 
       const apiUrl = [api, id].join('/');
 
-      const { data } = await httpService.get(apiUrl, { params: query, withLoading: true });
+      const { data } = await useHttp().get(apiUrl, { params: query, withLoading: true });
       this.setEntry(data);
 
       await this.requestRefs();
@@ -62,7 +60,7 @@ export const useEntry = defineStore('entry', {
       this.clearRefs();
 
       try {
-        const { data } = await httpService.get(`${api}/refs`, { withLoading: true });
+        const { data } = await useHttp().get(`${api}/refs`, { withLoading: true });
         this.setRefs(data);
       }
       catch (err) {

@@ -1,4 +1,4 @@
-import type { HttpClient } from '@intake24/ui/types';
+import type { HttpClient } from '@intake24/ui';
 
 declare module 'vue' {
   interface ComponentCustomProperties {

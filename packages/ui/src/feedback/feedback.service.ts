@@ -1,4 +1,3 @@
-import type { HttpClient } from '../types/http';
 import type { CardWithDemGroups } from './cards-builder';
 import type {
   Card,
@@ -6,6 +5,7 @@ import type {
   HenryCoefficient,
 } from '@intake24/common/feedback';
 import type { FeedbackDataResponse, FeedbackSubmissionEntry, UserPhysicalDataResponse } from '@intake24/common/types/http';
+import { useHttp } from '../services';
 import { CharacterRules, DemographicGroup, SurveyStats, UserDemographic } from './classes';
 
 export type FeedbackDictionaries = {
@@ -22,12 +22,14 @@ export type FeedbackResults = {
 
 export type UserPhysicalData = NonNullable<UserPhysicalDataResponse>;
 
-function createFeedbackService(httpClient: HttpClient) {
+function createFeedbackService() {
+  const http = useHttp();
+
   let cachedFeedbackData: FeedbackDataResponse | null = null;
   let cachedSubmissions: FeedbackSubmissionEntry[] = [];
 
   const fetchFeedbackData = async (): Promise<FeedbackDataResponse> => {
-    const { data } = await httpClient.get<FeedbackDataResponse>('feedback');
+    const { data } = await http.get<FeedbackDataResponse>('feedback');
     return data;
   };
 

@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
-
 import type { Subject, SurveyTokenPayload } from '@intake24/common/security';
-import { tokenService } from '@intake24/ui/services';
-
+import { tokenService } from '@intake24/ui';
 import { useSurvey } from './survey';
 
 export type UserState = {

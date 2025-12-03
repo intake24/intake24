@@ -188,7 +188,7 @@ import { LanguageSelector } from '@intake24/admin/components/forms';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import resources from '@intake24/admin/router/resources';
-import { httpService } from '@intake24/admin/services';
+import { useHttp } from '@intake24/admin/services';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import type { DrinkwareScaleV2Entry, DrinkwareSetEntry, UpdateDrinkwareScaleInput } from '@intake24/common/types/http/admin';
@@ -220,6 +220,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const http = useHttp();
     const { entry, entryLoaded } = useEntry<DrinkwareSetEntry>(props);
     useEntryFetch(props);
     const {
@@ -293,7 +294,7 @@ export default defineComponent({
 
         if (imageMapEntryUrl !== undefined) {
           // This is clunky, there should be a better way to access other resources
-          imageMapData.value = (await httpService.get(`${imageMapEntryUrl}/${newEntry.imageMapId}`))
+          imageMapData.value = (await http.get(`${imageMapEntryUrl}/${newEntry.imageMapId}`))
             .data as ImageMapResponse;
           imageMapLoading.value = false;
           loadedImageMapId = newEntry.imageMapId;

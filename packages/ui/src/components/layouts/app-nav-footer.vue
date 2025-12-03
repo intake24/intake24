@@ -39,8 +39,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useApp } from '@intake24/ui/stores';
 import { CookieConsent } from '../../cookie-consent';
+import { useApp } from '../../stores';
 import { useFooter } from './use-footer';
 
 defineOptions({ name: 'AppNavFooter' });

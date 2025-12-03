@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { httpService } from '@intake24/admin/services';
+import { useHttp } from '@intake24/admin/services';
 import type { AdminTokenPayload } from '@intake24/common/security';
 import type { AdminUserProfile } from '@intake24/common/types/http/admin';
 import { tokenService } from '@intake24/ui/services';
@@ -61,7 +61,7 @@ export const useUser = defineStore('user', {
     async request() {
       const {
         data: { aal, profile, permissions, roles },
-      } = await httpService.get<AdminUserProfile>('admin/user', { withLoading: true });
+      } = await useHttp().get<AdminUserProfile>('admin/user', { withLoading: true });
 
       this.aal = aal;
       this.profile = { ...profile };

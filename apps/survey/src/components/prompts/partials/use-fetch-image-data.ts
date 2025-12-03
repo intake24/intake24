@@ -1,6 +1,6 @@
 import type { MaybeRef } from 'vue';
 import { onMounted, ref, toRef, watch } from 'vue';
-import { useHttp } from '@intake24/survey/services';
+import { useHttp } from '@intake24/ui';
 
 export type UseFetchImageDataProps<D> = {
   url: MaybeRef<string | undefined>;

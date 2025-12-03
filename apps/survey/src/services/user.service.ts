@@ -1,8 +1,7 @@
 import type { UserPhysicalDataResponse } from '@intake24/common/types/http';
 import type { SurveySubmissionAttributes } from '@intake24/common/types/http/admin';
+import { http } from '@intake24/ui';
 import type { UserPhysicalData } from '@intake24/ui/feedback';
-
-import http from './http.service';
 
 export default {
   fetchPhysicalData: async (): Promise<UserPhysicalData> => {
