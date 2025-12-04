@@ -1,7 +1,7 @@
 {
   "_": "Crédits",
   "contact": "Contact",
-  "copyright": "{name} © {team} {year}",
+  "copyright": "© {team} {year}",
   "privacy": "Politique de Confidentialité",
   "terms": "Conditions d'Utilisation",
   "cookies": {

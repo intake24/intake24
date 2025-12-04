@@ -1,6 +1,11 @@
 <template>
-  <v-footer v-if="!$vuetify.display.mobile" class="justify-center pa-4 flex-grow-0">
-    <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-2">
+  <v-divider v-if="$vuetify.display.mobile" />
+  <v-footer v-if="!$vuetify.display.mobile || !loggedIn" class="justify-center pa-4 flex-grow-0">
+    <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-2 gr-2">
+      <a class="text-decoration-none text-primary" :href="links.home" target="_blank">
+        {{ $t('common._') }}
+      </a>
+      <span class="d-none d-md-flex mx-1">&nbsp;</span>
       <i18n-t keypath="legal.copyright" tag="span">
         <template #name>
           <a class="text-decoration-none text-primary" :href="links.home" target="_blank">
@@ -28,12 +33,10 @@
           {{ $t('legal.cookies._') }}
         </a>
       </cookie-consent>
-      <template v-if="!loggedIn">
-        <span class="d-none d-md-flex mx-2">|</span>
-        <a class="text-decoration-none text-primary" :href="links.contact" target="_blank">
-          {{ $t('legal.contact') }}
-        </a>
-      </template>
+      <span class="d-none d-md-flex mx-2">|</span>
+      <a class="text-decoration-none text-primary" :href="links.contact" target="_blank">
+        {{ $t('legal.contact') }}
+      </a>
     </div>
   </v-footer>
 </template>

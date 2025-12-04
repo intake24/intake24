@@ -152,7 +152,7 @@
     />
     <service-worker />
     <message-box />
-    <app-footer />
+    <app-footer v-if="!$vuetify.display.mobile || !loggedIn" />
   </v-app>
 </template>
 

@@ -139,7 +139,7 @@
     </v-main>
     <service-worker />
     <message-box />
-    <app-footer />
+    <app-footer :logged-in />
   </v-app>
 </template>
 

@@ -22,13 +22,6 @@
       <cookie-consent v-slot="{ open }">
         <v-list-item href="#" link :title="$t('legal.cookies._')" @click.stop="open" />
       </cookie-consent>
-      <v-list-item v-if="!loggedIn" :href="links.contact" link target="_blank" :title="$t('legal.contact')">
-        <template #append>
-          <v-list-item-action>
-            <v-icon icon="$redirect" size="x-small" />
-          </v-list-item-action>
-        </template>
-      </v-list-item>
     </v-list-group>
   </v-list>
   <div class="text--secondary text-caption px-4 py-2">
@@ -44,12 +37,6 @@ import { useApp } from '../../stores';
 import { useFooter } from './use-footer';
 
 defineOptions({ name: 'AppNavFooter' });
-
-defineProps({
-  loggedIn: {
-    type: Boolean,
-  },
-});
 
 const appInfo = computed(() => useApp().app);
 
