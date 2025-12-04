@@ -83,6 +83,7 @@ export function mountInterceptors(router: Router, useAuth: AuthStoreDef) {
     );
   }
 
+  http.axios.defaults.withCredentials = true;
   mountBearerInterceptor(useAuth);
   mount401Interceptor(router, useAuth);
 }
