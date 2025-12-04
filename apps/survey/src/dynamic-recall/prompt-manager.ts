@@ -397,20 +397,21 @@ function checkFoodStandardConditions(surveyStore: SurveyStore, mealState: MealSt
     case 'same-as-before-prompt': {
       if (
         foodState.type === 'encoded-food'
+        && foodState.data.sameAsBeforeOption
         && !foodState.flags.includes('same-as-before-complete')
         && !foodState.portionSize
       ) {
         recallLog().promptCheck(
           component,
           true,
-          `Entry type is ${foodState.type}, no SAB flag yet and no portion size selected`,
+          `Entry type is ${foodState.type}, SAB option enabled, no SAB flag yet and no portion size selected`,
         );
         return true;
       }
       recallLog().promptCheck(
         component,
         false,
-        `Entry type is ${foodState.type}, SAB flag set or portion size selected`,
+        `Entry type is ${foodState.type}, SAB option disabled, SAB flag set, or portion size selected`,
       );
       return false;
     }

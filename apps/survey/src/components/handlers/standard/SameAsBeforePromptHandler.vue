@@ -26,7 +26,10 @@ const {
 
 const survey = useSurvey();
 
-const sabFood = useSameAsBefore().getItem(survey.localeId, code);
+// Only get SAB item if current food has sameAsBeforeOption enabled
+const sabFood = food.value.data.sameAsBeforeOption
+  ? useSameAsBefore().getItem(survey.localeId, code)
+  : undefined;
 
 function sabAction(type: 'notSame' | 'same') {
   if (type === 'same' && sabFood) {
