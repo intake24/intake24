@@ -97,7 +97,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { WeightFactorProps } from './AsServedWeightFactor.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, SelectedAsServedImage } from '@intake24/common/surveys';
 import type { AsServedSetResponse } from '@intake24/common/types/http/foods';
@@ -137,12 +137,15 @@ const emit = defineEmits(['confirm', 'update:modelValue']);
 const denominator = 4;
 const objectIdx = ref<number | undefined>(undefined);
 
+const asServedUrl = computed(() => `portion-sizes/as-served-sets/${props.asServedSetId}`);
+
 const { imageData: asServedData } = useFetchImageData<AsServedSetResponse>({
-  url: `portion-sizes/as-served-sets/${props.asServedSetId}`,
+  url: asServedUrl,
   onFetch: () => {
     initSelection();
   },
 });
+
 const { labels } = useLabels(props, { type: 'asServed', data: asServedData });
 const label = computed(() => {
   if (objectIdx.value === undefined || !asServedData.value)
@@ -212,6 +215,12 @@ function moreWeightFactor(show: boolean, weight: number, modelValue?: number): W
 }
 
 const weightFactorProps = ref(noWeightFactor(0));
+
+// Reset state when the as-served set changes (e.g., when switching bowls in cereal prompt)
+watch(() => props.asServedSetId, () => {
+  objectIdx.value = undefined;
+  weightFactorProps.value = noWeightFactor(0);
+});
 
 const image = computed(() => {
   if (objectIdx.value === undefined)
