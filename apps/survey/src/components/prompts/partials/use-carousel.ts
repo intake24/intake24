@@ -12,8 +12,7 @@ export function useCarousel(props: UseCarouselProps) {
   function resolveSlideUrl(slideUrl: Carousel['slides'][number]['image']) {
     const url = slideUrl[display.mobile.value ? 'mobile' : 'desktop'] ?? '';
     const sameOrigin = new URL(document.baseURI).origin === new URL(url, document.baseURI).origin;
-
-    return sameOrigin ? `${import.meta.env.VITE_API_HOST}/${url}` : url;
+    return sameOrigin && import.meta.env.VITE_API_HOST ? `${import.meta.env.VITE_API_HOST}/${url}` : url;
   }
 
   watch(carousel, (val) => {
