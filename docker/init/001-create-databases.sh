@@ -30,7 +30,7 @@ pg_restore -n public --no-owner --no-acl --role=$DB_DEV_FOODS_USERNAME --dbname 
 echo "Downloading system database snapshot..."
 wget -O /tmp/system-db-schema.sql https://storage.googleapis.com/intake24/snapshots/system-db-schema.sql
 echo "Creating system database schema..."
-psql -U $POSTGRES_USER -d $DB_DEV_SYSTEM_DATABASE -f /tmp/system-db-schema.sql
+psql -U $POSTGRES_USER -d $DB_DEV_SYSTEM_DATABASE -f /tmp/system-db-snapshot.sql
 
 # TEST environment
 
