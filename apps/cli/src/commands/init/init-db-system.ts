@@ -19,6 +19,7 @@ import {
 } from '@intake24/common/prompts';
 import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
+import ietfLanguageTags from './ietf-language-tags.json';
 
 type Superuser = {
   name: string;
@@ -40,19 +41,34 @@ async function initDefaultData(db: KyselyDatabases) {
       langs.add(locale.respondentLanguageId);
     });
 
-    // TODO: Fetch language details
+    const languageRows = Array.from(langs).map((code) => {
+      const ietf_tags = (ietfLanguageTags as Array<{ code: string; english_name: string; local_name: string }>)
+        .find(lang => lang.code === code);
+
+      const englishName = ietf_tags?.english_name ?? code;
+      const localName = ietf_tags?.local_name ?? code;
+
+      const localeWithLang = locales.find(
+        locale => locale.adminLanguageId === code || locale.respondentLanguageId === code,
+      );
+      const countryFlagCode = localeWithLang?.countryFlagCode ?? 'gb';
+      const textDirection = localeWithLang?.textDirection ?? 'ltr';
+
+      return {
+        code,
+        englishName,
+        localName,
+        countryFlagCode,
+        textDirection,
+        visibility: 'public',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    });
+
     await db.system
       .insertInto('languages')
-      .values(
-        Array.from(langs).map(code => ({
-          code,
-          englishName: code,
-          localName: code,
-          countryFlagCode: code.split('-').at(0) || code,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        })),
-      )
+      .values(languageRows)
       .execute();
 
     await db.system
@@ -180,12 +196,25 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     .values({
       name: config.acl.roles.superuser,
       displayName: config.acl.roles.superuser,
+      description: 'Role gets assigned with all permissions created in system.',
       createdAt: new Date(),
       updatedAt: new Date(),
     })
     .returningAll()
     .executeTakeFirstOrThrow();
 
+  /*
+  * Set superuser role to admin user
+  */
+  await db.system
+    .insertInto('roleUser')
+    .values({
+      roleId: suRole.id,
+      userId: suUser.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .execute();
   /*
   * Populate permissions
   */
