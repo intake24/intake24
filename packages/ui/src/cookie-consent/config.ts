@@ -34,7 +34,10 @@ async function toggleClarity(enabled: boolean) {
   console.debug('Clarity toggled to ', enabled);
   Clarity.consent(enabled);
 }
-export function cookieConsentConfig(translations: CookieConsentConfig['language']['translations'] = {}): CookieConsentConfig {
+export function cookieConsentConfig(
+  translations: CookieConsentConfig['language']['translations'] = {},
+  defaultLang = 'en',
+): CookieConsentConfig {
   return ({
     cookie: {
       name: 'it24_cc_consent',
@@ -51,7 +54,7 @@ export function cookieConsentConfig(translations: CookieConsentConfig['language'
       },
     },
     language: {
-      default: 'en',
+      default: defaultLang,
       translations,
     },
     onChange: ({ cookie }) => {
