@@ -198,8 +198,8 @@
     "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
     "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
     "pizza": " ",
-    "rootCategory": "Food search restricted to '{category}'",
-    "rootCategoryToggle": "Restrict food search to '{category}'",
+    "rootCategory": "Recherche d'aliments limitée à '{category}'",
+    "rootCategoryToggle": "Limiter la recherche d'aliments à '{category}'",
     "missing": {
       "label": "Je ne trouve pas mon aliment.",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Signaler un aliment manquant'.</p>",

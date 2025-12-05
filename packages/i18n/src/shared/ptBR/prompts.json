@@ -189,6 +189,8 @@
     "none": "Nenhum resultado. Tente refinar sua pesquisa.",
     "refine": "A pesquisa retornou muitos resultados. Você pode tentar refinar.",
     "pizza": "Se sua pizza era de delivery ou restaurante, selecione essa opção.",
+    "rootCategory": "Busca de alimentos restrita a '{category}'",
+    "rootCategoryToggle": "Restringir busca de alimentos a '{category}'",
     "missing": {
       "label": "Não encontro meu alimento",
       "description": "<p>Se não encontrar na lista, tente reformular sua descrição.</p><p>Ou selecione 'Navegar por todos os alimentos'.</p><p>Se ainda não encontrar, selecione 'Reportar alimento ausente'.</p>",
@@ -370,6 +372,7 @@
     "name": "Como servido",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "serving": {
       "header": "Usando as imagens, escolha quanto de {food} você consumiu.",
       "less": "Consumi menos",
@@ -400,17 +403,21 @@
     "name": "Cereal",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "container": "Selecione a tigela que mais se parece com a que você usou para {food}."
   },
   "directWeight": {
     "name": "Peso",
     "text": "",
-    "description": "Digite quanto você consumiu em gramas ou ml."
+    "description": "",
+    "method": "Como deseja estimar sua porção?",
+    "quantity": "Digite quanto você consumiu em gramas ou ml."
   },
   "drinkScale": {
     "name": "Escala de bebida",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "container": "Selecione o copo que mais se parece com o que você usou para {food}.",
     "serving": {
       "header": "Use o controle deslizante ou toque no copo para indicar quanto consumiu.",
@@ -431,6 +438,7 @@
     "name": "Imagem guia",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "label": "Selecione a imagem que melhor representa o tamanho de {food}.",
     "quantity": "Escolha quantos de {food} você consumiu.",
     "confirm": "Consumi essa quantidade",
@@ -440,6 +448,7 @@
     "name": "Leite em bebida quente",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "label": "Quanto de {food} você adicionou ao chá ou café?",
     "confirm": "Consumi essa quantidade"
   },
@@ -447,6 +456,7 @@
     "name": "Leite no cereal",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "container": "Selecione a tigela que mais se parece com a que você usou para {food}.",
     "milk": "Escolha até onde o leite chegou (sem cereal)."
   },
@@ -496,6 +506,7 @@
     "name": "Porção de alimento pai",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "label": "Quanto de {food} você consumiu no seu {parentFood}?",
     "confirm": "Consumi essa quantidade"
   },
@@ -503,6 +514,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "typeLabel": "Selecione a pizza mais próxima do tamanho consumido.",
     "thicknessLabel": "Quão grossa era sua pizza?",
     "sizeLabel": "Qual tamanho de fatia você consumiu?",
@@ -519,6 +531,7 @@
     "name": "Pizza",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "sizes": {
       "label": "Qual tamanho de pizza você consumiu?",
       "personal": "Individual 7\"",
@@ -547,6 +560,7 @@
     "name": "Porção padrão",
     "text": "",
     "description": "",
+    "method": "Como deseja estimar sua porção?",
     "label": "Como deseja estimar a porção de {food}?",
     "estimateIn": "Em {unit}",
     "howMany": {
@@ -555,6 +569,12 @@
       "withFood": "{unit} de {food} consumidos"
     },
     "confirm": "Consumi essa quantidade"
+  },
+  "unknown": {
+    "name": "Desconhecido",
+    "text": "",
+    "description": "",
+    "method": "Como deseja estimar sua porção?"
   },
   "aggregateChoice": {
     "name": "Pergunta agregada",

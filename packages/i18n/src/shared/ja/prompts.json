@@ -189,6 +189,8 @@
     "none": "該当する食品が見つかりませんでした。検索条件を変更してお試しください。",
     "refine": "検索結果が多数見つかりました。検索条件を絞り込んでみてください。",
     "pizza": "ピザがテイクアウトやレストランのものであれば、リストの中からその選択肢を選んでください。",
+    "rootCategory": "食品検索を「{category}」に限定中",
+    "rootCategoryToggle": "食品検索を「{category}」に限定する",
     "missing": {
       "label": "食品が見つからない",
       "description": "<p>食品が見つからない場合は、上の検索ボックスで表現を変えて再検索してみてください。</p><p>料理名が見つからない場合でも、食材を組み合わせて入力することもできます（例：からみ餅→餅＋大根おろし）。</p><p>または「すべての食品を表示」を選んで、食品カテゴリから探すこともできます。</p><p>それでも見つからない場合は、「食品を自分で追加する」を選択してください。</p>",
@@ -370,6 +372,7 @@
     "name": "盛り付けた量",
     "text": "あなたがとった「{food}」の量をおたずねします。",
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "serving": {
       "header": "実際にとった量に近い写真を選び、「この量にする」のボタンをクリックしてください。",
       "less": "これより少ない",
@@ -400,17 +403,21 @@
     "name": "シリアル",
     "text": "{food}",
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "container": "{food} を食べるのに使った器に最も近いものを選んでください。"
   },
   "directWeight": {
     "name": "重量",
     "text": null,
-    "description": "食べた（または飲んだ）量をグラムまたはミリリットルで入力してください。"
+    "description": null,
+    "method": "量の見積もり方法を選んでください。",
+    "quantity": "食べた（または飲んだ）量をグラムまたはミリリットルで入力してください。"
   },
   "drinkScale": {
     "name": "飲み物のスケール",
     "text": "{food}",
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "container": "あなたが 「{food} 」を飲むのに使った容器に最も近いものを選んでください。",
     "serving": {
       "header": "飲んだ量に合わせてスライダーを調整し、「この量にする」を押してください。",
@@ -431,6 +438,7 @@
     "name": "食品の種類を選ぶ",
     "text": "{food}",
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "label": "あなたがとった「 {food}」 に最も近いものを選んでください。（似た食品の画像が表示されることがありますが、気にせずお答えください）",
     "quantity": "あなたがとった量を選んでください。",
     "confirm": "この量にする",
@@ -440,6 +448,7 @@
     "name": "飲み物に加えた牛乳",
     "text": "紅茶やコーヒーに{food}をどのくらい加えましたか？",
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "label": "あなたが入れた量を選んでください。",
     "confirm": "この量にする"
   },
@@ -447,6 +456,7 @@
     "name": "シリアルの牛乳",
     "text": "{food}",
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "container": "{food} を食べるのに使った器に最も近いものを選んでください。",
     "milk": "シリアルがない状態での牛乳の量を選んでください。"
   },
@@ -496,6 +506,7 @@
     "name": "親食品の分量",
     "text": null,
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "label": "{parentFood}の中で、どれくらいの{food}をとりましたか？",
     "confirm": "そのくらい食べた"
   },
@@ -503,6 +514,7 @@
     "name": "ピザ",
     "text": "{food}",
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "typeLabel": "あなたが食べたピザの大きさに最も近いものを選んでください。",
     "thicknessLabel": "ピザの厚みはどのくらいでしたか？",
     "sizeLabel": "ピザの1切れの大きさはどのくらいでしたか？",
@@ -519,6 +531,7 @@
     "name": "ピザ",
     "text": null,
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "sizes": {
       "label": "どのサイズのピザを食べましたか？",
       "personal": "Sサイズ（約18cm）",
@@ -547,6 +560,7 @@
     "name": "数値で答える",
     "text": "{food}",
     "description": null,
+    "method": "量の見積もり方法を選んでください。",
     "label": "{food}の量をどの方法で答えますか？",
     "estimateIn": "{unit} で答える",
     "howMany": {
@@ -555,6 +569,12 @@
       "withFood": "{food}とりましたか？"
     },
     "confirm": "この量にする"
+  },
+  "unknown": {
+    "name": "不明",
+    "text": null,
+    "description": null,
+    "method": "量の見積もり方法を選んでください。"
   },
   "aggregateChoice": {
     "name": "Aggregate food question",

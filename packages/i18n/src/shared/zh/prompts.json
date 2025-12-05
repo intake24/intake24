@@ -198,8 +198,8 @@
     "none": "没有食物结果。请尝试优化您的搜索。",
     "refine": "搜索已经找到了很多结果。您可以尝试优化搜索。",
     "pizza": "如果你的披萨来自外卖店或餐馆，请在列表中选择该选项。",
-    "rootCategory": "Food search restricted to '{category}'",
-    "rootCategoryToggle": "Restrict food search to '{category}'",
+    "rootCategory": "食物搜索限定于'{category}'",
+    "rootCategoryToggle": "将食物搜索限定于'{category}'",
     "missing": {
       "label": "我找不到我的食物",
       "description": "<p>如果在列表中找不到您的食物，请尝试在上面的搜索文本框中重新表述描述，然后点击“再次搜索”。</p><p>或者点击“浏览所有食物”并探索食品类别。</p><p>如果您仍然找不到您的食物，请点击“报告缺失的食物。</p>",
