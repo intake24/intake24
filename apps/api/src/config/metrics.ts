@@ -22,7 +22,7 @@ const metricsConfigSchema = z.object({
     }),
     instanceId: z.object({
       pm2: z.string().optional(),
-      intake24: z.string(),
+      intake24: z.string().optional(),
     },
     ),
   }),

@@ -104,7 +104,7 @@ Prefix to be used for application data stored in browser storage. Defaults to `i
 
 ### VITE_API_HOST
 
-API Server base URL. Defaults to `$API_HOST`.
+API Server base URL. Defaults to empty, in which pointing to API server with same base URL of the SPA.
 
 ### VITE_API_URL
 
@@ -122,7 +122,7 @@ Flag whether to allow admin tool sign-ups. Defaults to `true`. Flag only enables
 
 ### VITE_CAPTCHA_PROVIDER
 
-Captcha provider. Possible values `g-captcha` or `re-captcha`.
+Captcha provider. Possible values `re-captcha` or `h-captcha`.
 
 ### VITE_CAPTCHA_SITEKEY
 

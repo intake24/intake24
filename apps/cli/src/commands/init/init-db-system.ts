@@ -42,12 +42,21 @@ async function initDefaultData(db: KyselyDatabases) {
     });
 
     const languageRows = Array.from(langs).map((code) => {
-      const ietf_tags = (ietfLanguageTags as Array<{ code: string; english_name: string; local_name: string }>)
-        .find(lang => lang.code === code);
+      const ietf_locale = (ietfLanguageTags as Array<{ locale: string; language: any; country: any }>)
+        .find((tag) => {
+          return (tag.locale === code) || (tag.locale.split('-')[0] === code.split('-')[0]);
+        });
 
-      const englishName = ietf_tags?.english_name ?? code;
-      const localName = ietf_tags?.local_name ?? code;
-
+      let englishName = code;
+      let localName = code;
+      if (code.includes('-')) {
+        englishName = ietf_locale?.language.countries.find((country: { code: string }) => country.code === code.split('-')[1])?.name || code;
+        localName = ietf_locale?.language.countries.find((country: { code: string }) => country.code === code.split('-')[1])?.name_local || code;
+      }
+      else {
+        englishName = ietf_locale?.language.name || code;
+        localName = ietf_locale?.language.name_local || code;
+      }
       const localeWithLang = locales.find(
         locale => locale.adminLanguageId === code || locale.respondentLanguageId === code,
       );

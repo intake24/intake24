@@ -23,10 +23,11 @@ export default async (cmd: InitFoodImagesArgs): Promise<void> => {
   const output = fs.createWriteStream(outputPath);
 
   await pipeline(input, output);
+  console.log(`File downloaded to ${outputPath}`);
   const targetDir = `../api/${config.filesystem.local.images}`;
   await fs.ensureDir(targetDir);
+  console.log(`Extracting files to ${targetDir}...`);
   await decompress(outputPath, targetDir);
+  console.log('Extraction complete.');
   await unlink(outputPath);
-
-  console.log(`File downloaded to ${outputPath}`);
 };
