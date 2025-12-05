@@ -1,0 +1,14 @@
+[
+  { "code": "en", "english_name": "English", "local_name": "English" },
+  { "code": "en-AU", "english_name": "English (Australia)", "local_name": "English (Australia)" },
+  { "code": "en-NZ", "english_name": "English (New Zealand)", "local_name": "English (New Zealand)" },
+  { "code": "da", "english_name": "Danish (Denmark)", "local_name": "Dansk" },
+  { "code": "fr", "english_name": "French", "local_name": "Français" },
+  { "code": "pt", "english_name": "Portuguese", "local_name": "Português" },
+  { "code": "ar", "english_name": "Arabic", "local_name": "العربية" },
+  { "code": "ar-AE", "english_name": "Arabic (UAE)", "local_name": "العربية (الإمارات العربية المتحدة)" },
+  { "code": "zh-CN", "english_name": "Chinese (Simplified, China)", "local_name": "简体中文" },
+  { "code": "zh-TW", "english_name": "Chinese (Traditional, Taiwan)", "local_name": "繁體中文" },
+  { "code": "ja-JP", "english_name": "Japanese (Japan)", "local_name": "日本語" },
+  { "code": "ko-KR", "english_name": "Korean (South Korea)", "local_name": "한국어" }
+]
