@@ -47,7 +47,7 @@ type Superuser = {
 
 async function initDefaultData(db: KyselyDatabases) {
   await Promise.all(
-    ['languages', 'locales', 'nutrient_units', 'nutrient_types']
+    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
 
@@ -125,6 +125,67 @@ async function initDefaultData(db: KyselyDatabases) {
   if (nutrientTypes.length) {
     await db.system.insertInto('nutrientTypes').values(nutrientTypes).execute();
   }
+
+  const prompts: RecallPrompts = {
+    preMeals: [
+      {
+        ...infoPrompt,
+        id: 'welcome',
+        i18n: {
+          name: { en: 'Welcome' },
+          description: { en: 'Welcome to the dietary survey.' },
+        },
+      },
+      mealAddPrompt,
+    ],
+    meals: {
+      preFoods: [
+        mealTimePrompt,
+        editMealPrompt,
+      ],
+      foods: [
+        ...portionSizePrompts,
+        foodSearchPrompt,
+        associatedFoodsPrompt,
+        missingFoodPrompt,
+        noMoreInformationPrompt,
+      ],
+      postFoods: [
+        readyMealPrompt,
+        noMoreInformationPrompt,
+      ],
+      foodsDeferred: [],
+    },
+    postMeals: [
+      mealGapPrompt,
+    ],
+    submission: [
+      {
+        ...submitPrompt,
+        i18n: {
+          name: { en: 'Submit' },
+          description: { en: 'You are about to submit your dietary survey.' },
+        },
+      },
+      {
+        ...finalPrompt,
+        i18n: {
+          name: { en: 'Complete' },
+          description: { en: 'Thank you for completing the dietary survey.' },
+        },
+      },
+    ],
+  };
+
+  await db.system.insertInto('surveySchemes').values({
+    name: 'Default',
+    settings: JSON.stringify(defaultSchemeSettings),
+    meals: JSON.stringify(defaultMeals),
+    prompts: JSON.stringify(prompts),
+    dataExport: JSON.stringify(defaultExport),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }).executeTakeFirst();
 }
 
 async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
