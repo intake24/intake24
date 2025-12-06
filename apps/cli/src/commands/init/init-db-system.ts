@@ -1,9 +1,26 @@
+import axios from 'axios';
 import config from '@intake24/api/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { defaultAlgorithm } from '@intake24/common-backend/util';
 import { KyselyDatabases } from '@intake24/db';
-import ietfLanguageTags from './ietf-language-tags.json';
+import sequelizeMetaNames from './sequelize-meta.json';
+import tasks from './tasks.json';
+
+async function fetchIetfLanguageTags(): Promise<any[]> {
+  try {
+    const res = await axios.get(config.services.ietfLocales.url);
+    mainLogger.info(`Fetched IETF language tags from ${config.services.ietfLocales.url}`);
+    if (res.status !== 200 || !res.data || res.data.length === 0 || !Object.hasOwn(res.data[0], 'locale')) {
+      throw new Error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
+    }
+    return res.data;
+  }
+  catch (error) {
+    mainLogger.error(`Failed to fetch IETF language tags from ${config.services.ietfLocales.url}: ${error}`);
+    throw new Error(`Failed to fetch IETF language tags: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
 
 type Superuser = {
   name: string;
@@ -13,12 +30,13 @@ type Superuser = {
 
 async function initDefaultData(db: KyselyDatabases) {
   await Promise.all(
-    ['languages', 'locales', 'nutrient_units', 'nutrient_types']
+    ['languages', 'locales', 'nutrient_units', 'nutrient_types', 'sequelizeMeta', 'tasks']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
 
   const locales = await db.foods.selectFrom('locales').selectAll().execute();
   if (locales.length) {
+    const ietfLanguageTags = await fetchIetfLanguageTags();
     const langs = new Set<string>();
     locales.forEach((locale) => {
       langs.add(locale.adminLanguageId);
@@ -90,6 +108,22 @@ async function initDefaultData(db: KyselyDatabases) {
   if (nutrientTypes.length) {
     await db.system.insertInto('nutrientTypes').values(nutrientTypes).execute();
   }
+
+  await db.system
+    .insertInto('sequelizeMeta')
+    .values(sequelizeMetaNames)
+    .execute();
+
+  await db.system
+    .insertInto('tasks')
+    .values(
+      tasks.map(task => ({
+        ...task,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })),
+    )
+    .execute();
 }
 
 async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {

@@ -87,7 +87,7 @@ export class AppMetricsService {
     this.tasksQueueHandler = tasksQueueHandler;
 
     this.defaultLabels = {
-      instance_id: metricsConfig.app.instanceId.intake24 || 'unknown',
+      instance_id: metricsConfig.app.instanceId.intake24,
     };
 
     if (metricsConfig.app.instanceId.pm2 !== undefined)

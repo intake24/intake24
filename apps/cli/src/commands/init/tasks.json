@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Clean storage files",
+    "job": "CleanStorageFiles",
+    "cron": "0 0 * * *",
+    "active": true,
+    "description": null,
+    "params": "{}"
+  },
+  {
+    "name": "Sync survey schemes",
+    "job": "SurveySchemesSync",
+    "cron": "0 0 * * *",
+    "active": false,
+    "description": "Synchronize survey schemes to merge prompts with defaults",
+    "params": "{}"
+  },
+  {
+    "name": "Food Index Rebuild",
+    "job": "LocaleIndexBuild",
+    "cron": "*/15 * * * *",
+    "active": true,
+    "description": "Check for changed foods in locales and rebuild food index if necessary.",
+    "params": "{}"
+  },
+  {
+    "name": "Purge refresh tokens",
+    "job": "PurgeExpiredTokens",
+    "cron": "0 0 * * *",
+    "active": true,
+    "description": "Regularly purge expired refresh tokens",
+    "params": "{}"
+  },
+  {
+    "name": "Sync feedback schemes",
+    "job": "FeedbackSchemesSync",
+    "cron": "0 0 * * *",
+    "active": false,
+    "description": null,
+    "params": "{}"
+  },
+  {
+    "name": "Export resource data",
+    "job": "ResourceExport",
+    "cron": "0 0 * * *",
+    "active": false,
+    "description": null,
+    "params": "{\"resource\":\"standard-units\"}"
+  },
+  {
+    "name": "Clean redis cache",
+    "job": "CleanRedisStore",
+    "cron": "0 0 * * *",
+    "active": false,
+    "description": null,
+    "params": "{\"store\":[\"cache\",\"rateLimiter\",\"session\"]}"
+  },
+  {
+    "name": "Sync tranlations",
+    "job": "LanguageTranslationsSync",
+    "cron": "0 0 * * *",
+    "active": false,
+    "description": null,
+    "params": "{}"
+  }
+]
