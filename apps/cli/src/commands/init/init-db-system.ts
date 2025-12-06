@@ -1,8 +1,26 @@
+import axios from 'axios';
 import config from '@intake24/api/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { defaultAlgorithm } from '@intake24/common-backend/util';
 import { KyselyDatabases } from '@intake24/db';
+import sequelizeMetaNames from './sequelize-meta.json';
+import tasks from './tasks.json';
+
+async function fetchIetfLanguageTags(): Promise<any[]> {
+  try {
+    const res = await axios.get(config.services.ietfLocales.url);
+    mainLogger.info(`Fetched IETF language tags from ${config.services.ietfLocales.url}`);
+    if (res.status !== 200 || !res.data || res.data.length === 0 || !Object.hasOwn(res.data[0], 'locale')) {
+      throw new Error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
+    }
+    return res.data;
+  }
+  catch (error) {
+    mainLogger.error(`Failed to fetch IETF language tags from ${config.services.ietfLocales.url}: ${error}`);
+    throw new Error(`Failed to fetch IETF language tags: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
 
 type Superuser = {
   name: string;
@@ -12,31 +30,56 @@ type Superuser = {
 
 async function initDefaultData(db: KyselyDatabases) {
   await Promise.all(
-    ['languages', 'locales', 'nutrient_units', 'nutrient_types']
+    ['languages', 'locales', 'nutrient_units', 'nutrient_types', 'sequelizeMeta', 'tasks']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
 
   const locales = await db.foods.selectFrom('locales').selectAll().execute();
   if (locales.length) {
+    const ietfLanguageTags = await fetchIetfLanguageTags();
     const langs = new Set<string>();
     locales.forEach((locale) => {
       langs.add(locale.adminLanguageId);
       langs.add(locale.respondentLanguageId);
     });
 
-    // TODO: Fetch language details
+    const languageRows = Array.from(langs).map((code) => {
+      const ietf_locale = (ietfLanguageTags as Array<{ locale: string; language: any; country: any }>)
+        .find((tag) => {
+          return (tag.locale === code) || (tag.locale.split('-')[0] === code.split('-')[0]);
+        });
+
+      let englishName = code;
+      let localName = code;
+      if (code.includes('-')) {
+        englishName = ietf_locale?.language.countries.find((country: { code: string }) => country.code === code.split('-')[1])?.name || code;
+        localName = ietf_locale?.language.countries.find((country: { code: string }) => country.code === code.split('-')[1])?.name_local || code;
+      }
+      else {
+        englishName = ietf_locale?.language.name || code;
+        localName = ietf_locale?.language.name_local || code;
+      }
+      const localeWithLang = locales.find(
+        locale => locale.adminLanguageId === code || locale.respondentLanguageId === code,
+      );
+      const countryFlagCode = localeWithLang?.countryFlagCode ?? 'gb';
+      const textDirection = localeWithLang?.textDirection ?? 'ltr';
+
+      return {
+        code,
+        englishName,
+        localName,
+        countryFlagCode,
+        textDirection,
+        visibility: 'public',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    });
+
     await db.system
       .insertInto('languages')
-      .values(
-        Array.from(langs).map(code => ({
-          code,
-          englishName: code,
-          localName: code,
-          countryFlagCode: code.split('-').at(0) || code,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        })),
-      )
+      .values(languageRows)
       .execute();
 
     await db.system
@@ -65,6 +108,22 @@ async function initDefaultData(db: KyselyDatabases) {
   if (nutrientTypes.length) {
     await db.system.insertInto('nutrientTypes').values(nutrientTypes).execute();
   }
+
+  await db.system
+    .insertInto('sequelizeMeta')
+    .values(sequelizeMetaNames)
+    .execute();
+
+  await db.system
+    .insertInto('tasks')
+    .values(
+      tasks.map(task => ({
+        ...task,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })),
+    )
+    .execute();
 }
 
 async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
@@ -103,12 +162,25 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     .values({
       name: config.acl.roles.superuser,
       displayName: config.acl.roles.superuser,
+      description: 'Role gets assigned with all permissions created in system.',
       createdAt: new Date(),
       updatedAt: new Date(),
     })
     .returningAll()
     .executeTakeFirstOrThrow();
 
+  /*
+  * Set superuser role to admin user
+  */
+  await db.system
+    .insertInto('roleUser')
+    .values({
+      roleId: suRole.id,
+      userId: suUser.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .execute();
   /*
   * Populate permissions
   */

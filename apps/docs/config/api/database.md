@@ -24,9 +24,9 @@ System consists of two databases:
 
 Examples
 
-`DB_DEV_SYSTEM_URL=postgres://user:password@localhost:5432/intake24_system_dev`
+`DB_DEV_SYSTEM_URL=postgres://intake24:intake24@localhost:5432/intake24_system_dev`
 
-`DB_DEV_FOODS_URL=postgres://user:password@localhost:5432/intake24_foods_dev`
+`DB_DEV_FOODS_URL=postgres://intake24:intake24@localhost:5432/intake24_foods_dev`
 
 - object-path: `[environment][database].url`
 - dotenv vars:
