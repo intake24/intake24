@@ -1,19 +1,15 @@
-import type Config from './config';
-
+import type { FPIConfig } from './config';
 import { readFileSync } from 'node:fs';
-
 import { createArrayCsvWriter } from 'csv-writer';
 import { logger } from '@intake24/common-backend';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { Environment } from '@intake24/common/types';
-
 import {
   AsServedImage,
   AsServedSet,
   Database,
   databaseConfig,
   Food,
-
   FoodNutrient,
   FoodPortionSizeMethod,
   FoodsNutrientType,
@@ -26,7 +22,7 @@ import {
   NutrientTableRecordNutrient,
   ProcessedImage,
 } from '@intake24/db';
-import validate from './config.validator';
+import { fpiConfig } from './config';
 
 const energyKcalNutrientType = '1';
 
@@ -261,7 +257,7 @@ function calculateNutrients(
 }
 
 async function findPortionSizeImages(
-  config: Config,
+  config: FPIConfig,
   nutrientIds: string[],
 ): Promise<PortionSizeImages[]> {
   const asServedHelper = new AsServedHelper();
@@ -438,7 +434,7 @@ async function findPortionSizeImages(
   return portionSizeImages;
 }
 
-async function main(config: Config, outputFilePath: string) {
+async function main(config: FPIConfig, outputFilePath: string) {
   const db = new Database({
     databaseConfig,
     logger,
@@ -537,7 +533,7 @@ export type FindPortionImagesArgs = { config: string; output: string };
 
 export default async (cmd: FindPortionImagesArgs): Promise<void> => {
   const fileContents = readFileSync(cmd.config, { encoding: 'utf8' });
-  const config = validate(JSON.parse(fileContents));
+  const config = fpiConfig.parse(JSON.parse(fileContents));
 
   const now = new Date();
   const timeStamp = `${now.getDate().toString().padStart(2, '0')}${(now.getMonth() + 1)

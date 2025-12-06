@@ -151,7 +151,7 @@ export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
   logger.info('Initializing system databases...');
 
   const db = new KyselyDatabases({
-    environment: config.app.env,
+    environment: process.env.NODE_ENV as any || 'development',
     logger: mainLogger,
     databaseConfig: config.database,
   });

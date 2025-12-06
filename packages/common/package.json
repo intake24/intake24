@@ -21,8 +21,6 @@
   "dependencies": {
     "@anatine/zod-openapi": "^2.2.8",
     "@ts-rest/core": "^3.52.1",
-    "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
     "awesome-phonenumber": "^7.6.0",
     "cron-validator": "^1.4.0",
     "date-fns": "^4.1.0",
