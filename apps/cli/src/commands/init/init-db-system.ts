@@ -2,6 +2,22 @@ import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { defaultAlgorithm } from '@intake24/common-backend/util';
+import {
+  associatedFoodsPrompt,
+  editMealPrompt,
+  finalPrompt,
+  foodSearchPrompt,
+  infoPrompt,
+  mealAddPrompt,
+  mealGapPrompt,
+  mealTimePrompt,
+  missingFoodPrompt,
+  noMoreInformationPrompt,
+  portionSizePrompts,
+  readyMealPrompt,
+  submitPrompt,
+} from '@intake24/common/prompts';
+import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
 
 type Superuser = {
@@ -12,7 +28,7 @@ type Superuser = {
 
 async function initDefaultData(db: KyselyDatabases) {
   await Promise.all(
-    ['languages', 'locales', 'nutrient_units', 'nutrient_types']
+    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
 
@@ -65,6 +81,67 @@ async function initDefaultData(db: KyselyDatabases) {
   if (nutrientTypes.length) {
     await db.system.insertInto('nutrientTypes').values(nutrientTypes).execute();
   }
+
+  const prompts: RecallPrompts = {
+    preMeals: [
+      {
+        ...infoPrompt,
+        id: 'welcome',
+        i18n: {
+          name: { en: 'Welcome' },
+          description: { en: 'Welcome to the dietary survey.' },
+        },
+      },
+      mealAddPrompt,
+    ],
+    meals: {
+      preFoods: [
+        mealTimePrompt,
+        editMealPrompt,
+      ],
+      foods: [
+        ...portionSizePrompts,
+        foodSearchPrompt,
+        associatedFoodsPrompt,
+        missingFoodPrompt,
+        noMoreInformationPrompt,
+      ],
+      postFoods: [
+        readyMealPrompt,
+        noMoreInformationPrompt,
+      ],
+      foodsDeferred: [],
+    },
+    postMeals: [
+      mealGapPrompt,
+    ],
+    submission: [
+      {
+        ...submitPrompt,
+        i18n: {
+          name: { en: 'Submit' },
+          description: { en: 'You are about to submit your dietary survey.' },
+        },
+      },
+      {
+        ...finalPrompt,
+        i18n: {
+          name: { en: 'Complete' },
+          description: { en: 'Thank you for completing the dietary survey.' },
+        },
+      },
+    ],
+  };
+
+  await db.system.insertInto('surveySchemes').values({
+    name: 'Default',
+    settings: JSON.stringify(defaultSchemeSettings),
+    meals: JSON.stringify(defaultMeals),
+    prompts: JSON.stringify(prompts),
+    dataExport: JSON.stringify(defaultExport),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }).executeTakeFirst();
 }
 
 async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
