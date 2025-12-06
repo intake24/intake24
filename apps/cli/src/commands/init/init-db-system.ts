@@ -47,7 +47,7 @@ type Superuser = {
 
 async function initDefaultData(db: KyselyDatabases) {
   await Promise.all(
-    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes']
+    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'sequelizeMeta', 'tasks', 'surveySchemes']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
 
@@ -186,6 +186,22 @@ async function initDefaultData(db: KyselyDatabases) {
     createdAt: new Date(),
     updatedAt: new Date(),
   }).executeTakeFirst();
+
+  await db.system
+    .insertInto('sequelizeMeta')
+    .values(sequelizeMetaNames)
+    .execute();
+
+  await db.system
+    .insertInto('tasks')
+    .values(
+      tasks.map(task => ({
+        ...task,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })),
+    )
+    .execute();
 }
 
 async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
