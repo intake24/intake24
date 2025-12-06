@@ -10,6 +10,9 @@ export const baseEMProvider = z.object({
 export type BaseEMProvider = z.infer<typeof baseEMProvider>;
 
 export const servicesConfig = z.object({
+  ietfLocales: z.object({
+    url: z.string().url().default('https://cdn.simplelocalize.io/public/v1/locales'),
+  }),
   captcha: z.object({
     provider: z.enum(captchaProviders).nullable().default(null),
     secret: z.string().default(''),
@@ -51,8 +54,12 @@ export type ServicesConfig = z.infer<typeof servicesConfig>;
 export type CaptchaConfig = ServicesConfig['captcha'];
 export type WebPushConfig = ServicesConfig['webPush'];
 export type CommsConfig = ServicesConfig['comms'];
+export type IetfLocalesConfig = ServicesConfig['ietfLocales'];
 
 export default servicesConfig.parse({
+  ietfLocales: {
+    url: process.env.IETF_LANGUAGE_TAG_URL,
+  },
   captcha: {
     provider: process.env.CAPTCHA_PROVIDER,
     secret: process.env.CAPTCHA_SECRET,

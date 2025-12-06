@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@css-inline/css-inline": "^0.18.0",
+    "axios": "^1.13.2",
     "commander": "^14.0.2",
     "csv-parser": "^3.2.0",
     "csv-writer": "^1.6.0",

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
@@ -19,7 +20,23 @@ import {
 } from '@intake24/common/prompts';
 import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
-import ietfLanguageTags from './ietf-language-tags.json';
+import sequelizeMetaNames from './sequelize-meta.json';
+import tasks from './tasks.json';
+
+async function fetchIetfLanguageTags(): Promise<any[]> {
+  try {
+    const res = await axios.get(config.services.ietfLocales.url);
+    mainLogger.info(`Fetched IETF language tags from ${config.services.ietfLocales.url}`);
+    if (res.status !== 200 || !res.data || res.data.length === 0 || !Object.hasOwn(res.data[0], 'locale')) {
+      throw new Error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
+    }
+    return res.data;
+  }
+  catch (error) {
+    mainLogger.error(`Failed to fetch IETF language tags from ${config.services.ietfLocales.url}: ${error}`);
+    throw new Error(`Failed to fetch IETF language tags: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
 
 type Superuser = {
   name: string;
@@ -29,12 +46,13 @@ type Superuser = {
 
 async function initDefaultData(db: KyselyDatabases) {
   await Promise.all(
-    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes']
+    ['languages', 'locales', 'nutrient_units', 'nutrient_types']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
 
   const locales = await db.foods.selectFrom('locales').selectAll().execute();
   if (locales.length) {
+    const ietfLanguageTags = await fetchIetfLanguageTags();
     const langs = new Set<string>();
     locales.forEach((locale) => {
       langs.add(locale.adminLanguageId);
@@ -106,67 +124,6 @@ async function initDefaultData(db: KyselyDatabases) {
   if (nutrientTypes.length) {
     await db.system.insertInto('nutrientTypes').values(nutrientTypes).execute();
   }
-
-  const prompts: RecallPrompts = {
-    preMeals: [
-      {
-        ...infoPrompt,
-        id: 'welcome',
-        i18n: {
-          name: { en: 'Welcome' },
-          description: { en: 'Welcome to the dietary survey.' },
-        },
-      },
-      mealAddPrompt,
-    ],
-    meals: {
-      preFoods: [
-        mealTimePrompt,
-        editMealPrompt,
-      ],
-      foods: [
-        ...portionSizePrompts,
-        foodSearchPrompt,
-        associatedFoodsPrompt,
-        missingFoodPrompt,
-        noMoreInformationPrompt,
-      ],
-      postFoods: [
-        readyMealPrompt,
-        noMoreInformationPrompt,
-      ],
-      foodsDeferred: [],
-    },
-    postMeals: [
-      mealGapPrompt,
-    ],
-    submission: [
-      {
-        ...submitPrompt,
-        i18n: {
-          name: { en: 'Submit' },
-          description: { en: 'You are about to submit your dietary survey.' },
-        },
-      },
-      {
-        ...finalPrompt,
-        i18n: {
-          name: { en: 'Complete' },
-          description: { en: 'Thank you for completing the dietary survey.' },
-        },
-      },
-    ],
-  };
-
-  await db.system.insertInto('surveySchemes').values({
-    name: 'Default',
-    settings: JSON.stringify(defaultSchemeSettings),
-    meals: JSON.stringify(defaultMeals),
-    prompts: JSON.stringify(prompts),
-    dataExport: JSON.stringify(defaultExport),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }).executeTakeFirst();
 }
 
 async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
