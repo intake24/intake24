@@ -3,19 +3,6 @@
   "labels": ["dependencies"],
   "pin": false,
   "packageRules": [
-    // Ignore major
-    {
-      "matchPackageNames": [
-        // Breaking changes
-        "execa", // ESM-only since 6.x.x
-        "formdata-node", // ESM-only since 5.x.x
-        "nanoid", // ESM-only since 4.x.x
-        "p-limit", // ESM-only since 4.x.x
-        "p-queue" // ESM-only since 7.x.x
-      ],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    },
     // Typescript (major/minor)
     {
       "matchPackageNames": ["typescript"],
@@ -31,9 +18,5 @@
       "groupSlug": "all-minor-patch"
     }
   ],
-  "rangeStrategy": "bump",
-  "ignoreDeps": [
-    // Manual
-    "node"
-  ]
+  "rangeStrategy": "bump"
 }

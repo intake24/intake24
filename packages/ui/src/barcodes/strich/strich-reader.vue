@@ -124,12 +124,14 @@ async function initReader() {
       },
     });
     await barcodeReader.initialize();
-    barcodeReader.detected = async (codeDetections) => {
+    barcodeReader.detected = (codeDetections) => {
       const barcode = codeDetections[0].data;
       if (!barcode)
         return;
 
-      await toggleTorch(false);
+      toggleTorch(false).catch((error) => {
+        console.error('Error turning off torch after detection', error);
+      });
       emit('detected', barcode);
       close();
     };

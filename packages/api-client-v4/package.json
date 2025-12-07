@@ -11,11 +11,11 @@
   "dependencies": {
     "axios": "^1.13.2",
     "cookie": "^1.1.1",
-    "formdata-node": "4.4.1",
+    "formdata-node": "6.0.3",
     "lodash": "^4.17.21",
     "mime-types": "^3.0.2",
-    "p-queue": "^6.6.2",
-    "winston": "^3.18.3"
+    "p-queue": "^9.0.1",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.21",

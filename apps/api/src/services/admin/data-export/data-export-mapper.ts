@@ -9,7 +9,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { ExportSectionId } from '@intake24/common/surveys';
 
 export type ExportFieldTransformCallback<T = ExportRow> = (
-  field: ExportField
+  field: ExportField,
 ) => ExportFieldTransform<T>;
 
 export const userCustomFieldValue: ExportFieldTransformCallback

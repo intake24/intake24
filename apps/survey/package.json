@@ -45,10 +45,10 @@
     "vue-gtag": "^3.6.3",
     "vue-i18n": "^11.2.2",
     "vue-router": "^4.6.3",
-    "vuetify": "^3.11.0"
+    "vuetify": "^3.11.2"
   },
   "devDependencies": {
-    "@iconify-json/fluent": "^1.2.35",
+    "@iconify-json/fluent": "^1.2.36",
     "@iconify-json/game-icons": "^1.2.3",
     "@intlify/unplugin-vue-i18n": "^11.0.1",
     "@tsconfig/node22": "^22.0.5",
@@ -63,7 +63,7 @@
     "jsdom": "^27.2.0",
     "sass": "^1.94.2",
     "terser": "^5.44.1",
-    "type-fest": "^5.3.0",
+    "type-fest": "^5.3.1",
     "typescript": "^5.9.3",
     "unplugin-icons": "^22.5.0",
     "unplugin-vue-components": "^30.0.0",
@@ -74,7 +74,7 @@
     "vite-plugin-vue-devtools": "^8.0.5",
     "vite-plugin-vuetify": "^2.1.2",
     "vite-plugin-webfont-dl": "^3.11.1",
-    "vitest": "^3.2.4",
+    "vitest": "^4.0.15",
     "vue-tsc": "^3.1.5",
     "workbox-window": "^7.4.0",
     "zod": "^3.25.76"

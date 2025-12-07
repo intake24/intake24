@@ -42,6 +42,12 @@ export default await antfu({
       order: 'asc',
       type: 'natural',
     }],
+
+    // TODO: migrate to pnpm catalog and enable
+    'pnpm/json-enforce-catalog': 'off',
+    'pnpm/json-prefer-workspace-settings': 'off',
+    'pnpm/json-valid-catalog': 'off',
+
     'style/quote-props': ['error', 'as-needed'],
     'style/member-delimiter-style': ['error', { multiline: { delimiter: 'semi' }, singleline: { delimiter: 'semi' } }],
     'ts/ban-types': 'off',
