@@ -42,7 +42,7 @@ export default async (cmd: InitEnvArgs): Promise<void> => {
     const envFilePath = path.join(app.path, '.env');
     const envFileExists = await fs.pathExists(envFilePath);
     if (envFileExists && !cmd.force) {
-      console.warn(`Env file '.env' already exists for '${app.name}' application.`);
+      process.stdout.write(`Env file '.env' already exists for '${app.name}' application.\n`);
       return;
     }
 

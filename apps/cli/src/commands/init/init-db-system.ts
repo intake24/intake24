@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
-import { logger as mainLogger } from '@intake24/common-backend/services/logger';
+import { logger, logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { defaultAlgorithm } from '@intake24/common-backend/util';
 import {
   associatedFoodsPrompt,
@@ -26,15 +26,16 @@ import tasks from './tasks.json';
 async function fetchIetfLanguageTags(): Promise<any[]> {
   try {
     const res = await axios.get(config.services.ietfLocales.url);
-    mainLogger.info(`Fetched IETF language tags from ${config.services.ietfLocales.url}`);
+    process.stdout.write(`Fetched IETF language tags from ${config.services.ietfLocales.url}\n`);
     if (res.status !== 200 || !res.data || res.data.length === 0 || !Object.hasOwn(res.data[0], 'locale')) {
-      throw new Error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
+      process.stdout.write(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
+      throw new Error('Invalid response or response payload for IETF language tags.');
     }
     return res.data;
   }
   catch (error) {
-    mainLogger.error(`Failed to fetch IETF language tags from ${config.services.ietfLocales.url}: ${error}`);
-    throw new Error(`Failed to fetch IETF language tags: ${error instanceof Error ? error.message : String(error)}`);
+    process.stdout.write(`Failed to fetch IETF language tags from ${config.services.ietfLocales.url}.\n`);
+    throw error;
   }
 }
 
@@ -219,8 +220,7 @@ export type InitDbSystemArgs = {
 };
 
 export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
-  const logger = mainLogger.child({ service: 'Init:db:system' });
-  logger.info('Initializing system databases...');
+  process.stdout.write('Initializing system databases...\n');
 
   const db = new KyselyDatabases({
     environment: process.env.NODE_ENV as any || 'development',
@@ -233,7 +233,7 @@ export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
     await initAccessControl(db, superuser);
     await initDefaultData(db);
 
-    logger.info('System databases initialized successfully.');
+    process.stdout.write('System databases initialized successfully.');
   }
   catch (error) {
     logger.error('Error initializing system databases:', error);

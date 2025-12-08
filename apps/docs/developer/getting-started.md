@@ -66,7 +66,7 @@ This will create `.env` files under `apps/api`, `apps/admin` and `apps/frontend`
 To populate the system database only, you can run
 
 ```sh
-pnpm cli init:db-system
+pnpm cli init:db:system
 ```
 
 This will populate the system database with default data only. Follow the prompts to set up the admin user account.
@@ -106,8 +106,10 @@ The Intake24 frontend (survey) application should be running on `http://localhos
 Food images are not included in the database snapshots. Run the following command to download and extract the images:
 
 ```sh
-pnpm cli init:food-images --url https://storage.googleapis.com/intake24/images/intake24-images-MRC-LIVE-19112025.zip
+pnpm cli init:food-images https://storage.googleapis.com/intake24/images/intake24-images-MRC-LIVE-19112025.zip
 ```
+
+If you have downloaded the image archive to local PC, you can extract to `apps/api/storage/public/images` directly.
 
 :::warning
 Please note that currently the image arcihive is quite large (~18GB) and the download may take significant time and disk space.
