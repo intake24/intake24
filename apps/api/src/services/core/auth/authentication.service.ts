@@ -228,8 +228,13 @@ function authenticationService({
         throw new UnauthorizedError('Provided credentials do not match our records.');
       }
 
-      if (!permissions?.includes(surveyRespondent(surveyId)))
-        throw new UnauthorizedError('Provided credentials do not match our records.');
+      if (!permissions?.includes(surveyRespondent(surveyId))) {
+        await signInService.log({
+          ...signInAttempt,
+          message: `Missing permission for survey access (${surveyId}).`,
+        });
+        throw new UnauthorizedError('Missing permission for survey access.');
+      }
 
       if (authCaptcha) {
         try {
@@ -239,6 +244,7 @@ function authenticationService({
           else await captchaCheck(captcha, servicesConfig.captcha);
         }
         catch {
+          await signInService.log({ ...signInAttempt, message: `Invalid CAPTCHA challenge.` });
           throw new UnauthorizedError('Invalid CAPTCHA challenge.');
         }
       }
