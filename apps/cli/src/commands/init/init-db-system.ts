@@ -21,7 +21,6 @@ import {
 import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
 import sequelizeMetaNames from './sequelize-meta.json';
-import tasks from './tasks.json';
 
 async function fetchIetfLanguageTags(): Promise<any[]> {
   try {
@@ -46,7 +45,7 @@ type Superuser = {
 
 async function initDefaultData(db: KyselyDatabases) {
   await Promise.all(
-    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'sequelizeMeta', 'tasks', 'surveySchemes']
+    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'sequelizeMeta', 'surveySchemes']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
 
@@ -189,17 +188,6 @@ async function initDefaultData(db: KyselyDatabases) {
   await db.system
     .insertInto('sequelizeMeta')
     .values(sequelizeMetaNames)
-    .execute();
-
-  await db.system
-    .insertInto('tasks')
-    .values(
-      tasks.map(task => ({
-        ...task,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })),
-    )
     .execute();
 }
 

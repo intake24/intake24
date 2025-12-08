@@ -28,7 +28,6 @@ export default async (cmd: InitEnvArgs): Promise<void> => {
       replacements: [{ key: 'WEBPUSH_PUBLIC_KEY', value: vapidKeys.publicKey }],
     },
     { name: 'Survey', path: '../survey', replacements: [] },
-    { name: 'CLI', path: '../cli', replacements: [] },
   ];
 
   for (const app of apps) {
