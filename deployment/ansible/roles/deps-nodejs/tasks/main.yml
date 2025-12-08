@@ -6,7 +6,7 @@
 
 - name: Add Node.js repository
   apt_repository:
-    repo: 'deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main'
+    repo: 'deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main'
     state: present
     filename: nodesource
     mode: '644'
