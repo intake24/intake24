@@ -4,7 +4,7 @@ import { Readable, Transform } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import fs from 'fs-extra';
 import unzipper from 'unzipper';
-import config from '@intake24/api/config';
+import config from '@intake24/cli/config';
 
 export type InitFoodImagesArgs = { url: string };
 
