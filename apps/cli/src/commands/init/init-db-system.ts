@@ -3,7 +3,7 @@ import axios from 'axios';
 import fs from 'fs-extra';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
-import { logger, logger as mainLogger } from '@intake24/common-backend/services/logger';
+import { logger } from '@intake24/common-backend/services/logger';
 import { defaultAlgorithm } from '@intake24/common-backend/util';
 import {
   associatedFoodsPrompt,
@@ -30,15 +30,16 @@ type SequelizeMeta = {
 async function fetchIetfSequelizeMetaNames(): Promise<SequelizeMeta[]> {
   try {
     const res = await axios.get(config.services.sequelizeMeta.url);
-    process.stdout.write(`Fetched current sequelize meta names from ${config.services.sequelizeMeta.url}\n`);
+    console.log(`Fetched current sequelize meta names from ${config.services.sequelizeMeta.url}`);
     if (res.status !== 200 || !res.data || res.data.length === 0 || !Object.hasOwn(res.data[0], 'name')) {
-      process.stdout.write(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
+      console.error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
       throw new Error('Invalid response or response payload for sequelize meta names.');
     }
     return res.data;
   }
   catch (error) {
-    process.stdout.write(`Failed to fetch current sequelize meta names from ${config.services.sequelizeMeta.url}.\n`);
+    console.error(`Failed to fetch current sequelize meta names from ${config.services.sequelizeMeta.url}.`);
+    console.error((error as Error).message);
     throw error;
   }
 }
@@ -68,15 +69,16 @@ type IetfLanguageTag = {
 async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
   try {
     const res = await axios.get(config.services.ietfLocales.url);
-    process.stdout.write(`Fetched IETF language tags from ${config.services.ietfLocales.url}\n`);
+    console.log(`Fetched IETF language tags from ${config.services.ietfLocales.url}`);
     if (res.status !== 200 || !res.data || res.data.length === 0) {
-      process.stdout.write(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
+      console.error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
       throw new Error('Invalid response or response payload for IETF language tags.');
     }
     return res.data as IetfLanguageTag[];
   }
   catch (error) {
-    process.stdout.write(`Error in fetching and parsing IETF language tags from ${config.services.ietfLocales.url}.\n`);
+    console.error(`Error in fetching and parsing IETF language tags from ${config.services.ietfLocales.url}.`);
+    console.error((error as Error).message);
     throw error;
   }
 }
@@ -87,7 +89,7 @@ type Superuser = {
 };
 
 async function initDefaultData(db: KyselyDatabases) {
-  process.stdout.write('Initializing default data...\n');
+  console.log('Initializing default data...');
   await Promise.all(
     ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'sequelizeMeta', 'surveySchemes']
       .map(table => db.system.deleteFrom(table as any).execute()),
@@ -346,11 +348,11 @@ export type InitDbSystemArgs = {
 };
 
 export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
-  process.stdout.write('Initializing system databases...\n');
+  console.log('Initializing system databases...');
 
   const db = new KyselyDatabases({
     environment: process.env.NODE_ENV as any || 'development',
-    logger: mainLogger,
+    logger,
     databaseConfig: config.database,
   });
 
@@ -359,10 +361,10 @@ export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
     await initAccessControl(db, superuser);
     await initDefaultData(db);
 
-    process.stdout.write('System databases initialized successfully.');
+    console.log('System databases initialized successfully.');
   }
   catch (error) {
-    logger.error('Error initializing system databases:', error);
+    console.error('Error initializing system databases:', error);
     throw error;
   }
   finally {
