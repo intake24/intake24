@@ -44,10 +44,9 @@ docker compose up -d
 
 #### 4. Initialise the CLI application
 
-on project root folder, run below command to initialise the CLI application first.
+on project root folder, run below command to build the CLI application under `apps/cli` folder using development configuration
 
 ```sh
-pnpm cli:first-run
 pnpm cli:dev
 ```
 
@@ -61,15 +60,19 @@ on project root folder, run below command
 pnpm cli init:env
 ```
 
-This will create `.env` files under `apps/api`, `apps/admin` and `apps/frontend` folders, and populate the system database with default data. You can also use `-f` flag to force overwrite existing `.env` files if any.
-
-To populate the system database only, you can run
+This will create `.env` files under `apps/api`, `apps/admin` and `apps/survey` folders, and populate the system database with default data. You can also use `-f` flag to force overwrite existing `.env` files if any.
 
 ```sh
 pnpm cli init:db:system
 ```
 
 This will populate the system database with default data only. Follow the prompts to set up the admin user account.
+
+If the system database snapshot is not-to-date with the codebase, you may need to run database migrations to bring the database schema up-to-date by running below command on project root folder:
+
+```sh
+pnpm db:system:migrate
+```
 
 #### 6. Start API server
 
@@ -93,7 +96,7 @@ The Intake24 admin tool application should be running on `http://localhost:8100`
 
 #### 8. Start Intake24 frontend (survey) application
 
-On `apps/frontend` folder, run
+On `apps/survey` folder, run
 
 ```sh
 pnpm dev

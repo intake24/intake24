@@ -565,9 +565,6 @@ importers:
       '@css-inline/css-inline':
         specifier: ^0.18.0
         version: 0.18.0
-      ajv:
-        specifier: ^8.17.1
-        version: 8.17.1
       axios:
         specifier: ^1.13.2
         version: 1.13.2(debug@4.4.3)
