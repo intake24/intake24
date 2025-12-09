@@ -10,6 +10,9 @@ export const baseEMProvider = z.object({
 export type BaseEMProvider = z.infer<typeof baseEMProvider>;
 
 export const servicesConfig = z.object({
+  sequelizeMeta: z.object({
+    url: z.string().default('https://storage.googleapis.com/intake24/snapshots/sequelize-meta.json'),
+  }),
   ietfLocales: z.object({
     url: z.string().url().default('https://cdn.simplelocalize.io/public/v1/locales'),
   }),
@@ -55,8 +58,12 @@ export type CaptchaConfig = ServicesConfig['captcha'];
 export type WebPushConfig = ServicesConfig['webPush'];
 export type CommsConfig = ServicesConfig['comms'];
 export type IetfLocalesConfig = ServicesConfig['ietfLocales'];
+export type sequelizeMetaConfig = ServicesConfig['sequelizeMeta'];
 
 export default servicesConfig.parse({
+  sequelizeMeta: {
+    url: process.env.SEQUELIZE_META_URL,
+  },
   ietfLocales: {
     url: process.env.IETF_LANGUAGE_TAG_URL,
   },
