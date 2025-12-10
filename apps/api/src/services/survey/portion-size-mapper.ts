@@ -1,7 +1,5 @@
-import { randomUUID } from 'node:crypto';
-
 import type { PortionSizeStates } from '@intake24/common/surveys';
-import type { SurveySubmissionPortionSizeFieldCreationAttributes } from '@intake24/db';
+import type { Dictionary } from '@intake24/common/types';
 
 function parseUrlPathname(url?: string | null) {
   if (!url)
@@ -15,36 +13,34 @@ function parseUrlPathname(url?: string | null) {
   }
 }
 
-export function genericMapper<T extends keyof PortionSizeStates>(foodId: string, state: PortionSizeStates[T]): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function genericMapper<T extends keyof PortionSizeStates>(state: PortionSizeStates[T]): Dictionary {
   const { method, ...rest } = state;
 
-  return Object.entries(rest).map(([name, value]) => ({
-    id: randomUUID(),
-    foodId,
-    name,
-    value: value?.toString() ?? '',
-  }));
+  return Object.entries(rest).reduce<Dictionary>((acc, [name, value]) => {
+    acc[name] = value?.toString() ?? '';
+    return acc;
+  }, {});
 }
 
-export function asServedMapper(foodId: string, state: PortionSizeStates['as-served']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function asServedMapper(state: PortionSizeStates['as-served']): Dictionary {
   const { leftoversWeight, servingWeight, serving, leftovers, linkedQuantity, quantity } = state;
 
-  return [
-    { name: 'leftovers', value: (!!leftovers).toString() },
-    { name: 'leftoversImage', value: parseUrlPathname(leftovers?.imageUrl) },
-    { name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
-    { name: 'linkedQuantity', value: linkedQuantity.toString() },
-    { name: 'servingImage', value: parseUrlPathname(serving?.imageUrl) },
-    { name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
-    { name: 'quantity', value: quantity.toString() },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    leftovers: (!!leftovers).toString(),
+    leftoversImage: parseUrlPathname(leftovers?.imageUrl),
+    'leftovers-image-set': leftovers?.asServedSetId ?? '',
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    leftoversChoiceIndex: leftovers?.index?.toString() ?? '',
+    linkedQuantity: linkedQuantity.toString(),
+    servingImage: parseUrlPathname(serving?.imageUrl),
+    'serving-image-set': serving?.asServedSetId ?? '',
+    servingWeight: servingWeight?.toString() ?? '0',
+    servingChoiceIndex: serving?.index?.toString() ?? '',
+    quantity: quantity.toString(),
+  };
 }
 
-export function cerealMapper(foodId: string, state: PortionSizeStates['cereal']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function cerealMapper(state: PortionSizeStates['cereal']): Dictionary {
   const {
     type,
     bowl,
@@ -57,35 +53,35 @@ export function cerealMapper(foodId: string, state: PortionSizeStates['cereal'])
     leftovers,
   } = state;
 
-  return [
-    { name: 'bowl', value: bowl ?? '' },
-    { name: 'bowlId', value: bowlId?.toString() ?? '' },
-    { name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
-    { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
-    { name: 'leftovers', value: (!!leftovers).toString() },
-    { name: 'leftoversImage', value: parseUrlPathname(leftovers?.imageUrl) },
-    { name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
-    { name: 'servingImage', value: parseUrlPathname(serving?.imageUrl) },
-    { name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
-    { name: 'type', value: type },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    bowl: bowl ?? '',
+    bowlId: bowlId?.toString() ?? '',
+    bowlIndex: bowlIndex?.toString() ?? '',
+    imageUrl: parseUrlPathname(imageUrl),
+    leftovers: (!!leftovers).toString(),
+    leftoversImage: parseUrlPathname(leftovers?.imageUrl),
+    'leftovers-image-set': leftovers?.asServedSetId ?? '',
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    leftoversChoiceIndex: leftovers?.index?.toString() ?? '',
+    servingImage: parseUrlPathname(serving?.imageUrl),
+    'serving-image-set': serving?.asServedSetId ?? '',
+    servingWeight: servingWeight?.toString() ?? '0',
+    servingChoiceIndex: serving?.index?.toString() ?? '',
+    type,
+  };
 }
 
-export function directWeightMapper(foodId: string, state: PortionSizeStates['direct-weight']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function directWeightMapper(state: PortionSizeStates['direct-weight']): Dictionary {
   const { leftoversWeight, servingWeight, quantity } = state;
 
-  return [
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { name: 'quantity', value: quantity?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    servingWeight: servingWeight?.toString() ?? '0',
+    quantity: quantity?.toString() ?? '0',
+  };
 }
 
-export function drinkScaleMapper(foodId: string, state: PortionSizeStates['drink-scale']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function drinkScaleMapper(state: PortionSizeStates['drink-scale']): Dictionary {
   const {
     containerId,
     containerIndex,
@@ -101,23 +97,23 @@ export function drinkScaleMapper(foodId: string, state: PortionSizeStates['drink
     quantity,
   } = state;
 
-  return [
-    { name: 'containerId', value: containerId ?? '' },
-    { name: 'containerIndex', value: containerIndex?.toString() ?? '' },
-    { name: 'quantity', value: quantity.toString() },
-    { name: 'drinkware-id', value: drinkwareId },
-    { name: 'fillLevel', value: fillLevel.toString() },
-    { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
-    { name: 'initial-fill-level', value: initialFillLevel.toString() },
-    { name: 'leftovers', value: leftovers.toString() },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'leftoversLevel', value: leftoversLevel.toString() },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { name: 'skip-fill-level', value: skipFillLevel.toString() },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    containerId: containerId ?? '',
+    containerIndex: containerIndex?.toString() ?? '',
+    'drinkware-id': drinkwareId,
+    fillLevel: fillLevel.toString(),
+    imageUrl: parseUrlPathname(imageUrl),
+    'initial-fill-level': initialFillLevel.toString(),
+    leftovers: leftovers.toString(),
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    leftoversLevel: leftoversLevel.toString(),
+    servingWeight: servingWeight?.toString() ?? '0',
+    'skip-fill-level': skipFillLevel.toString(),
+    quantity: quantity.toString(),
+  };
 }
 
-export function guideImageMapper(foodId: string, state: PortionSizeStates['guide-image']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function guideImageMapper(state: PortionSizeStates['guide-image']): Dictionary {
   const {
     guideImageId,
     imageUrl,
@@ -130,42 +126,42 @@ export function guideImageMapper(foodId: string, state: PortionSizeStates['guide
     servingWeight,
   } = state;
 
-  return [
-    { name: 'guide-image-id', value: guideImageId },
-    { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'linkedQuantity', value: linkedQuantity.toString() },
-    { name: 'objectId', value: objectId ?? '' },
-    { name: 'objectIndex', value: objectIndex?.toString() ?? '' },
-    { name: 'objectWeight', value: objectWeight.toString() },
-    { name: 'quantity', value: quantity.toString() },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    'guide-image-id': guideImageId,
+    imageUrl: parseUrlPathname(imageUrl),
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    linkedQuantity: linkedQuantity.toString(),
+    objectId: objectId ?? '',
+    objectIndex: objectIndex?.toString() ?? '',
+    objectWeight: objectWeight.toString(),
+    quantity: quantity.toString(),
+    servingWeight: servingWeight?.toString() ?? '0',
+  };
 }
 
-export function milkInAHotDrinkMapper(foodId: string, state: PortionSizeStates['milk-in-a-hot-drink']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function milkInAHotDrinkMapper(state: PortionSizeStates['milk-in-a-hot-drink']): Dictionary {
   const { leftoversWeight, servingWeight, milkPartIndex, milkVolumePercentage } = state;
 
-  return [
-    { name: 'milkPartIndex', value: milkPartIndex?.toString() ?? '' },
-    { name: 'milkVolumePercentage', value: milkVolumePercentage?.toString() ?? '' },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    milkPartIndex: milkPartIndex?.toString() ?? '',
+    milkVolumePercentage: milkVolumePercentage?.toString() ?? '',
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    servingWeight: servingWeight?.toString() ?? '0',
+  };
 }
 
-export function parentFoodPortionMapper(foodId: string, state: PortionSizeStates['parent-food-portion']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function parentFoodPortionMapper(state: PortionSizeStates['parent-food-portion']): Dictionary {
   const { leftoversWeight, servingWeight, portionIndex, portionValue } = state;
 
-  return [
-    { name: 'portionIndex', value: portionIndex?.toString() ?? '' },
-    { name: 'portionValue', value: portionValue?.toString() ?? '' },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    portionIndex: portionIndex?.toString() ?? '',
+    portionValue: portionValue?.toString() ?? '',
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    servingWeight: servingWeight?.toString() ?? '0',
+  };
 }
 
-export function milkOnCerealMapper(foodId: string, state: PortionSizeStates['milk-on-cereal']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function milkOnCerealMapper(state: PortionSizeStates['milk-on-cereal']): Dictionary {
   const {
     bowl,
     bowlId,
@@ -178,77 +174,77 @@ export function milkOnCerealMapper(foodId: string, state: PortionSizeStates['mil
     servingWeight,
   } = state;
 
-  return [
-    { name: 'bowl', value: bowl ?? '' },
-    { name: 'bowlId', value: bowlId ?? '' },
-    { name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
-    { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
-    { name: 'milkLevelId', value: milkLevelId ?? '' },
-    { name: 'milkLevelChoice', value: milkLevelIndex?.toString() ?? '' },
-    { name: 'milkLevelImage', value: milkLevelImage ?? '' },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    bowl: bowl ?? '',
+    bowlId: bowlId ?? '',
+    bowlIndex: bowlIndex?.toString() ?? '',
+    imageUrl: parseUrlPathname(imageUrl),
+    milkLevelId: milkLevelId ?? '',
+    milkLevelChoice: milkLevelIndex?.toString() ?? '',
+    milkLevelImage: milkLevelImage ?? '',
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    servingWeight: servingWeight?.toString() ?? '0',
+  };
 }
 
-export function pizzaPortionMapper(foodId: string, state: PortionSizeStates['pizza']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function pizzaPortionMapper(state: PortionSizeStates['pizza']): Dictionary {
   const { type, thickness, slice, leftoversWeight, servingWeight } = state;
 
-  return [
-    { name: 'typeId', value: type.id ?? '' },
-    { name: 'typeIndex', value: type.index?.toString() ?? '' },
-    { name: 'typeImage', value: parseUrlPathname(type.image) },
-    { name: 'thicknessId', value: thickness.id ?? '' },
-    { name: 'thicknessIndex', value: thickness.index?.toString() ?? '' },
-    { name: 'thicknessImage', value: parseUrlPathname(type.image) },
-    { name: 'sliceId', value: slice.id ?? '' },
-    { name: 'sliceIndex', value: slice.index?.toString() ?? '' },
-    { name: 'sliceImage', value: parseUrlPathname(slice.image) },
-    { name: 'sliceQuantity', value: slice.quantity?.toString() ?? '' },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    typeId: type.id ?? '',
+    typeIndex: type.index?.toString() ?? '',
+    typeImage: parseUrlPathname(type.image),
+    thicknessId: thickness.id ?? '',
+    thicknessIndex: thickness.index?.toString() ?? '',
+    thicknessImage: parseUrlPathname(type.image),
+    sliceId: slice.id ?? '',
+    sliceIndex: slice.index?.toString() ?? '',
+    sliceImage: parseUrlPathname(slice.image),
+    sliceQuantity: slice.quantity?.toString() ?? '',
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    servingWeight: servingWeight?.toString() ?? '0',
+  };
 }
 
-export function pizzaV2PortionMapper(foodId: string, state: PortionSizeStates['pizza-v2']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function pizzaV2PortionMapper(state: PortionSizeStates['pizza-v2']): Dictionary {
   const { size, crust, unit, quantity, leftoversWeight, servingWeight } = state;
 
-  return [
-    { name: 'size', value: size?.toString() ?? '' },
-    { name: 'crust', value: crust?.toString() ?? '' },
-    { name: 'unit', value: unit?.toString() ?? '' },
-    { name: 'quantity', value: quantity.toString() },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    size: size?.toString() ?? '',
+    crust: crust?.toString() ?? '',
+    unit: unit?.toString() ?? '',
+    quantity: quantity.toString(),
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    servingWeight: servingWeight?.toString() ?? '0',
+  };
 }
 
-export function standardPortionMapper(foodId: string, state: PortionSizeStates['standard-portion']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function standardPortionMapper(state: PortionSizeStates['standard-portion']): Dictionary {
   const { linkedQuantity, quantity, unit, leftoversWeight, servingWeight } = state;
 
-  return [
-    { name: 'linkedQuantity', value: linkedQuantity.toString() },
-    { name: 'quantity', value: quantity.toString() },
-    { name: 'unitName', value: unit?.name ?? '' },
-    { name: 'unitWeight', value: unit?.weight.toString() ?? '' },
-    { name: 'unitOmitFoodDescription', value: unit?.omitFoodDescription.toString() ?? '' },
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    linkedQuantity: linkedQuantity.toString(),
+    quantity: quantity.toString(),
+    unitName: unit?.name ?? '',
+    unitWeight: unit?.weight.toString() ?? '',
+    unitOmitFoodDescription: unit?.omitFoodDescription.toString() ?? '',
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    servingWeight: servingWeight?.toString() ?? '0',
+  };
 }
 
-export function unknownMapper(foodId: string, state: PortionSizeStates['unknown']): SurveySubmissionPortionSizeFieldCreationAttributes[] {
+export function unknownMapper(state: PortionSizeStates['unknown']): Dictionary {
   const { leftoversWeight, servingWeight } = state;
 
-  return [
-    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ].map(psm => ({ ...psm, id: randomUUID(), foodId }));
+  return {
+    leftoversWeight: leftoversWeight?.toString() ?? '0',
+    servingWeight: servingWeight?.toString() ?? '0',
+  };
 }
 
 export const portionSizeMappers: Record<
   keyof PortionSizeStates,
-  (...arg: any[]) => SurveySubmissionPortionSizeFieldCreationAttributes[]
+  (...arg: any[]) => Dictionary
 > = {
   'as-served': asServedMapper,
   cereal: cerealMapper,

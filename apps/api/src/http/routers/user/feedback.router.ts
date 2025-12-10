@@ -91,41 +91,11 @@ export function feedback() {
         topCount: true,
         include: [
           {
-            association: 'customFields',
-            attributes: ['name', 'value'],
-          },
-          {
             association: 'meals',
             include: [
               {
-                association: 'customFields',
-                attributes: ['name', 'value'],
-              },
-              {
                 association: 'foods',
                 separate: true,
-                include: [
-                  {
-                    association: 'customFields',
-                    attributes: ['name', 'value'],
-                    separate: true,
-                  },
-                  {
-                    association: 'fields',
-                    attributes: ['fieldName', 'value'],
-                    separate: true,
-                  },
-                  {
-                    association: 'nutrients',
-                    attributes: ['amount', 'nutrientTypeId'],
-                    separate: true,
-                  },
-                  {
-                    association: 'portionSizes',
-                    attributes: ['name', 'value'],
-                    separate: true,
-                  },
-                ],
               },
               {
                 association: 'missingFoods',
