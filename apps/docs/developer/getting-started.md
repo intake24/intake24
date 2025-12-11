@@ -5,11 +5,125 @@
 Steps to getting a local instance running
 
 - Setup the database
-  - Method 1 (prefered): Execute Docker compose file `docker/docker-compose.yml` to prepare PostgresQL and Redis instances, and map out port 5432 and 6379 respectively by default.
+  - Method 1 (prefered): Execute Docker compose file `docker-compose.yml` to prepare PostgresQL and Redis instances, and map out port 5432 and 6379 respectively by default.
   - Method 2: Run Dev VM (download from S3 bucket - contact the Intake24 team), which maps out the database on 192.168.56.10:5432 (PostgreSQL). Start this VM.
 - Obtain up-to-date database snapshots from the intake24 team and import them into a database by scripts or DB tools (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/).
 - Local servers need to be run for `api`, `admin` and `survey` from each respective folder:
 - To start `api` / `admin` / `survey`: `pnpm dev` for live reloads
+
+### Steps to run locally
+
+#### Prerequisites
+
+- Node.js v22.12.0 or newer
+- pnpm v9.x or newer
+- Docker v29 or newer (for running PostgreSQL 17 and Redis 8 instances)
+- 4vGB+ free disk space (Or 50GB+ free disk space including downloading and extracting food images and database snapshots)
+
+#### 1. Git clone Intake24 project
+
+```sh
+git clone https://github.com/intake24/intake24.git
+```
+
+#### 2. Install node packages for the whole projects
+
+On project root folder, run
+
+```sh
+pnpm install
+```
+
+#### 3. Spin up Redis and PostgreSQL instance using docker compose
+
+On project root folder, run
+
+```sh
+docker compose up -d
+```
+
+#### 4. Initialise the CLI application
+
+On project root folder, run below command to build the CLI application under `apps/cli` folder using development configuration
+
+```sh
+pnpm cli:dev
+```
+
+This will create `.env` file under `apps/cli` folder, and complete the initial setup for the CLI application. You can quite the process after the command finishes.
+
+#### 5. Use CLI tools to create .env files for Intake24 API, Intake24 frontend (SPA), and Intake24 admin tool SPA applications, and populate system database
+
+on project root folder, run below command
+
+```sh
+pnpm cli init:env
+```
+
+This will create `.env` files under `apps/api`, `apps/admin` and `apps/survey` folders, and populate the system database with default data. You can also use `-f` flag to force overwrite existing `.env` files if any.
+
+```sh
+pnpm cli init:db:system
+```
+
+This will populate the system database with default data only. Follow the prompts to set up the admin user account.
+
+If the database snapshot versions are older than the codebase, you may need to run database migration scripts to `foods` and `system` databases by running below command under project root folder:
+
+```sh
+pnpm db:system:migrate
+pnpm db:foods:migrate
+```
+
+For more information, please refer to [Database migrations](../overview/database.md#database-migrations).
+
+#### 6. Start API server
+
+On `apps/api` folder, run
+
+```sh
+pnpm dev
+```
+
+The API server should be running on `http://localhost:3100` by default.
+
+#### 7. Start Intake24 admin tool application
+
+On `apps/admin` folder, run
+
+```sh
+pnpm dev
+```
+
+The Intake24 admin tool application should be running on `http://localhost:8100` by default, and you can log in using the admin account created during step 5.
+
+#### 8. Start Intake24 frontend (survey) application
+
+On `apps/survey` folder, run
+
+```sh
+pnpm dev
+```
+
+The Intake24 frontend (survey) application should be running on `http://localhost:8200` by default.
+
+#### 9. Download food images and place them in the correct folder
+
+Food images are not included in the database snapshots. Run the following command to download and extract the images:
+
+```sh
+pnpm cli init:food-images https://storage.googleapis.com/intake24/images/intake24-images-MRC-LIVE-19112025.zip
+```
+
+If you have downloaded the image archive to local PC, you can extract to `apps/api/storage/public/images` directly.
+
+:::warning
+Please note that currently the image arcihive is quite large (~18GB) and the download may take significant time and disk space.
+
+And to save space, the CLI will remove the download zip file once it is decompressed to the `FS_IMAGES`.
+:::
+
+For more information, please check [Download food images](../cli/init-food-images.md).
 
 ## Useful tools
 
@@ -30,7 +144,12 @@ Follow the readme instructions in the root of the repository.
 ## Databases
 
 Please contact the intake24 team for the latest development virtual machine. [Please also check the guidance on using the development virtual machine](https://docs.intake24.org/developer/vm).
-Alternatively, obtain database snapshots from the intake24 team and import them into a database browser (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/). While using the database snapshots, don't forget to set up your own Redis instance.
+Alternatively, you can obtain database snapshots and import them to a PostgreSQL (version 17 or newer) instance using database browser (e.g. DBeaver).
+
+[Foods database public download link](https://storage.googleapis.com/intake24/snapshots/foods_snapshot.pgcustom)
+[System database public download link](https://storage.googleapis.com/intake24/snapshots/system_snapshot.sql)
+
+Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/). While using the database snapshots, don't forget to set up your own Redis instance.
 
 To install PostgresQL and Redis instanace using provided setup, go to `docker` folder to start containers in the background by:
 

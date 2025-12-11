@@ -1,6 +1,7 @@
+import axios from 'axios';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
-import { logger as mainLogger } from '@intake24/common-backend/services/logger';
+import { logger } from '@intake24/common-backend/services/logger';
 import { defaultAlgorithm } from '@intake24/common-backend/util';
 import {
   associatedFoodsPrompt,
@@ -20,6 +21,46 @@ import {
 import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
 
+const IETF_LANGUAGE_TAG_URL = 'https://cdn.simplelocalize.io/public/v1/locales';
+
+type IetfLanguageCountry = {
+  code: string;
+  name: string;
+  name_local: string;
+};
+
+type IetfLanguage = {
+  name: string;
+  name_local: string;
+  countries: IetfLanguageCountry[];
+};
+
+type IetfLanguageTag = {
+  locale: string;
+  language: IetfLanguage;
+  country?: {
+    code: string;
+    name: string;
+    name_local: string;
+  };
+};
+
+async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
+  try {
+    const res = await axios.get(IETF_LANGUAGE_TAG_URL);
+    console.log(`Fetched IETF language tags from ${IETF_LANGUAGE_TAG_URL}`);
+    if (res.status !== 200 || !res.data || res.data.length === 0) {
+      console.error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
+      throw new Error('Invalid response or response payload for IETF language tags.');
+    }
+    return res.data as IetfLanguageTag[];
+  }
+  catch (error) {
+    console.error(`Error in fetching and parsing IETF language tags from ${IETF_LANGUAGE_TAG_URL}.`);
+    console.error((error as Error).message);
+    throw error;
+  }
+}
 type Superuser = {
   name: string;
   email: string;
@@ -27,6 +68,7 @@ type Superuser = {
 };
 
 async function initDefaultData(db: KyselyDatabases) {
+  console.log('Initializing default data...');
   await Promise.all(
     ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes']
       .map(table => db.system.deleteFrom(table as any).execute()),
@@ -34,25 +76,50 @@ async function initDefaultData(db: KyselyDatabases) {
 
   const locales = await db.foods.selectFrom('locales').selectAll().execute();
   if (locales.length) {
+    const ietfLanguageTags = await fetchIetfLanguageTags();
     const langs = new Set<string>();
     locales.forEach((locale) => {
       langs.add(locale.adminLanguageId);
       langs.add(locale.respondentLanguageId);
     });
 
-    // TODO: Fetch language details
+    const languageRows = Array.from(langs).map((code) => {
+      const ietf_locale = (ietfLanguageTags as Array<{ locale: string; language: any; country: any }>)
+        .find((tag) => {
+          return (tag.locale === code) || (tag.locale.split('-')[0] === code.split('-')[0]);
+        });
+
+      let englishName = code;
+      let localName = code;
+      if (code.includes('-')) {
+        englishName = ietf_locale?.language.countries.find((country: { code: string }) => country.code === code.split('-')[1])?.name || code;
+        localName = ietf_locale?.language.countries.find((country: { code: string }) => country.code === code.split('-')[1])?.name_local || code;
+      }
+      else {
+        englishName = ietf_locale?.language.name || code;
+        localName = ietf_locale?.language.name_local || code;
+      }
+      const localeWithLang = locales.find(
+        locale => locale.adminLanguageId === code || locale.respondentLanguageId === code,
+      );
+      const countryFlagCode = localeWithLang?.countryFlagCode ?? 'gb';
+      const textDirection = localeWithLang?.textDirection ?? 'ltr';
+
+      return {
+        code,
+        englishName,
+        localName,
+        countryFlagCode,
+        textDirection,
+        visibility: 'public',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    });
+
     await db.system
       .insertInto('languages')
-      .values(
-        Array.from(langs).map(code => ({
-          code,
-          englishName: code,
-          localName: code,
-          countryFlagCode: code.split('-').at(0) || code,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        })),
-      )
+      .values(languageRows)
       .execute();
 
     await db.system
@@ -180,12 +247,25 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     .values({
       name: config.acl.roles.superuser,
       displayName: config.acl.roles.superuser,
+      description: 'Role gets assigned with all permissions created in system.',
       createdAt: new Date(),
       updatedAt: new Date(),
     })
     .returningAll()
     .executeTakeFirstOrThrow();
 
+  /*
+  * Set superuser role to admin user
+  */
+  await db.system
+    .insertInto('roleUser')
+    .values({
+      roleId: suRole.id,
+      userId: suUser.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .execute();
   /*
   * Populate permissions
   */
@@ -224,12 +304,11 @@ export type InitDbSystemArgs = {
 };
 
 export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
-  const logger = mainLogger.child({ service: 'Init:db:system' });
-  logger.info('Initializing system databases...');
+  console.log('Initializing system databases...');
 
   const db = new KyselyDatabases({
     environment: process.env.NODE_ENV as any || 'development',
-    logger: mainLogger,
+    logger,
     databaseConfig: config.database,
   });
 
@@ -238,10 +317,10 @@ export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
     await initAccessControl(db, superuser);
     await initDefaultData(db);
 
-    logger.info('System databases initialized successfully.');
+    console.log('System databases initialized successfully.');
   }
   catch (error) {
-    logger.error('Error initializing system databases:', error);
+    console.error('Error initializing system databases:', error);
     throw error;
   }
   finally {

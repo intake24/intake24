@@ -108,34 +108,6 @@ pnpm sequelize db:seed --seed v3-recipe-foods.js --options-path sequelize/foods/
 TRUNCATE TABLE `table` RESTART IDENTITY CASCADE;
 ```
 
-### Seed ACL data
-
-```sh
-cd packages/db
-
-pnpm sequelize db:seed --seed populate-acl.js --options-path sequelize/system/options.js
-```
-
-:::danger
-Seeder truncates all `permissions` / `roles` / `users` tables with `CASCADE`.
-:::
-
-Seeder will create:
-
-- creates all available permissions
-- creates `superuser` role with all permissions assigned
-- creates `admin` user with `superuser` role assigned
-
-:::warning
-`admin` user is being created with `admin` password.
-
-**After first login:**
-
-1. Change password
-2. Set own email in order to restore password in future
-
-:::
-
 ### Copy over duplicated food data
 
 WIP - to be automated
