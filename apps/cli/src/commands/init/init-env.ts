@@ -28,6 +28,7 @@ export default async (cmd: InitEnvArgs): Promise<void> => {
       replacements: [{ key: 'WEBPUSH_PUBLIC_KEY', value: vapidKeys.publicKey }],
     },
     { name: 'Survey', path: '../survey', replacements: [] },
+    { name: 'CLI', path: '../cli', replacements: [] },
   ];
 
   for (const app of apps) {
@@ -41,7 +42,7 @@ export default async (cmd: InitEnvArgs): Promise<void> => {
     const envFilePath = path.join(app.path, '.env');
     const envFileExists = await fs.pathExists(envFilePath);
     if (envFileExists && !cmd.force) {
-      process.stdout.write(`Env file '.env' already exists for '${app.name}' application.\n`);
+      console.warn(`Env file '.env' already exists for '${app.name}' application.\n`);
       return;
     }
 

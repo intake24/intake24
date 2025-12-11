@@ -1,6 +1,4 @@
-import path from 'node:path';
 import axios from 'axios';
-import fs from 'fs-extra';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger } from '@intake24/common-backend/services/logger';
@@ -23,26 +21,7 @@ import {
 import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
 
-type SequelizeMeta = {
-  name: string;
-};
-
-async function fetchIetfSequelizeMetaNames(): Promise<SequelizeMeta[]> {
-  try {
-    const res = await axios.get(config.services.sequelizeMeta.url);
-    console.log(`Fetched current sequelize meta names from ${config.services.sequelizeMeta.url}`);
-    if (res.status !== 200 || !res.data || res.data.length === 0 || !Object.hasOwn(res.data[0], 'name')) {
-      console.error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
-      throw new Error('Invalid response or response payload for sequelize meta names.');
-    }
-    return res.data;
-  }
-  catch (error) {
-    console.error(`Failed to fetch current sequelize meta names from ${config.services.sequelizeMeta.url}.`);
-    console.error((error as Error).message);
-    throw error;
-  }
-}
+const IETF_LANGUAGE_TAG_URL = 'https://cdn.simplelocalize.io/public/v1/locales';
 
 type IetfLanguageCountry = {
   code: string;
@@ -68,8 +47,8 @@ type IetfLanguageTag = {
 
 async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
   try {
-    const res = await axios.get(config.services.ietfLocales.url);
-    console.log(`Fetched IETF language tags from ${config.services.ietfLocales.url}`);
+    const res = await axios.get(IETF_LANGUAGE_TAG_URL);
+    console.log(`Fetched IETF language tags from ${IETF_LANGUAGE_TAG_URL}`);
     if (res.status !== 200 || !res.data || res.data.length === 0) {
       console.error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
       throw new Error('Invalid response or response payload for IETF language tags.');
@@ -77,7 +56,7 @@ async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
     return res.data as IetfLanguageTag[];
   }
   catch (error) {
-    console.error(`Error in fetching and parsing IETF language tags from ${config.services.ietfLocales.url}.`);
+    console.error(`Error in fetching and parsing IETF language tags from ${IETF_LANGUAGE_TAG_URL}.`);
     console.error((error as Error).message);
     throw error;
   }
@@ -91,7 +70,7 @@ type Superuser = {
 async function initDefaultData(db: KyselyDatabases) {
   console.log('Initializing default data...');
   await Promise.all(
-    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'sequelizeMeta', 'surveySchemes']
+    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
 
@@ -230,29 +209,6 @@ async function initDefaultData(db: KyselyDatabases) {
     createdAt: new Date(),
     updatedAt: new Date(),
   }).executeTakeFirst();
-
-  const sequelizeMetaNames = await fetchIetfSequelizeMetaNames();
-
-  const migrationsDir = path.resolve(__dirname, '../../../packages/db/sequelize/system/migrations');
-  const migrationFiles = (await fs.readdir(migrationsDir)).filter(f => f.endsWith('.js'));
-  const metaNamesSet = new Set(sequelizeMetaNames.map(m => m.name));
-  const missingFiles = migrationFiles.filter(f => !metaNamesSet.has(f));
-  missingFiles.forEach((name) => {
-    sequelizeMetaNames.push({ name } as SequelizeMeta);
-  });
-  if (missingFiles.length > 0) {
-    console.log(
-      `Pending migration scripts detected:\n\n${missingFiles.join('\n')}\n\n`
-      + 'It means that your current database schema is not up to date.\n'
-      + 'Please run "pnpm db:system:migrate" to apply these migrations.\n',
-    );
-  }
-
-  // Insert into sequelizeMeta table
-  await db.system
-    .insertInto('sequelizeMeta')
-    .values(sequelizeMetaNames)
-    .execute();
 }
 
 async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {

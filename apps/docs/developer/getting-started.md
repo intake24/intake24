@@ -28,7 +28,7 @@ git clone https://github.com/intake24/intake24.git
 
 #### 2. Install node packages for the whole projects
 
-on project root folder, run
+On project root folder, run
 
 ```sh
 pnpm install
@@ -36,7 +36,7 @@ pnpm install
 
 #### 3. Spin up Redis and PostgreSQL instance using docker compose
 
-on project root folder, run
+On project root folder, run
 
 ```sh
 docker compose up -d
@@ -44,7 +44,7 @@ docker compose up -d
 
 #### 4. Initialise the CLI application
 
-on project root folder, run below command to build the CLI application under `apps/cli` folder using development configuration
+On project root folder, run below command to build the CLI application under `apps/cli` folder using development configuration
 
 ```sh
 pnpm cli:dev
@@ -68,11 +68,14 @@ pnpm cli init:db:system
 
 This will populate the system database with default data only. Follow the prompts to set up the admin user account.
 
-If the system database snapshot is not-to-date with the codebase, you may need to run database migrations to bring the database schema up-to-date by running below command on project root folder:
+If the database snapshot versions are older than the codebase, you may need to run database migration scripts to `foods` and `system` databases by running below command under project root folder:
 
 ```sh
 pnpm db:system:migrate
+pnpm db:foods:migrate
 ```
+
+For more information, please refer to [Database migrations](../overview/database.md#database-migrations).
 
 #### 6. Start API server
 
@@ -141,7 +144,12 @@ Follow the readme instructions in the root of the repository.
 ## Databases
 
 Please contact the intake24 team for the latest development virtual machine. [Please also check the guidance on using the development virtual machine](https://docs.intake24.org/developer/vm).
-Alternatively, obtain database snapshots from the intake24 team and import them into a database browser (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/). While using the database snapshots, don't forget to set up your own Redis instance.
+Alternatively, you can obtain database snapshots and import them to a PostgreSQL (version 17 or newer) instance using database browser (e.g. DBeaver).
+
+[Foods database public download link](https://storage.googleapis.com/intake24/snapshots/foods_snapshot.pgcustom)
+[System database public download link](https://storage.googleapis.com/intake24/snapshots/system_snapshot.sql)
+
+Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/). While using the database snapshots, don't forget to set up your own Redis instance.
 
 To install PostgresQL and Redis instanace using provided setup, go to `docker` folder to start containers in the background by:
 

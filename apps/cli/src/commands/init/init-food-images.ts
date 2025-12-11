@@ -2,53 +2,23 @@ import { unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { Readable, Transform } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
-import {
-  cancel,
-  confirm,
-  intro,
-  isCancel,
-  log,
-  outro,
-} from '@clack/prompts';
-
 import fs from 'fs-extra';
-import color from 'picocolors';
 import unzipper from 'unzipper';
 import config from '@intake24/cli/config';
 
 export type InitFoodImagesArgs = { url: string };
 
 export default async (cmd: InitFoodImagesArgs): Promise<void> => {
-  intro(color.cyan('Initialize food images from a zip file URL'));
   const { url } = cmd;
-  log.info(`Will download file from: ${url}`);
+  console.log(`Downloading file from: ${url}\n`);
 
   const filename = url.split('/').pop() ?? 'food-images.zip';
   const outputPath = path.join(process.cwd(), filename);
 
-  let response: Response;
-  try {
-    response = await fetch(url);
-  }
-  catch (error) {
-    log.error(`Failed to download file from ${url}: ${(error as Error).message}`);
-    return;
-  }
+  const response = await fetch(url);
+  if (!response.ok || !response.body)
+    throw new Error(`Failed to download file from ${url}: ${response.statusText}`);
 
-  if (!response.ok || !response.body) {
-    log.error(`Failed to download file from ${url}: ${response.status} ${response.statusText}`);
-    return;
-  }
-
-  const shouldContinue = await confirm({
-    message: 'Existing food images will be overwritten or merged. Do you want to continue?',
-  });
-
-  if (!shouldContinue || isCancel(shouldContinue)) {
-    cancel('Operation cancelled');
-    return;
-  }
-  log.info('Starting downloading..');
   const input = Readable.fromWeb(response.body);
   const output = fs.createWriteStream(outputPath);
 
@@ -71,7 +41,7 @@ export default async (cmd: InitFoodImagesArgs): Promise<void> => {
   const start = Date.now();
   let lastLogged = 0;
 
-  const dl_progress = new Transform({
+  const progress = new Transform({
     transform(chunk, _enc, cb) {
       downloaded += chunk.length;
       const now = Date.now();
@@ -84,7 +54,7 @@ export default async (cmd: InitFoodImagesArgs): Promise<void> => {
           : `Downloading: ${formatBytes(downloaded)} at ${formatBytes(speed)}/s`;
         if (process.stdout.isTTY)
           process.stdout.write(`\r${line}`);
-        else log.info(line);
+        else process.stdout.write(line);
         lastLogged = now;
       }
       cb(null, chunk);
@@ -97,23 +67,20 @@ export default async (cmd: InitFoodImagesArgs): Promise<void> => {
         : `Downloaded ${formatBytes(downloaded)} in ${elapsed.toFixed(1)}s (${formatBytes(avgSpeed)}/s)`;
       if (process.stdout.isTTY)
         process.stdout.write(`\r${finalLine}\n`);
-      else log.info(finalLine);
+      else process.stdout.write(finalLine);
       cb();
     },
   });
 
-  await pipeline(input, dl_progress, output);
-  log.success(`File downloaded to ${outputPath}`);
-
+  await pipeline(input, progress, output);
+  console.log(`File downloaded to ${outputPath}\n`);
   const targetDir = `../api/${config.filesystem.local.images}`;
   await fs.ensureDir(targetDir);
-  log.step(`Extracting files to ${targetDir}...`);
+  console.log(`Extracting files to ${targetDir}...\n`);
   await fs
     .createReadStream(outputPath)
     .pipe(unzipper.Extract({ path: targetDir }))
     .promise();
-  log.success('Extraction complete.');
-  log.success(`Images have saved to: ${path.resolve(process.cwd(), targetDir)}`);
-  outro(`Food images can now be used in the API.`);
+  console.log('Extraction complete.\n');
   await unlink(outputPath);
 };
