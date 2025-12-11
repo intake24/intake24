@@ -44,7 +44,7 @@ export default defineComponent({
       {
         title: t('fdbs.categories.code'),
         sortable: true,
-        key: 'categoryCode',
+        key: 'code',
       },
       {
         title: t('locales.code'),
