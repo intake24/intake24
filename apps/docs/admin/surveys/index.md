@@ -59,7 +59,7 @@ Edit tab allows to modify selected survey.
 
 - `URL token length` - Authentication token length (if empty, default length is used)
 
-- `URL Domain override` - URL used to generate full authentication links in CSV export file. Please note, valid redirect, CNAME or other mechanism to reach the original server needs to be set up.
+- `URL Domain override` - URL used to generate full authentication links in CSV export file. Note, valid redirect, CNAME or other mechanism to reach the original server needs to be set up.
 
 ### Submission limits
 

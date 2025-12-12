@@ -26,7 +26,7 @@ User can change their password by entering the current password and the new pass
 
 Multi-factor authentication can be set up by adding at least one authentication method and then enabling the multi-factor authentication toggle.
 
-To set up your multi-factor authentication, please log into the admin tool, then click on `Profile` at the top right of the screen. Scroll down to the `Multi-factor authentication` section then click on `Add Device`. From there you can select and set up your preferred method.
+To set up your multi-factor authentication, log into the admin tool, then click on `Profile` at the top right of the screen. Scroll down to the `Multi-factor authentication` section then click on `Add Device`. From there you can select and set up your preferred method.
 
 Once you have set up your device, you will be able to select the ‘Enable multi-factor authentication’ setting under your Profile page.”
 
@@ -46,7 +46,7 @@ Several `FIDO2` / `WebAuthn` authentication methods are available based on user'
 
 Optionally, [Duo Security](https://duo.com) can be used as a multi-factor authentication provider. Intake24 supports [Universal Prompt](https://duo.com/docs/duoweb) authentication method.
 
-Please check that relevant intake24 instance has this option available, configured and that user is enrolled in Duo Security.
+Check that relevant intake24 instance has this option available, configured and that user is enrolled in Duo Security.
 
 :::tip To set up Duo Security as a multi-factor authentication provider:
 

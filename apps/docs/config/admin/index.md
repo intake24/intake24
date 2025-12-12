@@ -126,7 +126,7 @@ Captcha provider. Possible values `re-captcha` or `h-captcha`.
 
 ### VITE_CAPTCHA_SITEKEY
 
-Captcha provider sitekey. Please refer to your provider, how to obtain the key.
+Captcha provider sitekey. Refer to your provider, how to obtain the key.
 
 ### VITE_GOOGLE_ANALYTICS_ID
 

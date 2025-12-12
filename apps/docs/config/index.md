@@ -24,5 +24,5 @@ For a more streamlined approach, you can use our CLI tool to initialize .env fil
 pnpm cli init-env
 ```
 
-For detailed instructions on using the CLI, please refer to our `.env` generation [guideline](/cli/init-env).
+For detailed instructions on using the CLI, refer to our `.env` generation [guideline](/cli/init-env).
 Choose the method that best suits your workflow and project needs.

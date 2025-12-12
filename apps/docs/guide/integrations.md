@@ -41,7 +41,7 @@ Once enabled, two options listed below can be used to create respondent accounts
 
 #### Standard JWT claims
 
-Standard JWT claims to help identify JWT and limit its lifetime. Please see [RFC 7519 Chapter 4.1](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1) for more details.
+Standard JWT claims to help identify JWT and limit its lifetime. See [RFC 7519 Chapter 4.1](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1) for more details.
 
 - `iat` - issued at timestamp (NumericDate in seconds)
 - `exp` - expiration timestamp (NumericDate in seconds)
@@ -112,10 +112,10 @@ Intake24 can notify 3<sup>rd</sup> party system about survey progression using r
 
 ## Redirection to 3<sup>rd</sup> party system
 
-Intake24 can redirect respondent to 3<sup>rd</sup> party system upon survey recall completion. To enable this feature, survey scheme needs to set up with terminal `redirect prompt` including desired parameters to form the `redirect URL`. Please see [redirect prompt](/admin/surveys/prompt-types#redirect-prompt) for more details.
+Intake24 can redirect respondent to 3<sup>rd</sup> party system upon survey recall completion. To enable this feature, survey scheme needs to set up with terminal `redirect prompt` including desired parameters to form the `redirect URL`. See [redirect prompt](/admin/surveys/prompt-types#redirect-prompt) for more details.
 
 ## Missing integration?
 
-Please note options described above are not exhaustive. It is a list of most frequently used methods, for more details consult [API documentation](/api/).
+Note options described above are not exhaustive. It is a list of most frequently used methods, for more details consult [API documentation](/api/).
 
 Not found the integration you're looking for? We appreciate that every system is a bit different, so we're happy to advise and where possible extend Intake24 to allow for seamless integration and wider adoption. Open an issue on [GitHub](https://github.com/intake24/intake24/issues) and we will try to help.

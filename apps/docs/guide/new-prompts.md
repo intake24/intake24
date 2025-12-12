@@ -9,7 +9,7 @@ In order to add a new prompt to the system you need to add it to the following m
 The process of adding prompt consits of the following stages:
 
 :::warning
-We are not covering the topic of prompt logic implementation and integration into the recall flow on this page. Please refere to the other guidlines or contact developers through the github. We are leaving the topic of test coverage out of the scope of this page as well. Please refer to the [Testing](/developer/testing) guidlines for more information.
+We are not covering the topic of prompt logic implementation and integration into the recall flow on this page. Refer to the other guidelines or contact developers through the github. We are leaving the topic of test coverage out of the scope of this page as well. Refer to the [Testing](/guide/testing) guidelines for more information.
 :::
 
 ## Admin & Packages

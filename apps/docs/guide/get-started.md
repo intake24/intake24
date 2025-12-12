@@ -1,228 +1,159 @@
-# Get started with your survey
+# Getting started
 
-If you are accessing your survey for the first time, log in here: [admin.intake24.org](https://admin.intake24.org) and follow the on-screen instructions to set your new password. You will not need to repeat this step.
+## Dev instance
 
-Once in the Intake24 admin tool, click on `Surveys` in sidebar. Next to your survey, click on the detail icon.
+Steps to getting a local instance running
 
-To get started with using Intake24, read and follow all the instructions in the sections below.
+- Setup the database
+  - Method 1 (preferred): Execute Docker compose file `docker-compose.yml` to prepare PostgresQL and Redis instances, and map out port 5432 and 6379 respectively by default.
+  - Method 2: Run Dev VM (download from S3 bucket - contact the Intake24 team), which maps out the database on 192.168.56.10:5432 (PostgreSQL). Start this VM.
+- Obtain up-to-date database snapshots from the intake24 team and import them into a database by scripts or DB tools (e.g. DBeaver). Check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/).
+- Local servers need to be run for `api`, `admin` and `survey` from each respective folder:
+- To start `api` / `admin` / `survey`: `pnpm dev` for live reloads
 
-## Detail
+### Steps to run locally
 
-This tab summarises the set-up of your study, updates can be made in the `edit` tab. All
-fields are explained in the next section.
+#### Prerequisites
 
-## Edit
+- Node.js v22.12.0 or newer
+- pnpm v9.x or newer
+- Docker v29 or newer (for running PostgreSQL 17 and Redis 8 instances)
+- 4vGB+ free disk space (Or 50GB+ free disk space including downloading and extracting food images and database snapshots)
 
-This tab is used to create your study in Intake24. The study set-up form sent to Cambridge is used to populate this tab.
+#### 1. Git clone Intake24 project
 
-There are a number of fields, listed below, which you are unable to edit. However, apart from `Survey ID` all fields can be modified by Cambridge if needed.
+```sh
+git clone https://github.com/intake24/intake24.git
+```
 
-### Survey ID
+#### 2. Install node packages for the whole projects
 
-- Short string-based field which is included in the survey URL / authentication URLs
-- Once set, this can't be edited
+On project root folder, run
 
-### Locale
+```sh
+pnpm install
+```
 
-- The food data that will be used for the survey
-- This can be amended but will require further discussion
+#### 3. Spin up Redis and PostgreSQL instance using docker compose
 
-### Survey scheme
+On project root folder, run
 
-- Recall questions forming the recall flow
-- This is set to pre-defined / default questions, additional questions can be added, please discuss
+```sh
+docker compose up -d
+```
 
-### Feedback scheme
+#### 4. Initialise environment files
 
-- Can be enabled / disabled
-- If dietary feedback is switched on, feedback scheme needs to be set
-- As above, this is set to a default scheme but this can be customised
-- More information can be found in [feedback scheme section](/admin/feedback/schemes.html)
+On project root folder, run below command to build the CLI application under folder using development configuration
 
----
+```sh
+pnpm cli init:env
+```
 
-The remaining fields, listed below, can be edited freely by you/your study team:
+This will create `.env` files under `apps/api`, `apps/cli`, `apps/admin` and `apps/survey` folders, and populate the system database with default data. You can also use `-f` flag to force overwrite existing `.env` files if any.
 
-### Survey name
+#### 5. Populate system database
 
-- Name of survey appearing on recall
+on project root folder, run below command
 
-### Start date
+```sh
+pnpm cli init:db:system
+```
 
-- Start date of your survey
+This will populate the system database with default data only. Follow the prompts to set up the admin user account.
 
-### End date
+Run database migration scripts to `foods` and `system` databases to make sure they are up to date by running below command under project root folder:
 
-- End date of your survey
+```sh
+pnpm db:system:migrate
+pnpm db:foods:migrate
+```
 
-### Support email
+For more information, refer to [Database migrations](/guide/database#database-migrations).
 
-- Designated mailbox for your survey help requests
+#### 6. Start API server
 
-### State
+On `apps/api` folder, run
 
-1. **Not started** – survey has not started, respondents will not be able to
-   complete recalls.
-2. **Active** – survey is LIVE, respondents are able to complete recalls
-3. **Suspended** – survey is paused, respondents are unable to complete recalls
-   until survey is set to active again
-4. **Completed** – survey has finished data collection, respondents are unable to
-   complete recalls.
+```sh
+pnpm dev
+```
 
-### Store user session on server
+The API server should be running on `http://localhost:3100` by default.
 
-- If enabled, user partial submission data are sent to server for storage and retrieval
-- If disabled, user partial submission data are only stored locally
-- This is switched on by default
+#### 7. Start Intake24 admin tool application
 
-### Sorting algorithm
+On `apps/admin` folder, run
 
-Determines the order of foods displayed to respondent:
+```sh
+pnpm dev
+```
 
-1. Popularity (reporting frequency): returned food matched list based on
-   popularity of selection – survey specific
-2. Global popularity (reporting frequency): returned food matched list based on
-   popularity of selection – all studies. This is our default setting.
-3. Predetermined order: returned food matched list compiled by researcher and
-   uploaded into Intake24
+The Intake24 admin tool application should be running on `http://localhost:8100` by default, and you can log in using the admin account created during step 5.
 
-### Match score weight
+#### 8. Start Intake24 frontend (survey) application
 
-- Match score weight parameter or sorting algorithm.
-- Our default score weight is 20
+On `apps/survey` folder, run
 
-### Allow user personal identifiers
+```sh
+pnpm dev
+```
 
-- Can be enabled / disabled
-- If enabled, user can store values to email / phone / name fields on user records through the survey respondent UI (i.e. the UI will show this additional fields and also CSV upload will accept those columns to import)
+The Intake24 frontend (survey) application should be running on `http://localhost:8200` by default.
 
-### Allow user custom fields
+#### 9. Download food images and place them in the correct folder
 
-- Can be enabled / disabled
-- If enabled, user can store additional values in user custom fields, which is `key:value` pair.
-- This can e.g. be done using CSV file upload, any column name that is not matched with user fields, will get stored as custom field
+Run the following command to download and extract the images:
 
-### Captcha verification
+```sh
+pnpm cli init:food-images https://storage.googleapis.com/intake24/images/intake24-images-MRC-LIVE-19112025.zip
+```
 
-- Can be toggled on / off
-- If enabled, strengthens participant logins (username/password and authentication URLs) to better guard against potential bot activity
+Refer to [Database -> Images](/guide/database#images) for more instructions.
 
-### URL Token character set
+## Useful tools
 
-- String of characters used for authentication tokens (related to redirecting respondents once recall(s) are complete)
+- IDE for developing Node, Typescript, npm (Intake24 use `pnpm` as drop-in replacement of npm) and associated tooling (e.g. VS Code)
+- Docker, a clean and resource-efficient way to run PostgreSQL and Redis servers locally.
+- Virtual Box (v6.x minimum) for running database VM
+- Database browser (e.g. DBeaver) for exploring/manipulating PostgreSQL DB.
+- Redis
 
-### URL Token length
+::: tip
+Intake24 requires node.js version 16 or newer, make sure to check your node.js version before continuing.
+:::
 
-- Authentication token length, see [authentication settings](/admin/surveys/#authentication-settings) for more information
+Clone the [Intake24 version 4 repository on GitHub](https://github.com/intake24/intake24).
 
-### URL Domain override
+Follow the readme instructions in the root of the repository.
 
-- URL override to used to generate full authentication links in CSV export file
+## API server
 
-### Allow user generation
+Go to `api` and follow instructions in the readme file.
 
-- Can be switched on / off, see [authentication settings](/admin/surveys/#authentication-settings) for more information
-- This is switched off by default
+Copy the `.env-template` file to `.env` and change the following settings:
 
-### JWT secret for M2M communication
+- `JWT_ACCESS_SECRET` — set to any string (security doesn't matter for development purposes), e.g. `verybigsecret`,
+- `JWT_REFRESH_SECRET` — same as above but use a different secret,
+- `DB_CONNECTION_SSL` - set to `false` for if the instance is for development purpose
+- `DB_SYSTEM_HOST` — set to `192.168.56.4` if using the development VM or alternatively point to your own database instance,
+- `DB_SYSTEM_PORT`, `DB_SYSTEM_USERNAME`, `DB_SYSTEM_PASSWORD` — keep the default settings if using the VM or edit according to your own DB settings,
+- `DB_FOODS_HOST` — set to `192.168.56.4` if using the development VM or alternatively point to your own database instance,
+- `DB_FOODS_PORT`, `DB_FOODS_USERNAME`, `DB_FOODS_PASSWORD` — keep the default settings if using the VM or edit according to your own DB settings,
+- `QUEUE_REDIS_HOST` — set to `192.168.56.4` if using the development VM or alternatively point to your own Redis instance.
+- `APP_SECRET` - secret used to generate and verify admin logins. Use a different secret.
+- `DB_DEV_SYSTEM_URL` and `DB_DEV_FOODS_URL` - set the connection strings according to your VM `192.168.56.4`, or alternatively point to your own database instance. If you are using docker compose script provided, PostgresQL DB will be installed locally, using default port `5432`, user name `postgres` and password `postgres`. The connection string will become something like `postgres://postgres:postgres@localhost:5432/{intake24 DB name}`
+- `WEBPUSH_PUBLIC_KEY` and `WEBPUSH_PRIVATE_KEY` - check out [API server configuration](/config/api/services.md) to generate key pairs.
 
-- String to sign JWT token
-
-### Submission notification URL
-
-- Webhook to be called when recall data is submitted
-- See [notifications settings](/admin/surveys/#notifications) for more information
-
-### Maximum allowed submissions per calendar day
-
-- Maximum number of recalls that can be submitted in one day
-- This is set to 1 recall by default
-
-### Maximum allowed total submissions
-
-- Maximum number of recalls that can be submitted by same respondent
-
-### Minimum interval between submissions (seconds)
-
-- Shortest minimal interval between submissions by same respondent
-- Set to 600 secs by default
-
-### Number of submissions for feedback
-
-- If feedback is switched on, this can be set to number of submissions required to allow respondent access to feedback
-
-## Respondents
-
-This tab is used to upload usernames and passwords and generate survey URLs for survey participants. It`s recommended to upload usernames and passwords in bulk and in CSV
-format.
-
-To bulk upload usernames and passwords:
-
-**1) Compile a CSV file which includes at least `username` column**
-
-The usernames should not contain any spaces (or personally identifiable information).
-
-Please see [survey respondent import](/admin/system/job-types#surveyrespondentsimport) for more details on CSV format.
-
-If passwords are used, the minimum requirements for creating passwords are as follows:
-
-- Minimum 10 character length (for both)
-- Character set to include both lower/upper letters [a-zA-Z] and digits [0-9]
-
-Usernames / passwords must NOT include personally identifiable information
+Check that the settings are correct by starting the server with `pnpm dev`.
 
 :::tip
-If your CSV file with usernames and passwords is not uploading to Intake24 and you
-have carefully checked that the headings match those given above, it may be that
-your CSV file contains a `BOM` (byte order marking) character. To check and remove
-this, open the file in an editor that supports encoding (e.g. Notepad++). In
-Notepad++ if you see it says UTF-8 BOM in the bottom right corner of the screen,
-you can remove it by clicking `Encoding` on the top menu and then `UTF-8`. Save the
-file and try uploading this new version. If this does not work or if you encounter any
-further issues, contact your IT or technical department.
+Add `DB_DEV_SYSTEM_DEBUG_QUERY_LIMIT=500` and `DB_DEV_FOODS_DEBUG_QUERY_LIMIT=500` to the API `.env` file to limit debug query char limit. It can prevent long queries from cluttering the console. The API server runs food indexing each time it starts so the console outputs can be quite a lot. The server does that for all locales in the food database, so for the DEV instance, you can also limit number of locales it runs against in `.env` by setting `APP_ENABLED_LOCALES = ["UK_V2_2022"]`.
 :::
 
-**2. Click on the three dots beside `new respondent` followed by `respondents upload`**
+## API access
 
-**3. Click into field `CSV file to upload`**
+If you had your account already created in the databse snapshot you are using, add your email in DBeaver `users` tables, then go to `apps/cli`, and run `pnpm cli:dev hash-password yourNewPassword`.
 
-- This will open up your file directory
-- Choose the correct file and click open
-- The `CSV file to upload` field should be filled with file name
-- Click on `upload`
-- Click `close` once the upload is complete – a green tick should appear beside the import job
-
-**4. Click into a different tab and then back into `respondents`**
-
-- This will update the tab to include the newly uploaded usernames
-
-**5. To generate survey URLs, follow step 2 but click on `Authentication URLs`**
-
-- Click `generate file`
-- Once generated, you will be able to download the file. You can either circulate the `ShortSurveyAuthenticationURL` or
-  `SurveyAuthenticationURL`, see [survey submissions](/admin/surveys/#respondents) for more details.
-- Respondents will not require their usernames and passwords to log-in, instead the URL can be used for Intake24 recall access
-- To manually create new respondents, click on `new respondent` and complete all fields
-- Finally click `save`
-- Remember to not include any personal identifiable information
-- Repeat step 5 to generate log-in URLs for new respondents
-
-:::warning
-Please note that it is your responsibility to test your survey prior to starting data collection.
-:::
-
-## Submissions
-
-This tab allows you to view / filter / delete submissions. You can filter the results by `username`. Any deletions made in this tab will automatically update the data export.
-
-## Tasks
-
-This tab allows you to import/extract the following reports:
-
-- `Survey – Export authentication URLs` - export log-in credentials
-- `Survey – Submission data export` - export survey submission data to CSV file
-- `Survey – Nutrients recalculation` - recalculates survey submission nutrient data
-- `Survey – Ratings export` - export survey dietary feedback ratings (please note, both
-  dietary feedback and the ratings feature will need to be enabled in order to collect this
-  information)
-- `Survey – Import respondents` - import usernames and passwords
+Grab the hash and put it manually into the `password_hash` column of the `user_passwords` table for your user record (find you user_id in users).
+There will be a cli command available to create a whole new account without this manual hassle.

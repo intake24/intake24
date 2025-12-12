@@ -1,4 +1,4 @@
-# Get started
+# Quick start introduction
 
 Section briefly describes how to configure, build and start the Intake24 components for development and production deployment.
 
@@ -30,13 +30,26 @@ pnpm install
 
 Set up `.env` file for each application you want to build, see below.
 
+:::tip Environment variables
+Code is using `.env ` environment files. Each application contains a template file (`.env-template`).
+
+If you're setting up fresh project, you can run CLI command, which generates all the files and couple of required specific keys. Follow the [CLI instructions](/cli/) and how to run [init:env](/cli/init-env).
+
+Some of the environment variables are either bundled in or used to configure build of SPA applications. Make sure you set up those `.env` file before running build for SPAs.
+:::
+
 ```sh
+# a) CLI to set up all applications
+cd apps/cli
+pnpm init:env
+
+# b) OR manually navigate to each application folder and copy template
+
 cd apps/{app}
-
 cp .env-template .env
-
-nano .env
 ```
+
+Edit `.env` files as required, see [configuration](/config/) section for detailed description of configuration options.
 
 Build all applications
 
@@ -47,12 +60,6 @@ Build all applications
 pnpm build
 ```
 
-:::tip Environment variables
-Code is using `.env ` environment files. Each project contains a template file (`.env-template`). If you're setting up fresh project, you can run CLI command, which generates all the files and couple of required specific keys. Follow the [CLI instructions](/cli/) and how to run [init-env](/cli/init-env).
-
-Some of the environment variables are either bundled in or used to configure build of SPA applications. Make sure you set up those `.env` file before running build for SPAs.
-:::
-
 ## API Server
 
 Navigate to `apps/api` directory.
@@ -61,7 +68,7 @@ Navigate to `apps/api` directory.
 cd apps/api
 ```
 
-Copy template of configuration file and edit it as required. Please see [Configuration](/config/) section for detailed description of configuration options.
+Copy template of configuration file and edit it as required. See [Configuration](/config/) section for detailed description of configuration options.
 
 ```sh
 cp .env-template .env
@@ -135,7 +142,7 @@ Navigate to `apps/admin` or `apps/survey` directory depending on which applicati
 cd apps/{admin|survey}
 ```
 
-Copy template of configuration file and edit it as required. Please see [Configuration](/config/) section for detailed description of configuration options.
+Copy template of configuration file and edit it as required. See [Configuration](/config/) section for detailed description of configuration options.
 
 ```sh
 cp .env-template .env

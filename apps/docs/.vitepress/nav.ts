@@ -1,7 +1,7 @@
 export const nav = [
   {
-    text: 'Overview',
-    link: '/overview/',
+    text: 'Guide',
+    link: '/guide/',
   },
   {
     text: 'Components',
@@ -14,11 +14,11 @@ export const nav = [
     ],
   },
   {
-    text: 'Guide',
-    link: '/guide/',
-  },
-  {
-    text: 'Developers',
-    link: '/developer/',
+    text: 'Resources',
+    items: [
+      { text: 'Home', link: 'https://intake24.org' },
+      { text: 'Researcher guides', link: 'https://intake24.atlassian.net/wiki/spaces/resources' },
+      { text: 'GitHub', link: 'https://github.com/intake24/intake24' },
+    ],
   },
 ];

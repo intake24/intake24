@@ -72,7 +72,7 @@ Flag whether to disable PWA functionality. Defaults to `false`.
 
 ### LEGACY
 
-Flag whether to target legacy browsers. Defaults to `false`. Please see [vite-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) for more details.
+Flag whether to target legacy browsers. Defaults to `false`. See [vite-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) for more details.
 
 ## Vite dev server vars
 
@@ -126,7 +126,7 @@ Captcha provider. Possible values `g-captcha` or `re-captcha`.
 
 ### VITE_CAPTCHA_SITEKEY
 
-Captcha provider sitekey. Please refer to your provider, how to obtain the key.
+Captcha provider sitekey. Refer to your provider, how to obtain the key.
 
 ### VITE_GOOGLE_ANALYTICS_ID
 

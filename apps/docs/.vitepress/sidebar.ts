@@ -1,70 +1,75 @@
 export const sidebar = {
-  '/overview/': [
-    {
-      text: 'Overview',
-      collapsable: false,
-      items: [
-        {
-          text: 'Introduction',
-          link: '/overview/',
-        },
-        {
-          text: 'Requirements',
-          link: '/overview/requirements',
-        },
-        {
-          text: 'Source code',
-          link: '/overview/source-code',
-        },
-        {
-          text: 'Versioning',
-          link: '/overview/versioning',
-        },
-        {
-          text: 'Releases',
-          link: '/overview/releases',
-        },
-        {
-          text: 'Technology Stack',
-          link: '/overview/technology-stack',
-        },
-        {
-          text: 'Get started',
-          link: '/overview/get-started',
-        },
-        {
-          text: 'Database',
-          link: '/overview/database',
-        },
-      ],
-    },
-  ],
   '/guide/': [
     {
-      text: 'Guide',
-      collapsable: false,
+      text: 'Overview',
+      collapsed: false,
       items: [
         {
           text: 'Introduction',
           link: '/guide/',
         },
         {
-          text: 'Get started',
-          link: '/guide/get-started',
+          text: 'Requirements',
+          link: '/guide/requirements',
+        },
+        {
+          text: 'Source code',
+          link: '/guide/source-code',
+        },
+        {
+          text: 'Releases',
+          link: '/guide/releases',
         },
         {
           text: 'Integrations',
           link: '/guide/integrations',
         },
+        {
+          text: 'Researcher guides',
+          link: 'https://intake24.github.io/researcher-docs/',
+          target: '_blank',
+        },
       ],
     },
     {
-      text: 'Legacy',
-      collapsable: false,
+      text: 'Guide',
+      collapsed: false,
       items: [
         {
-          text: 'Food groups',
-          link: '/guide/legacy/food-groups',
+          text: 'Quick start',
+          link: '/guide/intro',
+        },
+        {
+          text: 'Getting started',
+          link: '/guide/get-started',
+        },
+        {
+          text: 'Development using Docker',
+          link: '/guide/docker',
+        },
+        {
+          text: 'Development using VM',
+          link: '/guide/vm',
+        },
+        {
+          text: 'Database',
+          link: '/guide/database',
+        },
+        {
+          text: 'Testing',
+          link: '/guide/testing',
+        },
+        {
+          text: 'Adding a New Prompt',
+          link: '/guide/new-prompts',
+        },
+        {
+          text: 'Version 3 recall model',
+          link: '/guide/v3-survey',
+        },
+        {
+          text: 'Portion size methods',
+          link: '/guide/portion-size',
         },
       ],
     },
@@ -72,7 +77,7 @@ export const sidebar = {
   '/config/': [
     {
       text: 'Configuration',
-      collapsable: false,
+      collapsed: false,
       items: [
         {
           text: 'Introduction',
@@ -82,7 +87,7 @@ export const sidebar = {
     },
     {
       text: 'API server',
-      collapsable: false,
+      collapsed: false,
       items: [
         {
           text: 'Introduction',
@@ -152,7 +157,7 @@ export const sidebar = {
     },
     {
       text: 'Admin client',
-      collapsable: false,
+      collapsed: false,
       items: [
         {
           text: 'Introduction',
@@ -162,7 +167,7 @@ export const sidebar = {
     },
     {
       text: 'Survey client',
-      collapsable: false,
+      collapsed: false,
       items: [
         {
           text: 'Introduction',
@@ -174,7 +179,7 @@ export const sidebar = {
   '/api/': [
     {
       text: 'API',
-      collapsable: false,
+      collapsed: false,
       items: [
         {
           text: 'Introduction',
@@ -199,7 +204,7 @@ export const sidebar = {
   '/admin/': [
     {
       text: 'Admin',
-      collapsable: false,
+      collapsed: false,
       items: [
         {
           text: 'Introduction',
@@ -386,22 +391,10 @@ export const sidebar = {
       ],
     },
   ],
-  '/portal/': [
-    {
-      text: 'Portal',
-      collapsable: false,
-      items: [
-        {
-          text: 'Introduction',
-          link: '/Portal/',
-        },
-      ],
-    },
-  ],
   '/cli/': [
     {
       text: 'CLI',
-      collapsable: false,
+      collapsed: false,
       items: [
         {
           text: 'Introduction',
@@ -416,6 +409,10 @@ export const sidebar = {
           link: '/cli/init-db-system',
         },
         {
+          text: 'Download food images',
+          link: '/cli/init-food-images',
+        },
+        {
           text: 'Generate key / secret',
           link: '/cli/generate-key',
         },
@@ -426,80 +423,6 @@ export const sidebar = {
         {
           text: 'Find portion images',
           link: '/cli/find-portion-images',
-        },
-      ],
-    },
-  ],
-  '/deployment/': [
-    {
-      text: 'Deployment',
-      items: [
-        {
-          text: 'Introduction',
-          link: '/deployment/',
-        },
-      ],
-    },
-  ],
-  '/data-dictionary/': [
-    {
-      text: 'Data Dictionary',
-      items: [
-        {
-          text: 'Introduction',
-          link: '/data-dictionary/',
-        },
-        {
-          text: 'Survey',
-          link: '/data-dictionary/survey',
-        },
-        {
-          text: 'Admin',
-          link: '/data-dictionary/admin',
-        },
-      ],
-    },
-  ],
-  '/developer/': [
-    {
-      text: 'Developer resources',
-      items: [
-        {
-          text: 'Introduction',
-          link: '/developer/',
-        },
-
-        {
-          text: 'Getting started',
-          link: '/developer/getting-started',
-        },
-        {
-          text: 'Testing',
-          link: '/developer/testing',
-        },
-        {
-          text: 'Development virtual machine',
-          link: '/developer/vm',
-        },
-        {
-          text: 'Development using Docker',
-          link: '/developer/docker',
-        },
-        {
-          text: 'Import database snapshots',
-          link: '/developer/import-db-snapshots',
-        },
-        {
-          text: 'Adding a New Prompt',
-          link: '/developer/new-prompts',
-        },
-        {
-          text: 'Version 3 recall model',
-          link: '/developer/v3-survey',
-        },
-        {
-          text: 'Portion size methods',
-          link: '/developer/portion-size',
         },
       ],
     },

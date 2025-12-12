@@ -1,12 +1,12 @@
 # Development using Docker
 
-The more preferred approach is to use OCL-compatible platform like Docker to deploy and run the database systems needed to run Intake24 development.
+Intake24 provided `docker-compose.yml` to spin up required services for development environment including `PostgreSQL` and `Redis`.
 
-Using containers to deploy databases allow you to run Intake24 development environment in local using less resource. The `init` script run along with docker compose script will create the sample databases and schemas in PostgreSQL for you. However, here we also provide steps to import data of `foods` and `system` databaes by yourself.
+The `init` script run along with docker compose script will create databases / download and import snapshots. However, here we also provide steps to import data of `foods` and `system` databases by yourself.
 
 ## Installation
 
-Intake24 provided `docker-compose.yml`. Once you have installed compatible container platform (Intake24 uses Docker), you can navigate to `/docker` folder and execute docker compose script by
+Once you have installed compatible container platform (Intake24 uses Docker), execute docker compose script by:
 
 ```bash
 docker compose up -d
@@ -22,7 +22,7 @@ After that, you should have PostgreSQL and Redis server set to bind with corresp
 
 Once it is completed, you can use the `redis-cli` to connect to and test the Redis server, e.g. using `PING` command. This should return `PONG` if the connection is successful.
 
-#### Logs
+## Logs
 
 The PostgreSQL server log can be found in:
 
@@ -32,7 +32,7 @@ docker logs <postgres-container-name>
 
 Replace `<postgres-container-name>` by the postgreSQL container id.
 
-### Docker tear down
+## Tear down
 
 To stop and remove the containers, networks, and volumes created by `docker-compose up`, you can run the following command in the same directory where your `docker-compose.yml` file is located:
 

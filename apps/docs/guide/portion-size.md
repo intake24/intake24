@@ -237,7 +237,7 @@ Finally, the respondent is asked how many slices (or pizzas) they had:
 
 ![Pizza quantity](../assets/img/portion-size/pizza-4.png)
 
-Please refer to [v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize/PizzaPortionSizeScript.java)
+Refer to [v3 implementation](https://github.com/intake24/survey-frontend/blob/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize/PizzaPortionSizeScript.java)
 for the weight look up table based on these inputs.
 
 ### Parameters

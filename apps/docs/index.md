@@ -18,14 +18,17 @@ hero:
       alt: Intake24
   actions:
     - theme: brand
-      text: Get Started
-      link: /overview/
+      text: 🚀 Get Started
+      link: /guide
     - theme: alt
-      text: View on Github
+      text: Github
       link: https://github.com/intake24/intake24
     - theme: alt
-      text: Home
+      text: 🏠 Home
       link: https://intake24.org
+    - theme: alt
+      text: 🪧 Researcher guides
+      link: https://intake24.atlassian.net/wiki/spaces/resources
 
 features:
   - icon: 🎯

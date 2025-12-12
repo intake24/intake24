@@ -2,8 +2,8 @@
 
 Releases follow two standards:
 
-- [Calver](/overview/versioning) versioning for version control
-- [Angular commit convention](/overview/source-code#commit-convention) for changelog generation
+- [Calver](/guide/releases#versioning-system) versioning for version control
+- [Angular commit convention](/guide/source-code#commit-convention) for changelog generation
 
 ## Prepare and release
 
