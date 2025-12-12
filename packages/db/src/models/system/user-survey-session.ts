@@ -49,17 +49,9 @@ export default class UserSurveySession extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get sessionData(): SurveyState {
-    const val = this.getDataValue('sessionData') as unknown;
-    return JSON.parse(val as string);
-  }
-
-  set sessionData(value: SurveyState) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('sessionData', JSON.stringify(value));
-  }
+  declare sessionData: SurveyState;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

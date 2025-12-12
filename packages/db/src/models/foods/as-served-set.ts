@@ -51,16 +51,15 @@ export default class AsServedSet extends BaseModel<
 
   @Column({
     allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
   get label(): CreationOptional<LocaleTranslation> {
-    const val = this.getDataValue('label') as unknown as string | null;
-    return val ? JSON.parse(val) : {};
+    return this.getDataValue('label') ?? {};
   }
 
-  set label(value: LocaleTranslation) {
+  set label(value: CreationOptional<LocaleTranslation>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
+    this.setDataValue('label', value && Object.keys(value).length ? value : null);
   }
 
   @BelongsTo(() => ProcessedImage, 'selectionImageId')

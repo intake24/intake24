@@ -28,13 +28,7 @@ import type {
   SurveySearchSettings,
   SurveyStatus,
 } from '@intake24/common/surveys';
-import {
-  defaultOverrides,
-  defaultSearchSettings,
-  defaultSessionSettings,
-} from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
-
 import BaseModel from '../model';
 import ClientErrorReport from './client-error-report';
 import FAQ from './faq';
@@ -201,32 +195,16 @@ export default class Survey extends BaseModel<
 
   @Column({
     allowNull: false,
-    defaultValue: '[]',
-    type: DataType.TEXT({ length: 'long' }),
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get notifications(): CreationOptional<Notification[]> {
-    const val = this.getDataValue('notifications') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set notifications(value: CreationOptional<Notification[]>) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('notifications', JSON.stringify(value ?? []));
-  }
+  declare notifications: CreationOptional<Notification[]>;
 
   @Column({
-    allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    allowNull: false,
+    type: DataType.JSONB,
   })
-  get session(): CreationOptional<SessionSettings> {
-    const val = this.getDataValue('session') as unknown;
-    return val ? JSON.parse(val as string) : defaultSessionSettings;
-  }
-
-  set session(value: CreationOptional<SessionSettings>) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('session', JSON.stringify(value ?? defaultSessionSettings));
-  }
+  declare session: SessionSettings;
 
   @Column({
     allowNull: false,
@@ -249,32 +227,16 @@ export default class Survey extends BaseModel<
   declare minimumSubmissionInterval: CreationOptional<number>;
 
   @Column({
-    allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    allowNull: false,
+    type: DataType.JSONB,
   })
-  get surveySchemeOverrides(): CreationOptional<SchemeOverrides> {
-    const val = this.getDataValue('surveySchemeOverrides') as unknown;
-    return val ? JSON.parse(val as string) : defaultOverrides;
-  }
-
-  set surveySchemeOverrides(value: CreationOptional<SchemeOverrides>) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('surveySchemeOverrides', JSON.stringify(value ?? defaultOverrides));
-  }
+  declare surveySchemeOverrides: SchemeOverrides;
 
   @Column({
-    allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    allowNull: false,
+    type: DataType.JSONB,
   })
-  get searchSettings(): CreationOptional<SurveySearchSettings> {
-    const val = this.getDataValue('searchSettings') as unknown;
-    return val ? JSON.parse(val as string) : defaultSearchSettings;
-  }
-
-  set searchSettings(value: CreationOptional<SurveySearchSettings>) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('searchSettings', JSON.stringify(value ?? defaultSearchSettings));
-  }
+  declare searchSettings: SurveySearchSettings;
 
   @Column({
     allowNull: false,

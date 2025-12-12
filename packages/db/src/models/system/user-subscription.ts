@@ -54,17 +54,9 @@ export default class UserSubscription extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get subscription(): Subscription {
-    const val = this.getDataValue('subscription') as unknown;
-    return JSON.parse(val as string);
-  }
-
-  set subscription(value: Subscription) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('subscription', JSON.stringify(value));
-  }
+  declare subscription: Subscription;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

@@ -12,7 +12,6 @@ import {
   CreatedAt,
   DataType,
   Scopes,
-  Sequelize,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
@@ -81,43 +80,15 @@ export default class RecipeFoodStep extends BaseModel<
 
   @Column({
     allowNull: false,
-    defaultValue: () =>
-      JSON.stringify([
-        {
-          en: `${Sequelize.col('id')}-${Sequelize.col('recipeFoodsId')}${Sequelize.col('code')}`,
-        },
-      ]),
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get name(): RequiredLocaleTranslation {
-    const val = this.getDataValue('name') as unknown;
-    return JSON.parse(val as string);
-  }
-
-  set name(value: RequiredLocaleTranslation) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('name', JSON.stringify(value ?? {}));
-  }
+  declare name: RequiredLocaleTranslation;
 
   @Column({
     allowNull: false,
-    defaultValue: () =>
-      JSON.stringify({
-        en: `Step description for step ${Sequelize.col('name')} of special food ${Sequelize.col(
-          'recipeFoodsId',
-        )}`,
-      }),
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get description(): RequiredLocaleTranslation {
-    const val = this.getDataValue('description') as unknown;
-    return JSON.parse(val as string);
-  }
-
-  set description(value: RequiredLocaleTranslation) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('description', JSON.stringify(value ?? {}));
-  }
+  declare description: RequiredLocaleTranslation;
 
   @Column({
     allowNull: false,

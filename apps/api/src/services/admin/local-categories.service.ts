@@ -52,7 +52,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
             useForRecipes: m.useForRecipes,
             conversionFactor: m.conversionFactor,
             orderBy: index,
-            parameters: JSON.stringify(m.parameters),
+            parameters: m.parameters,
           })),
         )
         .execute();
@@ -72,7 +72,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
             name: request.name,
             simpleName: toSimpleName(request.name)!,
             hidden: request.hidden,
-            tags: JSON.stringify(request.tags ?? []),
+            tags: request.tags,
           })
           .returning('id')
           .executeTakeFirstOrThrow();
@@ -117,7 +117,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
           name: request.name,
           simpleName: toSimpleName(request.name)!,
           hidden: request.hidden,
-          tags: JSON.stringify(request.tags ?? []),
+          tags: request.tags,
         })
         .where('localeId', '=', localeId)
         .where('code', '=', categoryCode)
@@ -184,7 +184,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
         description: row.description,
         useForRecipes: row.useForRecipes,
         orderBy: row.orderBy,
-        parameters: JSON.parse(row.parameters) /* unsafe! */,
+        parameters: row.parameters as any /* unsafe! */,
       }));
 
       return {

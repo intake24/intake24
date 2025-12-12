@@ -49,17 +49,9 @@ export default class PersonalAccessToken extends BaseModel<
 
   @Column({
     allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get scopes(): CreationOptional<string[] | null> {
-    const val = this.getDataValue('scopes') as unknown;
-    return val ? JSON.parse(val as string) : null;
-  }
-
-  set scopes(value: string[] | null) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('scopes', value ? JSON.stringify([]) : null);
-  }
+  declare scopes: CreationOptional<string[] | null>;
 
   @Column({
     allowNull: false,

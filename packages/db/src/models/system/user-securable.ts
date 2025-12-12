@@ -53,17 +53,9 @@ export default class UserSecurable extends BaseModel<
 
   @Column({
     allowNull: true,
-    type: DataType.TEXT,
+    type: DataType.JSONB,
   })
-  get fields(): CreationOptional<string[] | null> {
-    const val = this.getDataValue('fields') as unknown;
-    return val ? JSON.parse(val as string) : null;
-  }
-
-  set fields(value: string[] | null) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('fields', value ? JSON.stringify(value) : null);
-  }
+  declare fields: CreationOptional<string[] | null>;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

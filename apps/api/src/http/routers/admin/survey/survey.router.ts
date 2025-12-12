@@ -12,6 +12,7 @@ import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses
 import { unique } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
+import { defaultOverrides, defaultSearchSettings, defaultSessionSettings } from '@intake24/common/surveys';
 import { jobRequiresFile } from '@intake24/common/types';
 import { multerFile } from '@intake24/common/types/http';
 import { kebabCase } from '@intake24/common/util';
@@ -124,8 +125,18 @@ export function survey() {
 
         const { userId } = req.scope.cradle.user;
 
+        const {
+          session = defaultSessionSettings,
+          searchSettings = defaultSearchSettings,
+          surveySchemeOverrides = defaultOverrides,
+          ...rest
+        } = pick(body, createSurveyFields);
+
         let survey: Survey | null = await Survey.create({
-          ...pick(body, createSurveyFields),
+          ...rest,
+          session,
+          searchSettings,
+          surveySchemeOverrides,
           ownerId: userId,
         });
 

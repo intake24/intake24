@@ -1,5 +1,5 @@
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { SurveyCreateRequest } from '@intake24/common/types/http/admin';
+import type { SurveyCreationAttributes } from '@intake24/db';
 import { Survey } from '@intake24/db';
 
 export default () => {
@@ -8,9 +8,9 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyCreateRequest;
-  let updateInput: SurveyCreateRequest;
-  let output: SurveyCreateRequest;
+  let input: SurveyCreationAttributes;
+  let updateInput: SurveyCreationAttributes;
+  let output: SurveyCreationAttributes;
   let survey: Survey;
 
   beforeAll(async () => {
