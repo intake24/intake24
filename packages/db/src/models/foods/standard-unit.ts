@@ -37,31 +37,15 @@ export default class StandardUnit extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get estimateIn(): RequiredLocaleTranslation {
-    const val = this.getDataValue('estimateIn') as unknown;
-    return val ? JSON.parse(val as string) : { en: 'Estimate in' };
-  }
-
-  set estimateIn(value: RequiredLocaleTranslation) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('estimateIn', JSON.stringify(value ?? { en: 'Estimate in' }));
-  }
+  declare estimateIn: RequiredLocaleTranslation;
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get howMany(): RequiredLocaleTranslation {
-    const val = this.getDataValue('howMany') as unknown;
-    return val ? JSON.parse(val as string) : { en: 'How many' };
-  }
-
-  set howMany(value: RequiredLocaleTranslation) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('howMany', JSON.stringify(value ?? { en: 'How many' }));
-  }
+  declare howMany: RequiredLocaleTranslation;
 
   @CreatedAt
   declare createdAt: CreationOptional<Date>;

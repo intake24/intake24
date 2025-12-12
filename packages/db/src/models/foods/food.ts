@@ -17,6 +17,7 @@ import {
   HasOne,
   Table,
 } from 'sequelize-typescript';
+import type { AltNames } from '@intake24/common/types/http/admin';
 import BaseModel from '../model';
 import AssociatedFood from './associated-foods';
 import Brand from './brand';
@@ -28,8 +29,6 @@ import FoodPortionSizeMethod from './food-portion-size-method';
 import FoodThumbnailImage from './food-thumbnail-image';
 import FoodsLocale from './locale';
 import NutrientTableRecord from './nutrient-table-record';
-
-export type AlternativeFoodNames = Record<string, string[]>;
 
 @Table({
   modelName: 'Food',
@@ -84,29 +83,15 @@ export default class Food extends BaseModel<
 
   @Column({
     allowNull: false,
-    defaultValue: '{}',
-    type: DataType.STRING(2048),
-    get(): AlternativeFoodNames {
-      const val = this.getDataValue('altNames') as unknown;
-      return val ? JSON.parse(val as string) : {};
-    },
-    set(value: AlternativeFoodNames) {
-      this.setDataValue('altNames', JSON.stringify(value ?? {}));
-    },
+    defaultValue: {},
+    type: DataType.JSONB,
   })
-  declare altNames: CreationOptional<AlternativeFoodNames>;
+  declare altNames: CreationOptional<AltNames>;
 
   @Column({
     allowNull: false,
-    defaultValue: '[]',
-    type: DataType.STRING(2048),
-    get(): string[] {
-      const val = this.getDataValue('tags') as unknown;
-      return val ? JSON.parse(val as string) : [];
-    },
-    set(value: string[]) {
-      this.setDataValue('tags', JSON.stringify(value ?? []));
-    },
+    defaultValue: [],
+    type: DataType.JSONB,
   })
   declare tags: CreationOptional<string[]>;
 

@@ -1,11 +1,8 @@
 import type { ResourceOps } from './resource';
-
 import { Readable } from 'node:stream';
 import { Transform } from '@json2csv/node';
-
 import { sql } from 'kysely';
-
-import type { UnwrapAII } from '@intake24/common/types';
+import type { LocaleTranslation, UnwrapAII } from '@intake24/common/types';
 
 export async function guideImageObjects({ config, kyselyDb, params: { language = ['en'] } }: ResourceOps) {
   const getImageUrl = (url?: string | null) => url ? `${config.app.urls.images}/${url}` : null;
@@ -54,7 +51,7 @@ export async function guideImageObjects({ config, kyselyDb, params: { language =
         'weight',
         ...language.map(lang => ({
           label: `label.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => row.label ? JSON.parse(row.label)[lang] : undefined,
+          value: (row: UnwrapAII<typeof cursor>) => row.label ? (row.label as LocaleTranslation)[lang] : undefined,
         })),
         'guideImageId',
         'guideImageDescription',
@@ -62,7 +59,7 @@ export async function guideImageObjects({ config, kyselyDb, params: { language =
         'imageMapObjectDescription',
         ...language.map(lang => ({
           label: `imageMapObjectLabel.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => row.imageMapObjectLabel ? JSON.parse(row.imageMapObjectLabel)[lang] : undefined,
+          value: (row: UnwrapAII<typeof cursor>) => row.imageMapObjectLabel ? (row.imageMapObjectLabel as LocaleTranslation)[lang] : undefined,
         })),
         'imageMapObjectNavigationIndex',
         'imageMapId',

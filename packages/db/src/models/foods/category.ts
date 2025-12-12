@@ -81,15 +81,8 @@ export default class Category extends BaseModel<
 
   @Column({
     allowNull: false,
-    defaultValue: '[]',
-    type: DataType.STRING(2048),
-    get(): string[] {
-      const val = this.getDataValue('tags') as unknown;
-      return val ? JSON.parse(val as string) : [];
-    },
-    set(value: string[]) {
-      this.setDataValue('tags', JSON.stringify(value ?? []));
-    },
+    defaultValue: [],
+    type: DataType.JSONB,
   })
   declare tags: CreationOptional<string[]>;
 

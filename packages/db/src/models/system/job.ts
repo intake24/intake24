@@ -15,9 +15,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
 import type { JobType, JobTypeParams } from '@intake24/common/types';
-
 import BaseModel from '../model';
 import User from './user';
 
@@ -79,17 +77,10 @@ export default class Job extends BaseModel<InferAttributes<Job>, InferCreationAt
   declare message: CreationOptional<string | null>;
 
   @Column({
-    allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    allowNull: false,
+    type: DataType.JSONB,
   })
-  get params(): JobTypeParams {
-    const val = this.getDataValue('params') as unknown;
-    return val ? JSON.parse(val as string) : {};
-  }
-
-  set params(value: JobTypeParams) {
-    this.setDataValue('params', JSON.stringify(value ?? {}));
-  }
+  declare params: JobTypeParams;
 
   @Column({
     allowNull: true,

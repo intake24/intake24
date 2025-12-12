@@ -13,7 +13,7 @@ export function subscription() {
 
       const subscriptions = await UserSubscription.findAll({
         attributes: ['id'],
-        where: { userId, type, subscription: JSON.stringify(subscription) },
+        where: { userId, type, subscription },
       });
 
       if (!subscriptions.length)

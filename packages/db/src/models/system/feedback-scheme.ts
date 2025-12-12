@@ -30,10 +30,7 @@ import type {
   HenryCoefficient,
   TopFoods,
 } from '@intake24/common/feedback';
-import { defaultMeals, defaultTopFoods } from '@intake24/common/feedback';
-
 import type { RecordVisibility } from '@intake24/common/security';
-
 import BaseModel from '../model';
 import Survey from './survey';
 import User from './user';
@@ -74,123 +71,57 @@ export default class FeedbackScheme
 
   @Column({
     allowNull: false,
-    defaultValue: () => JSON.stringify([]),
-    type: DataType.TEXT,
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get sections(): CreationOptional<FeedbackSection[]> {
-    const val = this.getDataValue('sections') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set sections(value: FeedbackSection[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('sections', JSON.stringify(value ?? []));
-  }
+  declare sections: CreationOptional<FeedbackSection[]>;
 
   @Column({
     allowNull: false,
-    defaultValue: () => JSON.stringify([]),
-    type: DataType.TEXT,
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get outputs(): CreationOptional<FeedbackOutput[]> {
-    const val = this.getDataValue('outputs') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set outputs(value: FeedbackOutput[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('outputs', JSON.stringify(value ?? []));
-  }
+  declare outputs: CreationOptional<FeedbackOutput[]>;
 
   @Column({
     allowNull: false,
-    defaultValue: JSON.stringify([]),
-    type: DataType.TEXT,
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get physicalDataFields(): CreationOptional<FeedbackPhysicalDataField[]> {
-    const val = this.getDataValue('physicalDataFields') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set physicalDataFields(value: FeedbackPhysicalDataField[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('physicalDataFields', JSON.stringify(value ?? []));
-  }
+  declare physicalDataFields: CreationOptional<FeedbackPhysicalDataField[]>;
 
   @Column({
     allowNull: false,
-    defaultValue: () => JSON.stringify(defaultTopFoods),
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get topFoods(): CreationOptional<TopFoods> {
-    const val = this.getDataValue('topFoods') as unknown;
-    return val ? JSON.parse(val as string) : defaultTopFoods;
-  }
-
-  set topFoods(value: TopFoods) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('topFoods', JSON.stringify(value ?? defaultTopFoods));
-  }
+  declare topFoods: TopFoods;
 
   @Column({
     allowNull: false,
-    defaultValue: () => JSON.stringify(defaultMeals),
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get meals(): CreationOptional<FeedbackMeals> {
-    const val = this.getDataValue('meals') as unknown;
-    return val ? JSON.parse(val as string) : defaultMeals;
-  }
-
-  set meals(value: FeedbackMeals) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('meals', JSON.stringify(value ?? defaultMeals));
-  }
+  declare meals: FeedbackMeals;
 
   @Column({
     allowNull: false,
-    defaultValue: JSON.stringify([]),
-    type: DataType.TEXT({ length: 'long' }),
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get cards(): CreationOptional<Card[]> {
-    const val = this.getDataValue('cards') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set cards(value: Card[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('cards', JSON.stringify(value ?? []));
-  }
+  declare cards: CreationOptional<Card[]>;
 
   @Column({
     allowNull: false,
-    defaultValue: JSON.stringify([]),
-    type: DataType.TEXT({ length: 'long' }),
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get demographicGroups(): CreationOptional<DemographicGroup[]> {
-    const val = this.getDataValue('demographicGroups') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set demographicGroups(value: DemographicGroup[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('demographicGroups', JSON.stringify(value ?? []));
-  }
+  declare demographicGroups: CreationOptional<DemographicGroup[]>;
 
   @Column({
     allowNull: false,
-    defaultValue: JSON.stringify([]),
-    type: DataType.TEXT({ length: 'long' }),
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get henryCoefficients(): CreationOptional<HenryCoefficient[]> {
-    const val = this.getDataValue('henryCoefficients') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set henryCoefficients(value: HenryCoefficient[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('henryCoefficients', JSON.stringify(value ?? []));
-  }
+  declare henryCoefficients: CreationOptional<HenryCoefficient[]>;
 
   @Column({
     allowNull: true,

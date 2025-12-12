@@ -21,8 +21,6 @@ import {
 } from 'sequelize-typescript';
 import type { RecordVisibility } from '@intake24/common/security';
 import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
-
-import { defaultExport, defaultMeals, defaultPrompts, defaultSchemeSettings } from '@intake24/common/surveys';
 import BaseModel from '../model';
 import Survey from './survey';
 import User from './user';
@@ -57,63 +55,29 @@ export default class SurveyScheme
 
   @Column({
     allowNull: false,
-    defaultValue: () => JSON.stringify(defaultSchemeSettings),
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get settings(): CreationOptional<SchemeSettings> {
-    const val = this.getDataValue('settings') as unknown;
-    return val ? JSON.parse(val as string) : defaultSchemeSettings;
-  }
-
-  set settings(value: SchemeSettings) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('settings', JSON.stringify(value ?? defaultSchemeSettings));
-  }
+  declare settings: SchemeSettings;
 
   @Column({
     allowNull: false,
-    defaultValue: () => JSON.stringify(defaultPrompts),
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get prompts(): CreationOptional<RecallPrompts> {
-    const val = this.getDataValue('prompts') as unknown;
-    return val ? JSON.parse(val as string) : defaultPrompts;
-  }
-
-  set prompts(value: RecallPrompts) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('prompts', JSON.stringify(value ?? defaultPrompts));
-  }
+  declare prompts: RecallPrompts;
 
   @Column({
     allowNull: false,
-    defaultValue: () => JSON.stringify(defaultMeals),
-    type: DataType.TEXT({ length: 'long' }),
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get meals(): CreationOptional<Meal[]> {
-    const val = this.getDataValue('meals') as unknown;
-    return val ? JSON.parse(val as string) : defaultMeals;
-  }
-
-  set meals(value: Meal[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('meals', JSON.stringify(value ?? defaultMeals));
-  }
+  declare meals: CreationOptional<Meal[]>;
 
   @Column({
-    allowNull: true,
-    defaultValue: () => JSON.stringify(defaultExport),
-    type: DataType.TEXT({ length: 'long' }),
+    allowNull: false,
+    defaultValue: [],
+    type: DataType.JSONB,
   })
-  get dataExport(): CreationOptional<ExportSection[]> {
-    const val = this.getDataValue('dataExport') as unknown;
-    return val ? JSON.parse(val as string) : defaultExport;
-  }
-
-  set dataExport(value: ExportSection[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('dataExport', JSON.stringify(value ?? defaultExport));
-  }
+  declare dataExport: CreationOptional<ExportSection[]>;
 
   @Column({
     allowNull: true,

@@ -8,7 +8,7 @@ export default () => {
   let faq: FAQ;
 
   beforeAll(async () => {
-    const input = mocker.system.feedbackScheme();
+    const input = mocker.system.faq();
 
     faq = await FAQ.create(input);
   });

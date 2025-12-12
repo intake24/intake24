@@ -16,9 +16,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import type { Dictionary } from '@intake24/common/types';
-
+import type { SurveyState } from '@intake24/common/surveys';
 import BaseModel from '../model';
 import Survey from './survey';
 import User from './user';
@@ -73,17 +71,9 @@ export default class ClientErrorReport extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get surveyStateJson(): Dictionary {
-    const val = this.getDataValue('surveyStateJson') as unknown;
-    return val ? JSON.parse(val as string) : {};
-  }
-
-  set surveyStateJson(value: Dictionary) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('surveyStateJson', JSON.stringify(value ?? {}));
-  }
+  declare surveyStateJson: SurveyState;
 
   @Column({
     allowNull: false,

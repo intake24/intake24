@@ -25,12 +25,10 @@ export default () => {
 
     schemeInput = {
       ...schemeInput,
-      prompts: schemeInput.prompts
-        ? {
-            ...schemeInput.prompts,
-            preMeals: [schemePromptInput.prompt],
-          }
-        : undefined,
+      prompts: {
+        ...schemeInput.prompts,
+        preMeals: [schemePromptInput.prompt],
+      },
     };
 
     schemePrompt = await SurveySchemePrompt.create(schemePromptInput);

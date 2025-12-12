@@ -1,11 +1,8 @@
 import type { ResourceOps } from './resource';
-
 import { Readable } from 'node:stream';
 import { Transform } from '@json2csv/node';
-
 import { sql } from 'kysely';
-
-import type { UnwrapAII } from '@intake24/common/types';
+import type { LocaleTranslation, UnwrapAII } from '@intake24/common/types';
 
 export async function imageMapObjects({ config, kyselyDb, params: { language = ['en'] } }: ResourceOps) {
   const getImageUrl = (url?: string | null) => url ? `${config.app.urls.images}/${url}` : null;
@@ -39,7 +36,7 @@ export async function imageMapObjects({ config, kyselyDb, params: { language = [
         'description',
         ...language.map(lang => ({
           label: `label.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => row.label ? JSON.parse(row.label)[lang] : undefined,
+          value: (row: UnwrapAII<typeof cursor>) => row.label ? (row.label as LocaleTranslation)[lang] : undefined,
         })),
         'navigationIndex',
         'imageMapId',
