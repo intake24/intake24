@@ -54,17 +54,9 @@ export default class LanguageTranslation extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get messages(): LocaleMessageDictionary<any> {
-    const val = this.getDataValue('messages') as unknown;
-    return JSON.parse(val as string);
-  }
-
-  set messages(value: LocaleMessageDictionary<any>) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('messages', JSON.stringify(value));
-  }
+  declare messages: LocaleMessageDictionary<any>;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

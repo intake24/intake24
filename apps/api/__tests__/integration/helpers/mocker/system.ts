@@ -29,7 +29,6 @@ import type {
   LocaleRequest,
   PermissionRequest,
   RoleRequest,
-  SurveyCreateRequest,
   TaskRequest,
   UserRequest,
 } from '@intake24/common/types/http/admin';
@@ -37,6 +36,7 @@ import { randomString } from '@intake24/common/util';
 import type {
   FeedbackSchemeCreationAttributes,
   JobCreationAttributes,
+  SurveyCreationAttributes,
   SurveySchemeCreationAttributes,
   SurveySchemePromptCreationAttributes,
 } from '@intake24/db';
@@ -271,7 +271,7 @@ function surveySchemePrompt(): SurveySchemePromptCreationAttributes {
   };
 }
 
-function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): SurveyCreateRequest {
+function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): SurveyCreationAttributes {
   const slug = slugify(randomString(16), { strict: true });
   const name = faker.word.words(6);
   const state = 'notStarted';

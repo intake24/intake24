@@ -1,8 +1,9 @@
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { SurveyAttributes, SurveyCreateRequest } from '@intake24/common/types/http/admin';
+import type { SurveyAttributes } from '@intake24/common/types/http/admin';
+import type { SurveyCreationAttributes } from '@intake24/db';
 import { Survey } from '@intake24/db';
 
-async function refreshSurveyRecord(input?: SurveyCreateRequest, overrides: Partial<SurveyAttributes> = {}): Promise<Survey> {
+async function refreshSurveyRecord(input?: SurveyCreationAttributes, overrides: Partial<SurveyAttributes> = {}): Promise<Survey> {
   const mock = input ?? mocker.system.survey();
   return Survey.create({
     ...mock,
@@ -17,7 +18,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyCreateRequest;
+  let input: SurveyCreationAttributes;
   let survey: Survey;
 
   beforeAll(async () => {

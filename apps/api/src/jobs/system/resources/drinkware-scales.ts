@@ -1,11 +1,8 @@
 import type { ResourceOps } from './resource';
-
 import { Readable } from 'node:stream';
 import { Transform } from '@json2csv/node';
-
 import { sql } from 'kysely';
-
-import type { UnwrapAII } from '@intake24/common/types';
+import type { LocaleTranslation, UnwrapAII } from '@intake24/common/types';
 
 export async function drinkwareScales({ kyselyDb, params: { language = ['en'] } }: ResourceOps) {
   const { total } = await kyselyDb.foods.selectFrom('drinkwareScales').select(({ fn }) => [
@@ -46,7 +43,7 @@ export async function drinkwareScales({ kyselyDb, params: { language = ['en'] } 
         'label',
         ...language.map(lang => ({
           label: `label.${lang}`,
-          value: (row: UnwrapAII<typeof cursor>) => row.label ? JSON.parse(row.label)[lang] : undefined,
+          value: (row: UnwrapAII<typeof cursor>) => row.label ? (row.label as LocaleTranslation)[lang] : undefined,
         })),
       ],
       withBOM: true,

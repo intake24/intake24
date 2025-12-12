@@ -11,13 +11,25 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export type Int8 = ColumnType<string, bigint | number | string, bigint | number | string>;
 
+export type Json = JsonValue;
+
+export type JsonArray = JsonValue[];
+
+export type JsonObject = {
+  [x: string]: JsonValue | undefined;
+};
+
+export type JsonPrimitive = boolean | number | string | null;
+
+export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
+
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export interface AsServedImages {
   asServedSetId: string;
   id: Generated<Int8>;
   imageId: Int8;
-  label: string | null;
+  label: Json | null;
   thumbnailImageId: Int8;
   weight: number;
 }
@@ -25,7 +37,7 @@ export interface AsServedImages {
 export interface AsServedSets {
   description: string;
   id: string;
-  label: string | null;
+  label: Json | null;
   selectionImageId: Int8;
 }
 
@@ -33,12 +45,12 @@ export interface AssociatedFoods {
   associatedCategoryCode: string | null;
   associatedFoodCode: string | null;
   foodId: Int8;
-  genericName: string;
+  genericName: Json;
   id: Generated<Int8>;
   linkAsMain: boolean;
   multiple: boolean;
   orderBy: Int8;
-  text: string;
+  text: Json;
 }
 
 export interface AttributeDefaults {
@@ -63,7 +75,7 @@ export interface Categories {
   localeId: string;
   name: string;
   simpleName: string;
-  tags: Generated<string>;
+  tags: Generated<Json>;
   version: string;
 }
 
@@ -87,7 +99,7 @@ export interface CategoryPortionSizeMethods {
   id: Generated<Int8>;
   method: string;
   orderBy: Int8;
-  parameters: Generated<string>;
+  parameters: Json;
   useForRecipes: boolean;
 }
 
@@ -99,7 +111,7 @@ export interface DrinkwareScales {
   fullLevel: number;
   height: number;
   id: Generated<Int8>;
-  label: string | null;
+  label: Json | null;
   overlayImageUrl: string;
   width: number;
 }
@@ -109,18 +121,18 @@ export interface DrinkwareScalesV2 {
   choiceId: Int8;
   drinkwareSetId: string;
   id: Generated<Int8>;
-  label: string | null;
-  outlineCoordinates: string;
+  label: Json | null;
+  outlineCoordinates: Json;
   volumeMethod: Generated<string>;
-  volumeSamples: string;
-  volumeSamplesNormalised: string;
+  volumeSamples: Json;
+  volumeSamplesNormalised: Json;
 }
 
 export interface DrinkwareSets {
   description: string;
   id: string;
   imageMapId: string;
-  label: string | null;
+  label: Json | null;
 }
 
 export interface DrinkwareVolumeSamples {
@@ -145,19 +157,19 @@ export interface FoodPortionSizeMethods {
   id: Generated<Int8>;
   method: string;
   orderBy: Int8;
-  parameters: Generated<string>;
+  parameters: Json;
   useForRecipes: boolean;
 }
 
 export interface Foods {
-  altNames: Generated<string>;
+  altNames: Generated<Json>;
   code: string;
   englishName: string;
   id: Generated<Int8>;
   localeId: string;
   name: string | null;
   simpleName: string | null;
-  tags: string;
+  tags: Generated<Json>;
   version: string;
 }
 
@@ -183,7 +195,7 @@ export interface GuideImageObjects {
   guideImageId: string;
   id: Generated<Int8>;
   imageMapObjectId: Int8;
-  label: string | null;
+  label: Json | null;
   weight: number;
 }
 
@@ -191,7 +203,7 @@ export interface GuideImages {
   description: string;
   id: string;
   imageMapId: string;
-  label: string | null;
+  label: Json | null;
   selectionImageId: Int8;
 }
 
@@ -199,9 +211,9 @@ export interface ImageMapObjects {
   description: string;
   id: Int8;
   imageMapId: string;
-  label: string | null;
+  label: Json | null;
   navigationIndex: number;
-  outlineCoordinates: string;
+  outlineCoordinates: Json;
   overlayImageId: Int8 | null;
 }
 
@@ -209,7 +221,7 @@ export interface ImageMaps {
   baseImageId: Int8;
   description: string;
   id: string;
-  label: string | null;
+  label: Json | null;
 }
 
 export interface Locales {
@@ -331,10 +343,10 @@ export interface RecipeFoodsSteps {
   categoryCode: string;
   code: string;
   createdAt: Timestamp;
-  description: string;
+  description: Json;
   id: Generated<Int8>;
-  localeId: Generated<string>;
-  name: string;
+  localeId: string;
+  name: Json;
   order: number;
   recipeFoodsId: Int8;
   repeatable: Generated<boolean>;
@@ -374,8 +386,8 @@ export interface SplitWords {
 
 export interface StandardUnits {
   createdAt: Timestamp;
-  estimateIn: string;
-  howMany: string;
+  estimateIn: Json;
+  howMany: Json;
   id: string;
   name: string;
   updatedAt: Timestamp;

@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { SurveyCreateRequest } from '@intake24/common/types/http/admin';
+import type { SurveyCreationAttributes } from '@intake24/db';
 import { guardedSurveyFields, Survey } from '@intake24/db';
 
 export default () => {
@@ -12,13 +12,13 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyCreateRequest;
-  let updateInput: SurveyCreateRequest;
+  let input: SurveyCreationAttributes;
+  let updateInput: SurveyCreationAttributes;
   let survey: Survey;
 
   let securable: SetSecurableOptions;
 
-  let refreshSurveyRecord: () => Omit<SurveyCreateRequest, 'startDate' | 'endDate'> & { startDate: string; endDate: string };
+  let refreshSurveyRecord: () => Omit<SurveyCreationAttributes, 'startDate' | 'endDate'> & { startDate: string; endDate: string };
 
   beforeAll(async () => {
     input = mocker.system.survey();

@@ -69,16 +69,9 @@ export default class FoodPortionSizeMethod extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get parameters(): PortionSizeParameter {
-    const val = this.getDataValue('parameters') as unknown;
-    return val ? JSON.parse(val as string) : {};
-  }
-
-  set parameters(value: PortionSizeParameter) {
-    this.setDataValue('parameters', JSON.stringify(value ?? {}));
-  }
+  declare parameters: PortionSizeParameter;
 
   @BelongsTo(() => Food, 'foodId')
   declare food?: NonAttribute<Food>;

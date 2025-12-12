@@ -87,7 +87,7 @@ export function standardUnit() {
           CategoryPortionSizeMethod.findOne({
             attributes: ['id'],
             where: where(
-              literal(`parameters::jsonb`),
+              literal(`parameters`),
               '@>',
               `{"units":[{"name": "${standardUnitId}"}]}`,
             ),
@@ -95,7 +95,7 @@ export function standardUnit() {
           FoodPortionSizeMethod.findOne({
             attributes: ['id'],
             where: where(
-              literal(`parameters::jsonb`),
+              literal(`parameters`),
               '@>',
               `{"units":[{"name": "${standardUnitId}"}]}`,
             ),
@@ -131,7 +131,7 @@ export function standardUnit() {
               association: 'portionSizeMethods',
               attributes: ['id'],
               where: where(
-                literal(`parameters::jsonb`),
+                literal(`parameters`),
                 '@>',
                 `{"units":[{"name": "${standardUnitId}"}]}`,
               ),
@@ -172,7 +172,7 @@ export function standardUnit() {
               association: 'portionSizeMethods',
               attributes: ['id'],
               where: where(
-                literal(`parameters::jsonb`),
+                literal(`parameters`),
                 '@>',
                 `{"units":[{"name": "${standardUnitId}"}]}`,
               ),

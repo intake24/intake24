@@ -41,17 +41,10 @@ export default class SurveySchemePrompt extends BaseModel<
   declare name: string;
 
   @Column({
-    allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    allowNull: false,
+    type: DataType.JSONB,
   })
-  get prompt(): SinglePrompt {
-    return JSON.parse(this.getDataValue('prompt') as unknown as string);
-  }
-
-  set prompt(value: SinglePrompt) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('prompt', JSON.stringify(value));
-  }
+  declare prompt: SinglePrompt;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

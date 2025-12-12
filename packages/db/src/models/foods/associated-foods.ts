@@ -52,17 +52,9 @@ export default class AssociatedFood extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get text(): LocaleTranslation {
-    const val = this.getDataValue('text') as unknown;
-    return val ? JSON.parse(val as string) : {};
-  }
-
-  set text(value: LocaleTranslation) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('text', JSON.stringify(value ?? {}));
-  }
+  declare text: LocaleTranslation;
 
   @Column({
     allowNull: false,
@@ -78,17 +70,9 @@ export default class AssociatedFood extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get genericName(): LocaleTranslation {
-    const val = this.getDataValue('genericName') as unknown;
-    return val ? JSON.parse(val as string) : {};
-  }
-
-  set genericName(value: LocaleTranslation) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('genericName', JSON.stringify(value ?? {}));
-  }
+  declare genericName: LocaleTranslation;
 
   @Column({
     allowNull: false,
