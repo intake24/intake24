@@ -79,6 +79,7 @@
             <v-col cols="12" md="6">
               <select-resource
                 v-model="data.faqId"
+                clearable
                 :error-messages="errors.get('faqId')"
                 :initial-item="entry.faq"
                 item-name="name"
