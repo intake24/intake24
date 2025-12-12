@@ -1,4 +1,10 @@
+import {
+  intro,
+  log,
+  outro,
+} from '@clack/prompts';
 import axios from 'axios';
+import color from 'picocolors';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger } from '@intake24/common-backend/services/logger';
@@ -48,16 +54,15 @@ type IetfLanguageTag = {
 async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
   try {
     const res = await axios.get(IETF_LANGUAGE_TAG_URL);
-    console.log(`Fetched IETF language tags from ${IETF_LANGUAGE_TAG_URL}`);
-    if (res.status !== 200 || !res.data || res.data.length === 0) {
-      console.error(`Invalid response or response payload: response ${res.status}, data (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
-      throw new Error('Invalid response or response payload for IETF language tags.');
+    log.info(`Fetched IETF language tags from ${IETF_LANGUAGE_TAG_URL}`);
+    if (res.status !== 200 || !res.data || res.data.length === 0 || !Array.isArray(res.data)) {
+      log.error(`Invalid response or response payload: response ${res.status}`);
+      throw new Error(`Invalid response or response payload for IETF language tags.\n Response payload (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
     }
     return res.data as IetfLanguageTag[];
   }
   catch (error) {
-    console.error(`Error in fetching and parsing IETF language tags from ${IETF_LANGUAGE_TAG_URL}.`);
-    console.error((error as Error).message);
+    log.error(`Error in fetching and parsing IETF language tags from ${IETF_LANGUAGE_TAG_URL}. `);
     throw error;
   }
 }
@@ -68,11 +73,12 @@ type Superuser = {
 };
 
 async function initDefaultData(db: KyselyDatabases) {
-  console.log('Initializing default data...');
+  log.step('Initializing default data...');
   await Promise.all(
     ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes']
       .map(table => db.system.deleteFrom(table as any).execute()),
   );
+  log.success('Cleared existing default data.');
 
   const locales = await db.foods.selectFrom('locales').selectAll().execute();
   if (locales.length) {
@@ -82,6 +88,7 @@ async function initDefaultData(db: KyselyDatabases) {
       langs.add(locale.adminLanguageId);
       langs.add(locale.respondentLanguageId);
     });
+    log.success('Collected language codes from foods.locales table.');
 
     const languageRows = Array.from(langs).map((code) => {
       const ietf_locale = (ietfLanguageTags as Array<{ locale: string; language: any; country: any }>)
@@ -121,6 +128,7 @@ async function initDefaultData(db: KyselyDatabases) {
       .insertInto('languages')
       .values(languageRows)
       .execute();
+    log.success('Inserted default languages into system.languages table.');
 
     await db.system
       .insertInto('locales')
@@ -137,16 +145,19 @@ async function initDefaultData(db: KyselyDatabases) {
         }),
       )
       .execute();
+    log.success('Inserted default locales into system.locales table.');
   }
 
   const nutrientUnits = await db.foods.selectFrom('nutrientUnits').selectAll().execute();
   if (nutrientUnits.length) {
     await db.system.insertInto('nutrientUnits').values(nutrientUnits).execute();
+    log.success('Inserted default nutrient units into system.nutrientUnits table.');
   }
 
   const nutrientTypes = await db.foods.selectFrom('nutrientTypes').selectAll().execute();
   if (nutrientTypes.length) {
     await db.system.insertInto('nutrientTypes').values(nutrientTypes).execute();
+    log.success('Inserted default nutrient types into system.nutrientTypes table.');
   }
 
   const prompts: RecallPrompts = {
@@ -209,12 +220,15 @@ async function initDefaultData(db: KyselyDatabases) {
     createdAt: new Date(),
     updatedAt: new Date(),
   }).executeTakeFirst();
+  log.success('Inserted default survey scheme into system.surveySchemes table.');
 }
 
 async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
+  log.step('Processing default access control initialization...');
   await Promise.all(
     ['permissions', 'roles', 'users'].map(table => db.system.deleteFrom(table as any).execute()),
   );
+  log.success('Cleared existing access control data.');
 
   /*
   * Create system admin user
@@ -230,6 +244,7 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     })
     .returningAll()
     .executeTakeFirstOrThrow();
+  log.success('Created superuser account.');
 
   const { salt, hash } = await defaultAlgorithm.hash(superuser.password);
   await db.system.insertInto('userPasswords').values({
@@ -238,6 +253,7 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     passwordHash: hash,
     passwordSalt: salt,
   }).executeTakeFirstOrThrow();
+  log.success('Set password for superuser account.');
 
   /*
   * Create system admin role
@@ -253,6 +269,7 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     })
     .returningAll()
     .executeTakeFirstOrThrow();
+  log.success('Created superuser role.');
 
   /*
   * Set superuser role to admin user
@@ -266,6 +283,7 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
       updatedAt: new Date(),
     })
     .execute();
+  log.success('Assigned superuser role to superuser account.');
   /*
   * Populate permissions
   */
@@ -281,6 +299,7 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     )
     .returningAll()
     .execute();
+  log.success('Inserted default permissions.');
 
   await db.system
     .insertInto('permissionRole')
@@ -293,6 +312,8 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
       })),
     )
     .execute();
+  log.success('Assigned all permissions to superuser role.');
+  log.success('Access control initialization completed.');
 }
 
 export type InitDbSystemArgs = {
@@ -304,7 +325,7 @@ export type InitDbSystemArgs = {
 };
 
 export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
-  console.log('Initializing system databases...');
+  intro(color.cyan('Initializing system databases...'));
 
   const db = new KyselyDatabases({
     environment: process.env.NODE_ENV as any || 'development',
@@ -317,11 +338,11 @@ export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
     await initAccessControl(db, superuser);
     await initDefaultData(db);
 
-    console.log('System databases initialized successfully.');
+    log.success('System databases initialized successfully.');
+    outro('System database initialized.');
   }
   catch (error) {
-    console.error('Error initializing system databases:', error);
-    throw error;
+    log.error(`Error initializing system databases: ${error}`);
   }
   finally {
     await db.close();
