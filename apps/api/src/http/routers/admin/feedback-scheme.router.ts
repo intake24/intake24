@@ -9,6 +9,7 @@ import { permission } from '@intake24/api/http/middleware';
 import { feedbackSchemeResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
+import { defaultMeals, defaultTopFoods } from '@intake24/common/feedback';
 import { kebabCase } from '@intake24/common/util';
 import {
   createFeedbackSchemeFields,
@@ -66,7 +67,18 @@ export function feedbackScheme() {
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
 
-        const feedbackScheme = await FeedbackScheme.create({ ...body, ownerId: req.scope.cradle.user.userId });
+        const {
+          meals = defaultMeals,
+          topFoods = defaultTopFoods,
+          ...rest
+        } = body;
+
+        const feedbackScheme = await FeedbackScheme.create({
+          ...rest,
+          meals,
+          topFoods,
+          ownerId: req.scope.cradle.user.userId,
+        });
 
         return { status: 201, body: feedbackSchemeResponse(feedbackScheme) };
       },

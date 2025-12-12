@@ -1,7 +1,5 @@
 import type { CreationAttributes, Transaction } from 'sequelize';
-
 import { randomUUID } from 'node:crypto';
-
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';

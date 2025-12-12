@@ -9,7 +9,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: Pick<FAQRequest, 'name'>;
+  let input: FAQRequest;
   let faq: FAQ;
 
   beforeAll(async () => {

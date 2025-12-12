@@ -58,17 +58,10 @@ export default class Task extends BaseModel<InferAttributes<Task>, InferCreation
   declare description: CreationOptional<string | null>;
 
   @Column({
-    allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    allowNull: false,
+    type: DataType.JSONB,
   })
-  get params(): JobTypeParams {
-    const val = this.getDataValue('params') as unknown;
-    return val ? JSON.parse(val as string) : {};
-  }
-
-  set params(value: JobTypeParams) {
-    this.setDataValue('params', JSON.stringify(value ?? {}));
-  }
+  declare params: JobTypeParams;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

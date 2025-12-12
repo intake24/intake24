@@ -1,8 +1,6 @@
 import type { Expression, Kysely, SqlBool } from 'kysely';
-
 import path from 'node:path';
 import { groupBy, mapValues } from 'lodash';
-
 import { ApplicationError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
@@ -17,7 +15,7 @@ import type {
   ImageMulterFile,
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
-import type { FoodsDB, PaginateQuery, ProcessedImage } from '@intake24/db';
+import type { FoodsDB, JsonValue, PaginateQuery, ProcessedImage } from '@intake24/db';
 import { DrinkwareSet, executeWithPagination } from '@intake24/db';
 
 export type UpdateDrinkwareSetInputWithFiles = UpdateDrinkwareSetInput & {
@@ -27,7 +25,6 @@ export type UpdateDrinkwareSetInputWithFiles = UpdateDrinkwareSetInput & {
 function drinkwareSetService({
   kyselyDb,
   imagesBaseUrl,
-  logger,
   sourceImageService,
   processedImageService,
   fsConfig,
@@ -35,7 +32,6 @@ function drinkwareSetService({
   IoC,
   | 'kyselyDb'
   | 'imagesBaseUrl'
-  | 'logger'
   | 'sourceImageService'
   | 'processedImageService'
   | 'fsConfig'
@@ -46,29 +42,18 @@ function drinkwareSetService({
     return `${imagesBaseUrl}/${relativeUrl}`;
   }
 
-  function parseLocaleTranslation(text: string | null): LocaleTranslation {
-    if (text == null)
-      return {};
-
-    try {
-      return JSON.parse(text); // should validate the result
-    }
-    catch {
-      logger.warn(`Failed to parse "${text}" as JSON string (expected LocaleTranslation)`);
-      return {};
-    }
+  function parseLocaleTranslation(text: JsonValue): LocaleTranslation {
+    return (text ?? {}) as LocaleTranslation;
   }
 
-  function parseFloatArray(text: string, sourceFieldName: string): number[] {
-    const jsonObject = JSON.parse(text);
-
-    if (!Array.isArray(jsonObject)) {
+  function parseFloatArray(value: JsonValue, sourceFieldName: string): number[] {
+    if (!Array.isArray(value)) {
       throw new TypeError(
-        `Expected a JSON array in field ${sourceFieldName}, but received ${typeof jsonObject}`,
+        `Expected a JSON array in field ${sourceFieldName}, but received ${typeof value}`,
       );
     }
 
-    for (const v of jsonObject) {
+    for (const v of value) {
       if (typeof v !== 'number') {
         throw new TypeError(
           `Expected an array of numbers in field ${sourceFieldName}, but encountered element of type ${typeof v}`,
@@ -76,7 +61,7 @@ function drinkwareSetService({
       }
     }
 
-    return jsonObject as number[];
+    return value as number[];
   }
 
   async function checkSetId(setId: string, transaction?: Kysely<FoodsDB>): Promise<void> {
@@ -103,7 +88,7 @@ function drinkwareSetService({
     await translateSqlErrors(() =>
       kyselyDb.foods
         .insertInto('drinkwareSets')
-        .values({ ...input, label: JSON.stringify(input.label) })
+        .values(input)
         .execute(),
     );
   };
@@ -152,7 +137,7 @@ function drinkwareSetService({
         .set({
           description: input.description,
           imageMapId: input.imageMapId,
-          label: JSON.stringify(input.label),
+          label: input.label,
         })
         .where('drinkwareSets.id', '=', drinkwareSetId)
         .executeTakeFirst();
@@ -386,11 +371,11 @@ function drinkwareSetService({
   type DrinkScaleV2Record = {
     choiceId: string;
     baseImageId: string;
-    outlineCoordinates: string;
-    volumeSamples: string;
-    volumeSamplesNormalised: string;
+    outlineCoordinates: JsonValue;
+    volumeSamples: JsonValue;
+    volumeSamplesNormalised: JsonValue;
     volumeMethod: string;
-    label: string | null;
+    label: JsonValue | null;
     id: string;
     baseImagePath: string | null;
   };
@@ -422,10 +407,7 @@ function drinkwareSetService({
       label: parseLocaleTranslation(record.label),
       outlineCoordinates: parseFloatArray(record.outlineCoordinates, 'outline_coordinates'),
       volumeSamples: parseFloatArray(record.volumeSamples, 'volume_samples'),
-      volumeSamplesNormalised: parseFloatArray(
-        record.volumeSamplesNormalised,
-        'volume_samples_normalised',
-      ),
+      volumeSamplesNormalised: parseFloatArray(record.volumeSamplesNormalised, 'volume_samples_normalised'),
       volumeMethod: parseVolumeMethod(record.volumeMethod),
       baseImageUrl: getImageUrl(record.baseImagePath),
     };
@@ -477,13 +459,11 @@ function drinkwareSetService({
     await checkSetId(drinkwareSetId);
 
     const recordV2 = await getDrinkScaleV2(drinkwareSetId, choiceId);
-
-    if (recordV2 !== undefined)
+    if (recordV2)
       return recordV2;
 
     const recordV1 = await getDrinkScaleV1(drinkwareSetId, choiceId);
-
-    if (recordV1 !== undefined)
+    if (recordV1)
       return recordV1;
 
     throw new NotFoundError(
@@ -569,11 +549,6 @@ function drinkwareSetService({
         ? baseImageFile
         : (await processDrinkScaleImage(drinkwareSetId, uploaderId, baseImageFile)).id;
 
-    const labelJson = JSON.stringify(label);
-    const outlineCoordinatesJson = JSON.stringify(outlineCoordinates);
-    const volumeSamplesJson = JSON.stringify(volumeSamples);
-    const normalisedVolumeSamplesJson = JSON.stringify(normaliseVolumeSamples(volumeSamples));
-
     async function executeQueries(db: Kysely<FoodsDB>): Promise<void> {
       if (updateOnConflict) {
         await db
@@ -586,13 +561,13 @@ function drinkwareSetService({
       await db
         .insertInto('drinkwareScalesV2')
         .values({
-          label: labelJson,
+          label,
           choiceId,
           drinkwareSetId,
           baseImageId: processedImageId,
-          outlineCoordinates: outlineCoordinatesJson,
-          volumeSamples: volumeSamplesJson,
-          volumeSamplesNormalised: normalisedVolumeSamplesJson,
+          outlineCoordinates,
+          volumeSamples,
+          volumeSamplesNormalised: normaliseVolumeSamples(volumeSamples),
           volumeMethod,
         })
         .execute();
@@ -632,25 +607,22 @@ function drinkwareSetService({
       query = query.set('baseImageId', processedImage.id);
     }
 
-    if (volumeSamples !== undefined) {
-      const normalisedVolumeSamplesJson = JSON.stringify(normaliseVolumeSamples(volumeSamples));
+    if (volumeSamples) {
       query = query
-        .set('volumeSamples', JSON.stringify(volumeSamples))
-        .set('volumeSamplesNormalised', normalisedVolumeSamplesJson);
+        .set('volumeSamples', volumeSamples)
+        .set('volumeSamplesNormalised', normaliseVolumeSamples(volumeSamples));
     }
 
-    if (label !== undefined) {
-      const labelJson = JSON.stringify(label);
-      query = query.set('label', labelJson);
+    if (label) {
+      query = query.set('label', label);
     }
 
-    if (volumeMethod !== undefined) {
+    if (volumeMethod) {
       query = query.set('volumeMethod', volumeMethod);
     }
 
-    if (outlineCoordinates !== undefined) {
-      const outlineCoordinatesJson = JSON.stringify(outlineCoordinates);
-      query = query.set('outlineCoordinates', outlineCoordinatesJson);
+    if (outlineCoordinates) {
+      query = query.set('outlineCoordinates', outlineCoordinates);
     }
 
     const updateResult = await query.executeTakeFirstOrThrow();
@@ -664,12 +636,12 @@ function drinkwareSetService({
     uploaderId: string,
     baseImageFile: Express.Multer.File,
     overlayImageFile: Express.Multer.File,
-    labelJson: string,
+    label: LocaleTranslation,
     width: string,
     height: string,
     fullLevel: string,
     emptyLevel: string,
-    volumeSamplesJson: string,
+    volumeSamples: { fill: number; volume: number }[],
     update: boolean,
   ) => {
     // Hacky but an easy way to handle legacy unprocessed drink scale images
@@ -692,8 +664,6 @@ function drinkwareSetService({
       'drink_scale',
     );
 
-    const volumeSamples = JSON.parse(volumeSamplesJson) as { fill: number; volume: number }[];
-
     await translateSqlErrors(() =>
       kyselyDb.foods.transaction().execute(async (tx) => {
         if (update) {
@@ -707,7 +677,7 @@ function drinkwareSetService({
         const { id } = await tx
           .insertInto('drinkwareScales')
           .values({
-            label: labelJson,
+            label,
             choiceId,
             drinkwareSetId,
             width: Number.parseInt(width),
@@ -763,7 +733,7 @@ function drinkwareSetService({
       id: set.id,
       description: set.description,
       imageMapId: set.imageMapId,
-      label: set.label ? JSON.parse(set.label) : {},
+      label: parseLocaleTranslation(set.label),
       scales: mergeScales(recordsV1, recordsV2),
     };
   };

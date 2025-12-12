@@ -53,17 +53,9 @@ export default class ImageMapObject extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
-  get outlineCoordinates(): number[] {
-    const val = this.getDataValue('outlineCoordinates') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set outlineCoordinates(value: number[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('outlineCoordinates', JSON.stringify(value ?? []));
-  }
+  declare outlineCoordinates: number[];
 
   @Column({
     allowNull: true,
@@ -73,16 +65,15 @@ export default class ImageMapObject extends BaseModel<
 
   @Column({
     allowNull: true,
-    type: DataType.TEXT({ length: 'long' }),
+    type: DataType.JSONB,
   })
   get label(): CreationOptional<LocaleTranslation> {
-    const val = this.getDataValue('label') as unknown as string | null;
-    return val ? JSON.parse(val) : {};
+    return this.getDataValue('label') ?? {};
   }
 
-  set label(value: LocaleTranslation) {
+  set label(value: CreationOptional<LocaleTranslation>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('label', value && Object.keys(value).length ? JSON.stringify(value) : null);
+    this.setDataValue('label', value && Object.keys(value).length ? value : null);
   }
 
   @BelongsTo(() => ImageMap, 'imageMapId')

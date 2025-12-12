@@ -67,17 +67,9 @@ export default class MFAAuthenticator extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.TEXT,
+    type: DataType.JSONB,
   })
-  get transports(): AuthenticatorTransportFuture[] {
-    const val = this.getDataValue('transports') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set transports(value: AuthenticatorTransportFuture[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('transports', JSON.stringify(value ?? []));
-  }
+  declare transports: AuthenticatorTransportFuture[];
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

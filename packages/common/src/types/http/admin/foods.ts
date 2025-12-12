@@ -13,11 +13,14 @@ import { categoryAttributes } from './categories';
 import { nutrientTableRecordAttributes } from './nutrient-tables';
 import { foodPortionSizeMethodAttributes } from './portion-size-methods';
 
+export const altNames = z.record(z.string().array());
+export type AltNames = z.infer<typeof altNames>;
+
 export type CreateFoodRequest = {
   code: string;
   englishName: string;
   name: string;
-  altNames?: Record<string, string[]>;
+  altNames?: AltNames;
   tags?: string[];
   attributes: InheritableAttributes;
   parentCategories?: string[];
@@ -38,7 +41,7 @@ export const foodAttributes = z.object({
   englishName: z.string().min(1).max(256),
   name: z.string().min(1).max(256).nullable(),
   simpleName: z.string().nullable(),
-  altNames: z.record(z.string().array()),
+  altNames,
   tags: z.string().array(),
   version: z.string().uuid(),
 });

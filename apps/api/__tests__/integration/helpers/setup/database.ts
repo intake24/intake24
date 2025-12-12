@@ -14,6 +14,8 @@ import {
   defaultMeals,
   defaultPrompts,
   defaultSchemeSettings,
+  defaultSearchSettings,
+  defaultSessionSettings,
 } from '@intake24/common/surveys';
 import type { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
 import type { User, UserSurveyAlias } from '@intake24/db';
@@ -194,6 +196,8 @@ export async function initDatabase(): Promise<MockData> {
     allowGenUsers: false,
     notifications: [],
     supportEmail: 'testSupportEmail@example.com',
+    session: { ...defaultSessionSettings },
+    searchSettings: { ...defaultSearchSettings },
     surveySchemeOverrides: { meals: [], prompts: [], settings: {} },
   });
 

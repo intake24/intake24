@@ -1,10 +1,7 @@
 import path from 'node:path';
-
 import { initServer } from '@ts-rest/express';
 import fs from 'fs-extra';
 import { pick } from 'lodash';
-import { literal, where } from 'sequelize';
-
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
 import type { JobAttributes } from '@intake24/common/types/http/admin';
@@ -16,13 +13,14 @@ export function job() {
     browse: async ({ query, req }) => {
       const { userId } = req.scope.cradle.user;
       const { type, ...rest } = query;
-      const jsonParams = Object.entries(
-        pick(rest, ['localeId', 'nutrientTableId', 'surveyId']),
-      ).map(([key, value]) => where(literal(`(params::json->>'${key}')::text`), value));
 
       const whereOp: WhereOptions = {
         userId,
-        [Op.and]: jsonParams,
+        params: Object.entries(pick(rest, ['localeId', 'nutrientTableId', 'surveyId']))
+          .reduce<Record<string, string | number>>((acc, [key, value]) => {
+            acc[key] = value;
+            return acc;
+          }, {}),
       };
       if (type)
         whereOp.type = type;

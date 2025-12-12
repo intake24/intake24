@@ -51,18 +51,9 @@ export default class FAQ
 
   @Column({
     allowNull: false,
-    defaultValue: () => JSON.stringify([]),
-    type: DataType.TEXT,
+    type: DataType.JSONB,
   })
-  get content(): CreationOptional<FAQSection[]> {
-    const val = this.getDataValue('content') as unknown;
-    return val ? JSON.parse(val as string) : [];
-  }
-
-  set content(value: FAQSection[]) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('content', JSON.stringify(value ?? []));
-  }
+  declare content: FAQSection[];
 
   @Column({
     allowNull: true,
