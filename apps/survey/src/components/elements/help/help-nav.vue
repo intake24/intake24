@@ -1,48 +1,36 @@
 <template>
-  <template v-if="!!request && !!faqs">
-    <v-btn
-      v-if="!$vuetify.display.mobile"
-      class="menu__activator"
-      color="grey"
-      :title="$t('common.help.request.title')"
-      variant="flat"
-    >
-      <v-icon icon="$info" start />
-      {{ $t('common.help._') }}
-    </v-btn>
-    <v-btn
-      v-else
-      class="order-3 nav-item__help"
-      value="help"
-      @click="toggleDrawer"
-    >
-      <v-icon icon="$info" />
-      <span>{{ $t('common.nav.help') }}</span>
-    </v-btn>
-  </template>
-  <help-request
-    v-else-if="!!request"
-    :settings="request"
-    :survey-id
-    @close="close"
-  />
-  <help-faq
-    v-else-if="!!faqs"
-    :survey-id
-    @close="close"
-  />
-  <v-spacer v-else class="order-3" />
   <component
     :is="$vuetify.display.mobile ? 'v-bottom-sheet' : 'v-menu'"
+    v-if="hasRequest && hasFAQs"
     v-model="drawer"
-    activator=".menu__activator"
     :close-on-content-click="true"
     location="bottom right"
     :persistent="false"
   >
+    <template #activator="{ props }">
+      <v-btn
+        v-if="!$vuetify.display.mobile"
+        v-bind="props"
+        color="grey"
+        :title="$t('common.help.request.title')"
+        variant="flat"
+      >
+        <v-icon icon="$info" start />
+        {{ $t('common.help._') }}
+      </v-btn>
+      <v-btn
+        v-else
+        v-bind="props"
+        class="order-3 nav-item__help"
+        value="help"
+      >
+        <v-icon icon="$info" />
+        <span>{{ $t('common.nav.help') }}</span>
+      </v-btn>
+    </template>
     <v-list>
       <help-faq
-        v-if="!!faqs"
+        v-if="hasFAQs"
         :survey-id
         @close="close"
       >
@@ -53,8 +41,8 @@
         </template>
       </help-faq>
       <help-request
-        v-if="!!request"
-        :settings="request"
+        v-if="hasRequest && !!settings"
+        :settings="settings"
         :survey-id
         @close="close"
       >
@@ -66,6 +54,18 @@
       </help-request>
     </v-list>
   </component>
+  <help-request
+    v-else-if="hasRequest && !!settings"
+    :settings="settings"
+    :survey-id
+    @close="close"
+  />
+  <help-faq
+    v-else-if="hasFAQs"
+    :survey-id
+    @close="close"
+  />
+  <v-spacer v-else class="order-3" />
 </template>
 
 <script lang="ts" setup>
@@ -97,12 +97,9 @@ function close() {
   drawer.value = false;
 }
 
-function toggleDrawer() {
-  drawer.value = !drawer.value;
-}
-
-const faqs = computed(() => survey.parameters?.faqs);
-const request = computed(() => survey.parameters?.surveyScheme.settings.help);
+const hasFAQs = computed(() => !!survey.parameters?.faqs);
+const hasRequest = computed(() => !!survey.parameters?.surveyScheme.settings.help?.available.length);
+const settings = computed(() => survey.parameters?.surveyScheme.settings.help);
 
 watch(drawer, (val) => {
   emit(val ? 'open' : 'close');
