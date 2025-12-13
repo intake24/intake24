@@ -12,7 +12,7 @@
     "directory": "packages/ui"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.12.0"
   },
   "scripts": {},
   "dependencies": {
