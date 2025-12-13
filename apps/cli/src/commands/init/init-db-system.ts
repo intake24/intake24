@@ -1,10 +1,5 @@
-import {
-  intro,
-  log,
-  outro,
-} from '@clack/prompts';
+import { log } from '@clack/prompts';
 import axios from 'axios';
-import color from 'picocolors';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger } from '@intake24/common-backend/services/logger';
@@ -26,6 +21,12 @@ import {
 } from '@intake24/common/prompts';
 import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
+
+type Superuser = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 const IETF_LANGUAGE_TAG_URL = 'https://cdn.simplelocalize.io/public/v1/locales';
 
@@ -66,17 +67,12 @@ async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
     throw error;
   }
 }
-type Superuser = {
-  name: string;
-  email: string;
-  password: string;
-};
 
 async function initDefaultData(db: KyselyDatabases) {
   log.step('Initializing default data...');
   await Promise.all(
-    ['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes']
-      .map(table => db.system.deleteFrom(table as any).execute()),
+    (['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes'] as const)
+      .map(table => db.system.deleteFrom(table).execute()),
   );
   log.success('Cleared existing default data.');
 
@@ -325,8 +321,6 @@ export type InitDbSystemArgs = {
 };
 
 export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
-  intro(color.cyan('Initializing system databases...'));
-
   const db = new KyselyDatabases({
     environment: process.env.NODE_ENV as any || 'development',
     logger,
@@ -339,7 +333,6 @@ export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
     await initDefaultData(db);
 
     log.success('System databases initialized successfully.');
-    outro('System database initialized.');
   }
   catch (error) {
     log.error(`Error initializing system databases: ${error}`);

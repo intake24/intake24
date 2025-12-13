@@ -22,11 +22,12 @@ import {
   packageImportV4,
   searchTest,
 } from './commands';
+import color from 'picocolors';
+import { cancel, confirm, group, intro, log, multiselect, outro, password, text } from '@clack/prompts';
 import {
   conflictResolutionOptions,
   importerSpecificModulesExecutionOptions,
 } from './commands/packager/importer-v4';
-import prompts from 'prompts';
 
 async function run() {
   const program = new Command();
@@ -38,78 +39,113 @@ async function run() {
     .command('init:db:system')
     .description('Initialize system databases')
     .action(async () => {
-      console.log('Initialize system databases');
-      const { start } = await prompts(
+      intro(color.cyan('Initializing system databases...'));
+
+      const canStart = await confirm(
         {
-          type: 'toggle',
-          name: 'start',
           message: 'This is a destructive operation and will erase existing system database data. Are you sure you want to continue?',
-          initial: false,
-          active: 'yes',
-          inactive: 'no',
+          initialValue: false,
+        },
+      );
+      if (!canStart)
+        return;
+
+      log.step('Collecting superuser information');
+
+      const superuser = await group(
+        {
+          name: () => text({ message: 'Enter superuser name:' }),
+          email: () => text({ message: 'Enter superuser email:' }),
+          password: () => password({ message: 'Enter superuser password:' }),
+          passwordConfirm: () => password({ message: 'Confirm superuser password:' }),
+        },
+        {
+          onCancel: () => {
+            cancel('Operation cancelled.');
+            process.exit(0);
+          },
         },
       );
 
-      if (!start)
-        return;
-
-      const superuser = await prompts([
-        {
-          type: 'text',
-          name: 'name',
-          message: 'Enter superuser name:',
-        },
-        {
-          type: 'text',
-          name: 'email',
-          message: 'Enter superuser email:',
-        },
-        {
-          type: 'password',
-          name: 'password',
-          message: 'Enter superuser password:',
-        },
-        {
-          type: 'password',
-          name: 'passwordConfirm',
-          message: 'Confirm superuser password:',
-        },
-      ]);
-
       if (!superuser.name || !superuser.email || !superuser.password) {
-        console.error('Superuser creation aborted: invalid input data.');
+        cancel('Superuser creation aborted: invalid input data.');
         return;
       }
 
       if (superuser.password !== superuser.passwordConfirm) {
-        console.error('Superuser creation aborted: passwords do not match.');
+        cancel('Superuser creation aborted: passwords do not match.');
         return;
       }
 
-      delete superuser.passwordConfirm;
-
-      const { confirm } = await prompts(
+      const canProceed = await confirm(
         {
-          type: 'toggle',
-          name: 'confirm',
           message: 'Are you sure you want to proceed?',
-          initial: false,
-          active: 'yes',
-          inactive: 'no',
+          initialValue: false,
         },
       );
-      if (!confirm)
+      if (!canProceed)
         return;
 
       await initDbSystem({ superuser });
+      outro('System database initialized.');
     });
 
   program
     .command('init:env')
     .description('Initialize .env files for each application with fresh secrets and keys.')
-    .option('-f, --force', 'override existing .env files')
-    .action(async (cmd) => {
-      await initEnv(cmd);
+    .action(async () => {
+      intro(color.cyan('Initialize environment configuration files (.env)'));
+
+      const input = await group(
+        {
+          apps: () =>
+            multiselect({
+              message: 'Which applications you want to initialize .env files for?',
+              options: [
+                { value: 'api', label: 'API Server' },
+                { value: 'cli', label: 'CLI' },
+                { value: 'admin', label: 'Admin SPA' },
+                { value: 'survey', label: 'Survey SPA' },
+              ],
+              required: true,
+            }),
+          secrets: () =>
+            confirm({
+              message: 'Do you want to generate secret keys?',
+              initialValue: true,
+            }),
+          vapid: () =>
+            confirm({
+              message: 'Do you want to generate VAPID keys?',
+              initialValue: true,
+            }),
+          override: () => confirm({
+            message: 'Do you want to back up or override existing .env files?',
+            initialValue: false,
+            active: 'Override .env files',
+            inactive: 'Back up existing .env files',
+          }),
+        },
+        {
+          onCancel: () => {
+            cancel('Operation cancelled.');
+            process.exit(0);
+          },
+        },
+      );
+
+      const canProceed = await confirm(
+        {
+          message: 'This operation will create for each application. Do you want to continue?',
+          initialValue: false,
+        },
+      );
+
+      if (!canProceed)
+        return;
+
+      await initEnv(input);
+      outro('Environment configuration files initialized.');
     });
 
   program
