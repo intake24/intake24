@@ -39,12 +39,12 @@
             {{ hint }}
           </v-alert>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="px-4">
           <v-btn
             class="px-4"
-            color="secondary"
+            color="primary"
             :title="promptI18n['hints.tryAgain']"
-            variant="text"
+            variant="flat"
             @click="tryAgain"
           >
             <v-icon icon="fas fa-rotate-left" start />
@@ -53,9 +53,9 @@
           <v-spacer />
           <v-btn
             class="px-4"
-            color="primary"
+            color="secondary"
             :title="promptI18n['hints.confirm']"
-            variant="text"
+            variant="tonal"
             @click="confirm"
           >
             <v-icon icon="fas fa-check" start />
