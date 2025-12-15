@@ -1,7 +1,16 @@
 import path from 'node:path';
-import { log } from '@clack/prompts';
+import {
+  cancel,
+  confirm,
+  group,
+  intro,
+  log,
+  multiselect,
+  outro,
+} from '@clack/prompts';
 import fs from 'fs-extra';
 import { nanoid } from 'nanoid';
+import color from 'picocolors';
 import webPush from 'web-push';
 
 type App = 'api' | 'admin' | 'survey' | 'cli';
@@ -20,7 +29,61 @@ type AppInfo = {
   };
 };
 
-export default async (args: InitEnvArgs): Promise<void> => {
+export default async (): Promise<void> => {
+  intro(color.bgCyanBright(color.black('Initialize environment configuration files (.env)')));
+
+  const input = await group(
+    {
+      apps: () =>
+        multiselect({
+          message: 'Which applications you want to initialize .env files for?',
+          options: [
+            { value: 'api', label: 'API Server' },
+            { value: 'cli', label: 'CLI' },
+            { value: 'admin', label: 'Admin SPA' },
+            { value: 'survey', label: 'Survey SPA' },
+          ],
+          required: true,
+        }),
+      secrets: () =>
+        confirm({
+          message: 'Do you want to generate secret keys?',
+          initialValue: true,
+        }),
+      vapid: () =>
+        confirm({
+          message: 'Do you want to generate VAPID keys?',
+          initialValue: true,
+        }),
+      override: () => confirm({
+        message: 'Do you want to back up or override existing .env files?',
+        initialValue: false,
+        active: 'Override .env files',
+        inactive: 'Back up existing .env files',
+      }),
+    },
+    {
+      onCancel: () => {
+        cancel('Operation cancelled.');
+        process.exit(0);
+      },
+    },
+  );
+
+  const canProceed = await confirm(
+    {
+      message: 'This operation will create for each application. Do you want to continue?',
+      initialValue: false,
+    },
+  );
+  if (!canProceed)
+    return;
+
+  await initEnv(input);
+  outro('Environment configuration files initialized.');
+};
+
+async function initEnv(args: InitEnvArgs): Promise<void> {
   const vapidKeys = webPush.generateVAPIDKeys();
 
   const apps: AppInfo[] = [
@@ -91,4 +154,4 @@ export default async (args: InitEnvArgs): Promise<void> => {
     await fs.writeFile(envFilePath, content);
     log.success(`Created '.env' for '${app.name}' application.`);
   }
-};
+}

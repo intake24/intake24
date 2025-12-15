@@ -18,7 +18,7 @@ import config from '@intake24/cli/config';
 export type InitFoodImagesArgs = { url: string };
 
 export default async (cmd: InitFoodImagesArgs): Promise<void> => {
-  intro(color.cyan('Initialize food images from a zip file URL'));
+  intro(color.bgCyanBright(color.black('Initialize food images from a zip file URL')));
   const { url } = cmd;
   log.info(`Will download file from: ${url}`);
 

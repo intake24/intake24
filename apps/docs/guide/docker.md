@@ -2,7 +2,7 @@
 
 Intake24 provided `docker-compose.yml` to spin up required services for development environment including `PostgreSQL` and `Redis`.
 
-The `init` script run along with docker compose script will create databases / download and import snapshots. However, here we also provide steps to import data of `foods` and `system` databases by yourself.
+The docker `init` script will create databases / download and import snapshots. Database snapshots can also be downloaded using [CLI command](/cli/init-assets.md).
 
 ## Installation
 

@@ -14,6 +14,7 @@ import {
   generateKey,
   generateVapidKeys,
   hashPassword,
+  initAssets,
   initDbSystem,
   initEnv,
   initFoodImages,
@@ -22,8 +23,6 @@ import {
   packageImportV4,
   searchTest,
 } from './commands';
-import color from 'picocolors';
-import { cancel, confirm, group, intro, log, multiselect, outro, password, text } from '@clack/prompts';
 import {
   conflictResolutionOptions,
   importerSpecificModulesExecutionOptions,
@@ -39,113 +38,21 @@ async function run() {
     .command('init:db:system')
     .description('Initialize system databases')
     .action(async () => {
-      intro(color.cyan('Initializing system databases...'));
-
-      const canStart = await confirm(
-        {
-          message: 'This is a destructive operation and will erase existing system database data. Are you sure you want to continue?',
-          initialValue: false,
-        },
-      );
-      if (!canStart)
-        return;
-
-      log.step('Collecting superuser information');
-
-      const superuser = await group(
-        {
-          name: () => text({ message: 'Enter superuser name:' }),
-          email: () => text({ message: 'Enter superuser email:' }),
-          password: () => password({ message: 'Enter superuser password:' }),
-          passwordConfirm: () => password({ message: 'Confirm superuser password:' }),
-        },
-        {
-          onCancel: () => {
-            cancel('Operation cancelled.');
-            process.exit(0);
-          },
-        },
-      );
-
-      if (!superuser.name || !superuser.email || !superuser.password) {
-        cancel('Superuser creation aborted: invalid input data.');
-        return;
-      }
-
-      if (superuser.password !== superuser.passwordConfirm) {
-        cancel('Superuser creation aborted: passwords do not match.');
-        return;
-      }
-
-      const canProceed = await confirm(
-        {
-          message: 'Are you sure you want to proceed?',
-          initialValue: false,
-        },
-      );
-      if (!canProceed)
-        return;
-
-      await initDbSystem({ superuser });
-      outro('System database initialized.');
+      await initDbSystem();
     });
 
   program
     .command('init:env')
     .description('Initialize .env files for each application with fresh secrets and keys.')
     .action(async () => {
-      intro(color.cyan('Initialize environment configuration files (.env)'));
+      await initEnv();
+    });
 
-      const input = await group(
-        {
-          apps: () =>
-            multiselect({
-              message: 'Which applications you want to initialize .env files for?',
-              options: [
-                { value: 'api', label: 'API Server' },
-                { value: 'cli', label: 'CLI' },
-                { value: 'admin', label: 'Admin SPA' },
-                { value: 'survey', label: 'Survey SPA' },
-              ],
-              required: true,
-            }),
-          secrets: () =>
-            confirm({
-              message: 'Do you want to generate secret keys?',
-              initialValue: true,
-            }),
-          vapid: () =>
-            confirm({
-              message: 'Do you want to generate VAPID keys?',
-              initialValue: true,
-            }),
-          override: () => confirm({
-            message: 'Do you want to back up or override existing .env files?',
-            initialValue: false,
-            active: 'Override .env files',
-            inactive: 'Back up existing .env files',
-          }),
-        },
-        {
-          onCancel: () => {
-            cancel('Operation cancelled.');
-            process.exit(0);
-          },
-        },
-      );
-
-      const canProceed = await confirm(
-        {
-          message: 'This operation will create for each application. Do you want to continue?',
-          initialValue: false,
-        },
-      );
-
-      if (!canProceed)
-        return;
-
-      await initEnv(input);
-      outro('Environment configuration files initialized.');
+  program
+    .command('init:assets')
+    .description('Download initial assets (system, foods, images) into specified path.')
+    .action(async () => {
+      await initAssets();
     });
 
   program

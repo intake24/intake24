@@ -18,32 +18,39 @@ Intake24 provides database snapshots for databases:
 - `foods` - full database snapshot (structure + data)
 - `system` - database structure-only snapshot (no data)
 
-If you use Docker to run Intake24 development environment, the database snapshots will be downloaded automatically when you run the docker compose script.
+Database snapshots can be obtained in several ways:
 
-- [Foods database public download link](https://storage.googleapis.com/intake24/snapshots/foods_snapshot.pgcustom)
-- [System database public download link](https://storage.googleapis.com/intake24/snapshots/system_snapshot.sql)
+1. Run [CLI command](/cli/init-assets.md) to download snapshots from public storage.
+2. With Docker used, `init` script will create databases / download and import snapshots.
+3. Download snapshots manually from public links below.
+
+### Public download links
+
+- [Foods database](https://storage.googleapis.com/intake24/snapshots/foods_snapshot.pgcustom)
+- [System database](https://storage.googleapis.com/intake24/snapshots/system_snapshot.sql)
 
 Once both databases are imported, system database needs to be initialized with default data and superuser account created using CLI [init:db:system](/cli/init-db-system) command.
 
 ## Images
 
-Intake24 provides food images archive:
+Intake24 provides food images archive.
+
+Food images can be obtained in several ways:
+
+1. Run [CLI command](/cli/init-assets.md) to download and extract images from public storage.
+2. Download images archive manually from public link below.
+
+### Public download links
 
 - [Foods images public download link](https://storage.googleapis.com/intake24/images/intake24-images-MRC-LIVE-19112025.zip)
 
-Extract the downloaded archive to the desired location (e.g. `apps/api/storage/images`).
-
-Food images can also be downloaded / extracted using [init:food-images](/cli/init-food-images.md) command:
-
-```sh
-pnpm cli init:food-images https://storage.googleapis.com/intake24/images/intake24-images-MRC-LIVE-19112025.zip
-```
+Extract the downloaded archive to the desired location (e.g. `apps/api/storage/images`). See more details on configuring image assets directory in [Configuration -> filesystem](/config/api/filesystem#images-dir).
 
 :::warning
 Images are very large (more than 18GB). Make sure you have enough disk space before downloading and extracting the archive.
 :::
 
-Refer to [Configuration -> Filesystem](/config/api/filesystem#images-dir) how to configure image assets directory.
+Refer to how to configure image assets directory.
 
 ## Migrations
 

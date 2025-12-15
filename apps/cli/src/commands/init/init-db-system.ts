@@ -1,5 +1,15 @@
-import { log } from '@clack/prompts';
+import {
+  cancel,
+  confirm,
+  group,
+  intro,
+  log,
+  outro,
+  password,
+  text,
+} from '@clack/prompts';
 import axios from 'axios';
+import color from 'picocolors';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger } from '@intake24/common-backend/services/logger';
@@ -320,7 +330,7 @@ export type InitDbSystemArgs = {
   };
 };
 
-export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
+export async function initDbSystem({ superuser }: InitDbSystemArgs): Promise<void> {
   const db = new KyselyDatabases({
     environment: process.env.NODE_ENV as any || 'development',
     logger,
@@ -340,4 +350,56 @@ export default async ({ superuser }: InitDbSystemArgs): Promise<void> => {
   finally {
     await db.close();
   }
+}
+
+export default async (): Promise<void> => {
+  intro(color.bgCyanBright(color.black('Initializing system databases...')));
+
+  const canStart = await confirm(
+    {
+      message: 'This is a destructive operation and will erase existing system database data. Are you sure you want to continue?',
+      initialValue: false,
+    },
+  );
+  if (!canStart)
+    return;
+
+  log.step('Collecting superuser information');
+
+  const superuser = await group(
+    {
+      name: () => text({ message: 'Enter superuser name:' }),
+      email: () => text({ message: 'Enter superuser email:' }),
+      password: () => password({ message: 'Enter superuser password:' }),
+      passwordConfirm: () => password({ message: 'Confirm superuser password:' }),
+    },
+    {
+      onCancel: () => {
+        cancel('Operation cancelled.');
+        process.exit(0);
+      },
+    },
+  );
+
+  if (!superuser.name || !superuser.email || !superuser.password) {
+    cancel('Superuser creation aborted: invalid input data.');
+    return;
+  }
+
+  if (superuser.password !== superuser.passwordConfirm) {
+    cancel('Superuser creation aborted: passwords do not match.');
+    return;
+  }
+
+  const canProceed = await confirm(
+    {
+      message: 'Are you sure you want to proceed?',
+      initialValue: false,
+    },
+  );
+  if (!canProceed)
+    return;
+
+  await initDbSystem({ superuser });
+  outro('System database initialized.');
 };

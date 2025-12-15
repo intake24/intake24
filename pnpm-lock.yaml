@@ -592,6 +592,9 @@ importers:
       jsdom:
         specifier: ^27.2.0
         version: 27.2.0
+      ky:
+        specifier: ^1.14.1
+        version: 1.14.1
       lodash:
         specifier: ^4.17.21
         version: 4.17.21

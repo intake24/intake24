@@ -26,7 +26,7 @@ export const sidebar = {
         },
         {
           text: 'Researcher guides',
-          link: 'https://intake24.github.io/researcher-docs/',
+          link: 'https://intake24.github.io/researcher-docs',
           target: '_blank',
         },
       ],
@@ -36,11 +36,7 @@ export const sidebar = {
       collapsed: false,
       items: [
         {
-          text: 'Quick start',
-          link: '/guide/intro',
-        },
-        {
-          text: 'Getting started',
+          text: 'Get started',
           link: '/guide/get-started',
         },
         {
@@ -409,8 +405,8 @@ export const sidebar = {
           link: '/cli/init-db-system',
         },
         {
-          text: 'Download food images',
-          link: '/cli/init-food-images',
+          text: 'Download assets',
+          link: '/cli/init-assets',
         },
         {
           text: 'Generate key / secret',

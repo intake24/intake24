@@ -1,4 +1,4 @@
-# Development virtual machine
+# Development using VM
 
 The Intake24 development virtual machine provides pre-installed dependencies such as the PostgreSQL DBMS
 and Redis server, a blank system database and a (relatively) recent snapshot of the food database.
