@@ -17,6 +17,7 @@
             :model-value="newFood.description"
             :prompt
             @confirm="moveToList"
+            @try-again="newFood.description = ''"
           >
             <template #default="{ checkForHints }">
               <v-form @submit.prevent="checkForHints">
