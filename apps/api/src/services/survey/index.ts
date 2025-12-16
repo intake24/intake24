@@ -1,5 +1,4 @@
 export { default as PopularityCountersService } from './popularity-counters.service';
-export * from './portion-size-mapper';
 export * from './survey-submission.service';
 export { default as surveySubmissionService } from './survey-submission.service';
 export * from './survey-url.service';

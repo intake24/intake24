@@ -1,18 +1,7 @@
 import { z } from 'zod';
-import { portionSizeMethods } from '@intake24/common/surveys';
-
-export const customField = z.object({
-  id: z.string().uuid(),
-  name: z.string().max(64),
-  value: z.string().max(2048),
-});
+import { customData, portionSizeMethods } from '@intake24/common/surveys';
 
 // Foods
-export const surveySubmissionFoodCustomField = customField.extend({
-  foodId: z.string().uuid(),
-});
-export type SurveySubmissionFoodCustomField = z.infer<typeof surveySubmissionFoodCustomField>;
-
 export const surveySubmissionFood = z.object({
   id: z.string().uuid(),
   parentId: z.string().uuid().nullable(),
@@ -30,6 +19,10 @@ export const surveySubmissionFood = z.object({
   nutrientTableId: z.string().max(64),
   nutrientTableCode: z.string().max(64),
   barcode: z.string().max(128).nullable(),
+  customData,
+  fields: z.record(z.string(), z.string()),
+  nutrients: z.record(z.string(), z.number()),
+  portionSize: z.record(z.string(), z.string()),
 });
 export type SurveySubmissionFood = z.infer<typeof surveySubmissionFood>;
 
@@ -47,37 +40,7 @@ export const surveySubmissionMissingFood = z.object({
 });
 export type SurveySubmissionMissingFood = z.infer<typeof surveySubmissionMissingFood>;
 
-export const surveySubmissionFields = z.object({
-  id: z.string().uuid(),
-  foodId: z.string().uuid(),
-  fieldName: z.string().max(64),
-  value: z.string().max(512),
-});
-export type SurveySubmissionField = z.infer<typeof surveySubmissionFields>;
-
-export const surveySubmissionNutrient = z.object({
-  id: z.string().uuid(),
-  foodId: z.string().uuid(),
-  nutrientTypeId: z.string(),
-  amount: z.number(),
-});
-export type SurveySubmissionNutrient = z.infer<typeof surveySubmissionNutrient>;
-
-export const surveySubmissionPortionSize = z.object({
-  id: z.string().uuid(),
-  foodId: z.string().uuid(),
-  name: z.string().max(64),
-  value: z.string().max(512),
-});
-export type SurveySubmissionPortionSize = z.infer<typeof surveySubmissionPortionSize>;
-
 // Meals
-export const surveySubmissionMealCustomField = customField.extend({
-  mealId: z.string().uuid(),
-});
-export type SurveySubmissionMealCustomField = z.infer<typeof surveySubmissionMealCustomField>;
-
-// Submissions
 export const surveySubmissionMeal = z.object({
   id: z.string().uuid(),
   submissionId: z.string().uuid(),
@@ -85,14 +48,11 @@ export const surveySubmissionMeal = z.object({
   minutes: z.number().int(),
   name: z.string().max(64).nullable(),
   duration: z.number().int().nullable(),
+  customData,
 });
 export type SurveySubmissionMeal = z.infer<typeof surveySubmissionMeal>;
 
-export const surveySubmissionCustomField = customField.extend({
-  submissionId: z.string().uuid(),
-});
-export type SurveySubmissionCustomField = z.infer<typeof surveySubmissionCustomField>;
-
+// Submissions
 export const surveySubmissionAttributes = z.object({
   id: z.string().uuid(),
   surveyId: z.string(),
@@ -102,6 +62,7 @@ export const surveySubmissionAttributes = z.object({
   submissionTime: z.date(),
   log: z.string().nullable(),
   sessionId: z.string().uuid(),
+  customData,
   userAgent: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -114,15 +75,8 @@ export const surveySubmissionListEntry = surveySubmissionAttributes.extend({
 export type SurveySubmissionListEntry = z.infer<typeof surveySubmissionEntry>;
 
 export const surveySubmissionEntry = surveySubmissionAttributes.extend({
-  customFields: surveySubmissionCustomField.array(),
   meals: surveySubmissionMeal.extend({
-    customFields: surveySubmissionMealCustomField.array(),
-    foods: surveySubmissionFood.extend({
-      customFields: surveySubmissionFoodCustomField.array(),
-      fields: surveySubmissionFields.array(),
-      nutrients: surveySubmissionNutrient.array(),
-      portionSizes: surveySubmissionPortionSize.array(),
-    }).array(),
+    foods: surveySubmissionFood.array(),
     missingFoods: surveySubmissionMissingFood.array(),
   }).array(),
 });

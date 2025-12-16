@@ -131,8 +131,7 @@ const mealStats = computed<FeedbackMealsData>(() => {
           resolvedValue = meal[field.fieldId];
           break;
         case 'custom':
-          resolvedValue
-            = meal.customFields.find(item => item.name === field.fieldId)?.value ?? null;
+          resolvedValue = meal.customData[field.fieldId]?.toString() ?? null;
           break;
         case 'nutrient':
           resolvedValue = meal.stats.getGroupAverageIntake(field.types);

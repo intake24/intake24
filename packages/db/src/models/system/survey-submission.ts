@@ -16,17 +16,15 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
+import type { CustomData } from '@intake24/common/surveys';
 import BaseModel from '../model';
 import Survey from './survey';
-import SurveySubmissionCustomField from './survey-submission-custom-field';
 import SurveySubmissionMeal from './survey-submission-meal';
 import User from './user';
 
 @Scopes(() => ({
   survey: { include: [{ model: Survey }] },
   user: { include: [{ model: User }] },
-  customFields: { include: [{ model: SurveySubmissionCustomField }] },
   meals: { include: [{ model: SurveySubmissionMeal }] },
 }))
 @Table({
@@ -112,6 +110,14 @@ export default class SurveySubmission extends BaseModel<
   })
   declare userAgent: CreationOptional<string | null>;
 
+  @Column({
+    allowNull: true,
+    type: DataType.JSONB(),
+  })
+  get customData(): CreationOptional<CustomData> {
+    return this.getDataValue('customData') ?? {} as CustomData;
+  }
+
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
 
@@ -123,9 +129,6 @@ export default class SurveySubmission extends BaseModel<
 
   @BelongsTo(() => User, 'userId')
   declare user?: NonAttribute<User>;
-
-  @HasMany(() => SurveySubmissionCustomField, 'surveySubmissionId')
-  declare customFields?: NonAttribute<SurveySubmissionCustomField[]>;
 
   @HasMany(() => SurveySubmissionMeal, 'surveySubmissionId')
   declare meals?: NonAttribute<SurveySubmissionMeal[]>;

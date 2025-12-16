@@ -7,23 +7,14 @@ import type {
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
-import type { PortionSizeMethodId } from '@intake24/common/surveys';
-
+import type { CustomData, PortionSizeMethodId } from '@intake24/common/surveys';
+import type { Dictionary } from '@intake24/common/types';
 import BaseModel from '../model';
 import SurveySubmissionExternalSource from './survey-submission-external-source';
-import SurveySubmissionField from './survey-submission-field';
-import SurveySubmissionFoodCustomField from './survey-submission-food-custom-field';
 import SurveySubmissionMeal from './survey-submission-meal';
-import SurveySubmissionNutrient from './survey-submission-nutrient';
-import SurveySubmissionPortionSizeField from './survey-submission-portion-size-field';
 
 @Scopes(() => ({
   meal: { include: [{ model: SurveySubmissionMeal }] },
-  customFields: { include: [{ model: SurveySubmissionFoodCustomField }] },
-  fields: { include: [{ model: SurveySubmissionField }] },
-  nutrients: { include: [{ model: SurveySubmissionNutrient }] },
-  portionSizes: { include: [{ model: SurveySubmissionPortionSizeField }] },
 }))
 @Table({
   modelName: 'SurveySubmissionFood',
@@ -132,20 +123,40 @@ export default class SurveySubmissionFood extends BaseModel<
   })
   declare barcode: string | null;
 
+  @Column({
+    allowNull: true,
+    type: DataType.JSONB(),
+  })
+  get customData(): CreationOptional<CustomData> {
+    return this.getDataValue('customData') ?? {} as CustomData;
+  }
+
+  @Column({
+    allowNull: true,
+    type: DataType.JSONB(),
+  })
+  get fields(): CreationOptional<Dictionary> {
+    return this.getDataValue('fields') ?? {} as Dictionary;
+  }
+
+  @Column({
+    allowNull: true,
+    type: DataType.JSONB(),
+  })
+  get nutrients(): CreationOptional<Dictionary> {
+    return this.getDataValue('nutrients') ?? {} as Dictionary;
+  }
+
+  @Column({
+    allowNull: true,
+    type: DataType.JSONB(),
+  })
+  get portionSize(): CreationOptional<Dictionary> {
+    return this.getDataValue('portionSize') ?? {} as Dictionary;
+  }
+
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
   declare meal?: NonAttribute<SurveySubmissionMeal>;
-
-  @HasMany(() => SurveySubmissionFoodCustomField, 'foodId')
-  declare customFields?: NonAttribute<SurveySubmissionFoodCustomField[]>;
-
-  @HasMany(() => SurveySubmissionField, 'foodId')
-  declare fields?: NonAttribute<SurveySubmissionField[]>;
-
-  @HasMany(() => SurveySubmissionNutrient, 'foodId')
-  declare nutrients?: NonAttribute<SurveySubmissionNutrient[]>;
-
-  @HasMany(() => SurveySubmissionPortionSizeField, 'foodId')
-  declare portionSizes?: NonAttribute<SurveySubmissionPortionSizeField[]>;
 
   @HasMany(() => SurveySubmissionExternalSource, {
     foreignKey: 'foodId',

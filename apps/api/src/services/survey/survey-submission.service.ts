@@ -3,10 +3,11 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { ExternalSource } from '@intake24/common/prompts';
 import type {
-  CustomPromptAnswer,
+  CustomData,
   EncodedFood,
   ExternalSourceRecord,
   FoodState,
+  MealState,
   MissingFood,
   RecipeBuilder,
   SurveyState,
@@ -18,29 +19,18 @@ import type {
 import type { SurveySubmissionResponse } from '@intake24/common/types/http';
 import type {
   SurveySubmissionExternalSourceCreationAttributes,
-  SurveySubmissionFieldCreationAttributes,
   SurveySubmissionFoodCreationAttributes,
   SurveySubmissionMissingFoodCreationAttributes,
-  SurveySubmissionNutrientCreationAttributes,
-  SurveySubmissionPortionSizeFieldCreationAttributes,
 } from '@intake24/db';
 import {
   Food,
   Survey,
   SurveySubmission,
-  SurveySubmissionCustomField,
   SurveySubmissionExternalSource,
-  SurveySubmissionField,
   SurveySubmissionFood,
-  SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
-  SurveySubmissionMealCustomField,
   SurveySubmissionMissingFood,
-  SurveySubmissionNutrient,
-  SurveySubmissionPortionSizeField,
 } from '@intake24/db';
-
-import { portionSizeMappers } from './portion-size-mapper';
 
 export type FoodMap = Record<string, Food>;
 
@@ -54,6 +44,7 @@ export type CollectFoodsOps = {
   foods: FoodMap;
   mealId: string;
   parentId?: string;
+  foodCustomPrompts: string[];
 };
 
 export type CollectedFoods = {
@@ -64,9 +55,9 @@ export type CollectedFoods = {
 };
 
 export type CollectedNutrientInfo = {
-  nutrients: SurveySubmissionNutrientCreationAttributes[];
-  fields: SurveySubmissionFieldCreationAttributes[];
-  portionSizes: SurveySubmissionPortionSizeFieldCreationAttributes[];
+  nutrients: Dictionary;
+  fields: Dictionary;
+  portionSize: Dictionary;
 };
 
 export type FoodCodes = { foodCodes: string[] };
@@ -76,37 +67,119 @@ function surveySubmissionService({
   db,
   logger: globalLogger,
   scheduler,
+  popularityCountersService,
   surveyService,
-}: Pick<IoC, 'cache' | 'db' | 'logger' | 'scheduler' | 'surveyService'>) {
+}: Pick<IoC, 'cache' | 'db' | 'logger' | 'scheduler' | 'popularityCountersService' | 'surveyService'>) {
   const logger = globalLogger.child({ service: 'SurveySubmissionsService' });
 
   /**
-   * Collect food and food group codes from submission state
+   * Collect custom prompt answers as custom fields
    *
-   * @param {FoodState[]} foods
+   * @param {CustomData} promptAnswers
+   * @param {string[]} prompts
+   * @returns {Dictionary}
    */
-  const collectFoodCodes = (foods: FoodState[]) =>
-    foods.reduce<FoodCodes>(
-      (acc, food) => {
-        const { linkedFoods, type } = food;
-        if (type === 'free-text') {
-          logger.warn(`Submission: ${type} food record present in 'collectFoodCodes, skipping...`);
-          return acc;
-        }
+  const collectCustomAnswers = (
+    promptAnswers: CustomData,
+    prompts: string[],
+  ): CustomData => {
+    return Object.entries(promptAnswers)
+      .filter(([name]) => prompts.includes(name))
+      .reduce<CustomData>((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {});
+  };
 
-        if (type === 'encoded-food') {
-          acc.foodCodes.push(food.data.code);
-        }
+  /**
+   * Collect food codes from submission state
+   *
+   * @param {string[]} codes
+   * @param {FoodState | MealState} entity
+   * @returns {string[]}
+   *
+   */
+  const collectFoodCodes = (codes: string[], entity: MealState | FoodState): string[] => {
+    if ('foods' in entity) {
+      entity.foods.reduce(collectFoodCodes, codes);
+      return codes;
+    }
 
-        if (linkedFoods.length) {
-          const { foodCodes } = collectFoodCodes(linkedFoods);
-          acc.foodCodes.push(...foodCodes);
-        }
+    const { linkedFoods, type } = entity;
+    if (type === 'free-text') {
+      logger.warn(`Submission: ${type} food record present in 'collectFoodCodes, skipping...`);
+      return codes;
+    }
 
+    if (type === 'encoded-food') {
+      codes.push(entity.data.code);
+    }
+
+    if (linkedFoods.length) {
+      linkedFoods.reduce(collectFoodCodes, codes);
+    }
+
+    return codes;
+  };
+
+  const collectFoodCompositionData = (
+    foodState: EncodedFood,
+    foods: FoodMap,
+  ) => {
+    const collectedData: CollectedNutrientInfo = { fields: {}, nutrients: {}, portionSize: {} };
+
+    const {
+      portionSize,
+      data: { code },
+    } = foodState;
+
+    const foodRecord = foods[code];
+
+    if (!foodRecord) {
+      logger.warn(`Submission: food code not found (${code}), skipping...`);
+      return collectedData;
+    }
+
+    if (!foodRecord.nutrientRecords)
+      throw new Error('Submission: not loaded foodRecord relationships');
+
+    if (!portionSize) {
+      logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
+      return collectedData;
+    }
+
+    // Collect portion sizes data
+    collectedData.portionSize = portionSize;
+
+    // Bail if no nutrient record links - missing encoded food link
+    if (!foodRecord.nutrientRecords.length) {
+      logger.warn(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
+      return collectedData;
+    }
+
+    const [nutrientTableRecord] = foodRecord.nutrientRecords;
+    if (!nutrientTableRecord.nutrients || !nutrientTableRecord.fields)
+      throw new Error('Submission: not loaded nutrient relationships');
+
+    // Collect food composition fields
+    collectedData.fields = nutrientTableRecord.fields.reduce<Dictionary>((acc, { name, value }) => {
+      acc[name] = value;
+      return acc;
+    }, {});
+
+    // Collect food composition nutrients
+    const portionSizeWeight = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
+
+    collectedData.nutrients = nutrientTableRecord.nutrients.reduce<Dictionary>(
+      (acc, { nutrientTypeId, unitsPer100g }) => {
+        acc[nutrientTypeId] = (unitsPer100g * portionSizeWeight) / 100.0;
         return acc;
       },
-      { foodCodes: [] },
+      {},
     );
+
+    return collectedData;
+  };
 
   /**
    * Collect foods from submissions state
@@ -116,7 +189,7 @@ function surveySubmissionService({
   const collectFoods
     = (ops: CollectFoodsOps) =>
       (collectedFoods: CollectedFoods, foodState: FoodState): CollectedFoods => {
-        const { foods, mealId, parentId } = ops;
+        const { foods, mealId, parentId, foodCustomPrompts } = ops;
 
         if (foodState.type === 'free-text') {
           logger.warn(`Submission: ${foodState.type} food record present in submission, skipping...`);
@@ -143,7 +216,7 @@ function surveySubmissionService({
         }
 
         if (foodState.type === 'recipe-builder') {
-          const { linkedFoods, searchTerm, template } = foodState;
+          const { linkedFoods, searchTerm, template, customPromptAnswers } = foodState;
 
           const id = randomUUID();
 
@@ -164,11 +237,12 @@ function surveySubmissionService({
             barcode: null,
             nutrientTableId: '',
             nutrientTableCode: '',
+            customData: collectCustomAnswers(customPromptAnswers, foodCustomPrompts),
           });
           collectedFoods.states.push(foodState);
 
           return linkedFoods.reduce(
-            collectFoods({ foods, mealId, parentId: id }),
+            collectFoods({ foods, mealId, parentId: id, foodCustomPrompts }),
             collectedFoods,
           );
         }
@@ -179,6 +253,7 @@ function surveySubmissionService({
           linkedFoods,
           portionSize,
           searchTerm,
+          customPromptAnswers,
         } = foodState;
 
         const foodRecord = foods[code];
@@ -224,108 +299,16 @@ function surveySubmissionService({
           barcode: null,
           nutrientTableId: nutrientRecords[0]?.nutrientTableId ?? '0',
           nutrientTableCode: nutrientRecords[0]?.nutrientTableRecordId ?? '0',
+          customData: collectCustomAnswers(customPromptAnswers, foodCustomPrompts),
+          ...collectFoodCompositionData(foodState, foods),
         });
         collectedFoods.states.push(foodState);
 
         return linkedFoods.reduce(
-          collectFoods({ foods, mealId, parentId: id }),
+          collectFoods({ foods, mealId, parentId: id, foodCustomPrompts }),
           collectedFoods,
         );
       };
-
-  const collectFoodCompositionData = (
-    foodId: string,
-    foodState: EncodedFood | RecipeBuilder,
-    foods: FoodMap,
-  ) => {
-    const collectedData: CollectedNutrientInfo = { fields: [], nutrients: [], portionSizes: [] };
-
-    if (foodState.type === 'recipe-builder')
-      return collectedData;
-
-    const {
-      portionSize,
-      data: { code },
-    } = foodState;
-
-    const foodRecord = foods[code];
-
-    if (!foodRecord) {
-      logger.warn(`Submission: food code not found (${code}), skipping...`);
-      return collectedData;
-    }
-
-    if (!foodRecord.nutrientRecords)
-      throw new Error('Submission: not loaded foodRecord relationships');
-
-    if (!portionSize) {
-      logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
-      return collectedData;
-    }
-
-    const portionSizeWeight = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
-
-    // Collect portion sizes data
-    collectedData.portionSizes = portionSizeMappers[portionSize.method](foodId, portionSize);
-
-    // Bail if no nutrient record links - missing encoded food link
-    if (!foodRecord.nutrientRecords.length) {
-      logger.warn(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
-      return collectedData;
-    }
-
-    const [nutrientTableRecord] = foodRecord.nutrientRecords;
-    if (!nutrientTableRecord.nutrients || !nutrientTableRecord.fields)
-      throw new Error('Submission: not loaded nutrient relationships');
-
-    // Collect food composition fields
-    collectedData.fields = nutrientTableRecord.fields.map(({ name, value }) => ({
-      id: randomUUID(),
-      foodId,
-      fieldName: name,
-      value,
-    }));
-
-    // Collect food composition nutrients
-    collectedData.nutrients = nutrientTableRecord.nutrients.map(
-      ({ nutrientTypeId, unitsPer100g }) => ({
-        id: randomUUID(),
-        foodId,
-        nutrientTypeId,
-        amount: (unitsPer100g * portionSizeWeight) / 100.0,
-      }),
-    );
-
-    return collectedData;
-  };
-
-  /**
-   * Collect custom prompt answers as custom fields
-   *
-   * @template T
-   * @param {T} propId
-   * @param {string} id
-   * @param {Dictionary<CustomPromptAnswer>} promptAnswers
-   * @param {string[]} prompts
-   * @returns {CustomAnswers<T>[]}
-   */
-  const collectCustomAnswers = <T extends 'surveySubmissionId' | 'mealId' | 'foodId'>(
-    propId: T,
-    id: string,
-    promptAnswers: Dictionary<CustomPromptAnswer>,
-    prompts: string[],
-  ): CustomAnswers<T>[] => {
-    const customAnswers = Object.entries(promptAnswers)
-      .filter(([name]) => prompts.includes(name))
-      .map(([name, answer]) => ({
-        id: randomUUID(),
-        [propId]: id,
-        name,
-        value: Array.isArray(answer) ? answer.join(', ') : answer?.toString() ?? 'N/A',
-      }));
-
-    return customAnswers as CustomAnswers<T>[];
-  };
 
   const collectExternalSources = (
     foodId: string,
@@ -484,56 +467,27 @@ function surveySubmissionService({
           userAgent,
           wakeUpTime,
           sleepTime,
+          customData: collectCustomAnswers(state.customPromptAnswers, submissionCustomPrompts),
         },
         { transaction },
       );
 
-      // Collect submission custom fields
-      const submissionCustomFieldInputs = collectCustomAnswers(
-        'surveySubmissionId',
-        surveySubmissionId,
-        state.customPromptAnswers,
-        submissionCustomPrompts,
-      );
-
       // Collect meals
-      const mealInputs = state.meals.map(({ name: { en: name }, time, duration }) => ({
+      const mealInputs = state.meals.map(({ name: { en: name }, time, duration, customPromptAnswers }) => ({
         id: randomUUID(),
         surveySubmissionId,
         name,
         hours: time?.hours ?? 0,
         minutes: time?.minutes ?? 0,
         duration,
+        customData: collectCustomAnswers(customPromptAnswers, mealCustomPrompts),
       }));
 
-      // Collect food
-      const { foodCodes } = state.meals.reduce<FoodCodes>(
-        (acc, meal) => {
-          const { foodCodes } = collectFoodCodes(meal.foods);
-          acc.foodCodes.push(...foodCodes);
+      // Store meals
+      await SurveySubmissionMeal.bulkCreate(mealInputs, { transaction });
 
-          return acc;
-        },
-        { foodCodes: [] },
-      );
+      const foodCodes = state.meals.reduce(collectFoodCodes, []);
 
-      // Store survey custom fields & meals
-      await Promise.all(
-        [
-          SurveySubmissionCustomField.bulkCreate(submissionCustomFieldInputs, { transaction }),
-          SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
-          searchCollectData
-            ? scheduler.jobs.addJob({
-                type: 'PopularitySearchUpdateCounters',
-                userId,
-                params: { localeCode, foodCodes },
-              })
-            : null,
-        ].filter(Boolean),
-      );
-
-      // Fetch food & group records
-      // TODO: if food record not found, look for prototype?
       const foodRecords = await Food.findAll({
         where: { code: foodCodes, localeId: localeCode },
         include: [
@@ -550,21 +504,17 @@ function surveySubmissionService({
         return acc;
       }, {});
 
+      const foodInputs: SurveySubmissionFoodCreationAttributes[] = [];
+      const missingFoodInputs: SurveySubmissionMissingFoodCreationAttributes[] = [];
+      const externalSourcesInputs: SurveySubmissionExternalSourceCreationAttributes[] = [];
+
       // Process meals
       for (const [idx, mealState] of state.meals.entries()) {
         const { id: mealId } = mealInputs[idx];
 
-        // Collect meal custom fields
-        const mealCustomFieldInputs = collectCustomAnswers(
-          'mealId',
-          mealId,
-          mealState.customPromptAnswers,
-          mealCustomPrompts,
-        );
-
         // Collect meal foods
         const collectedFoods = mealState.foods.reduce(
-          collectFoods({ foods: foodMap, mealId }),
+          collectFoods({ foods: foodMap, mealId, foodCustomPrompts }),
           {
             inputs: [],
             states: [],
@@ -573,87 +523,59 @@ function surveySubmissionService({
           },
         );
 
-        // Store meal custom fields & foods
-        await Promise.all([
-          SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs, { transaction }),
-          SurveySubmissionFood.bulkCreate(collectedFoods.inputs, { transaction }),
-          SurveySubmissionMissingFood.bulkCreate(collectedFoods.missingInputs, { transaction }),
-        ]);
+        foodInputs.push(...collectedFoods.inputs);
+        missingFoodInputs.push(...collectedFoods.missingInputs);
 
         // Process foods
         for (const [idx, foodState] of collectedFoods.states.entries()) {
           const { id: foodId } = collectedFoods.inputs[idx];
 
-          const { customPromptAnswers } = foodState;
-
-          // Collect food custom fields
-          const foodCustomFieldInputs = collectCustomAnswers(
-            'foodId',
-            foodId,
-            customPromptAnswers,
-            foodCustomPrompts,
-          );
-
-          // Collect food composition fields & food composition nutrients
-          const { fields, nutrients, portionSizes } = collectFoodCompositionData(
-            foodId,
-            foodState,
-            foodMap,
-          );
-
-          const externalSources = collectExternalSources(foodId, 'food', foodState.external);
-
-          // Store food custom fields, food composition fields, food composition nutrients, PSMs
-          await Promise.all(
-            [
-              SurveySubmissionFoodCustomField.bulkCreate(foodCustomFieldInputs, { transaction }),
-              fields.length ? SurveySubmissionField.bulkCreate(fields, { transaction }) : null,
-              nutrients.length
-                ? SurveySubmissionNutrient.bulkCreate(nutrients, { transaction })
-                : null,
-              portionSizes.length
-                ? SurveySubmissionPortionSizeField.bulkCreate(portionSizes, { transaction })
-                : null,
-              externalSources.length
-                ? SurveySubmissionExternalSource.bulkCreate(externalSources, { transaction })
-                : null,
-            ].filter(Boolean),
-          );
+          externalSourcesInputs.push(...collectExternalSources(foodId, 'food', foodState.external));
         }
 
         // Process missing foods
         for (const [idx, foodState] of collectedFoods.missingStates.entries()) {
           const { id: foodId } = collectedFoods.missingInputs[idx];
 
-          const externalSources = collectExternalSources(foodId, 'missing-food', foodState.external);
-          if (externalSources.length)
-            await SurveySubmissionExternalSource.bulkCreate(externalSources, { transaction });
+          externalSourcesInputs.push(...collectExternalSources(foodId, 'missing-food', foodState.external));
         }
       }
 
-      const hasNotifications
-        = notifications.length
-          && notifications.some(({ type }) => type === 'survey.session.submitted');
+      // Store foods & missing foods
+      await Promise.all([
+        SurveySubmissionFood.bulkCreate(foodInputs, { transaction }),
+        SurveySubmissionMissingFood.bulkCreate(missingFoodInputs, { transaction }),
+      ]);
 
-      // Clean user submissions cache and dispatch submission notification if any
-      await Promise.all(
-        [
-          cache.forget(`user-submissions:${userId}`),
-          hasNotifications
-            ? scheduler.jobs.addJob({
-                type: 'SurveyEventNotification',
-                userId,
-                params: {
-                  type: 'survey.session.submitted',
-                  sessionId,
-                  surveyId,
-                  submissionId: surveySubmissionId,
-                  userId,
-                },
-              })
-            : null,
-        ].filter(Boolean),
-      );
+      if (externalSourcesInputs.length)
+        await SurveySubmissionExternalSource.bulkCreate(externalSourcesInputs, { transaction });
+
+      const promises: Promise<unknown>[] = [
+        cache.forget(`user-submissions:${userId}`),
+      ];
+
+      if (searchCollectData) {
+        promises.push(
+          popularityCountersService.updateGlobalCounters(foodCodes),
+          popularityCountersService.updateLocalCounters(localeCode, foodCodes),
+        );
+      }
+
+      if (notifications.length && notifications.some(({ type }) => type === 'survey.session.submitted')) {
+        promises.push(scheduler.jobs.addJob({
+          type: 'SurveyEventNotification',
+          userId,
+          params: {
+            type: 'survey.session.submitted',
+            sessionId,
+            surveyId,
+            submissionId: surveySubmissionId,
+            userId,
+          },
+        }));
+      }
+
+      await Promise.all(promises);
     });
   };
 

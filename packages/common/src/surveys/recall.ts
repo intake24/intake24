@@ -1,6 +1,6 @@
 import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
 import type { FoodType, RecipeFood } from '../types';
-import type { Dictionary, Optional } from '../types/common';
+import type { Optional } from '../types/common';
 import type { UserFoodData } from '../types/http';
 import type { PortionSizeState } from './portion-size';
 import { z } from 'zod';
@@ -71,6 +71,8 @@ export const customPromptAnswer = z.union([
   z.null(),
 ]);
 export type CustomPromptAnswer = z.infer<typeof customPromptAnswer>;
+export const customData = z.record(z.string(), customPromptAnswer);
+export type CustomData = z.infer<typeof customData>;
 
 export const recipeBuilderComponent = z.object({
   order: z.number(),
@@ -84,7 +86,7 @@ export interface AbstractFoodState {
   id: string;
   flags: FoodFlag[];
   linkedFoods: FoodState[];
-  customPromptAnswers: Dictionary<CustomPromptAnswer>;
+  customPromptAnswers: CustomData;
   type: FoodType;
   external?: ExternalSourceRecord;
 }

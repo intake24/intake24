@@ -366,6 +366,10 @@ function submission(surveyId: string, userId: string) {
     endTime: faker.date.soon({ days: 1 }),
     submissionTime: faker.date.soon({ days: 1 }),
     sessionId: randomUUID(),
+    customData: {
+      testKey: 'testValue',
+      testNumber: 42,
+    },
   };
 }
 

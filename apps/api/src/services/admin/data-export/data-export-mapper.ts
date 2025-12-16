@@ -6,7 +6,7 @@ import type {
 } from './data-export-fields';
 import { get } from 'lodash-es';
 import type { IoC } from '@intake24/api/ioc';
-import type { ExportSectionId } from '@intake24/common/surveys';
+import type { CustomPromptAnswer, ExportSectionId } from '@intake24/common/surveys';
 
 export type ExportFieldTransformCallback<T = ExportRow> = (
   field: ExportField,
@@ -17,40 +17,40 @@ export const userCustomFieldValue: ExportFieldTransformCallback
     ({ food }) =>
       food.meal?.submission?.user?.customFields?.find(item => field.id === item.name)?.value;
 
+function mapCustomPromptAnswers(value?: CustomPromptAnswer): string {
+  return Array.isArray(value) ? value.join(', ') : value?.toString() ?? 'N/A';
+}
+
 export const submissionCustomFieldValue: ExportFieldTransformCallback
   = (field: ExportField): ExportFieldTransform =>
     ({ food }) =>
-      food.meal?.submission?.customFields?.find(item => field.id === item.name)?.value;
+      mapCustomPromptAnswers(food.meal?.submission?.customData[field.id]);
 
 export const mealCustomFieldValue: ExportFieldTransformCallback
   = (field: ExportField): ExportFieldTransform =>
     ({ food }) =>
-      food.meal?.customFields?.find(item => field.id === item.name)?.value;
+      mapCustomPromptAnswers(food.meal?.customData[field.id]);
 
 export const foodCustomFieldValue: ExportFieldTransformCallback
   = (field: ExportField): ExportFieldTransform =>
     ({ food }) =>
-      'customFields' in food
-        ? food.customFields?.find(item => field.id === item.name)?.value
+      'customData' in food
+        ? mapCustomPromptAnswers(food.customData[field.id])
         : undefined;
 
 export function foodFieldValue(field: ExportField): ExportFieldTransform {
   return ({ food }) =>
-    'fields' in food ? food.fields?.find(item => field.id === item.fieldName)?.value : undefined;
+    'fields' in food ? food.fields[field.id] : undefined;
 }
 
 export function foodNutrientValue(field: ExportField): ExportFieldTransform {
   return ({ food }) =>
-    'nutrients' in food
-      ? food.nutrients?.find(item => field.id === item.nutrientTypeId)?.amount
-      : undefined;
+    'nutrients' in food ? food.nutrients[field.id] : undefined;
 }
 
 export function portionSizeValue(field: ExportField): ExportFieldTransform {
   return ({ food }) =>
-    'portionSizes' in food
-      ? food.portionSizes?.find(item => field.id === item.name)?.value
-      : undefined;
+    !food.portionSize || typeof food.portionSize === 'string' ? undefined : food.portionSize[field.id];
 }
 
 export function externalSourceField(field: ExportField): ExportFieldTransform {
