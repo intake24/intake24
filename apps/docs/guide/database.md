@@ -1,3 +1,14 @@
+<script setup lang="ts">
+  import { onMounted, ref } from 'vue';
+
+  const links: Record<'system' | 'foods' | 'images', string> = ref({});
+
+  onMounted(async () => {
+    links.value = await (await fetch('https://storage.googleapis.com/intake24/assets/assets.json')).json();
+  });
+
+</script>
+
 # Database
 
 Database engine is [PostgreSQL](https://www.postgresql.org) and API Server is using mixture of two abstractions:
@@ -26,8 +37,14 @@ Database snapshots can be obtained in several ways:
 
 ### Public download links
 
-- [Foods database](https://storage.googleapis.com/intake24/snapshots/foods_snapshot.pgcustom)
-- [System database](https://storage.googleapis.com/intake24/snapshots/system_snapshot.sql)
+<ul v-if="Object.keys(links).length">
+  <li>
+    <a :href="links.foods" target="_blank" rel="noopener">Foods database</a>
+  </li>
+  <li>
+    <a :href="links.system" target="_blank" rel="noopener">System database</a>
+  </li>
+</ul>
 
 Once both databases are imported, system database needs to be initialized with default data and superuser account created using CLI [init:db:system](/cli/init-db-system) command.
 
@@ -42,7 +59,11 @@ Food images can be obtained in several ways:
 
 ### Public download links
 
-- [Foods images public download link](https://storage.googleapis.com/intake24/images/intake24-images-MRC-LIVE-19112025.zip)
+<ul v-if="Object.keys(links).length">
+  <li>
+    <a :href="links.images" target="_blank" rel="noopener">Foods images public download link</a>
+  </li>
+</ul>
 
 Extract the downloaded archive to the desired location (e.g. `apps/api/storage/images`). See more details on configuring image assets directory in [Configuration -> filesystem](/config/api/filesystem#images-dir).
 

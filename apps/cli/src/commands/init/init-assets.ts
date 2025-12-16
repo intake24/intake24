@@ -27,19 +27,10 @@ type InitAssetsArgs = {
   path: string;
 };
 
-const links: Record<Asset, { source: string; dest: string }> = {
-  system: {
-    source: 'https://storage.googleapis.com/intake24/snapshots/system_snapshot.sql',
-    dest: 'system_snapshot.sql',
-  },
-  foods: {
-    source: 'https://storage.googleapis.com/intake24/snapshots/foods_snapshot.pgcustom',
-    dest: 'foods_snapshot.pgcustom',
-  },
-  images: {
-    source: 'https://storage.googleapis.com/intake24/images/intake24-images-MRC-LIVE-19112025.zip',
-    dest: 'images.zip',
-  },
+const assetNames: Record<Asset, string> = {
+  system: 'system_snapshot.sql',
+  foods: 'foods_snapshot.pgcustom',
+  images: 'food_images.zip',
 };
 
 const throttleLog = throttle((msg: string) => log.info(msg), 1000);
@@ -51,19 +42,21 @@ async function initAssets({ assets, path }: InitAssetsArgs): Promise<void> {
     process.exit(1);
   }
 
+  const urls = await ky<Record<Asset, string>>('https://storage.googleapis.com/intake24/assets/assets.json').json();
+
   for (const asset of assets) {
-    const url = links[asset];
-    const destPath = resolve(path, url.dest);
+    const url = urls[asset];
+    const destPath = resolve(path, assetNames[asset]);
 
-    log.info(`Downloading ${asset} asset from ${url.source} to ${destPath}.`);
+    log.info(`Downloading ${asset} asset from ${url} to ${destPath}.`);
 
-    const response = await ky(url.source, {
+    const response = await ky(url, {
       onDownloadProgress: (progress) => {
         throttleLog(`${(progress.percent * 100).toFixed(2)}%`);
       },
     });
     if (!response.ok || !response.body) {
-      log.error(`Failed to download file from ${url.source}.`);
+      log.error(`Failed to download file from ${url}.`);
       log.error(`Error: ${response.status} ${response.statusText}`);
       continue;
     }
@@ -78,7 +71,7 @@ async function initAssets({ assets, path }: InitAssetsArgs): Promise<void> {
       if (existsSync(destPath))
         await unlink(destPath);
 
-      log.error(`Failed to download file from ${url.source}`);
+      log.error(`Failed to download file from ${url}.`);
       if (error instanceof Error)
         log.error(`${error.message}`);
 
@@ -100,7 +93,7 @@ async function extractImages(): Promise<void> {
   if (!extractImages)
     return;
 
-  const archivePath = resolve(links.images.dest);
+  const archivePath = resolve(assetNames.images);
   const pathExists = existsSync(archivePath);
   if (!pathExists) {
     log.error(`Archive path "${archivePath}" does not exist.`);
