@@ -22,7 +22,7 @@ import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-ma
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import logger from '@intake24/common-backend/services/logger/logger';
-import { Dictionary } from '@intake24/common/types';
+import type { Dictionary } from '@intake24/common/types';
 import { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
 import typeConverters from './types/v4-type-conversions';
 

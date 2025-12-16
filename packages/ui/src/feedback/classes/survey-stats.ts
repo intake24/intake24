@@ -14,7 +14,7 @@ export type FruitAndVegPortions = {
 };
 
 export interface MealStats
-  extends Pick<SurveyMeal, 'name' | 'hours' | 'minutes' | 'time' | 'duration' | 'customFields'> {
+  extends Pick<SurveyMeal, 'name' | 'hours' | 'minutes' | 'time' | 'duration' | 'customData'> {
   readonly stats: AggregateFoodStats;
 }
 
