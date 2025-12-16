@@ -14,7 +14,7 @@ PIDFile=/home/{{ env.user }}/.pm2/pm2.pid
 WorkingDirectory={{ env.directory }}/apps/api
 Restart=on-failure
 
-ExecStart=/usr/lib/node_modules/pm2/bin/pm2 resurrect
+ExecStart=/usr/lib/node_modules/pm2/bin/pm2 reload ecosystem.config.js
 ExecReload=/usr/lib/node_modules/pm2/bin/pm2 reload all
 ExecStop=/usr/lib/node_modules/pm2/bin/pm2 kill
 
