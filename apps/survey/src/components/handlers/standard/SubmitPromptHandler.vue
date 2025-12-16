@@ -9,6 +9,7 @@
 import { computed } from 'vue';
 import { SubmitPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { sendGtmEvent } from '@intake24/survey/util';
 import { createHandlerProps } from '../composables';
 
 defineProps(createHandlerProps<'submit-prompt'>());
@@ -20,9 +21,13 @@ const survey = useSurvey();
 const meals = computed(() => survey.meals);
 
 async function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next')
-    await survey.submitRecall();
-
+  if (type === 'next') {
+    sendGtmEvent({
+      event: 'recallSubmitted',
+      scheme_prompts: 'submission',
+    });
+  }
+  await survey.submitRecall();
   emit('action', type, ...args);
 }
 </script>

@@ -9,6 +9,9 @@ export const gtmEvents = [
   'surveyHome',
   'surveyLogout',
   'foodSearch',
+  'recallSubmitted',
+  'startRecall',
+  'cancelRecall',
 ] as const;
 type GtmEvent = (typeof gtmEvents)[number];
 
