@@ -367,13 +367,6 @@ export interface SurveySchemes {
   visibility: Generated<string>;
 }
 
-export interface SurveySubmissionCustomFields {
-  id: string;
-  name: string;
-  surveySubmissionId: string;
-  value: string;
-}
-
 export interface SurveySubmissionExternalSources {
   data: Json | null;
   foodId: string;
@@ -384,47 +377,31 @@ export interface SurveySubmissionExternalSources {
   type: string | null;
 }
 
-export interface SurveySubmissionFields {
-  fieldName: string;
-  foodId: string;
-  id: string;
-  value: string;
-}
-
-export interface SurveySubmissionFoodCustomFields {
-  foodId: string;
-  id: string;
-  name: string;
-  value: string;
-}
-
 export interface SurveySubmissionFoods {
   barcode: string | null;
   brand: string | null;
   code: string;
+  customData: Json | null;
   englishName: string;
+  fields: Json | null;
   id: string;
   index: number;
   locale: string;
   localName: string | null;
   mealId: string;
+  nutrients: Json | null;
   nutrientTableCode: string;
   nutrientTableId: string;
   parentId: string | null;
+  portionSize: Json | null;
   portionSizeMethodId: string;
   readyMeal: boolean;
   reasonableAmount: boolean;
   searchTerm: string;
 }
 
-export interface SurveySubmissionMealCustomFields {
-  id: string;
-  mealId: string;
-  name: string;
-  value: string;
-}
-
 export interface SurveySubmissionMeals {
+  customData: Json | null;
   duration: number | null;
   hours: number;
   id: string;
@@ -446,22 +423,9 @@ export interface SurveySubmissionMissingFoods {
   portionSize: string | null;
 }
 
-export interface SurveySubmissionNutrients {
-  amount: number;
-  foodId: string;
-  id: string;
-  nutrientTypeId: Int8;
-}
-
-export interface SurveySubmissionPortionSizeFields {
-  foodId: string;
-  id: string;
-  name: string;
-  value: string;
-}
-
 export interface SurveySubmissions {
   createdAt: Timestamp;
+  customData: Json | null;
   endTime: Timestamp;
   id: string;
   log: string | null;
@@ -648,16 +612,10 @@ export interface DB {
   surveys: Surveys;
   surveySchemePrompts: SurveySchemePrompts;
   surveySchemes: SurveySchemes;
-  surveySubmissionCustomFields: SurveySubmissionCustomFields;
   surveySubmissionExternalSources: SurveySubmissionExternalSources;
-  surveySubmissionFields: SurveySubmissionFields;
-  surveySubmissionFoodCustomFields: SurveySubmissionFoodCustomFields;
   surveySubmissionFoods: SurveySubmissionFoods;
-  surveySubmissionMealCustomFields: SurveySubmissionMealCustomFields;
   surveySubmissionMeals: SurveySubmissionMeals;
   surveySubmissionMissingFoods: SurveySubmissionMissingFoods;
-  surveySubmissionNutrients: SurveySubmissionNutrients;
-  surveySubmissionPortionSizeFields: SurveySubmissionPortionSizeFields;
   surveySubmissions: SurveySubmissions;
   surveysUxEventsSettings: SurveysUxEventsSettings;
   tasks: Tasks;

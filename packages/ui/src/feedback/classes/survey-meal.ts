@@ -1,3 +1,4 @@
+import type { CustomData } from '@intake24/common/surveys';
 import type { FeedbackSubmissionEntry } from '@intake24/common/types/http';
 import { fromTime } from '@intake24/common/util';
 import SurveyFood from './survey-food';
@@ -13,7 +14,7 @@ export default class SurveyMeal {
 
   readonly duration;
 
-  readonly customFields;
+  readonly customData;
 
   readonly foods;
 
@@ -24,7 +25,7 @@ export default class SurveyMeal {
     hours: number,
     minutes: number,
     duration: number | null,
-    customFields: { name: string; value: string }[],
+    customData: CustomData,
     foods: SurveyFood[],
     missingFoods: FeedbackSubmissionEntry['meals'][number]['missingFoods'],
   ) {
@@ -35,7 +36,7 @@ export default class SurveyMeal {
     this.minutes = minutes;
     this.time = time;
     this.duration = duration;
-    this.customFields = customFields;
+    this.customData = customData;
     this.foods = foods.map(food => food.clone());
     this.missingFoods = missingFoods.map(food => ({ ...food }));
   }
@@ -46,7 +47,7 @@ export default class SurveyMeal {
       this.hours,
       this.minutes,
       this.duration,
-      this.customFields,
+      this.customData,
       this.foods,
       this.missingFoods,
     );
@@ -58,7 +59,7 @@ export default class SurveyMeal {
       meal.hours,
       meal.minutes,
       meal.duration,
-      meal.customFields.map(({ name, value }) => ({ name, value })),
+      meal.customData,
       meal.foods.map(food => SurveyFood.fromJson(food)),
       meal.missingFoods.map(food => ({ ...food })),
     );

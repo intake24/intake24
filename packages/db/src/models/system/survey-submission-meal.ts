@@ -1,21 +1,20 @@
 import type {
   Attributes,
   CreationAttributes,
+  CreationOptional,
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
+import type { CustomData } from '@intake24/common/surveys';
 import BaseModel from '../model';
 import SurveySubmission from './survey-submission';
 import SurveySubmissionFood from './survey-submission-food';
-import SurveySubmissionMealCustomField from './survey-submission-meal-custom-field';
 import SurveySubmissionMissingFood from './survey-submission-missing-food';
 
 @Scopes(() => ({
   submission: { include: [{ model: SurveySubmission }] },
-  customFields: { include: [{ model: SurveySubmissionMealCustomField }] },
   foods: { include: [{ model: SurveySubmissionFood }] },
   missingFoods: { include: [{ model: SurveySubmissionMissingFood }] },
 }))
@@ -66,11 +65,16 @@ export default class SurveySubmissionMeal extends BaseModel<
   })
   declare duration: number | null;
 
+  @Column({
+    allowNull: true,
+    type: DataType.JSONB(),
+  })
+  get customData(): CreationOptional<CustomData> {
+    return this.getDataValue('customData') ?? {} as CustomData;
+  }
+
   @BelongsTo(() => SurveySubmission, 'surveySubmissionId')
   declare submission?: NonAttribute<SurveySubmission>;
-
-  @HasMany(() => SurveySubmissionMealCustomField, 'mealId')
-  declare customFields?: NonAttribute<SurveySubmissionMealCustomField[]>;
 
   @HasMany(() => SurveySubmissionFood, 'mealId')
   declare foods?: NonAttribute<SurveySubmissionFood[]>;

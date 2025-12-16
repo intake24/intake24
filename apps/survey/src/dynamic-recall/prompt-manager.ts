@@ -10,9 +10,8 @@ import type {
   Prompts,
 } from '@intake24/common/prompts';
 import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
-import type { CustomPromptAnswer, FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { CustomData, FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
-import type { Dictionary } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import {
   asServedComplete,
@@ -137,7 +136,7 @@ function showPrompt(state: SurveyState, prompt: Prompt, component: ComponentType
   return prompt.component === component;
 }
 
-function checkYesNoPromptConditions(prompt: Prompts['yes-no-prompt'], flags: string[], customPromptAnswers: Dictionary<CustomPromptAnswer>): boolean {
+function checkYesNoPromptConditions(prompt: Prompts['yes-no-prompt'], flags: string[], customPromptAnswers: CustomData): boolean {
   if (prompt.useFlag && prompt.flag) {
     if (!flags.includes(flagPromptCompletionFlag(prompt.flag))) {
       recallLog().promptCheck(

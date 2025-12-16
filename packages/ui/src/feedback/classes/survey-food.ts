@@ -24,9 +24,7 @@ export default class SurveyFood {
   }
 
   static fromJson(food: FeedbackSubmissionEntry['meals'][number]['foods'][number]): SurveyFood {
-    const mp = new Map<string, number>();
-    for (const nutrient of food.nutrients)
-      mp.set(nutrient.nutrientTypeId, nutrient.amount);
+    const mp = new Map(Object.entries(food.nutrients));
 
     return new SurveyFood(food.code, food.englishName, food.localName ?? '', mp);
   }
