@@ -82,7 +82,6 @@ function dataExportService({
             where: surveySubmissionConditions,
             include: [
               { association: 'survey', required: true },
-              { association: 'customFields', separate: true },
               {
                 association: 'user',
                 required: true,
@@ -93,7 +92,6 @@ function dataExportService({
               },
             ],
           },
-          { association: 'customFields', separate: true },
         ],
       },
       { association: 'externalSources', separate: true },
@@ -133,17 +131,7 @@ function dataExportService({
     ];
 
     const foods = {
-      include: [
-        ...include,
-        { association: 'customFields', separate: true },
-        { association: 'fields', separate: true },
-        {
-          association: 'nutrients',
-          separate: true,
-          include: [{ association: 'nutrientType', required: true }],
-        },
-        { association: 'portionSizes', separate: true },
-      ],
+      include,
       order,
     };
 

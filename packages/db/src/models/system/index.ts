@@ -28,16 +28,10 @@ import Survey from './survey';
 import SurveyScheme from './survey-scheme';
 import SurveySchemePrompt from './survey-scheme-prompt';
 import SurveySubmission from './survey-submission';
-import SurveySubmissionCustomField from './survey-submission-custom-field';
 import SurveySubmissionExternalSource from './survey-submission-external-source';
-import SurveySubmissionField from './survey-submission-field';
 import SurveySubmissionFood from './survey-submission-food';
-import SurveySubmissionFoodCustomField from './survey-submission-food-custom-field';
 import SurveySubmissionMeal from './survey-submission-meal';
-import SurveySubmissionMealCustomField from './survey-submission-meal-custom-field';
 import SurveySubmissionMissingFood from './survey-submission-missing-food';
-import SurveySubmissionNutrient from './survey-submission-nutrient';
-import SurveySubmissionPortionSizeField from './survey-submission-portion-size-field';
 import Task from './task';
 import User from './user';
 import UserCustomField from './user-custom-field';
@@ -110,26 +104,14 @@ export { default as SurveySchemePrompt } from './survey-scheme-prompt';
 export * from './survey-scheme-prompt';
 export { default as SurveySubmission } from './survey-submission';
 export * from './survey-submission';
-export { default as SurveySubmissionCustomField } from './survey-submission-custom-field';
-export * from './survey-submission-custom-field';
 export { default as SurveySubmissionExternalSource } from './survey-submission-external-source';
 export * from './survey-submission-external-source';
-export { default as SurveySubmissionField } from './survey-submission-field';
-export * from './survey-submission-field';
 export { default as SurveySubmissionFood } from './survey-submission-food';
 export * from './survey-submission-food';
-export { default as SurveySubmissionFoodCustomField } from './survey-submission-food-custom-field';
-export * from './survey-submission-food-custom-field';
 export { default as SurveySubmissionMeal } from './survey-submission-meal';
 export * from './survey-submission-meal';
-export { default as SurveySubmissionMealCustomField } from './survey-submission-meal-custom-field';
-export * from './survey-submission-meal-custom-field';
 export { default as SurveySubmissionMissingFood } from './survey-submission-missing-food';
 export * from './survey-submission-missing-food';
-export { default as SurveySubmissionNutrient } from './survey-submission-nutrient';
-export * from './survey-submission-nutrient';
-export { default as SurveySubmissionPortionSizeField } from './survey-submission-portion-size-field';
-export * from './survey-submission-portion-size-field';
 export { default as Task } from './task';
 export * from './task';
 export { default as User } from './user';
@@ -184,16 +166,10 @@ export const system = {
   SurveyScheme,
   SurveySchemePrompt,
   SurveySubmission,
-  SurveySubmissionCustomField,
   SurveySubmissionExternalSource,
-  SurveySubmissionField,
   SurveySubmissionFood,
-  SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
-  SurveySubmissionMealCustomField,
   SurveySubmissionMissingFood,
-  SurveySubmissionNutrient,
-  SurveySubmissionPortionSizeField,
   Task,
   User,
   UserCustomField,

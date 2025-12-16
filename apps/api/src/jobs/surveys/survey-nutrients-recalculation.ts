@@ -1,32 +1,27 @@
 import type { Job } from 'bullmq';
-
-import { randomUUID } from 'node:crypto';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
+import type { Dictionary } from '@intake24/common/types';
 import type { NutrientTableRecordField, NutrientTableRecordNutrient } from '@intake24/db';
 import {
   Job as DbJob,
   NutrientTableRecord,
   Op,
-  SurveySubmissionField,
   SurveySubmissionFood,
-  SurveySubmissionNutrient,
+  values,
 } from '@intake24/db';
-
 import BaseJob from '../job';
 
 export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrientsRecalculation'> {
   readonly name = 'SurveyNutrientsRecalculation';
 
   private dbJob!: DbJob;
+  private readonly kyselyDb;
 
-  private readonly db;
-
-  constructor({ db, logger }: Pick<IoC, 'db' | 'logger'>) {
+  constructor({ kyselyDb, logger }: Pick<IoC, 'kyselyDb' | 'logger'>) {
     super({ logger });
 
-    this.db = db;
+    this.kyselyDb = kyselyDb;
   }
 
   /**
@@ -77,7 +72,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       const difference = batchSize + offset - total;
       const limit = difference > 0 ? batchSize - difference : batchSize;
       const foods = await SurveySubmissionFood.findAll({
-        attributes: ['id', 'nutrientTableId', 'nutrientTableCode'],
+        attributes: ['id', 'nutrientTableId', 'nutrientTableCode', 'nutrients', 'portionSize'],
         include: [
           {
             association: 'meal',
@@ -92,12 +87,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
               },
             ],
           },
-          {
-            association: 'portionSizes',
-            where: { name: ['servingWeight', 'leftoversWeight'] },
-            required: false,
-            separate: true,
-          },
         ],
         order: [
           ['meal', 'submission', 'submissionTime', 'ASC'],
@@ -110,18 +99,15 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         limit,
       });
 
-      const foodIds: string[] = [];
       const nutrientTableRecordIds: Record<string, string[]> = {};
       const portionWeight: number[] = [];
 
-      foods.forEach(({ id, nutrientTableId, nutrientTableCode, portionSizes = [] }) => {
-        foodIds.push(id);
+      foods.forEach(({ nutrientTableId, nutrientTableCode, portionSize }) => {
         if (!nutrientTableRecordIds[nutrientTableId])
           nutrientTableRecordIds[nutrientTableId] = [];
 
         nutrientTableRecordIds[nutrientTableId].push(nutrientTableCode);
-        const [first, second] = portionSizes;
-        portionWeight.push(Math.abs(Number(first?.value ?? '0') - Number(second?.value ?? '0')));
+        portionWeight.push(Math.abs(Number(portionSize.servingWeight ?? '0') - Number(portionSize.leftoversWeight ?? '0')));
       });
 
       const conditions = Object.entries(nutrientTableRecordIds).map(
@@ -130,7 +116,10 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
       const nutrientRecords = await NutrientTableRecord.findAll({
         attributes: ['nutrientTableId', 'nutrientTableRecordId'],
-        include: [{ association: 'fields' }, { association: 'nutrients' }],
+        include: [
+          { association: 'fields' },
+          { association: 'nutrients' },
+        ],
         where: conditions.length > 1 ? { [Op.or]: conditions } : conditions[0],
       });
 
@@ -147,53 +136,49 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         return acc;
       }, {});
 
-      for (const [index, food] of Object.entries(foods)) {
-        const { id: foodId, nutrientTableId, nutrientTableCode } = food;
+      const records = Object.entries(foods).reduce<{ id: string; fields: string; nutrients: string }[]>((acc, [index, food]) => {
+        const { nutrientTableId, nutrientTableCode } = food;
 
         // Skip if nutrient table is not defined (e.g. recipe builder template)
         if (!nutrientTableId || !nutrientTableCode)
-          continue;
+          return acc;
 
         const key = `${nutrientTableId}:${nutrientTableCode}`;
 
         const match = nutrientRecordMap[key];
         if (!match) {
-          this.logger.warn(`Nutrient record mapping not found.`, {
-            nutrientTableId,
-            nutrientTableCode,
-          });
-          continue;
+          this.logger.warn(`Nutrient record mapping not found.`, { nutrientTableId, nutrientTableCode });
+          return acc;
         }
 
-        const fields = match.fields.map(({ name, value }) => ({
-          id: randomUUID(),
-          foodId,
-          fieldName: name,
-          value,
-        }));
+        const fields = match.fields.reduce<Dictionary>((acc, { name, value }) => {
+          acc[name] = value;
+          return acc;
+        }, {});
 
-        const nutrients = match.nutrients.map(({ nutrientTypeId, unitsPer100g }) => ({
-          id: randomUUID(),
-          foodId,
-          nutrientTypeId,
-          amount: (unitsPer100g * portionWeight[Number(index)]) / 100.0,
-        }));
+        const nutrients = match.nutrients.reduce<Dictionary>((acc, { nutrientTypeId, unitsPer100g }) => {
+          acc[nutrientTypeId] = (unitsPer100g * portionWeight[Number(index)]) / 100.0;
+          return acc;
+        }, {});
 
-        await this.db.system.transaction(async (transaction) => {
-          await Promise.all([
-            SurveySubmissionField.destroy({ where: { foodId }, transaction }),
-            SurveySubmissionNutrient.destroy({ where: { foodId }, transaction }),
-          ]);
-
-          await Promise.all(
-            [
-              fields.length ? SurveySubmissionField.bulkCreate(fields, { transaction }) : null,
-              nutrients.length
-                ? SurveySubmissionNutrient.bulkCreate(nutrients, { transaction })
-                : null,
-            ].filter(Boolean),
-          );
+        acc.push({
+          id: food.id,
+          fields: JSON.stringify(fields),
+          nutrients: JSON.stringify(nutrients),
         });
+        return acc;
+      }, []);
+
+      if (records.length) {
+        await this.kyselyDb.system
+          .updateTable('surveySubmissionFoods')
+          .from(values(records, 'data'))
+          .set(({ cast, ref }) => ({
+            fields: cast(ref('data.fields'), 'jsonb'),
+            nutrients: cast(ref('data.nutrients'), 'jsonb'),
+          }))
+          .whereRef('surveySubmissionFoods.id', '=', ({ cast, ref }) => cast(ref('data.id'), 'uuid'))
+          .executeTakeFirst();
       }
 
       await this.incrementProgress(batchSize);
