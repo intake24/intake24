@@ -23,12 +23,12 @@ psql -U $POSTGRES_USER -d $DB_DEV_FOODS_DATABASE -c "create extension if not exi
 psql -U $POSTGRES_USER -d $DB_DEV_FOODS_DATABASE -c "create extension if not exists \"btree_gist\";"
 
 echo "Downloading foods database snapshot..."
-wget -O /tmp/foods_snapshot.pgcustom https://storage.googleapis.com/intake24/snapshots/foods_snapshot.pgcustom
+wget -O /tmp/foods_snapshot.pgcustom https://storage.googleapis.com/intake24/assets/foods_snapshot.pgcustom
 echo "Restoring foods database from snapshot..."
 pg_restore -n public --no-owner --no-acl --role=$DB_DEV_FOODS_USERNAME --dbname $DB_DEV_FOODS_DATABASE /tmp/foods_snapshot.pgcustom
 
 echo "Downloading system database snapshot..."
-wget -O /tmp/system_snapshot.sql https://storage.googleapis.com/intake24/snapshots/system_snapshot.sql
+wget -O /tmp/system_snapshot.sql https://storage.googleapis.com/intake24/assets/system_snapshot.sql
 echo "Creating system database schema..."
 psql -U $POSTGRES_USER -d $DB_DEV_SYSTEM_DATABASE -f /tmp/system_snapshot.sql
 
