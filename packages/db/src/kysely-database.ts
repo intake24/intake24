@@ -123,7 +123,7 @@ export class KyselyDatabases {
     this.foods = new Kysely<FoodsDB>({
       dialect: foodsDialect,
       log: this.configLogger('foods'),
-      plugins: [new CamelCasePlugin()],
+      plugins: [new CamelCasePlugin({ maintainNestedObjectKeys: true })],
     });
 
     this.foodsConnectionPool = foodsConnectionPool;
@@ -133,7 +133,7 @@ export class KyselyDatabases {
     this.system = new Kysely<SystemDB>({
       dialect: systemDialect,
       log: this.configLogger('system'),
-      plugins: [new CamelCasePlugin()],
+      plugins: [new CamelCasePlugin({ maintainNestedObjectKeys: true })],
     });
 
     this.systemConnectionPool = systemConnectionPool;
