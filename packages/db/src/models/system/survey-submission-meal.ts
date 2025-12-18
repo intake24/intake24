@@ -7,6 +7,7 @@ import type {
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import type { CustomPromptAnswer } from '@intake24/common/surveys';
 import type { Dictionary } from '@intake24/common/types';
 import BaseModel from '../model';
 import SurveySubmission from './survey-submission';
@@ -69,8 +70,8 @@ export default class SurveySubmissionMeal extends BaseModel<
     allowNull: true,
     type: DataType.JSONB(),
   })
-  get customData(): CreationOptional<Dictionary> {
-    return this.getDataValue('customData') ?? {} as Dictionary;
+  get customData(): CreationOptional<Dictionary<CustomPromptAnswer>> {
+    return this.getDataValue('customData') ?? {} as Dictionary<CustomPromptAnswer>;
   }
 
   @BelongsTo(() => SurveySubmission, 'surveySubmissionId')

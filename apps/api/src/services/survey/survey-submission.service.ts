@@ -31,8 +31,6 @@ import {
   SurveySubmissionMissingFood,
 } from '@intake24/db';
 
-import { portionSizeMappers } from './portion-size-mapper';
-
 export type FoodMap = Record<string, Food>;
 
 export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
@@ -82,11 +80,11 @@ function surveySubmissionService({
   const collectCustomAnswers = (
     promptAnswers: Dictionary<CustomPromptAnswer>,
     prompts: string[],
-  ): Dictionary => {
+  ): Dictionary<CustomPromptAnswer> => {
     return Object.entries(promptAnswers)
       .filter(([name]) => prompts.includes(name))
-      .reduce<Dictionary>((acc, [key, value]) => {
-        acc[key] = Array.isArray(value) ? value.join(', ') : value?.toString() ?? 'N/A';
+      .reduce<Dictionary<CustomPromptAnswer>>((acc, [key, value]) => {
+        acc[key] = value;
         return acc;
       }, {});
   };
@@ -123,7 +121,7 @@ function surveySubmissionService({
     foodState: EncodedFood,
     foods: FoodMap,
   ) => {
-    const collectedData: CollectedNutrientInfo = { fields: [], nutrients: [], portionSize: [] };
+    const collectedData: CollectedNutrientInfo = { fields: {}, nutrients: {}, portionSize: {} };
 
     const {
       portionSize,
@@ -145,10 +143,8 @@ function surveySubmissionService({
       return collectedData;
     }
 
-    const portionSizeWeight = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
-
     // Collect portion sizes data
-    collectedData.portionSize = portionSizeMappers[portionSize.method](portionSize);
+    collectedData.portionSize = portionSize;
 
     // Bail if no nutrient record links - missing encoded food link
     if (!foodRecord.nutrientRecords.length) {
@@ -167,6 +163,8 @@ function surveySubmissionService({
     }, {});
 
     // Collect food composition nutrients
+    const portionSizeWeight = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
+
     collectedData.nutrients = nutrientTableRecord.nutrients.reduce<Dictionary>(
       (acc, { nutrientTypeId, unitsPer100g }) => {
         acc[nutrientTypeId] = (unitsPer100g * portionSizeWeight) / 100.0;
@@ -450,9 +448,6 @@ function surveySubmissionService({
         });
       }
 
-      // Collect submission custom fields
-      const submissionCustomField = collectCustomAnswers(state.customPromptAnswers, submissionCustomPrompts);
-
       // Survey submission
       const { id: surveySubmissionId } = await SurveySubmission.create(
         {
@@ -467,7 +462,7 @@ function surveySubmissionService({
           userAgent,
           wakeUpTime,
           sleepTime,
-          customData: submissionCustomField,
+          customData: collectCustomAnswers(state.customPromptAnswers, submissionCustomPrompts),
         },
         { transaction },
       );
@@ -508,8 +503,6 @@ function surveySubmissionService({
         ].filter(Boolean),
       );
 
-      // Fetch food & group records
-      // TODO: if food record not found, look for prototype?
       const foodRecords = await Food.findAll({
         where: { code: foodCodes, localeId: localeCode },
         include: [

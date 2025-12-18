@@ -16,6 +16,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
+import type { CustomPromptAnswer } from '@intake24/common/surveys';
 import type { Dictionary } from '@intake24/common/types';
 import BaseModel from '../model';
 import Survey from './survey';
@@ -114,8 +115,8 @@ export default class SurveySubmission extends BaseModel<
     allowNull: true,
     type: DataType.JSONB(),
   })
-  get customData(): CreationOptional<Dictionary> {
-    return this.getDataValue('customData') ?? {} as Dictionary;
+  get customData(): CreationOptional<Dictionary<CustomPromptAnswer>> {
+    return this.getDataValue('customData') ?? {} as Dictionary<CustomPromptAnswer>;
   }
 
   @CreatedAt

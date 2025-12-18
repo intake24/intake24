@@ -7,7 +7,7 @@ import type {
   NonAttribute,
 } from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-import type { PortionSizeMethodId } from '@intake24/common/surveys';
+import type { CustomPromptAnswer, PortionSizeMethodId } from '@intake24/common/surveys';
 import type { Dictionary } from '@intake24/common/types';
 import BaseModel from '../model';
 import SurveySubmissionExternalSource from './survey-submission-external-source';
@@ -127,8 +127,8 @@ export default class SurveySubmissionFood extends BaseModel<
     allowNull: true,
     type: DataType.JSONB(),
   })
-  get customData(): CreationOptional<Dictionary> {
-    return this.getDataValue('customData') ?? {} as Dictionary;
+  get customData(): CreationOptional<Dictionary<CustomPromptAnswer>> {
+    return this.getDataValue('customData') ?? {} as Dictionary<CustomPromptAnswer>;
   }
 
   @Column({

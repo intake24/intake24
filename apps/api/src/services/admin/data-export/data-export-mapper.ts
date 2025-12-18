@@ -6,7 +6,7 @@ import type {
 } from './data-export-fields';
 import { get } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
-import type { ExportSectionId } from '@intake24/common/surveys';
+import type { CustomPromptAnswer, ExportSectionId } from '@intake24/common/surveys';
 
 export type ExportFieldTransformCallback<T = ExportRow> = (
   field: ExportField,
@@ -17,21 +17,25 @@ export const userCustomFieldValue: ExportFieldTransformCallback
     ({ food }) =>
       food.meal?.submission?.user?.customFields?.find(item => field.id === item.name)?.value;
 
+function mapCustomPromptAnswers(value?: CustomPromptAnswer): string {
+  return Array.isArray(value) ? value.join(', ') : value?.toString() ?? 'N/A';
+}
+
 export const submissionCustomFieldValue: ExportFieldTransformCallback
   = (field: ExportField): ExportFieldTransform =>
     ({ food }) =>
-      food.meal?.submission?.customData[field.id];
+      mapCustomPromptAnswers(food.meal?.submission?.customData[field.id]);
 
 export const mealCustomFieldValue: ExportFieldTransformCallback
   = (field: ExportField): ExportFieldTransform =>
     ({ food }) =>
-      food.meal?.customData[field.id];
+      mapCustomPromptAnswers(food.meal?.customData[field.id]);
 
 export const foodCustomFieldValue: ExportFieldTransformCallback
   = (field: ExportField): ExportFieldTransform =>
     ({ food }) =>
       'customData' in food
-        ? food.customData[field.id]
+        ? mapCustomPromptAnswers(food.customData[field.id])
         : undefined;
 
 export function foodFieldValue(field: ExportField): ExportFieldTransform {
