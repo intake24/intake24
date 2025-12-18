@@ -28,7 +28,7 @@ type InitAssetsArgs = {
 };
 
 const assetNames: Record<Asset, string> = {
-  system: 'system_snapshot.sql',
+  system: 'system_snapshot.pgcustom',
   foods: 'foods_snapshot.pgcustom',
   images: 'food_images.zip',
 };

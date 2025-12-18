@@ -46,62 +46,9 @@ Database snapshots can be obtained in several ways:
   </li>
 </ul>
 
-Once both databases are imported, system database needs to be initialized with default data and superuser account created using CLI [init:db:system](/cli/init-db-system) command.
-
-## Images
-
-Intake24 provides food images archive.
-
-Food images can be obtained in several ways:
-
-1. Run [CLI command](/cli/init-assets.md) to download and extract images from public storage.
-2. Download images archive manually from public link below.
-
-### Public download links
-
-<ul v-if="Object.keys(links).length">
-  <li>
-    <a :href="links.images" target="_blank" rel="noopener">Foods images public download link</a>
-  </li>
-</ul>
-
-Extract the downloaded archive to the desired location (e.g. `apps/api/storage/images`). See more details on configuring image assets directory in [Configuration -> filesystem](/config/api/filesystem#images-dir).
-
-:::warning
-Images are very large (more than 18GB). Make sure you have enough disk space before downloading and extracting the archive.
-:::
-
-Refer to how to configure image assets directory.
-
-## Migrations
-
-Database migrations are being handled by [sequelize-cli](https://sequelize.org/docs/v6/other-topics/migrations).
-
-### Migrate system database
-
-Migration commands can be being executed either from `project root` or `packages/db` directory.
-
-```sh
-pnpm db:system:migrate
-
-# shorthand for
-
-pnpm sequelize db:migrate --options-path sequelize/system/options.js
-```
-
-### Migrate foods database
-
-```sh
-pnpm db:foods:migrate
-
-# shorthand for
-
-pnpm sequelize db:migrate --options-path sequelize/foods/options.js
-```
-
 ## Import database snapshots
 
-If you have a DB snapshots of Intake24, you can use CLI to import to the database server.
+Once you have DB snapshots of Intake24, you can use CLI to import to the database server.
 
 ### PostgreSQL
 
@@ -111,6 +58,23 @@ The Intake24 databases are:
 
 - System database: `intake24_system`, user `intake24`, no password.
 - Foods database: `intake24_foods`, user `intake24`, no password.
+
+:::tip
+
+The CLI command `pnpm cli init:env` assumes different database names for development, test and production environments.
+
+Development environment:
+
+- System database: `intake24_system_dev`, user `intake24`, no password.
+- Foods database: `intake24_foods_dev`, user `intake24`, no password.
+
+Test environment:
+
+- System database: `intake24_system_test`, user `intake24`, no password.
+- Foods database: `intake24_foods_test`, user `intake24`, no password.
+
+Please adjust the database names in below commands accordingly if you are using different environment.
+:::
 
 ### Importing foods and system databases
 
@@ -143,12 +107,12 @@ psql -d intake24_foods -c "create extension \"uuid-ossp\""
 4. Import snapshot file to DB `intake24_foods`
 
 ```
-pg_restore -n public --no-owner --no-acl --role=intake24 --dbname intake24_foods ./intake24-foods-snapshot.pgcustom
+pg_restore -n public --no-owner --no-acl --role=intake24 --dbname intake24_foods ./foods_snapshot.pgcustom
 ```
 
-Change the path of the snapshot file as needed, e.g. `intake24-foods-snapshot.pgcustom`
+Change the path of the snapshot file as needed, e.g. `foods_snapshot.pgcustom`
 
-5. Create DB `intake24_system`
+1. Create DB `intake24_system`
 
 ```
 createdb --owner=intake24 intake24_system
@@ -156,50 +120,84 @@ createdb --owner=intake24 intake24_system
 
 6. Import snapshot file to DB `intake24_system`.
 
-```
-pg_restore -n public --no-owner --no-acl --role=intake24 --dbname intake24_system ./intake24-system-snapshot.pgcustom
-```
-
-Change the path of the snapshot file as needed, e.g. `intake24-system-snapshot.pgcustom`
-
-7. Login to `intake24_system` using PSQL, and insert admin user (e.g. `admin@example.com`, or any email you prefer) to `users` table.
-
-Write down return user id. It will be useful in the next step.
+Locate the `system` database snapshot file and run:
 
 ```
-psql -d intake24_system
-
-insert into users (id, "name", email, phone, simple_name, email_notifications, sms_notifications, multi_factor_authentication, created_at, updated_at, verified_at, disabled_at) values (default, 'Admin', 'admin@example.com', '', 'Admin', true, true, false, now(), now(), now(), null) returning id;
+pg_restore -n public --no-owner --no-acl --role=intake24 --dbname intake24_system ./system_snapshot.pgcustom
 ```
 
-```
-id
--------
-11969
-(1 row)
-```
+Now you have both `foods` and `system` databases imported from snapshots.
 
-8. Go to the `apps/cli` directory in the source tree and run
+## Migrations
 
-```
-pnpm run cli hash-password [your password]
-```
+Since snapshots might be outdated, run the migrations to bring both databases to the latest version.
 
-Replace `[your password]` to the password you want.
+Database migrations are being handled by [sequelize-cli](https://sequelize.org/docs/v6/other-topics/migrations).
 
-9. Replace `[hash]` and `[salt]` with the password hash and salt generated, and insert to user by id.
+On the project root, run this single command to migrate both `foods` and `system` databases:
 
-```
-insert into user_passwords (user_id, password_hash, password_salt, password_hasher) values (11969, '[hash]', '[salt]', 'bcrypt');
+```sh
+pnpm db:migrate
 ```
 
-10. Give this user id superuser permissions:
+Or, you can run below commands separately for each database.
 
-```
-insert into role_user (role_id, user_id, created_at, updated_at) values (1, 11969, now(), now());
+### Migrate system database
+
+Migration commands can be being executed either from `project root` or `packages/db` directory.
+
+```sh
+pnpm db:system:migrate
+
+# shorthand for
+
+pnpm sequelize db:migrate --options-path sequelize/system/options.js
 ```
 
-By that you created admin test account `admin@example.com` in development database.
+### Migrate foods database
+
+```sh
+pnpm db:foods:migrate
+
+# shorthand for
+
+pnpm sequelize db:migrate --options-path sequelize/foods/options.js
+```
+
+## Initialize system database
+
+Once both databases are imported and migrated to the latest version, the system database needs to be initialized with default data and superuser account (admin user of Intake24) created using CLI:
+
+```sh
+pnpm cli init:db:system
+```
+
+For more details, please refer to [Initialize system database](/cli/init-db-system.md) documentation.
+
+Now you have updated `foods` and `system` databases, and created with admin account as specified.
+
+## Images
+
+Intake24 provides food images archive, which stored as file system assets and being access by Intake24 applications.
+
+Food images can be obtained in several ways:
+
+1. Run [CLI command](/cli/init-assets.md) to download and extract images from public storage.
+2. Download images archive manually from public link below.
+
+### Public download links
+
+<ul v-if="Object.keys(links).length">
+  <li>
+    <a :href="links.images" target="_blank" rel="noopener">Foods images public download link</a>
+  </li>
+</ul>
+
+Extract the downloaded archive to the desired location (e.g. `apps/api/storage/images`). See more details on configuring image assets directory in [Configuration -> filesystem](/config/api/filesystem#images-dir).
+
+:::warning
+Images are very large (more than 18GB). Make sure you have enough disk space before downloading and extracting the archive.
+:::
 
 ## Upgrade guide
 
@@ -268,6 +266,4 @@ TRUNCATE TABLE `table` RESTART IDENTITY CASCADE;
 
 ### Re-initialize data
 
-```sh
-pnpm cli init:db:system
-```
+Please refer [Initialize system database](/cli/init-db-system.md) the CLI command to re-initialize system database with default data and create an admin user.
