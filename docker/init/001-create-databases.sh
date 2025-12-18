@@ -28,9 +28,9 @@ echo "Restoring foods database from snapshot..."
 pg_restore -n public --no-owner --no-acl --role=$DB_DEV_FOODS_USERNAME --dbname $DB_DEV_FOODS_DATABASE /tmp/foods_snapshot.pgcustom
 
 echo "Downloading system database snapshot..."
-wget -O /tmp/system_snapshot.sql https://storage.googleapis.com/intake24/assets/system_snapshot.sql
+wget -O /tmp/system_snapshot.pgcustom https://storage.googleapis.com/intake24/assets/system_snapshot.pgcustom
 echo "Creating system database schema..."
-psql -U $POSTGRES_USER -d $DB_DEV_SYSTEM_DATABASE -f /tmp/system_snapshot.sql
+pg_restore -n public --no-owner --no-acl --role=$DB_DEV_SYSTEM_USERNAME --dbname $DB_DEV_SYSTEM_DATABASE /tmp/system_snapshot.pgcustom
 
 # TEST environment
 
@@ -50,7 +50,8 @@ if [ "$DB_TEST_SYSTEM_USERNAME" ] && [ "$DB_TEST_SYSTEM_DATABASE" ]; then
     echo "Creating test system database..."
     createdb -U $POSTGRES_USER --owner=$DB_TEST_SYSTEM_USERNAME $DB_TEST_SYSTEM_DATABASE;
     echo "Creating test system database schema..."
-    psql -U $POSTGRES_USER -d $DB_TEST_SYSTEM_DATABASE -f tmp/system_snapshot.sql
+    # psql -U $POSTGRES_USER -d $DB_TEST_SYSTEM_DATABASE -f tmp/system_snapshot.sql
+    pg_restore -n public --no-owner --no-acl --role=$DB_TEST_SYSTEM_USERNAME --dbname $DB_TEST_SYSTEM_DATABASE /tmp/system_snapshot.pgcustom
 fi
 
 # Foods DB
