@@ -26,8 +26,8 @@ async function action(type: string, ...args: [id?: string, params?: object]) {
       event: 'recallSubmitted',
       scheme_prompts: 'submission',
     });
+    await survey.submitRecall();
   }
-  await survey.submitRecall();
   emit('action', type, ...args);
 }
 </script>

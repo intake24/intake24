@@ -17,19 +17,21 @@ export default defineComponent({
   components: { RecallDesktop, RecallMobile },
 
   beforeRouteEnter({ params }, from, next) {
-    sendGtmEvent({
-      event: 'startRecall',
-      action: 'start',
-      scheme_prompts: 'preMeals',
-    });
     const survey = useSurvey();
 
     survey.validateState(survey.data, survey.parameters?.session);
 
-    if (survey.recallAllowed)
+    if (survey.recallAllowed) {
+      sendGtmEvent({
+        event: 'startRecall',
+        action: 'start',
+        scheme_prompts: 'preMeals',
+      });
       next();
-    else
+    }
+    else {
       next({ name: 'survey-home', params });
+    }
   },
 
   computed: {
