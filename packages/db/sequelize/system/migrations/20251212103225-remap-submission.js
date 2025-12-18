@@ -329,7 +329,6 @@ module.exports = {
     }),
 
   down: async () => {
-    console.log('This migration is irreversible');
-    // throw new Error('This migration cannot be undone');
+    throw new Error('This migration cannot be undone');
   },
 };
