@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const permissionAttributes = z.object({
   id: z.string(),
-  name: z.string().min(1).max(128).regex(/^[\w|-]*$/),
+  name: z.string().min(1).max(128).regex(/^[\w:-]*$/),
   displayName: z.string().min(1).max(128),
   description: z.string().nullish(),
   createdAt: z.date(),
