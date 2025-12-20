@@ -90,6 +90,22 @@ module.exports = {
         { transaction },
       );
 
+      const dups = await queryInterface.sequelize.query(`
+        SELECT COUNT(ss.id), ss.session_id
+        FROM survey_submissions ss
+        LEFT JOIN jobs j on ss.session_id = j.session_id and j."type" = 'SurveySubmission' AND j.successful = true
+        GROUP BY ss.session_id
+        HAVING COUNT(ss.id) > 1
+        `, {
+        type: Sequelize.QueryTypes.SELECT,
+        transaction,
+      });
+
+      if (dups.length) {
+        console.log(dups.map(d => `session_id: ${d.session_id}, count: ${d.count}`).join('\n'));
+        throw new Error(`Found ${dups.length} duplicate sessions matching the submissions`);
+      }
+
       const count = await queryInterface.sequelize.query(`SELECT count(ss.id) FROM survey_submissions ss`, {
         type: Sequelize.QueryTypes.SELECT,
         transaction,
@@ -117,7 +133,7 @@ module.exports = {
         SELECT ss.id, ss.submission_time, ss.session_id, ss.created_at, ss.updated_at, ss.custom_data, j.params
         FROM survey_submissions ss
         LEFT JOIN jobs j on ss.session_id = j.session_id and j."type" = 'SurveySubmission' and j.successful = true
-        order by ss.survey_id, ss.user_id
+        order by ss.survey_id, ss.submission_time, ss.id
         LIMIT :limit OFFSET :offset
         `, {
           type: Sequelize.QueryTypes.SELECT,
@@ -159,7 +175,7 @@ module.exports = {
             FROM survey_submission_meals ssm
             join survey_submissions ss on ssm.survey_submission_id = ss.id
             where ss.id = :submissionId
-            order by ss.submission_time , ss.id, interval, ssm."name"
+            order by ss.submission_time, ss.id, interval, ssm."name"
           `, {
             type: Sequelize.QueryTypes.SELECT,
             replacements: { submissionId: submission.id },
@@ -180,9 +196,8 @@ module.exports = {
               return false;
             });
 
-            if (!matchMeal) {
+            if (!matchMeal)
               throw new Error(`Meal not found for meal id: ${meal.id}, session: ${session.uxSessionId}`);
-            }
 
             const cMealKeys = Object.keys(meal.custom_data ?? {});
             return {
