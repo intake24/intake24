@@ -23,12 +23,20 @@ psql -U $POSTGRES_USER -d $DB_DEV_FOODS_DATABASE -c "create extension if not exi
 psql -U $POSTGRES_USER -d $DB_DEV_FOODS_DATABASE -c "create extension if not exists \"btree_gist\";"
 
 echo "Downloading foods database snapshot..."
-wget -O /tmp/foods_snapshot.pgcustom https://storage.googleapis.com/intake24/assets/foods_snapshot.pgcustom
+until wget -c -O /tmp/foods_snapshot.pgcustom https://storage.googleapis.com/intake24/assets/foods_snapshot.pgcustom
+do
+    echo "Retrying download of foods database snapshot in 3 seconds..."
+    sleep 3
+done
 echo "Restoring foods database from snapshot..."
 pg_restore -n public --no-owner --no-acl --role=$DB_DEV_FOODS_USERNAME --dbname $DB_DEV_FOODS_DATABASE /tmp/foods_snapshot.pgcustom
 
 echo "Downloading system database snapshot..."
-wget -O /tmp/system_snapshot.pgcustom https://storage.googleapis.com/intake24/assets/system_snapshot.pgcustom
+until wget -c -O /tmp/system_snapshot.pgcustom https://storage.googleapis.com/intake24/assets/system_snapshot.pgcustom
+do
+    echo "Retrying download of system database snapshot in 3 seconds..."
+    sleep 3
+done
 echo "Creating system database schema..."
 pg_restore -n public --no-owner --no-acl --role=$DB_DEV_SYSTEM_USERNAME --dbname $DB_DEV_SYSTEM_DATABASE /tmp/system_snapshot.pgcustom
 
@@ -50,7 +58,6 @@ if [ "$DB_TEST_SYSTEM_USERNAME" ] && [ "$DB_TEST_SYSTEM_DATABASE" ]; then
     echo "Creating test system database..."
     createdb -U $POSTGRES_USER --owner=$DB_TEST_SYSTEM_USERNAME $DB_TEST_SYSTEM_DATABASE;
     echo "Creating test system database schema..."
-    # psql -U $POSTGRES_USER -d $DB_TEST_SYSTEM_DATABASE -f tmp/system_snapshot.sql
     pg_restore -n public --no-owner --no-acl --role=$DB_TEST_SYSTEM_USERNAME --dbname $DB_TEST_SYSTEM_DATABASE /tmp/system_snapshot.pgcustom
 fi
 

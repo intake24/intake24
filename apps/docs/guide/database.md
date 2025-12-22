@@ -56,8 +56,8 @@ PostgreSQL is running on the standard port `5432`.
 
 The Intake24 databases are:
 
-- System database: `intake24_system`, user `intake24`, no password.
-- Foods database: `intake24_foods`, user `intake24`, no password.
+- System database: `intake24_system`, user `intake24`, password `intake24`.
+- Foods database: `intake24_foods`, user `intake24`, password `intake24`.
 
 :::tip
 
@@ -65,13 +65,13 @@ The CLI command `pnpm cli init:env` assumes different database names for develop
 
 Development environment:
 
-- System database: `intake24_system_dev`, user `intake24`, no password.
-- Foods database: `intake24_foods_dev`, user `intake24`, no password.
+- System database: `intake24_system_dev`, user `intake24`, password `intake24`.
+- Foods database: `intake24_foods_dev`, user `intake24`, password `intake24`.
 
 Test environment:
 
-- System database: `intake24_system_test`, user `intake24`, no password.
-- Foods database: `intake24_foods_test`, user `intake24`, no password.
+- System database: `intake24_system_test`, user `intake24`, password `intake24`.
+- Foods database: `intake24_foods_test`, user `intake24`, password `intake24`.
 
 Please adjust the database names in below commands accordingly if you are using different environment.
 :::
