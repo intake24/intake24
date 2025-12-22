@@ -1,3 +1,4 @@
+import { Readable } from 'node:stream';
 import { initContract } from '@ts-rest/core';
 import z from 'zod';
 
@@ -21,5 +22,24 @@ export const metrics = contract.router({
     },
     summary: 'Get metrics (node)',
     description: 'Returns prometheus-node-exporter metrics for the underlying machine',
+  },
+  writeHeapSnapshot: {
+    method: 'POST',
+    path: '/admin/metrics/heap-snapshots',
+    body: null,
+    responses: {
+      200: z.object({ filename: z.string() }),
+    },
+    summary: 'Generate heap snapshot',
+    description: 'Generates a heap snapshot',
+  },
+  getHeapSnapshot: {
+    method: 'GET',
+    path: '/admin/metrics/heap-snapshots/:heapSnapshot',
+    responses: {
+      200: z.instanceof(Readable),
+    },
+    summary: 'Download heap snapshot',
+    description: 'Downloads heap snapshot file',
   },
 });

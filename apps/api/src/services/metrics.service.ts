@@ -1,12 +1,18 @@
 import type { Express } from 'express';
+import type { MetricsConfig } from '../config/metrics';
+import type { JobsQueueHandler, QueueHandler, TasksQueueHandler } from './core/queues';
+import { stat } from 'node:fs/promises';
+import { basename, resolve } from 'node:path';
+import { writeHeapSnapshot } from 'node:v8';
 import { createMiddleware } from '@promster/express';
+import { format } from 'date-fns';
+import { ensureDir, exists } from 'fs-extra';
 import cron, { ScheduledTask } from 'node-cron';
 import prom, { collectDefaultMetrics, register as defaultRegister } from 'prom-client';
-import { IoC } from '@intake24/api/ioc';
-import { Dictionary, JobData } from '@intake24/common/types';
-import { DatabasesInterface, KyselyDatabases } from '@intake24/db';
-import { MetricsConfig } from '../config/metrics';
-import { JobsQueueHandler, QueueHandler, TasksQueueHandler } from './core/queues';
+import type { IoC } from '@intake24/api/ioc';
+import type { Dictionary, JobData } from '@intake24/common/types';
+import type { DatabasesInterface, KyselyDatabases } from '@intake24/db';
+import { NotFoundError } from '../http/errors';
 
 const kyselySystemLabels = { db: 'system', interface: 'kysely' } as const;
 const kyselyFoodsLabels = { db: 'foods', interface: 'kysely' } as const;
@@ -79,7 +85,13 @@ export class AppMetricsService {
 
   private cronTask?: ScheduledTask;
 
-  constructor({ db, kyselyDb, jobsQueueHandler, tasksQueueHandler, metricsConfig }: Pick<IoC, 'db' | 'kyselyDb' | 'jobsQueueHandler' | 'tasksQueueHandler' | 'metricsConfig'>) {
+  constructor({
+    db,
+    kyselyDb,
+    jobsQueueHandler,
+    tasksQueueHandler,
+    metricsConfig,
+  }: Pick<IoC, 'db' | 'kyselyDb' | 'jobsQueueHandler' | 'tasksQueueHandler' | 'metricsConfig'>) {
     this.sequelizeDb = db;
     this.kyselyDb = kyselyDb;
     this.metricsConfig = metricsConfig;
@@ -326,5 +338,30 @@ export class AppMetricsService {
 
   async getMetrics(): Promise<string> {
     return defaultRegister.metrics();
+  }
+
+  async writeHeapSnapshot(): Promise<string> {
+    const timestamp = format(new Date(), 'yyyyMMdd-HHmmss');
+    const fileName = `heapdump-${this.defaultLabels.instance_id}-${this.defaultLabels.pm2_instance_id ?? 0}-${timestamp}.heapsnapshot`;
+    const dir = resolve('./storage/private/heapdumps');
+    const filePath = resolve(dir, fileName);
+
+    await ensureDir(dir);
+    writeHeapSnapshot(filePath);
+
+    return fileName;
+  }
+
+  async getHeapSnapshot(heapSnapshot: string): Promise<{ filename: string; filePath: string; size: number }> {
+    const filename = basename(heapSnapshot);
+    const filePath = resolve('./storage/private/heapdumps', filename);
+
+    const hpExists = await exists(filePath);
+    if (!hpExists)
+      throw new NotFoundError();
+
+    const { size } = await stat(filePath);
+
+    return { filename, filePath, size };
   }
 }
