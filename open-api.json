@@ -8697,7 +8697,7 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 128,
-                            "pattern": "^[\\w|-]*$"
+                            "pattern": "^[\\w:-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -8793,7 +8793,7 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 128,
-                    "pattern": "^[\\w|-]*$"
+                    "pattern": "^[\\w:-]*$"
                   },
                   "displayName": {
                     "type": "string",
@@ -8828,7 +8828,7 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 128,
-                      "pattern": "^[\\w|-]*$"
+                      "pattern": "^[\\w:-]*$"
                     },
                     "displayName": {
                       "type": "string",
@@ -8895,7 +8895,7 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 128,
-                      "pattern": "^[\\w|-]*$"
+                      "pattern": "^[\\w:-]*$"
                     },
                     "displayName": {
                       "type": "string",
@@ -8984,7 +8984,7 @@
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 128,
-                      "pattern": "^[\\w|-]*$"
+                      "pattern": "^[\\w:-]*$"
                     },
                     "displayName": {
                       "type": "string",
@@ -9118,7 +9118,7 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 128,
-                            "pattern": "^[\\w|-]*$"
+                            "pattern": "^[\\w:-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -9266,7 +9266,7 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 128,
-                            "pattern": "^[\\w|-]*$"
+                            "pattern": "^[\\w:-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -9611,7 +9611,7 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 128,
-                            "pattern": "^[\\w|-]*$"
+                            "pattern": "^[\\w:-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -10494,7 +10494,7 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 128,
-                            "pattern": "^[\\w|-]*$"
+                            "pattern": "^[\\w:-]*$"
                           },
                           "displayName": {
                             "type": "string",
@@ -39404,6 +39404,71 @@
         "responses": {
           "200": {
             "description": "200"
+          }
+        }
+      }
+    },
+    "/admin/metrics/heap-snapshots": {
+      "post": {
+        "description": "Generates a heap snapshot",
+        "summary": "Generate heap snapshot",
+        "tags": [
+          "default",
+          "admin",
+          "metrics"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filename": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "filename"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/metrics/heap-snapshots/{heapSnapshot}": {
+      "get": {
+        "description": "Downloads heap snapshot file",
+        "summary": "Download heap snapshot",
+        "tags": [
+          "default",
+          "admin",
+          "metrics"
+        ],
+        "parameters": [
+          {
+            "name": "heapSnapshot",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true
+                }
+              }
+            }
           }
         }
       }
