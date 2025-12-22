@@ -1,5 +1,5 @@
+import { createReadStream } from 'node:fs';
 import { initServer } from '@ts-rest/express';
-import ioc from '@intake24/api/ioc';
 import contract from '@intake24/common/contracts';
 import { permission } from '../../middleware/acl';
 
@@ -42,25 +42,23 @@ import { permission } from '../../middleware/acl';
 // should be refactored without ts-rest
 
 export function metrics() {
-  const metricsConfig = ioc.cradle.metricsConfig;
-  const appMetricsService = ioc.cradle.appMetricsService;
-  const nodeExporterUrl = `http://127.0.0.1:${metricsConfig.prometheusNodeExporter.port}/metrics`;
-
   return initServer().router(contract.admin.metrics, {
     appMetrics: {
-      middleware: [permission('metrics-app')],
-      handler: async () => {
-        const metrics = await appMetricsService.getMetrics();
+      middleware: [permission('metrics:app')],
+      handler: async ({ req }) => {
+        const metrics = await req.scope.cradle.appMetricsService.getMetrics();
         return { status: 200, headers: { 'Content-Type': 'text/plain; version=0.0.4;' }, body: metrics };
       },
     },
     nodeMetrics: {
-      middleware: [permission('metrics-node')],
-      handler: async () => {
+      middleware: [permission('metrics:node')],
+      handler: async ({ req }) => {
+        const { metricsConfig } = req.scope.cradle;
         if (!metricsConfig.prometheusNodeExporter.enabled)
           return { status: 503, body: undefined };
 
         try {
+          const nodeExporterUrl = `http://127.0.0.1:${metricsConfig.prometheusNodeExporter.port}/metrics`;
           const nodeExporterResponse = await fetch(nodeExporterUrl, { method: 'GET' });
 
           if (!nodeExporterResponse.ok) {
@@ -79,6 +77,28 @@ export function metrics() {
         catch {
           return { status: 503, body: undefined };
         }
+      },
+    },
+    writeHeapSnapshot: {
+      middleware: [permission('metrics:heap-snapshots')],
+      handler: async ({ req }) => {
+        const filename = await req.scope.cradle.appMetricsService.writeHeapSnapshot();
+        return { status: 200, body: { filename } };
+      },
+    },
+    getHeapSnapshot: {
+      middleware: [permission('metrics:heap-snapshots')],
+      handler: async ({ req, res, params: { heapSnapshot } }) => {
+        const { filename, filePath, size } = await req.scope.cradle.appMetricsService.getHeapSnapshot(heapSnapshot);
+
+        res.set('Content-Disposition', `attachment; filename=${filename}`);
+        res.set('Content-Length', size.toString());
+
+        return {
+          status: 200,
+          contentType: 'application/octet-stream',
+          body: createReadStream(filePath),
+        };
       },
     },
   });
