@@ -9,7 +9,6 @@ import { defineComponent } from 'vue';
 
 import { RecallDesktop, RecallMobile } from '@intake24/survey/components';
 import { useSurvey } from '@intake24/survey/stores';
-import { sendGtmEvent } from '@intake24/survey/util';
 
 export default defineComponent({
   name: 'SurveyRecall',
@@ -21,17 +20,10 @@ export default defineComponent({
 
     survey.validateState(survey.data, survey.parameters?.session);
 
-    if (survey.recallAllowed) {
-      sendGtmEvent({
-        event: 'startRecall',
-        action: 'start',
-        scheme_prompts: 'preMeals',
-      });
+    if (survey.recallAllowed)
       next();
-    }
-    else {
+    else
       next({ name: 'survey-home', params });
-    }
   },
 
   computed: {
