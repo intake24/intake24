@@ -37,6 +37,7 @@ import {
   getMealIndex,
   getMealIndexForSelection,
   getMealIndexRequired,
+  sendGtmEvent,
 } from '@intake24/survey/util';
 import { useApp, useLoading } from '@intake24/ui/stores';
 import { surveyService } from '../services';
@@ -313,13 +314,22 @@ export const useSurvey = defineStore('survey', {
         meals: this.parameters.surveyScheme.meals.map(({ name, time, flags }) =>
           createMeal({ name, defaultTime: toTime(time), flags }, this.parameters?.surveyScheme.settings.flow)),
       });
+      sendGtmEvent({
+        event: 'startRecall',
+        action: 'start',
+        scheme_prompts: 'preMeals',
+      });
 
       await this.startUserSession();
     },
 
     async cancelRecall() {
       const { uxSessionId } = this.data;
-
+      sendGtmEvent({
+        event: 'cancelRecall',
+        action: 'cancel',
+        scheme_prompts: 'preMeals',
+      });
       this.clearState();
       await this.clearUserSession(uxSessionId);
     },
@@ -453,6 +463,11 @@ export const useSurvey = defineStore('survey', {
         this.setUserInfo(rest);
         this.data.id = submission.id;
         this.data.submissionTime = submission.submissionTime;
+        sendGtmEvent({
+          event: 'recallSubmitted',
+          scheme_prompts: 'submission',
+        });
+
         clearPromptStores();
       }
       finally {
