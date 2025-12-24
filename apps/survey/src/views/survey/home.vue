@@ -358,11 +358,6 @@ export default defineComponent({
     };
 
     async function cancelRecall() {
-      sendGtmEvent({
-        event: 'cancelRecall',
-        action: 'cancel',
-        scheme_prompts: 'preMeals',
-      });
       await survey.cancelRecall();
     };
 

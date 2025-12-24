@@ -19,7 +19,7 @@ import {
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndex, getMealIndex, sendGtmEvent } from '@intake24/survey/util';
+import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
 import { InfoAlert } from '../elements';
 
 export default defineComponent({
@@ -133,11 +133,6 @@ export default defineComponent({
 
     this.recallController = new DynamicRecall(this.surveyScheme, this.survey);
     await this.survey.startRecall();
-    sendGtmEvent({
-      event: 'startRecall',
-      action: 'start',
-      scheme_prompts: 'preMeals',
-    });
   },
 
   async mounted() {
