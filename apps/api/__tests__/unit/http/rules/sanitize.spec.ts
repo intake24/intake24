@@ -1,4 +1,4 @@
-import { createSanitizer } from '@intake24/common/rules';
+import { sanitize } from '@intake24/common/rules';
 
 describe('input sanitation middleware', () => {
   it('should sanitize/trim input, no HTML by default', () => {
@@ -16,7 +16,7 @@ describe('input sanitation middleware', () => {
       name: 'Ask About Diet',
     };
 
-    expect(createSanitizer()(input)).toEqual(output);
+    expect(sanitize(input)).toEqual(output);
   });
 
   it('should sanitize/trim input, allow safe HTML', () => {
@@ -56,11 +56,12 @@ describe('input sanitation middleware', () => {
       component: 'checkbox-list-prompt',
       type: 'custom',
       id: 'ask-about-diet',
-      name: 'Ask About Diet<img src="x">',
+      name: 'Ask About Diet<img src="x" />',
       props: {
         text: { en: 'Are you following any kind of special diet?' },
         description: {
-          en: '<p>If yes, please tick</p>',
+          en: `<p>If yes, please tick the options below
+            that best describes your diet (you can tick more than one e.g. vegetarian and gluten free).</p>`,
         },
         conditions: [],
         validation: { required: true, message: { en: 'Invalid answer<iframe></iframe>' } },
@@ -78,7 +79,7 @@ describe('input sanitation middleware', () => {
       },
     };
 
-    expect(createSanitizer({ allowHtml: true })(input)).toEqual(output);
+    expect(sanitize(input, { allowHtml: true })).toEqual(output);
   });
 
   it('should sanitize/trim input, allow safe HTML, convert empty strings to nulls', () => {
@@ -116,11 +117,11 @@ describe('input sanitation middleware', () => {
       component: 'checkbox-list-prompt',
       type: 'custom',
       id: 'ask-about-diet',
-      name: 'Ask About Diet<img src="x">',
+      name: 'Ask About Diet<img src="x" />',
       props: {
         text: { en: 'Are you following any kind of special diet?', de: null },
         description: {
-          en: '<p>If yes, please tick</p>',
+          en: '<p>If yes, please tick the options below that best describes your diet (you can tick more than one e.g. vegetarian and gluten free).</p>',
         },
         conditions: [],
         validation: { required: true, message: { en: 'Invalid answer<iframe></iframe>' } },
@@ -136,6 +137,6 @@ describe('input sanitation middleware', () => {
       },
     };
 
-    expect(createSanitizer({ allowHtml: true, emptyStringToNull: true })(input)).toEqual(output);
+    expect(sanitize(input, { allowHtml: true, emptyStringToNull: true })).toEqual(output);
   });
 });

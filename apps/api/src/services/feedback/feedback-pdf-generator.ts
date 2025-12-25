@@ -31,6 +31,7 @@ export default class FeedbackPdfGenerator {
         const store = JSON.stringify({ lang: this.options.lang });
         await page.evaluateOnNewDocument((store) => {
           // TODO: hardcoded default prefix
+          // @ts-expect-error types
           window.localStorage.setItem('it24s_app', store);
         }, store);
       }
@@ -79,7 +80,6 @@ export default class FeedbackPdfGenerator {
       displayHeaderFooter: true,
       printBackground: true,
     });
-    // @ts-expect-error types
     const pdfBuffer = Readable.fromWeb(pdfWebStream);
 
     pdfBuffer
