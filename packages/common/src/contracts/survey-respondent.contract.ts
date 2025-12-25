@@ -1,5 +1,5 @@
 import { initContract } from '@ts-rest/core';
-import { createSanitizer } from '../rules';
+import { sanitize } from '../rules';
 import { surveyState } from '../surveys';
 import {
   foodSearchResponse,
@@ -116,7 +116,7 @@ export const surveyRespondent = initContract().router({
     method: 'POST',
     path: '/surveys/:slug/submission',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     query: z.object({ tzOffset }),
     body: z.object({ submission: surveyState }),

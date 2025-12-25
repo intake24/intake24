@@ -1,4 +1,4 @@
-import { createSanitizer } from '@intake24/common/rules';
+import { sanitize } from '@intake24/common/rules';
 
 describe('input sanitation middleware', () => {
   it('should sanitize/trim input, no HTML by default', () => {
@@ -16,7 +16,7 @@ describe('input sanitation middleware', () => {
       name: 'Ask About Diet',
     };
 
-    expect(createSanitizer()(input)).toEqual(output);
+    expect(sanitize(input)).toEqual(output);
   });
 
   it('should sanitize/trim input, allow safe HTML', () => {
@@ -78,7 +78,7 @@ describe('input sanitation middleware', () => {
       },
     };
 
-    expect(createSanitizer({ allowHtml: true })(input)).toEqual(output);
+    expect(sanitize(input, { allowHtml: true })).toEqual(output);
   });
 
   it('should sanitize/trim input, allow safe HTML, convert empty strings to nulls', () => {
@@ -136,6 +136,6 @@ describe('input sanitation middleware', () => {
       },
     };
 
-    expect(createSanitizer({ allowHtml: true, emptyStringToNull: true })(input)).toEqual(output);
+    expect(sanitize(input, { allowHtml: true, emptyStringToNull: true })).toEqual(output);
   });
 });
