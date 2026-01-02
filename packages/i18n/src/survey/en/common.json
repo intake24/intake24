@@ -9,7 +9,7 @@
   "login": {
     "_": "Sign in",
     "start": "Let's get started",
-    "subtitle": "Sign in with your username & password",
+    "subtitle": "Sign in your username & password",
     "captcha": "Complete the captcha challenge",
     "back": "Back to login",
 
