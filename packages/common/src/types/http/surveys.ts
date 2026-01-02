@@ -6,6 +6,7 @@ import {
   schemeSettings,
   searchSortingAlgorithms,
   sessionSettings,
+  surveyAuthModes,
   surveyRatings,
   surveyStatuses,
 } from '@intake24/common/surveys';
@@ -41,6 +42,7 @@ export const publicSurveyEntry = z.object({
   supportEmail: z.string(),
   openAccess: z.boolean(),
   authCaptcha: z.boolean(),
+  authModes: z.enum(surveyAuthModes).array(),
 });
 
 export type PublicSurveyEntry = z.infer<typeof publicSurveyEntry>;

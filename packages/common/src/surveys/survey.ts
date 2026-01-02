@@ -4,6 +4,9 @@ import { singlePrompt } from '../prompts';
 import { meal } from './meals';
 import { schemeSettings } from './scheme';
 
+export const surveyAuthModes = ['username', 'token'] as const;
+export type SurveyAuthMode = (typeof surveyAuthModes)[number];
+
 export const surveyRatings = ['recall', 'feedback'] as const;
 export type SurveyRating = (typeof surveyRatings)[number];
 

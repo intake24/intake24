@@ -25,6 +25,7 @@ import { surveyPermissions } from '@intake24/common/security';
 import type {
   SchemeOverrides,
   SessionSettings,
+  SurveyAuthMode,
   SurveySearchSettings,
   SurveyStatus,
 } from '@intake24/common/surveys';
@@ -149,6 +150,13 @@ export default class Survey extends BaseModel<
     defaultValue: false,
   })
   declare authCaptcha: CreationOptional<boolean>;
+
+  @Column({
+    allowNull: false,
+    defaultValue: ['token'],
+    type: DataType.JSONB,
+  })
+  declare authModes: CreationOptional<SurveyAuthMode[]>;
 
   @Column({
     allowNull: true,
@@ -370,6 +378,7 @@ export const updateSurveyFields = [
   'session',
   'numberOfSubmissionsForFeedback',
   'authCaptcha',
+  'authModes',
   'authUrlDomainOverride',
   'authUrlTokenCharset',
   'authUrlTokenLength',

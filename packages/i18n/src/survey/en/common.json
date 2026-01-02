@@ -9,10 +9,15 @@
   "login": {
     "_": "Sign in",
     "start": "Let's get started",
-    "subtitle": "Sign in with your username & password",
     "captcha": "Complete the captcha challenge",
     "back": "Back to login",
-
+    "username": {
+      "_": "Sign in via username & password"
+    },
+    "token": {
+      "_": "Sign in via survey link",
+      "subtitle": "Use the sign-in link provided in your survey invitation instructions."
+    },
     "err": {
       "captcha": "Invalid captcha challenge response.",
       "credentials": "Invalid username & password credentials provided.",

@@ -62,6 +62,7 @@ export default () => {
         minimumSubmissionInterval: { nan: 5 },
         notifications: ['invalid-notification'],
         authCaptcha: [0],
+        authModes: true,
         authUrlTokenCharset: 'abcabc',
         authUrlTokenLength: 'this is not a number',
         searchSettings: {
@@ -104,6 +105,7 @@ export default () => {
         'minimumSubmissionInterval',
         'notifications.0',
         'authCaptcha',
+        'authModes',
         'authUrlTokenCharset',
         'authUrlTokenLength',
         'searchSettings.collectData',

@@ -1,8 +1,8 @@
 <template>
   <v-row justify="center" :no-gutters="$vuetify.display.mobile">
-    <v-col cols="12" sm="auto">
+    <v-col class="p-4" cols="12" sm="auto">
       <v-card
-        :class="{ 'mt-10': $vuetify.display.smAndUp }"
+        :class="{ 'mt-10': $vuetify.display.smAndUp, [contentClass]: contentClass }"
         :flat="$vuetify.display.mobile"
         :tile="$vuetify.display.mobile"
         :width="$vuetify.display.smAndUp ? width : undefined"
@@ -52,6 +52,10 @@ export default defineComponent({
     width: {
       type: String,
       default: '30rem',
+    },
+    contentClass: {
+      type: String,
+      default: '',
     },
   },
 

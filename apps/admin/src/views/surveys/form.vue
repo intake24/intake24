@@ -371,6 +371,18 @@
               <div class="text-h5 mb-4">
                 {{ $t('surveys.auth._') }}
               </div>
+              <v-select
+                v-model="data.authModes"
+                :error-messages="errors.get('authModes')"
+                hide-details="auto"
+                :items="authModes"
+                :label="$t('surveys.auth.modes._')"
+                multiple
+                name="authModes"
+                prepend-inner-icon="fas fa-mask"
+                variant="outlined"
+                @update:model-value="errors.clear('authModes')"
+              />
               <v-switch
                 v-model="data.authCaptcha"
                 class="my-2"
@@ -607,10 +619,10 @@ import {
   searchSortingAlgorithms as defaultSearchSortingAlgorithms,
   defaultSessionSettings,
   spellingCorrectionPreferences as defaultSpellingCorrectionPreferences,
+  surveyAuthModes,
   surveyStatuses,
-
 } from '@intake24/common/surveys';
-import type { SchemeOverrides, SessionSettings, SurveySearchSettings, SurveyStatus } from '@intake24/common/surveys';
+import type { SchemeOverrides, SessionSettings, SurveyAuthMode, SurveySearchSettings, SurveyStatus } from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
@@ -639,6 +651,7 @@ export type SurveyForm = {
   allowGenUsers: boolean;
   genUserKey: string | null;
   authCaptcha: boolean;
+  authModes: SurveyAuthMode[];
   authUrlDomainOverride: string | null;
   authUrlTokenCharset: string | null;
   authUrlTokenLength: number | null;
@@ -672,6 +685,7 @@ export const surveyForm: SurveyForm = {
   allowGenUsers: false,
   genUserKey: null,
   authCaptcha: false,
+  authModes: ['token'],
   authUrlDomainOverride: null,
   authUrlTokenCharset: null,
   authUrlTokenLength: null,
@@ -698,6 +712,11 @@ export default defineComponent({
     const infoComponentType = ref(undefined as string | undefined);
     const infoPopupOpen = ref(false);
     const showSecret = ref(false);
+
+    const authModes = surveyAuthModes.map(value => ({
+      value,
+      title: t(`surveys.auth.modes.${value}`),
+    }));
 
     const surveyStates = surveyStatuses.map(value => ({
       value,
@@ -748,6 +767,7 @@ export default defineComponent({
       showInformationPopup,
       spellingCorrectionOptions,
       submit,
+      authModes,
       surveyStates,
     };
   },

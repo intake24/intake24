@@ -22,6 +22,12 @@
   "auth": {
     "_": "Authentication settings",
     "captcha": "Captcha verification",
+    "modes": {
+      "_": "Authentication mode",
+      "title": "Authentication modes",
+      "username": "Username & Password",
+      "token": "Authentication URL"
+    },
     "urlDomainOverride": "URL Domain override",
     "urlTokenCharset": "URL Token character set",
     "urlTokenLength": "URL Token length"

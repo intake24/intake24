@@ -29,6 +29,7 @@ export function survey() {
           'genUserKey',
           'allowGenUsers',
           'authCaptcha',
+          'authModes',
         ],
         where: { allowGenUsers: true, genUserKey: null },
         order: [['name', 'ASC']],
@@ -50,6 +51,7 @@ export function survey() {
           'genUserKey',
           'allowGenUsers',
           'authCaptcha',
+          'authModes',
         ],
       });
       if (!survey)

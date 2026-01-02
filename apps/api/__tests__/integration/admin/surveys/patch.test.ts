@@ -73,6 +73,7 @@ export default () => {
         minimumSubmissionInterval: { nan: 5 },
         notifications: [{ type: 'invalid' }],
         authCaptcha: 'yes',
+        authModes: ['invalidMode'],
         authUrlTokenCharset: ['an array charset'],
         authUrlTokenLength: 1,
         searchSettings: {
@@ -116,6 +117,7 @@ export default () => {
         'minimumSubmissionInterval',
         'notifications.0.channel',
         'authCaptcha',
+        'authModes.0',
         'authUrlTokenCharset',
         'authUrlTokenLength',
         'searchSettings.collectData',
