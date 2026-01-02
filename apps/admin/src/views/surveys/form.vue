@@ -53,7 +53,7 @@
                 v-model="data.startDate"
                 :error-messages="errors.get('startDate')"
                 :label="$t('surveys.startDate')"
-                @change="errors.clear('startDate')"
+                @update:model-value="errors.clear('startDate')"
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -61,7 +61,7 @@
                 v-model="data.endDate"
                 :error-messages="errors.get('endDate')"
                 :label="$t('surveys.endDate')"
-                @change="errors.clear('endDate')"
+                @update:model-value="errors.clear('endDate')"
               />
             </v-col>
             <v-col cols="12" md="6">

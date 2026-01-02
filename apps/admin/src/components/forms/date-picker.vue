@@ -57,7 +57,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'change']);
+const emit = defineEmits(['update:modelValue']);
 
 const adapter = useDate();
 
