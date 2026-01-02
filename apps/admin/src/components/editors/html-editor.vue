@@ -68,6 +68,7 @@ const init = computed<Partial<EditorOptions>>(() => ({
     const formData = new FormData();
     formData.append('file', new File([blobInfo.blob()], blobInfo.filename(), { type: blobInfo.blob().type }));
     formData.append('collection', 'tinymce');
+    formData.append('disk', 'public');
 
     return new Promise((resolve, reject) => {
       http.post(mediaUploadUrl.value, formData)
