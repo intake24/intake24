@@ -85,6 +85,12 @@
           <td>{{ entry.numberOfSubmissionsForFeedback }}</td>
         </tr>
         <tr>
+          <th>{{ $t('surveys.auth.modes._') }}</th>
+          <td colspan="3">
+            {{ entry.authModes.map(mode => $t(`surveys.auth.modes.${mode}`)).join(', ') }}
+          </td>
+        </tr>
+        <tr>
           <th>{{ $t('surveys.auth.captcha') }}</th>
           <td>{{ $t(`common.${entry.authCaptcha}`) }}</td>
           <th>{{ $t('surveys.auth.urlDomainOverride') }}</th>

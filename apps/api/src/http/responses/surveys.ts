@@ -12,6 +12,7 @@ export function publicSurveyEntryResponse(survey: Survey): PublicSurveyEntry {
     genUserKey,
     allowGenUsers,
     authCaptcha,
+    authModes,
   } = survey;
 
   return {
@@ -23,5 +24,6 @@ export function publicSurveyEntryResponse(survey: Survey): PublicSurveyEntry {
     supportEmail,
     openAccess: allowGenUsers && !genUserKey,
     authCaptcha,
+    authModes,
   };
 }

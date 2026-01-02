@@ -1,8 +1,6 @@
 import slugify from 'slugify';
 import { z } from 'zod';
-
-import { schemeOverrides, sessionSettings, surveySearchSettings, surveyStatuses } from '@intake24/common/surveys';
-
+import { schemeOverrides, sessionSettings, surveyAuthModes, surveySearchSettings, surveyStatuses } from '@intake24/common/surveys';
 import { notification } from '../../notifications';
 import { safeIdentifier } from '../generic';
 import { faqAttributes } from './faqs';
@@ -27,6 +25,7 @@ export const surveyAttributes = z.object({
   authUrlTokenCharset: z.string().max(128).nullable().refine(value => !value || value.split('').length === [...new Set(value.split(''))].length),
   authUrlTokenLength: z.number().min(12).max(128).nullable(),
   authCaptcha: z.boolean(),
+  authModes: z.enum(surveyAuthModes).array(),
   suspensionReason: z.string().max(512).nullable(),
   surveyMonkeyUrl: z.string().max(512).nullable(),
   supportEmail: z.string().max(512).email().toLowerCase(),
