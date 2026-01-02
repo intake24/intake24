@@ -217,8 +217,8 @@ importers:
         specifier: ^7.4.0
         version: 7.4.0
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.3.4
+        version: 4.3.4
 
   apps/api:
     dependencies:
@@ -242,10 +242,10 @@ importers:
         version: 13.2.2
       '@ts-rest/core':
         specifier: ^3.52.1
-        version: 3.52.1(@types/node@24.10.1)(zod@3.25.76)
+        version: 3.52.1(@types/node@24.10.1)(zod@4.3.4)
       '@ts-rest/express':
         specifier: ^3.52.1
-        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@3.25.76))(express@4.22.1)(zod@3.25.76)
+        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.3.4))(express@4.22.1)(zod@4.3.4)
       arabic-stem:
         specifier: ^0.0.10
         version: 0.0.10
@@ -421,11 +421,11 @@ importers:
         specifier: ^3.6.7
         version: 3.6.7
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.3.4
+        version: 4.3.4
       zod-validation-error:
         specifier: ^3.5.4
-        version: 3.5.4(zod@3.25.76)
+        version: 3.5.4(zod@4.3.4)
     devDependencies:
       '@faker-js/faker':
         specifier: ^10.1.0
@@ -629,8 +629,8 @@ importers:
         specifier: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.3.4
+        version: 4.3.4
     devDependencies:
       '@types/decompress':
         specifier: ^4.2.7
@@ -694,7 +694,7 @@ importers:
     devDependencies:
       '@ts-rest/open-api':
         specifier: ^3.52.1
-        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.13))(zod@4.1.13)
+        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.3.4))(zod@4.3.4)
       '@tsconfig/node22':
         specifier: ^22.0.5
         version: 22.0.5
@@ -995,8 +995,8 @@ importers:
         specifier: ^7.4.0
         version: 7.4.0
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.3.4
+        version: 4.3.4
 
   packages/api-client-v3:
     dependencies:
@@ -1052,10 +1052,10 @@ importers:
     dependencies:
       '@anatine/zod-openapi':
         specifier: ^2.2.8
-        version: 2.2.8(openapi3-ts@4.3.1)(zod@3.25.76)
+        version: 2.2.8(openapi3-ts@4.3.1)(zod@4.3.4)
       '@ts-rest/core':
         specifier: ^3.52.1
-        version: 3.52.1(@types/node@24.10.1)(zod@3.25.76)
+        version: 3.52.1(@types/node@24.10.1)(zod@4.3.4)
       awesome-phonenumber:
         specifier: ^7.6.0
         version: 7.6.0
@@ -1099,8 +1099,8 @@ importers:
         specifier: ^13.15.23
         version: 13.15.23
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.3.4
+        version: 4.3.4
     devDependencies:
       '@simplewebauthn/server':
         specifier: ^13.2.2
@@ -11230,6 +11230,7 @@ packages:
   vue-i18n@11.2.2:
     resolution: {integrity: sha512-ULIKZyRluUPRCZmihVgUvpq8hJTtOqnbGZuv4Lz+byEKZq4mU0g92og414l6f/4ju+L5mORsiUuEPYrAuX2NJg==}
     engines: {node: '>= 16'}
+    deprecated: This version is NOT deprecated. Previous deprecation was a mistake.
     peerDependencies:
       vue: ^3.0.0
 
@@ -11369,10 +11370,12 @@ packages:
   whatwg-encoding@2.0.0:
     resolution: {integrity: sha512-p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==}
     engines: {node: '>=12'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -11674,8 +11677,8 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.1.13:
-    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
+  zod@4.3.4:
+    resolution: {integrity: sha512-Zw/uYiiyF6pUT1qmKbZziChgNPRu+ZRneAsMUDU6IwmXdWt5JwcUfy2bvLOCUtz5UniaN/Zx5aFttZYbYc7O/A==}
 
   zrender@6.0.0:
     resolution: {integrity: sha512-41dFXEEXuJpNecuUQq6JlbybmnHaqqpGlbH1yxnA5V9MMP4SbohSVZsJIwz+zdjQXSSlR1Vc34EgH1zxyTDvhg==}
@@ -11799,17 +11802,17 @@ snapshots:
     dependencies:
       '@algolia/client-common': 5.45.0
 
-  '@anatine/zod-openapi@1.14.2(openapi3-ts@2.0.2)(zod@4.1.13)':
+  '@anatine/zod-openapi@1.14.2(openapi3-ts@2.0.2)(zod@4.3.4)':
     dependencies:
       openapi3-ts: 2.0.2
       ts-deepmerge: 6.2.1
-      zod: 4.1.13
+      zod: 4.3.4
 
-  '@anatine/zod-openapi@2.2.8(openapi3-ts@4.3.1)(zod@3.25.76)':
+  '@anatine/zod-openapi@2.2.8(openapi3-ts@4.3.1)(zod@4.3.4)':
     dependencies:
       openapi3-ts: 4.3.1
       ts-deepmerge: 6.2.1
-      zod: 3.25.76
+      zod: 4.3.4
 
   '@antfu/eslint-config@6.4.2(@vue/compiler-sfc@3.5.25)(eslint-plugin-format@1.1.0(eslint@9.39.1(jiti@2.6.1)))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.15(@opentelemetry/api@1.9.0)(@types/node@24.10.1)(jiti@2.6.1)(jsdom@27.2.0)(sass@1.94.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
@@ -15286,29 +15289,24 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@3.25.76)':
+  '@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.3.4)':
     optionalDependencies:
       '@types/node': 24.10.1
-      zod: 3.25.76
+      zod: 4.3.4
 
-  '@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.13)':
-    optionalDependencies:
-      '@types/node': 24.10.1
-      zod: 4.1.13
-
-  '@ts-rest/express@3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@3.25.76))(express@4.22.1)(zod@3.25.76)':
+  '@ts-rest/express@3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.3.4))(express@4.22.1)(zod@4.3.4)':
     dependencies:
-      '@ts-rest/core': 3.52.1(@types/node@24.10.1)(zod@3.25.76)
+      '@ts-rest/core': 3.52.1(@types/node@24.10.1)(zod@4.3.4)
       express: 4.22.1
     optionalDependencies:
-      zod: 3.25.76
+      zod: 4.3.4
 
-  '@ts-rest/open-api@3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.1.13))(zod@4.1.13)':
+  '@ts-rest/open-api@3.52.1(@ts-rest/core@3.52.1(@types/node@24.10.1)(zod@4.3.4))(zod@4.3.4)':
     dependencies:
-      '@anatine/zod-openapi': 1.14.2(openapi3-ts@2.0.2)(zod@4.1.13)
-      '@ts-rest/core': 3.52.1(@types/node@24.10.1)(zod@4.1.13)
+      '@anatine/zod-openapi': 1.14.2(openapi3-ts@2.0.2)(zod@4.3.4)
+      '@ts-rest/core': 3.52.1(@types/node@24.10.1)(zod@4.3.4)
       openapi3-ts: 2.0.2
-      zod: 4.1.13
+      zod: 4.3.4
 
   '@tsconfig/node10@1.0.12': {}
 
@@ -19901,7 +19899,7 @@ snapshots:
       micromatch: 4.0.8
       minimist: 1.2.8
       pluralize: 8.0.0
-      zod: 4.1.13
+      zod: 4.3.4
     optionalDependencies:
       '@tediousjs/connection-string': 0.5.0
       pg: 8.16.3
@@ -23985,13 +23983,13 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod-validation-error@3.5.4(zod@3.25.76):
+  zod-validation-error@3.5.4(zod@4.3.4):
     dependencies:
-      zod: 3.25.76
+      zod: 4.3.4
 
   zod@3.25.76: {}
 
-  zod@4.1.13: {}
+  zod@4.3.4: {}
 
   zrender@6.0.0:
     dependencies:
