@@ -334,9 +334,24 @@ function dataExportFields() {
       value: ({ food }: ExportRow) =>
         food instanceof SurveySubmissionMissingFood ? food.brand : undefined,
     },
-    { id: 'missingDescription', label: 'Missing description', value: 'food.description' },
-    { id: 'missingPortionSize', label: 'Missing portion size', value: 'food.portionSize' },
-    { id: 'missingLeftovers', label: 'Missing leftovers', value: 'food.leftovers' },
+    {
+      id: 'missingDescription',
+      label: 'Missing description',
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.description : undefined,
+    },
+    {
+      id: 'missingPortionSize',
+      label: 'Missing portion size',
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.portionSize : undefined,
+    },
+    {
+      id: 'missingLeftovers',
+      label: 'Missing leftovers',
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.leftovers : undefined,
+    },
   ];
 
   /**
@@ -388,35 +403,18 @@ function dataExportFields() {
     {
       id: 'portion',
       label: 'Portion',
-      value: ({ food }: ExportRow) => {
-        if (!('portionSizes' in food))
-          return undefined;
-
-        return stringify(
-          food.portionSizes?.reduce(
-            (acc, item) => {
-              acc[item.name] = item.value;
-              return acc;
-            },
-            {} as Record<string, string>,
-          ),
-        );
-      },
+      value: ({ food }: ExportRow) => food instanceof SurveySubmissionFood ? stringify(food.portionSize) : undefined,
     },
     // servingWeight - leftoversWeight
     {
       id: 'portionWeight',
       label: 'Portion Weight',
       value: ({ food }: ExportRow) => {
-        if (!('portionSizes' in food))
+        if (food instanceof SurveySubmissionMissingFood)
           return undefined;
 
-        const servingWeightVal = food.portionSizes?.find(
-          item => item.name === 'servingWeight',
-        )?.value;
-        const leftoversWeightVal = food.portionSizes?.find(
-          item => item.name === 'leftoversWeight',
-        )?.value;
+        const servingWeightVal = food.portionSize.servingWeight;
+        const leftoversWeightVal = food.portionSize.leftoversWeight;
         if (!servingWeightVal || !leftoversWeightVal)
           return undefined;
 

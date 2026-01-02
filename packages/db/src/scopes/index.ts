@@ -29,32 +29,13 @@ export function submissionScope(scopeOps: SubmissionScope = {}, ops: FindOptions
           { association: 'customFields' },
         ],
       },
-      { association: 'customFields' },
       {
         association: 'meals',
         include: [
-          { association: 'customFields' },
           {
             association: 'foods',
             separate: true,
             include: [
-              {
-                association: 'customFields',
-                separate: true,
-              },
-              {
-                association: 'fields',
-                separate: true,
-              },
-              {
-                association: 'nutrients',
-                separate: true,
-                include: [{ association: 'nutrientType' }],
-              },
-              {
-                association: 'portionSizes',
-                separate: true,
-              },
               {
                 association: 'externalSources',
                 separate: true,
