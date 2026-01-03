@@ -21,60 +21,60 @@
         "closeIconLabel": "閉じる",
         "sections": [
           {
-            "title": "How we use cookies 📢",
-            "description": "Intake24 uses <strong>necessary cookies</strong> for the proper functioning of the website. <strong>Analytics &amp; statistical</strong> cookies help us to understand how visitors use the websites to improve the services offered."
+            "title": "クッキーの使用について 📢",
+            "description": "Intake24では、ウェブサイトを適切に機能させるために<strong>必須クッキー</strong>を使用しています。また、<strong>分析・統計クッキー</strong>により、訪問者の利用状況を把握し、サービスの向上に役立てています。"
           },
           {
-            "title": "Necessary cookies <span class=\"pm__badge\">Always Enabled</span>",
-            "description": "Cookies that are strictly necessary for the proper functioning of the website.",
+            "title": "必須クッキー <span class=\"pm__badge\">常に有効</span>",
+            "description": "ウェブサイトの適切な動作に必要不可欠なクッキーです。",
             "linkedCategory": "necessary",
             "cookieTable": {
               "headers": {
-                "name": "Name",
-                "exp": "Expiration",
-                "desc": "Description"
+                "name": "名前",
+                "exp": "有効期限",
+                "desc": "説明"
               },
               "body": [
                 {
                   "name": "it24(a|s)_refresh_token",
-                  "exp": "1 hour",
-                  "desc": "Technical functionality of websites."
+                  "exp": "1時間",
+                  "desc": "ウェブサイトの技術的な機能に使用されます。"
                 },
                 {
                   "name": "it24_cc_consent",
-                  "exp": "1 year",
-                  "desc": "Cookies consent preferences used by the website."
+                  "exp": "1年",
+                  "desc": "クッキーの同意設定を保存するために使用されます。"
                 }
               ]
             }
           },
           {
-            "title": "Analytics and statistical cookies",
-            "description": "Analytics and statistical cookies help us to understand how visitors use the websites to improve the services offered. Information is collected and stored anonymously.",
+            "title": "分析・統計クッキー",
+            "description": "分析・統計クッキーは、訪問者がウェブサイトをどのように利用しているかを把握し、サービスの向上に役立てるために使用されます。情報は匿名で収集・保存されます。",
             "linkedCategory": "analytics",
             "cookieTable": {
               "headers": {
-                "name": "Name",
-                "exp": "Expiration",
-                "desc": "Description"
+                "name": "名前",
+                "exp": "有効期限",
+                "desc": "説明"
               },
               "body": [
                 {
                   "name": "^_ga",
-                  "exp": "2 years",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "exp": "2年",
+                  "desc": "訪問者のウェブサイト利用に関する統計データを作成するために使用される一意のIDです。"
                 },
                 {
                   "name": "^_gid",
-                  "exp": "1 day",
-                  "desc": "Unique ID that is used to create statistical data about how visitors use the websites."
+                  "exp": "1日",
+                  "desc": "訪問者のウェブサイト利用に関する統計データを作成するために使用される一意のIDです。"
                 }
               ]
             }
           },
           {
-            "title": "More information",
-            "description": "If you have any questions, please contact us."
+            "title": "詳細情報",
+            "description": "ご質問がございましたら、お問い合わせください。"
           }
         ]
       }
