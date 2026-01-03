@@ -80,16 +80,21 @@ export interface FoodIndex {
 export function createMeal(data: MealCreationState, flow: RecallFlow = '2-pass'): MealState {
   const { name, defaultTime = { hours: 8, minutes: 0 }, time, duration = null, flags = [] } = data;
 
+  // Clone the flags array to prevent mutation of the original scheme flags
+  // This fixes a bug where addMealFlag() would mutate the scheme's flags,
+  // causing flags like 'ready-meal-complete' to persist across recall restarts
+  const mealFlags = [...flags];
+
   if (flow === '1-pass')
-    flags.push('free-entry-complete');
+    mealFlags.push('free-entry-complete');
 
   return {
     id: getEntityId(),
     name,
     defaultTime,
-    time: flags.includes('meal-time:confirmed') ? (time ?? defaultTime) : time,
+    time: mealFlags.includes('meal-time:confirmed') ? (time ?? defaultTime) : time,
     duration,
-    flags,
+    flags: mealFlags,
     foods: [],
     customPromptAnswers: {},
   };
@@ -313,6 +318,17 @@ export const useSurvey = defineStore('survey', {
       const { uxSessionId } = this.data;
 
       this.clearState();
+
+      // Explicitly clear localStorage to prevent afterHydrate from restoring old state
+      // This fixes a bug where meal flags (like 'ready-meal-complete') persist after abort
+      // because afterHydrate's validateState() call doesn't pass session settings
+      try {
+        localStorage.removeItem('survey');
+      }
+      catch {
+        // localStorage might not be available in some environments
+      }
+
       await this.clearUserSession(uxSessionId);
     },
 
