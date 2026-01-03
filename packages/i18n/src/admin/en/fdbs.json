@@ -118,7 +118,8 @@
     "genericName": "Generic name",
     "text": "Text",
     "linkAsMain": "Link as main food",
-    "multiple": "Allow multiple foods"
+    "multiple": "Allow multiple foods",
+    "emptyWarning": "Warning: {count} associated food(s) would be removed. Data has been preserved."
   },
 
   "portionSizes": {

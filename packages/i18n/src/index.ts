@@ -66,9 +66,9 @@ export function useI18n() {
   };
 }
 
-export async function loadAppLanguage(app: Application, lang: string) {
+export async function loadAppLanguage(app: Application, lang: string, forceReload = false) {
   // @ts-expect-error - non-legacy is Ref
-  if (i18n.global.locale.value === lang || i18n.global.availableLocales.includes(lang))
+  if (!forceReload && (i18n.global.locale.value === lang || i18n.global.availableLocales.includes(lang)))
     return;
 
   await Promise.allSettled([
