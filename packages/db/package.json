@@ -12,7 +12,7 @@
   },
   "main": "src/index.ts",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.12.0"
   },
   "scripts": {
     "db:foods:migrate": "pnpm sequelize db:migrate --options-path sequelize/foods/options.js",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "dotenv": "^17.2.3",
-    "kysely": "^0.28.8",
+    "kysely": "^0.28.9",
     "lodash": "^4.17.21",
     "mariadb": "^3.4.5",
     "mssql": "^12.2.0",
@@ -41,8 +41,8 @@
   "devDependencies": {
     "@simplewebauthn/server": "^13.2.2",
     "@types/lodash": "^4.17.21",
-    "@types/node": "^24.10.1",
-    "@types/pg": "^8.15.6",
+    "@types/node": "^24.10.4",
+    "@types/pg": "^8.16.0",
     "@types/pg-cursor": "^2.7.2",
     "@types/validator": "^13.15.10",
     "kysely-codegen": "^0.19.0",

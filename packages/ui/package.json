@@ -12,16 +12,16 @@
     "directory": "packages/ui"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.12.0"
   },
   "scripts": {},
   "dependencies": {
-    "@ericblade/quagga2": "^1.11.0",
+    "@ericblade/quagga2": "^1.12.1",
     "@gtm-support/vue-gtm": "^3.1.0",
     "@hcaptcha/vue3-hcaptcha": "^1.3.0",
     "@microsoft/clarity": "^1.0.2",
     "@pinia/plugin-debounce": "^1.0.1",
-    "@pixelverse/strichjs-sdk": "^1.12.1",
+    "@pixelverse/strichjs-sdk": "^1.12.2",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.13.2",
     "axios-retry": "^4.5.0",
@@ -32,20 +32,20 @@
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "vanilla-cookieconsent": "^3.1.0",
-    "vue": "^3.5.25",
+    "vue": "^3.5.26",
     "vue-echarts": "^8.0.1",
     "vue-gtag": "^3.6.3",
-    "vue-i18n": "^11.2.2",
+    "vue-i18n": "^11.2.8",
     "vue-recaptcha": "^2.0.3",
-    "vue-router": "^4.6.3",
-    "vuetify": "^3.11.2"
+    "vue-router": "^4.6.4",
+    "vuetify": "^3.11.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.21",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.10.4",
     "type-fest": "^5.3.1",
     "typescript": "^5.9.3",
-    "vite": "^7.2.6",
+    "vite": "^7.3.0",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0"
   }
