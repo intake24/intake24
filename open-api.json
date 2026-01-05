@@ -3878,8 +3878,8 @@
                     },
                     "birthdate": {
                       "type": "number",
-                      "minimum": 1875,
-                      "maximum": 2025,
+                      "minimum": 1876,
+                      "maximum": 2026,
                       "nullable": true
                     },
                     "physicalActivityLevelId": {
@@ -3957,8 +3957,8 @@
                   },
                   "birthdate": {
                     "type": "number",
-                    "minimum": 1875,
-                    "maximum": 2025,
+                    "minimum": 1876,
+                    "maximum": 2026,
                     "nullable": true
                   },
                   "physicalActivityLevelId": {
@@ -4017,8 +4017,8 @@
                     },
                     "birthdate": {
                       "type": "number",
-                      "minimum": 1875,
-                      "maximum": 2025,
+                      "minimum": 1876,
+                      "maximum": 2026,
                       "nullable": true
                     },
                     "physicalActivityLevelId": {
