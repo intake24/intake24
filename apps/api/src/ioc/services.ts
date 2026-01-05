@@ -46,6 +46,7 @@ import {
   nutrientTypeService,
   nutrientUnitService,
   openAIEmbeddingService,
+  opensearchSyncService,
   otpProvider,
   PopularityCountersService,
   portionSizeMethodsService,
@@ -99,6 +100,7 @@ export default (container: AwilixContainer): void => {
     categoryContentsService: asFunction(categoryContentsService).singleton(),
     inheritableAttributesService: asFunction(inheritableAttributesService).singleton(),
     cachedParentCategoriesService: asFunction(cachedParentCategoriesService).singleton(),
+    opensearchSyncService: asFunction(opensearchSyncService).singleton(),
 
     adminCategoryService: asFunction(adminCategoryService).singleton(),
     adminFoodService: asFunction(adminFoodService).singleton(),

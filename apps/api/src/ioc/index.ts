@@ -78,6 +78,7 @@ import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services
 import type { CachedParentCategoriesService } from '@intake24/api/services/foods/cached-parent-categories-service';
 import type { FoodOrCategoryLookupService } from '@intake24/api/services/foods/food-or-category-lookup.service';
 import type { InheritableAttributesService } from '@intake24/api/services/foods/inheritable-attributes-service';
+import type { OpenSearchSyncService } from '@intake24/api/services/foods/opensearch-sync-service';
 import type { Logger, Mailer } from '@intake24/common-backend';
 import type { TokenPayload } from '@intake24/common/security';
 import type { Environment } from '@intake24/common/types';
@@ -194,6 +195,7 @@ export interface IoC extends Jobs {
   inheritableAttributesService: InheritableAttributesService;
   foodSearchService: FoodSearchService;
   cachedParentCategoriesService: CachedParentCategoriesService;
+  opensearchSyncService: OpenSearchSyncService;
 
   // Categories
   categoryContentsService: CategoryContentsService;

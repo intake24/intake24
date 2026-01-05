@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
+import type { OpenSearchSyncService } from '@intake24/api/services/foods/opensearch-sync-service';
 import { toSimpleName } from '@intake24/api/util';
 import type { PortionSizeMethod } from '@intake24/common/surveys';
 import type {
@@ -13,6 +14,7 @@ import type {
 import type { AssociatedFood as HttpAssociatedFood } from '@intake24/common/types/http/admin/associated-food';
 import {
   AssociatedFood,
+  FoodAttribute,
   FoodLocal,
   FoodLocalList,
   FoodNutrient,
@@ -20,7 +22,7 @@ import {
   NutrientTableRecord,
 } from '@intake24/db';
 
-function localFoodsService({ db }: Pick<IoC, 'db'>) {
+function localFoodsService({ db, opensearchSyncService }: Pick<IoC, 'db'> & { opensearchSyncService: OpenSearchSyncService }) {
   async function toPortionSizeMethodAttrs(
     foodLocalId: string,
     psm: PortionSizeMethod,
@@ -131,6 +133,57 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     await FoodNutrient.bulkCreate(creationAttributes, { transaction });
   }
 
+  async function updateFoodAttributesImpl(
+    foodCode: string,
+    attributes: CreateLocalFoodRequest['attributes'],
+    transaction: Transaction,
+  ): Promise<void> {
+    if (!attributes)
+      return;
+
+    // Check if any attribute value is defined (not undefined)
+    const hasDefinedAttributes
+      = attributes.readyMealOption !== undefined
+        || attributes.sameAsBeforeOption !== undefined
+        || attributes.reasonableAmount !== undefined
+        || attributes.useInRecipes !== undefined;
+
+    if (!hasDefinedAttributes)
+      return;
+
+    // Find existing attribute record
+    const existingAttribute = await FoodAttribute.findOne({
+      where: { foodCode },
+      transaction,
+    });
+
+    if (existingAttribute) {
+      // Update existing record
+      await existingAttribute.update(
+        {
+          readyMealOption: attributes.readyMealOption ?? existingAttribute.readyMealOption,
+          sameAsBeforeOption: attributes.sameAsBeforeOption ?? existingAttribute.sameAsBeforeOption,
+          reasonableAmount: attributes.reasonableAmount ?? existingAttribute.reasonableAmount,
+          useInRecipes: attributes.useInRecipes ?? existingAttribute.useInRecipes,
+        },
+        { transaction },
+      );
+    }
+    else {
+      // Create new record
+      await FoodAttribute.create(
+        {
+          foodCode,
+          readyMealOption: attributes.readyMealOption ?? null,
+          sameAsBeforeOption: attributes.sameAsBeforeOption ?? null,
+          reasonableAmount: attributes.reasonableAmount ?? null,
+          useInRecipes: attributes.useInRecipes ?? null,
+        },
+        { transaction },
+      );
+    }
+  }
+
   async function createImpl(
     localeId: string,
     request: CreateLocalFoodRequest,
@@ -191,6 +244,8 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
 
     await updateAssociatedFoodsImpl(localeId, request.code, request.associatedFoods, transaction);
 
+    await updateFoodAttributesImpl(request.code, request.attributes, transaction);
+
     return created;
   }
 
@@ -235,14 +290,21 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     options: CreateLocalFoodRequestOptions,
     transaction?: Transaction,
   ): Promise<boolean> => {
+    let result: boolean;
+
     if (transaction !== undefined) {
-      return await createImpl(localeId, request, options, transaction);
+      result = await createImpl(localeId, request, options, transaction);
     }
     else {
-      return await db.foods.transaction(async (transaction) => {
+      result = await db.foods.transaction(async (transaction) => {
         return await createImpl(localeId, request, options, transaction);
       });
     }
+
+    // Sync to OpenSearch after successful database operation
+    await opensearchSyncService.syncFood(localeId, request.code);
+
+    return result;
   };
 
   const destroy = async (localeId: string, foodCode: string, transaction?: Transaction) => {
@@ -254,6 +316,9 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
         await destroyImpl(localeId, foodCode, transaction);
       });
     }
+
+    // Delete from OpenSearch after successful database operation
+    await opensearchSyncService.deleteFood(localeId, foodCode);
   };
 
   const readImpl = async (

@@ -1,7 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
 import { pick } from 'lodash';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import { foodsResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';
@@ -25,7 +24,7 @@ import {
 } from '@intake24/db';
 import { CacheKey } from '../core/redis/cache';
 
-function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
+function adminFoodService({ cache, db, opensearchSyncService }: Pick<IoC, 'cache' | 'db' | 'opensearchSyncService'>) {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<FoodLocalAttributes> = {
       where: { localeId },
@@ -197,6 +196,9 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
     await cache.push('indexing-locales', localeCode);
 
+    // Sync to OpenSearch for Japanese locale
+    await opensearchSyncService.syncFood(localeCode, foodLocal.foodCode);
+
     return (await getFood(foodLocal.id, localeCode))!;
   };
 
@@ -275,6 +277,11 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
       cache.forget(foodCacheKeys),
       cache.push('indexing-locales', localeCode),
     ]);
+
+    // Sync to OpenSearch for Japanese locale
+    // Use new code if it was changed, otherwise use original code
+    const syncFoodCode = (input.main?.code && input.main.code !== main.code) ? input.main.code : main.code;
+    await opensearchSyncService.syncFood(localeCode, syncFoodCode);
 
     return (await getFood(foodLocalId, localeCode))!;
   };
@@ -393,6 +400,9 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
 
     await cache.push('indexing-locales', localeCode);
 
+    // Sync to OpenSearch for Japanese locale
+    await opensearchSyncService.syncFood(localeCode, foodLocal.foodCode);
+
     return (await getFood(foodLocal.id, foodLocal.localeId))!;
   };
 
@@ -404,10 +414,16 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
     if (!foodLocal)
       throw new NotFoundError();
 
+    // Capture food code before destruction for OpenSearch sync
+    const foodCode = foodLocal.foodCode;
+
     await Promise.all([
       foodLocal.destroy(),
       FoodLocalList.destroy({ where: { foodCode: foodLocal.foodCode, localeId: localeCode } }),
     ]);
+
+    // Delete from OpenSearch for Japanese locale
+    await opensearchSyncService.deleteFood(localeCode, foodCode);
   };
 
   return {

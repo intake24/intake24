@@ -13,6 +13,8 @@ export { default as foodSearchService } from './food-search.service';
 export * from './inheritable-attributes-service';
 export { default as inheritableAttributesService } from './inheritable-attributes-service';
 export { default as InvalidIdError } from './invalid-id-error';
+export * from './opensearch-sync-service';
+export { default as opensearchSyncService } from './opensearch-sync-service';
 export { default as portionSizeMethodsService } from './portion-size-methods.service';
 export * from './portion-size-methods.service';
 export * from './portion-size.service';
