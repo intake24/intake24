@@ -855,6 +855,118 @@ export const useSurvey = defineStore('survey', {
       const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
       this.data.meals[mealIndex].foods = data.foods;
     },
+
+    /**
+     * Commits associated foods selection as a single atomic operation.
+     *
+     * This action batches all state mutations required when completing an associated foods prompt
+     * into a single synchronous operation, preventing race conditions that can occur when
+     * Vue's reactivity system triggers re-renders between individual mutations.
+     *
+     * @param data.mealId - The ID of the meal containing the food
+     * @param data.foodId - The ID of the main food being processed
+     * @param data.keepFoods - Foods to keep at meal level (excludes moved foods)
+     * @param data.linkedFoods - New foods to link to the main food
+     * @param data.isLinkedFood - Whether the main food is itself a linked food
+     * @param data.parentFoodId - If isLinkedFood is true, the ID of the parent food
+     */
+    commitAssociatedFoods(data: {
+      mealId: string;
+      foodId: string;
+      keepFoods: FoodState[];
+      linkedFoods: FoodState[];
+      isLinkedFood: boolean;
+      parentFoodId?: string;
+    }) {
+      const { mealId, foodId, keepFoods, linkedFoods, isLinkedFood, parentFoodId } = data;
+      const mealIndex = getMealIndexRequired(this.data.meals, mealId);
+
+      // Step 1: Set the meal foods (removes any moved foods from meal level)
+      this.data.meals[mealIndex].foods = keepFoods;
+
+      // Step 2: Add linked foods to the appropriate parent
+      if (isLinkedFood && parentFoodId) {
+        // Food is itself a linked food - add to its parent's linked foods
+        // Associated food prompts are disabled on these to prevent circular associations
+        const linkedFoodsWithoutPrompts = linkedFoods.map(food => ({
+          ...food,
+          flags: [...new Set([...food.flags, 'associated-foods-complete'])] as FoodFlag[],
+        }));
+
+        const parentFood = findFood(this.data.meals, parentFoodId);
+        parentFood.linkedFoods.push(...linkedFoodsWithoutPrompts);
+      }
+      else {
+        // Food is a main food - set its linked foods directly
+        const food = findFood(this.data.meals, foodId);
+        food.linkedFoods = linkedFoods;
+      }
+
+      // Step 3: Add 'associated-foods-complete' flag
+      const food = findFood(this.data.meals, foodId);
+      if (!food.flags.includes('associated-foods-complete')) {
+        food.flags.push('associated-foods-complete');
+      }
+
+      // Step 4: Process "link as main" feature
+      // This swaps the main/linked relationship when a linked food has the 'link-as-main' flag
+      this.processLinkAsMain(foodId, mealId);
+
+      // Step 5: Trigger same-as-before save if applicable
+      if (food.flags.includes('portion-size-method-complete')) {
+        this.saveSameAsBefore(foodId);
+      }
+    },
+
+    /**
+     * Processes the "link as main" feature for associated foods.
+     *
+     * When exactly one linked food has the 'link-as-main' flag, this function swaps
+     * the relationship so that the linked food becomes the main food, and the
+     * original main food becomes linked to it.
+     *
+     * @param foodId - The ID of the food to process
+     * @param mealId - The ID of the meal containing the food
+     */
+    processLinkAsMain(foodId: string, mealId: string) {
+      const foodIndex = getFoodIndexRequired(this.data.meals, foodId);
+      const mealIndex = getMealIndexRequired(this.data.meals, mealId);
+
+      // Only process main foods (not linked foods)
+      if (foodIndex.linkedFoodIndex !== undefined) {
+        return;
+      }
+
+      const oldMainFood = this.data.meals[mealIndex].foods[foodIndex.foodIndex];
+      const newMainFoods = oldMainFood.linkedFoods.filter(food =>
+        food.flags.includes('link-as-main'),
+      );
+
+      // Clear 'link-as-main' flags from all linked foods
+      oldMainFood.linkedFoods.forEach((food) => {
+        food.flags = food.flags.filter(flag => flag !== 'link-as-main');
+      });
+
+      // Only swap if exactly one food has the 'link-as-main' flag
+      if (newMainFoods.length === 1) {
+        // Disable associated food prompts on the new main food (workaround for V4-903/V4-904)
+        const newMainFood: FoodState = {
+          ...newMainFoods[0],
+          flags: [...newMainFoods[0].flags.filter(f => f !== 'link-as-main'), 'associated-foods-complete'],
+        };
+
+        const foodsUpdate = [...this.data.meals[mealIndex].foods];
+        foodsUpdate[foodIndex.foodIndex] = newMainFood;
+
+        // Set up new linked foods: original main + all other linked foods except new main
+        newMainFood.linkedFoods = [
+          { ...oldMainFood, linkedFoods: [] },
+          ...oldMainFood.linkedFoods.filter(food => food.id !== newMainFood.id),
+        ];
+
+        this.data.meals[mealIndex].foods = foodsUpdate;
+      }
+    },
   },
 });
 

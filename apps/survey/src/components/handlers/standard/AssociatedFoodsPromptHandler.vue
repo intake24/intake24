@@ -76,58 +76,6 @@ async function fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
   );
 }
 
-// The link as main feature can be applied only if exactly one of the linked foods has the
-// 'link-as-main' flag.
-//
-// In that case we need to reverse the relationship so that the linked food becomes the
-// new main (top level) food, the current main food becomes linked to that food and any foods
-// that were linked to the current main food become linked to the new main food.
-function processLinkAsMain(foodId: string) {
-  const oldFoodIndex = getFoodIndexRequired(meals.value, foodId);
-  const oldMainFood = meals.value[oldFoodIndex.mealIndex].foods[oldFoodIndex.foodIndex];
-  const newMainFoods = oldMainFood.linkedFoods.filter(food =>
-    food.flags.includes('link-as-main'),
-  );
-
-  // We don't need the flags anymore so we can clear them here
-  oldMainFood.linkedFoods.forEach((food) => {
-    food.flags = food.flags.filter(flag => flag !== 'link-as-main');
-  });
-
-  if (newMainFoods.length === 1) {
-    // Disable associated food prompts on the new main food, which is a workaround for
-    // the following issues:
-    //
-    // V4-903: Associated food prompts logic assumes that the food has no linked foods and will
-    //    overwrite any existing linked foods.
-    //
-    // V4-904: Associated food prompt on the new main food will not recognise the food that triggered
-    //    the addition in the first place, for example if jam triggered the AFP that added toast,
-    //    and toast becomes new main food, the AFP on toast will not recognise jam and will
-    //    suggest adding another instance.
-
-    const newMainFood: FoodState = {
-      ...newMainFoods[0],
-      flags: [...newMainFoods[0].flags, 'associated-foods-complete'],
-    };
-
-    const foodsUpdate = [...meal.value.foods];
-
-    foodsUpdate[oldFoodIndex.foodIndex] = newMainFood;
-
-    newMainFood.linkedFoods = [
-      oldMainFood,
-      ...oldMainFood.linkedFoods.filter(food => food.id !== newMainFood.id),
-    ];
-    oldMainFood.linkedFoods = [];
-
-    survey.setFoods({ mealId: meal.value.id, foods: foodsUpdate });
-  }
-  else {
-    // Nothing we can do, abort
-  }
-}
-
 async function commitAnswer() {
   // The legacy "link as main" feature doesn't make sense when combined with the multiple foods
   // option (because it is defined on the prompt level and there cannot be several main foods),
@@ -233,35 +181,19 @@ async function commitAnswer() {
 
   linkedFoods.push(...moveFoods, ...missingFoods);
 
-  survey.setFoods({ mealId, foods: keepFoods });
-
-  if (foodIndex.linkedFoodIndex !== undefined) {
-    // This is a linked food. Currently, more than one level of nesting is not supported,
-    // so the new foods that came from the associated foods prompt cannot be linked to this one.
-
-    // As a workaround, they can be linked to the parent food.
-
-    // Associated foods prompts for the new linked foods need to be disabled to prevent
-    // potential circular associations.
-    const linkedFoodsWithoutPrompts = linkedFoods.map(food => ({
-      ...food,
-      flags: [...new Set([...food.flags, 'associated-foods-complete'])] as FoodFlag[],
-    }));
-
-    const parentFood = meals.value[foodIndex.mealIndex].foods[foodIndex.foodIndex];
-    const newLinkedFoods = [...parentFood.linkedFoods, ...linkedFoodsWithoutPrompts];
-
-    // Order of the updates is important because any changes to the linked foods will be
-    // overwritten by the update to the parent food.
-    survey.updateFood({ foodId: parentFood.id, update: { linkedFoods: newLinkedFoods } });
-  }
-  else {
-    survey.updateFood({ foodId, update: { linkedFoods } });
-  }
-
-  survey.addFoodFlag(foodId, 'associated-foods-complete');
-
-  processLinkAsMain(foodId);
+  // Commit all changes atomically to prevent race conditions between state updates
+  // and Vue reactivity. This batches setFoods, updateFood (linkedFoods), addFoodFlag,
+  // and processLinkAsMain into a single synchronous operation.
+  survey.commitAssociatedFoods({
+    mealId,
+    foodId,
+    keepFoods,
+    linkedFoods,
+    isLinkedFood: foodIndex.linkedFoodIndex !== undefined,
+    parentFoodId: foodIndex.linkedFoodIndex !== undefined
+      ? meals.value[foodIndex.mealIndex].foods[foodIndex.foodIndex].id
+      : undefined,
+  });
 
   clearStoredStateById(foodId);
 
