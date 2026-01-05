@@ -1,6 +1,5 @@
 import { initContract } from '@ts-rest/core';
-
-import { createSanitizer } from '../rules';
+import { sanitize } from '../rules';
 import { captcha, challengeResponse, loginResponse } from '../types/http';
 import { z } from '../util';
 
@@ -9,7 +8,7 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/auth/login',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       email: z.string().toLowerCase(),
@@ -27,7 +26,7 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/auth/login/alias',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       username: z.string(),
@@ -45,7 +44,7 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/auth/login/token',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       token: z.string(),

@@ -1,6 +1,5 @@
 import { initContract } from '@ts-rest/core';
-
-import { createSanitizer } from '../rules';
+import { sanitize } from '../rules';
 import { strongPasswordWithConfirm } from '../security';
 import { captcha } from '../types/http';
 import { z } from '../util';
@@ -10,7 +9,7 @@ export const password = initContract().router({
     method: 'POST',
     path: '/password',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       email: z.string().email().toLowerCase(),

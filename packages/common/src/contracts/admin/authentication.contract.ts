@@ -1,17 +1,15 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-
 import { mfaProviders } from '@intake24/common/security';
 import { loginResponse } from '@intake24/common/types/http';
-
-import { createSanitizer } from '../../rules';
+import { sanitize } from '../../rules';
 
 export const authentication = initContract().router({
   login: {
     method: 'POST',
     path: '/admin/auth/login',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       email: z.string().toLowerCase(),
@@ -28,7 +26,7 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/admin/auth/duo',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       challengeId: z.string(),
@@ -45,7 +43,7 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/admin/auth/fido',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       challengeId: z.string(),
@@ -80,7 +78,7 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/admin/auth/otp',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       challengeId: z.string(),
