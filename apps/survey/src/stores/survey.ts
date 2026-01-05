@@ -24,7 +24,7 @@ import type {
 import { sortMeals } from '@intake24/common/surveys';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import type { Time } from '@intake24/common/util';
-import { isSessionAgeValid, isSessionFixedPeriodValid, toTime } from '@intake24/common/util';
+import { copy, isSessionAgeValid, isSessionFixedPeriodValid, toTime } from '@intake24/common/util';
 import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
 import {
@@ -79,7 +79,7 @@ export interface FoodIndex {
 }
 
 export function createMeal(data: MealCreationState, flow: RecallFlow = '2-pass'): MealState {
-  const { name, defaultTime = { hours: 8, minutes: 0 }, time, duration = null, flags = [] } = data;
+  const { name, defaultTime = { hours: 8, minutes: 0 }, time, duration = null, flags = [] } = copy(data);
 
   if (flow === '1-pass')
     flags.push('free-entry-complete');
