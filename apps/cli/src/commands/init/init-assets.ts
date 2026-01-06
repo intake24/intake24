@@ -133,6 +133,8 @@ export default async (): Promise<void> => {
       path: () =>
         text({
           message: 'Where do you want to download the assets to?',
+          initialValue: `${resolve('./')}`,
+          placeholder: `${resolve('./')}`,
           validate: (value) => {
             if (!value.trim())
               return 'Path cannot be empty';

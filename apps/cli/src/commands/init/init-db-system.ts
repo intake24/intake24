@@ -1,3 +1,6 @@
+import { exec } from 'node:child_process';
+import { resolve } from 'node:path';
+import { promisify } from 'node:util';
 import {
   cancel,
   confirm,
@@ -31,6 +34,7 @@ import {
 } from '@intake24/common/prompts';
 import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
+import initAssets from './init-assets';
 
 type Superuser = {
   name: string;
@@ -61,6 +65,31 @@ type IetfLanguageTag = {
     name_local: string;
   };
 };
+
+type InitDatabasesArgs = {
+  snapshotFilePath: string;
+  container: string;
+  database: string;
+  username: string;
+  postgresUser: string;
+};
+const execPromise = promisify(exec);
+
+async function importDatabaseSnapshot(type: 'foods' | 'system', input: InitDatabasesArgs) {
+  const destPath = `/tmp/${type}_snapshot.pgcustom`;
+
+  log.step(`Restoring ${type} database snapshot...`);
+  try {
+    await execPromise(`docker cp ${input.snapshotFilePath} ${input.container}:${destPath}`);
+    log.success('Snapshot copied to container.');
+    await execPromise(`docker exec --user ${input.postgresUser} ${input.container} pg_restore --clean --if-exists -n public --no-owner --no-acl --role=${input.username} --dbname ${input.database} ${destPath}`);
+    log.success('Snapshot restored.');
+  }
+  catch (error) {
+    log.error(`Failed to restore snapshot: ${error}`);
+    throw error;
+  }
+}
 
 async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
   try {
@@ -353,16 +382,101 @@ export async function initDbSystem({ superuser }: InitDbSystemArgs): Promise<voi
 }
 
 export default async (): Promise<void> => {
-  intro(color.bgCyanBright(color.black('Initializing system databases...')));
+  intro(color.bgCyanBright(color.black('Initializing foods and system databases...')));
+
+  const downloadAssets = await confirm({
+    message: 'Do you want to download database assets?',
+    initialValue: false,
+  });
+
+  if (downloadAssets) {
+    await initAssets();
+  }
+
+  const importFoodsSnapshot = await confirm({
+    message: `${color.bgRedBright(color.black('(Destructive operation)'))} Do you want to restore the foods database from snapshot?`,
+    initialValue: false,
+  });
+
+  if (importFoodsSnapshot) {
+    const foodsSnapshotInput = await group ({
+      snapshotFilePath: () => text({
+        message: 'Enter the path to the foods snapshot file:',
+        initialValue: `${resolve('foods_snapshot.pgcustom')}`,
+        placeholder: `${resolve('foods_snapshot.pgcustom')}`,
+      }),
+      container: () => text({
+        message: 'Enter the Docker container name:',
+        initialValue: 'intake24-db',
+        placeholder: 'intake24-db',
+      }),
+      postgresUser: () => text({
+        message: 'Enter the Postgres user name:',
+        initialValue: 'postgres',
+        placeholder: 'postgres',
+      }),
+      database: () => text({
+        message: 'Enter the database name:',
+        initialValue: 'intake24_foods_dev',
+        placeholder: 'intake24_foods_dev',
+      }),
+
+      username: () => text({
+        message: 'Enter the database username:',
+        initialValue: 'intake24',
+        placeholder: 'intake24',
+      }),
+    });
+    await importDatabaseSnapshot('foods', foodsSnapshotInput);
+  }
+
+  const importSystemSnapshot = await confirm({
+    message: `${color.bgRedBright(color.black('(Destructive operation)'))} Do you want to restore the system database from snapshot?`,
+    initialValue: false,
+  });
+
+  if (importSystemSnapshot) {
+    const sytemSnapshotInput = await group ({
+      snapshotFilePath: () => text({
+        message: 'Enter the path to the system snapshot file:',
+        initialValue: `${resolve('system_snapshot.pgcustom')}`,
+        placeholder: `${resolve('system_snapshot.pgcustom')}`,
+      }),
+      container: () => text({
+        message: 'Enter the Docker container name:',
+        initialValue: 'intake24-db',
+        placeholder: 'intake24-db',
+      }),
+      postgresUser: () => text({
+        message: 'Enter the Postgres user name:',
+        initialValue: 'postgres',
+        placeholder: 'postgres',
+      }),
+      database: () => text({
+        message: 'Enter the database name:',
+        initialValue: 'intake24_system_dev',
+        placeholder: 'intake24_system_dev',
+      }),
+
+      username: () => text({
+        message: 'Enter the database username:',
+        initialValue: 'intake24',
+        placeholder: 'intake24',
+      }),
+    });
+    await importDatabaseSnapshot('system', sytemSnapshotInput);
+  }
 
   const canStart = await confirm(
     {
-      message: 'This is a destructive operation and will erase existing system database data. Are you sure you want to continue?',
+      message: `${color.bgRedBright(color.black('(Destructive operation)'))} Proceeding initialization will reset system database, and requires the foods database. Continue?`,
       initialValue: false,
     },
   );
-  if (!canStart)
+  if (!canStart) {
+    outro('Will not proceed the system database initialization. Operation complete.');
     return;
+  }
 
   log.step('Collecting superuser information');
 
@@ -397,8 +511,10 @@ export default async (): Promise<void> => {
       initialValue: false,
     },
   );
-  if (!canProceed)
+  if (!canProceed) {
+    outro('Will not proceed the system database initialization. Operation complete.');
     return;
+  }
 
   await initDbSystem({ superuser });
   outro('System database initialized.');
