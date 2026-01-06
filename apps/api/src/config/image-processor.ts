@@ -1,40 +1,57 @@
-export type SourceImageConfig = {
-  thumbnailWidth: number;
-  thumbnailHeight: number;
-};
+import z from 'zod';
+import { validateConfig } from './validate-config';
 
-export type AsServedImageConfig = {
-  width: number;
-  thumbnailWidth: number;
-};
+export const sourceImageConfigSchema = z.object({
+  thumbnailWidth: z.number().int().positive(),
+  thumbnailHeight: z.number().int().positive(),
+});
 
-export type SelectionScreenImageConfig = {
-  width: number;
-  height: number;
-};
+export type SourceImageConfig = z.infer<typeof sourceImageConfigSchema>;
 
-export type FoodThumbnailImageConfig = {
-  width: number;
-};
+export const asServedImageConfigSchema = z.object({
+  width: z.number().int().positive(),
+  thumbnailWidth: z.number().int().positive(),
+});
 
-export type ImageMapsConfig = {
-  width: number;
-};
+export type AsServedImageConfig = z.infer<typeof asServedImageConfigSchema>;
 
-export type SlidingScaleConfig = {
-  width: number;
-};
+export const selectionScreenImageConfigSchema = z.object({
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+});
 
-export type ImageProcessorConfig = {
-  source: SourceImageConfig;
-  asServed: AsServedImageConfig;
-  imageMaps: ImageMapsConfig;
-  drinkScale: SlidingScaleConfig;
-  optionSelection: SelectionScreenImageConfig;
-  foodThumbnailImage: FoodThumbnailImageConfig;
-};
+export type SelectionScreenImageConfig = z.infer<typeof selectionScreenImageConfigSchema>;
 
-const imageProcessorConfig: ImageProcessorConfig = {
+export const foodThumbnailImageConfigSchema = z.object({
+  width: z.number().int().positive(),
+});
+
+export type FoodThumbnailImageConfig = z.infer<typeof foodThumbnailImageConfigSchema>;
+
+export const imageMapsConfigSchema = z.object({
+  width: z.number().int().positive(),
+});
+
+export type ImageMapsConfig = z.infer<typeof imageMapsConfigSchema>;
+
+export const slidingScaleConfigSchema = z.object({
+  width: z.number().int().positive(),
+});
+
+export type SlidingScaleConfig = z.infer<typeof slidingScaleConfigSchema>;
+
+export const imageProcessorConfigSchema = z.object({
+  source: sourceImageConfigSchema,
+  asServed: asServedImageConfigSchema,
+  imageMaps: imageMapsConfigSchema,
+  drinkScale: slidingScaleConfigSchema,
+  optionSelection: selectionScreenImageConfigSchema,
+  foodThumbnailImage: foodThumbnailImageConfigSchema,
+});
+
+export type ImageProcessorConfig = z.infer<typeof imageProcessorConfigSchema>;
+
+const rawImageProcessorConfig = {
   source: {
     thumbnailWidth: Number.parseInt(process.env.IMAGE_SOURCE_THUMB_WIDTH || '768', 10),
     thumbnailHeight: Number.parseInt(process.env.IMAGE_SOURCE_THUMB_HEIGHT || '432', 10),
@@ -58,4 +75,6 @@ const imageProcessorConfig: ImageProcessorConfig = {
   },
 };
 
-export default imageProcessorConfig;
+const parsedImageProcessorConfig = validateConfig('Image processor configuration', imageProcessorConfigSchema, rawImageProcessorConfig);
+
+export default parsedImageProcessorConfig;

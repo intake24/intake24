@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { validateConfig } from './validate-config';
 
 const metricsConfigSchema = z.object({
   prometheusNodeExporter: z.object({
@@ -30,7 +31,7 @@ const metricsConfigSchema = z.object({
 
 export type MetricsConfig = z.infer<typeof metricsConfigSchema>;
 
-export default metricsConfigSchema.parse({
+const parsedMetricsConfig = validateConfig('Performance metrics configuration', metricsConfigSchema, {
   prometheusNodeExporter: {
     enabled: Boolean(process.env.METRICS_PROMETHEUS_NODE_EXPORTER_ENABLED),
     port: Number.parseInt(process.env.METRICS_PROMETHEUS_NODE_EXPORTER_PORT || '9100'),
@@ -56,3 +57,5 @@ export default metricsConfigSchema.parse({
     },
   },
 });
+
+export default parsedMetricsConfig;

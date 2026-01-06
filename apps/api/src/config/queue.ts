@@ -1,11 +1,15 @@
-import type { RedisOptions } from './redis';
+import z from 'zod';
+import { redisOptionsWithKeyPrefixSchema } from './redis';
+import { validateConfig } from './validate-config';
 
-export type QueueConfig = {
-  redis: RedisOptions;
-  workers: number;
-};
+export const queueConfigSchema = z.object({
+  redis: redisOptionsWithKeyPrefixSchema,
+  workers: z.coerce.number().int().positive(),
+});
 
-const queueConfig: QueueConfig = {
+export type QueueConfig = z.infer<typeof queueConfigSchema>;
+
+const rawQueueConfig = {
   redis: {
     url: process.env.QUEUE_REDIS_URL || process.env.REDIS_URL || undefined,
     host: process.env.QUEUE_REDIS_HOST || process.env.REDIS_HOST || 'localhost',
@@ -16,4 +20,6 @@ const queueConfig: QueueConfig = {
   workers: Number.parseInt(process.env.QUEUE_WORKERS || '3', 10),
 };
 
-export default queueConfig;
+const parsedQueueConfig = validateConfig('Queue configuration', queueConfigSchema, rawQueueConfig);
+
+export default parsedQueueConfig;

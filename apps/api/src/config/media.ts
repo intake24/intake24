@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { validateConfig } from './validate-config';
 
 export const baseProvider = z.object({
   public: z.string(),
@@ -34,7 +35,7 @@ export type MediaConfig = z.infer<typeof mediaConfigSchema>;
 export type MediaProvider = MediaConfig['storage']['provider'];
 export type MediaConversion = keyof MediaConfig['conversions'];
 
-export default mediaConfigSchema.parse({
+const parsedMediaConfig = validateConfig('Media configuration', mediaConfigSchema, {
   storage: {
     provider: process.env.MEDIA_PROVIDER,
     local: {
@@ -49,3 +50,5 @@ export default mediaConfigSchema.parse({
     xl: { width: 1200 },
   },
 });
+
+export default parsedMediaConfig;

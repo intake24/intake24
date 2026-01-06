@@ -1,14 +1,16 @@
-import type { CookieSettings, SameSiteCookieOptions } from './common';
-import type { RedisOptions } from './redis';
-import ms from 'ms';
-import { parseToMs } from '@intake24/common/util';
+import z from 'zod';
+import { cookieSettings } from './common';
+import { redisOptionsWithKeyPrefixSchema } from './redis';
+import { validateConfig } from './validate-config';
 
-export type SessionConfig = {
-  redis: RedisOptions;
-  cookie: CookieSettings;
-};
+export const sessionConfigSchema = z.object({
+  redis: redisOptionsWithKeyPrefixSchema,
+  cookie: cookieSettings,
+});
 
-const sessionConfig: SessionConfig = {
+export type SessionConfig = z.infer<typeof sessionConfigSchema>;
+
+const rawSessionConfig = {
   redis: {
     url: process.env.SESSION_REDIS_URL || process.env.REDIS_URL || undefined,
     host: process.env.SESSION_REDIS_HOST || process.env.REDIS_HOST || 'localhost',
@@ -18,12 +20,14 @@ const sessionConfig: SessionConfig = {
   },
   cookie: {
     name: process.env.SESSION_COOKIE_NAME || 'it24_session',
-    maxAge: ms(parseToMs(process.env.SESSION_COOKIE_LIFETIME) || '15m'),
+    maxAge: process.env.SESSION_COOKIE_LIFETIME || '15m',
     httpOnly: true,
     path: process.env.SESSION_COOKIE_PATH || '/api/admin',
-    sameSite: (process.env.SESSION_COOKIE_SAME_SITE || 'lax') as SameSiteCookieOptions,
+    sameSite: process.env.SESSION_COOKIE_SAME_SITE || 'lax',
     secure: process.env.SESSION_COOKIE_SECURE === 'true',
   },
 };
 
-export default sessionConfig;
+const parsedSessionConfig = validateConfig('Session configuration', sessionConfigSchema, rawSessionConfig);
+
+export default parsedSessionConfig;
