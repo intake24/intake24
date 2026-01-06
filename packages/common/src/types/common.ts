@@ -52,7 +52,9 @@ export const emailCopy = ['cc', 'bcc', 'none'] as const;
 
 export type EmailCopy = (typeof emailCopy)[number];
 
-export type Environment = 'development' | 'test' | 'production';
+export const environmentOptions = ['development', 'test', 'production'] as const;
+
+export type Environment = (typeof environmentOptions)[number];
 
 export const localeTranslation = z.record(z.string().nullable());
 

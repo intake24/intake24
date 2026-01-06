@@ -1,13 +1,24 @@
-import type { StringValue } from 'ms';
+import z from 'zod';
+import { msStringValue } from './common';
+import { validateConfig } from './validate-config';
 
-export type LocalLocation = 'public' | 'downloads' | 'uploads' | 'images';
+export const localLocationSchema = z.enum(['public', 'downloads', 'uploads', 'images']);
 
-export type FileSystemConfig = {
-  local: Record<LocalLocation, string>;
-  urlExpiresAt: StringValue;
-};
+export type LocalLocation = z.infer<typeof localLocationSchema>;
 
-const fsConfig: FileSystemConfig = {
+export const fileSystemConfigSchema = z.object({
+  local: z.object({
+    public: z.string().nonempty(),
+    downloads: z.string().nonempty(),
+    uploads: z.string().nonempty(),
+    images: z.string().nonempty(),
+  }),
+  urlExpiresAt: msStringValue,
+});
+
+export type FileSystemConfig = z.infer<typeof fileSystemConfigSchema>;
+
+const rawFsConfig = {
   local: {
     public: process.env.FS_PUBLIC || 'public',
     downloads: process.env.FS_DOWNLOADS || 'storage/private/downloads',
@@ -17,4 +28,6 @@ const fsConfig: FileSystemConfig = {
   urlExpiresAt: '2d',
 };
 
-export default fsConfig;
+const parsedFsConfig = validateConfig('File system configuration', fileSystemConfigSchema, rawFsConfig);
+
+export default parsedFsConfig;
