@@ -39,11 +39,11 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <v-radio-group v-model="state.portionSize.unit" @update:model-value="selectMethod">
-            <v-radio v-for="unit in parameters.units" :key="unit.name" :value="unit">
+            <v-radio v-for="unit in translatedUnits" :key="unit.name" :value="unit">
               <template #label>
                 <i18n-t :keypath="`prompts.${type}.estimateIn`">
                   <template #unit>
-                    {{ getStandardUnitEstimateIn(unit) }}
+                    {{ unit.translatedEstimateIn }}
                   </template>
                 </i18n-t>
               </template>
@@ -54,14 +54,14 @@
       <v-expansion-panel :disabled="!unitValid">
         <v-expansion-panel-title>
           <i18n-t
-            v-if="state.portionSize.unit"
+            v-if="selectedUnitTranslated"
             :keypath="`prompts.${type}.howMany.${
-              state.portionSize.unit.omitFoodDescription ? '_' : 'withFood'
+              selectedUnitTranslated.omitFoodDescription ? '_' : 'withFood'
             }`"
             tag="span"
           >
             <template #unit>
-              {{ getStandardUnitHowMany(state.portionSize.unit) }}
+              {{ selectedUnitTranslated.translatedHowMany }}
             </template>
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
@@ -137,7 +137,31 @@ const {
   getStandardUnitEstimateIn,
   getStandardUnitHowMany,
   standardUnitsLoaded,
+  currentLocale,
 } = useStandardUnits();
+
+// Create computed translations with explicit locale dependency for reactivity
+const translatedUnits = computed(() => {
+  // Access currentLocale to create reactive dependency on locale changes
+  const _locale = currentLocale.value;
+  return parameters.value.units.map(unit => ({
+    ...unit,
+    translatedEstimateIn: getStandardUnitEstimateIn(unit),
+    translatedHowMany: getStandardUnitHowMany(unit),
+  }));
+});
+
+// Get translated unit for the currently selected unit
+const selectedUnitTranslated = computed(() => {
+  const _locale = currentLocale.value;
+  const selectedUnit = state.value.portionSize.unit;
+  if (!selectedUnit)
+    return null;
+  return {
+    ...selectedUnit,
+    translatedHowMany: getStandardUnitHowMany(selectedUnit),
+  };
+});
 
 const state = ref(copy(props.modelValue));
 

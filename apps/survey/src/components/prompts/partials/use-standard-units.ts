@@ -6,10 +6,13 @@ import type { StandardUnitResponse } from '@intake24/common/types/http';
 import { useI18n } from '@intake24/i18n';
 import { useHttp } from '@intake24/survey/services';
 
-export type StandardUnitRefs = Record<
-  string,
-  { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
->;
+export type StandardUnitEntry = {
+  estimateIn: RequiredLocaleTranslation;
+  howMany: RequiredLocaleTranslation;
+  isFallback?: boolean; // Marks entries that only have fallback English data
+};
+
+export type StandardUnitRefs = Record<string, StandardUnitEntry>;
 
 // Global shared state to prevent race conditions
 const globalStandardUnitRefs = ref<StandardUnitRefs>({});
@@ -18,7 +21,7 @@ const globalHasApiData = ref(false);
 
 export function useStandardUnits() {
   const http = useHttp();
-  const { translate } = useI18n();
+  const { translate, i18n } = useI18n();
 
   // Use shared global state instead of instance state
   const standardUnitRefs = globalStandardUnitRefs;
@@ -62,6 +65,7 @@ export function useStandardUnits() {
       acc[name] = {
         estimateIn: { en: name },
         howMany: { en: name },
+        isFallback: true, // Mark as fallback so it can be refetched later
       };
       return acc;
     }, {});
@@ -73,20 +77,31 @@ export function useStandardUnits() {
       return;
     }
 
-    // Check if we already have the data for all requested names
-    const missingNames = names.filter(name => !standardUnitRefs.value[name]);
+    // Helper to check which names still need fetching
+    const getMissingNames = () => names.filter((name) => {
+      const cached = standardUnitRefs.value[name];
+      return !cached || cached.isFallback === true;
+    });
+
+    let missingNames = getMissingNames();
+
     if (missingNames.length === 0) {
       hasApiData.value = true;
       return;
     }
 
-    // Prevent concurrent API calls
+    // If another call is in progress, wait for it then re-check
     if (loadingUnits.value) {
-      // Wait for the ongoing call to complete
       while (loadingUnits.value) {
         await new Promise(resolve => setTimeout(resolve, 50));
       }
-      return;
+      // Re-check after waiting - the other call may have fetched our data
+      missingNames = getMissingNames();
+      if (missingNames.length === 0) {
+        hasApiData.value = true;
+        return; // Other call fetched our data
+      }
+      // Otherwise, fall through to fetch our missing data
     }
 
     loadingUnits.value = true;
@@ -98,7 +113,8 @@ export function useStandardUnits() {
 
       const fetchedRefs = data.reduce<StandardUnitRefs>((acc, unit) => {
         const { id, estimateIn, howMany } = unit;
-        acc[id] = { estimateIn, howMany };
+        // Successfully fetched from API - not a fallback
+        acc[id] = { estimateIn, howMany, isFallback: false };
         return acc;
       }, {});
 
@@ -133,11 +149,15 @@ export function useStandardUnits() {
     }
   };
 
+  // Expose locale for reactive template dependencies
+  const currentLocale = computed(() => i18n.locale.value);
+
   return {
     resolveStandardUnits,
     getStandardUnitHowMany,
     getStandardUnitEstimateIn,
     standardUnitRefs,
     standardUnitsLoaded,
+    currentLocale, // Expose for components that need to react to locale changes
   };
 }

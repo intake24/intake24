@@ -92,7 +92,7 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: Re
       isRtl = textDirection === 'rtl';
     }
     catch {
-      //
+      // API call failed, use fallback
     }
 
     for (const lang of getLanguages(language)) {

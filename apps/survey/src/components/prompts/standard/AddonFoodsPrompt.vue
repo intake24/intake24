@@ -59,7 +59,7 @@
                     density="compact"
                     :disabled="addon.confirmed === false || !addon.data"
                     hide-details="auto"
-                    :item-title="(item) => getStandardUnitEstimateIn(item)"
+                    item-title="translatedEstimateIn"
                     item-value="name"
                     :items="getAddonFoodsUnits(food.id, idx)"
                     :label="promptI18n.portion"
@@ -134,7 +134,7 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { translate } = useI18n();
 const { action, getMealTime, translatePrompt } = usePromptUtils(props, { emit });
-const { resolveStandardUnits, getStandardUnitEstimateIn } = useStandardUnits();
+const { resolveStandardUnits, getStandardUnitEstimateIn, currentLocale } = useStandardUnits();
 
 const promptI18n = computed(() =>
   translatePrompt([
@@ -173,9 +173,22 @@ function isAddonFoodValid(food: PromptStates['addon-foods-prompt']['foods'][stri
 
 const isValid = computed(() => Object.values(foods.value).every(foods => foods.every(isAddonFoodValid)));
 
+// Create translated units with explicit locale dependency for reactivity
+const translatedAddonFoodUnits = computed(() => {
+  // Access currentLocale to create reactive dependency on locale changes
+  const _locale = currentLocale.value;
+  return Object.entries(addonFoodUnits.value).reduce<Record<string, Array<StandardUnit & { translatedEstimateIn: string }>>>((acc, [code, { units }]) => {
+    acc[code] = units.map(unit => ({
+      ...unit,
+      translatedEstimateIn: getStandardUnitEstimateIn(unit),
+    }));
+    return acc;
+  }, {});
+});
+
 function getAddonFoodsUnits(foodId: string, idx: number) {
   const code = foods.value[foodId][idx].data?.code;
-  return code ? addonFoodUnits.value[code].units : [];
+  return code ? (translatedAddonFoodUnits.value[code] ?? []) : [];
 }
 
 async function getAddonFoods() {

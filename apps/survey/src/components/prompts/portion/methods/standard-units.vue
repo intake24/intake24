@@ -5,7 +5,7 @@
     color="grey-lighten-5"
   >
     <v-chip
-      v-for="(unit, index) in standardUnits"
+      v-for="(unit, index) in translatedUnits"
       :key="unit.name"
       class="px-6 font-weight-medium"
       color="primary"
@@ -16,7 +16,7 @@
       </v-icon>
       <i18n-t keypath="prompts.standardPortion.estimateIn">
         <template #unit>
-          {{ getStandardUnitEstimateIn(unit) }}
+          {{ unit.translatedEstimateIn }}
         </template>
       </i18n-t>
     </v-chip>
@@ -49,7 +49,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { getStandardUnitEstimateIn, resolveStandardUnits, standardUnitsLoaded } = useStandardUnits();
+    const { getStandardUnitEstimateIn, resolveStandardUnits, standardUnitsLoaded, currentLocale } = useStandardUnits();
 
     const interval = ref<undefined | number>(undefined);
     const selectedIndex = ref<undefined | number>(props.timer ? 0 : undefined);
@@ -59,6 +59,16 @@ export default defineComponent({
         0,
         props.max,
       );
+    });
+
+    // Create computed translations that explicitly depend on locale changes
+    const translatedUnits = computed(() => {
+      // Access currentLocale to create reactive dependency
+      const _locale = currentLocale.value;
+      return standardUnits.value.map(unit => ({
+        ...unit,
+        translatedEstimateIn: getStandardUnitEstimateIn(unit),
+      }));
     });
 
     const selectNextStandardUnit = () => {
@@ -101,10 +111,9 @@ export default defineComponent({
     });
 
     return {
-      getStandardUnitEstimateIn,
       selectedIndex,
-      standardUnits,
       standardUnitsLoaded,
+      translatedUnits,
     };
   },
 });
