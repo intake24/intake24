@@ -973,6 +973,13 @@ export class SearchPatternMatcher {
         if (hasHiragana && katakanaQuery !== hiraganaQuery)
           registerMatchPhrase('name', katakanaQuery, 12);
 
+        // Include name_synonyms in phrase gate
+        registerMatchPhrase('name_synonyms', searchQuery, 140);
+        if (hasKanaCharacters) {
+          registerMatchPhrase('name_synonyms', hiraganaQuery, 140);
+          registerMatchPhrase('name_synonyms', katakanaQuery, 140);
+        }
+
         if (canonicalSynonym) {
           registerMatchPhrase('name', canonicalSynonym, 22);
           registerMatchPhrase('name_synonyms', canonicalSynonym, 24);
