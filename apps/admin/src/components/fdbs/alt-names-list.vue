@@ -76,3 +76,15 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+/* Make chip text selectable for copy-paste */
+:deep(.v-chip) {
+  user-select: text;
+  cursor: text;
+
+  .v-chip__content {
+    user-select: text;
+  }
+}
+</style>
