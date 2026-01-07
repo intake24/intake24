@@ -1,6 +1,49 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import kuromoji from 'kuromoji';
 
 type Tokenizer = kuromoji.Tokenizer<kuromoji.IpadicFeatures>;
+
+// Resolve kuromoji dictionary path dynamically to work from any directory
+// This handles webpack bundling, pnpm hoisted modules, and different working directories
+function getKuromojiDicPath(): string {
+  // Try multiple strategies to find the kuromoji dict directory
+
+  // Strategy 1: Try require.resolve (works in non-bundled environments)
+  try {
+    const packageJsonPath = require.resolve('kuromoji/package.json');
+    const dictPath = path.join(path.dirname(packageJsonPath), 'dict');
+    if (fs.existsSync(path.join(dictPath, 'base.dat.gz'))) {
+      return dictPath;
+    }
+  }
+  catch {
+    // require.resolve failed, try other strategies
+  }
+
+  // Strategy 2: Search from current working directory up to root
+  let searchDir = process.cwd();
+  const root = path.parse(searchDir).root;
+
+  while (searchDir !== root) {
+    // Check for pnpm structure
+    const pnpmPath = path.join(searchDir, 'node_modules', '.pnpm', 'kuromoji@0.1.2', 'node_modules', 'kuromoji', 'dict');
+    if (fs.existsSync(path.join(pnpmPath, 'base.dat.gz'))) {
+      return pnpmPath;
+    }
+
+    // Check standard node_modules
+    const standardPath = path.join(searchDir, 'node_modules', 'kuromoji', 'dict');
+    if (fs.existsSync(path.join(standardPath, 'base.dat.gz'))) {
+      return standardPath;
+    }
+
+    searchDir = path.dirname(searchDir);
+  }
+
+  // Strategy 3: Fallback to relative path (last resort)
+  return 'node_modules/kuromoji/dict';
+}
 
 let tokenizerInstance: Tokenizer | null = null;
 let tokenizerPromise: Promise<Tokenizer> | null = null;
@@ -153,7 +196,7 @@ async function getTokenizer(): Promise<Tokenizer> {
 
   if (!tokenizerPromise) {
     tokenizerPromise = new Promise((resolve, reject) => {
-      kuromoji.builder({ dicPath: 'node_modules/kuromoji/dict' }).build((err, tokenizer) => {
+      kuromoji.builder({ dicPath: getKuromojiDicPath() }).build((err, tokenizer) => {
         if (err) {
           reject(err);
           return;

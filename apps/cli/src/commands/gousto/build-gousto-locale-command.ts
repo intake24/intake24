@@ -6,7 +6,6 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import parseCsv from 'csv-parser';
 import { groupBy, mapValues } from 'lodash';
-// @ts-expect-error - no types available
 import removeBOM from 'remove-bom-stream';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { Dictionary } from '@intake24/common/types';

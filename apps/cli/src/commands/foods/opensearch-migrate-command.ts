@@ -5,6 +5,8 @@ import { Client } from '@opensearch-project/opensearch';
 import * as dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
 import { normalizeJapaneseFoodDocument } from '../../../../api/src/services/foods/japanese-food-document-normalizer';
+import { SageMakerEmbeddingService } from '../../../../api/src/services/foods/sagemaker-embedding-service';
+import { normalizeForSearch } from '../../../../api/src/utils/japanese-normalizer';
 
 // Load environment variables
 const possiblePaths = [
@@ -26,15 +28,21 @@ export interface OpenSearchMigrateArguments {
   locale: string;
   batchSize: number;
   recreateIndex: boolean;
+  useSagemaker: boolean;
+  embeddingBatchSize: number;
 }
 
 const opensearchMigrate = {
   handler: async (args: OpenSearchMigrateArguments): Promise<void> => {
-    const { locale, batchSize, recreateIndex } = args;
+    const { locale, batchSize, recreateIndex, useSagemaker, embeddingBatchSize } = args;
 
     console.log(`🔍 Starting OpenSearch migration for locale: ${locale}`);
     console.log(`   Batch size: ${batchSize}`);
     console.log(`   Recreate index: ${recreateIndex}`);
+    console.log(`   Use SageMaker for embeddings: ${useSagemaker}`);
+    if (useSagemaker) {
+      console.log(`   Embedding batch size: ${embeddingBatchSize}`);
+    }
 
     if (locale !== 'jp_JP_2024') {
       console.error(`❌ Locale ${locale} is not supported. Currently only jp_JP_2024 is supported.`);
@@ -67,6 +75,37 @@ const opensearchMigrate = {
       console.error('❌ OpenSearch credentials not found in environment variables');
       console.log('Please set OPENSEARCH_USERNAME and OPENSEARCH_PASSWORD in your .env file');
       process.exit(1);
+    }
+
+    // Initialize SageMaker service if --use-sagemaker flag is set
+    let sagemakerService: SageMakerEmbeddingService | null = null;
+    if (useSagemaker) {
+      const sagemakerEndpoint = opensearchConfig.sagemakerRuriEndpoint;
+      const sagemakerRegion = opensearchConfig.sagemakerRuriRegion || 'ap-southeast-1';
+
+      if (!sagemakerEndpoint) {
+        console.error('❌ SageMaker endpoint not configured');
+        console.log('Please set SAGEMAKER_RURI_ENDPOINT in your .env file');
+        process.exit(1);
+      }
+
+      // Create a simple console logger for CLI context
+      const cliLogger = {
+        info: (msg: string, ...args: any[]) => console.log(`[INFO] ${msg}`, ...args),
+        warn: (msg: string, ...args: any[]) => console.warn(`[WARN] ${msg}`, ...args),
+        error: (msg: string, ...args: any[]) => console.error(`[ERROR] ${msg}`, ...args),
+        debug: (msg: string, ...args: any[]) => {
+          if (process.env.DEBUG)
+            console.log(`[DEBUG] ${msg}`, ...args);
+        },
+        child: () => cliLogger,
+      } as any;
+
+      sagemakerService = new SageMakerEmbeddingService(
+        { endpointName: sagemakerEndpoint, region: sagemakerRegion },
+        cliLogger,
+      );
+      console.log(`✅ SageMaker RURI service initialized (endpoint: ${sagemakerEndpoint})`);
     }
 
     // Database configuration
@@ -179,55 +218,108 @@ const opensearchMigrate = {
       // is not needed since we're using the central opensearch.ts configuration
       // which handles all the necessary analyzers and mappings
 
-      // Load embeddings data for hybrid search
-      const embeddingsPath = path.resolve(process.cwd(), '../../data/japanese/food_embeddings.json');
+      // Load or generate embeddings data for hybrid search
       let embeddingsLookup: Map<string, number[]> = new Map();
 
-      try {
-        const embeddingsContent = fs.readFileSync(embeddingsPath, 'utf-8');
-        const embeddingsData = JSON.parse(embeddingsContent);
-        const rawEmbeddings = embeddingsData?.embeddings ?? embeddingsData;
+      if (useSagemaker && sagemakerService) {
+        // Generate embeddings via SageMaker RURI
+        console.log('🔄 Generating embeddings via SageMaker RURI...');
 
-        if (!rawEmbeddings || typeof rawEmbeddings !== 'object') {
-          throw new Error('Embeddings file has unexpected format');
+        // Prepare food names for embedding generation
+        // Use normalizeForSearch to get hiragana readings (so kanji/katakana/hiragana produce same embedding)
+        const foodsForEmbedding = (foods as any[]).map((food) => {
+          const name = food.name || '';
+          const normalized = normalizeForSearch(name);
+          // Use hiragana reading if available (this normalizes script variants)
+          return {
+            code: food.food_code,
+            text: normalized.hiragana || name.trim(),
+          };
+        });
+
+        // Generate embeddings in batches
+        const totalFoods = foodsForEmbedding.length;
+        let embeddingsGenerated = 0;
+
+        for (let i = 0; i < totalFoods; i += embeddingBatchSize) {
+          const batch = foodsForEmbedding.slice(i, i + embeddingBatchSize);
+          const texts = batch.map(f => f.text);
+
+          try {
+            const embeddings = await sagemakerService.generateEmbeddings(texts);
+
+            // Map embeddings back to food codes
+            batch.forEach((food, idx) => {
+              if (embeddings[idx] && embeddings[idx].length > 0) {
+                embeddingsLookup.set(food.code, embeddings[idx]);
+              }
+            });
+
+            embeddingsGenerated += batch.length;
+            console.log(`   Generated embeddings: ${embeddingsGenerated}/${totalFoods}`);
+          }
+          catch (error) {
+            console.error(`❌ Failed to generate embeddings for batch starting at ${i}:`, error);
+            // Continue with next batch - some embeddings are better than none
+          }
         }
 
-        const normalisedEntries: [string, number[]][] = [];
-
-        for (const [code, value] of Object.entries(rawEmbeddings)) {
-          const vector = Array.isArray(value)
-            ? value
-            : Array.isArray((value as any)?.embedding)
-              ? (value as any).embedding
-              : undefined;
-
-          if (Array.isArray(vector) && vector.length > 0)
-            normalisedEntries.push([code, vector]);
-        }
-
-        embeddingsLookup = new Map(normalisedEntries);
-
-        const reportedDimension =
-          embeddingsData?.metadata?.dimension ??
-          (normalisedEntries.length > 0 ? normalisedEntries[0][1].length : undefined);
-
-        console.log(`✅ Loaded ${embeddingsLookup.size} embeddings from ${embeddingsPath}`);
-        console.log(`   Embedding dimensions: ${reportedDimension ?? 'unknown'}`);
-
-        if (
-          embeddingDimension &&
-          typeof reportedDimension === 'number' &&
-          reportedDimension !== embeddingDimension
-        ) {
-          console.warn(
-            `⚠️  Embedding dimension mismatch: expected ${embeddingDimension}, got ${reportedDimension}`,
-          );
+        console.log(`✅ Generated ${embeddingsLookup.size} embeddings via SageMaker RURI`);
+        if (embeddingsLookup.size > 0) {
+          const sampleEmbedding = embeddingsLookup.values().next().value;
+          console.log(`   Embedding dimensions: ${sampleEmbedding?.length ?? 'unknown'}`);
         }
       }
-      catch (error) {
-        console.warn('⚠️  Could not load embeddings data:', error);
-        console.warn(`    Tried path: ${embeddingsPath}`);
-        console.warn('    Hybrid search will not be available without embeddings.');
+      else {
+        // Load embeddings from JSON file (original behavior)
+        const embeddingsPath = path.resolve(process.cwd(), '../../data/japanese/food_embeddings.json');
+
+        try {
+          const embeddingsContent = fs.readFileSync(embeddingsPath, 'utf-8');
+          const embeddingsData = JSON.parse(embeddingsContent);
+          const rawEmbeddings = embeddingsData?.embeddings ?? embeddingsData;
+
+          if (!rawEmbeddings || typeof rawEmbeddings !== 'object') {
+            throw new Error('Embeddings file has unexpected format');
+          }
+
+          const normalisedEntries: [string, number[]][] = [];
+
+          for (const [code, value] of Object.entries(rawEmbeddings)) {
+            const vector = Array.isArray(value)
+              ? value
+              : Array.isArray((value as any)?.embedding)
+                ? (value as any).embedding
+                : undefined;
+
+            if (Array.isArray(vector) && vector.length > 0)
+              normalisedEntries.push([code, vector]);
+          }
+
+          embeddingsLookup = new Map(normalisedEntries);
+
+          const reportedDimension =
+            embeddingsData?.metadata?.dimension ??
+            (normalisedEntries.length > 0 ? normalisedEntries[0][1].length : undefined);
+
+          console.log(`✅ Loaded ${embeddingsLookup.size} embeddings from ${embeddingsPath}`);
+          console.log(`   Embedding dimensions: ${reportedDimension ?? 'unknown'}`);
+
+          if (
+            embeddingDimension &&
+            typeof reportedDimension === 'number' &&
+            reportedDimension !== embeddingDimension
+          ) {
+            console.warn(
+              `⚠️  Embedding dimension mismatch: expected ${embeddingDimension}, got ${reportedDimension}`,
+            );
+          }
+        }
+        catch (error) {
+          console.warn('⚠️  Could not load embeddings data:', error);
+          console.warn(`    Tried path: ${embeddingsPath}`);
+          console.warn('    Hybrid search will not be available without embeddings.');
+        }
       }
 
       // Process foods in batches

@@ -6,7 +6,6 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import parseCsv from 'csv-parser';
 import { groupBy, mapValues, partition, sortBy, trim } from 'lodash';
-// @ts-expect-error - no types available
 import removeBOM from 'remove-bom-stream';
 
 import { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';

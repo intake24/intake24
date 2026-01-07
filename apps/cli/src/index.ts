@@ -761,11 +761,15 @@ async function run() {
     .option('-l, --locale [locale]', 'Locale to migrate (currently only ja-JP supported)', 'ja-JP')
     .option('-b, --batch-size [size]', 'Batch size for bulk indexing', '500')
     .option('-r, --recreate-index', 'Recreate the index (delete if exists)', false)
+    .option('--use-sagemaker', 'Generate embeddings via SageMaker RURI instead of loading from JSON file', false)
+    .option('--embedding-batch-size [size]', 'Batch size for SageMaker embedding generation', '32')
     .action(async (options) => {
       await opensearchMigrate.handler({
         locale: options.locale,
         batchSize: Number.parseInt(options.batchSize, 10),
         recreateIndex: options.recreateIndex,
+        useSagemaker: options.useSagemaker,
+        embeddingBatchSize: Number.parseInt(options.embeddingBatchSize, 10),
       });
     });
 
