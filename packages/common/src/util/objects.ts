@@ -19,10 +19,15 @@ export function mergeMultiple<T>(...args: any[]): T {
 
 export function getObjectNestedKeys<T extends object>(object: T, prefix?: string) {
   return Object.entries(object).reduce<string[]>((acc, [key, value]) => {
-    let items
-      = Object.prototype.toString.call(value) === '[object Object]'
-        ? getObjectNestedKeys(value, key)
-        : [key];
+    let items: string[];
+    if (Object.prototype.toString.call(value) === '[object Object]') {
+      const nestedKeys = getObjectNestedKeys(value as object, key);
+      // If object is empty, include the key itself so it can still be picked from source
+      items = nestedKeys.length > 0 ? nestedKeys : [key];
+    }
+    else {
+      items = [key];
+    }
 
     if (prefix)
       items = items.map(item => `${prefix}.${item}`);
