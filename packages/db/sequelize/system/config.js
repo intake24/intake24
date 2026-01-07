@@ -14,7 +14,7 @@ const dialectOptions = {
   },
   mssql: {},
   postgres: {
-    ssl: process.env.DB_CONNECTION_SSL === 'true',
+    ssl: process.env.DB_CONNECTION_SSL === 'true' ? { rejectUnauthorized: true } : { rejectUnauthorized: false },
   },
 };
 
