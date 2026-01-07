@@ -31,6 +31,50 @@ async function getTokenizer(): Promise<kuromoji.Tokenizer<kuromoji.IpadicFeature
   return tokenizerPromise;
 }
 
+/**
+ * Extract reading (katakana pronunciation) from Japanese text using Kuromoji.
+ * This function uses the tokenizer's built-in dictionary to get accurate readings
+ * for kanji, eliminating the need for static lookup tables.
+ *
+ * @param text - Japanese text (may contain kanji, hiragana, katakana, or mixed)
+ * @returns The reading in katakana, or the original text if no reading available
+ */
+export function getReading(text: string): string {
+  if (!tokenizerInstance) {
+    return text;
+  }
+
+  try {
+    const tokens = tokenizerInstance.tokenize(text);
+    if (tokens.length === 0) {
+      return text;
+    }
+
+    // Concatenate readings from all tokens
+    const readings = tokens.map((token) => {
+      // Use reading if available, otherwise fall back to surface form
+      // Kuromoji returns readings in katakana
+      if (token.reading && token.reading !== '*') {
+        return token.reading;
+      }
+      return token.surface_form;
+    });
+
+    return readings.join('');
+  }
+  catch {
+    return text;
+  }
+}
+
+/**
+ * Check if the tokenizer is ready for use.
+ * This is useful for components that need to know if reading extraction is available.
+ */
+export function isTokenizerReady(): boolean {
+  return tokenizerInstance !== null;
+}
+
 function segmentJapaneseText(text: string): string[] {
   try {
     if (!tokenizerInstance) {

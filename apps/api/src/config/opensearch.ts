@@ -78,6 +78,26 @@ const baseJapaneseSynonyms = [
   '牛丼,ぎゅうどん,ギュウドン,gyudon',
   '海鮮丼,かいせんどん,カイセンドン,kaisendon',
   'すき焼き,すきやき,スキヤキ,sukiyaki',
+
+  // Beverage variations
+  'コーヒー,こーひー,珈琲,コーヒ,coffee',
+  '紅茶,こうちゃ,コウチャ,black tea',
+  '緑茶,りょくちゃ,green tea',
+  'お茶,おちゃ,オチャ,茶,ちゃ,tea',
+  '牛乳,ぎゅうにゅう,ギュウニュウ,ミルク,みるく,milk',
+  '豆乳,とうにゅう,トウニュウ,soy milk',
+  'ジュース,じゅーす,juice',
+  '水,みず,ミズ,water',
+
+  // Fruit variations
+  'りんご,リンゴ,林檎,apple',
+  'みかん,ミカン,蜜柑,オレンジ,orange,mandarin',
+  'バナナ,ばなな,banana',
+  'ぶどう,ブドウ,葡萄,grape',
+  'いちご,イチゴ,苺,strawberry',
+  'すいか,スイカ,西瓜,watermelon',
+  'もも,モモ,桃,peach',
+  'なし,ナシ,梨,pear',
 ];
 
 const combinedJapaneseSynonyms = Array.from(new Set([...baseJapaneseSynonyms, ...generatedSynonymStrings]));

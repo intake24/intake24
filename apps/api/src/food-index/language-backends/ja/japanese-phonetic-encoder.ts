@@ -1,8 +1,11 @@
 import type { PhoneticEncoder } from '@intake24/api/food-index/dictionary';
 
+import { getReading, isTokenizerReady } from './japanese-language-backend';
+
 /**
  * Japanese Phonetic Encoder for cross-script matching
  * Handles hiragana ↔ katakana ↔ romaji conversions
+ * Uses Kuromoji tokenizer for dynamic kanji→kana conversion
  */
 export default class JapanesePhoneticEncoder implements PhoneticEncoder {
   private readonly hiraganaToKatakana: Map<string, string>;
@@ -729,6 +732,17 @@ export default class JapanesePhoneticEncoder implements PhoneticEncoder {
 
   // Add kanji-to-kana conversion method
   private convertKanjiToKana(input: string): string {
+    // Use Kuromoji tokenizer for dynamic kanji→kana conversion
+    // This provides comprehensive coverage for all Japanese text
+    if (isTokenizerReady()) {
+      const reading = getReading(input);
+      // Kuromoji returns readings in katakana, convert to hiragana for consistency
+      if (reading !== input) {
+        return this.katakanaToHiraganaString(reading);
+      }
+    }
+
+    // Fallback to static map for common food terms when tokenizer not ready
     const kanjiMap = new Map([
       // Basic food kanji to hiragana
       ['鶏', 'とり'],
@@ -801,6 +815,17 @@ export default class JapanesePhoneticEncoder implements PhoneticEncoder {
     ]);
 
     return kanjiMap.get(input) || input;
+  }
+
+  /**
+   * Convert a full string from katakana to hiragana
+   */
+  private katakanaToHiraganaString(input: string): string {
+    let result = '';
+    for (const char of input) {
+      result += this.katakanaToHiragana.get(char) || char;
+    }
+    return result;
   }
 
   /**

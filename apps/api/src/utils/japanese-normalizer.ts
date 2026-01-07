@@ -569,6 +569,39 @@ export async function generateJapaneseOrthographicVariants(text: string, limit =
   }
 }
 
+/**
+ * Synchronously get the reading (pronunciation) of Japanese text.
+ * Uses the Kuromoji tokenizer if already loaded.
+ * Returns katakana reading, or original text if tokenizer not available.
+ */
+function getReadingSync(text: string): string {
+  if (!text || !tokenizerInstance) {
+    return text;
+  }
+
+  try {
+    const tokens = tokenizerInstance.tokenize(text);
+    if (tokens.length === 0) {
+      return text;
+    }
+
+    // Concatenate readings from all tokens
+    // Kuromoji returns readings in katakana
+    const reading = tokens.map((token) => {
+      if (token.reading && token.reading !== '*') {
+        return token.reading;
+      }
+      // Fall back to surface form for tokens without readings
+      return token.surface_form || '';
+    }).join('');
+
+    return reading || text;
+  }
+  catch {
+    return text;
+  }
+}
+
 export function normalizeForSearch(text: string): {
   original: string;
   normalized: string;
@@ -576,8 +609,16 @@ export function normalizeForSearch(text: string): {
   katakana: string;
 } {
   const normalized = normalizeJapaneseText(text);
-  const hiragana = toHiragana(normalized);
-  const katakana = toKatakana(normalized);
+
+  // Get the reading (pronunciation) of the text using Kuromoji
+  // This converts kanji to their kana readings
+  // e.g., "お茶" → "オチャ" (katakana reading from Kuromoji)
+  const reading = getReadingSync(normalized);
+
+  // Convert reading to hiragana and katakana
+  // The reading from Kuromoji is in katakana, so we convert to both forms
+  const hiragana = toHiragana(reading);
+  const katakana = toKatakana(reading);
 
   return {
     original: text,
@@ -586,3 +627,8 @@ export function normalizeForSearch(text: string): {
     katakana,
   };
 }
+
+// Initialize tokenizer on module load for synchronous access
+getTokenizer().catch((error) => {
+  console.error('Failed to initialize Japanese tokenizer in normalizer:', error);
+});

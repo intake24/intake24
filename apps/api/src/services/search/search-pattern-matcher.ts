@@ -159,11 +159,9 @@ export class SearchPatternMatcher {
         for (const [term, data] of Object.entries(frequencyData)) {
           map.set(term, data as { foodCount: number; boost: number });
         }
-
-        console.log(`[STRATEGY 1] Loaded synonym frequency map: ${map.size} terms`);
       }
       else {
-        console.warn('[STRATEGY 1] synonym_frequency_map.json not found, using baseline boosts');
+        // synonym_frequency_map.json not found, using baseline boosts
       }
     }
     catch (error) {
@@ -214,6 +212,19 @@ export class SearchPatternMatcher {
     if (direct)
       return direct;
 
+    // Try Kuromoji reading for kanji queries
+    // This converts kanji like "林檎" to its reading "りんご"/"リンゴ" for synonym lookup
+    const searchNorm = normalizeForSearch(query);
+    if (searchNorm.hiragana !== normalizedQuery && searchNorm.hiragana) {
+      const readingHiraganaCanonical = this.synonymCanonicalMap.get(searchNorm.hiragana);
+      if (readingHiraganaCanonical)
+        return readingHiraganaCanonical;
+
+      const readingKatakanaCanonical = this.synonymCanonicalMap.get(searchNorm.katakana);
+      if (readingKatakanaCanonical)
+        return readingKatakanaCanonical;
+    }
+
     const hiragana = this.katakanaToHiragana(normalizedQuery);
     const hiraganaCanonical = this.synonymCanonicalMap.get(hiragana);
     if (hiraganaCanonical)
@@ -258,6 +269,26 @@ export class SearchPatternMatcher {
       const directK = this.triggerMap.get(katakana);
       if (directK)
         return directK;
+    }
+
+    // Japanese kanji fallback: use Kuromoji reading to find patterns
+    // This allows kanji queries like 林檎 to match patterns with りんご triggers
+    const containsKanji = /[\u4E00-\u9FFF]/.test(q);
+    if (containsKanji) {
+      const normalized = normalizeForSearch(q);
+      // Try hiragana reading (e.g., 林檎 → りんご)
+      if (normalized.hiragana && normalized.hiragana !== q) {
+        const directH = this.triggerMap.get(normalized.hiragana);
+        if (directH)
+          return directH;
+        // Also try katakana version of the reading (e.g., りんご → リンゴ)
+        const readingKatakana = this.hiraganaToKatakana(normalized.hiragana);
+        if (readingKatakana !== normalized.hiragana) {
+          const directK = this.triggerMap.get(readingKatakana);
+          if (directK)
+            return directK;
+        }
+      }
     }
 
     // Fallback: if query contains any trigger substring (in either form, case-insensitive), use that pattern
@@ -381,7 +412,12 @@ export class SearchPatternMatcher {
     // Detect if query is romaji (Latin alphabet)
     const isRomaji = isJapanese && /^[a-z0-9\s\-/()（）%％]+$/i.test(searchQuery);
 
-    const charLen = [...searchQuery].length;
+    // Use kana reading length for charLen when query contains kanji
+    // This ensures 林檎 (2 kanji) gets charLen=3 based on reading りんご
+    // so it follows the same code paths as searching with りんご directly
+    const charLen = isJapanese && hiraganaQuery !== searchQuery
+      ? [...hiraganaQuery].length
+      : [...searchQuery].length;
     const pattern = this.findPattern(searchQuery);
     const hasKatakana = /[\u30A0-\u30FF]/.test(searchQuery);
     const canonicalSynonym = isJapanese ? this.resolveCanonicalSynonym(searchQuery) : null;
@@ -443,6 +479,72 @@ export class SearchPatternMatcher {
       },
     ];
 
+    // CRITICAL FIX: For kanji queries, add high-boost kana clauses to main name.keyword field
+    // This ensures 林檎 gets the same exact-match behavior as りんご
+    // The kanji form is already in baseClauses via searchQuery; now add kana readings
+    if (isJapanese && hiraganaQuery !== searchQuery) {
+      // Add hiragana reading to main name.keyword exact match (same boost as original)
+      baseClauses.push({
+        term: {
+          'name.keyword': {
+            value: hiraganaQuery,
+            boost: 100, // Same as original exact match
+          },
+        },
+      });
+
+      // Add katakana reading to main name.keyword exact match
+      baseClauses.push({
+        term: {
+          'name.keyword': {
+            value: katakanaQuery,
+            boost: 99, // Slightly lower to prefer exact script match
+          },
+        },
+      });
+
+      // Add hiragana reading to phrase match
+      baseClauses.push({
+        match_phrase: {
+          name: {
+            query: hiraganaQuery,
+            boost: 95, // Same as original phrase match
+          },
+        },
+      });
+
+      // Add katakana reading to phrase match
+      baseClauses.push({
+        match_phrase: {
+          name: {
+            query: katakanaQuery,
+            boost: 94, // Slightly lower
+          },
+        },
+      });
+
+      // Add AND match for kana readings (priority 3 equivalent)
+      baseClauses.push({
+        match: {
+          name: {
+            query: hiraganaQuery,
+            operator: 'AND',
+            boost: 12,
+          },
+        },
+      });
+
+      baseClauses.push({
+        match: {
+          name: {
+            query: katakanaQuery,
+            operator: 'AND',
+            boost: 11,
+          },
+        },
+      });
+    }
+
     if (isJapanese && searchQuery) {
       baseClauses.push({
         term: {
@@ -482,8 +584,12 @@ export class SearchPatternMatcher {
       } as any);
 
       const containsKana = /[\u3040-\u30FF]/.test(searchQuery);
+      const containsKanji = /[\u4E00-\u9FFF]/.test(searchQuery);
+      const hasKanaReading = hiraganaQuery !== searchQuery; // kanji was converted to kana
 
-      if (containsKana) {
+      // Add kana field clauses if query contains kana OR if kanji has a kana reading
+      // This ensures 林檎 gets the same exact match clauses as りんご
+      if (containsKana || (containsKanji && hasKanaReading)) {
         baseClauses.push({
           term: {
             'name_hiragana.keyword': {
@@ -577,21 +683,8 @@ export class SearchPatternMatcher {
       } as any);
     }
 
-    // DEBUG: Log query details for Japanese searches
-    if (isJapanese) {
-      console.log('[SEARCH DEBUG] Japanese query:', searchQuery, 'charLen:', charLen, 'hasHiragana:', hasHiragana);
-      const matchedPattern = this.findPattern(searchQuery);
-      console.log('[SEARCH DEBUG] Matched pattern:', matchedPattern ? matchedPattern.id : 'defaultStrategy');
-    }
-
     // Add pattern-specific wildcard clauses
     const wildcardClauses = this.buildWildcardClauses(searchQuery);
-    if (isJapanese) {
-      console.log('[SEARCH DEBUG] Wildcard clauses count:', wildcardClauses.length);
-      if (wildcardClauses.length > 0) {
-        console.log('[SEARCH DEBUG] First wildcard:', JSON.stringify(wildcardClauses[0]));
-      }
-    }
     const allClauses = [...baseClauses, ...wildcardClauses];
 
     // For Japanese: Add enhanced matching for better compound word support
@@ -681,6 +774,179 @@ export class SearchPatternMatcher {
             },
           },
         });
+
+        // IMPROVEMENT: Add kana-based prefix AND substring matches for kanji queries
+        // This ensures searches like 林檎 also match foods stored as りんご...
+        if (isJapanese && hiraganaQuery !== searchQuery) {
+          // Substring wildcard - critical for finding りんご when user types 林檎
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `*${hiraganaQuery}*`,
+                boost: 70, // Nearly as high as original substring match
+              },
+            },
+          });
+          // Prefix wildcard
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `${hiraganaQuery}*`,
+                boost: 40, // Slightly lower than original query
+              },
+            },
+          });
+        }
+        if (isJapanese && katakanaQuery !== searchQuery && katakanaQuery !== hiraganaQuery) {
+          // Substring wildcard for katakana
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `*${katakanaQuery}*`,
+                boost: 68, // Slightly lower than hiragana
+              },
+            },
+          });
+          // Prefix wildcard
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `${katakanaQuery}*`,
+                boost: 38, // Slightly lower than hiragana
+              },
+            },
+          });
+        }
+      }
+
+      // HIGH-BOOST KANA WILDCARDS FOR KANJI QUERIES
+      // For queries containing kanji (not katakana), add high-boost kana wildcards
+      // This ensures 林檎 returns same results as りんご by matching kana representations
+      // We check !hasKatakana to avoid duplicating wildcards already added above
+      if (isJapanese && !hasKatakana && hiraganaQuery !== searchQuery) {
+        // CRITICAL: Add exact term match on brand_names for kana readings
+        // This matches what the hasHiragana section does
+        allClauses.push({
+          term: {
+            'brand_names.keyword': {
+              value: hiraganaQuery,
+              boost: 100,
+            },
+          },
+        });
+
+        allClauses.push({
+          term: {
+            'brand_names.keyword': {
+              value: katakanaQuery,
+              boost: 100,
+            },
+          },
+        });
+
+        // Primary: High-boost substring match using hiragana reading
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `*${hiraganaQuery}*`,
+              boost: 72, // High boost, matching katakana query wildcards
+            },
+          },
+        });
+
+        // Suffix match for hiragana (matches hasHiragana section)
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `*${hiraganaQuery}`,
+              boost: 30,
+            },
+          },
+        });
+
+        // Prefix match using hiragana reading
+        allClauses.push({
+          wildcard: {
+            'name.keyword': {
+              value: `${hiraganaQuery}*`,
+              boost: 42,
+            },
+          },
+        });
+
+        // Also add katakana wildcards if different from hiragana
+        if (katakanaQuery !== hiraganaQuery) {
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `*${katakanaQuery}*`,
+                boost: 70, // Slightly lower than hiragana
+              },
+            },
+          });
+
+          // Suffix match for katakana (matches hasHiragana section)
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `*${katakanaQuery}`,
+                boost: 32,
+              },
+            },
+          });
+
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `${katakanaQuery}*`,
+                boost: 40,
+              },
+            },
+          });
+        }
+
+        // Add exact term match on brand_names for kanji queries too
+        allClauses.push({
+          term: {
+            'brand_names.keyword': {
+              value: searchQuery,
+              boost: 100, // Highest boost for exact brand name matches
+            },
+          },
+        });
+
+        // Search katakana field with katakana query (matches hasHiragana section)
+        allClauses.push({
+          match: {
+            'name.katakana': {
+              query: katakanaQuery,
+              boost: 18,
+            },
+          },
+        });
+
+        // Fuzzy matching for long kanji queries (matches hasHiragana section)
+        if (charLen > 6) {
+          allClauses.push({
+            match: {
+              name: {
+                query: hiraganaQuery,
+                fuzziness: 'AUTO',
+                boost: 10,
+              },
+            },
+          });
+
+          allClauses.push({
+            match: {
+              'name.katakana': {
+                query: katakanaQuery,
+                fuzziness: 'AUTO',
+                boost: 12,
+              },
+            },
+          });
+        }
       }
 
       if (canonicalSynonym) {
@@ -909,6 +1175,45 @@ export class SearchPatternMatcher {
             },
           },
         } as any);
+
+        // IMPROVEMENT: Add kana-based prefix matches for kanji queries (short query section)
+        // This ensures short kanji searches also get prefix matches in their kana forms
+        if (isJapanese && hiraganaQuery !== searchQuery) {
+          allClauses.push({
+            prefix: {
+              'name.keyword': {
+                value: hiraganaQuery,
+                boost: charLen <= 3 ? 14 : 11,
+              },
+            },
+          });
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `${hiraganaQuery}*`,
+                boost: charLen <= 3 ? 14 : 11,
+              },
+            },
+          });
+        }
+        if (isJapanese && katakanaQuery !== searchQuery && katakanaQuery !== hiraganaQuery) {
+          allClauses.push({
+            prefix: {
+              'name.keyword': {
+                value: katakanaQuery,
+                boost: charLen <= 3 ? 13 : 10,
+              },
+            },
+          });
+          allClauses.push({
+            wildcard: {
+              'name.keyword': {
+                value: `${katakanaQuery}*`,
+                boost: charLen <= 3 ? 13 : 10,
+              },
+            },
+          });
+        }
       }
     }
 
@@ -964,18 +1269,22 @@ export class SearchPatternMatcher {
           registerMatchPhrase('name', hiraganaQuery, 15);
 
         const hasKanaCharacters = hasHiragana || hasKatakana;
+        // Kanji queries with Kuromoji readings should also use reading-based phrase gate
+        const hasKanaReading = hiraganaQuery !== searchQuery;
 
-        if (hasKanaCharacters) {
+        if (hasKanaCharacters || hasKanaReading) {
           registerMatchPhrase('name.reading', katakanaQuery, 16);
           registerMatchPhrase('name.katakana', katakanaQuery, 16);
         }
 
-        if (hasHiragana && katakanaQuery !== hiraganaQuery)
+        // Also add phrase gate for katakana in name field (for kanji queries)
+        // This ensures kanji queries match documents with katakana in name field
+        if ((hasHiragana || hasKanaReading) && katakanaQuery !== hiraganaQuery)
           registerMatchPhrase('name', katakanaQuery, 12);
 
         // Include name_synonyms in phrase gate
         registerMatchPhrase('name_synonyms', searchQuery, 140);
-        if (hasKanaCharacters) {
+        if (hasKanaCharacters || hasKanaReading) {
           registerMatchPhrase('name_synonyms', hiraganaQuery, 140);
           registerMatchPhrase('name_synonyms', katakanaQuery, 140);
         }
@@ -1179,13 +1488,13 @@ export class SearchPatternMatcher {
     else if (queryEmbedding && queryEmbedding.length === (opensearchConfig.embeddingDimension ?? queryEmbedding.length)) {
       // HYBRID SEARCH: Properly combine lexical and semantic search with configured embeddings
       const embeddingField = opensearchConfig.embeddingField ?? 'embedding';
-      const embeddingDimension = opensearchConfig.embeddingDimension ?? queryEmbedding.length;
+      const _embeddingDimension = opensearchConfig.embeddingDimension ?? queryEmbedding.length;
       // Tier 3: Use passed knnK if provided, otherwise fall back to config default
       const effectiveKnnK = knnK ?? opensearchConfig.knnK ?? 100;
       const knnBoost = opensearchConfig.knnBoost ?? 50;
       const useRRF = opensearchConfig.useRRF ?? false;
-      const rrfRankConstant = opensearchConfig.rrfRankConstant ?? 60;
-      const rrfWindowSize = opensearchConfig.rrfWindowSize ?? 100;
+      const _rrfRankConstant = opensearchConfig.rrfRankConstant ?? 60;
+      const _rrfWindowSize = opensearchConfig.rrfWindowSize ?? 100;
 
       // Whitelist important single-character food/beverage queries for semantic search
       // These have clear semantic meaning and benefit from embeddings
@@ -1196,10 +1505,6 @@ export class SearchPatternMatcher {
 
       if (isShortJapaneseQuery) {
         // Very short kana fragments tend to produce noisy semantic hits; rely on lexical only
-        console.log(
-          `[HYBRID SEARCH] Skipping semantic clause for short Japanese query (${charLen} chars)`,
-        );
-
         mainQuery = {
           function_score: {
             query: { bool: coreBool },
@@ -1210,12 +1515,6 @@ export class SearchPatternMatcher {
         };
       }
       else {
-        const whitelistNote = isWhitelisted ? ' (whitelisted short query)' : '';
-        const rrfNote = useRRF ? ' using RRF (Reciprocal Rank Fusion)' : '';
-        console.log(
-          `[HYBRID SEARCH] Using hybrid search with ${embeddingDimension}D embeddings on field "${embeddingField}"${whitelistNote}${rrfNote}`,
-        );
-
         if (useRRF) {
           // Use native OpenSearch RRF (Reciprocal Rank Fusion) via search pipeline - requires OpenSearch 2.11+
           // RRF uses rank positions instead of raw scores for better normalization
@@ -1249,10 +1548,6 @@ export class SearchPatternMatcher {
               boost_mode: 'multiply',
             },
           };
-
-          console.log(
-            `[RRF] Using hybrid query with RRF search pipeline (rank_constant=${rrfRankConstant}, window_size=${rrfWindowSize})`,
-          );
         }
         else {
           // Fallback: Create a hybrid bool query that combines lexical and k-NN as separate components

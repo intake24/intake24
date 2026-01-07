@@ -2,7 +2,7 @@ import type { ClientOptions } from '@opensearch-project/opensearch';
 import { Client } from '@opensearch-project/opensearch';
 import config from '@intake24/api/config';
 import { SearchPatternMatcher } from '@intake24/api/services/search/search-pattern-matcher';
-import { normalizeJapaneseText } from '@intake24/api/utils/japanese-normalizer';
+import { normalizeForSearch, normalizeJapaneseText } from '@intake24/api/utils/japanese-normalizer';
 import type { Logger } from '@intake24/common-backend';
 import { JapaneseQueryClassifier } from './query-classifier';
 import { SageMakerEmbeddingService } from './sagemaker-embedding-service';
@@ -242,11 +242,14 @@ export class OpenSearchClient {
       let queryEmbedding: number[] | null = null;
 
       if (this.enableHybridSearch && this.sagemakerService && query) {
-        const normalizedQuery = normalizeJapaneseText(query) || query.trim();
-        if (normalizedQuery) {
+        // Use normalizeForSearch to get Kuromoji readings for kanji
+        // This ensures 林檎, りんご, and リンゴ all produce the same embedding
+        const searchNormalized = normalizeForSearch(query);
+        const embeddingQuery = searchNormalized.hiragana || query.trim();
+        if (embeddingQuery) {
           try {
-            queryEmbedding = await this.sagemakerService.generateEmbedding(normalizedQuery);
-            this.logger.debug(`Generated ${queryEmbedding.length}D embedding for query: "${normalizedQuery}"`);
+            queryEmbedding = await this.sagemakerService.generateEmbedding(embeddingQuery);
+            this.logger.debug(`Generated ${queryEmbedding.length}D embedding for query: "${embeddingQuery}" (original: "${query}")`);
           }
           catch (error) {
             this.logger.error('Failed to generate query embedding, falling back to lexical search:', error);
