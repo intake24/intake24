@@ -3,7 +3,6 @@ import { addDays } from 'date-fns';
 import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
 import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
-
 import type {
   SurveyState as CurrentSurveyState,
   CustomPromptAnswer,
@@ -22,10 +21,12 @@ import type {
   SessionSettings,
   SurveyFlag,
 } from '@intake24/common/surveys';
+
 import { sortMeals, toMealTime } from '@intake24/common/surveys';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { isSessionAgeValid, isSessionFixedPeriodValid } from '@intake24/common/util';
 import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
+import { i18n, loadAppLanguage } from '@intake24/i18n';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
 import {
   associatedFoodPromptsComplete,
@@ -355,7 +356,23 @@ export const useSurvey = defineStore('survey', {
     async setParameters(parameters: SurveyEntryResponse) {
       this.parameters = parameters;
 
-      useApp().restrictLanguages(parameters.surveyScheme.settings.languages);
+      const appStore = useApp();
+      appStore.restrictLanguages(parameters.surveyScheme.settings.languages);
+
+      // Set the survey's respondent language as the default
+      // This ensures translations use the correct locale (e.g., 'ja' for Japanese surveys)
+      const respondentLang = parameters.locale.respondentLanguageId;
+      if (respondentLang) {
+        // Set i18n locale directly to ensure translations work immediately
+        i18n.global.locale.value = respondentLang;
+
+        // Load the language messages directly - this is required for page refresh scenarios
+        // where appStore.lang is already set from persistence and the watcher won't trigger
+        await loadAppLanguage('survey', respondentLang, false);
+
+        // Also update the app store for consistency
+        appStore.setLanguage(respondentLang);
+      }
     },
 
     setUserInfo(user: SurveyUserInfoResponse) {

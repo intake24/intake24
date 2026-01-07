@@ -43,7 +43,7 @@ export function surveyRespondent() {
               'type',
             ],
           },
-          { association: 'locale', attributes: ['id', 'code'] },
+          { association: 'locale', attributes: ['id', 'code', 'respondentLanguageId'] },
         ],
       });
       if (!survey || !survey.locale || !survey.surveyScheme)

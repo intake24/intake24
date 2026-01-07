@@ -100,6 +100,11 @@ export type LocaleContentOptions = {
   path?: string;
   params?: Dictionary<string | number>;
   sanitize?: boolean;
+  /**
+   * Override the locale used for translation lookup.
+   * Useful when i18n.locale.value hasn't been set yet but the target locale is known.
+   */
+  targetLocale?: string;
 };
 
 export function sanitizeParams(content: Dictionary<string | number>) {
@@ -133,7 +138,7 @@ export function createTranslate(i18n: ReturnType<typeof useI18n<DefaultLocaleMes
     options: LocaleContentOptions = {},
   ) => {
     const { t, locale, messages } = i18n;
-    const { path, sanitize = false } = options;
+    const { path, sanitize = false, targetLocale } = options;
     let { params = {} } = options;
 
     if (sanitize)
@@ -142,8 +147,10 @@ export function createTranslate(i18n: ReturnType<typeof useI18n<DefaultLocaleMes
     if (typeof content === 'string')
       return replaceParams(content, params);
 
-    const mappedLocale = mapLocaleCode(locale.value);
+    // Use targetLocale if provided (for cases where i18n.locale hasn't been set yet)
+    const mappedLocale = mapLocaleCode(targetLocale || locale.value);
     const localeContent = content ? content[mappedLocale] : undefined;
+
     if (localeContent)
       return replaceParams(localeContent, params);
 

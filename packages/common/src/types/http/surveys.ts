@@ -51,7 +51,7 @@ export const surveyEntryResponse = z.object({
   slug: z.string(),
   name: z.string(),
   state: z.enum(surveyStatuses),
-  locale: z.object({ id: z.string(), code: z.string() }),
+  locale: z.object({ id: z.string(), code: z.string(), respondentLanguageId: z.string() }),
   surveyScheme: z.object({
     id: z.string(),
     settings: schemeSettings,
