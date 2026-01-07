@@ -51,6 +51,10 @@ apps/docs/admin/**
 # **/japan-food-list*.csv
 **/DCDforJapan*.csv
 
-packages/food-tools/**
 packages/excel-reader/**
+reports/*
+!reports/japan/
+!reports/japan/dcd/**
+!reports/japan/food-list/**
+
 
