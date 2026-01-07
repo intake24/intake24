@@ -59,7 +59,11 @@
       "_": "Configurações locais do alimento",
       "id": "ID local do alimento",
       "name": "Nome local",
-      "tags": "Etiquetas"
+      "tags": "Etiquetas",
+      "altNames": {
+        "_": "Nomes Alternativos / Sinônimos",
+        "synonyms": "Sinônimos para este idioma"
+      }
     },
     "attributes": {
       "_": "Atributos do alimento"

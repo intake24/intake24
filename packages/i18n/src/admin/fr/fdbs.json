@@ -59,7 +59,11 @@
       "_": "Paramètres pour les aliments régionaux",
       "id": "Identifiant régional de l'aliment",
       "name": "Nom régional",
-      "tags": "Tags"
+      "tags": "Tags",
+      "altNames": {
+        "_": "Noms alternatifs / Synonymes",
+        "synonyms": "Synonymes pour cette langue"
+      }
     },
     "attributes": {
       "_": "Attributs des aliments"

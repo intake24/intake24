@@ -64,7 +64,11 @@
       "_": "Pengaturan makanan lokal",
       "id": "ID makanan lokal",
       "name": "Nama lokal",
-      "tags": "Tag"
+      "tags": "Tag",
+      "altNames": {
+        "_": "Nama Alternatif / Sinonim",
+        "synonyms": "Sinonim untuk bahasa ini"
+      }
     },
     "attributes": {
       "_": "Atribut makanan"
