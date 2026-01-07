@@ -1,7 +1,5 @@
-import ms from 'ms';
 import z from 'zod';
 import { mfaModes } from '@intake24/common/security';
-import { parseToMs } from '@intake24/common/util';
 import { cookieSettings, msStringValue } from './common';
 import { validateConfig } from './validate-config';
 
@@ -81,7 +79,7 @@ const rawSecurityConfig = {
       },
       cookie: {
         name: 'it24a_refresh_token',
-        maxAge: ms(parseToMs(process.env.JWT_ADMIN_REFRESH_LIFETIME) || '1d'),
+        maxAge: process.env.JWT_ADMIN_REFRESH_LIFETIME || '1d',
         httpOnly: true,
         path: process.env.JWT_ADMIN_COOKIE_PATH || '/api/admin/auth',
         sameSite: process.env.JWT_ADMIN_COOKIE_SAMESITE,
@@ -100,7 +98,7 @@ const rawSecurityConfig = {
       },
       cookie: {
         name: 'it24s_refresh_token',
-        maxAge: ms(parseToMs(process.env.JWT_SURVEY_REFRESH_LIFETIME) || '1d'),
+        maxAge: process.env.JWT_SURVEY_REFRESH_LIFETIME || '1d',
         httpOnly: true,
         path: process.env.JWT_SURVEY_COOKIE_PATH || '/api/auth',
         sameSite: process.env.JWT_SURVEY_COOKIE_SAMESITE,
