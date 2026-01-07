@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { mfaProviders } from '@intake24/common/security';
 
 export const mfaDeviceAttributes = z.object({
@@ -16,7 +15,6 @@ export const mfaDeviceAttributes = z.object({
 export type MFADeviceAttributes = z.infer<typeof mfaDeviceAttributes>;
 
 export const mfaDeviceResponse = mfaDeviceAttributes.omit({ secret: true });
-
 export type MFADeviceResponse = z.infer<typeof mfaDeviceResponse>;
 
 export const mfaDevicesResponse = z.object({
@@ -38,7 +36,6 @@ export const duoRegistrationVerificationRequest = z.object({
   name: z.string().min(3).max(128),
   token: z.string(),
 });
-
 export type DuoRegistrationVerificationRequest = z.infer<typeof duoRegistrationVerificationRequest>;
 
 export const fidoRegistrationChallenge = z.object({
@@ -64,39 +61,19 @@ export const fidoRegistrationChallenge = z.object({
       z.object({
         id: z.string(),
         type: z.literal('public-key'),
-        transports: z
-          .array(
-            z.union([
-              z.literal('ble'),
-              z.literal('cable'),
-              z.literal('hybrid'),
-              z.literal('internal'),
-              z.literal('nfc'),
-              z.literal('smart-card'),
-              z.literal('usb'),
-            ]),
-          )
-          .optional(),
+        transports: z.enum(['ble', 'cable', 'hybrid', 'internal', 'nfc', 'smart-card', 'usb']).array().optional(),
       }),
     )
     .optional(),
   authenticatorSelection: z
     .object({
-      authenticatorAttachment: z
-        .union([z.literal('cross-platform'), z.literal('platform')])
-        .optional(),
+      authenticatorAttachment: z.enum(['cross-platform', 'platform']).optional(),
       requireResidentKey: z.boolean().optional(),
-      residentKey: z
-        .union([z.literal('discouraged'), z.literal('preferred'), z.literal('required')])
-        .optional(),
-      userVerification: z
-        .union([z.literal('discouraged'), z.literal('preferred'), z.literal('required')])
-        .optional(),
+      residentKey: z.enum(['discouraged', 'preferred', 'required']).optional(),
+      userVerification: z.enum(['discouraged', 'preferred', 'required']).optional(),
     })
     .optional(),
-  attestation: z
-    .union([z.literal('direct'), z.literal('enterprise'), z.literal('indirect'), z.literal('none')])
-    .optional(),
+  attestation: z.enum(['none', 'indirect', 'direct', 'enterprise']).optional(),
   extensions: z
     .object({
       appid: z.string().optional(),
@@ -105,7 +82,6 @@ export const fidoRegistrationChallenge = z.object({
     })
     .optional(),
 });
-
 export type FIDORegistrationChallenge = z.infer<typeof fidoRegistrationChallenge>;
 
 export const registrationResponseJSON = z.object({
@@ -115,23 +91,11 @@ export const registrationResponseJSON = z.object({
     clientDataJSON: z.string(),
     attestationObject: z.string(),
     authenticatorData: z.string().optional(),
-    transports: z
-      .array(
-        z.union([
-          z.literal('ble'),
-          z.literal('cable'),
-          z.literal('hybrid'),
-          z.literal('internal'),
-          z.literal('nfc'),
-          z.literal('smart-card'),
-          z.literal('usb'),
-        ]),
-      )
-      .optional(),
+    transports: z.enum(['ble', 'cable', 'hybrid', 'internal', 'nfc', 'smart-card', 'usb']).array().optional(),
     publicKeyAlgorithm: z.number().optional(),
     publicKey: z.string().optional(),
   }),
-  authenticatorAttachment: z.union([z.literal('cross-platform'), z.literal('platform')]).optional(),
+  authenticatorAttachment: z.enum(['cross-platform', 'platform']).optional(),
   clientExtensionResults: z.object({
     appid: z.boolean().optional(),
     credProps: z.object({
@@ -147,7 +111,6 @@ export const fidoRegistrationVerificationRequest = z.object({
   name: z.string().min(3).max(128),
   response: registrationResponseJSON,
 });
-
 export type FIDORegistrationVerificationRequest = z.infer<
   typeof fidoRegistrationVerificationRequest
 >;
@@ -157,7 +120,6 @@ export const otpRegistrationChallenge = z.object({
   qrCode: z.string(),
   url: z.string().url(),
 });
-
 export type OTPRegistrationChallenge = z.infer<typeof otpRegistrationChallenge>;
 
 export const otpRegistrationVerificationRequest = z.object({
@@ -165,5 +127,4 @@ export const otpRegistrationVerificationRequest = z.object({
   name: z.string().min(3).max(128),
   token: z.string().length(6),
 });
-
 export type OTPRegistrationVerificationRequest = z.infer<typeof otpRegistrationVerificationRequest>;

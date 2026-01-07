@@ -1,6 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import { sanitize } from '../rules';
-import { captcha, challengeResponse, loginResponse } from '../types/http';
+import { captcha, surveyAuthResponse } from '../types/http';
 import { z } from '../util';
 
 export const authentication = initContract().router({
@@ -17,7 +17,7 @@ export const authentication = initContract().router({
       captcha,
     }),
     responses: {
-      200: z.union([loginResponse, challengeResponse]),
+      200: surveyAuthResponse,
     },
     summary: 'Email & password login',
     description: 'Survey participant login with email and password.',
@@ -35,7 +35,7 @@ export const authentication = initContract().router({
       captcha,
     }),
     responses: {
-      200: z.union([loginResponse, challengeResponse]),
+      200: surveyAuthResponse,
     },
     summary: 'Alias & password login',
     description: 'Survey participant login with alias and password.',
@@ -51,7 +51,7 @@ export const authentication = initContract().router({
       captcha,
     }),
     responses: {
-      200: z.union([loginResponse, challengeResponse]),
+      200: surveyAuthResponse,
     },
     summary: 'URL Token login',
     description: 'Survey participant login with unique URL token.',

@@ -1,7 +1,14 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-import { mfaProviders } from '@intake24/common/security';
-import { loginResponse } from '@intake24/common/types/http';
+import {
+  adminAuthResponse,
+  duoAuthenticationVerificationRequest,
+  fidoAuthenticationVerificationRequest,
+  loginResponse,
+  mfaChallengeRequest,
+  mfaChallengeResponse,
+  otpAuthenticationVerificationRequest,
+} from '@intake24/common/types/http';
 import { sanitize } from '../../rules';
 
 export const authentication = initContract().router({
@@ -16,11 +23,21 @@ export const authentication = initContract().router({
       password: z.string(),
     }),
     responses: {
-      200: z.union([loginResponse, z.any()]),
+      200: adminAuthResponse,
     },
     summary: 'Admin login',
     description:
       'Login with email / password to admin interface. Response can differ based on whether multi-factor authentication is enabled or not.',
+  },
+  challenge: {
+    method: 'POST',
+    path: '/admin/auth/challenge',
+    body: mfaChallengeRequest,
+    responses: {
+      200: mfaChallengeResponse,
+    },
+    summary: 'Request MFA challenge',
+    description: 'Request multi-factor authentication challenge',
   },
   duo: {
     method: 'POST',
@@ -28,13 +45,9 @@ export const authentication = initContract().router({
     headers: z.object({
       'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
-    body: z.object({
-      challengeId: z.string(),
-      provider: z.enum(mfaProviders),
-      token: z.string(),
-    }),
+    body: duoAuthenticationVerificationRequest,
     responses: {
-      200: z.union([loginResponse, z.any()]),
+      200: loginResponse,
     },
     summary: 'Verify Duo challenge',
     description: 'Verify Duo multi-factor authentication challenge',
@@ -45,31 +58,9 @@ export const authentication = initContract().router({
     headers: z.object({
       'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
-    body: z.object({
-      challengeId: z.string(),
-      provider: z.enum(mfaProviders),
-      response: z.object({
-        id: z.string(),
-        rawId: z.string(),
-        response: z.object({
-          clientDataJSON: z.string(),
-          authenticatorData: z.string(),
-          signature: z.string(),
-          userHandle: z.string().optional(),
-        }),
-        authenticatorAttachment: z
-          .union([z.literal('cross-platform'), z.literal('platform')])
-          .optional(),
-        clientExtensionResults: z.object({
-          appid: z.boolean().optional(),
-          credProps: z.object({ rk: z.boolean().optional() }).optional(),
-          hmacCreateSecret: z.boolean().optional(),
-        }),
-        type: z.literal('public-key'),
-      }),
-    }),
+    body: fidoAuthenticationVerificationRequest,
     responses: {
-      200: z.union([loginResponse, z.any()]),
+      200: loginResponse,
     },
     summary: 'Verify FIDO challenge',
     description: 'Verify FIDO multi-factor authentication challenge',
@@ -80,13 +71,9 @@ export const authentication = initContract().router({
     headers: z.object({
       'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
-    body: z.object({
-      challengeId: z.string(),
-      provider: z.enum(mfaProviders),
-      token: z.string().length(6),
-    }),
+    body: otpAuthenticationVerificationRequest,
     responses: {
-      200: z.union([loginResponse, z.any()]),
+      200: loginResponse,
     },
     summary: 'Verify OTP challenge',
     description: 'Verify OTP multi-factor authentication challenge',

@@ -2,7 +2,9 @@ import type {
   AdminAuthResponse,
   LoginRequest,
   LoginResponse,
-  MFAAuthenticationVerificationRequest,
+  MFAChallengeRequest,
+  MFAChallengeResponse,
+  MFAVerificationRequest,
 } from '@intake24/common/types/http';
 import { http } from '@intake24/ui';
 
@@ -24,10 +26,22 @@ export default {
   /**
    * Verify multi-factor challenge response
    *
-   * @param {MFAAuthenticationVerificationRequest} payload
+   * @param {MFAChallengeRequest} payload
    * @returns {Promise<string>}
    */
-  async verify(payload: MFAAuthenticationVerificationRequest): Promise<string> {
+  async challenge(payload: MFAChallengeRequest): Promise<MFAChallengeResponse> {
+    const { data } = await http.post<MFAChallengeResponse>(`admin/auth/challenge`, payload, { withLoading: true });
+
+    return data;
+  },
+
+  /**
+   * Verify multi-factor challenge response
+   *
+   * @param {MFAVerificationRequest} payload
+   * @returns {Promise<string>}
+   */
+  async verify(payload: MFAVerificationRequest): Promise<string> {
     const {
       data: { accessToken },
     } = await http.post<LoginResponse>(`admin/auth/${payload.provider}`, payload, {

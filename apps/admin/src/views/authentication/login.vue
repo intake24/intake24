@@ -85,101 +85,86 @@
   </app-entry-screen>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import axios, { HttpStatusCode } from 'axios';
-import { defineComponent } from 'vue';
-
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useAuth, useMessages } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
 import { AppEntryScreen } from '@intake24/ui';
-
 import MfaDialog from './mfa-dialog.vue';
 
-export default defineComponent({
+defineOptions({
   name: 'SignIn',
-
-  components: { AppEntryScreen, MfaDialog },
-
-  data() {
-    const auth = useAuth();
-
-    return {
-      auth,
-      email: '',
-      password: '',
-      showPassword: false,
-      errors: new Errors(),
-      signupEnabled: import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true',
-    };
-  },
-
-  computed: {
-    hasMFAChallenge(): boolean {
-      return !!this.auth.mfa;
-    },
-  },
-
-  async mounted() {
-    // Check for Duo MFA response
-    const { state: challengeId, code: token } = this.$route.query;
-    if (typeof challengeId !== 'string' || typeof token !== 'string')
-      return;
-
-    try {
-      await this.auth.verify({ challengeId, token, provider: 'duo' });
-      await this.finalizeLogin();
-    }
-    catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status === HttpStatusCode.Unauthorized) {
-        useMessages().error('Invalid MFA authentication.');
-        return;
-      }
-
-      throw err;
-    }
-  },
-
-  methods: {
-    clearMFAChallenge() {
-      this.auth.mfa = null;
-    },
-
-    async finalizeLogin() {
-      if (!this.auth.loggedIn)
-        return;
-
-      await this.$router.push({ name: 'dashboard' });
-    },
-
-    async login() {
-      const { email, password } = this;
-      try {
-        await this.auth.login({ email, password });
-        this.email = '';
-        this.password = '';
-
-        await this.finalizeLogin();
-      }
-      catch (err) {
-        if (axios.isAxiosError(err)) {
-          const { response: { status, data = {} } = {} } = err;
-
-          if (status === HttpStatusCode.BadRequest && 'errors' in data) {
-            this.errors.record(data.errors);
-            return;
-          }
-
-          if (status === HttpStatusCode.Unauthorized) {
-            useMessages().error('Invalid authentication credentials provided.');
-            return;
-          }
-        }
-
-        throw err;
-      }
-    },
-  },
 });
+
+const auth = useAuth();
+const router = useRouter();
+const route = useRoute();
+
+const email = ref('');
+const password = ref('');
+const showPassword = ref(false);
+const errors = ref(new Errors());
+const signupEnabled = import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true';
+
+onMounted(async () => {
+  // Check for Duo MFA response
+  const { state: challengeId, code: token } = route.query;
+  if (typeof challengeId !== 'string' || typeof token !== 'string')
+    return;
+
+  try {
+    await auth.verify({ challengeId, token, provider: 'duo' });
+    await finalizeLogin();
+  }
+  catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === HttpStatusCode.Unauthorized) {
+      useMessages().error('Invalid MFA authentication.');
+      return;
+    }
+
+    throw err;
+  }
+});
+
+function clearMFAChallenge() {
+  auth.mfa = null;
+};
+
+async function finalizeLogin() {
+  if (!auth.loggedIn)
+    return;
+
+  await router.push({ name: 'dashboard' });
+};
+
+async function login() {
+  try {
+    await auth.login({ email: email.value, password: password.value });
+    email.value = '';
+    password.value = '';
+
+    await finalizeLogin();
+  }
+  catch (err) {
+    if (axios.isAxiosError(err)) {
+      const { response: { status, data = {} } = {} } = err;
+
+      if (status === HttpStatusCode.BadRequest && 'errors' in data) {
+        errors.value.record(data.errors);
+        return;
+      }
+
+      if (status === HttpStatusCode.Unauthorized) {
+        useMessages().error('Invalid authentication credentials provided.');
+        return;
+      }
+    }
+
+    throw err;
+  }
+};
 </script>
 
 <style lang="scss"></style>

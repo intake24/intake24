@@ -9,7 +9,7 @@
   },
   "mfa": {
     "_": "MFA",
-    "title": "Confirm authentication challenge",
+    "title": "Authentication challenge",
     "devices": "Other devices",
     "otp": "Enter one-time password",
     "error": "Invalid authentication challenge. Try again."

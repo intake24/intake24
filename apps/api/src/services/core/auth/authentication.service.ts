@@ -1,7 +1,6 @@
-import type { AuthenticationResponseJSON } from '@simplewebauthn/server';
 import type { Request } from 'express';
 import type { Tokens } from './jwt.service';
-import { UnauthorizedError } from '@intake24/api/http/errors';
+import { NotFoundError, UnauthorizedError } from '@intake24/api/http/errors';
 import { captcha as captchaCheck } from '@intake24/api/http/rules';
 import type { IoC } from '@intake24/api/ioc';
 import { btoa } from '@intake24/api/util';
@@ -14,11 +13,12 @@ import type {
   ChallengeResponse,
   EmailLoginRequest,
   LoginRequest,
-  MFAAuthResponse,
+  MFAChallengeRequest,
+  MFAChallengeResponse,
+  MFAVerificationRequest,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
 import type { SurveyAttributes, UserPassword } from '@intake24/db';
-
 import { MFADevice, Survey, User } from '@intake24/db';
 
 export type LoginCredentials<T extends FrontEnd = FrontEnd> = {
@@ -32,6 +32,7 @@ export type LoginCredentials<T extends FrontEnd = FrontEnd> = {
 
 export type LoginMeta = {
   req: Request;
+  userAgent?: string;
 };
 
 export interface SignInAttempt extends Subject {
@@ -46,22 +47,6 @@ export type MFALoginCredentials = {
   userId: string;
   device: MFADevice;
 };
-
-export type DuoVerification = {
-  provider: 'duo';
-  token: string;
-};
-export type FIDOVerification = {
-  provider: 'fido';
-  response: AuthenticationResponseJSON;
-};
-
-export type OTPVerification = {
-  provider: 'otp';
-  token: string;
-};
-
-export type MFAVerification = DuoVerification | FIDOVerification | OTPVerification;
 
 function authenticationService({
   aclCache,
@@ -115,46 +100,36 @@ function authenticationService({
   };
 
   /**
-   * Process MFA authentication challenge
+   * Create new MFA challenge
    *
-   * @param {{ userId: string; email: string }} credentials
+   * @param {{ userId: string; deviceId?: string }} credentials
    * @param {LoginMeta} meta
-   * @returns {Promise<MFAAuthResponse>}
+   * @returns {Promise<MFAChallengeResponse>}
    */
-  const processMFA = async (
-    credentials: { userId: string; email: string },
-    meta: LoginMeta,
-  ): Promise<MFAAuthResponse> => {
-    const { userId, email } = credentials;
-    const {
-      ip: remoteAddress,
-      headers: { 'user-agent': userAgent },
-    } = meta.req;
-
-    const signInAttempt: SignInAttempt = {
-      provider: 'email',
-      providerKey: email,
-      userId,
-      remoteAddress,
-      userAgent,
-      successful: false,
-    };
-
+  const createMFAChallenge = async (credentials: { userId: string; deviceId?: string }, meta: LoginMeta): Promise<MFAChallengeResponse> => {
+    const { userId } = credentials;
     const devices = await MFADevice.findAll({
       where: { userId },
-      include: [{ association: 'authenticator' }, { association: 'user' }],
+      include: [
+        {
+          association: 'authenticator',
+          attributes: ['id', 'transports'],
+        },
+        {
+          association: 'user',
+          attributes: ['id', 'email'],
+        },
+      ],
       order: [
         ['preferred', 'DESC'],
         ['id', 'ASC'],
       ],
     });
 
-    if (!devices.length) {
-      await signInService.log({ ...signInAttempt, message: 'No MFA devices found for this user.' });
-      throw new UnauthorizedError('No MFA devices found.');
-    }
+    const device = credentials.deviceId ? devices.find(d => d.id === credentials.deviceId) : devices.at(0);
+    if (!device)
+      throw new NotFoundError('No MFA devices found.');
 
-    const [device] = devices;
     const { id: deviceId, provider } = device;
     const providers = { duo: duoProvider, otp: otpProvider, fido: fidoProvider };
 
@@ -166,12 +141,49 @@ function authenticationService({
       deviceId,
       provider,
       userId,
-      amr: [createAmrMethod('pwd')],
+      amr: credentials.deviceId && meta.req.session.mfaAuthChallenge?.amr ? meta.req.session.mfaAuthChallenge.amr : [createAmrMethod('pwd')],
     };
 
-    await signInService.log({ ...signInAttempt, successful: true });
-
     return { challenge, devices };
+  };
+
+  /**
+   * Process MFA authentication challenge
+   *
+   * @param {{ userId: string; email: string }} credentials
+   * @param {LoginMeta} meta
+   * @returns {Promise<MFAChallengeResponse>}
+   */
+  const processMFA = async (
+    credentials: { userId: string; email: string },
+    meta: LoginMeta,
+  ): Promise<MFAChallengeResponse> => {
+    const { userId, email } = credentials;
+    const { req: { ip: remoteAddress }, userAgent } = meta;
+
+    const signInAttempt: SignInAttempt = {
+      provider: 'email',
+      providerKey: email,
+      userId,
+      remoteAddress,
+      userAgent,
+      successful: false,
+    };
+
+    try {
+      const { challenge, devices } = await createMFAChallenge(credentials, meta);
+      await signInService.log({ ...signInAttempt, successful: true });
+
+      return { challenge, devices };
+    }
+    catch (err) {
+      if (err instanceof Error) {
+        await signInService.log({ ...signInAttempt, message: err.message });
+        throw new UnauthorizedError(err.message);
+      }
+
+      throw new UnauthorizedError();
+    }
   };
 
   /**
@@ -179,17 +191,14 @@ function authenticationService({
    *
    * @param {LoginCredentials} credentials
    * @param {LoginMeta} meta
-   * @returns {Promise<Tokens | MFAAuthResponse>}
+   * @returns {Promise<Tokens | MFAChallengeResponse>}
    */
   const processLogin = async <T extends FrontEnd>(
     credentials: LoginCredentials<T>,
     meta: LoginMeta,
-  ): Promise<T extends 'survey' ? ChallengeResponse | Tokens : MFAAuthResponse | Tokens> => {
+  ): Promise<T extends 'survey' ? ChallengeResponse | Tokens : MFAChallengeResponse | Tokens> => {
     const { user, password, captcha, subject, frontEnd, survey } = credentials;
-    const {
-      ip: remoteAddress,
-      headers: { 'user-agent': userAgent },
-    } = meta.req;
+    const { req: { ip: remoteAddress }, userAgent } = meta;
 
     const signInAttempt: SignInAttempt = {
       ...subject,
@@ -268,12 +277,12 @@ function authenticationService({
    *
    * @param {LoginRequest} credentials
    * @param {LoginMeta} meta
-   * @returns {(Promise<Tokens | MFAAuthResponse>)}
+   * @returns {(Promise<Tokens | MFAChallengeResponse>)}
    */
   const adminLogin = async (
     credentials: LoginRequest,
     meta: LoginMeta,
-  ): Promise<Tokens | MFAAuthResponse> => {
+  ): Promise<Tokens | MFAChallengeResponse> => {
     const { email, password } = credentials;
 
     const user = await User.findOne({
@@ -463,23 +472,39 @@ function authenticationService({
   };
 
   /**
+   * Generate MFA authentication challenge
+   *
+   * @param {MFAChallengeRequest} body
+   * @param {LoginMeta} meta
+   * @returns {Promise<MFAChallengeResponse>}
+   */
+  const challenge = async (body: MFAChallengeRequest, meta: LoginMeta): Promise<MFAChallengeResponse> => {
+    const { mfaAuthChallenge: { challengeId, userId } = {} } = meta.req.session;
+    if (challengeId !== body.challengeId || userId !== body.userId)
+      throw new UnauthorizedError('Invalid MFA authentication challenge session.');
+
+    try {
+      const { deviceId } = body;
+      return await createMFAChallenge({ userId, deviceId }, meta);
+    }
+    catch (err) {
+      throw new UnauthorizedError(err instanceof Error ? err.message : undefined);
+    }
+  };
+
+  /**
    * Verify MFA authentication response
    *
-   * @param {MFAVerification} verification
+   * @param {MFAVerificationRequest} body
    * @param {LoginMeta} meta
    * @returns {Promise<Tokens>}
    */
-  const verify = async (verification: MFAVerification, meta: LoginMeta): Promise<Tokens> => {
-    const {
-      ip: remoteAddress,
-      headers: { 'user-agent': userAgent },
-      session: { mfaAuthChallenge },
-      body,
-    } = meta.req;
+  const verify = async (body: MFAVerificationRequest, meta: LoginMeta): Promise<Tokens> => {
+    const { req: { ip: remoteAddress, session: { mfaAuthChallenge } }, userAgent } = meta;
 
     const signInAttempt: SignInAttempt = {
       provider: mfaAuthChallenge?.provider ?? body.provider,
-      providerKey: verification.provider === 'fido' ? verification.response.id : verification.token,
+      providerKey: body.provider === 'fido' ? body.response.id : body.token,
       userId: mfaAuthChallenge?.userId,
       remoteAddress,
       userAgent,
@@ -492,7 +517,7 @@ function authenticationService({
         throw new UnauthorizedError();
       }
 
-      const { provider } = verification;
+      const { provider } = body;
 
       if (provider !== mfaAuthChallenge.provider) {
         await signInService.log({
@@ -530,7 +555,7 @@ function authenticationService({
 
       switch (provider) {
         case 'duo':
-          await duoProvider.authenticationVerification({ email, token: verification.token });
+          await duoProvider.authenticationVerification({ email, token: body.token });
           break;
         case 'fido':
           if (!authenticator)
@@ -539,13 +564,13 @@ function authenticationService({
           await fidoProvider.authenticationVerification({
             authenticator,
             challengeId,
-            response: verification.response,
+            response: body.response,
           });
           break;
         case 'otp':
           await otpProvider.authenticationVerification({
             email,
-            token: verification.token,
+            token: body.token,
             secret,
           });
           break;
@@ -586,6 +611,7 @@ function authenticationService({
     aliasLogin,
     tokenLogin,
     refresh,
+    challenge,
     verify,
   };
 }
