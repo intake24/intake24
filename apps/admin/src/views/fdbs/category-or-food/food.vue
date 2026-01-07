@@ -87,6 +87,7 @@
         <alt-names-list
           v-model="data.altNames"
           class="mb-6"
+          :language-code="localeEntry?.foodIndexLanguageBackendId ?? 'en'"
         />
         <locale-list
           v-model="data.main.locales"

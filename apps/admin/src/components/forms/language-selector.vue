@@ -118,7 +118,10 @@ export default defineComponent({
       },
     );
 
-    const allLanguages = computed(() => useApp().langs ?? [english]);
+    const allLanguages = computed(() => {
+      const langs = useApp().langs;
+      return langs?.length ? langs : [english];
+    });
 
     const availableLanguages = computed(() =>
       allLanguages.value.filter(lang => !languages.value.includes(lang.code)),
