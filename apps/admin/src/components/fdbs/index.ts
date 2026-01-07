@@ -1,3 +1,4 @@
+export { default as AltNamesList } from './alt-names-list.vue';
 export * from './associated-foods';
 export { default as AttributeList } from './attribute-list.vue';
 export * from './categories';

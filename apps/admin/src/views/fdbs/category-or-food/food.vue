@@ -84,6 +84,10 @@
             </v-row>
           </v-card-text>
         </v-card>
+        <alt-names-list
+          v-model="data.altNames"
+          class="mb-6"
+        />
         <locale-list
           v-model="data.main.locales"
           class="mb-6"
@@ -155,6 +159,7 @@ import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
+  AltNamesList,
   AssociatedFoodList,
   AttributeList,
   CategoryList,
@@ -180,6 +185,7 @@ export default defineComponent({
   name: 'FoodEntry',
 
   components: {
+    AltNamesList,
     AssociatedFoodList,
     AttributeList,
     CategoryList,
@@ -240,6 +246,7 @@ export default defineComponent({
           parentCategories: [],
         },
         tags: [],
+        altNames: {},
         nutrientRecords: [],
         portionSizeMethods: [],
         associatedFoods: [],

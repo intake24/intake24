@@ -64,7 +64,11 @@
       "_": "Local food settings",
       "id": "Local food ID",
       "name": "Local name",
-      "tags": "Tags"
+      "tags": "Tags",
+      "altNames": {
+        "_": "Alternative Names / Synonyms",
+        "synonyms": "Synonyms for this language"
+      }
     },
     "attributes": {
       "_": "Food attributes"
