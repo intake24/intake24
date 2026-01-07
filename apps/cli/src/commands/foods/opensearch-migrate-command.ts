@@ -4,7 +4,7 @@ import * as path from 'node:path';
 import { Client } from '@opensearch-project/opensearch';
 import * as dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
-import { normalizeJapaneseFoodDocument } from '@intake24/api/services/foods/japanese-food-document-normalizer';
+import { normalizeJapaneseFoodDocument } from '../../../../api/src/services/foods/japanese-food-document-normalizer';
 
 // Load environment variables
 const possiblePaths = [

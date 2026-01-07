@@ -6,6 +6,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import parseCsv from 'csv-parser';
 import { groupBy } from 'lodash';
+// @ts-expect-error - no types available
 import removeBOM from 'remove-bom-stream';
 
 import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
