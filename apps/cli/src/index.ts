@@ -34,6 +34,8 @@ import {
   generateKey,
   generateVapidKeys,
   hashPassword,
+  mergeGeneratedSynonyms,
+  migrateAltNames,
   opensearchMigrate,
   opensearchTest,
   packageExportV3,
@@ -42,6 +44,7 @@ import {
   searchTest,
   syncFoodAttributes,
   validateEmbeddings,
+  verifyAssociatedFoods,
 } from './commands';
 import {
   conflictResolutionOptions,
@@ -783,6 +786,9 @@ async function run() {
     });
 
   syncFoodAttributes.command(program);
+  verifyAssociatedFoods.command(program);
+  mergeGeneratedSynonyms.command(program);
+  migrateAltNames.command(program);
 
   await program.parseAsync(process.argv);
 }
