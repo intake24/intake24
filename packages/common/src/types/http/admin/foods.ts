@@ -43,6 +43,7 @@ export type CreateLocalFoodRequest = {
   nutrientTableCodes: Record<string, string>;
   portionSizeMethods: PortionSizeMethod[];
   associatedFoods: AssociatedFood[];
+  attributes?: InheritableAttributes;
 };
 
 export type CreateLocalFoodRequestOptions = {
