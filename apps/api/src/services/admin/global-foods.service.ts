@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { OpenSearchSyncService } from '@intake24/api/services/foods/opensearch-sync-service';
 import type {
   CreateGlobalFoodRequest,
   FoodEntry,
@@ -8,7 +9,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { Category, Food, FoodAttribute, FoodCategory, FoodLocal } from '@intake24/db';
 
-function globalFoodsService({ db, opensearchSyncService }: Pick<IoC, 'db' | 'opensearchSyncService'>) {
+function globalFoodsService({ db, opensearchSyncService }: Pick<IoC, 'db'> & { opensearchSyncService: OpenSearchSyncService }) {
   /**
    * Sync food to OpenSearch for all locales it belongs to.
    * This ensures that when global food attributes change (ready_meal_option, etc.),
