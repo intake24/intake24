@@ -7,7 +7,7 @@ import { AsyncParser } from '@json2csv/node';
 import axios from 'axios';
 import fs from 'fs-extra';
 
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import ioc from '@intake24/api/ioc';
 import type { SecurableType } from '@intake24/common/security';
 

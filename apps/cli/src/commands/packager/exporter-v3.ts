@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { keys, sortBy, zip } from 'lodash';
+import { keys, sortBy, zip } from 'lodash-es';
 
 import type { ApiClientV3 } from '@intake24/api-client-v3';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';

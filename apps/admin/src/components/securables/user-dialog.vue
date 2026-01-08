@@ -151,7 +151,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import pick from 'lodash/pick';
+import { pick } from 'lodash-es';
 import { computed, defineComponent, ref } from 'vue';
 
 import { AutoComplete, ErrorList } from '@intake24/admin/components/forms';

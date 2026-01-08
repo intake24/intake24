@@ -2,7 +2,7 @@ import type { Method } from 'axios';
 import type { FormConfig } from '../use-form';
 import type { UseStoreEntryProps } from './use-entry';
 import { deepEqual } from 'fast-equals';
-import pick from 'lodash/pick';
+import { pick } from 'lodash-es';
 
 import { computed, ref, toRaw, toRefs, watch } from 'vue';
 import { useRouter } from 'vue-router';

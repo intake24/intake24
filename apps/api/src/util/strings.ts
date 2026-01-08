@@ -1,5 +1,4 @@
-import trim from 'lodash/trim';
-import trimEnd from 'lodash/trimEnd';
+import { trim, trimEnd } from 'lodash-es';
 import slugify from 'slugify';
 import { UAParser } from 'ua-parser-js';
 import validator from 'validator';

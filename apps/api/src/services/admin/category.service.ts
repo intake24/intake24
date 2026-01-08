@@ -1,6 +1,6 @@
 import type { CacheKey } from '../core/redis/cache';
 import { randomUUID } from 'node:crypto';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
 import type { IoC } from '@intake24/api/ioc';

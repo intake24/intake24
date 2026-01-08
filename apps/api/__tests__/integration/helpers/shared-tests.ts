@@ -1,5 +1,5 @@
 import type Suite from './integration-suite';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 
 import request from 'supertest';
 

@@ -4,7 +4,7 @@ import type {
   ExportFieldTransform,
   ExportRow,
 } from './data-export-fields';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportSectionId } from '@intake24/common/surveys';
 

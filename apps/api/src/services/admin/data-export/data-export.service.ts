@@ -2,7 +2,7 @@ import type { ExportFieldInfo, ExportRow } from './data-export-fields';
 import { Readable } from 'node:stream';
 import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
-import { groupBy } from 'lodash';
+import { groupBy } from 'lodash-es';
 import { literal } from 'sequelize';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';

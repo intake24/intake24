@@ -1,8 +1,6 @@
 <script lang="ts">
 import type { PropType, VNodeChild } from 'vue';
-import has from 'lodash/has';
-import isPlainObject from 'lodash/isPlainObject';
-import pick from 'lodash/pick';
+import { has, isPlainObject, pick } from 'lodash-es';
 import { computed, defineComponent, h, ref, watch } from 'vue';
 import {
   VBtn,

@@ -1,7 +1,7 @@
 import type { Translation } from 'vanilla-cookieconsent';
 import type { useLocale } from 'vuetify';
 import type { HttpClient } from '../services';
-import get from 'lodash/get';
+import { get } from 'lodash-es';
 import { computed, onMounted, toRaw, watch } from 'vue';
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
 import { defaultMessages, loadAppLanguage, useI18n } from '@intake24/i18n';

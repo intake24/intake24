@@ -3,7 +3,7 @@ import type { TsRestRequest } from '@ts-rest/express';
 import type { ModelStatic, WhereOptions } from 'sequelize';
 import path from 'node:path';
 import { initServer } from '@ts-rest/express';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 import multer from 'multer';
 import { col, fn } from 'sequelize';
 import languageBackends from '@intake24/api/food-index/language-backends';

@@ -2,7 +2,7 @@ import fs, { constants } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import decompress from 'decompress';
-import { omit } from 'lodash';
+import { omit } from 'lodash-es';
 import type { ApiClientV4, DrinkwareScaleUpdate } from '@intake24/api-client-v4';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import type {

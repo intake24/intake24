@@ -6,7 +6,7 @@ import CleanCSS from 'clean-css';
 import { RedisStore } from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 import morgan from 'morgan';
 import nunjucks from 'nunjucks';
 import type { Ops } from '@intake24/api/app';

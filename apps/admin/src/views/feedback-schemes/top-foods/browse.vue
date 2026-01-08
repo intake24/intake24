@@ -83,7 +83,7 @@
 
 <script lang="ts">
 import type { FeedbackSchemeForm } from '../form.vue';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 
 import { computed, defineComponent, ref, watch } from 'vue';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';

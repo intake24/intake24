@@ -6,7 +6,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import parseCsv from 'csv-parser';
-import { groupBy, mapValues, partition, sortBy, trim } from 'lodash';
+import { groupBy, mapValues, partition, sortBy, trim } from 'lodash-es';
 import stripBomStream from 'strip-bom-stream';
 import * as XLSX from 'xlsx';
 

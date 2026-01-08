@@ -1,6 +1,6 @@
 import type { Expression, Kysely, SqlBool } from 'kysely';
 import path from 'node:path';
-import { groupBy, mapValues } from 'lodash';
+import { groupBy, mapValues } from 'lodash-es';
 import { ApplicationError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
