@@ -71,7 +71,13 @@
         "noSuggestions": "Nenhuma sugestão foi gerada. Tente outro nome de alimento.",
         "found": "encontrado(s)",
         "alreadyAdded": "Já adicionado",
-        "new": "novo(s)"
+        "new": "novo(s)",
+        "loading": {
+          "analyzing": "Analisando",
+          "findingVariations": "Buscando variações",
+          "checkingScripts": "Verificando escritas",
+          "generatingIdeas": "Gerando ideias"
+        }
       }
     },
     "attributes": {

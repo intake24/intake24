@@ -71,7 +71,13 @@
         "noSuggestions": "提案が生成されませんでした。別の食品名をお試しください。",
         "found": "件",
         "alreadyAdded": "追加済み",
-        "new": "件の新規"
+        "new": "件の新規",
+        "loading": {
+          "analyzing": "分析中",
+          "findingVariations": "バリエーション検索中",
+          "checkingScripts": "表記を確認中",
+          "generatingIdeas": "アイデア生成中"
+        }
       }
     },
     "attributes": {

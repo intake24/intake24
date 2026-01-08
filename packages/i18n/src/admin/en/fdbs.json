@@ -76,7 +76,13 @@
         "noSuggestions": "No suggestions were generated. Try a different food name.",
         "found": "found",
         "alreadyAdded": "Already added",
-        "new": "new"
+        "new": "new",
+        "loading": {
+          "analyzing": "Analyzing",
+          "findingVariations": "Finding variations",
+          "checkingScripts": "Checking scripts",
+          "generatingIdeas": "Generating ideas"
+        }
       }
     },
     "attributes": {

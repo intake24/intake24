@@ -3,7 +3,7 @@
     <template #activator="{ props: activatorProps }">
       <v-btn
         class="ai-suggest-btn"
-        color="deep-purple-accent-2"
+        color="primary"
         :disabled="!foodName"
         size="small"
         :title="$t('fdbs.foods.local.altNames.suggest')"
@@ -17,7 +17,7 @@
     </template>
 
     <v-card class="suggestion-card" :tile="$vuetify.display.smAndDown">
-      <v-toolbar class="suggestion-toolbar" color="deep-purple-darken-1" density="comfortable">
+      <v-toolbar class="suggestion-toolbar" color="primary" density="comfortable">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click="close" />
         <v-toolbar-title class="text-body-1 font-weight-medium">
           {{ $t('fdbs.foods.local.altNames.suggest') }}
@@ -34,7 +34,7 @@
           <!-- Animated header -->
           <div class="loading-header">
             <div class="loading-icon-wrapper">
-              <v-icon class="loading-icon" color="deep-purple-accent-2" icon="fas fa-wand-magic-sparkles" size="24" />
+              <v-icon class="loading-icon" color="primary" icon="fas fa-wand-magic-sparkles" size="24" />
               <div class="loading-ripple" />
               <div class="loading-ripple loading-ripple-delayed" />
             </div>
@@ -67,7 +67,7 @@
               {{ error }}
             </div>
           </v-alert>
-          <v-btn class="mt-4" color="deep-purple" variant="tonal" @click="fetchSuggestions">
+          <v-btn class="mt-4" color="primary" variant="tonal" @click="fetchSuggestions">
             <v-icon icon="fas fa-rotate" start />
             {{ $t('common.action.retry') }}
           </v-btn>
@@ -105,7 +105,7 @@
               <template #prepend>
                 <v-checkbox-btn
                   v-if="!isExisting(suggestion)"
-                  color="deep-purple-accent-2"
+                  color="primary"
                   :model-value="selected.includes(suggestion)"
                   @click.stop
                   @update:model-value="toggleSelection(suggestion)"
@@ -149,7 +149,7 @@
         </v-btn>
         <v-spacer />
         <v-btn
-          color="deep-purple-accent-2"
+          color="primary"
           :disabled="!selected.length"
           variant="flat"
           @click="confirm"
@@ -167,6 +167,7 @@
 import { computed, defineComponent, onUnmounted, ref } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
+import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
@@ -195,6 +196,7 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const http = useHttp();
+    const { i18n } = useI18n();
 
     const dialog = ref(false);
     const loading = ref(false);
@@ -202,7 +204,7 @@ export default defineComponent({
     const suggestions = ref<string[]>([]);
     const reasoning = ref<string | undefined>(undefined);
     const selected = ref<string[]>([]);
-    const loadingPhase = ref('Analyzing');
+    const loadingPhase = ref(i18n.t('fdbs.foods.local.altNames.loading.analyzing'));
 
     let phaseInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -233,10 +235,10 @@ export default defineComponent({
 
     const startLoadingAnimation = () => {
       const phases = [
-        'Analyzing',
-        'Finding variations',
-        'Checking scripts',
-        'Generating ideas',
+        i18n.t('fdbs.foods.local.altNames.loading.analyzing'),
+        i18n.t('fdbs.foods.local.altNames.loading.findingVariations'),
+        i18n.t('fdbs.foods.local.altNames.loading.checkingScripts'),
+        i18n.t('fdbs.foods.local.altNames.loading.generatingIdeas'),
       ];
       let index = 0;
       phaseInterval = setInterval(() => {
@@ -360,7 +362,7 @@ export default defineComponent({
 // ============================================
 .loading-container {
   min-height: 320px;
-  background: linear-gradient(180deg, rgba(103, 58, 183, 0.04) 0%, rgba(103, 58, 183, 0.01) 100%);
+  background: linear-gradient(180deg, rgba(238, 103, 45, 0.04) 0%, rgba(238, 103, 45, 0.01) 100%);
 }
 
 .loading-header {
@@ -401,7 +403,7 @@ export default defineComponent({
 .loading-ripple {
   position: absolute;
   inset: 0;
-  border: 2px solid rgba(103, 58, 183, 0.3);
+  border: 2px solid rgba(238, 103, 45, 0.3);
   border-radius: 50%;
   animation: ripple-out 2s ease-out infinite;
 }
@@ -443,7 +445,7 @@ export default defineComponent({
 .dot {
   width: 4px;
   height: 4px;
-  background: rgba(103, 58, 183, 0.6);
+  background: rgba(238, 103, 45, 0.6);
   border-radius: 50%;
   animation: dot-bounce 1.4s ease-in-out infinite;
 
@@ -473,7 +475,7 @@ export default defineComponent({
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
   color: rgba(0, 0, 0, 0.5);
   padding: 0.25rem 0.75rem;
-  background: rgba(103, 58, 183, 0.06);
+  background: rgba(238, 103, 45, 0.06);
   border-radius: 4px;
 }
 
@@ -588,11 +590,11 @@ export default defineComponent({
   }
 
   &:hover:not(.is-existing) {
-    background: rgba(103, 58, 183, 0.04);
+    background: rgba(238, 103, 45, 0.04);
   }
 
   &.is-selected:not(.is-existing) {
-    background: rgba(103, 58, 183, 0.08);
+    background: rgba(238, 103, 45, 0.08);
   }
 
   // Existing/already-added state

@@ -76,7 +76,13 @@
         "noSuggestions": "Tidak ada saran yang dihasilkan. Coba nama makanan lain.",
         "found": "ditemukan",
         "alreadyAdded": "Sudah ditambahkan",
-        "new": "baru"
+        "new": "baru",
+        "loading": {
+          "analyzing": "Menganalisis",
+          "findingVariations": "Mencari variasi",
+          "checkingScripts": "Memeriksa skrip",
+          "generatingIdeas": "Menghasilkan ide"
+        }
       }
     },
     "attributes": {
