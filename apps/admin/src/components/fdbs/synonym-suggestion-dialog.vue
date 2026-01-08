@@ -23,21 +23,39 @@
           {{ $t('fdbs.foods.local.altNames.suggest') }}
         </v-toolbar-title>
         <v-spacer />
-        <v-chip v-if="!loading && suggestions.length" class="mr-2" color="white" size="small" variant="outlined">
-          {{ suggestions.length }} {{ $t('fdbs.foods.local.altNames.found') }}
+        <v-chip v-if="!loading && newSuggestionsCount > 0" class="mr-2" color="white" size="small" variant="outlined">
+          {{ newSuggestionsCount }} new
         </v-chip>
       </v-toolbar>
 
       <v-card-text class="pa-0">
-        <!-- Loading State -->
+        <!-- Loading State - Dynamic Skeleton -->
         <div v-if="loading" class="loading-container">
-          <div class="loading-content">
-            <v-progress-circular color="deep-purple-accent-2" indeterminate size="48" width="3" />
-            <div class="loading-text mt-4">
-              {{ $t('fdbs.foods.local.altNames.generating') }}
+          <!-- Animated header -->
+          <div class="loading-header">
+            <div class="loading-icon-wrapper">
+              <v-icon class="loading-icon" color="deep-purple-accent-2" icon="fas fa-wand-magic-sparkles" size="24" />
+              <div class="loading-ripple" />
+              <div class="loading-ripple loading-ripple-delayed" />
             </div>
-            <div class="loading-subtext mt-1 text-medium-emphasis">
+            <div class="loading-status">
+              <span class="loading-status-text">{{ loadingPhase }}</span>
+              <span class="loading-dots">
+                <span class="dot" />
+                <span class="dot" />
+                <span class="dot" />
+              </span>
+            </div>
+            <div class="loading-food-name">
               {{ foodName }}
+            </div>
+          </div>
+
+          <!-- Skeleton suggestions -->
+          <div class="skeleton-list">
+            <div v-for="i in 5" :key="i" class="skeleton-item" :style="{ animationDelay: `${i * 0.1}s` }">
+              <div class="skeleton-checkbox" />
+              <div class="skeleton-text" :style="{ width: `${40 + Math.random() * 40}%` }" />
             </div>
           </div>
         </div>
@@ -75,21 +93,39 @@
             <v-list-item
               v-for="(suggestion, i) in suggestions"
               :key="i"
-              class="suggestion-item"
-              :class="{ 'is-selected': selected.includes(suggestion) }"
-              :ripple="false"
-              @click="toggleSelection(suggestion)"
+              class="suggestion-item reveal-animation"
+              :class="{
+                'is-selected': selected.includes(suggestion),
+                'is-existing': isExisting(suggestion),
+              }"
+              :ripple="!isExisting(suggestion)"
+              :style="{ animationDelay: `${i * 0.05}s` }"
+              @click="!isExisting(suggestion) && toggleSelection(suggestion)"
             >
               <template #prepend>
                 <v-checkbox-btn
+                  v-if="!isExisting(suggestion)"
                   color="deep-purple-accent-2"
                   :model-value="selected.includes(suggestion)"
+                  @click.stop
                   @update:model-value="toggleSelection(suggestion)"
                 />
+                <v-icon
+                  v-else
+                  class="existing-icon"
+                  color="grey-lighten-1"
+                  icon="fas fa-check-circle"
+                  size="20"
+                />
               </template>
-              <v-list-item-title class="suggestion-text">
+              <v-list-item-title class="suggestion-text" :class="{ 'existing-text': isExisting(suggestion) }">
                 {{ suggestion }}
               </v-list-item-title>
+              <template v-if="isExisting(suggestion)" #append>
+                <v-chip class="existing-badge" color="grey-lighten-2" size="x-small" variant="flat">
+                  Already added
+                </v-chip>
+              </template>
             </v-list-item>
           </v-list>
 
@@ -128,7 +164,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, onUnmounted, ref } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
 import { useMessages } from '@intake24/ui/stores';
@@ -166,6 +202,21 @@ export default defineComponent({
     const suggestions = ref<string[]>([]);
     const reasoning = ref<string | undefined>(undefined);
     const selected = ref<string[]>([]);
+    const loadingPhase = ref('Analyzing');
+
+    let phaseInterval: ReturnType<typeof setInterval> | null = null;
+
+    // Normalize for comparison (lowercase, trimmed)
+    const normalizedExisting = computed(() =>
+      new Set(props.existingSynonyms.map(s => s.toLowerCase().trim())),
+    );
+
+    const isExisting = (suggestion: string) =>
+      normalizedExisting.value.has(suggestion.toLowerCase().trim());
+
+    const newSuggestionsCount = computed(() =>
+      suggestions.value.filter(s => !isExisting(s)).length,
+    );
 
     const resetState = () => {
       loading.value = false;
@@ -173,11 +224,31 @@ export default defineComponent({
       suggestions.value = [];
       reasoning.value = undefined;
       selected.value = [];
+      loadingPhase.value = 'Analyzing';
+      if (phaseInterval) {
+        clearInterval(phaseInterval);
+        phaseInterval = null;
+      }
+    };
+
+    const startLoadingAnimation = () => {
+      const phases = [
+        'Analyzing',
+        'Finding variations',
+        'Checking scripts',
+        'Generating ideas',
+      ];
+      let index = 0;
+      phaseInterval = setInterval(() => {
+        index = (index + 1) % phases.length;
+        loadingPhase.value = phases[index];
+      }, 2000);
     };
 
     const fetchSuggestions = async () => {
       loading.value = true;
       error.value = null;
+      startLoadingAnimation();
 
       try {
         const response = await http.post<{
@@ -198,14 +269,18 @@ export default defineComponent({
 
         suggestions.value = response.data.suggestions;
         reasoning.value = response.data.reasoning;
-        // Pre-select all suggestions by default
-        selected.value = [...response.data.suggestions];
+        // Pre-select only NEW suggestions (not already existing)
+        selected.value = response.data.suggestions.filter(s => !isExisting(s));
       }
       catch (err) {
         error.value = err instanceof Error ? err.message : 'Failed to fetch suggestions';
       }
       finally {
         loading.value = false;
+        if (phaseInterval) {
+          clearInterval(phaseInterval);
+          phaseInterval = null;
+        }
       }
     };
 
@@ -219,6 +294,8 @@ export default defineComponent({
     };
 
     const toggleSelection = (suggestion: string) => {
+      if (isExisting(suggestion))
+        return;
       const index = selected.value.indexOf(suggestion);
       if (index === -1) {
         selected.value.push(suggestion);
@@ -236,13 +313,22 @@ export default defineComponent({
       close();
     };
 
+    onUnmounted(() => {
+      if (phaseInterval) {
+        clearInterval(phaseInterval);
+      }
+    });
+
     return {
       dialog,
       loading,
+      loadingPhase,
       error,
       suggestions,
       reasoning,
       selected,
+      newSuggestionsCount,
+      isExisting,
       onOpen,
       close,
       toggleSelection,
@@ -269,29 +355,186 @@ export default defineComponent({
   }
 }
 
+// ============================================
+// Loading State - Dynamic & Engaging
+// ============================================
 .loading-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 280px;
-  background: linear-gradient(180deg, rgba(103, 58, 183, 0.03) 0%, transparent 100%);
+  min-height: 320px;
+  background: linear-gradient(180deg, rgba(103, 58, 183, 0.04) 0%, rgba(103, 58, 183, 0.01) 100%);
 }
 
-.loading-content {
+.loading-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.5rem 1.5rem;
   text-align: center;
 }
 
-.loading-text {
+.loading-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1rem;
+}
+
+.loading-icon {
+  z-index: 1;
+  animation: pulse-icon 2s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.loading-ripple {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(103, 58, 183, 0.3);
+  border-radius: 50%;
+  animation: ripple-out 2s ease-out infinite;
+}
+
+.loading-ripple-delayed {
+  animation-delay: 1s;
+}
+
+@keyframes ripple-out {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.loading-status {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.loading-status-text {
   font-size: 0.9375rem;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(0, 0, 0, 0.75);
 }
 
-.loading-subtext {
+.loading-dots {
+  display: flex;
+  gap: 3px;
+  margin-left: 2px;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  background: rgba(103, 58, 183, 0.6);
+  border-radius: 50%;
+  animation: dot-bounce 1.4s ease-in-out infinite;
+
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes dot-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.loading-food-name {
   font-size: 0.8125rem;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 0.25rem 0.75rem;
+  background: rgba(103, 58, 183, 0.06);
+  border-radius: 4px;
 }
 
+// Skeleton list
+.skeleton-list {
+  padding: 0.5rem 0;
+}
+
+.skeleton-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  animation: skeleton-fade-in 0.3s ease-out both;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+@keyframes skeleton-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.skeleton-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.06) 25%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-text {
+  height: 16px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.06) 25%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ============================================
+// Results State
+// ============================================
 .error-container {
   text-align: center;
   min-height: 200px;
@@ -320,6 +563,22 @@ export default defineComponent({
   overflow-y: auto;
 }
 
+// Reveal animation for suggestions
+.reveal-animation {
+  animation: reveal-slide 0.3s ease-out both;
+}
+
+@keyframes reveal-slide {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .suggestion-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   transition: background-color 0.15s ease;
@@ -328,19 +587,46 @@ export default defineComponent({
     border-bottom: none;
   }
 
-  &:hover {
+  &:hover:not(.is-existing) {
     background: rgba(103, 58, 183, 0.04);
   }
 
-  &.is-selected {
+  &.is-selected:not(.is-existing) {
     background: rgba(103, 58, 183, 0.08);
   }
+
+  // Existing/already-added state
+  &.is-existing {
+    background: rgba(0, 0, 0, 0.02);
+    cursor: default;
+    opacity: 0.7;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+  }
+}
+
+.existing-icon {
+  margin-left: 10px;
+  margin-right: 14px;
 }
 
 .suggestion-text {
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
   font-size: 0.9375rem;
   letter-spacing: -0.01em;
+
+  &.existing-text {
+    color: rgba(0, 0, 0, 0.45);
+  }
+}
+
+.existing-badge {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .reasoning-container {
