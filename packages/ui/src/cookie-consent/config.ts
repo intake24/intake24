@@ -1,7 +1,7 @@
 import type { CookieConsentConfig, Translation } from 'vanilla-cookieconsent';
 import { useGtm } from '@gtm-support/vue-gtm';
 import Clarity from '@microsoft/clarity';
-import get from 'lodash/get';
+import { get } from 'lodash-es';
 import { useConsent } from 'vue-gtag';
 import { defaultMessages } from '@intake24/i18n';
 

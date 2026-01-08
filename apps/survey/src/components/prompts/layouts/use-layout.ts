@@ -1,6 +1,5 @@
 import type { SetupContext } from 'vue';
-import get from 'lodash/get';
-import set from 'lodash/set';
+import { get, set } from 'lodash-es';
 import { computed, onBeforeMount } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';

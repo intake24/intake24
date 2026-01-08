@@ -85,7 +85,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
-import get from 'lodash/get';
+import { get } from 'lodash-es';
 import { computed, ref } from 'vue';
 
 import { HtmlEditor } from '@intake24/admin/components/editors';

@@ -1,7 +1,7 @@
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 import axiosRetry, { linearDelay } from 'axios-retry';
-import trim from 'lodash/trim';
+import { trim } from 'lodash-es';
 
 export type SubscribeCallback = (err?: AxiosError) => void;
 

@@ -3,7 +3,7 @@ import type { Transaction } from 'sequelize';
 import path from 'node:path';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
-import { camelCase } from 'lodash';
+import { camelCase } from 'lodash-es';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';

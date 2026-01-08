@@ -43,7 +43,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useVModel } from '@vueuse/core';
-import mapValues from 'lodash/mapValues';
+import { mapValues } from 'lodash-es';
 import conditionPartials from '@intake24/admin/components/prompts/partials/conditions';
 import { conditionObjectHasProperty, getConditionDefaults, getDefaultConditionProperty, promptConditionDefaults } from '@intake24/common/prompts';
 import type { Condition, ConditionObjectId, ObjectPropertyId } from '@intake24/common/prompts';

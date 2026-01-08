@@ -1,6 +1,6 @@
 'use strict';
 
-const { merge } = require('lodash');
+const { merge } = require('lodash-es');
 
 const defaultSearchSettings = {
   collectData: true,

@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import upperFirst from 'lodash/upperFirst';
+import { upperFirst } from 'lodash-es';
 import { defineComponent } from 'vue';
 
 import { ConfirmDialog } from '@intake24/ui';

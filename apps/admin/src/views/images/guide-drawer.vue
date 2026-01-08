@@ -117,8 +117,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useElementSize, watchDebounced } from '@vueuse/core';
-import chunk from 'lodash/chunk';
-import debounce from 'lodash/debounce';
+import { chunk, debounce } from 'lodash-es';
 import { computed, ref, useTemplateRef } from 'vue';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { closestSegmentIndex } from '@intake24/admin/views/images/math-helpers';

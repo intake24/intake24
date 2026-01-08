@@ -91,7 +91,7 @@
 <script lang='ts'>
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
-import mapValues from 'lodash/mapValues';
+import { mapValues } from 'lodash-es';
 import { computed, defineComponent, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 import { withIdList } from '@intake24/admin/util';

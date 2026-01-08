@@ -1,6 +1,6 @@
 /* eslint-disable ts/no-empty-object-type */
 import type { StringValue } from 'ms';
-import { mapValues } from 'lodash';
+import { mapValues } from 'lodash-es';
 import ms from 'ms';
 import stringify from 'safe-stable-stringify';
 

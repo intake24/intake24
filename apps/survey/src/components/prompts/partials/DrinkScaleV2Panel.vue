@@ -103,8 +103,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useElementSize } from '@vueuse/core';
-import chunk from 'lodash/chunk';
-import maxBy from 'lodash/maxBy';
+import { chunk, maxBy } from 'lodash-es';
 import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useGoTo } from 'vuetify';
 import { VImg } from 'vuetify/components';

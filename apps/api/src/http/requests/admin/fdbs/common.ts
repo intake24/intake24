@@ -1,5 +1,5 @@
 import type { ParamSchema, Schema } from 'express-validator';
-import { isPlainObject } from 'lodash';
+import { isPlainObject } from 'lodash-es';
 import { ZodError } from 'zod';
 
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';

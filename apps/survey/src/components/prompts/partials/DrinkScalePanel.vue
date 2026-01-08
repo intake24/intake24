@@ -80,7 +80,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import { useElementSize } from '@vueuse/core';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useGoTo } from 'vuetify';
 

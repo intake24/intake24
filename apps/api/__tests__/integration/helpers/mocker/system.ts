@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { faker } from '@faker-js/faker';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import slugify from 'slugify';
 import {
   defaultMeals as defaultFeedbackMeals,

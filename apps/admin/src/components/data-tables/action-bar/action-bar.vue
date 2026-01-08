@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import upperFirst from 'lodash/upperFirst';
+import { upperFirst } from 'lodash-es';
 import { defineComponent } from 'vue';
 
 import { useMessages } from '@intake24/admin/stores';

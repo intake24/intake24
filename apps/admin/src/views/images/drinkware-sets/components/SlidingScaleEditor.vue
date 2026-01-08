@@ -163,9 +163,7 @@
 
 <script lang="ts" setup>
 import { useElementSize } from '@vueuse/core';
-import chunk from 'lodash/chunk';
-import flatten from 'lodash/flatten';
-import uniqueId from 'lodash/uniqueId';
+import { chunk, flatten, uniqueId } from 'lodash-es';
 import { computed, onMounted, ref, toRef, useTemplateRef, watch } from 'vue';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';

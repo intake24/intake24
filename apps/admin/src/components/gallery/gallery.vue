@@ -70,7 +70,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import get from 'lodash/get';
+import { get } from 'lodash-es';
 import { computed, onMounted, ref, watch } from 'vue';
 import { DataTableFilter } from '@intake24/admin/components/data-tables';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';

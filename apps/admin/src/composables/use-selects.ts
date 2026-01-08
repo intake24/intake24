@@ -1,4 +1,4 @@
-import orderBy from 'lodash/orderBy';
+import { orderBy } from 'lodash-es';
 
 import { actionTypes as actionTypeRefs, conditionOpCodes, layoutTypes } from '@intake24/common/prompts';
 import type { ConditionOpCode } from '@intake24/common/prompts';

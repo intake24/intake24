@@ -1,6 +1,6 @@
 import type { InterpretedWord } from './interpreted-word';
 
-import { uniq } from 'lodash';
+import { uniq } from 'lodash-es';
 import type {
   DictionaryType,
   PhoneticEncoder,

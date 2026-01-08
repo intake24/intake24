@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type {

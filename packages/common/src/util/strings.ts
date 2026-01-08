@@ -1,5 +1,5 @@
 import type { CamelCase } from 'type-fest';
-import camelCase from 'lodash/camelCase';
+import { camelCase } from 'lodash-es';
 import { customAlphabet, nanoid } from 'nanoid';
 import { plural } from 'pluralize';
 import slugify from 'slugify';

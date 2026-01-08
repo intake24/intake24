@@ -1,6 +1,6 @@
 import type { WhereOptions } from 'sequelize';
 import { initServer } from '@ts-rest/express';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 import { col, fn, Op } from 'sequelize';
 import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';

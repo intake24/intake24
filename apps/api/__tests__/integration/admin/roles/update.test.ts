@@ -1,4 +1,4 @@
-import { pick, times } from 'lodash';
+import { pick, times } from 'lodash-es';
 import request from 'supertest';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';

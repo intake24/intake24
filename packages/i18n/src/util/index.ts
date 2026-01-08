@@ -1,6 +1,6 @@
 import type { DefaultLocaleMessageSchema, LocaleMessageValue, useI18n } from 'vue-i18n';
 import dompurify from 'dompurify';
-import has from 'lodash/has';
+import { has } from 'lodash-es';
 
 import type {
   Dictionary,

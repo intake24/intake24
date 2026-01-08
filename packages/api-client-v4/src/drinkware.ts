@@ -2,7 +2,7 @@ import type { BaseClientV4 } from './base-client-v4';
 import type { CreateResult } from './create-response';
 
 import { FormData } from 'formdata-node';
-import { mapValues, pick } from 'lodash';
+import { mapValues, pick } from 'lodash-es';
 
 import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 import type {

@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import has from 'lodash/has';
+import { has } from 'lodash-es';
 import { defineComponent, ref } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';

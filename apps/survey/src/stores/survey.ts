@@ -1,9 +1,8 @@
 import { addDays } from 'date-fns';
-
 import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
-import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
 
+import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
 import type {
   SurveyState as CurrentSurveyState,
   CustomPromptAnswer,
@@ -40,11 +39,10 @@ import {
   sendGtmEvent,
 } from '@intake24/survey/util';
 import { useApp, useLoading } from '@intake24/ui/stores';
-import { surveyService } from '../services';
 
+import { surveyService } from '../services';
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';
-import 'lodash/debounce';
 
 export type MealUndo = {
   type: 'meal';

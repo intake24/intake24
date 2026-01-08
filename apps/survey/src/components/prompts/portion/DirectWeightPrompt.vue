@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import isNumber from 'lodash/isNumber';
+import { isNumber } from 'lodash-es';
 import { computed, ref } from 'vue';
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';

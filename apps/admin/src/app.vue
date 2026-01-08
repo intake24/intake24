@@ -145,7 +145,7 @@
 
 <script lang="ts" setup>
 import type { RouteLocationRaw } from 'vue-router';
-import groupBy from 'lodash/groupBy';
+import { groupBy } from 'lodash-es';
 import pluralize from 'pluralize';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';

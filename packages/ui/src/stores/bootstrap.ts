@@ -1,5 +1,5 @@
 import { PiniaDebounce } from '@pinia/plugin-debounce';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import { createPinia } from 'pinia';
 import { createPersistedState } from 'pinia-plugin-persistedstate';
 

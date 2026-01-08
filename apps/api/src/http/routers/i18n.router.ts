@@ -1,5 +1,5 @@
 import { initServer } from '@ts-rest/express';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';

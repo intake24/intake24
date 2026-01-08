@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { watchDebounced } from '@vueuse/core';
-import isEmpty from 'lodash/isEmpty';
+import { isEmpty } from 'lodash-es';
 import { computed, defineComponent, ref, watch } from 'vue';
 
 import { useResource } from '@intake24/admin/stores';
