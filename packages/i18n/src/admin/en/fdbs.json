@@ -74,7 +74,9 @@
         "addSelected": "Add selected",
         "reasoning": "Reasoning",
         "noSuggestions": "No suggestions were generated. Try a different food name.",
-        "found": "found"
+        "found": "found",
+        "alreadyAdded": "Already added",
+        "new": "new"
       }
     },
     "attributes": {

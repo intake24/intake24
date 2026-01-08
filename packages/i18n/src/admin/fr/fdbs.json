@@ -62,7 +62,16 @@
       "tags": "Tags",
       "altNames": {
         "_": "Noms alternatifs / Synonymes",
-        "synonyms": "Synonymes pour cette langue"
+        "synonyms": "Synonymes pour cette langue",
+        "suggest": "Suggestion IA",
+        "generating": "Génération des suggestions...",
+        "selectSuggestions": "Sélectionnez les synonymes à ajouter :",
+        "addSelected": "Ajouter la sélection",
+        "reasoning": "Raisonnement",
+        "noSuggestions": "Aucune suggestion n'a été générée. Essayez un autre nom d'aliment.",
+        "found": "trouvé(s)",
+        "alreadyAdded": "Déjà ajouté",
+        "new": "nouveau(x)"
       }
     },
     "attributes": {

@@ -62,7 +62,16 @@
       "tags": "タグ",
       "altNames": {
         "_": "代替名 / 同義語",
-        "synonyms": "この言語の同義語"
+        "synonyms": "この言語の同義語",
+        "suggest": "AI提案",
+        "generating": "提案を生成中...",
+        "selectSuggestions": "追加する同義語を選択：",
+        "addSelected": "選択項目を追加",
+        "reasoning": "理由",
+        "noSuggestions": "提案が生成されませんでした。別の食品名をお試しください。",
+        "found": "件",
+        "alreadyAdded": "追加済み",
+        "new": "件の新規"
       }
     },
     "attributes": {

@@ -24,7 +24,7 @@
         </v-toolbar-title>
         <v-spacer />
         <v-chip v-if="!loading && newSuggestionsCount > 0" class="mr-2" color="white" size="small" variant="outlined">
-          {{ newSuggestionsCount }} new
+          {{ newSuggestionsCount }} {{ $t('fdbs.foods.local.altNames.new') }}
         </v-chip>
       </v-toolbar>
 
@@ -123,7 +123,7 @@
               </v-list-item-title>
               <template v-if="isExisting(suggestion)" #append>
                 <v-chip class="existing-badge" color="grey-lighten-2" size="x-small" variant="flat">
-                  Already added
+                  {{ $t('fdbs.foods.local.altNames.alreadyAdded') }}
                 </v-chip>
               </template>
             </v-list-item>

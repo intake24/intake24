@@ -62,7 +62,16 @@
       "tags": "Etiquetas",
       "altNames": {
         "_": "Nomes Alternativos / Sinônimos",
-        "synonyms": "Sinônimos para este idioma"
+        "synonyms": "Sinônimos para este idioma",
+        "suggest": "Sugestão IA",
+        "generating": "Gerando sugestões...",
+        "selectSuggestions": "Selecione os sinônimos para adicionar:",
+        "addSelected": "Adicionar selecionados",
+        "reasoning": "Justificativa",
+        "noSuggestions": "Nenhuma sugestão foi gerada. Tente outro nome de alimento.",
+        "found": "encontrado(s)",
+        "alreadyAdded": "Já adicionado",
+        "new": "novo(s)"
       }
     },
     "attributes": {

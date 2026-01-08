@@ -67,7 +67,16 @@
       "tags": "Tag",
       "altNames": {
         "_": "Nama Alternatif / Sinonim",
-        "synonyms": "Sinonim untuk bahasa ini"
+        "synonyms": "Sinonim untuk bahasa ini",
+        "suggest": "Saran AI",
+        "generating": "Membuat saran...",
+        "selectSuggestions": "Pilih sinonim untuk ditambahkan:",
+        "addSelected": "Tambah yang dipilih",
+        "reasoning": "Alasan",
+        "noSuggestions": "Tidak ada saran yang dihasilkan. Coba nama makanan lain.",
+        "found": "ditemukan",
+        "alreadyAdded": "Sudah ditambahkan",
+        "new": "baru"
       }
     },
     "attributes": {
