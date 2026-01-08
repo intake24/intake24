@@ -7,6 +7,7 @@ const synonymSuggestionRequest = z.object({
   languageCode: z.string().min(2, 'Language code is required'),
   existingSynonyms: z.array(z.string()).optional(),
   category: z.string().optional(),
+  uiLanguage: z.string().optional(), // Admin UI language for localized reasoning
 });
 
 // Response schema for synonym suggestions

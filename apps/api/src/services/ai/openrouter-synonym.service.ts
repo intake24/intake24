@@ -14,6 +14,7 @@ export interface SynonymRequest {
   languageCode: string;
   existingSynonyms?: string[];
   category?: string;
+  uiLanguage?: string; // Admin UI language for localized reasoning
 }
 
 export interface SynonymResult {
@@ -24,6 +25,23 @@ export interface SynonymResult {
 export interface RateLimitInfo {
   requestsRemaining: number;
   resetTime: Date;
+}
+
+/**
+ * Map UI language codes to full language names for the LLM prompt.
+ */
+function getLanguageName(code: string | undefined): string {
+  if (!code)
+    return 'English';
+  const languageMap: Record<string, string> = {
+    en: 'English',
+    ja: 'Japanese',
+    fr: 'French',
+    id: 'Indonesian',
+    pt: 'Portuguese',
+    ptBR: 'Brazilian Portuguese',
+  };
+  return languageMap[code] || languageMap[code.split('-')[0]] || 'English';
 }
 
 /**
@@ -41,6 +59,12 @@ function buildPrompt(request: SynonymRequest): { system: string; user: string } 
     ? `\nFood category context: ${request.category}`
     : '';
 
+  // Determine reasoning language based on UI language
+  const reasoningLang = getLanguageName(request.uiLanguage);
+  const reasoningNote = request.uiLanguage && request.uiLanguage !== 'en'
+    ? `\n5. IMPORTANT: Write the "reasoning" field in ${reasoningLang}`
+    : '';
+
   if (isJapanese) {
     return {
       system: `You are a Japanese food database expert specializing in linguistic variations and cultural naming conventions.
@@ -51,12 +75,12 @@ CRITICAL RULES:
 1. ONLY output valid JSON - no markdown, no explanations outside the JSON
 2. Generate 5-10 unique synonyms that are genuinely different from the input
 3. Never repeat the original food name or existing synonyms
-4. Focus on variations that real users would type when searching
+4. Focus on variations that real users would type when searching${reasoningNote}
 
 OUTPUT FORMAT (strict JSON):
 {
   "suggestions": ["synonym1", "synonym2", ...],
-  "reasoning": "Brief explanation of the variation types included"
+  "reasoning": "Brief explanation of the variation types included${request.uiLanguage && request.uiLanguage !== 'en' ? ` (in ${reasoningLang})` : ''}"
 }`,
 
       user: `Generate Japanese food synonyms for: "${request.foodName}"${categoryNote}${existingSynonymsNote}
@@ -84,12 +108,12 @@ CRITICAL RULES:
 1. ONLY output valid JSON - no markdown, no explanations outside the JSON
 2. Generate 5-10 unique synonyms that are genuinely different from the input
 3. Never repeat the original food name or existing synonyms
-4. Focus on variations that real users would type when searching
+4. Focus on variations that real users would type when searching${reasoningNote}
 
 OUTPUT FORMAT (strict JSON):
 {
   "suggestions": ["synonym1", "synonym2", ...],
-  "reasoning": "Brief explanation of the variation types included"
+  "reasoning": "Brief explanation of the variation types included${request.uiLanguage && request.uiLanguage !== 'en' ? ` (in ${reasoningLang})` : ''}"
 }`,
 
     user: `Generate food synonyms for: "${request.foodName}" (Language: ${request.languageCode})${categoryNote}${existingSynonymsNote}

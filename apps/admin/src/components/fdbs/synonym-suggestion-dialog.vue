@@ -262,6 +262,7 @@ export default defineComponent({
           languageCode: props.languageCode,
           existingSynonyms: props.existingSynonyms,
           category: props.category,
+          uiLanguage: i18n.locale.value,
         });
 
         if (!response.data.enabled) {
