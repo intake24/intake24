@@ -9,7 +9,7 @@
       "@intake24/common-backend/*": ["../../packages/common-backend/src/*"],
       "@intake24/*": ["../../packages/*/src"]
     },
-    "types": ["node", "webpack-env"]
+    "types": ["node"]
   },
   "include": ["src/**/*.ts", "__tests__/**/*.ts"],
   "exclude": ["node_modules"]

@@ -50,7 +50,6 @@
     "svgo": "^4.0.0",
     "type-fest": "^5.3.1",
     "typescript": "^5.9.3",
-    "typescript-json-validator": "^2.4.2",
     "vite-tsconfig-paths": "^6.0.3",
     "vitest": "^4.0.16"
   }
