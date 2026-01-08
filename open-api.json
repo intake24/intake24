@@ -11262,10 +11262,491 @@
                       ]
                     },
                     {
-                      "nullable": true
+                      "type": "object",
+                      "properties": {
+                        "challenge": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "challengeId": {
+                                  "type": "string"
+                                },
+                                "deviceId": {
+                                  "type": "string"
+                                },
+                                "provider": {
+                                  "type": "string",
+                                  "enum": [
+                                    "duo"
+                                  ]
+                                },
+                                "challengeUrl": {
+                                  "type": "string",
+                                  "format": "uri"
+                                }
+                              },
+                              "required": [
+                                "challengeId",
+                                "deviceId",
+                                "provider",
+                                "challengeUrl"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "challengeId": {
+                                  "type": "string"
+                                },
+                                "deviceId": {
+                                  "type": "string"
+                                },
+                                "provider": {
+                                  "type": "string",
+                                  "enum": [
+                                    "fido"
+                                  ]
+                                },
+                                "options": {
+                                  "type": "object",
+                                  "properties": {
+                                    "challenge": {
+                                      "type": "string"
+                                    },
+                                    "timeout": {
+                                      "type": "number"
+                                    },
+                                    "rpId": {
+                                      "type": "string"
+                                    },
+                                    "allowCredentials": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "type": {
+                                            "type": "string",
+                                            "enum": [
+                                              "public-key"
+                                            ]
+                                          },
+                                          "transports": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string",
+                                              "enum": [
+                                                "ble",
+                                                "cable",
+                                                "hybrid",
+                                                "internal",
+                                                "nfc",
+                                                "smart-card",
+                                                "usb"
+                                              ]
+                                            }
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "type"
+                                        ]
+                                      }
+                                    },
+                                    "userVerification": {
+                                      "type": "string",
+                                      "enum": [
+                                        "required",
+                                        "preferred",
+                                        "discouraged"
+                                      ]
+                                    },
+                                    "hints": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string",
+                                        "enum": [
+                                          "hybrid",
+                                          "security-key",
+                                          "client-device"
+                                        ]
+                                      }
+                                    },
+                                    "extensions": {
+                                      "type": "object",
+                                      "properties": {
+                                        "appid": {
+                                          "type": "string"
+                                        },
+                                        "credProps": {
+                                          "type": "boolean"
+                                        },
+                                        "hmacCreateSecret": {
+                                          "type": "boolean"
+                                        },
+                                        "minPinLength": {
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "challenge"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "challengeId",
+                                "deviceId",
+                                "provider",
+                                "options"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "challengeId": {
+                                  "type": "string"
+                                },
+                                "deviceId": {
+                                  "type": "string"
+                                },
+                                "provider": {
+                                  "type": "string",
+                                  "enum": [
+                                    "otp"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "challengeId",
+                                "deviceId",
+                                "provider"
+                              ]
+                            }
+                          ]
+                        },
+                        "devices": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "userId": {
+                                "type": "string"
+                              },
+                              "provider": {
+                                "type": "string",
+                                "enum": [
+                                  "duo",
+                                  "fido",
+                                  "otp"
+                                ]
+                              },
+                              "name": {
+                                "type": "string",
+                                "maxLength": 128
+                              },
+                              "preferred": {
+                                "type": "boolean"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "userId",
+                              "provider",
+                              "name",
+                              "preferred",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "devices"
+                      ]
                     }
-                  ],
-                  "nullable": true
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/auth/challenge": {
+      "post": {
+        "description": "Request multi-factor authentication challenge",
+        "summary": "Request MFA challenge",
+        "tags": [
+          "default",
+          "admin",
+          "authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "challengeId": {
+                    "type": "string"
+                  },
+                  "deviceId": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "challengeId",
+                  "deviceId",
+                  "userId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "challenge": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "challengeId": {
+                              "type": "string"
+                            },
+                            "deviceId": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string",
+                              "enum": [
+                                "duo"
+                              ]
+                            },
+                            "challengeUrl": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "challengeId",
+                            "deviceId",
+                            "provider",
+                            "challengeUrl"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "challengeId": {
+                              "type": "string"
+                            },
+                            "deviceId": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string",
+                              "enum": [
+                                "fido"
+                              ]
+                            },
+                            "options": {
+                              "type": "object",
+                              "properties": {
+                                "challenge": {
+                                  "type": "string"
+                                },
+                                "timeout": {
+                                  "type": "number"
+                                },
+                                "rpId": {
+                                  "type": "string"
+                                },
+                                "allowCredentials": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "public-key"
+                                        ]
+                                      },
+                                      "transports": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string",
+                                          "enum": [
+                                            "ble",
+                                            "cable",
+                                            "hybrid",
+                                            "internal",
+                                            "nfc",
+                                            "smart-card",
+                                            "usb"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "type"
+                                    ]
+                                  }
+                                },
+                                "userVerification": {
+                                  "type": "string",
+                                  "enum": [
+                                    "required",
+                                    "preferred",
+                                    "discouraged"
+                                  ]
+                                },
+                                "hints": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "hybrid",
+                                      "security-key",
+                                      "client-device"
+                                    ]
+                                  }
+                                },
+                                "extensions": {
+                                  "type": "object",
+                                  "properties": {
+                                    "appid": {
+                                      "type": "string"
+                                    },
+                                    "credProps": {
+                                      "type": "boolean"
+                                    },
+                                    "hmacCreateSecret": {
+                                      "type": "boolean"
+                                    },
+                                    "minPinLength": {
+                                      "type": "boolean"
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "challenge"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "challengeId",
+                            "deviceId",
+                            "provider",
+                            "options"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "challengeId": {
+                              "type": "string"
+                            },
+                            "deviceId": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string",
+                              "enum": [
+                                "otp"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "challengeId",
+                            "deviceId",
+                            "provider"
+                          ]
+                        }
+                      ]
+                    },
+                    "devices": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string",
+                            "enum": [
+                              "duo",
+                              "fido",
+                              "otp"
+                            ]
+                          },
+                          "name": {
+                            "type": "string",
+                            "maxLength": 128
+                          },
+                          "preferred": {
+                            "type": "boolean"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "userId",
+                          "provider",
+                          "name",
+                          "preferred",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "devices"
+                  ]
                 }
               }
             }
@@ -11304,9 +11785,7 @@
                   "provider": {
                     "type": "string",
                     "enum": [
-                      "duo",
-                      "fido",
-                      "otp"
+                      "duo"
                     ]
                   },
                   "token": {
@@ -11328,23 +11807,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "accessToken": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "accessToken"
-                      ]
-                    },
-                    {
-                      "nullable": true
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
                     }
-                  ],
-                  "nullable": true
+                  },
+                  "required": [
+                    "accessToken"
+                  ]
                 }
               }
             }
@@ -11383,9 +11854,7 @@
                   "provider": {
                     "type": "string",
                     "enum": [
-                      "duo",
-                      "fido",
-                      "otp"
+                      "fido"
                     ]
                   },
                   "response": {
@@ -11476,23 +11945,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "accessToken": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "accessToken"
-                      ]
-                    },
-                    {
-                      "nullable": true
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
                     }
-                  ],
-                  "nullable": true
+                  },
+                  "required": [
+                    "accessToken"
+                  ]
                 }
               }
             }
@@ -11531,8 +11992,6 @@
                   "provider": {
                     "type": "string",
                     "enum": [
-                      "duo",
-                      "fido",
                       "otp"
                     ]
                   },
@@ -11557,23 +12016,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "accessToken": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "accessToken"
-                      ]
-                    },
-                    {
-                      "nullable": true
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
                     }
-                  ],
-                  "nullable": true
+                  },
+                  "required": [
+                    "accessToken"
+                  ]
                 }
               }
             }
@@ -72691,10 +73142,10 @@
                     "attestation": {
                       "type": "string",
                       "enum": [
-                        "direct",
-                        "enterprise",
+                        "none",
                         "indirect",
-                        "none"
+                        "direct",
+                        "enterprise"
                       ]
                     },
                     "extensions": {
