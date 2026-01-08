@@ -56,6 +56,7 @@ import type {
   NutrientTypeService,
   NutrientUnitService,
   OpenAIEmbeddingService,
+  OpenRouterSynonymService,
   OTPProvider,
   PopularityCountersService,
   PortionSizeMethodsService,
@@ -167,10 +168,12 @@ export interface IoC extends Jobs {
 
   // AI services
   openAIEmbeddingService: OpenAIEmbeddingService;
+  openRouterSynonymService: OpenRouterSynonymService;
   embeddingLoaderService: EmbeddingLoaderService;
   hybridScorerService: HybridScorerService;
   semanticSearchService: SemanticSearchService;
   embeddingConfig: Config['services']['embedding'];
+  openRouterConfig: Config['services']['openRouter'];
 
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
@@ -247,6 +250,7 @@ function configureContainer() {
     publisherConfig: asValue(config.publisher),
     subscriberConfig: asValue(config.subscriber),
     embeddingConfig: asValue(config.services.embedding),
+    openRouterConfig: asValue(config.services.openRouter),
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
     imageProcessorConfig: asValue(config.imageProcessor),

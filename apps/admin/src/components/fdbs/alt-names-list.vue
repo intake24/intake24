@@ -4,6 +4,15 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.foods.local.altNames._') }}
       </v-toolbar-title>
+      <v-spacer />
+      <synonym-suggestion-dialog
+        v-if="aiEnabled && foodName"
+        :category="category"
+        :existing-synonyms="synonyms"
+        :food-name="foodName"
+        :language-code="languageCode"
+        @add-synonyms="addSuggestions"
+      />
     </v-toolbar>
     <v-card-text>
       <v-combobox
@@ -32,12 +41,17 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 
+import { useHttp } from '@intake24/admin/services';
 import { useMessages } from '@intake24/ui/stores';
+
+import SynonymSuggestionDialog from './synonym-suggestion-dialog.vue';
 
 export default defineComponent({
   name: 'AltNamesList',
+
+  components: { SynonymSuggestionDialog },
 
   props: {
     modelValue: {
@@ -48,11 +62,22 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    foodName: {
+      type: String,
+      default: '',
+    },
+    category: {
+      type: String,
+      default: undefined,
+    },
   },
 
   emits: ['update:modelValue'],
 
   setup(props, { emit }) {
+    const http = useHttp();
+    const aiEnabled = ref(false);
+
     const synonyms = computed({
       get: () => props.modelValue[props.languageCode] ?? [],
       set: (value: string[]) => {
@@ -65,9 +90,36 @@ export default defineComponent({
       useMessages().info(`Copied: ${text}`);
     };
 
+    const addSuggestions = (newSynonyms: string[]) => {
+      // Merge new synonyms with existing, avoiding duplicates
+      const existing = new Set(synonyms.value.map(s => s.toLowerCase()));
+      const toAdd = newSynonyms.filter(s => !existing.has(s.toLowerCase()));
+      if (toAdd.length) {
+        synonyms.value = [...synonyms.value, ...toAdd];
+      }
+    };
+
+    const checkAiStatus = async () => {
+      try {
+        const response = await http.get<{
+          synonymSuggestions: { enabled: boolean; model?: string };
+        }>('admin/ai/status');
+        aiEnabled.value = response.data.synonymSuggestions.enabled;
+      }
+      catch {
+        aiEnabled.value = false;
+      }
+    };
+
+    onMounted(() => {
+      checkAiStatus();
+    });
+
     return {
+      aiEnabled,
       synonyms,
       copySynonym,
+      addSuggestions,
     };
   },
 });

@@ -1,4 +1,5 @@
 import acl from './acl';
+import { ai } from './ai.router';
 import { authentication } from './authentication.router';
 import { feedbackScheme } from './feedback-scheme.router';
 import { foodDb } from './food-db.router';
@@ -25,6 +26,7 @@ import user from './user';
 
 export default {
   acl,
+  ai,
   authentication,
   feedbackScheme,
   foodDb,

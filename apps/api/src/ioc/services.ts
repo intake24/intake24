@@ -46,6 +46,7 @@ import {
   nutrientTypeService,
   nutrientUnitService,
   openAIEmbeddingService,
+  openRouterSynonymService,
   opensearchSyncService,
   otpProvider,
   PopularityCountersService,
@@ -120,6 +121,7 @@ export default (container: AwilixContainer): void => {
     dataExportService: asFunction(dataExportService).singleton(),
 
     openAIEmbeddingService: asFunction(openAIEmbeddingService).singleton(),
+    openRouterSynonymService: asFunction(openRouterSynonymService).singleton(),
     embeddingLoaderService: asFunction(embeddingLoaderService).singleton(),
     hybridScorerService: asFunction(hybridScorerService).singleton(),
     semanticSearchService: asFunction(semanticSearchService).singleton(),

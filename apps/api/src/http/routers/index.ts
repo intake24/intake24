@@ -120,6 +120,7 @@ export function registerRouters(express: Router) {
 
   // Admin endpoints - authenticated & verified
   const adminAuthVerifiedContract = {
+    ai: contract.admin.ai,
     asServedImage: contract.admin.images.asServedImage,
     asServedSet: contract.admin.images.asServedSet,
     drinkwareSet: contract.admin.images.drinkwareSet,
@@ -169,6 +170,7 @@ export function registerRouters(express: Router) {
   createExpressEndpoints(
     adminAuthVerifiedContract,
     server.router(adminAuthVerifiedContract, {
+      ai: admin.ai(),
       asServedImage: admin.images.asServedImage(),
       asServedSet: admin.images.asServedSet(),
       drinkwareSet: admin.images.drinkwareSet(),

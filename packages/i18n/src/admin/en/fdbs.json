@@ -67,7 +67,14 @@
       "tags": "Tags",
       "altNames": {
         "_": "Alternative Names / Synonyms",
-        "synonyms": "Synonyms for this language"
+        "synonyms": "Synonyms for this language",
+        "suggest": "AI Suggest",
+        "generating": "Generating suggestions...",
+        "selectSuggestions": "Select synonyms to add:",
+        "addSelected": "Add selected",
+        "reasoning": "Reasoning",
+        "noSuggestions": "No suggestions were generated. Try a different food name.",
+        "found": "found"
       }
     },
     "attributes": {

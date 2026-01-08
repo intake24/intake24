@@ -1,4 +1,5 @@
 import acl from './acl';
+import { ai } from './ai.contract';
 import { authentication } from './authentication.contract';
 import { foodThumbnailImages } from './fdbs/food-thumbnail-images.contract';
 import { feedbackScheme } from './feedback-scheme.contract';
@@ -25,6 +26,7 @@ import user from './user';
 
 export default {
   acl,
+  ai,
   authentication,
   feedbackScheme,
   feedbackSchemeSecurable: securable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
