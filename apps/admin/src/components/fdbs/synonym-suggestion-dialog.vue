@@ -226,7 +226,7 @@ export default defineComponent({
       suggestions.value = [];
       reasoning.value = undefined;
       selected.value = [];
-      loadingPhase.value = 'Analyzing';
+      loadingPhase.value = i18n.t('fdbs.foods.local.altNames.loading.analyzing');
       if (phaseInterval) {
         clearInterval(phaseInterval);
         phaseInterval = null;

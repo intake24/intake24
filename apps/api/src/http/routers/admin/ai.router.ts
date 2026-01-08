@@ -43,6 +43,7 @@ export function ai() {
             languageCode: body.languageCode,
             existingSynonyms: body.existingSynonyms,
             category: body.category,
+            uiLanguage: body.uiLanguage,
           });
 
           return {
