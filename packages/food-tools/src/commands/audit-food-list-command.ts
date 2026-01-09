@@ -621,7 +621,7 @@ class FoodListAuditor {
   }
 
   private computeColumnStats(rows: CsvRow[]): ColumnStat[] {
-    return KEY_COLUMN_STATS.map(({ key, label, isArray }) => {
+    return KEY_COLUMN_STATS.map(({ key, label, isArray: _isArray }) => {
       const missing = rows.filter((row) => {
         const value = row[key];
         if (Array.isArray(value))
@@ -829,10 +829,11 @@ function renderMarkdown(report: AuditReport): string {
   if (report.summary.header.unexpected.length)
     lines.push(`- Unexpected columns: ${report.summary.header.unexpected.join(', ')}`);
   lines.push(`- Byte Order Mark detected: ${report.summary.header.hadBom ? 'Yes' : 'No'}`);
-  if (report.summary.changes)
+  if (report.summary.changes) {
     lines.push(
       `- Baseline comparison: +${report.summary.changes.newCount} / -${report.summary.changes.removedCount} / Δ${report.summary.changes.changedCount}`,
     );
+  }
   lines.push('');
 
   if (report.topIssues.length) {
@@ -976,10 +977,11 @@ export default async function auditFoodListCommand(options: AuditFoodListOptions
       console.log(`… and ${report.topIssues.length - sample.length} more.`);
   }
 
-  if (report.summary.changes)
+  if (report.summary.changes) {
     console.log(
       `\nBaseline diff → +${report.summary.changes.newCount} / -${report.summary.changes.removedCount} / Δ${report.summary.changes.changedCount}`,
     );
+  }
 
   if (resolvedOptions.reportPath) {
     const output = formatReport(report, resolvedOptions.reportFormat ?? 'json');

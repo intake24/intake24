@@ -1,5 +1,5 @@
 import { promises as fs } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 
 interface ExportTranslationsOptions {
   sourcePath: string;

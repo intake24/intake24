@@ -266,6 +266,7 @@ class FoodImportOrchestrator {
     createdLocalFoods: string[];
     originalEnabledFoods: string[];
   };
+
   private validationSkips: FoodImportResult[];
   private categoryColumnKeys: string[];
 
@@ -1745,7 +1746,7 @@ class FoodDataParser {
       parts.push(current.trim());
 
     for (const part of parts) {
-      const match = part.match(/^([A-Za-z0-9_]+)(?:\((.*)\))?$/);
+      const match = part.match(/^(\w+)(?:\((.*)\))?$/);
 
       if (!match) {
         console.warn(`Skipping unrecognised associated food fragment: "${part}"`);
@@ -1783,9 +1784,11 @@ class FoodDataParser {
     if (!content)
       return translations;
 
-    const regex = /([A-Za-z0-9_-]+)\s*:\s*([^,]+?(?:(?=,\s*[A-Za-z0-9_-]+\s*:)|$))/g;
+    // eslint-disable-next-line regexp/no-super-linear-backtracking -- complex regex for parsing key-value pairs
+    const regex = /([\w-]+)\s*:\s*([^,]+(?:(?=,\s*[\w-]+\s*:)|$))/g;
     let match: RegExpExecArray | null;
 
+    // eslint-disable-next-line no-cond-assign -- standard regex exec pattern
     while ((match = regex.exec(content)) !== null) {
       const key = match[1].trim();
       let value = match[2].trim();
@@ -1793,7 +1796,7 @@ class FoodDataParser {
       if (!key)
         continue;
 
-      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith('\'') && value.endsWith('\'')))
         value = value.slice(1, -1);
 
       value = value.trim();
@@ -1919,8 +1922,10 @@ class FoodDataParser {
       };
 
       if (paramSection.length) {
-        const regex = /([a-zA-Z0-9_-]+)\s*:\s*([^:]+?)(?=\s+[a-zA-Z0-9_-]+\s*:|$)/g;
+        // eslint-disable-next-line regexp/no-super-linear-backtracking -- complex regex for parsing method parameters
+        const regex = /([\w-]+)\s*:\s*([^:]+?)(?=\s+[\w-]+\s*:|$)/g;
         let match: RegExpExecArray | null;
+        // eslint-disable-next-line no-cond-assign -- standard regex exec pattern
         while ((match = regex.exec(paramSection)) !== null) {
           pushParam(match[1], match[2]);
         }

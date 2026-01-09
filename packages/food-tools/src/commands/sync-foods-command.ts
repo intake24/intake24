@@ -126,7 +126,7 @@ class FoodSynchronizer {
       // Parse CSV file
       const csvFoods = await this.parseCsvFile(options.inputPath, options.skipHeaderRows || 3);
       this.logger.info(`📋 Parsed ${csvFoods.length} foods from CSV`);
-      
+
       // Count excluded foods
       const excludedCount = csvFoods.filter(f => f.action === '1').length;
       const foodsToProcess = csvFoods.filter(f => f.action !== '1').length;
@@ -479,14 +479,14 @@ class FoodSynchronizer {
     if (!value)
       return undefined;
     const num = Number.parseFloat(value);
-    return isNaN(num) ? undefined : num;
+    return Number.isNaN(num) ? undefined : num;
   }
 
   private parseUseInRecipes(value: string): UseInRecipeType | undefined {
     if (!value)
       return undefined;
     const num = Number.parseInt(value, 10);
-    if (isNaN(num))
+    if (Number.isNaN(num))
       return undefined;
     // Validate it's a valid UseInRecipeType (0, 1, or 2)
     if (num >= 0 && num <= 2) {
@@ -518,7 +518,7 @@ class FoodSynchronizer {
     return codes;
   }
 
-  private parsePortionSizeMethods(methodsString: string): PortionSizeMethod[] {
+  private parsePortionSizeMethods(_methodsString: string): PortionSizeMethod[] {
     // This would need more complex parsing based on the format
     return [];
   }

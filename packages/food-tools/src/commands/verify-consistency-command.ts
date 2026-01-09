@@ -8,13 +8,13 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+import { parse as parseCsv } from 'csv-parse/sync';
 import { ApiClientV4, getApiClientV4EnvOptions } from '@intake24/api-client-v4';
 import { logger as mainLogger } from '@intake24/common-backend';
 import type { Logger } from '@intake24/common-backend';
 import type { Environment } from '@intake24/common/types';
 import type { FoodEntry } from '@intake24/common/types/http/admin/foods';
 import { Database, databaseConfig } from '@intake24/db';
-import { parse as parseCsv } from 'csv-parse/sync';
 
 type GlobalFood = FoodEntry;
 
@@ -23,13 +23,13 @@ interface LocalFood {
   name: string;
 }
 
-interface FoodResponse {
+interface _FoodResponse {
   data: {
     foods: GlobalFood[];
   };
 }
 
-interface FoodLocalResponse {
+interface _FoodLocalResponse {
   data: LocalFood;
 }
 
@@ -476,7 +476,7 @@ class ConsistencyChecker {
         }),
       );
 
-      batchResults.forEach((result, index) => {
+      batchResults.forEach((result, _index) => {
         if (result.status === 'fulfilled' && result.value) {
           dbFoods.push(result.value);
         }
@@ -552,7 +552,7 @@ class ConsistencyChecker {
       if (csvFood.action === '1') {
         continue;
       }
-      
+
       const dbFood = dbFoodMap.get(csvFood.intake24Code);
       if (!dbFood)
         continue;
@@ -613,7 +613,7 @@ class ConsistencyChecker {
       if (csvFood.action === '1') {
         continue;
       }
-      
+
       const dbFood = dbFoodMap.get(csvFood.intake24Code);
       if (!dbFood)
         continue;
@@ -642,7 +642,7 @@ class ConsistencyChecker {
   /**
    * Check for foods that exist in CSV but not in database
    */
-  private async checkMissingFoods(csvFoods: FoodRow[], dbFoods: DatabaseFood[], localeId: string): Promise<MissingFood[]> {
+  private async checkMissingFoods(csvFoods: FoodRow[], dbFoods: DatabaseFood[], _localeId: string): Promise<MissingFood[]> {
     const missing: MissingFood[] = [];
     const dbFoodCodes = new Set(dbFoods.map(f => f.code));
 
@@ -651,7 +651,7 @@ class ConsistencyChecker {
       if (csvFood.action === '1') {
         continue;
       }
-      
+
       if (!dbFoodCodes.has(csvFood.intake24Code)) {
         let reason: 'not_in_global' | 'not_in_locale' | 'disabled' = 'not_in_global';
 
@@ -699,19 +699,19 @@ class ConsistencyChecker {
    */
   private async checkNutrientConsistency(csvFoods: FoodRow[], dbFoods: DatabaseFood[], localeId: string): Promise<NutrientDiscrepancy[]> {
     const discrepancies: NutrientDiscrepancy[] = [];
-    
+
     if (!this.database) {
       this.logger.warn('Database connection not available for nutrient consistency check');
       return discrepancies;
     }
 
     const dbFoodMap = new Map(dbFoods.map(f => [f.code, f]));
-    
+
     // Get all food codes that have nutrient table data in CSV (excluding action "1")
-    const foodsWithNutrients = csvFoods.filter(f => 
-      f.action !== '1' && f.foodCompositionTable && f.foodCompositionRecordId && dbFoodMap.has(f.intake24Code)
+    const foodsWithNutrients = csvFoods.filter(f =>
+      f.action !== '1' && f.foodCompositionTable && f.foodCompositionRecordId && dbFoodMap.has(f.intake24Code),
     );
-    
+
     if (foodsWithNutrients.length === 0) {
       return discrepancies;
     }
@@ -720,7 +720,7 @@ class ConsistencyChecker {
       // Build query to get nutrient mappings for all foods at once
       const foodCodes = foodsWithNutrients.map(f => f.intake24Code);
       const placeholders = foodCodes.map((_, index) => `$${index + 2}`).join(', ');
-      
+
       const query = `
         SELECT 
           fl.food_code,
@@ -737,17 +737,17 @@ class ConsistencyChecker {
         WHERE fl.locale_id = $1 
         AND fl.food_code IN (${placeholders})
       `;
-      
+
       const params = [localeId, ...foodCodes];
       const result = await this.database.foods.query(query, { bind: params }) as any;
-      
+
       // Create a map of food code to nutrient mappings
       const nutrientMap = new Map<string, Array<{
         table_id: string | null;
         record_id: string | null;
         table_description: string | null;
       }>>();
-      
+
       if (result && result[0]) {
         for (const row of result[0]) {
           const mappings = nutrientMap.get(row.food_code) || [];
@@ -759,14 +759,15 @@ class ConsistencyChecker {
           nutrientMap.set(row.food_code, mappings);
         }
       }
-      
+
       // Check each food for nutrient consistency
       for (const csvFood of foodsWithNutrients) {
         const dbFood = dbFoodMap.get(csvFood.intake24Code);
-        if (!dbFood) continue;
-        
+        if (!dbFood)
+          continue;
+
         const mappings = nutrientMap.get(csvFood.intake24Code) || [];
-        
+
         if (mappings.length === 0 || (mappings.length === 1 && !mappings[0].table_id)) {
           // No nutrient mapping found
           discrepancies.push({
@@ -780,7 +781,8 @@ class ConsistencyChecker {
             issue: 'missing_mapping',
             severity: 'critical',
           });
-        } else if (mappings.length > 1 && mappings.filter(m => m.table_id).length > 1) {
+        }
+        else if (mappings.length > 1 && mappings.filter(m => m.table_id).length > 1) {
           // Multiple mappings found (shouldn't happen normally)
           discrepancies.push({
             foodCode: csvFood.intake24Code,
@@ -793,21 +795,22 @@ class ConsistencyChecker {
             issue: 'multiple_mappings',
             severity: 'warning',
           });
-        } else {
+        }
+        else {
           // Check if table and record match
           const mapping = mappings.find(m => m.table_id) || mappings[0];
-          
+
           // Normalize table names for comparison
           const normalizedCsvTable = this.normalizeNutrientTableName(csvFood.foodCompositionTable);
           const normalizedDbTable = this.normalizeNutrientTableName(mapping.table_id || '');
-          
+
           // Debug logging for DCD for Japan issue
           if (csvFood.foodCompositionTable === 'DCD for Japan' || mapping.table_id === 'DCDJapan') {
             this.logger.debug(`Nutrient table comparison for ${csvFood.intake24Code}:`);
             this.logger.debug(`  CSV table: "${csvFood.foodCompositionTable}" -> normalized: "${normalizedCsvTable}"`);
             this.logger.debug(`  DB table: "${mapping.table_id}" -> normalized: "${normalizedDbTable}"`);
           }
-          
+
           if (normalizedCsvTable !== normalizedDbTable) {
             discrepancies.push({
               foodCode: csvFood.intake24Code,
@@ -820,14 +823,15 @@ class ConsistencyChecker {
               issue: 'table_mismatch',
               severity: 'critical',
             });
-          } else if (mapping.record_id !== csvFood.foodCompositionRecordId) {
+          }
+          else if (mapping.record_id !== csvFood.foodCompositionRecordId) {
             // Table matches but record ID is different
             // Need to check if the CSV record actually exists in the nutrient table
             const recordExists = await this.checkNutrientRecordExists(
               csvFood.foodCompositionTable,
-              csvFood.foodCompositionRecordId
+              csvFood.foodCompositionRecordId,
             );
-            
+
             if (!recordExists) {
               discrepancies.push({
                 foodCode: csvFood.intake24Code,
@@ -844,12 +848,13 @@ class ConsistencyChecker {
           }
         }
       }
-      
+
       this.logger.info(`🔬 Checked nutrient consistency for ${foodsWithNutrients.length} foods`);
-    } catch (error) {
+    }
+    catch (error) {
       this.logger.error(`Failed to check nutrient consistency: ${error instanceof Error ? error.message : String(error)}`);
     }
-    
+
     return discrepancies;
   }
 
@@ -860,7 +865,7 @@ class ConsistencyChecker {
     if (!this.database) {
       return false;
     }
-    
+
     try {
       const query = `
         SELECT COUNT(*) as count
@@ -868,10 +873,11 @@ class ConsistencyChecker {
         WHERE nutrient_table_id = $1
         AND nutrient_table_record_id = $2
       `;
-      
+
       const result = await this.database.foods.query(query, { bind: [tableId, recordId] }) as any;
       return result?.[0]?.[0]?.count > 0;
-    } catch (error) {
+    }
+    catch (error) {
       this.logger.debug(`Failed to check nutrient record existence: ${error instanceof Error ? error.message : String(error)}`);
       return false;
     }
@@ -882,19 +888,19 @@ class ConsistencyChecker {
    */
   private async checkPortionSizeConsistency(csvFoods: FoodRow[], dbFoods: DatabaseFood[], localeId: string): Promise<PortionSizeDiscrepancy[]> {
     const discrepancies: PortionSizeDiscrepancy[] = [];
-    
+
     if (!this.database) {
       this.logger.warn('Database connection not available for portion size consistency check');
       return discrepancies;
     }
 
     const dbFoodMap = new Map(dbFoods.map(f => [f.code, f]));
-    
+
     // Get all food codes that have portion size methods in CSV (excluding action "1")
-    const foodsWithPortionSizes = csvFoods.filter(f => 
-      f.action !== '1' && f.portionSizeEstimationMethods && f.portionSizeEstimationMethods.trim() && dbFoodMap.has(f.intake24Code)
+    const foodsWithPortionSizes = csvFoods.filter(f =>
+      f.action !== '1' && f.portionSizeEstimationMethods && f.portionSizeEstimationMethods.trim() && dbFoodMap.has(f.intake24Code),
     );
-    
+
     if (foodsWithPortionSizes.length === 0) {
       return discrepancies;
     }
@@ -903,7 +909,7 @@ class ConsistencyChecker {
       // Build query to get portion size methods for all foods at once
       const foodCodes = foodsWithPortionSizes.map(f => f.intake24Code);
       const placeholders = foodCodes.map((_, index) => `$${index + 2}`).join(', ');
-      
+
       const query = `
         SELECT 
           fl.food_code,
@@ -921,10 +927,10 @@ class ConsistencyChecker {
         AND fl.food_code IN (${placeholders})
         ORDER BY fl.food_code, fpsm.order_by
       `;
-      
+
       const params = [localeId, ...foodCodes];
       const result = await this.database.foods.query(query, { bind: params }) as any;
-      
+
       // Create a map of food code to portion size methods
       const portionSizeMap = new Map<string, Array<{
         method: string;
@@ -934,16 +940,16 @@ class ConsistencyChecker {
         parameters: any;
         useForRecipes: boolean;
       }>>();
-      
+
       if (result && result[0]) {
         for (const row of result[0]) {
           const methods = portionSizeMap.get(row.food_code) || [];
           if (row.method) {
             methods.push({
               method: row.method,
-              conversion: parseFloat(row.conversion_factor),
+              conversion: Number.parseFloat(row.conversion_factor),
               description: row.description,
-              order: parseInt(row.order_by),
+              order: Number.parseInt(row.order_by),
               parameters: typeof row.parameters === 'string' ? JSON.parse(row.parameters) : row.parameters,
               useForRecipes: row.use_for_recipes,
             });
@@ -951,21 +957,22 @@ class ConsistencyChecker {
           portionSizeMap.set(row.food_code, methods);
         }
       }
-      
+
       // Check each food for portion size consistency
       for (const csvFood of foodsWithPortionSizes) {
         const dbFood = dbFoodMap.get(csvFood.intake24Code);
-        if (!dbFood) continue;
-        
+        if (!dbFood)
+          continue;
+
         // Parse CSV portion size methods
         const csvMethods = this.parsePortionSizeMethods(csvFood.portionSizeEstimationMethods);
         const dbMethods = portionSizeMap.get(csvFood.intake24Code) || [];
-        
+
         // Compare methods
         if (csvMethods.length === 0 && dbMethods.length === 0) {
           continue; // Both empty, no discrepancy
         }
-        
+
         if (dbMethods.length === 0 && csvMethods.length > 0) {
           // No methods in database
           discrepancies.push({
@@ -977,14 +984,15 @@ class ConsistencyChecker {
             issue: 'missing_methods',
             severity: 'critical',
           });
-        } else {
+        }
+        else {
           // Compare individual methods
-          const csvMethodTypes = new Set(csvMethods.map(m => m.method));
-          const dbMethodTypes = new Set(dbMethods.map(m => m.method));
-          
+          const _csvMethodTypes = new Set(csvMethods.map(m => m.method));
+          const _dbMethodTypes = new Set(dbMethods.map(m => m.method));
+
           // Use order-independent comparison for all method checks
           const comparisonResult = this.comparePortionMethods(csvMethods, dbMethods);
-          
+
           if (!comparisonResult.match) {
             discrepancies.push({
               foodCode: csvFood.intake24Code,
@@ -1003,33 +1011,36 @@ class ConsistencyChecker {
           }
         }
       }
-      
+
       this.logger.info(`📏 Checked portion size consistency for ${foodsWithPortionSizes.length} foods`);
-    } catch (error) {
+    }
+    catch (error) {
       this.logger.error(`Failed to check portion size consistency: ${error instanceof Error ? error.message : String(error)}`);
     }
-    
+
     return discrepancies;
   }
 
   /**
    * Parse portion size methods from CSV string
    */
-  private parsePortionSizeMethods(methodString: string): Array<{method: string; conversion: number; parameters: Record<string, any>}> {
+  private parsePortionSizeMethods(methodString: string): Array<{ method: string; conversion: number; parameters: Record<string, any> }> {
     if (!methodString || !methodString.trim()) {
       return [];
     }
 
     const normalized = methodString.replace(/\r\n/g, '\n').trim();
     const segments: string[] = [];
-    const segmentRegex = /Method:[\s\S]*?(?=(?:\n\s*Method:)|$)/g;
+    // eslint-disable-next-line regexp/no-super-linear-backtracking -- complex regex for parsing method segments
+    const segmentRegex = /Method:[\s\S]*?(?=\n\s*Method:|$)/g;
     let match: RegExpExecArray | null;
 
+    // eslint-disable-next-line no-cond-assign -- standard regex exec pattern
     while ((match = segmentRegex.exec(normalized)) !== null) {
       segments.push(match[0].trim());
     }
 
-    const methods: Array<{method: string; conversion: number; parameters: Record<string, any>}> = [];
+    const methods: Array<{ method: string; conversion: number; parameters: Record<string, any> }> = [];
 
     for (const segment of segments) {
       const tokens = segment
@@ -1064,9 +1075,11 @@ class ConsistencyChecker {
               break;
             if (/^[+-]?\d+(?:\.\d+)?$/.test(value)) {
               parameters[key] = Number.parseFloat(value);
-            } else if (value === 'true' || value === 'false') {
+            }
+            else if (value === 'true' || value === 'false') {
               parameters[key] = value === 'true';
-            } else {
+            }
+            else {
               parameters[key] = value;
             }
           }
@@ -1089,73 +1102,72 @@ class ConsistencyChecker {
    * Compare portion size methods in an order-independent way
    */
   private comparePortionMethods(
-    csvMethods: Array<{method: string; conversion: number; parameters: Record<string, any>}>,
-    dbMethods: Array<{method: string; conversion: number; description: string; order: number; parameters?: any}>
-  ): {match: boolean; issue?: 'missing_methods' | 'method_mismatch' | 'conversion_mismatch' | 'extra_methods'; severity?: 'critical' | 'warning' | 'info'} {
-    
+    csvMethods: Array<{ method: string; conversion: number; parameters: Record<string, any> }>,
+    dbMethods: Array<{ method: string; conversion: number; description: string; order: number; parameters?: any }>,
+  ): { match: boolean; issue?: 'missing_methods' | 'method_mismatch' | 'conversion_mismatch' | 'extra_methods'; severity?: 'critical' | 'warning' | 'info' } {
     // Group methods by type for order-independent comparison
     const csvMethodGroups = this.groupMethodsByType(csvMethods);
     const dbMethodGroups = this.groupMethodsByType(dbMethods);
-    
+
     // Check if all method types are present
     const csvTypes = new Set(Object.keys(csvMethodGroups));
     const dbTypes = new Set(Object.keys(dbMethodGroups));
-    
+
     const missingTypes = [...csvTypes].filter(t => !dbTypes.has(t));
     const extraTypes = [...dbTypes].filter(t => !csvTypes.has(t));
-    
+
     if (missingTypes.length > 0 || extraTypes.length > 0) {
       return {
         match: false,
         issue: 'method_mismatch',
-        severity: missingTypes.length > 0 ? 'critical' : 'warning'
+        severity: missingTypes.length > 0 ? 'critical' : 'warning',
       };
     }
-    
+
     // For each method type, check if conversions match (order-independent)
     for (const [methodType, csvMethodList] of Object.entries(csvMethodGroups)) {
       const dbMethodList = dbMethodGroups[methodType] || [];
-      
+
       // Sort by conversion factor for comparison
       const csvConversions = csvMethodList.map(m => m.conversion).sort((a, b) => a - b);
       const dbConversions = dbMethodList.map(m => m.conversion).sort((a, b) => a - b);
-      
+
       if (!this.areConversionListsEquivalent(csvConversions, dbConversions)) {
         return {
           match: false,
           issue: 'conversion_mismatch',
-          severity: 'warning'
+          severity: 'warning',
         };
       }
-      
+
       // For guide-image and as-served methods, check parameters if available
       if (methodType === 'guide-image' || methodType === 'as-served') {
         if (!this.areParametersConsistent(csvMethodList, dbMethodList)) {
           return {
             match: false,
             issue: 'method_mismatch',
-            severity: 'info'
+            severity: 'info',
           };
         }
       }
     }
-    
-    return {match: true};
+
+    return { match: true };
   }
 
   /**
    * Group methods by their type
    */
-  private groupMethodsByType(methods: Array<{method: string; [key: string]: any}>): Record<string, any[]> {
+  private groupMethodsByType(methods: Array<{ method: string; [key: string]: any }>): Record<string, any[]> {
     const groups: Record<string, any[]> = {};
-    
+
     for (const method of methods) {
       if (!groups[method.method]) {
         groups[method.method] = [];
       }
       groups[method.method].push(method);
     }
-    
+
     return groups;
   }
 
@@ -1163,18 +1175,19 @@ class ConsistencyChecker {
    * Check if two lists of conversion factors are equivalent
    */
   private areConversionListsEquivalent(list1: number[], list2: number[]): boolean {
-    if (list1.length !== list2.length) return false;
-    
+    if (list1.length !== list2.length)
+      return false;
+
     // Use a more lenient tolerance for floating point comparison
     const TOLERANCE = 0.05; // 5% tolerance
-    
+
     for (let i = 0; i < list1.length; i++) {
       const relativeError = Math.abs(list1[i] - list2[i]) / Math.max(list1[i], list2[i]);
       if (relativeError > TOLERANCE && Math.abs(list1[i] - list2[i]) > 0.01) {
         return false;
       }
     }
-    
+
     return true;
   }
 
@@ -1192,34 +1205,35 @@ class ConsistencyChecker {
    * Handles common naming variations between CSV and database
    */
   private normalizeNutrientTableName(tableName: string): string {
-    if (!tableName) return '';
-    
+    if (!tableName)
+      return '';
+
     // Common mappings - includes both directions for consistency
     const mappings: Record<string, string> = {
       'DCD for Japan': 'DCDJapan',
-      'DCD_for_Japan': 'DCDJapan',
-      'DCDforJapan': 'DCDJapan',
-      'DCDJapan': 'DCDJapan', // Identity mapping for DB values
-      'McCance': 'MCCANCE',
+      DCD_for_Japan: 'DCDJapan',
+      DCDforJapan: 'DCDJapan',
+      DCDJapan: 'DCDJapan', // Identity mapping for DB values
+      McCance: 'MCCANCE',
       'McCance and Widdowson': 'MCCANCE',
-      'MCCANCE': 'MCCANCE', // Identity mapping
+      MCCANCE: 'MCCANCE', // Identity mapping
       'USDA SR': 'USDA_SR',
       'USDA-SR': 'USDA_SR',
-      'USDA_SR': 'USDA_SR', // Identity mapping
+      USDA_SR: 'USDA_SR', // Identity mapping
     };
-    
+
     // Check if there's a direct mapping
     if (mappings[tableName]) {
       return mappings[tableName];
     }
-    
+
     // Otherwise, normalize by removing spaces and special characters
     return tableName
       .replace(/\s+for\s+/gi, '') // Remove "for" with spaces
       .replace(/\s+and\s+/gi, '_') // Replace "and" with underscore
       .replace(/\s+/g, '_') // Replace remaining spaces with underscores
-      .replace(/[^\w]/g, ''); // Remove non-word characters
-      // Note: Removed toUpperCase() to match database casing
+      .replace(/\W/g, ''); // Remove non-word characters
+    // Note: Removed toUpperCase() to match database casing
   }
 
   /**
@@ -1288,7 +1302,7 @@ class ConsistencyChecker {
             text: typeof row.text === 'string' ? JSON.parse(row.text) : row.text,
             linkAsMain: row.link_as_main,
             multiple: row.multiple,
-            order: parseInt(row.order_by),
+            order: Number.parseInt(row.order_by),
           });
           associatedFoodMap.set(row.food_code, associations);
         }
@@ -1297,7 +1311,8 @@ class ConsistencyChecker {
       // Check each food for associated food consistency
       for (const csvFood of foodsWithAssociations) {
         const dbFood = dbFoodMap.get(csvFood.intake24Code);
-        if (!dbFood) continue;
+        if (!dbFood)
+          continue;
 
         // Parse CSV associated foods
         const csvAssociations = this.parseAssociatedFoods(csvFood.associatedFood);
@@ -1319,11 +1334,12 @@ class ConsistencyChecker {
             issue: 'missing_associations',
             severity: 'critical',
           });
-        } else {
+        }
+        else {
           // Compare individual associations
           const csvCodes = new Set(csvAssociations.map(a => a.code));
           const dbCodes = new Set(
-            dbAssociations.map(a => a.associatedFoodCode || a.associatedCategoryCode || '').filter(Boolean)
+            dbAssociations.map(a => a.associatedFoodCode || a.associatedCategoryCode || '').filter(Boolean),
           );
 
           // Check for code mismatches
@@ -1345,7 +1361,8 @@ class ConsistencyChecker {
       }
 
       this.logger.info(`🔗 Checked associated food consistency for ${foodsWithAssociations.length} foods`);
-    } catch (error) {
+    }
+    catch (error) {
       this.logger.error(`Failed to check associated food consistency: ${error instanceof Error ? error.message : String(error)}`);
     }
 
@@ -1355,12 +1372,12 @@ class ConsistencyChecker {
   /**
    * Parse associated foods from CSV string
    */
-  private parseAssociatedFoods(associatedString: string): Array<{code: string; text: string; type: 'food' | 'category'}> {
+  private parseAssociatedFoods(associatedString: string): Array<{ code: string; text: string; type: 'food' | 'category' }> {
     if (!associatedString || !associatedString.trim()) {
       return [];
     }
 
-    const associations: Array<{code: string; text: string; type: 'food' | 'category'}> = [];
+    const associations: Array<{ code: string; text: string; type: 'food' | 'category' }> = [];
 
     const normalized = associatedString.replace(/\r\n/g, '\n');
     const parts: string[] = [];
@@ -1397,7 +1414,7 @@ class ConsistencyChecker {
       // 2. COND({jp: ...}) - category code with localized text
       // 3. Simple codes without text
 
-      const foodMatch = part.match(/^([a-zA-Z0-9_]+)\((\{.+\})\)$/);
+      const foodMatch = part.match(/^(\w+)\((\{.+\})\)$/);
       if (foodMatch) {
         const code = foodMatch[1];
         const text = foodMatch[2];
@@ -1408,7 +1425,8 @@ class ConsistencyChecker {
         const type = /^[A-Z]+$/.test(code) ? 'category' : 'food';
 
         associations.push({ code, text, type });
-      } else if (part) {
+      }
+      else if (part) {
         // Simple code without text
         const type = /^[A-Z]+$/.test(part) ? 'category' : 'food';
         associations.push({ code: part, text: '', type });
@@ -1430,9 +1448,10 @@ class ConsistencyChecker {
       if (csvFood.action === '1') {
         continue;
       }
-      
+
       const dbFood = dbFoodMap.get(csvFood.intake24Code);
-      if (!dbFood) continue;
+      if (!dbFood)
+        continue;
 
       const attributes: AttributeDiscrepancy['attributes'] = {};
       let issueCount = 0;
@@ -1479,9 +1498,10 @@ class ConsistencyChecker {
 
       // Only add to discrepancies if there are actual issues
       if (issueCount > 0) {
-        const severity: 'critical' | 'warning' | 'info' = 
-          issueCount >= 3 ? 'critical' : 
-          issueCount >= 2 ? 'warning' : 'info';
+        const severity: 'critical' | 'warning' | 'info' =
+          issueCount >= 3
+            ? 'critical' :
+            issueCount >= 2 ? 'warning' : 'info';
 
         discrepancies.push({
           foodCode: csvFood.intake24Code,
@@ -1501,7 +1521,8 @@ class ConsistencyChecker {
    * Parse boolean value from CSV string
    */
   private parseBoolean(value: string): boolean {
-    if (!value || value.trim() === '') return false;
+    if (!value || value.trim() === '')
+      return false;
     return value.toUpperCase() === 'TRUE';
   }
 
@@ -1509,9 +1530,10 @@ class ConsistencyChecker {
    * Parse number value from CSV string
    */
   private parseNumber(value: string): number | null {
-    if (!value || value.trim() === '') return null;
-    const num = parseFloat(value);
-    return isNaN(num) ? null : num;
+    if (!value || value.trim() === '')
+      return null;
+    const num = Number.parseFloat(value);
+    return Number.isNaN(num) ? null : num;
   }
 
   /**
@@ -1869,8 +1891,8 @@ class ConsistencyChecker {
       markdown += `|-----------|------|--------|------------------|------------------|\n`;
       discrepancies.associatedFoods.forEach((d) => {
         const csvAssocList = d.csvAssociatedFoods.map(a => `${a.code}(${a.type})`).join(', ');
-        const dbAssocList = d.dbAssociatedFoods.map(a => 
-          `${a.associatedFoodCode || a.associatedCategoryCode || 'N/A'}(${a.associatedFoodCode ? 'food' : 'category'})`
+        const dbAssocList = d.dbAssociatedFoods.map(a =>
+          `${a.associatedFoodCode || a.associatedCategoryCode || 'N/A'}(${a.associatedFoodCode ? 'food' : 'category'})`,
         ).join(', ');
         markdown += `| ${d.foodCode} | ${d.englishName} | ${d.issue} | ${csvAssocList} | ${dbAssocList || 'None'} |\n`;
       });
@@ -1882,17 +1904,17 @@ class ConsistencyChecker {
       markdown += `| Food Code | Name | Ready Meal | Same As Before | Reasonable Amount | Use In Recipes | Severity |\n`;
       markdown += `|-----------|------|------------|----------------|-------------------|----------------|----------|\n`;
       discrepancies.attributes.forEach((d) => {
-        const readyMeal = d.attributes.readyMealOption 
-          ? `CSV: ${d.attributes.readyMealOption.csv}, DB: ${d.attributes.readyMealOption.db}` 
+        const readyMeal = d.attributes.readyMealOption
+          ? `CSV: ${d.attributes.readyMealOption.csv}, DB: ${d.attributes.readyMealOption.db}`
           : 'Match';
-        const sameAsBefore = d.attributes.sameAsBeforeOption 
-          ? `CSV: ${d.attributes.sameAsBeforeOption.csv}, DB: ${d.attributes.sameAsBeforeOption.db}` 
+        const sameAsBefore = d.attributes.sameAsBeforeOption
+          ? `CSV: ${d.attributes.sameAsBeforeOption.csv}, DB: ${d.attributes.sameAsBeforeOption.db}`
           : 'Match';
-        const reasonableAmount = d.attributes.reasonableAmount 
-          ? `CSV: ${d.attributes.reasonableAmount.csv}, DB: ${d.attributes.reasonableAmount.db}` 
+        const reasonableAmount = d.attributes.reasonableAmount
+          ? `CSV: ${d.attributes.reasonableAmount.csv}, DB: ${d.attributes.reasonableAmount.db}`
           : 'Match';
-        const useInRecipes = d.attributes.useInRecipes 
-          ? `CSV: ${d.attributes.useInRecipes.csv}, DB: ${d.attributes.useInRecipes.db}` 
+        const useInRecipes = d.attributes.useInRecipes
+          ? `CSV: ${d.attributes.useInRecipes.csv}, DB: ${d.attributes.useInRecipes.db}`
           : 'Match';
         markdown += `| ${d.foodCode} | ${d.englishName} | ${readyMeal} | ${sameAsBefore} | ${reasonableAmount} | ${useInRecipes} | ${d.severity} |\n`;
       });
@@ -1943,8 +1965,8 @@ class ConsistencyChecker {
     // Add associated food discrepancies
     report.discrepancies.associatedFoods.forEach((d) => {
       const csvAssociations = d.csvAssociatedFoods.map(a => `${a.code}(${a.type})`).join('; ');
-      const dbAssociations = d.dbAssociatedFoods.map(a => 
-        `${a.associatedFoodCode || a.associatedCategoryCode || 'N/A'}(${a.associatedFoodCode ? 'food' : 'category'})`
+      const dbAssociations = d.dbAssociatedFoods.map(a =>
+        `${a.associatedFoodCode || a.associatedCategoryCode || 'N/A'}(${a.associatedFoodCode ? 'food' : 'category'})`,
       ).join('; ');
       lines.push(`${d.foodCode},AssociatedFood,${d.issue},"${csvAssociations}","${dbAssociations}",${d.severity}`);
     });

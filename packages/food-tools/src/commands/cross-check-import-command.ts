@@ -85,7 +85,7 @@ export default async function crossCheckImportCommand(options: CrossCheckOptions
 
     // Step 5: Generate comprehensive report
     logger.info('📄 Generating cross-check report...');
-    const report = generateCrossCheckReport(crossCheckResult, validationReport);
+    const _report = generateCrossCheckReport(crossCheckResult, validationReport);
 
     // Step 6: Output results
     if (options.outputPath) {
@@ -162,7 +162,7 @@ function parseSimpleCsv(content: string): string[][] {
 /**
  * Analyze CSV file structure and content
  */
-async function analyzeCsvFile(csvPath: string, logger: any) {
+async function analyzeCsvFile(csvPath: string, _logger: any) {
   const resolvedPath = resolve(csvPath);
   const content = readFileSync(resolvedPath, 'utf-8');
   const arrayData = parseSimpleCsv(content);
@@ -343,7 +343,7 @@ async function performCrossCheck(
 async function checkFoodExistence(foodCodes: string[], localeId: string, logger: any) {
   try {
     const apiOptions = getApiClientV4EnvOptions();
-    const apiClient = new ApiClientV4(logger, apiOptions);
+    const _apiClient = new ApiClientV4(logger, apiOptions);
 
     const existingFoods: string[] = [];
     const missingFoods: string[] = [];
@@ -370,7 +370,7 @@ async function checkFoodExistence(foodCodes: string[], localeId: string, logger:
             missingFoods.push(code);
           }
         }
-        catch (error) {
+        catch {
           missingFoods.push(code);
         }
       }

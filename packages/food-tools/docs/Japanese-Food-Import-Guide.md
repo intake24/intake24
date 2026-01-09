@@ -288,6 +288,7 @@ pnpm cli import-foods \
 ```
 
 **What happens:**
+
 - Action 1 foods are removed from the enabled foods list
 - Foods won't appear in surveys for respondents
 - Foods still appear in admin UI tree view (with "0 locales" indicator)
@@ -306,6 +307,7 @@ pnpm cli import-foods \
 ```
 
 **What happens:**
+
 - Action 1 foods are removed from the enabled foods list
 - Local food records are deleted from the database
 - Foods won't appear in surveys
@@ -341,6 +343,7 @@ pnpm cli convert-report \
 ```
 
 **Deletion Report Includes:**
+
 - Number of local foods deleted
 - List of deleted food codes and names
 - Foods that were already deleted (404 errors)

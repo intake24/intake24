@@ -1,5 +1,5 @@
-import { copyFile, mkdir, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { constants as fsConstants } from 'node:fs';
+import { copyFile, mkdir, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import XLSX from 'xlsx';
@@ -349,7 +349,7 @@ async function buildAsServedManifestFromFolders(
         if (!file.isFile())
           continue;
 
-        const match = file.name.match(/_(\d+)_([0-9.]+)(?:g)?\.(jpe?g|png)$/i);
+        const match = file.name.match(/_(\d+)_([0-9.]+)g?\.(jpe?g|png)$/i);
 
         if (!match) {
           logger.warn(
@@ -486,7 +486,7 @@ async function writeAsServedJson(
   const portionSizeDir = path.join(outputPath, 'portion-size');
   await ensureDirectory(portionSizeDir);
 
-  const payload = manifests.map(manifest => {
+  const payload = manifests.map((manifest) => {
     const images = manifest.images.map(image => ({
       imagePath: path.posix.join('as-served', manifest.id, image.fileName),
       imageKeywords: [] as string[],
@@ -531,7 +531,7 @@ export default async function generateAsServedPackageCommand(
 ): Promise<void> {
   const mode = options.mode ?? (options.manifestPath ? 'manifest' : 'folders');
   let manifests: AsServedSetManifest[] = [];
-  let manifestPath = options.manifestPath ? path.resolve(options.manifestPath) : undefined;
+  const manifestPath = options.manifestPath ? path.resolve(options.manifestPath) : undefined;
 
   if (mode === 'manifest') {
     if (!manifestPath)

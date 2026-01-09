@@ -172,7 +172,7 @@ function loadCSVReport(filePath: string): FoodImportReport {
     const lines = content.split('\n').filter(line => line.trim());
 
     // Parse CSV headers
-    const headers = lines[0].split(',').map(cell => cell.replace(/"/g, '').trim());
+    const _headers = lines[0].split(',').map(cell => cell.replace(/"/g, '').trim());
 
     // Find summary section
     const summaryIndex = lines.findIndex(line => line.includes('Summary'));

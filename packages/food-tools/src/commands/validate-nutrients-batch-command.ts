@@ -174,7 +174,7 @@ export default async function validateNutrientsBatchCommand(
 
     // Validate each unique nutrient mapping
     let processed = 0;
-    for (const [key, mapping] of uniqueNutrientMappings) {
+    for (const [_key, mapping] of uniqueNutrientMappings) {
       processed++;
       logger.info(`Validating ${processed}/${uniqueNutrientMappings.size}: ${mapping.table}/${mapping.recordId}`);
 

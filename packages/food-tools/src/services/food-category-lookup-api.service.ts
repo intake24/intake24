@@ -73,7 +73,7 @@ export class FoodCategoryLookupApiService {
 
         // Log retry attempt for transient errors
         if (attempt < maxRetries) {
-          const delayMs = Math.pow(2, attempt - 1) * RETRY_BASE_DELAY_MS; // 200ms, 400ms, 800ms
+          const delayMs = 2 ** (attempt - 1) * RETRY_BASE_DELAY_MS; // 200ms, 400ms, 800ms
           console.warn(`Lookup failed for code ${code} (attempt ${attempt}/${maxRetries}), retrying in ${delayMs}ms...`);
           await delay(delayMs);
         }
@@ -136,7 +136,7 @@ export class FoodCategoryLookupApiService {
         }
 
         if (attempt < maxRetries) {
-          const delayMs = Math.pow(2, attempt - 1) * RETRY_BASE_DELAY_MS;
+          const delayMs = 2 ** (attempt - 1) * RETRY_BASE_DELAY_MS;
           console.warn(`Batch lookup failed (attempt ${attempt}/${maxRetries}), retrying in ${delayMs}ms...`);
           await delay(delayMs);
         }
