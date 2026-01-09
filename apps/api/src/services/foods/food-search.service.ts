@@ -121,7 +121,12 @@ Based on the query, primary matches and corresponding word distances, generate a
       return text.trim();
     }
     catch (error) {
-      logger.error({ error });
+      if (error instanceof Error) {
+        logger.error(`FoodSearchService error: ${error.message}`);
+      }
+      else {
+        logger.error(`FoodSearchService error: ${JSON.stringify(error)}`);
+      }
       return '';
     }
   };
