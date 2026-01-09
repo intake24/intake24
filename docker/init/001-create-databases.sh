@@ -22,15 +22,30 @@ createdb -U $POSTGRES_USER --owner=$DB_DEV_FOODS_USERNAME $DB_DEV_FOODS_DATABASE
 psql -U $POSTGRES_USER -d $DB_DEV_FOODS_DATABASE -c "create extension if not exists \"uuid-ossp\";"
 psql -U $POSTGRES_USER -d $DB_DEV_FOODS_DATABASE -c "create extension if not exists \"btree_gist\";"
 
-echo "Downloading foods database snapshot..."
-wget -O /tmp/foods_snapshot.pgcustom https://storage.googleapis.com/intake24/assets/foods_snapshot.pgcustom
+download_snapshot() {
+    local url=$1
+    local output=$2
+    local count=0
+    echo "Downloading ${output}..."
+    until wget -c -O "$output" "$url"
+    do
+        count=$((count+1))
+        if [ $count -ge 3 ]; then
+            echo "Failed to download snapshot from $url after 3 attempts."
+            exit 1
+        fi
+        echo "Retrying download in 3 seconds..."
+        sleep 3
+    done
+}
+
+download_snapshot "https://storage.googleapis.com/intake24/assets/foods_snapshot.pgcustom" "/tmp/foods_snapshot.pgcustom"
 echo "Restoring foods database from snapshot..."
 pg_restore -n public --no-owner --no-acl --role=$DB_DEV_FOODS_USERNAME --dbname $DB_DEV_FOODS_DATABASE /tmp/foods_snapshot.pgcustom
 
-echo "Downloading system database snapshot..."
-wget -O /tmp/system_snapshot.sql https://storage.googleapis.com/intake24/assets/system_snapshot.sql
+download_snapshot "https://storage.googleapis.com/intake24/assets/system_snapshot.pgcustom" "/tmp/system_snapshot.pgcustom"
 echo "Creating system database schema..."
-psql -U $POSTGRES_USER -d $DB_DEV_SYSTEM_DATABASE -f /tmp/system_snapshot.sql
+pg_restore -n public --no-owner --no-acl --role=$DB_DEV_SYSTEM_USERNAME --dbname $DB_DEV_SYSTEM_DATABASE /tmp/system_snapshot.pgcustom
 
 # TEST environment
 
@@ -50,7 +65,7 @@ if [ "$DB_TEST_SYSTEM_USERNAME" ] && [ "$DB_TEST_SYSTEM_DATABASE" ]; then
     echo "Creating test system database..."
     createdb -U $POSTGRES_USER --owner=$DB_TEST_SYSTEM_USERNAME $DB_TEST_SYSTEM_DATABASE;
     echo "Creating test system database schema..."
-    psql -U $POSTGRES_USER -d $DB_TEST_SYSTEM_DATABASE -f tmp/system_snapshot.sql
+    pg_restore -n public --no-owner --no-acl --role=$DB_TEST_SYSTEM_USERNAME --dbname $DB_TEST_SYSTEM_DATABASE /tmp/system_snapshot.pgcustom
 fi
 
 # Foods DB
