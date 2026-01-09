@@ -28,7 +28,7 @@ type InitAssetsArgs = {
 };
 
 const assetNames: Record<Asset, string> = {
-  system: 'system_snapshot.sql',
+  system: 'system_snapshot.pgcustom',
   foods: 'foods_snapshot.pgcustom',
   images: 'food_images.zip',
 };
@@ -133,6 +133,8 @@ export default async (): Promise<void> => {
       path: () =>
         text({
           message: 'Where do you want to download the assets to?',
+          initialValue: `${resolve('./')}`,
+          placeholder: `${resolve('./')}`,
           validate: (value) => {
             if (!value.trim())
               return 'Path cannot be empty';

@@ -56,7 +56,19 @@ pnpm install
 
 Make sure `Redis` and `PostgreSQL` instances are running and accessible.
 
-Refer to [Services setup](#services-setup) section for options to set up local `PostgreSQL` and `Redis` instances.
+To use Docker compose to start the services, run on project root folder:
+
+```sh
+docker compose up -d
+```
+
+Refer to
+[Development using Docker](docker) and [Development using VM](vm) sections for options to set up local `PostgreSQL` and `Redis` instances.
+
+:::tip
+
+You may also install `PostgreSQL` and `Redis` manually on your local machine. Refer to the official documentation for [PostgreSQL](https://www.postgresql.org/docs/current) and [Redis](https://redis.io/docs) for installation instructions.
+:::
 
 #### 5. Initialise environment files
 
@@ -83,6 +95,10 @@ pnpm cli init:db:system
 This will populate the system database with defaults. Follow the prompts to set up the admin user account.
 
 More details can be found in [CLI -> Initialize system database](/cli/init-db-system).
+
+:::tip
+The CLI will interactively prompt if you wish to download fresh assets from cloud storage for the initialization process. This is optional if you are using Docker Compose to start database services. You can also specify your own database snapshot files to restore the system database.
+:::
 
 #### 7. Run database migrations
 

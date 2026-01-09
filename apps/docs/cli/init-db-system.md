@@ -18,5 +18,9 @@ pnpm cli init:db:system
 ```
 
 :::tip
-Command requires food database and system database to be already imported. You can use [CLI command](/cli/init-assets.md) to download and restore the system database snapshot.
+This CLI expects `foods` and `system` databases are created already (which has typically been done during docker compose setup), and it will also invoke [cli:assets](/cli/init-assets.md) interactively to facilitate users to freshly download assets from the cloud storage and use during the initialization process.
+
+Alternatively, you can specify your own snapshot files for foods and system databases during the interactive prompts.
+
+Please also note that the `system` database initialization process requires the `foods` database to be already imported beforehand.
 :::
