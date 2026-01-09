@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts">
-import orderBy from 'lodash/orderBy';
+import { orderBy } from 'lodash-es';
 import { defineComponent } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';

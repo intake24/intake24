@@ -3,7 +3,7 @@ import fs, { copyFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import parseCsv from 'csv-parser';
-import { groupBy } from 'lodash';
+import { groupBy } from 'lodash-es';
 
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';

@@ -16,11 +16,8 @@ export function authentication() {
   return initServer().router(contract.admin.authentication, {
     login: {
       middleware: [loginRateLimiter],
-      handler: async ({ body, req, res }) => {
-        const result = await req.scope.cradle.authenticationService.adminLogin(
-          body,
-          { req },
-        );
+      handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+        const result = await req.scope.cradle.authenticationService.adminLogin(body, { req, userAgent });
         if ('devices' in result)
           return { status: 200, body: result };
 
@@ -33,53 +30,43 @@ export function authentication() {
         return { status: 200, body: { accessToken: result.accessToken } };
       },
     },
-    duo: async ({ body, req, res }) => {
-      const { token } = body;
+    challenge: async ({ body, req }) => {
+      const result = await req.scope.cradle.authenticationService.challenge(body, { req });
 
-      const tokens = await req.scope.cradle.authenticationService.verify(
-        { provider: 'duo', token },
-        { req },
-      );
-
-      attachRefreshToken(
-        tokens.refreshToken,
-        res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie,
-      );
-
-      return { status: 200, body: { accessToken: tokens.accessToken } };
+      return { status: 200, body: result };
     },
-    fido: async ({ body, req, res }) => {
-      const { response } = body;
-
-      const tokens = await req.scope.cradle.authenticationService.verify(
-        { provider: 'fido', response },
-        { req },
-      );
+    duo: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
 
       attachRefreshToken(
-        tokens.refreshToken,
+        refreshToken,
         res,
         req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
 
-      return { status: 200, body: { accessToken: tokens.accessToken } };
+      return { status: 200, body: { accessToken } };
     },
-    otp: async ({ body, req, res }) => {
-      const { token } = body;
-
-      const tokens = await req.scope.cradle.authenticationService.verify(
-        { provider: 'otp', token },
-        { req },
-      );
+    fido: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
 
       attachRefreshToken(
-        tokens.refreshToken,
+        refreshToken,
         res,
         req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
 
-      return { status: 200, body: { accessToken: tokens.accessToken } };
+      return { status: 200, body: { accessToken } };
+    },
+    otp: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
+
+      attachRefreshToken(
+        refreshToken,
+        res,
+        req.scope.cradle.securityConfig.jwt.admin.cookie,
+      );
+
+      return { status: 200, body: { accessToken } };
     },
     refresh: async ({ req, res }) => {
       const { name } = ioc.cradle.securityConfig.jwt.admin.cookie;

@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash-es';
 import { z } from 'zod';
 
 export const ops = ['eq', 'ne', 'in', 'notIn', 'gte', 'gt', 'lte', 'lt'] as const;

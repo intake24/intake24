@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { omit } from 'lodash-es';
 import type { Condition as ConditionV2 } from '@intake24/common/prompts/conditions';
 import type { Prompt as PromptV2, SinglePrompt as SinglePromptV2 } from '@intake24/common/prompts/prompts';
 import type { Condition as ConditionV1 } from '@intake24/common/prompts/v1/conditions';

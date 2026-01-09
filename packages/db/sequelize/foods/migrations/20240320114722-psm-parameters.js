@@ -1,4 +1,4 @@
-const camelCase = require('lodash/camelCase');
+const { camelCase } = require('lodash-es');
 
 function parseValue(oldValue) {
   if (['false', 'true'].includes(oldValue))

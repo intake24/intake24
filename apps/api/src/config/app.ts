@@ -1,36 +1,47 @@
 import childProcess from 'node:child_process';
 
-import type { Environment } from '@intake24/common/types';
+import z from 'zod';
 
+import { environmentOptions } from '@intake24/common/types';
 import pkg from '../../package.json';
+import { validateConfig } from './validate-config';
 
 export type Site = 'base' | 'admin' | 'survey' | 'images' | 'media' | 'docs';
 export type SiteUrls = Record<Site, string>;
 
-export type AppConfig = {
-  env: Environment;
+export const appConfigSchema = z.object({
+  env: z.enum(environmentOptions),
 
-  name: string;
-  icon?: string;
-  fullName: string;
-  poweredBy?: string;
+  name: z.string(),
+  icon: z.string().optional(),
+  fullName: z.string(),
+  poweredBy: z.string().optional(),
 
-  version: string;
-  revision: string;
-  fullVersion: string;
+  version: z.string(),
+  revision: z.string(),
+  fullVersion: z.string(),
 
-  host: string;
-  port: number;
-  https: boolean;
-  certPath?: string;
+  host: z.string(),
+  port: z.coerce.number().int().positive(),
+  https: z.boolean(),
+  certPath: z.string().optional(),
 
-  secret: string;
+  secret: z.string().nonempty(),
 
-  urls: SiteUrls;
-};
+  urls: z.object({
+    base: z.string(),
+    admin: z.string(),
+    survey: z.string(),
+    images: z.string(),
+    media: z.string(),
+    docs: z.string(),
+  }),
+});
 
-const host = 'localhost';
-const port = 3100;
+export type AppConfig = z.infer<typeof appConfigSchema>;
+
+const host = process.env.APP_HOST || 'localhost';
+const port = process.env.APP_PORT ? Number.parseInt(process.env.APP_PORT, 10) : 3100;
 const https = !!(process.env.DEV_HTTPS === 'true');
 const certPath = process.env.DEV_MKCERT_PATH;
 const domain = `${https ? 'https' : 'http'}://${host}:${port}`;
@@ -39,13 +50,20 @@ const name = process.env.APP_NAME || 'Intake24';
 const icon = process.env.APP_ICON || '🍴';
 const fullName = [icon, name].filter(item => item).join(' ');
 
-const revision = childProcess
-  .execSync('git rev-parse --short HEAD')
-  .toString()
-  .trim();
+let revision = 'rev-unknown';
 
-const appConfig: AppConfig = {
-  env: (process.env.NODE_ENV || 'development') as Environment,
+try {
+  revision = childProcess
+    .execSync('git rev-parse --short HEAD')
+    .toString()
+    .trim();
+}
+catch {
+  // empty catch clause intentional
+}
+
+const rawAppConfig = {
+  env: process.env.NODE_ENV || 'development',
 
   name,
   icon,
@@ -56,8 +74,8 @@ const appConfig: AppConfig = {
   revision,
   fullVersion: `${pkg.version}-${revision}`,
 
-  host: process.env.APP_HOST || host,
-  port: process.env.APP_PORT ? Number.parseInt(process.env.APP_PORT, 10) : port,
+  host,
+  port,
   https,
   certPath,
 
@@ -73,4 +91,6 @@ const appConfig: AppConfig = {
   },
 };
 
-export default appConfig;
+const parsedAppConfig = validateConfig('App configuration', appConfigSchema, rawAppConfig);
+
+export default parsedAppConfig;

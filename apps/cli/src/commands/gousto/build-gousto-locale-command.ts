@@ -5,7 +5,7 @@ import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import parseCsv from 'csv-parser';
-import { groupBy, mapValues } from 'lodash';
+import { groupBy, mapValues } from 'lodash-es';
 import stripBomStream from 'strip-bom-stream';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { Dictionary } from '@intake24/common/types';

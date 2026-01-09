@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';

@@ -1,6 +1,6 @@
 import type { FieldInfo } from '@json2csv/plainjs';
 import { differenceInMinutes } from 'date-fns';
-import { orderBy } from 'lodash';
+import { orderBy } from 'lodash-es';
 import stringify from 'safe-stable-stringify';
 import { UAParser } from 'ua-parser-js';
 import { externalSources as externalSourceProviders } from '@intake24/common/prompts';

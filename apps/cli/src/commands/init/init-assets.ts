@@ -16,7 +16,7 @@ import {
 } from '@clack/prompts';
 import { ensureDir } from 'fs-extra';
 import ky from 'ky';
-import { throttle } from 'lodash';
+import { throttle } from 'lodash-es';
 import color from 'picocolors';
 import unzipper from 'unzipper';
 import config from '@intake24/cli/config';

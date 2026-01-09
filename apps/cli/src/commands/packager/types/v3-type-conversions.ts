@@ -1,4 +1,4 @@
-import { identity, mapValues } from 'lodash';
+import { identity, mapValues } from 'lodash-es';
 
 import type {
   AssociatedFoodWithHeaderV3,

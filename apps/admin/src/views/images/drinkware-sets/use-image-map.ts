@@ -1,5 +1,5 @@
 import type { Ref } from 'vue';
-import chunk from 'lodash/chunk';
+import { chunk } from 'lodash-es';
 import { computed, ref } from 'vue';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';

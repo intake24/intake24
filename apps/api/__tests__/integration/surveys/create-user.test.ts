@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { omit, pick } from 'lodash';
+import { omit, pick } from 'lodash-es';
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';

@@ -1,4 +1,4 @@
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';

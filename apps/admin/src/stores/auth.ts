@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
-
 import { authService } from '@intake24/admin/services';
 import type {
   LoginRequest,
-  MFAAuthenticationVerificationRequest,
-  MFAAuthResponse,
+  MFAChallengeRequest,
+  MFAChallengeResponse,
+  MFAVerificationRequest,
 } from '@intake24/common/types/http';
 import { useLoading } from '@intake24/ui/stores';
 
@@ -12,7 +12,7 @@ import { useUser } from './user';
 
 export type AuthState = {
   accessToken: string | null;
-  mfa: MFAAuthResponse | null;
+  mfa: MFAChallengeResponse | null;
 };
 
 export const useAuth = defineStore('auth', {
@@ -38,7 +38,7 @@ export const useAuth = defineStore('auth', {
         await userState.request();
     },
 
-    mfaRequest(challenge: MFAAuthResponse) {
+    mfaRequest(challenge: MFAChallengeResponse) {
       this.accessToken = null;
       this.mfa = challenge;
     },
@@ -51,7 +51,12 @@ export const useAuth = defineStore('auth', {
       else this.mfaRequest(data);
     },
 
-    async verify(request: MFAAuthenticationVerificationRequest) {
+    async challenge(request: MFAChallengeRequest) {
+      const data = await authService.challenge(request);
+      this.mfaRequest(data);
+    },
+
+    async verify(request: MFAVerificationRequest) {
       const accessToken = await authService.verify(request);
       await this.successfulLogin(accessToken);
     },

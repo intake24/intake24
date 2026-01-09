@@ -11,7 +11,7 @@ import {
   password,
   text,
 } from '@clack/prompts';
-import axios from 'axios';
+import ky from 'ky';
 import color from 'picocolors';
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
@@ -93,13 +93,7 @@ async function importDatabaseSnapshot(type: 'foods' | 'system', input: InitDatab
 
 async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
   try {
-    const res = await axios.get(IETF_LANGUAGE_TAG_URL);
-    log.info(`Fetched IETF language tags from ${IETF_LANGUAGE_TAG_URL}`);
-    if (res.status !== 200 || !res.data || res.data.length === 0 || !Array.isArray(res.data)) {
-      log.error(`Invalid response or response payload: response ${res.status}`);
-      throw new Error(`Invalid response or response payload for IETF language tags.\n Response payload (first 500 chars): ${JSON.stringify(res.data).slice(0, 500)}...`);
-    }
-    return res.data as IetfLanguageTag[];
+    return await ky.get<IetfLanguageTag[]>(IETF_LANGUAGE_TAG_URL).json();
   }
   catch (error) {
     log.error(`Error in fetching and parsing IETF language tags from ${IETF_LANGUAGE_TAG_URL}. `);

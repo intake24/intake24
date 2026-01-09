@@ -16,13 +16,8 @@ export function authentication() {
   return initServer().router(contract.public.authentication, {
     emailLogin: {
       middleware: [loginRateLimiter],
-      handler: async ({ body, req, res }) => {
-        const { email, password, survey, captcha } = body;
-
-        const result = await req.scope.cradle.authenticationService.emailLogin(
-          { email, password, survey, captcha },
-          { req },
-        );
+      handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+        const result = await req.scope.cradle.authenticationService.emailLogin(body, { req, userAgent });
         if ('provider' in result)
           return { status: 200, body: result };
 
@@ -36,13 +31,8 @@ export function authentication() {
     },
     aliasLogin: {
       middleware: [loginRateLimiter],
-      handler: async ({ body, req, res }) => {
-        const { username, password, survey, captcha } = body;
-
-        const result = await req.scope.cradle.authenticationService.aliasLogin(
-          { username, password, survey, captcha },
-          { req },
-        );
+      handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+        const result = await req.scope.cradle.authenticationService.aliasLogin(body, { req, userAgent });
         if ('provider' in result)
           return { status: 200, body: result };
 
@@ -56,13 +46,8 @@ export function authentication() {
     },
     tokenLogin: {
       middleware: [loginRateLimiter],
-      handler: async ({ body, req, res }) => {
-        const { token, captcha } = body;
-
-        const result = await req.scope.cradle.authenticationService.tokenLogin(
-          { token, captcha },
-          { req },
-        );
+      handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+        const result = await req.scope.cradle.authenticationService.tokenLogin(body, { req, userAgent });
         if ('provider' in result)
           return { status: 200, body: result };
 

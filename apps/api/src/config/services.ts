@@ -1,5 +1,6 @@
 import z from 'zod';
 import { captchaProviders } from '@intake24/common/security';
+import { validateConfig } from './validate-config';
 
 export const baseEMProvider = z.object({
   lists: z.object({
@@ -16,8 +17,22 @@ export const servicesConfig = z.object({
   }),
   webPush: z.object({
     subject: z.string().default(''),
-    publicKey: z.string().default(''),
-    privateKey: z.string().default(''),
+    publicKey: z.string().nonempty().superRefine((val, ctx) => {
+      if (!val) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'See https://docs.intake24.org/config/api/services#web-push',
+        });
+      }
+    }),
+    privateKey: z.string().nonempty().superRefine((val, ctx) => {
+      if (!val) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'See https://docs.intake24.org/config/api/services#web-push',
+        });
+      }
+    }),
   }),
   comms: z.object({
     provider: z.enum(['email-blaster']).nullable().default(null),
@@ -52,7 +67,7 @@ export type CaptchaConfig = ServicesConfig['captcha'];
 export type WebPushConfig = ServicesConfig['webPush'];
 export type CommsConfig = ServicesConfig['comms'];
 
-export default servicesConfig.parse({
+const rawServicesConfig = {
   captcha: {
     provider: process.env.CAPTCHA_PROVIDER,
     secret: process.env.CAPTCHA_SECRET,
@@ -73,4 +88,8 @@ export default servicesConfig.parse({
       },
     },
   },
-});
+};
+
+const parsedServicesConfig = validateConfig('Services configuration', servicesConfig, rawServicesConfig);
+
+export default parsedServicesConfig;

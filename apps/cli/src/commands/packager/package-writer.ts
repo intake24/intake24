@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { merge } from 'lodash';
+import { merge } from 'lodash-es';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type { PkgCategory } from '@intake24/cli/commands/packager/types/categories';

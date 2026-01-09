@@ -1,14 +1,17 @@
-import type { StringValue } from 'ms';
-import type { RedisOptions } from './redis';
-import { parseToMs } from '@intake24/common/util';
+import z from 'zod';
+import { msStringValue } from './common';
+import { redisOptionsWithKeyPrefixSchema } from './redis';
+import { validateConfig } from './validate-config';
 
-export type CacheConfig = {
-  redis: RedisOptions;
-  ttl: StringValue;
-  surveySettingsTTL: StringValue;
-};
+export const cacheConfigSchema = z.object({
+  redis: redisOptionsWithKeyPrefixSchema,
+  ttl: msStringValue,
+  surveySettingsTTL: msStringValue,
+});
 
-const cacheConfig: CacheConfig = {
+export type CacheConfig = z.infer<typeof cacheConfigSchema>;
+
+const rawCacheConfig = {
   redis: {
     url: process.env.CACHE_REDIS_URL || process.env.REDIS_URL || undefined,
     host: process.env.CACHE_REDIS_HOST || process.env.REDIS_HOST || 'localhost',
@@ -16,8 +19,10 @@ const cacheConfig: CacheConfig = {
     db: Number.parseInt(process.env.CACHE_REDIS_DATABASE || process.env.REDIS_DATABASE || '0', 10),
     keyPrefix: process.env.CACHE_REDIS_PREFIX || 'it24:cache:',
   },
-  ttl: parseToMs(process.env.CACHE_TTL) || '7d',
-  surveySettingsTTL: parseToMs(process.env.CACHE_SURVEY_SETTINGS_TTL) || '120s',
+  ttl: process.env.CACHE_TTL || '7d',
+  surveySettingsTTL: process.env.CACHE_SURVEY_SETTINGS_TTL || '120s',
 };
 
-export default cacheConfig;
+const parsedCacheConfig = validateConfig('Cache configuration', cacheConfigSchema, rawCacheConfig);
+
+export default parsedCacheConfig;

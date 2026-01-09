@@ -1,7 +1,6 @@
 import { initContract } from '@ts-rest/core';
-
-import { createSanitizer } from '../rules';
-import { captcha, challengeResponse, loginResponse } from '../types/http';
+import { sanitize } from '../rules';
+import { captcha, surveyAuthResponse } from '../types/http';
 import { z } from '../util';
 
 export const authentication = initContract().router({
@@ -9,7 +8,7 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/auth/login',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       email: z.string().toLowerCase(),
@@ -18,7 +17,7 @@ export const authentication = initContract().router({
       captcha,
     }),
     responses: {
-      200: z.union([loginResponse, challengeResponse]),
+      200: surveyAuthResponse,
     },
     summary: 'Email & password login',
     description: 'Survey participant login with email and password.',
@@ -27,7 +26,7 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/auth/login/alias',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       username: z.string(),
@@ -36,7 +35,7 @@ export const authentication = initContract().router({
       captcha,
     }),
     responses: {
-      200: z.union([loginResponse, challengeResponse]),
+      200: surveyAuthResponse,
     },
     summary: 'Alias & password login',
     description: 'Survey participant login with alias and password.',
@@ -45,14 +44,14 @@ export const authentication = initContract().router({
     method: 'POST',
     path: '/auth/login/token',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: z.object({
       token: z.string(),
       captcha,
     }),
     responses: {
-      200: z.union([loginResponse, challengeResponse]),
+      200: surveyAuthResponse,
     },
     summary: 'URL Token login',
     description: 'Survey participant login with unique URL token.',

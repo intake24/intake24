@@ -8,7 +8,8 @@ import 'winston-daily-rotate-file';
 
 export { Logger } from 'winston';
 
-const silent = (process.env.NODE_ENV || 'development') === 'test';
+const consoleSilent = (process.env.NODE_ENV || 'development') === 'test';
+
 const dirname = path.resolve(config.dir);
 
 const logFormat = format.printf(({ level, message, timestamp, service, ...rest }) => {
@@ -23,7 +24,6 @@ const logFormat = format.printf(({ level, message, timestamp, service, ...rest }
 export const logger = createLogger({
   level: config.level,
   format: format.combine(format.timestamp(), format.json()),
-  silent,
   transports: [
     new transports.DailyRotateFile({
       dirname,
@@ -41,6 +41,7 @@ export const logger = createLogger({
       maxFiles: '30d',
     }),
     new transports.Console({
+      silent: consoleSilent,
       format: format.combine(
         format.colorize(),
         format.timestamp({

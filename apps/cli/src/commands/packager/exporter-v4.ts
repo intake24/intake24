@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { zip } from 'lodash';
+import { zip } from 'lodash-es';
 import { ApiClientV4 } from '@intake24/api-client-v4';
 import typeConverters from '@intake24/cli/commands/packager/types/v4-type-conversions';
 import logger from '@intake24/common-backend/services/logger/logger';

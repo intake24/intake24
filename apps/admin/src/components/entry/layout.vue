@@ -55,7 +55,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import has from 'lodash/has';
+import { has } from 'lodash-es';
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 

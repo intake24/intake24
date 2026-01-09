@@ -4,7 +4,7 @@ import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import parseCsv from 'csv-parser';
-import { groupBy } from 'lodash';
+import { groupBy } from 'lodash-es';
 import stripBomStream from 'strip-bom-stream';
 import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import type { INCA3EnglishDescription } from '@intake24/cli/commands/fr-inca3/types/english-description';

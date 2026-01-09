@@ -1,4 +1,4 @@
-import pick from 'lodash/pick';
+import { pick } from 'lodash-es';
 import { computed, ref } from 'vue';
 
 export type ValidationError = {

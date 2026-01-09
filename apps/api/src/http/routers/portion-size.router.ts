@@ -1,5 +1,5 @@
 import { initServer } from '@ts-rest/express';
-import { omit } from 'lodash';
+import { omit } from 'lodash-es';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { asServedResponse, imageMapsResponse } from '@intake24/api/http/responses/foods';

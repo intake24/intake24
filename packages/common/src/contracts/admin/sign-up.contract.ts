@@ -1,18 +1,16 @@
 import { initContract } from '@ts-rest/core';
 import { isJWT } from 'validator';
 import { z } from 'zod';
-
 import { strongPasswordWithConfirm } from '@intake24/common/security';
 import { captcha, loginResponse } from '@intake24/common/types/http';
-
-import { createSanitizer } from '../../rules';
+import { sanitize } from '../../rules';
 
 export const signUp = initContract().router({
   signUp: {
     method: 'POST',
     path: '/admin/sign-up',
     headers: z.object({
-      'user-agent': z.string().optional().transform(createSanitizer()),
+      'user-agent': z.string().optional().transform(val => sanitize(val)),
     }),
     body: strongPasswordWithConfirm
       .extend({

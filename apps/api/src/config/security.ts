@@ -1,8 +1,7 @@
-import ms from 'ms';
 import z from 'zod';
 import { mfaModes } from '@intake24/common/security';
-import { parseToMs } from '@intake24/common/util';
 import { cookieSettings, msStringValue } from './common';
+import { validateConfig } from './validate-config';
 
 export const jwtFrontEndSettings = z.object({
   access: z.object({
@@ -60,7 +59,7 @@ export const securityConfigSchema = z.object({
 });
 export type SecurityConfig = z.infer<typeof securityConfigSchema>;
 
-export const securityConfig = securityConfigSchema.parse({
+const rawSecurityConfig = {
   cors: {
     origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : false,
   },
@@ -80,7 +79,7 @@ export const securityConfig = securityConfigSchema.parse({
       },
       cookie: {
         name: 'it24a_refresh_token',
-        maxAge: ms(parseToMs(process.env.JWT_ADMIN_REFRESH_LIFETIME) || '1d'),
+        maxAge: process.env.JWT_ADMIN_REFRESH_LIFETIME || '1d',
         httpOnly: true,
         path: process.env.JWT_ADMIN_COOKIE_PATH || '/api/admin/auth',
         sameSite: process.env.JWT_ADMIN_COOKIE_SAMESITE,
@@ -99,7 +98,7 @@ export const securityConfig = securityConfigSchema.parse({
       },
       cookie: {
         name: 'it24s_refresh_token',
-        maxAge: ms(parseToMs(process.env.JWT_SURVEY_REFRESH_LIFETIME) || '1d'),
+        maxAge: process.env.JWT_SURVEY_REFRESH_LIFETIME || '1d',
         httpOnly: true,
         path: process.env.JWT_SURVEY_COOKIE_PATH || '/api/auth',
         sameSite: process.env.JWT_SURVEY_COOKIE_SAMESITE,
@@ -135,6 +134,8 @@ export const securityConfig = securityConfigSchema.parse({
   signInLog: {
     enabled: !process.env.SIGN_IN_LOG_ENABLED || process.env.SIGN_IN_LOG_ENABLED === 'true',
   },
-});
+};
 
-export default securityConfig;
+const parsedSecurityConfig = validateConfig('Security configuration', securityConfigSchema, rawSecurityConfig);
+
+export default parsedSecurityConfig;
