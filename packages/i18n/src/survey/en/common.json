@@ -107,5 +107,6 @@
   "validation": {
     "tooLong": "Entered text is too long ({max} characters max)."
   },
-  "noImagePlaceholder": "No image available"
+  "noImagePlaceholder": "No image available",
+  "loading": "Loading..."
 }

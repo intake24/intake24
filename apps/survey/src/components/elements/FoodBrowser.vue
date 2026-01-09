@@ -2,6 +2,7 @@
   <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" class="py-2" :flat="!dialog">
     <food-search-hints
       class="mb-4"
+      :foods="foodNames"
       :model-value="searchTerm"
       :prompt
     >
@@ -337,6 +338,8 @@ const searchContents = computed<CategoryContents>(() => ({
   foods: searchResults.value.foods,
   subcategories: searchResults.value.categories,
 }));
+
+const foodNames = computed(() => searchResults.value.foods.map(f => f.name));
 
 async function openInDialog() {
   if (!showInDialog.value || dialog.value)

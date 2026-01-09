@@ -3,6 +3,8 @@ import type { IoC } from '@intake24/api/ioc';
 import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 
+import { GoogleGenAI } from '@google/genai';
+
 import foodIndex from '@intake24/api/food-index';
 import { applyDefaultSearchQueryParameters } from '@intake24/api/food-index/search-query';
 
@@ -15,7 +17,10 @@ function foodSearchService({
   foodThumbnailImageService,
   cache,
   cacheConfig,
-}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig'>) {
+  logger: globalLogger,
+}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig' | 'logger'>) {
+  const logger = globalLogger.child({ service: 'FoodSearchService' });
+
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -81,9 +86,50 @@ function foodSearchService({
     return withFilteredIngredients;
   };
 
+  const getSearchHint = async (query: string, foodNames: string[]): Promise<string> => {
+    try {
+      const apiKey = process.env.GEMINI_API_KEY;
+      const genAI = new GoogleGenAI({ apiKey });
+      if (!apiKey) {
+        logger.warn('GEMINI_API_KEY not configured');
+        return '';
+      }
+
+      const prompt = `User searched for: "${query}"
+Primary matches are found:
+${foodNames.join(', ')}
+Based on the query, primary matches and corresponding word distances, generate a brief, helpful tooltip (max 80 chars) to help the user refine their food search.
+
+- If results are poor (such as distance > 0.2), suggest specific food, or altering terms.
+- If multiple similar results (such as distance among top 3 < 0.005), suggest adding details.
+- If query is too short or generic, suggest being more descriptive.
+- Be direct, polite and actionable, using simple language with suggestions.
+- If results are good, respond with an empty hint.
+- Suggestings food names should be specific, avoid generic terms.
+- If query is not a food name, suggest using food names.
+- Any suggestions should be relevant to food searching.
+- If the primary matches are less than 3 results, do not suggest them.`;
+
+      logger.debug('Generating hint with LLM...');
+      logger.debug(`Prompt: ${prompt}`);
+      const resp: any = await genAI.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      } as any);
+
+      const text = resp?.candidates?.[0]?.content?.parts?.[0]?.text;
+      return text.trim();
+    }
+    catch (error) {
+      logger.error({ error });
+      return '';
+    }
+  };
+
   return {
     getFoodAttributes,
     search,
+    getSearchHint,
   };
 }
 
