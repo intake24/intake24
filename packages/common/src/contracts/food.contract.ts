@@ -57,4 +57,19 @@ export const food = initContract().router({
     summary: 'Food categories',
     description: 'Get the list of categories for a food.',
   },
+  searchHint: {
+    method: 'POST',
+    path: '/foods/search-hints',
+    body: z.object({
+      query: z.string().min(1).describe('Search term/query'),
+      foodNames: z.array(z.string()).describe('List of food names suggested to users'),
+    }),
+    responses: {
+      200: z.object({
+        hint: z.string().describe('AI-generated hint'),
+      }),
+    },
+    summary: 'Generate search hint',
+    description: 'Generate helpful search hint advice using AI when search yields no direct matches',
+  },
 });

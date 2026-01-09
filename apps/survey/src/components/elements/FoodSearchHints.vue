@@ -2,6 +2,16 @@
   <div>
     <slot v-bind="{ checkForHints }" />
     <v-alert
+      v-if="loading"
+      class="mt-4"
+      color="info"
+      density="compact"
+      icon="fas fa-circle-notch fa-spin"
+      variant="tonal"
+    >
+      {{ $t('common.loading') }}
+    </v-alert>
+    <v-alert
       v-if="!!hint && props.mode === 'alert'"
       border
       class="mt-4"
@@ -32,6 +42,16 @@
             ... {{ props.modelValue }}
           </v-alert>
           <v-alert
+            v-if="loading"
+            class="pa-4 text-uppercase font-weight-medium"
+            color="info"
+            icon="fas fa-circle-notch fa-spin"
+            variant="tonal"
+          >
+            {{ $t('common.loading') }}
+          </v-alert>
+          <v-alert
+            v-else
             color="warning"
             icon="fas fa-wrench"
             variant="tonal"
@@ -76,6 +96,7 @@ import { watchDebounced } from '@vueuse/core';
 import { computed, ref } from 'vue';
 
 import { usePromptUtils } from '@intake24/survey/composables';
+import { foodsService } from '@intake24/survey/services';
 import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
@@ -90,6 +111,10 @@ const props = defineProps({
   modelValue: {
     type: String as PropType<string | null>,
     default: '',
+  },
+  foods: {
+    type: Array as PropType<string[]>,
+    default: () => [],
   },
   prompt: {
     type: Object as PropType<
@@ -113,6 +138,7 @@ const promptI18n = computed(() =>
 );
 
 const hint = ref<string | null>(null);
+const loading = ref(false);
 
 const trigger = computed(() =>
   new RegExp(
@@ -121,8 +147,8 @@ const trigger = computed(() =>
   ),
 );
 
-function checkForHints() {
-  if (!props.modelValue || !props.prompt.hints.length)
+async function checkForHints() {
+  if (!props.modelValue)
     return confirm();
 
   const res = props.modelValue.match(trigger.value);
@@ -137,6 +163,17 @@ function checkForHints() {
         continue;
 
       hint.value = translate(match.text);
+      return;
+    }
+  }
+  else if (props.modelValue && props.modelValue.length > 2) {
+    loading.value = true;
+    hint.value = null;
+    const aiHint = await foodsService.getSearchHint(props.modelValue, props.foods);
+    loading.value = false;
+
+    if (aiHint) {
+      hint.value = aiHint;
       return;
     }
   }
@@ -161,8 +198,8 @@ if (props.activator === 'watch') {
       checkForHints();
     },
     {
-      debounce: 500,
-      maxWait: 2000,
+      debounce: 1000,
+      maxWait: 5000,
       immediate: true,
     },
   );

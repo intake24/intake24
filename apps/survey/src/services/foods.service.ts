@@ -28,6 +28,16 @@ export default {
     const { data } = await http.get<RecipeFood>(`/locales/${localeId}/foods/${code}/recipe-food`);
     return data;
   },
+  getSearchHint: async (query: string, foodNames: string[] = []): Promise<string> => {
+    try {
+      const { data } = await http.post<{ hint: string }>(`/foods/search-hints`, { query, foodNames });
+      return data.hint;
+    }
+    catch (e) {
+      console.warn('Failed to fetch AI search hint', e);
+      return '';
+    }
+  },
   categories: async (localeId: string, code: string): Promise<string[]> => {
     const { data } = await http.get<string[]>(`/locales/${localeId}/foods/${code}/categories`);
     return data;

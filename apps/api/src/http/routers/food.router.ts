@@ -63,5 +63,11 @@ export function food() {
         steps: result.steps ?? [],
       } };
     },
+    searchHint: async ({ body, req }) => {
+      const { query, foodNames } = body;
+      const hint = await req.scope.cradle.foodSearchService.getSearchHint(query, foodNames);
+
+      return { status: 200, body: { hint } };
+    },
   });
 }
