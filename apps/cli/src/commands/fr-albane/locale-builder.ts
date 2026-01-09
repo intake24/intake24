@@ -33,7 +33,7 @@ import type {
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import logger from '@intake24/common-backend/services/logger/logger';
-import { Dictionary } from '@intake24/common/types';
+import type { Dictionary } from '@intake24/common/types';
 import { capitalize } from '@intake24/common/util';
 
 import { PkgAsServedSet } from '../packager/types/as-served';

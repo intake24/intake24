@@ -334,9 +334,24 @@ function dataExportFields() {
       value: ({ food }: ExportRow) =>
         food instanceof SurveySubmissionMissingFood ? food.brand : undefined,
     },
-    { id: 'missingDescription', label: 'Missing description', value: 'food.description' },
-    { id: 'missingPortionSize', label: 'Missing portion size', value: 'food.portionSize' },
-    { id: 'missingLeftovers', label: 'Missing leftovers', value: 'food.leftovers' },
+    {
+      id: 'missingDescription',
+      label: 'Missing description',
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.description : undefined,
+    },
+    {
+      id: 'missingPortionSize',
+      label: 'Missing portion size',
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.portionSize : undefined,
+    },
+    {
+      id: 'missingLeftovers',
+      label: 'Missing leftovers',
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.leftovers : undefined,
+    },
   ];
 
   /**
@@ -388,114 +403,21 @@ function dataExportFields() {
     {
       id: 'portion',
       label: 'Portion',
-      value: ({ food }: ExportRow) => {
-        if (!('portionSizes' in food))
-          return undefined;
-
-        return stringify(
-          food.portionSizes?.reduce(
-            (acc, item) => {
-              acc[item.name] = item.value;
-              return acc;
-            },
-            {} as Record<string, string>,
-          ),
-        );
-      },
+      value: ({ food }: ExportRow) => food instanceof SurveySubmissionFood ? stringify(food.portionSize) : undefined,
     },
     // servingWeight - leftoversWeight
     {
       id: 'portionWeight',
       label: 'Portion Weight',
       value: ({ food }: ExportRow) => {
-        if (!('portionSizes' in food))
+        if (food instanceof SurveySubmissionMissingFood)
           return undefined;
 
-        const servingWeightVal = food.portionSizes?.find(
-          item => item.name === 'servingWeight',
-        )?.value;
-        const leftoversWeightVal = food.portionSizes?.find(
-          item => item.name === 'leftoversWeight',
-        )?.value;
-        if (!servingWeightVal || !leftoversWeightVal)
-          return undefined;
-
-        const servingWeight = Number.parseFloat(servingWeightVal);
-        const leftoversWeight = Number.parseFloat(leftoversWeightVal);
-        if (Number.isNaN(servingWeight) || Number.isNaN(leftoversWeight))
-          return undefined;
+        const { servingWeight, leftoversWeight } = food.portionSize;
 
         return servingWeight - leftoversWeight;
       },
     },
-
-    { id: 'bowl', label: 'Bowl' },
-    { id: 'bowlId', label: 'Bowl ID' },
-    { id: 'bowlIndex', label: 'Bowl Index' },
-    { id: 'containerId', label: 'Container ID' },
-    { id: 'containerIndex', label: 'Container Idx' },
-    { id: 'count', label: 'Count' },
-    { id: 'drinkware-id', label: 'Drinkware ID' },
-    { id: 'fillLevel', label: 'Fill Level' },
-    { id: 'guide-image-id', label: 'Guide Image ID' },
-    { id: 'imageUrl', label: 'Image URL' },
-    { id: 'initial-fill-level', label: 'Initial Fill Level' },
-    { id: 'leftovers', label: 'Leftovers' },
-    { id: 'leftovers-image-set', label: 'Leftovers Image Set' },
-    { id: 'leftoversChoiceIndex', label: 'Leftovers Choice Idx' },
-    { id: 'leftoversImage', label: 'Leftovers image' },
-    { id: 'leftoversLevel', label: 'Leftovers Level' },
-    { id: 'leftoversWeight', label: 'Leftovers Weight' },
-    { id: 'leftoversWeightFactor', label: 'Leftovers Weight Factor' },
-    { id: 'milkLevelChoice', label: 'Milk Level Choice' },
-    { id: 'milkLevelId', label: 'Milk Level ID' },
-    { id: 'milkLevelImage', label: 'Milk Level Image' },
-    { id: 'milkPartIndex', label: 'Milk Part Index' },
-    { id: 'milkVolumePercentage', label: 'Milk Volume Percentage' },
-    { id: 'objectId', label: 'Object ID' },
-    { id: 'objectIndex', label: 'Object Index' },
-    { id: 'objectWeight', label: 'Object Weight' },
-    { id: 'portionIndex', label: 'Portion Index' },
-    { id: 'portionValue', label: 'Portion Value' },
-    { id: 'quantity', label: 'Quantity' },
-    { id: 'reason', label: 'Reason' },
-    { id: 'serving-image-set', label: 'As served Image Set' },
-    { id: 'servingChoiceIndex', label: 'As served Choice Index' },
-    { id: 'servingImage', label: 'As served Image' },
-    { id: 'servingWeight', label: 'As served Weight' },
-    { id: 'servingWeightFactor', label: 'As served weight factor' },
-    { id: 'skip-fill-level', label: 'Skip Fill Level' },
-    { id: 'sliceId', label: 'sliceId' },
-    { id: 'sliceIndex', label: 'sliceIndex' },
-    { id: 'sliceImage', label: 'sliceImage' },
-    { id: 'sliceQuantity', label: 'sliceQuantity' },
-    { id: 'thicknessId', label: 'thicknessId' },
-    { id: 'thicknessIndex', label: 'thicknessIndex' },
-    { id: 'thicknessImage', label: 'thicknessImage' },
-    { id: 'type', label: 'Type' },
-    { id: 'typeId', label: 'typeId' },
-    { id: 'typeIndex', label: 'typeIndex' },
-    { id: 'typeImage', label: 'typeImage' },
-    { id: 'unitName', label: 'unitName' },
-    { id: 'unitWeight', label: 'unitWeight' },
-    { id: 'unitOmitFoodDescription', label: 'unitOmitFoodDescription' },
-    { id: 'unit-choice', label: 'Unit Choice' },
-    { id: 'unit0-name', label: 'unit0-name' },
-    { id: 'unit0-omit-food-description', label: 'unit0-omit-food-description' },
-    { id: 'unit0-weight', label: 'unit0-weight' },
-    { id: 'unit1-name', label: 'unit1-name' },
-    { id: 'unit1-omit-food-description', label: 'unit1-omit-food-description' },
-    { id: 'unit1-weight', label: 'unit1-weight' },
-    { id: 'unit2-name', label: 'unit2-name' },
-    { id: 'unit2-omit-food-description', label: 'unit2-omit-food-description' },
-    { id: 'unit2-weight', label: 'unit2-weight' },
-    { id: 'unit3-name', label: 'unit3-name' },
-    { id: 'unit3-omit-food-description', label: 'unit3-omit-food-description' },
-    { id: 'unit3-weight', label: 'unit3-weight' },
-    { id: 'unit4-name', label: 'unit4-name' },
-    { id: 'unit4-omit-food-description', label: 'unit4-omit-food-description' },
-    { id: 'unit4-weight', label: 'unit4-weight' },
-    { id: 'units-count', label: 'units-count' },
   ];
 
   const externalSources = async (): Promise<ExportField[]> => externalSourceProviders.reduce<ExportField[]>((acc, source) => {

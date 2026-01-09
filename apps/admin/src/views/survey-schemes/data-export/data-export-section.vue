@@ -66,7 +66,7 @@
               <v-card-title>
                 {{ $t('survey-schemes.data-export.available') }}
               </v-card-title>
-              <v-btn v-if="section?.id === 'externalSources'" color="primary" rounded="pill" @click="addCustom">
+              <v-btn v-if="canHaveCustomFields" color="primary" rounded="pill" @click="addCustom">
                 {{ $t('survey-schemes.data-export.fields.custom') }}
               </v-btn>
             </div>
@@ -204,6 +204,9 @@ const availableFields = computed(() => {
   return currentFields.value.filter(field => !fieldIds.includes(field.id));
 });
 
+const canHaveCustomFields = computed(() => {
+  return props.section?.id && ['externalSources', 'portionSizes'].includes(props.section.id);
+});
 function isCustomField(id: string) {
   return !currentFields.value.find(f => f.id === id);
 }
