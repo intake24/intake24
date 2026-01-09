@@ -281,6 +281,7 @@ function localFoodsService({ db, opensearchSyncService }: Pick<IoC, 'db'> & { op
     await Promise.all([
       foodLocal.destroy({ transaction }),
       FoodLocalList.destroy({ where: { localeId, foodCode: foodLocal.foodCode }, transaction }),
+      AssociatedFood.destroy({ where: { localeId, foodCode: foodLocal.foodCode }, transaction }),
     ]);
   };
 

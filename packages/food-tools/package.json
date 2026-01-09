@@ -1,0 +1,42 @@
+{
+  "name": "@intake24/food-tools",
+  "type": "module",
+  "version": "2025.2",
+  "description": "Food import and validation tools for Intake24",
+  "author": {
+    "name": "Action Lab"
+  },
+  "license": "Apache-2.0",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./commands/*": {
+      "import": "./dist/commands/*.js",
+      "require": "./dist/commands/*.cjs"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "dev": "tsup --watch",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "csv-parse": "^5.5.6",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.14",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}

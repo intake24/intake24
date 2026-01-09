@@ -1,0 +1,5 @@
+"Intake24 Code","Action","English Description","Local Description","Food Composition Table","Food Composition Record ID","Ready Meal Option","Same As Before Option","Reasonable Amount","Use In Recipes","Associated Food","Brand Names","Synonyms","Brand Names as Search Terms","Portion Size Estimation Methods","Categories","Special Flags"
+"EXPL001","2","Example Apple","Example Apple Local","NDNS","1234","false","true","150","1","","","apple,example","0","standard-portion:APPL_STD;weight","FRUIT",""
+"EXPL002","2","Example Bread","Example Bread Local","NDNS","5678","false","true","40","1","","Brand1|Brand2","bread,loaf","1","standard-portion:BRED_STD;guide-image:BRED_GI;weight","CERE",""
+"EXPL003","3","Example Updated Food","Updated Local Name","NDNS","9999","true","true","200","0","","","","0","as-served:MEAL_AS;weight","MEAL",""
+"EXPL004","4","Example Validation Only","Validation Local Name","","","false","false","100","1","EXPL001","","","0","weight","MEAT",""

@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "types": ["node"],
+    "outDir": "./dist"
+  },
+  "references": [
+    { "path": "../api-client-v4" },
+    { "path": "../common" },
+    { "path": "../common-backend" },
+    { "path": "../db" },
+    { "path": "../excel-reader" }
+  ],
+  "include": ["src/**/*"]
+}
