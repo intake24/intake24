@@ -217,6 +217,33 @@ interface ConsistencyReport {
 }
 
 /**
+ * Format error for logging - handles various error types and provides meaningful messages
+ */
+function formatError(error: unknown): string {
+  if (error instanceof Error) {
+    const message = error.message || error.name || 'Unknown error';
+    const name = error.name !== 'Error' ? `[${error.name}] ` : '';
+    return `${name}${message}`;
+  }
+  if (typeof error === 'string') {
+    return error || 'Empty error string';
+  }
+  if (error && typeof error === 'object') {
+    // Handle Sequelize or other errors that might have different structures
+    const obj = error as Record<string, unknown>;
+    if (obj.message)
+      return String(obj.message);
+    if (obj.original && typeof obj.original === 'object') {
+      const original = obj.original as Record<string, unknown>;
+      if (original.message)
+        return String(original.message);
+    }
+    return JSON.stringify(error);
+  }
+  return 'Unknown error type';
+}
+
+/**
  * Database-CSV Consistency Checker
  */
 class ConsistencyChecker {
@@ -240,7 +267,6 @@ class ConsistencyChecker {
         logger: this.logger,
         environment: (process.env.NODE_ENV || 'development') as Environment,
       });
-      await this.database.init();
       await this.database.init();
     }
   }
@@ -429,7 +455,7 @@ class ConsistencyChecker {
       enabledFoodsSet = new Set(enabledFoodsList);
     }
     catch (error) {
-      this.logger.warn(`Failed to get enabled foods for locale ${localeId}: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.warn(`Failed to get enabled foods for locale ${localeId}: ${formatError(error)}`);
       enabledFoodsSet = new Set();
     }
 
@@ -470,7 +496,7 @@ class ConsistencyChecker {
             };
           }
           catch (error) {
-            this.logger.debug(`Failed to fetch food ${code}: ${error instanceof Error ? error.message : String(error)}`);
+            this.logger.debug(`Failed to fetch food ${code}: ${formatError(error)}`);
             return null;
           }
         }),
@@ -508,17 +534,16 @@ class ConsistencyChecker {
     try {
       // Build query to get all local names at once
       const foodCodes = foods.map(f => f.code);
-      const placeholders = foodCodes.map((_, index) => `$${index + 2}`).join(', ');
+      const placeholders = foodCodes.map(() => '?').join(', ');
 
       const query = `
         SELECT fl.food_code, fl.name
         FROM food_locals fl
-        WHERE fl.locale_id = $1
+        WHERE fl.locale_id = ?
         AND fl.food_code IN (${placeholders})
       `;
 
-      const params = [localeId, ...foodCodes];
-      const result = await this.database.foods.query(query, { bind: params }) as any;
+      const result = await this.database.foods.query(query, { replacements: [localeId, ...foodCodes] }) as any;
 
       // Create a map of food code to local name
       const localNameMap = new Map<string, string>();
@@ -536,7 +561,7 @@ class ConsistencyChecker {
       this.logger.info(`🌏 Fetched ${localNameMap.size} local names for ${localeId}`);
     }
     catch (error) {
-      this.logger.warn(`Failed to fetch local names: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.warn(`Failed to fetch local names: ${formatError(error)}`);
     }
   }
 
@@ -719,10 +744,10 @@ class ConsistencyChecker {
     try {
       // Build query to get nutrient mappings for all foods at once
       const foodCodes = foodsWithNutrients.map(f => f.intake24Code);
-      const placeholders = foodCodes.map((_, index) => `$${index + 2}`).join(', ');
+      const placeholders = foodCodes.map(() => '?').join(', ');
 
       const query = `
-        SELECT 
+        SELECT
           fl.food_code,
           fl.id as food_local_id,
           fn.nutrient_table_record_id,
@@ -734,12 +759,11 @@ class ConsistencyChecker {
         LEFT JOIN foods_nutrients fn ON fl.id = fn.food_local_id
         LEFT JOIN nutrient_table_records ntr ON fn.nutrient_table_record_id = ntr.id
         LEFT JOIN nutrient_tables nt ON ntr.nutrient_table_id = nt.id
-        WHERE fl.locale_id = $1 
+        WHERE fl.locale_id = ?
         AND fl.food_code IN (${placeholders})
       `;
 
-      const params = [localeId, ...foodCodes];
-      const result = await this.database.foods.query(query, { bind: params }) as any;
+      const result = await this.database.foods.query(query, { replacements: [localeId, ...foodCodes] }) as any;
 
       // Create a map of food code to nutrient mappings
       const nutrientMap = new Map<string, Array<{
@@ -852,7 +876,7 @@ class ConsistencyChecker {
       this.logger.info(`🔬 Checked nutrient consistency for ${foodsWithNutrients.length} foods`);
     }
     catch (error) {
-      this.logger.error(`Failed to check nutrient consistency: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(`Failed to check nutrient consistency: ${formatError(error)}`);
     }
 
     return discrepancies;
@@ -870,15 +894,15 @@ class ConsistencyChecker {
       const query = `
         SELECT COUNT(*) as count
         FROM nutrient_table_records
-        WHERE nutrient_table_id = $1
-        AND nutrient_table_record_id = $2
+        WHERE nutrient_table_id = ?
+        AND nutrient_table_record_id = ?
       `;
 
-      const result = await this.database.foods.query(query, { bind: [tableId, recordId] }) as any;
+      const result = await this.database.foods.query(query, { replacements: [tableId, recordId] }) as any;
       return result?.[0]?.[0]?.count > 0;
     }
     catch (error) {
-      this.logger.debug(`Failed to check nutrient record existence: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.debug(`Failed to check nutrient record existence: ${formatError(error)}`);
       return false;
     }
   }
@@ -908,10 +932,10 @@ class ConsistencyChecker {
     try {
       // Build query to get portion size methods for all foods at once
       const foodCodes = foodsWithPortionSizes.map(f => f.intake24Code);
-      const placeholders = foodCodes.map((_, index) => `$${index + 2}`).join(', ');
+      const placeholders = foodCodes.map(() => '?').join(', ');
 
       const query = `
-        SELECT 
+        SELECT
           fl.food_code,
           fl.id as food_local_id,
           fpsm.id,
@@ -923,13 +947,12 @@ class ConsistencyChecker {
           fpsm.use_for_recipes
         FROM food_locals fl
         LEFT JOIN food_portion_size_methods fpsm ON fl.id = fpsm.food_local_id
-        WHERE fl.locale_id = $1 
+        WHERE fl.locale_id = ?
         AND fl.food_code IN (${placeholders})
         ORDER BY fl.food_code, fpsm.order_by
       `;
 
-      const params = [localeId, ...foodCodes];
-      const result = await this.database.foods.query(query, { bind: params }) as any;
+      const result = await this.database.foods.query(query, { replacements: [localeId, ...foodCodes] }) as any;
 
       // Create a map of food code to portion size methods
       const portionSizeMap = new Map<string, Array<{
@@ -1015,7 +1038,7 @@ class ConsistencyChecker {
       this.logger.info(`📏 Checked portion size consistency for ${foodsWithPortionSizes.length} foods`);
     }
     catch (error) {
-      this.logger.error(`Failed to check portion size consistency: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(`Failed to check portion size consistency: ${formatError(error)}`);
     }
 
     return discrepancies;
@@ -1261,7 +1284,7 @@ class ConsistencyChecker {
     try {
       // Build query to get associated foods for all foods at once
       const foodCodes = foodsWithAssociations.map(f => f.intake24Code);
-      const placeholders = foodCodes.map((_, index) => `$${index + 2}`).join(', ');
+      const placeholders = foodCodes.map(() => '?').join(', ');
 
       const query = `
         SELECT
@@ -1275,13 +1298,12 @@ class ConsistencyChecker {
           af.generic_name,
           af.order_by
         FROM associated_foods af
-        WHERE af.locale_id = $1
+        WHERE af.locale_id = ?
         AND af.food_code IN (${placeholders})
         ORDER BY af.food_code, af.order_by
       `;
 
-      const params = [localeId, ...foodCodes];
-      const result = await this.database.foods.query(query, { bind: params }) as any;
+      const result = await this.database.foods.query(query, { replacements: [localeId, ...foodCodes] }) as any;
 
       // Create a map of food code to associated foods
       const associatedFoodMap = new Map<string, Array<{
@@ -1363,7 +1385,7 @@ class ConsistencyChecker {
       this.logger.info(`🔗 Checked associated food consistency for ${foodsWithAssociations.length} foods`);
     }
     catch (error) {
-      this.logger.error(`Failed to check associated food consistency: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(`Failed to check associated food consistency: ${formatError(error)}`);
     }
 
     return discrepancies;
@@ -1561,8 +1583,25 @@ class ConsistencyChecker {
     attributeDiscrepancies: AttributeDiscrepancy[],
   ): ConsistencyReport {
     const totalChecked = csvFoods.length;
-    const totalDiscrepancies = categoryDiscrepancies.length + nameDiscrepancies.length + missingFoods.length + nutrientDiscrepancies.length + portionSizeDiscrepancies.length + associatedFoodDiscrepancies.length + attributeDiscrepancies.length;
-    const perfectMatches = totalChecked - totalDiscrepancies;
+
+    // Count unique foods with ANY issue (a food can have multiple types of issues)
+    const foodsWithIssues = new Set<string>();
+    for (const d of categoryDiscrepancies)
+      foodsWithIssues.add(d.foodCode);
+    for (const d of nameDiscrepancies)
+      foodsWithIssues.add(d.foodCode);
+    for (const d of missingFoods)
+      foodsWithIssues.add(d.foodCode);
+    for (const d of nutrientDiscrepancies)
+      foodsWithIssues.add(d.foodCode);
+    for (const d of portionSizeDiscrepancies)
+      foodsWithIssues.add(d.foodCode);
+    for (const d of associatedFoodDiscrepancies)
+      foodsWithIssues.add(d.foodCode);
+    for (const d of attributeDiscrepancies)
+      foodsWithIssues.add(d.foodCode);
+
+    const perfectMatches = totalChecked - foodsWithIssues.size;
     const consistencyScore = Math.round((perfectMatches / totalChecked) * 100);
 
     // Determine quality grade
@@ -2030,7 +2069,7 @@ export default async function verifyConsistencyCommand(options: ConsistencyCheck
     console.log('\n✅ Consistency verification completed!');
   }
   catch (error) {
-    console.error('❌ Consistency verification failed:', error instanceof Error ? error.message : String(error));
+    console.error('❌ Consistency verification failed:', formatError(error));
     throw error;
   }
 }
