@@ -1135,10 +1135,6 @@ class FoodProcessor {
     apiClient: ApiClientV4,
     logger: Logger,
   ): Promise<void> {
-    if (!food.categories || food.categories.trim() === '') {
-      return; // No categories to update
-    }
-
     let existingGlobalFood: Awaited<ReturnType<typeof apiClient.foods.findGlobalFood>> | null = null;
 
     try {
@@ -1161,17 +1157,22 @@ class FoodProcessor {
       return;
     }
 
-    const categories = FoodDataParser.parseCategories(food.categories);
-    if (categories.length === 0) {
-      return; // No valid categories to update
-    }
+    // Check if name has changed
+    const csvName = food.englishDescription?.trim() || '';
+    const dbName = existingGlobalFood.name?.trim() || '';
+    const nameChanged = csvName.length > 0 && csvName !== dbName;
 
-    // Check if categories need updating
+    // Check if categories have changed
+    const categories = food.categories?.trim()
+      ? FoodDataParser.parseCategories(food.categories)
+      : [];
     const existingCategories = existingGlobalFood.parentCategories?.map((c: any) => c.code) || [];
-    const categoriesChanged = categories.length !== existingCategories.length
-      || !categories.every(cat => existingCategories.includes(cat));
+    const categoriesChanged = categories.length > 0
+      && (categories.length !== existingCategories.length
+        || !categories.every(cat => existingCategories.includes(cat)));
 
-    if (categoriesChanged) {
+    // Only update if something changed
+    if (nameChanged || categoriesChanged) {
       // Map attributes to ensure type compatibility
       const attributes: InheritableAttributes = existingGlobalFood.attributes
         ? {
@@ -1183,10 +1184,10 @@ class FoodProcessor {
         : {};
 
       const updateRequest: UpdateGlobalFoodRequest = {
-        name: existingGlobalFood.name,
+        name: csvName || existingGlobalFood.name,
         foodGroupId: existingGlobalFood.foodGroupId,
         attributes,
-        parentCategories: categories,
+        parentCategories: categories.length > 0 ? categories : existingCategories,
       };
 
       await apiClient.foods.updateGlobalFood(
@@ -1194,7 +1195,13 @@ class FoodProcessor {
         existingGlobalFood.version,
         updateRequest,
       );
-      logger.debug(`Updated categories for global food: ${food.intake24Code}`);
+
+      const changes: string[] = [];
+      if (nameChanged)
+        changes.push('name');
+      if (categoriesChanged)
+        changes.push('categories');
+      logger.debug(`Updated ${changes.join(', ')} for global food: ${food.intake24Code}`);
     }
   }
 
