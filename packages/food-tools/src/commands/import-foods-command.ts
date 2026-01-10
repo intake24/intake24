@@ -1757,7 +1757,8 @@ class FoodDataParser {
       parts.push(current.trim());
 
     for (const part of parts) {
-      const match = part.match(/^(\w+)(?:\((.*)\))?$/);
+      // Allow optional whitespace between code and parentheses
+      const match = part.match(/^(\w+)\s*(?:\((.*)\))?$/);
 
       if (!match) {
         console.warn(`Skipping unrecognised associated food fragment: "${part}"`);
