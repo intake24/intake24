@@ -1436,7 +1436,8 @@ class ConsistencyChecker {
       // 2. COND({jp: ...}) - category code with localized text
       // 3. Simple codes without text
 
-      const foodMatch = part.match(/^(\w+)\((\{.+\})\)$/);
+      // Allow optional whitespace between code and parentheses
+      const foodMatch = part.match(/^(\w+)\s*\((\{.+\})\)$/);
       if (foodMatch) {
         const code = foodMatch[1];
         const text = foodMatch[2];
