@@ -1,17 +1,19 @@
 // Generic food import CLI command for any locale
-import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import chardet from 'chardet';
-import { parse as parseCsv } from 'csv-parse/sync';
-import * as iconv from 'iconv-lite';
 
 import { ApiClientV4, getApiClientV4EnvOptions } from '@intake24/api-client-v4';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import type { Logger } from '@intake24/common-backend/services/logger/logger';
-import type { PortionSizeMethod, StandardUnit } from '@intake24/common/surveys/portion-size';
+import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
 import type { UseInRecipeType } from '@intake24/common/types';
 import { useInRecipeTypes } from '@intake24/common/types';
 import type { CreateGlobalFoodRequest, CreateLocalFoodRequest, InheritableAttributes, UpdateGlobalFoodRequest } from '@intake24/common/types/http/admin';
+
+import {
+  CsvParserService,
+  FoodDataParserService,
+  USE_IN_RECIPE_TYPES,
+} from '../services';
 import FoodCategoryLookupApiService from '../services/food-category-lookup-api.service';
 
 // Constants
@@ -162,6 +164,7 @@ function validateOptions(options: FoodImportOptions): void {
  * Enhanced CSV parser with better error handling
  */
 class CsvParser {
+  // Delegate to shared CsvParserService
   static parse(
     content: string,
     skipHeaderRows: number,
@@ -171,142 +174,24 @@ class CsvParser {
     dataStartLine: number;
     categoryColumnKeys: string[];
   } {
-    if (!content || content.trim() === '')
-      throw new Error('CSV content is empty');
-
-    const headerLineIndex = this.findHeaderLineIndex(content);
-    const effectiveHeaderIndex = headerLineIndex >= 0 ? headerLineIndex : Math.max(skipHeaderRows - 1, 0);
-    const fromLine = effectiveHeaderIndex + 1;
-    const dataStartLine = effectiveHeaderIndex + 2; // 1-based line number of first data row
-
-    let headerNames: string[] = [];
-    let categoryColumnKeys: string[] = [];
-
-    const records = parseCsv(content, {
-      columns: (header: string[]) => {
-        headerNames = this.normalizeHeaders(header);
-        categoryColumnKeys = this.identifyCategoryColumns(header, headerNames);
-        return headerNames;
-      },
-      from_line: fromLine,
-      skip_empty_lines: true,
-      relax_column_count: true,
-      relax_quotes: true,
-    }) as Record<string, unknown>[];
-
-    return { records, headerNames, dataStartLine, categoryColumnKeys };
+    const service = new CsvParserService();
+    return service.parse(content, skipHeaderRows);
   }
 
-  /**
-   * Detect common encoding issues in CSV content
-   * Returns warnings for any detected issues
-   */
-  /**
-   * Read a file with automatic encoding detection and conversion to UTF-8
-   * Uses chardet for detection and iconv-lite for conversion
-   */
   static readFileWithEncodingDetection(filePath: string, logger: Logger): {
     content: string;
     detectedEncoding: string;
     wasConverted: boolean;
   } {
-    // Read file as buffer first
-    const buffer = readFileSync(filePath);
-
-    // Detect encoding
-    const detectedEncoding = chardet.detect(buffer) || 'UTF-8';
-    logger.info(`Detected file encoding: ${detectedEncoding}`);
-
-    const isUtf8 = detectedEncoding.toUpperCase() === 'UTF-8'
-      || detectedEncoding.toUpperCase() === 'ASCII';
-
-    if (isUtf8) {
-      // Already UTF-8, decode directly
-      return {
-        content: buffer.toString('utf8'),
-        detectedEncoding,
-        wasConverted: false,
-      };
-    }
-
-    // Need to convert from detected encoding to UTF-8
-    logger.warn(`⚠️  File is encoded as ${detectedEncoding}, converting to UTF-8...`);
-
-    // Check if iconv-lite supports this encoding
-    if (!iconv.encodingExists(detectedEncoding)) {
-      logger.warn(`   Encoding ${detectedEncoding} not supported by iconv-lite, attempting direct decode`);
-      return {
-        content: buffer.toString('utf8'),
-        detectedEncoding,
-        wasConverted: false,
-      };
-    }
-
-    const content = iconv.decode(buffer, detectedEncoding);
-    logger.info(`   Successfully converted from ${detectedEncoding} to UTF-8`);
-
-    return {
-      content,
-      detectedEncoding,
-      wasConverted: true,
+    // Create a logger adapter for the service
+    const serviceLogger = {
+      info: (msg: string) => logger.info(msg),
+      warn: (msg: string) => logger.warn(msg),
+      error: (msg: string) => logger.error(msg),
+      debug: (msg: string) => logger.debug(msg),
     };
-  }
-
-  private static findHeaderLineIndex(content: string): number {
-    const lines = content.split(/\r?\n/);
-    return lines.findIndex(line => /intake24\s*code/i.test(line));
-  }
-
-  private static normalizeHeaders(headers: string[]): string[] {
-    const seen = new Map<string, number>();
-
-    return headers.map((header, index) => {
-      const normalized = this.normalizeHeaderName(header);
-      let candidate = normalized || `column_${index}`;
-
-      const count = seen.get(candidate) ?? 0;
-      if (count > 0)
-        candidate = `${candidate}_${count + 1}`;
-      seen.set(candidate, count + 1);
-
-      return candidate;
-    });
-  }
-
-  private static normalizeHeaderName(header: string): string {
-    return header
-      .replace(/^\uFEFF/, '')
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, '_')
-      .replace(/[^a-z0-9_]/g, '');
-  }
-
-  private static identifyCategoryColumns(header: string[], normalized: string[]): string[] {
-    const categoryKeys: string[] = [];
-    let inCategorySection = false;
-
-    header.forEach((original, index) => {
-      const trimmed = original?.trim();
-      const key = normalized[index];
-
-      if (trimmed?.toLowerCase() === 'categories') {
-        inCategorySection = true;
-        categoryKeys.push(key);
-        return;
-      }
-
-      if (inCategorySection && (!trimmed || trimmed.length === 0)) {
-        categoryKeys.push(key);
-        return;
-      }
-
-      if (inCategorySection) {
-        inCategorySection = false;
-      }
-    });
-
-    return categoryKeys;
+    const service = new CsvParserService(serviceLogger);
+    return service.readFileWithEncodingDetection(filePath);
   }
 }
 
@@ -1662,241 +1547,59 @@ These associated foods were skipped because the referenced code does not exist i
  * Food data parsing utilities
  */
 class FoodDataParser {
-  /**
-   * Maps a locale ID to its language code for use in altNames.
-   * E.g., jp_JP_2024 -> ja, en_GB -> en
-   */
-  static getLanguageCode(localeId: string): string {
-    const localeToLanguage: Record<string, string> = {
-      jp_JP_2024: 'ja',
-      en_GB: 'en',
-      en_AU: 'en',
-      en_NZ: 'en',
-      fr_FR: 'fr',
-      pt_BR: 'pt',
-      // Add more as needed
-    };
+  // Delegate to shared FoodDataParserService for common methods
+  private static service = new FoodDataParserService();
 
-    return localeToLanguage[localeId] || localeId.split('_')[0].toLowerCase();
+  static getLanguageCode(localeId: string): string {
+    return this.service.getLanguageCode(localeId);
   }
 
   static parseBoolean(value: string): boolean {
-    if (!value)
-      return false;
-    return ['true', '1', 'yes', 'y'].includes(value.toLowerCase());
+    return this.service.parseBoolean(value);
   }
 
   static parseNumber(value: string): number | undefined {
-    if (!value)
-      return undefined;
-    const num = Number.parseFloat(value);
-    return Number.isNaN(num) ? undefined : num;
+    return this.service.parseNumber(value);
   }
 
   static parseUseInRecipes(value: string): UseInRecipeType | undefined {
-    if (!value)
+    // Use the shared service's parsing, but map to the project's type constants
+    const result = this.service.parseUseInRecipes(value);
+    if (result === undefined)
       return undefined;
 
-    const normalizedValue = value.toLowerCase().trim();
-
-    // Map CSV values to UseInRecipeType
-    // "Anywhere" or "0" → USE_ANYWHERE (0) - food can appear in both regular and recipe searches
-    // "RegularFoodsOnly" or "1" → USE_AS_REGULAR_FOOD (1) - food only appears in regular search
-    // "RecipesOnly" or "2" → USE_AS_RECIPE_INGREDIENT (2) - food only appears in recipe search
-    if (normalizedValue === 'anywhere' || normalizedValue === '0') {
-      return useInRecipeTypes.USE_ANYWHERE;
+    // Map from shared service constants to project constants
+    switch (result) {
+      case USE_IN_RECIPE_TYPES.USE_ANYWHERE:
+        return useInRecipeTypes.USE_ANYWHERE;
+      case USE_IN_RECIPE_TYPES.USE_AS_REGULAR_FOOD:
+        return useInRecipeTypes.USE_AS_REGULAR_FOOD;
+      case USE_IN_RECIPE_TYPES.USE_AS_RECIPE_INGREDIENT:
+        return useInRecipeTypes.USE_AS_RECIPE_INGREDIENT;
+      default:
+        return undefined;
     }
-    if (normalizedValue === 'regularfoodsonly' || normalizedValue === 'regular' || normalizedValue === '1') {
-      return useInRecipeTypes.USE_AS_REGULAR_FOOD;
-    }
-    if (normalizedValue === 'recipesonly' || normalizedValue === 'recipes' || normalizedValue === '2') {
-      return useInRecipeTypes.USE_AS_RECIPE_INGREDIENT;
-    }
-
-    // Unknown value - return undefined to let it inherit from category/defaults
-    return undefined;
   }
 
   static parseCategories(value: string): string[] {
-    if (!value)
-      return [];
-    return value.split(',').map(cat => cat.trim()).filter(Boolean);
+    return this.service.parseCategories(value);
   }
 
-  /**
-   * Parses synonyms and brand names from CSV into altNames structure.
-   *
-   * IMPORTANT: Synonyms are stored under the language code key (e.g., "ja" for Japanese),
-   * NOT under a "synonyms" key. This enables proper language-based search indexing.
-   *
-   * Brand names are included as search terms under the language key to enable finding
-   * foods by brand. Note: The Intake24 API does not currently support creating brand
-   * records via the food import API - brands must be managed separately if needed.
-   *
-   * @param languageCode - The language code for the locale (e.g., "ja", "en")
-   * @param synonyms - Comma-separated list of synonym terms
-   * @param brandNames - Comma-separated list of brand names
-   * @param brandNamesAsSearchTerms - Additional brand names to use as search terms
-   */
   static parseAlternativeNames(
     languageCode: string,
     synonyms: string,
     brandNames: string,
     brandNamesAsSearchTerms: string,
   ): Record<string, string[]> {
-    const altNames: Record<string, string[]> = {};
-
-    const parseList = (value: string): string[] =>
-      value
-        .split(',')
-        .map(item => item.trim())
-        .filter(Boolean);
-
-    // Collect all search terms: synonyms + brand names
-    const allTerms = new Set<string>();
-
-    // Add synonyms
-    if (synonyms) {
-      for (const term of parseList(synonyms)) {
-        allTerms.add(term);
-      }
-    }
-
-    // Add brand names as search terms (users often search by brand)
-    for (const source of [brandNames, brandNamesAsSearchTerms]) {
-      if (!source)
-        continue;
-      for (const term of parseList(source)) {
-        allTerms.add(term);
-      }
-    }
-
-    // Store all terms under the language code key
-    if (allTerms.size > 0) {
-      altNames[languageCode] = [...allTerms];
-    }
-
-    return altNames;
+    return this.service.parseAlternativeNames(languageCode, synonyms, brandNames, brandNamesAsSearchTerms);
   }
 
   static parseTags(food: FoodRow): string[] {
-    const tags: string[] = [];
-
-    if (food.foodCompositionTable) {
-      tags.push(`composition-${food.foodCompositionTable.toLowerCase()}`);
-    }
-
-    return tags;
+    return this.service.parseFoodTags(food.foodCompositionTable);
   }
 
   static tokenizeAssociatedFoods(value: string): Array<{ code: string; prompts: Record<string, string>; rawPrompt?: string }> {
-    const entries: Array<{ code: string; prompts: Record<string, string>; rawPrompt?: string }> = [];
-
-    const normalized = value.replace(/\r\n/g, '\n');
-    const parts: string[] = [];
-    let current = '';
-    let parenDepth = 0;
-    let braceDepth = 0;
-
-    for (const char of normalized) {
-      if (char === '(')
-        parenDepth++;
-      else if (char === ')' && parenDepth > 0)
-        parenDepth--;
-      else if (char === '{')
-        braceDepth++;
-      else if (char === '}' && braceDepth > 0)
-        braceDepth--;
-
-      if (char === ',' && parenDepth === 0 && braceDepth === 0) {
-        if (current.trim().length > 0)
-          parts.push(current.trim());
-        current = '';
-        continue;
-      }
-
-      current += char;
-    }
-
-    if (current.trim().length > 0)
-      parts.push(current.trim());
-
-    for (const part of parts) {
-      // Allow optional whitespace between code and parentheses
-      const match = part.match(/^(\w+)\s*(?:\((.*)\))?$/);
-
-      if (!match) {
-        console.warn(`Skipping unrecognised associated food fragment: "${part}"`);
-        continue;
-      }
-
-      const code = match[1];
-      const payload = match[2]?.trim() ?? '';
-
-      const prompts = payload ? this.parsePromptTranslations(payload) : {};
-      const rawPrompt = Object.keys(prompts).length > 0
-        ? Object.values(prompts)[0]
-        : this.extractRawPrompt(payload);
-
-      entries.push({
-        code,
-        prompts,
-        rawPrompt: rawPrompt || undefined,
-      });
-    }
-
-    return entries;
-  }
-
-  private static parsePromptTranslations(payload: string): Record<string, string> {
-    let content = payload.trim();
-    const translations: Record<string, string> = {};
-
-    if (!content)
-      return translations;
-
-    if (content.startsWith('{') && content.endsWith('}'))
-      content = content.slice(1, -1);
-
-    if (!content)
-      return translations;
-
-    // eslint-disable-next-line regexp/no-super-linear-backtracking -- complex regex for parsing key-value pairs
-    const regex = /([\w-]+)\s*:\s*([^,]+(?:(?=,\s*[\w-]+\s*:)|$))/g;
-    let match: RegExpExecArray | null;
-
-    // eslint-disable-next-line no-cond-assign -- standard regex exec pattern
-    while ((match = regex.exec(content)) !== null) {
-      const key = match[1].trim();
-      let value = match[2].trim();
-
-      if (!key)
-        continue;
-
-      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith('\'') && value.endsWith('\'')))
-        value = value.slice(1, -1);
-
-      value = value.trim();
-      if (!value)
-        continue;
-
-      translations[key] = value;
-    }
-
-    return translations;
-  }
-
-  private static extractRawPrompt(payload: string): string {
-    if (!payload)
-      return '';
-
-    let text = payload.trim();
-
-    if (text.startsWith('{') && text.endsWith('}'))
-      text = text.slice(1, -1);
-
-    text = text.replace(/^["']|["']$/g, '').trim();
-    return text;
+    return this.service.tokenizeAssociatedFoods(value);
   }
 
   static parseNutrientTableCodes(
@@ -1904,337 +1607,21 @@ class FoodDataParser {
     recordId: string,
     tableMapping: Record<string, string>,
   ): Record<string, string> {
-    if (!table || !recordId) {
-      return {};
-    }
-
-    // Skip empty or placeholder values
-    if (table.trim() === '' || recordId.trim() === '' || recordId === 'N/A' || recordId === '-') {
-      return {};
-    }
-
-    const defaultMapping: Record<string, string> = {
-      AUSNUT: 'AUSNUT',
-      STFCJ: 'STFCJ',
-      'DCD for Japan': 'DCDJapan',
-      NDNS: 'NDNS',
-      USDA: 'USDA',
-      FCT: 'FCT',
-      ...tableMapping,
-    };
-
-    const tableCode = defaultMapping[table] || table;
-
-    // Only return valid nutrient mappings
-    // Skip if record ID looks invalid (contains special characters that shouldn't be in nutrient codes)
-    if (recordId.includes('/') || recordId.includes('\\') || recordId.length > 50) {
-      console.warn(`Skipping invalid nutrient record ID: ${tableCode}/${recordId}`);
-      return {};
-    }
-
-    return { [tableCode]: recordId };
+    return this.service.parseNutrientTableCodes(table, recordId, tableMapping);
   }
 
   static parsePortionSizeMethods(value: string): PortionSizeMethod[] {
-    if (!value)
-      return [];
-
-    const methods: PortionSizeMethod[] = [];
-    const methodStrings = value.split(/Method:/i).filter(Boolean);
-
-    console.debug(`Parsing ${methodStrings.length} portion size methods from: "${value.substring(0, 100)}..."`);
-
-    for (const methodStr of methodStrings) {
-      const method = FoodDataParser.parsePortionSizeMethod(methodStr.trim());
-      if (method) {
-        methods.push(method);
-        console.debug(`Successfully parsed ${method.method} method`);
-      }
-      else {
-        console.warn(`Failed to parse portion method from: "${methodStr.trim()}"`);
-      }
-    }
-
-    console.debug(`Total portion methods parsed: ${methods.length}`);
-    return methods;
+    return this.service.parsePortionSizeMethods(value);
   }
 
   static parsePortionSizeMethod(methodStr: string): PortionSizeMethod | null {
-    try {
-      const normalizedInput = methodStr.replace(/\s+/g, ' ').trim();
-      if (!normalizedInput.length)
-        return null;
-
-      const commaParts = normalizedInput.split(',').map(p => p.trim()).filter(Boolean);
-
-      let methodName: string;
-      let paramSection: string;
-
-      if (commaParts.length > 1) {
-        methodName = commaParts[0];
-        paramSection = commaParts.slice(1).join(', ');
-      }
-      else {
-        const firstSpace = normalizedInput.indexOf(' ');
-        if (firstSpace === -1) {
-          methodName = normalizedInput;
-          paramSection = '';
-        }
-        else {
-          methodName = normalizedInput.slice(0, firstSpace).trim();
-          paramSection = normalizedInput.slice(firstSpace + 1).trim();
-        }
-      }
-
-      methodName = methodName.toLowerCase();
-
-      const params: Record<string, string> = {};
-      const pushParam = (key: string, value: string) => {
-        const trimmedValue = value.trim().replace(/,+$/, '');
-        if (!trimmedValue)
-          return;
-        const normalizedKey = key.replace(/[-\s_]/g, '').toLowerCase();
-        params[normalizedKey] = trimmedValue;
-        params[key] = trimmedValue;
-      };
-
-      if (paramSection.length) {
-        // eslint-disable-next-line regexp/no-super-linear-backtracking -- complex regex for parsing method parameters
-        const regex = /([\w-]+)\s*:\s*([^:]+?)(?=\s+[\w-]+\s*:|$)/g;
-        let match: RegExpExecArray | null;
-        // eslint-disable-next-line no-cond-assign -- standard regex exec pattern
-        while ((match = regex.exec(paramSection)) !== null) {
-          pushParam(match[1], match[2]);
-        }
-
-        if (Object.keys(params).length === 0) {
-          paramSection.split(',').forEach((part) => {
-            const [key, value] = part.split(':').map(p => p.trim());
-            if (key && value)
-              pushParam(key, value);
-          });
-        }
-      }
-
-      const conversionFactor = Number.parseFloat(params.conversion || '1.0');
-
-      if (methodName === 'as-served') {
-        return {
-          method: 'as-served',
-          description: 'use_an_image',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '1',
-          parameters: {
-            servingImageSet: params.servingImageSet || params.servingimageset || 'default',
-            leftoversImageSet: params.leftoversImageSet || params.leftoversimageset || null,
-          },
-        };
-      }
-      else if (methodName === 'standard-portion') {
-        const units: StandardUnit[] = [];
-
-        const getParamValue = (key: string): string | undefined => {
-          const normalizedKey = key.replace(/[-\s_]/g, '').toLowerCase();
-          return params[key]
-            ?? params[normalizedKey]
-            ?? params[key.toLowerCase()];
-        };
-
-        if (params.unitscount) {
-          const unitCount = Number.parseInt(params.unitscount, 10);
-          for (let i = 0; i < unitCount; i++) {
-            const unitName = getParamValue(`unit${i}-name`);
-            const unitWeight = getParamValue(`unit${i}-weight`);
-            const unitOmit = getParamValue(`unit${i}-omit-food-description`);
-
-            if (unitName && unitWeight) {
-              units.push({
-                name: unitName,
-                weight: Number.parseFloat(unitWeight),
-                omitFoodDescription: unitOmit === 'true',
-              });
-            }
-          }
-        }
-
-        return {
-          method: 'standard-portion',
-          description: 'use_a_standard_portion',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '2',
-          parameters: { units },
-        };
-      }
-      else if (methodName === 'cereal') {
-        return {
-          method: 'cereal',
-          description: 'cereal',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '3',
-          parameters: {
-            type: (params.type as any) || 'flake',
-          },
-        };
-      }
-      else if (methodName === 'drink-scale') {
-        return {
-          method: 'drink-scale',
-          description: 'use_a_drink_scale',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '4',
-          parameters: {
-            drinkwareId: params.drinkwareid || params['drinkware-id'] || params.drinkwareId,
-            initialFillLevel: Number.parseFloat(params.initialfilllevel || params['initial-fill-level'] || '0.9'),
-            skipFillLevel: params.skipfilllevel === 'true' || params['skip-fill-level'] === 'true',
-          },
-        };
-      }
-      else if (methodName === 'guide-image') {
-        return {
-          method: 'guide-image',
-          description: 'use_a_guide_image',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '5',
-          parameters: {
-            guideImageId: params.guideimageid || params['guide-image-id'] || params.guideImageId,
-          },
-        };
-      }
-      else if (methodName === 'direct-weight') {
-        return {
-          method: 'direct-weight',
-          description: 'enter_weight_directly',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '6',
-          parameters: {},
-        };
-      }
-      else if (methodName === 'milk-in-a-hot-drink') {
-        // Parse options if provided, otherwise use default structure
-        const options: any = { en: [] };
-        if (params.options) {
-          try {
-            // Options might be in format: option1:value1;option2:value2
-            const optionPairs = params.options.split(';');
-            optionPairs.forEach((pair: string) => {
-              const [label, value] = pair.split(':');
-              if (label && value) {
-                options.en.push({ label, value: Number.parseFloat(value) });
-              }
-            });
-          }
-          catch (e) {
-            console.warn('Failed to parse milk-in-a-hot-drink options:', e);
-          }
-        }
-
-        return {
-          method: 'milk-in-a-hot-drink',
-          description: 'milk_in_a_hot_drink',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '7',
-          parameters: {
-            options,
-          },
-        };
-      }
-      else if (methodName === 'milk-on-cereal') {
-        return {
-          method: 'milk-on-cereal',
-          description: 'milk_on_cereal',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '8',
-          parameters: {},
-        };
-      }
-      else if (methodName === 'parent-food-portion') {
-        // Parse options similar to milk-in-a-hot-drink
-        const options: any = { _default: { en: [] } };
-        if (params.options) {
-          try {
-            const optionPairs = params.options.split(';');
-            optionPairs.forEach((pair: string) => {
-              const [label, value] = pair.split(':');
-              if (label && value) {
-                options._default.en.push({ label, value: Number.parseFloat(value) });
-              }
-            });
-          }
-          catch (e) {
-            console.warn('Failed to parse parent-food-portion options:', e);
-          }
-        }
-
-        return {
-          method: 'parent-food-portion',
-          description: 'parent_food_portion',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '9',
-          parameters: {
-            options,
-          },
-        };
-      }
-      else if (methodName === 'pizza') {
-        return {
-          method: 'pizza',
-          description: 'pizza',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '10',
-          parameters: {},
-        };
-      }
-      else if (methodName === 'pizza-v2') {
-        return {
-          method: 'pizza-v2',
-          description: 'pizza_v2',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '11',
-          parameters: {},
-        };
-      }
-      else if (methodName === 'recipe-builder') {
-        return {
-          method: 'recipe-builder',
-          description: 'recipe_builder',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '12',
-          parameters: {},
-        };
-      }
-      else if (methodName === 'unknown') {
-        return {
-          method: 'unknown',
-          description: 'unknown_portion_size',
-          useForRecipes: false,
-          conversionFactor,
-          orderBy: '13',
-          parameters: {},
-        };
-      }
-
-      // Log unrecognized method for debugging
-      console.warn(`Unrecognized portion size method: ${methodName}`);
-      return null;
-    }
-    catch (error) {
-      console.error('Error parsing portion size method:', error);
-      return null;
-    }
+    return this.service.parsePortionSizeMethod(methodStr);
   }
 
+  /**
+   * Parse associated foods with API lookup - this method requires the API client
+   * and is specific to the import command, so it remains here
+   */
   static async parseAssociatedFoods(value: string, apiClient: ApiClientV4): Promise<ParseAssociatedFoodsResult> {
     const result: ParseAssociatedFoodsResult = {
       associatedFoods: [],
