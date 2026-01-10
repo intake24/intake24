@@ -195,6 +195,59 @@ class CsvParser {
     return { records, headerNames, dataStartLine, categoryColumnKeys };
   }
 
+  /**
+   * Detect common encoding issues in CSV content
+   * Returns warnings for any detected issues
+   */
+  static detectEncodingIssues(content: string): string[] {
+    const warnings: string[] = [];
+
+    // Common UTF-8 → Latin-1 corruption patterns
+    const utf8CorruptionPatterns = [
+      { pattern: /Ã©/g, correct: 'é', name: 'e-acute' },
+      { pattern: /Ã¨/g, correct: 'è', name: 'e-grave' },
+      { pattern: /Ã /g, correct: 'à', name: 'a-grave' },
+      { pattern: /Ã¢/g, correct: 'â', name: 'a-circumflex' },
+      { pattern: /Ã®/g, correct: 'î', name: 'i-circumflex' },
+      { pattern: /Ã´/g, correct: 'ô', name: 'o-circumflex' },
+      { pattern: /Ã»/g, correct: 'û', name: 'u-circumflex' },
+      { pattern: /Ã§/g, correct: 'ç', name: 'c-cedilla' },
+      { pattern: /Ã±/g, correct: 'ñ', name: 'n-tilde' },
+      { pattern: /Ã¼/g, correct: 'ü', name: 'u-umlaut' },
+      { pattern: /Ã¶/g, correct: 'ö', name: 'o-umlaut' },
+      { pattern: /Ã¤/g, correct: 'ä', name: 'a-umlaut' },
+    ];
+
+    for (const { pattern, correct, name } of utf8CorruptionPatterns) {
+      const matches = content.match(pattern);
+      if (matches && matches.length > 0) {
+        warnings.push(
+          `Found ${matches.length} instance(s) of UTF-8 encoding corruption for '${correct}' (${name}). ` +
+          `Re-save CSV as UTF-8 to fix.`,
+        );
+      }
+    }
+
+    // Check for HTML entities that shouldn't be in raw data
+    const htmlEntityPatterns = [
+      { pattern: /&lt;/g, correct: '<' },
+      { pattern: /&gt;/g, correct: '>' },
+      { pattern: /&amp;/g, correct: '&' },
+    ];
+
+    for (const { pattern, correct } of htmlEntityPatterns) {
+      const matches = content.match(pattern);
+      if (matches && matches.length > 0) {
+        warnings.push(
+          `Found ${matches.length} HTML-encoded '${correct}' character(s). ` +
+          `Consider using the actual character instead of HTML entity.`,
+        );
+      }
+    }
+
+    return warnings;
+  }
+
   private static findHeaderLineIndex(content: string): number {
     const lines = content.split(/\r?\n/);
     return lines.findIndex(line => /intake24\s*code/i.test(line));
@@ -419,6 +472,16 @@ class FoodImportOrchestrator {
     }
     catch (error) {
       throw new Error(`Failed to read CSV file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+
+    // Check for encoding issues and warn user
+    const encodingWarnings = CsvParser.detectEncodingIssues(csvContent);
+    if (encodingWarnings.length > 0) {
+      this.logger.warn('⚠️  Encoding issues detected in CSV file:');
+      for (const warning of encodingWarnings) {
+        this.logger.warn(`   - ${warning}`);
+      }
+      this.logger.warn('   These issues may cause incorrect data to be imported.');
     }
 
     const { records, headerNames, dataStartLine, categoryColumnKeys } = CsvParser.parse(
