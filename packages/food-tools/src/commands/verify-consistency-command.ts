@@ -8,13 +8,14 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { parse as parseCsv } from 'csv-parse/sync';
 import { ApiClientV4, getApiClientV4EnvOptions } from '@intake24/api-client-v4';
 import { logger as mainLogger } from '@intake24/common-backend';
 import type { Logger } from '@intake24/common-backend';
 import type { Environment } from '@intake24/common/types';
 import type { FoodEntry } from '@intake24/common/types/http/admin/foods';
 import { Database, databaseConfig } from '@intake24/db';
+
+import { CsvParserService, FoodDataParserService } from '../services';
 
 type GlobalFood = FoodEntry;
 
@@ -250,11 +251,15 @@ class ConsistencyChecker {
   private logger: Logger;
   private apiClient: ApiClientV4;
   private database?: any;
+  private csvParser: CsvParserService;
+  private foodDataParser: FoodDataParserService;
 
   constructor() {
     this.logger = mainLogger.child({ service: 'Consistency Checker' });
     const apiOptions = getApiClientV4EnvOptions();
     this.apiClient = new ApiClientV4(this.logger, apiOptions);
+    this.csvParser = new CsvParserService();
+    this.foodDataParser = new FoodDataParserService();
   }
 
   /**
@@ -356,18 +361,11 @@ class ConsistencyChecker {
   /**
    * Parse CSV file into structured food data
    */
-  private async parseCsvFile(inputPath: string, skipRows: number): Promise<FoodRow[]> {
+  private async parseCsvFile(inputPath: string, _skipRows: number): Promise<FoodRow[]> {
     const csvContent = readFileSync(inputPath, 'utf8');
-    const headerLineIndex = this.findHeaderLineIndex(csvContent);
-    const fromLine = headerLineIndex >= 0 ? headerLineIndex + 1 : Math.max(skipRows + 1, 1);
 
-    const records = parseCsv(csvContent, {
-      columns: (header: string[]) => this.normalizeHeaders(header),
-      from_line: fromLine,
-      skip_empty_lines: true,
-      relax_column_count: true,
-      relax_quotes: true,
-    }) as Record<string, unknown>[];
+    // Use the shared CsvParserService for parsing
+    const { records } = this.csvParser.parse(csvContent, 0);
 
     return records
       .map(record => this.mapRecordToFoodRow(record))
@@ -375,33 +373,15 @@ class ConsistencyChecker {
   }
 
   private findHeaderLineIndex(content: string): number {
-    const lines = content.split(/\r?\n/);
-    return lines.findIndex(line => /intake24\s*code/i.test(line));
+    return this.csvParser.findHeaderLineIndex(content);
   }
 
   private normalizeHeaders(headers: string[]): string[] {
-    const seen = new Map<string, number>();
-
-    return headers.map((header, index) => {
-      const normalized = this.normalizeHeaderName(header);
-      let candidate = normalized || `column_${index}`;
-
-      const count = seen.get(candidate) ?? 0;
-      if (count > 0)
-        candidate = `${candidate}_${count + 1}`;
-      seen.set(candidate, count + 1);
-
-      return candidate;
-    });
+    return this.csvParser.normalizeHeaders(headers);
   }
 
   private normalizeHeaderName(header: string): string {
-    return header
-      .replace(/^\uFEFF/, '')
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, '_')
-      .replace(/[^a-z0-9_]/g, '');
+    return this.csvParser.normalizeHeaderName(header);
   }
 
   private mapRecordToFoodRow(record: Record<string, unknown>): FoodRow {
@@ -428,17 +408,7 @@ class ConsistencyChecker {
   }
 
   private getColumnValue(record: Record<string, unknown>, aliases: string[]): string {
-    for (const alias of aliases) {
-      const value = record[alias];
-      if (value !== undefined && value !== null) {
-        const stringValue = typeof value === 'string' ? value : String(value);
-        const trimmedValue = stringValue.trim();
-        if (trimmedValue.length > 0)
-          return trimmedValue;
-      }
-    }
-
-    return '';
+    return this.csvParser.getColumnValue(record, aliases);
   }
 
   /**
@@ -1567,19 +1537,15 @@ class ConsistencyChecker {
   }
 
   private parseBoolean(value: string): boolean {
-    if (!value || value.trim() === '')
-      return false;
-    return value.toUpperCase() === 'TRUE';
+    return this.foodDataParser.parseBoolean(value);
   }
 
   /**
    * Parse number value from CSV string
    */
   private parseNumber(value: string): number | null {
-    if (!value || value.trim() === '')
-      return null;
-    const num = Number.parseFloat(value);
-    return Number.isNaN(num) ? null : num;
+    const result = this.foodDataParser.parseNumber(value);
+    return result === undefined ? null : result;
   }
 
   /**
@@ -1590,34 +1556,15 @@ class ConsistencyChecker {
    * - "RecipesOnly" or "Recipes" or "2" → 2 (USE_AS_RECIPE_INGREDIENT)
    */
   private parseUseInRecipes(value: string): number | null {
-    if (!value || value.trim() === '')
-      return null;
-
-    const normalizedValue = value.toLowerCase().trim();
-
-    // Map text values to numeric codes
-    if (normalizedValue === 'anywhere' || normalizedValue === '0') {
-      return 0; // USE_ANYWHERE
-    }
-    if (normalizedValue === 'regularfoodsonly' || normalizedValue === 'regular' || normalizedValue === '1') {
-      return 1; // USE_AS_REGULAR_FOOD
-    }
-    if (normalizedValue === 'recipesonly' || normalizedValue === 'recipes' || normalizedValue === '2') {
-      return 2; // USE_AS_RECIPE_INGREDIENT
-    }
-
-    // Try parsing as number
-    const num = Number.parseFloat(value);
-    return Number.isNaN(num) ? null : num;
+    const result = this.foodDataParser.parseUseInRecipes(value);
+    return result === undefined ? null : result;
   }
 
   /**
    * Parse category string into array
    */
   private parseCategories(categoryString: string): string[] {
-    if (!categoryString)
-      return [];
-    return categoryString.split(',').map(cat => cat.trim()).filter(Boolean);
+    return this.foodDataParser.parseCategories(categoryString);
   }
 
   /**
