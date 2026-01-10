@@ -1,7 +1,9 @@
 // Generic food import CLI command for any locale
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import chardet from 'chardet';
 import { parse as parseCsv } from 'csv-parse/sync';
+import * as iconv from 'iconv-lite';
 
 import { ApiClientV4, getApiClientV4EnvOptions } from '@intake24/api-client-v4';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
@@ -199,53 +201,55 @@ class CsvParser {
    * Detect common encoding issues in CSV content
    * Returns warnings for any detected issues
    */
-  static detectEncodingIssues(content: string): string[] {
-    const warnings: string[] = [];
+  /**
+   * Read a file with automatic encoding detection and conversion to UTF-8
+   * Uses chardet for detection and iconv-lite for conversion
+   */
+  static readFileWithEncodingDetection(filePath: string, logger: Logger): {
+    content: string;
+    detectedEncoding: string;
+    wasConverted: boolean;
+  } {
+    // Read file as buffer first
+    const buffer = readFileSync(filePath);
 
-    // Common UTF-8 → Latin-1 corruption patterns
-    const utf8CorruptionPatterns = [
-      { pattern: /Ã©/g, correct: 'é', name: 'e-acute' },
-      { pattern: /Ã¨/g, correct: 'è', name: 'e-grave' },
-      { pattern: /Ã /g, correct: 'à', name: 'a-grave' },
-      { pattern: /Ã¢/g, correct: 'â', name: 'a-circumflex' },
-      { pattern: /Ã®/g, correct: 'î', name: 'i-circumflex' },
-      { pattern: /Ã´/g, correct: 'ô', name: 'o-circumflex' },
-      { pattern: /Ã»/g, correct: 'û', name: 'u-circumflex' },
-      { pattern: /Ã§/g, correct: 'ç', name: 'c-cedilla' },
-      { pattern: /Ã±/g, correct: 'ñ', name: 'n-tilde' },
-      { pattern: /Ã¼/g, correct: 'ü', name: 'u-umlaut' },
-      { pattern: /Ã¶/g, correct: 'ö', name: 'o-umlaut' },
-      { pattern: /Ã¤/g, correct: 'ä', name: 'a-umlaut' },
-    ];
+    // Detect encoding
+    const detectedEncoding = chardet.detect(buffer) || 'UTF-8';
+    logger.info(`Detected file encoding: ${detectedEncoding}`);
 
-    for (const { pattern, correct, name } of utf8CorruptionPatterns) {
-      const matches = content.match(pattern);
-      if (matches && matches.length > 0) {
-        warnings.push(
-          `Found ${matches.length} instance(s) of UTF-8 encoding corruption for '${correct}' (${name}). ` +
-          `Re-save CSV as UTF-8 to fix.`,
-        );
-      }
+    const isUtf8 = detectedEncoding.toUpperCase() === 'UTF-8'
+      || detectedEncoding.toUpperCase() === 'ASCII';
+
+    if (isUtf8) {
+      // Already UTF-8, decode directly
+      return {
+        content: buffer.toString('utf8'),
+        detectedEncoding,
+        wasConverted: false,
+      };
     }
 
-    // Check for HTML entities that shouldn't be in raw data
-    const htmlEntityPatterns = [
-      { pattern: /&lt;/g, correct: '<' },
-      { pattern: /&gt;/g, correct: '>' },
-      { pattern: /&amp;/g, correct: '&' },
-    ];
+    // Need to convert from detected encoding to UTF-8
+    logger.warn(`⚠️  File is encoded as ${detectedEncoding}, converting to UTF-8...`);
 
-    for (const { pattern, correct } of htmlEntityPatterns) {
-      const matches = content.match(pattern);
-      if (matches && matches.length > 0) {
-        warnings.push(
-          `Found ${matches.length} HTML-encoded '${correct}' character(s). ` +
-          `Consider using the actual character instead of HTML entity.`,
-        );
-      }
+    // Check if iconv-lite supports this encoding
+    if (!iconv.encodingExists(detectedEncoding)) {
+      logger.warn(`   Encoding ${detectedEncoding} not supported by iconv-lite, attempting direct decode`);
+      return {
+        content: buffer.toString('utf8'),
+        detectedEncoding,
+        wasConverted: false,
+      };
     }
 
-    return warnings;
+    const content = iconv.decode(buffer, detectedEncoding);
+    logger.info(`   Successfully converted from ${detectedEncoding} to UTF-8`);
+
+    return {
+      content,
+      detectedEncoding,
+      wasConverted: true,
+    };
   }
 
   private static findHeaderLineIndex(content: string): number {
@@ -465,23 +469,21 @@ class FoodImportOrchestrator {
   private async loadAndValidateData(): Promise<FoodRow[]> {
     this.logger.info('Reading and validating CSV file...');
 
-    // Read CSV file with error handling
+    // Read CSV file with automatic encoding detection and conversion
     let csvContent: string;
     try {
-      csvContent = readFileSync(this.options.inputPath, { encoding: 'utf8' });
+      const { content, detectedEncoding, wasConverted } = CsvParser.readFileWithEncodingDetection(
+        this.options.inputPath,
+        this.logger,
+      );
+      csvContent = content;
+
+      if (wasConverted) {
+        this.logger.warn(`   Note: File was converted from ${detectedEncoding} to UTF-8. Consider re-saving the source file as UTF-8.`);
+      }
     }
     catch (error) {
       throw new Error(`Failed to read CSV file: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-
-    // Check for encoding issues and warn user
-    const encodingWarnings = CsvParser.detectEncodingIssues(csvContent);
-    if (encodingWarnings.length > 0) {
-      this.logger.warn('⚠️  Encoding issues detected in CSV file:');
-      for (const warning of encodingWarnings) {
-        this.logger.warn(`   - ${warning}`);
-      }
-      this.logger.warn('   These issues may cause incorrect data to be imported.');
     }
 
     const { records, headerNames, dataStartLine, categoryColumnKeys } = CsvParser.parse(
