@@ -15,11 +15,11 @@ import FoodCategoryLookupApiService from '../services/food-category-lookup-api.s
 // Constants
 const CSV_CONSTANTS = {
   MIN_REQUIRED_COLUMNS: 16,
-  DEFAULT_BATCH_SIZE: 10,
+  DEFAULT_BATCH_SIZE: 25,
   DEFAULT_SKIP_HEADER_ROWS: 1,
   DEFAULT_FOOD_GROUP: '1',
   VALID_ACTIONS: ['1', '2', '3', '4'],
-  BATCH_DELAY_MS: 100,
+  BATCH_DELAY_MS: 50,
 } as const;
 
 export interface FoodImportOptions {
@@ -1259,6 +1259,11 @@ class FoodProcessor {
       && (categories.length !== existingCategories.length
         || !categories.every(cat => existingCategories.includes(cat)));
 
+    // Check if name has changed (normalize whitespace for comparison)
+    const csvName = food.englishDescription?.trim() || '';
+    const dbName = existingGlobalFood.name?.trim() || '';
+    const nameChanged = csvName.length > 0 && csvName !== dbName;
+
     // Parse CSV attributes - use CSV values first, fallback to existing DB values
     const csvReadyMeal = FoodDataParser.parseBoolean(food.readyMealOption);
     const csvSameAsBefore = FoodDataParser.parseBoolean(food.sameAsBeforeOption);
@@ -1280,10 +1285,10 @@ class FoodProcessor {
         || (csvReasonableAmount !== undefined && csvReasonableAmount !== existingAttrs?.reasonableAmount)
         || (csvUseInRecipes !== undefined && csvUseInRecipes !== existingAttrs?.useInRecipes);
 
-    // Update if categories or attributes have changed
-    if (categoriesChanged || attributesChanged) {
+    // Update if name, categories, or attributes have changed
+    if (nameChanged || categoriesChanged || attributesChanged) {
       const updateRequest: UpdateGlobalFoodRequest = {
-        name: existingGlobalFood.name,
+        name: csvName || existingGlobalFood.name,
         foodGroupId: existingGlobalFood.foodGroupId,
         attributes,
         parentCategories: categories.length > 0 ? categories : existingCategories,
@@ -1295,15 +1300,14 @@ class FoodProcessor {
         updateRequest,
       );
 
-      if (categoriesChanged && attributesChanged) {
-        logger.debug(`Updated categories and attributes for existing global food: ${food.intake24Code}`);
-      }
-      else if (categoriesChanged) {
-        logger.debug(`Updated categories for existing global food: ${food.intake24Code}`);
-      }
-      else {
-        logger.debug(`Updated attributes for existing global food: ${food.intake24Code}`);
-      }
+      const changes: string[] = [];
+      if (nameChanged)
+        changes.push('name');
+      if (categoriesChanged)
+        changes.push('categories');
+      if (attributesChanged)
+        changes.push('attributes');
+      logger.debug(`Updated ${changes.join(', ')} for existing global food: ${food.intake24Code}`);
     }
 
     return false; // Global food already existed

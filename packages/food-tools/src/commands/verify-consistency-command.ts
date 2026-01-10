@@ -1479,43 +1479,56 @@ class ConsistencyChecker {
       let issueCount = 0;
 
       // Check Ready Meal Option
-      const csvReadyMeal = this.parseBoolean(csvFood.readyMealOption);
-      const dbReadyMeal = dbFood.attributes?.readyMealOption;
-      // Only consider mismatch if DB has a defined value different from CSV
-      const readyMealMatch = dbReadyMeal === undefined || csvReadyMeal === dbReadyMeal;
-      if (!readyMealMatch) {
-        attributes.readyMealOption = { csv: csvReadyMeal, db: dbReadyMeal, match: false };
-        issueCount++;
+      // Skip if CSV value is "Inherited" - DB correctly stores the resolved inherited value
+      if (!this.isInherited(csvFood.readyMealOption)) {
+        const csvReadyMeal = this.parseBoolean(csvFood.readyMealOption);
+        const dbReadyMeal = dbFood.attributes?.readyMealOption;
+        // Only consider mismatch if DB has a defined value different from CSV
+        const readyMealMatch = dbReadyMeal === undefined || csvReadyMeal === dbReadyMeal;
+        if (!readyMealMatch) {
+          attributes.readyMealOption = { csv: csvReadyMeal, db: dbReadyMeal, match: false };
+          issueCount++;
+        }
       }
 
       // Check Same As Before Option
-      const csvSameAsBefore = this.parseBoolean(csvFood.sameAsBeforeOption);
-      const dbSameAsBefore = dbFood.attributes?.sameAsBeforeOption;
-      // Only consider mismatch if DB has a defined value different from CSV
-      const sameAsBeforeMatch = dbSameAsBefore === undefined || csvSameAsBefore === dbSameAsBefore;
-      if (!sameAsBeforeMatch) {
-        attributes.sameAsBeforeOption = { csv: csvSameAsBefore, db: dbSameAsBefore, match: false };
-        issueCount++;
+      // Skip if CSV value is "Inherited" - DB correctly stores the resolved inherited value
+      if (!this.isInherited(csvFood.sameAsBeforeOption)) {
+        const csvSameAsBefore = this.parseBoolean(csvFood.sameAsBeforeOption);
+        const dbSameAsBefore = dbFood.attributes?.sameAsBeforeOption;
+        // Only consider mismatch if DB has a defined value different from CSV
+        const sameAsBeforeMatch = dbSameAsBefore === undefined || csvSameAsBefore === dbSameAsBefore;
+        if (!sameAsBeforeMatch) {
+          attributes.sameAsBeforeOption = { csv: csvSameAsBefore, db: dbSameAsBefore, match: false };
+          issueCount++;
+        }
       }
 
       // Check Reasonable Amount (numeric field)
-      const csvReasonableAmount = this.parseNumber(csvFood.reasonableAmount);
-      const dbReasonableAmount = dbFood.attributes?.reasonableAmount;
-      // Only consider mismatch if DB has a defined value different from CSV
-      const reasonableAmountMatch = dbReasonableAmount === undefined || csvReasonableAmount === dbReasonableAmount;
-      if (!reasonableAmountMatch && (csvReasonableAmount !== null || dbReasonableAmount !== null)) {
-        attributes.reasonableAmount = { csv: csvReasonableAmount, db: dbReasonableAmount, match: false };
-        issueCount++;
+      // Skip if CSV value is "Inherited" - DB correctly stores the resolved inherited value
+      if (!this.isInherited(csvFood.reasonableAmount)) {
+        const csvReasonableAmount = this.parseNumber(csvFood.reasonableAmount);
+        const dbReasonableAmount = dbFood.attributes?.reasonableAmount;
+        // Only consider mismatch if DB has a defined value different from CSV
+        const reasonableAmountMatch = dbReasonableAmount === undefined || csvReasonableAmount === dbReasonableAmount;
+        if (!reasonableAmountMatch && (csvReasonableAmount !== null || dbReasonableAmount !== null)) {
+          attributes.reasonableAmount = { csv: csvReasonableAmount, db: dbReasonableAmount, match: false };
+          issueCount++;
+        }
       }
 
-      // Check Use In Recipes (numeric field)
-      const csvUseInRecipes = this.parseNumber(csvFood.useInRecipes);
-      const dbUseInRecipes = dbFood.attributes?.useInRecipes;
-      // Only consider mismatch if DB has a defined value different from CSV
-      const useInRecipesMatch = dbUseInRecipes === undefined || csvUseInRecipes === dbUseInRecipes;
-      if (!useInRecipesMatch && (csvUseInRecipes !== null || dbUseInRecipes !== null)) {
-        attributes.useInRecipes = { csv: csvUseInRecipes, db: dbUseInRecipes, match: false };
-        issueCount++;
+      // Check Use In Recipes (numeric field with text mapping)
+      // Maps: "Anywhere" → 0, "RegularFoodsOnly"/"Regular" → 1, "RecipesOnly"/"Recipes" → 2
+      // Skip if CSV value is "Inherited" - DB correctly stores the resolved inherited value
+      if (!this.isInherited(csvFood.useInRecipes)) {
+        const csvUseInRecipes = this.parseUseInRecipes(csvFood.useInRecipes);
+        const dbUseInRecipes = dbFood.attributes?.useInRecipes;
+        // Only consider mismatch if DB has a defined value different from CSV
+        const useInRecipesMatch = dbUseInRecipes === undefined || csvUseInRecipes === dbUseInRecipes;
+        if (!useInRecipesMatch && (csvUseInRecipes !== null || dbUseInRecipes !== null)) {
+          attributes.useInRecipes = { csv: csvUseInRecipes, db: dbUseInRecipes, match: false };
+          issueCount++;
+        }
       }
 
       // Only add to discrepancies if there are actual issues
@@ -1542,6 +1555,16 @@ class ConsistencyChecker {
   /**
    * Parse boolean value from CSV string
    */
+
+  /**
+   * Check if a CSV value indicates inheritance from parent category.
+   * When a value is "Inherited", the database stores the resolved/inherited value,
+   * so we should skip comparison for that attribute.
+   */
+  private isInherited(value: string): boolean {
+    return value?.trim().toLowerCase() === 'inherited';
+  }
+
   private parseBoolean(value: string): boolean {
     if (!value || value.trim() === '')
       return false;
@@ -1554,6 +1577,35 @@ class ConsistencyChecker {
   private parseNumber(value: string): number | null {
     if (!value || value.trim() === '')
       return null;
+    const num = Number.parseFloat(value);
+    return Number.isNaN(num) ? null : num;
+  }
+
+  /**
+   * Parse useInRecipes value from CSV string
+   * Maps text values to numeric codes:
+   * - "Anywhere" or "0" → 0 (USE_ANYWHERE)
+   * - "RegularFoodsOnly" or "Regular" or "1" → 1 (USE_AS_REGULAR_FOOD)
+   * - "RecipesOnly" or "Recipes" or "2" → 2 (USE_AS_RECIPE_INGREDIENT)
+   */
+  private parseUseInRecipes(value: string): number | null {
+    if (!value || value.trim() === '')
+      return null;
+
+    const normalizedValue = value.toLowerCase().trim();
+
+    // Map text values to numeric codes
+    if (normalizedValue === 'anywhere' || normalizedValue === '0') {
+      return 0; // USE_ANYWHERE
+    }
+    if (normalizedValue === 'regularfoodsonly' || normalizedValue === 'regular' || normalizedValue === '1') {
+      return 1; // USE_AS_REGULAR_FOOD
+    }
+    if (normalizedValue === 'recipesonly' || normalizedValue === 'recipes' || normalizedValue === '2') {
+      return 2; // USE_AS_RECIPE_INGREDIENT
+    }
+
+    // Try parsing as number
     const num = Number.parseFloat(value);
     return Number.isNaN(num) ? null : num;
   }
