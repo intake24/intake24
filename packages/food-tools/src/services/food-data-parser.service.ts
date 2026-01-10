@@ -2,6 +2,11 @@
  * Food data parsing service for transforming raw CSV values into typed food data
  */
 
+import type {
+  CerealType,
+  PortionSizeMethod,
+  StandardUnit,
+} from '@intake24/common/surveys';
 import type { Logger } from './csv-parser.service';
 
 // UseInRecipeType enum values (matching API types)
@@ -13,26 +18,8 @@ export const USE_IN_RECIPE_TYPES = {
 
 export type UseInRecipeType = (typeof USE_IN_RECIPE_TYPES)[keyof typeof USE_IN_RECIPE_TYPES];
 
-/**
- * Standard portion size unit
- */
-export interface StandardUnit {
-  name: string;
-  weight: number;
-  omitFoodDescription: boolean;
-}
-
-/**
- * Portion size method definition
- */
-export interface PortionSizeMethod {
-  method: string;
-  description: string;
-  useForRecipes: boolean;
-  conversionFactor: number;
-  orderBy: string;
-  parameters: Record<string, unknown>;
-}
+// Re-export imported types for convenience
+export type { PortionSizeMethod, StandardUnit };
 
 /**
  * Tokenized associated food entry
@@ -485,7 +472,7 @@ export class FoodDataParserService {
     switch (methodName) {
       case 'as-served':
         return {
-          method: 'as-served',
+          method: 'as-served' as const,
           description: 'use_an_image',
           useForRecipes: false,
           conversionFactor,
@@ -517,7 +504,7 @@ export class FoodDataParserService {
         }
 
         return {
-          method: 'standard-portion',
+          method: 'standard-portion' as const,
           description: 'use_a_standard_portion',
           useForRecipes: false,
           conversionFactor,
@@ -528,25 +515,25 @@ export class FoodDataParserService {
 
       case 'cereal':
         return {
-          method: 'cereal',
+          method: 'cereal' as const,
           description: 'cereal',
           useForRecipes: false,
           conversionFactor,
           orderBy: '3',
           parameters: {
-            type: (params.type as any) || 'flake',
+            type: (params.type as CerealType) || 'flake',
           },
         };
 
       case 'drink-scale':
         return {
-          method: 'drink-scale',
+          method: 'drink-scale' as const,
           description: 'use_a_drink_scale',
           useForRecipes: false,
           conversionFactor,
           orderBy: '4',
           parameters: {
-            drinkwareId: getParamValue('drinkwareid') || getParamValue('drinkware-id'),
+            drinkwareId: getParamValue('drinkwareid') || getParamValue('drinkware-id') || '',
             initialFillLevel: Number.parseFloat(getParamValue('initialfilllevel') || getParamValue('initial-fill-level') || '0.9'),
             skipFillLevel: getParamValue('skipfilllevel') === 'true' || getParamValue('skip-fill-level') === 'true',
           },
@@ -554,19 +541,19 @@ export class FoodDataParserService {
 
       case 'guide-image':
         return {
-          method: 'guide-image',
+          method: 'guide-image' as const,
           description: 'use_a_guide_image',
           useForRecipes: false,
           conversionFactor,
           orderBy: '5',
           parameters: {
-            guideImageId: getParamValue('guideimageid') || getParamValue('guide-image-id'),
+            guideImageId: getParamValue('guideimageid') || getParamValue('guide-image-id') || '',
           },
         };
 
       case 'direct-weight':
         return {
-          method: 'direct-weight',
+          method: 'direct-weight' as const,
           description: 'enter_weight_directly',
           useForRecipes: false,
           conversionFactor,
@@ -575,14 +562,14 @@ export class FoodDataParserService {
         };
 
       case 'milk-in-a-hot-drink': {
-        const options: Record<string, unknown[]> = { en: [] };
+        const optionsList: Array<{ label: string; value: number }> = [];
         if (params.options) {
           try {
             const optionPairs = params.options.split(';');
             optionPairs.forEach((pair: string) => {
               const [label, value] = pair.split(':');
               if (label && value) {
-                (options.en as unknown[]).push({ label, value: Number.parseFloat(value) });
+                optionsList.push({ label, value: Number.parseFloat(value) });
               }
             });
           }
@@ -592,18 +579,20 @@ export class FoodDataParserService {
         }
 
         return {
-          method: 'milk-in-a-hot-drink',
+          method: 'milk-in-a-hot-drink' as const,
           description: 'milk_in_a_hot_drink',
           useForRecipes: false,
           conversionFactor,
           orderBy: '7',
-          parameters: { options },
+          parameters: {
+            options: { en: optionsList },
+          },
         };
       }
 
       case 'milk-on-cereal':
         return {
-          method: 'milk-on-cereal',
+          method: 'milk-on-cereal' as const,
           description: 'milk_on_cereal',
           useForRecipes: false,
           conversionFactor,
@@ -612,14 +601,14 @@ export class FoodDataParserService {
         };
 
       case 'parent-food-portion': {
-        const options: Record<string, Record<string, unknown[]>> = { _default: { en: [] } };
+        const optionsList: Array<{ label: string; value: number }> = [];
         if (params.options) {
           try {
             const optionPairs = params.options.split(';');
             optionPairs.forEach((pair: string) => {
               const [label, value] = pair.split(':');
               if (label && value) {
-                (options._default.en as unknown[]).push({ label, value: Number.parseFloat(value) });
+                optionsList.push({ label, value: Number.parseFloat(value) });
               }
             });
           }
@@ -629,18 +618,20 @@ export class FoodDataParserService {
         }
 
         return {
-          method: 'parent-food-portion',
+          method: 'parent-food-portion' as const,
           description: 'parent_food_portion',
           useForRecipes: false,
           conversionFactor,
           orderBy: '9',
-          parameters: { options },
+          parameters: {
+            options: { _default: { en: optionsList } },
+          },
         };
       }
 
       case 'pizza':
         return {
-          method: 'pizza',
+          method: 'pizza' as const,
           description: 'pizza',
           useForRecipes: false,
           conversionFactor,
@@ -650,7 +641,7 @@ export class FoodDataParserService {
 
       case 'pizza-v2':
         return {
-          method: 'pizza-v2',
+          method: 'pizza-v2' as const,
           description: 'pizza_v2',
           useForRecipes: false,
           conversionFactor,
@@ -660,7 +651,7 @@ export class FoodDataParserService {
 
       case 'recipe-builder':
         return {
-          method: 'recipe-builder',
+          method: 'recipe-builder' as const,
           description: 'recipe_builder',
           useForRecipes: false,
           conversionFactor,
@@ -670,7 +661,7 @@ export class FoodDataParserService {
 
       case 'unknown':
         return {
-          method: 'unknown',
+          method: 'unknown' as const,
           description: 'unknown_portion_size',
           useForRecipes: false,
           conversionFactor,
