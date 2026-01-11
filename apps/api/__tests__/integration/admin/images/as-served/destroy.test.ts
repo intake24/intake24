@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import { createReadStream } from 'node:fs';
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
@@ -23,7 +23,7 @@ export default () => {
       .field('id', id)
       .field('description', description)
       .field('label[en]', label.en)
-      .attach('selectionImage', fs.createReadStream(suite.files.images.jpg), fileName);
+      .attach('selectionImage', createReadStream(suite.files.images.jpg), fileName);
   });
 
   it('missing authentication / authorization', async () => {

@@ -1,9 +1,9 @@
 import type { Job } from 'bullmq';
+import { createWriteStream } from 'node:fs';
 import path from 'node:path';
 import { pipeline } from 'node:stream/promises';
 import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
-import fs from 'fs-extra';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { EMPTY } from '@intake24/api/services/admin/data-export';
@@ -104,7 +104,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
     }, 2000);
 
     const filepath = path.resolve(this.fsConfig.local.downloads, filename);
-    const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
+    const output = createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
 
     const foods = Food.findAllWithStream({
       where: { localeId: localeCode },

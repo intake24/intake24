@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import { createReadStream } from 'node:fs';
 import { pick } from 'lodash-es';
 import request from 'supertest';
 
@@ -72,7 +72,7 @@ export default () => {
         .field('id', id)
         .field('description', description)
         .field('label[en]', label.en)
-        .attach('baseImage', fs.createReadStream(filePath), fileName);
+        .attach('baseImage', createReadStream(filePath), fileName);
 
       expect(status).toBe(201);
       expect(pick(body, Object.keys(output))).toEqual(output);
@@ -86,7 +86,7 @@ export default () => {
         .field('id', id)
         .field('description', description)
         .field('label[en]', label.en)
-        .attach('baseImage', fs.createReadStream(filePath), fileName);
+        .attach('baseImage', createReadStream(filePath), fileName);
 
       expect(status).toBe(409);
       expect(body).toContainAllKeys(['errors', 'message']);

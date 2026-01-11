@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import { createReadStream } from 'node:fs';
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
@@ -47,7 +47,7 @@ export default () => {
       .field('id', id)
       .field('description', description)
       .field('label[en]', label.en)
-      .attach('baseImage', fs.createReadStream(suite.files.images.jpg), fileName);
+      .attach('baseImage', createReadStream(suite.files.images.jpg), fileName);
 
     output = { ...body, ...updateInput };
   });

@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
+import { unlink } from 'node:fs/promises';
 import { dirname, extname, join, resolve } from 'node:path';
 import filenamify from 'filenamify';
-import { ensureDir, unlink } from 'fs-extra';
+import { ensureDir } from 'fs-extra';
 import sharp from 'sharp';
 import type { MediaConversion, MediaDisk } from '@intake24/api/config';
 import { NotFoundError } from '@intake24/api/http/errors';

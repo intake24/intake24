@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import { createReadStream } from 'node:fs';
 import { pick } from 'lodash-es';
 import request from 'supertest';
 
@@ -39,7 +39,7 @@ export default () => {
         .set('Authorization', suite.bearer.user)
         .field('label[en]', label.en)
         .field('weight', weight)
-        .attach('image', fs.createReadStream(filePath), fileName);
+        .attach('image', createReadStream(filePath), fileName);
 
       expect(status).toBe(404);
     });
@@ -82,7 +82,7 @@ export default () => {
         .set('Authorization', suite.bearer.user)
         .field('label[en]', label.en)
         .field('weight', weight)
-        .attach('image', fs.createReadStream(filePath), fileName);
+        .attach('image', createReadStream(filePath), fileName);
 
       expect(status).toBe(201);
       expect(pick(body, Object.keys(output))).toEqual(output);

@@ -1,7 +1,7 @@
 import type { Express } from 'express';
 import path from 'node:path';
 import { URL } from 'node:url';
-import { json, urlencoded } from 'body-parser';
+import bodyParser from 'body-parser';
 import CleanCSS from 'clean-css';
 import { RedisStore } from 'connect-redis';
 import cookieParser from 'cookie-parser';
@@ -26,8 +26,8 @@ export default (express: Express, { config }: Ops) => {
     throw new Error('Application secret not set.');
 
   // Body parser
-  express.use(json({ limit: '10mb' }));
-  express.use(urlencoded({ extended: false, limit: '10mb' }));
+  express.use(bodyParser.json({ limit: '10mb' }));
+  express.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }));
 
   // Cookie parser
   express.use(cookieParser(app.secret));

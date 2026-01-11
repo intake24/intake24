@@ -8,7 +8,7 @@ import { createServer } from 'node:https';
 import { homedir } from 'node:os';
 
 import { join } from 'node:path';
-import { readFile } from 'fs-extra';
+import { readFile } from 'node:fs/promises';
 import type { Ops } from '@intake24/api/app';
 
 import app from '@intake24/api/app';

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
+import { unlink } from 'node:fs/promises';
 import path from 'node:path';
-
 import fs from 'fs-extra';
 import sharp from 'sharp';
 
@@ -61,8 +61,8 @@ function sourceImageService({
       await sourceImage.destroy();
 
       try {
-        await fs.unlink(path.join(imagesPath, sourceImage.path));
-        await fs.unlink(path.join(imagesPath, sourceImage.thumbnailPath));
+        await unlink(path.join(imagesPath, sourceImage.path));
+        await unlink(path.join(imagesPath, sourceImage.thumbnailPath));
       }
       catch (err) {
         if (err instanceof Error) {

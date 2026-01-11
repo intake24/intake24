@@ -1,5 +1,5 @@
 import type { Job } from 'bullmq';
-
+import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
@@ -93,7 +93,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
    */
   private async validate(/* chunk = 500 */): Promise<void> {
     return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(this.file).pipe(
+      const stream = createReadStream(this.file).pipe(
         parse({
           headers: false,
           skipLines: this.mappings.mapping.rowOffset,
@@ -137,7 +137,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
    */
   private async import(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(this.file).pipe(
+      const stream = createReadStream(this.file).pipe(
         parse({
           headers: false,
           trim: true,

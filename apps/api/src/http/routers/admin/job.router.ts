@@ -1,5 +1,6 @@
-import path from 'node:path';
+import { createReadStream } from 'node:fs';
 
+import path from 'node:path';
 import { initServer } from '@ts-rest/express';
 import fs from 'fs-extra';
 
@@ -77,7 +78,7 @@ export function job() {
         return {
           status: 200,
           contentType: 'application/octet-stream',
-          body: fs.createReadStream(file),
+          body: createReadStream(file),
         };
       },
     },

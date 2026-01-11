@@ -1,5 +1,6 @@
 import type { Job } from 'bullmq';
 
+import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { parse } from 'fast-csv';
 import fs from 'fs-extra';
@@ -77,7 +78,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
    */
   private async validate(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
+      const stream = createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
 
       stream
         .on('data', (row: CSVRow) => {
@@ -168,7 +169,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
    */
   private async import(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
+      const stream = createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
 
       stream
         .on('data', (row: CSVRow) => {

@@ -1,6 +1,7 @@
+import { createWriteStream } from 'node:fs';
 import { resolve } from 'node:path';
-import { Readable } from 'node:stream';
 
+import { Readable } from 'node:stream';
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import fs from 'fs-extra';
@@ -36,7 +37,7 @@ try {
 
   Readable.from(links)
     .pipe(stream)
-    .pipe(fs.createWriteStream(resolve(`${publicPath}/sitemap.xml`)))
+    .pipe(createWriteStream(resolve(`${publicPath}/sitemap.xml`)))
     .on('error', (err) => {
       throw err;
     });

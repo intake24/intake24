@@ -1,9 +1,9 @@
 import type { Job } from 'bullmq';
+import { createWriteStream } from 'node:fs';
 import path from 'node:path';
 import { pipeline } from 'node:stream/promises';
 import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
-import fs from 'fs-extra';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import { addTime } from '@intake24/api/util';
@@ -96,7 +96,7 @@ export default class SurveySessionsExport extends BaseJob<'SurveySessionsExport'
       {},
       { objectMode: true },
     );
-    const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
+    const output = createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
       encoding: 'utf-8',
       flags: 'w+',
     });

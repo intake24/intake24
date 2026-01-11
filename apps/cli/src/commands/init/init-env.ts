@@ -1,3 +1,4 @@
+import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import {
   cancel,
@@ -127,7 +128,7 @@ async function initEnv(args: InitEnvArgs): Promise<void> {
       return;
     }
 
-    let content = await fs.readFile(templatePath, 'utf-8');
+    let content = await readFile(templatePath, 'utf-8');
 
     const envFilePath = path.join(app.path, '.env');
     const envFileExists = await fs.pathExists(envFilePath);
@@ -136,7 +137,7 @@ async function initEnv(args: InitEnvArgs): Promise<void> {
         log.warn(`Env file '.env' already exists for '${app.name}' application, overriding as requested.`);
       }
       else {
-        await fs.copyFile(envFilePath, `${envFilePath}.backup.${Date.now()}`);
+        await copyFile(envFilePath, `${envFilePath}.backup.${Date.now()}`);
         log.info(`Env file '.env' already exists for '${app.name}' application, backup created.`);
       }
     }
@@ -151,7 +152,7 @@ async function initEnv(args: InitEnvArgs): Promise<void> {
       }
     }
 
-    await fs.writeFile(envFilePath, content);
+    await writeFile(envFilePath, content);
     log.success(`Created '.env' for '${app.name}' application.`);
   }
 }

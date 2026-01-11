@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
+import { unlink } from 'node:fs/promises';
 import path from 'node:path';
-
 import fs from 'fs-extra';
 import sharp from 'sharp';
 
@@ -209,7 +209,7 @@ function processedImageService({
     await processedImage.destroy();
 
     try {
-      await fs.unlink(path.join(imagesPath, processedImage.path));
+      await unlink(path.join(imagesPath, processedImage.path));
     }
     catch (err) {
       if (err instanceof Error) {

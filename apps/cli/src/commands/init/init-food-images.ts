@@ -1,3 +1,4 @@
+import { createWriteStream } from 'node:fs';
 import { unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { Readable, Transform } from 'node:stream';
@@ -49,7 +50,7 @@ export default async (cmd: InitFoodImagesArgs): Promise<void> => {
   }
   log.step('Downloading image archive...');
   const input = Readable.fromWeb(response.body);
-  const output = fs.createWriteStream(outputPath);
+  const output = createWriteStream(outputPath);
 
   const totalBytes = Number(response.headers.get('content-length') ?? 0);
 

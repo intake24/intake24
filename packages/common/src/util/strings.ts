@@ -1,7 +1,7 @@
 import type { CamelCase } from 'type-fest';
 import { camelCase } from 'lodash-es';
 import { customAlphabet, nanoid } from 'nanoid';
-import { plural } from 'pluralize';
+import pluralize from 'pluralize';
 import slugify from 'slugify';
 import { isSecurableType } from '../security';
 
@@ -22,7 +22,7 @@ export function kebabCase(string: string): string {
 }
 
 export function modelToResource<T extends string>(modelType: T): string {
-  return kebabCase(plural(modelType));
+  return kebabCase(pluralize.plural(modelType));
 }
 
 export function modelToRequestParam<T extends string>(modelType: T): `${CamelCase<T>}Id` {

@@ -1,6 +1,5 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-
-import { existsSync, readFileSync } from 'fs-extra';
 
 import config from '../config/filesystem';
 

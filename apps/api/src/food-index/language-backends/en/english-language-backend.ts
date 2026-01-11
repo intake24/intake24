@@ -1,9 +1,9 @@
-import { PorterStemmer } from 'natural';
-
+import natural from 'natural';
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
 
 import Metaphone3Encoder from './metaphone-encoder';
 
+const { PorterStemmer } = natural;
 const sanitiseRegexp = /[.`,/\\\-+)(]|e\.g\.|e\.g|'s/g;
 
 export default {

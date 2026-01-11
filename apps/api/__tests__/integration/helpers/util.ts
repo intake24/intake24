@@ -1,11 +1,12 @@
-import type { ReadStream } from 'fs-extra';
+import type { ReadStream } from 'node:fs';
 
 import type Suite from './integration-suite';
+import { createWriteStream } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { faker } from '@faker-js/faker';
 import { AsyncParser } from '@json2csv/node';
 import axios from 'axios';
-import fs from 'fs-extra';
 
 import { times } from 'lodash-es';
 import ioc from '@intake24/api/ioc';
@@ -95,7 +96,7 @@ export type Util = ReturnType<typeof util>;
 
 export async function downloadImage(url: string, filename: string): Promise<string> {
   const filePath = path.resolve(fsConfig.local.downloads, filename);
-  const fileStream = fs.createWriteStream(filePath);
+  const fileStream = createWriteStream(filePath);
 
   const { data } = await axios.get<ReadStream>(url, { responseType: 'stream' });
 
@@ -121,7 +122,7 @@ export async function generateCSV(filename: string): Promise<string> {
   }));
 
   const csv = await new AsyncParser({ fields }).parse(data).promise();
-  await fs.writeFile(filePath, csv, { encoding: 'utf-8' });
+  await writeFile(filePath, csv, { encoding: 'utf-8' });
 
   return filePath;
 }
