@@ -36,7 +36,7 @@ import { SVGRenderer } from 'echarts/renderers';
 import { computed } from 'vue';
 import Chart from 'vue-echarts';
 import { round } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
   topFoods: {

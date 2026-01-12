@@ -192,7 +192,7 @@ import { useHttp } from '@intake24/admin/services';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import type { DrinkwareScaleV2Entry, DrinkwareSetEntry, UpdateDrinkwareScaleInput } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import DrinkwareObjectChooser from './components/DrinkwareObjectChooser.vue';
 import SlidingScaleEditor from './components/SlidingScaleEditor.vue';
 import VolumeSamplesTable from './components/VolumeSamplesTable.vue';

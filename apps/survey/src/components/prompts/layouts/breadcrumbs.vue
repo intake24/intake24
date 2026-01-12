@@ -17,8 +17,8 @@ import type { PropType } from 'vue';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import type { FoodState, MealState } from '@intake24/common/surveys';
-import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/ui';
 import { HelpNav } from '../../elements';
 
 type BreadcrumbsElement = {

@@ -21,11 +21,11 @@ import type { AssociatedFoodPrompt, Prompts, PromptStates } from '@intake24/comm
 import type { EncodedFood, FoodFlag, FoodState, MissingFood, PortionSizeState } from '@intake24/common/surveys';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import { capitalize } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import { foodsService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
+import { useI18n } from '@intake24/ui';
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'general-associated-foods-prompt'>());

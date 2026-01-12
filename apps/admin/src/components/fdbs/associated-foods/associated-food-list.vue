@@ -201,8 +201,7 @@ import { useListWithDialog } from '@intake24/admin/composables';
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { randomString } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { createDefaultAssociatedFood } from './associated-foods';
 
 const props = defineProps({

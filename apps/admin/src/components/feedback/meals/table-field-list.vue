@@ -212,8 +212,7 @@ import { useListWithDialog } from '@intake24/admin/composables';
 import type { MealTableField } from '@intake24/common/feedback';
 import { mealTableFieldStandardIds, mealTableFieldTypes } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { getTableFieldDefaults } from './table-field';
 

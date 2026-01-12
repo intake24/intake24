@@ -78,8 +78,7 @@ import { useHttp } from '@intake24/admin/services';
 import { useMessages, useResource } from '@intake24/admin/stores';
 import type { Dictionary } from '@intake24/common/types';
 import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 const props = defineProps({
   actions: {

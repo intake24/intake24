@@ -49,7 +49,7 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useForm } from '@intake24/admin/composables';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 export type CopyRecordForm = {

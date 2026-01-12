@@ -174,10 +174,10 @@ import type {
   FoodHeader,
   FoodSearchResponse,
 } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 import { sendGtmEvent } from '@intake24/survey/util';
+import { useI18n } from '@intake24/ui';
 import CategoryContentsView from './CategoryContentsView.vue';
 import FoodBrowserDialog from './FoodBrowserDialog.vue';
 import FoodSearchHints from './FoodSearchHints.vue';

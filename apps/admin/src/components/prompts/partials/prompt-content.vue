@@ -92,8 +92,7 @@ import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { BasePrompt, ComponentType } from '@intake24/common/prompts';
 import { getObjectNestedKeys } from '@intake24/common/util';
-import { loadAdminLanguage, useI18n } from '@intake24/i18n';
-import { promptType as getPromptType } from '@intake24/ui';
+import { promptType as getPromptType, loadAdminLanguage, useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'PromptContent' });
 

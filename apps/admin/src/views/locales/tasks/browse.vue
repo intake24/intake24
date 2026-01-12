@@ -60,7 +60,7 @@ import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
 import type { GetJobParams, JobParams, LocaleJob } from '@intake24/common/types';
 import { localeCopySubTasks, localeJobs } from '@intake24/common/types';
 import type { JobAttributes, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 type LocaleTasksForm = {
   type: LocaleJob;

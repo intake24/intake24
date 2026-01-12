@@ -73,7 +73,7 @@ import { useForm } from '@intake24/admin/composables';
 import type { GetJobParams, JobParams, UserJob } from '@intake24/common/types';
 import { userJobs } from '@intake24/common/types';
 import type { JobAttributes } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 type UserJobForm = {
   type: UserJob;

@@ -114,10 +114,9 @@ import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import type { FoodState, FreeTextFood, PromptSection } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { getEntityId } from '@intake24/survey/util';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { FoodSearchHints } from '../../elements';
 
 defineOptions({ name: 'EditableFoodList' });

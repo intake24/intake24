@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
   color: {

@@ -235,8 +235,7 @@ import { useEntry } from '@intake24/admin/stores';
 import { cardTypes as cardTypesRef, nutrientRuleTypes, rangeType, sexes } from '@intake24/common/feedback';
 import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeResponse, PhysicalActivityLevelAttributes } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { getDemographicGroupDefaults } from './demographic-group';
 import DemographicGroupRange from './demographic-group-range.vue';

@@ -11,7 +11,7 @@ import {
 } from '@intake24/common/surveys';
 import { colors as themeColors, variants as themeVariants } from '@intake24/common/theme';
 import { textDirections as textDirectionRefs } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 import { opToIconMap } from './op-icon-map';
 

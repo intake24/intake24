@@ -137,9 +137,9 @@ import { useDisplay } from 'vuetify';
 import type { SchemeSettings } from '@intake24/common/surveys';
 import type { SurveyHelpRequest } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { surveyService } from '@intake24/survey/services';
 import { useMessages } from '@intake24/survey/stores';
+import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
   surveyId: {

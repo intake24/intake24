@@ -6,12 +6,11 @@ import { computed, ref } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
 import type { PartialRecord } from '@intake24/common/types';
-import type { LocaleContentOptions } from '@intake24/i18n';
-import { useI18n } from '@intake24/i18n';
-
 import { useSurvey } from '@intake24/survey/stores';
 import { sendGtmEvent } from '@intake24/survey/util';
-import { promptType } from '@intake24/ui';
+
+import type { LocaleContentOptions } from '@intake24/ui';
+import { promptType, useI18n } from '@intake24/ui';
 import type { GtmEventParams } from '@intake24/ui/tracking';
 import { useFoodUtils } from './use-food-utils';
 import { useMealUtils } from './use-meal-utils';

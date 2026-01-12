@@ -98,7 +98,7 @@ import { defaultTopFoods } from '@intake24/common/feedback';
 import { colors } from '@intake24/common/theme';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 export type FeedbackSchemeTopFoodsForm = Pick<FeedbackSchemeForm, 'topFoods'>;
 

@@ -107,7 +107,7 @@ import { foodSections, mealSections } from '@intake24/common/surveys';
 import type { PromptSection } from '@intake24/common/surveys';
 import { randomString } from '@intake24/common/util';
 import { copy } from '@intake24/common/util/objects';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 import conditionPartials from './conditions';
 

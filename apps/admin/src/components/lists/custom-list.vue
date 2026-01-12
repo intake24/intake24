@@ -103,8 +103,7 @@ import pluralize from 'pluralize';
 import { computed, ref, useTemplateRef } from 'vue';
 
 import { VueDraggable } from 'vue-draggable-plus';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'CustomList' });
 

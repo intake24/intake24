@@ -72,8 +72,8 @@ import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import { computed, ref } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
-import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
   activator: {

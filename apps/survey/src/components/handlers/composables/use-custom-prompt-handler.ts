@@ -1,7 +1,7 @@
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { CustomPromptAnswer, FoodState, MealState, PromptSection } from '@intake24/common/surveys';
-import { useI18n } from '@intake24/i18n';
 import { useSurvey } from '@intake24/survey/stores';
+import { useI18n } from '@intake24/ui';
 import { useFoodPromptUtils } from './use-food-prompt-utils';
 import { useMealPromptUtils } from './use-meal-prompt-utils';
 

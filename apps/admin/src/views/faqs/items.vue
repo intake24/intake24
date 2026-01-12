@@ -159,8 +159,7 @@ import { useListWithDialog } from '@intake24/admin/composables';
 import type { ReturnUseErrors } from '@intake24/admin/composables';
 import type { FAQItem } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'FAQItems' });
 

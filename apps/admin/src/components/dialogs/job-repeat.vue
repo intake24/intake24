@@ -46,7 +46,7 @@ import { JsonEditor } from '@intake24/admin/components/editors';
 import { useHttp } from '@intake24/admin/services';
 import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 defineOptions({ name: 'JobRepeat' });

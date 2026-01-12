@@ -74,8 +74,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { ErrorList } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
-import { useI18n } from '@intake24/i18n';
-import { AppEntryScreen } from '@intake24/ui';
+import { AppEntryScreen, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 type PasswordResetForm = {

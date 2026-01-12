@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 import { useMessages } from '../stores';
 

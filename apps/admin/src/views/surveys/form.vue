@@ -614,8 +614,7 @@ import type { SchemeOverrides, SessionSettings, SurveySearchSettings, SurveyStat
 import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 export type SurveyForm = {
   id: string | null;

@@ -79,8 +79,7 @@ import type {
   LanguageTranslationsResponse,
 } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 import TranslationSection from './translation-section.vue';

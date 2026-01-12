@@ -1,7 +1,7 @@
 import type { VForm } from 'vuetify/components';
 import { useTemplateRef } from 'vue';
 
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 export type RuleCallback = (value: string | null) => boolean | string;
 

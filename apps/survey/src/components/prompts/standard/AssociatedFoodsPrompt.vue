@@ -183,11 +183,10 @@ import type {
 import type { EncodedFood } from '@intake24/common/surveys';
 import { getFoodDescription } from '@intake24/common/surveys';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import { MealFoodChooser, useScrollToPanel } from '@intake24/survey/components/prompts/partials';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { BaseLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

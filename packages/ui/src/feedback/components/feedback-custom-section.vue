@@ -17,7 +17,7 @@
 import type { PropType } from 'vue';
 import { computed } from 'vue';
 import type { FeedbackCustomSection } from '@intake24/common/feedback';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
   section: {

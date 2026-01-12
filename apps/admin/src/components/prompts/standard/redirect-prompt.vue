@@ -73,7 +73,7 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Prompts } from '@intake24/common/prompts';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 import { basePrompt } from '../partials';
 

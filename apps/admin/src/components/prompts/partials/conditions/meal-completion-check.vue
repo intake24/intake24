@@ -17,7 +17,7 @@
 import type { PropType } from 'vue';
 import { foodCompletionStateOptions } from '@intake24/common/prompts';
 import type { MealCompletionPropertyCheck } from '@intake24/common/prompts';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import { useCheck } from './use-check';
 
 const props = defineProps({

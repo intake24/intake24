@@ -172,7 +172,7 @@ import {
 } from '@intake24/common/feedback';
 import type { RecordVisibility } from '@intake24/common/security';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 import FeedbackSections from './sections.vue';
 

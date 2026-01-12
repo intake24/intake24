@@ -64,7 +64,7 @@ import type {
   NutrientTableEntry,
   NutrientTableRefs,
 } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 type NutrientTableTasksForm = {
   type: NutrientTableJob;

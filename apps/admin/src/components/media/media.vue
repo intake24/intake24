@@ -118,8 +118,7 @@ import { useHttp } from '@intake24/admin/services';
 import type { MediaModel } from '@intake24/common/types/http/admin';
 import { commonCollections, mediaDisks, modelCollections } from '@intake24/common/types/http/admin';
 import { modelToResource } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { EmbeddedDataTable } from '../data-tables';
 
 type UploadForm = {

@@ -99,7 +99,7 @@ import { useRouter } from 'vue-router';
 import { useForm } from '@intake24/admin/composables';
 import { useAuth, useMessages } from '@intake24/admin/stores';
 import type { LoginResponse, MFAChallengeResponse } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
   authData: {

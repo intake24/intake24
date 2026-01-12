@@ -29,7 +29,7 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { LocaleOptionList } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 export default defineComponent({
   name: 'PortionOptions',

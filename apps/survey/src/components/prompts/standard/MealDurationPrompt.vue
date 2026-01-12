@@ -47,8 +47,8 @@
 import type { PropType } from 'vue';
 import { computed, onMounted } from 'vue';
 import type { MealState } from '@intake24/common/surveys';
-import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/ui';
 import { CardLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

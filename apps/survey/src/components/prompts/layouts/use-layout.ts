@@ -4,9 +4,9 @@ import { computed, onBeforeMount } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, PromptSection } from '@intake24/common/surveys';
-import { defaultMessages, useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
+import { defaultMessages, useI18n } from '@intake24/ui';
 
 export type UseLayoutProps = {
   prompt: Prompt;

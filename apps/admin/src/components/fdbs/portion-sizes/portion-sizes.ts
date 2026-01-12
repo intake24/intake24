@@ -1,5 +1,5 @@
 import type { PortionSizeMethod } from '@intake24/common/surveys';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 export type PortionSizeMethodItem = PortionSizeMethod;
 

@@ -3,6 +3,7 @@ export * from './captcha';
 export * from './components';
 export * from './composables';
 export * from './cookie-consent';
+export * from './i18n';
 export * from './services';
 export * from './tracking';
 export * from './util';

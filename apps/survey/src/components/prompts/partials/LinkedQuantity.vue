@@ -36,9 +36,9 @@ import { computed, onMounted } from 'vue';
 import type { Prompt } from '@intake24/common/prompts';
 import type { EncodedFood, MissingFood } from '@intake24/common/surveys';
 import { round } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/ui';
 import QuantityCard from './QuantityCard.vue';
 import { useStandardUnits } from './use-standard-units';
 

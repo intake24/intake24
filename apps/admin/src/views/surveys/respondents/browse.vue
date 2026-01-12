@@ -218,8 +218,7 @@ import type {
   RespondentListEntry,
   SurveyEntry,
 } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog, useClipboard } from '@intake24/ui';
+import { ConfirmDialog, useClipboard, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 import RespondentFeedback from './respondent-feedback.vue';

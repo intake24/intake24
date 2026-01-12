@@ -100,7 +100,7 @@ import { defineComponent, ref, watch } from 'vue';
 import type { SurveyRating } from '@intake24/common/surveys';
 import type { SurveyRatingRequest } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 import { surveyService } from '../../services';
 import { useLoading, useMessages } from '../../stores';

@@ -110,9 +110,8 @@ import type {
   SurveySchemeEntry,
   SurveySchemeExportRefs,
 } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
-import { ConfirmDialog } from '@intake24/ui';
 import DataExportSection from './data-export-section.vue';
 
 export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;

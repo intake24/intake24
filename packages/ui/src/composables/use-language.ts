@@ -4,8 +4,8 @@ import type { HttpClient } from '../services';
 import { get } from 'lodash-es';
 import { computed, onMounted, toRaw, watch } from 'vue';
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
-import { defaultMessages, loadAppLanguage, useI18n } from '@intake24/i18n';
 import { cookieConsentConfig, useCookieConsent } from '../cookie-consent';
+import { defaultMessages, loadAppLanguage, useI18n } from '../i18n';
 import { useApp } from '../stores';
 
 export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: ReturnType<typeof useLocale>) {

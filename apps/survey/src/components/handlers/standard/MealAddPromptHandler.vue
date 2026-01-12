@@ -8,9 +8,9 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useI18n } from '@intake24/i18n';
 import { MealAddPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { useI18n } from '@intake24/ui';
 import { createHandlerProps, usePromptHandlerNoStore } from '../composables';
 
 defineProps(createHandlerProps<'meal-add-prompt'>());

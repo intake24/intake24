@@ -79,7 +79,7 @@ import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { CharacterSentiment } from '@intake24/common/feedback';
 import { characterSentimentTypes, sentiments as defaultSentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'CharacterSentiments' });
 

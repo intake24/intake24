@@ -52,7 +52,7 @@ import type {
   FoodsResponse,
 } from '@intake24/common/types/http/admin';
 
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 export type Category = CategoryListEntry & { resource: 'categories' };
 export type Food = FoodsResponse['data'][number] & { resource: 'foods' };

@@ -29,7 +29,7 @@ import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import { reviewOptions } from '@intake24/common/prompts';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 import { basePrompt } from '../partials';
 

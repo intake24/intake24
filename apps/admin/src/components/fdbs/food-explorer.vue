@@ -55,7 +55,7 @@ import type {
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import AddFoodDialog from './add-food-dialog.vue';
 import FoodSearch from './food-search.vue';
 

@@ -187,8 +187,7 @@ import {
   feedbackStandardSections,
 } from '@intake24/common/feedback';
 import { kebabCase, randomString } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 export default defineComponent({
   name: 'FeedbackSections',

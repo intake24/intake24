@@ -25,7 +25,7 @@ import { Read } from '@intake24/admin/components/data-tables/action-bar';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 import type { StandardUnitAttributes } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 export default defineComponent({
   name: 'StandardUnitCategories',

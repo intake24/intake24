@@ -106,8 +106,7 @@ import { useDateTime, useEntry, useEntryFetch, useEntryForm } from '@intake24/ad
 import type { JobType, JobTypeParams } from '@intake24/common/types';
 import { defaultJobsParams, jobTypes } from '@intake24/common/types';
 import type { TaskResponse } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 type TaskForm = {
   id: string | null;

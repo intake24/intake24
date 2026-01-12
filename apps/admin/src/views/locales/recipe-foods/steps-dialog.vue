@@ -158,7 +158,7 @@ import type {
   RecipeFoodStepAttributes,
   RecipeFoodStepRequest,
 } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 export type LocaleRecipeFoodStepsForm = {
   items: RecipeFoodStepRequest[];

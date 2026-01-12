@@ -81,7 +81,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from '@intake24/admin/composables';
 import type { CategoryEntry, CategoryInput, FoodEntry, FoodInput } from '@intake24/common/types/http/admin';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 import CategoryList from './categories/category-list.vue';
 

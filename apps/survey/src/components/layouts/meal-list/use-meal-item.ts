@@ -4,9 +4,9 @@ import type { MenuItem } from './use-food-item';
 import { computed } from 'vue';
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
-import { useI18n } from '@intake24/i18n';
-
 import { useMealUtils } from '@intake24/survey/composables';
+
+import { useI18n } from '@intake24/ui';
 
 export type UseMealItemProps = {
   meal: MealState;

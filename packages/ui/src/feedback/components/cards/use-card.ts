@@ -1,7 +1,7 @@
 import { computed } from 'vue';
 import type { CardType, NutrientRuleType, Sentiment } from '@intake24/common/feedback';
 import { round } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import type { CharacterParameters, FeedbackCardParameters, FiveADayParameters, NutrientGroupParameters } from '@intake24/ui/feedback';
 import { DemographicRange } from '../../classes';
 

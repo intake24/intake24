@@ -64,7 +64,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { TimePicker } from '@intake24/common/prompts';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'TimerPickerSettings' });
 

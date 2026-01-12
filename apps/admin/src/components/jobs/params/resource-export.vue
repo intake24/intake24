@@ -26,7 +26,7 @@ import { defineComponent } from 'vue';
 import { useUser } from '@intake24/admin/stores';
 import { resources } from '@intake24/common/types';
 import type { JobParams } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 import jobParams from './job-params';
 

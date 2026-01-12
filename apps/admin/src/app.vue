@@ -156,8 +156,7 @@ import defaultResources from '@intake24/admin/router/resources';
 import { useApp, useAuth, useEntry, useResource, useUser } from '@intake24/admin/stores';
 import { iconWhite as logo } from '@intake24/common/theme/assets';
 import type { Dictionary } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
-import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useLanguage } from '@intake24/ui';
+import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useI18n, useLanguage } from '@intake24/ui';
 import { useHttp } from './services';
 
 type Breadcrumbs = {

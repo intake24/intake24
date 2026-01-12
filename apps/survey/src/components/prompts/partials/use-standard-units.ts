@@ -3,8 +3,7 @@ import { computed, ref } from 'vue';
 import type { StandardUnit } from '@intake24/common/surveys';
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
 import type { StandardUnitResponse } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n';
-import { useHttp } from '@intake24/ui';
+import { useHttp, useI18n } from '@intake24/ui';
 
 export type StandardUnitRefs = Record<
   string,

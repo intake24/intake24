@@ -39,8 +39,7 @@ import { ErrorList } from '@intake24/admin/components/forms';
 import { useHttp } from '@intake24/admin/services';
 import { useAuth, useMessages, useUser } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
-import { AppEntryScreen } from '@intake24/ui';
+import { AppEntryScreen, useI18n } from '@intake24/ui';
 
 const http = useHttp();
 const { i18n: { t } } = useI18n();

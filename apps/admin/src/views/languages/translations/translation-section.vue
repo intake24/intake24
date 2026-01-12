@@ -20,8 +20,8 @@ import {
 import type { LanguageTranslationAttributes } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
 
-import { useI18n } from '@intake24/i18n';
 import type { LocaleMessageDictionary } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import IntersectableSkeleton from './intersectable-skeleton.vue';
 
 export default defineComponent({

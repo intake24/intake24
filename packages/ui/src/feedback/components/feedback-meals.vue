@@ -61,7 +61,7 @@ import Chart from 'vue-echarts';
 import type { FeedbackMealChart, FeedbackMeals, FeedbackMealTable } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
 import { round } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import { getNutrientUnit } from '@intake24/ui/util';
 
 interface FeedbackMealChartData extends FeedbackMealChart {

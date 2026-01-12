@@ -64,8 +64,7 @@ import { useHttp } from '@intake24/admin/services';
 import { useMessages, useResource, useUser } from '@intake24/admin/stores';
 import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
-import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import ConfirmLeaveDialog from './confirm-leave-dialog.vue';
 

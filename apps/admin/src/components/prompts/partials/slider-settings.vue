@@ -110,7 +110,7 @@ import { useVModel } from '@vueuse/core';
 import { computed, ref } from 'vue';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { Slider } from '@intake24/common/prompts';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
   hide: {

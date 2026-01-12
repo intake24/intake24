@@ -2,7 +2,7 @@ import { computed } from 'vue';
 
 import type { EncodedFood, FoodState, RecipeBuilder } from '@intake24/common/surveys';
 import { capitalize } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 export type UseFoodUtilsProps<
   F extends FoodState | undefined,

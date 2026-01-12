@@ -5,8 +5,8 @@ import type { ImageMap, Prompt } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/surveys';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import type { AsServedSetResponse, DrinkwareSetResponse, GuideImageResponse } from '@intake24/common/types/http/foods';
-import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/ui';
 import { usePortionSizeMethod } from './use-portion-size-method';
 
 export type UseLabelsProps = {

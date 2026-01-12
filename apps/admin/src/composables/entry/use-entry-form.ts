@@ -15,7 +15,7 @@ import {
 import type { EntryState } from '@intake24/admin/stores';
 
 import { copy, getObjectNestedKeys } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 import { useForm } from '../use-form';
 import { useEntry } from './use-entry';
 import { useEntryWatch } from './use-entry-watch';

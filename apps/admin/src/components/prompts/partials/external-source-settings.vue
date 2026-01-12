@@ -79,7 +79,7 @@ import { computed, ref, watch } from 'vue';
 import type { ExternalSource, ExternalSourceOptions } from '@intake24/common/prompts';
 import { defaultExternalSourceOptions, externalSources } from '@intake24/common/prompts';
 import { copy } from '@intake24/common/util';
-import { useI18n } from '@intake24/i18n';
+import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
   source: {
