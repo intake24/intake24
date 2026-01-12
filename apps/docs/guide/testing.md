@@ -36,7 +36,7 @@ pnpm test:unit:watch
 
 ## Integration tests
 
-Integration tests can be run with following commands. At the moment, there are `API Server` and `Portal` integration tests, so it re-triggers the `app` internal command.
+Integration tests can be run with following commands. At the moment, there are `API Server` integration tests, so it re-triggers the `app` internal command.
 
 ```sh
 pnpm test:integration

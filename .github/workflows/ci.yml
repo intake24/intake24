@@ -374,46 +374,6 @@ jobs:
         working-directory: apps/survey
         run: pnpm build
 
-  # Portal
-  portal:
-    name: Portal (Node.js ${{ matrix.node-version }})
-
-    runs-on: ubuntu-latest
-
-    needs: lint
-
-    strategy:
-      matrix:
-        node-version: [24.x]
-
-    steps:
-      - name: Repository checkout
-        uses: actions/checkout@v6
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Portal - build
-        working-directory: apps/portal
-        run: pnpm build
-
-      - name: Portal - use Github test environment file
-        working-directory: apps/portal
-        run: cp ./__tests__/.env-test-gh ./__tests__/.env-test
-
-      - name: Portal - integration tests
-        working-directory: apps/portal
-        run: pnpm test:integration
-
   # CLI
   cli:
     name: CLI (Node.js ${{ matrix.node-version }})

@@ -7,14 +7,6 @@
   roles:
     - role: nginx-site
 
-- hosts: portal
-  remote_user: deploy
-  become: true
-  vars:
-    app: 'portal'
-  roles:
-    - role: nginx-site
-
 - hosts: admin
   remote_user: deploy
   become: true

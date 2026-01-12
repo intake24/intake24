@@ -38,25 +38,6 @@
         }
       }
     },
-    "portal": {
-      "path": "apps/portal",
-      "env_file": "../instances/{{ instance }}/app-portal/.env",
-      "service": {
-        "deploy": true,
-        "template": "app-portal",
-        "name": "portal"
-      },
-      "site": {
-        "name": "portal",
-        "config_file": "../instances/{{ instance }}/app-portal/nginx-site",
-        "includes_dir": "../instances/{{ instance }}/nginx/includes",
-        "ssl": {
-          "enabled": false,
-          "public_cert": "../instances/{{ instance }}/certs/example.com.pem",
-          "private_key": "../instances/{{ instance }}/certs/example.com.key"
-        }
-      }
-    },
     "admin": {
       "path": "apps/admin",
       "env_file": "../instances/{{ instance }}/app-admin/.env",

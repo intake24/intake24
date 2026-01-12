@@ -42,7 +42,7 @@
     "test:unit:apps": "pnpm --filter \"./apps/api\" test:unit",
     "test:unit:pkgs": "pnpm --filter \"./packages/{common,common-backend,i18n}\" test:unit",
     "test:unit:coverage": "pnpm --filter * test:unit:coverage",
-    "test:integration": "pnpm --filter ./apps/{api,portal} test:integration",
+    "test:integration": "pnpm --filter ./apps/api test:integration",
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"
   },
   "devDependencies": {

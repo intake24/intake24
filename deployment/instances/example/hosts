@@ -13,9 +13,6 @@ localhost
 [api]
 localhost
 
-[portal]
-localhost
-
 [admin]
 localhost
 
