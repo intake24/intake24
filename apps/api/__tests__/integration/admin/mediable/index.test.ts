@@ -1,4 +1,4 @@
-import { MediaModel } from '@intake24/common/types/http/admin';
+import type { MediaModel } from '@intake24/common/types/http/admin';
 import browse from './browse.test';
 import store from './store.test';
 

@@ -1,7 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
-import { createMediaRequest, mediaEntry, MediaModel, updateMediaRequest } from '@intake24/common/types/http/admin';
+import type { MediaModel } from '@intake24/common/types/http/admin';
+import { createMediaRequest, mediaEntry, updateMediaRequest } from '@intake24/common/types/http/admin';
 
 export function mediable(mediable: MediaModel, prefix: string) {
   return initContract().router({

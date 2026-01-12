@@ -17,9 +17,9 @@ import {
   defaultPrompts,
   defaultSchemeSettings,
   searchSortingAlgorithms,
-  SessionSettings,
   spellingCorrectionPreferences,
 } from '@intake24/common/surveys';
+import type { SessionSettings } from '@intake24/common/surveys';
 import { defaultJobsParams } from '@intake24/common/types';
 import type { UserCustomField } from '@intake24/common/types';
 import type {

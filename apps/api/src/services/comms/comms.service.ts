@@ -1,5 +1,5 @@
+import type { CommsList, SubscribeInput } from './comms';
 import type { IoC } from '@intake24/api/ioc';
-import { CommsList, SubscribeInput } from './comms';
 
 function commsService({ commsProvider, logger: globalLogger }: Pick<IoC, 'commsProvider' | 'logger'>) {
   const logger = globalLogger.child({ service: 'CommsService' });

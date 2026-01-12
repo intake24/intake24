@@ -1,4 +1,5 @@
 import type { Express } from 'express';
+import type { ScheduledTask } from 'node-cron';
 import type { MetricsConfig } from '../config/metrics';
 import type { JobsQueueHandler, QueueHandler, TasksQueueHandler } from './core/queues';
 import { stat } from 'node:fs/promises';
@@ -7,7 +8,7 @@ import { writeHeapSnapshot } from 'node:v8';
 import { createMiddleware } from '@promster/express';
 import { format } from 'date-fns';
 import { ensureDir, exists } from 'fs-extra';
-import cron, { ScheduledTask } from 'node-cron';
+import cron from 'node-cron';
 import prom, { collectDefaultMetrics, register as defaultRegister } from 'prom-client';
 import type { IoC } from '@intake24/api/ioc';
 import type { Dictionary, JobData } from '@intake24/common/types';

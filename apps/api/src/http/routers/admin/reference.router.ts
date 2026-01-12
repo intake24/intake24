@@ -4,7 +4,7 @@ import { anyPermission } from '@intake24/api/http/middleware';
 import { imageResponseCollection } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
-import { Pagination } from '@intake24/common/types/http';
+import type { Pagination } from '@intake24/common/types/http';
 import type { PaginateOptions } from '@intake24/db';
 import {
   AsServedSet,
