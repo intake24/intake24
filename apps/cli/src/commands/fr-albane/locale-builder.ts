@@ -1,24 +1,26 @@
 import type csvParser from 'csv-parser';
+import type { PkgAsServedSet } from '../packager/types/as-served';
+import type { PkgPortionSizeImageLabels } from '../packager/types/portion-size-image-labels';
+import type { AlbanePortionSizeImage } from './types/portion-size-images';
+
+import type { AlbaneQuantificationRow } from './types/quantification';
+
 import { randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
-
 import path from 'node:path';
 
 import parseCsv from 'csv-parser';
 import { groupBy, mapValues, partition, sortBy, trim } from 'lodash-es';
 import stripBomStream from 'strip-bom-stream';
 import * as XLSX from 'xlsx';
-
-import { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';
-import {
-  AlbaneAlternativeDescriptionRow,
-} from '@intake24/cli/commands/fr-albane/types/alternative-descriptions';
-import { AlbaneFacetsRow } from '@intake24/cli/commands/fr-albane/types/facets';
-import { AlbaneFoodCategoryRow } from '@intake24/cli/commands/fr-albane/types/food-categories';
-import { AlbaneFoodListRow } from '@intake24/cli/commands/fr-albane/types/food-list';
-import { AlbaneStandardUnitRow } from '@intake24/cli/commands/fr-albane/types/standard-unit';
-import { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+import type { AlbaneAfpRow } from '@intake24/cli/commands/fr-albane/types/afp';
+import type { AlbaneAlternativeDescriptionRow } from '@intake24/cli/commands/fr-albane/types/alternative-descriptions';
+import type { AlbaneFacetsRow } from '@intake24/cli/commands/fr-albane/types/facets';
+import type { AlbaneFoodCategoryRow } from '@intake24/cli/commands/fr-albane/types/food-categories';
+import type { AlbaneFoodListRow } from '@intake24/cli/commands/fr-albane/types/food-list';
+import type { AlbaneStandardUnitRow } from '@intake24/cli/commands/fr-albane/types/standard-unit';
+import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import type {
   PkgCategory,
@@ -31,15 +33,11 @@ import type {
   PkgStandardUnit,
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
+
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import logger from '@intake24/common-backend/services/logger/logger';
-import { Dictionary } from '@intake24/common/types';
+import type { Dictionary } from '@intake24/common/types';
 import { capitalize } from '@intake24/common/util';
-
-import { PkgAsServedSet } from '../packager/types/as-served';
-import { PkgPortionSizeImageLabels } from '../packager/types/portion-size-image-labels';
-import { AlbanePortionSizeImage } from './types/portion-size-images';
-import { AlbaneQuantificationRow } from './types/quantification';
 
 export type Logger = typeof logger;
 

@@ -1,11 +1,11 @@
 import { Readable } from 'node:stream';
 import { initContract } from '@ts-rest/core';
-import { isLocale } from 'validator';
+import validator from 'validator';
 import { z } from 'zod';
 import { feedbackSubmissionEntry, paginationMeta } from '@intake24/common/types/http';
 
 const pdfFeedbackRequest = z.object({
-  lang: z.string().refine(val => isLocale(val)).optional(),
+  lang: z.string().refine(val => validator.isLocale(val)).optional(),
   survey: z.string(),
   submissions: z.array(z.string().uuid()).optional(),
 });

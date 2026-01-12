@@ -1,5 +1,5 @@
 import { initContract } from '@ts-rest/core';
-import { isLocale } from 'validator';
+import validator from 'validator';
 import { z } from 'zod';
 
 import { frontEnds, textDirections } from '../types';
@@ -27,7 +27,7 @@ export const i18n = initContract().router({
     method: 'GET',
     path: '/i18n/:languageId',
     pathParams: z.object({
-      languageId: z.string().refine(val => isLocale(val)),
+      languageId: z.string().refine(val => validator.isLocale(val)),
     }),
     query: z.object({
       app: z.enum(frontEnds),

@@ -1,5 +1,5 @@
 import { getSupportedRegionCodes, parsePhoneNumber } from 'awesome-phonenumber';
-import { isIn } from 'validator';
+import validator from 'validator';
 import {
   groupedRecallPrompts,
   meal,
@@ -122,7 +122,7 @@ export const surveyHelpRequest = z
     phoneCountry: z
       .string()
       .nullish()
-      .refine(value => (value ? isIn(value, getSupportedRegionCodes()) : true)),
+      .refine(value => (value ? validator.isIn(value, getSupportedRegionCodes()) : true)),
     message: z.string().max(500).nullish(),
   })
   .refine(

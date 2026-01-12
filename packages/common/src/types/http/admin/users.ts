@@ -1,4 +1,4 @@
-import { isInt } from 'validator';
+import validator from 'validator';
 import { z } from 'zod';
 
 import { strongPasswordWithConfirmOptional } from '@intake24/common/security';
@@ -23,8 +23,8 @@ export const userRequest = z.object({
   phone: z.string().max(32).nullish(),
   smsNotifications: z.boolean().optional(),
   verifiedAt: z.coerce.date().nullish(),
-  permissions: z.string().refine(value => isInt(value)).array().optional(),
-  roles: z.string().refine(value => isInt(value)).array().optional(),
+  permissions: z.string().refine(value => validator.isInt(value)).array().optional(),
+  roles: z.string().refine(value => validator.isInt(value)).array().optional(),
   customFields: userCustomField.array().optional(),
 }).merge(strongPasswordWithConfirmOptional);
 export type UserRequest = z.infer<typeof userRequest>;

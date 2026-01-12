@@ -1,3 +1,4 @@
+import type { PackageExportOptions } from './export-v3-command';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -7,7 +8,6 @@ import type {
   ImporterSpecificModulesExecutionStrategy,
 } from '@intake24/cli/commands/packager/importer-v4';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
-import { PackageExportOptions } from './export-v3-command';
 import { ExporterV4 } from './exporter-v4';
 
 export interface PackageImportOptions {

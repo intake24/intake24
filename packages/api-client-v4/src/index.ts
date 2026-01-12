@@ -1,11 +1,12 @@
 import type { Logger } from 'winston';
 
 import type { CredentialsV4 } from './credentials';
+import type { DrinkwareScaleUpdate } from './drinkware';
 import type { ApiClientOptionsV4 } from './options';
 import { AsServedApiV4 } from './as-served';
 import { BaseClientV4 } from './base-client-v4';
 import { CategoriesApiV4 } from './categories';
-import { DrinkwareApiV4, DrinkwareScaleUpdate } from './drinkware';
+import { DrinkwareApiV4 } from './drinkware';
 import { FoodDatabasesApiV4 } from './fdbs';
 import { FoodsApiV4 } from './foods';
 import { GuideImageApiV4 } from './guide-images';

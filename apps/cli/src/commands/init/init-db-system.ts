@@ -32,7 +32,8 @@ import {
   readyMealPrompt,
   submitPrompt,
 } from '@intake24/common/prompts';
-import { defaultExport, defaultMeals, defaultSchemeSettings, RecallPrompts } from '@intake24/common/surveys';
+import { defaultExport, defaultMeals, defaultSchemeSettings } from '@intake24/common/surveys';
+import type { RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
 import initAssets from './init-assets';
 

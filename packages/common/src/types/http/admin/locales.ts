@@ -1,5 +1,5 @@
 import type { Pagination } from '../generic';
-import { isLocale } from 'validator';
+import validator from 'validator';
 
 import { z } from 'zod';
 import { recordVisibilities } from '@intake24/common/security';
@@ -16,7 +16,7 @@ export const systemLocaleAttributes = z.object({
   localName: z.string().min(1).max(64),
   respondentLanguageId: languageAttributes.shape.code,
   adminLanguageId: languageAttributes.shape.code,
-  countryFlagCode: z.string().min(1).max(16).refine(val => isLocale(val)),
+  countryFlagCode: z.string().min(1).max(16).refine(val => validator.isLocale(val)),
   textDirection: z.enum(textDirections),
   foodIndexEnabled: z.boolean(),
   foodIndexLanguageBackendId: z.string().min(1).max(16),

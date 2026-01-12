@@ -33,7 +33,7 @@ import type {
   NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
-import { AssociatedFoodAttributes, FoodPortionSizeMethodAttributes } from '@intake24/db';
+import type { AssociatedFoodAttributes, FoodPortionSizeMethodAttributes } from '@intake24/db';
 
 function fromPackageImageMapObjects(
   objects: Record<string, PkgImageMapObject>,

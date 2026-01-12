@@ -1,8 +1,8 @@
-import isStrongPassword from 'validator/lib/isStrongPassword';
+import validator from 'validator';
 import { z } from 'zod';
 
 export const strongPassword = z.string().refine(val =>
-  isStrongPassword(val, {
+  validator.isStrongPassword(val, {
     minLength: 10,
     minLowercase: 1,
     minUppercase: 1,
@@ -14,7 +14,7 @@ export const strongPasswordOptional = z.string().nullish().transform(val => val 
   if (!val)
     return true;
 
-  return isStrongPassword(val, {
+  return validator.isStrongPassword(val, {
     minLength: 10,
     minLowercase: 1,
     minUppercase: 1,

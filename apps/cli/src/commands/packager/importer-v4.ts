@@ -1,3 +1,4 @@
+import type { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
 import fs, { constants } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -17,13 +18,12 @@ import type {
   PkgDrinkwareSet,
 } from '@intake24/cli/commands/packager/types/drinkware';
 import type { PkgFood } from '@intake24/cli/commands/packager/types/foods';
-import { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
+import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import logger from '@intake24/common-backend/services/logger/logger';
-import { Dictionary } from '@intake24/common/types';
-import { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
+import type { Dictionary } from '@intake24/common/types';
 import typeConverters from './types/v4-type-conversions';
 
 export type Logger = typeof logger;

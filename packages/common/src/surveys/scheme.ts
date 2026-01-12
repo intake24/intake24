@@ -1,6 +1,6 @@
 import type { Condition, Prompt, SinglePrompt } from '../prompts';
 import type { Meal } from './meals';
-import { isLocale } from 'validator';
+import validator from 'validator';
 import { z } from 'zod';
 import { basePrompt, CurrentPromptVersion, prompt, singlePrompt } from '../prompts';
 
@@ -19,7 +19,7 @@ export const schemeSettings = z.object({
   type: z.enum(schemeTypes),
   flow: z.enum(recallFlows),
   recallDate: z.coerce.number().int().nullable(),
-  languages: z.string().refine(val => isLocale(val)).array(),
+  languages: z.string().refine(val => validator.isLocale(val)).array(),
   help: z.object({
     available: z.enum(helpAvailableFields).array(),
     required: z.enum(helpRequiredFields).array(),

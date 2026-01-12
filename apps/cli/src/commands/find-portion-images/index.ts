@@ -1,6 +1,6 @@
 import type { FPIConfig } from './config';
-import { readFileSync } from 'node:fs';
-import { createArrayCsvWriter } from 'csv-writer';
+import { createWriteStream, readFileSync } from 'node:fs';
+import { Transform } from '@json2csv/node';
 import { logger } from '@intake24/common-backend';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { Environment } from '@intake24/common/types';
@@ -441,7 +441,7 @@ async function main(config: FPIConfig, outputFilePath: string) {
     environment: (process.env.NODE_ENV || 'development') as Environment,
   });
 
-  await db.init();
+  db.init();
 
   const nutrientIds = (await FoodsNutrientType.findAll({ order: ['id'] })).map(r => r.id);
 
@@ -450,9 +450,7 @@ async function main(config: FPIConfig, outputFilePath: string) {
     findPortionSizeImages(config, nutrientIds),
   ]);
 
-  const writer = createArrayCsvWriter({ path: outputFilePath });
-
-  const header = [
+  const fields = [
     'Intake24 food code',
     'Intake24 food name',
     'Portion size method',
@@ -469,9 +467,11 @@ async function main(config: FPIConfig, outputFilePath: string) {
     'FCT food name',
   ];
 
-  for (const nutrientId of nutrientIds) header.push(nutrientLabels.get(nutrientId)!);
+  for (const nutrientId of nutrientIds) fields.push(nutrientLabels.get(nutrientId)!);
 
-  await writer.writeRecords([header]);
+  const writer = new Transform({ fields }, { }, { objectMode: true });
+  const output = createWriteStream(outputFilePath, { encoding: 'utf8' });
+  writer.pipe(output);
 
   for (const psi of portionSizeImages) {
     const rows = [];
@@ -523,7 +523,7 @@ async function main(config: FPIConfig, outputFilePath: string) {
     }
 
     if (rows.length)
-      await writer.writeRecords(rows);
+      writer.write(rows);
   }
 
   await db.close();

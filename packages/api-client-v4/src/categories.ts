@@ -29,15 +29,14 @@ export class CategoriesApiV4 {
   }
 
   public async getRootCategories(localeId: string): Promise<CategoryContents> {
-    return this.baseClient.get<CategoryContents>(`${CategoriesApiV4.apiPath}/${localeId}`);
+    return this.baseClient.get<CategoryContents>(`api/locales/${localeId}/category-contents`);
   }
 
   public async getCategoryContents(
     categoryCode: string,
     localeId: string,
   ): Promise<CategoryContents> {
-    return this.baseClient.get<CategoryContents>(
-      `${CategoriesApiV4.apiPath}/${localeId}/${categoryCode}`,
+    return this.baseClient.get<CategoryContents>(`api/locales/${localeId}/category-contents/${categoryCode}`,
     );
   }
 

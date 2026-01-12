@@ -1,5 +1,5 @@
 import { initContract } from '@ts-rest/core';
-import { escape } from 'validator';
+import validator from 'validator';
 import { z } from 'zod';
 
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
@@ -183,7 +183,7 @@ export const reference = initContract().router({
     method: 'GET',
     path: '/admin/references/nutrient-types',
     query: paginationRequest.extend({
-      nutrientTableId: z.string().min(1).transform(val => escape(val)).optional(),
+      nutrientTableId: z.string().min(1).transform(val => validator.escape(val)).optional(),
     }),
     responses: {
       200: z.object({

@@ -1,5 +1,5 @@
 import { initContract } from '@ts-rest/core';
-import { isJWT } from 'validator';
+import validator from 'validator';
 
 import { captcha, createUserResponse, generateUserResponse, publicSurveyEntry } from '../types/http';
 import { z } from '../util';
@@ -42,7 +42,7 @@ export const survey = initContract().router({
     method: 'POST',
     path: '/surveys/:slug/create-user',
     body: z.object({
-      token: z.string().refine(value => isJWT(value), { message: 'Token must be a valid JWT' }),
+      token: z.string().refine(value => validator.isJWT(value), { message: 'Token must be a valid JWT' }),
     }),
     responses: {
       200: createUserResponse,

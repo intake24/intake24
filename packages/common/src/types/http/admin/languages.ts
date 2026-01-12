@@ -1,5 +1,5 @@
 import type { Pagination } from '../generic';
-import { isLocale } from 'validator';
+import validator from 'validator';
 
 import { z } from 'zod';
 import { recordVisibilities } from '@intake24/common/security';
@@ -11,10 +11,10 @@ import { owner } from './users';
 
 export const languageAttributes = z.object({
   id: z.string(),
-  code: z.string().min(1).max(16).refine(val => isLocale(val)),
+  code: z.string().min(1).max(16).refine(val => validator.isLocale(val)),
   englishName: z.string().min(1).max(512),
   localName: z.string().min(1).max(512),
-  countryFlagCode: z.string().min(1).max(16).refine(val => isLocale(val)),
+  countryFlagCode: z.string().min(1).max(16).refine(val => validator.isLocale(val)),
   textDirection: z.enum(textDirections),
   ownerId: z.string().nullable(),
   visibility: z.enum(recordVisibilities),

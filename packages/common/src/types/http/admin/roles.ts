@@ -1,4 +1,4 @@
-import { isInt } from 'validator';
+import validator from 'validator';
 import { z } from 'zod';
 
 import { safeIdentifier } from '../generic';
@@ -20,7 +20,7 @@ export const roleRequest = roleAttributes.pick({
   displayName: true,
   description: true,
 }).extend({
-  permissions: z.string().refine(value => isInt(value)).array(),
+  permissions: z.string().refine(value => validator.isInt(value)).array(),
 });
 export type RoleRequest = z.infer<typeof roleRequest>;
 

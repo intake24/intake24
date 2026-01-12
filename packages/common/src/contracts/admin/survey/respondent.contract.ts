@@ -1,7 +1,7 @@
 import { Readable } from 'node:stream';
 
 import { initContract } from '@ts-rest/core';
-import { isLocale } from 'validator';
+import validator from 'validator';
 import { z } from 'zod';
 
 import { emailCopy } from '@intake24/common/types';
@@ -9,7 +9,7 @@ import { paginationMeta, paginationRequest, bigIntString as surveyId } from '@in
 import { createRespondentRequest, respondentEntry, respondentListEntry, respondentRequest } from '@intake24/common/types/http/admin';
 
 const pdfFeedbackRequest = z.object({
-  lang: z.string().refine(val => isLocale(val)).optional(),
+  lang: z.string().refine(val => validator.isLocale(val)).optional(),
   submissions: z.array(z.string().uuid()).optional(),
 });
 

@@ -1,3 +1,5 @@
+import type { PkgFood } from './types/foods';
+import type { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { merge } from 'lodash-es';
@@ -10,8 +12,6 @@ import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-ma
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import type logger from '@intake24/common-backend/services/logger/logger';
-import { PkgFood } from './types/foods';
-import { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
 
 export type Logger = typeof logger;
 
