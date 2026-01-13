@@ -5,7 +5,7 @@ import type { JobData, JobParams, JobType } from '@intake24/common/types';
 
 export type JobProgress = { done: number; all: number };
 
-export default abstract class Job<T extends JobType> {
+export default abstract class Job<T extends JobType, R = any> {
   abstract readonly name: T;
 
   protected id!: string;
@@ -49,10 +49,10 @@ export default abstract class Job<T extends JobType> {
    *
    * @abstract
    * @param {BullJob<JobData<T>>} job
-   * @returns {Promise<void>}
+   * @returns {Promise<R>}
    * @memberof Job
    */
-  abstract run(job: BullJob<JobData<T>>): Promise<void>;
+  abstract run(job: BullJob<JobData<T>>): Promise<R>;
 
   /**
    * Get current progress

@@ -1,5 +1,5 @@
-import type { Router } from 'express';
 import { createExpressEndpoints, initServer } from '@ts-rest/express';
+import { Router } from 'express';
 import passport from 'passport';
 import { contract } from '@intake24/common/contracts';
 import { FAQ, FeedbackScheme, Language, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
@@ -12,6 +12,7 @@ import { feedback } from './feedback.router';
 import { food } from './food.router';
 import { health } from './health.router';
 import { i18n } from './i18n.router';
+import { createLargeFileUploadRouter } from './large-file-upload.router';
 import { password } from './password.router';
 import { portionSize } from './portion-size.router';
 import { subscription } from './subscription.router';
@@ -178,6 +179,8 @@ export function registerRouters(express: Router) {
     nutrientTable: contract.admin.nutrientTable,
     nutrientType: contract.admin.nutrientType,
     nutrientUnit: contract.admin.nutrientUnit,
+    packageExport: contract.admin.packageExport,
+    packageImport: contract.admin.packageImport,
     reference: contract.admin.reference,
     signInLog: contract.admin.signInLog,
     standardUnit: contract.admin.standardUnit,
@@ -198,6 +201,13 @@ export function registerRouters(express: Router) {
     personalAccessToken: contract.admin.user.personalAccessToken,
     userJob: contract.admin.user.job,
   };
+
+  const adminAuthVerifiedMfaMiddleware = [
+    passport.authenticate('admin', { session: false }),
+    registerACLScope,
+    isAccountVerified,
+    isAalSatisfied,
+  ];
 
   createExpressEndpoints(
     adminAuthVerifiedMfaContract,
@@ -230,6 +240,8 @@ export function registerRouters(express: Router) {
       nutrientTable: admin.nutrientTable(),
       nutrientType: admin.nutrientType(),
       nutrientUnit: admin.nutrientUnit(),
+      packageExport: admin.packageExport(),
+      packageImport: admin.packageImport(),
       reference: admin.reference(),
       signInLog: admin.signInLog(),
       standardUnit: admin.standardUnit(),
@@ -255,12 +267,11 @@ export function registerRouters(express: Router) {
       responseValidation,
       // @ts-expect-error fix types (caused by 204/undefined)
       requestValidationErrorHandler,
-      globalMiddleware: [
-        passport.authenticate('admin', { session: false }),
-        registerACLScope,
-        isAccountVerified,
-        isAalSatisfied,
-      ],
+      globalMiddleware: adminAuthVerifiedMfaMiddleware,
     },
   );
+
+  // Tus protocol server has a protocol that is difficult to wrap in a ts-rest contract definition.
+  const largeFileUploadRouter = createLargeFileUploadRouter(adminAuthVerifiedMfaMiddleware);
+  express.use('/admin/large-file-upload', largeFileUploadRouter);
 }

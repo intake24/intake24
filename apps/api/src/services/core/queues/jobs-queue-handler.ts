@@ -3,7 +3,6 @@ import type { PushPayload } from '..';
 
 import { Queue, Worker } from 'bullmq';
 import type { IoC } from '@intake24/api/ioc';
-import type { Job } from '@intake24/api/jobs';
 import type { JobData, JobParams, JobType } from '@intake24/common/types';
 
 import { Job as DbJob, Op } from '@intake24/db';
@@ -101,7 +100,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
             }
 
             await Promise.all([
-              dbJob.update({ completedAt: new Date(), progress: 1, successful: true }),
+              dbJob.update({ completedAt: new Date(), progress: 1, successful: true, returnValue: job.returnvalue as any }),
               this.notify(dbJob.userId, { jobId: dbId, status: 'success' }),
             ]);
           }
@@ -138,6 +137,8 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
                 progress: 1,
                 successful: false,
                 message: job.failedReason,
+                errorDetails: 'details' in err ? (err as any).details : null,
+                returnValue: job.returnvalue as any,
                 stackTrace: job.stacktrace,
               }),
               this.notify(dbJob.userId, {
@@ -170,7 +171,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   async processor(job: BullJob<JobData>) {
-    const { id, name } = job;
+    const { id, data: { type } } = job;
 
     if (!id) {
       this.logger.error(`Queue ${this.name}: Job ID missing.`);
@@ -186,8 +187,8 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
 
     await dbJob.update({ progress: 0, startedAt: new Date() });
 
-    const newJob = this.resolveDynamic<Job<typeof dbJob.type>>(name);
-    await newJob.run(job);
+    const newJob = this.resolveDynamic(type);
+    return await newJob.run(job);
   }
 
   /**

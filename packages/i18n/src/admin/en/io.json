@@ -1,0 +1,153 @@
+{
+  "_": "Import/export",
+  "import": {
+    "_": "Import package",
+    "pageTitle": "Import food database package",
+    "upload": {
+      "title": "Upload package",
+      "subtitle": "Select and upload package file",
+      "dragDrop": "Drag and drop a file here or click to select",
+      "format": "Package format",
+      "formats": {
+        "intake24": "Intake24",
+        "albane": "Albane (France)",
+        "gousto": "Gousto Recipe Drop"
+      },
+      "ready": "Ready to upload",
+      "success": "File uploaded",
+      "uploadButton": "Upload",
+      "cancelButton": "Cancel",
+      "changeFileButton": "Change file",
+      "status": {
+        "cancelled": "Upload cancelled"
+      },
+      "error": {
+        "selectFirst": "Please select a file first",
+        "unexpected": "An unexpected error occurred during upload. Please try again or contact support."
+      }
+    },
+    "verify": {
+      "title": "Verify file",
+      "subtitle": {
+        "complete": "Verification complete",
+        "verifying": "Verifying file integrity...",
+        "failed": "Verification failed",
+        "pending": "Waiting for file upload"
+      },
+      "success": "Package file is correctly formatted",
+      "tryAgainButton": "Try again",
+      "status": {
+        "verifying": "Verifying uploaded file..."
+      },
+      "error": {
+        "unexpected": "An unexpected error occurred during package verification (\"{message}\"). Please try again or contact support."
+      }
+    },
+    "import": {
+      "title": "Import data",
+      "subtitle": {
+        "complete": "Import complete",
+        "importing": "Importing data...",
+        "configure": "Configure and import"
+      },
+      "processingOptions": "Import options",
+      "conflictHandling": "If record already exists",
+      "conflict": {
+        "skip": "Skip",
+        "overwrite": "Overwrite",
+        "abort": "Abort"
+      },
+      "options": {
+        "locales": "Locales to include",
+        "noLocales": "No target locales identified",
+        "files": {
+          "_": "Files to include",
+          "noFiles": "No files to available for import",
+          "locales": "Locale configuration",
+          "foods": "Food list",
+          "categories": "Category list",
+          "asServedSets": "\"As served\" image sets",
+          "imageMaps": "Image maps (required for guide images and drinkware)",
+          "guideImages": "Guide images",
+          "drinkwareSets": "Drinkware sets (sliding scales)",
+          "nutrientTables": "Food composition tables",
+          "type": "Record type"
+        },
+        "importRecords": "Import records",
+        "dontImport": "Don't import",
+        "filtering": "Only specific foods and categories",
+        "foodCodeFilter": "Food codes",
+        "foodCodeFilterHint": "Comma-separated list of food codes to include (leave empty to include all)",
+        "categoryCodeFilter": "Category codes",
+        "categoryCodeFilterHint": "Comma-separated list of category codes to include (leave empty for all)"
+      },
+      "startButton": "Start import",
+      "importAnotherButton": "Import another file",
+      "status": {
+        "importing": "Importing file...",
+        "importingAlert": "Importing data, please wait...",
+        "success": "File imported successfully!"
+      },
+      "error": {
+        "unexpected": "An unexpected error occurred during import"
+      }
+    }
+  },
+  "permissions": {
+    "localePermission": "Uploader lacks permission to edit locale records",
+    "foodListPermission": "Uploader lacks permission to edit food and category records for locale {locale}",
+    "imagePermission": "Uploader lacks permission to edit portion size images"
+  },
+  "verification": {
+    "uploadedFile": "Zip file structure/integrity",
+    "uploadedFileNotAccessible": "Uploaded file is missing or is not accessible",
+    "extractedPathNotFound": "Extracted path not found",
+    "invalidJsonSyntax": "Syntax error parsing JSON file: {message}",
+    "schemaError": "{path}: {errors}",
+    "unexpectedError": "Unexpected error",
+    "invalidZipFile": "Invalid or corrupted zip file",
+    "packageJsonNotFound": "package.json not found in the zip file",
+    "packageJsonMalformed": "Malformed package.json",
+    "importPermission": "Uploader lacks permission to import packages",
+    "albaneNoXlsxFiles": "No Excel (.xlsx) files found in the uploaded Albane package"
+  },
+  "importJob": {
+    "invalidVerification": "A successful verification job is required before importing a package",
+    "extractedFilesNotFound": "Extracted package files are no longer available"
+  },
+  "export": {
+    "_": "Export package",
+    "pageTitle": "Export food database package",
+    "activeJobs": {
+      "_": "Active and recent exports",
+      "jobId": "Job ID",
+      "startedAt": "Started",
+      "status": {
+        "_": "Status",
+        "success": "Completed",
+        "error": "Error",
+        "inProgress": "In progress"
+      }
+    },
+    "noActiveJobs": "No recent exports",
+    "requestExport": "Request new export",
+    "exportButtonLabel": "Request export",
+    "downloadAvailable": "Download available: ",
+    "downloadExpired": "Download link expired",
+    "format": {
+      "_": "Export format",
+      "default": "JSON",
+      "xlsx": "MS Excel (XLSX)"
+    },
+    "locales": "Locales to include",
+    "includeOptions": {
+      "_": "Data to include",
+      "locales": "Locales",
+      "foods": "Food list",
+      "categories": "Category list",
+      "portionSizeMethods": "Portion size data",
+      "portionSizeImages": "Portion size images"
+    },
+    "portionSizeImagesWarning": "This will include original full-resolution portion size images, which may result in a very large download (several gigabytes)."
+  }
+}

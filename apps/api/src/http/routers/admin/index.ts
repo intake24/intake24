@@ -15,6 +15,8 @@ import { metrics } from './metrics.router';
 import { nutrientTable } from './nutrient-table.router';
 import { nutrientType } from './nutrient-type.router';
 import { nutrientUnit } from './nutrient-unit.router';
+import { packageExport } from './package-export.router';
+import { packageImport } from './package-import.router';
 import { reference } from './reference.router';
 import { securable } from './securable.router';
 import { signInLog } from './sign-in-log.router';
@@ -44,6 +46,8 @@ export default {
   nutrientTable,
   nutrientType,
   nutrientUnit,
+  packageExport,
+  packageImport,
   reference,
   securable,
   signInLog,

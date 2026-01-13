@@ -16,6 +16,7 @@ export const job = initContract().router({
       localeId: z.string().optional(),
       nutrientTableId: z.string().optional(),
       surveyId: z.string().optional(),
+      startedAfter: z.string().datetime().optional(),
     }),
     responses: {
       200: z.object({

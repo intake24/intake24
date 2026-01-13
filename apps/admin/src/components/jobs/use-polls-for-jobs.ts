@@ -1,11 +1,20 @@
 import type { ComputedRef } from 'vue';
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, toValue, watch } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
 import type { JobType } from '@intake24/common/types';
 import type { JobAttributes } from '@intake24/common/types/http/admin';
 
-export function usePollsForJobs(jobType: JobType | readonly JobType[], query?: ComputedRef<Record<string, string | number>>) {
+export interface PollsForJobsOptions {
+  limit?: number;
+  startedAfter?: ComputedRef<string> | string;
+}
+
+export function usePollsForJobs(
+  jobType: JobType | readonly JobType[],
+  query?: ComputedRef<Record<string, string | number>>,
+  options?: PollsForJobsOptions,
+) {
   const http = useHttp();
 
   const dialog = ref<boolean>(false);
@@ -20,7 +29,12 @@ export function usePollsForJobs(jobType: JobType | readonly JobType[], query?: C
     const {
       data: { data },
     } = await http.get(`admin/user/jobs`, {
-      params: { type: jobType, limit: 5, ...(query ? query.value : {}) },
+      params: {
+        type: jobType,
+        limit: options?.limit ?? 5,
+        startedAfter: options?.startedAfter ? toValue(options.startedAfter) : undefined,
+        ...(query ? query.value : {}),
+      },
     });
 
     jobs.value = [...data];
