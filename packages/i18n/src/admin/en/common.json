@@ -159,6 +159,7 @@
     "securables": "Security",
     "submit": "Submit",
     "sync": "Synchronize",
+    "select": "Select",
     "transfer": "Transfer",
     "upload": "Upload",
     "confirm": {
@@ -199,6 +200,7 @@
 
   "errors": "{count} errors",
   "selected": "{count} items selected",
+  "noneSelected": "No items selected",
 
   "not": {
     "assigned": "Not assigned",

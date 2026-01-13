@@ -20,7 +20,7 @@ export function job() {
           query,
           columns: ['type'],
           order: [['startedAt', 'DESC']],
-          attributes: ['id', 'type', 'userId', 'startedAt', 'completedAt', 'successful', 'downloadUrl', 'downloadUrlExpiresAt'],
+          attributes: ['id', 'type', 'userId', 'startedAt', 'completedAt', 'successful', 'message', 'errorDetails', 'returnValue', 'downloadUrl', 'downloadUrlExpiresAt'],
           include: [{ association: 'user', attributes: ['name', 'email'], required: false }],
         });
 

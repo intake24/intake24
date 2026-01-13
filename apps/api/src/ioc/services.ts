@@ -31,6 +31,7 @@ import {
   foodDataService,
   foodSearchService,
   foodThumbnailImageService,
+  globalAclService,
   guideImageService,
   i18nService,
   i18nStore,
@@ -67,6 +68,10 @@ import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core
 import { AppMetricsService } from '@intake24/api/services/metrics.service';
 import { logger, Mailer } from '@intake24/common-backend';
 
+import { createPackageExportService } from '../jobs/io/export/package-export.service';
+import { createPackageJsonWriter } from '../jobs/io/export/package-json-writer';
+import { createPackageXlsxWriter } from '../jobs/io/export/xlsx/package-xlsx-writer';
+
 export default (container: AwilixContainer<RequestIoC>): void => {
   const mediaStore = container.cradle.mediaConfig.storage.provider;
   const commsProvider = container.cradle.servicesConfig.comms.provider;
@@ -75,6 +80,7 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     authenticationService: asFunction(authenticationService).singleton(),
     aclCache: asFunction(aclCache).singleton(),
     aclService: asFunction(aclService).scoped(),
+    globalAclService: asFunction(globalAclService).singleton(),
     appMetricsService: asClass(AppMetricsService).singleton(),
 
     duoProvider: asFunction(duoProvider).singleton(),
@@ -117,6 +123,9 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     dataExportFields: asFunction(dataExportFields).singleton(),
     dataExportMapper: asFunction(dataExportMapper).singleton(),
     dataExportService: asFunction(dataExportService).singleton(),
+    packageExportService: asFunction(createPackageExportService).singleton(),
+    'packageWriter.json': asFunction(createPackageJsonWriter),
+    'packageWriter.xlsx': asFunction(createPackageXlsxWriter),
 
     mediaService: asFunction(mediaService).singleton(),
     mediaStore: asFunction(mediaStores[mediaStore]).singleton(),

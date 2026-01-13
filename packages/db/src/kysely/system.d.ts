@@ -91,7 +91,9 @@ export interface Jobs {
   downloadUrl: string | null;
   downloadUrlExpiresAt: Timestamp | null;
   id: Generated<Int8>;
+  localisableMessage: Json | null;
   message: string | null;
+  output: Json | null;
   params: Json;
   progress: number | null;
   stackTrace: string | null;

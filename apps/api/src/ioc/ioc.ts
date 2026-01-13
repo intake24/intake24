@@ -1,3 +1,7 @@
+import type { PackageExportService } from '../jobs/io/export/package-export.service';
+import type { PackageWriterFactory } from '../jobs/io/export/types';
+import type { GlobalACLService } from '../services/core/auth/global-acl.service';
+import type { AppMetricsService } from '../services/metrics.service';
 import type { Config } from '@intake24/api/config';
 import type { FoodIndex } from '@intake24/api/food-index';
 import type {
@@ -69,13 +73,18 @@ import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services
 import type { Logger, Mailer } from '@intake24/common-backend';
 import type { TokenPayload } from '@intake24/common/security';
 import type { Environment } from '@intake24/common/types';
+import type { ExportPackageFormat } from '@intake24/common/types/http/admin';
 import type { DatabasesInterface } from '@intake24/db';
 
 import { KyselyDatabases, models } from '@intake24/db';
 
-import { AppMetricsService } from '../services/metrics.service';
+export type PackageWriterFactories = {
+  [K in `packageWriter.${ExportPackageFormat}`]: PackageWriterFactory;
+};
 
-export interface IoC extends Jobs {
+type PackageWritersAndJobs = PackageWriterFactories & Jobs;
+
+export interface IoC extends PackageWritersAndJobs {
   config: Config;
   aclConfig: Config['acl'];
   appConfig: Config['app'];
@@ -131,6 +140,7 @@ export interface IoC extends Jobs {
   tasksQueueHandler: TasksQueueHandler;
 
   // Authentication
+  globalAclService: GlobalACLService;
   aclCache: ACLCache;
   authenticationService: AuthenticationService;
   jwtService: JwtService;
@@ -146,6 +156,7 @@ export interface IoC extends Jobs {
   dataExportFields: DataExportFields;
   dataExportMapper: DataExportMapper;
   dataExportService: DataExportService;
+  packageExportService: PackageExportService;
 
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
@@ -202,7 +213,7 @@ export interface IoC extends Jobs {
   userService: UserService;
 
   // Dynamic dependency resolver
-  resolveDynamic: <T>(name: string) => T;
+  resolveDynamic: <K extends keyof IoC>(name: K) => IoC[K];
 }
 
 export interface RequestIoC extends IoC {

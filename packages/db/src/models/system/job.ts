@@ -80,6 +80,18 @@ export default class Job extends BaseModel<InferAttributes<Job>, InferCreationAt
   declare message: CreationOptional<string | null>;
 
   @Column({
+    allowNull: true,
+    type: DataType.JSONB,
+  })
+  declare errorDetails: CreationOptional<any>;
+
+  @Column({
+    allowNull: true,
+    type: DataType.JSONB,
+  })
+  declare returnValue: CreationOptional<any>;
+
+  @Column({
     allowNull: false,
     type: DataType.JSONB,
   })

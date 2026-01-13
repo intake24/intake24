@@ -1,16 +1,21 @@
+import type { Kysely } from 'kysely';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { QueueJob } from '@intake24/common/types';
 import type {
+  LocaleRequest,
   RecipeFoodRequest,
   RecipeFoodStepRequest,
   SplitListRequest,
   SplitWordRequest,
   SynonymSetRequest,
 } from '@intake24/common/types/http/admin';
+import type { FoodsDB, OnConflictOption, SystemDB } from '@intake24/db';
 
-import { NotFoundError } from '@intake24/api/http/errors';
+import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { addDollarSign } from '@intake24/api/util';
 import {
+
   Op,
   RecipeFood,
   RecipeFoodStep,
@@ -20,7 +25,7 @@ import {
   SystemLocale,
 } from '@intake24/db';
 
-function localeService({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) {
+function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | 'cache' | 'kyselyDb'>) {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
     const locale
       = typeof localeId === 'string'
@@ -285,6 +290,173 @@ function localeService({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) {
     return [...records, ...newRecords];
   };
 
+  const bulkUpdateLocales = async (
+    input: LocaleRequest[],
+    onConflict: OnConflictOption,
+    foodsTransaction?: Kysely<FoodsDB>,
+    systemTransaction?: Kysely<SystemDB>,
+  ) => {
+    if (input.length === 0)
+      return;
+
+    const foodsImpl = async (transaction: Kysely<FoodsDB>) => {
+      const values = input.map(locale => ({
+        id: locale.code,
+        englishName: locale.englishName,
+        localName: locale.localName,
+        respondentLanguageId: locale.respondentLanguageId,
+        adminLanguageId: locale.adminLanguageId,
+        countryFlagCode: locale.countryFlagCode,
+        textDirection: locale.textDirection,
+        foodIndexEnabled: locale.foodIndexEnabled,
+        foodIndexLanguageBackendId: locale.foodIndexLanguageBackendId,
+      }));
+
+      switch (onConflict) {
+        case 'overwrite': {
+          await transaction
+            .insertInto('locales')
+            .values(values)
+            .onConflict(oc => oc
+              .column('id')
+              .doUpdateSet({
+                englishName: eb => eb.ref('excluded.englishName'),
+                localName: eb => eb.ref('excluded.localName'),
+                respondentLanguageId: eb => eb.ref('excluded.respondentLanguageId'),
+                adminLanguageId: eb => eb.ref('excluded.adminLanguageId'),
+                countryFlagCode: eb => eb.ref('excluded.countryFlagCode'),
+                textDirection: eb => eb.ref('excluded.textDirection'),
+                foodIndexEnabled: eb => eb.ref('excluded.foodIndexEnabled'),
+                foodIndexLanguageBackendId: eb => eb.ref('excluded.foodIndexLanguageBackendId'),
+              }),
+            )
+            .execute();
+          break;
+        }
+
+        case 'skip': {
+          await transaction
+            .insertInto('locales')
+            .values(values)
+            .onConflict(oc => oc
+              .column('id')
+              .doNothing(),
+            )
+            .execute();
+          break;
+        }
+
+        case 'abort': {
+          const codes = input.map(c => c.code);
+          const existingLocales = await transaction
+            .selectFrom('locales')
+            .select(['id'])
+            .where('id', 'in', codes)
+            .execute();
+
+          if (existingLocales.length > 0) {
+            const conflictingCodes = existingLocales.map(c => c.id);
+            throw new ConflictError(`Locale codes already exist in foods database: ${conflictingCodes.join(', ')}`);
+          }
+
+          await transaction
+            .insertInto('locales')
+            .values(values)
+            .returning(['id'])
+            .execute();
+          break;
+        }
+      }
+    };
+
+    const systemImpl = async (transaction: Kysely<SystemDB>) => {
+      const values = input.map(locale => ({
+        code: locale.code,
+        englishName: locale.englishName,
+        localName: locale.localName,
+        respondentLanguageId: locale.respondentLanguageId,
+        adminLanguageId: locale.adminLanguageId,
+        countryFlagCode: locale.countryFlagCode,
+        textDirection: locale.textDirection,
+        foodIndexEnabled: locale.foodIndexEnabled,
+        foodIndexLanguageBackendId: locale.foodIndexLanguageBackendId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }));
+
+      switch (onConflict) {
+        case 'overwrite': {
+          await transaction
+            .insertInto('locales')
+            .values(values)
+            .onConflict(oc => oc
+              .column('code')
+              .doUpdateSet({
+                englishName: eb => eb.ref('excluded.englishName'),
+                localName: eb => eb.ref('excluded.localName'),
+                respondentLanguageId: eb => eb.ref('excluded.respondentLanguageId'),
+                adminLanguageId: eb => eb.ref('excluded.adminLanguageId'),
+                countryFlagCode: eb => eb.ref('excluded.countryFlagCode'),
+                textDirection: eb => eb.ref('excluded.textDirection'),
+                foodIndexEnabled: eb => eb.ref('excluded.foodIndexEnabled'),
+                foodIndexLanguageBackendId: eb => eb.ref('excluded.foodIndexLanguageBackendId'),
+                updatedAt: eb => eb.ref('excluded.updatedAt'),
+              }),
+            )
+            .execute();
+          break;
+        }
+
+        case 'skip': {
+          await transaction
+            .insertInto('locales')
+            .values(values)
+            .onConflict(oc => oc
+              .column('code')
+              .doNothing(),
+            )
+            .execute();
+          break;
+        }
+
+        case 'abort': {
+          const codes = input.map(c => c.code);
+          const existingLocales = await transaction
+            .selectFrom('locales')
+            .select(['code'])
+            .where('code', 'in', codes)
+            .execute();
+
+          if (existingLocales.length > 0) {
+            const conflictingCodes = existingLocales.map(c => c.code);
+            throw new ConflictError(`Locale codes already exist in system database: ${conflictingCodes.join(', ')}`);
+          }
+
+          await transaction
+            .insertInto('locales')
+            .values(values)
+            .returning(['id'])
+            .execute();
+          break;
+        }
+      }
+    };
+
+    if (foodsTransaction) {
+      await foodsImpl(foodsTransaction);
+    }
+    else {
+      await kyselyDb.foods.transaction().execute(foodsImpl);
+    }
+
+    if (systemTransaction) {
+      await systemImpl(systemTransaction);
+    }
+    else {
+      await kyselyDb.system.transaction().execute(systemImpl);
+    }
+  };
+
   /**
    * Queue locale tasks
    *
@@ -305,6 +477,7 @@ function localeService({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) {
     getSynonymSets,
     setSynonymSets,
     queueTask,
+    bulkUpdateLocales,
   };
 }
 

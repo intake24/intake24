@@ -1,32 +1,41 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "(survey)Launch Chrome against localhost",
-            "url": "http://localhost:8200/test-survey",
-            "webRoot": "${workspaceFolder}/apps/survey/",
-            "skipFiles": [
-                "<node_internals>/**",
-                "**/node_modules/**",
-                "**/clarity.js",
-            ]
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "(admin) Launch Chrome against localhost",
-            "url": "http://localhost:8100",
-            "webRoot": "${workspaceFolder}/apps/admin/",
-            "skipFiles": [
-                "<node_internals>/**",
-                "**/node_modules/**",
-                "**/clarity.js",
-            ]
-        },
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to node.js (pick process)",
+      "processId": "${command:PickProcess}",
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "(survey)Launch Chrome against localhost",
+      "url": "http://localhost:8200/test-survey",
+      "webRoot": "${workspaceFolder}/apps/survey/",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**",
+        "**/clarity.js"
+      ]
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "(admin) Launch Chrome against localhost",
+      "url": "http://localhost:8100",
+      "webRoot": "${workspaceFolder}/apps/admin/",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**",
+        "**/clarity.js"
+      ]
+    }
+  ]
 }

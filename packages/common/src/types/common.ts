@@ -60,6 +60,10 @@ export const localeTranslation = z.record(z.string(), z.string().nullable());
 
 export type LocaleTranslation = z.infer<typeof localeTranslation>;
 
+export const localeTranslationStrict = z.record(z.string(), z.string());
+
+export type LocaleTranslationStrict = z.infer<typeof localeTranslationStrict>;
+
 export const requiredLocaleTranslation = z.intersection(
   z.object({ en: z.string() }),
   z.record(z.string(), z.string().nullable()),

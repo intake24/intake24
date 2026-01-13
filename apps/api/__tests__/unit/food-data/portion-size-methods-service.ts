@@ -6,7 +6,7 @@ import {
 } from '@intake24/api-tests/unit/food-data/portion-size-methods-test-data';
 import portionSizeMethodsService from '@intake24/api/services/foods/portion-size-methods.service';
 
-import { initDatabases, releaseDatabases } from '../helpers/databases';
+import { releaseDatabases, useDatabases } from '../helpers/databases';
 
 export default () => {
   describe('portion size methods service', () => {
@@ -15,7 +15,7 @@ export default () => {
     let testData: Record<string, string>;
 
     beforeAll(async () => {
-      await initDatabases();
+      await useDatabases();
       testData = await createTestData();
       service = portionSizeMethodsService('http://localhost:3000/images');
     });

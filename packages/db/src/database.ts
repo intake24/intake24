@@ -73,3 +73,5 @@ export class Database implements DatabasesInterface {
     await Promise.all([this.foods.close(), this.system.close()]);
   }
 }
+
+export type OnConflictOption = 'overwrite' | 'skip' | 'abort';
