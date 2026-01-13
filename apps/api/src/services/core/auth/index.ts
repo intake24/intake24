@@ -4,6 +4,8 @@ export * from './acl.service';
 export { default as aclService } from './acl.service';
 export * from './authentication.service';
 export { default as authenticationService } from './authentication.service';
+export * from './global-acl.service';
+export { default as globalAclService } from './global-acl.service';
 export * from './jwt-rotation.service';
 export { default as jwtRotationService } from './jwt-rotation.service';
 export * from './jwt.service';

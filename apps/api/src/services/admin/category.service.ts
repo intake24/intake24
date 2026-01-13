@@ -1,9 +1,17 @@
+import type { Kysely } from 'kysely';
+
 import type { CacheKey } from '../core/redis/cache';
 import type { IoC } from '@intake24/api/ioc';
-import type { CategoryCopyInput, CategoryInput } from '@intake24/common/types/http/admin';
+import type {
+  BulkCategoryInput,
+  CategoryCopyInput,
+  CategoryInput,
+} from '@intake24/common/types/http/admin';
 import type {
   CategoryAttributes,
   FindOptions,
+  FoodsDB,
+  OnConflictOption,
   PaginateQuery,
   Transaction,
 } from '@intake24/db';
@@ -12,7 +20,7 @@ import { randomUUID } from 'node:crypto';
 
 import { pick } from 'lodash-es';
 
-import { NotFoundError } from '@intake24/api/http/errors';
+import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
 import { toSimpleName } from '@intake24/api/util';
 import {
@@ -356,8 +364,248 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     ]);
   };
 
+  const bulkUpdateCategoryParents = async (
+    transaction: Kysely<FoodsDB>,
+    localeId: string,
+    input: BulkCategoryInput[],
+    idMap: Map<string, string>,
+  ) => {
+    const parentCodes = new Set<string>();
+
+    for (const item of input) {
+      if (item.parentCategories) {
+        item.parentCategories.forEach(code => parentCodes.add(code));
+      }
+    }
+
+    if (parentCodes.size === 0)
+      return;
+
+    const databaseRefs = await transaction.selectFrom('categories')
+      .select(['code', 'id'])
+      .where('localeId', '=', localeId)
+      .where('code', 'in', Array.from(parentCodes))
+      .execute();
+
+    const parentIdMap = new Map(databaseRefs.map(r => [r.code, r.id]));
+
+    // Allow references within the same batch
+    for (const [code, id] of idMap) {
+      if (!parentIdMap.has(code))
+        parentIdMap.set(code, id);
+    }
+
+    const records: { categoryId: string; subCategoryId: string }[] = [];
+
+    for (const item of input) {
+      const subCategoryId = idMap.get(item.code);
+      if (!subCategoryId || !item.parentCategories?.length)
+        continue;
+
+      for (const parentCode of item.parentCategories) {
+        const parentId = parentIdMap.get(parentCode);
+        if (parentId) {
+          records.push({ categoryId: parentId, subCategoryId });
+        }
+      }
+    }
+
+    if (idMap.size > 0) {
+      await transaction.deleteFrom('categoriesCategories')
+        .where('subCategoryId', 'in', Array.from(idMap.values()))
+        .execute();
+    }
+
+    if (records.length) {
+      await transaction.insertInto('categoriesCategories')
+        .values(records)
+        .execute();
+    }
+  };
+
+  const bulkUpdateCategoryAttributes = async (
+    transaction: Kysely<FoodsDB>,
+    input: BulkCategoryInput[],
+    idMap: Map<string, string>,
+  ) => {
+    const records: any[] = [];
+
+    for (const item of input) {
+      if (!item.attributes)
+        continue;
+
+      const categoryId = idMap.get(item.code);
+      if (!categoryId)
+        continue;
+
+      const attrs = pick(item.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+
+      if (Object.values(attrs).some(v => v !== null && v !== undefined)) {
+        records.push({ categoryId, ...attrs });
+      }
+    }
+
+    if (idMap.size > 0) {
+      await transaction.deleteFrom('categoryAttributes')
+        .where('categoryId', 'in', Array.from(idMap.values()))
+        .execute();
+    }
+
+    if (records.length) {
+      await transaction.insertInto('categoryAttributes')
+        .values(records)
+        .execute();
+    }
+  };
+
+  const bulkUpdateCategoryPortionSizeMethods = async (
+    transaction: Kysely<FoodsDB>,
+    input: BulkCategoryInput[],
+    idMap: Map<string, string>,
+  ) => {
+    const records: any[] = [];
+
+    for (const item of input) {
+      if (!item.portionSizeMethods?.length)
+        continue;
+
+      const categoryId = idMap.get(item.code);
+      if (!categoryId)
+        continue;
+
+      for (const psm of item.portionSizeMethods) {
+        records.push({
+          categoryId,
+          method: psm.method,
+          description: psm.description,
+          useForRecipes: psm.useForRecipes,
+          conversionFactor: psm.conversionFactor,
+          orderBy: psm.orderBy, // Kysely expects string/number depending on mapping, model says string? Check model.
+          parameters: JSON.stringify(psm.parameters),
+        });
+      }
+    }
+
+    if (idMap.size > 0) {
+      await transaction.deleteFrom('categoryPortionSizeMethods')
+        .where('categoryId', 'in', Array.from(idMap.values()))
+        .execute();
+    }
+
+    if (records.length) {
+      await transaction.insertInto('categoryPortionSizeMethods')
+        .values(records)
+        .execute();
+    }
+  };
+
+  const bulkUpdateCategories = async (
+    localeId: string,
+    input: BulkCategoryInput[],
+    onConflict: OnConflictOption,
+    transaction?: Kysely<FoodsDB>,
+  ) => {
+    if (input.length === 0)
+      return;
+
+    const impl = async (transaction: Kysely<FoodsDB>) => {
+      const values = input.map(category => ({
+        code: category.code,
+        localeId,
+        englishName: category.englishName,
+        name: category.name,
+        simpleName: toSimpleName(category.name)!,
+        hidden: category.hidden,
+        tags: JSON.stringify(category.tags ?? []),
+        version: randomUUID(),
+      }));
+
+      let rows: { id: string; code: string }[] = [];
+
+      switch (onConflict) {
+        case 'overwrite': {
+          rows = await transaction
+            .insertInto('categories')
+            .values(values)
+            .onConflict(oc => oc
+              .columns(['localeId', 'code'])
+              .doUpdateSet({
+                englishName: eb => eb.ref('excluded.englishName'),
+                name: eb => eb.ref('excluded.name'),
+                simpleName: eb => eb.ref('excluded.simpleName'),
+                hidden: eb => eb.ref('excluded.hidden'),
+                tags: eb => eb.ref('excluded.tags'),
+                version: eb => eb.ref('excluded.version'),
+              }),
+            )
+            .returning(['id', 'code'])
+            .execute();
+          break;
+        }
+
+        case 'skip': {
+          rows = await transaction
+            .insertInto('categories')
+            .values(values)
+            .onConflict(oc => oc
+              .columns(['localeId', 'code'])
+              .doNothing(),
+            )
+            .returning(['id', 'code']) // rows will conflicts will not be returned
+            .execute();
+          break;
+        }
+
+        case 'abort': {
+          const codes = input.map(c => c.code);
+          const existingCategories = await transaction
+            .selectFrom('categories')
+            .select(['code'])
+            .where('localeId', '=', localeId)
+            .where('code', 'in', codes)
+            .execute();
+
+          if (existingCategories.length > 0) {
+            const conflictingCodes = existingCategories.map(c => c.code);
+            throw new ConflictError(`Category codes already exist: ${conflictingCodes.join(', ')}`);
+          }
+
+          rows = await transaction
+            .insertInto('categories')
+            .values(values)
+            .returning(['id', 'code'])
+            .execute();
+          break;
+        }
+      }
+
+      const idMap = new Map(rows.map(r => [r.code, r.id]));
+      const affectedRows = input.filter(i => idMap.has(i.code));
+
+      await bulkUpdateCategoryParents(transaction, localeId, affectedRows, idMap);
+      await bulkUpdateCategoryAttributes(transaction, affectedRows, idMap);
+      await bulkUpdateCategoryPortionSizeMethods(transaction, affectedRows, idMap);
+
+      if (affectedRows.length > 0) {
+        await cache.forget(affectedRows.map(i => i.code).flatMap(getCategoryCacheKeys));
+        await cache.setAdd('locales-index', localeId);
+      }
+    };
+
+    if (transaction) {
+      await impl(transaction);
+    }
+    else {
+      await kyselyDb.foods.transaction().execute(impl);
+    }
+  };
+
   return {
     browseCategories,
+    bulkUpdateCategories,
+    bulkUpdateCategoryAttributes,
+    bulkUpdateCategoryParents,
+    bulkUpdateCategoryPortionSizeMethods,
     copyCategory,
     createCategory,
     getRootCategories,

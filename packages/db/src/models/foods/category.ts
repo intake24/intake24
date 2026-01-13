@@ -32,6 +32,13 @@ import FoodsLocale from './locale';
   freezeTableName: true,
   timestamps: false,
   underscored: true,
+  indexes: [
+    {
+      name: 'categories_unique',
+      unique: true,
+      fields: ['locale_id', 'code'],
+    },
+  ],
 })
 export default class Category extends BaseModel<
   InferAttributes<Category>,

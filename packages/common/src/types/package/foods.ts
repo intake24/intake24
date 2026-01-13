@@ -1,0 +1,183 @@
+// portion-size.zod.ts
+import { z } from 'zod';
+
+import { categoryLocaleOptionList, localeOptionList, localeTranslationStrict } from '../common';
+
+export const pkgV2InheritableAttributes = z.object({
+  readyMealOption: z.boolean().optional(),
+  sameAsBeforeOption: z.boolean().optional(),
+  reasonableAmount: z.number().optional(),
+  useInRecipes: (z.literal(0).or(z.literal(1)).or(z.literal(2))).optional(),
+});
+
+export const pkgV2PortionSizeMethodTypes = [
+  'as-served',
+  'cereal',
+  'direct-weight',
+  'drink-scale',
+  'guide-image',
+  'milk-in-a-hot-drink',
+  'milk-on-cereal',
+  'parent-food-portion',
+  'pizza',
+  'pizza-v2',
+  'recipe-builder',
+  'standard-portion',
+  'unknown',
+] as const;
+
+export const pkgV2PortionSizeMethodType = z.enum(pkgV2PortionSizeMethodTypes);
+
+export const pkgV2PortionSizeMethodBase = z.object({
+  method: pkgV2PortionSizeMethodType,
+  description: z.string(),
+  useForRecipes: z.boolean(),
+  conversionFactor: z.number(),
+  orderBy: z.string(),
+});
+
+export const pkgV2DirectWeightPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('direct-weight'),
+});
+
+export const pkgV2UnknownPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('unknown'),
+});
+
+export const pkgV2AsServedPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('as-served'),
+  servingImageSet: z.string(),
+  leftoversImageSet: z.string().optional(),
+  labels: z.boolean().optional(),
+  multiple: z.boolean().optional(),
+});
+
+export const pkgV2GuideImagePsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('guide-image'),
+  guideImageId: z.string(),
+  labels: z.boolean().optional(),
+});
+
+export const pkgV2DrinkScalePsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('drink-scale'),
+  drinkwareId: z.string(),
+  initialFillLevel: z.number(),
+  skipFillLevel: z.boolean(),
+  labels: z.boolean().optional(),
+  multiple: z.boolean().optional(),
+});
+
+export const pkgV2StandardUnit = z.object({
+  name: z.string(),
+  weight: z.number(),
+  omitFoodDescription: z.boolean(),
+  inlineEstimateIn: z.string().optional(),
+  inlineHowMany: z.string().optional(),
+});
+
+export const pkgV2StandardPortionPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('standard-portion'),
+  units: z.array(pkgV2StandardUnit),
+});
+
+export const cerealTypes = ['hoop', 'flake', 'rkris'] as const;
+
+export const pkgV2CerealPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('cereal'),
+  type: z.enum(cerealTypes),
+  labels: z.boolean().optional(),
+});
+
+export const pkgV2PizzaPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('pizza'),
+  labels: z.boolean().optional(),
+});
+
+export const pkgV2PizzaV2Psm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('pizza-v2'),
+  labels: z.boolean().optional(),
+});
+
+export const pkgV2MilkOnCerealPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('milk-on-cereal'),
+  labels: z.boolean().optional(),
+});
+
+export const pkgV2MilkInHotDrinkPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('milk-in-a-hot-drink'),
+  options: localeOptionList({ valueSchema: z.coerce.number() }),
+});
+
+export const pkgV2ParentFoodPortionPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('parent-food-portion'),
+  options: categoryLocaleOptionList(z.coerce.number()),
+});
+
+export const pkgV2PortionSizeMethod = z.discriminatedUnion('method', [
+  pkgV2AsServedPsm,
+  pkgV2GuideImagePsm,
+  pkgV2DrinkScalePsm,
+  pkgV2StandardPortionPsm,
+  pkgV2CerealPsm,
+  pkgV2MilkOnCerealPsm,
+  pkgV2PizzaPsm,
+  pkgV2PizzaV2Psm,
+  pkgV2MilkInHotDrinkPsm,
+  pkgV2ParentFoodPortionPsm,
+  pkgV2DirectWeightPsm,
+  pkgV2UnknownPsm,
+]);
+
+export const pkgV2AssociatedFood = z.object({
+  orderBy: z.string(),
+  foodCode: z.string().optional(),
+  categoryCode: z.string().optional(),
+  promptText: localeTranslationStrict,
+  linkAsMain: z.boolean(),
+  genericName: localeTranslationStrict,
+  multiple: z.boolean().optional(),
+});
+
+export const pkgV2Tags = z.array(z.string()).optional();
+
+export type PkgV2Tags = z.infer<typeof pkgV2Tags>;
+
+export const pkgV2AltNames = z.record(z.string(), z.array(z.string().nonempty()).nonempty());
+
+export type PkgV2AltNames = z.infer<typeof pkgV2AltNames>;
+
+export const pkgV2Food = z.object({
+  code: z.string(),
+  version: z.string().optional(),
+  name: z.string(),
+  englishName: z.string(),
+  alternativeNames: pkgV2AltNames,
+  tags: pkgV2Tags,
+  attributes: pkgV2InheritableAttributes,
+  parentCategories: z.array(z.string()),
+  nutrientTableCodes: z.record(z.string(), z.string()),
+  portionSize: z.array(pkgV2PortionSizeMethod),
+  associatedFoods: z.array(pkgV2AssociatedFood),
+  brandNames: z.array(z.string()),
+  thumbnailPath: z.string().optional(),
+});
+
+export type PkgV2InheritableAttributes = z.infer<typeof pkgV2InheritableAttributes>;
+export type PkgV2PortionSizeMethodType = z.infer<typeof pkgV2PortionSizeMethodType>;
+export type PkgV2PortionSizeMethodBase = z.infer<typeof pkgV2PortionSizeMethodBase>;
+export type PkgV2DirectWeightPsm = z.infer<typeof pkgV2DirectWeightPsm>;
+export type PkgV2UnknownPsm = z.infer<typeof pkgV2UnknownPsm>;
+export type PkgV2AsServedPsm = z.infer<typeof pkgV2AsServedPsm>;
+export type PkgV2GuideImagePsm = z.infer<typeof pkgV2GuideImagePsm>;
+export type PkgV2DrinkScalePsm = z.infer<typeof pkgV2DrinkScalePsm>;
+export type PkgV2StandardUnit = z.infer<typeof pkgV2StandardUnit>;
+export type PkgV2StandardPortionPsm = z.infer<typeof pkgV2StandardPortionPsm>;
+export type PkgV2CerealPsm = z.infer<typeof pkgV2CerealPsm>;
+export type PkgV2PizzaPsm = z.infer<typeof pkgV2PizzaPsm>;
+export type PkgV2PizzaV2Psm = z.infer<typeof pkgV2PizzaV2Psm>;
+export type PkgV2MilkOnCerealPsm = z.infer<typeof pkgV2MilkOnCerealPsm>;
+export type PkgV2MilkInHotDrinkPsm = z.infer<typeof pkgV2MilkInHotDrinkPsm>;
+export type PkgV2ParentFoodPortionPsm = z.infer<typeof pkgV2ParentFoodPortionPsm>;
+export type PkgV2PortionSizeMethod = z.infer<typeof pkgV2PortionSizeMethod>;
+export type PkgV2AssociatedFood = z.infer<typeof pkgV2AssociatedFood>;
+export type PkgV2Food = z.infer<typeof pkgV2Food>;

@@ -5,6 +5,13 @@ import { pick } from 'lodash-es';
 import { z } from 'zod';
 
 import { searchSortingAlgorithms } from '../surveys';
+import { packageExportOptions, packageFileTypes } from './http/admin/io';
+
+export const localisableMessage = z.object({
+  key: z.string(),
+  params: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
+});
+export type LocalisableMessage = z.infer<typeof localisableMessage>;
 
 export const repeatableBullJob = z.object({
   key: z.string(),
@@ -20,7 +27,7 @@ export const repeatableBullJob = z.object({
 
 export type RepeatableBullJob = z.infer<typeof repeatableBullJob>;
 
-export type JobData<T extends JobType = JobType> = { type: T; params: JobParams[T] };
+export type JobData<T extends JobType = JobType, _R = void> = { type: T; params: JobParams[T] };
 
 export const redisStoreTypes = ['cache', 'rateLimiter', 'session'] as const;
 export type RedisStoreType = (typeof redisStoreTypes)[number];
@@ -174,6 +181,26 @@ export const UserPasswordResetNotification = z.object({
   email: z.string(),
   userAgent: z.string().optional(),
 });
+export const PackageVerification = z.object({
+  fileId: z.string(),
+  packageFormat: z.string(),
+});
+
+export const PackageExport = packageExportOptions;
+
+export const PackageImport = z.object({
+  fileId: z.string(),
+  verificationJobId: z.string(),
+  options: z.object({
+    conflictStrategies: z.partialRecord(z.enum(packageFileTypes), z.enum(['overwrite', 'skip', 'abort'])),
+    include: z.enum(packageFileTypes).array(),
+    localeFilter: z.array(z.string()).optional(),
+    foodFilter: z.array(z.string()).optional(),
+    categoryFilter: z.array(z.string()).optional(),
+  }),
+});
+
+export const PackageConversionToXlsx = z.object({});
 
 export const jobParams = z.object({
   CleanRedisStore,
@@ -203,6 +230,10 @@ export const jobParams = z.object({
   SurveySubmission,
   UserEmailVerificationNotification,
   UserPasswordResetNotification,
+  PackageVerification,
+  PackageImport,
+  PackageExport,
+  PackageConversionToXlsx,
 });
 export type JobParams = z.infer<typeof jobParams>;
 
@@ -234,6 +265,9 @@ export const jobTypeParams = z.union([
   SurveySubmission,
   UserEmailVerificationNotification,
   UserPasswordResetNotification,
+  PackageVerification,
+  PackageImport,
+  PackageExport,
 ]);
 export type JobTypeParams = z.infer<typeof jobTypeParams>;
 
@@ -318,22 +352,39 @@ export const surveyTasks = z.discriminatedUnion('type', [
 ]);
 export type SurveyTask = z.infer<typeof surveyTasks>;
 
-/* export const userTasks = z.discriminatedUnion('type', [
+export const userTasks = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('ResourceExport'),
     params: ResourceExport,
   }),
-]); */
-export const userTasks = z.object({
-  type: z.literal('ResourceExport'),
-  params: ResourceExport,
-});
+  z.object({
+    type: z.literal('PackageVerification'),
+    params: PackageVerification,
+  }),
+  z.object({
+    type: z.literal('PackageImport'),
+    params: PackageImport,
+  }),
+  z.object({
+    type: z.literal('PackageExport'),
+    params: PackageExport,
+  }),
+]);
+
 export type UserTasks = z.infer<typeof userTasks>;
 
 export const userJobs = [
   'ResourceExport',
 ] as const;
 export type UserJob = (typeof userJobs)[number];
+
+export const ioJobs = [
+  'PackageVerification',
+  'PackageImport',
+  'PackageExport',
+  'PackageConversionToXlsx',
+] as const;
+export type IOJob = (typeof ioJobs)[number];
 
 export const jobTypes = [
   'CleanRedisStore',
@@ -355,6 +406,7 @@ export const jobTypes = [
   ...nutrientTableJobs,
   ...surveyJobs,
   ...userJobs,
+  ...ioJobs,
 ] as const;
 
 export type JobType = keyof JobParams & (typeof jobTypes)[number];
@@ -462,6 +514,26 @@ export const defaultJobsParams: JobParams = {
   UserPasswordResetNotification: {
     email: '',
   },
+  PackageVerification: {
+    fileId: '',
+    packageFormat: 'intake24',
+  },
+  PackageExport: {
+    format: 'json',
+    locales: ['en_GB'],
+    options: {
+      include: ['foods'],
+    },
+  },
+  PackageImport: {
+    fileId: '',
+    verificationJobId: '',
+    options: {
+      include: [],
+      conflictStrategies: {},
+    },
+  },
+  PackageConversionToXlsx: {},
 };
 
 export const isValidJob = (job: any): boolean => jobTypes.includes(job);

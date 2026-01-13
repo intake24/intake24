@@ -1,5 +1,6 @@
 export * from './arrays';
 export * from './errors';
+export * from './format-zod-error';
 export * from './json';
 export * from './numbers';
 export * from './objects';

@@ -5,34 +5,75 @@ import type { DatabasesInterface } from '@intake24/db';
 
 import appConfig from '@intake24/api/config/app';
 import { logger } from '@intake24/common-backend';
-import { Database, databaseConfig } from '@intake24/db';
+import { Database, databaseConfig, KyselyDatabases } from '@intake24/db';
 
-let databases: DatabasesInterface;
+let sequelizeDbs: DatabasesInterface | undefined;
+let kyselyDbs: KyselyDatabases | undefined;
 
-export async function initDatabases(): Promise<DatabasesInterface> {
+let usingDatabases = false;
+
+export async function useDatabases(): Promise<void> {
+  if (usingDatabases) {
+    throw new Error('Databases must be released before calling useDatabases() again');
+  }
+
+  usingDatabases = true;
+
   console.info(
-    `Using database ${databaseConfig.test.foods.database} on ${databaseConfig.test.foods.host}`,
+    `Using database ${databaseConfig.test.foods.database} on ${databaseConfig.test.foods.host ?? 'localhost'}`,
   );
 
-  databases = new Database({
+  sequelizeDbs = new Database({
     environment: appConfig.env,
     databaseConfig,
     logger,
   });
 
-  databases.init();
-  await databases.sync(true);
+  kyselyDbs = new KyselyDatabases({
+    environment: appConfig.env,
+    databaseConfig,
+    logger,
+  });
 
-  return databases;
+  sequelizeDbs.init();
+  kyselyDbs.init();
+
+  await sequelizeDbs.sync(true);
+}
+
+export function getSequelizeDbs(): DatabasesInterface {
+  if (!sequelizeDbs) {
+    throw new Error('Sequelize databases not initialized');
+  }
+
+  return sequelizeDbs;
+}
+
+export function getKyselyDbs(): KyselyDatabases {
+  if (!kyselyDbs) {
+    throw new Error('Kysely databases not initialized');
+  }
+
+  return kyselyDbs;
 }
 
 export async function releaseDatabases(): Promise<void> {
+  if (!sequelizeDbs || !kyselyDbs) {
+    console.warn('Release database called without calling useDatabases(');
+  }
+
   // Clean up the tables created by Sequelize to leave the database in the original blank state
-  await databases.system.drop({ cascade: true });
-  await databases.foods.drop({ cascade: true });
+  await sequelizeDbs!.system.drop({ cascade: true });
+  await sequelizeDbs!.foods.drop({ cascade: true });
 
   // Close database connections to let test runner detect termination correctly
-  await databases.close();
+  await sequelizeDbs!.close();
+  await kyselyDbs!.close();
+
+  sequelizeDbs = undefined;
+  kyselyDbs = undefined;
+
+  usingDatabases = false;
 }
 
 function logSql(sql: string, queryObject: any) {
@@ -44,9 +85,9 @@ function logSql(sql: string, queryObject: any) {
 // creation queries etc. get logged.
 
 export function enableSqlLogging() {
-  databases.foods.options.logging = logSql;
+  sequelizeDbs!.foods.options.logging = logSql;
 }
 
 export function disableSqlLogging() {
-  databases.foods.options.logging = false;
+  sequelizeDbs!.foods.options.logging = false;
 }

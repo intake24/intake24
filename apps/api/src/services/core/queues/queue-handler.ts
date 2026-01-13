@@ -37,7 +37,7 @@ export abstract class QueueHandler<T = any> {
   protected readonly logger;
 
   abstract init(): Promise<void>;
-  abstract processor(job: Job<T>, token?: string): Promise<void>;
+  abstract processor(job: Job<T>, token?: string): Promise<any>;
 
   constructor(config: QueueConfig, logger: Logger) {
     this.config = config;

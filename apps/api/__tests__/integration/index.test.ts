@@ -10,6 +10,7 @@ import admin from './admin/index.test';
 import authentication from './authentication/index.test';
 import feedback from './feedback/index.test';
 import i18n from './i18n/index.test';
+import jobs from './jobs/index.test';
 import password from './password/index.test';
 import portionSizes from './portion-sizes/index.test';
 import subscriptions from './subscriptions/index.test';
@@ -58,6 +59,8 @@ describe('api', () => {
   describe('/api/user', user);
 
   describe('/api/admin', admin);
+
+  describe('jobs', jobs);
 
   afterAll(async () => {
     await suite.close();

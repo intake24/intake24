@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { portionSizeParameters } from '@intake24/common/surveys/portion-size';
 
 import { inheritableAttributes } from './attributes';
-import { categoryPortionSizeMethodAttributes } from './portion-size-methods';
+import { categoryPortionSizeMethodAttributes, portionSizeMethodAttributes } from './portion-size-methods';
 
 export type CreateCategoryRequest = {
   code: string;
@@ -85,6 +85,20 @@ export const categoryCopyInput = categoryAttributes.pick({
   englishName: true,
 });
 export type CategoryCopyInput = z.infer<typeof categoryCopyInput>;
+
+export const bulkCategoryInput = categoryAttributes.omit({
+  id: true,
+  localeId: true,
+  simpleName: true,
+}).partial({
+  tags: true,
+  version: true,
+}).extend({
+  attributes: inheritableAttributes.optional(),
+  parentCategories: categoryAttributes.shape.code.array().optional(),
+  portionSizeMethods: portionSizeMethodAttributes.omit({ id: true }).array().optional(),
+});
+export type BulkCategoryInput = z.infer<typeof bulkCategoryInput>;
 
 export const categoryListEntry = categoryAttributes.pick({
   id: true,

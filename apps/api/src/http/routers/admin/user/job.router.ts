@@ -16,7 +16,7 @@ export function job() {
   return initServer().router(contract.admin.user.job, {
     browse: async ({ query, req }) => {
       const { userId } = req.scope.cradle.user;
-      const { type, ...rest } = query;
+      const { type, startedAfter, ...rest } = query;
 
       const whereOp: WhereOptions = {
         userId,
@@ -28,6 +28,8 @@ export function job() {
       };
       if (type)
         whereOp.type = type;
+      if (startedAfter)
+        whereOp.startedAt = { [Op.gte]: new Date(startedAfter) };
 
       const jobs = await Job.paginate<() => JobAttributes>({
         query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -41,9 +43,26 @@ export function job() {
     submit: async ({ body: { type, params }, req }) => {
       const { userId } = req.scope.cradle.user;
 
-      const resource = params.resource.split('.')[0];
-      if (!(await req.scope.cradle.aclService.hasPermission(`${resource}:browse`)))
-        throw new ForbiddenError();
+      switch (type) {
+        case 'ResourceExport':
+          if ('resource' in params) {
+            const resource = params.resource.split('.')[0];
+            if (!(await req.scope.cradle.aclService.hasPermission(`${resource}:browse`)))
+              throw new ForbiddenError();
+          }
+          break;
+        case 'PackageExport':
+          if (!(await req.scope.cradle.aclService.hasPermission('export-package')))
+            throw new ForbiddenError();
+          break;
+        case 'PackageVerification':
+          if (!(await req.scope.cradle.aclService.hasPermission('import-package')))
+            throw new ForbiddenError();
+          break;
+        case 'PackageImport':
+          if (!(await req.scope.cradle.aclService.hasPermission('import-package')))
+            throw new ForbiddenError();
+      }
 
       const jobEntry = await req.scope.cradle.scheduler.jobs.addJob(
         { userId, type, params },

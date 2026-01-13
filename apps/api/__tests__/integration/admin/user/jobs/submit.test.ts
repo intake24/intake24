@@ -19,17 +19,31 @@ export default () => {
 
   describe('authenticated / resource authorized', () => {
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['type', 'params']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['type']);
     });
 
-    it('should return 400 for invalid input data', async () => {
+    it('should return 400 for invalid job type', async () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['type', 'params'],
+        ['type'],
         {
           input: {
             type: 'not-a-job-type',
+            params: 'invalid-params',
+          },
+        },
+      );
+    });
+
+    it('should return 400 for invalid job parameters', async () => {
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        ['params'],
+        {
+          input: {
+            type: 'ResourceExport',
             params: 'invalid-params',
           },
         },

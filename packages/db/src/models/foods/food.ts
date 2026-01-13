@@ -39,6 +39,13 @@ import NutrientTableRecord from './nutrient-table-record';
   freezeTableName: true,
   timestamps: false,
   underscored: true,
+  indexes: [
+    {
+      name: 'foods_unique',
+      unique: true,
+      fields: ['locale_id', 'code'],
+    },
+  ],
 })
 export default class Food extends BaseModel<
   InferAttributes<Food>,

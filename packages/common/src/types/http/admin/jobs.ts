@@ -15,6 +15,8 @@ export const jobAttributes = z.object({
   progress: z.number().nullable(),
   successful: z.boolean().nullable(),
   message: z.string().nullable(),
+  errorDetails: z.any().nullable(),
+  returnValue: z.any(),
   params: jobTypeParams,
   stackTrace: z.string().array().nullable(),
   startedAt: z.date().nullable(),

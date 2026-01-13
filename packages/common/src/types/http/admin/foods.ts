@@ -11,7 +11,7 @@ import { associatedFoodAttributes } from './associated-food';
 import { inheritableAttributes } from './attributes';
 import { categoryAttributes } from './categories';
 import { nutrientTableRecordAttributes } from './nutrient-tables';
-import { foodPortionSizeMethodAttributes } from './portion-size-methods';
+import { foodPortionSizeMethodAttributes, portionSizeMethodAttributes } from './portion-size-methods';
 
 export const altNames = z.record(z.string(), z.string().array());
 export type AltNames = z.infer<typeof altNames>;
@@ -92,6 +92,23 @@ export const foodInput = foodAttributes.omit({
     .optional(),
 });
 export type FoodInput = z.infer<typeof foodInput>;
+
+export const bulkFoodInput = foodAttributes.omit({
+  id: true,
+  localeId: true,
+  simpleName: true,
+}).partial({
+  altNames: true,
+  tags: true,
+  version: true,
+}).extend({
+  attributes: inheritableAttributes,
+  associatedFoods: associatedFoodAttributes.omit({ id: true, foodId: true }).array(),
+  nutrientRecords: nutrientTableRecordAttributes.pick({ nutrientTableId: true, nutrientTableRecordId: true }).array(),
+  parentCategories: categoryAttributes.shape.code.array(),
+  portionSizeMethods: portionSizeMethodAttributes.omit({ id: true }).array(),
+});
+export type BulkFoodInput = z.infer<typeof bulkFoodInput>;
 
 export const foodCopyInput = foodAttributes.pick({
   localeId: true,
