@@ -1,4 +1,4 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
 const permissions = [
   { name: 'media', display_name: 'Media resource' },
@@ -13,7 +13,7 @@ const permissions = [
 ];
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.createTable(

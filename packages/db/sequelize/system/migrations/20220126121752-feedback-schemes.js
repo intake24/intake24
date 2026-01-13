@@ -1,4 +1,4 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
 const permissions = [
   { name: 'feedback-schemes|browse', display_name: 'Browse feedback schemes' },
@@ -10,7 +10,7 @@ const permissions = [
   { name: 'feedback-schemes|food-groups', display_name: 'Feedback scheme food groups' },
 ];
 
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const created_at = new Date();

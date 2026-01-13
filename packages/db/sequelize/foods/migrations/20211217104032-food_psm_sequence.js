@@ -1,6 +1,6 @@
-const { updateSequence } = require('../../utils.js');
+import { updateSequence } from '../../utils.js';
 
-module.exports = {
+export default {
   up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await updateSequence('food_portion_size_methods', 'id', {

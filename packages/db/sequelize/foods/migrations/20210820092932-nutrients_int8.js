@@ -1,6 +1,6 @@
-const { updateSequence } = require('../../utils.js');
+import { updateSequence } from '../../utils.js';
 
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('nutrient_units', 'v3_nutrient_units', { transaction });

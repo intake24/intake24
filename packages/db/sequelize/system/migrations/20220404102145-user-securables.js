@@ -1,4 +1,4 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
 const permissions = [
   { name: 'feedback-schemes|copy', display_name: 'Copy feedback schemes' },
@@ -26,7 +26,7 @@ const permissions = [
   { name: 'tasks', display_name: 'Tasks resource access' },
 ];
 
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.createTable(

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('user_permissions', 'v3_user_permissions', { transaction });

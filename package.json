@@ -35,7 +35,7 @@
     "cli:dev": "pnpm --filter @intake24/cli dev",
     "i18n:sync": "pnpm --filter @intake24/i18n i18n:sync",
     "changelog": "conventional-changelog -p angular",
-    "release": "pnpm tsx scripts/release.ts",
+    "release": "pnpm unrun scripts/release.ts",
     "lint": "eslint . --fix",
     "test": "pnpm test:unit && test:integration",
     "test:unit": "pnpm test:unit:apps && pnpm test:unit:pkgs",
@@ -60,13 +60,13 @@
     "prompts": "^2.4.2",
     "rimraf": "^6.1.2",
     "simple-git-hooks": "^2.13.1",
-    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
+    "unrun": "^0.2.24",
     "vitest": "^4.0.16"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged",
-    "commit-msg": "pnpm tsx scripts/verify-commit.ts $1"
+    "commit-msg": "pnpm unrun scripts/verify-commit.ts $1"
   },
   "lint-staged": {
     "*": "eslint --fix"

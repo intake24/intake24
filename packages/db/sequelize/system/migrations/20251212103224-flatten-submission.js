@@ -1,5 +1,5 @@
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all(['survey_submissions', 'survey_submission_meals', 'survey_submission_foods'].map(table =>

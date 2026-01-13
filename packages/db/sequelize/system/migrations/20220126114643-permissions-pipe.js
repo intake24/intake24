@@ -23,7 +23,7 @@ const resources = [
   'permissions',
 ];
 
-module.exports = {
+export default {
   up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       for (const item of resources) {

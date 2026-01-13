@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const { QueryTypes } = queryInterface.sequelize;

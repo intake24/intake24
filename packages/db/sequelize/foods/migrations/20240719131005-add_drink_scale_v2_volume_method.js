@@ -1,7 +1,5 @@
-'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn('drinkware_scales_v2', 'volume_method', {
       type: Sequelize.STRING(16),

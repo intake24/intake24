@@ -1,5 +1,6 @@
 {
   "name": "@intake24/i18n",
+  "type": "module",
   "version": "2025.4",
   "private": true,
   "description": "Intake24 localization",
@@ -15,12 +16,13 @@
     "node": ">=24.12.0"
   },
   "scripts": {
-    "i18n:sync": "pnpm tsx scripts/i18n-sync.ts",
+    "i18n:sync": "pnpm unrun scripts/i18n-sync.ts",
     "test:unit": "vitest"
   },
   "devDependencies": {
     "@types/node": "^24.10.4",
     "typescript": "^5.9.3",
+    "unrun": "^0.2.24",
     "vitest": "^4.0.16",
     "vue-i18n": "^11.2.8"
   }

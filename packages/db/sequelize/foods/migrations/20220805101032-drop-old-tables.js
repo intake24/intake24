@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('demographic_group_scale_sectors', { transaction });

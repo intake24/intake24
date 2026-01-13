@@ -1,5 +1,5 @@
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.addColumn('survey_submissions', 'wake_up_time', {

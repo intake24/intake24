@@ -87,7 +87,7 @@ const recipeFoods = [
 ];
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       // Getting all available locales from the locales table in foods DB

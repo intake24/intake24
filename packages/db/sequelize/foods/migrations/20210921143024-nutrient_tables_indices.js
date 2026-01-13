@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.addIndex('nutrient_table_record_fields', ['nutrient_table_record_id'], {

@@ -1,5 +1,5 @@
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn('pairwise_associations_occurrences', 'multiplier', {
       type: Sequelize.INTEGER,

@@ -1,8 +1,6 @@
-'use strict';
-
-const fs = require('node:fs');
-const https = require('node:https');
-const path = require('node:path');
+import fs from 'node:fs';
+import https from 'node:https';
+import path from 'node:path';
 
 const adminUrl
   = 'https://raw.githubusercontent.com/intake24/admin-frontend/master/src/js/explorer/constants/standard-units-en.js';
@@ -85,7 +83,7 @@ async function fetchSurveyStandardUnits(locale) {
   });
 }
 
-module.exports = {
+export default {
   up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const adminUnits = await fetchAdminStandardUnits();

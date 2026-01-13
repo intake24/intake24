@@ -4,7 +4,7 @@
  * @param {*} records
  * @param {*} { roleNames = ['superuser'], queryInterface, transaction }
  */
-async function createPermissions(records, { roleNames = ['superuser'], queryInterface, transaction }) {
+export async function createPermissions(records, { roleNames = ['superuser'], queryInterface, transaction }) {
   const { QueryTypes } = queryInterface.sequelize;
 
   const created_at = new Date();
@@ -57,7 +57,7 @@ async function createPermissions(records, { roleNames = ['superuser'], queryInte
  * @param {*} { queryInterface, transaction }
  * @returns
  */
-async function updateSequence(table, column, { queryInterface, transaction }) {
+export async function updateSequence(table, column, { queryInterface, transaction }) {
   const [[{ max }]] = await queryInterface.sequelize.query(`SELECT MAX(${column}) FROM ${table}`, {
     transaction,
   });
@@ -70,5 +70,3 @@ async function updateSequence(table, column, { queryInterface, transaction }) {
     { transaction },
   );
 }
-
-module.exports = { createPermissions, updateSequence };

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: (queryInterface) => {
     return queryInterface.renameTable(
       'foods_portion_size_method_params',

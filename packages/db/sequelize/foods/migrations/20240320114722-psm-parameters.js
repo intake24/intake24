@@ -1,4 +1,4 @@
-const { camelCase } = require('lodash-es');
+import { camelCase } from 'lodash-es';
 
 function parseValue(oldValue) {
   if (['false', 'true'].includes(oldValue))
@@ -11,7 +11,7 @@ function parseValue(oldValue) {
 }
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.addColumn(

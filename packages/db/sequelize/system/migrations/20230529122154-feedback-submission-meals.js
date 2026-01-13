@@ -1,11 +1,11 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
 const defaultMeals = { chart: { colors: [], nutrients: [] }, table: { fields: [] } };
 const defaultSections = ['cards', 'topFoods'];
 
 const permissions = [{ name: 'feedback-schemes|meals', display_name: 'Feedback scheme meals' }];
 
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.addColumn(

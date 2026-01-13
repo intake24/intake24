@@ -1,10 +1,10 @@
-const { createPermissions, updateSequence } = require('../../utils.js');
+import { createPermissions, updateSequence } from '../../utils.js';
 
 const permissions = [{ name: 'surveys|securables', display_name: 'Surveys security' }];
 
 const permissionToDelete = ['surveyadmin', 'surveys|mgmt'];
 
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('surveys', 'v3_surveys', { transaction });

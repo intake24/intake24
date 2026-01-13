@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('food_index_language_backends', {
       id: {

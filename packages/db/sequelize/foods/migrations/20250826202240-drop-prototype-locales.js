@@ -1,5 +1,5 @@
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   async up(queryInterface, _Sequelize) {
     const { QueryTypes } = queryInterface.sequelize;
     await queryInterface.sequelize.transaction(async (transaction) => {
@@ -60,29 +60,29 @@ module.exports = {
         // Only copy if no portion size method rows exist for the same category code in target locale (otherwise keep existing rows as override)
         await queryInterface.sequelize.query(
           `with source_target_map as (
-            select 
+            select
                 cl_source.id as source_local_id,
                 cl_target.id as target_local_id,
                 cl_source.category_code
             from category_locals cl_source
-            join category_locals cl_target 
+            join category_locals cl_target
                 on cl_target.category_code = cl_source.category_code
-            left join category_portion_size_methods psm_target 
+            left join category_portion_size_methods psm_target
                 on psm_target.category_local_id = cl_target.id
             where cl_source.locale_id = :prototypeLocaleId
             and cl_target.locale_id = :targetLocaleId
             and psm_target.category_local_id is null
           )
           insert into category_portion_size_methods (
-            category_local_id, 
-            method, 
-            description, 
-            use_for_recipes, 
-            conversion_factor, 
-            order_by, 
+            category_local_id,
+            method,
+            description,
+            use_for_recipes,
+            conversion_factor,
+            order_by,
             parameters
           )
-          select 
+          select
             stm.target_local_id,
             psm.method,
             psm.description,
@@ -157,7 +157,7 @@ module.exports = {
              from foods_local_lists fll
              where fll.locale_id = fl.locale_id
              and fll.food_code = fl.food_code
-           ) 
+           )
            and (fl.name is null or fl.simple_name is null)`,
           {
             type: QueryTypes.DELETE,
@@ -170,29 +170,29 @@ module.exports = {
         // Only copy if no portion size method rows exist for the same food code in target locale (otherwise keep existing rows as override)
         await queryInterface.sequelize.query(
           `with source_target_map as (
-            select 
+            select
                 fl_source.id as source_local_id,
                 fl_target.id as target_local_id,
                 fl_source.food_code
             from food_locals fl_source
-            join food_locals fl_target 
+            join food_locals fl_target
                 on fl_target.food_code = fl_source.food_code
-            left join food_portion_size_methods psm_target 
+            left join food_portion_size_methods psm_target
                 on psm_target.food_local_id = fl_target.id
             where fl_source.locale_id = :prototypeLocaleId
             and fl_target.locale_id = :targetLocaleId
             and psm_target.food_local_id is null
           )
           insert into food_portion_size_methods (
-            food_local_id, 
-            method, 
-            description, 
-            use_for_recipes, 
-            conversion_factor, 
-            order_by, 
+            food_local_id,
+            method,
+            description,
+            use_for_recipes,
+            conversion_factor,
+            order_by,
             parameters
           )
-          select 
+          select
             stm.target_local_id,
             psm.method,
             psm.description,
@@ -210,21 +210,21 @@ module.exports = {
         if (languageCompatible) {
           await queryInterface.sequelize.query(
             `insert into associated_foods(
-             food_code, 
-             locale_id, 
+             food_code,
+             locale_id,
              associated_food_code,
-             associated_category_code, 
+             associated_category_code,
              text,
              link_as_main,
              generic_name,
              order_by,
              multiple
           )
-          select 
-            af.food_code, 
-            :targetLocaleId as locale_id, 
+          select
+            af.food_code,
+            :targetLocaleId as locale_id,
             af.associated_food_code,
-            af.associated_category_code, 
+            af.associated_category_code,
             af.text,
             af.link_as_main,
             af.generic_name,
@@ -239,9 +239,9 @@ module.exports = {
       }
 
       const inheritedLocales = await queryInterface.sequelize.query(
-        `select 
+        `select
           l.id as locale_id,
-          l.prototype_locale_id as prototype_locale_id, 
+          l.prototype_locale_id as prototype_locale_id,
           substring(l.respondent_language_id from 1 for 2) = substring(pl.respondent_language_id from 1 for 2) as prototype_language_compatible
         from locales l left join locales pl on pl.id = l.prototype_locale_id where l.prototype_locale_id is not null;`,
         {

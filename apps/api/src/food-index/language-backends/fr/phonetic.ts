@@ -1,4 +1,4 @@
-import phonetic from 'talisman/phonetics/french/phonetic';
+import phonetic from 'talisman/phonetics/french/phonetic.js';
 
 import type { PhoneticEncoder } from '@intake24/api/food-index/dictionary';
 

@@ -1,6 +1,6 @@
-const systemDbConfig = require('../../system/config.js');
+import systemDbConfig from '../../system/config.cjs';
 
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.addColumn(

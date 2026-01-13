@@ -1,4 +1,4 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
 const permissions = [
   { name: 'languages|securables', display_name: 'Languages security' },
@@ -16,7 +16,7 @@ const permissionToDelete = [
   'fdbs|delete',
 ];
 
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('languages', 'old_languages', { transaction });

@@ -1,6 +1,6 @@
-const { nanoid } = require('nanoid');
+import { nanoid } from 'nanoid';
 
-module.exports = {
+export default {
   up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const schemes = await queryInterface.sequelize.query(

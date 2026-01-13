@@ -1,0 +1,6 @@
+{
+  "config": "./sequelize/system/config.js",
+  "models-path": "./src/db/models/system",
+  "migrations-path": "./sequelize/system/migrations",
+  "seeders-path": "./sequelize/system/seeders"
+}

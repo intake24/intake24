@@ -10,7 +10,6 @@
     ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
     "paths": {
       "@intake24/survey/*": ["./src/*"],
       "@intake24/common/*": ["../../packages/common/src/*"],

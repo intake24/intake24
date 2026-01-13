@@ -1,5 +1,4 @@
-const isEqual = require('lodash/isEqual');
-const pick = require('lodash/pick');
+import { isEqual, pick } from 'lodash-es';
 
 function mapCustomPromptAnswers(sessionAnswers, dbAnswers) {
   return Object.entries(pick(sessionAnswers ?? {}, Object.keys(dbAnswers ?? {})))
@@ -71,7 +70,7 @@ function mapSession(state) {
 }
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.addColumn('jobs', 'session_id', {

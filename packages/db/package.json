@@ -1,5 +1,6 @@
 {
   "name": "@intake24/db",
+  "type": "module",
   "version": "2025.4",
   "private": true,
   "description": "Intake24 database layer",
@@ -15,13 +16,13 @@
     "node": ">=24.12.0"
   },
   "scripts": {
-    "db:foods:migrate": "pnpm sequelize db:migrate --options-path sequelize/foods/options.js",
-    "db:foods:migration:new": "pnpm sequelize migration:generate --options-path sequelize/foods/options.js",
-    "db:foods:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/foods/options.js",
+    "db:foods:migrate": "pnpm sequelize db:migrate --options-path sequelize/foods/options.json",
+    "db:foods:migration:new": "pnpm sequelize migration:generate --options-path sequelize/foods/options.json",
+    "db:foods:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/foods/options.json",
     "db:foods:kysely-codegen": "pnpm exec kysely-codegen --dialect postgres --url \"env(DB_DEV_FOODS_URL)\" --camel-case --out-file ./src/kysely/foods.d.ts",
-    "db:system:migrate": "pnpm sequelize db:migrate --options-path sequelize/system/options.js",
-    "db:system:migration:new": "pnpm sequelize migration:generate --options-path sequelize/system/options.js",
-    "db:system:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/system/options.js",
+    "db:system:migrate": "pnpm sequelize db:migrate --options-path sequelize/system/options.json",
+    "db:system:migration:new": "pnpm sequelize migration:generate --options-path sequelize/system/options.json",
+    "db:system:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/system/options.json",
     "db:system:kysely-codegen": "pnpm exec kysely-codegen --dialect postgres --url \"env(DB_DEV_SYSTEM_URL)\" --camel-case --out-file ./src/kysely/system.d.ts"
   },
   "dependencies": {

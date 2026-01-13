@@ -1,7 +1,7 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   async up(queryInterface) {
     await queryInterface.sequelize.transaction(async (transaction) => {
       const permissions = [{ name: 'locales:food-list:edit', display_name: 'Locale - edit food list' }];

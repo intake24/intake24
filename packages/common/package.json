@@ -1,5 +1,6 @@
 {
   "name": "@intake24/common",
+  "type": "module",
   "version": "2025.4",
   "private": true,
   "description": "Intake24 common code",

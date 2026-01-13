@@ -17,7 +17,7 @@
     "api": {
       "path": "apps/api",
       "env_file": "../instances/{{ instance }}/app-api/.env",
-      "pm2_file": "../instances/{{ instance }}/app-api/pm2.js",
+      "pm2_file": "../instances/{{ instance }}/app-api/pm2.cjs",
       "migrations": {
         "foods": true,
         "system": true

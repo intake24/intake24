@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('food_nutrient_mapping', 'v3_food_nutrient_mapping_1', {

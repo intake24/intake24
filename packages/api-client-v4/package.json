@@ -1,5 +1,6 @@
 {
   "name": "@intake24/api-client-v4",
+  "type": "module",
   "version": "2025.4",
   "description": "",
   "author": "",

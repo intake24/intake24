@@ -1,7 +1,3 @@
-'use strict';
-
-const { QueryTypes } = require('sequelize');
-
 function addVersionToPrompt(prompt, version) {
   return {
     ...prompt,
@@ -29,9 +25,8 @@ function addVersionToSchemeOverridePrompts(schemeOverride, version) {
   };
 }
 
-module.exports = {
-
-  async up(queryInterface) {
+export default {
+  async up(queryInterface, QueryTypes) {
     await queryInterface.sequelize.transaction(async (transaction) => {
       const schemeRows = await queryInterface.sequelize.query('select id, prompts, version from survey_schemes', {
         type: QueryTypes.SELECT,

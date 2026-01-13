@@ -1,2 +1,2 @@
-declare module 'talisman/stemmers/french/porter';
-declare module 'talisman/phonetics/french/phonetic';
+declare module 'talisman/stemmers/french/porter.js';
+declare module 'talisman/phonetics/french/phonetic.js';

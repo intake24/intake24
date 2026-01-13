@@ -1583,7 +1583,7 @@ function deleteTranslation(jsonString) {
   return JSON.stringify(translationsObject);
 }
 
-module.exports = {
+export default {
   up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const records = await queryInterface.select(null, 'standard_units', { transaction });

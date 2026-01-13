@@ -1,9 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@intake24/common/*": ["src/*"],
+      "@intake24/common/*": ["./src/*"],
       "@intake24/*": ["../*/src"]
     }
   },

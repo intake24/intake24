@@ -29,7 +29,7 @@ interface RebuildResponse {
 
 const foodIndex = {
   async init(): Promise<void> {
-    indexWorker = new Worker('./dist/foodIndexBuilder.js', {
+    indexWorker = new Worker('./dist/foodIndex.mjs', {
       workerData: {
         env: config.app.env,
         dbConnectionInfo: config.database,

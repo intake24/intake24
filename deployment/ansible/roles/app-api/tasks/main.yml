@@ -16,7 +16,7 @@
   become_user: '{{ env.user }}'
   copy:
     src: '{{ apps[app].pm2_file }}'
-    dest: '{{ env.directory }}/{{ apps[app].path }}/ecosystem.config.js'
+    dest: '{{ env.directory }}/{{ apps[app].path }}/ecosystem.config.cjs'
     mode: '644'
 
 - name: '{{ app|upper }} | Build API server'

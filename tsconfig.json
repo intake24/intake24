@@ -1,23 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "es2020", // TODO: sequelize has some issues with higher targets
     "lib": ["es2024"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "types": ["node", "vitest/globals"],
+    "allowImportingTsExtensions": true,
     "allowJs": true,
     "strict": true,
+    // "exactOptionalPropertyTypes": false, TODO: enable in future
     "noImplicitThis": true,
+    // "noUncheckedIndexedAccess": false, TODO: enable in future
+    "noEmit": true,
     "outDir": "dist",
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    // "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
   "exclude": ["dist", "node_modules"]

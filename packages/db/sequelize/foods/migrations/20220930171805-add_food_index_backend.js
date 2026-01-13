@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn('locales', 'food_index_language_backend_id', {
       type: Sequelize.STRING(16),

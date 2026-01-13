@@ -14,7 +14,7 @@ function checkEnvFileExists(path: string): void {
 }
 
 const envFilePath
-  = process.env.NODE_ENV === 'test' ? resolve(__dirname, '../__tests__/.env-test') : resolve(__dirname, '../.env');
+  = process.env.NODE_ENV === 'test' ? resolve(import.meta.dirname, '../__tests__/.env-test') : resolve(import.meta.dirname, '../.env');
 
 checkEnvFileExists(envFilePath);
 

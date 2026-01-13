@@ -1,6 +1,6 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
-module.exports = {
+export default {
   up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const permissions = [{ name: 'surveys-overrides', display_name: 'Survey scheme overrides' }];

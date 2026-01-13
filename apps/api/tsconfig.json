@@ -1,10 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@intake24/api/*": ["src/*"],
-      "@intake24/api-tests/*": ["__tests__/*"],
+      "@intake24/api/*": ["./src/*"],
+      "@intake24/api-tests/*": ["./__tests__/*"],
       "@intake24/common/*": ["../../packages/common/src/*"],
       "@intake24/common-backend/*": ["../../packages/common-backend/src/*"],
       /*
@@ -14,7 +13,7 @@
        */
       "@intake24/*": ["../../packages/*/src"]
     },
-    "types": ["node", "jest-extended", "vitest/globals", "webpack-env"]
+    "types": ["node", "jest-extended", "vitest/globals"]
   },
   "include": ["src/**/*.ts", "__tests__/**/*.ts"],
   "exclude": ["node_modules", "packages/common/src/theme/assets/**/*"]

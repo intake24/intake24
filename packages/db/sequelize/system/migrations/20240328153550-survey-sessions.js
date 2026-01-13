@@ -1,9 +1,9 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
 const permissions = [{ name: 'surveys|sessions', display_name: 'Survey sessions' }];
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await createPermissions(permissions, { queryInterface, transaction });

@@ -2,8 +2,9 @@ import { defineConfig } from 'tsdown';
 
 export default defineConfig({
   entry: {
-    cli: 'src/index.ts',
+    server: './src/index.ts',
+    foodIndex: './src/food-index/workers/index-builder.ts',
   },
-  name: 'CLI',
+  name: 'API',
   sourcemap: true,
 });

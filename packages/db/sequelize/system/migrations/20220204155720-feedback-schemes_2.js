@@ -1,6 +1,6 @@
-const { nanoid } = require('nanoid');
-const foodDbConfig = require('../../foods/config.js');
-const { createPermissions } = require('../../utils.js');
+import { nanoid } from 'nanoid';
+import foodDbConfig from '../../foods/config.js';
+import { createPermissions } from '../../utils.js';
 
 const permissions = [
   {
@@ -554,7 +554,7 @@ const characters = [
   },
 ];
 
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameColumn('feedback_schemes', 'food_groups', 'cards', {

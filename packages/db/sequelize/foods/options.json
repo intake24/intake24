@@ -1,0 +1,6 @@
+{
+  "config": "./sequelize/foods/config.js",
+  "models-path": "./src/db/models/foods",
+  "migrations-path": "./sequelize/foods/migrations",
+  "seeders-path": "./sequelize/foods/seeders"
+}

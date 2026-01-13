@@ -14,14 +14,13 @@
     "dev": "pnpm open-api && vitepress dev",
     "build": "pnpm open-api && vitepress build",
     "serve": "pnpm open-api && vitepress serve",
-    "open-api": "pnpm tsx scripts/open-api.ts"
+    "open-api": "pnpm unrun scripts/open-api.ts"
   },
   "devDependencies": {
     "@ts-rest/open-api": "^3.52.1",
-    "@tsconfig/node24": "^24.0.3",
     "@types/node": "^24.10.4",
-    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
+    "unrun": "^0.2.24",
     "vitepress": "^1.6.4"
   }
 }

@@ -1,4 +1,4 @@
-const { createPermissions } = require('../../utils.js');
+import { createPermissions } from '../../utils.js';
 
 const permissions = [
   { name: 'permissions|roles', display_name: 'Permission roles' },
@@ -9,7 +9,7 @@ const permissions = [
   { name: 'users|roles', display_name: 'User roles' },
 ];
 
-module.exports = {
+export default {
   up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await createPermissions(permissions, { queryInterface, transaction });

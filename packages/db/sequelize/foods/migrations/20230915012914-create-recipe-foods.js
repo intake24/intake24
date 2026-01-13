@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       // Create Recipe Foods Table and Recipe_Foods Steps Table and Recipe_Foods <-> Category <-> Foods Table)

@@ -1,5 +1,5 @@
-// eslint-disable-next-line ts/no-require-imports
-const { createPermissions } = require('../../utils.js');
+import { QueryInterface } from 'sequelize';
+import { createPermissions } from '../../utils.js';
 
 /*
  * TODO: import from common-backend extract once migration system supports module system (sequelize v7)
@@ -194,8 +194,8 @@ const permissions = [
   { name: 'users:roles', displayName: 'User roles' },
 ];
 
-module.exports = {
-  up: async queryInterface =>
+export default {
+  up: async (queryInterface: QueryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query('TRUNCATE TABLE permissions RESTART IDENTITY CASCADE;', {
         transaction,

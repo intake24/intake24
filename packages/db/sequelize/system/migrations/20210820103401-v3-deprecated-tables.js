@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   up: queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('local_fields', 'v3_local_fields', { transaction });

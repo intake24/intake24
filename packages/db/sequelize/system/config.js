@@ -1,7 +1,7 @@
-const path = require('node:path');
-const dotenv = require('dotenv');
+import { resolve } from 'node:path';
+import dotenv from 'dotenv';
 
-dotenv.config({ path: path.resolve('../../apps/api/.env') });
+dotenv.config({ path: resolve('../../apps/api/.env') });
 
 const dialectOptions = {
   mariadb: {
@@ -18,7 +18,7 @@ const dialectOptions = {
   },
 };
 
-module.exports = {
+export default {
   development: {
     url: process.env.DB_DEV_SYSTEM_URL,
     host: process.env.DB_DEV_SYSTEM_HOST,

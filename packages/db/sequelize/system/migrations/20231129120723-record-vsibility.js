@@ -1,6 +1,6 @@
-const tables = ['languages', 'locales', 'feedback_schemes', 'survey_schemes'];
+import { createPermissions } from '../../utils.js';
 
-const { createPermissions } = require('../../utils.js');
+const tables = ['languages', 'locales', 'feedback_schemes', 'survey_schemes'];
 
 const permissions = [
   { name: 'languages|use', display_name: 'Languages use' },
@@ -9,7 +9,7 @@ const permissions = [
   { name: 'survey-schemes|use', display_name: 'Survey schemes use' },
 ];
 
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all(

@@ -1,6 +1,4 @@
-'use strict';
-
-const { merge } = require('lodash-es');
+import { merge } from 'lodash-es';
 
 const defaultSearchSettings = {
   collectData: true,
@@ -22,7 +20,7 @@ const defaultSearchSettings = {
 };
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
   async up(queryInterface) {
     await queryInterface.sequelize.transaction(async (transaction) => {
       const surveys = await queryInterface.sequelize.query(

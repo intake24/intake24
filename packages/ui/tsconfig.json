@@ -1,6 +1,6 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
     "jsx": "preserve",
     "lib": [
       "esnext",
@@ -8,12 +8,6 @@
       "dom.iterable",
       "webworker"
     ],
-    "useDefineForClassFields": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "baseUrl": ".",
-    "module": "esnext",
-    "moduleResolution": "node",
     "paths": {
       "@intake24/common/*": [
         "../common/src/*"
@@ -24,17 +18,7 @@
       "@intake24/*": [
         "../*/src"
       ]
-    },
-    "resolveJsonModule": true,
-    "strict": true,
-    "noImplicitThis": true,
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "skipLibCheck": true
+    }
   },
   "include": [
     "env.d.ts",

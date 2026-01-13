@@ -126,7 +126,7 @@ jobs:
 
       - name: API - build for tests
         working-directory: apps/api
-        run: pnpm test:build
+        run: pnpm build
 
       - name: API - use Github test environment file
         working-directory: apps/api
