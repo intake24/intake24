@@ -1,6 +1,6 @@
 /* eslint-disable perfectionist/sort-imports */
 import './bootstrap';
-import { Argument, Command, Option } from 'commander';
+import { Argument, Command, CommanderError, Option } from 'commander';
 import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-fr-albane-command';
 import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import buildGoustoLocaleCommand from './commands/gousto/build-gousto-locale-command';
@@ -272,13 +272,20 @@ async function run() {
       await buildGoustoLocaleCommand(options);
     });
 
-  await program.parseAsync(process.argv);
+  program.exitOverride();
+
+  try {
+    await program.parseAsync(process.argv);
+  }
+  catch (err) {
+    if (!(err instanceof CommanderError) || err.code !== 'commander.help')
+      throw err;
+  }
 }
 
 run()
   .catch((err) => {
     console.error(err instanceof Error ? err.stack : err);
-
     process.exit(process.exitCode ?? 1);
   })
   .finally(() => {
