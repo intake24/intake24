@@ -104,14 +104,15 @@ Based on the query, primary matches and corresponding word distances, generate a
 Based on the query, primary matches and corresponding word distances, generate a brief, helpful tooltip hints (30 words max) to help the user refine their food search.
 >>>>>>> a31d1df0f (fix(api): Use gemini-2.5-flash-lite to improve speed, instruction prompt improvement.)
 
-- If results are poor (such as distance > 0.2), suggest specific food, or altering terms.
-- If multiple similar results (such as distance among top 3 < 0.005), suggest adding details.
-- If query is too short or generic, suggest being more descriptive.
-- Be direct, polite and actionable, using simple language with suggestions.
-- If results are good, respond with an empty hint.
-- If query is not a food name, suggest using food names.
-- Advise against typos or uncommon terms.
-- Avoid mentioning distances or technical terms.
+If results are poor (such as distance > 0.15), suggest specific food, or altering terms.
+If multiple similar results (such as distance among top 3 < 0.005), suggest adding details.
+If query is a single word but too generic (e.g. fruit, vegetable), suggest being more descriptive.
+If query is a food name and very similar to the first primary match, respond with an empty hint.
+If query is not a food name, suggest using food names.
+If query has a typo of a food name, suggest correcting the spelling.
+Avoid mentioning "gluten free", "organic", "vegan", "vegetarian", or distances or technical terms.
+If the query is a food name but not found as the same language to the primary matches, suggest using the food name in current language.
+If the query matches below examples (or similar), use the corresponding hint.
 
 Query: pizza
 Answer: You might want to specify the type of pizza or add toppings to narrow down your search.
@@ -123,21 +124,63 @@ Query: car
 Answer: It seems like "car" is not a food item. Please use food names to get relevant search results.
 
 Query: Coca Coka
-Answer: Is it possible you meant "Coca Cola"? Please check for typos or use common food and beverage names.
+Answer: Do you mean "Coca Cola"? Please check for typos or use common food and beverage names.
+
+Query: Vegetables
+Answer: Can you enter all your vegetables separately. For example, if you ate carrots, peas and broccoil, enter them separately, in per box.
+(Same for vegetable, veg, veggies)
+
+Query: Fruit
+Answer: Can you enter all your fruits separately. For example, if you ate apple, banana and grapes, enter them separately, in per box.
+(Same for fruits)
+
+Query: Cereal
+Answer: You entered 'cereal'. Can you be more specific? For example, type 'cornflakes' or 'muesli'.
+
+Query: Fish
+Answer: You entered 'fish'. Can you be more specific? For example, type 'cod' or 'haddock'
+
+Query: Biscuit
+Answer: You entered 'biscuit'. Can you be more specific? For example, type 'digestive' or 'shortcake'
+
+Query: Cheese
+Answer: You entered 'cheese'. Can you be more specific? For example, type 'cheddar' or 'parmesan'
+(Same for cake, chocolate, sweets)
 
 Now provide only the hint based on the above instructions.
+Be direct, polite and actionable, using simple language with suggestions.
 Do NOT include the input prefix or output prefix.
+If query contains offensive terms, ignore and DO NOT repeat the term.
+Always suggest the first primary match.
+Do NOT show suggestions (empty hint) if the query is similar to the first primary match.
 `;
       logger.debug('Generating hint with LLM...');
       logger.debug(`Prompt: ${prompt}`);
-      const resp: any = await genAI.models.generateContent({
+      const result = await genAI.models.generateContentStream({
         model: 'gemini-2.5-flash-lite',
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+          thinkingBudget: 0,
+          temperature: 0,
+          topK: 1,
+          topP: 0.8,
+          maxOutputTokens: 30,
+        },
       } as any);
 
-      const text = resp?.candidates?.[0]?.content?.parts?.[0]?.text;
-      logger.debug(`Hint: ${text}`);
-      return text.trim();
+      let text = null;
+      let tokenUsage: any = null;
+      for await (const chunk of result) {
+        // Consume stream to avoid leaks
+        console.log(chunk.text);
+        text = (text ?? '') + chunk.text;
+        tokenUsage = chunk.usageMetadata;
+      }
+      // const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+      console.log('LLM hint response:', text);
+      console.log('token usage:', tokenUsage);
+
+      return text ? text.trim() : '';
     }
     catch (error) {
       if (error instanceof Error) {
