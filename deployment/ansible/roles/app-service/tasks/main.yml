@@ -1,5 +1,5 @@
 - name: '{{ app|upper }} | Set full service name'
-  set_fact: 
+  set_fact:
     service_name: '{{ env.prefix }}-{{ apps[app].service.name }}'
 
 - name: '{{ app|upper }} | Copy systemd service file'
@@ -9,6 +9,7 @@
     owner: root
     group: root
     mode: '644'
+  register: service_file_copy
 
 #  TODO: might only reload pm2 processes for API server
 # - name: Check if service is already running
@@ -19,5 +20,6 @@
 - name: '{{ app|upper }} | Restart service to apply configuration changes'
   service:
     name: '{{ service_name }}'
+    daemon_reload: '{{ service_file_copy.changed }}'
     state: restarted
     enabled: yes
