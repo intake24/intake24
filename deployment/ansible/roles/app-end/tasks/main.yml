@@ -3,3 +3,4 @@
     channel: '{{ slack.channel }}'
     token: '{{ slack.token }}'
     msg: '🏁 Deployment finished | *Instance:* {{ instance }}, *Version (branch/tag):* <https://github.com/intake24/intake24/tree/{{ git_version }}|{{ git_version }}>'
+  when: slack.token and slack.channel

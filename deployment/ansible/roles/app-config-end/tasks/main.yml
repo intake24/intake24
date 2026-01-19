@@ -3,3 +3,4 @@
     channel: '{{ slack.channel }}'
     token: '{{ slack.token }}'
     msg: '🏁 Configuration update finished | *Instance:* {{ instance }}'
+  when: slack.token and slack.channel

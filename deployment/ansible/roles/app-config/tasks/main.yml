@@ -6,6 +6,7 @@
     channel: '{{ slack.channel }}'
     token: '{{ slack.token }}'
     msg: '🚀 Configuration update started | *Instance:* {{ instance }}'
+  when: slack.token and slack.channel
 
 - name: '{{ app|upper }} | Copy .env config file'
   become_user: '{{ env.user }}'
