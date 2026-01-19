@@ -18,7 +18,7 @@
                 :width="20"
               >
                 <div class="d-flex align-center flex-column">
-                  <v-icon class="provider-icon mb-2 ml-2" color="secondary">
+                  <v-icon class="provider-icon mb-2 ml-2" color="secondary" size="80">
                     $duo
                   </v-icon>
                   <span class="font-weight-bold text-h4">{{ duo.value / 20 }} </span>
@@ -138,6 +138,7 @@ function fail() {
 };
 
 function clearDuoInterval() {
+  duo.value.value = 100;
   clearInterval(duo.value.interval);
 };
 
@@ -252,7 +253,4 @@ watch(challengeId, async () => {
 </script>
 
 <style lang="scss">
-.provider-icon {
-  font-size: 100px !important;
-}
 </style>

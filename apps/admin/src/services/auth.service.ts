@@ -24,7 +24,7 @@ export default {
   },
 
   /**
-   * Verify multi-factor challenge response
+   * Request multi-factor challenge response
    *
    * @param {MFAChallengeRequest} payload
    * @returns {Promise<string>}
