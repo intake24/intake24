@@ -104,6 +104,7 @@
                   item-id="code"
                   :label="$t('locales.recipe-foods.ingredientsCategory')"
                   name="ingredientsCategoryCode"
+                  :query="{ localeId: locale.code }"
                   resource="categories"
                 >
                   <template #title>
@@ -147,17 +148,12 @@
   </v-dialog>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
-import type {
-  RecipeFoodStepAttributes,
-  RecipeFoodStepRequest,
-} from '@intake24/common/types/http/admin';
+import type { RecipeFoodStepAttributes, RecipeFoodStepRequest } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/ui';
 
 export type LocaleRecipeFoodStepsForm = {
@@ -169,86 +165,69 @@ export type Locale = {
   code: string;
 };
 
-export default defineComponent({
-  name: 'StepsDialog',
-
-  components: { LanguageSelector, SelectResource },
-
-  props: {
-    dialog: {
-      type: Boolean,
-      required: true,
-    },
-    activeRecipeFoodId: {
-      type: String,
-      required: true,
-    },
-    activeRecipeFoodCode: {
-      type: String,
-      required: true,
-    },
-    locale: {
-      type: Object as PropType<Locale>,
-      required: true,
-    },
-    items: {
-      type: Array as PropType<RecipeFoodStepRequest[]>,
-      default: () => [],
-    },
+const props = defineProps({
+  dialog: {
+    type: Boolean,
+    required: true,
   },
-
-  emits: ['close', 'updateSteps'],
-
-  setup(props, { emit }) {
-    const { translate } = useI18n();
-
-    const { data, errors, post } = useForm<LocaleRecipeFoodStepsForm>({ data: { items: props.items } });
-
-    const saveSteps = async () => {
-      data.value.items = data.value.items
-        .filter(({ name }) => name)
-        .map((item, idx) => {
-          item.order = idx + 1;
-          return item;
-        });
-
-      const items = await post<RecipeFoodStepAttributes[]>(
-        `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`,
-      );
-
-      emit('updateSteps', items);
-    };
-
-    const addStep = () => {
-      data.value.items.push({
-        id: undefined,
-        code: `${props.activeRecipeFoodCode.substring(1)}_STP-${data.value.items.length + 1}`,
-        recipeFoodsId: props.activeRecipeFoodId,
-        name: { en: 'Name' },
-        description: { en: 'Description' },
-        order: data.value.items.length + 1,
-        localeId: props.locale.code,
-        categoryCode: '',
-        repeatable: false,
-        required: false,
-      });
-    };
-
-    const removeStep = (index: number) => {
-      console.log(index);
-      data.value.items.splice(index, 1);
-    };
-
-    return {
-      data,
-      errors,
-      addStep,
-      removeStep,
-      saveSteps,
-      translate,
-    };
+  activeRecipeFoodId: {
+    type: String,
+    required: true,
+  },
+  activeRecipeFoodCode: {
+    type: String,
+    required: true,
+  },
+  locale: {
+    type: Object as PropType<Locale>,
+    required: true,
+  },
+  items: {
+    type: Array as PropType<RecipeFoodStepRequest[]>,
+    default: () => [],
   },
 });
+
+const emit = defineEmits(['close', 'updateSteps']);
+
+const { translate } = useI18n();
+
+const { data, errors, post } = useForm<LocaleRecipeFoodStepsForm>({ data: { items: props.items } });
+
+async function saveSteps() {
+  data.value.items = data.value.items
+    .filter(({ name }) => name)
+    .map((item, idx) => {
+      item.order = idx + 1;
+      return item;
+    });
+
+  const items = await post<RecipeFoodStepAttributes[]>(
+    `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`,
+  );
+
+  emit('updateSteps', items);
+}
+
+function addStep() {
+  data.value.items.push({
+    id: undefined,
+    code: `${props.activeRecipeFoodCode.substring(1)}_STP-${data.value.items.length + 1}`,
+    recipeFoodsId: props.activeRecipeFoodId,
+    name: { en: 'Name' },
+    description: { en: 'Description' },
+    order: data.value.items.length + 1,
+    localeId: props.locale.code,
+    categoryCode: '',
+    repeatable: false,
+    required: false,
+  });
+}
+
+function removeStep(index: number) {
+  console.log(index);
+  data.value.items.splice(index, 1);
+}
 </script>
 
 <style lang="scss">

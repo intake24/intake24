@@ -22,7 +22,7 @@
           <div class="text-h4 font-weight-medium mb-4">
             {{ item.name }}
           </div>
-          <v-row col="12">
+          <v-row>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model.trim="item.name"
