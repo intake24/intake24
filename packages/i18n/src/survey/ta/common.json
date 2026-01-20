@@ -40,16 +40,19 @@
   "phone": "தொலைபேசி",
   "message": "Message",
   "continue": "தொடரவும்",
-  "faqs": {
-    "_": "FAQ",
-    "title": "Frequently Asked Questions",
-    "subtitle": "Find answers to common questions about Intake24"
-  },
   "help": {
-    "_": "உதவி",
-    "title": "உதவி கேட்கவும்",
-    "text": "Complete the form below and one of our support staff will get in touch as soon as they can.",
-    "sent": "உங்கள் உதவிக் கோரிக்கை அனுப்பப்பட்டது."
+    "_": "Help & FAQ",
+    "faqs": {
+      "_": "FAQ",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Find answers to common questions about Intake24"
+    },
+    "request": {
+      "_": "உதவி",
+      "title": "உதவி கேட்கவும்",
+      "text": "Complete the form below and one of our support staff will get in touch as soon as they can.",
+      "sent": "உங்கள் உதவிக் கோரிக்கை அனுப்பப்பட்டது."
+    }
   },
   "app": {
     "_": "செயலி",

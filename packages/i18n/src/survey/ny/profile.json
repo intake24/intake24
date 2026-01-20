@@ -1,0 +1,18 @@
+{
+  "_": "Profile",
+  "info": "Information",
+  "settings": "Settings",
+  "provider": "Provider",
+  "providerId": "Provider ID",
+  "languages": {
+    "_": "Language",
+    "title": "Languages",
+    "ar": "Arabic",
+    "de": "German",
+    "dk": "Danish",
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "pt": "Portuguese"
+  }
+}

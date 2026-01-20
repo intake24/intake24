@@ -1,0 +1,652 @@
+{
+  "checkboxList": {
+    "name": "Mndandanda wazosankha zambiri",
+    "text": "",
+    "description": "",
+    "label": "",
+    "other": "Zina - Fotokozani",
+    "validation": {
+      "required": "Mukuyenera kusankha osachepera chimodzi."
+    }
+  },
+  "datePicker": {
+    "name": "Sankhani tsiku",
+    "text": "",
+    "description": "",
+    "validation": {
+      "required": "Mukuyenera kulemba mundime iyi."
+    }
+  },
+  "info": {
+    "name": "Info / confirmation",
+    "text": "",
+    "description": ""
+  },
+  "noMoreInformation": {
+    "name": "Sipakufunikanso uthenga wina",
+    "text": "",
+    "description": "<p>Tili ndi uthenga wanu wonse wokhudzana ndi <strong>{item}</strong> pakadali pano.</p><p>Kuti mupitilize ndi kafukufukuyu, sankhani \"Continue\" batani lilimunsimo ndipo tikusankilani zakudya zomwe tikufuna chidziwitso chowonjezera.</p><p>Kapenanso,sankhani zakudya za kumanzere ngati mukufuna kuwunikira pachinachake.</p>"
+  },
+  "select": {
+    "name": "Sankani nambala kuchokera pamndandanda",
+    "text": "",
+    "description": "",
+    "label": "Sankhani yankho"
+  },
+  "slider": {
+    "name": "Sankhani nambala pa sikelo",
+    "text": "",
+    "description": ""
+  },
+  "radioList": {
+    "name": "Mndandanda wa chisankho chimodzi",
+    "text": "",
+    "description": "",
+    "label": "",
+    "other": "Zina - Fotokozani",
+    "validation": {
+      "required": "Mukuyenera kusankha chimodzi."
+    }
+  },
+  "textarea": {
+    "name": "Lembani nokha",
+    "text": "",
+    "description": "",
+    "label": "Ikani yankho lanu apa",
+    "validation": {
+      "required": "Mukuyenera kulemba mundime iyi."
+    }
+  },
+  "timePicker": {
+    "name": "Sankhani nthawi",
+    "text": "",
+    "description": "",
+    "validation": {
+      "required": "Mukuyenera kulemba mundime iyi."
+    },
+    "picker": {
+      "title": "Sankhani nthawi",
+      "hours": "Maola",
+      "minutes": "Mphindi",
+      "24h": "Maola 24",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
+  },
+  "yesNo": {
+    "name": "Inde / Ayi",
+    "text": "",
+    "description": ""
+  },
+  "addonFoods": {
+    "name": "Zakudya zowonjezera",
+    "text": "",
+    "description": "Munadya za kudya zowonjezera limodzi ndi zakudya izi?",
+    "food": "Chakudya",
+    "portion": "Gawo",
+    "quantity": "Mulingo",
+    "didNotHave": "Ayi"
+  },
+  "associatedFoods": {
+    "name": "Zakudya zomwe zimadyedwera limodzi",
+    "text": "",
+    "description": "",
+    "yes": "Inde, Ndinadya",
+    "yesAnother": "Inde, Ndinadya zina",
+    "existingFoodHint": "Sankhani \"Inde, Ndinadya\" ngati munane kale.",
+    "no": "Ayi, sindinadye",
+    "moreFoodsQuestion": "Munadya zakudya china mugulu ili?",
+    "databaseLookupTitle": "Chinali chakudya chanji?",
+    "databaseLookupWithExisting": "Ngati sichoncho, chinali chakudya chanji?",
+    "existingFoodsTitle": "Ndi chakudya choti munalemba kale?",
+    "select": {
+      "different": "Sinthani",
+      "remove": "Chotsani"
+    },
+    "browse": "Sakatulani zakudya zonse",
+    "search": "Fufuzani chakudya",
+    "results": "Fufuzani zotsatira",
+    "relatedCategories": "Magulu/ Magulu ang'ono",
+    "showLess": "Onetsani zochepa",
+    "showAll": "Fufuzani gulu",
+    "root": "Magulu azakudya onse",
+    "back": "Bwelerani ku'{gulu}'",
+    "none": "Chakudya sichikupezeka.Yeserani njira yina pofufuza chakudyachi.",
+    "refine": "Zafanana ndizakudya zambiri — Yesetsani kufotokoza bwino kuti mupeze chakudya chimene mukufuna.",
+    "hints": {
+      "label": "Mwalowetsa",
+      "confirm": "Sungani",
+      "tryAgain": "Yesaninso"
+    },
+    "missing": {
+      "label": "Chakudya changa sichikupezeka",
+      "description": "<p>Yeserani kuyang'ana ndondomeko yamagulu azakudya yalembedwa m'mwambamu kuti mupeze chakudya chanu.</p><p>Ngati chakudya chanu sichikupezekabe sankhani 'Tiuzeni chakudya chomwe chasowa'.</p>",
+      "report": "Tiuzeni chakudya chomwe chasowa",
+      "tryAgain": "Chabwino,ndiyeserenso",
+      "placeholder": "Chakudya chimene sichikupezeka"
+    }
+  },
+  "generalAssociatedFoods": {
+    "name": "Zakudya zomwe zimadyedwera limodzi (Chokhazikika)",
+    "text": "",
+    "description": "",
+    "yes": "Inde, Ndinadya",
+    "yesAnother": "Inde, Ndinadya zina",
+    "existingFoodHint": "Sankhani \"Inde, Ndinadya\" ngati munane kale..",
+    "no": "Ayi, sindinadye",
+    "moreFoodsQuestion": "Munadya zakudya china mugulu ili?",
+    "databaseLookupTitle": "Chinali chakudya chanji?",
+    "databaseLookupWithExisting": "Ngati sichoncho, chinali chakudya chanji?",
+    "existingFoodsTitle": "Ndi chakudya choti munalemba kale?",
+    "select": {
+      "different": "Sinthani",
+      "remove": "Chotsani"
+    },
+    "browse": "Sakatulani zakudya zonse",
+    "search": "Fufuzani chakudya",
+    "results": "Fufuzani zotsatira",
+    "root": "Magulu azakudya onse",
+    "back": "Bwelerani ku'{gulu}'",
+    "none": "Chakudya sichikupezeka.Yeserani njira yina pofufuza chakudyachi.",
+    "hints": {
+      "label": "Mwalowetsa",
+      "confirm": "Sungani",
+      "tryAgain": "Yesaninso"
+    },
+    "missing": {
+      "label": "Chakudya chimene sichikupezeka",
+      "description": "<p>Yeserani kuyang'ana ndondomeko yamagulu azakudya yalembedwa m'mwambamu kuti mupeze chakudya chanu.</p><p>Ngati chakudya chanu sichikupezekabe sankhani 'Tiuzeni chakudya chomwe chasowa'.</p>",
+      "report": "Tiuzeni chakudya chomwe chasowa",
+      "tryAgain": "Chabwino, ndiyeserenso",
+      "placeholder": "Chakudya chimene sichikupezeka"
+    }
+  },
+  "editMeal": {
+    "name": "Sinthani chakudya",
+    "text": "",
+    "description": "<p>Tiuzeni chinachilichonse chomwe mundya pa <strong>{meal}</strong>.</p><p>Mulemba chakudya ndi chakumwa pachokha pachokha.</p><p>Dinani <span class=\"fas fa-turn-down fa-rotate-90 mx-2\"></span> Kapena gwiritsani ntchito batani lolowera kapena kubwelera mbuyo kuti muonjezere zakudya ndi zakumwa.</p><p><strong>Do not</strong>Lembani mulingo omwe munadya, koma dzina lokha la zakudyazo.</p>",
+    "add": "Onjezani",
+    "drinksOnly": "Zakumwa",
+    "foods": "Zakudya ndi Zakumwa",
+    "foodsOnly": "Zakudya",
+    "hints": {
+      "label": "Mwalowetsa",
+      "confirm": "Sungani",
+      "tryAgain": "Yesaninso"
+    }
+  },
+  "externalSource": {
+    "name": "Gwero lakunja",
+    "text": "",
+    "description": "",
+    "search": "Fufuzani",
+    "back": "Bwelerani kofufuza",
+    "select": "Sankhani",
+    "missing": "Sichikupezeka",
+    "products": {
+      "results": "Chinthu chapezeka: {count}.",
+      "none": "Chinthu sichikupezeka",
+      "name": "Dzina",
+      "code": "Code",
+      "quantity": "Mulingo",
+      "packaging": "Packaging"
+    }
+  },
+  "final": {
+    "name": "Tsamba lotsiriza",
+    "text": "",
+    "description": ""
+  },
+  "foodSearch": {
+    "name": "Fufuzani chakudya",
+    "text": "",
+    "description": "<p>Sankhani chofananira kapena fufuzani gulu.</p>",
+    "browse": "Sakatulani zakudya zonse",
+    "search": "Fufuzani chakudya",
+    "results": "Fufuzani zotsatira",
+    "relatedCategories": "Magulu/ Magulu ang'ono",
+    "showLess": "Onetsani zochepa",
+    "showAll": "Fufuzani gulu",
+    "root": "Magulu azakudya onse",
+    "back": "Bwelerani ku'{category}'",
+    "none": "Chakudya sichikupezeka.Yeserani njira yina pofufuza chakudyachi.",
+    "refine": "Zafanana ndizakudya zambiri — Yesetsani kufotokoza bwino kuti mupeze chakudya chimene mukufuna.",
+    "pizza": "Ngati chakudya chanu munadya ku malo odyera,sankhani pa mndandandawu.",
+    "rootCategory": "Kafufuzidwe ka chakudya kathera pa '{category}', Zandandanitsidwa motsatira zilembo.",
+    "rootCategoryToggle": "Kafufuzidwe ka chakudya kathera pa '{category}'",
+    "hints": {
+      "label": "Mwalowetsa",
+      "confirm": "Sungani",
+      "tryAgain": "Yesaninso"
+    },
+    "missing": {
+      "label": "Chakudya chimene sichikupezeka",
+      "description": "<p>Ngati simukupeza chakudya pa mndandanda, yetsani kusintha kafotokozedwe kanu mubokosi lofufuzira lomwe liri pamwambapo.</p><p>Or sankhani 'Browse all foods' komanso onani magulu azakudya.</p><p>Ngati chakudya chanu sichikupezekabe sankhani 'Tiuzeni chakudya chomwe chasowa'.</p>",
+      "report": "Tiuzeni chakudya chomwe chasowa",
+      "tryAgain": "Chabwino, ndiyeserenso"
+    },
+    "confirmDiscardFood": {
+      "label": "Inde",
+      "messageUnsafe": "<p>Mwayankha kale mafunso ena okhuzana ndi <strong>\"{discardedFoodName}\"</strong>!</p><p>Ngati mungasinthe kupita ku <strong>\"{selectedFoodName}\"</strong> pano,Muyenera kuyankha mafunso ena kachikena.</p><p>Mwatsimikiza kuti mukufuna kusintha chakudyachi?</p>",
+      "message": "Mwayankha kale mafunso ena okhuzana ndi \"{discardedFoodName}\"! Ngati mungasinthe kupita ku\"{selectedFoodName}\"pano,Muyenera kuyankha mafunso ena kachikena. Mwatsimikiza kuti mukufuna kusintha chakudyachi?"
+    }
+  },
+  "foodSelection": {
+    "name": "Sankhani zakudya",
+    "text": "",
+    "description": "<p>Sankhani zakudya pa mndandanda uli munsimu.</p>",
+    "none": "Palibe"
+  },
+  "mealAdd": {
+    "name": "Onjezani chakudya",
+    "text": "",
+    "description": "<p>Sankhani chimodzi pa mndandanda uli munsimu ngati kuli koyenera kutero.</p>",
+    "label": "Sankhani chakudya",
+    "custom": {
+      "text": "",
+      "description": "<p>Lembani dzina lachakudya. Mutha kulemba dzina lanu, kapena kusanka kuchokera mndandanda uli munsimu ngati kuli koyenera kutero.</p>",
+      "label": "Sankhani chakudya kapena lembani dzina la chakudya"
+    },
+    "yes": "Onjezani chakudya ichi",
+    "no": "Chotsani",
+    "exists": "Chakudya mwasankhachi chilipo kale, sankhani chakudya china.",
+    "noMeal": "Palibe chakudya chotsala, onjezani chosachepera chimodzi"
+  },
+  "mealDuration": {
+    "name": "Munadya kwa nthawi yayitali bwanji",
+    "text": "",
+    "description": "<p>Zinakutengerani nthawi yayitali bwanji kuti mudye <strong>{mealName}</strong>?</p>",
+    "minutes": "Mphindi",
+    "confirm": "Pitilizani"
+  },
+  "mealGap": {
+    "name": "Mpata pamadyedwe",
+    "text": "",
+    "description": "",
+    "before": "<p>Munadya chakudya chilichonse, kapena kutolatola kapena kumwa chakumwa musanadye <strong>{meal}</strong> at {mealTime}?</p>",
+    "after": "<p>Munadya chakudya chilichonse, kapena kutolatola kapena kumwa chakumwa musanadye <strong>{meal}</strong> at {mealTime}?</p>",
+    "between": "<p>Munadya chakudya chilichonse, kapena kutolatola kapena kumwa chakumwa musanadye<strong>{startMeal}</strong> (at {startMealTime}) and your <strong>{endMeal}</strong> (at {endMealTime})?</p>",
+    "yes": "Inde, onjezani chakudya",
+    "no": "Ayi, sindinadye"
+  },
+  "mealTime": {
+    "name": "Kusintha nthawi",
+    "text": "",
+    "description": "<p>Munadya <strong>{meal}</strong>? Ngati ndichoncho, nthawi yanji?</p>",
+    "yes": "Chapanthawi yomweyo",
+    "no": "Sindinadye",
+    "picker": {
+      "title": "Sankhani nthawi",
+      "hours": "Maora",
+      "minutes": "Mphindi",
+      "24h": "Maora 24",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
+  },
+  "recallDate": {
+    "name": "Tsiku lo lembera",
+    "text": "",
+    "description": "Sankhani tsiku lomwe mukulemba zomwe munadya."
+  },
+  "readyMeal": {
+    "name": "Chakudya chophikiratu",
+    "text": "",
+    "description": "<p>Chinali chakudya chophikiratu?</p>"
+  },
+  "redirect": {
+    "name": "Redirect",
+    "text": "",
+    "description": "",
+    "missingUrl": "Missing redirection URL",
+    "goTo": "Pitani ku mafunso"
+  },
+  "reviewConfirm": {
+    "name": "Kuwerenga ndi Kutsimikiza",
+    "text": "",
+    "description": "",
+    "item": "Ndawerenga",
+    "meal": "Ndawerenga zakudya ndi zakumwa zonse.",
+    "survey": "Ndawerenga zakudya ndi zakumwa zonse."
+  },
+  "sameAsBefore": {
+    "name": "Chimodzimodzi ndi penapo",
+    "text": "",
+    "description": "<p>Kodi <strong>{food}</strong> ndichimodzimodzi ndi <i>chomwe munalowetsa</i> kuti munadya </p>",
+    "serving": "{amount} Mulingo",
+    "leftovers": "Zotsala {amount}",
+    "quantity": "{quantity} Mulingo",
+    "noLeftovers": {
+      "drink": "Ndinamwa zonse",
+      "food": "Ndinadya zonse"
+    },
+    "hadWith": "Ndinadyera limodzi ndi:",
+    "noAddedFoods": "Palibe chimene ndinaonjezera (monga mkaka, shuga, tomato sosi , tsabola)",
+    "same": "Inde",
+    "notSame": "Ayi",
+    "details": "Zowonetsa zatsatanetsatane",
+    "hadQuantity": "Mulingo",
+    "characteristics": "Makhalidwe",
+    "none": "Palibe"
+  },
+  "sleepSchedule": {
+    "name": "Ndondomeko ya magonedwe",
+    "text": "",
+    "description": "",
+    "wakeUp": "Munadzuka nthawi yanji?",
+    "sleep": "Munagona nthawi yanji?",
+    "confirm": "Pitilizani",
+    "picker": {
+      "title": "Sankhani nthawi",
+      "hours": "Maora",
+      "minutes": "Mphindi",
+      "24h": "Maora 24",
+      "amPm": "AM / PM",
+      "am": "AM",
+      "pm": "PM"
+    }
+  },
+  "splitFood": {
+    "name": "Zakudya zosiyana",
+    "text": "",
+    "description": "Munafufuza <strong>{food}</strong>.",
+    "split": "Kodi ndizakudya zosiyana?",
+    "separate": "Inde",
+    "single": "Ayi"
+  },
+  "submit": {
+    "name": "Tsamba lotumizira",
+    "text": "",
+    "description": ""
+  },
+  "quantity": {
+    "_": "Mulingo",
+    "whole": "Chonse",
+    "fraction": "Gawo",
+    "and": "ndi",
+    "confirm": "Ndinadya mulingo umenewo",
+    "more": "Zochulukira",
+    "less": "Zochepera"
+  },
+  "portionSizeOption": {
+    "name": "Kagawidwe ka chakudya",
+    "text": "",
+    "description": "Mukufuna kugwiritsa ntchito njira yanji poyeza chakudya?",
+    "selections": {
+      "grated": "Zopala",
+      "in_a_bag": "Mu paketi",
+      "in_a_bottle": "Mu botolo",
+      "in_a_bowl": "Mu mbale yolowa",
+      "in_a_can": "Mu chitini",
+      "in_a_carton": "Mu katoni",
+      "in_a_glass": "Mu galasi",
+      "in_a_mug": "Mu kapu ya dothi",
+      "in_a_pot": "Mu mpoto",
+      "in_a_takeaway_cup": "Mu kapu yonyamulira yakumalo odyera",
+      "in_baby_carrots": "Mu kaloti ng'onong'ono",
+      "in_bars": "Mu chiduswa",
+      "in_batons": "Mu timitengo",
+      "in_berries": "Mu maberizi",
+      "in_burgers": "Mu mabaga",
+      "in_chopped_fruit": "Mu zipatso zodula",
+      "in_crinkle_cut_chips": "Mu tchipisi chodulidwa mokwinyika",
+      "in_cubes": "Mu mabokosi",
+      "in_curly_fries": "Mu tchipisi cha mizinga",
+      "in_dollops": "Mu mulingo ogwiritsa ntchito supuni",
+      "in_french_fries": "Mu tchipisi",
+      "in_individual_cakes": "Mu keke",
+      "in_individual_packs": "Mu paketi",
+      "in_individual_puddings": "Mu gawo la keke ndi zobeka",
+      "in_individual_sweets": "Mu switi",
+      "in_slices": "M'macheka",
+      "in_spoonfuls": "Mu masupuni odzadza",
+      "in_straight_cut_chips": "Mu tchipisi chodulidwa mowongoka",
+      "in_thick_cut_chips": "Mu tchipisi chodulidwa muziduswa zikuluzikulu",
+      "in_unwrapped_bars": "Muziduswa zosakutilidwa",
+      "in_whole_fruit_vegetables": "Mu zipatso/masamba",
+      "in_wrapped_bars": "Mu ziduswa zokutilidwa",
+      "milk_on_cereal": "Mkaka mu cereal ngati cornflakes",
+      "on_a_knife": "Pa mpeni",
+      "on_a_plate": "Mbale",
+      "slice_from_a_large_cake": "Cheka la keke yaikulu",
+      "slice_from_a_large_pudding": "Cheka la keke ndi zobeka",
+      "spread_on_a_cracker": "Zopaka pa bisiketi osakoma shuga",
+      "spread_on_a_scone": "Zopaka pa sikono",
+      "spread_on_bread": "Zopaka pa buledi",
+      "use_a_standard_measure": "Kugwiritsa ntchito mulingo wovemerezeka",
+      "use_a_standard_portion": "Kugwiritsa ntchito gawo lovomerezeka",
+      "use_an_image": "Kugwiritsa ntchito chithuzi",
+      "use_these_crisps_in_a_bag": "Tchipisi chamu paketi",
+      "use_tortilla_chips_in_a_bowl": "Kugwiritsa ntchito khirisipi",
+      "unknown": "Kugwiritsa mulingo wina",
+      "weight": "Lembani kulemera/kuchuluka"
+    },
+    "unknown": "Palibe po njira yoyezera mulingo wa {food}."
+  },
+  "linkedAmount": {
+    "label": "{unit} (out of {quantity}) Munadya {food} pa?",
+    "unit": "M'macheka angati",
+    "all": "Pa zonse"
+  },
+  "asServed": {
+    "name": "M'mene zaomoledwera",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza chakudya?",
+    "serving": {
+      "header": "Kugwiritsa ntchito zithunzi, sankhani mulingo wa {food} omwe munadya.",
+      "less": "Ndinadya zochepera",
+      "more": "Ndinadya zochulukira",
+      "confirm": "Ndinadya mulingo umenewo"
+    },
+    "leftovers": {
+      "header": "Panatsalira {food}?",
+      "label": "Kugwiritsa ntchito zithunzi, sankhani mulingo wa {food} omwe unatsala.",
+      "less": "Panatsalira zochepera",
+      "more": "Panatsalira zochulukira",
+      "confirm": "Panatsalira mulingo umenewo"
+    },
+    "quantity": "Munadya ma gawo angati?",
+    "weightFactor": {
+      "serving": {
+        "more": "Ndinadya {whole} ndi {fraction}",
+        "less": "Ndinadya {fraction}"
+      },
+      "leftovers": {
+        "more": "Panatsalira {whole} ndi {fraction}",
+        "less": "Panatsalira {fraction}"
+      },
+      "less": "pa gawo laling'ono kwambiri",
+      "more": "pa gawo lalikulu kwambiri"
+    }
+  },
+  "cereal": {
+    "name": "Cereal",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza chakudya?",
+    "container": "Sankani mbale yolowa yomwe ikufananirako ndiyomwe munagwiritsa ntchito pa {food}."
+  },
+  "directWeight": {
+    "name": "Kulemera",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza chakudya?",
+    "quantity": "Lembani mulingo omwe munadya mu kulemera kapena kuchuluka."
+  },
+  "drinkScale": {
+    "name": "Mulingo wa zakumwa",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza chakumwa?",
+    "container": "Sankani kapu kapena tambula yomwe ikufananirako ndiyomwe munagwiritsa ntchito pokumwa {food}.",
+    "serving": {
+      "header": "Gwiritsani ntchito sikelo kapena dinani pa kapu kuti musonyeze mulingo omwe munamwa.",
+      "less": "Ndinamwa zochepera",
+      "more": "Ndinamwa zochulukira",
+      "confirm": "Ndinamwa mulingo umenewo"
+    },
+    "leftovers": {
+      "header": "Panatsalira {food}?",
+      "label": "Gwiritsani ntchito sikelo yomwe ili kumanja kuti musankhe mulingo otsalira.",
+      "less": "Panatsalira zochepera",
+      "more": "Panatsalira zochulukira",
+      "confirm": "Panatsalira mulingo umenewo"
+    },
+    "quantity": "Munamwa zakumwa zotere zingati?"
+  },
+  "guideImage": {
+    "name": "Chithunzi chothandizira",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza chakumwa?",
+    "label": "Sankani chithunzi chomwe chikufananirako mu mulingo ndichomwe munagwiritsa ntchito pokumwa {food}.",
+    "quantity": "Sankhani kuti munamwa {food} mungati.",
+    "confirm": "Ndinamwa mulingo umenewo",
+    "expand": "Kulitsani chithunzi"
+  },
+  "milkInAHotDrink": {
+    "name": "Mkaka muchakumwa chotentha ngati tiyi kapena khofi",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza?",
+    "label": "Munathira {food} wochuluka bwanji mu tiyi kapena khofi?",
+    "confirm": "Ndinathira mulingo umenewo"
+  },
+  "milkOnCereal": {
+    "name": "Mkaka wothira mu cereal ngati cornflakes",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza?",
+    "container": "Sankani mbale yolowa yomwe ikufananirako ndiyomwe munagwiritsa ntchito pa {food}.",
+    "milk": "Sankhani mulingo wa mkaka umene munagwiritsa ntchito (musanathire cereal)."
+  },
+  "missingFood": {
+    "name": "Zakudya zimene sizikupezeka",
+    "text": "",
+    "description": "Munanena kuti simuthe kupeza \"{food}\". Fotokozani mokwanira poyankha mafunso ali munsimu kuti atithandizire kupeza chakudyachi kapena chakumwachi.",
+    "source": "Chakudyachi chinaphikidwa kunyumba?",
+    "details": " Tambasulani zambiri monga kaphikidwe ka chakudyachi ndi zomwe munagwiritsa ntchito pophika chakudyachi.",
+    "brand": " Chakudya munagula kuti komanso ndi cha kampani yanji ngati mukuyidziwa.",
+    "barcode": "Ngati mukugwiritsa ntchito lamya poyankha mafunso, jambulani nambala ya barcode pa paketi ya chakudyacho.",
+    "portionSize": "Munadya kapena kumwa chochuluka bwanji? monga paketi imodzi, ma tiyi sipuni awiri, dzanja limodzi lodzadza, 125 grams."
+  },
+  "recipeBuilder": {
+    "name": " Kaphikidwe ka {food}",
+    "text": "",
+    "description": "Tsatilani ndondomeko ili munsiyi kuti muwonetse kaphikidwe ka {food}.",
+    "label": "Lembani {searchTerm}",
+    "browse": "{category} magulu",
+    "search": "Fufuzani chakudya",
+    "results": "Fufuzani zotsatira",
+    "relatedCategories": "Magulu/Magulu ang'ono",
+    "showLess": "Onetsani zochepa",
+    "showAll": "Fufuzani gulu",
+    "root": "Magulu azakudya onse",
+    "back": "Bwelerani ku '{category}'",
+    "none": "Chakudya sichikupezeka.Yeserani njira yina pofufuza chakudyachi.",
+    "refine": "Zafanana ndizakudya zambiri — Yesetsani kufotokoza bwino kuti mupeze chakudya chimene mukufuna.",
+    "optional": {
+      "confirm": "Inde",
+      "reject": "Ayi",
+      "infoPrompt": "Chinali chani?"
+    },
+    "addMore": "Onjezerani china",
+    "noMore": "Ndamaliza",
+    "remove": "Chotsani",
+    "hints": {
+      "label": "Mwalowetsa",
+      "confirm": "Sungani",
+      "tryAgain": "Yesaninso"
+    },
+    "missingAllIngredients": "Onjezani chomwe munathira muchakudya chosachepera chimodzi kuti mupitilize.",
+    "missing": {
+      "label": "Chakudya sichikupezeka",
+      "description": "<p>Ngati simukupeza chakudya pa mndandanda, yetsani kusintha kafotokozedwe kanu mubokosi lofufuzira lomwe liri pamwambapo.</p><p> Ngati chakudya chanu sichikupezekabe dinani batani lili munsimu kuti mutiuze chakudya chomwe chasowa.</p>",
+      "report": "Tiuzeni chakudya chomwe chasowa",
+      "tryAgain": "Chabwino, ndiyeserenso",
+      "irrelevantIngredient": "Sindinadye"
+    }
+  },
+  "parentFoodPortion": {
+    "name": "Chigawo chakudya chachikulu",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza?",
+    "label": "Munayika {food} yochuluka bwanji mu  {parentFood}?",
+    "confirm": "Ndinayika mulingo umenewo"
+  },
+  "pizza": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza?",
+    "typeLabel": " Sankani mulingo ofananira pizza yomwe munadya.",
+    "thicknessLabel": "Pizza inali yayikulu bwanji?",
+    "sizeLabel": "Munadya cheka kapena macheka aakulu bwanji?",
+    "whole": {
+      "label": " Munadya pizza mungati?",
+      "confirm": "Ndinadya pizza yonse"
+    },
+    "slices": {
+      "label": "Munadya macheka angati?"
+    },
+    "confirm": "Ndinadya mulingo umenewo"
+  },
+  "pizzaV2": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza?",
+    "sizes": {
+      "label": "Munadya Pizza yayikulu bwanji?",
+      "personal": "Personal 7\"",
+      "small": "Small 9.5\"",
+      "medium": "Medium 11.5\"",
+      "large": "Large 13.5\"",
+      "xxl": "Extra large 15.5\""
+    },
+    "crusts": {
+      "label": "Pizza wanu anali wokhuthara bwanji?",
+      "classic": "Wa mulingo wokhazikika",
+      "italian-thin": "wokhutala pang'ono",
+      "stuffed": "Oyika zinthu mkati"
+    },
+    "units": {
+      "label": "Mukufuna kugwiritsa ntchito njira yanji poyeza?",
+      "slice": "M'macheka",
+      "whole": "Pizza yonse"
+    },
+    "quantity": {
+      "slice": "Munadya macheka angati?",
+      "whole": "Munadya pizza mungati?"
+    }
+  },
+  "standardPortion": {
+    "name": "Kugwiritsa ntchito gawo lovomerezeka",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza?",
+    "label": "Mukufuna kugwiritsa ntchito njira yanji poyeza mulingo wa {food}?",
+    "estimateIn": "Mu {unit}",
+    "howMany": {
+      "_": "Munadya {unit} angati?",
+      "placeholder": "Munadya angati?",
+      "withFood": "{unit} a {food} amene munadya?"
+    },
+    "confirm": "Ndinadya mulingo umenewo"
+  },
+  "unknown": {
+    "name": "Kugwiritsa mulingo wina",
+    "text": "",
+    "description": "",
+    "method": "Mukufuna kugwiritsa ntchito njira yanji poyeza?"
+  },
+  "aggregateChoice": {
+    "name": "Mafunso osiyasiyana a zakudya",
+    "text": "",
+    "description": ""
+  }
+}

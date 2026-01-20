@@ -40,16 +40,19 @@
   "phone": "电话",
   "message": "短信",
   "continue": "继续",
-  "faqs": {
-    "_": "FAQ",
-    "title": "Frequently Asked Questions",
-    "subtitle": "Find answers to common questions about Intake24"
-  },
   "help": {
-    "_": "帮助",
-    "title": "请求帮助",
-    "text": "请填写以下表格，我们的一名支持人员将尽快与您取得联系。",
-    "sent": "您的帮助请求已发送。"
+    "_": "Help & FAQ",
+    "faqs": {
+      "_": "FAQ",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Find answers to common questions about Intake24"
+    },
+    "request": {
+      "_": "帮助",
+      "title": "请求帮助",
+      "text": "请填写以下表格，我们的一名支持人员将尽快与您取得联系。",
+      "sent": "您的帮助请求已发送。"
+    }
   },
   "app": {
     "_": "应用程序",

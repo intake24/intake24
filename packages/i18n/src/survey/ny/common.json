@@ -1,0 +1,100 @@
+{
+  "_": "Intake24",
+  "home": "Tsamba lofikira",
+  "dashboard": "Dashibodi",
+  "welcome": {
+    "_": "Takulandilani ku Intake24",
+    "subtitle": "Intake24 ndi chipangizo chopezeka kwa wina aliyense pamakina a kompyuta chomwe chimatolera ndongosolo la zakudya ndi zokumwa zomwe munthu amadya patsiku."
+  },
+  "login": {
+    "_": "Lowani",
+    "start": "Tiyambe",
+    "subtitle": "Lowani ndi dzina lanu lolowera ndi mawu a chinsinsi",
+    "captcha": "Malizisani mayeso otsimikiza kuti ndinu munthu",
+    "back": "Bwelerani patsamba lolowera ",
+    "err": {
+      "captcha": "Zomwe mwayika potsimikiza kuti ndinu munthu ndi zolakwika.",
+      "credentials": "Dzina lanu ndi mawu a chinsinsi ndizolakwikwa.",
+      "token": "Kachidindo kolowera ndikolakwika.",
+      "survey": "Adilesi mwagwiritsira ntchito siyikuoneka ngati yovomerezeka mukafukufukuyu."
+    }
+  },
+  "logout": {
+    "_": "Tulukani",
+    "text": "Tulukani mu pulogalamu"
+  },
+  "nav": {
+    "_": "Kuyendayenda pa tsamba",
+    "home": "Tsamba lofikira",
+    "feedback": "Ndemanga",
+    "recall": "Kumbukirani",
+    "review": "Onaninso",
+    "help": "Thandizo",
+    "options": "Zosankha"
+  },
+  "username": "Dzina lanu lolowera",
+  "name": "Dzina",
+  "email": "Imelo",
+  "emailConfirm": "Tsimikizani imelo",
+  "password": "Mawu a chinsinsi",
+  "phone": "Lamya",
+  "message": "Uthenga",
+  "continue": "Pitirizani",
+  "help": {
+    "_": "Thandizo & FAQ",
+    "faqs": {
+      "_": "FAQ",
+      "title": "Mafunso Ofunsidwa Kawirikawiri",
+      "subtitle": "Pezani mayankho amafunso ofunsidwa kawirikawiri okhuzana ndi intake24"
+    },
+    "request": {
+      "_": "Thandizo",
+      "title": "Pemphani thandizo",
+      "text": "Lembani fomu ilipansipa ndipo m'modzi wagulu lathu lothandiza azalumikizana nanu momwe angathere fomu.",
+      "sent": "Pempho lanu lathandizo latumizidwa."
+    }
+  },
+  "app": {
+    "_": "Pulogalamu",
+    "info": "Zambiri za pulogalamu",
+    "build": "Mtundu wa pulogalamu"
+  },
+  "clipboard": {
+    "_": "Kopelani mawu",
+    "copied": "Mawu asungwidwa mwakanthawi"
+  },
+  "sw": {
+    "check": "Onani zosintha pa pulogalamu",
+    "update": "Sinthani"
+  },
+  "action": {
+    "cancel": "Letsani",
+    "close": "Tsekani",
+    "continue": "Pitirizani",
+    "confirm": {
+      "_": "Tsimikizani",
+      "title": "Kodi mukufuna kupitiliza?",
+      "delete": "Kodi mukufuna kufufuta? {dzina}?"
+    },
+    "ok": "Chabwino",
+    "reload": "Bwezeletsani tsamba",
+    "remove": "Chotsani",
+    "reset": "Yambitsaninso",
+    "start": "Yambani",
+    "submit": "Tumizani",
+    "yes": "Eya",
+    "no": "Ayi"
+  },
+  "not": {
+    "provided": "Sizinaperekedwa",
+    "selected": "Sizinasankhidwe"
+  },
+  "errors": {
+    "500": "China chake chalakwika :(",
+    "retry": "Yesaninso"
+  },
+  "validation": {
+    "tooLong": "Mawu omwe mwalowesa ndi ochuluka kwambiri ({malire} malire a mawu)."
+  },
+  "noImagePlaceholder": "Chithuzi sichikupezeka"
+}

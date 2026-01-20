@@ -1,0 +1,107 @@
+{
+  "_": "Legal",
+  "contact": "Contact",
+  "copyright": "© {team} {year}",
+  "privacy": "Privacy Policy",
+  "terms": "Terms of Use",
+  "cookies": {
+    "_": "Cookies",
+    "consent": {
+      "consentModal": {
+        "label": "Cookies",
+        "title": "Intake24 uses cookies!",
+        "description": "We use <strong>necessary</strong> cookies to provide essential features, <strong>functionality</strong> cookies to remember user preferences and <strong>analytics</strong> cookies to help us to understand and improve user experience.",
+        "acceptAllBtn": "Accept",
+        "showPreferencesBtn": "Change preferences"
+      },
+      "preferencesModal": {
+        "title": "Cookies preferences",
+        "acceptAllBtn": "Accept all",
+        "savePreferencesBtn": "Save preferences",
+        "closeIconLabel": "Close",
+        "sections": [
+          {
+            "title": "How we use cookies 📢",
+            "description": "We use <strong>necessary</strong> cookies to provide essential features, <strong>functionality</strong> cookies to remember user preferences and <strong>analytics</strong> cookies to help us to understand and improve user experience."
+          },
+          {
+            "title": "Necessary cookies <span class=\"pm__badge\">Always Enabled</span>",
+            "description": "Cookies that are strictly necessary for the proper functioning of the website.",
+            "linkedCategory": "necessary",
+            "cookieTable": {
+              "headers": {
+                "name": "Name",
+                "desc": "Description",
+                "exp": "Expiration"
+              },
+              "body": [
+                {
+                  "name": "it24(a|s)_session",
+                  "desc": "Technical functionality of websites.",
+                  "exp": "1 hour"
+                },
+                {
+                  "name": "it24(a|s)_refresh_token",
+                  "desc": "Technical functionality of websites.",
+                  "exp": "1 hour"
+                },
+                {
+                  "name": "it24_cc",
+                  "desc": "Cookies consent preferences used by the website.",
+                  "exp": "1 year"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Functionality cookies",
+            "description": "Functionality cookies allow the website to remember information that changes the way the website behaves or looks, like your preferred language or the region that you are in.",
+            "linkedCategory": "functionality",
+            "cookieTable": {
+              "headers": {
+                "name": "Name",
+                "desc": "Description",
+                "exp": "Expiration"
+              },
+              "body": [
+                {
+                  "name": "^it24(a|s)_",
+                  "desc": "Stores user preferences and settings for the websites.",
+                  "exp": "1 year"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Analytics and statistical cookies",
+            "description": "Analytics and statistical cookies help us to understand how visitors use the websites to improve the services offered. Information is collected and stored anonymously.",
+            "linkedCategory": "analytics",
+            "cookieTable": {
+              "headers": {
+                "name": "Name",
+                "desc": "Description",
+                "exp": "Expiration"
+              },
+              "body": [
+                {
+                  "name": "^_ga",
+                  "desc": "Google Analytics cookies used to distinguish users and persist session state.",
+                  "exp": "2 years"
+                },
+                {
+                  "name": "_clck<br>_clsk<br>CLID<br>ANONCHK<br>MR<br>MUID<br>SM",
+                  "desc": "MS Clarity cookies used to distinguish users and persist session state.",
+                  "exp": "up to 1 year"
+                }
+              ]
+            }
+          },
+          {
+            "title": "More information",
+            "description": "If you have any questions, please contact us."
+          }
+        ]
+      }
+    }
+  }
+}

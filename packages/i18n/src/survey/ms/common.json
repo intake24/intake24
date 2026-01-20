@@ -40,16 +40,19 @@
   "phone": "Telefon",
   "message": "Mesej",
   "continue": "Teruskan",
-  "faqs": {
-    "_": "FAQ",
-    "title": "Frequently Asked Questions",
-    "subtitle": "Find answers to common questions about Intake24"
-  },
   "help": {
-    "_": "Bantuan",
-    "title": "Mohon bantuan",
-    "text": "Sila lengkapkan borang di bawah dan staf sokongan kami akan menghubungi anda.",
-    "sent": "Permohonan bantuan anda telah dihantar."
+    "_": "Help & FAQ",
+    "faqs": {
+      "_": "FAQ",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Find answers to common questions about Intake24"
+    },
+    "request": {
+      "_": "Bantuan",
+      "title": "Mohon bantuan",
+      "text": "Sila lengkapkan borang di bawah dan staf sokongan kami akan menghubungi anda.",
+      "sent": "Permohonan bantuan anda telah dihantar."
+    }
   },
   "app": {
     "_": "Aplikasi",

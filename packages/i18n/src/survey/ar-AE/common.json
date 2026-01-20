@@ -40,16 +40,19 @@
   "phone": "رقم الهاتف الخلوي",
   "message": "رسالة",
   "continue": "متابعة",
-  "faqs": {
-    "_": "FAQ",
-    "title": "Frequently Asked Questions",
-    "subtitle": "Find answers to common questions about Intake24"
-  },
   "help": {
-    "_": "مساعدة",
-    "title": "اطلب المساعدة",
-    "text": "أكمل النموذج أدناه وسيتواصل معك أحد موظفي الدعم لدينا في أقرب وقت ممكن",
-    "sent": " تم إرسال طلب المساعدة الخاص بك."
+    "_": "Help & FAQ",
+    "faqs": {
+      "_": "FAQ",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Find answers to common questions about Intake24"
+    },
+    "request": {
+      "_": "مساعدة",
+      "title": "اطلب المساعدة",
+      "text": "أكمل النموذج أدناه وسيتواصل معك أحد موظفي الدعم لدينا في أقرب وقت ممكن",
+      "sent": " تم إرسال طلب المساعدة الخاص بك."
+    }
   },
   "app": {
     "_": "التطبيق",
