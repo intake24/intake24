@@ -78,18 +78,31 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     const { code } = locale;
     const { code: sourceCode } = sourceLocale;
 
+    const foodsPriorityTasks: ('categories' | 'foods')[] = [];
     const foodsTasks: LocaleCopyFoodsSubTasks[] = [];
     const systemTasks: LocaleCopySystemSubTasks[] = [];
 
     this.params.subTasks.forEach((task) => {
-      if (['searchPopularity', 'searchFixedRanking'].includes(task))
+      if (['searchPopularity', 'searchFixedRanking'].includes(task)) {
         systemTasks.push(task as LocaleCopySystemSubTasks);
-      else foodsTasks.push(task as LocaleCopyFoodsSubTasks);
+      }
+      else if (['categories', 'foods'].includes(task)) {
+        foodsPriorityTasks.push(task as 'categories' | 'foods');
+      }
+      else {
+        foodsTasks.push(task as LocaleCopyFoodsSubTasks);
+      }
     });
 
-    if (foodsTasks.length) {
+    if (foodsPriorityTasks.length || foodsTasks.length) {
       await this.kyselyDb.foods.transaction().execute(async (trx) => {
-        Promise.all(foodsTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
+        if (foodsPriorityTasks.includes('categories'))
+          await this.categories({ trx, code, sourceCode });
+        if (foodsPriorityTasks.includes('foods'))
+          await this.foods({ trx, code, sourceCode });
+
+        if (foodsTasks.length)
+          await Promise.all(foodsTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
       });
     }
 
@@ -136,7 +149,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
 
   private async categories({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('categories').where('localeId', '=', code).executeTakeFirst();
-    this.logger.debug(`Number of local categories cleared: ${delResult.numDeletedRows}`);
+    this.logger.debug(`Number of categories cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('categories')
       .columns(['code', 'localeId', 'englishName', 'name', 'simpleName', 'hidden', 'tags', 'version'])
@@ -157,26 +170,62 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
       )
       .executeTakeFirst();
 
-    this.logger.debug(`Number of local categories created: ${insResult.numInsertedOrUpdatedRows}`);
+    this.logger.debug(`Number of categories created: ${insResult.numInsertedOrUpdatedRows}`);
+
+    const insLinksResult = await trx.insertInto('categoriesCategories')
+      .columns(['categoryId', 'subCategoryId'])
+      .expression(eb => eb
+        .selectFrom('categoriesCategories as cc')
+        .innerJoin(
+          'categories as cSource',
+          join => join
+            .onRef('cSource.id', '=', 'cc.categoryId')
+            .on('cSource.localeId', '=', sourceCode),
+        )
+        .innerJoin(
+          'categories as cTarget',
+          join => join
+            .onRef('cTarget.code', '=', 'cSource.code')
+            .on('cTarget.localeId', '=', code),
+        )
+        .innerJoin(
+          'categories as cSubSource',
+          join => join
+            .onRef('cSubSource.id', '=', 'cc.subCategoryId')
+            .on('cSubSource.localeId', '=', sourceCode),
+        )
+        .innerJoin(
+          'categories as cSubTarget',
+          join => join
+            .onRef('cSubTarget.code', '=', 'cSubSource.code')
+            .on('cSubTarget.localeId', '=', code),
+        )
+        .select(['cTarget.id', 'cSubTarget.id'])
+        .orderBy('cc.categoryId')
+        .orderBy('cc.subCategoryId'),
+      )
+      .executeTakeFirst();
+
+    this.logger.debug(`Number of category links created: ${insLinksResult.numInsertedOrUpdatedRows}`);
 
     const psmResult = await trx.insertInto('categoryPortionSizeMethods')
       .columns(['categoryId', 'method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy', 'parameters'])
       .expression(eb => eb
         .selectFrom('categoryPortionSizeMethods as cpsm')
         .innerJoin(
-          'categories as c1',
+          'categories as cSource',
           join => join
-            .onRef('c1.id', '=', 'cpsm.categoryId')
-            .on('c1.localeId', '=', sourceCode),
+            .onRef('cSource.id', '=', 'cpsm.categoryId')
+            .on('cSource.localeId', '=', sourceCode),
         )
         .innerJoin(
-          'categories as c2',
+          'categories as cTarget',
           join => join
-            .onRef('c2.code', '=', 'c1.code')
-            .on('c2.localeId', '=', code),
+            .onRef('cTarget.code', '=', 'cSource.code')
+            .on('cTarget.localeId', '=', code),
         )
         .select([
-          'c2.id',
+          'cTarget.id',
           'cpsm.method',
           'cpsm.description',
           'cpsm.useForRecipes',
@@ -193,7 +242,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
 
   private async foods({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('foods').where('localeId', '=', code).executeTakeFirst();
-    this.logger.debug(`Number of local foods cleared: ${delResult.numDeletedRows}`);
+    this.logger.debug(`Number of foods cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('foods')
       .columns(['code', 'localeId', 'englishName', 'name', 'simpleName', 'altNames', 'tags', 'version'])
@@ -214,26 +263,62 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
       )
       .executeTakeFirst();
 
-    this.logger.debug(`Number of local foods created: ${insResult.numInsertedOrUpdatedRows}`);
+    this.logger.debug(`Number of foods created: ${insResult.numInsertedOrUpdatedRows}`);
+
+    const insLinksResult = await trx.insertInto('foodsCategories')
+      .columns(['foodId', 'categoryId'])
+      .expression(eb => eb
+        .selectFrom('foodsCategories as fc')
+        .innerJoin(
+          'foods as fSource',
+          join => join
+            .onRef('fSource.id', '=', 'fc.foodId')
+            .on('fSource.localeId', '=', sourceCode),
+        )
+        .innerJoin(
+          'foods as fTarget',
+          join => join
+            .onRef('fTarget.code', '=', 'fSource.code')
+            .on('fTarget.localeId', '=', code),
+        )
+        .innerJoin(
+          'categories as cSource',
+          join => join
+            .onRef('cSource.id', '=', 'fc.categoryId')
+            .on('cSource.localeId', '=', sourceCode),
+        )
+        .innerJoin(
+          'categories as cTarget',
+          join => join
+            .onRef('cTarget.code', '=', 'cSource.code')
+            .on('cTarget.localeId', '=', code),
+        )
+        .select(['fTarget.id', 'cTarget.id'])
+        .orderBy('fc.foodId')
+        .orderBy('fc.categoryId'),
+      )
+      .executeTakeFirst();
+
+    this.logger.debug(`Number of food links created: ${insLinksResult.numInsertedOrUpdatedRows}`);
 
     const psmResult = await trx.insertInto('foodPortionSizeMethods')
       .columns(['foodId', 'method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy', 'parameters'])
       .expression(eb => eb
         .selectFrom('foodPortionSizeMethods as fpsm')
         .innerJoin(
-          'foods as f1',
+          'foods as fSource',
           join => join
-            .onRef('f1.id', '=', 'fpsm.foodId')
-            .on('f1.localeId', '=', sourceCode),
+            .onRef('fSource.id', '=', 'fpsm.foodId')
+            .on('fSource.localeId', '=', sourceCode),
         )
         .innerJoin(
-          'foods as f2',
+          'foods as fTarget',
           join => join
-            .onRef('f2.code', '=', 'f1.code')
-            .on('f2.localeId', '=', code),
+            .onRef('fTarget.code', '=', 'fSource.code')
+            .on('fTarget.localeId', '=', code),
         )
         .select([
-          'f2.id',
+          'fTarget.id',
           'fpsm.method',
           'fpsm.description',
           'fpsm.useForRecipes',
@@ -252,23 +337,23 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
       .expression(eb => eb
         .selectFrom('foodsNutrients as fn')
         .innerJoin(
-          'foods as f1',
+          'foods as fSource',
           join => join
-            .onRef('f1.id', '=', 'fn.foodId')
-            .on('f1.localeId', '=', sourceCode),
+            .onRef('fSource.id', '=', 'fn.foodId')
+            .on('fSource.localeId', '=', sourceCode),
         )
         .innerJoin(
-          'foods as f2',
+          'foods as fTarget',
           join => join
-            .onRef('f2.code', '=', 'f1.code')
-            .on('f2.localeId', '=', code),
+            .onRef('fTarget.code', '=', 'fSource.code')
+            .on('fTarget.localeId', '=', code),
         )
-        .select(['f2.id', 'fn.nutrientTableRecordId'])
+        .select(['fTarget.id', 'fn.nutrientTableRecordId'])
         .orderBy('fn.foodId'),
       )
       .executeTakeFirst();
 
-    this.logger.debug(`Number of local food portion size methods created: ${npResult.numInsertedOrUpdatedRows}`);
+    this.logger.debug(`Number of food portion size methods created: ${npResult.numInsertedOrUpdatedRows}`);
   }
 
   private async associatedFoods({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
@@ -283,21 +368,21 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     const insResult = await trx.insertInto('associatedFoods')
       .columns(['foodId', 'associatedFoodCode', 'associatedCategoryCode', 'text', 'linkAsMain', 'genericName', 'orderBy', 'multiple'])
       .expression(eb => eb
-        .selectFrom('associatedFoods')
+        .selectFrom('associatedFoods as af')
         .innerJoin(
-          'foods as f1',
+          'foods as fSource',
           join => join
-            .onRef('f1.id', '=', 'associatedFoods.foodId')
-            .on('f1.localeId', '=', sourceCode),
+            .onRef('fSource.id', '=', 'af.foodId')
+            .on('fSource.localeId', '=', sourceCode),
         )
         .innerJoin(
-          'foods as f2',
+          'foods as fTarget',
           join => join
-            .onRef('f2.code', '=', 'f1.code')
-            .on('f2.localeId', '=', code),
+            .onRef('fTarget.code', '=', 'fSource.code')
+            .on('fTarget.localeId', '=', code),
         )
         .select([
-          'f2.id',
+          'fTarget.id',
           'associatedFoodCode',
           'associatedCategoryCode',
           'text',
@@ -306,8 +391,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'orderBy',
           'multiple',
         ])
-        .where('localeId', '=', sourceCode)
-        .orderBy('associatedFoods.id'),
+        .orderBy('af.id'),
       )
       .executeTakeFirst();
 
@@ -326,28 +410,27 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     const categoriesInsResult = await trx.insertInto('categoryAttributes')
       .columns(['categoryId', 'readyMealOption', 'reasonableAmount', 'sameAsBeforeOption', 'useInRecipes'])
       .expression(eb => eb
-        .selectFrom('categoryAttributes')
+        .selectFrom('categoryAttributes as ca')
         .innerJoin(
-          'categories as c1',
+          'categories as cSource',
           join => join
-            .onRef('c1.id', '=', 'categoryAttributes.categoryId')
-            .on('c1.localeId', '=', sourceCode),
+            .onRef('cSource.id', '=', 'ca.categoryId')
+            .on('cSource.localeId', '=', sourceCode),
         )
         .innerJoin(
-          'categories as c2',
+          'categories as cTarget',
           join => join
-            .onRef('c2.code', '=', 'c1.code')
-            .on('c2.localeId', '=', code),
+            .onRef('cTarget.code', '=', 'cSource.code')
+            .on('cTarget.localeId', '=', code),
         )
         .select([
-          'c2.id',
+          'cTarget.id',
           'readyMealOption',
           'reasonableAmount',
           'sameAsBeforeOption',
           'useInRecipes',
         ])
-        .where('localeId', '=', sourceCode)
-        .orderBy('categoryAttributes.categoryId'),
+        .orderBy('ca.categoryId'),
       )
       .executeTakeFirst();
 
@@ -364,28 +447,27 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     const foodsInsResult = await trx.insertInto('foodAttributes')
       .columns(['foodId', 'readyMealOption', 'reasonableAmount', 'sameAsBeforeOption', 'useInRecipes'])
       .expression(eb => eb
-        .selectFrom('foodAttributes')
+        .selectFrom('foodAttributes as fa')
         .innerJoin(
-          'foods as f1',
+          'foods as fSource',
           join => join
-            .onRef('f1.id', '=', 'foodAttributes.foodId')
-            .on('f1.localeId', '=', sourceCode),
+            .onRef('fSource.id', '=', 'fa.foodId')
+            .on('fSource.localeId', '=', sourceCode),
         )
         .innerJoin(
-          'foods as f2',
+          'foods as fTarget',
           join => join
-            .onRef('f2.code', '=', 'f1.code')
-            .on('f2.localeId', '=', code),
+            .onRef('fTarget.code', '=', 'fSource.code')
+            .on('fTarget.localeId', '=', code),
         )
         .select([
-          'f2.id',
+          'fTarget.id',
           'readyMealOption',
           'reasonableAmount',
           'sameAsBeforeOption',
           'useInRecipes',
         ])
-        .where('localeId', '=', sourceCode)
-        .orderBy('foodAttributes.foodId'),
+        .orderBy('fa.foodId'),
       )
       .executeTakeFirst();
 
@@ -470,8 +552,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           eb.val(new Date()).as('createdAt'),
           eb.val(new Date()).as('updatedAt'),
         ])
-        .where('localeId', '=', sourceCode)
-        .orderBy('id'),
+        .where('recipeFoods.localeId', '=', sourceCode)
+        .orderBy('recipeFoods.id'),
       )
       .executeTakeFirst();
 
