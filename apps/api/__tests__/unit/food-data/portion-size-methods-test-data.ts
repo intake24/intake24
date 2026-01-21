@@ -76,15 +76,15 @@ async function createCategoryPortionSizeMethods(
   categoryId: string,
   portionSizeMethods: UserPortionSizeMethod[],
 ): Promise<void> {
-  for (let i = 0; i < portionSizeMethods.length; i++) {
+  for (const [idx, psm] of Object.entries(portionSizeMethods)) {
     const catPsm = new CategoryPortionSizeMethod({
       categoryId,
-      method: portionSizeMethods[i].method,
-      description: portionSizeMethods[i].description,
-      useForRecipes: portionSizeMethods[i].useForRecipes,
-      conversionFactor: portionSizeMethods[i].conversionFactor,
-      parameters: portionSizeMethods[i].parameters,
-      orderBy: i.toString(),
+      method: psm.method,
+      description: psm.description,
+      useForRecipes: psm.useForRecipes,
+      conversionFactor: psm.conversionFactor,
+      parameters: psm.parameters,
+      orderBy: idx.toString(),
     });
 
     await catPsm.save();

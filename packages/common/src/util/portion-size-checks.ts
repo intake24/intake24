@@ -7,7 +7,7 @@ export function portionSizeMethodSelected(food: FoodState, method: PortionSizeMe
   if (food.portionSizeMethodIndex === null)
     return false;
 
-  if (food.data.portionSizeMethods[food.portionSizeMethodIndex].method !== method)
+  if (food.data.portionSizeMethods.at(food.portionSizeMethodIndex)?.method !== method)
     return false;
 
   if (food.portionSize !== null) {

@@ -121,8 +121,9 @@ export function groupMultiPrompts(prompts: SinglePrompt[]) {
 
     if (!acc[item.group])
       acc[item.group] = { idx, prompts: [], conditions: [], inserted: false };
-    acc[item.group].prompts.push(item);
-    acc[item.group].conditions.push(...item.conditions);
+
+    acc[item.group]?.prompts.push(item);
+    acc[item.group]?.conditions.push(...item.conditions);
 
     return acc;
   }, {});

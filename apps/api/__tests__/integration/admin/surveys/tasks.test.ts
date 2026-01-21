@@ -28,8 +28,8 @@ export default () => {
       type: 'SurveyDataExport',
       params: {
         surveyId: id,
-        startDate: startDate.toISOString().split('T')[0],
-        endDate: endDate.toISOString().split('T')[0],
+        startDate: startDate.toISOString().split('T')[0]!,
+        endDate: endDate.toISOString().split('T')[0]!,
       },
     };
 

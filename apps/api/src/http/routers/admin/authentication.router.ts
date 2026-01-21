@@ -8,7 +8,7 @@ import { attachRefreshToken } from '../util';
 
 export function authentication() {
   const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
-    keyGenerator: req => `login:${req.body?.email ?? ipKeyGenerator(req.ip ?? req.ips[0])}`,
+    keyGenerator: req => `login:${req.body?.email ?? (req.ip ? ipKeyGenerator(req.ip) : 'missing-ip')}`,
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
     skipSuccessfulRequests: true,
   });

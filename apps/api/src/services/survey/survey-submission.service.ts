@@ -158,7 +158,7 @@ function surveySubmissionService({
     }
 
     const [nutrientTableRecord] = foodRecord.nutrientRecords;
-    if (!nutrientTableRecord.nutrients || !nutrientTableRecord.fields)
+    if (!nutrientTableRecord?.nutrients || !nutrientTableRecord.fields)
       throw new Error('Submission: not loaded nutrient relationships');
 
     // Collect food composition fields
@@ -510,7 +510,7 @@ function surveySubmissionService({
 
       // Process meals
       for (const [idx, mealState] of state.meals.entries()) {
-        const { id: mealId } = mealInputs[idx];
+        const { id: mealId } = mealInputs[idx]!;
 
         // Collect meal foods
         const collectedFoods = mealState.foods.reduce(
@@ -528,14 +528,14 @@ function surveySubmissionService({
 
         // Process foods
         for (const [idx, foodState] of collectedFoods.states.entries()) {
-          const { id: foodId } = collectedFoods.inputs[idx];
+          const { id: foodId } = collectedFoods.inputs[idx]!;
 
           externalSourcesInputs.push(...collectExternalSources(foodId, 'food', foodState.external));
         }
 
         // Process missing foods
         for (const [idx, foodState] of collectedFoods.missingStates.entries()) {
-          const { id: foodId } = collectedFoods.missingInputs[idx];
+          const { id: foodId } = collectedFoods.missingInputs[idx]!;
 
           externalSourcesInputs.push(...collectExternalSources(foodId, 'missing-food', foodState.external));
         }

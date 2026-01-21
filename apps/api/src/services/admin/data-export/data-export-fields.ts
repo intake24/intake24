@@ -118,7 +118,7 @@ function dataExportFields() {
       label: 'Survey Alias / username',
       value: ({ food }: ExportRow) => {
         const aliases = food.meal?.submission?.user?.aliases;
-        return aliases && aliases.length ? aliases[0].username : undefined;
+        return aliases?.at(0)?.username;
       },
     },
     {

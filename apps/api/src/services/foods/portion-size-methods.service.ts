@@ -36,8 +36,8 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
     });
 
   const getNearestCategoryPortionSizeMethods = async (categoryIds: string[]): Promise<CategoryPortionSizeMethod[]> => {
-    for (let i = 0; i < categoryIds.length; ++i) {
-      const methods = await getCategoryPortionSizeMethods(categoryIds[i]);
+    for (const categoryId of categoryIds) {
+      const methods = await getCategoryPortionSizeMethods(categoryId);
 
       if (methods.length)
         return methods;

@@ -6,7 +6,7 @@ import slugify from 'slugify';
 import { isSecurableType } from '../security';
 
 export function capitalize(string: string): string {
-  return string ? string[0].toUpperCase() + string.substring(1) : '';
+  return string ? string.at(0)?.toUpperCase() + string.substring(1) : '';
 }
 
 /**

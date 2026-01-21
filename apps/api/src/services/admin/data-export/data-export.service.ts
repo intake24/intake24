@@ -191,7 +191,7 @@ function dataExportService({
 
           currentIndex++;
 
-          if (index + 1 < mealCount && surveySubmissionId !== array[index + 1].surveySubmissionId)
+          if (index + 1 < mealCount && surveySubmissionId !== array.at(index + 1)?.surveySubmissionId)
             currentIndex = 0;
         });
 

@@ -33,14 +33,14 @@ function inheritableAttributesService() {
   const completeAttributesWithDefaults = async (
     attributes: InheritableAttributesTemp,
   ): Promise<InheritableAttributes> => {
-    const defaults = await AttributeDefaults.findAll({ limit: 1 });
+    const [defaults] = await AttributeDefaults.findAll({ limit: 1 });
 
-    if (defaults.length) {
+    if (defaults) {
       return {
-        readyMealOption: attributes.readyMealOption ?? defaults[0].readyMealOption,
-        sameAsBeforeOption: attributes.sameAsBeforeOption ?? defaults[0].sameAsBeforeOption,
-        reasonableAmount: attributes.reasonableAmount ?? defaults[0].reasonableAmount,
-        useInRecipes: attributes.useInRecipes ?? defaults[0].useInRecipes,
+        readyMealOption: attributes.readyMealOption ?? defaults.readyMealOption,
+        sameAsBeforeOption: attributes.sameAsBeforeOption ?? defaults.sameAsBeforeOption,
+        reasonableAmount: attributes.reasonableAmount ?? defaults.reasonableAmount,
+        useInRecipes: attributes.useInRecipes ?? defaults.useInRecipes,
       };
     }
 
@@ -68,15 +68,16 @@ function inheritableAttributesService() {
       useInRecipes: attributes.useInRecipes,
     };
 
-    for (let i = 0; i < parentAttributesRows.length; ++i) {
+    parentAttributesRows.forEach((row) => {
       newAttributes.readyMealOption
-        = attributes.readyMealOption ?? parentAttributesRows[i].readyMealOption;
+        = attributes.readyMealOption ?? row.readyMealOption;
       newAttributes.reasonableAmount
-        = attributes.reasonableAmount ?? parentAttributesRows[i].reasonableAmount;
+        = attributes.reasonableAmount ?? row.reasonableAmount;
       newAttributes.sameAsBeforeOption
-        = attributes.sameAsBeforeOption ?? parentAttributesRows[i].sameAsBeforeOption;
-      newAttributes.useInRecipes = attributes.useInRecipes ?? parentAttributesRows[i].useInRecipes;
-    }
+        = attributes.sameAsBeforeOption ?? row.sameAsBeforeOption;
+      newAttributes.useInRecipes
+        = attributes.useInRecipes ?? row.useInRecipes;
+    });
 
     const maybeComplete = completeAttributes(newAttributes);
 

@@ -54,13 +54,14 @@ async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<R
 
   for (const [key, value] of Object.entries(values)) {
     const keyName = key as 'faqId' | 'feedbackSchemeId' | 'localeId' | 'surveySchemeId';
+    const model = models[keyName];
 
-    if (!value || (survey && survey[keyName] === value))
+    if (!value || (survey && survey[keyName] === value) || !model)
       continue;
 
     try {
       await req.scope.cradle.aclService.findAndCheckVisibility(
-        models[keyName],
+        model,
         'use',
         { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } },
       );

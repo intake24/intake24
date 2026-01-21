@@ -147,7 +147,7 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
 
   const foodIndex = new PhraseIndex<string>(
     foodDescriptions,
-    LanguageBackends[languageBackendId],
+    languageBackend,
     synonymSets,
     recipeFoodsSynomSet,
     recipeFoodslist,
@@ -155,7 +155,7 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
 
   const categoryIndex = new PhraseIndex<string>(
     categoryDescriptions,
-    LanguageBackends[languageBackendId],
+    languageBackend,
     synonymSets,
   );
 

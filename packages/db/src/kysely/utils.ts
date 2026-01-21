@@ -78,10 +78,11 @@ export async function executeWithPagination<DB, TB extends keyof DB, O>(query: S
  * const fragment = values(rows, 'users');
  */
 export function values<R extends Record<string, unknown>, A extends string>(rows: R[], alias: A) {
-  if (!rows.length)
+  const headerRow = rows.at(0);
+  if (!headerRow)
     throw new Error('Records array must be non-empty');
 
-  const columns = Object.keys(rows[0]);
+  const columns = Object.keys(headerRow);
   const valuesSql = sql.join(rows.map(row => sql`(${sql.join(columns.map(column => row[column]))})`));
   const aliasSql = sql`${sql.ref(alias)}(${sql.join(columns.map(sql.ref))})`;
 

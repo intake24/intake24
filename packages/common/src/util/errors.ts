@@ -19,7 +19,7 @@ export class Errors {
 
   get(field: string, index?: number): string[] {
     if (typeof index === 'undefined')
-      return [this.errors[field]?.msg].filter(Boolean);
+      return [this.errors[field]?.msg].filter(Boolean) as string[];
 
     return Object.entries(this.errors).reduce<string[]>((acc, [key, value]) => {
       if (key.startsWith(`${field}[${index}]`))

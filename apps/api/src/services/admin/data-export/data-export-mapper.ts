@@ -56,6 +56,9 @@ export function portionSizeValue(field: ExportField): ExportFieldTransform {
 export function externalSourceField(field: ExportField): ExportFieldTransform {
   return ({ food }) => {
     const [sourceId, fieldId] = field.id.split(':');
+    if (!sourceId || !fieldId)
+      return undefined;
+
     const record = food.externalSources?.find(item => sourceId === item.source);
     if (!record)
       return undefined;

@@ -131,7 +131,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
             if (!nutrientRecords?.length)
               return { code, name, englishName, localeId };
 
-            const { nutrientTableId, nutrientTableRecordId, nutrients = [] } = nutrientRecords[0];
+            const { nutrientTableId, nutrientTableRecordId, nutrients = [] } = nutrientRecords.at(0) ?? {};
 
             const nutrientData = nutrients.reduce<Record<string, number>>((acc, nutrient) => {
               acc[`nt-${nutrient.nutrientTypeId}`] = nutrient.unitsPer100g;

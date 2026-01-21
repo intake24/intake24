@@ -102,11 +102,11 @@ export default class Model<
     const total = await model.unscoped().count(countOptions);
 
     if (sort && typeof sort === 'string') {
-      const [column, order] = sort.split('|');
+      const [column, order = 'ASC'] = sort.split('|');
       const attributes = model.getAttributes();
-      if (Object.keys(attributes).includes(column)) {
+      if (column && Object.keys(attributes).includes(column)) {
         options.order = [DataTypes.STRING.key, DataTypes.TEXT.key].includes(
-          (attributes[column].type as AbstractDataType).key,
+          (attributes[column]?.type as AbstractDataType).key,
         )
           ? [[fn('lower', col(`${model.name}.${snakeCase(column)}`)), order]]
           : [[snakeCase(column), order]];

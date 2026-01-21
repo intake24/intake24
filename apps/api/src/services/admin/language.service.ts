@@ -37,6 +37,9 @@ function languageService({
       return getDefaultI18nMessages(language.code);
 
     const [languageCode] = language.code.toLowerCase().split(/[-_]/);
+    if (!languageCode)
+      return getDefaultI18nMessages();
+
     // 2.: check if the language exists in the code (without the dialect)
     if (i18nStore.hasExactLanguage(languageCode))
       return getDefaultI18nMessages(languageCode);

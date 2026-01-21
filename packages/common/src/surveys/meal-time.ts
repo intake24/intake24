@@ -62,8 +62,11 @@ export function resolveMealGaps(meals: MealState[], prompt: Prompts['meal-gap-pr
   if (!mealSize)
     return [undefined, undefined];
 
-  const firstMeal = meals[0];
-  const lastMeal = meals[mealSize - 1];
+  const firstMeal = meals.at(0);
+  const lastMeal = meals.at(mealSize - 1);
+  if (!firstMeal || !lastMeal)
+    return [undefined, undefined];
+
   const { gap, startTime, endTime } = prompt;
 
   const mealStartGap = mealWithStartGap(firstMeal, startTime, gap);
@@ -72,9 +75,9 @@ export function resolveMealGaps(meals: MealState[], prompt: Prompts['meal-gap-pr
 
   if (mealSize > 1) {
     for (let i = 0; i < mealSize - 1; i++) {
-      const meal = meals[i];
-      const nextMeal = meals[i + 1];
-      if (!meal.time || !nextMeal.time)
+      const meal = meals.at(i);
+      const nextMeal = meals.at(i + 1);
+      if (!meal?.time || !nextMeal?.time)
         return [undefined, undefined];
 
       if (

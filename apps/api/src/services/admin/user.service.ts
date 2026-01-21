@@ -164,7 +164,7 @@ function adminUserService({
       }
 
       // 3) update existing fields
-      await userCustomFields[matchIdx].update(rest, { transaction });
+      await userCustomFields.at(matchIdx)?.update(rest, { transaction });
     }
   };
 

@@ -137,7 +137,7 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
         continue;
       }
 
-      await csvMappingFields[matchIdx].update({ columnOffset }, { transaction });
+      await csvMappingFields.at(matchIdx)?.update({ columnOffset }, { transaction });
     }
 
     return csvMappingFields;
@@ -183,7 +183,7 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
         continue;
       }
 
-      await csvMappingNutrients[matchIdx].update({ columnOffset }, { transaction });
+      await csvMappingNutrients.at(matchIdx)?.update({ columnOffset }, { transaction });
     }
 
     return csvMappingNutrients;

@@ -37,41 +37,41 @@ export const conditionOps = {
 
     return answers.every(item => !values.includes(item));
   },
-  gte: ({ answer, value }: ConditionValueOps) => {
-    const values = toNumber(value);
-    const answers = toNumber(answer);
+  gte: (ops: ConditionValueOps) => {
+    const value = toNumber(ops.value).at(0);
+    const answer = toNumber(ops.answer).at(0);
 
-    if (!values.length || !answers.length)
+    if (value === undefined || answer === undefined)
       return false;
 
-    return answers[0] >= values[0];
+    return answer >= value;
   },
-  gt: ({ answer, value }: ConditionValueOps) => {
-    const values = toNumber(value);
-    const answers = toNumber(answer);
+  gt: (ops: ConditionValueOps) => {
+    const value = toNumber(ops.value).at(0);
+    const answer = toNumber(ops.answer).at(0);
 
-    if (!values.length || !answers.length)
+    if (value === undefined || answer === undefined)
       return false;
 
-    return answers[0] > values[0];
+    return answer > value;
   },
-  lte: ({ answer, value }: ConditionValueOps) => {
-    const values = toNumber(value);
-    const answers = toNumber(answer);
+  lte: (ops: ConditionValueOps) => {
+    const value = toNumber(ops.value).at(0);
+    const answer = toNumber(ops.answer).at(0);
 
-    if (!values.length || !answers.length)
+    if (value === undefined || answer === undefined)
       return false;
 
-    return answers[0] <= values[0];
+    return answer <= value;
   },
-  lt: ({ answer, value }: ConditionValueOps) => {
-    const values = toNumber(value);
-    const answers = toNumber(answer);
+  lt: (ops: ConditionValueOps) => {
+    const value = toNumber(ops.value).at(0);
+    const answer = toNumber(ops.answer).at(0);
 
-    if (!values.length || !answers.length)
+    if (value === undefined || answer === undefined)
       return false;
 
-    return answers[0] < values[0];
+    return answer < value;
   },
 };
 

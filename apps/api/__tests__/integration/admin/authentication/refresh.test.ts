@@ -30,8 +30,9 @@ export default () => {
     const refreshToken = loginRes
       .get('Set-Cookie')
       ?.at(0)
-      ?.split(';')[0]
-      .replace(`${securityConfig.jwt.admin.cookie.name}=`, '');
+      ?.split(';')
+      .at(0)
+      ?.replace(`${securityConfig.jwt.admin.cookie.name}=`, '');
 
     const res = await request(suite.app)
       .post(url)
@@ -41,8 +42,9 @@ export default () => {
     const newRefreshToken = res
       .get('Set-Cookie')
       ?.at(0)
-      ?.split(';')[0]
-      .replace(`${securityConfig.jwt.admin.cookie.name}=`, '');
+      ?.split(';')
+      .at(0)
+      ?.replace(`${securityConfig.jwt.admin.cookie.name}=`, '');
 
     expect(refreshToken).not.toBe(newRefreshToken);
 

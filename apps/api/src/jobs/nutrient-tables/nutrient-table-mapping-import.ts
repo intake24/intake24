@@ -113,12 +113,13 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
    * @memberof NutrientTableMappingImport
    */
   private async validateChunk(): Promise<void> {
-    if (!this.content.length)
+    const firstRow = this.content.at(0);
+    if (!firstRow)
       return;
 
     this.lock();
 
-    const csvFields = Object.keys(this.content[0]);
+    const csvFields = Object.keys(firstRow);
 
     // Check for presence of required fields
     if (requiredFields.some(field => !csvFields.includes(field)))
