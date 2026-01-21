@@ -6,7 +6,6 @@
         "description": "Survey participant login with email and password.",
         "summary": "Email & password login",
         "tags": [
-          "default",
           "public",
           "authentication"
         ],
@@ -99,7 +98,6 @@
         "description": "Survey participant login with alias and password.",
         "summary": "Alias & password login",
         "tags": [
-          "default",
           "public",
           "authentication"
         ],
@@ -192,7 +190,6 @@
         "description": "Survey participant login with unique URL token.",
         "summary": "URL Token login",
         "tags": [
-          "default",
           "public",
           "authentication"
         ],
@@ -277,7 +274,6 @@
         "description": "Refresh access token using refresh token. API server expects refresh token sent as cookie. Cookie name can differ based on API server configuration.",
         "summary": "Refresh access token",
         "tags": [
-          "default",
           "public",
           "authentication"
         ],
@@ -309,7 +305,6 @@
         "description": "Clears cookie which stores refresh token and revokes refresh token.",
         "summary": "Logout from survey",
         "tags": [
-          "default",
           "public",
           "authentication"
         ],
@@ -331,7 +326,6 @@
         "description": "Send ping to the server to check if it is up and running.",
         "summary": "Ping",
         "tags": [
-          "default",
           "public",
           "health"
         ],
@@ -353,7 +347,6 @@
         "description": "Fetch list of available languages for front-ends.",
         "summary": "Browse languages",
         "tags": [
-          "default",
           "public",
           "i18n"
         ],
@@ -412,7 +405,6 @@
         "description": "Get language entry and available translations.",
         "summary": "Get language entry",
         "tags": [
-          "default",
           "public",
           "i18n"
         ],
@@ -489,7 +481,6 @@
         "description": "Request a password reset token to be sent by email. If captcha-protection activated, a captcha token has to be sent to validate the request.",
         "summary": "Password request",
         "tags": [
-          "default",
           "public",
           "password"
         ],
@@ -543,7 +534,6 @@
         "description": "Reset password using a token sent by email.",
         "summary": "Password reset",
         "tags": [
-          "default",
           "public",
           "password"
         ],
@@ -596,7 +586,6 @@
         "description": "Publicly accessible survey list. Returns list of public surveys.",
         "summary": "Browse surveys",
         "tags": [
-          "default",
           "public",
           "survey"
         ],
@@ -660,7 +649,6 @@
         "description": "Returns survey parameters necessary to render the survey login page such as the language settings and the support e-mail.",
         "summary": "Get survey entry",
         "tags": [
-          "default",
           "public",
           "survey"
         ],
@@ -737,7 +725,6 @@
         "description": "Generate user for survey public survey. Automatically create a new user account with a respondent role and random credentials if allowed by the survey settings.",
         "summary": "Generate user",
         "tags": [
-          "default",
           "public",
           "survey"
         ],
@@ -799,7 +786,6 @@
         "description": "Create user for survey survey using JWT encoded parameters. Payload must be a valid JWT token signed with secret set up in survey settings.",
         "summary": "Create user",
         "tags": [
-          "default",
           "public",
           "survey"
         ],
@@ -894,7 +880,6 @@
         "description": "Get reference data for feedback.",
         "summary": "Feedback data",
         "tags": [
-          "default",
           "feedback"
         ],
         "parameters": [],
@@ -996,7 +981,6 @@
         "description": "Browse and search category contents for foods and subcategories listed under the given category.",
         "summary": "Browse category contents",
         "tags": [
-          "default",
           "category"
         ],
         "parameters": [
@@ -1140,7 +1124,6 @@
         "description": "Get the list of root categories & foods for the \"browse all foods\" options.",
         "summary": "Root category contents",
         "tags": [
-          "default",
           "category"
         ],
         "parameters": [
@@ -1249,7 +1232,6 @@
         "description": "Get the category contents, i.e. foods and subcategories listed under the given category.",
         "summary": "Category contents",
         "tags": [
-          "default",
           "category"
         ],
         "parameters": [
@@ -1366,7 +1348,6 @@
         "description": "Get the category header, useful if only the local name is required",
         "summary": "Category header",
         "tags": [
-          "default",
           "category"
         ],
         "parameters": [
@@ -1422,7 +1403,6 @@
         "description": "Get portion size estimation options, associated foods and related data for a food from the database.",
         "summary": "Food entry",
         "tags": [
-          "default",
           "food"
         ],
         "parameters": [
@@ -2057,7 +2037,6 @@
         "description": "Returns a list of foods from the food database that match the description.",
         "summary": "Food search",
         "tags": [
-          "default",
           "food"
         ],
         "parameters": [
@@ -2216,7 +2195,6 @@
         "description": "Get portion size estimation options, associated foods and related data for a food from the database.",
         "summary": "Food entry",
         "tags": [
-          "default",
           "food"
         ],
         "parameters": [
@@ -2859,7 +2837,6 @@
         "description": "Get the recipe food data for a food if any.",
         "summary": "Recipe food",
         "tags": [
-          "default",
           "food"
         ],
         "parameters": [
@@ -3015,7 +2992,6 @@
         "description": "Get the list of categories for a food.",
         "summary": "Food categories",
         "tags": [
-          "default",
           "food"
         ],
         "parameters": [
@@ -3058,7 +3034,6 @@
         "description": "Subscribe user to receive web-push notifications. It expects the subscription object produced by Web API PushManager",
         "summary": "Subscribe to push notification",
         "tags": [
-          "default",
           "subscription"
         ],
         "parameters": [],
@@ -3133,7 +3108,6 @@
         "description": "Unsubscribe user from receiving web-push notifications.",
         "summary": "Unsubscribe from push notification",
         "tags": [
-          "default",
           "subscription"
         ],
         "parameters": [],
@@ -3154,7 +3128,6 @@
         "description": "Send test push notification to user.",
         "summary": "Ping push",
         "tags": [
-          "default",
           "subscription"
         ],
         "parameters": [],
@@ -3175,7 +3148,6 @@
         "description": "Download feedback as PDF. Returns stream as application/pdf.",
         "summary": "Download feedback",
         "tags": [
-          "default",
           "user",
           "feedback"
         ],
@@ -3224,7 +3196,6 @@
         "description": "Email user feedback as PDF file attachment",
         "summary": "Email feedback",
         "tags": [
-          "default",
           "user",
           "feedback"
         ],
@@ -3284,7 +3255,6 @@
         "description": "Get user submissions for selected surveys used in feedback generation.",
         "summary": "User submissions for feedback",
         "tags": [
-          "default",
           "user",
           "feedback"
         ],
@@ -3370,6 +3340,48 @@
                             "type": "string",
                             "format": "uuid"
                           },
+                          "customData": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "maxLength": 2048
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "maxLength": 2048
+                                  }
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number"
+                                  }
+                                },
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "null",
+                                  "nullable": true
+                                }
+                              ],
+                              "nullable": true
+                            }
+                          },
                           "userAgent": {
                             "type": "string",
                             "nullable": true
@@ -3381,26 +3393,6 @@
                           "updatedAt": {
                             "type": "string",
                             "format": "date-time"
-                          },
-                          "customFields": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "name": {
-                                  "type": "string",
-                                  "maxLength": 64
-                                },
-                                "value": {
-                                  "type": "string",
-                                  "maxLength": 2048
-                                }
-                              },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
-                            }
                           },
                           "meals": {
                             "type": "array",
@@ -3430,24 +3422,46 @@
                                   "type": "integer",
                                   "nullable": true
                                 },
-                                "customFields": {
-                                  "type": "array",
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "name": {
-                                        "type": "string",
-                                        "maxLength": 64
-                                      },
-                                      "value": {
+                                "customData": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "oneOf": [
+                                      {
                                         "type": "string",
                                         "maxLength": 2048
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string",
+                                          "maxLength": 2048
+                                        }
+                                      },
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "number"
+                                        }
+                                      },
+                                      {
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "boolean"
+                                        }
+                                      },
+                                      {
+                                        "type": "string",
+                                        "format": "null",
+                                        "nullable": true
                                       }
-                                    },
-                                    "required": [
-                                      "name",
-                                      "value"
-                                    ]
+                                    ],
+                                    "nullable": true
                                   }
                                 },
                                 "foods": {
@@ -3534,82 +3548,64 @@
                                         "maxLength": 128,
                                         "nullable": true
                                       },
-                                      "customFields": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "object",
-                                          "properties": {
-                                            "name": {
-                                              "type": "string",
-                                              "maxLength": 64
-                                            },
-                                            "value": {
+                                      "customData": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "oneOf": [
+                                            {
                                               "type": "string",
                                               "maxLength": 2048
+                                            },
+                                            {
+                                              "type": "array",
+                                              "items": {
+                                                "type": "string",
+                                                "maxLength": 2048
+                                              }
+                                            },
+                                            {
+                                              "type": "number"
+                                            },
+                                            {
+                                              "type": "array",
+                                              "items": {
+                                                "type": "number"
+                                              }
+                                            },
+                                            {
+                                              "type": "boolean"
+                                            },
+                                            {
+                                              "type": "array",
+                                              "items": {
+                                                "type": "boolean"
+                                              }
+                                            },
+                                            {
+                                              "type": "string",
+                                              "format": "null",
+                                              "nullable": true
                                             }
-                                          },
-                                          "required": [
-                                            "name",
-                                            "value"
-                                          ]
+                                          ],
+                                          "nullable": true
                                         }
                                       },
                                       "fields": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "object",
-                                          "properties": {
-                                            "fieldName": {
-                                              "type": "string",
-                                              "maxLength": 64
-                                            },
-                                            "value": {
-                                              "type": "string",
-                                              "maxLength": 512
-                                            }
-                                          },
-                                          "required": [
-                                            "fieldName",
-                                            "value"
-                                          ]
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "type": "string"
                                         }
                                       },
                                       "nutrients": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "object",
-                                          "properties": {
-                                            "amount": {
-                                              "type": "number"
-                                            },
-                                            "nutrientTypeId": {
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [
-                                            "amount",
-                                            "nutrientTypeId"
-                                          ]
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "type": "number"
                                         }
                                       },
-                                      "portionSizes": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "object",
-                                          "properties": {
-                                            "name": {
-                                              "type": "string",
-                                              "maxLength": 64
-                                            },
-                                            "value": {
-                                              "type": "string",
-                                              "maxLength": 512
-                                            }
-                                          },
-                                          "required": [
-                                            "name",
-                                            "value"
-                                          ]
+                                      "portionSize": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "type": "string"
                                         }
                                       }
                                     },
@@ -3630,10 +3626,10 @@
                                       "nutrientTableId",
                                       "nutrientTableCode",
                                       "barcode",
-                                      "customFields",
+                                      "customData",
                                       "fields",
                                       "nutrients",
-                                      "portionSizes"
+                                      "portionSize"
                                     ]
                                   }
                                 },
@@ -3711,7 +3707,7 @@
                                 "minutes",
                                 "name",
                                 "duration",
-                                "customFields",
+                                "customData",
                                 "foods",
                                 "missingFoods"
                               ]
@@ -3727,10 +3723,10 @@
                           "submissionTime",
                           "log",
                           "sessionId",
+                          "customData",
                           "userAgent",
                           "createdAt",
                           "updatedAt",
-                          "customFields",
                           "meals"
                         ]
                       }
@@ -3787,7 +3783,6 @@
         "description": "Update user password",
         "summary": "Update password",
         "tags": [
-          "default",
           "user",
           "profile"
         ],
@@ -3835,7 +3830,6 @@
         "description": "Get user physical data for feedback and survey recall calculations.",
         "summary": "Get physical data",
         "tags": [
-          "default",
           "user",
           "profile"
         ],
@@ -3915,7 +3909,6 @@
         "description": "Set user physical data for feedback and survey recall calculations.",
         "summary": "Set physical data",
         "tags": [
-          "default",
           "user",
           "profile"
         ],
@@ -4056,7 +4049,6 @@
         "description": "Get user submissions for selected surveys.",
         "summary": "User submissions",
         "tags": [
-          "default",
           "user",
           "profile"
         ],
@@ -4122,6 +4114,48 @@
                         "type": "string",
                         "format": "uuid"
                       },
+                      "customData": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "oneOf": [
+                            {
+                              "type": "string",
+                              "maxLength": 2048
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "maxLength": 2048
+                              }
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "boolean"
+                              }
+                            },
+                            {
+                              "type": "string",
+                              "format": "null",
+                              "nullable": true
+                            }
+                          ],
+                          "nullable": true
+                        }
+                      },
                       "userAgent": {
                         "type": "string",
                         "nullable": true
@@ -4144,6 +4178,7 @@
                       "submissionTime",
                       "log",
                       "sessionId",
+                      "customData",
                       "userAgent",
                       "createdAt",
                       "updatedAt"
@@ -4161,7 +4196,6 @@
         "description": "Get as served image definitions for the given as served sets.",
         "summary": "Multiple as served sets",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -4261,7 +4295,6 @@
         "description": "Get as served image definitions for the given as served set.",
         "summary": "Single as served set",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -4348,7 +4381,6 @@
         "description": "Get the definition of \"sliding scale\" which is the portion size estimation for hot and cold drinks.",
         "summary": "Multiple drinkware sets",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -4542,7 +4574,6 @@
         "description": "Get the definition of \"sliding scale\" which is the portion size estimation for hot and cold drinks.",
         "summary": "Single drinkware set",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -4723,7 +4754,6 @@
         "description": "Get definition of an image map which is an image of multiple objects from which one can be selected. Every object has an associated weight that is used for portion size weight calculations.",
         "summary": "Multiple guide images",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -4877,7 +4907,6 @@
         "description": "Get definition of an image map which is an image of multiple objects from which one can be selected. Every object has an associated weight that is used for portion size weight calculations.",
         "summary": "Single guide image",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -5018,7 +5047,6 @@
         "description": "Returns an image map definition similar to guide images, but without the associated weights. Used for selecting objects from images where the object is not directly associated with a weight, e.g. selecting pizza slice sizes whose final weight also depends on pizza thickness and type.",
         "summary": "Multiple image maps",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -5125,7 +5153,6 @@
         "description": "Returns an image map definition similar to guide images, but without the associated weights. Used for selecting objects from images where the object is not directly associated with a weight, e.g. selecting pizza slice sizes whose final weight also depends on pizza thickness and type.",
         "summary": "Single image map",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -5219,7 +5246,6 @@
         "description": "Get definitions for the given standard units.",
         "summary": "Multiple standard units",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -5322,7 +5348,6 @@
         "description": "Get definitions for the given standard units.",
         "summary": "Single standard unit",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [
@@ -5412,7 +5437,6 @@
         "description": "Dummy endpoint for manual weight entry estimation method. The method has no parameters and this request is needed to get the image URL for the portion size option selection screen.",
         "summary": "Get weight",
         "tags": [
-          "default",
           "portionSize"
         ],
         "parameters": [],
@@ -5469,7 +5493,6 @@
         "description": "Returns survey FAQs, if any.",
         "summary": "Survey faqs",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -5596,7 +5619,6 @@
         "description": "Returns survey parameters such as the scheme ID, current status, custom HTML content etc.",
         "summary": "Survey parameters",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -6963,7 +6985,6 @@
         "description": "Returns a subset of personal data for the current user that is relevant to the recall application.",
         "summary": "User info",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -7065,7 +7086,6 @@
         "description": "Get survey user session (current recall state), if any. Functionality is controlled by survey settings.",
         "summary": "Get user session",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -7110,7 +7130,6 @@
         "description": "Start survey user session (current recall state).",
         "summary": "Start user session",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -7486,7 +7505,6 @@
         "description": "Save survey user session (current recall state) on server. Functionality is controlled by survey settings.",
         "summary": "Set user session",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -7864,7 +7882,6 @@
         "description": "Clear survey user session (current recall state).",
         "summary": "Clear user session",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -7902,7 +7919,6 @@
         "description": "Notify people having survey support role or survey support email to give the respondent a call to help them complete their recall.",
         "summary": "Request help",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -7966,7 +7982,6 @@
         "description": "Submit 5-start rating about the survey recall experience.",
         "summary": "Send rating",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -8033,7 +8048,6 @@
         "description": "Submit recall data to the server.",
         "summary": "Submit recall",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -8507,7 +8521,6 @@
         "description": "Returns a list of foods from the food database that match the description using the study search settings.",
         "summary": "Food search",
         "tags": [
-          "default",
           "surveyRespondent"
         ],
         "parameters": [
@@ -8636,7 +8649,6 @@
         "description": "Browse permissions (paginated list)",
         "summary": "Browse permissions",
         "tags": [
-          "default",
           "admin",
           "acl",
           "permission"
@@ -8776,7 +8788,6 @@
         "description": "Create new permission",
         "summary": "Create permission",
         "tags": [
-          "default",
           "admin",
           "acl",
           "permission"
@@ -8867,7 +8878,6 @@
         "description": "Get permission by id",
         "summary": "Get permission",
         "tags": [
-          "default",
           "admin",
           "acl",
           "permission"
@@ -8932,7 +8942,6 @@
         "description": "Update permission by id",
         "summary": "Update permission",
         "tags": [
-          "default",
           "admin",
           "acl",
           "permission"
@@ -9021,7 +9030,6 @@
         "description": "Delete permission by id",
         "summary": "Delete permission",
         "tags": [
-          "default",
           "admin",
           "acl",
           "permission"
@@ -9051,7 +9059,6 @@
         "description": "Browse assigned permissions (paginated list)",
         "summary": "Browse assigned roles",
         "tags": [
-          "default",
           "admin",
           "acl",
           "permission"
@@ -9199,7 +9206,6 @@
         "description": "Browse assigned permissions (paginated list)",
         "summary": "Browse assigned users",
         "tags": [
-          "default",
           "admin",
           "acl",
           "permission"
@@ -9347,7 +9353,6 @@
         "description": "Browse roles (paginated list)",
         "summary": "Browse roles",
         "tags": [
-          "default",
           "admin",
           "acl",
           "role"
@@ -9487,7 +9492,6 @@
         "description": "Create new role",
         "summary": "Create role",
         "tags": [
-          "default",
           "admin",
           "acl",
           "role"
@@ -9585,7 +9589,6 @@
         "description": "Role reference data",
         "summary": "Role references",
         "tags": [
-          "default",
           "admin",
           "acl",
           "role"
@@ -9642,7 +9645,6 @@
         "description": "Get role by id",
         "summary": "Get role",
         "tags": [
-          "default",
           "admin",
           "acl",
           "role"
@@ -9707,7 +9709,6 @@
         "description": "Update role by id",
         "summary": "Update role",
         "tags": [
-          "default",
           "admin",
           "acl",
           "role"
@@ -9803,7 +9804,6 @@
         "description": "Delete role by id",
         "summary": "Delete role",
         "tags": [
-          "default",
           "admin",
           "acl",
           "role"
@@ -9833,7 +9833,6 @@
         "description": "Browse assigned permissions (paginated list)",
         "summary": "Browse assigned permissions",
         "tags": [
-          "default",
           "admin",
           "acl",
           "role"
@@ -9981,7 +9980,6 @@
         "description": "Browse assigned users (paginated list)",
         "summary": "Browse assigned users",
         "tags": [
-          "default",
           "admin",
           "acl",
           "role"
@@ -10129,7 +10127,6 @@
         "description": "Browse users (paginated list)",
         "summary": "Browse users",
         "tags": [
-          "default",
           "admin",
           "acl",
           "user"
@@ -10296,7 +10293,6 @@
         "description": "Create new user",
         "summary": "Create user",
         "tags": [
-          "default",
           "admin",
           "acl",
           "user"
@@ -10471,7 +10467,6 @@
         "description": "User reference data",
         "summary": "User references",
         "tags": [
-          "default",
           "admin",
           "acl",
           "user"
@@ -10556,7 +10551,6 @@
         "description": "Get user by id",
         "summary": "Get user",
         "tags": [
-          "default",
           "admin",
           "acl",
           "user"
@@ -10648,7 +10642,6 @@
         "description": "Update user by id",
         "summary": "Update user",
         "tags": [
-          "default",
           "admin",
           "acl",
           "user"
@@ -10828,7 +10821,6 @@
         "description": "Delete user by id",
         "summary": "Delete user",
         "tags": [
-          "default",
           "admin",
           "acl",
           "user"
@@ -10858,7 +10850,6 @@
         "description": "Browse assigned permissions (paginated list)",
         "summary": "Browse assigned permissions",
         "tags": [
-          "default",
           "admin",
           "acl",
           "user"
@@ -11033,7 +11024,6 @@
         "description": "Browse assigned roles (paginated list)",
         "summary": "Browse assigned roles",
         "tags": [
-          "default",
           "admin",
           "acl",
           "user"
@@ -11208,7 +11198,6 @@
         "description": "Login with email / password to admin interface. Response can differ based on whether multi-factor authentication is enabled or not.",
         "summary": "Admin login",
         "tags": [
-          "default",
           "admin",
           "authentication"
         ],
@@ -11493,7 +11482,6 @@
         "description": "Request multi-factor authentication challenge",
         "summary": "Request MFA challenge",
         "tags": [
-          "default",
           "admin",
           "authentication"
         ],
@@ -11759,7 +11747,6 @@
         "description": "Verify Duo multi-factor authentication challenge",
         "summary": "Verify Duo challenge",
         "tags": [
-          "default",
           "admin",
           "authentication"
         ],
@@ -11828,7 +11815,6 @@
         "description": "Verify FIDO multi-factor authentication challenge",
         "summary": "Verify FIDO challenge",
         "tags": [
-          "default",
           "admin",
           "authentication"
         ],
@@ -11966,7 +11952,6 @@
         "description": "Verify OTP multi-factor authentication challenge",
         "summary": "Verify OTP challenge",
         "tags": [
-          "default",
           "admin",
           "authentication"
         ],
@@ -12037,7 +12022,6 @@
         "description": "Refresh access token using refresh token. API server expects refresh token sent as cookie. Cookie name can differ based on API server configuration.",
         "summary": "Refresh access token",
         "tags": [
-          "default",
           "admin",
           "authentication"
         ],
@@ -12069,7 +12053,6 @@
         "description": "Clears cookie which stores refresh token and revokes refresh token.",
         "summary": "Logout from survey",
         "tags": [
-          "default",
           "admin",
           "authentication"
         ],
@@ -12091,7 +12074,6 @@
         "description": "Browse faqs (paginated list)",
         "summary": "Browse faqs",
         "tags": [
-          "default",
           "admin",
           "faq"
         ],
@@ -12396,7 +12378,6 @@
         "description": "Create new faq",
         "summary": "Create faq",
         "tags": [
-          "default",
           "admin",
           "faq"
         ],
@@ -12748,7 +12729,6 @@
         "description": "Get faq by id",
         "summary": "Get faq",
         "tags": [
-          "default",
           "admin",
           "faq"
         ],
@@ -12978,7 +12958,6 @@
         "description": "Update faq by id",
         "summary": "Update faq",
         "tags": [
-          "default",
           "admin",
           "faq"
         ],
@@ -13335,7 +13314,6 @@
         "description": "Delete faq by id",
         "summary": "Delete faq",
         "tags": [
-          "default",
           "admin",
           "faq"
         ],
@@ -13364,7 +13342,6 @@
         "description": "Copy faq record",
         "summary": "Copy faq",
         "tags": [
-          "default",
           "admin",
           "faq"
         ],
@@ -13616,7 +13593,6 @@
         "description": "FAQ: Browse media (paginated list)",
         "summary": "FAQ: Browse media",
         "tags": [
-          "default",
           "admin",
           "faqMedia"
         ],
@@ -13802,7 +13778,6 @@
         "description": "FAQ: Upload new media",
         "summary": "FAQ: Upload media",
         "tags": [
-          "default",
           "admin",
           "faqMedia"
         ],
@@ -13947,7 +13922,6 @@
         "description": "FAQ: Update media",
         "summary": "FAQ: Update media",
         "tags": [
-          "default",
           "admin",
           "faqMedia"
         ],
@@ -14061,7 +14035,6 @@
         "description": "FAQ: Update media",
         "summary": "FAQ: Update media",
         "tags": [
-          "default",
           "admin",
           "faqMedia"
         ],
@@ -14197,7 +14170,6 @@
         "description": "FAQ: Remove media",
         "summary": "FAQ: Remove media",
         "tags": [
-          "default",
           "admin",
           "faqMedia"
         ],
@@ -14237,7 +14209,6 @@
         "description": "FAQ: Browse securable users (paginated list)",
         "summary": "FAQ: Browse securable users",
         "tags": [
-          "default",
           "admin",
           "faqSecurable"
         ],
@@ -14412,7 +14383,6 @@
         "description": "FAQ: Create new user for securable",
         "summary": "FAQ: Create user for securable",
         "tags": [
-          "default",
           "admin",
           "faqSecurable"
         ],
@@ -14488,7 +14458,6 @@
         "description": "FAQ: Browse available users (paginated list)",
         "summary": "FAQ: Browse available users",
         "tags": [
-          "default",
           "admin",
           "faqSecurable"
         ],
@@ -14665,7 +14634,6 @@
         "description": "FAQ: Set securable owner",
         "summary": "FAQ: Set securable owner",
         "tags": [
-          "default",
           "admin",
           "faqSecurable"
         ],
@@ -14714,7 +14682,6 @@
         "description": "FAQ: Update user's securable access",
         "summary": "FAQ: Update user's securable access",
         "tags": [
-          "default",
           "admin",
           "faqSecurable"
         ],
@@ -14779,7 +14746,6 @@
         "description": "FAQ: Remove user's securable access",
         "summary": "FAQ: Remove user's securable access",
         "tags": [
-          "default",
           "admin",
           "faqSecurable"
         ],
@@ -14816,7 +14782,6 @@
         "description": "Browse feedback schemes (paginated list)",
         "summary": "Browse feedback schemes",
         "tags": [
-          "default",
           "admin",
           "feedbackScheme"
         ],
@@ -16086,7 +16051,6 @@
         "description": "Create new feedback scheme",
         "summary": "Create feedback scheme",
         "tags": [
-          "default",
           "admin",
           "feedbackScheme"
         ],
@@ -18358,7 +18322,6 @@
         "description": "Get references for feedback scheme",
         "summary": "Feedback scheme references",
         "tags": [
-          "default",
           "admin",
           "feedbackScheme"
         ],
@@ -18470,7 +18433,6 @@
         "description": "Get feedback scheme by id",
         "summary": "Get feedback scheme",
         "tags": [
-          "default",
           "admin",
           "feedbackScheme"
         ],
@@ -19665,7 +19627,6 @@
         "description": "Partial update feedback scheme by id",
         "summary": "Partial update feedback scheme",
         "tags": [
-          "default",
           "admin",
           "feedbackScheme"
         ],
@@ -21939,7 +21900,6 @@
         "description": "Update feedback scheme by id",
         "summary": "Update feedback scheme",
         "tags": [
-          "default",
           "admin",
           "feedbackScheme"
         ],
@@ -24226,7 +24186,6 @@
         "description": "Delete feedback scheme by id",
         "summary": "Delete feedback scheme",
         "tags": [
-          "default",
           "admin",
           "feedbackScheme"
         ],
@@ -24255,7 +24214,6 @@
         "description": "Copy feedback scheme record",
         "summary": "Copy feedback scheme",
         "tags": [
-          "default",
           "admin",
           "feedbackScheme"
         ],
@@ -25472,7 +25430,6 @@
         "description": "FeedbackScheme: Browse media (paginated list)",
         "summary": "FeedbackScheme: Browse media",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeMedia"
         ],
@@ -25658,7 +25615,6 @@
         "description": "FeedbackScheme: Upload new media",
         "summary": "FeedbackScheme: Upload media",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeMedia"
         ],
@@ -25803,7 +25759,6 @@
         "description": "FeedbackScheme: Update media",
         "summary": "FeedbackScheme: Update media",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeMedia"
         ],
@@ -25917,7 +25872,6 @@
         "description": "FeedbackScheme: Update media",
         "summary": "FeedbackScheme: Update media",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeMedia"
         ],
@@ -26053,7 +26007,6 @@
         "description": "FeedbackScheme: Remove media",
         "summary": "FeedbackScheme: Remove media",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeMedia"
         ],
@@ -26093,7 +26046,6 @@
         "description": "FeedbackScheme: Browse securable users (paginated list)",
         "summary": "FeedbackScheme: Browse securable users",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeSecurable"
         ],
@@ -26268,7 +26220,6 @@
         "description": "FeedbackScheme: Create new user for securable",
         "summary": "FeedbackScheme: Create user for securable",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeSecurable"
         ],
@@ -26350,7 +26301,6 @@
         "description": "FeedbackScheme: Browse available users (paginated list)",
         "summary": "FeedbackScheme: Browse available users",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeSecurable"
         ],
@@ -26527,7 +26477,6 @@
         "description": "FeedbackScheme: Set securable owner",
         "summary": "FeedbackScheme: Set securable owner",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeSecurable"
         ],
@@ -26576,7 +26525,6 @@
         "description": "FeedbackScheme: Update user's securable access",
         "summary": "FeedbackScheme: Update user's securable access",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeSecurable"
         ],
@@ -26647,7 +26595,6 @@
         "description": "FeedbackScheme: Remove user's securable access",
         "summary": "FeedbackScheme: Remove user's securable access",
         "tags": [
-          "default",
           "admin",
           "feedbackSchemeSecurable"
         ],
@@ -26684,7 +26631,6 @@
         "description": "Browse food lists (paginated list)",
         "summary": "Browse food lists",
         "tags": [
-          "default",
           "admin",
           "foodDb"
         ],
@@ -27160,7 +27106,6 @@
         "description": "Get food list references",
         "summary": "Get food list references",
         "tags": [
-          "default",
           "admin",
           "foodDb"
         ],
@@ -27211,7 +27156,6 @@
         "description": "Get food list by id",
         "summary": "Get food list",
         "tags": [
-          "default",
           "admin",
           "foodDb"
         ],
@@ -27612,7 +27556,6 @@
         "description": "Update food image thumbnail",
         "summary": "Update food image thumbnail",
         "tags": [
-          "default",
           "admin",
           "foodThumbnailImages"
         ],
@@ -27674,7 +27617,6 @@
         "description": "Browse as served images (paginated list)",
         "summary": "Browse as served images",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedImage"
@@ -27815,7 +27757,6 @@
         "description": "Create new as served image",
         "summary": "Create as served image",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedImage"
@@ -27901,7 +27842,6 @@
         "description": "Delete all as served image of as served set",
         "summary": "Delete as served images",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedImage"
@@ -27933,7 +27873,6 @@
         "description": "Get as served image by id",
         "summary": "Get as served image",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedImage"
@@ -28001,7 +27940,6 @@
         "description": "Delete as served image by id",
         "summary": "Delete as served image",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedImage"
@@ -28041,7 +27979,6 @@
         "description": "Browse as served sets (paginated list)",
         "summary": "Browse as served sets",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedSet"
@@ -28167,7 +28104,6 @@
         "description": "Create new as served set",
         "summary": "Create as served set",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedSet"
@@ -28290,7 +28226,6 @@
         "description": "Get as served set by id",
         "summary": "Get as served set",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedSet"
@@ -28386,7 +28321,6 @@
         "description": "Update as served set by id",
         "summary": "Update as served set",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedSet"
@@ -28535,7 +28469,6 @@
         "description": "Delete as served set by id",
         "summary": "Delete as served set",
         "tags": [
-          "default",
           "admin",
           "images",
           "asServedSet"
@@ -28567,7 +28500,6 @@
         "description": "Browse drinkware sets (paginated list)",
         "summary": "Browse drinkware sets",
         "tags": [
-          "default",
           "admin",
           "images",
           "drinkwareSet"
@@ -28693,7 +28625,6 @@
         "description": "Create new drinkware set",
         "summary": "Create drinkware set",
         "tags": [
-          "default",
           "admin",
           "images",
           "drinkwareSet"
@@ -28919,7 +28850,6 @@
         "description": "Get drinkware set by id",
         "summary": "Get drinkware set",
         "tags": [
-          "default",
           "admin",
           "images",
           "drinkwareSet"
@@ -29114,7 +29044,6 @@
         "description": "Update drinkware set by id",
         "summary": "Update drinkware set",
         "tags": [
-          "default",
           "admin",
           "images",
           "drinkwareSet"
@@ -29383,7 +29312,6 @@
         "description": "Delete drinkware set by id",
         "summary": "Delete drinkware set",
         "tags": [
-          "default",
           "admin",
           "images",
           "drinkwareSet"
@@ -29415,7 +29343,6 @@
         "description": "Browse guide images (paginated list)",
         "summary": "Browse guide images",
         "tags": [
-          "default",
           "admin",
           "images",
           "guideImage"
@@ -29541,7 +29468,6 @@
         "description": "Create new guide image",
         "summary": "Create guide image",
         "tags": [
-          "default",
           "admin",
           "images",
           "guideImage"
@@ -29677,7 +29603,6 @@
         "description": "Get guide image by id",
         "summary": "Get guide image",
         "tags": [
-          "default",
           "admin",
           "images",
           "guideImage"
@@ -29782,7 +29707,6 @@
         "description": "Update guide image by id",
         "summary": "Update guide image",
         "tags": [
-          "default",
           "admin",
           "images",
           "guideImage"
@@ -29941,7 +29865,6 @@
         "description": "Delete guide image by id",
         "summary": "Delete guide image",
         "tags": [
-          "default",
           "admin",
           "images",
           "guideImage"
@@ -29973,7 +29896,6 @@
         "description": "Browse image maps (paginated list)",
         "summary": "Browse image maps",
         "tags": [
-          "default",
           "admin",
           "images",
           "imageMap"
@@ -30099,7 +30021,6 @@
         "description": "Create new image map",
         "summary": "Create image map",
         "tags": [
-          "default",
           "admin",
           "images",
           "imageMap"
@@ -30262,7 +30183,6 @@
         "description": "Get image map by id",
         "summary": "Get image map",
         "tags": [
-          "default",
           "admin",
           "images",
           "imageMap"
@@ -30358,7 +30278,6 @@
         "description": "Update image map by id",
         "summary": "Update image map",
         "tags": [
-          "default",
           "admin",
           "images",
           "imageMap"
@@ -30521,7 +30440,6 @@
         "description": "Delete image map by id",
         "summary": "Delete image map",
         "tags": [
-          "default",
           "admin",
           "images",
           "imageMap"
@@ -30553,7 +30471,6 @@
         "description": "Update base image of image map by id",
         "summary": "Update base image of image map",
         "tags": [
-          "default",
           "admin",
           "images",
           "imageMap"
@@ -30651,7 +30568,6 @@
         "description": "Browse jobs (paginated list)",
         "summary": "Browse jobs",
         "tags": [
-          "default",
           "admin",
           "job"
         ],
@@ -31466,7 +31382,6 @@
         "description": "Get job by id",
         "summary": "Get job",
         "tags": [
-          "default",
           "admin",
           "job"
         ],
@@ -32204,7 +32119,6 @@
         "description": "Delete job by id",
         "summary": "Delete job",
         "tags": [
-          "default",
           "admin",
           "job"
         ],
@@ -32233,7 +32147,6 @@
         "description": "Download job attachment by id (if any and not expired)",
         "summary": "Download job attachment",
         "tags": [
-          "default",
           "admin",
           "job"
         ],
@@ -32264,7 +32177,6 @@
         "description": "Repeat job by id with same parameters",
         "summary": "Repeat job",
         "tags": [
-          "default",
           "admin",
           "job"
         ],
@@ -33052,7 +32964,6 @@
         "description": "Browse languages (paginated list)",
         "summary": "Browse languages",
         "tags": [
-          "default",
           "admin",
           "language"
         ],
@@ -33219,7 +33130,6 @@
         "description": "Create new language",
         "summary": "Create language",
         "tags": [
-          "default",
           "admin",
           "language"
         ],
@@ -33424,7 +33334,6 @@
         "description": "Get language by id",
         "summary": "Get language",
         "tags": [
-          "default",
           "admin",
           "language"
         ],
@@ -33581,7 +33490,6 @@
         "description": "Update language by id",
         "summary": "Update language",
         "tags": [
-          "default",
           "admin",
           "language"
         ],
@@ -33785,7 +33693,6 @@
         "description": "Delete language by id",
         "summary": "Delete language",
         "tags": [
-          "default",
           "admin",
           "language"
         ],
@@ -33814,7 +33721,6 @@
         "description": "Browse language translations (paginated list)",
         "summary": "Browse language translations",
         "tags": [
-          "default",
           "admin",
           "languageTranslation"
         ],
@@ -33925,7 +33831,6 @@
         "description": "Create new language translations",
         "summary": "Create language translations",
         "tags": [
-          "default",
           "admin",
           "languageTranslation"
         ],
@@ -34002,7 +33907,6 @@
         "description": "Update language translations by id",
         "summary": "Update language translations",
         "tags": [
-          "default",
           "admin",
           "languageTranslation"
         ],
@@ -34115,7 +34019,6 @@
         "description": "Delete language translations by id",
         "summary": "Delete language translations",
         "tags": [
-          "default",
           "admin",
           "languageTranslation"
         ],
@@ -34144,7 +34047,6 @@
         "description": "Delete language translations by id",
         "summary": "Delete language translations",
         "tags": [
-          "default",
           "admin",
           "languageTranslation"
         ],
@@ -34223,7 +34125,6 @@
         "description": "Language: Browse securable users (paginated list)",
         "summary": "Language: Browse securable users",
         "tags": [
-          "default",
           "admin",
           "languageSecurable"
         ],
@@ -34398,7 +34299,6 @@
         "description": "Language: Create new user for securable",
         "summary": "Language: Create user for securable",
         "tags": [
-          "default",
           "admin",
           "languageSecurable"
         ],
@@ -34474,7 +34374,6 @@
         "description": "Language: Browse available users (paginated list)",
         "summary": "Language: Browse available users",
         "tags": [
-          "default",
           "admin",
           "languageSecurable"
         ],
@@ -34651,7 +34550,6 @@
         "description": "Language: Set securable owner",
         "summary": "Language: Set securable owner",
         "tags": [
-          "default",
           "admin",
           "languageSecurable"
         ],
@@ -34700,7 +34598,6 @@
         "description": "Language: Update user's securable access",
         "summary": "Language: Update user's securable access",
         "tags": [
-          "default",
           "admin",
           "languageSecurable"
         ],
@@ -34765,7 +34662,6 @@
         "description": "Language: Remove user's securable access",
         "summary": "Language: Remove user's securable access",
         "tags": [
-          "default",
           "admin",
           "languageSecurable"
         ],
@@ -34802,7 +34698,6 @@
         "description": "Browse locales (paginated list)",
         "summary": "Browse locales",
         "tags": [
-          "default",
           "admin",
           "locale",
           "locale"
@@ -34939,7 +34834,6 @@
         "description": "Create new locale",
         "summary": "Create locale",
         "tags": [
-          "default",
           "admin",
           "locale",
           "locale"
@@ -35406,7 +35300,6 @@
         "description": "Get references for locale",
         "summary": "Locale references",
         "tags": [
-          "default",
           "admin",
           "locale",
           "locale"
@@ -35454,7 +35347,6 @@
         "description": "Get locale by id",
         "summary": "Get locale",
         "tags": [
-          "default",
           "admin",
           "locale",
           "locale"
@@ -35854,7 +35746,6 @@
         "description": "Update locale by id",
         "summary": "Update locale",
         "tags": [
-          "default",
           "admin",
           "locale",
           "locale"
@@ -36320,7 +36211,6 @@
         "description": "Delete locale by id",
         "summary": "Delete locale",
         "tags": [
-          "default",
           "admin",
           "locale",
           "locale"
@@ -36350,7 +36240,6 @@
         "description": "Get locale by code",
         "summary": "Get locale by code",
         "tags": [
-          "default",
           "admin",
           "locale",
           "locale"
@@ -36756,7 +36645,6 @@
         "description": "Submits job to the queue.\nSpecific jobs can be submitted to the queue. Each job type has its own parameters. See job types for more information.",
         "summary": "Queue locale task",
         "tags": [
-          "default",
           "admin",
           "locale",
           "locale"
@@ -37650,7 +37538,6 @@
         "description": "Browse locale recipe foods (paginated list)",
         "summary": "Browse locale recipe foods",
         "tags": [
-          "default",
           "admin",
           "locale",
           "recipeFood"
@@ -37722,7 +37609,6 @@
         "description": "Set locale recipe foods",
         "summary": "Set locale recipe foods",
         "tags": [
-          "default",
           "admin",
           "locale",
           "recipeFood"
@@ -37845,7 +37731,6 @@
         "description": "Browse locale recipe food steps",
         "summary": "Browse locale recipe food steps",
         "tags": [
-          "default",
           "admin",
           "locale",
           "recipeFood"
@@ -37975,7 +37860,6 @@
         "description": "Set locale recipe food steps",
         "summary": "Set locale recipe food steps",
         "tags": [
-          "default",
           "admin",
           "locale",
           "recipeFood"
@@ -38214,7 +38098,6 @@
         "description": "Browse locale split lists",
         "summary": "Browse locale split lists",
         "tags": [
-          "default",
           "admin",
           "locale",
           "splitList"
@@ -38272,7 +38155,6 @@
         "description": "Set locale split lists",
         "summary": "Set locale split lists",
         "tags": [
-          "default",
           "admin",
           "locale",
           "splitList"
@@ -38367,7 +38249,6 @@
         "description": "Browse locale split words",
         "summary": "Browse locale split words",
         "tags": [
-          "default",
           "admin",
           "locale",
           "splitWord"
@@ -38419,7 +38300,6 @@
         "description": "Set locale split words",
         "summary": "Set locale split words",
         "tags": [
-          "default",
           "admin",
           "locale",
           "splitWord"
@@ -38502,7 +38382,6 @@
         "description": "Browse locale synonym sets",
         "summary": "Browse locale synonym sets",
         "tags": [
-          "default",
           "admin",
           "locale",
           "synonymSet"
@@ -38554,7 +38433,6 @@
         "description": "Set locale synonym sets",
         "summary": "Set locale synonym sets",
         "tags": [
-          "default",
           "admin",
           "locale",
           "synonymSet"
@@ -38637,7 +38515,6 @@
         "description": "Locale: Browse securable users (paginated list)",
         "summary": "Locale: Browse securable users",
         "tags": [
-          "default",
           "admin",
           "localeSecurable"
         ],
@@ -38812,7 +38689,6 @@
         "description": "Locale: Create new user for securable",
         "summary": "Locale: Create user for securable",
         "tags": [
-          "default",
           "admin",
           "localeSecurable"
         ],
@@ -38895,7 +38771,6 @@
         "description": "Locale: Browse available users (paginated list)",
         "summary": "Locale: Browse available users",
         "tags": [
-          "default",
           "admin",
           "localeSecurable"
         ],
@@ -39072,7 +38947,6 @@
         "description": "Locale: Set securable owner",
         "summary": "Locale: Set securable owner",
         "tags": [
-          "default",
           "admin",
           "localeSecurable"
         ],
@@ -39121,7 +38995,6 @@
         "description": "Locale: Update user's securable access",
         "summary": "Locale: Update user's securable access",
         "tags": [
-          "default",
           "admin",
           "localeSecurable"
         ],
@@ -39193,7 +39066,6 @@
         "description": "Locale: Remove user's securable access",
         "summary": "Locale: Remove user's securable access",
         "tags": [
-          "default",
           "admin",
           "localeSecurable"
         ],
@@ -39230,7 +39102,6 @@
         "description": "Browse media (paginated list)",
         "summary": "Browse media",
         "tags": [
-          "default",
           "admin",
           "media"
         ],
@@ -39408,7 +39279,6 @@
         "description": "Upload new media",
         "summary": "Upload media",
         "tags": [
-          "default",
           "admin",
           "media"
         ],
@@ -39553,7 +39423,6 @@
         "description": "Update media",
         "summary": "Update media",
         "tags": [
-          "default",
           "admin",
           "media"
         ],
@@ -39659,7 +39528,6 @@
         "description": "Update media",
         "summary": "Update media",
         "tags": [
-          "default",
           "admin",
           "media"
         ],
@@ -39798,7 +39666,6 @@
         "description": "Remove media",
         "summary": "Remove media",
         "tags": [
-          "default",
           "admin",
           "media"
         ],
@@ -39830,7 +39697,6 @@
         "description": "Returns internal app metrics for scraping by Prometheus",
         "summary": "Get metrics (app)",
         "tags": [
-          "default",
           "admin",
           "metrics"
         ],
@@ -39847,7 +39713,6 @@
         "description": "Returns prometheus-node-exporter metrics for the underlying machine",
         "summary": "Get metrics (node)",
         "tags": [
-          "default",
           "admin",
           "metrics"
         ],
@@ -39864,7 +39729,6 @@
         "description": "Generates a heap snapshot",
         "summary": "Generate heap snapshot",
         "tags": [
-          "default",
           "admin",
           "metrics"
         ],
@@ -39896,7 +39760,6 @@
         "description": "Downloads heap snapshot file",
         "summary": "Download heap snapshot",
         "tags": [
-          "default",
           "admin",
           "metrics"
         ],
@@ -39929,7 +39792,6 @@
         "description": "Browse nutrient tables (paginated list)",
         "summary": "Browse nutrient tables",
         "tags": [
-          "default",
           "admin",
           "nutrientTable"
         ],
@@ -40136,7 +39998,6 @@
         "description": "Create new nutrient table",
         "summary": "Create nutrient table",
         "tags": [
-          "default",
           "admin",
           "nutrientTable"
         ],
@@ -40355,7 +40216,6 @@
         "description": "Get references for nutrient tables",
         "summary": "Nutrient table references",
         "tags": [
-          "default",
           "admin",
           "nutrientTable"
         ],
@@ -40424,7 +40284,6 @@
         "description": "Get nutrient table by id",
         "summary": "Get nutrient table",
         "tags": [
-          "default",
           "admin",
           "nutrientTable"
         ],
@@ -40558,7 +40417,6 @@
         "description": "Update nutrient table by id",
         "summary": "Update nutrient table",
         "tags": [
-          "default",
           "admin",
           "nutrientTable"
         ],
@@ -40777,7 +40635,6 @@
         "description": "Delete nutrient table by id",
         "summary": "Delete nutrient table",
         "tags": [
-          "default",
           "admin",
           "nutrientTable"
         ],
@@ -40808,7 +40665,6 @@
         "description": "Submits job to the queue.\nSpecific jobs can be submitted to the queue. Each job type has its own parameters. See job types for more information.",
         "summary": "Queue nutrient table task",
         "tags": [
-          "default",
           "admin",
           "nutrientTable"
         ],
@@ -41616,7 +41472,6 @@
         "description": "Update nutrient table records by id",
         "summary": "Update nutrient table records",
         "tags": [
-          "default",
           "admin",
           "nutrientTable"
         ],
@@ -41693,7 +41548,6 @@
         "description": "Browse nutrient types (paginated list)",
         "summary": "Browse nutrient types",
         "tags": [
-          "default",
           "admin",
           "nutrientType"
         ],
@@ -41831,7 +41685,6 @@
         "description": "Create new nutrient type",
         "summary": "Create nutrient type",
         "tags": [
-          "default",
           "admin",
           "nutrientType"
         ],
@@ -41921,7 +41774,6 @@
         "description": "Get references for nutrient types",
         "summary": "Nutrient type references",
         "tags": [
-          "default",
           "admin",
           "nutrientType"
         ],
@@ -41972,7 +41824,6 @@
         "description": "Get nutrient type by id",
         "summary": "Get nutrient type",
         "tags": [
-          "default",
           "admin",
           "nutrientType"
         ],
@@ -42035,7 +41886,6 @@
         "description": "Update nutrient type by id",
         "summary": "Update nutrient type",
         "tags": [
-          "default",
           "admin",
           "nutrientType"
         ],
@@ -42125,7 +41975,6 @@
         "description": "Delete nutrient type by id",
         "summary": "Delete nutrient type",
         "tags": [
-          "default",
           "admin",
           "nutrientType"
         ],
@@ -42154,7 +42003,6 @@
         "description": "Browse nutrient units (paginated list)",
         "summary": "Browse nutrient units",
         "tags": [
-          "default",
           "admin",
           "nutrientUnit"
         ],
@@ -42274,7 +42122,6 @@
         "description": "Create new nutrient unit",
         "summary": "Create nutrient unit",
         "tags": [
-          "default",
           "admin",
           "nutrientUnit"
         ],
@@ -42343,7 +42190,6 @@
         "description": "Get nutrient unit by id",
         "summary": "Get nutrient unit",
         "tags": [
-          "default",
           "admin",
           "nutrientUnit"
         ],
@@ -42388,7 +42234,6 @@
         "description": "Update nutrient unit by id",
         "summary": "Update nutrient unit",
         "tags": [
-          "default",
           "admin",
           "nutrientUnit"
         ],
@@ -42457,7 +42302,6 @@
         "description": "Delete nutrient unit by id",
         "summary": "Delete nutrient unit",
         "tags": [
-          "default",
           "admin",
           "nutrientUnit"
         ],
@@ -42486,7 +42330,6 @@
         "description": "As served sets (paginated reference list)",
         "summary": "As served sets",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -42613,7 +42456,6 @@
         "description": "Categories (paginated reference list)",
         "summary": "Categories",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -42739,7 +42581,6 @@
         "description": "Drinkware sets (paginated reference list)",
         "summary": "Drinkware sets",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -42866,7 +42707,6 @@
         "description": "FAQs (paginated reference list)",
         "summary": "FAQs",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -43173,7 +43013,6 @@
         "description": "Feedback schemes (paginated reference list)",
         "summary": "Feedback schemes",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -44445,7 +44284,6 @@
         "description": "Foods (paginated reference list)",
         "summary": "Foods",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -44572,7 +44410,6 @@
         "description": "Guide images (paginated reference list)",
         "summary": "Guide images",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -44699,7 +44536,6 @@
         "description": "Image maps (paginated reference list)",
         "summary": "Image maps",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -44826,7 +44662,6 @@
         "description": "Languages (paginated reference list)",
         "summary": "Languages",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -44958,7 +44793,6 @@
         "description": "Locales (paginated reference list)",
         "summary": "Locales",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -45090,7 +44924,6 @@
         "description": "Nutrient tables (paginated reference list)",
         "summary": "Nutrient tables",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -45212,7 +45045,6 @@
         "description": "Nutrient tables (paginated reference list)",
         "summary": "Nutrient tables",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -45351,7 +45183,6 @@
         "description": "Nutrient types (paginated reference list)",
         "summary": "Nutrient types",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -45481,7 +45312,6 @@
         "description": "Standard units (paginated reference list)",
         "summary": "Standard units",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -45645,7 +45475,6 @@
         "description": "Surveys (paginated reference list)",
         "summary": "Surveys",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -45772,7 +45601,6 @@
         "description": "Survey schemes (paginated reference list)",
         "summary": "Survey schemes",
         "tags": [
-          "default",
           "admin",
           "reference"
         ],
@@ -45875,7 +45703,6 @@
         "description": "Browse sign-in logs (paginated list)",
         "summary": "Browse sign-in logs",
         "tags": [
-          "default",
           "admin",
           "signInLog"
         ],
@@ -46026,7 +45853,6 @@
         "description": "Get sign-in log by id",
         "summary": "Get sign-in log",
         "tags": [
-          "default",
           "admin",
           "signInLog"
         ],
@@ -46100,7 +45926,6 @@
         "description": "Delete sign-in log by id",
         "summary": "Delete sign-in log",
         "tags": [
-          "default",
           "admin",
           "signInLog"
         ],
@@ -46129,7 +45954,6 @@
         "description": "Register account for admin interface",
         "summary": "Admin sign-up",
         "tags": [
-          "default",
           "admin",
           "signUp"
         ],
@@ -46233,7 +46057,6 @@
         "description": "Verify email address for admin account",
         "summary": "Admin email verification",
         "tags": [
-          "default",
           "admin",
           "signUp"
         ],
@@ -46273,7 +46096,6 @@
         "description": "Browse standard units (paginated list)",
         "summary": "Browse standard units",
         "tags": [
-          "default",
           "admin",
           "standardUnit"
         ],
@@ -46445,7 +46267,6 @@
         "description": "Create new standard unit",
         "summary": "Create standard unit",
         "tags": [
-          "default",
           "admin",
           "standardUnit"
         ],
@@ -46609,7 +46430,6 @@
         "description": "Get standard unit by id",
         "summary": "Get standard unit",
         "tags": [
-          "default",
           "admin",
           "standardUnit"
         ],
@@ -46708,7 +46528,6 @@
         "description": "Update standard unit by id",
         "summary": "Update standard unit",
         "tags": [
-          "default",
           "admin",
           "standardUnit"
         ],
@@ -46873,7 +46692,6 @@
         "description": "Delete standard unit by id",
         "summary": "Delete standard unit",
         "tags": [
-          "default",
           "admin",
           "standardUnit"
         ],
@@ -46904,7 +46722,6 @@
         "description": "Get categories associated with standard unit",
         "summary": "Standard unit categories",
         "tags": [
-          "default",
           "admin",
           "standardUnit"
         ],
@@ -47059,7 +46876,6 @@
         "description": "Get foods associated with standard unit",
         "summary": "Standard unit foods",
         "tags": [
-          "default",
           "admin",
           "standardUnit"
         ],
@@ -47214,7 +47030,6 @@
         "description": "Browse surveys (paginated list)",
         "summary": "Browse surveys",
         "tags": [
-          "default",
           "admin",
           "survey",
           "survey"
@@ -47430,7 +47245,6 @@
         "description": "Create new survey",
         "summary": "Create survey",
         "tags": [
-          "default",
           "admin",
           "survey",
           "survey"
@@ -50060,7 +49874,6 @@
         "description": "Get survey by id",
         "summary": "Get survey",
         "tags": [
-          "default",
           "admin",
           "survey",
           "survey"
@@ -52230,7 +52043,6 @@
         "description": "Partial update survey by id",
         "summary": "Partial update survey",
         "tags": [
-          "default",
           "admin",
           "survey",
           "survey"
@@ -54854,7 +54666,6 @@
         "description": "Update survey by id",
         "summary": "Update survey",
         "tags": [
-          "default",
           "admin",
           "survey",
           "survey"
@@ -57509,7 +57320,6 @@
         "description": "Delete survey by id",
         "summary": "Delete survey",
         "tags": [
-          "default",
           "admin",
           "survey",
           "survey"
@@ -57539,7 +57349,6 @@
         "description": "Submits job to the queue.\nSpecific jobs can be submitted to the queue. Each job type has its own parameters. See job types for more information.",
         "summary": "Queue survey task",
         "tags": [
-          "default",
           "admin",
           "survey",
           "survey"
@@ -58498,7 +58307,6 @@
         "description": "Browse survey respondents (paginated list)",
         "summary": "Browse respondents",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondent"
@@ -58645,7 +58453,6 @@
         "description": "Create new respondent",
         "summary": "Create respondent",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondent"
@@ -58824,7 +58631,6 @@
         "description": "Get survey respondent by username",
         "summary": "Get respondent",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondent"
@@ -58944,7 +58750,6 @@
         "description": "Update survey respondent by username",
         "summary": "Update respondent",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondent"
@@ -59121,7 +58926,6 @@
         "description": "Delete survey respondent by username",
         "summary": "Delete respondent",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondent"
@@ -59159,7 +58963,6 @@
         "description": "Download feedback as PDF. Returns stream as application/pdf.",
         "summary": "Download feedback",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondent"
@@ -59215,7 +59018,6 @@
         "description": "Email respondent feedback as PDF file attachment",
         "summary": "Email respondent feedback",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondent"
@@ -59291,7 +59093,6 @@
         "description": "Browse survey custom fields (paginated list)",
         "summary": "Browse respondents custom fields",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondentCustomField"
@@ -59434,7 +59235,6 @@
         "description": "Create new respondent custom field",
         "summary": "Create respondent custom field",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondentCustomField"
@@ -59523,7 +59323,6 @@
         "description": "Get survey respondent custom field",
         "summary": "Get respondent custom field",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondentCustomField"
@@ -59593,7 +59392,6 @@
         "description": "Update survey respondent custom field",
         "summary": "Update respondent custom field",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondentCustomField"
@@ -59682,7 +59480,6 @@
         "description": "Create or update survey respondent custom field",
         "summary": "Create or update respondent custom field",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondentCustomField"
@@ -59805,7 +59602,6 @@
         "description": "Delete survey respondent custom field",
         "summary": "Delete respondent custom field",
         "tags": [
-          "default",
           "admin",
           "survey",
           "respondentCustomField"
@@ -59851,7 +59647,6 @@
         "description": "Browse respondent recall sessions (paginated list)",
         "summary": "Browse respondent sessions",
         "tags": [
-          "default",
           "admin",
           "survey",
           "session"
@@ -59994,7 +59789,6 @@
         "description": "Get respondent recall session by id",
         "summary": "Get respondent session",
         "tags": [
-          "default",
           "admin",
           "survey",
           "session"
@@ -60063,7 +59857,6 @@
         "description": "Delete respondent recall session by id",
         "summary": "Delete respondent session",
         "tags": [
-          "default",
           "admin",
           "survey",
           "session"
@@ -60102,7 +59895,6 @@
         "description": "Browse submissions (paginated list)",
         "summary": "Browse submissions",
         "tags": [
-          "default",
           "admin",
           "survey",
           "submission"
@@ -60192,6 +59984,48 @@
                             "type": "string",
                             "format": "uuid"
                           },
+                          "customData": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "maxLength": 2048
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "maxLength": 2048
+                                  }
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number"
+                                  }
+                                },
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                {
+                                  "type": "string",
+                                  "format": "null",
+                                  "nullable": true
+                                }
+                              ],
+                              "nullable": true
+                            }
+                          },
                           "userAgent": {
                             "type": "string",
                             "nullable": true
@@ -60217,6 +60051,7 @@
                           "submissionTime",
                           "log",
                           "sessionId",
+                          "customData",
                           "userAgent",
                           "createdAt",
                           "updatedAt",
@@ -60276,7 +60111,6 @@
         "description": "Get submission by id",
         "summary": "Get submission",
         "tags": [
-          "default",
           "admin",
           "survey",
           "submission"
@@ -60336,6 +60170,48 @@
                       "type": "string",
                       "format": "uuid"
                     },
+                    "customData": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 2048
+                          },
+                          {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "maxLength": 2048
+                            }
+                          },
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          },
+                          {
+                            "type": "boolean"
+                          },
+                          {
+                            "type": "array",
+                            "items": {
+                              "type": "boolean"
+                            }
+                          },
+                          {
+                            "type": "string",
+                            "format": "null",
+                            "nullable": true
+                          }
+                        ],
+                        "nullable": true
+                      }
+                    },
                     "userAgent": {
                       "type": "string",
                       "nullable": true
@@ -60358,6 +60234,7 @@
                     "submissionTime",
                     "log",
                     "sessionId",
+                    "customData",
                     "userAgent",
                     "createdAt",
                     "updatedAt"
@@ -60372,7 +60249,6 @@
         "description": "Delete submission by id",
         "summary": "Delete submission",
         "tags": [
-          "default",
           "admin",
           "survey",
           "submission"
@@ -60411,7 +60287,6 @@
         "description": "Survey: Browse securable users (paginated list)",
         "summary": "Survey: Browse securable users",
         "tags": [
-          "default",
           "admin",
           "surveySecurable"
         ],
@@ -60586,7 +60461,6 @@
         "description": "Survey: Create new user for securable",
         "summary": "Survey: Create user for securable",
         "tags": [
-          "default",
           "admin",
           "surveySecurable"
         ],
@@ -60666,7 +60540,6 @@
         "description": "Survey: Browse available users (paginated list)",
         "summary": "Survey: Browse available users",
         "tags": [
-          "default",
           "admin",
           "surveySecurable"
         ],
@@ -60843,7 +60716,6 @@
         "description": "Survey: Set securable owner",
         "summary": "Survey: Set securable owner",
         "tags": [
-          "default",
           "admin",
           "surveySecurable"
         ],
@@ -60892,7 +60764,6 @@
         "description": "Survey: Update user's securable access",
         "summary": "Survey: Update user's securable access",
         "tags": [
-          "default",
           "admin",
           "surveySecurable"
         ],
@@ -60961,7 +60832,6 @@
         "description": "Survey: Remove user's securable access",
         "summary": "Survey: Remove user's securable access",
         "tags": [
-          "default",
           "admin",
           "surveySecurable"
         ],
@@ -60998,7 +60868,6 @@
         "description": "Browse survey schemes (paginated list)",
         "summary": "Browse survey schemes",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -61099,7 +60968,6 @@
         "description": "Create new survey scheme",
         "summary": "Create survey scheme",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -61656,7 +61524,6 @@
         "description": "Get references for survey scheme",
         "summary": "Survey scheme references",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -61688,7 +61555,6 @@
         "description": "Get survey scheme by id",
         "summary": "Get survey scheme",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -62023,7 +61889,6 @@
         "description": "Partial update survey scheme by id",
         "summary": "Partial update survey scheme",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -62582,7 +62447,6 @@
         "description": "Update survey scheme by id",
         "summary": "Update survey scheme",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -63149,7 +63013,6 @@
         "description": "Delete survey scheme by id",
         "summary": "Delete survey scheme",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -63178,7 +63041,6 @@
         "description": "Copy survey scheme record",
         "summary": "Copy survey scheme",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -63535,7 +63397,6 @@
         "description": "Survey scheme templates",
         "summary": "Survey scheme templates",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -63644,7 +63505,6 @@
         "description": "Get survey scheme data export references",
         "summary": "Survey scheme data export references",
         "tags": [
-          "default",
           "admin",
           "surveyScheme"
         ],
@@ -63693,7 +63553,6 @@
         "description": "Browse survey scheme prompts (paginated list)",
         "summary": "Browse survey scheme prompts",
         "tags": [
-          "default",
           "admin",
           "surveySchemePrompt"
         ],
@@ -63794,7 +63653,6 @@
         "description": "Create new survey scheme prompt",
         "summary": "Create survey scheme prompt",
         "tags": [
-          "default",
           "admin",
           "surveySchemePrompt"
         ],
@@ -63870,7 +63728,6 @@
         "description": "Get references for survey scheme prompt",
         "summary": "survey scheme prompt references",
         "tags": [
-          "default",
           "admin",
           "surveySchemePrompt"
         ],
@@ -63909,7 +63766,6 @@
         "description": "Get survey scheme prompt by id",
         "summary": "Get survey scheme prompt",
         "tags": [
-          "default",
           "admin",
           "surveySchemePrompt"
         ],
@@ -63972,7 +63828,6 @@
         "description": "Update survey scheme prompt by id",
         "summary": "Update survey scheme prompt",
         "tags": [
-          "default",
           "admin",
           "surveySchemePrompt"
         ],
@@ -64053,7 +63908,6 @@
         "description": "Delete survey scheme prompt by id",
         "summary": "Delete survey scheme prompt",
         "tags": [
-          "default",
           "admin",
           "surveySchemePrompt"
         ],
@@ -64082,7 +63936,6 @@
         "description": "Synchronize survey scheme prompt record",
         "summary": "Sync survey scheme prompt",
         "tags": [
-          "default",
           "admin",
           "surveySchemePrompt"
         ],
@@ -64146,7 +63999,6 @@
         "description": "SurveyScheme: Browse media (paginated list)",
         "summary": "SurveyScheme: Browse media",
         "tags": [
-          "default",
           "admin",
           "surveySchemeMedia"
         ],
@@ -64332,7 +64184,6 @@
         "description": "SurveyScheme: Upload new media",
         "summary": "SurveyScheme: Upload media",
         "tags": [
-          "default",
           "admin",
           "surveySchemeMedia"
         ],
@@ -64477,7 +64328,6 @@
         "description": "SurveyScheme: Update media",
         "summary": "SurveyScheme: Update media",
         "tags": [
-          "default",
           "admin",
           "surveySchemeMedia"
         ],
@@ -64591,7 +64441,6 @@
         "description": "SurveyScheme: Update media",
         "summary": "SurveyScheme: Update media",
         "tags": [
-          "default",
           "admin",
           "surveySchemeMedia"
         ],
@@ -64727,7 +64576,6 @@
         "description": "SurveyScheme: Remove media",
         "summary": "SurveyScheme: Remove media",
         "tags": [
-          "default",
           "admin",
           "surveySchemeMedia"
         ],
@@ -64767,7 +64615,6 @@
         "description": "SurveyScheme: Browse securable users (paginated list)",
         "summary": "SurveyScheme: Browse securable users",
         "tags": [
-          "default",
           "admin",
           "surveySchemeSecurable"
         ],
@@ -64942,7 +64789,6 @@
         "description": "SurveyScheme: Create new user for securable",
         "summary": "SurveyScheme: Create user for securable",
         "tags": [
-          "default",
           "admin",
           "surveySchemeSecurable"
         ],
@@ -65021,7 +64867,6 @@
         "description": "SurveyScheme: Browse available users (paginated list)",
         "summary": "SurveyScheme: Browse available users",
         "tags": [
-          "default",
           "admin",
           "surveySchemeSecurable"
         ],
@@ -65198,7 +65043,6 @@
         "description": "SurveyScheme: Set securable owner",
         "summary": "SurveyScheme: Set securable owner",
         "tags": [
-          "default",
           "admin",
           "surveySchemeSecurable"
         ],
@@ -65247,7 +65091,6 @@
         "description": "SurveyScheme: Update user's securable access",
         "summary": "SurveyScheme: Update user's securable access",
         "tags": [
-          "default",
           "admin",
           "surveySchemeSecurable"
         ],
@@ -65315,7 +65158,6 @@
         "description": "SurveyScheme: Remove user's securable access",
         "summary": "SurveyScheme: Remove user's securable access",
         "tags": [
-          "default",
           "admin",
           "surveySchemeSecurable"
         ],
@@ -65352,7 +65194,6 @@
         "description": "Browse tasks (paginated list)",
         "summary": "Browse tasks",
         "tags": [
-          "default",
           "admin",
           "task"
         ],
@@ -66066,7 +65907,6 @@
         "description": "Create new task",
         "summary": "Create task",
         "tags": [
-          "default",
           "admin",
           "task"
         ],
@@ -67307,7 +67147,6 @@
         "description": "Get task by id",
         "summary": "Get task",
         "tags": [
-          "default",
           "admin",
           "task"
         ],
@@ -68000,7 +67839,6 @@
         "description": "Update task by id",
         "summary": "Update task",
         "tags": [
-          "default",
           "admin",
           "task"
         ],
@@ -69300,7 +69138,6 @@
         "description": "Delete task by id",
         "summary": "Delete task",
         "tags": [
-          "default",
           "admin",
           "task"
         ],
@@ -69329,7 +69166,6 @@
         "description": "Trigger task pushing into the job queue",
         "summary": "Run task",
         "tags": [
-          "default",
           "admin",
           "task"
         ],
@@ -70069,7 +69905,6 @@
         "description": "Browse user jobs (paginated list)",
         "summary": "Browse user jobs",
         "tags": [
-          "default",
           "admin",
           "user",
           "job"
@@ -70981,7 +70816,6 @@
         "description": "Submit new job to the queue",
         "summary": "Submit job",
         "tags": [
-          "default",
           "admin",
           "user",
           "job"
@@ -71769,7 +71603,6 @@
         "description": "Get user job by id",
         "summary": "Get user job",
         "tags": [
-          "default",
           "admin",
           "user",
           "job"
@@ -72512,7 +72345,6 @@
         "description": "Download user job attachment by id (if any and not expired)",
         "summary": "Download user job attachment",
         "tags": [
-          "default",
           "admin",
           "user",
           "job"
@@ -72546,7 +72378,6 @@
         "description": "Browse multi-factor authentication devices for user",
         "summary": "Browse devices",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -72627,7 +72458,6 @@
         "description": "Turn multi-factor authentication on or off for user",
         "summary": "Toggle multi-factor authentication",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -72669,7 +72499,6 @@
         "description": "Get multi-factor authentication device details for user",
         "summary": "Device details",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -72742,7 +72571,6 @@
         "description": "Update multi-factor authentication device for user",
         "summary": "Update device",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -72833,7 +72661,6 @@
         "description": "Delete multi-factor authentication device for user",
         "summary": "Delete device",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -72866,7 +72693,6 @@
         "description": "Generate a challenge for Duo multi-factor authentication",
         "summary": "Duo challenge",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -72903,7 +72729,6 @@
         "description": "Verify Duo multi-factor authentication challenge",
         "summary": "Duo verification",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -72997,7 +72822,6 @@
         "description": "Generate a challenge for FIDO multi-factor authentication",
         "summary": "FIDO challenge",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -73179,7 +73003,6 @@
         "description": "Verify FIDO multi-factor authentication challenge",
         "summary": "FIDO verification",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -73359,7 +73182,6 @@
         "description": "Generate a challenge for OTP multi-factor authentication",
         "summary": "OTP challenge",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -73400,7 +73222,6 @@
         "description": "Verify OTP multi-factor authentication challenge",
         "summary": "OTP verification",
         "tags": [
-          "default",
           "admin",
           "user",
           "mfa",
@@ -73496,7 +73317,6 @@
         "description": "Browse user personal access tokens (paginated)",
         "summary": "Browse user personal access tokens",
         "tags": [
-          "default",
           "admin",
           "user",
           "personalAccessToken"
@@ -73652,7 +73472,6 @@
         "description": "Issue new personal access token for user",
         "summary": "Issue personal access token",
         "tags": [
-          "default",
           "admin",
           "user",
           "personalAccessToken"
@@ -73765,7 +73584,6 @@
         "description": "Revoke personal access token for user",
         "summary": "Revoke personal access token",
         "tags": [
-          "default",
           "admin",
           "user",
           "personalAccessToken"
@@ -73797,7 +73615,6 @@
         "description": "Get logged-in user profile data",
         "summary": "User profile data",
         "tags": [
-          "default",
           "admin",
           "user",
           "profile"
@@ -73874,7 +73691,6 @@
         "description": "Request email verification link to be sent to user email",
         "summary": "Verify user email",
         "tags": [
-          "default",
           "admin",
           "user",
           "profile"
