@@ -12,7 +12,9 @@ import {
   surveySchemeTemplates,
 } from '@intake24/common/types/http/admin';
 
-export const surveyScheme = initContract().router({
+const contract = initContract();
+
+export const surveyScheme = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/survey-schemes',
@@ -83,7 +85,7 @@ export const surveyScheme = initContract().router({
     pathParams: z.object({ surveySchemeId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete survey scheme',
     description: 'Delete survey scheme by id',

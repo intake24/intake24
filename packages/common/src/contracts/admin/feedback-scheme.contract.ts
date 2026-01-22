@@ -10,7 +10,9 @@ import {
   feedbackSchemeRequest,
 } from '@intake24/common/types/http/admin';
 
-export const feedbackScheme = initContract().router({
+const contract = initContract();
+
+export const feedbackScheme = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/feedback-schemes',
@@ -81,7 +83,7 @@ export const feedbackScheme = initContract().router({
     pathParams: z.object({ feedbackSchemeId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete feedback scheme',
     description: 'Delete feedback scheme by id',

@@ -9,7 +9,9 @@ import {
   updateAsServedSetInput,
 } from '@intake24/common/types/http/admin';
 
-export const asServedSet = initContract().router({
+const contract = initContract();
+
+export const asServedSet = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/images/as-served-sets',
@@ -58,7 +60,7 @@ export const asServedSet = initContract().router({
     path: '/admin/images/as-served-sets/:asServedSetId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete as served set',
     description: 'Delete as served set by id',

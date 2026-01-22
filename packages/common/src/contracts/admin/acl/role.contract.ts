@@ -8,7 +8,9 @@ import {
   roleRequest,
 } from '@intake24/common/types/http/admin';
 
-export const role = initContract().router({
+const contract = initContract();
+
+export const role = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/roles',
@@ -68,7 +70,7 @@ export const role = initContract().router({
     pathParams: z.object({ roleId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete role',
     description: 'Delete role by id',

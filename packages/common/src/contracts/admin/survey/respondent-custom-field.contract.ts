@@ -5,7 +5,9 @@ import { userCustomField } from '@intake24/common/types';
 import { paginationMeta, paginationRequest, bigIntString as surveyId } from '@intake24/common/types/http';
 import { userCustomFieldAttributes } from '@intake24/common/types/http/admin';
 
-export const respondentCustomField = initContract().router({
+const contract = initContract();
+
+export const respondentCustomField = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/respondents/:username/custom-fields',
@@ -70,7 +72,7 @@ export const respondentCustomField = initContract().router({
     pathParams: z.object({ surveyId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete respondent custom field',
     description: 'Delete survey respondent custom field',

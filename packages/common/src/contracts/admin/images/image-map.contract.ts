@@ -9,7 +9,9 @@ import {
   updateImageMapInput,
 } from '@intake24/common/types/http/admin';
 
-export const imageMap = initContract().router({
+const contract = initContract();
+
+export const imageMap = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/images/image-maps',
@@ -69,7 +71,7 @@ export const imageMap = initContract().router({
     path: '/admin/images/image-maps/:imageMapId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete image map',
     description: 'Delete image map by id',

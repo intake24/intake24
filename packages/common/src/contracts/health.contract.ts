@@ -1,12 +1,13 @@
 import { initContract } from '@ts-rest/core';
-import { z } from 'zod';
 
-export const health = initContract().router({
+const contract = initContract();
+
+export const health = contract.router({
   ping: {
     method: 'GET',
     path: '/ping',
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Ping',
     description: 'Send ping to the server to check if it is up and running.',

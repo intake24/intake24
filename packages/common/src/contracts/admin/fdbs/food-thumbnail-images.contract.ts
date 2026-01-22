@@ -1,7 +1,9 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-export const foodThumbnailImages = initContract().router({
+const contract = initContract();
+
+export const foodThumbnailImages = contract.router({
   update: {
     method: 'PUT',
     path: '/admin/fdbs/:localeId/:foodCode/thumbnail',
@@ -11,8 +13,8 @@ export const foodThumbnailImages = initContract().router({
     }),
     pathParams: z.object({ localeId: z.string(), foodCode: z.string() }),
     responses: {
-      200: z.undefined(),
-      404: z.undefined(),
+      200: contract.noBody(),
+      404: contract.noBody(),
     },
     summary: 'Update food image thumbnail',
     description: 'Update food image thumbnail',

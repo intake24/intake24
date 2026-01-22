@@ -4,7 +4,9 @@ import { z } from 'zod';
 import { bigIntString as nutrientUnitId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { nutrientUnitAttributes, nutrientUnitRequest } from '@intake24/common/types/http/admin';
 
-export const nutrientUnit = initContract().router({
+const contract = initContract();
+
+export const nutrientUnit = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/nutrient-units',
@@ -55,7 +57,7 @@ export const nutrientUnit = initContract().router({
     pathParams: z.object({ nutrientUnitId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete nutrient unit',
     description: 'Delete nutrient unit by id',

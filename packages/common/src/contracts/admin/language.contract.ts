@@ -9,7 +9,9 @@ import {
   updateLanguageRequest,
 } from '@intake24/common/types/http/admin';
 
-export const language = initContract().router({
+const contract = initContract();
+
+export const language = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/languages',
@@ -60,7 +62,7 @@ export const language = initContract().router({
     pathParams: z.object({ languageId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete language',
     description: 'Delete language by id',

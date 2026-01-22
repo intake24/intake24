@@ -2,7 +2,9 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 import { webPushSubscription } from '../types/web-push';
 
-export const subscription = initContract().router({
+const contract = initContract();
+
+export const subscription = contract.router({
   subscribe: {
     method: 'POST',
     path: '/subscriptions',
@@ -10,7 +12,7 @@ export const subscription = initContract().router({
       subscription: webPushSubscription,
     }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Subscribe to push notification',
     description:
@@ -21,7 +23,7 @@ export const subscription = initContract().router({
     path: '/subscriptions',
     body: null,
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Unsubscribe from push notification',
     description: 'Unsubscribe user from receiving web-push notifications.',
@@ -31,7 +33,7 @@ export const subscription = initContract().router({
     path: '/subscriptions/push',
     body: null,
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Ping push',
     description: 'Send test push notification to user.',

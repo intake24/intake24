@@ -7,7 +7,9 @@ import {
   permissionRequest,
 } from '@intake24/common/types/http/admin';
 
-export const permission = initContract().router({
+const contract = initContract();
+
+export const permission = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/permissions',
@@ -58,7 +60,7 @@ export const permission = initContract().router({
     pathParams: z.object({ permissionId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete permission',
     description: 'Delete permission by id',

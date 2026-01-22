@@ -9,7 +9,9 @@ import {
   taskResponse,
 } from '@intake24/common/types/http/admin';
 
-export const task = initContract().router({
+const contract = initContract();
+
+export const task = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/tasks',
@@ -60,7 +62,7 @@ export const task = initContract().router({
     pathParams: z.object({ taskId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete task',
     description: 'Delete task by id',

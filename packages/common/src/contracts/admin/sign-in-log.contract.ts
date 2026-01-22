@@ -4,7 +4,9 @@ import { z } from 'zod';
 import { paginationMeta, paginationRequest, bigIntString as signInLogId } from '@intake24/common/types/http';
 import { signInLogAttributes } from '@intake24/common/types/http/admin';
 
-export const signInLog = initContract().router({
+const contract = initContract();
+
+export const signInLog = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/sign-in-logs',
@@ -34,7 +36,7 @@ export const signInLog = initContract().router({
     pathParams: z.object({ signInLogId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete sign-in log',
     description: 'Delete sign-in log by id',

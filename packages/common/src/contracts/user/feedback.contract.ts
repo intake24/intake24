@@ -4,13 +4,15 @@ import validator from 'validator';
 import { z } from 'zod';
 import { feedbackSubmissionEntry, paginationMeta } from '@intake24/common/types/http';
 
+const contract = initContract();
+
 const pdfFeedbackRequest = z.object({
   lang: z.string().refine(val => validator.isLocale(val)).optional(),
   survey: z.string(),
   submissions: z.array(z.string().uuid()).optional(),
 });
 
-export const feedback = initContract().router({
+export const feedback = contract.router({
   download: {
     method: 'GET',
     path: '/user/feedback',
@@ -34,7 +36,7 @@ export const feedback = initContract().router({
         message: 'Emails do not match',
       }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Email feedback',
     description: 'Email user feedback as PDF file attachment',

@@ -13,7 +13,9 @@ import {
   nutrientTableResponse,
 } from '@intake24/common/types/http/admin';
 
-export const nutrientTable = initContract().router({
+const contract = initContract();
+
+export const nutrientTable = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/nutrient-tables',
@@ -70,7 +72,7 @@ export const nutrientTable = initContract().router({
     path: '/admin/nutrient-tables/:nutrientTableId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete nutrient table',
     description: 'Delete nutrient table by id',
@@ -94,7 +96,7 @@ export const nutrientTable = initContract().router({
       records: nutrientTableRecordRequest.array(),
     }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Update nutrient table records',
     description: 'Update nutrient table records by id',

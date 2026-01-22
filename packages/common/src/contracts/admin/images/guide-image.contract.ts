@@ -9,7 +9,9 @@ import {
   updateGuideImageInput,
 } from '@intake24/common/types/http/admin';
 
-export const guideImage = initContract().router({
+const contract = initContract();
+
+export const guideImage = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/images/guide-images',
@@ -58,7 +60,7 @@ export const guideImage = initContract().router({
     path: '/admin/images/guide-images/:guideImageId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete guide image',
     description: 'Delete guide image by id',

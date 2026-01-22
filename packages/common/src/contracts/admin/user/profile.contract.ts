@@ -1,8 +1,9 @@
 import { initContract } from '@ts-rest/core';
-import { z } from 'zod';
 import { adminUserProfile } from '@intake24/common/types/http/admin';
 
-export const profile = initContract().router({
+const contract = initContract();
+
+export const profile = contract.router({
   profile: {
     method: 'GET',
     path: '/admin/user',
@@ -17,7 +18,7 @@ export const profile = initContract().router({
     path: '/admin/user/verify',
     body: null,
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Verify user email',
     description: 'Request email verification link to be sent to user email',

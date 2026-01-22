@@ -3,7 +3,9 @@ import { sanitize } from '../rules';
 import { captcha, surveyAuthResponse } from '../types/http';
 import { z } from '../util';
 
-export const authentication = initContract().router({
+const contract = initContract();
+
+export const authentication = contract.router({
   emailLogin: {
     method: 'POST',
     path: '/auth/login',
@@ -72,7 +74,7 @@ export const authentication = initContract().router({
     path: '/auth/logout',
     body: null,
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Logout from survey',
     description: 'Clears cookie which stores refresh token and revokes refresh token.',

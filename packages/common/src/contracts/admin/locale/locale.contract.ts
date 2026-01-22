@@ -12,7 +12,9 @@ import {
   updateLocaleRequest,
 } from '@intake24/common/types/http/admin';
 
-export const locale = initContract().router({
+const contract = initContract();
+
+export const locale = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/locales',
@@ -82,7 +84,7 @@ export const locale = initContract().router({
     pathParams: z.object({ localeId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete locale',
     description: 'Delete locale by id',

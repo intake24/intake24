@@ -4,7 +4,9 @@ import { strongPasswordWithConfirm } from '../security';
 import { captcha } from '../types/http';
 import { z } from '../util';
 
-export const password = initContract().router({
+const contract = initContract();
+
+export const password = contract.router({
   request: {
     method: 'POST',
     path: '/password',
@@ -16,7 +18,7 @@ export const password = initContract().router({
       captcha,
     }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Password request',
     description:
@@ -32,7 +34,7 @@ export const password = initContract().router({
         path: ['passwordConfirm'],
       }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Password reset',
     description: 'Reset password using a token sent by email.',

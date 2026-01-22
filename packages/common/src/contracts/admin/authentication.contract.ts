@@ -11,7 +11,9 @@ import {
 } from '@intake24/common/types/http';
 import { sanitize } from '../../rules';
 
-export const authentication = initContract().router({
+const contract = initContract();
+
+export const authentication = contract.router({
   login: {
     method: 'POST',
     path: '/admin/auth/login',
@@ -94,7 +96,7 @@ export const authentication = initContract().router({
     path: '/admin/auth/logout',
     body: null,
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Logout from survey',
     description: 'Clears cookie which stores refresh token and revokes refresh token.',

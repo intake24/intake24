@@ -7,7 +7,9 @@ import {
   createAsServedImageRequest,
 } from '@intake24/common/types/http/admin';
 
-export const asServedImage = initContract().router({
+const contract = initContract();
+
+export const asServedImage = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/images/as-served-sets/:asServedSetId/images',
@@ -37,7 +39,7 @@ export const asServedImage = initContract().router({
     path: '/admin/images/as-served-sets/:asServedSetId/images',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete as served images',
     description: 'Delete all as served image of as served set',
@@ -56,7 +58,7 @@ export const asServedImage = initContract().router({
     path: '/admin/images/as-served-sets/:asServedSetId/images/:asServedImageId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete as served image',
     description: 'Delete as served image by id',

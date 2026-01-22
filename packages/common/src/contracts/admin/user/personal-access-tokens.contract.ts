@@ -5,7 +5,9 @@ import { z } from 'zod';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { personalAccessTokenResponse } from '@intake24/common/types/http/admin';
 
-export const personalAccessToken = initContract().router({
+const contract = initContract();
+
+export const personalAccessToken = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/user/personal-access-tokens',
@@ -44,7 +46,7 @@ export const personalAccessToken = initContract().router({
     path: '/admin/user/personal-access-tokens/:tokenId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Revoke personal access token',
     description: 'Revoke personal access token for user',

@@ -8,7 +8,9 @@ import {
   userRequest,
 } from '@intake24/common/types/http/admin';
 
-export const user = initContract().router({
+const contract = initContract();
+
+export const user = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/users',
@@ -68,7 +70,7 @@ export const user = initContract().router({
     pathParams: z.object({ userId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete user',
     description: 'Delete user by id',

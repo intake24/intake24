@@ -4,7 +4,9 @@ import { userPhysicalDataAttributes, userPhysicalDataResponse } from '@intake24/
 import { surveySubmissionAttributes } from '@intake24/common/types/http/admin';
 import { strongPasswordWithConfirm } from '../../security';
 
-export const profile = initContract().router({
+const contract = initContract();
+
+export const profile = contract.router({
   updatePassword: {
     method: 'POST',
     path: '/user/password',
@@ -15,7 +17,7 @@ export const profile = initContract().router({
         path: ['passwordConfirm'],
       }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Update password',
     description: 'Update user password',

@@ -4,8 +4,10 @@ import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import type { MediaModel } from '@intake24/common/types/http/admin';
 import { createMediaRequest, mediaEntry, updateMediaRequest } from '@intake24/common/types/http/admin';
 
+const contract = initContract();
+
 export function mediable(mediable: MediaModel, prefix: string) {
-  return initContract().router({
+  return contract.router({
     browse: {
       method: 'GET',
       path: `${prefix}/media`,
@@ -56,7 +58,7 @@ export function mediable(mediable: MediaModel, prefix: string) {
       pathParams: z.object({ mediaId: z.string().uuid() }),
       body: null,
       responses: {
-        204: z.undefined(),
+        204: contract.noBody(),
       },
       summary: `${mediable}: Remove media`,
       description: `${mediable}: Remove media`,

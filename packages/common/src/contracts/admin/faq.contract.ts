@@ -3,7 +3,9 @@ import { z } from 'zod';
 import { bigIntString as faqId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { faqEntry, faqRequest } from '@intake24/common/types/http/admin';
 
-export const faq = initContract().router({
+const contract = initContract();
+
+export const faq = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/faqs',
@@ -54,7 +56,7 @@ export const faq = initContract().router({
     pathParams: z.object({ faqId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete faq',
     description: 'Delete faq by id',

@@ -3,7 +3,9 @@ import { z } from 'zod';
 import { paginationMeta, paginationRequest, uuid as sessionId, bigIntString as surveyId } from '@intake24/common/types/http';
 import { userSurveySessionAttributes } from '@intake24/common/types/http/admin';
 
-export const session = initContract().router({
+const contract = initContract();
+
+export const session = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/sessions',
@@ -34,7 +36,7 @@ export const session = initContract().router({
     pathParams: z.object({ surveyId, sessionId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete respondent session',
     description: 'Delete respondent recall session by id',

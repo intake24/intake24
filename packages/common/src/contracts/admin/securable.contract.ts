@@ -10,8 +10,10 @@ import {
   userSecurableListEntry,
 } from '@intake24/common/types/http/admin';
 
+const contract = initContract();
+
 export function securable(securable: SecurableType, prefix: string) {
-  return initContract().router({
+  return contract.router({
     browse: {
       method: 'GET',
       path: `${prefix}/securables`,
@@ -32,7 +34,7 @@ export function securable(securable: SecurableType, prefix: string) {
         actions: z.enum(securableDefs[securable]).array().min(1),
       }),
       responses: {
-        201: z.undefined(),
+        201: contract.noBody(),
       },
       summary: `${securable}: Create user for securable`,
       description: `${securable}: Create new user for securable`,
@@ -55,7 +57,7 @@ export function securable(securable: SecurableType, prefix: string) {
       path: `${prefix}/securables/owner`,
       body: updateSecurableOwnerRequest,
       responses: {
-        201: z.undefined(),
+        201: contract.noBody(),
       },
       summary: `${securable}: Set securable owner`,
       description: `${securable}: Set securable owner`,
@@ -68,7 +70,7 @@ export function securable(securable: SecurableType, prefix: string) {
         actions: z.enum(securableDefs[securable]).array().min(1),
       }),
       responses: {
-        200: z.undefined(),
+        200: contract.noBody(),
       },
       summary: `${securable}: Update user's securable access`,
       description: `${securable}: Update user's securable access`,
@@ -79,7 +81,7 @@ export function securable(securable: SecurableType, prefix: string) {
       pathParams: z.object({ userId }),
       body: null,
       responses: {
-        204: z.undefined(),
+        204: contract.noBody(),
       },
       summary: `${securable}: Remove user's securable access`,
       description: `${securable}: Remove user's securable access`,

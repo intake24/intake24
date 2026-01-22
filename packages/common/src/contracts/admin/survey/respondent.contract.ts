@@ -8,12 +8,14 @@ import { emailCopy } from '@intake24/common/types';
 import { paginationMeta, paginationRequest, bigIntString as surveyId } from '@intake24/common/types/http';
 import { createRespondentRequest, respondentEntry, respondentListEntry, respondentRequest } from '@intake24/common/types/http/admin';
 
+const contract = initContract();
+
 const pdfFeedbackRequest = z.object({
   lang: z.string().refine(val => validator.isLocale(val)).optional(),
   submissions: z.array(z.string().uuid()).optional(),
 });
 
-export const respondent = initContract().router({
+export const respondent = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/respondents',
@@ -66,7 +68,7 @@ export const respondent = initContract().router({
     pathParams: z.object({ surveyId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete respondent',
     description: 'Delete survey respondent by username',
@@ -91,7 +93,7 @@ export const respondent = initContract().router({
       copy: z.enum(emailCopy),
     }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Email respondent feedback',
     description: 'Email respondent feedback as PDF file attachment',

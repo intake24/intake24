@@ -3,7 +3,9 @@ import { z } from 'zod';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { createMediaWithModelRequest, mediaEntry, updateMediaWithModelRequest } from '@intake24/common/types/http/admin';
 
-export const media = initContract().router({
+const contract = initContract();
+
+export const media = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/media',
@@ -54,7 +56,7 @@ export const media = initContract().router({
     pathParams: z.object({ mediaId: z.string().uuid() }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Remove media',
     description: 'Remove media',

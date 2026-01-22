@@ -6,7 +6,9 @@ import {
   languageTranslationAttributes,
 } from '@intake24/common/types/http/admin';
 
-export const languageTranslation = initContract().router({
+const contract = initContract();
+
+export const languageTranslation = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/languages/:languageId/translations',
@@ -48,7 +50,7 @@ export const languageTranslation = initContract().router({
     pathParams: z.object({ languageId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete language translations',
     description: 'Delete language translations by id',

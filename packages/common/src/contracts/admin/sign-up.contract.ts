@@ -4,7 +4,9 @@ import { strongPasswordWithConfirm } from '@intake24/common/security';
 import { captcha, loginResponse } from '@intake24/common/types/http';
 import { sanitize } from '../../rules';
 
-export const signUp = initContract().router({
+const contract = initContract();
+
+export const signUp = contract.router({
   signUp: {
     method: 'POST',
     path: '/admin/sign-up',
@@ -50,7 +52,7 @@ export const signUp = initContract().router({
       token: z.string().jwt(),
     }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Admin email verification',
     description: 'Verify email address for admin account',

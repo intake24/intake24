@@ -8,7 +8,9 @@ import {
   nutrientTypeResponse,
 } from '@intake24/common/types/http/admin';
 
-export const nutrientType = initContract().router({
+const contract = initContract();
+
+export const nutrientType = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/nutrient-types',
@@ -68,7 +70,7 @@ export const nutrientType = initContract().router({
     pathParams: z.object({ nutrientTypeId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete nutrient type',
     description: 'Delete nutrient type by id',

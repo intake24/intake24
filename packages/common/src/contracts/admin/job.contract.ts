@@ -6,7 +6,9 @@ import { z } from 'zod';
 import { bigIntString as jobId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { jobAttributes, repeatJobRequest } from '@intake24/common/types/http/admin';
 
-export const job = initContract().router({
+const contract = initContract();
+
+export const job = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/jobs',
@@ -36,7 +38,7 @@ export const job = initContract().router({
     pathParams: z.object({ jobId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete job',
     description: 'Delete job by id',

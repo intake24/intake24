@@ -9,7 +9,9 @@ import {
   updateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
 
-export const drinkwareSet = initContract().router({
+const contract = initContract();
+
+export const drinkwareSet = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/images/drinkware-sets',
@@ -58,7 +60,7 @@ export const drinkwareSet = initContract().router({
     path: '/admin/images/drinkware-sets/:drinkwareSetId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete drinkware set',
     description: 'Delete drinkware set by id',

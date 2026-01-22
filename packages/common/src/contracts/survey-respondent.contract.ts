@@ -14,9 +14,10 @@ import {
 } from '../types/http';
 import { z } from '../util';
 
+const contract = initContract();
 const tzOffset = z.coerce.number().openapi({ description: 'Client timezone offset in minutes' });
 
-export const surveyRespondent = initContract().router({
+export const surveyRespondent = contract.router({
   faqs: {
     method: 'GET',
     path: '/surveys/:slug/faqs',
@@ -63,7 +64,7 @@ export const surveyRespondent = initContract().router({
     path: '/surveys/:slug/session',
     body: z.object({ session: surveyState }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Start user session',
     description:
@@ -74,7 +75,7 @@ export const surveyRespondent = initContract().router({
     path: '/surveys/:slug/session',
     body: z.object({ session: surveyState }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Set user session',
     description:
@@ -85,7 +86,7 @@ export const surveyRespondent = initContract().router({
     path: '/surveys/:slug/session/:sessionId?',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Clear user session',
     description:
@@ -96,7 +97,7 @@ export const surveyRespondent = initContract().router({
     path: '/surveys/:slug/request-help',
     body: surveyHelpRequest,
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Request help',
     description:
@@ -107,7 +108,7 @@ export const surveyRespondent = initContract().router({
     path: '/surveys/:slug/rating',
     body: surveyRatingRequest,
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Send rating',
     description: 'Submit 5-start rating about the survey recall experience.',

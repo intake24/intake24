@@ -1,9 +1,10 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-
 import { mfaDeviceResponse, mfaDevicesResponse } from '@intake24/common/types/http/admin';
 
-export const device = initContract().router({
+const contract = initContract();
+
+export const device = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/user/mfa',
@@ -20,7 +21,7 @@ export const device = initContract().router({
       status: z.boolean(),
     }),
     responses: {
-      200: z.undefined(),
+      200: contract.noBody(),
     },
     summary: 'Toggle multi-factor authentication',
     description: 'Turn multi-factor authentication on or off for user',
@@ -51,7 +52,7 @@ export const device = initContract().router({
     path: '/admin/user/mfa/devices/:deviceId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete device',
     description: 'Delete multi-factor authentication device for user',

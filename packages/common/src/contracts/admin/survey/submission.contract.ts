@@ -6,7 +6,9 @@ import {
   surveySubmissionListEntry,
 } from '@intake24/common/types/http/admin';
 
-export const submission = initContract().router({
+const contract = initContract();
+
+export const submission = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/submissions',
@@ -37,7 +39,7 @@ export const submission = initContract().router({
     pathParams: z.object({ surveyId, submissionId }),
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete submission',
     description: 'Delete submission by id',

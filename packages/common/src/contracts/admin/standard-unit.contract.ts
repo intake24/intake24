@@ -9,7 +9,9 @@ import {
   standardUnitRequest,
 } from '@intake24/common/types/http/admin';
 
-export const standardUnit = initContract().router({
+const contract = initContract();
+
+export const standardUnit = contract.router({
   browse: {
     method: 'GET',
     path: '/admin/standard-units',
@@ -57,7 +59,7 @@ export const standardUnit = initContract().router({
     path: '/admin/standard-units/:standardUnitId',
     body: null,
     responses: {
-      204: z.undefined(),
+      204: contract.noBody(),
     },
     summary: 'Delete standard unit',
     description: 'Delete standard unit by id',
