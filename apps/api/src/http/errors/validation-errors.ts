@@ -8,16 +8,15 @@ import type {
   UnknownFieldsError,
   ValidationError,
 } from 'express-validator';
-import type { ZodError, ZodIssueCode } from 'zod';
-import type { ZodIssue, ValidationError as ZodValidationError } from 'zod-validation-error';
-import { fromZodError } from 'zod-validation-error';
-
+import type { ZodIssue } from 'zod-validation-error';
+import { StandardSchemaError } from '@ts-rest/core';
+import { ZodIssueCode } from 'zod';
 import type { I18nService } from '@intake24/api/services';
 import type { I18nParams } from '@intake24/i18n';
 
 export const standardErrorCodes = ['$unique', '$exists', '$restricted'] as const;
 
-export type StandardErrorCode = (typeof standardErrorCodes)[number] | ZodIssueCode;
+export type StandardErrorCode = (typeof standardErrorCodes)[number] | keyof typeof ZodIssueCode;
 
 export interface ExtendedFieldValidationError extends FieldValidationError {
   code: StandardErrorCode | null;
@@ -99,7 +98,6 @@ export function formatZodIssueMessage(issue: ZodIssue, i18nService?: I18nService
 
   switch (issue.code) {
     case 'invalid_type':
-    case 'invalid_literal':
       return i18nService.translate(`validation.types.${issue.expected}._`, {
         attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
       });
@@ -126,25 +124,24 @@ export function mapZodIssues(details: ZodIssue[], i18nService?: I18nService, loc
 
 export function requestValidationErrorHandler(err: RequestValidationError, req: Request, res: Response, _next: NextFunction) {
   const { i18nService } = req.scope.cradle;
-  let firstError: ZodValidationError;
+  let firstError: StandardSchemaError;
 
   const errors = ['pathParams', 'headers', 'query', 'body'].reduce<Record<string, ExtendedValidationError>>((acc, key) => {
     const zKey = key as keyof typeof err;
-    if (!err[zKey])
+    const error = err[zKey];
+
+    if (!error || !(error instanceof StandardSchemaError))
       return acc;
 
-    const error = fromZodError(err[zKey] as ZodError);
     if (!firstError)
       firstError = error;
 
-    if (error.details.length)
-      acc = { ...acc, ...mapZodIssues(error.details, i18nService, (key === 'pathParams' ? 'params' : key) as Location) };
+    acc = { ...acc, ...mapZodIssues(error.issues as ZodIssue[], i18nService, (key === 'pathParams' ? 'params' : key) as Location) };
 
     return acc;
   }, {});
 
   return res.status(400).json({
-    // name: firstError!.name,
     message: firstError!.message,
     errors,
   });

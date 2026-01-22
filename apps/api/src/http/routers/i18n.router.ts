@@ -1,6 +1,5 @@
 import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash-es';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
 import type { Includeable } from '@intake24/db';
@@ -45,7 +44,7 @@ export function i18n() {
           'textDirection',
         ]),
         messages:
-          language.translations?.reduce<LocaleMessageDictionary<any>>((acc, { section, messages }) => {
+          language.translations?.reduce<Record<string, LocaleMessageDictionary<any>>>((acc, { section, messages }) => {
             acc[section] = messages;
             return acc;
           }, {}) ?? {},

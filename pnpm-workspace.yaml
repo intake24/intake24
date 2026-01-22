@@ -1,6 +1,14 @@
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
 packages:
   - apps/**
   - packages/**
+
+patchedDependencies:
+  '@ts-rest/core': patches/@ts-rest__core.patch
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - core-js

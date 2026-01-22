@@ -5,12 +5,12 @@ export type SanitizeInputOptions = {
   allowHtml?: boolean;
 };
 
-export function sanitize(input: any, options: SanitizeInputOptions = {}) {
+export function sanitize<T = string>(input: T, options: SanitizeInputOptions = {}): T {
   const { allowHtml, emptyStringToNull } = options;
-  let output = input;
+  // let output = input;
 
   if (typeof input === 'string') {
-    output = allowHtml
+    let output: string | null = allowHtml
       ? sanitizeHtml(input, {
           allowedTags: sanitizeHtml.defaults.allowedTags.concat(['iframe', 'img']),
           allowedAttributes: {
@@ -24,17 +24,19 @@ export function sanitize(input: any, options: SanitizeInputOptions = {}) {
     output = output.trim();
     if (emptyStringToNull && !output.length)
       output = null;
+
+    return output as any;
   }
 
   if (Array.isArray(input))
-    output = input.map(item => sanitize(item, options));
+    return input.map(item => sanitize(item, options)) as any;
 
   if (Object.prototype.toString.call(input) === '[object Object]') {
-    output = Object.entries(input).reduce<any>((acc, [key, value]) => {
+    return Object.entries(input as Record<string, unknown>).reduce<any>((acc, [key, value]) => {
       acc[key] = sanitize(value, options);
       return acc;
-    }, {});
+    }, {}) as any;
   }
 
-  return output;
+  return input as any;
 }

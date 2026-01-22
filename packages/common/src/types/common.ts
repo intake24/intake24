@@ -12,7 +12,7 @@ export const isApplication = (app: any): app is Application => applications.incl
 
 export const customField = z.object({
   name: z.string().min(1).max(128),
-  value: z.union([z.string(), z.number(), z.boolean(), z.date()]).pipe(z.coerce.string().min(1).max(512)),
+  value: z.union([z.string(), z.number(), z.boolean(), z.date()]).pipe(z.coerce.string<string>().min(1).max(512)),
 });
 export type CustomField = z.infer<typeof customField>;
 
@@ -101,6 +101,7 @@ export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>({ valueSc
     return scheme;
 
   return scheme.superRefine((data, ctx) => {
+    // @ts-expect-error -- zod4 issue, worked in zod3
     const length = Object.values(data).flat().map(item => item.value).join('').length;
     if (length <= limit)
       return;

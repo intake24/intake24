@@ -1,5 +1,5 @@
+import { z } from 'zod';
 import { localeTranslation, requiredLocaleTranslation } from '../types';
-import { z } from '../util';
 import { cardTypes } from './cards';
 import { nutrientRuleTypes, range, sentiments, sexes } from './shared';
 

@@ -1,4 +1,5 @@
 import { initContract } from '@ts-rest/core';
+import { z } from 'zod';
 import { sanitize } from '../rules';
 import { surveyState } from '../surveys';
 import {
@@ -12,10 +13,9 @@ import {
   surveyUserInfoResponse,
   surveyUserSessionResponse,
 } from '../types/http';
-import { z } from '../util';
 
 const contract = initContract();
-const tzOffset = z.coerce.number().openapi({ description: 'Client timezone offset in minutes' });
+const tzOffset = z.coerce.number().meta({ description: 'Client timezone offset in minutes' });
 
 export const surveyRespondent = contract.router({
   faqs: {
@@ -116,9 +116,9 @@ export const surveyRespondent = contract.router({
   submission: {
     method: 'POST',
     path: '/surveys/:slug/submission',
-    headers: z.object({
+    headers: {
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    }),
+    },
     query: z.object({ tzOffset }),
     body: z.object({ submission: surveyState }),
     responses: {

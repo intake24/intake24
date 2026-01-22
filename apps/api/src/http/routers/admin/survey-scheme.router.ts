@@ -243,7 +243,7 @@ export function surveyScheme() {
 
         const fieldMapper = ({ id, label }: ExportField) => ({ id, label });
 
-        const fields: SurveySchemeExportRefs = {};
+        const fields = {} as SurveySchemeExportRefs;
         for (const [section, callback] of Object.entries(dataExportFields)) {
           const sectionFields = await callback(surveyScheme);
           fields[section as ExportSectionId] = sectionFields.map(fieldMapper);

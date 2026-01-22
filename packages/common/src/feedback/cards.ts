@@ -1,5 +1,5 @@
+import { z } from 'zod';
 import { localeTranslation, requiredLocaleTranslation } from '../types';
-import { z } from '../util';
 import { characterSentiment } from './characters';
 
 export const foodGroupThreshold = z.object({
