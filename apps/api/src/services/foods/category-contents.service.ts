@@ -1,4 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
+import { useInRecipeTypes } from '@intake24/common/types/foods';
 import type {
   CategoryContents,
   CategoryHeader,
@@ -33,6 +34,7 @@ function categoryContentsService({
       foods: [],
       subcategories: categories
         .filter(({ hidden }) => !hidden)
+        .filter(({ useInRecipes }) => useInRecipes !== useInRecipeTypes.USE_AS_RECIPE_INGREDIENT)
         .map(({ id, code, name }) => ({ id, code, name })),
     };
   };
