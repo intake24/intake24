@@ -10,9 +10,9 @@ export const signUp = contract.router({
   signUp: {
     method: 'POST',
     path: '/admin/sign-up',
-    headers: z.object({
+    headers: {
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    }),
+    },
     body: strongPasswordWithConfirm
       .extend({
         email: z.string().max(512).email().toLowerCase(),

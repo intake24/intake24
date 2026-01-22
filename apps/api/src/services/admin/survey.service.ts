@@ -67,7 +67,7 @@ function adminSurveyService({
    */
   const createRespondent = async (
     survey: Survey | string,
-    input: CreateRespondentRequest,
+    input: Omit<CreateRespondentRequest, 'passwordConfirm'>,
   ): Promise<UserSurveyAlias> => {
     const surveyEntry
       = typeof survey === 'string'
@@ -143,7 +143,7 @@ function adminSurveyService({
    */
   const createRespondents = async (
     surveyId: string,
-    inputs: CreateRespondentRequest[],
+    inputs: Omit<CreateRespondentRequest, 'passwordConfirm'>[],
   ): Promise<UserSurveyAlias[]> => {
     const survey = await Survey.findByPk(surveyId, {
       attributes: [

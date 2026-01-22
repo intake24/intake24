@@ -15,7 +15,7 @@ export default () => {
   let invalidUrl: string;
 
   let input: UserRequest;
-  let output: UserInput;
+  let output: Omit<UserInput, 'password'>;
   let user: User;
 
   beforeAll(async () => {

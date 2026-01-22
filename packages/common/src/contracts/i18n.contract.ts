@@ -10,7 +10,7 @@ const languageResponse = z.object({
   localName: z.string(),
   countryFlagCode: z.string(),
   textDirection: z.enum(textDirections),
-  messages: z.object({}).optional(),
+  messages: z.record(z.string(), z.any()).optional(),
 });
 
 export const i18n = initContract().router({

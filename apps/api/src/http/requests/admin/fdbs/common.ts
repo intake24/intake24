@@ -139,7 +139,7 @@ export const portionSizeMethods: Schema = {
         }
         catch (err) {
           if (err instanceof ZodError)
-            throw err.errors.at(0)?.message;
+            throw err.issues.at(0)?.message;
 
           throw err;
         }

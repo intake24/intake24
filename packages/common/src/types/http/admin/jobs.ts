@@ -49,7 +49,7 @@ export const repeatJobRequest = jobAttributes.pick({
     if (!success) {
       error.issues.forEach((issue) => {
         issue.path.unshift('params');
-        ctx.addIssue(issue);
+        ctx.addIssue({ ...issue });
       });
     }
   },

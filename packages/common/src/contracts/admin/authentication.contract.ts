@@ -17,9 +17,9 @@ export const authentication = contract.router({
   login: {
     method: 'POST',
     path: '/admin/auth/login',
-    headers: z.object({
+    headers: {
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    }),
+    },
     body: z.object({
       email: z.string().toLowerCase(),
       password: z.string(),
@@ -44,9 +44,9 @@ export const authentication = contract.router({
   duo: {
     method: 'POST',
     path: '/admin/auth/duo',
-    headers: z.object({
+    headers: {
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    }),
+    },
     body: duoAuthenticationVerificationRequest,
     responses: {
       200: loginResponse,
@@ -57,9 +57,9 @@ export const authentication = contract.router({
   fido: {
     method: 'POST',
     path: '/admin/auth/fido',
-    headers: z.object({
+    headers: {
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    }),
+    },
     body: fidoAuthenticationVerificationRequest,
     responses: {
       200: loginResponse,
@@ -70,9 +70,9 @@ export const authentication = contract.router({
   otp: {
     method: 'POST',
     path: '/admin/auth/otp',
-    headers: z.object({
+    headers: {
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    }),
+    },
     body: otpAuthenticationVerificationRequest,
     responses: {
       200: loginResponse,

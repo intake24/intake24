@@ -17,10 +17,12 @@
     "open-api": "pnpm unrun scripts/open-api.ts"
   },
   "devDependencies": {
-    "@ts-rest/open-api": "^3.52.1",
+    "@openapi-contrib/json-schema-to-openapi-schema": "^4.3.0",
+    "@ts-rest/open-api": "^3.53.0-rc.1",
     "@types/node": "^24.10.4",
     "typescript": "^5.9.3",
     "unrun": "^0.2.24",
-    "vitepress": "^1.6.4"
+    "vitepress": "^1.6.4",
+    "zod": "^4.3.5"
   }
 }

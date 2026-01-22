@@ -1,0 +1,2174 @@
+diff --git a/src/index.d.ts b/src/index.d.ts
+index 0375c9fc04fe116b78883c4df0e48abbddd789b9..9582a5a8532ff7976ade1f37db542643f7bb071a 100644
+--- a/src/index.d.ts
++++ b/src/index.d.ts
+@@ -4,7 +4,6 @@ export * from './lib/paths';
+ export * from './lib/query';
+ export * from './lib/status-codes';
+ export * from './lib/type-utils';
+-export * from './lib/zod-utils';
+ export * from './lib/server';
+ export * from './lib/response-validation-error';
+ export * from './lib/unknown-status-error';
+diff --git a/src/lib/dsl.d.ts b/src/lib/dsl.d.ts
+index 04c150deba78cec8d77aecf68afc2dc3fce73abe..5b1c338fbe1681341e3862cb80a60c0e5672f3e2 100644
+--- a/src/lib/dsl.d.ts
++++ b/src/lib/dsl.d.ts
+@@ -1,4 +1,3 @@
+-import type { z } from 'zod';
+ import { StandardSchemaV1 } from './standard-schema';
+ import { LowercaseKeys, Merge, Opaque, Prettify, SchemaInputOrType, SchemaOutputOrType, WithoutUnknown } from './type-utils';
+ type MixedSchemaError<A, B> = Opaque<{
+@@ -15,11 +14,11 @@ export declare const ContractNoBody: unique symbol;
+ export type ContractPlainType<T> = Opaque<T, 'ContractPlainType'>;
+ export type ContractNullType = Opaque<typeof NullSymbol, 'ContractNullType'>;
+ export type ContractNoBodyType = typeof ContractNoBody;
+-export type ContractAnyType = z.ZodSchema | StandardSchemaV1<any> | ContractPlainType<unknown> | ContractNullType | null;
++export type ContractAnyType = StandardSchemaV1<any> | ContractPlainType<unknown> | ContractNullType | null;
+ /**
+  * It's the same as ContractAnyType, but it doesn't include standard schema - used for legacy headers support
+  */
+-export type ContractAnyTypeLegacy = z.ZodSchema | ContractPlainType<unknown> | ContractNullType | null;
++export type ContractAnyTypeLegacy = ContractPlainType<unknown> | ContractNullType | null;
+ export type ContractOtherResponse<T extends ContractAnyType> = Opaque<{
+     contentType: string;
+     body: T;
+@@ -93,11 +92,7 @@ export type MergeHeadersWithLegacySupport<A extends AppRouteCommon['headers'], B
+  *
+  * This function serves to deal with the old type
+  */
+-type MergeHeadersLegacy<A, B> = A extends z.AnyZodObject ? B extends z.AnyZodObject ? z.ZodObject<z.objectUtil.MergeShapes<A['shape'], B['shape']>, B['_def']['unknownKeys'], B['_def']['catchall']> : unknown extends B ? A : MixedZodError<A, B> : unknown extends A ? B : B extends z.AnyZodObject ? MixedZodError<A, B> : unknown extends B ? A : Prettify<Merge<A extends ContractPlainType<infer APlain> ? APlain : A, B extends ContractPlainType<infer BPlain> ? BPlain : B>>;
+-type MixedZodError<A, B> = Opaque<{
+-    a: A;
+-    b: B;
+-}, 'MixedZodError'>;
++type MergeHeadersLegacy<A, B> = unknown extends A ? B : unknown extends B ? A : Prettify<Merge<A extends ContractPlainType<infer APlain> ? APlain : A, B extends ContractPlainType<infer BPlain> ? BPlain : B>>;
+ /**
+  * Headers are typed as a Record<string, ContractAnyType>
+  *
+@@ -112,7 +107,7 @@ type IsEmptyObject<T> = keyof T extends never ? {} extends T ? true : false : fa
+ /**
+  * For a given app route, infer the headers input type
+  */
+-export type InferHeadersInput<T extends AppRoute, THeaders = T['headers']> = unknown extends THeaders ? undefined : IsEmptyObject<THeaders> extends true ? {} : THeaders extends z.AnyZodObject ? LowercaseKeys<z.input<THeaders>> : THeaders extends Record<string, ContractAnyType> ? LowercaseKeys<UnknownOrUndefinedObjectValuesToOptionalKeys<{
++export type InferHeadersInput<T extends AppRoute, THeaders = T['headers']> = unknown extends THeaders ? undefined : IsEmptyObject<THeaders> extends true ? {} : THeaders extends Record<string, ContractAnyType> ? LowercaseKeys<UnknownOrUndefinedObjectValuesToOptionalKeys<{
+     [K in keyof THeaders]: THeaders[K] extends ContractAnyType ? SchemaInputOrType<THeaders[K]> : never;
+ }>> : undefined;
+ /**
+@@ -129,7 +124,7 @@ export type UnknownOrUndefinedObjectValuesToOptionalKeys<T> = {
+ /**
+  * For a given app route, infer the headers output type
+  */
+-export type InferHeadersOutput<T extends AppRoute, THeaders = T['headers']> = unknown extends THeaders ? '1' : IsEmptyObject<THeaders> extends true ? {} : THeaders extends z.AnyZodObject ? LowercaseKeys<z.output<THeaders>> : THeaders extends Record<string, ContractAnyType> ? {
++export type InferHeadersOutput<T extends AppRoute, THeaders = T['headers']> = unknown extends THeaders ? '1' : IsEmptyObject<THeaders> extends true ? {} : THeaders extends Record<string, ContractAnyType> ? {
+     [K in keyof THeaders]: THeaders[K] extends ContractAnyType ? LowercaseKeys<SchemaOutputOrType<THeaders[K]>> : never;
+ } : '3';
+ type ApplyOptions<TRoute extends AppRoute, TOptions extends RouterOptions> = Omit<TRoute, 'headers' | 'path' | 'responses'> & WithoutUnknown<{
+diff --git a/src/lib/response-validation-error.d.ts b/src/lib/response-validation-error.d.ts
+index 7104d812323373eff0cc572f86abbde237fa8fb3..33719e3b82fb88ddf911cd64e419cc6224c2012f 100644
+--- a/src/lib/response-validation-error.d.ts
++++ b/src/lib/response-validation-error.d.ts
+@@ -1,4 +1,3 @@
+-import type { ZodError } from 'zod';
+ import { AppRoute } from './dsl';
+ import { StandardSchemaError } from './validation-error';
+ export declare class TsRestResponseValidationError extends Error {
+@@ -6,11 +5,3 @@ export declare class TsRestResponseValidationError extends Error {
+     cause: StandardSchemaError;
+     constructor(appRoute: AppRoute, cause: StandardSchemaError);
+ }
+-/**
+- * @deprecated use TsRestResponseValidationError instead, this will be removed in v4
+- */
+-export declare class ResponseValidationError extends Error {
+-    appRoute: AppRoute;
+-    cause: ZodError;
+-    constructor(appRoute: AppRoute, cause: ZodError);
+-}
+diff --git a/src/lib/standard-schema-utils.d.ts b/src/lib/standard-schema-utils.d.ts
+index 8919db999d25618b49ddae21a646b3b1d20f5dbd..20c647c34fce74580b48bd0f493a900e04c03d65 100644
+--- a/src/lib/standard-schema-utils.d.ts
++++ b/src/lib/standard-schema-utils.d.ts
+@@ -1,4 +1,3 @@
+-import { ZodError } from 'zod';
+ import { StandardSchemaV1 } from './standard-schema';
+ import { StandardSchemaError } from './validation-error';
+ import { ContractAnyType, ContractAnyTypeLegacy } from './dsl';
+@@ -28,7 +27,7 @@ export declare const parseAsStandardSchema: (schema: unknown) => StandardSchemaV
+  */
+ export declare const validateMultiSchemaObject: (data: unknown, schemaObject: Record<string, ContractAnyType> | ContractAnyTypeLegacy | undefined) => {
+     value?: unknown;
+-    error?: StandardSchemaError | ZodError;
++    error?: StandardSchemaError;
+     schemasUsed: Array<StandardSchemaV1<unknown, unknown>>;
+ };
+ /**
+@@ -58,16 +57,12 @@ export declare const validateIfSchema: (data: unknown, schema: unknown, { passTh
+     passThroughExtraKeys?: boolean | undefined;
+ }) => {
+     value?: unknown;
+-    error?: StandardSchemaError | ZodError;
++    error?: StandardSchemaError;
+     schemasUsed: Array<StandardSchemaV1<unknown, unknown>>;
+ };
+ export declare const validateAgainstStandardSchema: (data: unknown, schema: StandardSchemaV1<unknown, unknown>, { passThroughExtraKeys, }?: {
+     passThroughExtraKeys?: boolean | undefined;
+ }) => {
+     value?: unknown;
+-    error?: StandardSchemaError | ZodError;
++    error?: StandardSchemaError;
+ };
+-/**
+- * Use this to decide whether to return the old-style ZodError or the new-style StandardSchemaError
+- */
+-export declare const areAllSchemasLegacyZod: (schemas: (StandardSchemaV1<unknown, unknown> | null | undefined)[]) => boolean;
+diff --git a/src/lib/type-utils.d.ts b/src/lib/type-utils.d.ts
+index 2e0e38a6a26ab90dc72d0702a8b5e4510495f6c3..d1be23928780e823aa1d7dc625c5497cb39ce2c2 100644
+--- a/src/lib/type-utils.d.ts
++++ b/src/lib/type-utils.d.ts
+@@ -1,4 +1,3 @@
+-import type { z } from 'zod';
+ import { ContractNoBodyType, ContractNullType, ContractPlainType } from './dsl';
+ import { StandardSchemaV1 } from './standard-schema';
+ type GetIndexedField<T, K> = K extends keyof T ? T[K] : K extends `${number}` ? '0' extends keyof T ? undefined : number extends keyof T ? T[number] : undefined : undefined;
+@@ -13,10 +12,10 @@ type ExcludeKeysWithoutTypeOf<T, V> = {
+ }[keyof T];
+ export type Without<T, V> = Pick<T, ExcludeKeysWithTypeOf<T, V>>;
+ export type With<T, V> = Pick<T, ExcludeKeysWithoutTypeOf<T, V>>;
+-export type SchemaOutputOrType<T> = T extends ContractNullType ? null : T extends ContractNoBodyType ? undefined : T extends ContractPlainType<infer U> ? U : T extends z.ZodTypeAny ? z.output<T> : T extends StandardSchemaV1 ? StandardSchemaV1.InferOutput<T> : T;
++export type SchemaOutputOrType<T> = T extends ContractNullType ? null : T extends ContractNoBodyType ? undefined : T extends ContractPlainType<infer U> ? U : T extends StandardSchemaV1 ? StandardSchemaV1.InferOutput<T> : T;
+ /** @deprecated use SchemaOutputOrType */
+ export type ZodInferOrType<T> = SchemaOutputOrType<T>;
+-export type SchemaInputOrType<T> = T extends ContractNullType ? null : T extends ContractNoBodyType ? undefined : T extends ContractPlainType<infer U> ? U : T extends z.ZodTypeAny ? z.input<T> : T extends StandardSchemaV1 ? StandardSchemaV1.InferInput<T> : T;
++export type SchemaInputOrType<T> = T extends ContractNullType ? null : T extends ContractNoBodyType ? undefined : T extends ContractPlainType<infer U> ? U : T extends StandardSchemaV1 ? StandardSchemaV1.InferInput<T> : T;
+ /** @deprecated use SchemaInputOrType */
+ export type ZodInputOrType<T> = SchemaInputOrType<T>;
+ export type Merge<T, U> = Omit<T, keyof U> & U;
+diff --git a/src/lib/validation-error.d.ts b/src/lib/validation-error.d.ts
+index 16a523ae8d9b1afb8786a1c1e26c74d39ff0ac13..0de81273d88f78eca64a958eef03194a5f073cd7 100644
+--- a/src/lib/validation-error.d.ts
++++ b/src/lib/validation-error.d.ts
+@@ -1,4 +1,3 @@
+-import { z, type ZodError } from 'zod';
+ import { StandardSchemaV1 } from './standard-schema';
+ /**
+  * The error class for standard schema validation errors.
+@@ -10,2014 +9,4 @@ export declare class StandardSchemaError extends Error implements StandardSchema
+     constructor(issues: ReadonlyArray<StandardSchemaV1.Issue>);
+     toString(): string;
+ }
+-export declare const validationErrorResponse: (error: ZodError | StandardSchemaError) => Pick<ZodError | StandardSchemaError, 'name' | 'issues'>;
+-/**
+- * Schema was added in https://github.com/ts-rest/ts-rest/pull/601
+- *
+- * @deprecated supports zod 3, does not support other validators, you can bring your own schema, from next major version this will be removed
+- */
+-export declare const RequestValidationErrorSchema: z.ZodObject<{
+-    message: z.ZodLiteral<"Request validation failed">;
+-    pathParameterErrors: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    headerErrors: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    queryParameterErrors: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    bodyErrors: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-}, "strip", z.ZodTypeAny, {
+-    message: "Request validation failed";
+-    pathParameterErrors: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    headerErrors: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    queryParameterErrors: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    bodyErrors: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-}, {
+-    message: "Request validation failed";
+-    pathParameterErrors: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    headerErrors: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    queryParameterErrors: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    bodyErrors: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-}>;
+-/**
+- * Schema was added in https://github.com/ts-rest/ts-rest/pull/601
+- *
+- * @deprecated supports zod 3, does not support other validators, you can bring your own schema, from next major version this will be removed
+- */
+-export declare const RequestValidationErrorSchemaWithoutMessage: z.ZodObject<{
+-    pathParameterErrors: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    headerErrors: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    queryParameterErrors: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    bodyErrors: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-}, "strip", z.ZodTypeAny, {
+-    pathParameterErrors: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    headerErrors: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    queryParameterErrors: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    bodyErrors: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-}, {
+-    pathParameterErrors: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    headerErrors: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    queryParameterErrors: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    bodyErrors: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-}>;
+-/**
+- * Schema was added in https://github.com/ts-rest/ts-rest/pull/601
+- *
+- * @deprecated supports zod 3, does not support other validators, you can bring your own schema, from next major version this will be removed
+- */
+-export declare const RequestValidationErrorSchemaForNest: z.ZodObject<{
+-    paramsResult: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    headersResult: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    queryResult: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-    bodyResult: z.ZodNullable<z.ZodObject<{
+-        name: z.ZodLiteral<"ZodError">;
+-        issues: z.ZodArray<z.ZodObject<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, "strip", z.ZodAny, z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">, z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">>, "many">;
+-    }, "strip", z.ZodTypeAny, {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }, {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    }>>;
+-}, "strip", z.ZodTypeAny, {
+-    paramsResult: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    headersResult: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    queryResult: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    bodyResult: {
+-        name: "ZodError";
+-        issues: z.objectOutputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-}, {
+-    paramsResult: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    headersResult: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    queryResult: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-    bodyResult: {
+-        name: "ZodError";
+-        issues: z.objectInputType<{
+-            path: z.ZodArray<z.ZodUnion<[z.ZodString, z.ZodNumber]>, "many">;
+-            message: z.ZodOptional<z.ZodString>;
+-            code: z.ZodNativeEnum<{
+-                invalid_type: "invalid_type";
+-                invalid_literal: "invalid_literal";
+-                custom: "custom";
+-                invalid_union: "invalid_union";
+-                invalid_union_discriminator: "invalid_union_discriminator";
+-                invalid_enum_value: "invalid_enum_value";
+-                unrecognized_keys: "unrecognized_keys";
+-                invalid_arguments: "invalid_arguments";
+-                invalid_return_type: "invalid_return_type";
+-                invalid_date: "invalid_date";
+-                invalid_string: "invalid_string";
+-                too_small: "too_small";
+-                too_big: "too_big";
+-                invalid_intersection_types: "invalid_intersection_types";
+-                not_multiple_of: "not_multiple_of";
+-                not_finite: "not_finite";
+-            }>;
+-        }, z.ZodAny, "strip">[];
+-    } | null;
+-}>;
++export declare const validationErrorResponse: (error: StandardSchemaError) => Pick<StandardSchemaError, 'name' | 'issues'>;
+diff --git a/src/lib/zod-utils.d.ts b/src/lib/zod-utils.d.ts
+deleted file mode 100644
+index 606938a20109d506a178933dd5563d74ca1ff1e6..0000000000000000000000000000000000000000

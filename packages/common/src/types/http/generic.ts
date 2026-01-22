@@ -1,7 +1,7 @@
 import type { Dictionary } from '../common';
-import { z } from '../../util';
+import { z } from 'zod';
 
-export const bigIntString = z.bigint().or(z.number().or(z.string()).pipe(z.coerce.number().int())).pipe(z.coerce.string());
+export const bigIntString = z.bigint().or(z.number().or(z.string()).pipe(z.coerce.number<number>().int())).pipe(z.coerce.string());
 export const uuid = z.string().uuid();
 export const safeIdentifier = z.string().min(1).regex(/^[\w-]*$/);
 
@@ -19,7 +19,7 @@ export const captcha = z
   .string()
   .nullish()
   .transform(val => val || undefined)
-  .openapi({ description: 'Captcha token if enabled' });
+  .meta({ description: 'Captcha token if enabled' });
 
 export const paginationRequest = z.object({
   page: z.coerce.number().int().min(1).optional(),

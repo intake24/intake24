@@ -1,5 +1,6 @@
 import { getSupportedRegionCodes, parsePhoneNumber } from 'awesome-phonenumber';
 import validator from 'validator';
+import { z } from 'zod';
 import {
   groupedRecallPrompts,
   meal,
@@ -10,7 +11,6 @@ import {
   surveyRatings,
   surveyStatuses,
 } from '@intake24/common/surveys';
-import { z } from '../../util';
 import { userCustomField } from '../common';
 import { faqSection } from './admin';
 import { feedbackSchemeResponse } from './feedback';
@@ -76,25 +76,25 @@ export type SurveyEntryResponse = z.infer<typeof surveyEntryResponse>;
 export type SchemeEntryResponse = SurveyEntryResponse['surveyScheme'];
 
 export const surveyUserInfoResponse = z.object({
-  userId: z.string().openapi({ title: 'Internal (numerical) Intake24 user ID' }),
-  name: z.string().nullable().openapi({
+  userId: z.string().meta({ title: 'Internal (numerical) Intake24 user ID' }),
+  name: z.string().nullable().meta({
     title: 'Optional user name for personalization',
   }),
-  customFields: z.record(z.string(), z.string()).openapi({
+  customFields: z.record(z.string(), z.string()).meta({
     description: 'Public user custom fields',
   }),
-  submissions: z.number().openapi({ description: 'Number of collected submissions' }),
-  showFeedback: z.boolean().openapi({ description: 'Whether to show feedback' }),
-  maximumTotalSubmissionsReached: z.boolean().openapi({
+  submissions: z.number().meta({ description: 'Number of collected submissions' }),
+  showFeedback: z.boolean().meta({ description: 'Whether to show feedback' }),
+  maximumTotalSubmissionsReached: z.boolean().meta({
     description: 'Whether the user has reached the maximum number of submissions',
   }),
-  maximumDailySubmissionsReached: z.boolean().openapi({
+  maximumDailySubmissionsReached: z.boolean().meta({
     description: 'Whether the user has reached the maximum number of submissions per day',
   }),
   followUpUrl: z
     .union([z.string(), z.record(z.string(), z.string())])
     .nullish()
-    .openapi({ description: 'Optional follow-up URL for user redirect' }),
+    .meta({ description: 'Optional follow-up URL for user redirect' }),
 });
 
 export type SurveyUserInfoResponse = z.infer<typeof surveyUserInfoResponse>;

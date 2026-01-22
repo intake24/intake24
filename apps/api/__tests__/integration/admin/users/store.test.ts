@@ -10,7 +10,7 @@ export default () => {
   const permissions = ['acl', 'users', 'users:create'];
 
   let input: UserRequest;
-  let output: Omit<UserInput, 'permissions' | 'roles'>;
+  let output: Omit<UserInput, 'password' | 'permissions' | 'roles'>;
 
   beforeAll(async () => {
     input = mocker.system.user();

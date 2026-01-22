@@ -4,11 +4,10 @@ import { pick } from 'lodash-es';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type {
-  FoodEntry,
   FoodInput,
   FoodsResponse,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery } from '@intake24/db';
+import type { Food, PaginateQuery } from '@intake24/db';
 import { SystemLocale } from '@intake24/db';
 
 function adminFoodController({
@@ -54,7 +53,7 @@ function adminFoodController({
 
   const read = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response<FoodEntry>,
+    res: Response<Food>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -73,7 +72,7 @@ function adminFoodController({
 
   const readByCode = async (
     req: Request<{ foodCode: string; localeId: string }>,
-    res: Response<FoodEntry>,
+    res: Response<Food>,
   ): Promise<void> => {
     const { foodCode, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -92,7 +91,7 @@ function adminFoodController({
 
   const update = async (
     req: Request<{ foodId: string; localeId: string }, any, FoodInput>,
-    res: Response<FoodEntry>,
+    res: Response<Food>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
@@ -126,7 +125,7 @@ function adminFoodController({
 
   const copy = async (
     req: Request<{ foodId: string; localeId: string }>,
-    res: Response<FoodEntry>,
+    res: Response<Food>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;
     const input = req.body;
