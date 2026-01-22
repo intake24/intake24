@@ -34,9 +34,9 @@ export type RedisStoreType = (typeof redisStoreTypes)[number];
 export const CleanRedisStore = z.object({
   store: z.enum(redisStoreTypes).array(),
 });
-export const CleanStorageFiles = z.record(z.never());
-export const FeedbackSchemesSync = z.record(z.never());
-export const LanguageTranslationsSync = z.record(z.never());
+export const CleanStorageFiles = z.record(z.string(), z.never());
+export const FeedbackSchemesSync = z.record(z.string(), z.never());
+export const LanguageTranslationsSync = z.record(z.string(), z.never());
 export const LocaleIndexBuild = z.object({
   force: z.boolean().optional(),
 });
@@ -76,7 +76,7 @@ export const PopularitySearchUpdateCounters = z.object({
   localeCode: z.string(),
   foodCodes: z.array(z.string()),
 });
-export const PurgeExpiredTokens = z.record(z.never());
+export const PurgeExpiredTokens = z.record(z.string(), z.never());
 
 export const resources = [
   'as-served-sets',

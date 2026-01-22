@@ -108,7 +108,7 @@ export const basePrompt = z.object({
   id: z.string().min(1).max(64),
   name: z.string().min(1).max(128),
   version: z.number(),
-  i18n: z.record(localeTranslation),
+  i18n: z.record(z.string(), localeTranslation),
   actions: actions.optional(),
   conditions: condition.array(),
   useGraph: z.boolean(),

@@ -1,5 +1,4 @@
 import { initContract } from '@ts-rest/core';
-import validator from 'validator';
 import { z } from 'zod';
 import { strongPasswordWithConfirm } from '@intake24/common/security';
 import { captcha, loginResponse } from '@intake24/common/types/http';
@@ -48,7 +47,7 @@ export const signUp = initContract().router({
     method: 'POST',
     path: '/admin/sign-up/verify',
     body: z.object({
-      token: z.string().refine(value => validator.isJWT(value), { message: 'Token must be a valid JWT' }),
+      token: z.string().jwt(),
     }),
     responses: {
       200: z.undefined(),

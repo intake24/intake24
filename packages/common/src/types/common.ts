@@ -56,13 +56,13 @@ export const environmentOptions = ['development', 'test', 'production'] as const
 
 export type Environment = (typeof environmentOptions)[number];
 
-export const localeTranslation = z.record(z.string().nullable());
+export const localeTranslation = z.record(z.string(), z.string().nullable());
 
 export type LocaleTranslation = z.infer<typeof localeTranslation>;
 
 export const requiredLocaleTranslation = z.intersection(
   z.object({ en: z.string() }),
-  z.record(z.string().nullable()),
+  z.record(z.string(), z.string().nullable()),
 );
 export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation>;
 
@@ -70,7 +70,7 @@ export function requiredLocaleTranslationWithLimit(options: { min?: number; max:
   const { min = 1, max } = options;
   return z.intersection(
     z.object({ en: z.string().min(min).max(max) }),
-    z.record(z.string().min(min).max(max).nullable()),
+    z.record(z.string(), z.string().min(min).max(max).nullable()),
   );
 }
 
@@ -94,7 +94,7 @@ export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>({ valueSc
     z.object({
       en: z.array(listOption(valueSchema)),
     }),
-    z.record(z.array(listOption(valueSchema))),
+    z.record(z.string(), z.array(listOption(valueSchema))),
   );
 
   if (!limit)
@@ -121,7 +121,7 @@ export function categoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber>(v
     z.object({
       _default: localeOptionList({ valueSchema }),
     }),
-    z.record(localeOptionList({ valueSchema })),
+    z.record(z.string(), localeOptionList({ valueSchema })),
   );
 }
 

@@ -58,7 +58,7 @@ export const languageTranslationAttributes = z.object({
   languageId: z.string(),
   application: z.enum(applications),
   section: z.string().min(1).max(64),
-  messages: z.record(z.any()), // TODO: fix (messages: jsonObjectSchema,)
+  messages: z.record(z.string(), z.any()), // TODO: fix (messages: jsonObjectSchema,)
   createdAt: z.date(),
   updatedAt: z.date(),
 });

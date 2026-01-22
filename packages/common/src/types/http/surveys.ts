@@ -78,7 +78,7 @@ export const surveyUserInfoResponse = z.object({
   name: z.string().nullable().openapi({
     title: 'Optional user name for personalization',
   }),
-  customFields: z.record(z.string()).openapi({
+  customFields: z.record(z.string(), z.string()).openapi({
     description: 'Public user custom fields',
   }),
   submissions: z.number().openapi({ description: 'Number of collected submissions' }),
@@ -90,7 +90,7 @@ export const surveyUserInfoResponse = z.object({
     description: 'Whether the user has reached the maximum number of submissions per day',
   }),
   followUpUrl: z
-    .union([z.string(), z.record(z.string())])
+    .union([z.string(), z.record(z.string(), z.string())])
     .nullish()
     .openapi({ description: 'Optional follow-up URL for user redirect' }),
 });

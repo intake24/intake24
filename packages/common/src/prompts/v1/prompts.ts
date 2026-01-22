@@ -98,7 +98,7 @@ export type PromptValidationWithLimits = z.infer<typeof promptValidationWithLimi
 export const basePrompt = z.object({
   id: z.string(),
   name: z.string(),
-  i18n: z.record(localeTranslation),
+  i18n: z.record(z.string(), localeTranslation),
   actions: actions.optional(),
   conditions: condition.array(),
 });

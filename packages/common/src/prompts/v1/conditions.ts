@@ -50,12 +50,12 @@ const flagCondition = baseCondition.extend({
 
 const foodCategoryCondition = baseCondition.extend({
   type: z.literal('foodCategory'),
-  props: z.record(z.never()),
+  props: z.record(z.string(), z.never()),
 });
 
 const mealsCondition = baseCondition.extend({
   type: z.literal('meals'),
-  props: z.record(z.never()),
+  props: z.record(z.string(), z.never()),
 });
 
 const promptAnswerCondition = baseCondition.extend({
@@ -75,7 +75,7 @@ const propertyCondition = baseCondition.extend({
 
 const recallNumberCondition = baseCondition.extend({
   type: z.literal('recallNumber'),
-  props: z.record(z.never()),
+  props: z.record(z.string(), z.never()),
 });
 
 export const conditions = z.object({

@@ -13,7 +13,7 @@ import { categoryAttributes } from './categories';
 import { nutrientTableRecordAttributes } from './nutrient-tables';
 import { foodPortionSizeMethodAttributes } from './portion-size-methods';
 
-export const altNames = z.record(z.string().array());
+export const altNames = z.record(z.string(), z.string().array());
 export type AltNames = z.infer<typeof altNames>;
 
 export type CreateFoodRequest = {

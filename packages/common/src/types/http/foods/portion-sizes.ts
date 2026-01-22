@@ -52,7 +52,7 @@ export const guideImageResponse = z.object({
   description: z.string(),
   label: localeTranslation,
   imageMap: imageMapResponse,
-  objects: z.record(z.object({ label: localeTranslation, weight: z.number() })),
+  objects: z.record(z.string(), z.object({ label: localeTranslation, weight: z.number() })),
 });
 
 export type GuideImageResponse = z.infer<typeof guideImageResponse>;
@@ -88,7 +88,7 @@ export type StandardUnitResponse = z.infer<typeof standardUnitResponse>;
 export const weightResponse = z.object({
   method: z.literal('weight'),
   description: z.string(),
-  parameters: z.record(z.never()),
+  parameters: z.record(z.string(), z.never()),
   imageUrl: z.string(),
   useForRecipes: z.boolean(),
   conversionFactor: z.number(),

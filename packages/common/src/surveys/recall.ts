@@ -198,7 +198,7 @@ export const surveyState = z.object({
   uxSessionId: z.string().uuid(),
   userAgent: z.string().nullish(),
   flags: surveyFlag.array(),
-  customPromptAnswers: z.record(customPromptAnswer),
+  customPromptAnswers: z.record(z.string(), customPromptAnswer),
   selection,
   meals: mealState.array(),
   wakeUpTime: z.string().time().nullable(),

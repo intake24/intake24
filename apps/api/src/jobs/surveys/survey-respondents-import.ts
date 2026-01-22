@@ -22,7 +22,7 @@ const csvRow = z.intersection(
     email: z.string().max(512).email().toLowerCase().optional().transform(val => val || undefined),
     phone: z.string().max(32).optional().transform(val => val || undefined),
   }),
-  z.record(z.string().transform(val => val || undefined)),
+  z.record(z.string(), z.string().transform(val => val || undefined)),
 );
 
 export type CSVRow = z.infer<typeof csvRow>;
