@@ -1,12 +1,11 @@
 import { z } from 'zod';
-
+import { pathways } from '@intake24/common/surveys';
 import {
   drinkwareScaleEntry,
   drinkwareScaleV2Entry,
   drinkwareSetEntry,
 } from '@intake24/common/types/http/admin';
-
-import { localeTranslation, requiredLocaleTranslation } from '../..';
+import { localeTranslation, requiredLocaleTranslation } from '../../common';
 
 export const asServedImageResponse = z.object({
   label: localeTranslation,
@@ -90,7 +89,8 @@ export const weightResponse = z.object({
   description: z.string(),
   parameters: z.record(z.string(), z.never()),
   imageUrl: z.string(),
-  useForRecipes: z.boolean(),
+  pathways: z.enum(pathways).array(),
+  defaultWeight: z.number().nonnegative().nullable(),
   conversionFactor: z.number(),
 });
 

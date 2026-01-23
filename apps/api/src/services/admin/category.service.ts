@@ -339,8 +339,9 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
                 ...pick(psm, [
                   'method',
                   'description',
-                  'useForRecipes',
+                  'pathways',
                   'conversionFactor',
+                  'defaultWeight',
                   'orderBy',
                   'parameters',
                 ]),

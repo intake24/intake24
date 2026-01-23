@@ -21,7 +21,7 @@ describe('testing Component', () => {
         imageUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Fries_2.jpg/800px-Fries_2.jpg',
         // imageUrl: 'https://bad.src',
-        useForRecipes: false,
+        pathways: ['search', 'afp'],
         conversionFactor: 0.0,
         parameters: {
           'serving-image-set': 'lasagne',

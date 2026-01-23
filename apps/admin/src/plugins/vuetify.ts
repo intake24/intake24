@@ -67,6 +67,10 @@ export default createVuetify({
     VCheckboxBtn: {
       hideDetails: 'auto',
     },
+    VNumberInput: {
+      hideDetails: 'auto',
+      variant: 'outlined',
+    },
     VSwitch: {
       hideDetails: 'auto',
       color: 'primary',

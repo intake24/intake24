@@ -27,6 +27,7 @@
     "customFields": "Custom fields",
     "dataExport": "Data export",
     "demographicGroups": "Demographic groups",
+    "defaultWeight": "Default weight",
     "description": "Description",
     "disabledAt": "Disabled at",
     "displayName": "Display name",
@@ -96,6 +97,7 @@
       "file": "File",
       "targetAlgorithm": "Sorting algorithm type"
     },
+    "pathways": "Pathways",
     "permissions": "Permissions",
     "phone": "Phone",
     "physicalActivityLevelId": "Physical activity level",
@@ -143,7 +145,6 @@
     "translations": "Translations",
     "type": "Type",
     "tzOffset": "Timezone offset",
-    "useForRecipes": "Use for recipes",
     "userId": "User ID",
     "userPersonalIdentifiers": "User personal identifiers",
     "userCustomFields": "User custom fields",

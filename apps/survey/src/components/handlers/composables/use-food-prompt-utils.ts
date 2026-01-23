@@ -1,6 +1,6 @@
 import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, PortionSizeMethodId, PortionSizeStates } from '@intake24/common/surveys';
-import type { UserFoodData } from '@intake24/common/types/http';
+import type { EncodedFood, FoodFlag, FoodState, Pathway, PortionSizeMethodId, PortionSizeState, PortionSizeStates } from '@intake24/common/surveys';
+import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 
 import { computed } from 'vue';
 
@@ -61,7 +61,6 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
 
   const encodedFood = computed(() => {
     if (food.value.type !== 'encoded-food') {
-      console.log(food.value);
       throw new Error('This selected food must be an encoded food');
     }
 
@@ -101,13 +100,41 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
 
   const foodName = computed(() => ({ en: encodedFood.value.data.localName }));
 
+  const pathway = computed(() => {
+    const parent = parentFoodOptional.value;
+    if (!parent)
+      return 'search';
+
+    if (parent.type === 'encoded-food')
+      return 'afp';
+
+    if (parent.type === 'recipe-builder')
+      return 'recipe';
+
+    return 'search';
+  });
+
+  function getPortionSizeMethods(methods: UserPortionSizeMethod[], pathway: Pathway, parent?: FoodState) {
+    return methods
+      .map((method, index) => ({ ...method, index }))
+      .filter(
+        ({ method, pathways }) => {
+          if (!survey.registeredPortionSizeMethods.includes(method))
+            return false;
+
+          if (!pathways.includes(pathway))
+            return false;
+
+          if (parentFoodRequiredPSMs.includes(method) && !parent)
+            return false;
+
+          return true;
+        },
+      );
+  }
+
   const portionSizeMethods = computed(() =>
-    encodedFood.value.data.portionSizeMethods.map((item, index) => ({ ...item, index })).filter(
-      item =>
-        survey.registeredPortionSizeMethods.includes(item.method)
-        && (!parentFoodRequiredPSMs.includes(item.method) || !!parentFoodOptional.value),
-    ),
-  );
+    getPortionSizeMethods(encodedFood.value.data.portionSizeMethods, pathway.value, parentFoodOptional.value));
 
   const portionSize = computed(() => {
     const selectedFood = encodedFood.value;
@@ -116,6 +143,33 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
 
     return selectedFood.data.portionSizeMethods[selectedFood.portionSizeMethodIndex];
   });
+
+  function resolvePortionSize(methods: UserPortionSizeMethod[], pathway: Pathway, parent?: FoodState) {
+    const flags: FoodFlag[] = [];
+    let portionSizeMethodIndex: number | null = null;
+    let portionSize: PortionSizeState | null = null;
+
+    const portionSizeMethods = getPortionSizeMethods(methods, pathway, parent);
+    const autoPsmIdx = portionSizeMethods.findIndex(psm => psm.defaultWeight !== null);
+    const autoPsm = autoPsmIdx !== -1 ? portionSizeMethods.at(autoPsmIdx) : undefined;
+    if (autoPsm?.defaultWeight) {
+      portionSizeMethodIndex = autoPsmIdx;
+      portionSize = {
+        method: 'direct-weight',
+        mode: 'auto',
+        servingWeight: autoPsm.defaultWeight * autoPsm.conversionFactor,
+        leftoversWeight: 0,
+        quantity: autoPsm.defaultWeight,
+      };
+      flags.push('portion-size-option-complete', 'portion-size-method-complete');
+    }
+    else if (portionSizeMethods.length === 1) {
+      portionSizeMethodIndex = 0;
+      flags.push('portion-size-option-complete');
+    }
+
+    return { flags, portionSizeMethodIndex, portionSize };
+  }
 
   const linkedQuantityCategories = (data: UserFoodData) =>
     survey.linkedQuantity?.parent.filter(cat => data.categories.includes(cat.code)) ?? [];
@@ -183,6 +237,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     encodedFood,
     encodedFoodPortionSizeData,
     encodedFoodOptional,
+    resolvePortionSize,
     freeTextFood,
     foodName,
     initializeRecipeComponents,

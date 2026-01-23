@@ -1,3 +1,4 @@
+import { pathways as defaultPathways } from '@intake24/common/surveys';
 import type { PortionSizeMethod } from '@intake24/common/surveys';
 
 import { useI18n } from '@intake24/ui';
@@ -21,8 +22,9 @@ export type PortionSizeMethodDialog = {
 
 export const psmDefaultAttributes: Omit<PortionSizeMethodItem, 'id' | 'method'> = {
   description: '',
-  useForRecipes: false,
+  pathways: ['search'],
   conversionFactor: 1,
+  defaultWeight: null,
   orderBy: '0',
   parameters: {},
 };
@@ -167,6 +169,11 @@ export function usePortionSizeMethods() {
     title: i18n.t(`fdbs.portionSizes.methods.${value}._`),
   }));
 
+  const pathways = defaultPathways.map(value => ({
+    value,
+    title: i18n.t(`fdbs.portionSizes.pathways.${value}`),
+  }));
+
   const selections = Object.keys(portionSizeSelectionImages)
     .map(value => ({
       value,
@@ -177,5 +184,5 @@ export function usePortionSizeMethods() {
     title: string;
   }[];
 
-  return { estimationMethods, selections };
+  return { estimationMethods, pathways, selections };
 }

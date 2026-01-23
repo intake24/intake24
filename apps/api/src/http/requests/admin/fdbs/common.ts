@@ -5,6 +5,7 @@ import { ZodError } from 'zod';
 
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import {
+  pathways,
   portionSizeMethods as portionSizeMethodIds,
   portionSizeParameter,
 } from '@intake24/common/surveys';
@@ -113,16 +114,29 @@ export const portionSizeMethods: Schema = {
     isEmpty: { negated: true },
     isLength: { bail: true, options: { max: 256 } },
   },
-  'portionSizeMethods.*.useForRecipes': {
+  'portionSizeMethods.*.pathways': {
     in: ['body'],
-    errorMessage: typeErrorMessage('boolean._', { attributePath: 'useForRecipes' }),
-    isBoolean: { options: { strict: true } },
+    errorMessage: typeErrorMessage('boolean._', { attributePath: 'pathways' }),
+    isIn: {
+      options: [pathways],
+      errorMessage: typeErrorMessage('in.options', {
+        attributePath: 'pathways',
+        options: pathways,
+      }),
+    },
   },
   'portionSizeMethods.*.conversionFactor': {
     in: ['body'],
     errorMessage: typeErrorMessage('float._', { attributePath: 'conversionFactor' }),
     isFloat: true,
     toFloat: true,
+  },
+  'portionSizeMethods.*.defaultWeight': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('float._', { attributePath: 'defaultWeight' }),
+    isFloat: true,
+    toFloat: true,
+    optional: { options: { nullable: true } },
   },
   'portionSizeMethods.*.orderBy': {
     in: ['body'],

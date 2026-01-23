@@ -89,8 +89,15 @@
     "parameters": "Paramètres",
     "noParameters": "La méthode ne présente pas plus de paramètres.",
     "description": "Description",
-    "useForRecipes": "Utiliser pour les recettes",
+    "pathways": {
+      "_": "Voies",
+      "addon": "Aliment additionnel",
+      "afp": "Aliment associé",
+      "recipe": "Ingrédient de recette",
+      "search": "Recherche d'aliments"
+    },
     "conversionFactor": "Facteur de conversion",
+    "defaultWeight": "Quantité par défaut (g)",
     "labels": "Libellés de la photo à curseur",
     "multiple": "Permettre la spécification de plusieurs éléments",
     "methods": {

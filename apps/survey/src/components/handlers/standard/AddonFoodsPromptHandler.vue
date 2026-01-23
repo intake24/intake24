@@ -99,7 +99,7 @@ function commitAnswer() {
         return acc;
 
       const portionSizeMethodIndex = data.portionSizeMethods.findIndex(psm =>
-        psm.method === portionSize.method
+        psm.method === portionSize.method && psm.pathways.includes('addon')
         && (psm.parameters as PortionSizeParameters['standard-portion']).units.find(unit => unit.name === portionSize.unit?.name));
 
       acc.push(

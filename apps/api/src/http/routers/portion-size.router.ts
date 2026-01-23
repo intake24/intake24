@@ -132,8 +132,9 @@ export function portionSize() {
           description: 'weight',
           parameters: {},
           imageUrl: `${imagesBaseUrl}/portion/weight.png`,
-          useForRecipes: true,
+          pathways: ['search', 'afp', 'recipe'],
           conversionFactor: 1.0,
+          defaultWeight: null,
         },
       };
     },
