@@ -1,6 +1,5 @@
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import type { IoC } from '@intake24/api/ioc';
-import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 
 import { GoogleGenAI } from '@google/genai';
@@ -8,9 +7,7 @@ import { GoogleGenAI } from '@google/genai';
 import foodIndex from '@intake24/api/food-index';
 import { applyDefaultSearchQueryParameters } from '@intake24/api/food-index/search-query';
 
-// const ATTR_USE_ANYWHERE = 0;
-const ATTR_AS_REGULAR_FOOD_ONLY = 1;
-const ATTR_AS_RECIPE_INGREDIENT_ONLY = 2;
+import { acceptForQuery, buildAttributeResolvers } from './attribute-filters';
 
 function foodSearchService({
   inheritableAttributesService,
@@ -20,43 +17,11 @@ function foodSearchService({
   logger: globalLogger,
 }: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig' | 'logger'>) {
   const logger = globalLogger.child({ service: 'FoodSearchService' });
-
-  function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
-    const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
-
-    switch (attr) {
-      case ATTR_AS_REGULAR_FOOD_ONLY:
-        return !recipe;
-      case ATTR_AS_RECIPE_INGREDIENT_ONLY:
-        return recipe;
-      default:
-        return true;
-    }
-  }
-
-  const resolveCategoryAttributes = async (categoryIds: string[]): Promise<Record<string, InheritableAttributes>> => {
-    const data = await Promise.all(
-      categoryIds.map(id => inheritableAttributesService.resolveCategoryAttributes(id)),
-    );
-
-    return Object.fromEntries(categoryIds.map((id, index) => [id, data[index]]));
-  };
-
-  const resolveFoodAttributes = async (foodIds: string[]): Promise<Record<string, InheritableAttributes>> => {
-    const data = await Promise.all(
-      foodIds.map(id => inheritableAttributesService.resolveFoodAttributes(id)),
-    );
-
-    return Object.fromEntries(foodIds.map((id, index) => [id, data[index]]));
-  };
-
-  const getCategoryAttributes = async (categoryIds: string[]): Promise<Record<string, InheritableAttributes | null>> => {
-    return cache.rememberMany(categoryIds, 'category-attributes', cacheConfig.ttl, resolveCategoryAttributes);
-  };
-
-  const getFoodAttributes = async (foodIds: string[]): Promise<Record<string, InheritableAttributes | null>> => {
-    return cache.rememberMany(foodIds, 'food-attributes', cacheConfig.ttl, resolveFoodAttributes);
-  };
+  const { getCategoryAttributes, getFoodAttributes } = buildAttributeResolvers({
+    inheritableAttributesService,
+    cache,
+    cacheConfig,
+  });
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);
@@ -98,11 +63,7 @@ function foodSearchService({
       const prompt = `User searched for: "${query}"
 Primary matches are found:
 ${foodNames.join(', ')}
-<<<<<<< HEAD
-Based on the query, primary matches and corresponding word distances, generate a brief, helpful tooltip (max 80 chars) to help the user refine their food search.
-=======
 Based on the query, primary matches and corresponding word distances, generate a brief, helpful tooltip hints (30 words max) to help the user refine their food search.
->>>>>>> a31d1df0f (fix(api): Use gemini-2.5-flash-lite to improve speed, instruction prompt improvement.)
 
 If results are poor (such as distance > 0.15), suggest specific food, or altering terms.
 If multiple similar results (such as distance among top 3 < 0.005), suggest adding details.

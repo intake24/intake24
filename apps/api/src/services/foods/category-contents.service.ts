@@ -1,5 +1,4 @@
 import type { IoC } from '@intake24/api/ioc';
-import { useInRecipeTypes } from '@intake24/common/types/foods';
 import type {
   CategoryContents,
   CategoryHeader,
@@ -17,10 +16,20 @@ import {
   QueryTypes,
 } from '@intake24/db';
 
+import { acceptForQuery, buildAttributeResolvers } from './attribute-filters';
+
 function categoryContentsService({
   adminCategoryService,
   db,
-}: Pick<IoC, 'db' | 'adminCategoryService'>) {
+  inheritableAttributesService,
+  cache,
+  cacheConfig,
+}: Pick<IoC, 'db' | 'adminCategoryService' | 'inheritableAttributesService' | 'cache' | 'cacheConfig'>) {
+  const { getCategoryAttributes } = buildAttributeResolvers({
+    inheritableAttributesService,
+    cache,
+    cacheConfig,
+  });
   const filterUndefined = (
     headers: { id: string; code: string; name?: string | null }[],
   ): (CategoryHeader | FoodHeader)[] =>
@@ -29,12 +38,16 @@ function categoryContentsService({
   const getRootCategories = async (localeCode: string): Promise<CategoryContents> => {
     const categories = await adminCategoryService.getRootCategories(localeCode);
 
+    const catIds = categories.map(({ id }) => id);
+    const categoryAttrs = await getCategoryAttributes(catIds);
+    const isRecipe = false; // Root categories are not recipes
+
     return {
       header: { id: '', code: '', name: 'Root' },
       foods: [],
       subcategories: categories
         .filter(({ hidden }) => !hidden)
-        .filter(({ useInRecipes }) => useInRecipes !== useInRecipeTypes.USE_AS_RECIPE_INGREDIENT)
+        .filter(category => acceptForQuery(isRecipe, categoryAttrs[category.id]?.useInRecipes))
         .map(({ id, code, name }) => ({ id, code, name })),
     };
   };
