@@ -48,6 +48,7 @@ export interface ConsistencyCheckOptions {
   checkNutrients?: boolean;
   checkPortionSizes?: boolean;
   checkAssociatedFoods?: boolean;
+  nutrientTableMapping?: Record<string, string>;
 }
 
 interface FoodRow {
@@ -254,6 +255,7 @@ class ConsistencyChecker {
   private csvParser: CsvParserService;
   private foodDataParser: FoodDataParserService;
   private currentLocaleId: string = '';
+  private nutrientTableMapping: Record<string, string> = {};
 
   constructor() {
     this.logger = mainLogger.child({ service: 'Consistency Checker' });
@@ -293,6 +295,7 @@ class ConsistencyChecker {
   async verifyConsistency(options: ConsistencyCheckOptions): Promise<ConsistencyReport> {
     this.logger.info(`🔍 Starting consistency verification for ${options.localeId}`);
     this.currentLocaleId = options.localeId;
+    this.nutrientTableMapping = options.nutrientTableMapping || {};
 
     try {
       // Initialize database connection for direct queries
@@ -398,7 +401,7 @@ class ConsistencyChecker {
       sameAsBeforeOption: this.getColumnValue(record, ['same_as_before_option']),
       reasonableAmount: this.getColumnValue(record, ['reasonable_amount']),
       useInRecipes: this.getColumnValue(record, ['use_in_recipes']),
-      associatedFood: this.getColumnValue(record, ['associated_food_category', 'associated_food', 'associated_food__category']),
+      associatedFood: this.getColumnValue(record, this.getAssociatedFoodAliases()),
       brandNames: this.getColumnValue(record, ['brand_names']),
       synonyms: this.getColumnValue(record, ['synonyms']),
       brandNamesAsSearchTerms: this.getColumnValue(record, ['brand_names_as_search_terms']),
@@ -441,6 +444,33 @@ class ConsistencyChecker {
 
     // Default aliases for non-Malaysian locales
     return ['local_description', 'local_name'];
+  }
+
+  /**
+   * Get locale-aware column aliases for associated food fields.
+   * Malaysian locales have language-specific columns like "Associated Food / Category (Malay)".
+   */
+  private getAssociatedFoodAliases(): string[] {
+    const localeId = this.currentLocaleId.toLowerCase();
+
+    // Malaysian locale mappings (language code → normalized column name suffix)
+    // CSV columns: "Associated Food / Category (Malay)" → "associated_food__categorymalay"
+    const languageColumnMap: Record<string, string> = {
+      ms_my: 'associated_food__categorymalay',
+      ta_my: 'associated_food__categorytamil',
+      // Note: zh_my (Mandarin) uses the generic column as no specific column exists
+    };
+
+    // Check if this is a Malaysian locale with a language-specific column
+    for (const [prefix, columnName] of Object.entries(languageColumnMap)) {
+      if (localeId.startsWith(prefix)) {
+        // Prioritize language-specific column, fall back to generic
+        return [columnName, 'associated_food_category', 'associated_food', 'associated_food__category'];
+      }
+    }
+
+    // Default aliases for non-Malaysian locales
+    return ['associated_food_category', 'associated_food', 'associated_food__category'];
   }
 
   /**
@@ -1233,8 +1263,13 @@ class ConsistencyChecker {
     if (!tableName)
       return '';
 
-    // Common mappings - includes both directions for consistency
-    const mappings: Record<string, string> = {
+    // Check preset mapping first (from CLI --preset option)
+    if (this.nutrientTableMapping[tableName]) {
+      return this.nutrientTableMapping[tableName];
+    }
+
+    // Fallback to common mappings for backwards compatibility
+    const defaultMappings: Record<string, string> = {
       'DCD for Japan': 'DCDJapan',
       DCD_for_Japan: 'DCDJapan',
       DCDforJapan: 'DCDJapan',
@@ -1247,9 +1282,9 @@ class ConsistencyChecker {
       USDA_SR: 'USDA_SR', // Identity mapping
     };
 
-    // Check if there's a direct mapping
-    if (mappings[tableName]) {
-      return mappings[tableName];
+    // Check if there's a default mapping
+    if (defaultMappings[tableName]) {
+      return defaultMappings[tableName];
     }
 
     // Otherwise, normalize by removing spaces and special characters

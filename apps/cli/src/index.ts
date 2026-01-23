@@ -472,6 +472,19 @@ async function run() {
             SR: 'USDA_SR',
           },
         },
+        malaysia: {
+          skipHeaderRows: 1,
+          tags: ['malaysian'],
+          nutrientTableMapping: {
+            AUSNUT: 'AUSNUT',
+            Australia: 'AUSNUT', // Common data entry mistake
+            MyFCD: 'Malaysia_FCD',
+            MyFCDCombined: 'Malaysia_FCD',
+            Malaysia_FCD: 'Malaysia_FCD',
+            HPB: 'HPB',
+            'Singapore HPB': 'HPB',
+          },
+        },
         custom: {
           skipHeaderRows: Number.parseInt(options.skipHeaderRows, 10),
           tags: options.tags || [],
@@ -637,6 +650,7 @@ async function run() {
     .option('-r, --report-path [path]', 'Path to save consistency report')
     .option('-f, --report-format [format]', 'Report format (csv, json, markdown)', 'json')
     .option('--skip-header-rows [rows]', 'Number of header rows to skip', '3')
+    .option('--preset [preset]', 'Use preset configuration (japan, uk, france, usa, malaysia, custom)', 'custom')
     .option('--no-check-categories', 'Skip category consistency checks')
     .option('--no-check-names', 'Skip name consistency checks')
     .option('--no-check-attributes', 'Skip attribute consistency checks (ready meal, same as before, etc.)')
@@ -645,12 +659,65 @@ async function run() {
     .option('--no-check-associated-foods', 'Skip associated food consistency checks')
     .option('--include-valid-rows', 'Include perfectly matching rows in detailed report', false)
     .action(async (options) => {
+      // Define presets for different locales (same as import-foods/sync-foods)
+      const presets = {
+        japan: {
+          skipHeaderRows: 2,
+          nutrientTableMapping: {
+            AUSNUT: 'AUSNUT',
+            STFCJ: 'STFCJ',
+            'DCD for Japan': 'DCDJapan',
+          },
+        },
+        uk: {
+          skipHeaderRows: 1,
+          nutrientTableMapping: {
+            NDNS: 'NDNS',
+            McCance: 'MCCANCE',
+          },
+        },
+        france: {
+          skipHeaderRows: 1,
+          nutrientTableMapping: {
+            CIQUAL: 'CIQUAL',
+            ANSES: 'ANSES',
+          },
+        },
+        usa: {
+          skipHeaderRows: 1,
+          nutrientTableMapping: {
+            USDA: 'USDA',
+            SR: 'USDA_SR',
+          },
+        },
+        malaysia: {
+          skipHeaderRows: 1,
+          nutrientTableMapping: {
+            AUSNUT: 'AUSNUT',
+            Australia: 'AUSNUT', // Common data entry mistake
+            MyFCD: 'Malaysia_FCD',
+            MyFCDCombined: 'Malaysia_FCD',
+            MyFCDCurrent: 'Malaysia_FCD',
+            Malaysia_FCD: 'Malaysia_FCD',
+            HPB: 'HPB',
+            'Singapore HPB': 'HPB',
+          },
+        },
+        custom: {
+          skipHeaderRows: Number.parseInt(options.skipHeaderRows, 10),
+          nutrientTableMapping: {},
+        },
+      };
+
+      const presetConfig = presets[options.preset as keyof typeof presets] || presets.custom;
+      const skipHeaderRows = options.preset !== 'custom' ? presetConfig.skipHeaderRows : Number.parseInt(options.skipHeaderRows);
+
       await verifyConsistencyCommand({
         inputPath: options.inputPath,
         localeId: options.localeId,
         reportPath: options.reportPath,
         reportFormat: options.reportFormat,
-        skipHeaderRows: Number.parseInt(options.skipHeaderRows),
+        skipHeaderRows,
         checkCategories: options.checkCategories,
         checkNames: options.checkNames,
         checkAttributes: options.checkAttributes,
@@ -658,6 +725,7 @@ async function run() {
         checkPortionSizes: options.checkPortionSizes,
         checkAssociatedFoods: options.checkAssociatedFoods,
         includeValidRows: options.includeValidRows,
+        nutrientTableMapping: presetConfig.nutrientTableMapping,
       });
     });
 
@@ -735,6 +803,17 @@ async function run() {
           nutrientTableMapping: {
             USDA: 'USDA',
             SR: 'USDA_SR',
+          },
+        },
+        malaysia: {
+          nutrientTableMapping: {
+            AUSNUT: 'AUSNUT',
+            Australia: 'AUSNUT', // Common data entry mistake
+            MyFCD: 'Malaysia_FCD',
+            MyFCDCombined: 'Malaysia_FCD',
+            Malaysia_FCD: 'Malaysia_FCD',
+            HPB: 'HPB',
+            'Singapore HPB': 'HPB',
           },
         },
         custom: {
