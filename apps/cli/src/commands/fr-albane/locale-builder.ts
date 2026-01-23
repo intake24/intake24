@@ -23,6 +23,7 @@ import type {
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
+import type { Pathway } from '@intake24/common/surveys';
 import type { Dictionary } from '@intake24/common/types';
 
 import { randomUUID } from 'node:crypto';
@@ -569,8 +570,9 @@ export class FrenchAlbaneLocaleBuilder {
     return mapValues(groupedStandardUnits, rows => ({
       method: 'standard-portion' as const,
       description: 'use_a_standard_portion',
-      useForRecipes: true,
+      pathways: ['search', 'afp', 'recipe'] as Pathway[],
       conversionFactor: 1,
+      defaultWeight: null,
       units: getStandardUnits(rows),
     }));
   }
@@ -644,8 +646,9 @@ export class FrenchAlbaneLocaleBuilder {
         foodPortionSizeMethods.push({
           method: 'direct-weight',
           description: 'weight',
-          useForRecipes: true,
+          pathways: ['search', 'afp', 'recipe'],
           conversionFactor: 1.0,
+          defaultWeight: null,
         });
       }
 
@@ -689,8 +692,9 @@ export class FrenchAlbaneLocaleBuilder {
         foodPortionSizeMethods.push({
           method: 'as-served',
           description: 'use_an_image',
-          useForRecipes: true,
+          pathways: ['search', 'afp', 'recipe'],
           conversionFactor: asServedConversionFactors[asServedId],
+          defaultWeight: null,
           servingImageSet: asServedId,
           multiple: true,
         });
@@ -701,8 +705,9 @@ export class FrenchAlbaneLocaleBuilder {
           method: 'guide-image',
           guideImageId,
           description: 'use_an_image',
-          useForRecipes: true,
+          pathways: ['search', 'afp', 'recipe'],
           conversionFactor: guideImageConversionFactors[guideImageId],
+          defaultWeight: null,
         });
       }
 
@@ -717,8 +722,9 @@ export class FrenchAlbaneLocaleBuilder {
           initialFillLevel: 0.9,
           skipFillLevel: false,
           description: 'use_an_image',
-          useForRecipes: true,
+          pathways: ['search', 'afp', 'recipe'],
           conversionFactor: drinkwareConversionFactors[drinkwareId],
+          defaultWeight: null,
           multiple: true,
         });
       }
@@ -732,7 +738,8 @@ export class FrenchAlbaneLocaleBuilder {
           method: 'unknown',
           conversionFactor: 1.0,
           description: 'unknown',
-          useForRecipes: true,
+          pathways: ['search', 'afp', 'recipe'],
+          defaultWeight: null,
         });
       }
 

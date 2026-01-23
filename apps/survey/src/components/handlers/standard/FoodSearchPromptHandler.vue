@@ -36,7 +36,7 @@ function getSearchTerm(foodEntry: FoodState) {
   }
 }
 
-const { food, localeId, surveySlug, initializeRecipeComponents } = useFoodPromptUtils();
+const { food, localeId, surveySlug, initializeRecipeComponents, resolvePortionSize } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 const survey = useSurvey();
 
@@ -135,17 +135,14 @@ function recipeBuilder(recipeFood: RecipeFood) {
 };
 
 function commitAnswer() {
-  if (foodData.value === undefined) {
+  if (!foodData.value) {
     console.warn('FoodSearchPromptHandler: foodData is undefined.');
     return;
   }
 
   const { id, flags } = getFoodToReplace();
-
-  // Assign portion size method if only one is available
-  const hasOnePortionSizeMethod = foodData.value.portionSizeMethods.length === 1;
-  if (hasOnePortionSizeMethod)
-    flags.push('portion-size-option-complete');
+  const { flags: addonFlags, portionSizeMethodIndex, portionSize } = resolvePortionSize(foodData.value, 'search');
+  flags.push(...addonFlags);
 
   // V4-1393: Custom prompts may depend on the selected food via the conditions system,
   // so transferring custom prompt answers is not valid in the general case.
@@ -158,8 +155,8 @@ function commitAnswer() {
     type: 'encoded-food',
     data: foodData.value,
     searchTerm: searchTerm.value || '',
-    portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
-    portionSize: null,
+    portionSizeMethodIndex,
+    portionSize,
     customPromptAnswers: {},
     flags,
     linkedFoods: [],

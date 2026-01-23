@@ -30,7 +30,8 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       foodId,
       method: psm.method,
       description: psm.description,
-      useForRecipes: psm.useForRecipes,
+      pathways: psm.pathways,
+      defaultWeight: psm.defaultWeight,
       conversionFactor: psm.conversionFactor,
       orderBy: '1',
       parameters: psm.parameters,
@@ -240,7 +241,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     const portionSizeRows = await FoodPortionSizeMethod.findAll(
       {
         where: { foodId: food.id },
-        attributes: ['method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy', 'parameters'],
+        attributes: ['method', 'description', 'pathways', 'conversionFactor', 'defaultWeight', 'orderBy', 'parameters'],
         transaction,
       },
     );
@@ -250,7 +251,8 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
         method: row.method,
         conversionFactor: row.conversionFactor,
         description: row.description,
-        useForRecipes: row.useForRecipes,
+        pathways: row.pathways,
+        defaultWeight: row.defaultWeight,
         orderBy: row.orderBy,
         parameters: row.parameters,
       } as PortionSizeMethod));

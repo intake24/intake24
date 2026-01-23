@@ -96,8 +96,9 @@ function fromPackageAssociatedFood(associatedFood: PkgAssociatedFood): Associate
 function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod, orderBy: string): PortionSizeMethod {
   const baseFields = {
     description: psm.description,
+    pathways: psm.pathways,
     conversionFactor: psm.conversionFactor,
-    useForRecipes: psm.useForRecipes,
+    defaultWeight: psm.defaultWeight,
     orderBy,
   };
 
@@ -309,7 +310,8 @@ function packageAsServed(portionSize: AsServedPsm): PkgAsServedPsm {
     method: 'as-served',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
     servingImageSet: portionSize.parameters.servingImageSet,
     leftoversImageSet: portionSize.parameters.leftoversImageSet ?? undefined,
   };
@@ -320,7 +322,8 @@ function packageGuideImage(portionSize: GuideImagePsm): PkgGuideImagePsm {
     method: 'guide-image',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
     guideImageId: portionSize.parameters.guideImageId,
   };
 }
@@ -330,7 +333,8 @@ function packageDrinkScale(portionSize: DrinkScalePsm): PkgDrinkScalePsm {
     method: 'drink-scale',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
     drinkwareId: portionSize.parameters.drinkwareId,
     initialFillLevel: portionSize.parameters.initialFillLevel,
     skipFillLevel: portionSize.parameters.skipFillLevel,
@@ -342,7 +346,8 @@ function packageStandardPortion(portionSize: StandardPortionPsm): PkgStandardPor
     method: 'standard-portion',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
     units: portionSize.parameters.units,
   };
 }
@@ -352,7 +357,8 @@ function packageCereal(portionSize: CerealPsm): PkgCerealPsm {
     method: 'cereal',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
     type: portionSize.parameters.type,
   };
 }
@@ -362,7 +368,8 @@ function packageMilkOnCereal(portionSize: MilkOnCerealPsm): PkgMilkOnCerealPsm {
     method: 'milk-on-cereal',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
   };
 }
 
@@ -371,7 +378,8 @@ function packagePizza(portionSize: PizzaPsm): PkgPizzaPsm {
     method: 'pizza',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
   };
 }
 
@@ -380,7 +388,8 @@ function packageMilkInHotDrink(portionSize: MilkInHotDrinkPsm): PkgMilkInHotDrin
     method: 'milk-in-a-hot-drink',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
   };
 }
 

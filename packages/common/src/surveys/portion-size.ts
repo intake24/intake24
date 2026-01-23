@@ -18,6 +18,9 @@ export const portionSizeMethods = [
   'unknown',
 ] as const;
 
+export const pathways = ['addon', 'afp', 'recipe', 'search'] as const;
+export type Pathway = (typeof pathways)[number];
+
 export type PortionSizeMethodId = (typeof portionSizeMethods)[number];
 
 export const cerealTypes = ['hoop', 'flake', 'rkris'] as const;
@@ -126,8 +129,9 @@ export type PortionSizeParameters = z.infer<typeof portionSizeParameters>;
 
 export const portionSizeMethodBase = z.object({
   description: z.string().min(1).max(256),
-  useForRecipes: z.boolean(),
+  pathways: z.enum(pathways).array(),
   conversionFactor: z.number(),
+  defaultWeight: z.number().nonnegative().nullable(),
   orderBy: z.string(),
 });
 export type PortionSizeMethodBase = z.infer<typeof portionSizeMethodBase>;
@@ -253,7 +257,9 @@ const cerealPortionSizeState = portionSizeStateBase.extend({
 });
 const directWeightPortionSizeState = portionSizeStateBase.extend({
   method: z.literal('direct-weight'),
+  mode: z.enum(['auto', 'manual']),
   quantity: z.number().nullable(),
+  linkedQuantity: z.number(),
 });
 const drinkScalePortionSizeState = portionSizeStateBase.extend({
   method: z.literal('drink-scale'),

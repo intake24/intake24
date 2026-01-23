@@ -122,6 +122,20 @@ export function foodComplete(food: FoodState) {
   return foodTypeChecks[food.type](food);
 }
 
+export function canEditFood(food: FoodState) {
+  const complete = foodComplete(food);
+  if (!complete)
+    return false;
+
+  if (food.type !== 'encoded-food')
+    return false;
+
+  if (food.portionSize?.method === 'direct-weight' && food.portionSize.mode === 'auto')
+    return false;
+
+  return true;
+}
+
 export function foodSearchComplete(food: FoodState) {
   return food.type !== 'free-text';
 }

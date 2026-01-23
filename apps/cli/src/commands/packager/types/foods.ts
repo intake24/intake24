@@ -1,3 +1,5 @@
+import type { Pathway } from '@intake24/common/surveys';
+
 export interface PkgInheritableAttributes {
   readyMealOption?: boolean;
   sameAsBeforeOption?: boolean;
@@ -31,8 +33,9 @@ export interface PkgUnknownPsm extends PkgPortionSizeMethodBase {
 export interface PkgPortionSizeMethodBase {
   method: PkgPortionSizeMethodType;
   description: string;
-  useForRecipes: boolean;
+  pathways: Pathway[];
   conversionFactor: number;
+  defaultWeight: number | null;
 }
 
 export interface PkgAsServedPsm extends PkgPortionSizeMethodBase {

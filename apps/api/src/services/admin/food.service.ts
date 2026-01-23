@@ -316,8 +316,9 @@ function adminFoodService({ cache, db }: Pick<IoC, 'cache' | 'db'>) {
                 ...pick(psm, [
                   'method',
                   'description',
-                  'useForRecipes',
+                  'pathways',
                   'conversionFactor',
+                  'defaultWeight',
                   'orderBy',
                   'parameters',
                 ]),

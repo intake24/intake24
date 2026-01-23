@@ -362,8 +362,9 @@ export class FrenchAnsesLocaleBuilder {
         portionSizeMethods.push({
           method: 'as-served',
           description: 'use_an_image',
-          useForRecipes: true,
+          pathways: ['search', 'afp', 'recipe'],
           conversionFactor: 1.0,
+          defaultWeight: null,
           servingImageSet: `INCA3_${pictureId.padStart(3, '0')}`,
         });
       });
@@ -416,7 +417,8 @@ export class FrenchAnsesLocaleBuilder {
           portionSizeMethods.push({
             method: 'standard-portion',
             description: 'use_a_standard_portion',
-            useForRecipes: true,
+            pathways: ['search', 'afp', 'recipe'],
+            defaultWeight: null,
             conversionFactor: 1,
             units,
           });
@@ -434,8 +436,9 @@ export class FrenchAnsesLocaleBuilder {
           portionSizeMethods.push({
             method: 'drink-scale',
             description: 'use_an_image',
-            useForRecipes: true,
+            pathways: ['search', 'afp', 'recipe'],
             conversionFactor: 1,
+            defaultWeight: null,
             drinkwareId: householdDrinkwareId,
             initialFillLevel: 0.9,
             skipFillLevel: false,
@@ -453,8 +456,9 @@ export class FrenchAnsesLocaleBuilder {
       portionSizeMethods.push({
         method: 'standard-portion',
         description: 'use_a_standard_portion',
-        useForRecipes: true,
+        pathways: ['search', 'afp', 'recipe'],
         conversionFactor: 1.0,
+        defaultWeight: null,
         units: [
           {
             name: 'pieces',
@@ -507,8 +511,9 @@ export class FrenchAnsesLocaleBuilder {
           portionSizeMethods.push({
             method: 'standard-portion',
             description: 'use_a_standard_portion',
-            useForRecipes: true,
+            pathways: ['search', 'afp', 'recipe'],
             conversionFactor: 1,
+            defaultWeight: null,
             units,
           });
         }
@@ -531,8 +536,9 @@ export class FrenchAnsesLocaleBuilder {
       portionSizeMethods.push({
         method: 'standard-portion',
         description: 'use_a_standard_portion',
-        useForRecipes: true,
+        pathways: ['search', 'afp', 'recipe'],
         conversionFactor: 1.0,
+        defaultWeight: null,
         units: [
           {
             name: 'pieces',

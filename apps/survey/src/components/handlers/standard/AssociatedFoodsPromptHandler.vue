@@ -54,7 +54,7 @@ interface LinkAsMainExisting {
 }
 
 const { translate } = useI18n();
-const { encodedFood: food, localeId, surveySlug, meals } = useFoodPromptUtils();
+const { encodedFood: food, localeId, surveySlug, meals, resolvePortionSize } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 const survey = useSurvey();
 
@@ -208,11 +208,8 @@ async function commitAnswer() {
   const foodData = await fetchFoodData(newFoods.map(f => f.header));
 
   const linkedFoods: FoodState[] = foodData.map((data, index) => {
-    const hasOnePortionSizeMethod = data.portionSizeMethods.length === 1;
+    const { flags, portionSizeMethodIndex, portionSize } = resolvePortionSize(data, 'afp', food.value);
 
-    const flags: FoodFlag[] = [];
-    if (hasOnePortionSizeMethod)
-      flags.push('portion-size-option-complete');
     if (newFoods[index].linkAsMain)
       flags.push('link-as-main');
 
@@ -224,8 +221,8 @@ async function commitAnswer() {
       customPromptAnswers: {},
       data,
       searchTerm: newFoods[index].header.searchTerm ?? null,
-      portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
-      portionSize: null,
+      portionSizeMethodIndex,
+      portionSize,
     };
   });
 

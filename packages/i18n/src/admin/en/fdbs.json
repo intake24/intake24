@@ -98,8 +98,15 @@
     "parameters": "parameters",
     "noParameters": "Method does not have any further parameters.",
     "description": "Description",
-    "useForRecipes": "Use for recipes",
+    "pathways": {
+      "_": "Pathways",
+      "addon": "Addon food",
+      "afp": "Associated food",
+      "recipe": "Recipe ingredient",
+      "search": "Food search"
+    },
     "conversionFactor": "Conversion factor",
+    "defaultWeight": "Default quantity (g)",
     "labels": "Image map labels",
     "multiple": "Allow specifying multiple items",
 

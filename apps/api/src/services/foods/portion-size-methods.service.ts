@@ -27,7 +27,8 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
       attributes: [
         'method',
         'description',
-        'useForRecipes',
+        'pathways',
+        'defaultWeight',
         'conversionFactor',
         'orderBy',
         'parameters',
@@ -67,7 +68,8 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
           attributes: [
             'method',
             'description',
-            'useForRecipes',
+            'pathways',
+            'defaultWeight',
             'conversionFactor',
             'orderBy',
             'parameters',

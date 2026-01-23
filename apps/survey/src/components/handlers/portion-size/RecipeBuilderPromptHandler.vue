@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import type { FoodRecipeBuilderItemState, PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
-import type { EncodedFood, FoodFlag, MissingFood } from '@intake24/common/surveys';
+import type { EncodedFood, MissingFood } from '@intake24/common/surveys';
 import type { RecipeFoodStep } from '@intake24/common/types';
 
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
@@ -44,7 +44,7 @@ function initialPromptState(step: RecipeFoodStep): RecipeBuilderStepState {
 }
 
 const survey = useSurvey();
-const { recipeBuilder, localeId, surveySlug } = useFoodPromptUtils();
+const { recipeBuilder, localeId, surveySlug, resolvePortionSize } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 
 const recipeFood = recipeBuilder.value.template;
@@ -83,10 +83,8 @@ async function addLinkedFood(data: FoodRecipeBuilderItemState) {
     };
   }
   else {
-    const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
-    const flags: FoodFlag[] = ['associated-foods-complete'];
-    if (hasOnePortionSizeMethod)
-      flags.push('portion-size-option-complete');
+    const { flags, portionSizeMethodIndex, portionSize } = resolvePortionSize(data.ingredient, 'recipe', recipeBuilder.value);
+    flags.push('associated-foods-complete');
 
     ingredientToAdd = {
       id: data.id,
@@ -94,8 +92,8 @@ async function addLinkedFood(data: FoodRecipeBuilderItemState) {
       data: data.ingredient,
       searchTerm: data.searchTerm ?? null,
       flags,
-      portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
-      portionSize: null,
+      portionSizeMethodIndex,
+      portionSize,
       customPromptAnswers: {},
       linkedFoods: [],
     };

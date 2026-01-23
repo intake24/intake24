@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import type { AssociatedFoodPrompt, Prompts, PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, FoodFlag, FoodState, MissingFood, PortionSizeState } from '@intake24/common/surveys';
+import type { EncodedFood, FoodFlag, FoodState, MissingFood } from '@intake24/common/surveys';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 
 import { computed } from 'vue';
@@ -44,7 +44,7 @@ function initialPromptState(allowMultiple: boolean): AssociatedFoodPrompt {
 }
 
 const { translate } = useI18n();
-const { encodedFood: food, localeId, surveySlug, meals } = useFoodPromptUtils();
+const { encodedFood: food, localeId, surveySlug, meals, resolvePortionSize } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 const survey = useSurvey();
 
@@ -152,21 +152,19 @@ async function commitAnswer() {
   const foodData = await fetchFoodData(newFoods);
 
   const linkedFoods: FoodState[] = foodData.map((data, index) => {
-    const portionSizeState: PortionSizeState | null = props.prompt.skipPortionSize
-      ? {
-          method: 'direct-weight' as const,
-          quantity: 0,
-          servingWeight: 0,
-          leftoversWeight: 0,
-        }
-      : null;
-
-    const skipPortionSizeOption = data.portionSizeMethods.length === 1 || props.prompt.skipPortionSize;
-
-    const flags: FoodFlag[] = [];
-
-    if (skipPortionSizeOption)
+    let { flags, portionSizeMethodIndex, portionSize } = resolvePortionSize(data, 'afp', food.value);
+    if (portionSize === null && props.prompt.skipPortionSize) {
+      portionSize = {
+        method: 'direct-weight',
+        mode: 'auto',
+        quantity: 0,
+        linkedQuantity: 0,
+        servingWeight: 0,
+        leftoversWeight: 0,
+      };
+      portionSizeMethodIndex = 0;
       flags.push('portion-size-option-complete');
+    }
 
     return {
       type: 'encoded-food',
@@ -176,8 +174,8 @@ async function commitAnswer() {
       customPromptAnswers: {},
       data,
       searchTerm: newFoods[index].searchTerm ?? null,
-      portionSizeMethodIndex: skipPortionSizeOption ? 0 : null,
-      portionSize: portionSizeState,
+      portionSizeMethodIndex,
+      portionSize,
     };
   });
 

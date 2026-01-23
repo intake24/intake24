@@ -100,7 +100,8 @@ export interface CategoryPortionSizeMethods {
   method: string;
   orderBy: Int8;
   parameters: Json;
-  useForRecipes: boolean;
+  pathways: Json;
+  defaultWeight: number | null;
 }
 
 export interface DrinkwareScales {
@@ -158,7 +159,8 @@ export interface FoodPortionSizeMethods {
   method: string;
   orderBy: Int8;
   parameters: Json;
-  useForRecipes: boolean;
+  pathways: Json;
+  defaultWeight: number | null;
 }
 
 export interface Foods {

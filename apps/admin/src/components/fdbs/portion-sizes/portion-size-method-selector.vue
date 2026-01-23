@@ -27,50 +27,52 @@
               <v-card-title class="px-0">
                 {{ $t(`fdbs.portionSizes._`) }} {{ $t('fdbs.portionSizes.parameters') }}
               </v-card-title>
-              <v-row>
-                <v-col cols="12">
-                  <v-select
-                    v-model="dialog.item.method"
-                    hide-details="auto"
-                    :items="estimationMethods"
-                    :label="$t('fdbs.portionSizes.methods._')"
-                    name="method"
-                    variant="outlined"
-                    @update:model-value="updateItemProps"
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-select
-                    v-model="dialog.item.description"
-                    hide-details="auto"
-                    :items="selections"
-                    :label="$t('fdbs.portionSizes.description')"
-                    name="description"
-                    variant="outlined"
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-switch
-                    v-model="dialog.item.useForRecipes"
-                    hide-details="auto"
-                    :label="$t('fdbs.portionSizes.useForRecipes')"
-                    name="useForRecipes"
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-slider
-                    v-model="dialog.item.conversionFactor"
-                    class="mt-5"
-                    :label="$t('fdbs.portionSizes.conversionFactor')"
-                    :max="10"
-                    :min="0.2"
-                    name="conversionFactor"
-                    :readonly
-                    :step="0.1"
-                    thumb-label="always"
-                  />
-                </v-col>
-              </v-row>
+              <div class="d-flex flex-column ga-4">
+                <v-select
+                  v-model="dialog.item.method"
+                  hide-details="auto"
+                  :items="estimationMethods"
+                  :label="$t('fdbs.portionSizes.methods._')"
+                  name="method"
+                  variant="outlined"
+                  @update:model-value="updateItemProps"
+                />
+                <v-select
+                  v-model="dialog.item.description"
+                  hide-details="auto"
+                  :items="selections"
+                  :label="$t('fdbs.portionSizes.description')"
+                  name="description"
+                  variant="outlined"
+                />
+                <v-select
+                  v-model="dialog.item.pathways"
+                  hide-details="auto"
+                  :items="pathways"
+                  :label="$t('fdbs.portionSizes.pathways._')"
+                  multiple
+                  name="pathways"
+                  prepend-inner-icon="fas fa-route"
+                />
+                <v-slider
+                  v-model="dialog.item.conversionFactor"
+                  class="mt-5"
+                  :label="$t('fdbs.portionSizes.conversionFactor')"
+                  :max="10"
+                  :min="0.2"
+                  name="conversionFactor"
+                  :readonly
+                  :step="0.1"
+                  thumb-label="always"
+                />
+                <v-number-input
+                  v-model="dialog.item.defaultWeight"
+                  :label="$t('fdbs.portionSizes.defaultWeight')"
+                  name="defaultWeight"
+                  :precision="2"
+                  prepend-inner-icon="fas fa-weight-scale"
+                />
+              </div>
             </v-col>
             <v-divider vertical />
             <v-col cols="12" md>
@@ -126,7 +128,7 @@ defineProps({
 
 const emit = defineEmits(['save']);
 
-const { estimationMethods, selections } = usePortionSizeMethods();
+const { estimationMethods, pathways, selections } = usePortionSizeMethods();
 
 function newDialog(show = false): PortionSizeMethodDialog {
   return {
