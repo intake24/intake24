@@ -7,7 +7,7 @@ import { computed } from 'vue';
 
 import { useFoodUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
-import { customPromptComplete, foodComplete, foodPortionSizeComplete } from '@intake24/survey/util';
+import { canEditFood, customPromptComplete, foodPortionSizeComplete } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui';
 
 export type MenuItem = {
@@ -44,7 +44,7 @@ export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext
           name: t(`recall.menu.food.${props.food.type}.edit`),
           action: 'editFood',
           icon: '$food',
-          if: (food: FoodState) => foodComplete(food),
+          if: (food: FoodState) => canEditFood(food),
         },
         {
           name: t('recall.menu.food.delete'),

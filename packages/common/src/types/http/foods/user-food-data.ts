@@ -1,18 +1,12 @@
 import { z } from 'zod';
-
-import { portionSizeMethods, portionSizeParameter } from '@intake24/common/surveys';
 import { localeTranslation } from '@intake24/common/types';
+import { portionSizeMethodAttributes } from '../admin/portion-size-methods';
 
-export const userPortionSizeMethod = z.object({
-  method: z.enum(portionSizeMethods),
-  description: z.string(),
-  imageUrl: z.string(),
-  useForRecipes: z.boolean(),
-  conversionFactor: z.number(),
-  orderBy: z.string(),
-  parameters: portionSizeParameter,
-});
-
+export const userPortionSizeMethod = portionSizeMethodAttributes
+  .omit({ id: true })
+  .extend({
+    imageUrl: z.string(),
+  });
 export type UserPortionSizeMethod = z.infer<typeof userPortionSizeMethod>;
 
 export const userAssociatedFoodPrompt = z.object({

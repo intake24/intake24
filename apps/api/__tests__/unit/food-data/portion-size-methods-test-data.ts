@@ -52,7 +52,8 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
       description: faker.word.words(5),
       imageUrl: 'http://localhost:3000/images/portion/standard-portion.jpg',
       method: 'standard-portion',
-      useForRecipes: false,
+      pathways: ['search'],
+      defaultWeight: faker.number.float({ min: 10, max: 500 }),
       orderBy: i.toString(),
       parameters,
     });
@@ -82,8 +83,9 @@ async function createCategoryPortionSizeMethods(
       categoryId,
       method: psm.method,
       description: psm.description,
-      useForRecipes: psm.useForRecipes,
+      pathways: psm.pathways,
       conversionFactor: psm.conversionFactor,
+      defaultWeight: psm.defaultWeight,
       parameters: psm.parameters,
       orderBy: idx.toString(),
     });

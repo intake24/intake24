@@ -178,7 +178,8 @@ function packageAsServed(portionSize: PortionSizeMethodV3): PkgAsServedPsm {
     method: 'as-served',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    defaultWeight: null,
     servingImageSet: getPsmParameter('serving-image-set', portionSize.parameters),
     leftoversImageSet: getOptionalPsmParameter('leftovers-image-set', portionSize.parameters),
   };
@@ -189,7 +190,8 @@ function packageGuideImage(portionSize: PortionSizeMethodV3): PkgGuideImagePsm {
     method: 'guide-image',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    defaultWeight: null,
     guideImageId: getPsmParameter('guide-image-id', portionSize.parameters),
   };
 }
@@ -199,7 +201,8 @@ function packageDrinkScale(portionSize: PortionSizeMethodV3): PkgDrinkScalePsm {
     method: 'drink-scale',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    defaultWeight: null,
     drinkwareId: getPsmParameter('drinkware-id', portionSize.parameters),
     initialFillLevel: Number.parseFloat(getPsmParameter('initial-fill-level', portionSize.parameters)),
     skipFillLevel: getPsmParameter('skip-fill-level', portionSize.parameters) === 'true',
@@ -211,7 +214,8 @@ function packageStandardPortion(portionSize: PortionSizeMethodV3): PkgStandardPo
     method: 'standard-portion',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    defaultWeight: null,
     units: parseStandardUnits(portionSize.parameters),
   };
 }
@@ -221,7 +225,8 @@ function packageCereal(portionSize: PortionSizeMethodV3): PkgCerealPsm {
     method: 'cereal',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    defaultWeight: null,
     type: getPsmParameter('type', portionSize.parameters),
   };
 }
@@ -231,7 +236,8 @@ function packageMilkOnCereal(portionSize: PortionSizeMethodV3): PkgMilkOnCerealP
     method: 'milk-on-cereal',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    defaultWeight: null,
+    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
   };
 }
 
@@ -240,7 +246,8 @@ function packagePizza(portionSize: PortionSizeMethodV3): PkgPizzaPsm {
     method: 'pizza',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    defaultWeight: null,
+    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
   };
 }
 
@@ -249,7 +256,8 @@ function packageMilkInHotDrink(portionSize: PortionSizeMethodV3): PkgMilkInHotDr
     method: 'milk-in-a-hot-drink',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    defaultWeight: null,
+    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
   };
 }
 

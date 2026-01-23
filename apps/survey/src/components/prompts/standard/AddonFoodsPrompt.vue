@@ -152,7 +152,7 @@ const addonFoods = ref<Record<string, UserFoodData[]>>({});
 const addonFoodUnits = computed(() => Object.values(addonFoods.value).flat().reduce<Record<string, { conversionFactor: number; units: StandardUnit[] }>>((acc, food) => {
   let conversionFactor = 0;
   const units = food.portionSizeMethods.reduce<StandardUnit[]>((su, psm, idx, array) => {
-    if (psm.method !== 'standard-portion' || psm.conversionFactor !== array[0].conversionFactor)
+    if (psm.method !== 'standard-portion' || !psm.pathways.includes('addon') || psm.conversionFactor !== array[0].conversionFactor)
       return su;
 
     conversionFactor = psm.conversionFactor;
@@ -193,7 +193,8 @@ async function getAddonFoods() {
     }
 
     const foods = await Promise.all([...new Set(foodCodes)].map(code => foodsService.getData(props.localeId, code))); ;
-    addonFoods.value[addon.id] = foods.filter(food => food.portionSizeMethods.some(({ method }) => method === 'standard-portion'));
+    addonFoods.value[addon.id] = foods.filter(food =>
+      food.portionSizeMethods.some(({ method, pathways }) => method === 'standard-portion' && pathways.includes('addon')));
   }
 }
 

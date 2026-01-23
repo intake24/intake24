@@ -8,7 +8,7 @@ import type {
   NonAttribute,
 } from 'sequelize';
 
-import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
+import type { Pathway, PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
 
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
@@ -53,9 +53,15 @@ export default class CategoryPortionSizeMethod extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.BOOLEAN,
+    type: DataType.JSONB,
   })
-  declare useForRecipes: boolean;
+  declare pathways: Pathway[];
+
+  @Column({
+    allowNull: true,
+    type: DataType.FLOAT(),
+  })
+  declare defaultWeight: CreationOptional<number | null>;
 
   @Column({
     allowNull: false,
