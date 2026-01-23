@@ -22,7 +22,7 @@ const CSV_CONSTANTS = {
   DEFAULT_BATCH_SIZE: 25,
   DEFAULT_SKIP_HEADER_ROWS: 1,
   DEFAULT_FOOD_GROUP: '1',
-  VALID_ACTIONS: ['1', '2', '3', '4'],
+  DEFAULT_NEW_FOOD_ACTION: 4,
   BATCH_DELAY_MS: 50,
 } as const;
 
@@ -42,6 +42,8 @@ export interface FoodImportOptions {
   validateNutrients?: boolean;
   skipAssociatedFoods?: boolean;
   deleteAction1Local?: boolean;
+  /** Action code that means "create new global + local food" (default: 4 for Japan, use 5 for Malaysia) */
+  newFoodAction?: number;
 }
 
 interface FoodRow {
@@ -232,6 +234,7 @@ class FoodImportOrchestrator {
       validateNutrients: options.validateNutrients ?? false,
       skipAssociatedFoods: options.skipAssociatedFoods ?? false,
       deleteAction1Local: options.deleteAction1Local ?? false,
+      newFoodAction: options.newFoodAction ?? CSV_CONSTANTS.DEFAULT_NEW_FOOD_ACTION,
     };
 
     this.logger = mainLogger.child({ service: 'Food import' });
@@ -434,13 +437,14 @@ class FoodImportOrchestrator {
     const intake24Code = this.getColumnValue(record, ['intake24_code', 'code']);
     const action = this.getColumnValue(record, ['action']);
     const englishDescription = this.getColumnValue(record, ['english_description', 'description']);
-    let localDescription = this.getColumnValue(record, ['local_description', 'local_name']);
+    let localDescription = this.getColumnValue(record, this.getLocalDescriptionAliases());
 
     if (!intake24Code)
       throw new Error('Intake24 code is required');
 
-    if (!action || !CSV_CONSTANTS.VALID_ACTIONS.includes(action as '1' | '2' | '3' | '4'))
-      throw new Error(`Action must be 1, 2, 3, or 4 (got: "${action}")`);
+    const validActions = this.getValidActions();
+    if (!action || !validActions.includes(action))
+      throw new Error(`Action must be one of ${validActions.join(', ')} (got: "${action}")`);
 
     if (!englishDescription)
       throw new Error('English description is required');
@@ -486,6 +490,49 @@ class FoodImportOrchestrator {
     return '';
   }
 
+  /**
+   * Get locale-aware column aliases for local description.
+   * For Malaysian locales, prioritizes language-specific columns:
+   * - ms_MY_* → local_descriptionmalay
+   * - zh_MY_* → local_descriptionmandarin
+   * - ta_MY_* → local_descriptiontamil
+   * Falls back to generic local_description/local_name if language-specific not found.
+   */
+  private getLocalDescriptionAliases(): string[] {
+    const localeId = this.options.localeId.toLowerCase();
+
+    // Malaysian locale mappings (language code → normalized column name)
+    const languageColumnMap: Record<string, string> = {
+      ms_my: 'local_descriptionmalay',
+      zh_my: 'local_descriptionmandarin',
+      ta_my: 'local_descriptiontamil',
+    };
+
+    // Check if this is a Malaysian locale and get the language-specific column
+    for (const [prefix, columnName] of Object.entries(languageColumnMap)) {
+      if (localeId.startsWith(prefix)) {
+        // Prioritize language-specific column, fall back to generic
+        return [columnName, 'local_description', 'local_name'];
+      }
+    }
+
+    // Default aliases for non-Malaysian locales
+    return ['local_description', 'local_name'];
+  }
+
+  /**
+   * Get valid action codes based on configuration.
+   * Base actions are 1, 2, 3, 4. The "new food" action (default 4) is configurable.
+   * When newFoodAction is set to 5 (e.g., Malaysia), action 4 is treated as "existing food"
+   * similar to actions 2/3.
+   */
+  private getValidActions(): string[] {
+    const newFoodAction = this.options.newFoodAction ?? CSV_CONSTANTS.DEFAULT_NEW_FOOD_ACTION;
+    const actions = ['1', '2', '3', '4', String(newFoodAction)];
+    // Return unique sorted actions
+    return [...new Set(actions)].sort();
+  }
+
   private collectCategories(record: Record<string, unknown>): string[] {
     const values: string[] = [];
     const keys = this.categoryColumnKeys.length ? this.categoryColumnKeys : ['categories'];
@@ -518,7 +565,7 @@ class FoodImportOrchestrator {
   private recordValidationSkip(record: Record<string, unknown>, rowNumber: number, message: string): void {
     const foodCode = this.getColumnValue(record, ['intake24_code', 'code']) || `row-${rowNumber}`;
     const englishDescription = this.getColumnValue(record, ['english_description', 'description']);
-    const localDescription = this.getColumnValue(record, ['local_description', 'local_name']) || englishDescription;
+    const localDescription = this.getColumnValue(record, this.getLocalDescriptionAliases()) || englishDescription;
 
     this.validationSkips.push({
       foodCode,
@@ -592,6 +639,7 @@ class FoodImportOrchestrator {
         skipExisting: this.options.skipExisting,
         skipInvalidNutrients: this.options.skipInvalidNutrients,
         skipAssociatedFoods: this.options.skipAssociatedFoods,
+        newFoodAction: this.options.newFoodAction ?? CSV_CONSTANTS.DEFAULT_NEW_FOOD_ACTION,
       }, this.rollbackData);
 
       // Update report
@@ -963,6 +1011,7 @@ class FoodProcessor {
       skipExisting: boolean;
       skipInvalidNutrients: boolean;
       skipAssociatedFoods: boolean;
+      newFoodAction: number;
     },
     rollbackData?: {
       createdGlobalFoods: string[];
@@ -971,7 +1020,7 @@ class FoodProcessor {
   ): Promise<FoodImportResult> {
     const { intake24Code, action } = food;
 
-    // Parse action: 1=update, 2=new local, 3=include existing, 4=new global+local
+    // Parse action: 1=exclude/delete, 2=new local, 3=include existing, newFoodAction=new global+local (default 4, use 5 for Malaysia)
     const actionNum = Number.parseInt(action, 10);
 
     // Skip action 1 foods entirely
@@ -981,7 +1030,7 @@ class FoodProcessor {
     }
 
     try {
-      const actionFlags = FoodProcessor.parseActionFlags(actionNum);
+      const actionFlags = FoodProcessor.parseActionFlags(actionNum, config.newFoodAction);
 
       // Handle global food creation
       if (actionFlags.shouldCreateGlobal) {
@@ -1046,12 +1095,15 @@ class FoodProcessor {
     }
   }
 
-  private static parseActionFlags(actionNum: number) {
+  private static parseActionFlags(actionNum: number, newFoodAction: number = 4) {
+    // When newFoodAction is not 4 (e.g., 5 for Malaysia), treat action 4 as "existing food" like action 2
+    const isExistingFoodAction = actionNum === 2 || (actionNum === 4 && newFoodAction !== 4);
+
     return {
-      shouldCreateGlobal: actionNum === 4, // Only Action 4 creates global food
-      shouldCreateLocal: actionNum === 2 || actionNum === 4, // Actions 2 & 4 create local food
-      shouldInclude: actionNum === 3 || actionNum === 4, // Actions 3 & 4 include in locale
-      shouldUpdateGlobalCategories: actionNum === 2 || actionNum === 3, // Actions 2 & 3 should update existing global food categories
+      shouldCreateGlobal: actionNum === newFoodAction, // Only newFoodAction creates global food
+      shouldCreateLocal: isExistingFoodAction || actionNum === newFoodAction, // Actions 2, 4 (when not newFood), & newFoodAction create local food
+      shouldInclude: actionNum === 3 || actionNum === newFoodAction, // Actions 3 & newFoodAction include in locale
+      shouldUpdateGlobalCategories: actionNum === 2 || actionNum === 3 || isExistingFoodAction, // Actions 2, 3, 4 (when not newFood) update existing global food categories
     };
   }
 

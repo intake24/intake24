@@ -253,6 +253,7 @@ class ConsistencyChecker {
   private database?: any;
   private csvParser: CsvParserService;
   private foodDataParser: FoodDataParserService;
+  private currentLocaleId: string = '';
 
   constructor() {
     this.logger = mainLogger.child({ service: 'Consistency Checker' });
@@ -291,6 +292,7 @@ class ConsistencyChecker {
    */
   async verifyConsistency(options: ConsistencyCheckOptions): Promise<ConsistencyReport> {
     this.logger.info(`🔍 Starting consistency verification for ${options.localeId}`);
+    this.currentLocaleId = options.localeId;
 
     try {
       // Initialize database connection for direct queries
@@ -389,7 +391,7 @@ class ConsistencyChecker {
       intake24Code: this.getColumnValue(record, ['intake24_code', 'code']),
       action: this.getColumnValue(record, ['action']),
       englishDescription: this.getColumnValue(record, ['english_description', 'description']),
-      localDescription: this.getColumnValue(record, ['local_description', 'local_name']),
+      localDescription: this.getColumnValue(record, this.getLocalDescriptionAliases()),
       foodCompositionTable: this.getColumnValue(record, ['food_composition_table', 'source_database']),
       foodCompositionRecordId: this.getColumnValue(record, ['food_composition_record_id', 'food_composition_id', 'fct_record_id']),
       readyMealOption: this.getColumnValue(record, ['ready_meal_option']),
@@ -409,6 +411,36 @@ class ConsistencyChecker {
 
   private getColumnValue(record: Record<string, unknown>, aliases: string[]): string {
     return this.csvParser.getColumnValue(record, aliases);
+  }
+
+  /**
+   * Get locale-aware column aliases for local description.
+   * For Malaysian locales, prioritizes language-specific columns:
+   * - ms_MY_* → local_descriptionmalay
+   * - zh_MY_* → local_descriptionmandarin
+   * - ta_MY_* → local_descriptiontamil
+   * Falls back to generic local_description/local_name if language-specific not found.
+   */
+  private getLocalDescriptionAliases(): string[] {
+    const localeId = this.currentLocaleId.toLowerCase();
+
+    // Malaysian locale mappings (language code → normalized column name)
+    const languageColumnMap: Record<string, string> = {
+      ms_my: 'local_descriptionmalay',
+      zh_my: 'local_descriptionmandarin',
+      ta_my: 'local_descriptiontamil',
+    };
+
+    // Check if this is a Malaysian locale and get the language-specific column
+    for (const [prefix, columnName] of Object.entries(languageColumnMap)) {
+      if (localeId.startsWith(prefix)) {
+        // Prioritize language-specific column, fall back to generic
+        return [columnName, 'local_description', 'local_name'];
+      }
+    }
+
+    // Default aliases for non-Malaysian locales
+    return ['local_description', 'local_name'];
   }
 
   /**

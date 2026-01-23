@@ -433,6 +433,7 @@ async function run() {
     .option('--skip-invalid-nutrients', 'Skip nutrient table mappings to avoid 500 errors', false)
     .option('--skip-associated-foods', 'Skip associated foods (for multi-pass import)', false)
     .option('--delete-action1-local', 'Delete local food records for action 1 foods', false)
+    .option('--new-food-action [action]', 'Action code that means "create new global food" (default: 4 for Japan, use 5 for Malaysia)', '4')
     .option('--report-path [path]', 'Path to save import report')
     .option('--report-format [format]', 'Report format (csv, json, markdown)', 'json')
     .action(async (options) => {
@@ -493,6 +494,7 @@ async function run() {
         skipInvalidNutrients: options.skipInvalidNutrients,
         skipAssociatedFoods: options.skipAssociatedFoods,
         deleteAction1Local: options.deleteAction1Local,
+        newFoodAction: Number.parseInt(options.newFoodAction, 10),
         reportPath: options.reportPath,
         reportFormat: options.reportFormat,
       });
