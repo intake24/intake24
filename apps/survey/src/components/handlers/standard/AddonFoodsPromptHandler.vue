@@ -103,7 +103,7 @@ function commitAnswer() {
         {
           type: 'encoded-food',
           id: getEntityId(),
-          flags: ['portion-size-option-complete', 'portion-size-method-complete'],
+          flags: ['portion-size-option-complete', 'portion-size-method-complete', `${props.prompt.id}-complete`],
           linkedFoods: [],
           customPromptAnswers: {},
           data,
