@@ -58,6 +58,7 @@ interface FoodRow {
   reasonableAmount: string;
   useInRecipes: string;
   associatedFood: string;
+  associatedFoodEnglish: string; // English associated foods column for merging translations
   brandNames: string;
   synonyms: string;
   brandNamesAsSearchTerms: string;
@@ -230,7 +231,7 @@ class FoodImportOrchestrator {
       skipExisting: options.skipExisting ?? false,
       reportPath: options.reportPath ?? '',
       reportFormat: options.reportFormat ?? 'json',
-      skipInvalidNutrients: options.skipInvalidNutrients ?? true,
+      skipInvalidNutrients: options.skipInvalidNutrients ?? false,
       validateNutrients: options.validateNutrients ?? false,
       skipAssociatedFoods: options.skipAssociatedFoods ?? false,
       deleteAction1Local: options.deleteAction1Local ?? false,
@@ -465,7 +466,8 @@ class FoodImportOrchestrator {
       sameAsBeforeOption: this.getColumnValue(record, ['same_as_before_option']),
       reasonableAmount: this.getColumnValue(record, ['reasonable_amount']),
       useInRecipes: this.getColumnValue(record, ['use_in_recipes']),
-      associatedFood: this.getColumnValue(record, ['associated_food_category', 'associated_food', 'associated_food__category']),
+      associatedFood: this.getColumnValue(record, this.getAssociatedFoodAliases()),
+      associatedFoodEnglish: this.getColumnValue(record, ['associated_food_category', 'associated_food', 'associated_food__category']),
       brandNames: this.getColumnValue(record, ['brand_names']),
       synonyms: this.getColumnValue(record, ['synonyms']),
       brandNamesAsSearchTerms: this.getColumnValue(record, ['brand_names_as_search_terms']),
@@ -518,6 +520,38 @@ class FoodImportOrchestrator {
 
     // Default aliases for non-Malaysian locales
     return ['local_description', 'local_name'];
+  }
+
+  /**
+   * Get locale-aware associated food column aliases.
+   * Malaysian locales have language-specific columns like "Associated Food / Category (Malay)".
+   * The CSV headers are normalized to snake_case by csv-parse, e.g.:
+   * - "Associated Food / Category (Malay)" → "associated_food__category_malay"
+   * - ms_MY_* → associated_food__category_malay
+   * - ta_MY_* → associated_food__category_tamil
+   * Note: double underscore from "/" in original header
+   * Falls back to generic associated_food_category if language-specific not found.
+   */
+  private getAssociatedFoodAliases(): string[] {
+    const localeId = this.options.localeId.toLowerCase();
+
+    // Malaysian locale mappings (language code → normalized column name)
+    // Note: double underscore from "/" in original header
+    const languageColumnMap: Record<string, string> = {
+      ms_my: 'associated_food__category_malay',
+      ta_my: 'associated_food__category_tamil',
+    };
+
+    // Check if this is a Malaysian locale and get the language-specific column
+    for (const [prefix, columnName] of Object.entries(languageColumnMap)) {
+      if (localeId.startsWith(prefix)) {
+        // Prioritize language-specific column, fall back to generic
+        return [columnName, 'associated_food_category', 'associated_food', 'associated_food__category'];
+      }
+    }
+
+    // Default aliases for non-Malaysian locales
+    return ['associated_food_category', 'associated_food', 'associated_food__category'];
   }
 
   /**
@@ -1344,9 +1378,14 @@ class FoodProcessor {
         );
 
     // Parse associated foods and capture any issues
+    // Pass both locale-specific and English columns for translation merging
     let associatedFoodsResult: ParseAssociatedFoodsResult = { associatedFoods: [], issues: [] };
     if (!config.skipAssociatedFoods) {
-      associatedFoodsResult = await FoodDataParser.parseAssociatedFoods(food.associatedFood, apiClient);
+      associatedFoodsResult = await FoodDataParser.parseAssociatedFoods(
+        food.associatedFood,
+        apiClient,
+        food.associatedFoodEnglish,
+      );
     }
 
     const localFoodRequest: CreateLocalFoodRequest = {
@@ -1672,9 +1711,17 @@ class FoodDataParser {
 
   /**
    * Parse associated foods with API lookup - this method requires the API client
-   * and is specific to the import command, so it remains here
+   * and is specific to the import command, so it remains here.
+   *
+   * @param value - The locale-specific associated foods column (e.g., Malay column with {ms: ...} format)
+   * @param apiClient - API client for food/category lookups
+   * @param englishValue - Optional English associated foods column for merging translations
    */
-  static async parseAssociatedFoods(value: string, apiClient: ApiClientV4): Promise<ParseAssociatedFoodsResult> {
+  static async parseAssociatedFoods(
+    value: string,
+    apiClient: ApiClientV4,
+    englishValue?: string,
+  ): Promise<ParseAssociatedFoodsResult> {
     const result: ParseAssociatedFoodsResult = {
       associatedFoods: [],
       issues: [],
@@ -1692,6 +1739,19 @@ class FoodDataParser {
       if (entries.length === 0) {
         console.warn(`No associated foods found in expected format for: "${value}"`);
         return result;
+      }
+
+      // Parse English column to extract English prompts by code
+      // Format: CODE(English text here), CODE2(Another text)
+      const englishPromptsByCode = new Map<string, string>();
+      if (englishValue && englishValue.trim()) {
+        const englishEntries = FoodDataParser.tokenizeAssociatedFoods(englishValue);
+        for (const entry of englishEntries) {
+          // rawPrompt contains the text inside parentheses without language tags
+          if (entry.rawPrompt) {
+            englishPromptsByCode.set(entry.code, entry.rawPrompt);
+          }
+        }
       }
 
       const codes = entries.map(entry => entry.code);
@@ -1726,12 +1786,18 @@ class FoodDataParser {
 
         const isCategory = lookupResult.type === 'category';
 
-        // Determine prompt translations
+        // Determine prompt translations from locale-specific column
         const translations = Object.keys(entry.prompts).length > 0
           ? { ...entry.prompts }
           : {};
 
-        if (!translations.en) {
+        // Merge English translation from English column if available
+        const englishFromColumn = englishPromptsByCode.get(entry.code);
+        if (englishFromColumn) {
+          translations.en = englishFromColumn;
+        }
+        else if (!translations.en) {
+          // Fallback for English if not in English column
           const fallback = translations.id
             || translations.jp
             || entry.rawPrompt

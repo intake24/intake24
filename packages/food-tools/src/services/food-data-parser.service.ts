@@ -2,12 +2,12 @@
  * Food data parsing service for transforming raw CSV values into typed food data
  */
 
+import type { Logger } from './csv-parser.service';
 import type {
   CerealType,
   PortionSizeMethod,
   StandardUnit,
 } from '@intake24/common/surveys';
-import type { Logger } from './csv-parser.service';
 
 // UseInRecipeType enum values (matching API types)
 export const USE_IN_RECIPE_TYPES = {
@@ -214,7 +214,7 @@ export class FoodDataParserService {
         braceDepth--;
       }
 
-      if (char === ',' && parenDepth === 0 && braceDepth === 0) {
+      if ((char === ',' || char === '\n') && parenDepth === 0 && braceDepth === 0) {
         if (current.trim().length > 0) {
           parts.push(current.trim());
         }
@@ -241,7 +241,7 @@ export class FoodDataParserService {
       const code = match[1];
       const payload = match[2]?.trim() ?? '';
 
-      const prompts = payload ? this.parsePromptTranslations(payload) : {};
+      const prompts = payload ? FoodDataParserService.parsePromptTranslations(payload) : {};
       const rawPrompt = Object.keys(prompts).length > 0
         ? Object.values(prompts)[0]
         : this.extractRawPrompt(payload);
@@ -257,9 +257,10 @@ export class FoodDataParserService {
   }
 
   /**
-   * Parse prompt translations from payload string
+   * Parse prompt translations from payload string.
+   * Handles formats like: {ms: Malay text, en: English text}
    */
-  private parsePromptTranslations(payload: string): Record<string, string> {
+  static parsePromptTranslations(payload: string): Record<string, string> {
     let content = payload.trim();
     const translations: Record<string, string> = {};
 
@@ -275,14 +276,47 @@ export class FoodDataParserService {
       return translations;
     }
 
-    // eslint-disable-next-line regexp/no-super-linear-backtracking -- complex regex for parsing key-value pairs
-    const regex = /([\w-]+)\s*:\s*([^,]+(?:(?=,\s*[\w-]+\s*:)|$))/g;
-    let match: RegExpExecArray | null;
+    // Parse key:value pairs using string-based approach to avoid ReDoS
+    // Handles commas within values (e.g., "whisky, gin, rum")
+    let remaining = content.trim();
 
-    // eslint-disable-next-line no-cond-assign -- standard regex exec pattern
-    while ((match = regex.exec(content)) !== null) {
-      const key = match[1].trim();
-      let value = match[2].trim();
+    while (remaining.length > 0) {
+      // Find key (alphanumeric/dash/underscore followed by colon)
+      const keyMatch = remaining.match(/^([\w-]+)\s*:\s*/);
+      if (!keyMatch)
+        break;
+
+      const key = keyMatch[1].trim();
+      remaining = remaining.slice(keyMatch[0].length);
+
+      // Find where this value ends - at ", nextkey:" or end of string
+      // Use a simple scan to find the next ", key:" pattern
+      let valueEnd = remaining.length;
+      let pos = 0;
+      while (pos < remaining.length) {
+        const commaPos = remaining.indexOf(',', pos);
+        if (commaPos === -1)
+          break;
+
+        // Check if this comma is followed by whitespace + key + colon
+        const afterComma = remaining.slice(commaPos + 1);
+        const nextKeyMatch = afterComma.match(/^\s*([\w-]+)\s*:/);
+        if (nextKeyMatch) {
+          valueEnd = commaPos;
+          break;
+        }
+        pos = commaPos + 1;
+      }
+
+      let value = remaining.slice(0, valueEnd).trim();
+
+      // Advance remaining past this value and the comma (if any)
+      if (valueEnd < remaining.length) {
+        remaining = remaining.slice(valueEnd + 1).trim(); // +1 to skip comma
+      }
+      else {
+        remaining = '';
+      }
 
       if (!key) {
         continue;

@@ -63,6 +63,7 @@ interface FoodRow {
   reasonableAmount: string;
   useInRecipes: string;
   associatedFood: string;
+  associatedFoodEnglish: string; // English associated foods column for translation verification
   brandNames: string;
   synonyms: string;
   brandNamesAsSearchTerms: string;
@@ -166,8 +167,16 @@ interface AssociatedFoodDiscrepancy {
     multiple: boolean;
     order: number;
   }>;
-  issue: 'missing_associations' | 'association_mismatch' | 'extra_associations';
+  issue: 'missing_associations' | 'association_mismatch' | 'extra_associations' | 'translation_mismatch';
   severity: 'critical' | 'warning' | 'info';
+  translationIssues?: Array<{
+    code: string;
+    missingLanguages: string[];
+    expectedEnglish?: string;
+    actualEnglish?: string;
+    expectedLocal?: string;
+    actualLocal?: string;
+  }>;
 }
 
 interface AttributeDiscrepancy {
@@ -402,6 +411,7 @@ class ConsistencyChecker {
       reasonableAmount: this.getColumnValue(record, ['reasonable_amount']),
       useInRecipes: this.getColumnValue(record, ['use_in_recipes']),
       associatedFood: this.getColumnValue(record, this.getAssociatedFoodAliases()),
+      associatedFoodEnglish: this.getColumnValue(record, ['associated_food_category', 'associated_food', 'associated_food__category']),
       brandNames: this.getColumnValue(record, ['brand_names']),
       synonyms: this.getColumnValue(record, ['synonyms']),
       brandNamesAsSearchTerms: this.getColumnValue(record, ['brand_names_as_search_terms']),
@@ -453,11 +463,12 @@ class ConsistencyChecker {
   private getAssociatedFoodAliases(): string[] {
     const localeId = this.currentLocaleId.toLowerCase();
 
-    // Malaysian locale mappings (language code → normalized column name suffix)
-    // CSV columns: "Associated Food / Category (Malay)" → "associated_food__categorymalay"
+    // Malaysian locale mappings (language code → normalized column name)
+    // CSV columns: "Associated Food / Category (Malay)" → "associated_food__category_malay"
+    // Note: double underscore from "/" in original header
     const languageColumnMap: Record<string, string> = {
-      ms_my: 'associated_food__categorymalay',
-      ta_my: 'associated_food__categorytamil',
+      ms_my: 'associated_food__category_malay',
+      ta_my: 'associated_food__category_tamil',
       // Note: zh_my (Mandarin) uses the generic column as no specific column exists
     };
 
@@ -1086,13 +1097,32 @@ class ConsistencyChecker {
 
     const normalized = methodString.replace(/\r\n/g, '\n').trim();
     const segments: string[] = [];
-    // eslint-disable-next-line regexp/no-super-linear-backtracking -- complex regex for parsing method segments
-    const segmentRegex = /Method:[\s\S]*?(?=\n\s*Method:|$)/g;
-    let match: RegExpExecArray | null;
 
-    // eslint-disable-next-line no-cond-assign -- standard regex exec pattern
-    while ((match = segmentRegex.exec(normalized)) !== null) {
-      segments.push(match[0].trim());
+    // Split on "Method:" markers - use string-based approach to avoid ReDoS
+    // Find all positions of "Method:" in the string
+    const methodMarker = 'Method:';
+    const positions: number[] = [];
+    let searchPos = 0;
+
+    while (searchPos < normalized.length) {
+      const pos = normalized.indexOf(methodMarker, searchPos);
+      if (pos === -1)
+        break;
+      // Only count if at start or preceded by whitespace
+      if (pos === 0 || /\s/.test(normalized[pos - 1])) {
+        positions.push(pos);
+      }
+      searchPos = pos + methodMarker.length;
+    }
+
+    // Extract segments between positions
+    for (let i = 0; i < positions.length; i++) {
+      const start = positions[i];
+      const end = i + 1 < positions.length ? positions[i + 1] : normalized.length;
+      const segment = normalized.slice(start, end).trim();
+      if (segment) {
+        segments.push(segment);
+      }
     }
 
     const methods: Array<{ method: string; conversion: number; parameters: Record<string, any> }> = [];
@@ -1416,6 +1446,27 @@ class ConsistencyChecker {
               severity: missingCodes.length > 0 ? 'critical' : 'warning',
             });
           }
+          else {
+            // Codes match - now check translation consistency for Malaysian locales
+            const translationIssues = this.checkAssociatedFoodTranslations(
+              csvFood,
+              csvAssociations,
+              dbAssociations,
+            );
+
+            if (translationIssues.length > 0) {
+              discrepancies.push({
+                foodCode: csvFood.intake24Code,
+                englishName: csvFood.englishDescription,
+                localName: csvFood.localDescription || csvFood.englishDescription,
+                csvAssociatedFoods: csvAssociations,
+                dbAssociatedFoods: dbAssociations,
+                issue: 'translation_mismatch',
+                severity: 'warning',
+                translationIssues,
+              });
+            }
+          }
         }
       }
 
@@ -1426,6 +1477,148 @@ class ConsistencyChecker {
     }
 
     return discrepancies;
+  }
+
+  /**
+   * Check associated food translations for Malaysian locales.
+   * Verifies that both English and locale-specific translations exist and match CSV.
+   */
+  private checkAssociatedFoodTranslations(
+    csvFood: FoodRow,
+    csvAssociations: Array<{ code: string; text: string; type: 'food' | 'category' }>,
+    dbAssociations: Array<{ associatedFoodCode: string | null; associatedCategoryCode: string | null; text: any }>,
+  ): Array<{ code: string; missingLanguages: string[]; expectedEnglish?: string; actualEnglish?: string; expectedLocal?: string; actualLocal?: string }> {
+    const issues: Array<{ code: string; missingLanguages: string[]; expectedEnglish?: string; actualEnglish?: string; expectedLocal?: string; actualLocal?: string }> = [];
+
+    // Determine expected language code from locale
+    const localeId = this.currentLocaleId.toLowerCase();
+    let expectedLangCode: string | null = null;
+    if (localeId.startsWith('ms_my'))
+      expectedLangCode = 'ms';
+    else if (localeId.startsWith('ta_my'))
+      expectedLangCode = 'ta';
+    else if (localeId.startsWith('zh_my'))
+      expectedLangCode = 'zh';
+
+    // Only check Malaysian locales
+    if (!expectedLangCode) {
+      return issues;
+    }
+
+    // Parse English column for expected English translations
+    const englishAssociations = this.parseAssociatedFoods(csvFood.associatedFoodEnglish || '');
+    const englishByCode = new Map(englishAssociations.map(a => [a.code, a.text]));
+
+    // Parse locale-specific column for expected local translations
+    const localAssociations = this.parseAssociatedFoodsWithPrompts(csvFood.associatedFood || '');
+    const localByCode = new Map(localAssociations.map(a => [a.code, a.prompts]));
+
+    // Check each database association
+    for (const dbAssoc of dbAssociations) {
+      const code = dbAssoc.associatedFoodCode || dbAssoc.associatedCategoryCode;
+      if (!code)
+        continue;
+
+      const dbText = dbAssoc.text || {};
+      const missingLanguages: string[] = [];
+
+      // Check if English translation exists
+      if (!dbText.en) {
+        missingLanguages.push('en');
+      }
+
+      // Check if locale-specific translation exists
+      if (!dbText[expectedLangCode]) {
+        missingLanguages.push(expectedLangCode);
+      }
+
+      // Check if English matches CSV (if we have expected value)
+      const expectedEnglish = englishByCode.get(code);
+      const actualEnglish = dbText.en;
+
+      // Check if local matches CSV (if we have expected value)
+      const localPrompts = localByCode.get(code) || {};
+      const expectedLocal = localPrompts[expectedLangCode];
+      const actualLocal = dbText[expectedLangCode];
+
+      // Report issues if languages are missing or translations don't match
+      if (missingLanguages.length > 0) {
+        issues.push({
+          code,
+          missingLanguages,
+          expectedEnglish,
+          actualEnglish,
+          expectedLocal,
+          actualLocal,
+        });
+      }
+    }
+
+    return issues;
+  }
+
+  /**
+   * Parse associated foods with prompt translations (for locale-specific columns).
+   * Returns the code and parsed prompts object.
+   */
+  private parseAssociatedFoodsWithPrompts(associatedString: string): Array<{ code: string; prompts: Record<string, string> }> {
+    if (!associatedString || !associatedString.trim()) {
+      return [];
+    }
+
+    const results: Array<{ code: string; prompts: Record<string, string> }> = [];
+
+    // Tokenize using same logic as parseAssociatedFoods
+    const normalized = associatedString.replace(/\r\n/g, '\n');
+    const parts: string[] = [];
+    let current = '';
+    let parenDepth = 0;
+    let braceDepth = 0;
+
+    for (const char of normalized) {
+      if (char === '(')
+        parenDepth++;
+      else if (char === ')' && parenDepth > 0)
+        parenDepth--;
+      else if (char === '{')
+        braceDepth++;
+      else if (char === '}' && braceDepth > 0)
+        braceDepth--;
+
+      if ((char === ',' || char === '\n') && parenDepth === 0 && braceDepth === 0) {
+        if (current.trim().length > 0)
+          parts.push(current.trim());
+        current = '';
+        continue;
+      }
+
+      current += char;
+    }
+
+    if (current.trim().length > 0)
+      parts.push(current.trim());
+
+    for (const part of parts) {
+      // Match CODE({lang: text}) format
+      const match = part.match(/^(\w+)\s*\((\{.+\})\)$/);
+      if (match) {
+        const code = match[1];
+        const promptStr = match[2];
+
+        // Parse the {lang: text} format using the service's parsePromptTranslations
+        const prompts = FoodDataParserService.parsePromptTranslations(promptStr);
+        results.push({ code, prompts });
+      }
+      else {
+        // Simple code without prompts
+        const simpleMatch = part.match(/^(\w+)$/);
+        if (simpleMatch) {
+          results.push({ code: simpleMatch[1], prompts: {} });
+        }
+      }
+    }
+
+    return results;
   }
 
   /**
@@ -1454,7 +1647,7 @@ class ConsistencyChecker {
       else if (char === '}' && braceDepth > 0)
         braceDepth--;
 
-      if (char === ',' && parenDepth === 0 && braceDepth === 0) {
+      if ((char === ',' || char === '\n') && parenDepth === 0 && braceDepth === 0) {
         if (current.trim().length > 0)
           parts.push(current.trim());
         current = '';
