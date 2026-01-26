@@ -73,8 +73,6 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
   const getRootCategories = async (localeId: string) => {
     return await kyselyDb.foods
       .selectFrom('categories')
-      .leftJoin('categoriesCategories as cc', 'categories.id', 'cc.subCategoryId')
-      .leftJoin('categoryAttributes as ca', 'categories.id', 'ca.categoryId')
       .select([
         'id',
         'localeId',
@@ -82,9 +80,9 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
         'englishName',
         'name',
         'hidden',
-        'useInRecipes',
       ])
       .distinct()
+      .leftJoin('categoriesCategories as cc', 'categories.id', 'cc.subCategoryId')
       .where('categories.localeId', '=', localeId)
       .where(eb =>
         eb.not(
