@@ -93,7 +93,7 @@
     "ua-parser-js": "^2.0.7",
     "validator": "^13.15.26",
     "web-push": "^3.6.7",
-    "zod": "^3.25.76",
+    "zod": "^4.3.6",
     "zod-validation-error": "^3.5.4"
   },
   "devDependencies": {
