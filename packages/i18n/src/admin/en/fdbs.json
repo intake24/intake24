@@ -106,14 +106,19 @@
     "title": "Attributes",
     "inherit": "Inherit",
     "override": "Override",
+    "inheritHelp": "Attributes can be inherited from parent categories or overridden with specific values. 'Inherit' uses the value from parent categories, 'Override' lets you set a custom value.",
     "sameAsBeforeOption": "Same as before option",
+    "sameAsBeforeOption.tooltip": "When enabled, users can quickly select 'same as last time' for this food.",
     "readyMealOption": "Was this a ready-made meal or food (e.g. ready to cook / eat / pre-packed)?",
+    "readyMealOption.tooltip": "When enabled, users will be asked if this was a ready-made/pre-packaged meal.",
     "reasonableAmount": "Reasonable amount (g/ml)",
+    "reasonableAmount.tooltip": "Maximum expected portion in g/ml. Users entering larger amounts will be prompted to confirm.",
     "useInRecipes": {
       "_": "Use for recipes",
       "0": "Use anywhere",
       "1": "Use only as regular food",
-      "2": "Use only as recipe ingredient"
+      "2": "Use only as recipe ingredient",
+      "tooltip": "Controls whether this food can be used as a recipe ingredient, as a standalone food, or both."
     }
   },
 
@@ -123,7 +128,8 @@
     "add": "Add nutrient record",
     "remove": "Remove nutrient record",
     "alreadyIncluded": "Nutrient table record '{id}' is already included in current list.",
-    "none": "No nutrient table record found for provided search."
+    "none": "No nutrient table record found for provided search.",
+    "empty": "No nutrient records linked. Click '+' to map this food to a nutrient table."
   },
 
   "associatedFoods": {
@@ -138,7 +144,8 @@
     "text": "Text",
     "linkAsMain": "Link as main food",
     "multiple": "Allow multiple foods",
-    "emptyWarning": "Warning: {count} associated food(s) would be removed. Data has been preserved."
+    "emptyWarning": "Warning: {count} associated food(s) would be removed. Data has been preserved.",
+    "empty": "No associated foods. These prompt users about related items (e.g., 'Did you have milk with your cereal?')."
   },
 
   "portionSizes": {
@@ -147,6 +154,7 @@
     "add": "Add portion size method",
     "edit": "Edit portion size method",
     "remove": "Remove portion size method",
+    "empty": "No portion size methods defined. Click '+' to specify how this food is measured.",
 
     "parameters": "parameters",
     "noParameters": "Method does not have any further parameters.",

@@ -4,15 +4,42 @@
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.attributes.title') }}
       </v-toolbar-title>
+      <v-tooltip location="bottom" max-width="300">
+        <template #activator="{ props }">
+          <v-icon v-bind="props" class="ml-2" size="small">
+            mdi-help-circle-outline
+          </v-icon>
+        </template>
+        {{ $t('fdbs.attributes.inheritHelp') }}
+      </v-tooltip>
     </v-toolbar>
     <v-card-text>
-      <v-row>
+      <!-- Same as before option -->
+      <v-row align="center" class="mb-2">
         <v-col cols="auto">
-          <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('sameAsBeforeOption')">
-            {{ title('sameAsBeforeOption') }}
-          </v-btn>
+          <v-btn-toggle
+            color="primary"
+            density="compact"
+            :disabled="disabled"
+            mandatory
+            :model-value="isInherited('sameAsBeforeOption') ? 'inherit' : 'override'"
+            @update:model-value="(val) => setInheritMode('sameAsBeforeOption', val)"
+          >
+            <v-btn size="small" value="inherit">
+              <v-icon size="small" start>
+                mdi-arrow-down
+              </v-icon>
+              {{ $t('fdbs.attributes.inherit') }}
+            </v-btn>
+            <v-btn size="small" value="override">
+              <v-icon size="small" start>
+                mdi-pencil
+              </v-icon>
+              {{ $t('fdbs.attributes.override') }}
+            </v-btn>
+          </v-btn-toggle>
         </v-col>
-        <v-col align-self="center">
+        <v-col>
           <v-switch
             v-model="attributes.sameAsBeforeOption"
             class="mt-0"
@@ -24,14 +51,44 @@
             @update:model-value="errors.clear('main.attributes.sameAsBeforeOption')"
           />
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col align-self="center" cols="auto">
-          <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('readyMealOption')">
-            {{ title('readyMealOption') }}
-          </v-btn>
+        <v-col cols="auto">
+          <v-tooltip location="bottom" max-width="250">
+            <template #activator="{ props }">
+              <v-icon v-bind="props" size="small">
+                mdi-help-circle-outline
+              </v-icon>
+            </template>
+            {{ $t('fdbs.attributes.sameAsBeforeOption.tooltip') }}
+          </v-tooltip>
         </v-col>
-        <v-col align-self="center">
+      </v-row>
+
+      <!-- Ready meal option -->
+      <v-row align="center" class="mb-2">
+        <v-col cols="auto">
+          <v-btn-toggle
+            color="primary"
+            density="compact"
+            :disabled="disabled"
+            mandatory
+            :model-value="isInherited('readyMealOption') ? 'inherit' : 'override'"
+            @update:model-value="(val) => setInheritMode('readyMealOption', val)"
+          >
+            <v-btn size="small" value="inherit">
+              <v-icon size="small" start>
+                mdi-arrow-down
+              </v-icon>
+              {{ $t('fdbs.attributes.inherit') }}
+            </v-btn>
+            <v-btn size="small" value="override">
+              <v-icon size="small" start>
+                mdi-pencil
+              </v-icon>
+              {{ $t('fdbs.attributes.override') }}
+            </v-btn>
+          </v-btn-toggle>
+        </v-col>
+        <v-col>
           <v-switch
             v-model="attributes.readyMealOption"
             class="mt-0"
@@ -43,14 +100,44 @@
             @update:model-value="errors.clear('main.attributes.readyMealOption')"
           />
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col align-self="center" cols="auto">
-          <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('reasonableAmount')">
-            {{ title('reasonableAmount') }}
-          </v-btn>
+        <v-col cols="auto">
+          <v-tooltip location="bottom" max-width="250">
+            <template #activator="{ props }">
+              <v-icon v-bind="props" size="small">
+                mdi-help-circle-outline
+              </v-icon>
+            </template>
+            {{ $t('fdbs.attributes.readyMealOption.tooltip') }}
+          </v-tooltip>
         </v-col>
-        <v-col align-self="center">
+      </v-row>
+
+      <!-- Reasonable amount -->
+      <v-row align="center" class="mb-2">
+        <v-col cols="auto">
+          <v-btn-toggle
+            color="primary"
+            density="compact"
+            :disabled="disabled"
+            mandatory
+            :model-value="isInherited('reasonableAmount') ? 'inherit' : 'override'"
+            @update:model-value="(val) => setInheritMode('reasonableAmount', val)"
+          >
+            <v-btn size="small" value="inherit">
+              <v-icon size="small" start>
+                mdi-arrow-down
+              </v-icon>
+              {{ $t('fdbs.attributes.inherit') }}
+            </v-btn>
+            <v-btn size="small" value="override">
+              <v-icon size="small" start>
+                mdi-pencil
+              </v-icon>
+              {{ $t('fdbs.attributes.override') }}
+            </v-btn>
+          </v-btn-toggle>
+        </v-col>
+        <v-col>
           <v-text-field
             v-model.number="attributes.reasonableAmount"
             density="compact"
@@ -63,14 +150,44 @@
             @update:model-value="errors.clear('main.attributes.reasonableAmount')"
           />
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col align-self="center" cols="auto">
-          <v-btn :disabled="disabled" variant="outlined" @click="toggleInherit('useInRecipes')">
-            {{ title('useInRecipes') }}
-          </v-btn>
+        <v-col cols="auto">
+          <v-tooltip location="bottom" max-width="250">
+            <template #activator="{ props }">
+              <v-icon v-bind="props" size="small">
+                mdi-help-circle-outline
+              </v-icon>
+            </template>
+            {{ $t('fdbs.attributes.reasonableAmount.tooltip') }}
+          </v-tooltip>
         </v-col>
-        <v-col align-self="center" cols>
+      </v-row>
+
+      <!-- Use in recipes -->
+      <v-row align="center">
+        <v-col cols="auto">
+          <v-btn-toggle
+            color="primary"
+            density="compact"
+            :disabled="disabled"
+            mandatory
+            :model-value="isInherited('useInRecipes') ? 'inherit' : 'override'"
+            @update:model-value="(val) => setInheritMode('useInRecipes', val)"
+          >
+            <v-btn size="small" value="inherit">
+              <v-icon size="small" start>
+                mdi-arrow-down
+              </v-icon>
+              {{ $t('fdbs.attributes.inherit') }}
+            </v-btn>
+            <v-btn size="small" value="override">
+              <v-icon size="small" start>
+                mdi-pencil
+              </v-icon>
+              {{ $t('fdbs.attributes.override') }}
+            </v-btn>
+          </v-btn-toggle>
+        </v-col>
+        <v-col>
           <v-select
             v-model="attributes.useInRecipes"
             density="compact"
@@ -83,6 +200,16 @@
             variant="outlined"
             @update:model-value="errors.clear('main.attributes.useInRecipes')"
           />
+        </v-col>
+        <v-col cols="auto">
+          <v-tooltip location="bottom" max-width="250">
+            <template #activator="{ props }">
+              <v-icon v-bind="props" size="small">
+                mdi-help-circle-outline
+              </v-icon>
+            </template>
+            {{ $t('fdbs.attributes.useInRecipes.tooltip') }}
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-card-text>
@@ -161,6 +288,16 @@ export default defineComponent({
       return i18n.t(`fdbs.attributes.${key}`);
     };
 
+    function setInheritMode(attribute: AttributeType, mode: 'inherit' | 'override') {
+      if (mode === 'inherit') {
+        attributes.value[attribute] = null;
+      }
+      else {
+        // @ts-expect-error it doesn't narrow the type correctly
+        attributes.value[attribute] = defaultAttributes[attribute];
+      }
+    };
+
     function toggleInherit(attribute: AttributeType) {
       if (attributes.value[attribute] !== null) {
         attributes.value[attribute] = null;
@@ -168,7 +305,7 @@ export default defineComponent({
       }
 
       // @ts-expect-error it doesn't narrow the type correctly
-      this.attributes[attribute] = this.defaultAttributes[attribute];
+      attributes.value[attribute] = defaultAttributes[attribute];
     };
 
     return {
@@ -177,6 +314,7 @@ export default defineComponent({
       isInherited,
       title,
       toggleInherit,
+      setInheritMode,
       useInRecipeTypeItems,
     };
   },

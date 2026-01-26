@@ -15,6 +15,9 @@
       />
     </v-toolbar>
     <v-list class="list-border py-0" lines="two">
+      <v-alert v-if="!items.length" class="ma-3" density="compact" type="info" variant="tonal">
+        {{ $t('fdbs.associatedFoods.empty') }}
+      </v-alert>
       <vue-draggable
         v-model="items"
         :animation="300"

@@ -13,6 +13,9 @@
       />
     </v-toolbar>
     <v-list class="list-border py-0" lines="two">
+      <v-alert v-if="!items.length" class="ma-3" density="compact" type="info" variant="tonal">
+        {{ $t('fdbs.nutrients.empty') }}
+      </v-alert>
       <v-list-item v-for="item in items" :key="item.id" link>
         <template #prepend>
           <v-icon>$nutrient-types</v-icon>
