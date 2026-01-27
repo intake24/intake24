@@ -156,7 +156,7 @@ function adminFoodController({
   };
 
   const categories = async (
-    req: Request,
+    req: Request<{ foodId: string; localeId: string }>,
     res: Response<{ categories: string[] }>,
   ): Promise<void> => {
     const { foodId, localeId } = req.params;

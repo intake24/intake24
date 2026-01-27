@@ -11,7 +11,7 @@ import { SystemLocale } from '@intake24/db';
 function localCategoriesController({
   localCategoriesService,
 }: Pick<IoC, 'localCategoriesService'>) {
-  const store = async (req: Request, res: Response): Promise<void> => {
+  const store = async (req: Request<{ localeId: string }>, res: Response): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
 
@@ -36,7 +36,7 @@ function localCategoriesController({
     }
   };
 
-  const update = async (req: Request, res: Response): Promise<void> => {
+  const update = async (req: Request<{ localeId: string; categoryId: string }>, res: Response): Promise<void> => {
     const { localeId, categoryId } = req.params;
     const { version } = req.query;
     const { aclService } = req.scope.cradle;
@@ -56,7 +56,7 @@ function localCategoriesController({
     res.end();
   };
 
-  const read = async (req: Request, res: Response<SimpleCategoryEntry>): Promise<void> => {
+  const read = async (req: Request<{ localeId: string; categoryId: string }>, res: Response<SimpleCategoryEntry>): Promise<void> => {
     const { localeId, categoryId } = req.params;
     const { aclService } = req.scope.cradle;
 

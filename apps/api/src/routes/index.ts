@@ -71,7 +71,7 @@ const staticContentHelmet = helmet({
 });
 
 function catchRestAs404(app: Express) {
-  app.all('*', (req: Request, res: Response): void => {
+  app.all('{*rest}', (req: Request, res: Response): void => {
     res.status(404).json('Invalid route');
   });
 }

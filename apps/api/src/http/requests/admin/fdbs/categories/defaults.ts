@@ -16,7 +16,7 @@ const defaults: Schema = {
     isLength: { options: { min: 1, max: 64 }, bail: true },
     custom: {
       options: async (value, meta): Promise<void> => {
-        const { localeId, categoryId } = (meta.req as Request).params;
+        const { localeId, categoryId } = (meta.req as Request<{ localeId: string; categoryId: string }>).params;
 
         const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
         if (!locale)

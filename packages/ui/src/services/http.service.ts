@@ -44,6 +44,9 @@ const httpClient: HttpClient = {
       .map(item => trim(item, '/'))
       .join('/'),
     headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } },
+    paramsSerializer: {
+      indexes: null,
+    },
   }),
 
   async get(url, config) {

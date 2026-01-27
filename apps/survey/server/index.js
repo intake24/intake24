@@ -70,7 +70,7 @@ async function startApp() {
 
   app.use(express.static(config.static, { index: false }));
 
-  app.get('*', (req, res) => {
+  app.get('{*rest}', (req, res) => {
     const index = path.resolve(config.static, 'index.html');
 
     fs.access(index, fs.constants.F_OK, (err) => {

@@ -10,7 +10,7 @@ function localFoodsController({
   localFoodsService,
   cache,
 }: Pick<IoC, 'localFoodsService' | 'cache'>) {
-  const store = async (req: Request, res: Response): Promise<void> => {
+  const store = async (req: Request<{ localeId: string }>, res: Response): Promise<void> => {
     const { localeId } = req.params;
     const { update } = req.query;
     const _return = req.query.return;
@@ -38,7 +38,7 @@ function localFoodsController({
     }
   };
 
-  const read = async (req: Request, res: Response): Promise<void> => {
+  const read = async (req: Request<{ localeId: string; foodId: string }>, res: Response): Promise<void> => {
     const { localeId, foodId } = req.params;
     const { aclService } = req.scope.cradle;
 
@@ -52,7 +52,7 @@ function localFoodsController({
     res.json(instance);
   };
 
-  const readEnabledFoods = async (req: Request, res: Response): Promise<void> => {
+  const readEnabledFoods = async (req: Request<{ localeId: string }>, res: Response): Promise<void> => {
     const { localeId } = req.params;
     const { aclService } = req.scope.cradle;
 

@@ -68,7 +68,7 @@ export function role(role: string | string[]) {
 }
 
 export function isSurveyRespondent() {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return (req: Request<{ slug: string }>, res: Response, next: NextFunction): void => {
     const { slug } = req.params;
 
     req.scope.cradle.aclService.hasPermission(surveyRespondent(slug)).then(result => (result ? next() : next(new ForbiddenError()))).catch(err => next(err));

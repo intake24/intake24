@@ -25,7 +25,7 @@ export function mediable(securable: ModelStatic<FAQ | FeedbackScheme | SurveySch
     browse: {
       middleware: [permission(resource)],
       handler: async ({ query, req }) => {
-        const { [paramId]: modelId } = req.params;
+        const { [paramId]: modelId } = req.params as Record<typeof paramId, string>;
         const { aclService, mediaService } = req.scope.cradle;
 
         await aclService.findAndCheckRecordAccess(securable, 'media', { attributes: ['id'], where: { id: modelId } });
@@ -37,7 +37,7 @@ export function mediable(securable: ModelStatic<FAQ | FeedbackScheme | SurveySch
     store: {
       middleware: [permission(resource), upload.single('file')],
       handler: async ({ body, file, req }) => {
-        const { params: { [paramId]: modelId } } = req;
+        const { [paramId]: modelId } = req.params as Record<typeof paramId, string>;
         const { aclService, kyselyDb, mediaService } = req.scope.cradle;
 
         if (body.id) {

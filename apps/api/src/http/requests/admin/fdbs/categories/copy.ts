@@ -36,7 +36,7 @@ export default validate(
       isLength: { options: { min: 1, max: 64 }, bail: true },
       custom: {
         options: async (value, meta): Promise<void> => {
-          const { localeId } = (meta.req as Request).params;
+          const { localeId } = (meta.req as Request<{ localeId: string }>).params;
 
           const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
           if (!locale)

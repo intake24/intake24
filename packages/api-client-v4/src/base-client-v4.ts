@@ -56,6 +56,9 @@ export class BaseClientV4 {
       headers: {},
       validateStatus: null,
       baseURL: this.apiBaseUrl,
+      paramsSerializer: {
+        indexes: null,
+      },
     });
 
     this.accessClient = new Axios({
@@ -63,6 +66,9 @@ export class BaseClientV4 {
       headers: {},
       validateStatus: null,
       baseURL: this.apiBaseUrl,
+      paramsSerializer: {
+        indexes: null,
+      },
     });
 
     this.accessClient.interceptors.request.use(

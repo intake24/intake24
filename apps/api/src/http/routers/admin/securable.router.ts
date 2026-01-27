@@ -92,7 +92,7 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
     store: {
       middleware: [permission(resource)],
       handler: async ({ body: { email, name, phone, actions }, req }) => {
-        const { params: { [paramId]: securableId } } = req;
+        const { [paramId]: securableId } = req.params as Record<typeof paramId, string>;
         const { aclService, adminUserService } = req.scope.cradle;
 
         await aclService.findAndCheckRecordAccess(securable, 'securables', {

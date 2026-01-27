@@ -10,13 +10,13 @@ import {
   weightResponse,
 } from '../types/http';
 
+const id = z.union([z.string().nonempty(), z.string().array().nonempty()]);
+
 export const portionSize = initContract().router({
   asServedSets: {
     method: 'GET',
     path: '/portion-sizes/as-served-sets',
-    query: z.object({
-      id: z.union([z.string(), z.string().array()]),
-    }),
+    query: z.object({ id }),
     responses: {
       200: asServedSetResponse.array(),
     },
@@ -35,9 +35,7 @@ export const portionSize = initContract().router({
   drinkwareSets: {
     method: 'GET',
     path: '/portion-sizes/drinkware-sets',
-    query: z.object({
-      id: z.union([z.string(), z.string().array()]),
-    }),
+    query: z.object({ id }),
     responses: {
       200: drinkwareSetResponse.array(),
     },
@@ -58,9 +56,7 @@ export const portionSize = initContract().router({
   guideImages: {
     method: 'GET',
     path: '/portion-sizes/guide-images',
-    query: z.object({
-      id: z.union([z.string(), z.string().array()]),
-    }),
+    query: z.object({ id }),
     responses: {
       200: guideImageResponse.array(),
     },
@@ -81,9 +77,7 @@ export const portionSize = initContract().router({
   imageMaps: {
     method: 'GET',
     path: '/portion-sizes/image-maps',
-    query: z.object({
-      id: z.union([z.string(), z.string().array()]),
-    }),
+    query: z.object({ id }),
     responses: {
       200: imageMapResponse.array(),
     },
@@ -104,9 +98,7 @@ export const portionSize = initContract().router({
   standardUnits: {
     method: 'GET',
     path: '/portion-sizes/standard-units',
-    query: z.object({
-      id: z.union([z.string(), z.string().array()]),
-    }),
+    query: z.object({ id }),
     responses: {
       200: standardUnitResponse.array(),
     },

@@ -17,7 +17,7 @@ const defaults: Schema = {
     optional: true,
     custom: {
       options: async (value, meta): Promise<void> => {
-        const { localeId, foodId } = (meta.req as Request).params;
+        const { localeId, foodId } = (meta.req as Request<{ localeId: string; foodId: string }>).params;
 
         const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
         if (!locale)

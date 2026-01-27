@@ -20,7 +20,7 @@ export default () => {
   // Admin
   router.use('/admin', admin());
 
-  router.all('*', (req: Request, res: Response): void => {
+  router.all('{*rest}', (req: Request, res: Response): void => {
     res.status(404).json('Invalid route');
   });
 

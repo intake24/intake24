@@ -49,38 +49,20 @@ export function portionSize() {
       };
     },
     drinkwareSets: async ({ query: { id }, req }) => {
-      switch (typeof id) {
-        case 'string': {
-          const drinkwareSetEntry = await req.scope.cradle.drinkwareSetService.getDrinkwareSet(id);
-          if (drinkwareSetEntry === undefined)
-            throw new NotFoundError();
-          return {
-            status: 200,
-            body: [toSurveyResponse(drinkwareSetEntry)],
-          };
-        }
-        case 'object':
-          if (Array.isArray(id)) {
-            const lookupResults = await Promise.all(
-              id.map(setId => req.scope.cradle.drinkwareSetService.getDrinkwareSet(setId)),
-            );
-            const successfulResults = lookupResults.filter(
-              (entry): entry is DrinkwareSetEntry => entry !== undefined,
-            );
-            return {
-              status: 200,
-              body: successfulResults.map(toSurveyResponse),
-            };
-          }
-          break;
-      }
-
-      return { status: 200, body: [] };
+      const lookupResults = await Promise.all(
+        (Array.isArray(id) ? id : [id]).map(setId => req.scope.cradle.drinkwareSetService.getDrinkwareSet(setId)),
+      );
+      const successfulResults = lookupResults.filter(
+        (entry): entry is DrinkwareSetEntry => entry !== undefined,
+      );
+      return {
+        status: 200,
+        body: successfulResults.map(toSurveyResponse),
+      };
     },
     drinkwareSet: async ({ params: { id }, req }) => {
       const drinkwareSetEntry = await req.scope.cradle.drinkwareSetService.getDrinkwareSet(id);
-
-      if (drinkwareSetEntry === undefined)
+      if (!drinkwareSetEntry)
         throw new NotFoundError();
 
       return {

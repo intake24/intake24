@@ -9,7 +9,7 @@ import fsConfig from '@intake24/api/config/filesystem';
 
 const router = Router();
 
-router.get('*', (req: Request, res: Response): void => {
+router.get('{*rest}', (req: Request, res: Response): void => {
   const index = path.resolve(fsConfig.local.public, 'survey', 'index.html');
 
   fs.access(index, fs.constants.F_OK, (err) => {

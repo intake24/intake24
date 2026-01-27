@@ -179,7 +179,7 @@ function adminCategoryController({
   };
 
   const categories = async (
-    req: Request,
+    req: Request<{ categoryId: string; localeId: string }>,
     res: Response<{ categories: string[] }>,
   ): Promise<void> => {
     const { categoryId, localeId } = req.params;
