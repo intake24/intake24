@@ -12,15 +12,14 @@ import {
   NutrientTableRecordNutrient,
 } from '@intake24/db';
 
-import InheritableAttributesImpl from './inheritable-attributes-service';
 import InvalidIdError from './invalid-id-error';
 import PortionSizeMethodsImpl from './portion-size-methods.service';
 
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
 
-function foodDataService({ imagesBaseUrl, cachedParentCategoriesService, cache, cacheConfig }: Pick<IoC, 'imagesBaseUrl' | 'cachedParentCategoriesService' | 'cache' | 'cacheConfig'>) {
-  const inheritableAttributesImpl = InheritableAttributesImpl({ cache, cacheConfig });
+function foodDataService({ inheritableAttributesService, imagesBaseUrl, cachedParentCategoriesService }: Pick<IoC, 'inheritableAttributesService' | 'imagesBaseUrl' | 'cachedParentCategoriesService'>) {
+  const { resolveFoodAttributes } = inheritableAttributesService;
   const portionSizeMethodsImpl = PortionSizeMethodsImpl(imagesBaseUrl);
 
   const getNutrientKCalPer100G = async (foodId: string): Promise<number> => {
@@ -117,7 +116,7 @@ function foodDataService({ imagesBaseUrl, cachedParentCategoriesService, cache, 
       getAssociatedFoodPrompts(id),
       getBrands(id),
       cachedParentCategoriesService.getFoodAllCategoryCodes(id),
-      inheritableAttributesImpl.resolveFoodAttributes(id),
+      resolveFoodAttributes(id),
       getNutrientKCalPer100G(id),
       portionSizeMethodsImpl.resolveUserPortionSizeMethods(id),
       getAllTags(categoryIds, food.tags),
