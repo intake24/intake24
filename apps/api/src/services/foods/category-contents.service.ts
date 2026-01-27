@@ -16,7 +16,7 @@ import {
   QueryTypes,
 } from '@intake24/db';
 
-import { acceptForQuery, buildAttributeResolvers } from './attribute-filters';
+import { acceptForQuery, buildAttributeResolvers } from './inheritable-attributes-service';
 
 function categoryContentsService({
   adminCategoryService,

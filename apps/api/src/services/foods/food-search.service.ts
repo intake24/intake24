@@ -1,10 +1,10 @@
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import type { IoC } from '@intake24/api/ioc';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
+import { acceptForQuery, buildAttributeResolvers } from './inheritable-attributes-service';
 
 import foodIndex from '@intake24/api/food-index';
 import { applyDefaultSearchQueryParameters } from '@intake24/api/food-index/search-query';
-import { acceptForQuery, buildAttributeResolvers } from './attribute-filters';
 
 function foodSearchService({
   inheritableAttributesService,
