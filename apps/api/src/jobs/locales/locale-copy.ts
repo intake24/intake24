@@ -23,17 +23,13 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
 
   private dbJob!: DbJob;
 
+  private cache;
   private kyselyDb;
 
-  constructor({
-    kyselyDb,
-    logger,
-  }: Pick<
-    IoC,
-    'kyselyDb' | 'logger'
-  >) {
+  constructor({ cache, kyselyDb, logger }: Pick<IoC, 'cache' | 'kyselyDb' | 'logger'>) {
     super({ logger });
 
+    this.cache = cache;
     this.kyselyDb = kyselyDb;
   }
 
@@ -113,6 +109,8 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
         Promise.all(systemTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
       });
     }
+
+    await this.cache.setAdd('locales-index', code);
   }
 
   private async brands({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
