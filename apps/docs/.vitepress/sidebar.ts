@@ -1,3 +1,5 @@
+import { links } from './links';
+
 export const sidebar = {
   '/guide/': [
     {
@@ -26,7 +28,7 @@ export const sidebar = {
         },
         {
           text: 'Researcher guides',
-          link: 'https://intake24.github.io/researcher-docs',
+          link: links.researcherGuides,
           target: '_blank',
         },
       ],

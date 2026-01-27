@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 
 import { description } from '../package.json';
+import { links } from './links';
 import { nav } from './nav';
 import { sidebar } from './sidebar';
 
@@ -33,12 +34,12 @@ export default defineConfig({
     },
     sidebar,
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/intake24/intake24' },
+      { icon: 'github', link: links.gitHub },
     ],
   },
 
   cleanUrls: true,
   sitemap: {
-    hostname: 'https://docs.intake24.org',
+    hostname: links.docs,
   },
 });

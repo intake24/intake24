@@ -20,7 +20,7 @@ Content-Type: multipart/form-data
 
 ## Reference
 
-OpenAPI specification is used to describe the API -> [OpenAPI specification](/open-api){target="blank"}
+OpenAPI specification is used to describe the API -> [OpenAPI specification](/open-api.html){target="blank"}
 
 ::: warning
 OpenAPI specification is available for ALL survey endpoints and part of admin endpoints.

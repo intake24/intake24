@@ -1,3 +1,5 @@
+import { links } from './links';
+
 export const nav = [
   {
     text: 'Guide',
@@ -16,9 +18,9 @@ export const nav = [
   {
     text: 'Resources',
     items: [
-      { text: 'Home', link: 'https://intake24.org' },
-      { text: 'Researcher guides', link: 'https://intake24.atlassian.net/wiki/spaces/resources' },
-      { text: 'GitHub', link: 'https://github.com/intake24/intake24' },
+      { text: 'Home', link: links.home },
+      { text: 'Researcher guides', link: links.researcherGuides },
+      { text: 'GitHub', link: links.gitHub },
     ],
   },
 ];
