@@ -19,8 +19,8 @@ import PortionSizeMethodsImpl from './portion-size-methods.service';
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
 
-function foodDataService({ imagesBaseUrl, cachedParentCategoriesService }: Pick<IoC, 'imagesBaseUrl' | 'cachedParentCategoriesService'>) {
-  const inheritableAttributesImpl = InheritableAttributesImpl();
+function foodDataService({ imagesBaseUrl, cachedParentCategoriesService, cache, cacheConfig }: Pick<IoC, 'imagesBaseUrl' | 'cachedParentCategoriesService' | 'cache' | 'cacheConfig'>) {
+  const inheritableAttributesImpl = InheritableAttributesImpl({ cache, cacheConfig });
   const portionSizeMethodsImpl = PortionSizeMethodsImpl(imagesBaseUrl);
 
   const getNutrientKCalPer100G = async (foodId: string): Promise<number> => {

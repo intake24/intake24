@@ -5,20 +5,22 @@ import { getCategoryParentCategories, getFoodParentCategories } from '@intake24/
 import { useInRecipeTypes } from '@intake24/common/types';
 import { AttributeDefaults, CategoryAttribute, FoodAttribute } from '@intake24/db';
 
-function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
-  const attr = attrOpt ?? useInRecipeTypes.USE_AS_REGULAR_FOOD;
+function inheritableAttributesService({
+  cache,
+  cacheConfig,
+}: Pick<IoC, 'cache' | 'cacheConfig'>) {
+  const acceptForQuery = (recipe: boolean, attrOpt?: number): boolean => {
+    const attr = attrOpt ?? useInRecipeTypes.USE_AS_REGULAR_FOOD;
 
-  switch (attr) {
-    case useInRecipeTypes.USE_AS_REGULAR_FOOD:
-      return !recipe;
-    case useInRecipeTypes.USE_AS_RECIPE_INGREDIENT:
-      return recipe;
-    default:
-      return true;
-  }
-}
-
-function inheritableAttributesService() {
+    switch (attr) {
+      case useInRecipeTypes.USE_AS_REGULAR_FOOD:
+        return !recipe;
+      case useInRecipeTypes.USE_AS_RECIPE_INGREDIENT:
+        return recipe;
+      default:
+        return true;
+    }
+  };
   const completeAttributes = (
     attributes: Partial<InheritableAttributes>,
   ): InheritableAttributes | undefined => {
@@ -118,50 +120,29 @@ function inheritableAttributesService() {
     return resolveAttributesRec(parentCategories, attributes);
   }
 
-  return {
-    resolveCategoryAttributes,
-    resolveFoodAttributes,
-  };
-}
-
-function buildAttributeResolvers({
-  inheritableAttributesService: service,
-  cache,
-  cacheConfig,
-}: Pick<IoC, 'inheritableAttributesService' | 'cache' | 'cacheConfig'>) {
-  const resolveCategoryAttributes = async (categoryIds: string[]): Promise<Record<string, InheritableAttributes>> => {
-    const data = await Promise.all(
-      categoryIds.map(id => service.resolveCategoryAttributes(id)),
-    );
-
-    return Object.fromEntries(categoryIds.map((id, index) => [id, data[index]]));
-  };
-
-  const resolveFoodAttributes = async (foodIds: string[]): Promise<Record<string, InheritableAttributes>> => {
-    const data = await Promise.all(
-      foodIds.map(id => service.resolveFoodAttributes(id)),
-    );
-
-    return Object.fromEntries(foodIds.map((id, index) => [id, data[index]]));
-  };
-
   const getCategoryAttributes = async (categoryIds: string[]): Promise<Record<string, InheritableAttributes | null>> => {
-    return cache.rememberMany(categoryIds, 'category-attributes', cacheConfig.ttl, resolveCategoryAttributes);
+    return cache.rememberMany(categoryIds, 'category-attributes', cacheConfig.ttl, async (ids) => {
+      const data = await Promise.all(ids.map(id => resolveCategoryAttributes(id)));
+      return Object.fromEntries(ids.map((id, index) => [id, data[index]]));
+    });
   };
 
   const getFoodAttributes = async (foodIds: string[]): Promise<Record<string, InheritableAttributes | null>> => {
-    return cache.rememberMany(foodIds, 'food-attributes', cacheConfig.ttl, resolveFoodAttributes);
+    return cache.rememberMany(foodIds, 'food-attributes', cacheConfig.ttl, async (ids) => {
+      const data = await Promise.all(ids.map(id => resolveFoodAttributes(id)));
+      return Object.fromEntries(ids.map((id, index) => [id, data[index]]));
+    });
   };
 
   return {
     resolveCategoryAttributes,
     resolveFoodAttributes,
+    acceptForQuery,
     getCategoryAttributes,
     getFoodAttributes,
   };
 }
 
-export { acceptForQuery, buildAttributeResolvers };
 export default inheritableAttributesService;
 
 export type InheritableAttributesService = ReturnType<typeof inheritableAttributesService>;

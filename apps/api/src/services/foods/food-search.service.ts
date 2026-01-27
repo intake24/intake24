@@ -1,7 +1,6 @@
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import type { IoC } from '@intake24/api/ioc';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
-import { acceptForQuery, buildAttributeResolvers } from './inheritable-attributes-service';
 
 import foodIndex from '@intake24/api/food-index';
 import { applyDefaultSearchQueryParameters } from '@intake24/api/food-index/search-query';
@@ -9,14 +8,8 @@ import { applyDefaultSearchQueryParameters } from '@intake24/api/food-index/sear
 function foodSearchService({
   inheritableAttributesService,
   foodThumbnailImageService,
-  cache,
-  cacheConfig,
-}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService' | 'cache' | 'cacheConfig'>) {
-  const { getCategoryAttributes, getFoodAttributes } = buildAttributeResolvers({
-    inheritableAttributesService,
-    cache,
-    cacheConfig,
-  });
+}: Pick<IoC, 'inheritableAttributesService' | 'foodThumbnailImageService'>) {
+  const { getCategoryAttributes, getFoodAttributes, acceptForQuery } = inheritableAttributesService;
 
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);

@@ -16,20 +16,12 @@ import {
   QueryTypes,
 } from '@intake24/db';
 
-import { acceptForQuery, buildAttributeResolvers } from './inheritable-attributes-service';
-
 function categoryContentsService({
   adminCategoryService,
   db,
   inheritableAttributesService,
-  cache,
-  cacheConfig,
-}: Pick<IoC, 'db' | 'adminCategoryService' | 'inheritableAttributesService' | 'cache' | 'cacheConfig'>) {
-  const { getCategoryAttributes } = buildAttributeResolvers({
-    inheritableAttributesService,
-    cache,
-    cacheConfig,
-  });
+}: Pick<IoC, 'db' | 'adminCategoryService' | 'inheritableAttributesService'>) {
+  const { getCategoryAttributes, acceptForQuery } = inheritableAttributesService;
   const filterUndefined = (
     headers: { id: string; code: string; name?: string | null }[],
   ): (CategoryHeader | FoodHeader)[] =>
