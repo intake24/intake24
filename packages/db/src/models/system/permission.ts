@@ -7,6 +7,7 @@ import type {
   NonAttribute,
   Transaction,
 } from 'sequelize';
+
 import {
   AfterBulkCreate,
   AfterCreate,

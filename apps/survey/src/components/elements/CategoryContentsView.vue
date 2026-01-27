@@ -126,10 +126,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, reactive } from 'vue';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
+
+import { defineComponent, reactive } from 'vue';
+
 import { sendGtmEvent } from '@intake24/survey/util';
+
 import NoImagePlaceholder from './NoImagePlaceholder.vue';
 
 export default defineComponent({

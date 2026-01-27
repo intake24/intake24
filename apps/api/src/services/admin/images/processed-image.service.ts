@@ -1,11 +1,13 @@
+import type { IoC } from '@intake24/api/ioc';
+
 import { randomUUID } from 'node:crypto';
 import { unlink } from 'node:fs/promises';
 import path from 'node:path';
+
 import fs from 'fs-extra';
 import sharp from 'sharp';
 
 import { NotFoundError } from '@intake24/api/http/errors';
-import type { IoC } from '@intake24/api/ioc';
 import { ProcessedImage, ProcessedImagePurposes, SourceImage } from '@intake24/db';
 
 export type SelectionImageType = 'guide' | 'as_served';

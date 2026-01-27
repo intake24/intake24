@@ -91,10 +91,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { Dictionary } from '@intake24/common/types';
+
 import { computed, onMounted, ref, watch } from 'vue';
+
 import { useFetchList } from '@intake24/admin/composables';
 import { getResource } from '@intake24/admin/router/resources';
-import type { Dictionary } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
 defineOptions({

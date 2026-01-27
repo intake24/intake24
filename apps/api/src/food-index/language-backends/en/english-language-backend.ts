@@ -1,5 +1,6 @@
-import natural from 'natural';
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
+
+import natural from 'natural';
 
 import Metaphone3Encoder from './metaphone-encoder';
 

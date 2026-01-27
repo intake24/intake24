@@ -1,6 +1,7 @@
-import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import type { SurveyAttributes } from '@intake24/common/types/http/admin';
 import type { SurveyCreationAttributes } from '@intake24/db';
+
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { Survey } from '@intake24/db';
 
 async function refreshSurveyRecord(input?: SurveyCreationAttributes, overrides: Partial<SurveyAttributes> = {}): Promise<Survey> {

@@ -161,9 +161,11 @@ import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLocale } from 'vuetify';
+
 import { Navigation } from '@intake24/survey/components/layouts';
 import { sendGtmEvent } from '@intake24/survey/util';
 import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useHttp, useI18n, useLanguage } from '@intake24/ui';
+
 import { useAuth, useSurvey } from './stores';
 
 const http = useHttp();

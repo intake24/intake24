@@ -1,5 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
+
 import { mfaDeviceResponse, mfaDevicesResponse } from '@intake24/common/types/http/admin';
 
 const contract = initContract();

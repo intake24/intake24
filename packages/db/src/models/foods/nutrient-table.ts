@@ -6,9 +6,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import type { NutrientTableRecordCreationAttributes } from './nutrient-table-record';
 
 import { Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
+
 import BaseModel from '../model';
 import NutrientTableCsvMapping from './nutrient-table-csv-mapping';
 import NutrientTableCsvMappingField from './nutrient-table-csv-mapping-field';

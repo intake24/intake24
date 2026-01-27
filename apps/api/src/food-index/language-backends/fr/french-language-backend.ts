@@ -1,6 +1,6 @@
-import porter from 'talisman/stemmers/french/porter.js';
-
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
+
+import porter from 'talisman/stemmers/french/porter.js';
 
 import FrenchPhoneticEncoder from './phonetic';
 

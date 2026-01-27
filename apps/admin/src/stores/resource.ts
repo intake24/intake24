@@ -1,8 +1,7 @@
 import type { Resource } from '../types';
+import type { Dictionary } from '@intake24/common/types';
 
 import { defineStore } from 'pinia';
-
-import type { Dictionary } from '@intake24/common/types';
 
 export type ListState = {
   name: string;

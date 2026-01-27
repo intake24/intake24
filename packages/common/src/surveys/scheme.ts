@@ -1,7 +1,9 @@
 import type { Condition, Prompt, SinglePrompt } from '../prompts';
 import type { Meal } from './meals';
+
 import validator from 'validator';
 import { z } from 'zod';
+
 import { basePrompt, CurrentPromptVersion, prompt, singlePrompt } from '../prompts';
 
 export const schemeTypes = ['default'] as const;

@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-
 import { resolve } from 'node:path';
+
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 

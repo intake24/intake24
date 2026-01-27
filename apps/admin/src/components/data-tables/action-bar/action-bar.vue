@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
 import { upperFirst } from 'lodash-es';
 import { defineComponent } from 'vue';
 

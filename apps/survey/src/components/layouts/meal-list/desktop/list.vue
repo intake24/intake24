@@ -31,9 +31,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/surveys';
+
+import { defineComponent } from 'vue';
 
 import { useMealList } from '../use-meal-list';
 import MealItemExpandable from './meal-item-expandable.vue';

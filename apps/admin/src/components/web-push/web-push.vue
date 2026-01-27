@@ -36,6 +36,7 @@
 
 <script lang="ts" setup>
 import { useHttp } from '@intake24/admin/services';
+
 import { useWebPush } from './use-web-push';
 
 const http = useHttp();

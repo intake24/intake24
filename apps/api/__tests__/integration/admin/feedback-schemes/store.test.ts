@@ -1,8 +1,9 @@
+import type { FeedbackSchemeCreationAttributes } from '@intake24/db';
+
 import { pick } from 'lodash-es';
 import request from 'supertest';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { FeedbackSchemeCreationAttributes } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/feedback-schemes';

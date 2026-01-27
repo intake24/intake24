@@ -12,9 +12,11 @@ import type { SecurityConfig } from './security';
 import type { ServicesConfig } from './services';
 import type { SessionConfig } from './session';
 import type { ACLConfig, LogConfig, MailConfig } from '@intake24/common-backend';
-import { aclConfig as acl, logConfig as log, mailConfig as mail } from '@intake24/common-backend';
 import type { DatabaseConfig } from '@intake24/db';
+
+import { aclConfig as acl, logConfig as log, mailConfig as mail } from '@intake24/common-backend';
 import { databaseConfig as database } from '@intake24/db';
+
 import app from './app';
 import cache from './cache';
 import filesystem from './filesystem';

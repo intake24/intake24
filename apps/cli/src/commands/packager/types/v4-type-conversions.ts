@@ -20,7 +20,6 @@ import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import type { AsServedPsm, CerealPsm, DrinkScalePsm, GuideImagePsm, MilkInHotDrinkPsm, MilkOnCerealPsm, PizzaPsm, PortionSizeMethod, StandardPortionPsm } from '@intake24/common/surveys';
 import type { UseInRecipeType } from '@intake24/common/types';
-import { useInRecipeTypes } from '@intake24/common/types';
 import type {
   CreateCategoryRequest,
   CreateFoodRequest,
@@ -34,6 +33,8 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
 import type { AssociatedFoodAttributes, FoodPortionSizeMethodAttributes } from '@intake24/db';
+
+import { useInRecipeTypes } from '@intake24/common/types';
 
 function fromPackageImageMapObjects(
   objects: Record<string, PkgImageMapObject>,

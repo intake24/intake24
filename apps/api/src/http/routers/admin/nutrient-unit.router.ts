@@ -1,4 +1,5 @@
 import { initServer } from '@ts-rest/express';
+
 import { ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { unique } from '@intake24/api/http/rules';

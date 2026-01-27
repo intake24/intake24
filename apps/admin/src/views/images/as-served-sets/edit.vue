@@ -57,14 +57,15 @@
 </template>
 
 <script lang="ts">
+import type { LocaleTranslation } from '@intake24/common/types';
+import type { AsServedImageEntry, AsServedSetEntry } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
-import type { LocaleTranslation } from '@intake24/common/types';
-import type { AsServedImageEntry, AsServedSetEntry } from '@intake24/common/types/http/admin';
 import AsServedImages from './images.vue';
 
 type EditAsServedSetForm = {

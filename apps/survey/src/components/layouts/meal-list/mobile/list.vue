@@ -58,8 +58,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { ref, watch } from 'vue';
+
 import type { MealState } from '@intake24/common/surveys';
+
+import { ref, watch } from 'vue';
+
 import { useMealList } from '../use-meal-list';
 import MealItem from './meal-item.vue';
 

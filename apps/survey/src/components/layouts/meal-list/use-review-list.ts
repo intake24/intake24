@@ -1,7 +1,8 @@
 import type { SetupContext } from 'vue';
-import { ref, watch } from 'vue';
 
 import type { ReviewOptions } from '@intake24/common/prompts';
+
+import { ref, watch } from 'vue';
 
 export type UseReviewListProps = {
   review: ReviewOptions;

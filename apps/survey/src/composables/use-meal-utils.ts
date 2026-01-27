@@ -1,5 +1,7 @@
-import { computed } from 'vue';
 import type { MealState } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { fromTime } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 

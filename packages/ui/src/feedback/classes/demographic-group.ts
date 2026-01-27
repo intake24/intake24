@@ -1,6 +1,5 @@
 import type AggregateFoodStats from './aggregate-food-stats';
 import type UserDemographic from './user-demographic';
-
 import type {
   CardType,
   DemographicGroup as FeedbackSchemeDemographicGroup,
@@ -8,6 +7,7 @@ import type {
   Sex,
 } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
+
 import DemographicRange from './demographic-range';
 import DemographicResult from './demographic-result';
 import DemographicScaleSector from './demographic-scale-sector';

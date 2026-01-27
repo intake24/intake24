@@ -53,10 +53,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import PinchScrollZoom from '@coddicat/vue-pinch-scroll-zoom';
-import { defineComponent, ref, toRef, useTemplateRef } from 'vue';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';
+
+import PinchScrollZoom from '@coddicat/vue-pinch-scroll-zoom';
+import { defineComponent, ref, toRef, useTemplateRef } from 'vue';
 
 import { useImageMap } from './use-image-map';
 

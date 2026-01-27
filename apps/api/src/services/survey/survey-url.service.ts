@@ -1,4 +1,5 @@
 import type { SiteUrls } from '@intake24/api/config';
+
 import { getFrontEndUrl } from '@intake24/api/util/strings';
 
 function surveyUrlService(urls: Pick<SiteUrls, 'base' | 'survey'>, surveySlug: string, authUrlDomainOverride?: string | null) {

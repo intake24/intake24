@@ -5,9 +5,10 @@ import type {
   InferAttributes,
   InferCreationAttributes,
 } from 'sequelize';
-import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { SecurableType } from '@intake24/common/security';
+
+import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import User from './user';

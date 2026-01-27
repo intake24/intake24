@@ -25,10 +25,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { LanguageSelector } from '@intake24/admin/components/forms';
-import { OptionsList } from '@intake24/admin/components/lists';
+
 import type { Condition } from '@intake24/common/prompts';
 import type { LocaleOptionList } from '@intake24/common/types';
+
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { OptionsList } from '@intake24/admin/components/lists';
+
 import { FoodFilter, useBasePrompt } from '../partials';
 
 const props = defineProps({

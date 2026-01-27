@@ -1,6 +1,9 @@
 import type { AwilixContainer } from 'awilix';
+
 import type { RequestIoC } from './ioc';
+
 import { asClass, asFunction, asValue } from 'awilix';
+
 import foodIndex from '@intake24/api/food-index';
 import {
   aclCache,
@@ -60,7 +63,6 @@ import {
   surveySubmissionService,
   userService,
 } from '@intake24/api/services';
-
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import { AppMetricsService } from '@intake24/api/services/metrics.service';
 import { logger, Mailer } from '@intake24/common-backend';

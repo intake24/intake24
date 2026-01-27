@@ -2,6 +2,7 @@ import { createVuetify } from 'vuetify';
 import { VCardActions } from 'vuetify/components/VCard';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
+
 import { colors } from '@intake24/common/theme';
 
 import 'vuetify/styles';

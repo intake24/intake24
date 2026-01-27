@@ -1,8 +1,10 @@
 import type { CookieConsentConfig, Translation } from 'vanilla-cookieconsent';
+
 import { useGtm } from '@gtm-support/vue-gtm';
 import Clarity from '@microsoft/clarity';
 import { get } from 'lodash-es';
 import { useConsent } from 'vue-gtag';
+
 import { defaultMessages } from '../i18n';
 
 export const CC_CAT_NECESSARY = 'necessary';

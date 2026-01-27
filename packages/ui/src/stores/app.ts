@@ -1,7 +1,7 @@
+import type { I18nLanguageListEntry } from '@intake24/common/types/http';
+
 import { trim } from 'lodash-es';
 import { defineStore } from 'pinia';
-
-import type { I18nLanguageListEntry } from '@intake24/common/types/http';
 
 export type AppState = {
   lang: string;

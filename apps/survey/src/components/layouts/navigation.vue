@@ -53,8 +53,10 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import { ref, useTemplateRef, watch } from 'vue';
 import { useDisplay } from 'vuetify';
+
 import { HelpNav } from '../elements';
 
 defineOptions({ name: 'AppNavigation' });

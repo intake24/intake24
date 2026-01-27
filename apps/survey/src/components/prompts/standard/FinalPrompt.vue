@@ -29,6 +29,7 @@
 <script lang="ts" setup>
 import { SurveyRating } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 

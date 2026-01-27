@@ -13,7 +13,9 @@
 
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
+
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+
 import { CardLayout } from '../layouts';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';

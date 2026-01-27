@@ -27,7 +27,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { Prompts } from '@intake24/common/prompts';
+
 import { foodBrowserProps, FoodBrowserSettings, FoodSearchHints, useBasePrompt } from '../partials';
 
 const props = defineProps({

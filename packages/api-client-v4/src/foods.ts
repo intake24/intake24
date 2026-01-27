@@ -5,6 +5,7 @@ import type {
   CreateFoodRequestOptions,
   FoodEntry,
 } from '@intake24/common/types/http/admin';
+
 import { parseCreateResponse } from './create-response';
 import { fileFromPathWithType } from './form-data-helpers';
 

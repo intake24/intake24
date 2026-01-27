@@ -1,5 +1,6 @@
 import type { RecipeFoodTuple } from '../phrase-index';
 import type { AltNames } from '@intake24/common/types/http/admin';
+
 import { Category, Food, RecipeFood } from '@intake24/db';
 
 export type FoodData = {

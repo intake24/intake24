@@ -145,15 +145,17 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { Carousel } from '@intake24/common/prompts';
+
 import { useVModel } from '@vueuse/core';
 import { ref } from 'vue';
-
 import { VueDraggable } from 'vue-draggable-plus';
+
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useSelects } from '@intake24/admin/composables';
 import { carouselDefaults } from '@intake24/common/prompts';
-import type { Carousel } from '@intake24/common/prompts';
 import { randomString } from '@intake24/common/util';
 
 defineOptions({ name: 'Carousel' });

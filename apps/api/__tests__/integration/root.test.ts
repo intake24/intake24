@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
-
 import path from 'node:path';
+
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';

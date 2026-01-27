@@ -1,8 +1,10 @@
 import type { SetupContext } from 'vue';
-import { computed } from 'vue';
 
 import type { FoodActionType, GenericActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/util';
 

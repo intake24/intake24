@@ -1,17 +1,19 @@
 import type { SetupContext } from 'vue';
-import type { UseFoodUtilsProps } from './use-food-utils';
 
+import type { UseFoodUtilsProps } from './use-food-utils';
 import type { UseMealUtilsProps } from './use-meal-utils';
-import { computed, ref } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
 import type { PartialRecord } from '@intake24/common/types';
+import type { LocaleContentOptions } from '@intake24/ui';
+import type { GtmEventParams } from '@intake24/ui/tracking';
+
+import { computed, ref } from 'vue';
+
 import { useSurvey } from '@intake24/survey/stores';
 import { sendGtmEvent } from '@intake24/survey/util';
-
-import type { LocaleContentOptions } from '@intake24/ui';
 import { promptType, useI18n } from '@intake24/ui';
-import type { GtmEventParams } from '@intake24/ui/tracking';
+
 import { useFoodUtils } from './use-food-utils';
 import { useMealUtils } from './use-meal-utils';
 

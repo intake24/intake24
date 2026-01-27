@@ -1,7 +1,3 @@
-import { addDays } from 'date-fns';
-import { defineStore } from 'pinia';
-import { v4 } from 'uuid';
-
 import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
 import type {
   SurveyState as CurrentSurveyState,
@@ -20,9 +16,14 @@ import type {
   SessionSettings,
   SurveyFlag,
 } from '@intake24/common/surveys';
-import { sortMeals } from '@intake24/common/surveys';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import type { Time } from '@intake24/common/util';
+
+import { addDays } from 'date-fns';
+import { defineStore } from 'pinia';
+import { v4 } from 'uuid';
+
+import { sortMeals } from '@intake24/common/surveys';
 import { copy, isSessionAgeValid, isSessionFixedPeriodValid, toTime } from '@intake24/common/util';
 import { portionSizeComplete } from '@intake24/common/util/portion-size-checks';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';

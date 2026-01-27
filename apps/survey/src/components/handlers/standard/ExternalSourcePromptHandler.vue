@@ -7,11 +7,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
+
+import { computed } from 'vue';
+
 import { getSearchTerm } from '@intake24/common/surveys';
 import { ExternalSourcePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'external-source-prompt'>());

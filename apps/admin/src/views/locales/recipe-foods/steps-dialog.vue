@@ -150,10 +150,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { RecipeFoodStepAttributes, RecipeFoodStepRequest } from '@intake24/common/types/http/admin';
+
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
-import type { RecipeFoodStepAttributes, RecipeFoodStepRequest } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/ui';
 
 export type LocaleRecipeFoodStepsForm = {

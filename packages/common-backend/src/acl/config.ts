@@ -1,4 +1,5 @@
 import type { StringValue } from 'ms';
+
 import { parseToMs } from '@intake24/common/util';
 
 export type ACLConfig = {

@@ -9,9 +9,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
 
 import type { FoodState } from '@intake24/common/surveys';
+
+import { defineComponent, ref } from 'vue';
+
 import { getFoodDescription } from '@intake24/common/surveys';
 import { useSurvey } from '@intake24/survey/stores';
 import { findMeal } from '@intake24/survey/util';

@@ -1,4 +1,5 @@
 import { QueryInterface } from 'sequelize';
+
 import { createPermissions } from '../../utils.js';
 
 /*

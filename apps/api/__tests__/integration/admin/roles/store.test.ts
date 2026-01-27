@@ -1,7 +1,8 @@
+import type { RoleRequest } from '@intake24/common/types/http/admin';
+
 import { omit } from 'lodash-es';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { RoleRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/roles';

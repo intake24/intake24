@@ -19,7 +19,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { FlagPropertyCheck } from '@intake24/common/prompts';
+
 import { useCheck } from './use-check';
 
 const props = defineProps({

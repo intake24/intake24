@@ -1,8 +1,9 @@
 import type { FileSystemConfig } from '@intake24/api/config';
-import filesystem from '@intake24/api/config/filesystem';
 import type { ACLConfig } from '@intake24/common-backend';
-import { aclConfig as acl } from '@intake24/common-backend';
 import type { DatabaseConfig } from '@intake24/db';
+
+import filesystem from '@intake24/api/config/filesystem';
+import { aclConfig as acl } from '@intake24/common-backend';
 import { databaseConfig as database } from '@intake24/db';
 
 export type CLIConfig = {

@@ -17,10 +17,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/surveys';
 import type { Time } from '@intake24/common/util';
+
+import { defineComponent } from 'vue';
+
 import { fromTime } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 

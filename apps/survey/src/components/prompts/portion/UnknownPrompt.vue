@@ -28,9 +28,11 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
+
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout } from '../layouts';
 import { Next, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';

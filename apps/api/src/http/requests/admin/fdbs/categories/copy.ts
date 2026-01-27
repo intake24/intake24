@@ -1,12 +1,15 @@
 import type { Request } from 'express';
+
+import type { FindOptions } from '@intake24/db';
+
 import { checkSchema } from 'express-validator';
+
 import {
   customTypeErrorMessage,
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
-import type { FindOptions } from '@intake24/db';
 import { Category, SystemLocale } from '@intake24/db';
 
 export default validate(

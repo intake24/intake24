@@ -83,10 +83,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus';
-import { SelectResource } from '@intake24/admin/components/dialogs';
+
 import type { PortionSizeParameters } from '@intake24/common/surveys';
+
+import { VueDraggable } from 'vue-draggable-plus';
+
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmDialog } from '@intake24/ui';
+
 import { useParameters } from './use-parameters';
 
 defineOptions({ name: 'StandardPortionParameters' });

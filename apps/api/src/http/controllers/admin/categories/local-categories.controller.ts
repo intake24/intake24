@@ -1,8 +1,11 @@
 import type { Request, Response } from 'express';
-import { HttpStatusCode } from 'axios';
-import { ConflictError } from '@intake24/api/http/errors';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { SimpleCategoryEntry } from '@intake24/common/types/http/admin';
+
+import { HttpStatusCode } from 'axios';
+
+import { ConflictError } from '@intake24/api/http/errors';
 import { SystemLocale } from '@intake24/db';
 
 function localCategoriesController({

@@ -1,4 +1,6 @@
 import type { WordInterpretation } from '@intake24/api/food-index/interpreted-word';
+import type { SpellingCorrectionPreference } from '@intake24/common/surveys';
+
 import {
   AltSpelling,
   ExactMatch,
@@ -6,7 +8,6 @@ import {
   Synonym,
 } from '@intake24/api/food-index/interpreted-word';
 import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
-import type { SpellingCorrectionPreference } from '@intake24/common/surveys';
 
 export interface SpellingCorrectionParameters {
   spellingCorrectionPreference: SpellingCorrectionPreference;

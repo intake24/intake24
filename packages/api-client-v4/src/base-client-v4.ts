@@ -1,15 +1,15 @@
 import type { AxiosResponse } from 'axios';
-
 import type { Logger } from 'winston';
+
 import type { CredentialsV4 } from './credentials';
 import type { ApiClientOptionsV4 } from './options';
-import fs from 'node:fs';
-import axios, { Axios, HttpStatusCode } from 'axios';
-
-import { parse as parseCookie, serialize as serializeCookie } from 'cookie';
-
-import PQueue from 'p-queue';
 import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http';
+
+import fs from 'node:fs';
+
+import axios, { Axios, HttpStatusCode } from 'axios';
+import { parse as parseCookie, serialize as serializeCookie } from 'cookie';
+import PQueue from 'p-queue';
 
 const DEFAULT_REFRESH_TOKEN_COOKIE_NAME = 'it24a_refresh_token';
 const DEFAULT_API_LOGIN_RESPONSE_URL = '/api/admin/auth';

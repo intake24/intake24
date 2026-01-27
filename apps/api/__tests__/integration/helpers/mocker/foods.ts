@@ -1,8 +1,3 @@
-import { randomUUID } from 'node:crypto';
-
-import { faker } from '@faker-js/faker';
-
-import slugify from 'slugify';
 import type {
   CreateAsServedSetInput,
   // LocaleRequest,
@@ -10,9 +5,15 @@ import type {
   NutrientTypeRequest,
   NutrientUnitRequest,
 } from '@intake24/common/types/http/admin';
+import type { StandardUnitCreationAttributes } from '@intake24/db';
+
+import { randomUUID } from 'node:crypto';
+
+import { faker } from '@faker-js/faker';
+import slugify from 'slugify';
+
 import { randomString, toStandardUnitId } from '@intake24/common/util';
 
-import type { StandardUnitCreationAttributes } from '@intake24/db';
 import { downloadImage } from '../util';
 
 function category() {

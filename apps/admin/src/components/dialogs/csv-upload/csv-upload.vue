@@ -55,12 +55,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { JobType } from '@intake24/common/types';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useForm } from '@intake24/admin/composables';
-import type { JobType } from '@intake24/common/types';
-import type { JobAttributes } from '@intake24/common/types/http/admin';
 
 type CsvUploadForm = {
   file: File | null;

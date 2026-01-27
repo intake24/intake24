@@ -1,4 +1,5 @@
 import type { Meta, Schema } from 'express-validator';
+
 import { checkSchema } from 'express-validator';
 
 import { imageFile, isTranslationObject } from '@intake24/api/http/requests/admin/generic';

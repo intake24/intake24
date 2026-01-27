@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import type { registerSW } from 'virtual:pwa-register';
+
 import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
 export type UpdateSW = ReturnType<typeof registerSW>;

@@ -1,9 +1,9 @@
 import type { BaseClientV4 } from './base-client-v4';
+import type { ImageMapEntryObject } from '@intake24/common/types/http/admin';
+import type { ImageMap } from '@intake24/db';
 
 import { FormData } from 'formdata-node';
-import type { ImageMapEntryObject } from '@intake24/common/types/http/admin';
 
-import type { ImageMap } from '@intake24/db';
 import { fileFromPathWithType } from './form-data-helpers';
 
 export class ImageMapApiV4 {

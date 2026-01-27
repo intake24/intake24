@@ -66,12 +66,15 @@
 </template>
 
 <script lang="ts">
+import type { LocaleTranslation } from '@intake24/common/types';
+import type { GuideImageEntry, GuideImageEntryObject } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
+
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import type { LocaleTranslation } from '@intake24/common/types';
-import type { GuideImageEntry, GuideImageEntryObject } from '@intake24/common/types/http/admin';
+
 import GuideDrawer from '../guide-drawer.vue';
 
 type EditGuideImageForm = {

@@ -3,6 +3,7 @@ import { unlink } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+
 import {
   cancel,
   confirm,
@@ -19,6 +20,7 @@ import ky from 'ky';
 import { throttle } from 'lodash-es';
 import color from 'picocolors';
 import unzipper from 'unzipper';
+
 import config from '@intake24/cli/config';
 
 type Asset = 'system' | 'foods' | 'images';

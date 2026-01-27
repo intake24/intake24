@@ -162,7 +162,11 @@
 import type { PropType } from 'vue';
 import type { VForm } from 'vuetify/components';
 
+import type { Prompt, PromptType } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
+
 import { defineComponent, ref, useTemplateRef } from 'vue';
+
 import { ErrorList } from '@intake24/admin/components/forms';
 import {
   customPrompts,
@@ -170,15 +174,13 @@ import {
   promptSettings,
   standardPrompts,
 } from '@intake24/admin/components/prompts';
-import type { Prompt, PromptType } from '@intake24/common/prompts';
 import {
   customPrompts as customPromptDefaults,
   portionSizePrompts as portionSizeDefaults,
   standardPrompts as standardPromptDefaults,
 } from '@intake24/common/prompts';
-
-import type { PromptSection } from '@intake24/common/surveys';
 import { copy, merge } from '@intake24/common/util';
+
 import { useTinymce } from '../editors';
 import {
   PromptActions,

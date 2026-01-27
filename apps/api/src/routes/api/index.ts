@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+
 import { Router } from 'express';
 
 import { registerI18nScope, registerIoC } from '@intake24/api/http/middleware';

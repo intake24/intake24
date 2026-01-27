@@ -1,5 +1,6 @@
-import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import type { SurveySchemePromptCreationAttributes } from '@intake24/db';
+
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/survey-scheme-prompts';

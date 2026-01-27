@@ -14,8 +14,10 @@
 
 <script lang="ts" setup>
 import type { PromptStates } from '@intake24/common/prompts';
+
 import { MissingFoodPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'missing-food-prompt'>());

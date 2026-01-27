@@ -7,6 +7,16 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
+import type {
+  SchemeOverrides,
+  SessionSettings,
+  SurveyAuthMode,
+  SurveySearchSettings,
+  SurveyStatus,
+} from '@intake24/common/surveys';
+import type { Notification } from '@intake24/common/types';
+
 import {
   AfterCreate,
   AfterDestroy,
@@ -21,15 +31,9 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
+
 import { surveyPermissions } from '@intake24/common/security';
-import type {
-  SchemeOverrides,
-  SessionSettings,
-  SurveyAuthMode,
-  SurveySearchSettings,
-  SurveyStatus,
-} from '@intake24/common/surveys';
-import type { Notification } from '@intake24/common/types';
+
 import BaseModel from '../model';
 import ClientErrorReport from './client-error-report';
 import FAQ from './faq';

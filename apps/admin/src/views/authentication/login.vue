@@ -89,9 +89,11 @@
 import axios, { HttpStatusCode } from 'axios';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
 import { useAuth, useMessages } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
 import { AppEntryScreen } from '@intake24/ui';
+
 import MfaDialog from './mfa-dialog.vue';
 
 defineOptions({

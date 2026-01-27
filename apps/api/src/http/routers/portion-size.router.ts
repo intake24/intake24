@@ -1,11 +1,12 @@
+import type { DrinkwareSetResponse } from '@intake24/common/types/http';
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
+
 import { initServer } from '@ts-rest/express';
 import { omit } from 'lodash-es';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { asServedResponse, imageMapsResponse } from '@intake24/api/http/responses/foods';
 import { contract } from '@intake24/common/contracts';
-import type { DrinkwareSetResponse } from '@intake24/common/types/http';
-import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 
 // Omit fields unnecessary for the survey app
 function toSurveyResponse(entry: DrinkwareSetEntry): DrinkwareSetResponse {

@@ -1,10 +1,12 @@
+import type { Includeable } from '@intake24/db';
+import type { LocaleMessageDictionary } from '@intake24/i18n';
+
 import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash-es';
+
 import { NotFoundError } from '@intake24/api/http/errors';
 import { contract } from '@intake24/common/contracts';
-import type { Includeable } from '@intake24/db';
 import { Language } from '@intake24/db';
-import type { LocaleMessageDictionary } from '@intake24/i18n';
 
 export function i18n() {
   return initServer().router(contract.public.i18n, {

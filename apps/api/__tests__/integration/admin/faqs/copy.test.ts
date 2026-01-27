@@ -1,8 +1,10 @@
+import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
+import type { FAQRequest } from '@intake24/common/types/http/admin';
+
 import { pick } from 'lodash-es';
 import request from 'supertest';
-import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
+
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { FAQRequest } from '@intake24/common/types/http/admin';
 import { FAQ } from '@intake24/db';
 
 export default () => {

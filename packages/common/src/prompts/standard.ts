@@ -1,6 +1,7 @@
 import type { FoodBrowser, Prompts } from './prompts';
 
 import { copy } from '@intake24/common/util';
+
 import { basePrompt } from './base';
 import { timePickerDefaults } from './partials';
 

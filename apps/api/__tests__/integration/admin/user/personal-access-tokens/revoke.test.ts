@@ -1,9 +1,10 @@
+import type { AmrMethod } from '@intake24/common/security';
+import type { PersonalAccessToken } from '@intake24/db';
+
 import request from 'supertest';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
-import type { AmrMethod } from '@intake24/common/security';
-import type { PersonalAccessToken } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/user/personal-access-tokens';

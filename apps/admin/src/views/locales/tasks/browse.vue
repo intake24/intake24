@@ -52,14 +52,15 @@
 </template>
 
 <script lang="ts">
+import type { GetJobParams, JobParams, LocaleJob } from '@intake24/common/types';
+import type { JobAttributes, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
+
 import { computed, defineComponent, onMounted } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import type { GetJobParams, JobParams, LocaleJob } from '@intake24/common/types';
 import { localeCopySubTasks, localeJobs } from '@intake24/common/types';
-import type { JobAttributes, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/ui';
 
 type LocaleTasksForm = {

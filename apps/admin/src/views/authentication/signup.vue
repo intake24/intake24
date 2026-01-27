@@ -147,12 +147,13 @@
 </template>
 
 <script lang="ts" setup>
+import type { LoginResponse } from '@intake24/common/types/http';
+
 import { reactive, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useForm } from '@intake24/admin/composables';
 import { useAuth, useMessages } from '@intake24/admin/stores';
-import type { LoginResponse } from '@intake24/common/types/http';
 import { AppEntryScreen, Captcha, useI18n } from '@intake24/ui';
 
 type SignUpForm = {

@@ -1,8 +1,4 @@
 import type { Job } from 'bullmq';
-import { createReadStream } from 'node:fs';
-import path from 'node:path';
-import { parse } from 'fast-csv';
-import fs from 'fs-extra';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -10,6 +6,13 @@ import type {
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
 } from '@intake24/db';
+
+import { createReadStream } from 'node:fs';
+import path from 'node:path';
+
+import { parse } from 'fast-csv';
+import fs from 'fs-extra';
+
 import {
   NutrientTable,
   NutrientTableRecord,

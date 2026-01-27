@@ -15,14 +15,16 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
-
 import { flagPromptCompletionFlag } from '@intake24/survey/util';
+
 import { useCustomPromptHandler } from '../composables/use-custom-prompt-handler';
 import { usePromptHandlerNoStore } from '../composables/use-prompt-handler-no-store';
 

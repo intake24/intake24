@@ -8,10 +8,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue';
 import type { EncodedFood } from '@intake24/common/surveys';
+
+import { computed, onMounted } from 'vue';
+
 import { ReadyMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
 defineProps(createHandlerProps<'ready-meal-prompt'>());

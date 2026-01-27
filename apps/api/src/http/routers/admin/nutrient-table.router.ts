@@ -1,7 +1,9 @@
 import path from 'node:path';
+
 import { initServer } from '@ts-rest/express';
 import multer from 'multer';
 import { col, fn } from 'sequelize';
+
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { unique } from '@intake24/api/http/rules';

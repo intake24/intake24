@@ -14,10 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
 import type { EncodedFood } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
 defineProps(createHandlerProps<'portion-size-option-prompt'>());

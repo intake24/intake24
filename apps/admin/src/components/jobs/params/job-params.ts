@@ -1,7 +1,8 @@
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
+
+import { defineComponent } from 'vue';
 
 export default <T>() =>
   defineComponent({

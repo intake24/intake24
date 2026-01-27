@@ -44,8 +44,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+
 import type { Prompts } from '@intake24/common/prompts';
+
+import { defineComponent } from 'vue';
+
 import { CounterSettings, ImageMapSettings, SliderSettings, useBasePrompt, useMultiple } from '../partials';
 
 export default defineComponent({

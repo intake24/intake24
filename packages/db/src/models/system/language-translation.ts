@@ -6,10 +6,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { Application } from '@intake24/common/types';
 import type { LocaleMessageDictionary } from '@intake24/i18n';
+
+import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import Language from './language';

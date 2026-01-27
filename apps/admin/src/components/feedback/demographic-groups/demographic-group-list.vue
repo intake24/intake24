@@ -225,6 +225,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { DemographicGroup } from '@intake24/common/feedback';
+import type { NutrientTypeResponse, PhysicalActivityLevelAttributes } from '@intake24/common/types/http/admin';
+
 import { computed, defineComponent, ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
@@ -233,8 +237,6 @@ import { JsonEditor, JsonEditorDialog, useTinymce } from '@intake24/admin/compon
 import { useListWithDialog } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
 import { cardTypes as cardTypesRef, nutrientRuleTypes, rangeType, sexes } from '@intake24/common/feedback';
-import type { DemographicGroup } from '@intake24/common/feedback';
-import type { NutrientTypeResponse, PhysicalActivityLevelAttributes } from '@intake24/common/types/http/admin';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { getDemographicGroupDefaults } from './demographic-group';

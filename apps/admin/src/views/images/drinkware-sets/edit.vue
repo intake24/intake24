@@ -181,18 +181,21 @@
 </template>
 
 <script lang="ts">
+import type { LocaleTranslation } from '@intake24/common/types';
+import type { ImageMapResponse } from '@intake24/common/types/http';
+import type { DrinkwareScaleV2Entry, DrinkwareSetEntry, UpdateDrinkwareScaleInput } from '@intake24/common/types/http/admin';
+
 import { mapValues } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, ref, watch } from 'vue';
+
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import resources from '@intake24/admin/router/resources';
 import { useHttp } from '@intake24/admin/services';
-import type { LocaleTranslation } from '@intake24/common/types';
-import type { ImageMapResponse } from '@intake24/common/types/http';
-import type { DrinkwareScaleV2Entry, DrinkwareSetEntry, UpdateDrinkwareScaleInput } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/ui';
+
 import DrinkwareObjectChooser from './components/DrinkwareObjectChooser.vue';
 import SlidingScaleEditor from './components/SlidingScaleEditor.vue';
 import VolumeSamplesTable from './components/VolumeSamplesTable.vue';

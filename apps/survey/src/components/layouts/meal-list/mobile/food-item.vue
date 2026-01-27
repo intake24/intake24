@@ -62,9 +62,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { FoodState, MealState } from '@intake24/common/surveys';
+
+import { defineComponent } from 'vue';
 
 import { useFoodItem } from '../use-food-item';
 import ContextMenu from './context-menu.vue';

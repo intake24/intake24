@@ -1,15 +1,17 @@
 import type { Express } from 'express';
 import type { Server } from 'node:http';
-import type { MockData, MockFiles } from '.';
 
+import type { MockData, MockFiles } from '.';
 import type { SharedTests } from './shared-tests';
 import type { Util } from './util';
-import fs from 'fs-extra';
-import app from '@intake24/api/app';
+import type { KyselyDatabases } from '@intake24/db';
 
+import fs from 'fs-extra';
+
+import app from '@intake24/api/app';
 import foodIndex from '@intake24/api/food-index';
 import ioc from '@intake24/api/ioc';
-import type { KyselyDatabases } from '@intake24/db';
+
 import { initDatabase, initFiles, wipeRedis } from '.';
 import sharedTests from './shared-tests';
 import util from './util';

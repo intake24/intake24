@@ -66,10 +66,12 @@
 </template>
 
 <script lang="ts">
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
+
 import { chunk, flatten } from 'lodash-es';
 import { computed, defineComponent, ref, watch } from 'vue';
+
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
-import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'VolumeSamplesTable',

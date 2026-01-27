@@ -175,12 +175,13 @@
 </template>
 
 <script lang="ts">
+import type { CustomField } from '@intake24/common/types';
+import type { UserEntry, UserRefs } from '@intake24/common/types/http/admin';
+
 import { defineComponent, ref } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import type { CustomField } from '@intake24/common/types';
-import type { UserEntry, UserRefs } from '@intake24/common/types/http/admin';
 
 type UserForm = {
   id: string | null;

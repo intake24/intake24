@@ -34,11 +34,12 @@
 </template>
 
 <script lang="ts">
+import type { JobParams } from '@intake24/common/types';
+
 import { defineComponent } from 'vue';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { DatePicker } from '@intake24/admin/components/forms';
-import type { JobParams } from '@intake24/common/types';
 
 import jobParams from './job-params';
 

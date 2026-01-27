@@ -40,11 +40,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { JobAttributes } from '@intake24/common/types/http/admin';
+
 import { ref } from 'vue';
 
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { useHttp } from '@intake24/admin/services';
-import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';

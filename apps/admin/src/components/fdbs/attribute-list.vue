@@ -89,11 +89,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed } from 'vue';
+
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import type { Nullable } from '@intake24/common/types';
-import { useInRecipeTypes } from '@intake24/common/types';
 import type { AttributeDefaultsAttributes } from '@intake24/db';
+
+import { computed } from 'vue';
+
+import { useInRecipeTypes } from '@intake24/common/types';
 import { useI18n } from '@intake24/ui';
 
 type Attributes = Pick<

@@ -1,6 +1,7 @@
+import type { HasVideo, Prompt } from '@intake24/common/prompts';
+
 import { usePlayer } from '@vue-youtube/core';
 import { ref, useTemplateRef } from 'vue';
-import type { HasVideo, Prompt } from '@intake24/common/prompts';
 
 export type UseYoutubeVideoProps = Prompt & HasVideo;
 

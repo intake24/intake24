@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+
 import { CookieConsent } from '../../cookie-consent';
 import { useApp } from '../../stores';
 import { useFooter } from './use-footer';

@@ -1,4 +1,5 @@
 import { initContract } from '@ts-rest/core';
+
 import {
   categoryContents,
   categoryHeader,

@@ -1,4 +1,5 @@
 import type { Request } from 'express';
+
 import { initServer } from '@ts-rest/express';
 
 import ioc from '@intake24/api/ioc';

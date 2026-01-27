@@ -1,9 +1,9 @@
 import type { DatabaseConfig, DatabaseType } from './config';
+import type { Logger } from '@intake24/common-backend';
+import type { Environment } from '@intake24/common/types';
 
 import { Sequelize } from 'sequelize-typescript';
-import type { Logger } from '@intake24/common-backend';
 
-import type { Environment } from '@intake24/common/types';
 import { foods, system } from './models';
 
 export const models = { foods, system };

@@ -7,9 +7,11 @@
 
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
+
 import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
+
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils } from '../composables';
 
 defineProps(createHandlerProps<'split-food-prompt'>());

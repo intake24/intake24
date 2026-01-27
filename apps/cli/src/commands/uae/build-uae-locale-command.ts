@@ -3,7 +3,9 @@ import type { PkgLocale } from '../packager/types/locale';
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
+
 import { PkgConstants } from '../packager/constants';
 import { PackageWriter } from '../packager/package-writer';
 

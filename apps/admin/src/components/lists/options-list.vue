@@ -76,12 +76,15 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { ZodNumber, ZodString } from 'zod';
+
+import type { RuleCallback } from '@intake24/admin/types';
+import type { ListOption } from '@intake24/common/types';
+
 import { deepEqual } from 'fast-equals';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
-import type { RuleCallback } from '@intake24/admin/types';
+
 import { toIndexedList } from '@intake24/admin/util';
-import type { ListOption } from '@intake24/common/types';
 
 defineOptions({ name: 'OptionsList' });
 

@@ -6,6 +6,7 @@
 import { resolveMealGaps } from '@intake24/common/surveys';
 import { MealGapPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps } from '../composables';
 
 const props = defineProps(createHandlerProps<'meal-gap-prompt'>());

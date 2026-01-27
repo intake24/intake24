@@ -42,14 +42,15 @@
 </template>
 
 <script lang="ts">
+import type { DataTableHeader } from '@intake24/admin/components/data-tables';
+import type { SurveyEntry, UserSurveySessionAttributes } from '@intake24/common/types/http/admin';
+
 import { defineComponent, ref } from 'vue';
 
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
-import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { SurveyEntry, UserSurveySessionAttributes } from '@intake24/common/types/http/admin';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 

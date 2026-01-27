@@ -24,12 +24,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref } from 'vue';
 
 import type { PromptLayout } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
+
+import { computed, ref } from 'vue';
+
 import { ReviewMealList, ReviewMealListMobile } from '@intake24/survey/components/layouts';
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { CardLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

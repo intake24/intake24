@@ -1,8 +1,10 @@
 import type { CamelCase } from 'type-fest';
+
 import { camelCase } from 'lodash-es';
 import { customAlphabet, nanoid } from 'nanoid';
 import pluralize from 'pluralize';
 import slugify from 'slugify';
+
 import { isSecurableType } from '../security';
 
 export function capitalize(string: string): string {

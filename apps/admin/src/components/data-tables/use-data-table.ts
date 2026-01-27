@@ -1,10 +1,12 @@
 import type { ComputedRef, Ref } from 'vue';
+
+import type { Dictionary } from '@intake24/common/types';
+import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
+
 import { computed, ref, watch } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
 import { useResource } from '@intake24/admin/stores';
-import type { Dictionary } from '@intake24/common/types';
-import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
 
 export type DataTableOptions = {
   itemsPerPage: number;

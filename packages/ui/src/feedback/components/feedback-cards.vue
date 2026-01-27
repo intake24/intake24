@@ -18,7 +18,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { FeedbackCardParameters } from '../cards-builder';
+
 import { PrintCard, ScreenCard } from './cards';
 
 defineProps({

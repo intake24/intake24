@@ -1,10 +1,14 @@
 import type { ComputedRef } from 'vue';
+
 import type { FeedbackCardParameters } from './cards-builder';
 import type { FeedbackDictionaries } from './feedback.service';
-import { computed, ref } from 'vue';
 import type { FeedbackCustomSection, FeedbackStandardSection } from '@intake24/common/feedback';
 import type { FeedbackSchemeResponse } from '@intake24/common/types/http';
+
+import { computed, ref } from 'vue';
+
 import { copy } from '@intake24/common/util';
+
 import { buildTopFoods } from './top-foods';
 
 export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefined>) {

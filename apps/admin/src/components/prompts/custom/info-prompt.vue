@@ -32,9 +32,11 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import { ytVideoDefaults } from '@intake24/common/prompts';
 import type { Prompts } from '@intake24/common/prompts';
+
+import { ytVideoDefaults } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/ui';
+
 import { Carousel, useBasePrompt, YoutubeVideo } from '../partials';
 
 defineOptions({

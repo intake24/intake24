@@ -32,10 +32,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
 
 import type { Prompt, RecipeBuilderStepState } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
+
+import { computed, defineComponent } from 'vue';
+
 import { promptType } from '@intake24/ui';
 
 export default defineComponent({

@@ -150,14 +150,17 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { ReturnUseErrors } from '@intake24/admin/composables';
+import type { FAQItem } from '@intake24/common/types/http/admin';
+
 import { ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
+
 import { HtmlEditor, JsonEditor, useTinymce } from '@intake24/admin/components/editors';
 import { ErrorList, LanguageSelector } from '@intake24/admin/components/forms';
 import { ListItemError } from '@intake24/admin/components/lists';
 import { useListWithDialog } from '@intake24/admin/composables';
-import type { ReturnUseErrors } from '@intake24/admin/composables';
-import type { FAQItem } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 

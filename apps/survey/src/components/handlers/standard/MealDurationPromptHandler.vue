@@ -8,8 +8,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+
 import { MealDurationPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'meal-duration-prompt'>());

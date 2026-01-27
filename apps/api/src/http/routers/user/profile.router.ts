@@ -1,8 +1,11 @@
 import type { FieldValidationError } from 'express-validator';
+
 import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash-es';
+
 import { contract } from '@intake24/common/contracts';
 import { Survey, UserPassword } from '@intake24/db';
+
 import { ForbiddenError, NotFoundError, ValidationError } from '../../errors';
 
 export function profile() {

@@ -69,6 +69,7 @@
 <script lang="ts" setup>
 import { usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
+
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

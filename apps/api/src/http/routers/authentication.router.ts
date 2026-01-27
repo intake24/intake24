@@ -1,9 +1,12 @@
 import type { Request } from 'express';
+
 import { initServer } from '@ts-rest/express';
 import { ipKeyGenerator } from 'express-rate-limit';
+
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
+
 import { attachRefreshToken } from './util';
 
 export function authentication() {

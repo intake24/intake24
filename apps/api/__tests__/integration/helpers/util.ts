@@ -1,17 +1,18 @@
 import type { ReadStream } from 'node:fs';
 
 import type Suite from './integration-suite';
+import type { SecurableType } from '@intake24/common/security';
+
 import { createWriteStream } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
+
 import { faker } from '@faker-js/faker';
 import { AsyncParser } from '@json2csv/node';
 import axios from 'axios';
-
 import { times } from 'lodash-es';
-import ioc from '@intake24/api/ioc';
-import type { SecurableType } from '@intake24/common/security';
 
+import ioc from '@intake24/api/ioc';
 import { Permission, Role, User, UserSecurable } from '@intake24/db';
 
 const { fsConfig } = ioc.cradle;

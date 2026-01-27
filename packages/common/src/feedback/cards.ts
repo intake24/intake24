@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { localeTranslation, requiredLocaleTranslation } from '../types';
 import { characterSentiment } from './characters';
 

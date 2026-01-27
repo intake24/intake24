@@ -73,17 +73,19 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
-import { useTemplateRef } from 'vue';
 
-import { VueDraggable } from 'vue-draggable-plus';
-import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import type { Card } from '@intake24/common/feedback';
 import type { FeedbackImage, NutrientTypeResponse } from '@intake24/common/types/http/admin';
 
+import { useVModel } from '@vueuse/core';
+import { useTemplateRef } from 'vue';
+import { VueDraggable } from 'vue-draggable-plus';
+
+import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
+
 import CardSelector from './card-selector.vue';
 
 type CardEvent = {

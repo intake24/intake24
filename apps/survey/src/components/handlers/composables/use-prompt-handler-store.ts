@@ -1,7 +1,9 @@
 import type { Ref, SetupContext } from 'vue';
-import { ref } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
+
+import { ref } from 'vue';
+
 import { merge } from '@intake24/common/util';
 import { getOrCreatePromptStateStore, useSurvey } from '@intake24/survey/stores';
 import { findMeal, mealPortionSizeComplete } from '@intake24/survey/util';

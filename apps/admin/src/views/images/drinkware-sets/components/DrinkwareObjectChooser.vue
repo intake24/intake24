@@ -30,14 +30,16 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { ImageMap } from '@intake24/common/prompts';
+import type { ImageMapResponse } from '@intake24/common/types/http';
+
 import { useElementSize } from '@vueuse/core';
 import { onMounted, ref, useTemplateRef } from 'vue';
-
 import { useDisplay } from 'vuetify';
-import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
-import type { ImageMap } from '@intake24/common/prompts';
 
-import type { ImageMapResponse } from '@intake24/common/types/http';
+import ImagePlaceholder from '@intake24/admin/components/util/ImagePlaceholder.vue';
+
 import { useImageMap } from '../use-image-map';
 
 export type ImageMapObject = {

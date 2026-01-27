@@ -19,9 +19,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import { computed } from 'vue';
+
 import { timePickers } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

@@ -61,17 +61,18 @@
 </template>
 
 <script lang="ts">
+import type {
+  LocaleEntry,
+  SplitListAttributes,
+  SplitListRequest,
+} from '@intake24/common/types/http/admin';
+
 import { defineComponent, onMounted } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
-import type {
-  LocaleEntry,
-  SplitListAttributes,
-  SplitListRequest,
-} from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 
 export type SplitListsForm = { items: SplitListRequest[] };

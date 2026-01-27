@@ -1,7 +1,9 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
+
 import { strongPasswordWithConfirm } from '@intake24/common/security';
 import { captcha, loginResponse } from '@intake24/common/types/http';
+
 import { sanitize } from '../../rules';
 
 const contract = initContract();

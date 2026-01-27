@@ -1,8 +1,9 @@
 import type { Job } from 'bullmq';
-import fs from 'fs-extra';
-import nunjucks from 'nunjucks';
 
 import type { IoC } from '@intake24/api/ioc';
+
+import fs from 'fs-extra';
+import nunjucks from 'nunjucks';
 
 import BaseJob from '../job';
 

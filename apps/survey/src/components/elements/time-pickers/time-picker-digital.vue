@@ -149,8 +149,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref, watch } from 'vue';
+
 import type { Prompts } from '@intake24/common/prompts';
+
+import { computed, ref, watch } from 'vue';
+
 import { fromTime, toTime } from '@intake24/common/util';
 import { usePromptUtils } from '@intake24/survey/composables';
 

@@ -9,10 +9,11 @@ import type {
   Prompt,
   Prompts,
 } from '@intake24/common/prompts';
-import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
 import type { CustomData, FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
-import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
+
+import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
+import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import {
   asServedComplete,
   cerealComplete,
@@ -50,6 +51,7 @@ import {
   surveySearchComplete,
 } from '@intake24/survey/util';
 import { flattenFoods } from '@intake24/survey/util/meal-food';
+
 import { recallLog } from '../stores';
 import { filterFoodsForFoodSelectionPrompt, filterForAddonFoods, filterMealsForAggregateChoicePrompt } from './prompt-filters';
 

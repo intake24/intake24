@@ -84,13 +84,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { BasePrompt, ComponentType } from '@intake24/common/prompts';
+
 import { useVModel } from '@vueuse/core';
 import { get } from 'lodash-es';
 import { computed, ref } from 'vue';
 
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import type { BasePrompt, ComponentType } from '@intake24/common/prompts';
 import { getObjectNestedKeys } from '@intake24/common/util';
 import { promptType as getPromptType, loadAdminLanguage, useI18n } from '@intake24/ui';
 

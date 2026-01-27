@@ -61,9 +61,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { JobAttributes } from '@intake24/common/types/http/admin';
+
+import { defineComponent } from 'vue';
 
 import { useDownloadJob } from './use-download-job';
 

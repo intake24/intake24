@@ -71,7 +71,9 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 import { VBottomSheet, VMenu } from 'vuetify/components';
+
 import { useSurvey } from '@intake24/survey/stores';
+
 import HelpFaq from './help-faq.vue';
 import HelpRequest from './help-request.vue';
 

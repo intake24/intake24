@@ -1,5 +1,4 @@
 import type { BaseClientV4 } from './base-client-v4';
-
 import type { JobEntry } from '@intake24/common/types/http/admin';
 
 async function delay(ms: number): Promise<void> {

@@ -1,6 +1,8 @@
+import type { FAQSection } from '@intake24/common/types/http/admin';
+
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { FAQSection } from '@intake24/common/types/http/admin';
+
 import { surveyService } from '../services';
 
 export const useFAQs = defineStore('faqs', () => {

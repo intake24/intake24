@@ -37,12 +37,14 @@
 <script lang="ts" setup>
 import type { QuaggaJSResultObject } from '@ericblade/quagga2';
 import type { PropType } from 'vue';
+
+import type { QuaggaScanner } from '@intake24/common/barcodes';
+
 import Quagga from '@ericblade/quagga2';
 import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 import { defineComponent, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 
 import { defaultBarcodeScannerOptions } from '@intake24/common/barcodes';
-import type { QuaggaScanner } from '@intake24/common/barcodes';
 
 import { useMessages } from '../../stores';
 import { useTorch } from '../util';

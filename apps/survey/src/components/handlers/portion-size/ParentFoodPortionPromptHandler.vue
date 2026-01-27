@@ -16,8 +16,10 @@
 
 <script lang="ts" setup>
 import type { PromptStates } from '@intake24/common/prompts';
+
 import { ParentFoodPortionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'parent-food-portion-prompt'>());

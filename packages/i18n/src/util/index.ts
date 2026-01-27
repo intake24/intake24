@@ -1,4 +1,5 @@
 import type { LocaleMessageValue } from 'vue-i18n';
+
 import { getObjectNestedKeys } from '@intake24/common/util';
 
 /**

@@ -1,4 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
+
 import { PAOccurrence, PopularityCounter } from '@intake24/db';
 
 export default class PopularityCountersService {

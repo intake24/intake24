@@ -1,4 +1,5 @@
 import type { RouteLocationRaw } from 'vue-router';
+
 import { defineComponent } from 'vue';
 
 export default defineComponent({

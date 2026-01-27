@@ -1,10 +1,11 @@
 import type { AxiosResponse } from 'axios';
-
 import type { Logger } from 'winston';
-import type { CredentialsV3, RefreshResponseV3, SignInRequestV3, SignInResponseV3 } from './types';
-import fs from 'node:fs';
-import axios, { Axios, HttpStatusCode } from 'axios';
 
+import type { CredentialsV3, RefreshResponseV3, SignInRequestV3, SignInResponseV3 } from './types';
+
+import fs from 'node:fs';
+
+import axios, { Axios, HttpStatusCode } from 'axios';
 import pLimit from 'p-limit';
 
 export class BaseClientV3 {

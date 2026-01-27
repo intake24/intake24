@@ -1,8 +1,9 @@
 import type { SelectQueryBuilder, Simplify, StringReference } from 'kysely';
-import { sql } from 'kysely';
 
 import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
 import type { PaginateQuery } from '@intake24/db';
+
+import { sql } from 'kysely';
 
 export async function executeWithPagination<DB, TB extends keyof DB, O>(query: SelectQueryBuilder<DB, TB, O>, searchColumns: StringReference<DB, TB>[], sortColumns: StringReference<DB, TB>[], paginateQuery: PaginateQuery): Promise<Pagination<Simplify<O>>> {
   const { page = 1, limit = 50, sort, search } = paginateQuery;

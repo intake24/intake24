@@ -1,8 +1,10 @@
 import type { RequestOptions, SendResult } from 'web-push';
-import webPush, { WebPushError } from 'web-push';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { SubscriptionType } from '@intake24/common/types';
+
+import webPush, { WebPushError } from 'web-push';
+
 import { UserSubscription } from '@intake24/db';
 
 export type SubscriptionInput = {

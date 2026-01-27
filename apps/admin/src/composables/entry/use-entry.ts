@@ -1,7 +1,8 @@
+import type { Dictionary } from '@intake24/common/types';
+
 import { computed, toRefs } from 'vue';
 
 import { useEntry as useStoreEntry, useUser } from '@intake24/admin/stores';
-import type { Dictionary } from '@intake24/common/types';
 
 export type UseStoreEntryProps = {
   id: string;

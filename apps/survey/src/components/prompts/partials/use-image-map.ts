@@ -1,8 +1,9 @@
 import type { Ref } from 'vue';
-import { chunk } from 'lodash-es';
-import { computed, ref } from 'vue';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';
+
+import { chunk } from 'lodash-es';
+import { computed, ref } from 'vue';
 
 export type UseImageMapProps = {
   imageMapData: ImageMapResponse;

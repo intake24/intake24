@@ -80,12 +80,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { LocaleTranslation } from '@intake24/common/types';
+import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
+
 import { ref, useTemplateRef } from 'vue';
+
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import type { LocaleTranslation } from '@intake24/common/types';
-import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 

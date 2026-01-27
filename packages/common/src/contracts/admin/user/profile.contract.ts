@@ -1,4 +1,5 @@
 import { initContract } from '@ts-rest/core';
+
 import { adminUserProfile } from '@intake24/common/types/http/admin';
 
 const contract = initContract();

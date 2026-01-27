@@ -69,9 +69,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { Prompts } from '@intake24/common/prompts';
+
 import { watchDebounced } from '@vueuse/core';
 import { computed, ref } from 'vue';
-import type { Prompts } from '@intake24/common/prompts';
+
 import { usePromptUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
 

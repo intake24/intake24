@@ -1,10 +1,11 @@
-import { InternalServerError } from '@intake24/api/http/errors';
 import type {
   GuideImageResponse,
   ImageMapObjectResponse,
   ImageMapResponse,
 } from '@intake24/common/types/http';
 import type { GuideImage, ImageMap, ImageMapObject } from '@intake24/db';
+
+import { InternalServerError } from '@intake24/api/http/errors';
 
 export function imageMapsResponse(baseUrl: string) {
   /**

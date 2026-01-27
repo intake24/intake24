@@ -28,13 +28,16 @@
 <script lang="ts" setup>
 import type { EChartsOption } from 'echarts';
 import type { PropType } from 'vue';
+
 import type { TopFoodData } from '../top-foods';
+
 import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { use } from 'echarts/core';
 import { SVGRenderer } from 'echarts/renderers';
 import { computed } from 'vue';
 import Chart from 'vue-echarts';
+
 import { round } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 

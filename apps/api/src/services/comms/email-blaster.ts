@@ -1,6 +1,7 @@
 import type { CommsList, CommsProvider, SubscribeInput } from './comms';
-import ky from 'ky';
 import type { IoC } from '@intake24/api/ioc';
+
+import ky from 'ky';
 
 export interface CreateSubscriber {
   salutation?: string;

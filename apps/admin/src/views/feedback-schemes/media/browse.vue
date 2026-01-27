@@ -5,11 +5,13 @@
 </template>
 
 <script lang="ts">
+import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
+
 import { detailMixin } from '@intake24/admin/components/entry';
 import { Media } from '@intake24/admin/components/media';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'FeedbackSchemeMedia',

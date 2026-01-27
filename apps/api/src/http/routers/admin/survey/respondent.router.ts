@@ -1,10 +1,12 @@
+import type { Subject } from '@intake24/common/security';
+
 import { initServer } from '@ts-rest/express';
+
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { respondentResponse } from '@intake24/api/http/responses/admin';
 import { atob } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
-import type { Subject } from '@intake24/common/security';
 import { Survey, UserSurveyAlias } from '@intake24/db';
 
 export function respondent() {

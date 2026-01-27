@@ -98,15 +98,19 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, onMounted, ref } from 'vue';
+
 import type { PromptStates } from '@intake24/common/prompts';
-import { getFoodDescription } from '@intake24/common/surveys';
 import type { MealState, PortionSizeParameters, StandardUnit } from '@intake24/common/surveys';
 import type { UserFoodData } from '@intake24/common/types/http';
+
+import { computed, onMounted, ref } from 'vue';
+
+import { getFoodDescription } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 import { useI18n } from '@intake24/ui';
+
 import { CardLayout } from '../layouts';
 import { Next, useStandardUnits } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

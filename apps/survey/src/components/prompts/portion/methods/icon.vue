@@ -8,8 +8,10 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed } from 'vue';
+
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
+
+import { computed } from 'vue';
 
 defineOptions({ name: 'PortionIcon' });
 

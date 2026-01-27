@@ -10,12 +10,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import type { EncodedFood, FoodState, MissingFood, RecipeBuilder } from '@intake24/common/surveys';
 import type { RecipeFood } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
+
+import { ref } from 'vue';
+
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils } from '../composables';
 
 defineProps(createHandlerProps<'food-search-prompt'>());

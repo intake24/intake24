@@ -1,8 +1,9 @@
 import type { Model as BaseModel } from 'sequelize-typescript';
-import { Op } from 'sequelize';
 
 import type { RecordVisibility } from '@intake24/common/security';
 import type { FindOptions, Includeable, UserSecurableAttributes, WhereOptions } from '@intake24/db';
+
+import { Op } from 'sequelize';
 
 export interface Securable extends BaseModel {
   ownerId: string | null;

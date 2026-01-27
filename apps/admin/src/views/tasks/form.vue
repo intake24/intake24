@@ -97,15 +97,16 @@
 </template>
 
 <script lang="ts">
+import type { JobType, JobTypeParams } from '@intake24/common/types';
+import type { TaskResponse } from '@intake24/common/types/http/admin';
+
 import cronstrue from 'cronstrue';
 import { computed, defineComponent } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import type { JobType, JobTypeParams } from '@intake24/common/types';
 import { defaultJobsParams, jobTypes } from '@intake24/common/types';
-import type { TaskResponse } from '@intake24/common/types/http/admin';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 type TaskForm = {

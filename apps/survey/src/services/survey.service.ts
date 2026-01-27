@@ -11,6 +11,7 @@ import type {
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
+
 import { http } from '@intake24/ui';
 
 export type GenerateUserPayload = {

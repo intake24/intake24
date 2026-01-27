@@ -104,13 +104,17 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
-import { computed } from 'vue';
-import { useSelects } from '@intake24/admin/composables';
+
 import type { ReturnUseErrors } from '@intake24/admin/composables';
 import type { SchemeOverrides, SchemeSettings } from '@intake24/common/surveys';
+
+import { useVModel } from '@vueuse/core';
+import { computed } from 'vue';
+
+import { useSelects } from '@intake24/admin/composables';
 import { defaultSchemeSettings } from '@intake24/common/surveys';
 import { useApp } from '@intake24/ui/stores';
+
 import SchemeSettingsField from './scheme-settings-field.vue';
 
 const props = defineProps({

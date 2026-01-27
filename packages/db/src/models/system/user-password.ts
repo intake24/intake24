@@ -5,6 +5,7 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';

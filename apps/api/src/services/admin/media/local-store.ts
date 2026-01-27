@@ -1,8 +1,11 @@
 import type { MediaStore } from './store';
-import { join, resolve } from 'node:path';
-import { move, remove } from 'fs-extra';
 import type { MediaDisk } from '@intake24/api/config';
 import type { IoC } from '@intake24/api/ioc';
+
+import { join, resolve } from 'node:path';
+
+import { move, remove } from 'fs-extra';
+
 import { baseObjectPath } from './store';
 
 function localMediaStore({ logger: globalLogger, mediaConfig }: Pick<IoC, 'mediaConfig' | 'kyselyDb' | 'logger'>): MediaStore {

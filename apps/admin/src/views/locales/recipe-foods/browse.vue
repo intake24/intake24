@@ -114,17 +114,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-
-import { formMixin } from '@intake24/admin/components/entry';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import type {
   LocaleEntry,
   RecipeFoodEntry,
   RecipeFoodRequest,
   SynonymSetAttributes,
 } from '@intake24/common/types/http/admin';
+
+import { defineComponent, ref } from 'vue';
+
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
 import StepsDialog from './steps-dialog.vue';

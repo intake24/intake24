@@ -140,16 +140,17 @@
 </template>
 
 <script lang="ts">
+import type {
+  PersonalAccessTokenResponse,
+  PersonalAccessTokensResponse,
+} from '@intake24/common/types/http/admin';
+
 import { addYears } from 'date-fns';
 import { defineComponent, onMounted, ref, watch } from 'vue';
 
 import { useDateTime, useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { useMessages } from '@intake24/admin/stores';
-import type {
-  PersonalAccessTokenResponse,
-  PersonalAccessTokensResponse,
-} from '@intake24/common/types/http/admin';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { useClipboard } from '@intake24/ui/composables';
 

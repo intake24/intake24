@@ -174,19 +174,23 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref, watch } from 'vue';
+
 import type {
   AssociatedFoodPrompt,
   AssociatedFoodPromptItem,
   PromptStates,
 } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/surveys';
-import { getFoodDescription } from '@intake24/common/surveys';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
+
+import { computed, ref, watch } from 'vue';
+
+import { getFoodDescription } from '@intake24/common/surveys';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import { MealFoodChooser, useScrollToPanel } from '@intake24/survey/components/prompts/partials';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
 import { BaseLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

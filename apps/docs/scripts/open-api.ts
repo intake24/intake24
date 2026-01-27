@@ -1,9 +1,12 @@
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+
 import convert from '@openapi-contrib/json-schema-to-openapi-schema';
 import { generateOpenApiAsync } from '@ts-rest/open-api';
 import { z } from 'zod';
+
 import contract from '@intake24/common/contracts';
+
 import pkg from '../package.json';
 
 async function main() {
@@ -39,7 +42,7 @@ async function main() {
     {
       schemaTransformer: async ({ schema }) => {
         // @ts-expect-error -- schemas do not conform to ZodType
-        if (schema && 'toJSONSchema' in schema /* schema instanceof z.ZodAny */) {
+        if (Object.prototype.toString.call(schema) === '[object Object]' && 'toJSONSchema' in schema /* schema instanceof z.ZodAny */) {
           // @ts-expect-error -- schemas do not conform to ZodType
           const jsonSchema = z.toJSONSchema(schema, {
             target: 'openapi-3.0',

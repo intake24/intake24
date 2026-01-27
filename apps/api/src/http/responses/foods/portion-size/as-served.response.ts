@@ -1,6 +1,7 @@
-import { InternalServerError } from '@intake24/api/http/errors';
 import type { AsServedImageResponse, AsServedSetResponse } from '@intake24/common/types/http';
 import type { AsServedImage, AsServedSet } from '@intake24/db';
+
+import { InternalServerError } from '@intake24/api/http/errors';
 
 export function asServedResponse(baseUrl: string) {
   const imageResponse = (item: AsServedImage): AsServedImageResponse => {

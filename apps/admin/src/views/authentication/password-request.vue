@@ -40,6 +40,7 @@
 
 <script lang="ts" setup>
 import { ref, useTemplateRef } from 'vue';
+
 import { useForm } from '@intake24/admin/composables';
 import { AppEntryScreen, Captcha, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';

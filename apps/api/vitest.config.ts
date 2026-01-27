@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import { defineConfig, mergeConfig } from 'vitest/config';
+
 import configShared from '../../packages/common/vitest.shared.js';
 
 export default mergeConfig(

@@ -60,17 +60,18 @@
 </template>
 
 <script lang="ts">
+import type { PromptSection } from '@intake24/common/surveys';
+import type {
+  SurveySchemePromptEntry,
+  SurveySchemePromptRefs,
+} from '@intake24/common/types/http/admin';
+
 import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { PromptSection } from '@intake24/common/surveys';
 import { flattenSchemeWithSection } from '@intake24/common/surveys';
-import type {
-  SurveySchemePromptEntry,
-  SurveySchemePromptRefs,
-} from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 
 export type SchemeStatus = {

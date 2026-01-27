@@ -25,9 +25,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
+
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import { useStandardUnits } from '../../partials';
 

@@ -47,9 +47,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
 
 import type { BarcodeScannerOptions } from '@intake24/common/barcodes';
+
+import { computed, defineComponent } from 'vue';
+
 import { barcodeReaders, barcodeScanners, defaultBarcodeScannerOptions } from '@intake24/common/barcodes';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';

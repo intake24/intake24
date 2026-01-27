@@ -73,6 +73,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { ReturnUseErrors } from '@intake24/admin/composables';
+import type { SinglePrompt } from '@intake24/common/prompts';
+import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
+
 import { deepEqual } from 'fast-equals';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
@@ -80,13 +85,10 @@ import { VueDraggable } from 'vue-draggable-plus';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
-import type { ReturnUseErrors } from '@intake24/admin/composables';
-import type { SinglePrompt } from '@intake24/common/prompts';
 import { isMealSection } from '@intake24/common/surveys';
-import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
 import { copy as copyObject } from '@intake24/common/util';
-
 import { useI18n } from '@intake24/ui';
+
 import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';

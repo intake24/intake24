@@ -11,8 +11,9 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import { JsonEditor } from '@intake24/admin/components/editors';
 import type { Prompt } from '@intake24/common/prompts';
+
+import { JsonEditor } from '@intake24/admin/components/editors';
 
 defineOptions({ name: 'PromptJson' });
 

@@ -1,13 +1,16 @@
 import type { FieldInfo } from '@json2csv/plainjs';
+
+import type { Prompt } from '@intake24/common/prompts';
+import type { ExportField as BaseExportField } from '@intake24/common/surveys';
+import type { SurveyScheme } from '@intake24/db';
+
 import { differenceInMinutes } from 'date-fns';
 import { orderBy } from 'lodash-es';
 import stringify from 'safe-stable-stringify';
 import { UAParser } from 'ua-parser-js';
+
 import { externalSources as externalSourceProviders } from '@intake24/common/prompts';
-import type { Prompt } from '@intake24/common/prompts';
-import type { ExportField as BaseExportField } from '@intake24/common/surveys';
 import { fromTime } from '@intake24/common/util';
-import type { SurveyScheme } from '@intake24/db';
 import {
   NutrientTableCsvMappingField,
   SurveySubmissionFood,

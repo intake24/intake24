@@ -56,10 +56,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
-import { computed } from 'vue';
 
 import type { YoutubeVideo } from '@intake24/common/prompts';
+
+import { useVModel } from '@vueuse/core';
+import { computed } from 'vue';
 
 defineOptions({ name: 'YoutubeVideo' });
 

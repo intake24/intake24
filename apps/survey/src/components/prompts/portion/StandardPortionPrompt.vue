@@ -100,11 +100,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { LinkedParent } from '../../handlers/composables';
+
 import { computed, onMounted, ref } from 'vue';
+
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout } from '../layouts';
 import { LinkedQuantity, Next, QuantityBadge, QuantityCard, usePanel, usePortionSizeMethod, useStandardUnits } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';

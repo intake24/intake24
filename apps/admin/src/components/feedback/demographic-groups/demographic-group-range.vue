@@ -36,9 +36,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { Range, RangeType } from '@intake24/common/feedback';
+
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'DemographicGroupRange',

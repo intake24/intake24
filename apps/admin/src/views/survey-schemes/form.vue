@@ -59,16 +59,18 @@
 </template>
 
 <script lang="ts">
+import type { RecordVisibility } from '@intake24/common/security';
+import type { ExportSection, Meal, RecallPrompts, SchemeSettings as SchemeSettingsType } from '@intake24/common/surveys';
+import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
+
 import { CopyRecordDialog } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import { SchemeSettings } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
-import type { RecordVisibility } from '@intake24/common/security';
-import type { ExportSection, Meal, RecallPrompts, SchemeSettings as SchemeSettingsType } from '@intake24/common/surveys';
 import { defaultMeals, defaultSchemeSettings } from '@intake24/common/surveys';
-import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 
 export type SurveySchemeForm = {
   id: string | null;

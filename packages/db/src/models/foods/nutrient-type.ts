@@ -5,10 +5,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import { BelongsTo, Column, DataType, HasOne, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-
 import NutrientTableRecordNutrient from './nutrient-table-record-nutrient';
 import NutrientTypeInKcal from './nutrient-type-in-kcal';
 import FoodsNutrientUnit from './nutrient-unit';

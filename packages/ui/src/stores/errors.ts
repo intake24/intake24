@@ -1,4 +1,5 @@
 import type { ComponentPublicInstance } from 'vue';
+
 import axios, { HttpStatusCode } from 'axios';
 import { defineStore } from 'pinia';
 

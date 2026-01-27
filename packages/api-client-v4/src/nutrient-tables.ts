@@ -1,5 +1,4 @@
 import type { BaseClientV4 } from './base-client-v4';
-
 import type { NutrientTableRecordRequest, NutrientTableRequest } from '@intake24/common/types/http/admin';
 
 export class NutrientTablesApiV4 {

@@ -41,10 +41,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type { DataTableHeader } from './use-data-table';
-import { watchDebounced } from '@vueuse/core';
 
+import type { DataTableHeader } from './use-data-table';
+
+import { watchDebounced } from '@vueuse/core';
 import { defineComponent, ref } from 'vue';
+
 import { useDataTable } from './use-data-table';
 
 export default defineComponent({

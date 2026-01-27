@@ -1,7 +1,8 @@
 import type { StoreDefinition } from 'pinia';
-import { defineStore } from 'pinia';
 
 import type { ComponentType } from '@intake24/common/prompts';
+
+import { defineStore } from 'pinia';
 
 interface FoodOrMealPromptsState<T> {
   prompts: {

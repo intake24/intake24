@@ -72,7 +72,9 @@ import type { Logger, Mailer } from '@intake24/common-backend';
 import type { TokenPayload } from '@intake24/common/security';
 import type { Environment } from '@intake24/common/types';
 import type { DatabasesInterface } from '@intake24/db';
+
 import { KyselyDatabases, models } from '@intake24/db';
+
 import { AppMetricsService } from '../services/metrics.service';
 
 export interface IoC extends Jobs {

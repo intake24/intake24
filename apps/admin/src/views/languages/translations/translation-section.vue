@@ -1,5 +1,9 @@
 <script lang="ts">
 import type { PropType, VNodeChild } from 'vue';
+
+import type { LanguageTranslationAttributes } from '@intake24/common/types/http/admin';
+import type { LocaleMessageDictionary } from '@intake24/i18n';
+
 import { has, isPlainObject, pick } from 'lodash-es';
 import { computed, defineComponent, h, ref, watch } from 'vue';
 import {
@@ -17,11 +21,9 @@ import {
   VToolbarTitle,
 } from 'vuetify/components';
 
-import type { LanguageTranslationAttributes } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
-
-import type { LocaleMessageDictionary } from '@intake24/i18n';
 import { useI18n } from '@intake24/ui';
+
 import IntersectableSkeleton from './intersectable-skeleton.vue';
 
 export default defineComponent({

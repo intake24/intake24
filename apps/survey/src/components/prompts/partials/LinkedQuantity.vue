@@ -31,14 +31,18 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { LinkedParent } from '../../handlers/composables';
-import { computed, onMounted } from 'vue';
 import type { Prompt } from '@intake24/common/prompts';
 import type { EncodedFood, MissingFood } from '@intake24/common/surveys';
+
+import { computed, onMounted } from 'vue';
+
 import { round } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
+
 import QuantityCard from './QuantityCard.vue';
 import { useStandardUnits } from './use-standard-units';
 

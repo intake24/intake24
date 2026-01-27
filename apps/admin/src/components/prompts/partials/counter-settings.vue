@@ -69,9 +69,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { Counter } from '@intake24/common/prompts';
+
 import { useVModel } from '@vueuse/core';
 import { computed } from 'vue';
-import type { Counter } from '@intake24/common/prompts';
+
 import { useI18n } from '@intake24/ui';
 
 const props = defineProps({

@@ -1,5 +1,7 @@
 import z from 'zod';
+
 import { captchaProviders } from '@intake24/common/security';
+
 import { validateConfig } from './validate-config';
 
 export const baseEMProvider = z.object({

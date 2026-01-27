@@ -110,15 +110,19 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { DataTableHeader } from '../data-tables';
+import type { MediaModel } from '@intake24/common/types/http/admin';
+
 import { computed, ref, useTemplateRef } from 'vue';
+
 import { SubmitFooter } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import type { MediaModel } from '@intake24/common/types/http/admin';
 import { commonCollections, mediaDisks, modelCollections } from '@intake24/common/types/http/admin';
 import { modelToResource } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
 import { EmbeddedDataTable } from '../data-tables';
 
 type UploadForm = {

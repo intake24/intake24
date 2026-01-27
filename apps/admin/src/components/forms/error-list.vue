@@ -8,10 +8,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
-import { VCardText } from 'vuetify/components';
 
 import type { ValidationError } from '@intake24/common/util';
+
+import { computed, defineComponent } from 'vue';
+import { VCardText } from 'vuetify/components';
 
 export default defineComponent({
   name: 'ErrorList',

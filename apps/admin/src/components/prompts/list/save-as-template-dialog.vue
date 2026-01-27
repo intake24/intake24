@@ -54,14 +54,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { Prompt } from '@intake24/common/prompts';
+import type { SurveySchemePromptEntry } from '@intake24/common/types/http/admin';
+
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { ErrorList } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
-import type { Prompt } from '@intake24/common/prompts';
-import type { SurveySchemePromptEntry } from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
 
 export type SchemePromptForm = {

@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+
 import foodDbConfig from '../../foods/config.js';
 import { createPermissions } from '../../utils.js';
 

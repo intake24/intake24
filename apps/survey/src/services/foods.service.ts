@@ -1,5 +1,6 @@
 import type { RecipeFood } from '@intake24/common/types';
 import type { FoodSearchResponse, UserFoodData } from '@intake24/common/types/http';
+
 import { http } from '@intake24/ui';
 
 export type SearchOptions = {

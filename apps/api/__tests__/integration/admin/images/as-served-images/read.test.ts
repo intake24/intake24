@@ -1,8 +1,10 @@
+import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
+
 import { createReadStream } from 'node:fs';
+
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
-import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/images/as-served-sets/asServedSetForImages/images';

@@ -57,12 +57,15 @@
 </template>
 
 <script lang="ts">
+import type { RecordVisibility } from '@intake24/common/security';
+import type { FAQEntry, FAQSection } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
+
 import { CopyRecordDialog } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
-import type { RecordVisibility } from '@intake24/common/security';
-import type { FAQEntry, FAQSection } from '@intake24/common/types/http/admin';
+
 import FaqSections from './sections.vue';
 
 export type FAQForm = {

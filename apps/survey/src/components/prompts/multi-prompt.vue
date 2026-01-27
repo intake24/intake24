@@ -27,11 +27,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { CustomPrompts } from './custom';
-import { computed, ref, useTemplateRef } from 'vue';
 import type { Prompt } from '@intake24/common/prompts';
 import type { CustomPromptAnswer, FoodState } from '@intake24/common/surveys';
+
+import { computed, ref, useTemplateRef } from 'vue';
+
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { customPrompts } from './custom';
 import { BaseLayout } from './layouts';
 import { Next, useScrollToPanel } from './partials';

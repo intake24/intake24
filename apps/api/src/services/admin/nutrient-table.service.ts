@@ -1,6 +1,5 @@
 import type { CreationAttributes } from 'sequelize';
 
-import { NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { JobType, QueueJob } from '@intake24/common/types';
 import type {
@@ -9,6 +8,8 @@ import type {
   NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
 import type { Transaction } from '@intake24/db';
+
+import { NotFoundError } from '@intake24/api/http/errors';
 import {
   NutrientTable,
   NutrientTableCsvMapping,

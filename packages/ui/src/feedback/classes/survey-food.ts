@@ -1,5 +1,6 @@
-import { NutrientTypeIdEnum } from '@intake24/common/feedback';
 import type { FeedbackSubmissionEntry } from '@intake24/common/types/http';
+
+import { NutrientTypeIdEnum } from '@intake24/common/feedback';
 import { round } from '@intake24/common/util';
 
 export default class SurveyFood {

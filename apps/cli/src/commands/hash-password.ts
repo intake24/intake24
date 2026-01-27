@@ -5,6 +5,7 @@ import {
   spinner,
 } from '@clack/prompts';
 import color from 'picocolors';
+
 import { PasswordBcrypt } from '@intake24/common-backend';
 
 export default async (password: string): Promise<void> => {

@@ -95,6 +95,7 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+
 import { useAuth } from '@intake24/survey/stores';
 import { sendGtmEvent } from '@intake24/survey/util';
 import { AppEntryScreen, Captcha } from '@intake24/ui';

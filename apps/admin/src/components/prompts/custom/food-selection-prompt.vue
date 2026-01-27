@@ -33,7 +33,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { Condition } from '@intake24/common/prompts';
+
 import { FoodFilter, useBasePrompt } from '../partials';
 
 const props = defineProps({

@@ -1,8 +1,11 @@
+import type { CategoryHeader } from '@intake24/common/types/http';
+
 import { createWriteStream } from 'node:fs';
+
 import { Transform } from '@json2csv/node';
+
 import { ApiClientV4, getApiClientV4EnvOptions } from '@intake24/api-client-v4';
 import { logger as mainLogger } from '@intake24/common-backend';
-import type { CategoryHeader } from '@intake24/common/types/http';
 
 interface ExtractCategoriesOptions {
   outputPath: string;

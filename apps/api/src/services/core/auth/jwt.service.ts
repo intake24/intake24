@@ -1,13 +1,16 @@
 import type { Secret, SignOptions, VerifyOptions } from 'jsonwebtoken';
-import jwt, { decode } from 'jsonwebtoken';
-import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
+
 import type { IoC } from '@intake24/api/ioc';
+import type { AdminSignPayload, SignPayload, TokenPayload } from '@intake24/common/security';
+import type { FrontEnd } from '@intake24/common/types';
+
+import jwt, { decode } from 'jsonwebtoken';
+
+import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
 import {
   ACL_PAT_KEY,
   createAmrMethod,
 } from '@intake24/common/security';
-import type { AdminSignPayload, SignPayload, TokenPayload } from '@intake24/common/security';
-import type { FrontEnd } from '@intake24/common/types';
 import { randomString } from '@intake24/common/util';
 import { PersonalAccessToken } from '@intake24/db';
 

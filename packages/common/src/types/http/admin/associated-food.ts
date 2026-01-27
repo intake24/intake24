@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { localeTranslation } from '../../common';
 
 export const associatedFood = z.object({

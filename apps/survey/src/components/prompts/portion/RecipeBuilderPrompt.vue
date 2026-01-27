@@ -98,7 +98,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref } from 'vue';
+
 import type {
   MissingFoodRecipeBuilderItemState,
   PromptStates,
@@ -107,6 +107,9 @@ import type {
 } from '@intake24/common/prompts';
 import type { RecipeBuilder } from '@intake24/common/surveys';
 import type { FoodHeader } from '@intake24/common/types/http';
+
+import { computed, ref } from 'vue';
+
 import { copy } from '@intake24/common/util';
 import {
   ExpansionPanelActions,
@@ -118,6 +121,7 @@ import { usePromptUtils } from '@intake24/survey/composables';
 import { foodsService } from '@intake24/survey/services';
 import { getEntityId } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui';
+
 import { BaseLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

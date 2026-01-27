@@ -1,9 +1,10 @@
 import type { Request } from 'express';
 import type { Schema } from 'express-validator';
 
+import type { FindOptions } from '@intake24/db';
+
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
-import type { FindOptions } from '@intake24/db';
 import { Food, Op, SystemLocale } from '@intake24/db';
 
 const defaults: Schema = {

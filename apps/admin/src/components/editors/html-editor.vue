@@ -12,12 +12,15 @@
 <script lang="ts" setup>
 import type { EditorOptions } from 'tinymce/tinymce';
 import type { PropType } from 'vue';
+
 import Editor from '@tinymce/tinymce-vue';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLocale } from 'vuetify';
+
 import { useHttp } from '@intake24/admin/services';
 import { useResource } from '@intake24/admin/stores';
+
 import 'tinymce/tinymce';
 import 'tinymce/icons/default/icons.min.js';
 import 'tinymce/themes/silver/theme.min.js';

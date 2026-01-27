@@ -46,20 +46,20 @@
 
 <script lang="ts">
 import type { SurveySchemeForm } from '../form.vue';
+import type { PromptMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import type { SinglePrompt } from '@intake24/common/prompts';
+import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
+import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 
 import { defineComponent, ref } from 'vue';
+
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { promptSections } from '@intake24/admin/components/prompts';
-import type { PromptMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import type { SinglePrompt } from '@intake24/common/prompts';
-import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
 import { defaultPrompts, flattenScheme, isMealSection } from '@intake24/common/surveys';
-
-import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 
 export type SurveySchemePromptsForm = Pick<SurveySchemeForm, 'prompts'>;
 

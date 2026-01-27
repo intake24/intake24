@@ -6,7 +6,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import type { Securable } from '..';
+import type { RecordVisibility } from '@intake24/common/security';
+import type { FAQSection } from '@intake24/common/types/http/admin';
+
 import {
   BelongsTo,
   BelongsToMany,
@@ -17,11 +21,8 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import type { RecordVisibility } from '@intake24/common/security';
-import type { FAQSection } from '@intake24/common/types/http/admin';
 
 import BaseModel from '../model';
-
 import Survey from './survey';
 import User from './user';
 import UserSecurable from './user-securable';

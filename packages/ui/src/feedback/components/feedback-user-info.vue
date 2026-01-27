@@ -42,8 +42,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { UserDemographic } from '../classes';
+
 import { computed } from 'vue';
+
 import { useI18n } from '@intake24/ui';
 
 const props = defineProps({

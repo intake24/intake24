@@ -1,6 +1,6 @@
-import Stemmer from 'arabic-stem';
-
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
+
+import Stemmer from 'arabic-stem';
 
 const indexFilter
   = [

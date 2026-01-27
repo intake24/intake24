@@ -49,7 +49,9 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+
 import { WebPush } from '@intake24/admin/components/web-push';
+
 import { useUser } from '../stores';
 
 const user = useUser();

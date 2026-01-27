@@ -1,4 +1,5 @@
 import type { CaptchaConfig } from '@intake24/api/config';
+
 import { captcha } from '@intake24/api/http/rules';
 
 describe('captcha middleware', () => {

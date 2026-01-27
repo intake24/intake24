@@ -122,12 +122,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { Nutrient } from '@intake24/common/feedback';
+import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
 import { useListWithDialog } from '@intake24/admin/composables';
-import type { Nutrient } from '@intake24/common/feedback';
-import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 
 import { LanguageSelector } from '../forms';

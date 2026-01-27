@@ -3,6 +3,7 @@ import childProcess from 'node:child_process';
 import z from 'zod';
 
 import { environmentOptions } from '@intake24/common/types';
+
 import pkg from '../../package.json';
 import { validateConfig } from './validate-config';
 

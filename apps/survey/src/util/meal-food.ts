@@ -1,9 +1,10 @@
 import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, Selection, SurveyState } from '@intake24/common/surveys';
-import { randomString } from '@intake24/common/util';
-import { filterForIncompleteCustomPrompts } from '@intake24/survey/dynamic-recall/prompt-filters';
 import type { SurveyStore } from '@intake24/survey/stores';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
+
+import { randomString } from '@intake24/common/util';
+import { filterForIncompleteCustomPrompts } from '@intake24/survey/dynamic-recall/prompt-filters';
 
 // Helper to generate unique id for each meal/food with same length
 export const getEntityId = () => randomString(12);

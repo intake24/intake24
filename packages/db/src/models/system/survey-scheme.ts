@@ -6,7 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import type { HasVisibility } from '..';
+import type { RecordVisibility } from '@intake24/common/security';
+import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
 
 import {
   BelongsTo,
@@ -19,8 +22,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import type { RecordVisibility } from '@intake24/common/security';
-import type { ExportSection, Meal, RecallPrompts, SchemeSettings } from '@intake24/common/surveys';
+
 import BaseModel from '../model';
 import Survey from './survey';
 import User from './user';

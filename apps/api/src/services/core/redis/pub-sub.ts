@@ -1,4 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
+
 import HasRedisClient from './redis-store';
 
 export class Subscriber extends HasRedisClient {

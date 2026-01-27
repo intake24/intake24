@@ -1,8 +1,11 @@
 import type { DefaultLocaleMessageSchema } from 'vue-i18n';
+
+import type { Dictionary, LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
+
 import dompurify from 'dompurify';
 import { has } from 'lodash-es';
 import { useI18n as useI18nLib } from 'vue-i18n';
-import type { Dictionary, LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
+
 import { replaceParams } from '@intake24/i18n';
 
 export type LocaleContentOptions = {

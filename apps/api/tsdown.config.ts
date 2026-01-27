@@ -7,4 +7,5 @@ export default defineConfig({
   },
   name: 'API',
   sourcemap: true,
+  inlineOnly: false,
 });

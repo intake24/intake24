@@ -94,11 +94,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import axios, { HttpStatusCode } from 'axios';
-import { defineComponent, ref, watch } from 'vue';
 
 import type { SurveyRating } from '@intake24/common/surveys';
 import type { SurveyRatingRequest } from '@intake24/common/types/http';
+
+import axios, { HttpStatusCode } from 'axios';
+import { defineComponent, ref, watch } from 'vue';
+
 import { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 

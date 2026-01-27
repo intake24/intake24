@@ -1,8 +1,9 @@
 import type { Job, Queue, QueueBaseOptions, Worker } from 'bullmq';
 
-import { EventEmitter } from 'node:events';
 import type { QueueConfig } from '@intake24/api/config';
 import type { Logger } from '@intake24/common-backend';
+
+import { EventEmitter } from 'node:events';
 
 export interface QueueHandlerEvents<T>
 {

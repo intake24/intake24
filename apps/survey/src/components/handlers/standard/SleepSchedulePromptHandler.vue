@@ -8,8 +8,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+
 import { SleepSchedulePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, usePromptHandlerNoStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'sleep-schedule-prompt'>());

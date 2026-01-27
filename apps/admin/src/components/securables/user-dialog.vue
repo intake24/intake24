@@ -151,14 +151,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { SecurableAction } from '@intake24/common/security';
+import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
+
 import { pick } from 'lodash-es';
 import { computed, defineComponent, ref } from 'vue';
 
 import { AutoComplete, ErrorList } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import type { SecurableAction } from '@intake24/common/security';
-import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 
 export type UserDialogForm = {
   userId: string | null;

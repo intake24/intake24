@@ -42,10 +42,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { PublicSurveyEntry } from '@intake24/common/types/http';
+
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 import { AppEntryScreen } from '@intake24/ui/components';
 

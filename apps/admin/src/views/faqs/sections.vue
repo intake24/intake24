@@ -154,16 +154,20 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { ReturnUseErrors } from '@intake24/admin/composables';
+import type { FAQSection } from '@intake24/common/types/http/admin';
+
 import { ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
+
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor, JsonEditorDialog, useTinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/composables';
-import type { ReturnUseErrors } from '@intake24/admin/composables';
-import type { FAQSection } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
 import FaqItems from './items.vue';
 
 defineOptions({ name: 'FAQSections' });

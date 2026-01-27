@@ -1,19 +1,19 @@
 import type { InterpretedWord } from './interpreted-word';
-
-import { uniq } from 'lodash-es';
 import type {
   DictionaryType,
   PhoneticEncoder,
   SpellingCorrectionParameters,
 } from '@intake24/api/food-index/dictionary';
+import type { RecipeFoodsHeader } from '@intake24/common/types';
+
+import { uniq } from 'lodash-es';
+
 import { RichDictionary } from '@intake24/api/food-index/dictionary';
 import InterpretedPhrase from '@intake24/api/food-index/interpreted-phrase';
-
 import {
   countDistanceViolations,
   countOrderViolations,
 } from '@intake24/api/food-index/match-quality-helpers';
-import type { RecipeFoodsHeader } from '@intake24/common/types';
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;

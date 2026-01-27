@@ -16,8 +16,10 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+
 import { RedirectPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps } from '../composables';
 
 const props = defineProps(createHandlerProps<'redirect-prompt'>());

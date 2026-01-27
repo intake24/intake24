@@ -6,8 +6,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
+
 import type { TextDirection } from '@intake24/common/types';
+
+import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
+
 import BaseModel from '../model';
 import Category from './category';
 import Food from './food';

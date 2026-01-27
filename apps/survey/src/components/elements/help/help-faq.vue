@@ -92,6 +92,7 @@
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
+
 import { useFAQs } from '@intake24/survey/stores';
 import { useI18n } from '@intake24/ui';
 

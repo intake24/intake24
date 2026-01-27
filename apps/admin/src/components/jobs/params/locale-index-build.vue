@@ -17,8 +17,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { JobParams } from '@intake24/common/types';
+
+import { defineComponent } from 'vue';
+
 import jobParams from './job-params';
 
 export default defineComponent({

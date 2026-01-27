@@ -1,4 +1,5 @@
 import type { RedisOptions as BaseRedisOptions } from 'ioredis';
+
 import z from 'zod';
 
 export const redisOptionsSchema = z.object({

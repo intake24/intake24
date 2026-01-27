@@ -1,7 +1,11 @@
 import type { DefaultLocaleMessageSchema } from 'vue-i18n';
-import { createI18n, useI18n as useI18nLib } from 'vue-i18n';
+
 import type { Application } from '@intake24/common/types';
+
+import { createI18n, useI18n as useI18nLib } from 'vue-i18n';
+
 import { copy } from '@intake24/common/util';
+
 import { createTranslate, createTranslatePath } from './util';
 
 export * from './util';

@@ -1,4 +1,5 @@
 import type { Dictionary } from '../common';
+
 import { z } from 'zod';
 
 export const bigIntString = z.bigint().or(z.number().or(z.string()).pipe(z.coerce.number<number>().int())).pipe(z.coerce.string());

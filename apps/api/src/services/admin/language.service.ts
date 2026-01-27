@@ -1,4 +1,3 @@
-import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import type { IoC } from '@intake24/api/ioc';
 import type { Application } from '@intake24/common/types';
 import type {
@@ -10,6 +9,8 @@ import type {
   LanguageTranslationCreationAttributes,
   WhereOptions,
 } from '@intake24/db';
+
+import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';
 import { compareMessageKeys, getDefaultI18nMessages, mergeTranslations } from '@intake24/i18n';
 

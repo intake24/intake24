@@ -1,8 +1,10 @@
 import type { Job } from 'bullmq';
-import nunjucks from 'nunjucks';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Survey } from '@intake24/db';
+
+import nunjucks from 'nunjucks';
+
 import { UserSurveyAlias } from '@intake24/db';
 
 import BaseJob from '../job';

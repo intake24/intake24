@@ -1,7 +1,9 @@
 import type { UserPhysicalData } from '..';
 import type { HenryCoefficient, WeightTargetCoefficient } from '@intake24/common/feedback';
-import { round } from '@intake24/common/util';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
+
+import { round } from '@intake24/common/util';
+
 import HenryCoefficientsCalculator from './henry-coefficient-calculator';
 
 export default class UserDemographic {

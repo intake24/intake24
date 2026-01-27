@@ -53,8 +53,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+
 import type { FeedbackImage, FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+
 import {
   buildCardParams,
   buildTopFoods,

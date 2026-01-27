@@ -323,10 +323,12 @@
 </template>
 
 <script lang="ts">
+import type { SurveySubmissionAttributes } from '@intake24/common/types/http/admin';
+
 import { mapState } from 'pinia';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import type { SurveySubmissionAttributes } from '@intake24/common/types/http/admin';
+
 import { userService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 import { sendGtmEvent } from '@intake24/survey/util';

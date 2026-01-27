@@ -3,6 +3,7 @@ import type { Logger } from 'winston';
 import type { CredentialsV4 } from './credentials';
 import type { DrinkwareScaleUpdate } from './drinkware';
 import type { ApiClientOptionsV4 } from './options';
+
 import { AsServedApiV4 } from './as-served';
 import { BaseClientV4 } from './base-client-v4';
 import { CategoriesApiV4 } from './categories';

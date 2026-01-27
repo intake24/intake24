@@ -1,10 +1,13 @@
 import type { Request } from 'express';
 import type { PassportStatic } from 'passport';
 import type { StrategyOptionsWithRequest } from 'passport-jwt';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import security from '@intake24/api/config/security';
+
 import type { TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
+
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
+import security from '@intake24/api/config/security';
 
 const { issuer, secret } = security.jwt;
 

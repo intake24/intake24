@@ -1,6 +1,9 @@
 import type { Express } from 'express';
-import { body, query } from 'express-validator';
+
 import type { Ops } from '@intake24/api/app';
+
+import { body, query } from 'express-validator';
+
 import { errors } from '@intake24/api/http/middleware';
 import routes from '@intake24/api/routes';
 import { sanitize } from '@intake24/common/rules';

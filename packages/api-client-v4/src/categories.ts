@@ -8,6 +8,7 @@ import type {
   UpdateCategoryRequest,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
+
 import { parseCreateResponse } from './create-response';
 
 export class CategoriesApiV4 {

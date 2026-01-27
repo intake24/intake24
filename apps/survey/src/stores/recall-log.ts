@@ -1,7 +1,9 @@
-import { defineStore } from 'pinia';
-import { shallowRef } from 'vue';
 import type { ComponentType } from '@intake24/common/prompts';
 import type { Selection } from '@intake24/common/surveys';
+
+import { defineStore } from 'pinia';
+import { shallowRef } from 'vue';
+
 import { copy } from '@intake24/common/util';
 import { useSurvey } from '@intake24/survey/stores/survey';
 

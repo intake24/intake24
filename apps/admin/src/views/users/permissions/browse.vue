@@ -15,15 +15,16 @@
 </template>
 
 <script lang="ts">
+import type { DataTableHeader } from '@intake24/admin/components/data-tables';
+import type { UserEntry } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
-import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import { Edit, Read } from '@intake24/admin/components/data-tables/action-bar';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { useUser } from '@intake24/admin/stores';
-import type { UserEntry } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/ui';
 
 export default defineComponent({

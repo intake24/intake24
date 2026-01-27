@@ -130,12 +130,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { SchemeSettings } from '@intake24/common/surveys';
+import type { SurveyHelpRequest } from '@intake24/common/types/http';
+
 import { getCountryCodeForRegionCode, getSupportedRegionCodes } from 'awesome-phonenumber';
 import axios, { HttpStatusCode } from 'axios';
 import { ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
-import type { SchemeSettings } from '@intake24/common/surveys';
-import type { SurveyHelpRequest } from '@intake24/common/types/http';
+
 import { Errors } from '@intake24/common/util';
 import { surveyService } from '@intake24/survey/services';
 import { useMessages } from '@intake24/survey/stores';

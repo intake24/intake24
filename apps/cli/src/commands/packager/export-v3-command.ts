@@ -1,8 +1,9 @@
+import type { CredentialsV3 } from '@intake24/api-client-v3';
+
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-import type { CredentialsV3 } from '@intake24/api-client-v3';
 import { ApiClientV3 } from '@intake24/api-client-v3';
 import { ExporterV3 } from '@intake24/cli/commands/packager/exporter-v3';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';

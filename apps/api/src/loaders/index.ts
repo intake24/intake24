@@ -3,6 +3,7 @@ import type { Express } from 'express';
 import type { Ops } from '@intake24/api/app';
 
 import ioc from '@intake24/api/ioc';
+
 import expressLoader from './express';
 import routesLoader from './routes';
 import securityLoader from './security';

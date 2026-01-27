@@ -1,4 +1,5 @@
 import type { DefaultLocaleMessageSchema, LocaleMessageDictionary } from 'vue-i18n';
+
 import admin from './admin';
 import api from './api';
 import shared from './shared';

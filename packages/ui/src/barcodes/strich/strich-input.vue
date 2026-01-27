@@ -15,10 +15,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
-import { defineComponent, ref, useTemplateRef } from 'vue';
 
 import type { StrichScanner } from '@intake24/common/barcodes';
+
+import { useVModel } from '@vueuse/core';
+import { defineComponent, ref, useTemplateRef } from 'vue';
 
 import StrichReader from './strich-reader.vue';
 

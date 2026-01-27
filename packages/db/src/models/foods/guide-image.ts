@@ -6,9 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
+
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import GuideImageObject from './guide-image-object';

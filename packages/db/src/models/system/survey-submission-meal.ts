@@ -6,8 +6,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+
 import type { CustomData } from '@intake24/common/surveys';
+
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+
 import BaseModel from '../model';
 import SurveySubmission from './survey-submission';
 import SurveySubmissionFood from './survey-submission-food';

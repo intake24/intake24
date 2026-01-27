@@ -1,9 +1,10 @@
+import type { Subject } from '@intake24/common/security';
+
 import { initServer } from '@ts-rest/express';
 
 import { ApplicationError } from '@intake24/api/http/errors';
 import { atob } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
-import type { Subject } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
 
 export function otp() {

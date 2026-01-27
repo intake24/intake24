@@ -29,9 +29,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { externalSources } from '@intake24/common/prompts';
+
 import type { ExternalSourcePropertyCheck } from '@intake24/common/prompts';
+
+import { externalSources } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/ui';
+
 import { useCheck } from './use-check';
 
 const props = defineProps({

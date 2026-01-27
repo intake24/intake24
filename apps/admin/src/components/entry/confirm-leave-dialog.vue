@@ -37,9 +37,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { RouteLeave } from '@intake24/admin/types';
+
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ConfirmLeaveDialog',

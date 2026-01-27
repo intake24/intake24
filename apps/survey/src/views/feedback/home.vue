@@ -115,12 +115,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
 import type { FeedbackSubmissionEntry, Pagination } from '@intake24/common/types/http';
+import type { UserDemographic } from '@intake24/ui/feedback';
+
+import { computed, defineComponent, ref } from 'vue';
+
 import { SurveyRating } from '@intake24/survey/components/elements';
 import { userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
-import type { UserDemographic } from '@intake24/ui/feedback';
 import {
   buildCardParams,
   buildTopFoods,

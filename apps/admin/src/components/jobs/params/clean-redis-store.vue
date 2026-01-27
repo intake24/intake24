@@ -20,10 +20,11 @@
 </template>
 
 <script lang="ts">
+import type { JobParams } from '@intake24/common/types';
+
 import { defineComponent } from 'vue';
 
 import { redisStoreTypes } from '@intake24/common/types';
-import type { JobParams } from '@intake24/common/types';
 
 import jobParams from './job-params';
 

@@ -79,12 +79,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { ImageMap } from '@intake24/common/prompts';
+import type { ImageMapResponse } from '@intake24/common/types/http';
+
 import { useElementSize } from '@vueuse/core';
 import { computed, onMounted, ref, useTemplateRef } from 'vue';
 import { useDisplay } from 'vuetify';
 
-import type { ImageMap } from '@intake24/common/prompts';
-import type { ImageMapResponse } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 import PinchZoomImageMapSelector from './PinchZoomImageMapSelector.vue';

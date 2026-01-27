@@ -1,10 +1,13 @@
 import type { Request } from 'express';
 import type { Options } from 'express-rate-limit';
 import type { RedisReply } from 'rate-limit-redis';
-import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
-import RedisStore from 'rate-limit-redis';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { TokenPayload } from '@intake24/common/security';
+
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
+import RedisStore from 'rate-limit-redis';
+
 import HasRedisClient from './redis-store';
 
 export default class RateLimiter extends HasRedisClient {

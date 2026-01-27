@@ -1,6 +1,8 @@
 import type { ExtendedFieldValidationError } from './validation-errors';
-import { HttpStatusCode } from 'axios';
 import type { I18nService } from '@intake24/api/services';
+
+import { HttpStatusCode } from 'axios';
+
 import { getLocalisedTypeErrorMessage } from './validation-errors';
 
 export default class ValidationError extends Error {

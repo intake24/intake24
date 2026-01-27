@@ -109,9 +109,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { VCombobox, VTextField } from 'vuetify/components';
-import { SelectResource } from '@intake24/admin/components/dialogs';
+
 import type { EntityValuePropertyCheck } from '@intake24/common/prompts';
+
+import { VCombobox, VTextField } from 'vuetify/components';
+
+import { SelectResource } from '@intake24/admin/components/dialogs';
+
 import { useCheck } from './use-check';
 
 defineOptions({

@@ -24,11 +24,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { PromptStates } from '@intake24/common/prompts';
+
 import { useVModel } from '@vueuse/core';
 import { computed } from 'vue';
-import type { PromptStates } from '@intake24/common/prompts';
+
 import { timePickers } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout } from '../layouts';
 import { usePanel } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

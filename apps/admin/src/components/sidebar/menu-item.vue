@@ -11,9 +11,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { Resource } from '@intake24/admin/types';
+
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'MenuItem',

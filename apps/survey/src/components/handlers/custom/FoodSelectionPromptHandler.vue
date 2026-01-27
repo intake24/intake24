@@ -7,13 +7,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { dynamicFoodFlag } from '@intake24/common/surveys';
 import type { FoodState } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
+import { dynamicFoodFlag } from '@intake24/common/surveys';
 import { foodSelectionNoneUuid, FoodSelectionPrompt } from '@intake24/survey/components/prompts/custom';
 import { filterFoodsForFoodSelectionPrompt } from '@intake24/survey/dynamic-recall/prompt-filters';
 import { useSurvey } from '@intake24/survey/stores';
 import { flagPromptCompletionFlag } from '@intake24/survey/util';
+
 import { createHandlerProps, usePromptHandlerNoStore } from '../composables';
 import { useMealPromptUtils } from '../composables/use-meal-prompt-utils';
 

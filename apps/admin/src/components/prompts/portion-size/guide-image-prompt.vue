@@ -88,12 +88,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
-import { SelectResource } from '@intake24/admin/components/dialogs';
-import { CategoryList } from '@intake24/admin/components/fdbs';
+
 import type { Prompts } from '@intake24/common/prompts';
 import type { CategoryReference } from '@intake24/common/types/http/admin';
+
+import { defineComponent } from 'vue';
+
+import { SelectResource } from '@intake24/admin/components/dialogs';
+import { CategoryList } from '@intake24/admin/components/fdbs';
 import { copy } from '@intake24/common/util';
+
 import { basePrompt, ImageMapSettings } from '../partials';
 
 export default defineComponent({

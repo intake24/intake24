@@ -33,6 +33,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import { useTemplateRef, watch } from 'vue';
 import { useGoTo } from 'vuetify';
 

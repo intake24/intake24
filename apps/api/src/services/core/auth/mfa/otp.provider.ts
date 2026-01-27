@@ -1,9 +1,10 @@
+import type { IoC } from '@intake24/api/ioc';
+import type { OTPAuthChallenge } from '@intake24/common/security';
+
 import { TOTP } from 'otpauth';
 import QRCode from 'qrcode';
 
 import { ValidationError } from '@intake24/api/http/errors';
-import type { IoC } from '@intake24/api/ioc';
-import type { OTPAuthChallenge } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
 import { MFADevice } from '@intake24/db';
 

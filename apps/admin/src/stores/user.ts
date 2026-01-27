@@ -1,9 +1,12 @@
-import { defineStore } from 'pinia';
-import { useHttp } from '@intake24/admin/services';
 import type { AdminTokenPayload } from '@intake24/common/security';
 import type { AdminUserProfile } from '@intake24/common/types/http/admin';
-import { tokenService } from '@intake24/ui/services';
 import type { Permission } from '@intake24/ui/types';
+
+import { defineStore } from 'pinia';
+
+import { useHttp } from '@intake24/admin/services';
+import { tokenService } from '@intake24/ui/services';
+
 import { useResource } from './resource';
 
 export interface UserState extends Pick<AdminUserProfile, 'aal' | 'permissions' | 'roles'> {

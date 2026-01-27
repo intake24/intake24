@@ -1,8 +1,10 @@
 import type { App } from 'vue';
 import type { Router } from 'vue-router';
+
 import { createGtm } from '@gtm-support/vue-gtm';
 import Clarity from '@microsoft/clarity';
 import { configure } from 'vue-gtag';
+
 import { CC_CAT_ANALYTICS } from './config';
 import { useCookieConsent } from './plugin';
 

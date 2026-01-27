@@ -113,12 +113,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
 import type { MissingFood } from '@intake24/common/surveys';
+
+import { computed, ref } from 'vue';
+
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { barcodes } from '@intake24/ui';
+
 import { BaseLayout } from '../layouts';
 import { Next, useForm, usePanel } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';

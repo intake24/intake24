@@ -1,9 +1,10 @@
+import type { CustomField } from '@intake24/common/types';
+import type { UserInput, UserRequest } from '@intake24/common/types/http/admin';
+
 import { omit, pick } from 'lodash-es';
 import request from 'supertest';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { CustomField } from '@intake24/common/types';
-import type { UserInput, UserRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/users';

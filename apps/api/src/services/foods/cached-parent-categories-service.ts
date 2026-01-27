@@ -1,5 +1,7 @@
 import type { IoC } from '@intake24/api/ioc';
+
 import { Category, Food } from '@intake24/db';
+
 import {
   getCategoryParentCategories as localGetCategoryParentCategories,
   getFoodParentCategories as localGetFoodParentCategories,

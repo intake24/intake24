@@ -123,11 +123,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
 import type { ImageMapResponse } from '@intake24/common/types/http';
+
+import { computed, ref, watch } from 'vue';
+
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout } from '../layouts';
 import { AsServedSelector, ImageMapSelector, Next, QuantityBadge, useFetchImageData, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';

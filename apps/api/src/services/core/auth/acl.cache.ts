@@ -1,7 +1,9 @@
-import { Op } from 'sequelize';
 import type { IoC } from '@intake24/api/ioc';
-import { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import type { Permission, Role } from '@intake24/db';
+
+import { Op } from 'sequelize';
+
+import { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { PersonalAccessToken, User } from '@intake24/db';
 
 function aclCache({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) {

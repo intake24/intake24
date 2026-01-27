@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import type { ValidationError } from 'express-validator';
 import type { ValidationError as SequelizeValidationError, ValidationErrorItem } from 'sequelize';
+
 import { HttpStatusCode } from 'axios';
 
 import { ConflictError } from '@intake24/api/http/errors';

@@ -5,9 +5,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
 
 import type { Sex, WeightTarget } from '@intake24/common/feedback';
+
+import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import User from './user';

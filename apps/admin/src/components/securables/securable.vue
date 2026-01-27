@@ -56,14 +56,18 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { DataTableHeader } from '../data-tables';
 import type { Owner } from './owner-dialog.vue';
-import { computed, useTemplateRef } from 'vue';
 import type { SecurableType } from '@intake24/common/security';
-import { securableDefs } from '@intake24/common/security';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
+
+import { computed, useTemplateRef } from 'vue';
+
+import { securableDefs } from '@intake24/common/security';
 import { getResourceFromSecurable } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
 import { EmbeddedDataTable } from '../data-tables';
 import OwnerDialog from './owner-dialog.vue';
 import UserDialog from './user-dialog.vue';

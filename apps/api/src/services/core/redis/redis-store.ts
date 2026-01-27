@@ -1,7 +1,7 @@
-import { Redis } from 'ioredis';
-
 import type { RedisOptions } from '@intake24/api/config';
 import type { Logger } from '@intake24/common-backend';
+
+import { Redis } from 'ioredis';
 
 export type RedisStoreOps = {
   config: RedisOptions;

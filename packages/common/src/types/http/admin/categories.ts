@@ -1,8 +1,10 @@
 import type { Pagination } from '../generic';
 import type { InheritableAttributes } from './attributes';
 import type { FoodListEntry } from './foods';
-import { z } from 'zod';
 import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
+
+import { z } from 'zod';
+
 import { inheritableAttributes } from './attributes';
 import { categoryPortionSizeMethodAttributes } from './portion-size-methods';
 

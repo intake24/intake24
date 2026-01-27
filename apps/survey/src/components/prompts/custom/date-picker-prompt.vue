@@ -21,7 +21,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next, useDatePicker } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

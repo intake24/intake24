@@ -1,5 +1,7 @@
 import { z } from 'zod';
+
 import { recordVisibilities } from '@intake24/common/security';
+
 import { requiredLocaleTranslation } from '../../common';
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';

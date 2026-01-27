@@ -1,9 +1,10 @@
-import { omit } from 'lodash-es';
 import type { Condition as ConditionV2 } from '@intake24/common/prompts/conditions';
 import type { Prompt as PromptV2, SinglePrompt as SinglePromptV2 } from '@intake24/common/prompts/prompts';
 import type { Condition as ConditionV1 } from '@intake24/common/prompts/v1/conditions';
 import type { Prompt as PromptV1, SinglePrompt as SinglePromptV1 } from '@intake24/common/prompts/v1/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
+
+import { omit } from 'lodash-es';
 
 function defaultObjectForSection(section: PromptSection): any {
   switch (section) {

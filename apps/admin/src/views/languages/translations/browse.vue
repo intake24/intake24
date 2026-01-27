@@ -67,17 +67,18 @@
 </template>
 
 <script lang="ts">
+import type {
+  LanguageEntry,
+  LanguageTranslationAttributes,
+  LanguageTranslationsResponse,
+} from '@intake24/common/types/http/admin';
+
 import { has } from 'lodash-es';
 import { defineComponent, ref } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import type {
-  LanguageEntry,
-  LanguageTranslationAttributes,
-  LanguageTranslationsResponse,
-} from '@intake24/common/types/http/admin';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';

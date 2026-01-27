@@ -1,6 +1,8 @@
 import type { SetupContext } from 'vue';
-import { useVModel } from '@vueuse/core';
+
 import type { PortionSizeMethodId, PortionSizeParameters } from '@intake24/common/surveys';
+
+import { useVModel } from '@vueuse/core';
 
 export type UseParametersProps<T extends PortionSizeMethodId> = {
   modelValue: PortionSizeParameters[T];

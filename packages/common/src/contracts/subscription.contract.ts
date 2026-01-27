@@ -1,5 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
+
 import { webPushSubscription } from '../types/web-push';
 
 const contract = initContract();

@@ -1,7 +1,3 @@
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
-import { useGoTo } from 'vuetify';
-
 import type {
   ComponentType,
   FoodActionType,
@@ -9,17 +5,23 @@ import type {
   MealActionType,
 } from '@intake24/common/prompts';
 import type { MealCreationState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
-import { isSelectionEqual } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
+import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+
+import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
+import { useGoTo } from 'vuetify';
+
+import { isSelectionEqual } from '@intake24/common/surveys';
 import {
   customHandlers,
   portionSizeHandlers,
   standardHandlers,
 } from '@intake24/survey/components/handlers';
-import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
+
 import { InfoAlert } from '../elements';
 
 export default defineComponent({

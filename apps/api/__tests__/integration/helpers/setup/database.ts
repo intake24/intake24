@@ -1,3 +1,6 @@
+import type { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
+import type { User, UserSurveyAlias } from '@intake24/db';
+
 import { Redis } from 'ioredis';
 
 import ioc from '@intake24/api/ioc';
@@ -17,8 +20,6 @@ import {
   defaultSearchSettings,
   defaultSessionSettings,
 } from '@intake24/common/surveys';
-import type { SystemLocaleAttributes } from '@intake24/common/types/http/admin';
-import type { User, UserSurveyAlias } from '@intake24/db';
 import {
   FAQ,
   FeedbackScheme,

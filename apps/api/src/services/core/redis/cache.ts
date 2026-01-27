@@ -1,11 +1,13 @@
 /* eslint-disable ts/no-empty-object-type */
 import type { StringValue } from 'ms';
+
+import type { IoC } from '@intake24/api/ioc';
+import type { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
+
 import { mapValues } from 'lodash-es';
 import ms from 'ms';
 import stringify from 'safe-stable-stringify';
 
-import type { IoC } from '@intake24/api/ioc';
-import type { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { jsonDateReviver, mapKeys } from '@intake24/common/util';
 
 import HasRedisClient from './redis-store';

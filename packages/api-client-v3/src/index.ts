@@ -1,6 +1,7 @@
 import type { Logger } from 'winston';
 
 import type { CredentialsV3 } from './types';
+
 import { BaseClientV3 } from './base-client-v3';
 import { CategoriesApiV3 } from './categories';
 import { FoodsApiV3 } from './foods';

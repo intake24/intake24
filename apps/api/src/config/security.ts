@@ -1,5 +1,7 @@
 import z from 'zod';
+
 import { mfaModes } from '@intake24/common/security';
+
 import { cookieSettings, msStringValue } from './common';
 import { validateConfig } from './validate-config';
 

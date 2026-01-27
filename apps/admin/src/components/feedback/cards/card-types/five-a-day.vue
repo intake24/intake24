@@ -13,8 +13,9 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import { JsonEditor } from '@intake24/admin/components/editors';
 import type { FiveADayCard } from '@intake24/common/feedback';
+
+import { JsonEditor } from '@intake24/admin/components/editors';
 
 import { CardThresholds, CardUnit } from '../partials';
 

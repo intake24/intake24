@@ -1,5 +1,7 @@
 import type { Request } from 'express';
+
 import { initServer } from '@ts-rest/express';
+
 import { NotFoundError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';

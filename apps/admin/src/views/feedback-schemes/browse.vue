@@ -3,8 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import { DataTable } from '@intake24/admin/components/data-tables';
 import type { DataTableHeader } from '@intake24/admin/components/data-tables';
+
+import { DataTable } from '@intake24/admin/components/data-tables';
 import { useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'FeedbackSchemeList' });

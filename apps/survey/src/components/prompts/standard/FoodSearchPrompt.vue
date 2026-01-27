@@ -14,13 +14,17 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed } from 'vue';
+
 import type { FoodState } from '@intake24/common/surveys';
 import type { RecipeFood } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
+
+import { computed } from 'vue';
+
 import { FoodBrowser } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { foodsService } from '@intake24/survey/services';
+
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 

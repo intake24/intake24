@@ -1,11 +1,13 @@
 import type { Express, Request, Response } from 'express';
 
+import type { Ops } from '@intake24/api/app';
+import type { Site } from '@intake24/api/config';
+
 import path from 'node:path';
+
 import express from 'express';
 import helmet from 'helmet';
 
-import type { Ops } from '@intake24/api/app';
-import type { Site } from '@intake24/api/config';
 import { isUrlAbsolute } from '@intake24/api/util';
 
 import api from './api';

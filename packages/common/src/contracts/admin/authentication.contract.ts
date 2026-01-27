@@ -1,5 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
+
 import {
   adminAuthResponse,
   duoAuthenticationVerificationRequest,
@@ -9,6 +10,7 @@ import {
   mfaChallengeResponse,
   otpAuthenticationVerificationRequest,
 } from '@intake24/common/types/http';
+
 import { sanitize } from '../../rules';
 
 const contract = initContract();

@@ -1,7 +1,10 @@
-import { URLSearchParams } from 'node:url';
-import axios from 'axios';
 import type { CaptchaConfig } from '@intake24/api/config';
 import type { CaptchaProvider } from '@intake24/common/security';
+
+import { URLSearchParams } from 'node:url';
+
+import axios from 'axios';
+
 import { ValidationError } from '../errors';
 
 export type CaptchaResponse = {

@@ -14,13 +14,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState, PortionSizeParameters } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { AddonFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import { filterForAddonFoods } from '@intake24/survey/dynamic-recall/prompt-filters';
 import { useSurvey } from '@intake24/survey/stores';
 import { flattenFoods, getEntityId } from '@intake24/survey/util';
+
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'addon-foods-prompt'>());

@@ -51,7 +51,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
+
 import PortionIcon from './icon.vue';
 import PortionImage from './image.vue';
 import PortionOptions from './options.vue';

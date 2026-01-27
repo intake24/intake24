@@ -1,8 +1,9 @@
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
-import { suite } from '@intake24/api-tests/integration/helpers';
 import type { MediaModel } from '@intake24/common/types/http/admin';
-import { modelToResource } from '@intake24/common/util';
 import type { Securable } from '@intake24/db';
+
+import { suite } from '@intake24/api-tests/integration/helpers';
+import { modelToResource } from '@intake24/common/util';
 
 export default (type: MediaModel) => () => {
   const resource = modelToResource(type);

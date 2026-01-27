@@ -1,3 +1,10 @@
+import type { PkgDrinkScaleV2 } from '@intake24/cli/commands/packager/types/drinkware';
+import type {
+  PkgImageMap,
+  PkgImageMapObject,
+} from '@intake24/cli/commands/packager/types/image-map';
+import type { ImageMapData } from '@intake24/svg-utils';
+
 import { createReadStream } from 'node:fs';
 import fs, { copyFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -7,13 +14,7 @@ import { groupBy } from 'lodash-es';
 
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
-import type { PkgDrinkScaleV2 } from '@intake24/cli/commands/packager/types/drinkware';
-import type {
-  PkgImageMap,
-  PkgImageMapObject,
-} from '@intake24/cli/commands/packager/types/image-map';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
-import type { ImageMapData } from '@intake24/svg-utils';
 import { getDrinkScaleOutline, getImageMapData } from '@intake24/svg-utils';
 
 type Logger = typeof mainLogger;

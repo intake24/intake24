@@ -1,9 +1,10 @@
 import type { SetupContext } from 'vue';
+
+import type { Prompts } from '@intake24/common/prompts';
+
 import { addDays } from 'date-fns';
 import { computed } from 'vue';
 import { useDate } from 'vuetify';
-
-import type { Prompts } from '@intake24/common/prompts';
 
 export type DatePickerProps = {
   prompt: Prompts['recall-date-prompt'] | Prompts['date-picker-prompt'];

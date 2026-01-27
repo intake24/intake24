@@ -18,5 +18,6 @@
       "groupSlug": "all-minor-patch"
     }
   ],
-  "rangeStrategy": "bump"
+  "rangeStrategy": "bump",
+  "ignoreDeps": ["node"]
 }

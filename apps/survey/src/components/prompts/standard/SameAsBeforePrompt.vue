@@ -188,12 +188,16 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, onMounted, ref } from 'vue';
+
 import type { EncodedFood } from '@intake24/common/surveys';
+import type { SameAsBeforeItem } from '@intake24/survey/stores';
+
+import { computed, onMounted, ref } from 'vue';
+
 import { usePromptUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
-import type { SameAsBeforeItem } from '@intake24/survey/stores';
 import { useI18n } from '@intake24/ui';
+
 import { CardLayout } from '../layouts';
 import { useStandardUnits } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

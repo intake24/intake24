@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { validateConfig } from './validate-config';
 
 const metricsConfigSchema = z.object({

@@ -1,5 +1,6 @@
-import { computed } from 'vue';
 import type { EncodedFood, PortionSizeMethodId, PortionSizeParameters } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
 
 export type UsePortionSizeProps = {
   food: EncodedFood;

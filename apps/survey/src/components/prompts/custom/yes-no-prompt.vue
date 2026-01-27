@@ -12,8 +12,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+
 import { YesNoChoice } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 

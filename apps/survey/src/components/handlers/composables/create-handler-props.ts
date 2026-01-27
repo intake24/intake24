@@ -1,4 +1,5 @@
 import type { PropType } from 'vue';
+
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 

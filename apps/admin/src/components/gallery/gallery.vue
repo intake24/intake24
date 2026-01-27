@@ -70,14 +70,17 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { Dictionary } from '@intake24/common/types';
+import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
+
 import { get } from 'lodash-es';
 import { computed, onMounted, ref, watch } from 'vue';
+
 import { DataTableFilter } from '@intake24/admin/components/data-tables';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { useHttp } from '@intake24/admin/services';
 import { useMessages, useResource } from '@intake24/admin/stores';
-import type { Dictionary } from '@intake24/common/types';
-import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 const props = defineProps({

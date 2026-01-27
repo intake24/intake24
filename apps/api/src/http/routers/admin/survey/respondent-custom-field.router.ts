@@ -1,4 +1,5 @@
 import { initServer } from '@ts-rest/express';
+
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { contract } from '@intake24/common/contracts';

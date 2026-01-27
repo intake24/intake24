@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { mfaProviders } from '@intake24/common/security';
 
 export const mfaDeviceAttributes = z.object({

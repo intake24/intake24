@@ -96,13 +96,17 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { WeightFactorProps } from './AsServedWeightFactor.vue';
-import { deepEqual } from 'fast-equals';
-import { computed, ref } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, SelectedAsServedImage } from '@intake24/common/surveys';
 import type { AsServedSetResponse } from '@intake24/common/types/http/foods';
+
+import { deepEqual } from 'fast-equals';
+import { computed, ref } from 'vue';
+
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
+
 import AsServedWeightFactor from './AsServedWeightFactor.vue';
 import { useFetchImageData } from './use-fetch-image-data';
 import { useLabels } from './use-labels';

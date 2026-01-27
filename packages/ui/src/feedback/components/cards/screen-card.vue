@@ -28,9 +28,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed } from 'vue';
+
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
+
+import { computed } from 'vue';
+
 import { getContrastYIQ } from '@intake24/ui/util';
+
 import TellMeMore from './tell-me-more.vue';
 import { useCard } from './use-card';
 

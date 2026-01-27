@@ -1,8 +1,9 @@
+import type { NutrientTableRequest } from '@intake24/common/types/http/admin';
+
 import { pick } from 'lodash-es';
 import request from 'supertest';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { NutrientTableRequest } from '@intake24/common/types/http/admin';
 import { NutrientTable } from '@intake24/db';
 
 export default () => {

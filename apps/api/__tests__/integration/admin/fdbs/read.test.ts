@@ -1,5 +1,6 @@
-import { suite } from '@intake24/api-tests/integration/helpers';
 import type { SystemLocaleCreationAttributes } from '@intake24/db';
+
+import { suite } from '@intake24/api-tests/integration/helpers';
 import { FoodsLocale, SystemLocale } from '@intake24/db';
 
 export default () => {

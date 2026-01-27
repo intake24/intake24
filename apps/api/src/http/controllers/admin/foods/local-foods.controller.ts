@@ -1,6 +1,9 @@
 import type { Request, Response } from 'express';
-import { HttpStatusCode } from 'axios';
+
 import type { IoC } from '@intake24/api/ioc';
+
+import { HttpStatusCode } from 'axios';
+
 import { SystemLocale } from '@intake24/db';
 
 function localFoodsController({

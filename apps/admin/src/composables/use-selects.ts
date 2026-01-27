@@ -1,7 +1,8 @@
+import type { ConditionOpCode } from '@intake24/common/prompts';
+
 import { orderBy } from 'lodash-es';
 
 import { actionTypes as actionTypeRefs, conditionOpCodes, layoutTypes } from '@intake24/common/prompts';
-import type { ConditionOpCode } from '@intake24/common/prompts';
 import { recordVisibilities } from '@intake24/common/security';
 import {
   helpAvailableFields as helpAvailableFieldRefs,

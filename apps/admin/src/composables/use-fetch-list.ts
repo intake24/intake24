@@ -1,9 +1,11 @@
 import type { Ref } from 'vue';
+
+import type { Pagination } from '@intake24/common/types/http';
+
 import { watchDebounced } from '@vueuse/core';
 import { computed, ref, unref, watch } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
-import type { Pagination } from '@intake24/common/types/http';
 
 export type UseFetchListProps = {
   url: string;

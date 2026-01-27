@@ -15,10 +15,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
-import { defineComponent, ref, useTemplateRef } from 'vue';
 
 import type { QuaggaScanner } from '@intake24/common/barcodes';
+
+import { useVModel } from '@vueuse/core';
+import { defineComponent, ref, useTemplateRef } from 'vue';
 
 import QuaggaReader from './quagga-reader.vue';
 

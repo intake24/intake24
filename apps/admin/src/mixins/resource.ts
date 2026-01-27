@@ -1,7 +1,8 @@
+import type { Resource } from '@intake24/admin/types';
+
 import { defineComponent } from 'vue';
 
 import resources from '@intake24/admin/router/resources';
-import type { Resource } from '@intake24/admin/types';
 
 export default defineComponent({
   computed: {

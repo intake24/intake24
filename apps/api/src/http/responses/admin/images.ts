@@ -1,4 +1,3 @@
-import { InternalServerError } from '@intake24/api/http/errors';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type {
   AsServedImageEntry,
@@ -20,6 +19,8 @@ import type {
   ImageMap,
   ImageMapObject,
 } from '@intake24/db';
+
+import { InternalServerError } from '@intake24/api/http/errors';
 
 type GuideObjects = { [index: string]: { label: LocaleTranslation; weight: number } };
 

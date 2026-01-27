@@ -68,11 +68,13 @@
 </template>
 
 <script lang="ts">
+import type { MediaEntry } from '@intake24/common/types/http/admin';
+
 import { computed, defineComponent } from 'vue';
+
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { commonCollections } from '@intake24/common/types/http/admin';
-import type { MediaEntry } from '@intake24/common/types/http/admin';
 import { modelToResource } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 

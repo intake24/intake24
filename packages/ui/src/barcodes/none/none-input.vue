@@ -4,10 +4,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
-import { defineComponent } from 'vue';
 
 import type { NoneScanner } from '@intake24/common/barcodes';
+
+import { useVModel } from '@vueuse/core';
+import { defineComponent } from 'vue';
 
 const props = defineProps({
   modelValue: {

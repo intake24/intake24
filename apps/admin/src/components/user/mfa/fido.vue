@@ -46,16 +46,17 @@
 </template>
 
 <script lang="ts" setup>
-import { startRegistration } from '@simplewebauthn/browser';
-import { ref } from 'vue';
-
-import { useForm } from '@intake24/admin/composables';
-import { useHttp } from '@intake24/admin/services';
 import type {
   FIDORegistrationChallenge,
   FIDORegistrationVerificationRequest,
   MFADeviceResponse,
 } from '@intake24/common/types/http/admin';
+
+import { startRegistration } from '@simplewebauthn/browser';
+import { ref } from 'vue';
+
+import { useForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
 
 export interface FIDOForm extends Omit<FIDORegistrationVerificationRequest, 'response'> {
   response: FIDORegistrationVerificationRequest['response'] | null;

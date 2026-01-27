@@ -1,4 +1,5 @@
 import z from 'zod';
+
 import { validateConfig } from './validate-config';
 
 export const sourceImageConfigSchema = z.object({

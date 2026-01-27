@@ -144,10 +144,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { FeedbackOutput } from '@intake24/common/feedback';
+
 import axios, { HttpStatusCode } from 'axios';
 import { defineComponent } from 'vue';
 
-import type { FeedbackOutput } from '@intake24/common/feedback';
 import { Errors } from '@intake24/common/util';
 import { downloadFile } from '@intake24/ui';
 import { useLoading } from '@intake24/ui/stores';

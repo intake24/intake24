@@ -1,10 +1,11 @@
-import { defineStore } from 'pinia';
-
 import type {
   AliasLoginRequest,
   ChallengeResponse,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
+
+import { defineStore } from 'pinia';
+
 import { useLoading } from '@intake24/ui/stores';
 
 import { authService } from '../services';

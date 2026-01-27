@@ -1,7 +1,8 @@
 import type { Express } from 'express';
-import cors from 'cors';
 
 import type { Ops } from '@intake24/api/app';
+
+import cors from 'cors';
 
 export default (app: Express, { config }: Ops) => {
   const {

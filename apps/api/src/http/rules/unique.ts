@@ -1,5 +1,6 @@
-import { merge } from '@intake24/common/util';
 import type { BaseModel, BaseModelCtor, BaseModelStatic, FindOptions } from '@intake24/db';
+
+import { merge } from '@intake24/common/util';
 import { Op } from '@intake24/db';
 
 export type UniqueCondition = {

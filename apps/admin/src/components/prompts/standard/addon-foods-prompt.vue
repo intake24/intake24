@@ -97,12 +97,16 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { Prompts } from '@intake24/common/prompts';
+
 import { deepEqual } from 'fast-equals';
 import { ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
+
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import type { Prompts } from '@intake24/common/prompts';
 import { copy, randomString } from '@intake24/common/util';
+
 import { ConditionList, useBasePrompt } from '../partials';
 
 const props = defineProps({

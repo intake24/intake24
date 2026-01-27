@@ -3,6 +3,7 @@ import { unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { Readable, Transform } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+
 import {
   cancel,
   confirm,
@@ -14,6 +15,7 @@ import {
 import fs from 'fs-extra';
 import color from 'picocolors';
 import unzipper from 'unzipper';
+
 import config from '@intake24/cli/config';
 
 export type InitFoodImagesArgs = { url: string };

@@ -1,10 +1,11 @@
 import { initServer } from '@ts-rest/express';
+
 import { ValidationError } from '@intake24/api/http/errors';
 import { unique } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
-
 import { User } from '@intake24/db';
+
 import { captchaCheck } from '../../rules';
 import { attachRefreshToken } from '../util';
 

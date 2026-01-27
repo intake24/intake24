@@ -7,7 +7,9 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import type { NutrientTableRecordNutrientCreationAttributes } from './nutrient-table-record-nutrient';
+
 import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';

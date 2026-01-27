@@ -192,6 +192,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { Actions } from '@intake24/common/prompts';
+
 import { deepEqual } from 'fast-equals';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
@@ -201,7 +204,6 @@ import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useSelects } from '@intake24/admin/composables';
 import { withIdList } from '@intake24/admin/util';
 import { defaultAction } from '@intake24/common/prompts';
-import type { Actions } from '@intake24/common/prompts';
 import { copy, randomString } from '@intake24/common/util';
 
 defineOptions({ name: 'PromptActions' });

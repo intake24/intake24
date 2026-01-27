@@ -6,6 +6,9 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
+import type { Subscription, SubscriptionType } from '@intake24/common/types';
+
 import {
   BelongsTo,
   Column,
@@ -15,7 +18,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import type { Subscription, SubscriptionType } from '@intake24/common/types';
 
 import BaseModel from '../model';
 import User from './user';

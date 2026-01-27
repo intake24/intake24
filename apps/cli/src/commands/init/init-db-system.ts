@@ -1,6 +1,9 @@
+import type { RecallPrompts } from '@intake24/common/surveys';
+
 import { exec } from 'node:child_process';
 import { resolve } from 'node:path';
 import { promisify } from 'node:util';
+
 import {
   cancel,
   confirm,
@@ -13,6 +16,7 @@ import {
 } from '@clack/prompts';
 import ky from 'ky';
 import color from 'picocolors';
+
 import config from '@intake24/cli/config';
 import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
 import { logger } from '@intake24/common-backend/services/logger';
@@ -33,8 +37,8 @@ import {
   submitPrompt,
 } from '@intake24/common/prompts';
 import { defaultExport, defaultMeals, defaultSchemeSettings } from '@intake24/common/surveys';
-import type { RecallPrompts } from '@intake24/common/surveys';
 import { KyselyDatabases } from '@intake24/db';
+
 import initAssets from './init-assets';
 
 type Superuser = {

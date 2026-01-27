@@ -24,8 +24,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
+
 import type { ImageMap } from '@intake24/common/prompts';
+
+import { useVModel } from '@vueuse/core';
+
 import { useI18n } from '@intake24/ui';
 
 const props = defineProps({

@@ -1,6 +1,8 @@
-import { useGtm } from '@gtm-support/vue-gtm';
-import { useSurvey } from '@intake24/survey/stores';
 import type { GtmEventParams } from '@intake24/ui/tracking';
+
+import { useGtm } from '@gtm-support/vue-gtm';
+
+import { useSurvey } from '@intake24/survey/stores';
 
 export function sendGtmEvent(params: GtmEventParams): void {
   try {

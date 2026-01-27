@@ -1,6 +1,7 @@
+import type { RankingData } from '@intake24/api/food-index/ranking/ranking';
+
 import NodeCache from 'node-cache';
 
-import type { RankingData } from '@intake24/api/food-index/ranking/ranking';
 import { PopularityCounter } from '@intake24/db';
 
 const cache = new NodeCache({ stdTTL: 600, checkperiod: 600 });

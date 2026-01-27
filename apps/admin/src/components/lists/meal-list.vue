@@ -182,15 +182,19 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { ReturnUseErrors } from '@intake24/admin/composables';
+import type { Meal } from '@intake24/common/surveys';
+
 import { useVModel } from '@vueuse/core';
 import { computed, ref, useTemplateRef } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
+
 import { ListItemError } from '@intake24/admin/components/lists';
-import type { ReturnUseErrors } from '@intake24/admin/composables';
-import type { Meal } from '@intake24/common/surveys';
 import { defaultMeals, staticMealFlags } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
 import { OptionsMenu, SelectResource } from '../dialogs';
 import { JsonEditor, JsonEditorDialog } from '../editors';
 import { ErrorList, LanguageSelector } from '../forms';

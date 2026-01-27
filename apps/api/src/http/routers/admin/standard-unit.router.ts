@@ -1,5 +1,6 @@
 import { initServer } from '@ts-rest/express';
 import { col, fn, literal, where } from 'sequelize';
+
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { unique } from '@intake24/api/http/rules';

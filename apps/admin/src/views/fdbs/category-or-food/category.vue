@@ -99,8 +99,15 @@
 </template>
 
 <script lang="ts">
+import type {
+  CategoryEntry,
+  FoodDatabaseRefs,
+  LocaleEntry,
+} from '@intake24/common/types/http/admin';
+
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
+
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
   AttributeList,
@@ -111,11 +118,6 @@ import {
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import type {
-  CategoryEntry,
-  FoodDatabaseRefs,
-  LocaleEntry,
-} from '@intake24/common/types/http/admin';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 

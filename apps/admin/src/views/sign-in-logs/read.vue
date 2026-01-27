@@ -58,11 +58,12 @@
 </template>
 
 <script lang="ts">
+import type { SignInLogAttributes } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { SignInLogAttributes } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'SignInLogDetail',

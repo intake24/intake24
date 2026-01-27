@@ -102,10 +102,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { Notification, Notifications } from '@intake24/common/types';
+
 import { useVModel } from '@vueuse/core';
 import { ref } from 'vue';
 
-import type { Notification, Notifications } from '@intake24/common/types';
 import { eventTypes, notificationChannels } from '@intake24/common/types';
 import { useI18n } from '@intake24/ui';
 

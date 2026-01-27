@@ -14,6 +14,7 @@ import type {
 } from '@intake24/common/feedback';
 
 import { round } from '@intake24/common/util';
+
 import { DemographicRange } from './classes';
 
 export type FiveADayCardWithDemGroups = FiveADayCard & { demographicGroups: DemographicGroup[] };

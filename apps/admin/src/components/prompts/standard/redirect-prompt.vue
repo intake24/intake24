@@ -69,10 +69,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Prompts } from '@intake24/common/prompts';
+
+import { defineComponent } from 'vue';
+
 import { useI18n } from '@intake24/ui';
 
 import { basePrompt } from '../partials';

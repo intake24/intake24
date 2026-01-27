@@ -1,5 +1,7 @@
 import type { Job } from 'bullmq';
+
 import type { IoC } from '@intake24/api/ioc';
+
 import BaseJob from '../job';
 
 export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {

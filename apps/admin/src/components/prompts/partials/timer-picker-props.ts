@@ -1,4 +1,5 @@
 import type { PropType } from 'vue';
+
 import type { TimePicker } from '@intake24/common/prompts';
 
 export const timerPickerProps = {

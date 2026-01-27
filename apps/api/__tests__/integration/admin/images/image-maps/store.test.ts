@@ -1,9 +1,11 @@
+import type { ImageMapEntry } from '@intake24/common/types/http/admin';
+
 import { createReadStream } from 'node:fs';
+
 import { pick } from 'lodash-es';
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
-import type { ImageMapEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/images/image-maps';

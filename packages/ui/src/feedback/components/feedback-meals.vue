@@ -50,16 +50,19 @@
 <script lang="ts" setup>
 import type { EChartsOption } from 'echarts';
 import type { PropType } from 'vue';
+
 import type { NutrientChartData } from '../charts';
 import type { SurveyStats, SurveySubmission } from '../classes';
+import type { FeedbackMealChart, FeedbackMeals, FeedbackMealTable } from '@intake24/common/feedback';
+import type { NutrientType } from '@intake24/common/types/http';
+
 import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { use } from 'echarts/core';
 import { SVGRenderer } from 'echarts/renderers';
 import { computed, ref } from 'vue';
 import Chart from 'vue-echarts';
-import type { FeedbackMealChart, FeedbackMeals, FeedbackMealTable } from '@intake24/common/feedback';
-import type { NutrientType } from '@intake24/common/types/http';
+
 import { round } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 import { getNutrientUnit } from '@intake24/ui/util';

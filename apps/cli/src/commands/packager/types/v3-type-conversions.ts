@@ -1,5 +1,3 @@
-import { identity, mapValues } from 'lodash-es';
-
 import type {
   AssociatedFoodWithHeaderV3,
   CategoryHeaderV3,
@@ -37,6 +35,8 @@ import type {
   PkgStandardUnit,
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
+
+import { identity, mapValues } from 'lodash-es';
 
 // JSON encoding for Scala's Option type
 // Empty array for None, array with a single element for Some

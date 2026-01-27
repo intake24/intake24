@@ -1,5 +1,7 @@
 import type { NavigationGuard } from 'vue-router';
+
 import { HttpStatusCode, isAxiosError } from 'axios';
+
 import { surveyService } from '../services';
 import { useAuth, useSurvey, useUser } from '../stores';
 

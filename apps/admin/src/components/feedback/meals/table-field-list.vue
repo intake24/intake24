@@ -204,14 +204,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { MealTableField } from '@intake24/common/feedback';
+import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
+
 import { computed, defineComponent, ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/composables';
-import type { MealTableField } from '@intake24/common/feedback';
 import { mealTableFieldStandardIds, mealTableFieldTypes } from '@intake24/common/feedback';
-import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { getTableFieldDefaults } from './table-field';

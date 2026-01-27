@@ -1,4 +1,5 @@
 import type { PropType } from 'vue';
+
 import type { FoodBrowser } from '@intake24/common/prompts';
 
 export const foodBrowserProps = {

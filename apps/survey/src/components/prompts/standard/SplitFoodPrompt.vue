@@ -32,9 +32,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed } from 'vue';
+
 import type { FreeTextFood } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 

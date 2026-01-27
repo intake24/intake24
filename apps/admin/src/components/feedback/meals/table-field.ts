@@ -1,4 +1,5 @@
 import type { MealTableField, MealTableFieldType } from '@intake24/common/feedback';
+
 import { copy } from '@intake24/common/util';
 
 export const tableFieldDefaults: Record<MealTableFieldType, MealTableField> = {

@@ -19,10 +19,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed } from 'vue';
+
 import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

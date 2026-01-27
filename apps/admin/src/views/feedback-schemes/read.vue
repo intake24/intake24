@@ -44,13 +44,14 @@
 </template>
 
 <script lang="ts">
+import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { CopyRecordDialog } from '@intake24/admin/components/dialogs';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'FeedbackSchemeDetail',

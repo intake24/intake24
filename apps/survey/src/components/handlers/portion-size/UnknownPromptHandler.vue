@@ -16,7 +16,9 @@
 
 <script lang="ts" setup>
 import type { PromptStates } from '@intake24/common/prompts';
+
 import { UnknownPrompt } from '@intake24/survey/components/prompts';
+
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'unknown-prompt'>());

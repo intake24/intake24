@@ -21,8 +21,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { SelectResource } from '@intake24/admin/components/dialogs';
+
 import type { PortionSizeParameters } from '@intake24/common/surveys';
+
+import { SelectResource } from '@intake24/admin/components/dialogs';
+
 import { useParameters } from './use-parameters';
 
 defineOptions({ name: 'GuideImageParameters' });

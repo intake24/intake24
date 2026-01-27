@@ -109,14 +109,18 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useDebounceFn } from '@vueuse/core';
-import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue';
+
 import type { Prompts } from '@intake24/common/prompts';
 import type { FoodState, FreeTextFood, PromptSection } from '@intake24/common/surveys';
+
+import { useDebounceFn } from '@vueuse/core';
+import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue';
+
 import { copy } from '@intake24/common/util';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { getEntityId } from '@intake24/survey/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
 import { FoodSearchHints } from '../../elements';
 
 defineOptions({ name: 'EditableFoodList' });

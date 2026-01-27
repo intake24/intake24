@@ -1,10 +1,12 @@
 import type { RouteRecordRaw } from 'vue-router';
-import type { Resource } from '../types';
-import { singular } from 'pluralize';
 
+import type { Resource } from '../types';
+
+import { singular } from 'pluralize';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import views from '@intake24/admin/views';
+
 import resources from './resources';
 
 export interface GenerateRoutesOps extends Resource {

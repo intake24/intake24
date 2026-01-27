@@ -1,10 +1,13 @@
 import type { NextFunction, Request, Response, Router } from 'express';
+
+import type { TokenPayload } from '@intake24/common/security';
+import type { FrontEnd } from '@intake24/common/types';
+
 import { asValue } from 'awilix';
 import passport from 'passport';
+
 import { ForbiddenError } from '@intake24/api/http/errors';
-import type { TokenPayload } from '@intake24/common/security';
 import { surveyRespondent } from '@intake24/common/security';
-import type { FrontEnd } from '@intake24/common/types';
 
 export function isAalSatisfied(req: Request, res: Response, next: NextFunction): void {
   if (req.aal)

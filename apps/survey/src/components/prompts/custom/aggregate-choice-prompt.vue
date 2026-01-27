@@ -84,11 +84,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref } from 'vue';
+
 import type { CustomPromptAnswer, MealState } from '@intake24/common/surveys';
+
+import { computed, ref } from 'vue';
+
 import { copy } from '@intake24/common/util';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
+
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

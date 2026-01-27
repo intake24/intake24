@@ -1,6 +1,10 @@
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server';
 
+import type { IoC } from '@intake24/api/ioc';
+import type { FIDOAuthChallenge } from '@intake24/common/security';
+
 import { URL } from 'node:url';
+
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
@@ -10,9 +14,7 @@ import {
 import { isoUint8Array } from '@simplewebauthn/server/helpers';
 
 import { ValidationError } from '@intake24/api/http/errors';
-import type { IoC } from '@intake24/api/ioc';
 import { getFrontEndUrl } from '@intake24/api/util';
-import type { FIDOAuthChallenge } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
 import { MFAAuthenticator, MFADevice } from '@intake24/db';
 

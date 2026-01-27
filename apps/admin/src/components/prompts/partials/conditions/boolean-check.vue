@@ -11,7 +11,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { BooleanPropertyCheck } from '@intake24/common/prompts';
+
 import { useCheck } from './use-check';
 
 const props = defineProps({

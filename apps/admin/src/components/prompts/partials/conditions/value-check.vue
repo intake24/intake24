@@ -39,8 +39,11 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { VCombobox, VTextField } from 'vuetify/components';
+
 import type { ValuePropertyCheck } from '@intake24/common/prompts';
+
+import { VCombobox, VTextField } from 'vuetify/components';
+
 import { useCheck } from './use-check';
 
 defineOptions({

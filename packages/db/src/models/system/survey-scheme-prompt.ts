@@ -5,9 +5,10 @@ import type {
   InferAttributes,
   InferCreationAttributes,
 } from 'sequelize';
-import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { SinglePrompt } from '@intake24/common/prompts';
+
+import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 

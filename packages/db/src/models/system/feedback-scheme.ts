@@ -6,19 +6,8 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import type { Securable } from '..';
 
-import {
-  BelongsTo,
-  BelongsToMany,
-  Column,
-  CreatedAt,
-  DataType,
-  HasMany,
-  Scopes,
-  Table,
-  UpdatedAt,
-} from 'sequelize-typescript';
+import type { Securable } from '..';
 import type {
   Card,
   DemographicGroup,
@@ -31,6 +20,19 @@ import type {
   TopFoods,
 } from '@intake24/common/feedback';
 import type { RecordVisibility } from '@intake24/common/security';
+
+import {
+  BelongsTo,
+  BelongsToMany,
+  Column,
+  CreatedAt,
+  DataType,
+  HasMany,
+  Scopes,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+
 import BaseModel from '../model';
 import Survey from './survey';
 import User from './user';

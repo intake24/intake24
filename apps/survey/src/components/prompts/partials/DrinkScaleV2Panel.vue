@@ -102,13 +102,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { DrinkwareScaleV2Response } from '@intake24/common/types/http';
+
 import { useElementSize } from '@vueuse/core';
 import { chunk, maxBy } from 'lodash-es';
 import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useGoTo } from 'vuetify';
 import { VImg } from 'vuetify/components';
 
-import type { DrinkwareScaleV2Response } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 import { calculateVolume, getScaleBounds, toSvgPolygonPoints } from './drink-scale';

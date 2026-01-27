@@ -1,3 +1,5 @@
+import type { FindOptions } from '@intake24/db';
+
 import { checkSchema } from 'express-validator';
 
 import {
@@ -6,7 +8,6 @@ import {
   validate,
 } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
-import type { FindOptions } from '@intake24/db';
 import { Food, SystemLocale } from '@intake24/db';
 
 export default validate(

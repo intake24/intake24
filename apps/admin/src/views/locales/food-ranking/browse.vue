@@ -21,12 +21,13 @@
 </template>
 
 <script lang="ts">
+import type { LocaleEntry } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import CsvUpload from '@intake24/admin/components/dialogs/csv-upload/csv-upload.vue';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { LocaleEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'LocaleFoodRanking',

@@ -63,11 +63,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { CategoryListItem } from './categories';
-import { useVModel } from '@vueuse/core';
-import { SelectResource } from '@intake24/admin/components/dialogs';
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
+
+import { useVModel } from '@vueuse/core';
+
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmDialog } from '@intake24/ui';
+
 import { ErrorList } from '../../forms';
 
 const props = defineProps({

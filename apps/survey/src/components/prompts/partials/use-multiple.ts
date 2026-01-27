@@ -1,8 +1,11 @@
 import type { Replace } from 'type-fest';
+
 import type { LinkedParent } from '../../handlers/composables';
-import { computed } from 'vue';
 import type { HasMultiple, Prompt } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { usePortionSizeMethod } from './use-portion-size-method';
 
 export type UseMultipleProps = {

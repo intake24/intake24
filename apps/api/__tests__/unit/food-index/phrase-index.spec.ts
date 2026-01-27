@@ -1,7 +1,8 @@
+import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
+
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
 import EnglishLanguageBackend from '@intake24/api/food-index/language-backends/en/english-language-backend';
-import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { defaultSearchSettings } from '@intake24/common/surveys';
 

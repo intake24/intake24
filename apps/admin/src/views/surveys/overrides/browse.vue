@@ -49,15 +49,17 @@
 </template>
 
 <script lang="ts">
+import type { SchemeOverrides } from '@intake24/common/surveys';
+import type { SurveyEntry } from '@intake24/common/types/http/admin';
+
 import { computed, defineComponent, ref } from 'vue';
+
 import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { SchemeSettings } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
-import type { SchemeOverrides } from '@intake24/common/surveys';
 import { defaultOverrides, flattenScheme } from '@intake24/common/surveys';
-import type { SurveyEntry } from '@intake24/common/types/http/admin';
 
 export type SurveyOverridesForm = { surveySchemeOverrides: SchemeOverrides };
 

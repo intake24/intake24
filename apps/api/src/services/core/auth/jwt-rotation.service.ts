@@ -1,8 +1,9 @@
+import type { IoC } from '@intake24/api/ioc';
+import type { TokenPayload } from '@intake24/common/security';
+
 import { subDays } from 'date-fns';
 import jwt from 'jsonwebtoken';
 
-import type { IoC } from '@intake24/api/ioc';
-import type { TokenPayload } from '@intake24/common/security';
 import { Op, PersonalAccessToken, RefreshToken } from '@intake24/db';
 
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;

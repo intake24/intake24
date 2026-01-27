@@ -1,5 +1,6 @@
-import { initCache, releaseCache } from '@intake24/api-tests/unit/helpers/cache';
 import type { Cache } from '@intake24/api/services';
+
+import { initCache, releaseCache } from '@intake24/api-tests/unit/helpers/cache';
 
 function delay(time: number) {
   return new Promise(resolve => setTimeout(resolve, time));

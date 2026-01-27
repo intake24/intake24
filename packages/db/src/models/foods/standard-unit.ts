@@ -5,9 +5,10 @@ import type {
   InferAttributes,
   InferCreationAttributes,
 } from 'sequelize';
-import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
+
+import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 

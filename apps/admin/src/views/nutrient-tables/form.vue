@@ -217,11 +217,12 @@
 </template>
 
 <script lang="ts">
+import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
+
 import { computed, defineComponent, ref, watch } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
 import { excelColumnToOffset, offsetToExcelColumn } from '@intake24/common/util';
 
 export type CsvMappingField = { fieldName: string; columnOffset: string };

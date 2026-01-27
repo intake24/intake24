@@ -1,9 +1,12 @@
 import type { Translation } from 'vanilla-cookieconsent';
 import type { useLocale } from 'vuetify';
+
 import type { HttpClient } from '../services';
+import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
+
 import { get } from 'lodash-es';
 import { computed, onMounted, toRaw, watch } from 'vue';
-import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
+
 import { cookieConsentConfig, useCookieConsent } from '../cookie-consent';
 import { defaultMessages, loadAppLanguage, useI18n } from '../i18n';
 import { useApp } from '../stores';

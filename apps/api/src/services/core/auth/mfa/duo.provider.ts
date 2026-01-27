@@ -1,9 +1,10 @@
+import type { IoC } from '@intake24/api/ioc';
+import type { DuoAuthChallenge } from '@intake24/common/security';
+
 import { URL } from 'node:url';
 
 import { Client } from '@duosecurity/duo_universal';
 
-import type { IoC } from '@intake24/api/ioc';
-import type { DuoAuthChallenge } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
 import { MFADevice } from '@intake24/db';
 

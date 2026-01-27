@@ -1,4 +1,5 @@
 import type { Ops } from '@intake24/api/app';
+
 import ioc from '@intake24/api/ioc';
 
 async function exitSignalHandler() {

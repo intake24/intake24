@@ -1,6 +1,7 @@
+import type { Carousel, Prompt } from '@intake24/common/prompts';
+
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
-import type { Carousel, Prompt } from '@intake24/common/prompts';
 
 export type UseCarouselProps = Prompt & { carousel?: Carousel };
 

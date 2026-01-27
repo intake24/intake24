@@ -1,6 +1,10 @@
 import type { Express } from 'express';
+
+import type { Ops } from '@intake24/api/app';
+
 import path from 'node:path';
 import { URL } from 'node:url';
+
 import bodyParser from 'body-parser';
 import CleanCSS from 'clean-css';
 import { RedisStore } from 'connect-redis';
@@ -9,7 +13,7 @@ import expressSession from 'express-session';
 import { pick } from 'lodash-es';
 import morgan from 'morgan';
 import nunjucks from 'nunjucks';
-import type { Ops } from '@intake24/api/app';
+
 import ioc from '@intake24/api/ioc';
 import { httpLogger as stream } from '@intake24/common-backend';
 

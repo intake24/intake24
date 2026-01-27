@@ -64,10 +64,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { FoodSearchHint } from '@intake24/common/prompts';
+
 import { useVModel } from '@vueuse/core';
+
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { CustomList } from '@intake24/admin/components/lists';
-import type { FoodSearchHint } from '@intake24/common/prompts';
 
 const props = defineProps({
   modelValue: {

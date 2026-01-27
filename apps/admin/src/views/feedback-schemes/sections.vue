@@ -171,6 +171,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type {
+  FeedbackSection,
+  FeedbackStandardSection,
+} from '@intake24/common/feedback';
+
 import { computed, defineComponent, ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 import { useRoute, useRouter } from 'vue-router';
@@ -179,10 +185,6 @@ import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs'
 import { HtmlEditor, JsonEditor, JsonEditorDialog, useTinymce } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/composables';
-import type {
-  FeedbackSection,
-  FeedbackStandardSection,
-} from '@intake24/common/feedback';
 import {
   feedbackStandardSections,
 } from '@intake24/common/feedback';

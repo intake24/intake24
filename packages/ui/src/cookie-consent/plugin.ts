@@ -2,6 +2,7 @@ import type { CookieConsentConfig } from 'vanilla-cookieconsent';
 import type { App } from 'vue';
 
 import * as CookieConsent from 'vanilla-cookieconsent';
+
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
 import './cookie-consent.css';
 

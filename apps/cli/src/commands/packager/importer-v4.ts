@@ -1,11 +1,5 @@
 import type { PkgPortionSizeImageLabels } from './types/portion-size-image-labels';
-import fs, { constants } from 'node:fs/promises';
-import os from 'node:os';
-import path from 'node:path';
-import decompress from 'decompress';
-import { omit } from 'lodash-es';
 import type { ApiClientV4, DrinkwareScaleUpdate } from '@intake24/api-client-v4';
-import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import type {
   PkgAsServedImage,
   PkgAsServedSet,
@@ -22,8 +16,18 @@ import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
-import logger from '@intake24/common-backend/services/logger/logger';
 import type { Dictionary } from '@intake24/common/types';
+
+import fs, { constants } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+
+import decompress from 'decompress';
+import { omit } from 'lodash-es';
+
+import { PkgConstants } from '@intake24/cli/commands/packager/constants';
+import logger from '@intake24/common-backend/services/logger/logger';
+
 import typeConverters from './types/v4-type-conversions';
 
 export type Logger = typeof logger;

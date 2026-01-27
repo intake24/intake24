@@ -47,11 +47,15 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { DataTableHeader } from './use-data-table';
+import type { Dictionary } from '@intake24/common/types';
+
 import { computed } from 'vue';
+
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { useResource } from '@intake24/admin/stores';
-import type { Dictionary } from '@intake24/common/types';
+
 import { ActionBar } from './action-bar';
 import DataTableFilter from './data-table-filter.vue';
 import { useDataTable } from './use-data-table';

@@ -70,7 +70,9 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next, useCarousel, useYoutubeVideo } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

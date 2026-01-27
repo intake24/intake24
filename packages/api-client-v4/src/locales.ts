@@ -1,6 +1,5 @@
 import type { BaseClientV4 } from './base-client-v4';
 import type { CreateResult } from './create-response';
-
 import type {
   LocaleEntry,
   LocaleRequest,
@@ -8,6 +7,7 @@ import type {
   UpdateLocaleRequest,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
+
 import { parseCreateResponse } from './create-response';
 
 export class LocalesApiV4 {

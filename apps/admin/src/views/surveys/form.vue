@@ -606,6 +606,10 @@
 </template>
 
 <script lang="ts">
+import type { SchemeOverrides, SessionSettings, SurveyAuthMode, SurveySearchSettings, SurveyStatus } from '@intake24/common/surveys';
+import type { Notification } from '@intake24/common/types';
+import type { SurveyEntry } from '@intake24/common/types/http/admin';
+
 import { defineComponent, ref } from 'vue';
 
 import { EventNotifications, SelectResource } from '@intake24/admin/components/dialogs';
@@ -622,9 +626,6 @@ import {
   surveyAuthModes,
   surveyStatuses,
 } from '@intake24/common/surveys';
-import type { SchemeOverrides, SessionSettings, SurveyAuthMode, SurveySearchSettings, SurveyStatus } from '@intake24/common/surveys';
-import type { Notification } from '@intake24/common/types';
-import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 

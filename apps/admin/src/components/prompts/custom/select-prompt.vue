@@ -29,11 +29,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { Prompts } from '@intake24/common/prompts';
+
 import { defineComponent } from 'vue';
 
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { OptionsList } from '@intake24/admin/components/lists';
-import type { Prompts } from '@intake24/common/prompts';
 
 import { basePrompt } from '../partials';
 

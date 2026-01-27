@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { bigIntString } from '../generic';
 
 export const mediaModels = ['FAQ', 'FeedbackScheme', 'SurveyScheme'] as const;

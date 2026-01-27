@@ -1,8 +1,11 @@
 import type { AxiosError } from 'axios';
 import type { Router } from 'vue-router';
+
 import type { AuthStoreDef } from '../stores';
-import { HttpStatusCode } from 'axios';
 import type { SubscribeCallback } from '@intake24/ui';
+
+import { HttpStatusCode } from 'axios';
+
 import { http } from '@intake24/ui';
 
 let isRefreshing = false;

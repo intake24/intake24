@@ -3,6 +3,7 @@ import type {
   UserAssociatedFoodPrompt,
   UserFoodData,
 } from '@intake24/common/types/http/foods/user-food-data';
+
 import {
   AssociatedFood,
   Brand,
@@ -10,6 +11,7 @@ import {
   Food,
   NutrientTableRecordNutrient,
 } from '@intake24/db';
+
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import InvalidIdError from './invalid-id-error';
 import PortionSizeMethodsImpl from './portion-size-methods.service';

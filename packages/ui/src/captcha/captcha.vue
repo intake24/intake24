@@ -31,11 +31,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { CaptchaProvider } from '@intake24/common/security';
+
 import HCaptcha from '@hcaptcha/vue3-hcaptcha';
 import { ref, useTemplateRef } from 'vue';
 import { VueRecaptcha as ReCaptcha } from 'vue-recaptcha';
-
-import type { CaptchaProvider } from '@intake24/common/security';
 
 defineOptions({
   name: 'Captcha',

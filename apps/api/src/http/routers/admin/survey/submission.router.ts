@@ -1,11 +1,13 @@
 import type { WhereOptions } from 'sequelize';
+
+import type { SurveySubmissionAttributes } from '@intake24/db';
+
 import { initServer } from '@ts-rest/express';
 import { cast, col, Op, where } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { contract } from '@intake24/common/contracts';
-import type { SurveySubmissionAttributes } from '@intake24/db';
 import { submissionScope, Survey, SurveySubmission } from '@intake24/db';
 
 export function submission() {

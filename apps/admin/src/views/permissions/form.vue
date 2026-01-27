@@ -45,11 +45,12 @@
 </template>
 
 <script lang="ts">
+import type { PermissionEntry } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import type { PermissionEntry } from '@intake24/common/types/http/admin';
 
 type PermissionForm = {
   id: string | null;

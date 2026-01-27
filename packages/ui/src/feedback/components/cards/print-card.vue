@@ -37,7 +37,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
+
 import { useCard } from './use-card';
 
 const props = defineProps({

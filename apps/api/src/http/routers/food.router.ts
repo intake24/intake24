@@ -1,6 +1,8 @@
-import { initServer } from '@ts-rest/express';
-import foodIndex from '@intake24/api/food-index';
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
+
+import { initServer } from '@ts-rest/express';
+
+import foodIndex from '@intake24/api/food-index';
 import { contract } from '@intake24/common/contracts';
 
 export function food() {

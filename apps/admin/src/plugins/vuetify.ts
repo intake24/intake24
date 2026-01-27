@@ -1,11 +1,15 @@
 import type { IconAliases } from 'vuetify';
+
 import { createVuetify } from 'vuetify';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { VStepperVertical, VStepperVerticalItem } from 'vuetify/labs/VStepperVertical';
+
 import { colors } from '@intake24/common/theme';
+
 import resources from '../router/resources';
+
 import 'vuetify/styles';
 
 const resourceIcons = resources.reduce<Partial<IconAliases>>((acc, resource) => {

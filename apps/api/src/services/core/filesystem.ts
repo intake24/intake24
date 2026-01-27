@@ -1,6 +1,6 @@
-import fs from 'fs-extra';
-
 import type { IoC } from '@intake24/api/ioc';
+
+import fs from 'fs-extra';
 
 export default class Filesystem {
   private readonly fsConfig;

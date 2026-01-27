@@ -1,8 +1,9 @@
+import type { SecurableType } from '@intake24/common/security';
+
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import { securableDefs } from '@intake24/common/security';
-import type { SecurableType } from '@intake24/common/security';
 import { paginationMeta, paginationRequest, bigIntString as userId } from '@intake24/common/types/http';
 import {
   createUserWithSecurables,

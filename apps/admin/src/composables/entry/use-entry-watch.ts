@@ -1,9 +1,11 @@
 import type { ComputedRef, Ref } from 'vue';
 import type { NavigationGuardNext, RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router';
+
+import type { RouteLeave } from '@intake24/admin/types';
+
 import { computed, ref } from 'vue';
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 
-import type { RouteLeave } from '@intake24/admin/types';
 import { copy } from '@intake24/common/util';
 
 export function useEntryWatch(originalEntry: Ref<object>, changed?: ComputedRef<boolean>) {

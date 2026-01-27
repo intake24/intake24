@@ -1,8 +1,8 @@
 import type { JobTypeParams } from '../../jobs';
-
 import type { Pagination } from '../generic';
 
 import { z } from 'zod';
+
 import { jobParams, jobTypeParams, jobTypes, userTasks } from '../../jobs';
 import { userAttributes } from './users';
 

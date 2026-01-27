@@ -1,10 +1,11 @@
 import type { PhraseMatchResult } from '@intake24/api/food-index/phrase-index';
-import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
-import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';
-import { getLocalPopularityRanking } from '@intake24/api/food-index/ranking/local-popularity';
 import type { Logger } from '@intake24/common-backend';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { CategoryHeader, FoodHeader } from '@intake24/common/types/http';
+
+import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
+import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';
+import { getLocalPopularityRanking } from '@intake24/api/food-index/ranking/local-popularity';
 
 export type RankingAlgorithm = '';
 

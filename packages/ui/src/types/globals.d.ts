@@ -1,4 +1,5 @@
 import type CookieConsent from 'vanilla-cookieconsent';
+
 import type { HttpClient, Permission } from '../services';
 
 declare module 'vue' {

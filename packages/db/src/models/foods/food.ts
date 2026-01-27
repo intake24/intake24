@@ -6,8 +6,11 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import type { FoodNutrientCreationAttributes } from './food-nutrient';
 import type { FoodPortionSizeMethodCreationAttributes } from './food-portion-size-method';
+import type { AltNames } from '@intake24/common/types/http/admin';
+
 import {
   BelongsTo,
   BelongsToMany,
@@ -17,7 +20,7 @@ import {
   HasOne,
   Table,
 } from 'sequelize-typescript';
-import type { AltNames } from '@intake24/common/types/http/admin';
+
 import BaseModel from '../model';
 import AssociatedFood from './associated-foods';
 import Brand from './brand';

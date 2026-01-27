@@ -97,12 +97,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
 
+import { useVModel } from '@vueuse/core';
 import pluralize from 'pluralize';
 import { computed, ref, useTemplateRef } from 'vue';
-
 import { VueDraggable } from 'vue-draggable-plus';
+
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'CustomList' });

@@ -9,8 +9,10 @@
 
 <script lang="ts" setup>
 import type { PromptStates } from '@intake24/common/prompts';
+
 import { EditMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useMealPromptUtils, usePromptHandlerStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'edit-meal-prompt'>());

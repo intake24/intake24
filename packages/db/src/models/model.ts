@@ -1,10 +1,13 @@
 import type { AbstractDataType, CountOptions, FindOptions } from 'sequelize';
+
 /* eslint-disable ts/no-empty-object-type */
+import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
+
 import { Readable } from 'node:stream';
+
 import { snakeCase } from 'lodash-es';
 import { cast, col, DataTypes, fn, Op, where } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
-import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
 
 export type PaginateQuery = {
   page?: number;

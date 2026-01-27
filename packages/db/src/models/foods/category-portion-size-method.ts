@@ -7,9 +7,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
+
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import Category from './category';

@@ -14,10 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
 import type { CustomPromptAnswer } from '@intake24/common/surveys';
+
+import { computed, ref } from 'vue';
+
 import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useCustomPromptHandler } from '../composables';
 
 defineOptions({ components: { ...customPrompts } });

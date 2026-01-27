@@ -4,6 +4,7 @@ import type {
   InferAttributes,
   InferCreationAttributes,
 } from 'sequelize';
+
 import { Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';

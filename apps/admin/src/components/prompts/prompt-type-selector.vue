@@ -34,9 +34,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
 
 import type { Prompt, PromptType } from '@intake24/common/prompts';
+
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'PromptTypeSelector',

@@ -1,9 +1,11 @@
 import type { ComputedRef } from 'vue';
+
+import type { JobType } from '@intake24/common/types';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
+
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
-import type { JobType } from '@intake24/common/types';
-import type { JobAttributes } from '@intake24/common/types/http/admin';
 
 export function usePollsForJobs(jobType: JobType | readonly JobType[], query?: ComputedRef<Record<string, string | number>>) {
   const http = useHttp();

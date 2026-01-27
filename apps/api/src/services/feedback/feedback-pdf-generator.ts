@@ -1,7 +1,10 @@
 import type { CookieData } from 'puppeteer';
-import { Readable } from 'node:stream';
-import puppeteer from 'puppeteer';
+
 import type { PuppeteerOptions } from '@intake24/api/config';
+
+import { Readable } from 'node:stream';
+
+import puppeteer from 'puppeteer';
 
 export default class FeedbackPdfGenerator {
   readonly url;

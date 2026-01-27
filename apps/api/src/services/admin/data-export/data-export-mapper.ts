@@ -4,9 +4,10 @@ import type {
   ExportFieldTransform,
   ExportRow,
 } from './data-export-fields';
-import { get } from 'lodash-es';
 import type { IoC } from '@intake24/api/ioc';
 import type { CustomPromptAnswer, ExportSectionId } from '@intake24/common/surveys';
+
+import { get } from 'lodash-es';
 
 export type ExportFieldTransformCallback<T = ExportRow> = (
   field: ExportField,

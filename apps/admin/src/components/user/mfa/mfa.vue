@@ -118,14 +118,17 @@
 </template>
 
 <script lang="ts" setup>
+import type { MFADeviceResponse, MFADevicesResponse } from '@intake24/common/types/http/admin';
+
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+
 import { useHttp } from '@intake24/admin/services';
 import { useMessages } from '@intake24/admin/stores';
 import { mfaProviders } from '@intake24/common/security';
-import type { MFADeviceResponse, MFADevicesResponse } from '@intake24/common/types/http/admin';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
 import Duo from './duo.vue';
 import Fido from './fido.vue';
 import Otp from './otp.vue';

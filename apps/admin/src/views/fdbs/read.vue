@@ -17,11 +17,13 @@
 </template>
 
 <script lang="ts" setup>
+import type { LocaleEntry } from '@intake24/common/types/http/admin';
+
 import { computed } from 'vue';
+
 import { Layout } from '@intake24/admin/components/entry';
 import { FoodExplorer } from '@intake24/admin/components/fdbs';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { LocaleEntry } from '@intake24/common/types/http/admin';
 
 defineOptions({ name: 'FoodDBDetail' });
 

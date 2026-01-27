@@ -1,6 +1,8 @@
 import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue';
+
 import { computed, toValue, watch } from 'vue';
 import { useDisplay, useGoTo } from 'vuetify';
+
 import { isElementInViewport } from '@intake24/survey/util';
 
 export function usePanel<T extends Ref<{ panel: number }>>(state: T, conditions: ComputedRef<boolean[]>) {

@@ -72,11 +72,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
 
-import { ref } from 'vue';
-import { LanguageSelector } from '@intake24/admin/components/forms';
 import type { CharacterSentiment } from '@intake24/common/feedback';
+
+import { useVModel } from '@vueuse/core';
+import { ref } from 'vue';
+
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import { characterSentimentTypes, sentiments as defaultSentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';

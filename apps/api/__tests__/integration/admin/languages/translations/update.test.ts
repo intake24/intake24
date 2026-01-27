@@ -1,8 +1,9 @@
+import type { LanguageTranslation, LanguageTranslationAttributes } from '@intake24/db';
+
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
-import type { LanguageTranslation, LanguageTranslationAttributes } from '@intake24/db';
 
 export default () => {
   const permissions = ['languages', 'languages:translations'];

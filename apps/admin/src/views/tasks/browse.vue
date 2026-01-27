@@ -15,10 +15,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { DataTableHeader } from '@intake24/admin/components/data-tables';
+
 import cronstrue from 'cronstrue';
 
 import { DataTable } from '@intake24/admin/components/data-tables';
-import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import { useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'TaskList' });

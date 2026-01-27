@@ -6,6 +6,9 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
+import type { MFAProvider } from '@intake24/common/security';
+
 import {
   BeforeCreate,
   BelongsTo,
@@ -17,8 +20,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import type { MFAProvider } from '@intake24/common/security';
 
 import BaseModel from '../model';
 import MFAAuthenticator from './mfa-authenticator';

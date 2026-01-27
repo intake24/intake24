@@ -1,8 +1,9 @@
+import type { SplitWordRequest } from '@intake24/common/types/http/admin';
+
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
-import type { SplitWordRequest } from '@intake24/common/types/http/admin';
 
 export default () => {
   const baseUrl = '/api/admin/locales';

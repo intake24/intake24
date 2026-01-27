@@ -1,6 +1,6 @@
 import type Suite from './integration-suite';
-import { pick } from 'lodash-es';
 
+import { pick } from 'lodash-es';
 import request from 'supertest';
 
 type Method = 'get' | 'post' | 'patch' | 'put' | 'delete';

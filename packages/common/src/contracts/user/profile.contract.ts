@@ -1,7 +1,9 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
+
 import { userPhysicalDataAttributes, userPhysicalDataResponse } from '@intake24/common/types/http';
 import { surveySubmissionAttributes } from '@intake24/common/types/http/admin';
+
 import { strongPasswordWithConfirm } from '../../security';
 
 const contract = initContract();

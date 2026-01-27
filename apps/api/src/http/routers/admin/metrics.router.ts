@@ -1,6 +1,9 @@
 import { createReadStream } from 'node:fs';
+
 import { initServer } from '@ts-rest/express';
+
 import contract from '@intake24/common/contracts';
+
 import { permission } from '../../middleware/acl';
 
 // Clustered/load-balanced mode notes:

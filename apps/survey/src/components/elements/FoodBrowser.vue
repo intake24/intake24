@@ -161,10 +161,7 @@
 <script lang='ts' setup>
 import type { PropType } from 'vue';
 import type { VTextField } from 'vuetify/components';
-import { watchDebounced } from '@vueuse/core';
-import { computed, nextTick, onMounted, ref } from 'vue';
-import { useGoTo } from 'vuetify';
-import { VCard } from 'vuetify/components';
+
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { RecipeFood } from '@intake24/common/types';
@@ -174,10 +171,17 @@ import type {
   FoodHeader,
   FoodSearchResponse,
 } from '@intake24/common/types/http';
+
+import { watchDebounced } from '@vueuse/core';
+import { computed, nextTick, onMounted, ref } from 'vue';
+import { useGoTo } from 'vuetify';
+import { VCard } from 'vuetify/components';
+
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 import { sendGtmEvent } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui';
+
 import CategoryContentsView from './CategoryContentsView.vue';
 import FoodBrowserDialog from './FoodBrowserDialog.vue';
 import FoodSearchHints from './FoodSearchHints.vue';

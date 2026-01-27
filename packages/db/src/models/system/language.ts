@@ -6,7 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import type { HasVisibility } from '..';
+import type { RecordVisibility } from '@intake24/common/security';
+import type { TextDirection } from '@intake24/common/types';
 
 import {
   BelongsTo,
@@ -19,13 +22,10 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import type { RecordVisibility } from '@intake24/common/security';
 
-import type { TextDirection } from '@intake24/common/types';
 import BaseModel from '../model';
 import LanguageTranslation from './language-translation';
 import SystemLocale from './locale';
-
 import User from './user';
 import UserSecurable from './user-securable';
 

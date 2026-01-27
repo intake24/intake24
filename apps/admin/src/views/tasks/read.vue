@@ -53,12 +53,13 @@
 </template>
 
 <script lang="ts">
+import type { TaskResponse } from '@intake24/common/types/http/admin';
+
 import cronstrue from 'cronstrue';
 import { defineComponent } from 'vue';
 
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { TaskResponse } from '@intake24/common/types/http/admin';
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({

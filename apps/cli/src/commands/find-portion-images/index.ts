@@ -1,9 +1,12 @@
 import type { FPIConfig } from './config';
-import { createWriteStream, readFileSync } from 'node:fs';
-import { Transform } from '@json2csv/node';
-import { logger } from '@intake24/common-backend';
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 import type { Environment } from '@intake24/common/types';
+
+import { createWriteStream, readFileSync } from 'node:fs';
+
+import { Transform } from '@json2csv/node';
+
+import { logger } from '@intake24/common-backend';
 import {
   AsServedImage,
   AsServedSet,
@@ -22,6 +25,7 @@ import {
   NutrientTableRecordNutrient,
   ProcessedImage,
 } from '@intake24/db';
+
 import { fpiConfig } from './config';
 
 const energyKcalNutrientType = '1';

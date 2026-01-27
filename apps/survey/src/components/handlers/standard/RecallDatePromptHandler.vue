@@ -8,8 +8,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+
 import { RecallDatePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, usePromptHandlerNoStore } from '../composables';
 
 defineProps(createHandlerProps<'recall-date-prompt'>());

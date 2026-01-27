@@ -1,5 +1,6 @@
 import type { IoC } from '@intake24/api/ioc';
 import type { I18nParams } from '@intake24/i18n';
+
 import { api, replaceParams, shared } from '@intake24/i18n';
 
 export type TranslationObject = { [key: string]: TranslationObject } | string;

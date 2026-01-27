@@ -1,4 +1,5 @@
 import type { I18nOptions } from 'vue-i18n';
+
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import VueI18n from 'vue-i18n';
 

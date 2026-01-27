@@ -6,9 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import type { UseInRecipeType } from '@intake24/common/types';
+
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import Food from './food';

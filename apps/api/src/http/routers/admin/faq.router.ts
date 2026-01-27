@@ -1,13 +1,16 @@
 import type { WhereOptions } from 'sequelize';
+
+import type { PaginateOptions } from '@intake24/db';
+
 import { initServer } from '@ts-rest/express';
 import { col, fn, Op } from 'sequelize';
+
 import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { faqResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { FAQ, securableScope, UserSecurable } from '@intake24/db';
-import type { PaginateOptions } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { faqId }: { faqId?: string } = {}) {
   const where: WhereOptions = faqId ? { id: { [Op.ne]: faqId } } : {};

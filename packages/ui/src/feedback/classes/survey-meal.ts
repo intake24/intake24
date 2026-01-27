@@ -1,6 +1,8 @@
 import type { CustomData } from '@intake24/common/surveys';
 import type { FeedbackSubmissionEntry } from '@intake24/common/types/http';
+
 import { fromTime } from '@intake24/common/util';
+
 import SurveyFood from './survey-food';
 
 export default class SurveyMeal {

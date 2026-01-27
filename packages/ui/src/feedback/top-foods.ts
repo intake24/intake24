@@ -1,6 +1,7 @@
 import type { NutrientChartData } from './charts';
 import type { TopFoods } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
+
 import { getNutrientUnit } from '../util';
 import { AggregateFoodStats } from './classes';
 

@@ -23,11 +23,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+
+import type { Dictionary } from '@intake24/common/types';
+
 import { watchDebounced } from '@vueuse/core';
 import { defineComponent, ref, watch } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
-import type { Dictionary } from '@intake24/common/types';
 
 export default defineComponent({
   name: 'AutoComplete',

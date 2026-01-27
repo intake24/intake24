@@ -79,12 +79,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { DrinkwareScaleEntry } from '@intake24/common/types/http/admin';
+
 import { useElementSize } from '@vueuse/core';
 import { debounce } from 'lodash-es';
 import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useGoTo } from 'vuetify';
 
-import type { DrinkwareScaleEntry } from '@intake24/common/types/http/admin';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 import { calculateVolume } from './drink-scale';

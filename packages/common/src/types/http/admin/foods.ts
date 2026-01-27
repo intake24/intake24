@@ -5,8 +5,10 @@ import type { InheritableAttributes } from './attributes';
 import type { CategoryAttributes } from './categories';
 import type { NutrientTableRecordAttributes } from './nutrient-tables';
 import type { FoodPortionSizeMethodAttributes } from './portion-size-methods';
-import { z } from 'zod';
 import type { PortionSizeMethod } from '@intake24/common/surveys/portion-size';
+
+import { z } from 'zod';
+
 import { associatedFoodAttributes } from './associated-food';
 import { inheritableAttributes } from './attributes';
 import { categoryAttributes } from './categories';

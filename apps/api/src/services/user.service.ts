@@ -1,4 +1,5 @@
 import type { UserPhysicalDataAttributes } from '@intake24/db';
+
 import { UserPhysicalData } from '@intake24/db';
 
 export type UpdatePasswordInput = {

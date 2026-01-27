@@ -31,12 +31,13 @@
 </template>
 
 <script lang="ts">
+import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { CopyRecordDialog } from '@intake24/admin/components/dialogs';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'SurveySchemeDetail',

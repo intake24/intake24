@@ -70,7 +70,9 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { FeedbackDetails } from './use-card';
+
 import { computed, ref } from 'vue';
 
 const props = defineProps({

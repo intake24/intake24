@@ -5,9 +5,10 @@ import type {
   InferAttributes,
   InferCreationAttributes,
 } from 'sequelize';
-import { Column, DataType, Table } from 'sequelize-typescript';
 
 import type { UseInRecipeType } from '@intake24/common/types';
+
+import { Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 

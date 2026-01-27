@@ -1,4 +1,5 @@
 import type { HenryCoefficient } from '@intake24/common/feedback';
+
 import { copy, randomString } from '@intake24/common/util';
 
 export const henryCoefficientDefaults: HenryCoefficient = {

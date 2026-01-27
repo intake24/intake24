@@ -1,10 +1,11 @@
+import type { UserSurveySessionCreationAttributes } from '@intake24/db';
+
 import { randomUUID } from 'node:crypto';
 
 import { pick } from 'lodash-es';
 import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
-import type { UserSurveySessionCreationAttributes } from '@intake24/db';
 import { UserSurveySession } from '@intake24/db';
 
 export default () => {

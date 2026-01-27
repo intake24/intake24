@@ -21,10 +21,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { useVModel } from '@vueuse/core';
-import { getConditionDefaults, getDefaultConditionProperty } from '@intake24/common/prompts';
+
 import type { Condition } from '@intake24/common/prompts';
+
+import { useVModel } from '@vueuse/core';
+
+import { getConditionDefaults, getDefaultConditionProperty } from '@intake24/common/prompts';
 import { copy } from '@intake24/common/util';
+
 import ConditionItem from './condition-item.vue';
 
 const props = defineProps({

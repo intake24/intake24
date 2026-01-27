@@ -1,14 +1,15 @@
+import type {
+  PkgImageMap,
+  PkgImageMapObject,
+} from '@intake24/cli/commands/packager/types/image-map';
+import type { ImageMapData } from '@intake24/svg-utils';
+
 import fs, { copyFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
-import type {
-  PkgImageMap,
-  PkgImageMapObject,
-} from '@intake24/cli/commands/packager/types/image-map';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
-import type { ImageMapData } from '@intake24/svg-utils';
 import { getImageMapData } from '@intake24/svg-utils';
 
 export interface ConvertImageMapOptions {

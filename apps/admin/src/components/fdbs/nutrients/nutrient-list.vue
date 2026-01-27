@@ -49,10 +49,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
 import type { FoodDatabaseRefs, NutrientTableRecordAttributes } from '@intake24/common/types/http/admin';
+
+import { computed, defineComponent } from 'vue';
+
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
 import { ErrorList } from '../../forms';
 import AddNutrientDialog from './add-nutrient-dialog.vue';
 

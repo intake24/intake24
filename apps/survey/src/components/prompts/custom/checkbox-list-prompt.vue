@@ -49,11 +49,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import { computed, ref, watch } from 'vue';
 
 import type { ListOption } from '@intake24/common/types';
+
+import { computed, ref, watch } from 'vue';
+
 import { usePromptUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
+
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next, useForm } from '../partials';
 import { createBasePromptProps } from '../prompt-props';

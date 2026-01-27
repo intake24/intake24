@@ -1,8 +1,10 @@
 import type { Job } from 'bullmq';
+
+import type { IoC } from '@intake24/api/ioc';
+
 import ms from 'ms';
 import nunjucks from 'nunjucks';
 
-import type { IoC } from '@intake24/api/ioc';
 import { getFrontEndUrl, getUAInfo } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 import { User, UserPasswordReset } from '@intake24/db';

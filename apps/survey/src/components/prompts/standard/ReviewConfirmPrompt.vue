@@ -56,11 +56,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
 import type { FoodState, MealState } from '@intake24/common/surveys';
-import { fromTime } from '@intake24/common/util';
 import type { Time } from '@intake24/common/util';
+
+import { fromTime } from '@intake24/common/util';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 

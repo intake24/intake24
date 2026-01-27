@@ -89,6 +89,8 @@
 </template>
 
 <script lang="ts">
+import type { JobAttributes } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { JobRepeat } from '@intake24/admin/components/dialogs';
@@ -96,7 +98,6 @@ import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDownloadJob } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
-import type { JobAttributes } from '@intake24/common/types/http/admin';
 
 export default defineComponent({
   name: 'UserJobDetail',

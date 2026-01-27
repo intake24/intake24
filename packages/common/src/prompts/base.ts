@@ -1,4 +1,5 @@
 import type { BasePortionPrompt, BasePrompt } from './prompts';
+
 import { CurrentPromptVersion } from './prompts';
 
 export const basePrompt: Pick<BasePrompt, 'i18n' | 'conditions' | 'actions' | 'useGraph' | 'graph' | 'version'> = {

@@ -55,6 +55,10 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+
+import type { RouteLeave } from '@intake24/admin/types';
+import type { Dictionary } from '@intake24/common/types';
+
 import { has } from 'lodash-es';
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
@@ -62,8 +66,6 @@ import { useRouter } from 'vue-router';
 import resources from '@intake24/admin/router/resources';
 import { useHttp } from '@intake24/admin/services';
 import { useMessages, useResource, useUser } from '@intake24/admin/stores';
-import type { RouteLeave } from '@intake24/admin/types';
-import type { Dictionary } from '@intake24/common/types';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import ConfirmLeaveDialog from './confirm-leave-dialog.vue';

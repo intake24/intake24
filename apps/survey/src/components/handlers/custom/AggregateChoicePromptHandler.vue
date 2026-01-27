@@ -7,11 +7,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
 import type { FoodState } from '@intake24/common/surveys';
+
+import { computed } from 'vue';
+
 import { AggregateChoicePrompt } from '@intake24/survey/components/prompts/custom';
 import { filterMealsForAggregateChoicePrompt } from '@intake24/survey/dynamic-recall/prompt-filters';
 import { useSurvey } from '@intake24/survey/stores';
+
 import { createHandlerProps, useCustomPromptHandler, usePromptHandlerNoStore } from '../composables';
 
 const props = defineProps(createHandlerProps<'aggregate-choice-prompt'>());

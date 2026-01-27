@@ -1,7 +1,8 @@
+import type { EncodedFood } from '@intake24/common/surveys';
+
 import { defineStore } from 'pinia';
 
 import { portionSizeStates } from '@intake24/common/surveys';
-import type { EncodedFood } from '@intake24/common/surveys';
 
 import { useUser } from './user';
 

@@ -1,7 +1,8 @@
 import type { Pagination } from '../generic';
-import validator from 'validator';
 
+import validator from 'validator';
 import { z } from 'zod';
+
 import { recordVisibilities } from '@intake24/common/security';
 import { applications, textDirections } from '@intake24/common/types';
 import { compareMessageKeys, defaultI18nMessages, validateTranslations } from '@intake24/i18n';

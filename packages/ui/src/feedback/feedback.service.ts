@@ -5,6 +5,7 @@ import type {
   HenryCoefficient,
 } from '@intake24/common/feedback';
 import type { FeedbackDataResponse, FeedbackSubmissionEntry, UserPhysicalDataResponse } from '@intake24/common/types/http';
+
 import { useHttp } from '../services';
 import { CharacterRules, DemographicGroup, SurveyStats, UserDemographic } from './classes';
 

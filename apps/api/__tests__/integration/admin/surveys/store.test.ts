@@ -1,7 +1,9 @@
+import type { SurveyCreateRequest, SurveyEntry } from '@intake24/common/types/http/admin';
+
 import { pick } from 'lodash-es';
 import request from 'supertest';
+
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import type { SurveyCreateRequest, SurveyEntry } from '@intake24/common/types/http/admin';
 
 export default () => {
   const url = '/api/admin/surveys';

@@ -130,10 +130,13 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import axios, { isAxiosError, isCancel } from 'axios';
-import { computed, onMounted, ref, watch } from 'vue';
+
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/surveys';
+
+import axios, { isAxiosError, isCancel } from 'axios';
+import { computed, onMounted, ref, watch } from 'vue';
+
 import { usePromptUtils } from '@intake24/survey/composables';
 import { barcodes } from '@intake24/ui';
 import { useApp } from '@intake24/ui/stores';

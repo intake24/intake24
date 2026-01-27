@@ -1,6 +1,7 @@
+import type { EncodedFood, FoodState, RecipeBuilder } from '@intake24/common/surveys';
+
 import { computed } from 'vue';
 
-import type { EncodedFood, FoodState, RecipeBuilder } from '@intake24/common/surveys';
 import { capitalize } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 

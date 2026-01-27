@@ -1,6 +1,6 @@
-import { z } from 'zod';
-
 import type { SystemNutrientUnitAttributes } from '@intake24/db';
+
+import { z } from 'zod';
 
 export const nutrientUnitAttributes = z.object({
   id: z.string(),

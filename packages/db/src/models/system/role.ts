@@ -6,6 +6,7 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+
 import {
   BelongsToMany,
   Column,

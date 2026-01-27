@@ -1,8 +1,10 @@
 import type { Job } from 'bullmq';
-import { NotFoundError } from '@intake24/api/http/errors';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
 import type { NutrientTableRecordField, NutrientTableRecordNutrient } from '@intake24/db';
+
+import { NotFoundError } from '@intake24/api/http/errors';
 import {
   Job as DbJob,
   NutrientTableRecord,
@@ -10,6 +12,7 @@ import {
   SurveySubmissionFood,
   values,
 } from '@intake24/db';
+
 import BaseJob from '../job';
 
 export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrientsRecalculation'> {
