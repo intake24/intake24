@@ -52,24 +52,6 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     });
   };
 
-  const browseMainCategories = async (query: PaginateQuery) => {
-    const options: FindOptions<CategoryAttributes> = {};
-    const { search } = query;
-
-    if (search) {
-      const op
-        = Category.sequelize?.getDialect() === 'postgres'
-          ? { [Op.iLike]: `%${search}%` }
-          : { [Op.substring]: search };
-
-      const ops = ['code', 'name'].map(column => ({ [column]: op }));
-
-      options.where = { ...options.where, [Op.or]: ops };
-    }
-
-    return Category.paginate({ query, ...options });
-  };
-
   const getRootCategories = async (localeId: string) => {
     return await kyselyDb.foods
       .selectFrom('categories')
@@ -154,6 +136,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     return Category.findOne({
       where: { ...categoryId },
       include: [
+        { association: 'attributes' },
         {
           association: 'parentCategories',
           through: { attributes: [] },
@@ -374,7 +357,6 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
 
   return {
     browseCategories,
-    browseMainCategories,
     copyCategory,
     createCategory,
     getRootCategories,

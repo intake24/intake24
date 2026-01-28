@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 const contract = initContract();
 
-export const foodThumbnailImages = contract.router({
+export const foodThumbnailImage = contract.router({
   update: {
     method: 'PUT',
     path: '/admin/fdbs/:localeId/:foodCode/thumbnail',

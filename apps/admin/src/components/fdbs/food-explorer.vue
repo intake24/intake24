@@ -49,7 +49,6 @@ import type {
   CategoryContentsResponse,
   CategoryListEntry,
   FoodListEntry,
-  RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
 
 import { computed, onMounted, ref } from 'vue';
@@ -99,7 +98,7 @@ const activatedEntryCategories = ref<string[]>([]);
 const itemText = computed(() => (showGlobalName.value ? 'englishName' : 'name'));
 
 async function fetchRootCategories() {
-  const { data } = await http.get<RootCategoriesResponse>(
+  const { data } = await http.get<CategoryListEntry[]>(
     `admin/fdbs/${props.id}/categories/root`,
   );
 

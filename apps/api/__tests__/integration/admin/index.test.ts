@@ -1,5 +1,4 @@
 import authentication from './authentication/index.test';
-import categories from './categories/index.test';
 import faqs from './faqs/index.test';
 import fdbs from './fdbs/index.test';
 import feedbackSchemes from './feedback-schemes/index.test';
@@ -26,7 +25,6 @@ import users from './users/index.test';
 export default () => {
   describe('/api/admin/auth', authentication);
   describe('/api/admin/sign-up', signup);
-  describe('/api/admin/categories', categories);
   describe('/api/admin/faqs', faqs);
   describe('/api/admin/fdbs', fdbs);
   describe('/api/admin/feedback-schemes', feedbackSchemes);

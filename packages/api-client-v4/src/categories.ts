@@ -3,11 +3,9 @@ import type { CreateResult } from './create-response';
 import type { CategoryContents } from '@intake24/common/types/http';
 import type {
   CreateCategoryRequest,
-  MainCategoriesResponse,
   SimpleCategoryEntry,
   UpdateCategoryRequest,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery } from '@intake24/db';
 
 import { parseCreateResponse } from './create-response';
 
@@ -19,14 +17,6 @@ export class CategoriesApiV4 {
 
   constructor(baseClient: BaseClientV4) {
     this.baseClient = baseClient;
-  }
-
-  public async list(pagination: PaginateQuery): Promise<MainCategoriesResponse> {
-    return this.baseClient.get<MainCategoriesResponse>(
-      `${CategoriesApiV4.adminApiPath}`,
-      undefined,
-      pagination,
-    );
   }
 
   public async getRootCategories(localeId: string): Promise<CategoryContents> {

@@ -2,8 +2,6 @@ import type { Config } from '@intake24/api/config';
 import type { FoodIndex } from '@intake24/api/food-index';
 import type {
   // Admin
-  AdminCategoryController,
-  AdminFoodController,
   AdminLocalCategoriesController,
   AdminLocalFoodsController,
   DrinkScaleController,
@@ -106,8 +104,6 @@ export interface IoC extends Jobs {
   // user: TokenPayload;
 
   // Admin controllers
-  adminCategoryController: AdminCategoryController;
-  adminFoodController: AdminFoodController;
   adminLocalFoodsController: AdminLocalFoodsController;
   adminLocalCategoriesController: AdminLocalCategoriesController;
 
