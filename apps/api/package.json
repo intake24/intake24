@@ -42,7 +42,7 @@
     "body-parser": "^2.2.2",
     "bullmq": "^5.67.1",
     "clean-css": "^5.3.3",
-    "connect-redis": "^8.1.0",
+    "connect-redis": "^9.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "date-fns": "^4.1.0",
