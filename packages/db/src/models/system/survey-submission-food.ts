@@ -7,7 +7,7 @@ import type {
   NonAttribute,
 } from 'sequelize';
 
-import type { CustomData, PortionSizeMethodId } from '@intake24/common/surveys';
+import type { CustomData, PortionSizeMethodId, PortionSizeState } from '@intake24/common/surveys';
 import type { Dictionary } from '@intake24/common/types';
 
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
@@ -138,24 +138,24 @@ export default class SurveySubmissionFood extends BaseModel<
     allowNull: true,
     type: DataType.JSONB(),
   })
-  get fields(): CreationOptional<Dictionary> {
-    return this.getDataValue('fields') ?? {} as Dictionary;
+  get fields(): CreationOptional<Dictionary<string>> {
+    return this.getDataValue('fields') ?? {} as Dictionary<string>;
   }
 
   @Column({
     allowNull: true,
     type: DataType.JSONB(),
   })
-  get nutrients(): CreationOptional<Dictionary> {
-    return this.getDataValue('nutrients') ?? {} as Dictionary;
+  get nutrients(): CreationOptional<Dictionary<number>> {
+    return this.getDataValue('nutrients') ?? {} as Dictionary<number>;
   }
 
   @Column({
     allowNull: true,
     type: DataType.JSONB(),
   })
-  get portionSize(): CreationOptional<Dictionary> {
-    return this.getDataValue('portionSize') ?? {} as Dictionary;
+  get portionSize(): CreationOptional<PortionSizeState> {
+    return this.getDataValue('portionSize') ?? {} as PortionSizeState;
   }
 
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')

@@ -324,9 +324,7 @@ const pizzaV2PortionSizeState = portionSizeStateBase.extend({
   unit: z.enum(pizzaUnits).nullable(),
   quantity: z.number(),
 });
-const recipeBuilderPortionSizeState = portionSizeStateBase.extend({
-  method: z.literal('recipe-builder'),
-});
+const recipeBuilderPortionSizeState = z.record(z.string(), z.never());
 const standardPortionPortionSizeState = portionSizeStateBase.extend({
   method: z.literal('standard-portion'),
   unit: standardUnit.nullable(),
@@ -354,4 +352,3 @@ export const portionSizeStates = z.object({
 });
 export type PortionSizeStates = z.infer<typeof portionSizeStates>;
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
-export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];

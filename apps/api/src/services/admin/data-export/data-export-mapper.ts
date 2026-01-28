@@ -5,7 +5,7 @@ import type {
   ExportRow,
 } from './data-export-fields';
 import type { IoC } from '@intake24/api/ioc';
-import type { CustomPromptAnswer, ExportSectionId } from '@intake24/common/surveys';
+import type { CustomPromptAnswer, ExportSectionId, PortionSizeState } from '@intake24/common/surveys';
 
 import { get } from 'lodash-es';
 
@@ -51,7 +51,7 @@ export function foodNutrientValue(field: ExportField): ExportFieldTransform {
 
 export function portionSizeValue(field: ExportField): ExportFieldTransform {
   return ({ food }) =>
-    !food.portionSize || typeof food.portionSize === 'string' ? undefined : food.portionSize[field.id];
+    !food.portionSize || typeof food.portionSize === 'string' ? undefined : food.portionSize[field.id as keyof PortionSizeState];
 }
 
 export function externalSourceField(field: ExportField): ExportFieldTransform {
