@@ -1,10 +1,10 @@
-import type { PortionSizeMethod } from '@intake24/common/surveys';
+import type { PortionSizeMethodAttributes } from '@intake24/common/types/http/admin';
 
 import { useI18n } from '@intake24/ui';
 
-export type PortionSizeMethodItem = PortionSizeMethod;
+export type PortionSizeMethodItem = Omit<PortionSizeMethodAttributes, 'id'>;
 
-export type InternalPortionSizeMethodItem = PortionSizeMethod & {
+export type InternalPortionSizeMethodItem = PortionSizeMethodItem & {
   _id: string;
 };
 

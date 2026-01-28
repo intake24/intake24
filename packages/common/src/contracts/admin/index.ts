@@ -1,9 +1,8 @@
 import acl from './acl';
 import { authentication } from './authentication.contract';
 import { faq } from './faq.contract';
-import { foodThumbnailImages } from './fdbs/food-thumbnail-images.contract';
+import fdbs from './fdbs';
 import { feedbackScheme } from './feedback-scheme.contract';
-import { foodDb } from './food-db.contract';
 import images from './images';
 import { job } from './job.contract';
 import { languageTranslation } from './language-translation.contract';
@@ -35,8 +34,7 @@ export default {
   feedbackScheme,
   feedbackSchemeMedia: mediable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
   feedbackSchemeSecurable: securable('FeedbackScheme', '/admin/feedback-schemes/:feedbackSchemeId'),
-  foodDb,
-  foodThumbnailImages,
+  fdbs,
   images,
   job,
   language,

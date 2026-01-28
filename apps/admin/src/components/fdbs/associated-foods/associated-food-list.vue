@@ -25,8 +25,8 @@
         <v-list-item
           v-for="(item, index) in items"
           :key="item._id"
-          :class="errors.has(`associatedFoods[${index}]*`) ? 'text-error' : undefined"
-          :variant="errors.has(`associatedFoods[${index}]*`) ? 'tonal' : undefined"
+          :class="errors.has(`associatedFoods.${index}.*`) ? 'text-error' : undefined"
+          :variant="errors.has(`associatedFoods.${index}.*`) ? 'tonal' : undefined"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />
@@ -36,7 +36,7 @@
             {{ translate(item.text, { force: true }) }}
           </v-list-item-subtitle>
           <template #append>
-            <list-item-error :errors="errors.get(`associatedFoods[${index}]*`)" />
+            <list-item-error :errors="errors.get(`associatedFoods.${index}.*`)" />
             <v-list-item-action>
               <v-btn :icon="readonly ? '$read' : '$edit'" :title="$t('fdbs.associatedFoods.edit')" @click.stop="edit(index, item)" />
             </v-list-item-action>

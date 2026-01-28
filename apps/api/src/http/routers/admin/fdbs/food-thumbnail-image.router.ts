@@ -8,12 +8,12 @@ import { contract } from '@intake24/common/contracts';
 import { imageMulterFile } from '@intake24/common/types/http/admin/source-images';
 import { Food } from '@intake24/db';
 
-export function foodThumbnailImages() {
+export function foodThumbnailImage() {
   const upload = multer({ dest: ioc.cradle.fsConfig.local.uploads });
 
   // FIXME: Empty form produces HTTP 500 with 'Unexpected end of form' message
   //        instead of 400
-  return initServer().router(contract.admin.foodThumbnailImages, {
+  return initServer().router(contract.admin.fdbs.foodThumbnailImage, {
     update: {
       middleware: [
         permission('fdbs:edit'),

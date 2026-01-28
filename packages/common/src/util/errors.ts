@@ -22,7 +22,7 @@ export class Errors {
       return [this.errors[field]?.msg].filter(Boolean) as string[];
 
     return Object.entries(this.errors).reduce<string[]>((acc, [key, value]) => {
-      if (key.startsWith(`${field}[${index}]`))
+      if (key.startsWith(`${field}.${index}.`))
         acc.push(value.msg);
 
       return acc;
@@ -34,7 +34,7 @@ export class Errors {
       return Object.prototype.hasOwnProperty.call(this.errors, field);
 
     return Object.keys(this.errors).some(
-      key => key === field || key.startsWith(`${field}[${index}]`),
+      key => key === field || key.startsWith(`${field}.${index}.`),
     );
   }
 

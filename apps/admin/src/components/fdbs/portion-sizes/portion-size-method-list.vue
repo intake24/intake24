@@ -24,8 +24,8 @@
         <v-list-item
           v-for="(item, index) in items"
           :key="item._id"
-          :class="errors.has(`portionSizeMethods[${index}]*`) ? 'text-error' : undefined"
-          :variant="errors.has(`portionSizeMethods[${index}]*`) ? 'tonal' : undefined"
+          :class="errors.has(`portionSizeMethods.${index}.*`) ? 'text-error' : undefined"
+          :variant="errors.has(`portionSizeMethods.${index}.*`) ? 'tonal' : undefined"
         >
           <template #prepend>
             <v-avatar class="drag-and-drop__handle" icon="$handle" />
@@ -35,7 +35,7 @@
           </v-list-item-title>
           <v-list-item-subtitle>{{ item.method }} </v-list-item-subtitle>
           <template #append>
-            <list-item-error :errors="errors.get(`portionSizeMethods[${index}]*`)" />
+            <list-item-error :errors="errors.get(`portionSizeMethods.${index}.*`)" />
             <v-list-item-action>
               <v-btn :icon="readonly ? '$read' : '$edit'" :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })" />
             </v-list-item-action>
@@ -134,7 +134,7 @@ export default defineComponent({
     },
 
     edit({ item, index }: PortionSizeMethodEvent) {
-      const errors = this.errors.get(`portionSizeMethods[${index}]*`);
+      const errors = this.errors.get(`portionSizeMethods.${index}.*`);
       this.selector?.edit(index, item, errors);
     },
 
