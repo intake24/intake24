@@ -10,6 +10,7 @@ import { pipeline } from 'node:stream/promises';
 
 import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
+import { pick } from 'lodash-es';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { addTime } from '@intake24/api/util';
@@ -21,7 +22,8 @@ export type ItemTransform = {
   food: Food;
   dat: {
     attributes: Record<string, InheritableAttributes | null>;
-    categories: string[];
+    categoryIds: string[];
+    categoryCodes: string[];
     portionSizeMethods: (CategoryPortionSizeMethod | FoodPortionSizeMethod)[];
   };
 };
@@ -97,6 +99,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
 
     const fields = [
       { label: 'Locale', value: 'localeId' },
+      { label: 'Food ID', value: 'id' },
       { label: 'Food code', value: 'code' },
       { label: 'English name', value: 'englishName' },
       { label: 'Local name', value: 'name' },
@@ -114,7 +117,8 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
       { label: 'Attr: Use In Recipes (Effective)', value: 'useInRecipesEffective' },
       { label: 'Associated Food / Category', value: 'associatedFoods' },
       { label: 'Brands', value: 'brands' },
-      { label: 'Categories', value: 'categories' },
+      { label: 'Category IDs', value: 'categoryIds' },
+      { label: 'Category Codes', value: 'categoryCodes' },
       { label: 'Portion Size methods', value: 'portionSizeMethods' },
     ];
 
@@ -145,15 +149,16 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
       ],
       order: [['code', 'asc']],
       transform: async (food: Food) => {
-        const [attributes, categories, portionSizeMethods] = await Promise.all([
+        const [attributes, categoryIds, categoryCodes, portionSizeMethods] = await Promise.all([
           this.foodSearchService.getFoodAttributes([food.id]),
           this.cachedParentCategoriesService.getFoodAllCategories(food.id),
+          this.cachedParentCategoriesService.getFoodAllCategoryCodes(food.id),
           food.portionSizeMethods?.length
             ? this.portionSizeMethodsService.resolvePortionSizeMethods(food.id)
             : ([] as (CategoryPortionSizeMethod | FoodPortionSizeMethod)[]),
         ]);
 
-        return { food, dat: { attributes, categories, portionSizeMethods } };
+        return { food, dat: { attributes, categoryIds, categoryCodes, portionSizeMethods } };
       },
     });
 
@@ -177,7 +182,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
               portionSizeMethods: foodPSMs = [],
               tags,
             } = food;
-            const { attributes: datAttributes, categories, portionSizeMethods: datPSMs } = dat;
+            const { attributes: datAttributes, categoryIds, categoryCodes, portionSizeMethods: datPSMs } = dat;
 
             return {
               id,
@@ -212,13 +217,19 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
                     associatedFoodCode ?? associatedCategoryCode,
                 )
                 .join(', '),
-              categories: categories.join(', '),
+              categoryIds: categoryIds.join(', '),
+              categoryCodes: categoryCodes.join(', '),
               brands: brands.map(({ name }) => name).join(', '),
               portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
-                .map(
-                  ({ method, conversionFactor, parameters = [] }) =>
-                    `Method: ${method}, conversion: ${conversionFactor}, ${JSON.stringify(parameters)}`,
-                )
+                .map((psm) => {
+                  const attr = Object.entries(pick(psm, ['method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy'])).map(
+                    ([key, value]) => `${key}: ${value?.toString()}`,
+                  ).join(', ');
+                  const params = Object.entries(psm.parameters).map(
+                    ([key, value]) => `${key}: ${value?.toString()}`,
+                  ).join(', ');
+                  return `${attr}, ${params}`;
+                })
                 .join('\n'),
             };
           },
