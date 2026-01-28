@@ -48,7 +48,7 @@
     "fs-extra": "^11.3.3",
     "jest-extended": "^7.0.0",
     "svgo": "^4.0.0",
-    "type-fest": "^5.4.1",
+    "type-fest": "^5.4.2",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.0.5",
     "vitest": "^4.0.18"

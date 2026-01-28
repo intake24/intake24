@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "axios": "^1.13.3",
+    "axios": "^1.13.4",
     "cookie": "^1.1.1",
     "formdata-node": "6.0.3",
     "lodash-es": "^4.17.23",

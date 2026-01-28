@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.11.0",
-    "@css-inline/css-inline": "^0.19.0",
+    "@css-inline/css-inline": "^0.19.2",
     "@json2csv/node": "^7.0.6",
     "commander": "^14.0.2",
     "csv-parser": "^3.2.0",
@@ -54,7 +54,7 @@
     "@types/node": "^24.10.9",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
-    "@typescript/native-preview": "7.0.0-dev.20260127.1",
+    "@typescript/native-preview": "7.0.0-dev.20260128.1",
     "tsdown": "^0.20.1",
     "typescript": "^5.9.3"
   }
