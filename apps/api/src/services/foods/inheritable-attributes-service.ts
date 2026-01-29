@@ -1,38 +1,39 @@
+import type { IoC } from '@intake24/api/ioc';
 import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
 
 import { getCategoryParentCategories, getFoodParentCategories } from '@intake24/api/services/foods/common';
+import { useInRecipeTypes } from '@intake24/common/types';
 import { AttributeDefaults, CategoryAttribute, FoodAttribute } from '@intake24/db';
 
-interface InheritableAttributesTemp {
-  reasonableAmount: number | null;
-  readyMealOption: boolean | null;
-  sameAsBeforeOption: boolean | null;
-  useInRecipes: number | null;
-}
+function inheritableAttributesService({
+  cache,
+  cacheConfig,
+}: Pick<IoC, 'cache' | 'cacheConfig'>) {
+  const acceptForQuery = (recipe: boolean, attrOpt?: number): boolean => {
+    const attr = attrOpt ?? useInRecipeTypes.USE_AS_REGULAR_FOOD;
 
-function inheritableAttributesService() {
+    switch (attr) {
+      case useInRecipeTypes.USE_AS_REGULAR_FOOD:
+        return !recipe;
+      case useInRecipeTypes.USE_AS_RECIPE_INGREDIENT:
+        return recipe;
+      default:
+        return true;
+    }
+  };
   const completeAttributes = (
-    attributes: InheritableAttributesTemp,
+    attributes: Partial<InheritableAttributes>,
   ): InheritableAttributes | undefined => {
-    if (
-      attributes.readyMealOption == null
-      || attributes.reasonableAmount == null
-      || attributes.sameAsBeforeOption == null
-      || attributes.useInRecipes == null
-    ) {
-      return undefined;
+    // Check if all attributes are defined (not null or undefined)
+    if (Object.values(attributes).every(v => v != null)) {
+      return attributes as InheritableAttributes;
     }
 
-    return {
-      readyMealOption: attributes.readyMealOption,
-      sameAsBeforeOption: attributes.sameAsBeforeOption,
-      reasonableAmount: attributes.reasonableAmount,
-      useInRecipes: attributes.useInRecipes,
-    };
+    return undefined;
   };
 
   const completeAttributesWithDefaults = async (
-    attributes: InheritableAttributesTemp,
+    attributes: Partial<InheritableAttributes>,
   ): Promise<InheritableAttributes> => {
     const [defaults] = await AttributeDefaults.findAll({ limit: 1 });
 
@@ -52,7 +53,7 @@ function inheritableAttributesService() {
 
   const resolveAttributesRec = async (
     parentCategories: string[],
-    attributes: InheritableAttributesTemp,
+    attributes: Partial<InheritableAttributes>,
   ): Promise<InheritableAttributes> => {
     if (!parentCategories.length)
       return completeAttributesWithDefaults(attributes);
@@ -62,22 +63,13 @@ function inheritableAttributesService() {
       order: [['categoryId', 'ASC']],
     });
 
-    const newAttributes: InheritableAttributesTemp = {
-      readyMealOption: attributes.readyMealOption,
-      reasonableAmount: attributes.reasonableAmount,
-      sameAsBeforeOption: attributes.sameAsBeforeOption,
-      useInRecipes: attributes.useInRecipes,
-    };
+    const newAttributes: Partial<InheritableAttributes> = { ...attributes };
 
     parentAttributesRows.forEach((row) => {
-      newAttributes.readyMealOption
-        = attributes.readyMealOption ?? row.readyMealOption;
-      newAttributes.reasonableAmount
-        = attributes.reasonableAmount ?? row.reasonableAmount;
-      newAttributes.sameAsBeforeOption
-        = attributes.sameAsBeforeOption ?? row.sameAsBeforeOption;
-      newAttributes.useInRecipes
-        = attributes.useInRecipes ?? row.useInRecipes;
+      newAttributes.readyMealOption = newAttributes.readyMealOption ?? row.readyMealOption ?? undefined;
+      newAttributes.reasonableAmount = newAttributes.reasonableAmount ?? row.reasonableAmount ?? undefined;
+      newAttributes.sameAsBeforeOption = newAttributes.sameAsBeforeOption ?? row.sameAsBeforeOption ?? undefined;
+      newAttributes.useInRecipes = newAttributes.useInRecipes ?? row.useInRecipes ?? undefined;
     });
 
     const maybeComplete = completeAttributes(newAttributes);
@@ -93,19 +85,12 @@ function inheritableAttributesService() {
   async function resolveCategoryAttributes(categoryId: string): Promise<InheritableAttributes> {
     const catAttributes = await CategoryAttribute.findOne({ where: { categoryId } });
 
-    const attributes: InheritableAttributesTemp = {
-      readyMealOption: null,
-      reasonableAmount: null,
-      sameAsBeforeOption: null,
-      useInRecipes: null,
+    const attributes: Partial<InheritableAttributes> = {
+      readyMealOption: catAttributes?.readyMealOption ?? undefined,
+      reasonableAmount: catAttributes?.reasonableAmount ?? undefined,
+      sameAsBeforeOption: catAttributes?.sameAsBeforeOption ?? undefined,
+      useInRecipes: catAttributes?.useInRecipes ?? undefined,
     };
-
-    if (catAttributes) {
-      attributes.readyMealOption = catAttributes.readyMealOption;
-      attributes.reasonableAmount = catAttributes.reasonableAmount;
-      attributes.sameAsBeforeOption = catAttributes.sameAsBeforeOption;
-      attributes.useInRecipes = catAttributes.useInRecipes;
-    }
 
     const maybeComplete = completeAttributes(attributes);
     if (maybeComplete)
@@ -119,19 +104,12 @@ function inheritableAttributesService() {
   async function resolveFoodAttributes(foodId: string): Promise<InheritableAttributes> {
     const foodAttributesRow = await FoodAttribute.findOne({ where: { foodId } });
 
-    const attributes: InheritableAttributesTemp = {
-      readyMealOption: null,
-      reasonableAmount: null,
-      sameAsBeforeOption: null,
-      useInRecipes: null,
+    const attributes: Partial<InheritableAttributes> = {
+      readyMealOption: foodAttributesRow?.readyMealOption ?? undefined,
+      reasonableAmount: foodAttributesRow?.reasonableAmount ?? undefined,
+      sameAsBeforeOption: foodAttributesRow?.sameAsBeforeOption ?? undefined,
+      useInRecipes: foodAttributesRow?.useInRecipes ?? undefined,
     };
-
-    if (foodAttributesRow) {
-      attributes.readyMealOption = foodAttributesRow.readyMealOption;
-      attributes.reasonableAmount = foodAttributesRow.reasonableAmount;
-      attributes.sameAsBeforeOption = foodAttributesRow.sameAsBeforeOption;
-      attributes.useInRecipes = foodAttributesRow.useInRecipes;
-    }
 
     const maybeComplete = completeAttributes(attributes);
     if (maybeComplete)
@@ -142,9 +120,26 @@ function inheritableAttributesService() {
     return resolveAttributesRec(parentCategories, attributes);
   }
 
+  const getCategoryAttributes = async (categoryIds: string[]): Promise<Record<string, InheritableAttributes | null>> => {
+    return cache.rememberMany(categoryIds, 'category-attributes', cacheConfig.ttl, async (ids) => {
+      const data = await Promise.all(ids.map(id => resolveCategoryAttributes(id)));
+      return Object.fromEntries(ids.map((id, index) => [id, data[index]]));
+    });
+  };
+
+  const getFoodAttributes = async (foodIds: string[]): Promise<Record<string, InheritableAttributes | null>> => {
+    return cache.rememberMany(foodIds, 'food-attributes', cacheConfig.ttl, async (ids) => {
+      const data = await Promise.all(ids.map(id => resolveFoodAttributes(id)));
+      return Object.fromEntries(ids.map((id, index) => [id, data[index]]));
+    });
+  };
+
   return {
     resolveCategoryAttributes,
     resolveFoodAttributes,
+    acceptForQuery,
+    getCategoryAttributes,
+    getFoodAttributes,
   };
 }
 

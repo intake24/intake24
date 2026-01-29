@@ -19,7 +19,9 @@ import {
 function categoryContentsService({
   adminCategoryService,
   db,
-}: Pick<IoC, 'db' | 'adminCategoryService'>) {
+  inheritableAttributesService,
+}: Pick<IoC, 'db' | 'adminCategoryService' | 'inheritableAttributesService'>) {
+  const { getCategoryAttributes, acceptForQuery } = inheritableAttributesService;
   const filterUndefined = (
     headers: { id: string; code: string; name?: string | null }[],
   ): (CategoryHeader | FoodHeader)[] =>
@@ -28,11 +30,16 @@ function categoryContentsService({
   const getRootCategories = async (localeCode: string): Promise<CategoryContents> => {
     const categories = await adminCategoryService.getRootCategories(localeCode);
 
+    const catIds = categories.map(({ id }) => id);
+    const categoryAttrs = await getCategoryAttributes(catIds);
+    const isRecipe = false; // Root categories are not recipes
+
     return {
       header: { id: '', code: '', name: 'Root' },
       foods: [],
       subcategories: categories
         .filter(({ hidden }) => !hidden)
+        .filter(category => acceptForQuery(isRecipe, categoryAttrs[category.id]?.useInRecipes))
         .map(({ id, code, name }) => ({ id, code, name })),
     };
   };
