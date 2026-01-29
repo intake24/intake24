@@ -18,8 +18,8 @@ export const userCustomFieldValue: ExportFieldTransformCallback
     ({ food }) =>
       food.meal?.submission?.user?.customFields?.find(item => field.id === item.name)?.value;
 
-function mapCustomPromptAnswers(value?: CustomPromptAnswer): string {
-  return Array.isArray(value) ? value.join(', ') : value?.toString() ?? 'N/A';
+function mapCustomPromptAnswers(value?: CustomPromptAnswer): string | undefined {
+  return Array.isArray(value) ? value.join(', ') : value?.toString();
 }
 
 export const submissionCustomFieldValue: ExportFieldTransformCallback
