@@ -154,8 +154,8 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
           this.cachedParentCategoriesService.getFoodAllCategories(food.id),
           this.cachedParentCategoriesService.getFoodAllCategoryCodes(food.id),
           food.portionSizeMethods?.length
-            ? this.portionSizeMethodsService.resolvePortionSizeMethods(food.id)
-            : ([] as (CategoryPortionSizeMethod | FoodPortionSizeMethod)[]),
+            ? this.portionSizeMethodsService.resolvePortionSizeMethods(food)
+            : [],
         ]);
 
         return { food, dat: { attributes, categoryIds, categoryCodes, portionSizeMethods } };
@@ -193,10 +193,10 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
               altNames: Object.values(altNames).reduce<string[]>((acc, names) => {
                 acc.push(...names);
                 return acc;
-              }, []).join(', '),
-              tags: tags.join(', '),
-              nutrientTableId: nutrientRecords[0]?.nutrientTableId,
-              nutrientTableRecordId: nutrientRecords[0]?.nutrientTableRecordId,
+              }, []).toSorted().join(', '),
+              tags: tags.toSorted().join(', '),
+              nutrientTableId: nutrientRecords.at(0)?.nutrientTableId,
+              nutrientTableRecordId: nutrientRecords.at(0)?.nutrientTableRecordId,
               readyMealOption: attributes?.readyMealOption ?? 'Inherited',
               sameAsBeforeOption: attributes?.sameAsBeforeOption ?? 'Inherited',
               reasonableAmount: attributes?.reasonableAmount ?? 'Inherited',
@@ -216,11 +216,13 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
                   ({ associatedFoodCode, associatedCategoryCode }) =>
                     associatedFoodCode ?? associatedCategoryCode,
                 )
+                .toSorted()
                 .join(', '),
-              categoryIds: categoryIds.join(', '),
-              categoryCodes: categoryCodes.join(', '),
-              brands: brands.map(({ name }) => name).join(', '),
+              categoryIds: categoryIds.toSorted().join(', '),
+              categoryCodes: categoryCodes.toSorted().join(', '),
+              brands: brands.map(({ name }) => name).toSorted().join(', '),
               portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
+                .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
                 .map((psm) => {
                   const attr = Object.entries(pick(psm, ['method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy'])).map(
                     ([key, value]) => `${key}: ${value?.toString()}`,
