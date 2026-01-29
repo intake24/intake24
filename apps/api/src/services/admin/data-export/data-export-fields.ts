@@ -42,10 +42,7 @@ function dataExportFields() {
    * @param {Prompt} prompt
    * @returns {ExportField}
    */
-  const customPromptMapper = ({ id, name: label }: Prompt): ExportField => ({
-    id,
-    label,
-  });
+  const customPromptMapper = ({ id, name: label }: Prompt): ExportField => ({ id, label });
 
   /**
    * Helper to filter custom Prompt to ExportField
@@ -417,6 +414,8 @@ function dataExportFields() {
           return undefined;
 
         const { servingWeight, leftoversWeight } = food.portionSize;
+        if (typeof servingWeight !== 'number' || typeof leftoversWeight !== 'number')
+          return undefined;
 
         return servingWeight - leftoversWeight;
       },

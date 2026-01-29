@@ -1,8 +1,8 @@
-import type { ComponentType, ExternalSource, PromptStates } from '../prompts';
+import type { ExternalSource, PromptStates } from '../prompts';
 import type { FoodType, RecipeFood } from '../types';
 import type { Optional } from '../types/common';
 import type { UserFoodData } from '../types/http';
-import type { PortionSizeState } from './portion-size';
+import type { PortionSizeStates } from './portion-size';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
 import { z } from 'zod';
@@ -103,7 +103,7 @@ export interface EncodedFood extends AbstractFoodState {
   data: UserFoodData;
   searchTerm: string | null;
   portionSizeMethodIndex: number | null;
-  portionSize: PortionSizeState | null;
+  portionSize: PortionSizeStates[keyof Omit<PortionSizeStates, 'recipe-builder'>] | null;
   // brand: string[]; TODO V3?
 }
 
@@ -172,23 +172,6 @@ export const selection = z.object({
 });
 
 export type Selection = z.infer<typeof selection>;
-
-export type PromptAnswerResponse
-  = | FoodState[]
-    | string
-    | PortionSizeState
-    | null
-    | number;
-
-export interface PromptAnswer {
-  response: PromptAnswerResponse;
-  modified: boolean;
-  new: boolean;
-  finished: boolean;
-  prompt: ComponentType | undefined;
-  mealIndex: number | undefined;
-  foodIndex: number | undefined;
-}
 
 export const surveyState = z.object({
   id: z.string().uuid().optional(),

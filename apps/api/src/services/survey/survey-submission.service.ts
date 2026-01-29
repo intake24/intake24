@@ -7,6 +7,7 @@ import type {
   FoodState,
   MealState,
   MissingFood,
+  PortionSizeState,
   RecipeBuilder,
   SurveyState,
 } from '@intake24/common/surveys';
@@ -57,9 +58,9 @@ export type CollectedFoods = {
 };
 
 export type CollectedNutrientInfo = {
-  nutrients: Dictionary;
-  fields: Dictionary;
-  portionSize: Dictionary;
+  nutrients: Dictionary<number>;
+  fields: Dictionary<string>;
+  portionSize: PortionSizeState;
 };
 
 export type FoodCodes = { foodCodes: string[] };
@@ -218,7 +219,7 @@ function surveySubmissionService({
         }
 
         if (foodState.type === 'recipe-builder') {
-          const { linkedFoods, searchTerm, template, customPromptAnswers } = foodState;
+          const { linkedFoods, searchTerm, template: { code, name, localeId }, customPromptAnswers } = foodState;
 
           const id = randomUUID();
 
@@ -227,10 +228,10 @@ function surveySubmissionService({
             parentId,
             mealId,
             index: collectedFoods.inputs.length + collectedFoods.missingInputs.length,
-            code: template.code,
-            englishName: template.name,
-            localName: template.name,
-            locale: template.localeId,
+            code,
+            englishName: name,
+            localName: name,
+            locale: localeId,
             readyMeal: false,
             searchTerm: (searchTerm ?? '').slice(0, 256),
             portionSizeMethodId: 'recipe-builder',

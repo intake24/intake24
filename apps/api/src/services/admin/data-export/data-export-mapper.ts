@@ -5,7 +5,7 @@ import type {
   ExportRow,
 } from './data-export-fields';
 import type { IoC } from '@intake24/api/ioc';
-import type { CustomPromptAnswer, ExportSectionId } from '@intake24/common/surveys';
+import type { CustomPromptAnswer, ExportSectionId, PortionSizeState } from '@intake24/common/surveys';
 
 import { get } from 'lodash-es';
 
@@ -18,8 +18,8 @@ export const userCustomFieldValue: ExportFieldTransformCallback
     ({ food }) =>
       food.meal?.submission?.user?.customFields?.find(item => field.id === item.name)?.value;
 
-function mapCustomPromptAnswers(value?: CustomPromptAnswer): string {
-  return Array.isArray(value) ? value.join(', ') : value?.toString() ?? 'N/A';
+function mapCustomPromptAnswers(value?: CustomPromptAnswer): string | undefined {
+  return Array.isArray(value) ? value.join(', ') : value?.toString();
 }
 
 export const submissionCustomFieldValue: ExportFieldTransformCallback
@@ -51,7 +51,7 @@ export function foodNutrientValue(field: ExportField): ExportFieldTransform {
 
 export function portionSizeValue(field: ExportField): ExportFieldTransform {
   return ({ food }) =>
-    !food.portionSize || typeof food.portionSize === 'string' ? undefined : food.portionSize[field.id];
+    !food.portionSize || typeof food.portionSize === 'string' ? undefined : food.portionSize[field.id as keyof PortionSizeState];
 }
 
 export function externalSourceField(field: ExportField): ExportFieldTransform {

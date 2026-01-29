@@ -78,8 +78,8 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
       ],
     });
 
-  const resolvePortionSizeMethods = async (foodId: string): Promise<(CategoryPortionSizeMethod | FoodPortionSizeMethod)[]> => {
-    const food = await getFood(foodId);
+  const resolvePortionSizeMethods = async (foodId: string | Food): Promise<(CategoryPortionSizeMethod | FoodPortionSizeMethod)[]> => {
+    const food = typeof foodId === 'string' ? await getFood(foodId) : foodId;
     if (!food)
       return [];
 
@@ -179,7 +179,7 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
     }
   }
 
-  const resolveUserPortionSizeMethods = async (foodId: string): Promise<UserPortionSizeMethod[]> => {
+  const resolveUserPortionSizeMethods = async (foodId: string | Food): Promise<UserPortionSizeMethod[]> => {
     const psms = await resolvePortionSizeMethods(foodId);
 
     return Promise.all(
