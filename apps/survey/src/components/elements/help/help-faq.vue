@@ -71,7 +71,7 @@
                 {{ translate(section.title) }}
               </div>
               <v-expansion-panels focusable>
-                <v-expansion-panel v-for="items in section.items" :key="items.id">
+                <v-expansion-panel v-for="items in section.items" :key="items.id" @click="fireGTMEvent(translate(section.title), items.id, translate(items.title))">
                   <v-expansion-panel-title>
                     {{ translate(items.title) }}
                   </v-expansion-panel-title>
@@ -94,6 +94,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 
 import { useFAQs } from '@intake24/survey/stores';
+import { sendGtmEvent } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui';
 
 const props = defineProps({
@@ -128,6 +129,13 @@ function close() {
   dialog.value = false;
 }
 
+function fireGTMEvent(sectionTitle: string, questionId: string, questionTitle: string) {
+  sendGtmEvent({
+    event: 'selectFAQ',
+    faq_section_title: sectionTitle,
+    faq_question_title: questionTitle,
+  });
+}
 watch(dialog, (val) => {
   emit(val ? 'open' : 'close');
 });
