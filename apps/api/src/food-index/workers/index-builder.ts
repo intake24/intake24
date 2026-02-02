@@ -28,7 +28,6 @@ const databases = new Database({
   databaseConfig: workerData.dbConnectionInfo,
   logger: servicesLogger,
 });
-databases.init();
 
 interface LocalFoodIndex {
   foodIndex: PhraseIndex<string>;
@@ -394,6 +393,7 @@ async function buildIndex() {
 }
 
 (async () => {
+  await databases.init();
   await buildIndex();
 })().catch((err) => {
   logger.error(err);
