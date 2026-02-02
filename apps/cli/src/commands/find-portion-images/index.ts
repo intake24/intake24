@@ -445,7 +445,7 @@ async function main(config: FPIConfig, outputFilePath: string) {
     environment: (process.env.NODE_ENV || 'development') as Environment,
   });
 
-  db.init();
+  await db.init();
 
   const nutrientIds = (await FoodsNutrientType.findAll({ order: ['id'] })).map(r => r.id);
 

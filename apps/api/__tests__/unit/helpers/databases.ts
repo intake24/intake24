@@ -35,8 +35,8 @@ export async function useDatabases(): Promise<void> {
     logger,
   });
 
-  sequelizeDbs.init();
-  kyselyDbs.init();
+  await sequelizeDbs.init();
+  await kyselyDbs.init();
 
   await sequelizeDbs.sync(true);
 }

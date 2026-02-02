@@ -5,6 +5,7 @@ import type { Environment } from '@intake24/common/types';
 import { Sequelize } from 'sequelize-typescript';
 
 import { foods, system } from './models';
+import { ENUM_ARRAY_TYPES, setupEnumArrayParsersSequelize } from './pg-enum-array-parsers';
 
 export const models = { foods, system };
 
@@ -46,7 +47,7 @@ export class Database implements DatabasesInterface {
     this.logger = logger.child({ service: 'Database' });
   }
 
-  init() {
+  async init() {
     const isDebug = this.logger.level === 'debug';
 
     for (const database of Object.keys(this.config[this.env]) as DatabaseType[]) {
@@ -62,6 +63,8 @@ export class Database implements DatabasesInterface {
       };
 
       this[database] = url ? new Sequelize(url, config) : new Sequelize(config);
+
+      await setupEnumArrayParsersSequelize(this[database], ENUM_ARRAY_TYPES[database]);
     }
   }
 

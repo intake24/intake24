@@ -366,7 +366,7 @@ export async function initDbSystem({ superuser }: InitDbSystemArgs): Promise<voi
   });
 
   try {
-    db.init();
+    await db.init();
     await initAccessControl(db, superuser);
     await initDefaultData(db);
 

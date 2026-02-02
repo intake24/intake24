@@ -8,6 +8,8 @@ import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 import cursor from 'pg-cursor';
 
+import { ENUM_ARRAY_TYPES, setupEnumArrayParsers } from './pg-enum-array-parsers';
+
 function databaseLogQuery(sql: string, logger: Logger, logLevel: string, limit: number) {
   if (limit > 0 && sql.length > limit)
     logger.log(logLevel, `${sql.substring(0, limit)}...`);
@@ -117,8 +119,10 @@ export class KyselyDatabases {
     }
   }
 
-  init() {
+  async init() {
     const { dialect: foodsDialect, pool: foodsConnectionPool } = this.configKyselyDialect('foods');
+
+    await setupEnumArrayParsers(foodsConnectionPool, ENUM_ARRAY_TYPES.foods);
 
     this.foods = new Kysely<FoodsDB>({
       dialect: foodsDialect,
@@ -129,6 +133,8 @@ export class KyselyDatabases {
     this.foodsConnectionPool = foodsConnectionPool;
 
     const { dialect: systemDialect, pool: systemConnectionPool } = this.configKyselyDialect('system');
+
+    await setupEnumArrayParsers(systemConnectionPool, ENUM_ARRAY_TYPES.system);
 
     this.system = new Kysely<SystemDB>({
       dialect: systemDialect,
