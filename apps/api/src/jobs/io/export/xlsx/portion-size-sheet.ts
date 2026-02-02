@@ -24,9 +24,10 @@ const portionSizeSections: PortionSizeSection[] = [
       { header: 'Serving image set ID', width: 25 },
       { header: 'Leftovers image set ID', width: 25 },
       { header: 'Conversion factor', width: 18 },
+      { header: 'Default weight', width: 18 },
       { header: 'Show labels', width: 18 },
       { header: 'Multiple option', width: 18 },
-      { header: 'Use if ingredient', width: 18 },
+      { header: 'Pathways', width: 18 },
     ],
   },
   {
@@ -35,8 +36,9 @@ const portionSizeSections: PortionSizeSection[] = [
     columns: [
       { header: 'Guide image ID', width: 25 },
       { header: 'Conversion factor', width: 18 },
+      { header: 'Default weight', width: 18 },
       { header: 'Show labels', width: 18 },
-      { header: 'Use if ingredient', width: 18 },
+      { header: 'Visibility', width: 18 },
     ],
   },
   {
@@ -45,11 +47,12 @@ const portionSizeSections: PortionSizeSection[] = [
     columns: [
       { header: 'Drinkware set ID', width: 25 },
       { header: 'Conversion factor', width: 18 },
+      { header: 'Default weight', width: 18 },
       { header: 'Show labels', width: 18 },
       { header: 'Multiple option', width: 18 },
       { header: 'Initial fill level', width: 18 },
       { header: 'Skip fill level', width: 18 },
-      { header: 'Use if ingredient', width: 18 },
+      { header: 'Pathways', width: 18 },
     ],
   },
   {
@@ -58,8 +61,9 @@ const portionSizeSections: PortionSizeSection[] = [
     columns: [
       { header: 'Cereal type', width: 25 },
       { header: 'Conversion factor', width: 18 },
+      { header: 'Default weight', width: 18 },
       { header: 'Show labels', width: 18 },
-      { header: 'Use if ingredient', width: 18 },
+      { header: 'Pathways', width: 18 },
     ],
   },
   {
@@ -67,8 +71,9 @@ const portionSizeSections: PortionSizeSection[] = [
     overallHeader: 'Milk on cereal',
     columns: [
       { header: 'Conversion factor', width: 18 },
+      { header: 'Default weight', width: 18 },
       { header: 'Show labels', width: 18 },
-      { header: 'Use if ingredient', width: 18 },
+      { header: 'Pathways', width: 18 },
     ],
   },
   {
@@ -76,8 +81,9 @@ const portionSizeSections: PortionSizeSection[] = [
     overallHeader: 'Pizza',
     columns: [
       { header: 'Conversion factor', width: 18 },
+      { header: 'Default weight', width: 18 },
       { header: 'Show labels', width: 18 },
-      { header: 'Use if ingredient', width: 18 },
+      { header: 'Pathways', width: 18 },
     ],
   },
   {
@@ -85,8 +91,9 @@ const portionSizeSections: PortionSizeSection[] = [
     overallHeader: 'Pizza (Version 2)',
     columns: [
       { header: 'Conversion factor', width: 18 },
+      { header: 'Default weight', width: 18 },
       { header: 'Show labels', width: 18 },
-      { header: 'Use if ingredient', width: 18 },
+      { header: 'Pathways', width: 18 },
     ],
   },
 ];
@@ -192,51 +199,58 @@ export class PortionSizeWriter {
           psm.servingImageSet,
           psm.leftoversImageSet,
           psm.conversionFactor,
+          psm.defaultWeight,
           psm.labels,
           psm.multiple,
-          psm.useForRecipes,
+          psm.pathways.join('; '),
         ];
       case 'guide-image':
         return [
           psm.guideImageId,
           psm.conversionFactor,
+          psm.defaultWeight,
           psm.labels,
-          psm.useForRecipes,
+          psm.pathways.join('; '),
         ];
       case 'drink-scale':
         return [
           psm.drinkwareId,
           psm.conversionFactor,
+          psm.defaultWeight,
           psm.labels,
           psm.multiple,
           psm.initialFillLevel,
           psm.skipFillLevel,
-          psm.useForRecipes,
+          psm.pathways.join('; '),
         ];
       case 'cereal':
         return [
           psm.type,
           psm.conversionFactor,
+          psm.defaultWeight,
           psm.labels,
-          psm.useForRecipes,
+          psm.pathways.join('; '),
         ];
       case 'milk-on-cereal':
         return [
           psm.conversionFactor,
+          psm.defaultWeight,
           psm.labels,
-          psm.useForRecipes,
+          psm.pathways.join('; '),
         ];
       case 'pizza':
         return [
           psm.conversionFactor,
+          psm.defaultWeight,
           psm.labels,
-          psm.useForRecipes,
+          psm.pathways.join('; '),
         ];
       case 'pizza-v2':
         return [
           psm.conversionFactor,
+          psm.defaultWeight,
           psm.labels,
-          psm.useForRecipes,
+          psm.pathways.join('; '),
         ];
 
       default:

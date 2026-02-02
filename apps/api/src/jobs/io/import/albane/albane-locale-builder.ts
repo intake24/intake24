@@ -17,6 +17,7 @@ import type {
   PkgV2Locale,
   PkgV2NutrientTable,
   PkgV2PortionSizeMethod,
+  PkgV2PortionSizeMethodPathways,
   PkgV2StandardPortionPsm,
   PkgV2StandardUnit,
 } from '@intake24/common/types/package';
@@ -35,6 +36,9 @@ import { capitalize } from '@intake24/common/util';
 type Logger = IoC['logger'];
 
 const LOCALE_ID = 'fr_albane';
+
+const portionSizePathwayDefaults = ['search', 'afp'] as PkgV2PortionSizeMethodPathways;
+const portionSizeDefaultWeight = null;
 
 const LOCALE_CONFIG: PkgV2Locale = {
   id: LOCALE_ID,
@@ -646,7 +650,8 @@ export class AlbaneLocaleBuilder {
     return mapValues(groupedStandardUnits, rows => ({
       method: 'standard-portion' as const,
       description: 'use_a_standard_portion',
-      useForRecipes: true,
+      pathways: portionSizePathwayDefaults,
+      defaultWeight: portionSizeDefaultWeight,
       conversionFactor: 1,
       orderBy: '99', // Will be overwritten with correct order
       units: getStandardUnits(rows),
@@ -717,7 +722,8 @@ export class AlbaneLocaleBuilder {
         foodPortionSizeMethods.push({
           method: 'direct-weight',
           description: 'weight',
-          useForRecipes: true,
+          pathways: portionSizePathwayDefaults,
+          defaultWeight: portionSizeDefaultWeight,
           conversionFactor: 1.0,
           orderBy: String(foodPortionSizeMethods.length),
         });
@@ -759,7 +765,8 @@ export class AlbaneLocaleBuilder {
         foodPortionSizeMethods.push({
           method: 'as-served',
           description: 'use_an_image',
-          useForRecipes: true,
+          pathways: portionSizePathwayDefaults,
+          defaultWeight: portionSizeDefaultWeight,
           conversionFactor: asServedConversionFactors[asServedId],
           servingImageSet: asServedId,
           multiple: true,
@@ -772,7 +779,8 @@ export class AlbaneLocaleBuilder {
           method: 'guide-image',
           guideImageId,
           description: 'use_an_image',
-          useForRecipes: true,
+          pathways: portionSizePathwayDefaults,
+          defaultWeight: portionSizeDefaultWeight,
           conversionFactor: guideImageConversionFactors[guideImageId],
           orderBy: String(foodPortionSizeMethods.length),
         });
@@ -789,7 +797,8 @@ export class AlbaneLocaleBuilder {
           initialFillLevel: 0.9,
           skipFillLevel: false,
           description: 'use_an_image',
-          useForRecipes: true,
+          pathways: portionSizePathwayDefaults,
+          defaultWeight: portionSizeDefaultWeight,
           conversionFactor: drinkwareConversionFactors[drinkwareId],
           multiple: true,
           orderBy: String(foodPortionSizeMethods.length),
@@ -808,7 +817,8 @@ export class AlbaneLocaleBuilder {
           method: 'unknown',
           conversionFactor: 1.0,
           description: 'unknown',
-          useForRecipes: true,
+          pathways: portionSizePathwayDefaults,
+          defaultWeight: portionSizeDefaultWeight,
           orderBy: String(foodPortionSizeMethods.length),
         });
       }
