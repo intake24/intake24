@@ -48,7 +48,7 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
     }
 
     result.push({
-      conversionFactor: faker.number.float({ min: 0.1, max: 10, multipleOf: 2 }),
+      conversionFactor: faker.number.float({ min: 0.1, max: 10, multipleOf: 0.01 }),
       description: faker.word.words(5),
       imageUrl: 'http://localhost:3000/images/portion/standard-portion.jpg',
       method: 'standard-portion',

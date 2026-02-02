@@ -1,4 +1,4 @@
-import type { Kysely } from 'kysely';
+import type { Insertable, Kysely } from 'kysely';
 
 import type { CacheKey } from '../core/redis/cache';
 import type { IoC } from '@intake24/api/ioc';
@@ -500,7 +500,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
       }
     }
 
-    const records: any[] = [];
+    const records: Insertable<FoodsDB['associatedFoods']>[] = [];
 
     for (const item of input) {
       if (!item.associatedFoods?.length)
@@ -542,7 +542,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     input: BulkFoodInput[],
     idMap: Map<string, string>,
   ) => {
-    const records: any[] = [];
+    const records: Insertable<FoodsDB['foodPortionSizeMethods']>[] = [];
 
     for (const item of input) {
       if (!item.portionSizeMethods?.length)
@@ -557,9 +557,10 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
           foodId,
           method: psm.method,
           description: psm.description,
-          useForRecipes: psm.useForRecipes,
+          pathways: psm.pathways,
           conversionFactor: psm.conversionFactor,
           orderBy: psm.orderBy,
+          defaultWeight: psm.defaultWeight,
           parameters: psm.parameters,
         });
       }

@@ -5,6 +5,18 @@
 
 import type { ColumnType } from 'kysely';
 
+export type ArrayType<T> = ArrayTypeImpl<T> extends (infer U)[]
+  ? U[]
+  : ArrayTypeImpl<T>;
+
+export type ArrayTypeImpl<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S[], I[], U[]>
+  : T[];
+
+export type EnumCategoryPortionSizeMethodsPathways = 'addon' | 'afp' | 'recipe' | 'search';
+
+export type EnumFoodPortionSizeMethodsPathways = 'addon' | 'afp' | 'recipe' | 'search';
+
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
@@ -95,13 +107,13 @@ export interface CategoryAttributes {
 export interface CategoryPortionSizeMethods {
   categoryId: Int8;
   conversionFactor: number;
+  defaultWeight: number | null;
   description: string;
   id: Generated<Int8>;
   method: string;
   orderBy: Int8;
   parameters: Json;
-  pathways: Json;
-  defaultWeight: number | null;
+  pathways: ArrayType<EnumCategoryPortionSizeMethodsPathways>;
 }
 
 export interface DrinkwareScales {
@@ -153,14 +165,14 @@ export interface FoodAttributes {
 
 export interface FoodPortionSizeMethods {
   conversionFactor: number;
+  defaultWeight: number | null;
   description: string;
   foodId: Int8;
   id: Generated<Int8>;
   method: string;
   orderBy: Int8;
   parameters: Json;
-  pathways: Json;
-  defaultWeight: number | null;
+  pathways: ArrayType<EnumFoodPortionSizeMethodsPathways>;
 }
 
 export interface Foods {

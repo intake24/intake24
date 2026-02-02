@@ -12,6 +12,8 @@ import type { Pathway, PortionSizeMethodId, PortionSizeParameter } from '@intake
 
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
+import { pathways } from '@intake24/common/surveys';
+
 import BaseModel from '../model';
 import Category from './category';
 
@@ -53,7 +55,7 @@ export default class CategoryPortionSizeMethod extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.JSONB,
+    type: DataType.ARRAY(DataType.ENUM(...pathways)),
   })
   declare pathways: Pathway[];
 

@@ -207,10 +207,11 @@ describe('category service', () => {
             {
               method: 'as-served',
               description: 'As Served',
-              useForRecipes: true,
               conversionFactor: 1.0,
               orderBy: '1',
               parameters: { servingImageSet: 'set1' },
+              pathways: ['search', 'afp'],
+              defaultWeight: 100,
             },
           ],
         },
@@ -244,10 +245,11 @@ describe('category service', () => {
             {
               method: 'guide-image',
               description: 'Guide',
-              useForRecipes: false,
               conversionFactor: 1.0,
               orderBy: '1',
               parameters: { guideImageId: 'G1' },
+              defaultWeight: 100,
+              pathways: ['search', 'afp'],
             },
           ],
           attributes: {

@@ -5,6 +5,8 @@
 
 import type { ColumnType } from 'kysely';
 
+export type EnumMediaDisk = 'private' | 'public';
+
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
@@ -90,12 +92,12 @@ export interface Jobs {
   createdAt: Timestamp;
   downloadUrl: string | null;
   downloadUrlExpiresAt: Timestamp | null;
+  errorDetails: Json | null;
   id: Generated<Int8>;
-  localisableMessage: Json | null;
   message: string | null;
-  output: Json | null;
   params: Json;
   progress: number | null;
+  returnValue: Json | null;
   stackTrace: string | null;
   startedAt: Timestamp | null;
   successful: boolean | null;
@@ -147,7 +149,7 @@ export interface Locales {
 export interface Media {
   collection: string;
   createdAt: Timestamp;
-  disk: 'public' | 'private';
+  disk: EnumMediaDisk;
   filename: string;
   id: string;
   mimetype: string;
@@ -314,6 +316,7 @@ export interface SigninLog {
 export interface Surveys {
   allowGenUsers: boolean | null;
   authCaptcha: Generated<boolean>;
+  authModes: Generated<Json>;
   authUrlDomainOverride: string | null;
   authUrlTokenCharset: string | null;
   authUrlTokenLength: number | null;

@@ -40,7 +40,9 @@ export default class Media extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(32),
+    // enum type must be called enum_media_disk to be compatible with Sequelize,
+    // no way to define it explicitly here
+    type: DataType.ENUM('public', 'private'),
   })
   declare disk: 'public' | 'private';
 
