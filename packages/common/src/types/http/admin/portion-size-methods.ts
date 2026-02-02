@@ -5,10 +5,6 @@ import { portionSizeMethodBase, portionSizeMethods, portionSizeParameter } from 
 export const portionSizeMethodAttributes = portionSizeMethodBase.extend({
   id: z.string(),
   method: z.enum(portionSizeMethods),
-  description: z.string().min(1).max(256),
-  useForRecipes: z.boolean(),
-  conversionFactor: z.number(),
-  orderBy: z.string(),
   parameters: portionSizeParameter,
 });
 export type PortionSizeMethodAttributes = z.infer<typeof portionSizeMethodAttributes>;

@@ -21,6 +21,9 @@ export const portionSizeMethods = [
 export const pathways = ['addon', 'afp', 'recipe', 'search'] as const;
 export type Pathway = (typeof pathways)[number];
 
+export const pathwaysSchema = z.enum(pathways).array();
+export type Pathways = z.infer<typeof pathwaysSchema>;
+
 export type PortionSizeMethodId = (typeof portionSizeMethods)[number];
 
 export const cerealTypes = ['hoop', 'flake', 'rkris'] as const;

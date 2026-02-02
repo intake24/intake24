@@ -1,4 +1,4 @@
-import type { Kysely } from 'kysely';
+import type { Insertable, Kysely } from 'kysely';
 
 import type { CacheKey } from '../core/redis/cache';
 import type { IoC } from '@intake24/api/ioc';
@@ -428,7 +428,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     input: BulkCategoryInput[],
     idMap: Map<string, string>,
   ) => {
-    const records: any[] = [];
+    const records: Insertable<FoodsDB['categoryAttributes']>[] = [];
 
     for (const item of input) {
       if (!item.attributes)
@@ -463,7 +463,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     input: BulkCategoryInput[],
     idMap: Map<string, string>,
   ) => {
-    const records: any[] = [];
+    const records: Insertable<FoodsDB['categoryPortionSizeMethods']>[] = [];
 
     for (const item of input) {
       if (!item.portionSizeMethods?.length)
@@ -478,10 +478,11 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
           categoryId,
           method: psm.method,
           description: psm.description,
-          useForRecipes: psm.useForRecipes,
+          pathways: psm.pathways,
           conversionFactor: psm.conversionFactor,
-          orderBy: psm.orderBy, // Kysely expects string/number depending on mapping, model says string? Check model.
-          parameters: JSON.stringify(psm.parameters),
+          defaultWeight: psm.defaultWeight,
+          orderBy: psm.orderBy,
+          parameters: psm.parameters,
         });
       }
     }

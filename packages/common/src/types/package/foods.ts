@@ -1,6 +1,8 @@
 // portion-size.zod.ts
 import { z } from 'zod';
 
+import { pathways } from '@intake24/common/surveys';
+
 import { categoryLocaleOptionList, localeOptionList, localeTranslationStrict } from '../common';
 
 export const pkgV2InheritableAttributes = z.object({
@@ -28,10 +30,15 @@ export const pkgV2PortionSizeMethodTypes = [
 
 export const pkgV2PortionSizeMethodType = z.enum(pkgV2PortionSizeMethodTypes);
 
+export const pkgV2PortionSizeMethodPathways = z.enum(pathways).array();
+
+export type PkgV2PortionSizeMethodPathways = z.infer<typeof pkgV2PortionSizeMethodPathways>;
+
 export const pkgV2PortionSizeMethodBase = z.object({
   method: pkgV2PortionSizeMethodType,
   description: z.string(),
-  useForRecipes: z.boolean(),
+  pathways: pkgV2PortionSizeMethodPathways,
+  defaultWeight: z.number().nonnegative().nullable(),
   conversionFactor: z.number(),
   orderBy: z.string(),
 });
