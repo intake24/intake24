@@ -9,9 +9,15 @@
   "login": {
     "_": "登录",
     "start": "让我们开始吧",
-    "subtitle": "使用您的用户名和密码登录",
     "captcha": "完成captcha挑战",
     "back": "返回登录",
+    "username": {
+      "_": "使用您的用户名和密码登录"
+    },
+    "token": {
+      "_": "通过调查链接登录",
+      "subtitle": "使用调查邀请说明中提供的登录链接。"
+    },
     "err": {
       "captcha": "无效的captcha质询响应。",
       "credentials": "提供的用户名和密码凭据无效。",

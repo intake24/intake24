@@ -1,104 +1,104 @@
 {
-  "_": "Legal",
-  "contact": "Contact",
-  "copyright": "© {team} {year}",
-  "privacy": "Privacy Policy",
-  "terms": "Terms of Use",
+  "_": "Zamalamulo",
+  "contact": "Njira zolumikizirana",
+  "copyright": "{name} © {team} {year}",
+  "privacy": "Fundo zachisinsi",
+  "terms": "Mgwirizano pazakagwiritsidwe",
   "cookies": {
     "_": "Cookies",
     "consent": {
       "consentModal": {
         "label": "Cookies",
-        "title": "Intake24 uses cookies!",
-        "description": "We use <strong>necessary</strong> cookies to provide essential features, <strong>functionality</strong> cookies to remember user preferences and <strong>analytics</strong> cookies to help us to understand and improve user experience.",
-        "acceptAllBtn": "Accept",
-        "showPreferencesBtn": "Change preferences"
+        "title": "Intake24 imagwiritsira ntchito ma cookies!",
+        "description": "Timagwiritsira ntchito <strong>necessary</strong> ma cookies kuti tipereke zinthu zofunika, <strong>functionality</strong> ma cookies ogwirira ntchito kuti tikumbukire zomwe ogwiritsira ntchito amakonda komanso <strong>analytics</strong> ma cookies osanthula kuti atithandize kumvetsetsa ndikuwongolera zomwe ogwiritsa ntchito akumana nazo.",
+        "acceptAllBtn": "Vomerani",
+        "showPreferencesBtn": "Sinthani nkuyika m'mene mukondera"
       },
       "preferencesModal": {
-        "title": "Cookies preferences",
-        "acceptAllBtn": "Accept all",
-        "savePreferencesBtn": "Save preferences",
-        "closeIconLabel": "Close",
+        "title": "M'mene mukondera Cookies",
+        "acceptAllBtn": "Vomerani zonse",
+        "savePreferencesBtn": "Sungani zomwe mumakonda",
+        "closeIconLabel": "Tsekani Close",
         "sections": [
           {
-            "title": "How we use cookies 📢",
-            "description": "We use <strong>necessary</strong> cookies to provide essential features, <strong>functionality</strong> cookies to remember user preferences and <strong>analytics</strong> cookies to help us to understand and improve user experience."
+            "title": "M'mene timagwiritsira ntchito ma cookies 📢",
+            "description": "Timagwiritsira ntchito <strong>necessary</strong> ma cookies kuti tipereke zinthu zofunika, <strong>functionality</strong> ma cookies ogwirira ntchito kuti tikumbukire zomwe ogwiritsira ntchito amakonda komanso  <strong>analytics</strong> ma cookies osanthula kuti atithandize kumvetsetsa ndikuwongolera zomwe ogwiritsa ntchito akumana nazo.."
           },
           {
-            "title": "Necessary cookies <span class=\"pm__badge\">Always Enabled</span>",
-            "description": "Cookies that are strictly necessary for the proper functioning of the website.",
-            "linkedCategory": "necessary",
+            "title": "Ma cookies ofunikira <span class=\"pm__badge\">Always Enabled</span>",
+            "description": "Ma cookies ndi ofunikira kwambiri kuti tsamba lawebusayiti  ligwire ntchito bwino.",
+            "linkedCategory": "Zofunikira",
             "cookieTable": {
               "headers": {
-                "name": "Name",
-                "desc": "Description",
-                "exp": "Expiration"
+                "name": "Dzina",
+                "desc": "Kufotokozera",
+                "exp": "Kusiya kugwira ntchito"
               },
               "body": [
                 {
                   "name": "it24(a|s)_session",
-                  "desc": "Technical functionality of websites.",
-                  "exp": "1 hour"
+                  "desc": "Magwiridwe a ntchito amawebusayita.",
+                  "exp": "Ola limodzi"
                 },
                 {
                   "name": "it24(a|s)_refresh_token",
-                  "desc": "Technical functionality of websites.",
-                  "exp": "1 hour"
+                  "desc": "Magwiridwe a ntchito amawebusayiti.",
+                  "exp": "Ola limodzi"
                 },
                 {
                   "name": "it24_cc",
-                  "desc": "Cookies consent preferences used by the website.",
-                  "exp": "1 year"
+                  "desc": "Ma cookies amene  mwawakonda ndikuwavomereza ogwirisidwa ntchito ndi webusayiti Cookies.",
+                  "exp": "Chaka chimodzi"
                 }
               ]
             }
           },
           {
-            "title": "Functionality cookies",
-            "description": "Functionality cookies allow the website to remember information that changes the way the website behaves or looks, like your preferred language or the region that you are in.",
-            "linkedCategory": "functionality",
+            "title": "Ma cookies ogwira ntchito",
+            "description": "Ma cookies ogwira ntchito amalora webusayitiyi kukumbukira zambiri zomwe zimasintha monga momwe webusayitiyi imakhalira kapena kuoneka, monga chinenero chomwe mumakonda kapena dera lomwe muli.",
+            "linkedCategory": "Kagwiridwe ntchito",
             "cookieTable": {
               "headers": {
-                "name": "Name",
-                "desc": "Description",
-                "exp": "Expiration"
+                "name": "Dzina",
+                "desc": "Kufotokozera",
+                "exp": "Kusiya kugwira ntchito"
               },
               "body": [
                 {
                   "name": "^it24(a|s)_",
-                  "desc": "Stores user preferences and settings for the websites.",
-                  "exp": "1 year"
+                  "desc": "Amasunga zokonda zazogwiritsa ntchito ndi kasinthidwe ka webusayiti.",
+                  "exp": "Chaka chimodzi"
                 }
               ]
             }
           },
           {
-            "title": "Analytics and statistical cookies",
-            "description": "Analytics and statistical cookies help us to understand how visitors use the websites to improve the services offered. Information is collected and stored anonymously.",
-            "linkedCategory": "analytics",
+            "title": "Ma cookies a kaunikidwe ndi ziwelengero",
+            "description": "Ma cookies a kaunikidwe ndi ziwelengero amatithandiza kumvesetsa momwe alendo amagwiritsira ntchito webusayitiyi kuti apitise patsogolo utumiki omwe umaperekedwa.Uthenga umatoleledwa ndi kusungidwa moti simungadziwike.",
+            "linkedCategory": "Kaunikidwe",
             "cookieTable": {
               "headers": {
-                "name": "Name",
-                "desc": "Description",
-                "exp": "Expiration"
+                "name": "Dzina",
+                "desc": "Kufotokozera",
+                "exp": "Kusiya kugwira ntchito"
               },
               "body": [
                 {
                   "name": "^_ga",
-                  "desc": "Google Analytics cookies used to distinguish users and persist session state.",
-                  "exp": "2 years"
+                  "desc": "Ma cookies a google amagwiritsidwa ntchito kusiyanitsa ogwiritsa ntchito ndi kusunga momwe mukugwiritsira ntchito.",
+                  "exp": "Dzaka ziwiri"
                 },
                 {
                   "name": "_clck<br>_clsk<br>CLID<br>ANONCHK<br>MR<br>MUID<br>SM",
-                  "desc": "MS Clarity cookies used to distinguish users and persist session state.",
-                  "exp": "up to 1 year"
+                  "desc": "Ma cookies a MS Clarity omwe amagwiritsidwa ntchito kusiyanitsa ogwiritsa ntchito ndi kusunga momwe mukugwiritsira ntchito.",
+                  "exp": "Kufikira chaka chimodzi"
                 }
               ]
             }
           },
           {
-            "title": "More information",
-            "description": "If you have any questions, please contact us."
+            "title": "Uthenga wambiri",
+            "description": "Ngati muli ndi mafunso, chonde lumikizanani nafe."
           }
         ]
       }

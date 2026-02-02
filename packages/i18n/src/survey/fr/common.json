@@ -9,9 +9,15 @@
   "login": {
     "_": "Se connecter",
     "start": "Commençons",
-    "subtitle": "Se connecter avec votre nom d'utilisateur et votre mot de passe",
     "captcha": "Remplir le test CAPTCHA",
     "back": "Retour à la connexion",
+    "username": {
+      "_": "Se connecter avec nom d'utilisateur et mot de passe"
+    },
+    "token": {
+      "_": "Se connecter via le lien de l'enquête",
+      "subtitle": "Utilisez le lien de connexion fourni dans les instructions de votre invitation à l'enquête."
+    },
     "err": {
       "captcha": "Réponse invalide au test CAPTCHA.",
       "credentials": "Le nom d'utilisateur et le mot de passe renseignés sont invalides.",

@@ -24,8 +24,8 @@
     "modes": {
       "_": "Authentication mode",
       "title": "Authentication modes",
-      "link": "Authentication link",
-      "username": "Username & Password"
+      "username": "Username & Password",
+      "token": "Authentication URL"
     },
     "urlDomainOverride": "URL Domain override",
     "urlTokenCharset": "URL Token character set",

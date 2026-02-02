@@ -9,9 +9,15 @@
   "login": {
     "_": "Daftar masuk",
     "start": "Jom mula",
-    "subtitle": "Daftar masuk dengan nama pengguna & kata laluan anda",
     "captcha": "Sila lengkapkan captcha",
     "back": "Kembali ke log masuk",
+    "username": {
+      "_": "Daftar masuk menggunakan nama pengguna & kata laluan"
+    },
+    "token": {
+      "_": "Daftar masuk menggunakan pautan tinjauan",
+      "subtitle": "Gunakan pautan daftar masuk yang disediakan dalam arahan jemputan tinjauan anda."
+    },
     "err": {
       "captcha": "Respon captcha tidak sah.",
       "credentials": "Nama pengguna & kata laluan yang diberikan adalah tidak sah.",

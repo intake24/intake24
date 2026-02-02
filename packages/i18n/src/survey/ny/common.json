@@ -9,9 +9,15 @@
   "login": {
     "_": "Lowani",
     "start": "Tiyambe",
-    "subtitle": "Lowani ndi dzina lanu lolowera ndi mawu a chinsinsi",
     "captcha": "Malizisani mayeso otsimikiza kuti ndinu munthu",
     "back": "Bwelerani patsamba lolowera ",
+    "username": {
+      "_": "Lowani ndi dzina lanu lolowera ndi mawu a chinsinsi"
+    },
+    "token": {
+      "_": "Sign in via survey link",
+      "subtitle": "Use the sign-in link provided in your survey invitation instructions."
+    },
     "err": {
       "captcha": "Zomwe mwayika potsimikiza kuti ndinu munthu ndi zolakwika.",
       "credentials": "Dzina lanu ndi mawu a chinsinsi ndizolakwikwa.",

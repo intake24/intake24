@@ -2,7 +2,7 @@
   "_": "Survey",
   "welcome": {
     "_": "Takulandirani ku Intake24",
-    "subtitle": "Intake24 amagwirisidwa ntchito mukafufuku ngakhale kafukufuku ochitika m'chipatala kutolera uthenga wa zomwe anthu adya kapena kumwa."
+    "subtitle": "Intake24 amagwirisidwa ntchito mukafufuku wa madera ndi kafukufuku ochitika m'chipatala kutolera uthenga wa zomwe anthu adya kapena kumwa."
   },
   "info": "Uthenga wa kafukufuku",
   "states": {
@@ -16,24 +16,24 @@
     "_": "Ndinu otenga nawo mbali mukafukufuku?",
     "subtitle": "Mwafika pa tsamba loyamba la Intake24.",
     "link": "Kuti mugwiritse ntchito Intake24 mufunika <strong>own survey link</strong>.",
-    "info": "<p>Ngati mwayitanidwa kuti mutenge nawo gawo mukafukufuku wa Intake24 mumayenera kupatsidwa link.</p><p>Chonde onani ngati mwayitanidwa kuti mutenge nawo gawo. Ngati simukudziwa bwino, chonde funsani gulu loyang'anira kafukufuku uyu.</p>"
+    "info": "<p>Ngati mwayitanidwa kuti mutenge nawo gawo mukafukufuku wa Intake24 mumayenera kupatsidwa njira .</p><p>Chonde onani ngati mwayitanidwa kuti mutenge nawo gawo.Ngati simukumvetsetsa, chonde funsani gulu loyang'anira kafukufuku uyu.</p>"
   },
   "visitor": {
     "_": "Ndinu mlendo?",
-    "subtitle": "Mutakuyesera kafukufuku woyesera.",
-    "try": "Yeserani kafukufuku woyesera pompano."
+    "subtitle": "Yeserani kafukufuku wa chitsanzo!",
+    "try": "Yeserani kafukufuku wa chitsanzo panopa!"
   },
   "generateUser": {
     "400": "Zomwe mwapereka zotsimikiza kuti ndinu munthu ndi zolakwika.",
-    "403": "Kafukufuku {surveyId} salola kuti ogwiritsa ntchito azipangire okha nambala zolowera.",
-    "404": "Kafukufuku {surveyId} sakudziwika.",
-    "429": "Ogwritsa ntchito watsopano wapangidwa kumene, yesani nthawi yina.",
+    "403": "Kafukufuku {surveyId} salola kuti ogwiritsa ntchito azipangire okha zolowera.",
+    "404": "Kafukufuku {surveyId} siikudziwika.",
+    "429": "Ogwritsa ntchito watsopano wapangidwa kumene, yesaninso nthawi yina.",
     "_": "Pangani njira yolowera",
     "subtitle": "Uyu ndi kafukufuku opezaka kwa wina aliyense,mutha kupanga nawo mwaulere.",
-    "noAccount": "palibe akaunti?",
-    "link": "linki",
-    "info1": "Sankhani 'njira yolowera' kuti mupange njira mawu olowera. Lembani mawuwa ngati mukufuna kupitiliza kafukufuku nthawi yina.",
-    "info2": "Kafukufuku uyu atenga pafupi fupi mphindi 15.",
+    "noAccount": "palibe dzina lanu, simunalembetse?",
+    "link": "njira yolowela",
+    "info1": "Sankhani 'njira yolowera' kuti mukembetse. Lembani dzina lomwe mwalembetsela ngati mukufuna kupitiliza kafukufuku nthawi yina.",
+    "info2": "Kafukufuku uyu atenga pafupi fupi mphindi khumi ndi zisano.",
     "info3": "Ngati mwaseka tsamba la makina lolowera ku kafukufukuyu, muthakubwelerako kugwiritsira ntchito ichi {action}."
   }
 }

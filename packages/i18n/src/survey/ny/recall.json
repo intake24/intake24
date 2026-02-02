@@ -1,7 +1,7 @@
 {
   "_": "Kukumbukira zomwe mwadya",
   "info": "Uthenga wokhuzana ndikukumbukira zomwe mwadya",
-  "none": "Zokumbukira pa zomwe mwadya sizikuchitika panthawi yino.",
+  "none": "Zokumbukira zomwe mwadya sizikuchitika panthawi yino.",
   "startedAt": "Kukumbukira zomwe mwadya mwayamba nthawi ya: {startedAt}.",
   "finishedAt": "Kukumbukira zomwe mwadya mwamaliza nthawi ya: {finishedAt}.",
   "submittedAt": "Mwatumiza nthawi ya",
@@ -10,9 +10,9 @@
     "total": "Mwakwanitsa chiwelengero chokumbukira zomwe mwadya."
   },
   "rating": {
-    "_": "Maganizo pa zimene mwakuman nazo?",
+    "_": "Maganizo anu ndiotani pa zimene mwakumana nazo pogwiritsira ntchito webusayitiyi?",
     "title": "Maganizo anu ndi otani pazotsatira zakadyedwe?",
-    "comment": "Tell us more about the rating you gave the recall",
+    "comment": "Mutiuzeko mmene munapangira chiganizo cha kakumbukiridwe ka zakudya zanu",
     "send": "Tumizani zotsatira",
     "sent": "Zotsatira zatumizidwa, zikomo!"
   },
@@ -21,19 +21,19 @@
     "_": "Tsiku lokumbukira zomwe mwadya",
     "title": "Matsiku okumbukira zomwe mwadya",
     "all": "Zonse",
-    "past": "Zokumbukira zomwe mwadya zakumbuyo",
-    "none": "Pakadali pano mulibe zokumbukira zomwe mwadya zakumbuyo.",
+    "past": "Zokumbukira zomwe mwadya zamumbuyo",
+    "none": "Pakadali pano mulibe zokumbukira zomwe mwadya zamumbuyo.",
     "count": "Nambala ya zokumbukira ya zomwe mwadya: {count}"
   },
   "start": {
-    "_": "Yambani kukumbukira zomwe mwadya",
-    "another": "Yambaninso kukumbikira zomwe mwadya"
+    "_": "Yambani kukumbukira zomwe munadya",
+    "another": "Yambani kukumbikira zomwe munadya kachikena"
   },
   "continue": "Pitilizani",
   "abort": {
     "_": "Lekani",
-    "label": "Lekani kukumbukira zomwe mwadya",
-    "confirm": "Lekani kukumbikira zomwe mwadya zomwe mukupanga?"
+    "label": "Lekani kukumbukira zomwe munadya",
+    "confirm": "Lekani kukumbikira zomwe munadya dzulo zomwe mukulemba panopa?"
   },
   "surveyInfo": {
     "recall": "Kukumbukira zomwe mwadya: {number}"
@@ -89,13 +89,13 @@
   "actions": {
     "feedback": "Ndemanga zotsatira za kadyedwe",
     "next": "Pitilizani",
-    "submit": "Tumizani zokumbukira zomwe mwadya",
+    "submit": "Tumizani zokumbukira zomwe munadya",
     "addMeal": "Onjezani chakudya",
     "deleteFood": "Fufutani chakudya",
-    "deleteMeal": "Fufutani chakudya",
+    "deleteMeal": "Fufutani zakudya",
     "editFood": "Sinthani chakudya",
     "editMeal": "Onjezani zakudya",
-    "mealTime": "Sinthani nthawi",
+    "mealTime": "Sinthani nthawi yokudya",
     "nav": {
       "cancel": "Chotsani",
       "confirm": "Tsimikizani",
@@ -107,10 +107,10 @@
       "submit": "Tumizani",
       "addMeal": "Onjezani chakudya",
       "deleteFood": "Fufutani chakudya",
-      "deleteMeal": "Fufutani chakudya",
+      "deleteMeal": "Fufutani zakudya",
       "editFood": "Sinthani chakudya",
       "editMeal": "Onjezani zakudya",
-      "mealTime": "Nthawi yodyera"
+      "mealTime": "Nthawi yodyera zakudya"
     }
   }
 }
