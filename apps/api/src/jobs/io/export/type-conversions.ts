@@ -7,7 +7,7 @@ import { ZodError } from 'zod';
 
 import { asServedPortionSizeParameters, cerealPortionSizeParameters, drinkScalePortionSizeParameters, guideImagePortionSizeParameters, milkInHotDrinkPortionSizeParameters, milkOnCerealPortionSizeParameters, parentFoodPortionParameters, pizzaPortionSizeParameters, pizzaV2PortionSizeParameters, standardPortionSizeParameters } from '@intake24/common/surveys/portion-size';
 
-type FoodPortionSizeMethodsRow = Pick<Selectable<FoodPortionSizeMethods>, 'id' | 'method' | 'description' | 'conversionFactor' | 'useForRecipes' | 'parameters' | 'orderBy'>;
+type FoodPortionSizeMethodsRow = Pick<Selectable<FoodPortionSizeMethods>, 'id' | 'method' | 'description' | 'conversionFactor' | 'pathways' | 'parameters' | 'defaultWeight' | 'orderBy'>;
 
 function packageAsServed(portionSize: FoodPortionSizeMethodsRow): PkgV2AsServedPsm {
   const parameters = asServedPortionSizeParameters.parse(portionSize.parameters);
@@ -15,10 +15,11 @@ function packageAsServed(portionSize: FoodPortionSizeMethodsRow): PkgV2AsServedP
     method: 'as-served',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     servingImageSet: parameters.servingImageSet,
     leftoversImageSet: parameters.leftoversImageSet ?? undefined,
     multiple: parameters.multiple,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -29,8 +30,9 @@ function packageGuideImage(portionSize: FoodPortionSizeMethodsRow): PkgV2GuideIm
     method: 'guide-image',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     guideImageId: parameters.guideImageId,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -41,10 +43,11 @@ function packageDrinkScale(portionSize: FoodPortionSizeMethodsRow): PkgV2DrinkSc
     method: 'drink-scale',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     drinkwareId: parameters.drinkwareId,
     initialFillLevel: parameters.initialFillLevel,
     skipFillLevel: parameters.skipFillLevel,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -55,8 +58,9 @@ function packageStandardPortion(portionSize: FoodPortionSizeMethodsRow): PkgV2St
     method: 'standard-portion',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     units: parameters.units,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -67,8 +71,9 @@ function packageCereal(portionSize: FoodPortionSizeMethodsRow): PkgV2CerealPsm {
     method: 'cereal',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     type: parameters.type,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -79,8 +84,9 @@ function packageMilkOnCereal(portionSize: FoodPortionSizeMethodsRow): PkgV2MilkO
     method: 'milk-on-cereal',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     labels: parameters.labels,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -91,8 +97,9 @@ function packagePizza(portionSize: FoodPortionSizeMethodsRow): PkgV2PizzaPsm {
     method: 'pizza',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     labels: parameters.labels,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -103,8 +110,9 @@ function packagePizzaV2(portionSize: FoodPortionSizeMethodsRow): PkgV2PizzaV2Psm
     method: 'pizza-v2',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     labels: parameters.labels,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -115,8 +123,9 @@ function packageMilkInHotDrink(portionSize: FoodPortionSizeMethodsRow): PkgV2Mil
     method: 'milk-in-a-hot-drink',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     options: parameters.options,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -127,8 +136,9 @@ function packageParentFoodPortion(portionSize: FoodPortionSizeMethodsRow): PkgV2
     method: 'parent-food-portion',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
     options: parameters.options,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -138,7 +148,8 @@ function packageDirectWeight(portionSize: FoodPortionSizeMethodsRow): PkgV2Direc
     method: 'direct-weight',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
@@ -148,7 +159,8 @@ function packageUnknown(portionSize: FoodPortionSizeMethodsRow): PkgV2UnknownPsm
     method: 'unknown',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    useForRecipes: portionSize.useForRecipes,
+    pathways: portionSize.pathways,
+    defaultWeight: portionSize.defaultWeight,
     orderBy: portionSize.orderBy,
   };
 }
