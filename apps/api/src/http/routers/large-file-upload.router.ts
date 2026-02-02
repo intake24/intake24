@@ -52,7 +52,7 @@ export function createLargeFileUploadRouter(authMiddleware: RequestHandler[]): R
 
   router.use(permission('upload-large-files'));
 
-  router.all('/*path', (req, res) => {
+  router.all('{*path}', (req, res) => {
     tusServer.handle(req, res);
   });
 
