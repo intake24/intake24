@@ -60,7 +60,7 @@ export function createPackageExportService({
 
     await zipDirectory(tempDirPath, uniqueFilePath);
 
-    // fs.unlink(tempDirPath)
+    await fs.rm(tempDirPath, { recursive: true, force: true });
 
     return path.relative(fsConfig.local.downloads, uniqueFilePath);
   };
