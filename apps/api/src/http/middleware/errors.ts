@@ -14,6 +14,7 @@ import {
   ApplicationError,
   ConflictError,
   ForbiddenError,
+  InsufficientStorageError,
   InternalServerError,
   mapZodIssues,
   NotFoundError,
@@ -103,6 +104,16 @@ export default (app: Express, { logger }: Ops): void => {
       const { message, name, stack } = err;
       logger.error(`${name}: ${message}`, { stack });
       res.status(500).json({ message: 'Internal Server Error' });
+      return;
+    }
+    next(err);
+  });
+
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof InsufficientStorageError) {
+      const { message, name, stack } = err;
+      logger.error(`${name}: ${message}`, { stack });
+      res.status(507).json({ message: 'Insufficient Storage Space' });
       return;
     }
     next(err);
