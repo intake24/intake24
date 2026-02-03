@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
+import { InsufficientStorageError } from '@intake24/api/http/errors';
 import { getTimestampedFileName } from '@intake24/api/util';
 import { createUniqueEmptyFile, zipDirectory } from '@intake24/api/util/files';
 
@@ -24,7 +25,15 @@ export function createPackageExportService({
 
     log.debug(`Package export temp path: ${tempDirPath}`);
 
+    // Check low disk space threshold if images are being exported
     if (options.options.include.includes('portionSizeImages')) {
+      const stats = await fs.statfs(tempDirPath);
+      const freeSpace = stats.bavail * stats.bsize;
+
+      if (freeSpace < fsConfig.lowDiskSpaceThreshold) {
+        throw new InsufficientStorageError();
+      }
+
       await fs.mkdir(imagesPath, { recursive: true });
     }
 

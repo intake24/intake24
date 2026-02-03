@@ -275,6 +275,9 @@ importers:
       bullmq:
         specifier: ^5.67.1
         version: 5.67.2
+      bytes:
+        specifier: ^3.1.2
+        version: 3.1.2
       clean-css:
         specifier: ^5.3.3
         version: 5.3.3
@@ -465,6 +468,9 @@ importers:
       '@types/body-parser':
         specifier: ^1.19.6
         version: 1.19.6
+      '@types/bytes':
+        specifier: ^3.1.5
+        version: 3.1.5
       '@types/clean-css':
         specifier: ^4.2.11
         version: 4.2.11
@@ -3768,6 +3774,9 @@ packages:
 
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
+
+  '@types/bytes@3.1.5':
+    resolution: {integrity: sha512-VgZkrJckypj85YxEsEavcMmmSOIzkUHqWmM4CCyia5dc54YwsXzJ5uT4fYxBQNEXx+oF1krlhgCbvfubXqZYsQ==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -12724,6 +12733,8 @@ snapshots:
     dependencies:
       '@types/connect': 3.4.38
       '@types/node': 24.10.9
+
+  '@types/bytes@3.1.5': {}
 
   '@types/chai@5.2.3':
     dependencies:

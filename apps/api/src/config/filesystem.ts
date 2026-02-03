@@ -1,6 +1,6 @@
 import z from 'zod';
 
-import { msStringValue } from './common';
+import { msStringValue, parsedBytesStringValue } from './common';
 import { validateConfig } from './validate-config';
 
 export const localLocationSchema = z.enum(['public', 'downloads', 'uploads', 'images']);
@@ -15,6 +15,8 @@ export const fileSystemConfigSchema = z.object({
     images: z.string().nonempty(),
   }),
   urlExpiresAt: msStringValue,
+  maxChunkedUploadSize: parsedBytesStringValue,
+  lowDiskSpaceThreshold: parsedBytesStringValue,
 });
 
 export type FileSystemConfig = z.infer<typeof fileSystemConfigSchema>;
@@ -27,6 +29,8 @@ const rawFsConfig = {
     images: process.env.FS_IMAGES || 'storage/public/images',
   },
   urlExpiresAt: '2d',
+  maxChunkedUploadSize: process.env.FS_MAX_CHUNKED_UPLOAD_SIZE || '100MB',
+  lowDiskSpaceThreshold: process.env.FS_LOW_DISK_SPACE_THRESHOLD || '10GB',
 };
 
 const parsedFsConfig = validateConfig('File system configuration', fileSystemConfigSchema, rawFsConfig);

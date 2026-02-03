@@ -1,12 +1,15 @@
 import type { RequestHandler } from 'express';
 
 import fs from 'node:fs';
+import fsp from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
 import { FileStore } from '@tus/file-store';
 import { Server as TusServer } from '@tus/server';
 import { Router } from 'express';
+
+import fsConfig from '@intake24/api/config/filesystem';
 
 import { permission } from '../middleware';
 
@@ -20,6 +23,22 @@ export function createLargeFileUploadRouter(authMiddleware: RequestHandler[]): R
     datastore: new FileStore({
       directory: tempDir,
     }),
+    maxSize: fsConfig.maxChunkedUploadSize,
+    async onIncomingRequest(_req, _uploadId) {
+      // Don't allow uploads if free disk space below configured threshold
+
+      const stats = await fsp.statfs(tempDir);
+      const freeSpace = stats.bavail * stats.bsize;
+
+      if (freeSpace < fsConfig.lowDiskSpaceThreshold) {
+        // TUS server excepts this format
+        // eslint-disable-next-line no-throw-literal
+        throw {
+          status_code: 507,
+          body: 'Insufficient Storage Space',
+        };
+      }
+    },
   });
 
   const router = Router();
