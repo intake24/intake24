@@ -4,8 +4,6 @@ import { faq } from './faq.contract';
 import fdbs from './fdbs';
 import { feedbackScheme } from './feedback-scheme.contract';
 import images from './images';
-import { packageExport } from './io/package-export.contract';
-import { packageImport } from './io/package-import.contract';
 import { job } from './job.contract';
 import { languageTranslation } from './language-translation.contract';
 import { language } from './language.contract';
@@ -16,6 +14,7 @@ import { metrics } from './metrics.contract';
 import { nutrientTable } from './nutrient-table.contract';
 import { nutrientType } from './nutrient-type.contract';
 import { nutrientUnit } from './nutrient-unit.contract';
+import { packages } from './packages/packages.contract';
 import { reference } from './reference.contract';
 import { securable } from './securable.contract';
 import { signInLog } from './sign-in-log.contract';
@@ -50,8 +49,7 @@ export default {
   nutrientType,
   nutrientUnit,
   reference,
-  packageExport,
-  packageImport,
+  packages,
   signInLog,
   signUp,
   standardUnit,

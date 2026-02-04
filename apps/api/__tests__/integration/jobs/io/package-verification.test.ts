@@ -32,9 +32,9 @@ export default () => {
     });
 
     [packageImportPermission] = await Permission.findOrCreate({
-      where: { name: 'import-package' },
+      where: { name: 'packages:import' },
       defaults: {
-        name: 'import-package',
+        name: 'packages:import',
         displayName: 'Import Package',
         description: 'Permission to import packages',
       },
@@ -232,7 +232,7 @@ export default () => {
     beforeEach(async () => {
       fileId = await createValidEmptyPackage();
       dbJob = await createDbJob(testUser.id, { fileId, packageFormat: 'intake24' });
-      // Note: NOT granting import-package permission
+      // Note: NOT granting packages:import permission
     });
 
     afterEach(async () => {
@@ -241,7 +241,7 @@ export default () => {
         await dbJob.destroy();
     });
 
-    it('should throw error when user lacks import-package permission', async () => {
+    it('should throw error when user lacks packages:import permission', async () => {
       const job = ioc.resolve('PackageVerification');
       const mockBullJob = createMockBullJob(dbJob.id, { fileId, packageFormat: 'intake24' });
 
