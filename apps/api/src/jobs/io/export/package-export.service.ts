@@ -2,7 +2,6 @@ import type { IoC } from '@intake24/api/ioc';
 import type { PackageExportOptions } from '@intake24/common/types/http/admin';
 
 import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 
 import { InsufficientStorageError } from '@intake24/api/http/errors';
@@ -18,7 +17,9 @@ export function createPackageExportService({
   logger,
 }: Pick<IoC, 'kyselyDb' | 'fsConfig' | 'resolveDynamic' | 'logger'>) {
   return async (options: PackageExportOptions, updateProgress: (progress: number) => Promise<void>): Promise<string> => {
-    const tempDirPrefix = path.join(os.tmpdir(), 'i24pkg-');
+    // FIXME: uses uploads as the temp dir for more predictable temp file clean up,
+    // change if/when a dedicated temp dir is introduced
+    const tempDirPrefix = path.join(path.resolve(fsConfig.local.uploads), 'i24pkg-');
     const tempDirPath = await fs.mkdtemp(tempDirPrefix);
     const imagesPath = path.join(tempDirPath, 'images');
     const log = logger.child({ service: 'PackageExport' });

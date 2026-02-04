@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 
 import { Job as BullJob } from 'bullmq';
@@ -89,7 +88,7 @@ export default () => {
       await expect(job.run(mockBullJob)).resolves.not.toThrow();
 
       // Verify extracted files exist
-      const extractedPath = path.join(os.tmpdir(), `i24-pkg-import-${fileId}`);
+      const extractedPath = path.join(path.resolve(ioc.cradle.fsConfig.local.uploads), `i24-pkg-import-${fileId}`);
       await expect(fs.stat(extractedPath)).resolves.toBeDefined();
     });
   });
@@ -331,7 +330,7 @@ export default () => {
     afterEach(async () => {
       // Uploaded file should be deleted by the job
       // Just clean up extracted path in case
-      const extractedPath = path.join(os.tmpdir(), `i24-pkg-import-${fileId}`);
+      const extractedPath = path.join(path.resolve(ioc.cradle.fsConfig.local.uploads), `i24-pkg-import-${fileId}`);
       await fs.rm(extractedPath, { recursive: true, force: true }).catch(() => {});
       if (dbJob)
         await dbJob.destroy();
@@ -342,7 +341,7 @@ export default () => {
       const job = ioc.resolve('PackageVerification');
       const mockBullJob = createMockBullJob(dbJob.id, { fileId, packageFormat: 'intake24' });
 
-      const uploadedPath = path.join(os.tmpdir(), 'large-file-uploads', fileId);
+      const uploadedPath = path.join(path.resolve(ioc.cradle.fsConfig.local.uploads), fileId);
 
       // Verify file exists before
       await expect(fs.stat(uploadedPath)).resolves.toBeDefined();
@@ -358,7 +357,7 @@ export default () => {
       const job = ioc.resolve('PackageVerification');
       const mockBullJob = createMockBullJob(dbJob.id, { fileId, packageFormat: 'intake24' });
 
-      const extractedPath = path.join(os.tmpdir(), `i24-pkg-import-${fileId}`);
+      const extractedPath = path.join(path.resolve(ioc.cradle.fsConfig.local.uploads), `i24-pkg-import-${fileId}`);
 
       // Run job (should fail)
       await expect(job.run(mockBullJob)).rejects.toBeInstanceOf(PackageValidationFileErrors);

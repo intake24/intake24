@@ -35,7 +35,9 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
 
   private readonly kyselyDb;
 
-  constructor({ logger, globalAclService, adminCategoryService, adminFoodService, localeService, kyselyDb }: Pick<IoC, 'logger' | 'globalAclService' | 'adminCategoryService' | 'adminFoodService' | 'localeService' | 'kyselyDb'>) {
+  private readonly fsConfig;
+
+  constructor({ logger, globalAclService, adminCategoryService, adminFoodService, localeService, kyselyDb, fsConfig }: Pick<IoC, 'logger' | 'globalAclService' | 'adminCategoryService' | 'adminFoodService' | 'localeService' | 'kyselyDb' | 'fsConfig'>) {
     super({ logger });
 
     this.globalAclService = globalAclService;
@@ -43,6 +45,7 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
     this.adminFoodService = adminFoodService;
     this.localeService = localeService;
     this.kyselyDb = kyselyDb;
+    this.fsConfig = fsConfig;
   }
 
   public async run(job: Job): Promise<void> {
@@ -60,7 +63,7 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
 
     this.logger.debug('Job started.');
 
-    this.verifiedPath = getVerifiedOutputPath(this.params.fileId);
+    this.verifiedPath = getVerifiedOutputPath(path.resolve(this.fsConfig.local.uploads), this.params.fileId);
 
     await this.validateExtractedFiles();
     await this.importPackage();
