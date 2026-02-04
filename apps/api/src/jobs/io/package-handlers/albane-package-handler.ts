@@ -72,7 +72,6 @@ export class AlbanePackageHandler implements PackageHandler {
       throw new PackageValidationFileErrors({ _uploadedFile: getFileValidationErrorMessages(err) });
     }
 
-    // Run conversion from Albane to Intake24 package format
     let conversionResult: AlbaneConversionResult;
     try {
       const result = await this.convertPackage(albaneExtractedPath, uploadDir, fileId, logger);
@@ -80,15 +79,17 @@ export class AlbanePackageHandler implements PackageHandler {
       this.convertedPackagePath = result.convertedPackagePath;
     }
     catch (err) {
-      // Clean up Albane source files on conversion failure
+      if (err instanceof PackageValidationFileErrors) {
+        throw err;
+      }
+      throw new PackageValidationFileErrors({ package: getFileValidationErrorMessages(err) });
+    }
+    finally {
+      // Clean up Albane source files regardless of outcome
       if (albaneExtractedPath) {
         await fs.rm(albaneExtractedPath, { recursive: true, force: true });
       }
-      throw new PackageValidationFileErrors({ _conversion: getFileValidationErrorMessages(err) });
     }
-
-    // Clean up Albane source files after successful conversion
-    await fs.rm(albaneExtractedPath, { recursive: true, force: true });
 
     // Build summary directly from conversion result - no need to validate JSON files
     // since the output is correct by construction
