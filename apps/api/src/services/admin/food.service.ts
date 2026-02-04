@@ -676,7 +676,9 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
         englishName: food.englishName,
         name: food.name,
         simpleName: toSimpleName(food.name),
-        altNames: JSON.stringify(food.altNames),
+        altNames: food.altNames,
+        // Postgres gets confused between JSON array and native array when receiving an array like this,
+        // stringify makes it accept it as JSON
         tags: JSON.stringify(food.tags ?? []),
         version: randomUUID(),
       }));
