@@ -25,7 +25,7 @@ import type { PkgV2AsServedSet } from '@intake24/common/types/package/as-served'
 import type { PkgV2Category } from '@intake24/common/types/package/categories';
 
 import { randomUUID } from 'node:crypto';
-import fs from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
 import path from 'node:path';
 
 import ExcelJS from 'exceljs';
@@ -33,7 +33,11 @@ import { groupBy, mapValues, partition, sortBy, trim } from 'lodash-es';
 
 import { capitalize } from '@intake24/common/util';
 
+import { PackageValidationFileErrors } from '../../package-handlers';
+
 type Logger = IoC['logger'];
+
+const MAX_XLSX_ROWS = 10000;
 
 const LOCALE_ID = 'fr_albane';
 
@@ -124,75 +128,123 @@ export class AlbaneLocaleBuilder {
     this.logger = logger;
   }
 
-  private async readJSON<T>(relativePath: string): Promise<T> {
-    const filePath = path.join(this.sourceDirPath, relativePath);
-    return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
-  }
-
   private async readXLSX<T extends Record<string, any>>(
     relativePath: string,
     options?: { header?: number | string[]; range?: number; sheetName?: string },
   ): Promise<T[]> {
     const filePath = path.join(this.sourceDirPath, relativePath);
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.readFile(filePath);
-
-    const sheetName = options?.sheetName;
-    const worksheet = sheetName ? workbook.getWorksheet(sheetName) : workbook.worksheets[0];
-
-    if (!worksheet) {
-      throw new Error(`Worksheet not found in ${relativePath}`);
-    }
-
     const results: T[] = [];
     const startRow = (options?.range ?? 0) + 1; // exceljs is 1-indexed
 
-    // Determine headers
-    let headers: string[];
+    const stream = createReadStream(filePath);
+    const workbookReader = new ExcelJS.stream.xlsx.WorkbookReader(stream, {});
+
+    let headers: string[] | undefined;
     let dataStartRow: number;
+    let currentSheetIndex = 0;
+    let targetSheetFound = false;
 
     if (Array.isArray(options?.header)) {
-      // Use provided headers
       headers = options.header;
       dataStartRow = startRow;
     }
     else if (typeof options?.header === 'number') {
-      // Numeric header means row-based data without headers
-      const rowCount = worksheet.rowCount;
-      for (let i = startRow; i <= rowCount; i++) {
-        const row = worksheet.getRow(i);
-        const rowData: Record<number, string> = {};
-        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-          rowData[colNumber - 1] = cell.value?.toString() ?? '';
-        });
-        results.push(rowData as T);
-      }
-      return results;
+      // Numeric header means column indexed data without headers
+      headers = undefined;
+      dataStartRow = startRow;
     }
     else {
-      // First row is header
-      const headerRow = worksheet.getRow(startRow);
-      headers = [];
-      headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-        headers[colNumber - 1] = cell.value?.toString() ?? '';
-      });
+      // First row is header, will be read from worksheet
+      headers = undefined;
       dataStartRow = startRow + 1;
     }
 
-    // Read data rows
-    const rowCount = worksheet.rowCount;
-    for (let i = dataStartRow; i <= rowCount; i++) {
-      const row = worksheet.getRow(i);
-      const rowData: Record<string, string> = {};
+    for await (const worksheetReader of workbookReader) {
+      // Check if this is the worksheet we want
+      if (options?.sheetName) {
+        // WorksheetReader the name property, no idea how to access it in a type-safe way
+        const worksheet = worksheetReader as any;
+        if (worksheet.name !== options.sheetName) {
+          continue;
+        }
+        targetSheetFound = true;
+      }
+      else if (currentSheetIndex > 0) {
+        // We only want the first worksheet if no sheetName specified
+        break;
+      }
+      else {
+        targetSheetFound = true;
+      }
 
-      headers.forEach((header, colIndex) => {
-        const cell = row.getCell(colIndex + 1);
-        // Cell values are expected to be strings but ExcelJS may return numbers
-        const value = cell.value;
-        rowData[header] = value?.toString() ?? '';
-      });
+      let currentRowNumber = 0;
+      let totalRowsProcessed = 0;
 
-      results.push(rowData as T);
+      for await (const row of worksheetReader) {
+        totalRowsProcessed++;
+
+        // Safety check: abort if we exceed the maximum row limit
+        if (totalRowsProcessed > MAX_XLSX_ROWS) {
+          throw new PackageValidationFileErrors(
+            {
+              [relativePath]: [{
+                key: 'io.verification.excelRowsExceded',
+                params: {
+                  worksheetName: options?.sheetName ?? 'Sheet1',
+                  maxRows: MAX_XLSX_ROWS,
+                },
+              }],
+            },
+          );
+        }
+        currentRowNumber = row.number;
+
+        // Skip rows before startRow
+        if (currentRowNumber < startRow)
+          continue;
+
+        // Handle numeric header mode (no headers, use column indices)
+        if (typeof options?.header === 'number') {
+          const rowData: Record<number, string> = {};
+          row.eachCell({ includeEmpty: true }, (cell: ExcelJS.Cell, colNumber: number) => {
+            rowData[colNumber - 1] = cell.value?.toString() ?? '';
+          });
+          results.push(rowData as T);
+          continue;
+        }
+
+        // Handle header row if we haven't read it yet
+        if (headers === undefined && currentRowNumber === startRow) {
+          headers = [];
+          row.eachCell({ includeEmpty: true }, (cell: ExcelJS.Cell, colNumber: number) => {
+            headers![colNumber - 1] = cell.value?.toString() ?? '';
+          });
+          continue;
+        }
+
+        // Skip if we're still waiting for headers or before data start
+        if (!headers || currentRowNumber < dataStartRow)
+          continue;
+
+        // Read data row
+        const rowData: Record<string, string> = {};
+        headers.forEach((header, colIndex) => {
+          const cell = row.getCell(colIndex + 1);
+          const value = cell.value;
+          rowData[header] = value?.toString() ?? '';
+        });
+        results.push(rowData as T);
+      }
+
+      currentSheetIndex++;
+
+      // If we found our target sheet, we can stop
+      if (options?.sheetName && targetSheetFound)
+        break;
+    }
+
+    if (options?.sheetName && !targetSheetFound) {
+      throw new Error(`Worksheet not found in ${relativePath}`);
     }
 
     return results;
@@ -927,7 +979,6 @@ export class AlbaneLocaleBuilder {
     await this.readFacetFlags();
     await this.readPortionSizeImages();
     await this.readPortionSizeMethods();
-
     const foods = this.buildFoods();
     const categories = this.buildCategories();
 

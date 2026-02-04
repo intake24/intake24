@@ -103,6 +103,7 @@
     "uploadedFileNotAccessible": "Uploaded file is missing or is not accessible",
     "extractedPathNotFound": "Extracted path not found",
     "invalidJsonSyntax": "Syntax error parsing JSON file: {message}",
+    "excelRowsExceded": "Worksheet '{worksheetName}' exceeds the maximum allowed number of rows ({maxRows}). Please check the file for unused empty rows at the end of the worksheet.",
     "schemaError": "{path}: {errors}",
     "unexpectedError": "Unexpected error",
     "invalidZipFile": "Invalid or corrupted zip file",
