@@ -45,3 +45,24 @@ export type PackageContentsSummary = {
   targetLocales: string[];
   files: Record<PackageFileType, boolean>;
 };
+
+export const packageVerificationRequest = z.object({
+  fileId: z.string().nonempty(),
+  packageFormat: z.enum(importPackageFormats),
+});
+
+export type PackageVerificationRequest = z.infer<typeof packageVerificationRequest>;
+
+export const packageImportRequest = z.object({
+  fileId: z.string().nonempty(),
+  verificationJobId: z.string().nonempty(),
+  options: z.object({
+    conflictStrategies: z.record(z.string(), z.string()),
+    include: z.array(z.enum(packageFileTypes)),
+    localeFilter: z.array(z.string()),
+    foodFilter: z.array(z.string()).optional(),
+    categoryFilter: z.array(z.string()).optional(),
+  }),
+});
+
+export type PackageImportRequest = z.infer<typeof packageImportRequest>;

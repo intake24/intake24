@@ -649,19 +649,16 @@ async function verifyPackage() {
   panel.value = '1';
 
   try {
-    // Submit package verification job
-    const { data: job } = await http.post<JobAttributes>('/admin/user/jobs', {
-      type: 'PackageVerification',
-      params: {
-        fileId: uploadedFileId.value,
-        packageFormat: packageFormat.value,
-      },
+    // Queue package verification job
+    const { data: jobResponse } = await http.post<{ jobId: string }>('/admin/packages/verify', {
+      fileId: uploadedFileId.value,
+      packageFormat: packageFormat.value,
     });
 
     // Poll until the job completes
     while (true) {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      const response = await http.get<JobAttributes>(`/admin/user/jobs/${job.id}`);
+      const response = await http.get<JobAttributes>(`/admin/user/jobs/${jobResponse.jobId}`);
 
       if (response.status !== 200) {
         verifyError.value = t('io.import.verify.error.unexpected');
@@ -786,26 +783,23 @@ async function startImport() {
       }
     });
 
-    // Submit package import job
-    const { data: job } = await http.post<JobAttributes>('/admin/user/jobs', {
-      type: 'PackageImport',
-      params: {
-        fileId: uploadedFileId.value,
-        verificationJobId: verificationJobStatus.value.id,
-        options: {
-          conflictStrategies: activeStrategies,
-          include: selectedFiles.value,
-          localeFilter: selectedLocales.value,
-          foodFilter: foodCodeFilter.value.split(',').map(s => s.trim()).filter(s => s.length > 0),
-          categoryFilter: categoryCodeFilter.value.split(',').map(s => s.trim()).filter(s => s.length > 0),
-        },
+    // Queue package import job
+    const { data: jobResponse } = await http.post<{ jobId: string }>('/admin/packages/import', {
+      fileId: uploadedFileId.value,
+      verificationJobId: verificationJobStatus.value.id,
+      options: {
+        conflictStrategies: activeStrategies,
+        include: selectedFiles.value,
+        localeFilter: selectedLocales.value,
+        foodFilter: foodCodeFilter.value.split(',').map(s => s.trim()).filter(s => s.length > 0),
+        categoryFilter: categoryCodeFilter.value.split(',').map(s => s.trim()).filter(s => s.length > 0),
       },
     });
 
     // Poll until the job completes
     while (true) {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      const response = await http.get<JobAttributes>(`/admin/user/jobs/${job.id}`);
+      const response = await http.get<JobAttributes>(`/admin/user/jobs/${jobResponse.jobId}`);
 
       if (response.status !== 200) {
         importError.value = t('io.import.import.error.unexpected');
