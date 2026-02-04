@@ -21,6 +21,7 @@ export class PackageValidationFileErrors extends Error {
 export interface PackageHandlerContext {
   fileId: string;
   userId: string;
+  uploadDir: string;
   logger: IoC['logger'];
   globalAclService: IoC['globalAclService'];
 }

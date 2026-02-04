@@ -7,7 +7,6 @@ import type {
 } from './types';
 
 import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 
 import * as yauzl from 'yauzl';
@@ -61,13 +60,13 @@ export class AlbanePackageHandler implements PackageHandler {
   }
 
   async verify(uploadedPath: string): Promise<PackageVerificationResult> {
-    const { fileId, logger } = this.context;
+    const { fileId, uploadDir, logger } = this.context;
 
     let albaneExtractedPath: string | undefined;
 
     try {
       await this.validateArchive(uploadedPath);
-      albaneExtractedPath = await this.extractArchive(uploadedPath, fileId);
+      albaneExtractedPath = await this.extractArchive(uploadedPath, uploadDir, fileId);
     }
     catch (err) {
       throw new PackageValidationFileErrors({ _uploadedFile: getFileValidationErrorMessages(err) });
@@ -76,7 +75,7 @@ export class AlbanePackageHandler implements PackageHandler {
     // Run conversion from Albane to Intake24 package format
     let conversionResult: AlbaneConversionResult;
     try {
-      const result = await this.convertPackage(albaneExtractedPath, fileId, logger);
+      const result = await this.convertPackage(albaneExtractedPath, uploadDir, fileId, logger);
       conversionResult = result.conversionResult;
       this.convertedPackagePath = result.convertedPackagePath;
     }
@@ -159,18 +158,19 @@ export class AlbanePackageHandler implements PackageHandler {
     }
   }
 
-  private async extractArchive(uploadedPath: string, fileId: string): Promise<string> {
-    const extractedPath = path.join(os.tmpdir(), `i24-albane-source-${fileId}`);
+  private async extractArchive(uploadedPath: string, uploadDir: string, fileId: string): Promise<string> {
+    const extractedPath = path.join(uploadDir, `i24-albane-source-${fileId}`);
     await unzipFile(uploadedPath, extractedPath);
     return extractedPath;
   }
 
   private async convertPackage(
     albaneExtractedPath: string,
+    uploadDir: string,
     fileId: string,
     logger: PackageHandlerContext['logger'],
   ): Promise<{ conversionResult: AlbaneConversionResult; convertedPackagePath: string }> {
-    const convertedPackagePath = getVerifiedOutputPath(fileId);
+    const convertedPackagePath = getVerifiedOutputPath(uploadDir, fileId);
 
     await fs.mkdir(convertedPackagePath, { recursive: true });
 

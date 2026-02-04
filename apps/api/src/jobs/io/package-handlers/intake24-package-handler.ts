@@ -100,11 +100,11 @@ export class Intake24PackageHandler implements PackageHandler {
   }
 
   async verify(uploadedPath: string): Promise<PackageVerificationResult> {
-    const { fileId } = this.context;
+    const { fileId, uploadDir } = this.context;
 
     try {
       await this.validateArchive(uploadedPath);
-      this.extractedPath = getVerifiedOutputPath(fileId);
+      this.extractedPath = getVerifiedOutputPath(uploadDir, fileId);
       await unzipFile(uploadedPath, this.extractedPath);
     }
     catch (err) {

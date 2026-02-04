@@ -1,37 +1,34 @@
 import type { RequestHandler } from 'express';
 
-import fs from 'node:fs';
 import fsp from 'node:fs/promises';
-import os from 'node:os';
-import path from 'node:path';
 
 import { FileStore } from '@tus/file-store';
 import { Server as TusServer } from '@tus/server';
 import { Router } from 'express';
 
 import fsConfig from '@intake24/api/config/filesystem';
+import ioc from '@intake24/api/ioc';
 
 import { permission } from '../middleware';
 
 export function createLargeFileUploadRouter(authMiddleware: RequestHandler[]): Router {
-  const tempDir = path.join(os.tmpdir(), 'large-file-uploads');
-  fs.mkdirSync(tempDir, { recursive: true });
+  const uploadPath = ioc.cradle.fsConfig.local.uploads;
 
   const tusServer = new TusServer({
     path: '/admin/large-file-upload',
     relativeLocation: true,
     datastore: new FileStore({
-      directory: tempDir,
+      directory: uploadPath,
     }),
     maxSize: fsConfig.maxChunkedUploadSize,
     async onIncomingRequest(_req, _uploadId) {
       // Don't allow uploads if free disk space below configured threshold
 
-      const stats = await fsp.statfs(tempDir);
+      const stats = await fsp.statfs(uploadPath);
       const freeSpace = stats.bavail * stats.bsize;
 
       if (freeSpace < fsConfig.lowDiskSpaceThreshold) {
-        // TUS server excepts this format
+        // Tus server excepts this format
         // eslint-disable-next-line no-throw-literal
         throw {
           status_code: 507,
@@ -71,7 +68,7 @@ export function createLargeFileUploadRouter(authMiddleware: RequestHandler[]): R
 
   router.use(permission('upload-large-files'));
 
-  router.all('{*path}', (req, res) => {
+  router.all('*path', (req, res) => {
     tusServer.handle(req, res);
   });
 

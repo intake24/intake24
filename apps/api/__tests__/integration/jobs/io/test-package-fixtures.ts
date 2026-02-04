@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
+import ioc from '@intake24/api/ioc';
 import { zipDirectory } from '@intake24/api/util/files';
 
 export interface TestPackageOptions {
@@ -17,7 +18,7 @@ export interface TestPackageOptions {
 
 export async function createTestPackage(options: TestPackageOptions = {}): Promise<string> {
   const fileId = randomUUID();
-  const uploadDir = path.join(os.tmpdir(), 'large-file-uploads');
+  const uploadDir = path.resolve(ioc.cradle.fsConfig.local.uploads);
   const filePath = path.join(uploadDir, fileId);
 
   await fs.mkdir(uploadDir, { recursive: true });
@@ -70,9 +71,9 @@ export async function createTestPackage(options: TestPackageOptions = {}): Promi
 }
 
 export async function cleanupTestPackage(fileId: string): Promise<void> {
-  const uploadDir = path.join(os.tmpdir(), 'large-file-uploads');
+  const uploadDir = path.resolve(ioc.cradle.fsConfig.local.uploads);
   const filePath = path.join(uploadDir, fileId);
-  const extractedPath = path.join(os.tmpdir(), 'i24-pkg-import-', fileId);
+  const extractedPath = path.join(uploadDir, `i24-pkg-import-${fileId}`);
 
   await fs.rm(filePath, { force: true });
   await fs.rm(extractedPath, { recursive: true, force: true });

@@ -8,7 +8,6 @@ import type { IoC } from '@intake24/api/ioc';
 import type { ImportPackageFormat, PackageContentsSummary } from '@intake24/common/types/http/admin/io';
 
 import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 
 import { LocalisableError, NotFoundError } from '@intake24/api/http/errors';
@@ -28,12 +27,15 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
 
   private readonly globalAclService;
 
+  private readonly fsConfig;
+
   private userId!: string;
 
-  constructor({ logger, globalAclService }: Pick<IoC, 'logger' | 'globalAclService'>) {
+  constructor({ logger, globalAclService, fsConfig }: Pick<IoC, 'logger' | 'globalAclService' | 'fsConfig'>) {
     super({ logger });
 
     this.globalAclService = globalAclService;
+    this.fsConfig = fsConfig;
   }
 
   public async run(job: Job): Promise<PackageContentsSummary> {
@@ -72,8 +74,8 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
 
   private async verifyPackage(): Promise<PackageContentsSummary> {
     const { fileId } = this.params;
-    // FIXME: make tus upload dir configurable
-    const uploadedPath = path.join(os.tmpdir(), 'large-file-uploads', fileId);
+
+    const uploadedPath = path.join(path.resolve(this.fsConfig.local.uploads), fileId);
 
     try {
       await fs.stat(uploadedPath);
@@ -85,6 +87,7 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
     const context: PackageHandlerContext = {
       fileId,
       userId: this.userId,
+      uploadDir: path.resolve(this.fsConfig.local.uploads),
       logger: this.logger,
       globalAclService: this.globalAclService,
     };
