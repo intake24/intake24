@@ -36,7 +36,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="job in jobs" :key="job.id">
+                <tr v-for="job in jobs" :key="job.id" :class="{ 'job-highlight': job.id === highlightJobId }">
                   <td>{{ job.id }}</td>
                   <td>{{ job.startedAt === null ? "N/A" : formatDate(job.startedAt.toString()) }}</td>
                   <td>
@@ -269,8 +269,9 @@ function scrollToActiveJobs() {
 
 const exportFormat = ref<ExportFormat>('json');
 const exportLocales = ref<Dictionary[]>([]);
-const exportJobId = ref<string | null>(null);
+const queuedJobId = ref<string | null>(null);
 const exportErrorMessage = ref<string | null>(null);
+const highlightJobId = ref<string | null>(null);
 
 const includeFlags = reactive({
   locales: true,
@@ -302,10 +303,29 @@ const canExport = computed(() => {
 
 watch(exportLocales, () => errors.clear('localeId'));
 
-watch(exportJobId, (newId) => {
+watch(queuedJobId, (newId) => {
   if (newId) {
     scrollToActiveJobs();
-    exportLocales.value = [];
+  }
+});
+
+// Wait until the queued job appears in the list, and highlight it
+// to draw the user's attention
+watch(jobs, (newJobs, oldJobs) => {
+  if (!queuedJobId.value)
+    return;
+
+  const jobAppeared = newJobs.some(job => job.id === queuedJobId.value)
+    && (!oldJobs || !oldJobs.some(job => job.id === queuedJobId.value));
+
+  if (jobAppeared) {
+    highlightJobId.value = queuedJobId.value;
+    queuedJobId.value = null;
+
+    // Clear highlight after animation completes
+    setTimeout(() => {
+      highlightJobId.value = null;
+    }, 2000);
   }
 });
 
@@ -320,12 +340,17 @@ async function startExport() {
       options: { include: includeOptions.value },
     });
 
-    exportJobId.value = response.data.jobId;
+    queuedJobId.value = response.data.jobId;
     exportErrorMessage.value = null;
+
     startPolling(true);
   }
   catch (error: any) {
     handleExportError(error);
+  }
+  finally {
+    // Clear export locales to prevent accidental double exports
+    exportLocales.value = [];
   }
 }
 
@@ -352,5 +377,18 @@ function handleExportError(error: any) {
 }
 .status-col {
   width: auto;
+}
+
+@keyframes flash-highlight {
+  0% {
+    background-color: rgba(76, 175, 80, 0.25);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.job-highlight {
+  animation: flash-highlight 2s ease-out;
 }
 </style>
