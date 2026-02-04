@@ -52,15 +52,15 @@ export function job() {
           }
           break;
         case 'PackageExport':
-          if (!(await req.scope.cradle.aclService.hasPermission('export-package')))
+          if (!(await req.scope.cradle.aclService.hasPermission('packages:export')))
             throw new ForbiddenError();
           break;
         case 'PackageVerification':
-          if (!(await req.scope.cradle.aclService.hasPermission('import-package')))
+          if (!(await req.scope.cradle.aclService.hasPermission('packages:import')))
             throw new ForbiddenError();
           break;
         case 'PackageImport':
-          if (!(await req.scope.cradle.aclService.hasPermission('import-package')))
+          if (!(await req.scope.cradle.aclService.hasPermission('packages:import')))
             throw new ForbiddenError();
       }
 

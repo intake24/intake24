@@ -314,7 +314,7 @@ async function startExport() {
     return;
 
   try {
-    const response = await http.post('/admin/package-export', {
+    const response = await http.post('/admin/packages/export', {
       format: exportFormat.value,
       locales: exportLocales.value.map(i => i.code),
       options: { include: includeOptions.value },

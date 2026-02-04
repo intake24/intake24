@@ -92,7 +92,7 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
     const handler = this.createPackageHandler(context);
 
     try {
-      if (!(await this.globalAclService.hasPermission(this.userId, 'import-package')))
+      if (!(await this.globalAclService.hasPermission(this.userId, 'packages:import')))
         throw new LocalisableError('io.verification.importPermission');
 
       const result = await handler.verify(uploadedPath);

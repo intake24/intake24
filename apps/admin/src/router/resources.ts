@@ -250,6 +250,27 @@ export const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes, 'roles', 'users'],
   },
+  // Food database package import/export
+  {
+    group: 'fdb',
+    name: 'packages.import',
+    module: 'packages:import',
+    icon: 'fas fa-fw fa-download',
+    title: 'io.import._',
+    api: 'admin/packages',
+    generateRoutes: false,
+    routes: [],
+  },
+  {
+    group: 'fdb',
+    name: 'packages.export',
+    module: 'packages:export',
+    icon: 'fas fa-fw fa-upload',
+    title: 'io.export._',
+    api: 'admin/packages',
+    generateRoutes: false,
+    routes: [],
+  },
 ];
 
 export const getResource = (name: string) => resources.find(resource => resource.name === name);

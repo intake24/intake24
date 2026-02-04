@@ -3,10 +3,10 @@ import { z } from 'zod';
 
 import { packageExportOptions } from '@intake24/common/types/http/admin';
 
-export const packageExport = initContract().router({
-  start: {
+export const packages = initContract().router({
+  startExport: {
     method: 'POST',
-    path: '/admin/package-export',
+    path: '/admin/packages/export',
     body: packageExportOptions,
     responses: {
       202: z.object({
