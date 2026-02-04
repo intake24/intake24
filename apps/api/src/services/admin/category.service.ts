@@ -517,6 +517,8 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
         name: category.name,
         simpleName: toSimpleName(category.name)!,
         hidden: category.hidden,
+        // Postgres gets confused between JSON array and native array when receiving an array like this,
+        // stringify makes it accept it as JSON
         tags: JSON.stringify(category.tags ?? []),
         version: randomUUID(),
       }));
