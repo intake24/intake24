@@ -133,6 +133,14 @@ export const pizzaV2Prompt: Prompts['pizza-v2-prompt'] = copy({
   },
 });
 
+export const genericBuilderPrompt: Prompts['generic-builder-prompt'] = copy({
+  ...basePortionPrompt,
+  component: 'generic-builder-prompt',
+  type: 'portion-size',
+  id: 'generic-builder-prompt',
+  name: 'Generic Builder',
+});
+
 export const portionSizeOptionPrompt: Prompts['portion-size-option-prompt'] = copy({
   ...basePortionPrompt,
   component: 'portion-size-option-prompt',
@@ -188,4 +196,5 @@ export const portionSizePrompts = [
   recipeBuilderPrompt,
   standardPortionPrompt,
   unknownPrompt,
+  genericBuilderPrompt,
 ];

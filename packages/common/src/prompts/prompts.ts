@@ -58,7 +58,8 @@ export type StandardComponentType = (typeof standardComponentTypes)[number];
 export type PortionSizeComponentType
   = | `${PortionSizeMethodId}-prompt`
     | 'missing-food-prompt'
-    | 'portion-size-option-prompt';
+    | 'portion-size-option-prompt'
+    | 'generic-builder-prompt';
 
 /* export const portionSizeComponentTypes = [
   ...portionSizeMethods,
@@ -307,6 +308,10 @@ const pizzaV2Prompt = basePortionPrompt.extend({
   imageMap,
 });
 
+const genericBuilderPrompt = basePortionPrompt.extend({
+  component: z.literal('generic-builder-prompt'),
+});
+
 const portionSizeOptionPrompt = basePortionPrompt.extend({
   component: z.literal('portion-size-option-prompt'),
 });
@@ -463,6 +468,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   parentFoodPortionPrompt,
   pizzaPrompt,
   pizzaV2Prompt,
+  genericBuilderPrompt,
   portionSizeOptionPrompt,
   recipeBuilderPrompt,
   standardPortionPrompt,
@@ -525,6 +531,7 @@ export const prompts = z.object({
   'parent-food-portion-prompt': parentFoodPortionPrompt,
   'pizza-prompt': pizzaPrompt,
   'pizza-v2-prompt': pizzaV2Prompt,
+  'generic-builder-prompt': genericBuilderPrompt,
   'portion-size-option-prompt': portionSizeOptionPrompt,
   'recipe-builder-prompt': recipeBuilderPrompt,
   'standard-portion-prompt': standardPortionPrompt,

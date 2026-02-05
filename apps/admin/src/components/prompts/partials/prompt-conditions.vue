@@ -112,7 +112,7 @@ import { randomString } from '@intake24/common/util';
 import { copy } from '@intake24/common/util/objects';
 import { useI18n } from '@intake24/ui';
 
-import conditionPartials from './conditions';
+import conditionPartials from '../../conditions/conditions';
 
 export default defineComponent({
   name: 'PromptConditions',

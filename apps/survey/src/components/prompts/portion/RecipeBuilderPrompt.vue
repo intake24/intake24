@@ -5,7 +5,7 @@
         <v-expansion-panel-title>
           <div>
             <v-avatar class="me-2" color="primary" size="28">
-              <span class="text-white font-weight-medium">{{ step.order + 1 }}</span>
+              <span class="text-white font-weight-medium">{{ index + 1 }}</span>
             </v-avatar>
             {{ translate(step.name) }}
           </div>
@@ -48,7 +48,7 @@
             @remove="removeFood"
           />
           <v-btn-toggle
-            v-if="(step.required || step.confirmed === 'yes') && step.repeat && step.foods.length > 0"
+            v-if="(step.required || step.confirmed === 'yes') && step.multiple && step.foods.length > 0"
             v-model="step.anotherFoodConfirmed"
             class="bg-grey-lighten-4"
             color="primary"
@@ -152,7 +152,7 @@ function isStepValid(step: RecipeBuilderStepState): boolean {
   const foodSelected = step.foods.length > 0;
 
   if (step.required || step.confirmed === 'yes')
-    return step.repeat ? foodSelected && step.anotherFoodConfirmed === false : foodSelected;
+    return step.multiple ? foodSelected && step.anotherFoodConfirmed === false : foodSelected;
   else
     return step.confirmed === 'no';
 }
@@ -247,11 +247,7 @@ function goToNextIfCan(index: number) {
   state.value.activeStep = getNextStep(state.value.recipeSteps);
 };
 
-function updateActiveStep(index: unknown) {
-  // TODO: remove this once we have a proper type from vuetify component
-  if (typeof index !== 'number')
-    return;
-
+function updateActiveStep(index: number) {
   state.value.activeStep = index;
   update();
 };
@@ -269,7 +265,8 @@ function updateStepsIngredients() {
   // Ignore optional steps that have been rejected even if they had
   // initially been accepted and some foods were added
     .filter(step => step.confirmed !== 'no')
-    .map(({ foods }) => foods);
+    .map(({ foods }) => foods)
+    .flat();
   emit('addFood', chosenIngredients);
 };
 

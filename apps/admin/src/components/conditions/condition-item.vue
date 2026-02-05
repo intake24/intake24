@@ -48,10 +48,11 @@ import type { Condition, ConditionObjectId, ObjectPropertyId } from '@intake24/c
 import { useVModel } from '@vueuse/core';
 import { mapValues } from 'lodash-es';
 
-import conditionPartials from '@intake24/admin/components/prompts/partials/conditions';
 import { conditionObjectHasProperty, getConditionDefaults, getDefaultConditionProperty, promptConditionDefaults } from '@intake24/common/prompts';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
+
+import conditionPartials from './conditions';
 
 defineOptions({
   components: { ...conditionPartials.check, ConditionSummary: conditionPartials.summary },

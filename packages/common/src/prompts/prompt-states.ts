@@ -4,10 +4,9 @@ import type {
   PortionSizeStates,
 } from '../surveys';
 import type {
-  RecipeFood,
   RequiredLocaleTranslation,
 } from '../types';
-import type { FoodHeader, UserFoodData } from '../types/http';
+import type { FoodBuilder, FoodHeader, UserFoodData } from '../types/http';
 import type { AddonFood } from './prompts';
 
 export type AssociatedFoodPromptItem = {
@@ -46,11 +45,10 @@ export type RecipeBuilderStepState = {
   confirmed?: 'yes' | 'no';
   anotherFoodConfirmed?: boolean;
   foods: FoodRecipeBuilderItemState[];
-  order: number;
   description: RequiredLocaleTranslation;
   name: RequiredLocaleTranslation;
   categoryCode: string;
-  repeat: boolean;
+  multiple: boolean;
   required: boolean;
 };
 
@@ -84,6 +82,11 @@ export type PromptStates = {
     leftoversConfirmed: boolean;
     leftoversPrompt?: boolean;
     quantityConfirmed: boolean;
+  };
+  'generic-builder-prompt': {
+    builder: FoodBuilder;
+    steps: RecipeBuilderStepState[];
+    activeStep: number;
   };
   'guide-image-prompt': {
     portionSize: PortionSizeStates['guide-image'];
@@ -135,7 +138,7 @@ export type PromptStates = {
     option: number | null;
   };
   'recipe-builder-prompt': {
-    recipe: RecipeFood;
+    recipe: FoodBuilder;
     activeStep: number;
     recipeSteps: RecipeBuilderStepState[];
   };

@@ -91,6 +91,13 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     return food.value;
   });
 
+  const genericBuilder = computed(() => {
+    if (food.value.type !== 'generic-builder')
+      throw new Error('This selected food must be an Generic Builder food');
+
+    return food.value;
+  });
+
   const recipeBuilder = computed(() => {
     if (food.value.type !== 'recipe-builder')
       throw new Error('This selected food must be an Recipe Builder food');
@@ -207,9 +214,6 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
   const linkedParent = computed(() => getLinkedParent(encodedFoodOptional.value?.data, parentFoodOptional.value));
   const linkedParentQuantity = computed(() => linkedParent.value?.quantity ?? 1);
 
-  const initializeRecipeComponents = (steps: number[]) =>
-    steps.map(step => ({ ingredients: [], order: step }));
-
   return {
     food,
     foodIndex,
@@ -228,10 +232,10 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     resolvePortionSize,
     freeTextFood,
     foodName,
-    initializeRecipeComponents,
     missingFood,
     portionSize,
     portionSizeMethods,
+    genericBuilder,
     recipeBuilder,
   };
 }
