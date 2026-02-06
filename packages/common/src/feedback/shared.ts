@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { localeTranslation } from '../types';
+import { localeTranslation, sanitizedLocaleTranslation } from '../types';
 
 export const feedbackTypes = ['default', 'playful'] as const;
 export type FeedbackType = (typeof feedbackTypes)[number];
@@ -13,7 +13,7 @@ export type FeedbackStandardSection = (typeof feedbackStandardSections)[number];
 export const feedbackCustomSection = z.object({
   id: z.string(),
   title: localeTranslation,
-  content: localeTranslation,
+  content: sanitizedLocaleTranslation,
 });
 export type FeedbackCustomSection = z.infer<typeof feedbackCustomSection>;
 export const feedbackSection = feedbackCustomSection.or(z.enum(feedbackStandardSections));
