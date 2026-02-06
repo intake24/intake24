@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { variants } from '../theme';
-import { localeTranslation } from '../types/common';
+import { localeTranslation, sanitizedLocaleTranslation } from '../types/common';
 
 export const layoutTypes = ['desktop', 'mobile'] as const;
 export type PromptLayout = (typeof layoutTypes)[number];
@@ -12,7 +12,7 @@ export const carousel = z.object({
   required: z.boolean(),
   slides: z.object({
     id: z.string(),
-    text: localeTranslation,
+    text: sanitizedLocaleTranslation,
     image: z.record(z.enum(layoutTypes), z.string().nullable()),
   }).array(),
 });
