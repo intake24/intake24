@@ -10,9 +10,9 @@ export const authentication = contract.router({
   emailLogin: {
     method: 'POST',
     path: '/auth/login',
-    headers: {
+    headers: z.object({
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    },
+    }),
     body: z.object({
       email: z.string().toLowerCase(),
       password: z.string(),
@@ -28,9 +28,9 @@ export const authentication = contract.router({
   aliasLogin: {
     method: 'POST',
     path: '/auth/login/alias',
-    headers: {
+    headers: z.object({
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    },
+    }),
     body: z.object({
       username: z.string(),
       password: z.string(),
@@ -46,9 +46,9 @@ export const authentication = contract.router({
   tokenLogin: {
     method: 'POST',
     path: '/auth/login/token',
-    headers: {
+    headers: z.object({
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    },
+    }),
     body: z.object({
       token: z.string(),
       captcha,
