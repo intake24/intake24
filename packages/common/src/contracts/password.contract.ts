@@ -11,9 +11,9 @@ export const password = contract.router({
   request: {
     method: 'POST',
     path: '/password',
-    headers: {
+    headers: z.object({
       'user-agent': z.string().optional().transform(val => sanitize(val)),
-    },
+    }),
     body: z.object({
       email: z.string().email().toLowerCase(),
       captcha,
