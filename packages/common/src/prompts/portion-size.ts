@@ -157,6 +157,11 @@ export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({
   type: 'portion-size',
   id: 'standard-portion-prompt',
   name: 'Standard portion',
+  linkedQuantity: {
+    auto: false,
+    parent: [],
+    source: [],
+  },
 });
 
 export const unknownPrompt: Prompts['unknown-prompt'] = copy({

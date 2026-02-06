@@ -1,4 +1,4 @@
-import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
+import type { LinkedQuantity, PortionSizeComponentType } from '@intake24/common/prompts';
 import type {
   SurveyState as CurrentSurveyState,
   CustomPromptAnswer,
@@ -202,12 +202,11 @@ export const useSurvey = defineStore('survey', {
           .map(item => item.component.replace('-prompt', '')) ?? []
       );
     },
-    linkedQuantity(): LinkedQuantity | undefined {
-      const prompt = this.foodPrompts.find(
-        (prompt): prompt is Prompts['guide-image-prompt'] => prompt.component === 'guide-image-prompt',
-      );
-
-      return prompt?.linkedQuantity;
+    linkedQuantity(): Record<string, LinkedQuantity | undefined> {
+      return this.foodPrompts.filter(prompt => 'linkedQuantity' in prompt).reduce((acc, prompt) => {
+        acc[prompt.component] = prompt.linkedQuantity;
+        return acc;
+      }, {} as Record<string, LinkedQuantity | undefined>);
     },
     recallDate: (state) => {
       if (state.data.recallDate)

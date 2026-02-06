@@ -10,6 +10,7 @@ export { default as FoodBrowserSettings } from './food-browser-settings.vue';
 export { default as FoodFilter } from './food-filter.vue';
 export { default as FoodSearchHints } from './food-search-hints.vue';
 export { default as ImageMapSettings } from './image-map-settings.vue';
+export { default as LinkedQuantity } from './linked-quantity.vue';
 export { default as PromptActions } from './prompt-actions.vue';
 export { default as PromptConditions } from './prompt-conditions.vue';
 export { default as PromptContent } from './prompt-content.vue';

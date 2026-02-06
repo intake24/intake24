@@ -9,7 +9,7 @@ import { useSurvey } from '@intake24/survey/stores';
 export type LinkedParent = {
   auto: boolean;
   categories: Prompts['guide-image-prompt']['linkedQuantity']['parent'];
-  food: EncodedFood;
+  quantity: number;
 };
 
 const parentFoodRequiredPSMs: PortionSizeMethodId[] = [
@@ -144,56 +144,35 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     return selectedFood.data.portionSizeMethods[selectedFood.portionSizeMethodIndex];
   });
 
-  function linkedQuantityCategories(data: UserFoodData) {
-    return survey.linkedQuantity?.parent.filter(cat => data.categories.includes(cat.code)) ?? [];
-  }
-
   function getLinkedParent(foodData: UserFoodData | undefined, parentFood: FoodState | undefined): LinkedParent | undefined {
-    if (!foodData || !parentFood)
+    if (!foodData || !parentFood || (parentFood.type !== 'encoded-food' && parentFood.type !== 'recipe-builder'))
       return undefined;
 
-    const source = foodData.categories.find(cat => survey.linkedQuantity?.source.includes(cat));
-    if (!source)
+    const lQ = survey.linkedQuantity;
+    if (!Object.keys(lQ).length)
       return undefined;
 
-    if (
-      parentFood.type === 'encoded-food'
-      && parentFood.portionSize?.method === 'guide-image'
-      && parentFood.portionSize.quantity > 1
-    ) {
-      return {
-        auto: !!survey.linkedQuantity?.auto,
-        categories: linkedQuantityCategories(parentFood.data),
-        food: parentFood,
-      };
-    }
+    const foods = parentFood.type === 'encoded-food' ? [parentFood] : parentFood.linkedFoods;
 
-    if (parentFood.type === 'recipe-builder') {
-      const food = parentFood.linkedFoods.find(
-        food =>
-          food.type === 'encoded-food'
-          && food.portionSize?.method === 'guide-image'
-          && food.portionSize.quantity > 1,
-      ) as EncodedFood | undefined;
+    const food = foods.find(food =>
+      food.type === 'encoded-food'
+      && food.portionSize
+      && 'quantity' in food.portionSize
+      && (food.portionSize.quantity ?? 0) > 1,
+    ) as EncodedFood | undefined;
 
-      if (food) {
-        return {
-          auto: !!survey.linkedQuantity?.auto,
-          categories: linkedQuantityCategories(food.data),
-          food,
-        };
-      }
-    }
+    if (!food?.portionSize)
+      return undefined;
 
-    return undefined;
-  }
+    const prompt = `${food.portionSize.method}-prompt`;
+    if (!lQ[prompt]?.source.some(cat => foodData.categories.includes(cat)))
+      return undefined;
 
-  function getLinkedParentQuantity(foodData: UserFoodData | undefined, parentFood: FoodState | undefined) {
-    const linkedParent = getLinkedParent(foodData, parentFood);
-
-    return linkedParent?.food.portionSize?.method === 'guide-image'
-      ? linkedParent.food.portionSize.quantity
-      : 1;
+    return {
+      auto: !!lQ[prompt].auto,
+      categories: lQ[prompt].parent.filter(cat => food.data.categories.includes(cat.code)) ?? [],
+      quantity: 'quantity' in food.portionSize ? (food.portionSize.quantity ?? 1) : 1,
+    };
   }
 
   function resolvePortionSize(foodData: UserFoodData, pathway: Pathway, parent?: FoodState) {
@@ -205,7 +184,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     const autoPsmIdx = portionSizeMethods.findIndex(psm => psm.defaultWeight !== null);
     const autoPsm = autoPsmIdx !== -1 ? portionSizeMethods.at(autoPsmIdx) : undefined;
     if (autoPsm?.defaultWeight) {
-      const linkedQuantity = getLinkedParentQuantity(foodData, parent);
+      const linkedQuantity = getLinkedParent(foodData, parent)?.quantity ?? 1;
       portionSizeMethodIndex = autoPsmIdx;
       portionSize = {
         method: 'direct-weight',
@@ -222,13 +201,11 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
       flags.push('portion-size-option-complete');
     }
 
-    console.log(`getLinkedParentQuantity`, getLinkedParentQuantity(foodData, parent));
-
     return { flags, portionSizeMethodIndex, portionSize };
   }
 
   const linkedParent = computed(() => getLinkedParent(encodedFoodOptional.value?.data, parentFoodOptional.value));
-  const linkedParentQuantity = computed(() => getLinkedParentQuantity(encodedFoodOptional.value?.data, parentFoodOptional.value));
+  const linkedParentQuantity = computed(() => linkedParent.value?.quantity ?? 1);
 
   const initializeRecipeComponents = (steps: number[]) =>
     steps.map(step => ({ ingredients: [], order: step }));

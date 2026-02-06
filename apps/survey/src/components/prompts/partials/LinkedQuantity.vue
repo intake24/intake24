@@ -85,11 +85,7 @@ const linkedQuantityUnit = computed(() => {
   });
 });
 
-const parentQuantity = computed(() =>
-  props.linkedParent.food?.portionSize?.method === 'guide-image'
-    ? props.linkedParent.food.portionSize.quantity
-    : 1,
-);
+const parentQuantity = computed(() => props.linkedParent.quantity ?? 1);
 
 function updateQuantity(value: number) {
   emit('update:modelValue', value);

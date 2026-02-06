@@ -2,6 +2,12 @@
   <v-tabs-window-item value="options">
     <v-row class="mb-3">
       <v-col cols="12" md="6">
+        <linked-quantity
+          :model-value="linkedQuantity"
+          @update:model-value="update('linkedQuantity', $event)"
+        />
+      </v-col>
+      <v-col cols="12" md="6">
         <v-switch
           hide-details="auto"
           :label="$t('survey-schemes.prompts.badges')"
@@ -13,27 +19,27 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { LinkedQuantity, useBasePrompt } from '../partials';
 
-import { basePrompt } from '../partials';
-
-export default defineComponent({
-  name: 'StandardPortionPrompt',
-
-  mixins: [basePrompt],
-
-  props: {
-    badges: {
-      type: Boolean as PropType<Prompts['standard-portion-prompt']['badges']>,
-      required: true,
-    },
+const props = defineProps({
+  badges: {
+    type: Boolean as PropType<Prompts['standard-portion-prompt']['badges']>,
+    required: true,
+  },
+  linkedQuantity: {
+    type: Object as PropType<Prompts['standard-portion-prompt']['linkedQuantity']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

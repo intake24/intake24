@@ -318,6 +318,7 @@ const recipeBuilderPrompt = basePortionPrompt.merge(foodBrowser).extend({
 
 const standardPortionPrompt = basePortionPrompt.extend({
   component: z.literal('standard-portion-prompt'),
+  linkedQuantity,
 });
 
 const unknownPrompt = basePortionPrompt.extend({
