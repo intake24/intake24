@@ -3,7 +3,7 @@ import type { PortionSizeMethodId } from '../surveys';
 import { z } from 'zod';
 
 import { barcodeScannerOptions } from '../barcodes';
-import { localeOptionList, localeTranslation } from '../types/common';
+import { localeOptionList, localeTranslation, sanitizedLocaleTranslation } from '../types/common';
 import { actions } from './actions';
 import { condition } from './conditions';
 import { externalSourceOptions } from './external-sources';
@@ -110,7 +110,7 @@ export const basePrompt = z.object({
   id: z.string().min(1).max(64),
   name: z.string().min(1).max(128),
   version: z.number(),
-  i18n: z.record(z.string(), localeTranslation),
+  i18n: z.record(z.string(), sanitizedLocaleTranslation),
   actions: actions.optional(),
   conditions: condition.array(),
   useGraph: z.boolean(),
