@@ -2,14 +2,14 @@ import { z } from 'zod';
 
 import { recordVisibilities } from '@intake24/common/security';
 
-import { requiredLocaleTranslation } from '../../common';
+import { requiredLocaleTranslation, sanitizedRequiredLocaleTranslation } from '../../common';
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';
 
 export const faqItem = z.object({
   id: z.string(),
   title: requiredLocaleTranslation,
-  content: requiredLocaleTranslation,
+  content: sanitizedRequiredLocaleTranslation,
 });
 export type FAQItem = z.infer<typeof faqItem>;
 

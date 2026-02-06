@@ -1,22 +1,18 @@
-function trimStrings(input: any) {
-  let output = input;
-
+export function trimStrings<T = string>(input: T): T {
   if (typeof input === 'string') {
     const chars = input.trim();
-    output = chars.length ? chars : null;
+    return (chars.length ? chars : null) as T;
   }
 
   if (Array.isArray(input))
-    output = input.map(item => trimStrings(item));
+    return input.map(item => trimStrings(item)) as T;
 
   if (Object.prototype.toString.call(input) === '[object Object]') {
-    output = Object.entries(input).reduce<any>((acc, [key, value]) => {
+    return Object.entries(input as Record<string, unknown>).reduce<any>((acc, [key, value]) => {
       acc[key] = trimStrings(value);
       return acc;
     }, {});
   }
 
-  return output;
+  return input;
 }
-
-export default trimStrings;
