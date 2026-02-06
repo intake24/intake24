@@ -125,7 +125,7 @@ export function food() {
           attributes: ['code'],
           where: { id: localeId },
         });
-        await uniqueMiddleware(body.code, { field: 'code', foodId, localeId: code });
+        await uniqueMiddleware(body.code, { field: 'code', localeId: code });
 
         if (input.localeId && localeId !== input.localeId) {
           const { code: inputLocaleCode } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list:edit', {

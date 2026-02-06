@@ -122,7 +122,7 @@ export function category() {
           attributes: ['code'],
           where: { id: localeId },
         });
-        await uniqueMiddleware(body.code, { field: 'code', categoryId, localeId: code });
+        await uniqueMiddleware(body.code, { field: 'code', localeId: code });
 
         const category = await adminCategoryService.copyCategory(code, categoryId, body);
 
