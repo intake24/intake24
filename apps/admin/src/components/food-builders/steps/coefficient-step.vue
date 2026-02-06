@@ -19,8 +19,8 @@
 <script lang="ts" setup>
 import { useVModel } from '@vueuse/core';
 
-import { LanguageSelector } from '../forms';
-import { OptionsList } from '../lists';
+import { LanguageSelector } from '../../forms';
+import { OptionsList } from '../../lists';
 import { createStepProps } from './step';
 
 const props = defineProps(createStepProps<'coefficient'>());

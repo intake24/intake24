@@ -3,10 +3,10 @@ import type {
   MissingFood,
   PortionSizeStates,
 } from '../surveys';
-import type {
-  RequiredLocaleTranslation,
-} from '../types';
-import type { FoodBuilder, FoodHeader, UserFoodData } from '../types/http';
+import type { FoodHeader, UserFoodData } from '../types/http';
+import type { CoefficientStep, ConditionStep, IngredientStep, LookupStep } from '../types/http/admin';
+import type { FoodBuilder } from '../types/http/foods/builders';
+import type { Condition } from './conditions';
 import type { AddonFood } from './prompts';
 
 export type AssociatedFoodPromptItem = {
@@ -36,21 +36,31 @@ export type SelectedFoodRecipeBuilderItemState = FoodHeader & {
   idx: number;
   ingredient: UserFoodData;
 };
+export type FoodRecipeBuilderItemState = MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
 
-export type FoodRecipeBuilderItemState
-  = | MissingFoodRecipeBuilderItemState
-    | SelectedFoodRecipeBuilderItemState;
+export type FoodBuilderCoefficientStepState = CoefficientStep & {
+  option: number | null;
+};
 
-export type RecipeBuilderStepState = {
+export type FoodBuilderConditionStepState = ConditionStep & {
+  option: Condition[] | null;
+};
+
+export type FoodBuilderIngredientStepState = IngredientStep & {
   confirmed?: 'yes' | 'no';
   anotherFoodConfirmed?: boolean;
   foods: FoodRecipeBuilderItemState[];
-  description: RequiredLocaleTranslation;
-  name: RequiredLocaleTranslation;
-  categoryCode: string;
-  multiple: boolean;
-  required: boolean;
 };
+
+export type FoodBuilderLookupStepState = LookupStep & {
+  option: string | null;
+};
+
+export type FoodBuilderStepState
+  = | FoodBuilderCoefficientStepState
+    | FoodBuilderConditionStepState
+    | FoodBuilderIngredientStepState
+    | FoodBuilderLookupStepState;
 
 export type PromptStates = {
   'as-served-prompt': {
@@ -85,7 +95,7 @@ export type PromptStates = {
   };
   'generic-builder-prompt': {
     builder: FoodBuilder;
-    steps: RecipeBuilderStepState[];
+    steps: FoodBuilderStepState[];
     activeStep: number;
   };
   'guide-image-prompt': {
@@ -138,9 +148,9 @@ export type PromptStates = {
     option: number | null;
   };
   'recipe-builder-prompt': {
-    recipe: FoodBuilder;
+    builder: FoodBuilder;
+    steps: FoodBuilderIngredientStepState[];
     activeStep: number;
-    recipeSteps: RecipeBuilderStepState[];
   };
   'standard-portion-prompt': {
     portionSize: PortionSizeStates['standard-portion'];

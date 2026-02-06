@@ -33,7 +33,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 
-import type { Prompt, RecipeBuilderStepState } from '@intake24/common/prompts';
+import type { FoodBuilderIngredientStepState, Prompt } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/surveys';
 
 import { computed, defineComponent } from 'vue';
@@ -45,7 +45,7 @@ export default defineComponent({
 
   props: {
     step: {
-      type: Object as PropType<RecipeBuilderStepState>,
+      type: Object as PropType<FoodBuilderIngredientStepState>,
       required: true,
     },
     show: {

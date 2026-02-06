@@ -38,8 +38,8 @@ import { computed } from 'vue';
 import { resources as resourcesList } from '@intake24/common/types/http/admin';
 import { useI18n } from '@intake24/ui';
 
-import { LanguageSelector } from '../forms';
-import { OptionsList } from '../lists';
+import { LanguageSelector } from '../../forms';
+import { OptionsList } from '../../lists';
 import { createStepProps } from './step';
 
 const props = defineProps(createStepProps<'lookup'>());

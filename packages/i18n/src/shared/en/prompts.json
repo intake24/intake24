@@ -533,6 +533,11 @@
     "barcode": "If you are completing this on a mobile phone, scan the barcode on the food package.",
     "portionSize": "How much did you eat? e.g. 1 pack, 2 teaspoons, 1 handful, 125 grams."
   },
+  "genericBuilder": {
+    "name": "{food} builder",
+    "text": "",
+    "description": "Follow the steps below to build your own {food}."
+  },
   "recipeBuilder": {
     "name": "{food} recipe builder",
     "text": "",

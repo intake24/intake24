@@ -73,7 +73,7 @@ function getFoodToReplace() {
           'missing-food-complete',
           'portion-size-method-complete',
           'portion-size-option-complete',
-          'recipe-builder-complete',
+          'food-builder-complete',
           'same-as-before-complete',
         ].includes(flag),
     ),

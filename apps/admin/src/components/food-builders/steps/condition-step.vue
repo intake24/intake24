@@ -24,8 +24,8 @@ import { useVModel } from '@vueuse/core';
 
 import { ConditionList } from '@intake24/admin/components/conditions';
 
-import { LanguageSelector } from '../forms';
-import { OptionsList } from '../lists';
+import { LanguageSelector } from '../../forms';
+import { OptionsList } from '../../lists';
 import { createStepProps } from './step';
 
 const props = defineProps(createStepProps<'condition'>());

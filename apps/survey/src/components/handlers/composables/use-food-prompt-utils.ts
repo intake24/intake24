@@ -30,10 +30,8 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     if (!food)
       return undefined;
 
-    if (food.type !== 'encoded-food' && food.type !== 'recipe-builder') {
-      console.log(food);
+    if (food.type !== 'encoded-food' && food.type !== 'recipe-builder')
       throw new Error('This selected food must be an encoded food or recipe builder');
-    }
 
     return food;
   });
@@ -91,16 +89,9 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     return food.value;
   });
 
-  const genericBuilder = computed(() => {
-    if (food.value.type !== 'generic-builder')
+  const foodBuilder = computed(() => {
+    if (food.value.type !== 'generic-builder' && food.value.type !== 'recipe-builder')
       throw new Error('This selected food must be an Generic Builder food');
-
-    return food.value;
-  });
-
-  const recipeBuilder = computed(() => {
-    if (food.value.type !== 'recipe-builder')
-      throw new Error('This selected food must be an Recipe Builder food');
 
     return food.value;
   });
@@ -235,7 +226,6 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     missingFood,
     portionSize,
     portionSizeMethods,
-    genericBuilder,
-    recipeBuilder,
+    foodBuilder,
   };
 }

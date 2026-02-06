@@ -1,7 +1,7 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="state.activeStep" :tile="$vuetify.display.mobile" @update:model-value="updateActiveStep">
-      <v-expansion-panel v-for="(step, index) in state.recipeSteps" :key="index">
+      <v-expansion-panel v-for="(step, index) in state.steps" :key="index">
         <v-expansion-panel-title>
           <div>
             <v-avatar class="me-2" color="primary" size="28">
@@ -91,7 +91,7 @@
       :class="{ 'mt-4': $vuetify.display.mobile }"
     />
     <template #actions>
-      <next :disabled="!isValid" @click="updateStepsIngredients" />
+      <next :disabled="!isValid" @click="action('next')" />
     </template>
   </base-layout>
 </template>
@@ -100,9 +100,9 @@
 import type { PropType } from 'vue';
 
 import type {
+  FoodBuilderIngredientStepState,
   MissingFoodRecipeBuilderItemState,
   PromptStates,
-  RecipeBuilderStepState,
   SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
 import type { RecipeBuilder } from '@intake24/common/surveys';
@@ -125,6 +125,7 @@ import { useI18n } from '@intake24/ui';
 import { BaseLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
+import { getNextStep, isStepValid } from './builder-steps/step';
 
 const props = defineProps({
   ...createBasePromptProps<'recipe-builder-prompt', RecipeBuilder>(),
@@ -141,34 +142,21 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'update:modelValue', 'addFood']);
+const emit = defineEmits(['action', 'update:modelValue']);
 
 const { translate } = useI18n();
 const { action } = usePromptUtils(props, { emit });
 
 const state = ref(copy(props.modelValue));
 
-function isStepValid(step: RecipeBuilderStepState): boolean {
-  const foodSelected = step.foods.length > 0;
-
-  if (step.required || step.confirmed === 'yes')
-    return step.multiple ? foodSelected && step.anotherFoodConfirmed === false : foodSelected;
-  else
-    return step.confirmed === 'no';
-}
-
-const allConfirmed = computed(() => state.value.recipeSteps.every(step => isStepValid(step)));
-const atLeastOneFoodSelected = computed(() => state.value.recipeSteps.some(step => step.foods.length > 0));
+const allConfirmed = computed(() => state.value.steps.every(step => isStepValid(step)));
+const atLeastOneFoodSelected = computed(() => state.value.steps.some(step => step.foods.length > 0));
 const isValid = computed(() => allConfirmed.value && atLeastOneFoodSelected.value);
 
-function getNextStep(steps: RecipeBuilderStepState[]) {
-  return steps.findIndex(step => !isStepValid(step));
-}
-
 function removeFood({ foodIndex, index }: { foodIndex: number; index: number }) {
-  const foodToRemove = state.value.recipeSteps[index].foods.splice(foodIndex, 1);
-  if (!state.value.recipeSteps[index].foods.length)
-    state.value.recipeSteps[index].confirmed = undefined;
+  const foodToRemove = state.value.steps[index].foods.splice(foodIndex, 1);
+  if (!state.value.steps[index].foods.length)
+    state.value.steps[index].confirmed = undefined;
 
   if (foodToRemove === undefined)
     return;
@@ -189,8 +177,8 @@ function foodMissing(index: number, searchTerm?: string | null) {
 
 function foodSkipped(index: number): void {
   state.value.activeStep = index + 1;
-  state.value.recipeSteps[index].confirmed = 'yes';
-  state.value.recipeSteps[index].anotherFoodConfirmed = undefined;
+  state.value.steps[index].confirmed = 'yes';
+  state.value.steps[index].anotherFoodConfirmed = undefined;
   update();
 };
 
@@ -200,7 +188,7 @@ async function onFoodSelected(
     | { type: 'missing'; searchTerm?: string | null },
   idx: number,
 ): Promise<void> {
-  const step = state.value.recipeSteps[idx];
+  const step = state.value.steps[idx];
   const id = getEntityId();
 
   let food: MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
@@ -228,23 +216,23 @@ async function onFoodSelected(
   const foods = step.foods.slice();
   foods.push(food);
 
-  const update: RecipeBuilderStepState = {
+  const update: FoodBuilderIngredientStepState = {
     ...step,
     foods,
     anotherFoodConfirmed: undefined,
   };
 
-  state.value.recipeSteps.splice(idx, 1, update);
+  state.value.steps.splice(idx, 1, update);
 
   updateActiveStep(idx);
   goToNextIfCan(idx);
 };
 
 function goToNextIfCan(index: number) {
-  if (!isStepValid(state.value.recipeSteps[index]))
+  if (!isStepValid(state.value.steps[index]))
     return;
 
-  state.value.activeStep = getNextStep(state.value.recipeSteps);
+  state.value.activeStep = getNextStep(state.value.steps);
 };
 
 function updateActiveStep(index: number) {
@@ -260,17 +248,7 @@ function onConfirmToggleIngredients(index: number) {
   goToNextIfCan(index);
 };
 
-function updateStepsIngredients() {
-  const chosenIngredients = state.value.recipeSteps
-  // Ignore optional steps that have been rejected even if they had
-  // initially been accepted and some foods were added
-    .filter(step => step.confirmed !== 'no')
-    .map(({ foods }) => foods)
-    .flat();
-  emit('addFood', chosenIngredients);
-};
-
-function showFoodBrowser(step: RecipeBuilderStepState): boolean {
+function showFoodBrowser(step: FoodBuilderIngredientStepState): boolean {
   if (step.required || step.confirmed === 'yes') {
     // Current step needs at least one food to be selected, and it hasn't
     if (step.foods.length === 0)

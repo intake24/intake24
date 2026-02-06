@@ -41,7 +41,7 @@
 <script lang="ts" setup>
 import { useVModel } from '@vueuse/core';
 
-import { SelectResource } from '../dialogs';
+import { SelectResource } from '../../dialogs';
 import { createStepProps } from './step';
 
 const props = defineProps(createStepProps<'ingredient'>());

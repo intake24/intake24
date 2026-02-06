@@ -108,11 +108,11 @@ export function missingFoodComplete(food: FoodState) {
 }
 
 export function recipeBuilderComplete(food: FoodState) {
-  return food.type === 'recipe-builder' && food.flags.includes('recipe-builder-complete');
+  return food.type === 'recipe-builder' && food.flags.includes('food-builder-complete');
 }
 
 export function genericBuilderComplete(food: FoodState) {
-  return food.type === 'generic-builder' && food.flags.includes('generic-builder-complete');
+  return food.type === 'generic-builder' && food.flags.includes('food-builder-complete');
 }
 
 export function foodComplete(food: FoodState) {

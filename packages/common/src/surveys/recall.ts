@@ -1,7 +1,8 @@
 import type { ExternalSource, PromptStates } from '../prompts';
 import type { FoodType } from '../types';
 import type { Optional } from '../types/common';
-import type { FoodBuilder, UserFoodData } from '../types/http';
+import type { UserFoodData } from '../types/http';
+import type { FoodBuilder } from '../types/http/foods';
 import type { PortionSizeStates } from './portion-size';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
@@ -48,7 +49,7 @@ export const staticFoodFlags = [
   'missing-food-complete',
   'portion-size-option-complete',
   'portion-size-method-complete',
-  'recipe-builder-complete',
+  'food-builder-complete',
   'associated-foods-complete',
   'disable-general-associated-foods',
 ] as const;
@@ -126,6 +127,7 @@ export interface GenericBuilder extends AbstractFoodState {
 
 export type FoodState = FreeTextFood | EncodedFood | MissingFood | RecipeBuilder | GenericBuilder;
 export type ParentFoodState = EncodedFood | RecipeBuilder | GenericBuilder;
+export type FoodBuilderState = RecipeBuilder | GenericBuilder;
 
 export const mealState = z.object({
   id: z.string(),
