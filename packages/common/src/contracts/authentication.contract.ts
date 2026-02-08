@@ -11,7 +11,10 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/auth/login',
     headers: z.object({
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .transform(val => sanitize(Array.isArray(val) ? val[0] : val)),
     }),
     body: z.object({
       email: z.string().toLowerCase(),
@@ -29,7 +32,10 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/auth/login/alias',
     headers: z.object({
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .transform(val => sanitize(Array.isArray(val) ? val[0] : val)),
     }),
     body: z.object({
       username: z.string(),
@@ -47,7 +53,10 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/auth/login/token',
     headers: z.object({
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .transform(val => sanitize(Array.isArray(val) ? val[0] : val)),
     }),
     body: z.object({
       token: z.string(),

@@ -20,7 +20,10 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/admin/auth/login',
     headers: z.object({
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .transform(val => sanitize(Array.isArray(val) ? val[0] : val)),
     }),
     body: z.object({
       email: z.string().toLowerCase(),
@@ -47,7 +50,10 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/admin/auth/duo',
     headers: z.object({
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .transform(val => sanitize(Array.isArray(val) ? val[0] : val)),
     }),
     body: duoAuthenticationVerificationRequest,
     responses: {
@@ -60,7 +66,10 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/admin/auth/fido',
     headers: z.object({
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .transform(val => sanitize(Array.isArray(val) ? val[0] : val)),
     }),
     body: fidoAuthenticationVerificationRequest,
     responses: {
@@ -73,7 +82,10 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/admin/auth/otp',
     headers: z.object({
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .transform(val => sanitize(Array.isArray(val) ? val[0] : val)),
     }),
     body: otpAuthenticationVerificationRequest,
     responses: {

@@ -118,7 +118,10 @@ export const surveyRespondent = contract.router({
     method: 'POST',
     path: '/surveys/:slug/submission',
     headers: z.object({
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .transform(val => sanitize(Array.isArray(val) ? val[0] : val)),
     }),
     query: z.object({ tzOffset }),
     body: z.object({ submission: surveyState }),
