@@ -303,6 +303,8 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
   isDisabled(): boolean {
     return !!this.disabledAt;
   }
+
+  declare static update: any;
 }
 
 export type UserAttributes = Attributes<User>;

@@ -101,6 +101,10 @@ export default class FAQ
     scope: { securable_type: 'FAQ' },
   })
   declare securables?: NonAttribute<UserSecurable[]>;
+
+  declare static create: any;
+
+  declare update: any;
 }
 
 export type FAQAttributes = Attributes<FAQ>;
