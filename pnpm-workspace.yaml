@@ -9,6 +9,7 @@ trustPolicyExclude:
 
 packages:
   - apps/**
+  - packages/**
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
