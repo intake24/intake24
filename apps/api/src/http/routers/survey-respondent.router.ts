@@ -263,7 +263,12 @@ export function surveyRespondent() {
     }) => {
       const { userId } = req.scope.cradle.user;
 
-      const followUpInfo = await req.scope.cradle.surveySubmissionService.submit(slug, userId, { ...submission, userAgent }, tzOffset);
+      const followUpInfo = await req.scope.cradle.surveySubmissionService.submit(
+        slug,
+        userId,
+        { ...submission, userAgent: Array.isArray(userAgent) ? userAgent[0] : userAgent },
+        tzOffset,
+      );
 
       return { status: 200, body: followUpInfo };
     },

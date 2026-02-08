@@ -20,7 +20,10 @@ export function authentication() {
     emailLogin: {
       middleware: [loginRateLimiter],
       handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-        const result = await req.scope.cradle.authenticationService.emailLogin(body, { req, userAgent });
+        const result = await req.scope.cradle.authenticationService.emailLogin(body, {
+          req,
+          userAgent: Array.isArray(userAgent) ? userAgent[0] : userAgent,
+        });
         if ('provider' in result)
           return { status: 200, body: result };
 
@@ -35,7 +38,10 @@ export function authentication() {
     aliasLogin: {
       middleware: [loginRateLimiter],
       handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-        const result = await req.scope.cradle.authenticationService.aliasLogin(body, { req, userAgent });
+        const result = await req.scope.cradle.authenticationService.aliasLogin(body, {
+          req,
+          userAgent: Array.isArray(userAgent) ? userAgent[0] : userAgent,
+        });
         if ('provider' in result)
           return { status: 200, body: result };
 
@@ -50,7 +56,10 @@ export function authentication() {
     tokenLogin: {
       middleware: [loginRateLimiter],
       handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-        const result = await req.scope.cradle.authenticationService.tokenLogin(body, { req, userAgent });
+        const result = await req.scope.cradle.authenticationService.tokenLogin(body, {
+          req,
+          userAgent: Array.isArray(userAgent) ? userAgent[0] : userAgent,
+        });
         if ('provider' in result)
           return { status: 200, body: result };
 

@@ -20,7 +20,10 @@ export function authentication() {
     login: {
       middleware: [loginRateLimiter],
       handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-        const result = await req.scope.cradle.authenticationService.adminLogin(body, { req, userAgent });
+        const result = await req.scope.cradle.authenticationService.adminLogin(body, {
+          req,
+          userAgent: Array.isArray(userAgent) ? userAgent[0] : userAgent,
+        });
         if ('devices' in result)
           return { status: 200, body: result };
 
@@ -39,7 +42,10 @@ export function authentication() {
       return { status: 200, body: result };
     },
     duo: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
+      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, {
+        req,
+        userAgent: Array.isArray(userAgent) ? userAgent[0] : userAgent,
+      });
 
       attachRefreshToken(
         refreshToken,
@@ -50,7 +56,10 @@ export function authentication() {
       return { status: 200, body: { accessToken } };
     },
     fido: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
+      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, {
+        req,
+        userAgent: Array.isArray(userAgent) ? userAgent[0] : userAgent,
+      });
 
       attachRefreshToken(
         refreshToken,
@@ -61,7 +70,10 @@ export function authentication() {
       return { status: 200, body: { accessToken } };
     },
     otp: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
+      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, {
+        req,
+        userAgent: Array.isArray(userAgent) ? userAgent[0] : userAgent,
+      });
 
       attachRefreshToken(
         refreshToken,
