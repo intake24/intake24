@@ -133,9 +133,7 @@ function fireGTMEvent(sectionTitle: string, questionId: string, questionTitle: s
   sendGtmEvent({
     event: 'selectFAQ',
     faq_section_title: sectionTitle,
-    // faq_question_id: questionId,
     faq_question_title: questionTitle,
-    // survey_id: props.surveyId,
   });
 }
 watch(dialog, (val) => {

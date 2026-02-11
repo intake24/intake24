@@ -46,7 +46,5 @@ export type GtmEventParams = {
   search_term_order?: number; // order of search term in the search history, e.g. 1 for first search term, 2 for second search term, etc.
   search_results_count?: number; // number of search results returned for the search term
   faq_section_title?: string; // title of the FAQ section
-  faq_question_id?: string; // id of the FAQ question
   faq_question_title?: string; // title of the FAQ question
-  survey_id?: string; // id of the survey
 };
