@@ -72,6 +72,10 @@
       "warningP3": "This feature is intended only for initialising new locales or fixing issues with existing frequency data.",
       "warningP4": "Double-check that you are in the correct locale before uploading the data."
     },
+    "LocaleCategories": {
+      "_": "Locale - Export categories",
+      "localeId": "Locale ID"
+    },
     "LocaleFoods": {
       "_": "Locale - Export foods",
       "localeId": "Locale ID"

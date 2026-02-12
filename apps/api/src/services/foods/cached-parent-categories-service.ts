@@ -93,12 +93,39 @@ function cachedParentCategoriesService({
     );
   }
 
+  async function getCategoryAllCategoryCodes(ops: string | { code: string; localeId: string }): Promise<string[]> {
+    let categoryId: string;
+
+    if (typeof ops !== 'string') {
+      const category = await Category.findOne({ where: ops, attributes: ['id', 'code', 'localeId'] });
+      if (!category)
+        return [];
+
+      categoryId = category.id;
+    }
+    else {
+      categoryId = ops;
+    }
+
+    return cache.remember<string[]>(
+      `category-all-category-codes:${categoryId}`,
+      cacheConfig.ttl,
+      async () => {
+        const id = await getCategoryAllCategories(categoryId);
+        const categories = await Category.findAll({ where: { id }, attributes: ['code'] });
+
+        return categories.map(category => category.code);
+      },
+    );
+  }
+
   return {
     getFoodParentCategories,
     getCategoryParentCategories,
     getFoodAllCategories,
     getFoodAllCategoryCodes,
     getCategoryAllCategories,
+    getCategoryAllCategoryCodes,
   };
 }
 
