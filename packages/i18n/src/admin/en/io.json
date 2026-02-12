@@ -105,12 +105,13 @@
     "invalidJsonSyntax": "Syntax error parsing JSON file: {message}",
     "excelRowsExceded": "Worksheet '{worksheetName}' exceeds the maximum allowed number of rows ({maxRows}). Please check the file for unused empty rows at the end of the worksheet.",
     "schemaError": "{path}: {errors}",
-    "unexpectedError": "Unexpected error",
-    "invalidZipFile": "Invalid or corrupted zip file",
-    "packageJsonNotFound": "package.json not found in the zip file",
+    "unexpectedError": "An unexpected error has occurred during package verification. Please contact support.",
+    "invalidZipFile": "Invalid or corrupted ZIP file",
+    "packageJsonNotFound": "package.json not found in the ZIP file",
     "packageJsonMalformed": "Malformed package.json",
     "importPermission": "Uploader lacks permission to import packages",
-    "albaneNoXlsxFiles": "No Excel (.xlsx) files found in the uploaded Albane package"
+    "albaneRequiredFileMissing": "The file is required but was not found in the uploaded ZIP",
+    "albaneRequiredFileWrongPath": "The file must be located at the root of the archive, but it was found at '{archivePath}'. Please repackage the ZIP file correctly and try again."
   },
   "importJob": {
     "invalidVerification": "A successful verification job is required before importing a package",

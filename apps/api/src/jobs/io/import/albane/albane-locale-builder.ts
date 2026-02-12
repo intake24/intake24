@@ -137,6 +137,31 @@ export class AlbaneLocaleBuilder {
     const startRow = (options?.range ?? 0) + 1; // exceljs is 1-indexed
 
     const stream = createReadStream(filePath);
+
+    // ExcelJS WorkbookReader doesn't propagate stream errors through its async
+    // iterator, so an unhandled 'error' event on the ReadStream crashes the
+    // node process.
+    //
+    // If we intercept the stream errors via the 'error' callback to prevent this,
+    // then the for await loop hangs indefinitely because it is still waiting for
+    // events on a dead stream.
+    //
+    // This workaround breaks the loop by injecting the error outcome into
+    // the iterator via Promise.race()
+    const streamError = new Promise<never>((_, reject) => {
+      stream.on('error', reject);
+    });
+
+    const injectStreamError = <T>(iterable: AsyncIterable<T>): AsyncIterable<T> => ({
+      [Symbol.asyncIterator]() {
+        const it = iterable[Symbol.asyncIterator]();
+        return {
+          next: () => Promise.race([it.next(), streamError]),
+          return: (value?: any) => it.return?.(value) ?? Promise.resolve({ done: true as const, value: undefined }),
+        };
+      },
+    });
+
     const workbookReader = new ExcelJS.stream.xlsx.WorkbookReader(stream, {});
 
     let headers: string[] | undefined;
@@ -159,88 +184,93 @@ export class AlbaneLocaleBuilder {
       dataStartRow = startRow + 1;
     }
 
-    for await (const worksheetReader of workbookReader) {
-      // Check if this is the worksheet we want
-      if (options?.sheetName) {
-        // WorksheetReader the name property, no idea how to access it in a type-safe way
-        const worksheet = worksheetReader as any;
-        if (worksheet.name !== options.sheetName) {
-          continue;
+    try {
+      for await (const worksheetReader of injectStreamError(workbookReader)) {
+        // Check if this is the worksheet we want
+        if (options?.sheetName) {
+          // WorksheetReader the name property, no idea how to access it in a type-safe way
+          const worksheet = worksheetReader as any;
+          if (worksheet.name !== options.sheetName) {
+            continue;
+          }
+          targetSheetFound = true;
         }
-        targetSheetFound = true;
-      }
-      else if (currentSheetIndex > 0) {
-        // We only want the first worksheet if no sheetName specified
-        break;
-      }
-      else {
-        targetSheetFound = true;
-      }
-
-      let currentRowNumber = 0;
-      let totalRowsProcessed = 0;
-
-      for await (const row of worksheetReader) {
-        totalRowsProcessed++;
-
-        // Safety check: abort if we exceed the maximum row limit
-        if (totalRowsProcessed > MAX_XLSX_ROWS) {
-          throw new PackageValidationFileErrors(
-            {
-              [relativePath]: [{
-                key: 'io.verification.excelRowsExceded',
-                params: {
-                  worksheetName: options?.sheetName ?? 'Sheet1',
-                  maxRows: MAX_XLSX_ROWS,
-                },
-              }],
-            },
-          );
+        else if (currentSheetIndex > 0) {
+          // We only want the first worksheet if no sheetName specified
+          break;
         }
-        currentRowNumber = row.number;
+        else {
+          targetSheetFound = true;
+        }
 
-        // Skip rows before startRow
-        if (currentRowNumber < startRow)
-          continue;
+        let currentRowNumber = 0;
+        let totalRowsProcessed = 0;
 
-        // Handle numeric header mode (no headers, use column indices)
-        if (typeof options?.header === 'number') {
-          const rowData: Record<number, string> = {};
-          row.eachCell({ includeEmpty: true }, (cell: ExcelJS.Cell, colNumber: number) => {
-            rowData[colNumber - 1] = cell.value?.toString() ?? '';
+        for await (const row of injectStreamError(worksheetReader)) {
+          totalRowsProcessed++;
+
+          // Safety check: abort if we exceed the maximum row limit
+          if (totalRowsProcessed > MAX_XLSX_ROWS) {
+            throw new PackageValidationFileErrors(
+              {
+                [relativePath]: [{
+                  key: 'io.verification.excelRowsExceded',
+                  params: {
+                    worksheetName: options?.sheetName ?? 'Sheet1',
+                    maxRows: MAX_XLSX_ROWS,
+                  },
+                }],
+              },
+            );
+          }
+          currentRowNumber = row.number;
+
+          // Skip rows before startRow
+          if (currentRowNumber < startRow)
+            continue;
+
+          // Handle numeric header mode (no headers, use column indices)
+          if (typeof options?.header === 'number') {
+            const rowData: Record<number, string> = {};
+            row.eachCell({ includeEmpty: true }, (cell: ExcelJS.Cell, colNumber: number) => {
+              rowData[colNumber - 1] = cell.value?.toString() ?? '';
+            });
+            results.push(rowData as T);
+            continue;
+          }
+
+          // Handle header row if we haven't read it yet
+          if (headers === undefined && currentRowNumber === startRow) {
+            headers = [];
+            row.eachCell({ includeEmpty: true }, (cell: ExcelJS.Cell, colNumber: number) => {
+              headers![colNumber - 1] = cell.value?.toString() ?? '';
+            });
+            continue;
+          }
+
+          // Skip if we're still waiting for headers or before data start
+          if (!headers || currentRowNumber < dataStartRow)
+            continue;
+
+          // Read data row
+          const rowData: Record<string, string> = {};
+          headers.forEach((header, colIndex) => {
+            const cell = row.getCell(colIndex + 1);
+            const value = cell.value;
+            rowData[header] = value?.toString() ?? '';
           });
           results.push(rowData as T);
-          continue;
         }
 
-        // Handle header row if we haven't read it yet
-        if (headers === undefined && currentRowNumber === startRow) {
-          headers = [];
-          row.eachCell({ includeEmpty: true }, (cell: ExcelJS.Cell, colNumber: number) => {
-            headers![colNumber - 1] = cell.value?.toString() ?? '';
-          });
-          continue;
-        }
+        currentSheetIndex++;
 
-        // Skip if we're still waiting for headers or before data start
-        if (!headers || currentRowNumber < dataStartRow)
-          continue;
-
-        // Read data row
-        const rowData: Record<string, string> = {};
-        headers.forEach((header, colIndex) => {
-          const cell = row.getCell(colIndex + 1);
-          const value = cell.value;
-          rowData[header] = value?.toString() ?? '';
-        });
-        results.push(rowData as T);
+        // If we found our target sheet, we can stop
+        if (options?.sheetName && targetSheetFound)
+          break;
       }
-
-      currentSheetIndex++;
-
-      // If we found our target sheet, we can stop
-      if (options?.sheetName && targetSheetFound)
-        break;
+    }
+    finally {
+      stream.destroy();
     }
 
     if (options?.sheetName && !targetSheetFound) {
