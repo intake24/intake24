@@ -145,6 +145,7 @@ export const textDirections = ['ltr', 'rtl'] as const;
 export type TextDirection = (typeof textDirections)[number];
 
 export const bigIntString = z.union([z.coerce.bigint().positive(), z.coerce.number().int().positive()]).pipe(z.coerce.string());
+export const booleanString = z.preprocess(val => val === true || val === 'true', z.boolean());
 export const safeIdentifier = z.string().min(1).regex(/^[\w-]*$/);
 
 const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
