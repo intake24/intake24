@@ -115,6 +115,7 @@
     },
     "PopularitySearchUpdateCounters": {
       "_": "Chercher - Mettre à jour les compteurs de popularité",
+      "localeCode": "Code de langue",
       "foodCodes": "Codes des aliments"
     },
     "ResourceExport": {
@@ -144,9 +145,27 @@
       "_": "Enquête - Carculer à nouveau les nutriments",
       "surveyId": "Identifiant de l'enquête",
       "alert": {
-        "1": "This job will recalculate nutrient values for all survey submissions.",
-        "2": "Depending on the number of submissions, this process may take a significant amount of time to complete."
-      }
+        "1": "Cette tâche recalculera les valeurs de nutriments pour toutes les soumissions d'enquête.",
+        "2": "Selon le nombre de soumissions, ce processus peut prendre un temps considérable pour se terminer."
+      },
+      "mode": "Mode de recalcul",
+      "modeOptions": {
+        "none": "Aucun",
+        "noneDescription": "Ignorer le recalcul (aucune modification)",
+        "valuesOnly": "Valeurs uniquement (Par défaut)",
+        "valuesOnlyDescription": "Recalculer les valeurs de nutriments existantes en utilisant les codes de tableaux de nutriments stockés",
+        "valuesAndCodes": "Valeurs et codes de nutriments",
+        "valuesAndCodesDescription": "Mettre à jour les codes de nutriments avec les mappages alimentaires actuels et recalculer les valeurs"
+      },
+      "syncFields": "Synchroniser les variables et domaines de nutriments",
+      "syncFieldsDescription": "Ajouter les nouveaux nutriments/domaines, supprimer les supprimés et mettre à jour toutes les valeurs. Sans cela, seules les valeurs existantes sont mises à jour.",
+      "mappingChangesTitle": "Important: Modifications du mapping",
+      "mappingChangesDescription": "Cela mettra à jour les données soumises en utilisant les nouveaux codes de nutriments du NDB. Cela peut affecter:",
+      "mappingChangesImpact": {
+        "historicalData": "Comparabilité des données historiques",
+        "exportedDatasets": "Ensembles de données précédemment exportés"
+      },
+      "mappingChangesWarning": "Envisagez de sauvegarder les données avant de continuer."
     },
     "SurveyRatingsExport": {
       "_": "Survey - Ratings export"

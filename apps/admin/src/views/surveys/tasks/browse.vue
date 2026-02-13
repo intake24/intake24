@@ -41,11 +41,15 @@ export default defineComponent({
         startDate: entry.value.startDate,
         endDate: entry.value.endDate,
       },
-      SurveyNutrientsRecalculation: { surveyId: props.id },
+      SurveyNutrientsRecalculation: {
+        surveyId: props.id,
+        mode: 'values-only',
+        syncFields: false,
+      },
       SurveyRatingsExport: { surveyId: props.id },
       SurveyRespondentsImport: { surveyId: props.id, file: '' },
       SurveySessionsExport: { surveyId: props.id },
-    }));
+    }) as unknown as Pick<JobParams, SurveyJob>); // Type assertion as suggested by TypeScript error message
 
     const alerts = {
       SurveyNutrientsRecalculation: { type: 'warning' as const, lines: 2 },
