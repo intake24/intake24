@@ -12,13 +12,71 @@
             resource="surveys"
           />
         </v-col>
+        <v-col cols="12">
+          <v-select
+            v-model="params.mode"
+            :error-messages="errors.get('params.mode')"
+            hide-details="auto"
+            item-title="text"
+            item-value="value"
+            :items="modeOptions"
+            label="Recalculation mode"
+            name="mode"
+            variant="outlined"
+          >
+            <template #item="{ item, props }">
+              <v-list-item v-bind="props">
+                <template #subtitle>
+                  <div class="text-caption">
+                    {{ item.raw.description }}
+                  </div>
+                </template>
+              </v-list-item>
+            </template>
+          </v-select>
+        </v-col>
+        <v-col v-if="params.mode !== 'none' && params.mode !== 'full'" cols="12">
+          <v-checkbox
+            v-model="params.syncFields"
+            :error-messages="errors.get('params.syncFields')"
+            hide-details="auto"
+          >
+            <template #label>
+              <div>
+                <div>Sync nutrient table fields</div>
+                <div class="text-caption text-medium-emphasis">
+                  Add new fields from updated nutrient tables and remove obsolete fields
+                </div>
+              </div>
+            </template>
+          </v-checkbox>
+        </v-col>
       </v-row>
+
+      <v-alert
+        v-if="params.mode === 'values-and-codes' || params.mode === 'full'"
+        class="mt-4"
+        color="warning"
+        variant="tonal"
+      >
+        <v-alert-title>Important: Data Changes</v-alert-title>
+        <div class="text-body-2">
+          This will update nutrient composition codes in submitted data. This may affect:
+          <ul class="mt-2">
+            <li>Historical data comparability</li>
+            <li>Audit trails and data provenance</li>
+            <li>Previously exported datasets</li>
+          </ul>
+          Consider backing up data before proceeding.
+        </div>
+      </v-alert>
     </v-card-text>
   </div>
 </template>
 
 <script lang="ts">
 import type { JobParams } from '@intake24/common/types';
+import type { RecalculationMode } from '@intake24/common/types/jobs';
 
 import { defineComponent } from 'vue';
 
@@ -32,6 +90,33 @@ export default defineComponent({
   components: { SelectResource },
 
   mixins: [jobParams<JobParams['SurveyNutrientsRecalculation']>()],
+
+  data() {
+    return {
+      modeOptions: [
+        {
+          value: 'none' as RecalculationMode,
+          text: 'None',
+          description: 'Skip recalculation (no changes)',
+        },
+        {
+          value: 'values-only' as RecalculationMode,
+          text: 'Values only (Default)',
+          description: 'Update nutrient values and fields using existing nutrient table codes',
+        },
+        {
+          value: 'values-and-codes' as RecalculationMode,
+          text: 'Values and nutrient codes',
+          description: 'Update nutrient values AND use current food-to-nutrient mappings',
+        },
+        {
+          value: 'full' as RecalculationMode,
+          text: 'Full recalculation',
+          description: 'Update everything: food names, nutrient codes, values, and sync all fields',
+        },
+      ],
+    };
+  },
 });
 </script>
 
