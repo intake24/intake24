@@ -40,7 +40,7 @@ export const FeedbackSchemesSync = z.record(z.string(), z.never());
 export const LanguageTranslationsSync = z.record(z.string(), z.never());
 export const LocaleIndexBuild = z.object({
   force: z.boolean().optional(),
-});
+}).strict();
 
 export const localeCopyFoodsSubTasks = ['categories', 'foods', 'associatedFoods', 'attributes', 'brands', 'recipeFoods', 'splitLists', 'splitWords', 'synonymSets'] as const;
 export type LocaleCopyFoodsSubTasks = (typeof localeCopyFoodsSubTasks)[number];
