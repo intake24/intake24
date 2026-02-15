@@ -127,11 +127,10 @@ const { action, type } = usePromptUtils(props, { emit });
 const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'standard-portion'>(props);
 const { foodName } = useFoodUtils(props);
 const {
-  resolveStandardUnits,
   getStandardUnitEstimateIn,
   getStandardUnitHowMany,
   standardUnitsLoaded,
-} = useStandardUnits();
+} = useStandardUnits({ units: computed(() => parameters.value.units) });
 
 const state = ref(copy(props.modelValue));
 
@@ -150,10 +149,6 @@ const isValid = computed(() => validConditions.value.every(condition => conditio
 const { updatePanel } = usePanel(state, validConditions);
 
 onMounted(async () => {
-  const names = parameters.value.units.filter(unit => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined).map(({ name }) => name);
-
-  await resolveStandardUnits(names);
-
   if (!state.value.portionSize.unit && parameters.value.units.length === 1) {
     state.value.portionSize.unit = parameters.value.units[0];
     selectMethod();

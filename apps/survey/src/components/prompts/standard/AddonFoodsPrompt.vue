@@ -135,7 +135,6 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { translate } = useI18n();
 const { action, getMealTime, translatePrompt } = usePromptUtils(props, { emit });
-const { resolveStandardUnits, getStandardUnitEstimateIn } = useStandardUnits();
 
 const promptI18n = computed(() =>
   translatePrompt([
@@ -164,6 +163,16 @@ const addonFoodUnits = computed(() => Object.values(addonFoods.value).flat().red
 
   return acc;
 }, {}));
+
+const units = computed(() => [
+  ...new Set(
+    Object.values(addonFoodUnits.value)
+      .map(({ units }) => units)
+      .flat()
+      .filter(({ inlineEstimateIn }) => !inlineEstimateIn),
+  ),
+]);
+const { getStandardUnitEstimateIn } = useStandardUnits({ units });
 
 function isAddonFoodValid(food: PromptStates['addon-foods-prompt']['foods'][string][number]) {
   const unitValid = (food.portionSize.unit && food.portionSize.quantity > 0)
@@ -243,18 +252,6 @@ function updateQuantity(foodId: string, idx: number) {
 
 onMounted(async () => {
   await getAddonFoods();
-
-  const names = [
-    ...new Set(
-      Object.values(addonFoodUnits.value)
-        .map(({ units }) => units)
-        .flat()
-        .filter(({ inlineEstimateIn }) => !inlineEstimateIn)
-        .map(({ name }) => name),
-    ),
-  ];
-
-  await resolveStandardUnits(names);
 });
 </script>
 

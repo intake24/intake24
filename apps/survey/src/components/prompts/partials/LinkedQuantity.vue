@@ -36,7 +36,7 @@ import type { LinkedParent } from '../../handlers/composables';
 import type { Prompt } from '@intake24/common/prompts';
 import type { EncodedFood, MissingFood } from '@intake24/common/surveys';
 
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 
 import { round } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
@@ -72,17 +72,14 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'update:confirmed']);
 
 const { foodName } = useFoodUtils(props);
-const { i18n: { t }, translate } = useI18n();
-const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
+const { i18n: { t } } = useI18n();
+
+const units = computed(() => props.linkedParent.categories.map(({ unit }) => unit).filter(Boolean) as string[]);
+const { getStandardUnitHowMany } = useStandardUnits({ units });
 
 const linkedQuantityUnit = computed(() => {
-  const unit = props.linkedParent.categories[0]?.unit;
-  if (!unit || !standardUnitRefs.value[unit])
-    return t('prompts.linkedAmount.unit');
-
-  return translate(standardUnitRefs.value[unit].howMany, {
-    path: 'prompts.linkedAmount.unit',
-  });
+  const unit = props.linkedParent.categories.at(0)?.unit;
+  return unit ? getStandardUnitHowMany(unit) : t('prompts.linkedAmount.unit');
 });
 
 const parentQuantity = computed(() => props.linkedParent.quantity ?? 1);
@@ -94,14 +91,6 @@ function updateQuantity(value: number) {
 function updateConfirmed(value: boolean) {
   emit('update:confirmed', value);
 }
-
-onMounted(async () => {
-  if (!props.linkedParent.categories.length)
-    return;
-
-  const names = props.linkedParent.categories.map(({ unit }) => unit).filter(Boolean) as string[];
-  await resolveStandardUnits(names);
-});
 </script>
 
 <style lang="scss" scoped></style>

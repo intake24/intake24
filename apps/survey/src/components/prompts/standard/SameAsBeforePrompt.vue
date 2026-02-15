@@ -189,7 +189,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type { EncodedFood } from '@intake24/common/surveys';
+import type { EncodedFood, StandardUnit } from '@intake24/common/surveys';
 import type { SameAsBeforeItem } from '@intake24/survey/stores';
 
 import { computed, onMounted, ref } from 'vue';
@@ -216,7 +216,24 @@ const emit = defineEmits(['action', 'update:modelValue', 'update:sabOptions']);
 const sabOptions = ref<Record<string, any>>({});
 const { i18n: { t, locale }, translate } = useI18n();
 const { action, translatePrompt, type } = usePromptUtils(props, { emit });
-const { standardUnitRefs, resolveStandardUnits } = useStandardUnits();
+
+const units = computed(() => [props.sabFood.food, ...props.sabFood.food.linkedFoods].reduce<StandardUnit[]>(
+  (acc, food) => {
+    if (
+      food.type !== 'encoded-food'
+      || !food.portionSize
+      || food.portionSize?.method !== 'standard-portion'
+      || !food.portionSize.unit
+    ) {
+      return acc;
+    }
+
+    acc.push(food.portionSize.unit);
+    return acc;
+  },
+  [],
+));
+const { getStandardUnitEstimateIn } = useStandardUnits({ units });
 const survey = useSurvey();
 const showSABcard = ref(survey.foodPrompts.find(item => item.component === 'same-as-before-prompt')?.skipToSAB === true);
 const isDrink = computed(() => props.sabFood.food.data.categories.includes('DRNK'));
@@ -254,14 +271,8 @@ function getUnit(food: EncodedFood) {
     case 'milk-in-a-hot-drink':
       return '%';
     case 'standard-portion':
-      if (food.portionSize.unit) {
-        if (food.portionSize.unit.inlineEstimateIn)
-          return `g (${food.portionSize.unit.inlineEstimateIn})`;
-
-        const unit = standardUnitRefs.value[food.portionSize.unit.name]?.estimateIn;
-        if (unit)
-          return `g (${translate(unit)})`;
-      }
+      if (food.portionSize.unit)
+        return `g (${getStandardUnitEstimateIn(food.portionSize.unit)})`;
   }
 
   return 'g';
@@ -347,24 +358,6 @@ const promptI18n = computed(() => ({
 }));
 
 onMounted(async () => {
-  const names = [props.sabFood.food, ...props.sabFood.food.linkedFoods].reduce<string[]>(
-    (acc, food) => {
-      if (
-        food.type !== 'encoded-food'
-        || !food.portionSize
-        || food.portionSize?.method !== 'standard-portion'
-        || !food.portionSize.unit
-      ) {
-        return acc;
-      }
-
-      acc.push(food.portionSize.unit.name);
-      return acc;
-    },
-    [],
-  );
-
-  await resolveStandardUnits(names);
   // Set default values for sabOptions
   sabOptions.value = {
     portionSize: true,

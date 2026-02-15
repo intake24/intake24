@@ -5,7 +5,7 @@
     color="grey-lighten-5"
   >
     <v-chip
-      v-for="(unit, index) in standardUnits"
+      v-for="(unit, index) in units"
       :key="unit.name"
       class="px-6 font-weight-medium"
       color="primary"
@@ -23,91 +23,74 @@
   </v-sheet>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import { useStandardUnits } from '../../partials';
 
-export default defineComponent({
-  name: 'PortionStandardUnits',
+defineOptions({ name: 'PortionStandardUnits' });
 
-  props: {
-    max: {
-      type: Number,
-      default: 4,
-    },
-    method: {
-      type: Object as PropType<UserPortionSizeMethod>,
-      required: true,
-    },
-    timer: {
-      type: Number,
-    },
+const props = defineProps({
+  max: {
+    type: Number,
+    default: 4,
   },
-
-  setup(props) {
-    const { getStandardUnitEstimateIn, resolveStandardUnits, standardUnitsLoaded } = useStandardUnits();
-
-    const interval = ref<undefined | number>(undefined);
-    const selectedIndex = ref<undefined | number>(props.timer ? 0 : undefined);
-
-    const standardUnits = computed(() => {
-      return ('units' in props.method.parameters ? props.method.parameters.units : []).slice(
-        0,
-        props.max,
-      );
-    });
-
-    const selectNextStandardUnit = () => {
-      if (typeof selectedIndex.value === 'undefined')
-        return;
-
-      selectedIndex.value = (selectedIndex.value + 1) % standardUnits.value.length;
-    };
-
-    const startTimer = () => {
-      if (!props.timer)
-        return;
-
-      // @ts-expect-error - node types
-      interval.value = setInterval(() => {
-        selectNextStandardUnit();
-      }, props.timer);
-    };
-
-    const clearTimer = () => {
-      clearInterval(interval.value);
-    };
-
-    onMounted(async () => {
-      if (!standardUnits.value.length)
-        return;
-
-      const names = standardUnits.value
-        .filter(unit => unit.inlineEstimateIn === undefined)
-        .map(unit => unit.name);
-
-      await resolveStandardUnits(names);
-
-      selectNextStandardUnit();
-      startTimer();
-    });
-
-    onBeforeUnmount(() => {
-      clearTimer();
-    });
-
-    return {
-      getStandardUnitEstimateIn,
-      selectedIndex,
-      standardUnits,
-      standardUnitsLoaded,
-    };
+  method: {
+    type: Object as PropType<UserPortionSizeMethod>,
+    required: true,
   },
+  timer: {
+    type: Number,
+  },
+});
+
+const units = computed(() => {
+  return ('units' in props.method.parameters ? props.method.parameters.units : []).slice(
+    0,
+    props.max,
+  );
+});
+
+const { getStandardUnitEstimateIn, standardUnitsLoaded } = useStandardUnits({ units });
+
+const interval = ref<undefined | number>(undefined);
+const selectedIndex = ref<undefined | number>(props.timer ? 0 : undefined);
+
+function selectNextStandardUnit() {
+  if (typeof selectedIndex.value === 'undefined')
+    return;
+
+  selectedIndex.value = (selectedIndex.value + 1) % units.value.length;
+}
+
+function startTimer() {
+  if (!props.timer)
+    return;
+
+  // @ts-expect-error - node types
+  interval.value = setInterval(() => {
+    selectNextStandardUnit();
+  }, props.timer);
+}
+
+function clearTimer() {
+  clearInterval(interval.value);
+}
+
+onMounted(async () => {
+  if (!units.value.length)
+    return;
+
+  selectNextStandardUnit();
+  startTimer();
+});
+
+onBeforeUnmount(() => {
+  clearTimer();
 });
 </script>
 

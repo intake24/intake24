@@ -1,57 +1,46 @@
-import type { StandardUnit } from '@intake24/common/surveys';
-import type { RequiredLocaleTranslation } from '@intake24/common/types';
-import type { StandardUnitResponse } from '@intake24/common/types/http';
+import type { MaybeRefOrGetter } from 'vue';
 
-import { computed, ref } from 'vue';
+import type { StandardUnitDef } from '@intake24/survey/stores';
 
-import { useHttp, useI18n } from '@intake24/ui';
+import { computed, onMounted, toRef, watch } from 'vue';
 
-export type StandardUnitRefs = Record<
-  string,
-  { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
->;
+import { useStandardUnits as useStandardUnitsStore } from '@intake24/survey/stores';
 
-export function useStandardUnits() {
-  const http = useHttp();
-  const { translate } = useI18n();
+export type UseStandardUnitsProps = {
+  units: MaybeRefOrGetter<(string | StandardUnitDef)[]>;
+};
 
-  const standardUnitRefs = ref<StandardUnitRefs>({});
-  const usingStandardTranslations = ref(true);
+export function useStandardUnits(props: UseStandardUnitsProps) {
+  const units = toRef(props.units);
 
-  const standardUnitsLoaded = computed(() => usingStandardTranslations.value ? !!Object.keys(standardUnitRefs.value).length : true);
-
-  function getStandardUnitHowMany(item: StandardUnit) {
-    return translate(item.inlineHowMany ?? standardUnitRefs.value[item.name]?.howMany ?? item.name);
-  };
-
-  function getStandardUnitEstimateIn(item: StandardUnit) {
-    return translate(item.inlineEstimateIn ?? standardUnitRefs.value[item.name]?.estimateIn ?? item.name);
-  };
-
-  async function resolveStandardUnits(names: string[]) {
-    if (!names.length) {
-      usingStandardTranslations.value = false;
-      return;
-    }
-
-    const { data } = await http.get<StandardUnitResponse[]>('portion-sizes/standard-units', {
-      params: { id: names },
-    });
-
-    standardUnitRefs.value = data.reduce<StandardUnitRefs>((acc, unit) => {
-      const { id, estimateIn, howMany } = unit;
-
-      acc[id] = { estimateIn, howMany };
-
-      return acc;
-    }, {});
-  };
-
-  return {
-    resolveStandardUnits,
+  const {
+    getStandardUnit,
+    getStandardUnits,
     getStandardUnitHowMany,
     getStandardUnitEstimateIn,
-    standardUnitRefs,
+    resolveStandardUnits,
+  } = useStandardUnitsStore();
+
+  const standardUnitsLoaded = computed(() => {
+    const names = units.value.map(unit => typeof unit === 'string' ? unit : unit.name);
+    const loaded = getStandardUnits(names);
+    return Object.keys(loaded).length === names.length;
+  });
+
+  watch(units, async (val) => {
+    await resolveStandardUnits(val);
+  });
+
+  onMounted(async () => {
+    await resolveStandardUnits(units.value);
+  });
+
+  return {
+    getStandardUnit,
+    getStandardUnits,
+    getStandardUnitHowMany,
+    getStandardUnitEstimateIn,
+    resolveStandardUnits,
     standardUnitsLoaded,
   };
 }
