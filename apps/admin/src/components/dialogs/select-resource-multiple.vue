@@ -107,7 +107,7 @@
                     @update:model-value="toggleSelection(item)"
                   />
                 </v-list-item-action>
-                <v-icon>{{ itemIcon }}</v-icon>
+                <v-icon :icon="`$${resource}`" />
               </template>
 
               <slot name="item" v-bind="{ item }">
@@ -149,10 +149,9 @@ import type { PropType } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
 
-import { computed, ref, watch } from 'vue';
+import { computed, ref, toRefs, watch } from 'vue';
 
 import { useFetchList } from '@intake24/admin/composables';
-import { getResource } from '@intake24/admin/router/resources';
 import { copy } from '@intake24/common/util';
 
 defineOptions({
@@ -181,12 +180,9 @@ const emit = defineEmits(['clear', 'update:modelValue']);
 
 const tempSelected = ref<Dictionary[]>([]);
 
-const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>({
-  query: props.query,
-  url: `/admin/references/${props.resource}`,
-});
-
-const itemIcon = computed(() => getResource(props.resource)?.icon ?? 'fas fa-list');
+const { query } = toRefs(props);
+const url = computed(() => `/admin/references/${props.resource}`);
+const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>({ query, url });
 
 function isSelected(item: Dictionary): boolean {
   return tempSelected.value.findIndex(i => i[props.itemId] === item[props.itemId]) > -1;

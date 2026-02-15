@@ -1,21 +1,26 @@
-import type { Ref } from 'vue';
+import type { MaybeRefOrGetter, Ref } from 'vue';
 
+import type { Dictionary } from '@intake24/common/types';
 import type { Pagination } from '@intake24/common/types/http';
 
 import { watchDebounced } from '@vueuse/core';
-import { computed, ref, unref, watch } from 'vue';
+import { computed, ref, toRef, watch } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
 
 export type UseFetchListProps = {
-  url: string;
-  id?: string | Ref<string>;
-  query?: Record<string, any>;
+  url: MaybeRefOrGetter<string>;
+  id?: MaybeRefOrGetter<string>;
+  query?: MaybeRefOrGetter<Dictionary>;
 };
 
 export function useFetchList<T = any>(props: UseFetchListProps) {
+  const id = toRef(props.id);
+  const url = toRef(props.url);
+  const query = toRef(props.query);
+
   const http = useHttp();
-  const apiUrl = computed(() => (props.id ? props.url.replace(':id', unref(props.id)) : props.url));
+  const apiUrl = computed(() => (id.value ? url.value.replace(':id', id.value) : url.value));
 
   const dialog = ref(false);
   const loading = ref(false);
@@ -33,7 +38,7 @@ export function useFetchList<T = any>(props: UseFetchListProps) {
       const {
         data: { data, meta },
       } = await http.get<Pagination<T>>(apiUrl.value, {
-        params: { ...props.query, search: search.value, page: page.value, limit: 6 },
+        params: { ...(query?.value ?? {}), search: search.value, page: page.value, limit: 6 },
       });
 
       items.value = data;
@@ -44,13 +49,17 @@ export function useFetchList<T = any>(props: UseFetchListProps) {
     }
   };
 
-  const get = async (search: string) => {
+  const get = async (id: string | string[]) => {
     loading.value = true;
 
     try {
-      const { data: { data } } = await http.get<Pagination<T>>(apiUrl.value, { params: { ...props.query, search, page: 1, limit: 6 } });
+      const results = await Promise.all(
+        (Array.isArray(id) ? id : [id]).map(search =>
+          http.get<Pagination<T>>(apiUrl.value, { params: { ...query.value, search, page: 1, limit: 6 } }),
+        ),
+      );
 
-      return data;
+      return results.flatMap(({ data: { data } }) => data);
     }
     finally {
       loading.value = false;
