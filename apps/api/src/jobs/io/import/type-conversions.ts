@@ -33,9 +33,7 @@ function groupParameters<
     }
   }
 
-  if (Object.keys(parameters).length > 0) {
-    result.parameters = parameters;
-  }
+  result.parameters = parameters;
 
   return result as WithParameters<T, K>;
 }

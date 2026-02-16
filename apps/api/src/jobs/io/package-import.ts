@@ -199,6 +199,6 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
       });
     });
 
-    await this.job.updateProgress(100);
+    await this.job.updateProgress(1);
   }
 }

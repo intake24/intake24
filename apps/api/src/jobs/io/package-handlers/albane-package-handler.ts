@@ -17,39 +17,7 @@ import { unzipFile } from '../../../util/files';
 import { AlbaneLocaleBuilder } from '../import/albane/albane-locale-builder';
 import { getVerifiedOutputPath } from '../import/utils';
 import { PackageValidationFileErrors } from './types';
-
-function getFileValidationErrorMessages(error: unknown): FileValidationErrorMessage[] {
-  if (error instanceof SyntaxError) {
-    return [{
-      key: 'io.verification.invalidJsonSyntax',
-      params: {
-        message: error.message,
-      },
-    }];
-  }
-  else if (error instanceof LocalisableError) {
-    return [error.details];
-  }
-  else if (error instanceof AggregateError) {
-    return error.errors.flatMap(getFileValidationErrorMessages);
-  }
-  else if (error instanceof Error) {
-    return [{
-      key: 'io.verification.unexpectedError',
-      params: {
-        message: error.message,
-      },
-    }];
-  }
-  else {
-    return [{
-      key: 'io.verification.unexpectedError',
-      params: {
-        message: String(error),
-      },
-    }];
-  }
-}
+import { getFileValidationErrorMessages, validateJsonFiles } from './validate-json-files';
 
 export class AlbanePackageHandler implements PackageHandler {
   private readonly context: PackageHandlerContext;
@@ -75,11 +43,10 @@ export class AlbanePackageHandler implements PackageHandler {
       throw new PackageValidationFileErrors({ _uploadedFile: getFileValidationErrorMessages(err) });
     }
 
-    let conversionResult: AlbaneConversionResult;
+    let convertedPath: string;
     try {
-      const result = await this.convertPackage(albaneExtractedPath, uploadDir, fileId, logger);
-      conversionResult = result.conversionResult;
-      this.convertedPackagePath = result.convertedPackagePath;
+      convertedPath = await this.convertPackage(albaneExtractedPath, uploadDir, fileId, logger);
+      this.convertedPackagePath = convertedPath;
     }
     catch (err) {
       if (err instanceof PackageValidationFileErrors) {
@@ -94,22 +61,35 @@ export class AlbanePackageHandler implements PackageHandler {
       }
     }
 
-    // Build summary directly from conversion result - no need to validate JSON files
-    // since the output is correct by construction
-    const targetLocales = Object.keys(conversionResult.foods);
+    // This *should* be guaranteed by the type system, but validation is not very expensive so we'll just do it anyway
+    const packageContents = await validateJsonFiles(convertedPath);
+
+    const targetLocales = new Set<string>();
+
+    if (packageContents.locales) {
+      packageContents.locales.forEach(locale => targetLocales.add(locale.id));
+    }
+
+    if (packageContents.foods) {
+      Object.keys(packageContents.foods).forEach(locale => targetLocales.add(locale));
+    }
+
+    if (packageContents.categories) {
+      Object.keys(packageContents.categories).forEach(locale => targetLocales.add(locale));
+    }
 
     return {
-      extractedPath: this.convertedPackagePath,
+      extractedPath: convertedPath,
       summary: {
-        targetLocales,
+        targetLocales: [...targetLocales],
         files: {
-          locales: conversionResult.locales.length > 0,
-          foods: Object.keys(conversionResult.foods).length > 0,
-          categories: Object.keys(conversionResult.categories).length > 0,
-          asServedSets: (conversionResult.asServedSets?.length ?? 0) > 0,
-          imageMaps: false,
-          guideImages: false,
-          drinkwareSets: false,
+          locales: !!packageContents.locales,
+          foods: !!packageContents.foods,
+          categories: !!packageContents.categories,
+          asServedSets: !!packageContents.asServedSets,
+          imageMaps: !!packageContents.imageMaps,
+          guideImages: !!packageContents.guideImages,
+          drinkwareSets: !!packageContents.drinkwareSets,
           nutrientTables: false,
         },
       },
@@ -195,7 +175,7 @@ export class AlbanePackageHandler implements PackageHandler {
     uploadDir: string,
     fileId: string,
     logger: PackageHandlerContext['logger'],
-  ): Promise<{ conversionResult: AlbaneConversionResult; convertedPackagePath: string }> {
+  ): Promise<string> {
     const convertedPackagePath = getVerifiedOutputPath(uploadDir, fileId);
 
     await fs.mkdir(convertedPackagePath, { recursive: true });
@@ -205,7 +185,7 @@ export class AlbanePackageHandler implements PackageHandler {
 
     await this.writeConvertedPackage(convertedPackagePath, conversionResult);
 
-    return { conversionResult, convertedPackagePath };
+    return convertedPackagePath;
   }
 
   private async writeConvertedPackage(convertedPackagePath: string, result: AlbaneConversionResult): Promise<void> {
