@@ -35,7 +35,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col v-if="params.mode !== 'none' && params.mode !== 'full'" cols="12">
+        <v-col v-if="params.mode !== 'none'" cols="12">
           <v-checkbox
             v-model="params.syncFields"
             :error-messages="errors.get('params.syncFields')"
@@ -54,7 +54,7 @@
       </v-row>
 
       <v-alert
-        v-if="params.mode === 'values-and-codes' || params.mode === 'full'"
+        v-if="params.mode === 'values-and-codes'"
         class="mt-4"
         color="warning"
         variant="tonal"
@@ -108,11 +108,6 @@ export default defineComponent({
           value: 'values-and-codes' as RecalculationMode,
           text: 'Values and nutrient codes',
           description: 'Update nutrient values AND use current food-to-nutrient mappings',
-        },
-        {
-          value: 'full' as RecalculationMode,
-          text: 'Full recalculation',
-          description: 'Update everything: food names, nutrient codes, values, and sync all fields',
         },
       ],
     };

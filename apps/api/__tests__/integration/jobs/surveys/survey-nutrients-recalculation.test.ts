@@ -247,13 +247,85 @@ export default () => {
       expect(refreshed?.nutrients).toEqual({ 1: 50 });
       expect(refreshed?.fields).toEqual({ group: 'A' });
       expect(refreshed?.code).toBe(foodCode);
+      expect(refreshed?.englishName).toBe('Test Food');
+      expect(refreshed?.localName).toBe('Test Food');
+    });
+
+    it('values-only updates nutrient values when underlying record changes', async () => {
+      const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
+
+      // Update underlying record values (A) - change 50 -> 75
+      await recordANutrient!.update({ unitsPer100g: 75 });
+      // Update underlying field value - change 'A' -> 'A_UPDATED'
+      await recordAField!.update({ value: 'A_UPDATED' });
+
+      dbJob = await DbJob.create({
+        type: 'SurveyNutrientsRecalculation',
+        userId: userId(),
+        params: { surveyId: surveyId(), mode: 'values-only' },
+      });
+
+      const job = ioc.resolve('SurveyNutrientsRecalculation');
+      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
+
+      await job.run(mockBullJob);
+
+      const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+      // Keeps reference to A, but updates values from A
+      expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
+      expect(refreshed?.nutrientTableCode).toBe('A');
+      expect(refreshed?.nutrients).toEqual({ 1: 75 });
+      expect(refreshed?.fields).toEqual({ group: 'A_UPDATED' });
+      expect(refreshed?.code).toBe(foodCode);
+    });
+
+    it('values-only with syncFields updates nutrient values similar to standard values-only', async () => {
+      const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
+
+      // Update underlying record values (A) - change 50 -> 90
+      await recordANutrient!.update({ unitsPer100g: 90 });
+      // Update underlying field value - change 'A' -> 'A_SYNCED'
+      await recordAField!.update({ value: 'A_SYNCED' });
+
+      // Even if food mapping points to B (simulate change), values-only keeps it on A
+      await foodNutrient!.destroy();
+      foodNutrient = await FoodNutrient.create({
+        foodId: food!.id,
+        nutrientTableRecordId: recordB!.id,
+      });
+
+      dbJob = await DbJob.create({
+        type: 'SurveyNutrientsRecalculation',
+        userId: userId(),
+        params: { surveyId: surveyId(), mode: 'values-only', syncFields: true },
+      });
+
+      const job = ioc.resolve('SurveyNutrientsRecalculation');
+      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only', syncFields: true });
+
+      await job.run(mockBullJob);
+
+      const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+      // Keeps reference to A (values-only preference)
+      expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
+      expect(refreshed?.nutrientTableCode).toBe('A');
+      // Updates values based on A's new state (90)
+      expect(refreshed?.nutrients).toEqual({ 1: 90 });
+      expect(refreshed?.fields).toEqual({ group: 'A_SYNCED' });
+      expect(refreshed?.code).toBe(foodCode);
     });
 
     it('values-and-codes updates nutrient codes to current mapping', async () => {
       const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
 
-      // Switch mapping to record B after submission
-      await foodNutrient!.update({ nutrientTableRecordId: recordB!.id });
+      // Switch mapping to record B after submission - destroy and recreate since update doesn't work on composite PKs
+      await foodNutrient!.destroy();
+      foodNutrient = await FoodNutrient.create({
+        foodId: food!.id,
+        nutrientTableRecordId: recordB!.id,
+      });
 
       dbJob = await DbJob.create({
         type: 'SurveyNutrientsRecalculation',
@@ -273,6 +345,97 @@ export default () => {
       expect(refreshed?.nutrients).toEqual({ 1: 200 });
       expect(refreshed?.fields).toEqual({ group: 'B' });
       expect(refreshed?.code).toBe(foodCode);
+      expect(refreshed?.englishName).toBe('Test Food');
+      expect(refreshed?.localName).toBe('Test Food');
+    });
+
+    it('values-and-codes with syncFields recalculates nutrients and mappings but keeps submission food identity fields', async () => {
+      const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
+
+      // Switch mapping to record B and change food names in foods DB - destroy and recreate
+      await foodNutrient!.destroy();
+      foodNutrient = await FoodNutrient.create({
+        foodId: food!.id,
+        nutrientTableRecordId: recordB!.id,
+      });
+      await food!.update({
+        name: 'Renamed Food',
+        englishName: 'Renamed Food',
+      });
+
+      dbJob = await DbJob.create({
+        type: 'SurveyNutrientsRecalculation',
+        userId: userId(),
+        params: { surveyId: surveyId(), mode: 'values-and-codes', syncFields: true },
+      });
+
+      const job = ioc.resolve('SurveyNutrientsRecalculation');
+      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
+
+      await job.run(mockBullJob);
+
+      const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+      expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
+      expect(refreshed?.nutrientTableCode).toBe('B');
+      expect(refreshed?.nutrients).toEqual({ 1: 200 });
+      expect(refreshed?.fields).toEqual({ group: 'B' });
+      expect(refreshed?.code).toBe(foodCode);
+      expect(refreshed?.englishName).toBe('Test Food');
+      expect(refreshed?.localName).toBe('Test Food');
+    });
+
+    it('clears nutrients and fields when nutrient record is deleted', async () => {
+      const { foodCode } = await setupFoodAndNutrients();
+
+      // Verify initial state
+      const submission = await SurveySubmissionFood.findByPk(submissionFood!.id);
+      expect(submission?.nutrients).toEqual({ 1: 100 });
+      expect(submission?.fields).toEqual({ group: 'A' });
+
+      // Delete the nutrient record (simulate dropped variable)
+      await recordA!.destroy();
+
+      dbJob = await DbJob.create({
+        type: 'SurveyNutrientsRecalculation',
+        userId: userId(),
+        params: { surveyId: surveyId(), mode: 'values-only' },
+      });
+
+      const job = ioc.resolve('SurveyNutrientsRecalculation');
+      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
+
+      await job.run(mockBullJob);
+
+      // Verify nutrients and fields are cleared
+      const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+      expect(refreshed?.nutrients).toEqual({});
+      expect(refreshed?.fields).toEqual({});
+      expect(refreshed?.code).toBe(foodCode); // Food identity preserved
+      expect(refreshed?.englishName).toBe('Test Food');
+    });
+
+    it('clears nutrients and fields when food-nutrient mapping is removed', async () => {
+      await setupFoodAndNutrients();
+
+      // Remove the nutrient mapping (food still exists, but no nutrient association)
+      await foodNutrient!.destroy();
+
+      dbJob = await DbJob.create({
+        type: 'SurveyNutrientsRecalculation',
+        userId: userId(),
+        params: { surveyId: surveyId(), mode: 'values-and-codes' },
+      });
+
+      const job = ioc.resolve('SurveyNutrientsRecalculation');
+      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-and-codes' });
+
+      await job.run(mockBullJob);
+
+      // Verify nutrients and fields are cleared
+      const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+      expect(refreshed?.nutrients).toEqual({});
+      expect(refreshed?.fields).toEqual({});
     });
   });
 };

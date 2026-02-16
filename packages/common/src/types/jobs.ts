@@ -156,7 +156,7 @@ export const SurveyHelpRequestNotification = z.object({
   phoneCountry: z.string().nullish(),
   message: z.string().nullish(),
 }).strict();
-export const recalculationModes = ['none', 'values-only', 'values-and-codes', 'full'] as const;
+export const recalculationModes = ['none', 'values-only', 'values-and-codes'] as const;
 export type RecalculationMode = (typeof recalculationModes)[number];
 
 export const SurveyNutrientsRecalculation = z.object({
