@@ -55,6 +55,9 @@
     }
   ],
   "files.eol": "\n",
+  "files.associations": {
+    "**/.env*": "dotenv"
+  },
   "search.exclude": {
     "coverage": true,
     "dist": true,
