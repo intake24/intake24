@@ -22,8 +22,10 @@ export interface PackageHandlerContext {
   fileId: string;
   userId: string;
   uploadDir: string;
+  cacheDir: string;
   logger: IoC['logger'];
   globalAclService: IoC['globalAclService'];
+  servicesConfig: IoC['servicesConfig'];
 }
 
 export interface PackageVerificationResult {

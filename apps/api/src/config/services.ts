@@ -36,6 +36,10 @@ export const servicesConfig = z.object({
       }
     }),
   }),
+  deepl: z.object({
+    apiKey: z.string().default(''),
+    apiHost: z.string().default('api-free.deepl.com'),
+  }),
   comms: z.object({
     provider: z.enum(['email-blaster']).nullable().default(null),
     'email-blaster': baseEMProvider.extend({
@@ -66,6 +70,7 @@ export const servicesConfig = z.object({
 });
 export type ServicesConfig = z.infer<typeof servicesConfig>;
 export type CaptchaConfig = ServicesConfig['captcha'];
+export type DeepLConfig = ServicesConfig['deepl'];
 export type WebPushConfig = ServicesConfig['webPush'];
 export type CommsConfig = ServicesConfig['comms'];
 
@@ -78,6 +83,10 @@ const rawServicesConfig = {
     subject: process.env.WEBPUSH_SUBJECT,
     publicKey: process.env.WEBPUSH_PUBLIC_KEY,
     privateKey: process.env.WEBPUSH_PRIVATE_KEY,
+  },
+  deepl: {
+    apiKey: process.env.DEEPL_API_KEY,
+    apiHost: process.env.DEEPL_API_HOST,
   },
   comms: {
     provider: process.env.COMMS_PROVIDER,

@@ -106,7 +106,7 @@ export class AlbanePackageHandler implements PackageHandler {
           locales: conversionResult.locales.length > 0,
           foods: Object.keys(conversionResult.foods).length > 0,
           categories: Object.keys(conversionResult.categories).length > 0,
-          asServedSets: conversionResult.asServedSets.length > 0,
+          asServedSets: (conversionResult.asServedSets?.length ?? 0) > 0,
           imageMaps: false,
           guideImages: false,
           drinkwareSets: false,
@@ -123,13 +123,12 @@ export class AlbanePackageHandler implements PackageHandler {
   }
 
   private static readonly REQUIRED_FILES = [
-    'FDLIST_EN.xlsx',
+    'FDLIST.xlsx',
     'CATEGORIES_I24_FOOD.xlsx',
     'CATEGORIES_I24_LIST.xlsx',
     'ALTERNATIVE_FOOD_DESCRIPTION.xlsx',
     'ASSOCIATED_FOOD_PROMPTS.xlsx',
     'FACETS.xlsx',
-    'List.Photos_HHM_Shapes.xlsx',
     'US.xlsx',
     'FDQUANT.xlsx',
   ];
@@ -201,7 +200,7 @@ export class AlbanePackageHandler implements PackageHandler {
 
     await fs.mkdir(convertedPackagePath, { recursive: true });
 
-    const builder = new AlbaneLocaleBuilder(logger, albaneExtractedPath);
+    const builder = new AlbaneLocaleBuilder(logger, albaneExtractedPath, this.context.servicesConfig.deepl, this.context.cacheDir);
     const conversionResult = await builder.buildPackage();
 
     await this.writeConvertedPackage(convertedPackagePath, conversionResult);
@@ -218,7 +217,7 @@ export class AlbanePackageHandler implements PackageHandler {
       );
     };
 
-    await Promise.all([
+    const writes = [
       writeJson('package.json', {
         version: '2.0',
         format: 'json',
@@ -226,9 +225,13 @@ export class AlbanePackageHandler implements PackageHandler {
       writeJson('locales.json', result.locales),
       writeJson('foods.json', result.foods),
       writeJson('categories.json', result.categories),
-      writeJson('as-served-sets.json', result.asServedSets),
       writeJson('nutrient-tables.json', result.nutrientTables),
       writeJson('enabled-local-foods.json', result.enabledLocalFoods),
-    ]);
+    ];
+
+    if (result.asServedSets)
+      writes.push(writeJson('as-served-sets.json', result.asServedSets));
+
+    await Promise.all(writes);
   }
 }

@@ -29,13 +29,16 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
 
   private readonly fsConfig;
 
+  private readonly servicesConfig;
+
   private userId!: string;
 
-  constructor({ logger, globalAclService, fsConfig }: Pick<IoC, 'logger' | 'globalAclService' | 'fsConfig'>) {
+  constructor({ logger, globalAclService, fsConfig, servicesConfig }: Pick<IoC, 'logger' | 'globalAclService' | 'fsConfig' | 'servicesConfig'>) {
     super({ logger });
 
     this.globalAclService = globalAclService;
     this.fsConfig = fsConfig;
+    this.servicesConfig = servicesConfig;
   }
 
   public async run(job: Job): Promise<PackageContentsSummary> {
@@ -88,8 +91,10 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
       fileId,
       userId: this.userId,
       uploadDir: path.resolve(this.fsConfig.local.uploads),
+      cacheDir: path.resolve(this.fsConfig.local.cache),
       logger: this.logger,
       globalAclService: this.globalAclService,
+      servicesConfig: this.servicesConfig,
     };
 
     const handler = this.createPackageHandler(context);
