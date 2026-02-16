@@ -1,8 +1,9 @@
+import type { JobTypeParams } from '../../jobs';
 import type { Pagination } from '../generic';
 
 import { z } from 'zod';
 
-import { jobTypeParams, jobTypes, userTasks } from '../../jobs';
+import { jobParams, jobTypeParams, jobTypes, userTasks } from '../../jobs';
 import { userAttributes } from './users';
 
 export const jobAttributes = z.object({

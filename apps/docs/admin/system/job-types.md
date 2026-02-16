@@ -21,6 +21,9 @@ Jobs types available in system.
   - [SurveyFeedbackNotification](#surveyfeedbacknotification)
   - [SurveyHelpRequestNotification](#surveyhelprequestnotification)
   - [SurveyNutrientsRecalculation](#surveynutrientsrecalculation)
+    - [Parameters](#parameters)
+    - [Quick Reference: Mode Matrix](#quick-reference-mode-matrix)
+    - [Decision Tree: Which Mode to Use?](#decision-tree-which-mode-to-use)
   - [SurveyRatingsExport](#surveyratingsexport)
   - [SurveyRespondentsImport](#surveyrespondentsimport)
   - [SurveySchemesSync](#surveyschemessync)
@@ -268,187 +271,51 @@ Each subtask will firstly delete any existing data and then copies over data fro
 
 ## SurveyNutrientsRecalculation
 
-`SurveyNutrientsRecalculation` recalculates survey submission nutrients with configurable modes for handling code changes and field updates. This is useful when nutrient table data changes and you need to update historical submissions.
+`SurveyNutrientsRecalculation` recalculates survey submission nutrient values with configurable modes for handling nutrient mapping references and field synchronization. This is useful when nutrient table data or food-to-nutrient mappings change.
 
 ### Parameters
 
 ```json
 {
   "surveyId": string,
-  "mode": "none" | "values-only" | "values-and-codes" | "full",
+  "mode": "none" | "values-only" | "values-and-codes",
   "syncFields": boolean (optional, default: false)
 }
 ```
 
-### Recalculation Modes
+### Quick Reference: Mode Matrix
 
-#### `none`
+This table shows what gets updated in submission data for each mode and `syncFields` combination:
 
-Skip recalculation entirely. No changes are made to submitted data.
+| Aspect                                | `none` | `values-only`<br/>(syncFields: false) | `values-only`<br/>(syncFields: true) | `values-and-codes`<br/>(syncFields: false) | `values-and-codes`<br/>(syncFields: true) |
+| ------------------------------------- | ------ | ------------------------------------- | ------------------------------------ | ------------------------------------------ | ----------------------------------------- |
+| **Nutrient Values**                   | —      | → Existing only                       | → All                                | → Existing only                            | → All                                     |
+| **Nutrient Entries**                  | —      | — (zeroes unresolvable)               | → Add new / remove dropped           | — (zeroes unresolvable)                    | → Add new / remove dropped                |
+| **Nutrient Codes mappings**           | —      | —                                     | —                                    | → Updated                                  | → Updated                                 |
+| **Field Value (e.g. sub-group code)** | —      | → Existing only                       | → All                                | → Existing only                            | → All                                     |
+| **Field mappings**                    | —      | —                                     | → Add new / prune obsolete           | —                                          | → Add new / prune obsolete                |
+| **Data Provenance**                   | N/A    | ✓ Preserved                           | ✓ Preserved                          | ⚠️ Mapping changed                         | ⚠️ Mapping changed                        |
 
-**Use when:** Testing or dry-run scenarios.
-
-#### `values-only` (Default)
-
-Updates nutrient values and field data using the **original** nutrient table codes stored at submission time.
-
-**What is updated:**
-
-- Nutrient amounts (recalculated with current `unitsPer100g` values)
-- Field values (description, food group, etc.)
-
-**What is NOT updated:**
-
-- Food codes or names
-- Nutrient table references (`nutrientTableId`, `nutrientTableCode`)
-
-**Use when:** Nutrient composition values have been corrected/updated in the same nutrient table records, but food-to-nutrient mappings haven't changed.
-
-#### `values-and-codes`
-
-Updates nutrient values AND uses **current** food-to-nutrient composition mappings from the foods database.
-
-**What is updated:**
-
-- Everything from `values-only`
-- Nutrient table references if food mappings have changed
-
-**What is NOT updated:**
-
-- Food codes or names
-
-**Use when:**
-
-- Foods have been remapped to different nutrient composition records
-- Nutrient tables have been restructured
-- You want submissions to reflect current nutrient mappings
-
-**Optional:** Enable `syncFields` to also add/remove fields from updated nutrient tables.
-
-#### `full`
-
-Comprehensive recalculation that updates everything including food names and syncs all fields.
-
-**What is updated:**
-
-- Everything from `values-and-codes`
-- Food names (English and localized) if changed in foods database
-- Adds new fields from updated nutrient tables
-- Removes obsolete fields
-
-**Use when:**
-
-- Major nutrient table updates with new fields/variables
-- Food names have been corrected in the database
-- You want complete synchronization with current food database
-
-### Optional Field Sync
-
-**`syncFields`** (boolean, default: `false`)
-
-When enabled:
-
-- Adds new fields from updated nutrient tables
-- Removes fields that no longer exist in nutrient tables
-- Applies to `values-only` and `values-and-codes` modes
-- Always enabled for `full` mode
-
-**Use when:** Nutrient tables have been updated with new variables (e.g., new nutrient like Omega-3) or restructured with removed fields.
-
-### Important Considerations
-
-#### Data Provenance
-
-- Updating codes (`values-and-codes` or `full` mode) changes the historical record of which nutrient data was used at submission time
-- This may affect audit trails and data comparability
-- Consider backing up data before running with code updates
-
-#### Edge Cases
-
-The job handles these situations gracefully:
-
-- **Food not found**: Skipped with warning, original data retained
-- **Nutrient record deleted**: Skipped with warning
-- **Food has no nutrient mappings**: Skipped with warning
-- **Multiple nutrient mappings**: Uses first mapping (consistent with submission behavior)
-
-#### Performance
-
-- Processes foods in batches of 100
-- Progress tracking updates incrementally
-- Job completion message includes comprehensive statistics
-
-### Use Case Examples
-
-#### Example 1: Nutrient Value Corrections
-
-**Problem:** Vitamin C values for certain foods were updated in NDNS database.
-**Solution:** Use `values-only` mode (default) to recalculate with corrected values.
-
-```json
-{
-  "surveyId": "59",
-  "mode": "values-only",
-  "syncFields": false
-}
-```
-
-#### Example 2: Food Remapping
-
-**Problem:** "Banana, raw" was mapped to wrong NDNS record, now corrected in foods database.
-**Solution:** Use `values-and-codes` mode to pick up the new nutrient composition mapping.
-
-```json
-{
-  "surveyId": "59",
-  "mode": "values-and-codes",
-  "syncFields": false
-}
-```
-
-#### Example 3: New Nutrient Variable Added
-
-**Problem:** NDNS updated to include Omega-3 fatty acids for all foods.
-**Solution:** Use `values-and-codes` mode with `syncFields` enabled to add the new nutrient fields.
-
-```json
-{
-  "surveyId": "59",
-  "mode": "values-and-codes",
-  "syncFields": true
-}
-```
-
-#### Example 4: Comprehensive Update
-
-**Problem:** Food names corrected, nutrient mappings updated, and new fields added.
-**Solution:** Use `full` mode (automatically syncs fields).
-
-```json
-{
-  "surveyId": "59",
-  "mode": "full"
-}
-```
-
-### Job Output
-
-On completion, the job stores a summary message with statistics:
-
-- Total foods processed
-- Foods updated vs skipped
-- Food codes updated
-- Nutrient codes updated
-- Fields added/removed
-- Errors encountered
-
-Example:
+### Decision Tree: Which Mode to Use?
 
 ```
-Recalculation completed. Total: 5432, Updated: 5401, Skipped: 31,
-Food codes updated: 0, Nutrient codes updated: 127, Fields added: 543,
-Fields removed: 0, Errors: 31
+ Are foods remapped to different nutrient compositions?
+  ├─ YES → Use `values-and-codes` (±syncFields?)
+  │        ├─ YES (with syncFields) → Full sync: new nutrients/fields added, dropped removed
+  │        └─ NO (without syncFields) → Only existing nutrient/field values updated; unresolvable zeroed
+  │
+  └─ NO → Just nutrient values corrected?
+     ├─ YES → Use `values-only` (±syncFields?)
+     │        ├─ YES (with syncFields) → Full sync: new nutrients/fields added, dropped removed
+     │        └─ NO (without syncFields) → Default: only existing values updated, structure preserved
+     │
+     └─ NO → No changes needed
+        └─ Use `none` (dry-run/testing)
+
+Note: This task does not rename foods or replace missing submission food codes with new codes.
 ```
+
+Click [here](survey-nutrients-recalculation-job) for detailed mode descriptions and use case examples.
 
 ## SurveyRatingsExport
 

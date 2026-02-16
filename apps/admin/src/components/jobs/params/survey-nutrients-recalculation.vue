@@ -35,7 +35,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col v-if="params.mode !== 'none' && params.mode !== 'full'" cols="12">
+        <v-col v-if="params.mode !== 'none'" cols="12">
           <v-checkbox
             v-model="params.syncFields"
             :error-messages="errors.get('params.syncFields')"
@@ -43,9 +43,9 @@
           >
             <template #label>
               <div>
-                <div>Sync nutrient table fields</div>
+                <div>Sync nutrient variables and fields</div>
                 <div class="text-caption text-medium-emphasis">
-                  Add new fields from updated nutrient tables and remove obsolete fields
+                  Add new nutrients/fields, remove dropped ones, and update all values. Without this, only existing values are updated.
                 </div>
               </div>
             </template>
@@ -54,7 +54,7 @@
       </v-row>
 
       <v-alert
-        v-if="params.mode === 'values-and-codes' || params.mode === 'full'"
+        v-if="params.mode === 'values-and-codes'"
         class="mt-4"
         color="warning"
         variant="tonal"
@@ -102,17 +102,12 @@ export default defineComponent({
         {
           value: 'values-only' as RecalculationMode,
           text: 'Values only (Default)',
-          description: 'Update nutrient values and fields using existing nutrient table codes',
+          description: 'Recalculate existing nutrient values using stored nutrient table codes',
         },
         {
           value: 'values-and-codes' as RecalculationMode,
           text: 'Values and nutrient codes',
-          description: 'Update nutrient values AND use current food-to-nutrient mappings',
-        },
-        {
-          value: 'full' as RecalculationMode,
-          text: 'Full recalculation',
-          description: 'Update everything: food names, nutrient codes, values, and sync all fields',
+          description: 'Update nutrient codes to current food mappings and recalculate values',
         },
       ],
     };

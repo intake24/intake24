@@ -28,8 +28,6 @@ interface FoodMapping {
 }
 
 interface ChangeSet {
-  foodCodeChanged: boolean;
-  foodNamesChanged: boolean;
   nutrientCodeChanged: boolean;
   fieldsAdded: string[];
   fieldsRemoved: string[];
@@ -41,10 +39,10 @@ interface RecalculationStats {
   totalProcessed: number;
   updated: number;
   skipped: number;
-  foodCodesUpdated: number;
   nutrientCodesUpdated: number;
   fieldsAdded: number;
   fieldsRemoved: number;
+  clearedDueToMissingRecords: number;
   errors: number;
 }
 
@@ -57,10 +55,10 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     totalProcessed: 0,
     updated: 0,
     skipped: 0,
-    foodCodesUpdated: 0,
     nutrientCodesUpdated: 0,
     fieldsAdded: 0,
     fieldsRemoved: 0,
+    clearedDueToMissingRecords: 0,
     errors: 0,
   };
 
@@ -90,7 +88,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
     await this.recalculate();
 
-    const summary = `Recalculation completed. Total: ${this.stats.totalProcessed}, Updated: ${this.stats.updated}, Skipped: ${this.stats.skipped}, Food codes updated: ${this.stats.foodCodesUpdated}, Nutrient codes updated: ${this.stats.nutrientCodesUpdated}, Fields added: ${this.stats.fieldsAdded}, Fields removed: ${this.stats.fieldsRemoved}, Errors: ${this.stats.errors}`;
+    const summary = `Recalculation completed. Total: ${this.stats.totalProcessed}, Updated: ${this.stats.updated}, Skipped: ${this.stats.skipped}, Nutrient codes updated: ${this.stats.nutrientCodesUpdated}, Fields added: ${this.stats.fieldsAdded}, Fields removed: ${this.stats.fieldsRemoved}, Cleared due to missing records: ${this.stats.clearedDueToMissingRecords}, Errors: ${this.stats.errors}`;
     this.logger.info(summary);
 
     await this.dbJob.update({ message: summary });
@@ -99,19 +97,22 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
   }
 
   /**
-   * Resolve recalculation flags based on mode and syncFields option
+   * Resolve recalculation flags based on mode and syncFields option.
+   *
+   * syncFields controls structural changes to nutrients and fields:
+   * - false: only update values of existing nutrients/fields; no add/remove
+   * - true:  full sync — add new, remove dropped, update all values
    */
   private getRecalculationFlags() {
     const { mode = 'values-only', syncFields = false } = this.params;
 
-    const shouldUpdateFoodCodes = mode === 'full';
-    const shouldUpdateNutrientCodes = mode === 'values-and-codes' || mode === 'full';
-    const shouldSyncFields = mode === 'full' || syncFields;
-    const shouldPruneFields = shouldSyncFields; // Auto-prune when syncing fields
+    const shouldUpdateNutrientCodes = mode === 'values-and-codes';
+    const shouldSyncFields = syncFields;
+    // Prune obsolete fields only when syncing (structural changes allowed)
+    const shouldPruneFields = shouldSyncFields;
     const shouldSkipRecalculation = mode === 'none';
 
     return {
-      shouldUpdateFoodCodes,
       shouldUpdateNutrientCodes,
       shouldSyncFields,
       shouldPruneFields,
@@ -194,8 +195,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     current: FoodMapping | null,
   ): ChangeSet {
     const changeSet: ChangeSet = {
-      foodCodeChanged: false,
-      foodNamesChanged: false,
       nutrientCodeChanged: false,
       fieldsAdded: [],
       fieldsRemoved: [],
@@ -205,13 +204,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
     if (!current)
       return changeSet;
-
-    // Check food code changes (though this shouldn't happen in practice)
-    changeSet.foodCodeChanged = stored.code !== current.code;
-
-    // Check name changes
-    changeSet.foodNamesChanged = stored.englishName !== current.englishName
-      || stored.localName !== current.localName;
 
     // Check nutrient table/record changes
     changeSet.nutrientCodeChanged = stored.nutrientTableId !== current.nutrientTableId
@@ -338,7 +330,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
       // Fetch current food mappings if needed
       const currentMappings = new Map<string, FoodMapping | null>();
-      if (flags.shouldUpdateFoodCodes || flags.shouldUpdateNutrientCodes || flags.shouldSyncFields) {
+      if (flags.shouldUpdateNutrientCodes || flags.shouldSyncFields) {
         for (const [locale, localeFoods] of localeGroups) {
           const foodCodes = [...new Set(localeFoods.map(f => f.code))];
           const localeMappings = await this.fetchCurrentFoodMappings(foodCodes, locale);
@@ -404,9 +396,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       // Build update records
       type UpdateRecord = {
         id: string;
-        code?: string;
-        englishName?: string;
-        localName?: string | null;
         nutrientTableId?: string;
         nutrientTableCode?: string;
         fields: string;
@@ -414,7 +403,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       };
 
       const records: UpdateRecord[] = [];
-      let batchFoodCodesUpdated = 0;
       let batchNutrientCodesUpdated = 0;
       let batchFieldsAdded = 0;
       let batchFieldsRemoved = 0;
@@ -434,6 +422,43 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         // Get nutrient data (either from current mapping or stored reference)
         let nutrientTableId = food.nutrientTableId;
         let nutrientTableCode = food.nutrientTableCode;
+        // Handle missing food in current database
+        if (currentMapping === null) {
+          this.logger.warn('Food not found in current database', {
+            foodId: food.id,
+            code: food.code,
+            locale: food.locale,
+          });
+          batchSkipped++;
+          this.stats.errors++;
+          continue;
+        }
+
+        // Handle food with warning (e.g., no nutrient mappings) - clear nutrients and fields
+        if (currentMapping?.warning) {
+          this.logger.warn(`${currentMapping.warning} - clearing nutrients and fields`, {
+            foodId: food.id,
+            code: food.code,
+          });
+
+          // Clear nutrients and fields for this submission food
+          const record: UpdateRecord = {
+            id: food.id,
+            fields: JSON.stringify({}),
+            nutrients: JSON.stringify({}),
+          };
+
+          // Include nutrient table references to maintain consistent record structure
+          if (flags.shouldUpdateNutrientCodes) {
+            record.nutrientTableId = nutrientTableId;
+            record.nutrientTableCode = nutrientTableCode;
+          }
+
+          records.push(record);
+          this.stats.clearedDueToMissingRecords++;
+          continue;
+        }
+
         let nutrientData: { fields: NutrientTableRecordField[]; nutrients: NutrientTableRecordNutrient[] } | null = null;
 
         // Values-and-codes uses current nutrient mappings; values-only uses stored nutrient table IDs.
@@ -450,43 +475,35 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
           nutrientData = nutrientRecordMap[key] ?? null;
         }
 
+        // Handle deleted nutrient record: clear nutrients and fields
         if (!nutrientData) {
-          this.logger.warn('Nutrient record not found', {
+          this.logger.warn('Nutrient record deleted or dissociated - clearing nutrients and fields', {
             foodId: food.id,
             code: food.code,
-            nutrientTableId: food.nutrientTableId,
-            nutrientTableCode: food.nutrientTableCode,
+            nutrientTableId,
+            nutrientTableCode,
           });
-          batchSkipped++;
-          this.stats.errors++;
-          continue;
-        }
 
-        // Handle missing food in current database
-        if (currentMapping === null) {
-          this.logger.warn('Food not found in current database', {
-            foodId: food.id,
-            code: food.code,
-            locale: food.locale,
-          });
-          batchSkipped++;
-          this.stats.errors++;
-          continue;
-        }
+          // Clear nutrients and fields for this submission food
+          const record: UpdateRecord = {
+            id: food.id,
+            fields: JSON.stringify({}),
+            nutrients: JSON.stringify({}),
+          };
 
-        // Handle food with warning (e.g., no nutrient mappings)
-        if (currentMapping?.warning) {
-          this.logger.warn(currentMapping.warning, {
-            foodId: food.id,
-            code: food.code,
-          });
-          batchSkipped++;
-          this.stats.errors++;
+          // Include nutrient table references to maintain consistent record structure
+          if (flags.shouldUpdateNutrientCodes) {
+            record.nutrientTableId = nutrientTableId;
+            record.nutrientTableCode = nutrientTableCode;
+          }
+
+          records.push(record);
+          this.stats.clearedDueToMissingRecords++;
           continue;
         }
 
         // Detect changes
-        const changeSet = flags.shouldSyncFields && currentMapping
+        const changeSet = (flags.shouldSyncFields || flags.shouldUpdateNutrientCodes) && currentMapping
           ? this.detectChanges(
               {
                 code: food.code,
@@ -500,8 +517,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
               currentMapping,
             )
           : {
-              foodCodeChanged: false,
-              foodNamesChanged: false,
               nutrientCodeChanged: false,
               fieldsAdded: [],
               fieldsRemoved: [],
@@ -510,10 +525,14 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
             };
 
         // Build fields object
-        let fieldsObj = { ...food.fields };
+        const fieldsObj: Dictionary = { ...food.fields };
 
         if (flags.shouldSyncFields && currentMapping) {
-          // Add new fields
+          // syncFields = true: Full structural sync of fields.
+          // Add new fields from nutrientData, update existing values, and prune obsolete ones.
+          // Note: nutrientData depends on the mode.
+          // In values-only mode, nutrientData comes from the stored reference (old record).
+          // In values-and-codes mode, it comes from the current food mapping (new record).
           for (const field of nutrientData.fields) {
             if (!fieldsObj[field.name] || changeSet.fieldsAdded.includes(field.name)) {
               fieldsObj[field.name] = field.value;
@@ -539,19 +558,49 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
           }
         }
         else {
-          // Just update field values (current behavior)
-          fieldsObj = nutrientData.fields.reduce<Dictionary>((acc, { name, value }) => {
-            acc[name] = value;
-            return acc;
-          }, {});
+          // syncFields = false:
+          // Only update values of fields that already exist in the submission.
+          // Do NOT add new fields or remove existing fields (structure preserved).
+          const nutrientFieldMap = new Map(nutrientData.fields.map(f => [f.name, f.value]));
+          for (const fieldName of Object.keys(fieldsObj)) {
+            const newValue = nutrientFieldMap.get(fieldName);
+            if (newValue !== undefined) {
+              fieldsObj[fieldName] = newValue;
+            }
+            // Fields not present in nutrientData are left unchanged (not removed)
+          }
         }
 
         // Calculate nutrients
         const portionWeight = portionWeights.get(food.id) ?? 0;
-        const nutrientsObj = nutrientData.nutrients.reduce<Dictionary>((acc, { nutrientTypeId, unitsPer100g }) => {
-          acc[nutrientTypeId.toString()] = (unitsPer100g * portionWeight) / 100.0;
-          return acc;
-        }, {});
+        let nutrientsObj: Dictionary;
+
+        if (flags.shouldSyncFields) {
+          // syncFields = true: Full replacement — build entirely from nutrientData.
+          // New nutrients are added, dropped nutrients are removed.
+          nutrientsObj = nutrientData.nutrients.reduce<Dictionary>((acc, { nutrientTypeId, unitsPer100g }) => {
+            acc[nutrientTypeId.toString()] = (unitsPer100g * portionWeight) / 100.0;
+            return acc;
+          }, {});
+        }
+        else {
+          // syncFields = false: Only recalculate nutrients already present in the submission.
+          // Do NOT add new nutrients. Unresolvable nutrients (no longer in source) are zeroed out.
+          const sourceNutrientMap = new Map(
+            nutrientData.nutrients.map(n => [n.nutrientTypeId.toString(), n.unitsPer100g]),
+          );
+          nutrientsObj = { ...food.nutrients };
+          for (const nutrientId of Object.keys(nutrientsObj)) {
+            const unitsPer100g = sourceNutrientMap.get(nutrientId);
+            if (unitsPer100g !== undefined) {
+              nutrientsObj[nutrientId] = (unitsPer100g * portionWeight) / 100.0;
+            }
+            else {
+              // Nutrient no longer in source record — zero out
+              nutrientsObj[nutrientId] = 0;
+            }
+          }
+        }
 
         // Build update record
         const record: UpdateRecord = {
@@ -560,18 +609,13 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
           nutrients: JSON.stringify(nutrientsObj),
         };
 
-        // Add food code/names if updating
-        if (flags.shouldUpdateFoodCodes && currentMapping && changeSet.foodNamesChanged) {
-          record.englishName = currentMapping.englishName;
-          record.localName = currentMapping.localName;
-          batchFoodCodesUpdated++;
-        }
-
-        // Add nutrient table references if updating
-        if (flags.shouldUpdateNutrientCodes && changeSet.nutrientCodeChanged) {
+        // Add nutrient table references if updating codes (maintain consistent structure)
+        if (flags.shouldUpdateNutrientCodes) {
           record.nutrientTableId = nutrientTableId;
           record.nutrientTableCode = nutrientTableCode;
-          batchNutrientCodesUpdated++;
+          if (changeSet.nutrientCodeChanged) {
+            batchNutrientCodesUpdated++;
+          }
         }
 
         records.push(record);
@@ -583,11 +627,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
           fields: ({ cast, ref }: any) => cast(ref('data.fields'), 'jsonb'),
           nutrients: ({ cast, ref }: any) => cast(ref('data.nutrients'), 'jsonb'),
         };
-
-        if (flags.shouldUpdateFoodCodes) {
-          columnsToUpdate.englishName = ({ ref }: any) => ref('data.englishName');
-          columnsToUpdate.localName = ({ ref }: any) => ref('data.localName');
-        }
 
         if (flags.shouldUpdateNutrientCodes) {
           columnsToUpdate.nutrientTableId = ({ ref }: any) => ref('data.nutrientTableId');
@@ -605,7 +644,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       // Update batch statistics
       this.stats.updated += records.length;
       this.stats.skipped += batchSkipped;
-      this.stats.foodCodesUpdated += batchFoodCodesUpdated;
       this.stats.nutrientCodesUpdated += batchNutrientCodesUpdated;
       this.stats.fieldsAdded += batchFieldsAdded;
       this.stats.fieldsRemoved += batchFieldsRemoved;
@@ -616,7 +654,6 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         processed: foods.length,
         updated: records.length,
         skipped: batchSkipped,
-        foodCodesUpdated: batchFoodCodesUpdated,
         nutrientCodesUpdated: batchNutrientCodesUpdated,
       });
 
