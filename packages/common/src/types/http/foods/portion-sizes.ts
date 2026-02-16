@@ -1,10 +1,12 @@
 import { z } from 'zod';
+
 import { pathways } from '@intake24/common/surveys';
 import {
   drinkwareScaleEntry,
   drinkwareScaleV2Entry,
   drinkwareSetEntry,
 } from '@intake24/common/types/http/admin';
+
 import { localeTranslation, requiredLocaleTranslation } from '../../common';
 
 export const asServedImageResponse = z.object({

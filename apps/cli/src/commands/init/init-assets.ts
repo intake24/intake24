@@ -138,7 +138,7 @@ export default async (): Promise<void> => {
           initialValue: `${resolve('./')}`,
           placeholder: `${resolve('./')}`,
           validate: (value) => {
-            if (!value.trim())
+            if (!value?.trim())
               return 'Path cannot be empty';
           },
         }),

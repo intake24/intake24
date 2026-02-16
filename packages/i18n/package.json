@@ -20,9 +20,9 @@
     "test:unit": "vitest"
   },
   "devDependencies": {
-    "@types/node": "^24.10.9",
+    "@types/node": "^24.10.13",
     "typescript": "^5.9.3",
-    "unrun": "^0.2.26",
+    "unrun": "^0.2.27",
     "vitest": "^4.0.18",
     "vue-i18n": "^11.2.8"
   }

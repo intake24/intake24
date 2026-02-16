@@ -39,8 +39,7 @@ function commitAnswer() {
   const flags = ['portion-size-option-complete'];
   const update: Partial<Omit<EncodedFood, 'type'>> = { portionSizeMethodIndex: state.value.option };
 
-  if (food.portionSizeMethodIndex !== null && food.portionSizeMethodIndex !== state.value.option
-  ) {
+  if (food.portionSizeMethodIndex !== null && food.portionSizeMethodIndex !== state.value.option) {
     update.portionSize = null;
   }
 

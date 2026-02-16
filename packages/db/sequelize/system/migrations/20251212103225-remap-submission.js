@@ -264,8 +264,7 @@ export default {
                 if (f.code === food.code
                   && food.portion_size_method_id === 'recipe-builder'
                   && f.type === 'recipe-builder'
-                  && fCustomDataMatch
-                ) {
+                  && fCustomDataMatch) {
                   return true;
                 }
 
