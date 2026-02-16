@@ -139,4 +139,9 @@ describe('input sanitation middleware', () => {
 
     expect(sanitize(input, { allowHtml: true, emptyStringToNull: true })).toEqual(output);
   });
+
+  it('should leave other types unchanged', () => {
+    expect(sanitize(undefined, { allowHtml: true, emptyStringToNull: true })).toEqual(undefined);
+    expect(sanitize(true, { allowHtml: true, emptyStringToNull: true })).toEqual(true);
+  });
 });

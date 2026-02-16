@@ -122,7 +122,7 @@ export async function unzipFile(zipFilePath: string, destinationDir: string): Pr
 
             const writeStream = fsSync.createWriteStream(path.join(destinationDir, entry.fileName));
 
-            readStream.on('end', () => zipfile.readEntry());
+            writeStream.on('close', () => zipfile.readEntry());
             readStream.on('error', reject);
             writeStream.on('error', reject);
             readStream.pipe(writeStream);

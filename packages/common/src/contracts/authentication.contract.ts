@@ -1,7 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { sanitize } from '../rules';
 import { captcha, surveyAuthResponse } from '../types/http';
 
 const contract = initContract();
@@ -11,7 +10,7 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/auth/login',
     headers: {
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z.string().optional(),
     },
     body: z.object({
       email: z.string().toLowerCase(),
@@ -29,7 +28,7 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/auth/login/alias',
     headers: {
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z.string().optional(),
     },
     body: z.object({
       username: z.string(),
@@ -47,7 +46,7 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/auth/login/token',
     headers: {
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z.string().optional(),
     },
     body: z.object({
       token: z.string(),

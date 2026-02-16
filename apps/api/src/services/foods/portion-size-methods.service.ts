@@ -193,6 +193,7 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
   };
 
   return {
+    getCategoryPortionSizeMethods,
     getPortionSizeImageUrl,
     resolvePortionSizeMethods,
     resolveUserPortionSizeMethods,

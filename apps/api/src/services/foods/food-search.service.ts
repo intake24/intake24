@@ -40,7 +40,6 @@ function foodSearchService({
   };
 
   return {
-    getFoodAttributes,
     search,
   };
 }

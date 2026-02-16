@@ -152,6 +152,7 @@
     "securables": "Sécurité",
     "submit": "Soumettre",
     "sync": "Synchroniser",
+    "select": "Select",
     "transfer": "Transférer",
     "upload": "Mettre en ligne",
     "confirm": {
@@ -188,6 +189,7 @@
   "redirect": "Rediriger vers une autre entrée",
   "errors": "{count} errors",
   "selected": "{count} éléments sélectionnés",
+  "noneSelected": "No items selected",
   "not": {
     "assigned": "Non attribué",
     "found": "Non trouvé",

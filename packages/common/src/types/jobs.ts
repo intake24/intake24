@@ -54,6 +54,9 @@ export const LocaleCopy = z.object({
   sourceLocaleId: z.string(),
   subTasks: z.enum(localeCopySubTasks).array(),
 });
+export const LocaleCategories = z.object({
+  localeId: z.string(),
+});
 export const LocaleFoods = z.object({
   localeId: z.string(),
 });
@@ -209,6 +212,7 @@ export const jobParams = z.object({
   LanguageTranslationsSync,
   LocaleIndexBuild,
   LocaleCopy,
+  LocaleCategories,
   LocaleFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
@@ -244,6 +248,7 @@ export const jobTypeParams = z.union([
   LanguageTranslationsSync,
   LocaleIndexBuild,
   LocaleCopy,
+  LocaleCategories,
   LocaleFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
@@ -277,6 +282,10 @@ export const localeTasks = z.discriminatedUnion('type', [
     params: LocaleCopy,
   }),
   z.object({
+    type: z.literal('LocaleCategories'),
+    params: LocaleCategories,
+  }),
+  z.object({
     type: z.literal('LocaleFoods'),
     params: LocaleFoods,
   }),
@@ -292,6 +301,7 @@ export const localeTasks = z.discriminatedUnion('type', [
 export type LocaleTask = z.infer<typeof localeTasks>;
 
 export const localeJobs = [
+  'LocaleCategories',
   'LocaleCopy',
   'LocaleFoods',
   'LocaleFoodNutrientMapping',
@@ -431,6 +441,9 @@ export const defaultJobsParams: JobParams = {
     localeId: '',
     sourceLocaleId: '',
     subTasks: [...localeCopySubTasks],
+  },
+  LocaleCategories: {
+    localeId: '',
   },
   LocaleFoods: {
     localeId: '',

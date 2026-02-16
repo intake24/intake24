@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { localeTranslation, requiredLocaleTranslation } from '../types';
+import { localeTranslation, requiredLocaleTranslation, sanitizedLocaleTranslation } from '../types';
 import { characterSentiment } from './characters';
 
 export const foodGroupThreshold = z.object({
   threshold: z.number(),
-  message: localeTranslation,
+  message: sanitizedLocaleTranslation,
 });
 
 export type FoodGroupThreshold = z.infer<typeof foodGroupThreshold>;
@@ -32,7 +32,7 @@ export const nutrientGroupCard = baseCard.extend({
   low: foodGroupThreshold.nullable(),
   unit: z.object({
     name: requiredLocaleTranslation,
-    description: localeTranslation,
+    description: sanitizedLocaleTranslation,
   }),
 });
 

@@ -7,7 +7,6 @@ export type SanitizeInputOptions = {
 
 export function sanitize<T = string>(input: T, options: SanitizeInputOptions = {}): T {
   const { allowHtml, emptyStringToNull } = options;
-  // let output = input;
 
   if (typeof input === 'string') {
     let output: string | null = allowHtml
@@ -25,18 +24,18 @@ export function sanitize<T = string>(input: T, options: SanitizeInputOptions = {
     if (emptyStringToNull && !output.length)
       output = null;
 
-    return output as any;
+    return output as T;
   }
 
   if (Array.isArray(input))
-    return input.map(item => sanitize(item, options)) as any;
+    return input.map(item => sanitize(item, options)) as T;
 
   if (Object.prototype.toString.call(input) === '[object Object]') {
     return Object.entries(input as Record<string, unknown>).reduce<any>((acc, [key, value]) => {
       acc[key] = sanitize(value, options);
       return acc;
-    }, {}) as any;
+    }, {}) as T;
   }
 
-  return input as any;
+  return input;
 }

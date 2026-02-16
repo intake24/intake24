@@ -69,6 +69,9 @@ export class AlbanePackageHandler implements PackageHandler {
       albaneExtractedPath = await this.extractArchive(uploadedPath, uploadDir, fileId);
     }
     catch (err) {
+      if (err instanceof PackageValidationFileErrors)
+        throw err;
+
       throw new PackageValidationFileErrors({ _uploadedFile: getFileValidationErrorMessages(err) });
     }
 
@@ -119,6 +122,18 @@ export class AlbanePackageHandler implements PackageHandler {
     }
   }
 
+  private static readonly REQUIRED_FILES = [
+    'FDLIST_EN.xlsx',
+    'CATEGORIES_I24_FOOD.xlsx',
+    'CATEGORIES_I24_LIST.xlsx',
+    'ALTERNATIVE_FOOD_DESCRIPTION.xlsx',
+    'ASSOCIATED_FOOD_PROMPTS.xlsx',
+    'FACETS.xlsx',
+    'List.Photos_HHM_Shapes.xlsx',
+    'US.xlsx',
+    'FDQUANT.xlsx',
+  ];
+
   private async validateArchive(uploadedPath: string): Promise<void> {
     const zipfile = await new Promise<yauzl.ZipFile>((resolve, reject) => {
       yauzl.open(uploadedPath, { lazyEntries: true }, (err, zf) => {
@@ -129,29 +144,40 @@ export class AlbanePackageHandler implements PackageHandler {
     });
 
     try {
-      // Check that the zip contains at least one xlsx file
-      const hasXlsx = await new Promise<boolean>((resolve, reject) => {
-        let found = false;
+      // Map each required filename to its full path in the archive (if found)
+      const foundPaths = await new Promise<Map<string, string>>((resolve, reject) => {
+        const paths = new Map<string, string>();
         zipfile.readEntry();
         zipfile.on('entry', (entry: yauzl.Entry) => {
           if (entry.fileName.endsWith('.xlsx')) {
-            found = true;
-            resolve(true);
+            const basename = entry.fileName.split('/').pop()!;
+            paths.set(basename, entry.fileName);
           }
-          else {
-            zipfile.readEntry();
-          }
+          zipfile.readEntry();
         });
-        zipfile.on('end', () => {
-          if (!found) {
-            resolve(false);
-          }
-        });
+        zipfile.on('end', () => resolve(paths));
         zipfile.on('error', err => reject(new LocalisableError('io.verification.invalidZipFile', undefined, { cause: err })));
       });
 
-      if (!hasXlsx) {
-        throw new LocalisableError('io.verification.albaneNoXlsxFiles');
+      const fileErrors: Record<string, FileValidationErrorMessage[]> = {};
+
+      for (const required of AlbanePackageHandler.REQUIRED_FILES) {
+        const archivePath = foundPaths.get(required);
+        if (archivePath === undefined) {
+          fileErrors[required] = [{
+            key: 'io.verification.albaneRequiredFileMissing',
+          }];
+        }
+        else if (archivePath !== required) {
+          fileErrors[required] = [{
+            key: 'io.verification.albaneRequiredFileWrongPath',
+            params: { archivePath },
+          }];
+        }
+      }
+
+      if (Object.keys(fileErrors).length > 0) {
+        throw new PackageValidationFileErrors(fileErrors);
       }
     }
     finally {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { localeTranslation, requiredLocaleTranslation } from '../types';
+import { requiredLocaleTranslation, sanitizedLocaleTranslation } from '../types';
 import { cardTypes } from './cards';
 import { nutrientRuleTypes, range, sentiments, sexes } from './shared';
 
@@ -9,8 +9,8 @@ export type RangeType = (typeof rangeType)[number];
 
 export const demographicGroupScaleSector = z.object({
   name: requiredLocaleTranslation,
-  summary: localeTranslation,
-  description: localeTranslation,
+  summary: sanitizedLocaleTranslation,
+  description: requiredLocaleTranslation,
   intake: z.enum(['summary', 'description']).array(),
   range,
   sentiment: z.enum(sentiments),

@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { sanitize } from '@intake24/common/rules';
+
 export const frontEnds = ['admin', 'survey'] as const;
 
 export type FrontEnd = (typeof frontEnds)[number];
@@ -57,6 +59,8 @@ export const environmentOptions = ['development', 'test', 'production'] as const
 export type Environment = (typeof environmentOptions)[number];
 
 export const localeTranslation = z.record(z.string(), z.string().nullable());
+export const sanitizedLocaleTranslation = localeTranslation.transform(val =>
+  sanitize(val, { allowHtml: true, emptyStringToNull: true }));
 
 export type LocaleTranslation = z.infer<typeof localeTranslation>;
 
@@ -68,6 +72,8 @@ export const requiredLocaleTranslation = z.intersection(
   z.object({ en: z.string() }),
   z.record(z.string(), z.string().nullable()),
 );
+export const sanitizedRequiredLocaleTranslation = requiredLocaleTranslation.transform(val =>
+  sanitize(val, { allowHtml: true, emptyStringToNull: true }));
 export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation>;
 
 export function requiredLocaleTranslationWithLimit(options: { min?: number; max: number }) {

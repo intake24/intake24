@@ -11,8 +11,6 @@ import {
   otpAuthenticationVerificationRequest,
 } from '@intake24/common/types/http';
 
-import { sanitize } from '../../rules';
-
 const contract = initContract();
 
 export const authentication = contract.router({
@@ -20,7 +18,7 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/admin/auth/login',
     headers: {
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z.string().optional(),
     },
     body: z.object({
       email: z.string().toLowerCase(),
@@ -47,7 +45,7 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/admin/auth/duo',
     headers: {
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z.string().optional(),
     },
     body: duoAuthenticationVerificationRequest,
     responses: {
@@ -60,7 +58,7 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/admin/auth/fido',
     headers: {
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z.string().optional(),
     },
     body: fidoAuthenticationVerificationRequest,
     responses: {
@@ -73,7 +71,7 @@ export const authentication = contract.router({
     method: 'POST',
     path: '/admin/auth/otp',
     headers: {
-      'user-agent': z.string().optional().transform(val => sanitize(val)),
+      'user-agent': z.string().optional(),
     },
     body: otpAuthenticationVerificationRequest,
     responses: {
