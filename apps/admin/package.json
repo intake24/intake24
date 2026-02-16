@@ -60,7 +60,7 @@
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/tsconfig": "^0.8.1",
     "cross-env": "^10.1.0",
-    "jsdom": "^27.4.0",
+    "jsdom": "^28.1.0",
     "sass": "^1.97.3",
     "typescript": "^5.9.3",
     "unplugin-vue-components": "^31.0.0",
