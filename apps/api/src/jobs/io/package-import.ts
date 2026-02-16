@@ -16,6 +16,8 @@ import { fromPackageCategory, fromPackageFood, fromPackageLocale } from './impor
 import { getVerifiedOutputPath } from './import/utils';
 import { checkEditFoodListPermissions, checkGlobalLocalePermissions } from './permission-checks';
 
+const BATCH_SIZE = 200;
+
 export default class PackageImport extends BaseJob<'PackageImport'> {
   readonly name = 'PackageImport';
 
@@ -174,21 +176,25 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
 
     await checkEditFoodListPermissions(this.globalAclService, this.userId, localesWithFoodListChanges);
 
-    await this.kyselyDb.system.transaction().execute (async (systemTransaction) => {
-      await this.kyselyDb.foods.transaction().execute (async (foodsTransaction) => {
-        if (filteredLocaleData.length) {
-          await this.localeService.bulkUpdateLocales(filteredLocaleData, conflictStrategies.locales || 'abort', foodsTransaction, systemTransaction);
+    await this.kyselyDb.system.transaction().execute(async (systemTransaction) => {
+      await this.kyselyDb.foods.transaction().execute(async (foodsTransaction) => {
+        for (let i = 0; i < filteredLocaleData.length; i += BATCH_SIZE) {
+          await this.localeService.bulkUpdateLocales(filteredLocaleData.slice(i, i + BATCH_SIZE), conflictStrategies.locales || 'abort', foodsTransaction, systemTransaction);
         }
 
         for (const locale of [...localesWithFoodListChanges].sort()) {
           const categories = filteredCategoryData[locale];
           const foods = filteredFoodData[locale];
 
-          if (categories?.length)
-            await this.adminCategoryService.bulkUpdateCategories(locale, categories, conflictStrategies.categories || 'abort', foodsTransaction);
+          if (categories?.length) {
+            for (let i = 0; i < categories.length; i += BATCH_SIZE)
+              await this.adminCategoryService.bulkUpdateCategories(locale, categories.slice(i, i + BATCH_SIZE), conflictStrategies.categories || 'abort', foodsTransaction);
+          }
 
-          if (foods?.length)
-            await this.adminFoodService.bulkUpdateFoods(locale, foods, conflictStrategies.foods || 'abort', foodsTransaction);
+          if (foods?.length) {
+            for (let i = 0; i < foods.length; i += BATCH_SIZE)
+              await this.adminFoodService.bulkUpdateFoods(locale, foods.slice(i, i + BATCH_SIZE), conflictStrategies.foods || 'abort', foodsTransaction);
+          }
         }
       });
     });
