@@ -21,16 +21,13 @@ export function session() {
         });
 
         const { search } = query;
-        const isPostgres = UserSurveySession.sequelize?.getDialect() === 'postgres';
-        const op = isPostgres ? Op.iLike : Op.substring;
-        const value = isPostgres ? `%${search}%` : search;
         const whereClause: WhereOptions<UserSurveySessionAttributes> = typeof search === 'string' && search
           ? {
               [Op.and]: {
                 surveyId,
                 [Op.or]: [
-                  where(cast(col('UserSurveySession.id'), 'text'), op, value),
-                  { '$alias.username$': { [op]: value } },
+                  where(cast(col('UserSurveySession.id'), 'text'), Op.iLike, `%${search}%`),
+                  { '$alias.username$': { [Op.iLike]: `%${search}%` } },
                 ],
               },
             }

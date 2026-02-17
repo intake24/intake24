@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import { validateConfig } from './validate-config';
+import { validateConfig } from '@intake24/common-backend';
 
 export const pdfConfig = z.object({
   puppeteer: z.object({
-    headless: z.union([z.literal('shell'), z.boolean()]).default(true),
+    headless: z.union([z.literal('shell'), z.boolean(), z.stringbool()]).default(true),
     lang: z.string().optional(),
   }),
 });
@@ -13,7 +13,7 @@ export type PuppeteerOptions = PdfConfig['puppeteer'];
 
 const parsedPdfConfig = validateConfig('PDF configuration', pdfConfig, {
   puppeteer: {
-    headless: process.env.PUPPETEER_HEADLESS === 'true' ? true : process.env.PUPPETEER_HEADLESS,
+    headless: process.env.PUPPETEER_HEADLESS,
     lang: process.env.PUPPETEER_LANG,
   },
 });

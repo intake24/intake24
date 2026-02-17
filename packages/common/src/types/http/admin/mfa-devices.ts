@@ -27,7 +27,7 @@ export type MFADevicesResponse = z.infer<typeof mfaDevicesResponse>;
 
 export const duoRegistrationChallenge = z.object({
   challengeId: z.string(),
-  challengeUrl: z.string().url(),
+  challengeUrl: z.url(),
 });
 
 export type DuoRegistrationChallenge = z.infer<typeof duoRegistrationChallenge>;
@@ -119,7 +119,7 @@ export type FIDORegistrationVerificationRequest = z.infer<
 export const otpRegistrationChallenge = z.object({
   challengeId: z.string(),
   qrCode: z.string(),
-  url: z.string().url(),
+  url: z.url(),
 });
 export type OTPRegistrationChallenge = z.infer<typeof otpRegistrationChallenge>;
 

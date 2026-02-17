@@ -4,21 +4,6 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: resolve('../../apps/api/.env') });
 
-const dialectOptions = {
-  mariadb: {
-    supportBigNumbers: true,
-    bigNumberStrings: true,
-  },
-  mysql: {
-    supportBigNumbers: true,
-    bigNumberStrings: true,
-  },
-  mssql: {},
-  postgres: {
-    ssl: process.env.DB_CONNECTION_SSL === 'true',
-  },
-};
-
 export default {
   development: {
     url: process.env.DB_DEV_SYSTEM_URL,
@@ -27,8 +12,10 @@ export default {
     database: process.env.DB_DEV_SYSTEM_DATABASE,
     username: process.env.DB_DEV_SYSTEM_USERNAME,
     password: process.env.DB_DEV_SYSTEM_PASSWORD,
-    dialect: process.env.DB_DEV_SYSTEM_DRIVER,
-    dialectOptions: dialectOptions[process.env.DB_DEV_SYSTEM_DRIVER],
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: process.env.DB_DEV_SYSTEM_SSL === 'true',
+    },
     migrationStorage: 'sequelize',
     migrationStorageTableName: 'sequelize_meta',
   },
@@ -39,8 +26,10 @@ export default {
     database: process.env.DB_TEST_SYSTEM_DATABASE,
     username: process.env.DB_TEST_SYSTEM_USERNAME,
     password: process.env.DB_TEST_SYSTEM_PASSWORD,
-    dialect: process.env.DB_TEST_SYSTEM_DRIVER,
-    dialectOptions: dialectOptions[process.env.DB_TEST_SYSTEM_DRIVER],
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: process.env.DB_TEST_SYSTEM_SSL === 'true',
+    },
     migrationStorage: 'sequelize',
     migrationStorageTableName: 'sequelize_meta',
   },
@@ -51,8 +40,10 @@ export default {
     database: process.env.DB_SYSTEM_DATABASE,
     username: process.env.DB_SYSTEM_USERNAME,
     password: process.env.DB_SYSTEM_PASSWORD,
-    dialect: process.env.DB_SYSTEM_DRIVER,
-    dialectOptions: dialectOptions[process.env.DB_SYSTEM_DRIVER],
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: process.env.DB_SYSTEM_SSL === 'true',
+    },
     migrationStorage: 'sequelize',
     migrationStorageTableName: 'sequelize_meta',
   },

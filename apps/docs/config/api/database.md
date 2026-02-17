@@ -86,16 +86,6 @@ Examples
 - type: `string | undefined`
 - default: `undefined`
 
-## Dialect
-
-- object-path: `[environment][database].dialect`
-- dotenv vars:
-  - `development`: `DB_DEV_FOODS_DRIVER` and `DB_DEV_SYSTEM_DRIVER`
-  - `test`: `DB_TEST_FOODS_DRIVER` and `DB_TEST_SYSTEM_DRIVER`
-  - `production`: `DB_FOODS_DRIVER` and `DB_SYSTEM_DRIVER`
-- type: `'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql'`
-- default: `'postgres'`
-
 ## Pool max connections
 
 - object-path: `[environment][database].pool.max`
@@ -112,8 +102,8 @@ SSL connection for database (only Postgresql dialect supported at the moment)
 
 - object-path: `[environment].security`
 - dotenv vars:
-  - `development`: `DB_CONNECTION_SSL`
-  - `test`: `DB_CONNECTION_SSL`
-  - `production`: `DB_CONNECTION_SSL`
+  - `development`: `DB_DEV_FOODS_SSL` and `DB_DEV_SYSTEM_SSL`
+  - `test`: `DB_TEST_FOODS_SSL` and `DB_TEST_SYSTEM_SSL`
+  - `production`: `DB_FOODS_SSL` and `DB_SYSTEM_SSL`
 - type: `'true' | 'false'`
 - default: `'false'`

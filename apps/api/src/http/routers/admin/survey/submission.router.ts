@@ -21,16 +21,13 @@ export function submission() {
         });
 
         const { search } = query;
-        const isPostgres = SurveySubmission.sequelize?.getDialect() === 'postgres';
-        const op = isPostgres ? Op.iLike : Op.substring;
-        const value = isPostgres ? `%${search}%` : search;
         const whereClause: WhereOptions<SurveySubmissionAttributes> = typeof search === 'string' && search
           ? {
               [Op.and]: {
                 surveyId,
                 [Op.or]: [
-                  where(cast(col('SurveySubmission.id'), 'text'), op, value),
-                  { '$user.aliases.username$': { [op]: value } },
+                  where(cast(col('SurveySubmission.id'), 'text'), Op.iLike, `%${search}%`),
+                  { '$user.aliases.username$': { [Op.iLike]: `%${search}%` } },
                 ],
               },
             }

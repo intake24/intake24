@@ -12,7 +12,7 @@ const contract = initContract();
 
 const pdfFeedbackRequest = z.object({
   lang: z.string().refine(val => validator.isLocale(val)).optional(),
-  submissions: z.array(z.string().uuid()).optional(),
+  submissions: z.array(z.uuid()).optional(),
 });
 
 export const respondent = contract.router({
@@ -89,7 +89,7 @@ export const respondent = contract.router({
     path: '/admin/surveys/:surveyId/respondents/:username/feedback',
     pathParams: z.object({ surveyId }),
     body: pdfFeedbackRequest.extend({
-      email: z.string().email().toLowerCase(),
+      email: z.email().toLowerCase(),
       copy: z.enum(emailCopy),
     }),
     responses: {

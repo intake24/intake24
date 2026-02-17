@@ -11,7 +11,7 @@ const contract = initContract();
 const pdfFeedbackRequest = z.object({
   lang: z.string().refine(val => validator.isLocale(val)).optional(),
   survey: z.string(),
-  submissions: z.array(z.string().uuid()).optional(),
+  submissions: z.array(z.uuid()).optional(),
 });
 
 export const feedback = contract.router({
@@ -30,8 +30,8 @@ export const feedback = contract.router({
     path: '/user/feedback',
     body: pdfFeedbackRequest
       .extend({
-        email: z.string().email().toLowerCase(),
-        emailConfirm: z.string().email().toLowerCase(),
+        email: z.email().toLowerCase(),
+        emailConfirm: z.email().toLowerCase(),
       })
       .refine(data => data.email === data.emailConfirm, {
         path: ['emailConfirm'],

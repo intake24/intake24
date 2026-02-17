@@ -43,7 +43,7 @@ export const foodAttributes = z.object({
   simpleName: z.string().nullable(),
   altNames,
   tags: z.string().array(),
-  version: z.string().uuid(),
+  version: z.uuid(),
 });
 export type FoodAttributes = z.infer<typeof foodAttributes>;
 

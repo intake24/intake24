@@ -199,17 +199,12 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
         if (!search)
           return { status: 200, body: [] };
 
-        const op
-          = User.sequelize?.getDialect() === 'postgres'
-            ? { [Op.iLike]: `%${search}%` }
-            : { [Op.substring]: search };
-
         const users = await User.findAll({
           attributes: ['id', 'name', 'email'],
           where: {
             email: { [Op.ne]: null },
             '$securables.user_id$': { [Op.eq]: null },
-            [Op.or]: { name: op, email: op },
+            [Op.or]: { name: { [Op.iLike]: `%${search}%` }, email: { [Op.iLike]: `%${search}%` } },
           },
           order: [['email', 'ASC']],
           limit: 10,

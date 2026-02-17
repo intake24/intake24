@@ -117,7 +117,7 @@ export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>({ valueSc
       return;
 
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       message: `Combined options values are too long, limit is ${limit} characters`,
     });
   });

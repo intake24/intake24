@@ -40,7 +40,7 @@ export const repeatJobRequest = jobAttributes.pick({
 
     if (!val.type) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'Job type is required',
         path: ['type'],
       });

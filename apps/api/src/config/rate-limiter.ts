@@ -2,9 +2,10 @@ import type { Options } from 'express-rate-limit';
 
 import z from 'zod';
 
+import { validateConfig } from '@intake24/common-backend';
+
 import { parsedMsStringValue } from './common';
 import { redisOptionsWithKeyPrefixSchema } from './redis';
-import { validateConfig } from './validate-config';
 
 export const rateLimitSchema = z.object({
   windowMs: parsedMsStringValue,
@@ -28,10 +29,10 @@ export type RateLimiterConfig = z.infer<typeof rateLimiterConfigSchema> & { [key
 
 const rawRateLimiterConfig = {
   redis: {
-    url: process.env.RATE_LIMITER_REDIS_URL || process.env.REDIS_URL || undefined,
-    host: process.env.RATE_LIMITER_REDIS_HOST || process.env.REDIS_HOST || 'localhost',
-    port: process.env.RATE_LIMITER_REDIS_PORT || process.env.REDIS_PORT || '6379',
-    db: process.env.RATE_LIMITER_REDIS_DATABASE || process.env.REDIS_DATABASE || '0',
+    url: process.env.RATE_LIMITER_REDIS_URL || process.env.REDIS_URL,
+    host: process.env.RATE_LIMITER_REDIS_HOST || process.env.REDIS_HOST,
+    port: process.env.RATE_LIMITER_REDIS_PORT || process.env.REDIS_PORT,
+    db: process.env.RATE_LIMITER_REDIS_DATABASE || process.env.REDIS_DATABASE,
     keyPrefix: process.env.RATE_LIMITER_REDIS_PREFIX || 'it24:rate-limiter:',
   },
   generic: {

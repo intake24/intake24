@@ -121,7 +121,7 @@ export type SurveyFAQs = z.infer<typeof surveyFAQs>;
 export const surveyHelpRequest = z
   .object({
     name: z.string().nullish(),
-    email: z.string().email().toLowerCase().nullish(),
+    email: z.email().toLowerCase().nullish(),
     phone: z.string().nullish(),
     phoneCountry: z
       .string()
@@ -157,7 +157,7 @@ export type SurveyHelpRequest = z.infer<typeof surveyHelpRequest>;
 export const surveyRatingRequest = z.object({
   type: z.enum(surveyRatings),
   rating: z.number().min(1).max(5),
-  submissionId: z.string().uuid().optional(),
+  submissionId: z.uuid().optional(),
   comment: z.string().max(500).nullish(),
 });
 

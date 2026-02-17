@@ -4,9 +4,9 @@ import { customData, portionSizeMethods } from '@intake24/common/surveys';
 
 // Foods
 export const surveySubmissionFood = z.object({
-  id: z.string().uuid(),
-  parentId: z.string().uuid().nullable(),
-  mealId: z.string().uuid(),
+  id: z.uuid(),
+  parentId: z.uuid().nullable(),
+  mealId: z.uuid(),
   index: z.number().int(),
   code: z.string().max(64),
   englishName: z.string().max(256),
@@ -28,9 +28,9 @@ export const surveySubmissionFood = z.object({
 export type SurveySubmissionFood = z.infer<typeof surveySubmissionFood>;
 
 export const surveySubmissionMissingFood = z.object({
-  id: z.string().uuid(),
-  parentId: z.string().uuid().nullable(),
-  mealId: z.string().uuid(),
+  id: z.uuid(),
+  parentId: z.uuid().nullable(),
+  mealId: z.uuid(),
   index: z.number().int(),
   name: z.string().max(512).nullable(),
   brand: z.string().max(512).nullable(),
@@ -43,8 +43,8 @@ export type SurveySubmissionMissingFood = z.infer<typeof surveySubmissionMissing
 
 // Meals
 export const surveySubmissionMeal = z.object({
-  id: z.string().uuid(),
-  submissionId: z.string().uuid(),
+  id: z.uuid(),
+  submissionId: z.uuid(),
   hours: z.number().int(),
   minutes: z.number().int(),
   name: z.string().max(64).nullable(),
@@ -55,14 +55,14 @@ export type SurveySubmissionMeal = z.infer<typeof surveySubmissionMeal>;
 
 // Submissions
 export const surveySubmissionAttributes = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   surveyId: z.string(),
   userId: z.string(),
   startTime: z.date(),
   endTime: z.date(),
   submissionTime: z.date(),
   log: z.string().nullable(),
-  sessionId: z.string().uuid(),
+  sessionId: z.uuid(),
   customData,
   userAgent: z.string().nullable(),
   createdAt: z.date(),

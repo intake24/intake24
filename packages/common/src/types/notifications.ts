@@ -15,7 +15,7 @@ export type NotificationChannel = (typeof notificationChannels)[number];
 export const emailNotification = z.object({
   type: z.enum(eventTypes),
   channel: z.literal('email'),
-  to: z.string().email().toLowerCase(),
+  to: z.email().toLowerCase(),
 });
 
 export type EmailNotification = z.infer<typeof emailNotification>;
@@ -31,7 +31,7 @@ export type SlackNotification = z.infer<typeof slackNotification>;
 export const webhookNotification = z.object({
   type: z.enum(eventTypes),
   channel: z.literal('webhook'),
-  url: z.string().url(),
+  url: z.url(),
 });
 
 export type WebhookNotification = z.infer<typeof webhookNotification>;

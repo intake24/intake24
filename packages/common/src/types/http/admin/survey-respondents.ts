@@ -3,19 +3,20 @@ import { z } from 'zod';
 
 import { userAttributes, userCustomFieldAttributes, userRequest, userSurveyAliasAttributes } from './users';
 
-export const respondentEntry = userSurveyAliasAttributes.omit({
-  createdAt: true,
-  updatedAt: true,
-}).merge(userAttributes.pick({
-  name: true,
-  email: true,
-  phone: true,
-})).extend({
+export const respondentEntry = z.object({
+  ...userSurveyAliasAttributes.omit({
+    createdAt: true,
+    updatedAt: true,
+  }).shape,
+  ...userAttributes.pick({
+    name: true,
+    email: true,
+    phone: true,
+  }).shape,
   customFields: userCustomFieldAttributes.array(),
   surveyAuthUrl: z.string(),
   feedbackAuthUrl: z.string(),
 });
-
 export type RespondentEntry = z.infer<typeof respondentEntry>;
 
 export const respondentListEntry = userSurveyAliasAttributes.omit({

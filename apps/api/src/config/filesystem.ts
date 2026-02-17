@@ -1,19 +1,19 @@
 import z from 'zod';
 
+import { validateConfig } from '@intake24/common-backend';
+
 import { msStringValue, parsedBytesStringValue } from './common';
-import { validateConfig } from './validate-config';
 
-export const localLocationSchema = z.enum(['public', 'downloads', 'uploads', 'images']);
-
-export type LocalLocation = z.infer<typeof localLocationSchema>;
+export const localLocation = z.enum(['public', 'downloads', 'uploads', 'images', 'cache']);
+export type LocalLocation = z.infer<typeof localLocation>;
 
 export const fileSystemConfigSchema = z.object({
   local: z.object({
-    public: z.string().nonempty(),
-    downloads: z.string().nonempty(),
-    uploads: z.string().nonempty(),
-    images: z.string().nonempty(),
-    cache: z.string().nonempty(),
+    public: z.string().nonempty().default('public'),
+    downloads: z.string().nonempty().default('storage/private/downloads'),
+    uploads: z.string().nonempty().default('storage/private/uploads'),
+    images: z.string().nonempty().default('storage/public/images'),
+    cache: z.string().nonempty().default('storage/private/cache'),
   }),
   urlExpiresAt: msStringValue,
   maxChunkedUploadSize: parsedBytesStringValue,
@@ -24,11 +24,11 @@ export type FileSystemConfig = z.infer<typeof fileSystemConfigSchema>;
 
 const rawFsConfig = {
   local: {
-    public: process.env.FS_PUBLIC || 'public',
-    downloads: process.env.FS_DOWNLOADS || 'storage/private/downloads',
-    uploads: process.env.FS_UPLOADS || 'storage/private/uploads',
-    images: process.env.FS_IMAGES || 'storage/public/images',
-    cache: process.env.FS_CACHE || 'storage/private/cache',
+    public: process.env.FS_PUBLIC,
+    downloads: process.env.FS_DOWNLOADS,
+    uploads: process.env.FS_UPLOADS,
+    images: process.env.FS_IMAGES,
+    cache: process.env.FS_CACHE,
   },
   urlExpiresAt: '2d',
   maxChunkedUploadSize: process.env.FS_MAX_CHUNKED_UPLOAD_SIZE || '100MB',

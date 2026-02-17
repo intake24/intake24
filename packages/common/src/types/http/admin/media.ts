@@ -21,13 +21,16 @@ export const withModel = z.object({
 });
 
 export const createMediaRequest = z.object({
-  id: z.string().uuid().nullish().transform(val => val || undefined),
+  id: z.uuid().nullish().transform(val => val || undefined),
   name: z.string().max(128).nullish().transform(val => val || undefined),
   collection: z.string().min(1).max(128),
   disk: z.enum(mediaDisks),
 });
 export type CreateMediaRequest = z.infer<typeof createMediaRequest>;
-export const createMediaWithModelRequest = createMediaRequest.merge(withModel);
+export const createMediaWithModelRequest = z.object({
+  ...createMediaRequest.shape,
+  ...withModel.shape,
+});
 export type CreateMediaWithModelRequest = z.infer<typeof createMediaWithModelRequest>;
 
 export const updateMediaRequest = z.object({
@@ -36,11 +39,14 @@ export const updateMediaRequest = z.object({
 });
 export type UpdateMediaRequest = z.infer<typeof updateMediaRequest>;
 
-export const updateMediaWithModelRequest = updateMediaRequest.merge(withModel);
+export const updateMediaWithModelRequest = z.object({
+  ...updateMediaRequest.shape,
+  ...withModel.shape,
+});
 export type UpdateMediaWithModelRequest = z.infer<typeof updateMediaWithModelRequest>;
 
 export const mediaAttributes = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   modelId: bigIntString.nullable(),
   modelType: z.string().max(64),
   disk: z.enum(mediaDisks),
@@ -56,7 +62,7 @@ export const mediaAttributes = z.object({
 export type MediaAttributes = z.infer<typeof mediaAttributes>;
 
 export const mediaEntry = mediaAttributes.extend({
-  url: z.string().url(),
-  sizes: z.record(z.string(), z.string().url()),
+  url: z.url(),
+  sizes: z.record(z.string(), z.url()),
 });
 export type MediaEntry = z.infer<typeof mediaEntry>;

@@ -14,7 +14,7 @@ export const password = contract.router({
       'user-agent': z.string().optional(),
     },
     body: z.object({
-      email: z.string().email().toLowerCase(),
+      email: z.email().toLowerCase(),
       captcha,
     }),
     responses: {
@@ -28,7 +28,7 @@ export const password = contract.router({
     method: 'POST',
     path: '/password/reset',
     body: strongPasswordWithConfirm
-      .extend({ email: z.string().email().toLowerCase(), token: z.string() })
+      .extend({ email: z.email().toLowerCase(), token: z.string() })
       .refine(data => data.password === data.passwordConfirm, {
         message: 'Passwords don\'t match',
         path: ['passwordConfirm'],

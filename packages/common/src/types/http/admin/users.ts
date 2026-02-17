@@ -16,7 +16,7 @@ export type UserCustomFieldAttributes = z.infer<typeof userCustomFieldAttributes
 
 export const userRequest = z.object({
   disabledAt: z.coerce.date().nullish(),
-  email: z.string().max(512).email().toLowerCase().nullish(),
+  email: z.email().max(512).toLowerCase().nullish(),
   emailNotifications: z.boolean().optional(),
   multiFactorAuthentication: z.boolean().optional(),
   name: z.string().max(512).nullish(),
@@ -26,7 +26,8 @@ export const userRequest = z.object({
   permissions: bigIntString.array().optional(),
   roles: bigIntString.array().optional(),
   customFields: userCustomField.array().optional(),
-}).merge(strongPasswordWithConfirmOptional);
+  ...strongPasswordWithConfirmOptional.shape,
+});
 export type UserRequest = z.infer<typeof userRequest>;
 
 export const userInput = userRequest.omit({

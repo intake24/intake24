@@ -10,7 +10,10 @@ export const createAsServedImageRequest = z.object({
 });
 export type CreateAsServedImageRequest = z.infer<typeof createAsServedImageRequest>;
 
-export const createAsServedImageInput = createAsServedImageRequest.merge(uploadSourceImageInput);
+export const createAsServedImageInput = z.object({
+  ...createAsServedImageRequest.shape,
+  ...uploadSourceImageInput.shape,
+});
 export type CreateAsServedImageInput = z.infer<typeof createAsServedImageInput>;
 
 export const asServedImageAttributes = z.object({
@@ -50,7 +53,10 @@ export const createAsServedSetRequest = asServedSetAttributes.pick({
 });
 export type CreateAsServedSetRequest = z.infer<typeof createAsServedSetRequest>;
 
-export const createAsServedSetInput = createAsServedSetRequest.merge(uploadSourceImageInput);
+export const createAsServedSetInput = z.object({
+  ...createAsServedSetRequest.shape,
+  ...uploadSourceImageInput.shape,
+});
 export type CreateAsServedSetInput = z.infer<typeof createAsServedSetInput>;
 
 export const updateAsServedSetInput = createAsServedSetInput.pick({

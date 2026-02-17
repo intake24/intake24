@@ -175,67 +175,86 @@ export const reviewOptions = [false, 'scroll', 'checkbox', 'onecheckbox'] as con
 export type ReviewOptions = (typeof reviewOptions)[number];
 
 // Custom
-const aggregateChoicePrompt = baseCustomPrompt.extend({
+const aggregateChoicePrompt = z.object({
+  ...baseCustomPrompt.shape,
   component: z.literal('aggregate-choice-prompt'),
   options: localeOptionList(),
   foodFilter: condition.optional(),
 });
 
-const checkboxListPrompt = baseCustomPrompt
-  .extend({
-    component: z.literal('checkbox-list-prompt'),
-    options: localeOptionList({ limit: 2048 }),
-    other: z.boolean(),
-    validation: promptValidationWithLimits,
-  });
+const checkboxListPrompt = z.object({
+  ...baseCustomPrompt.shape,
+  component: z.literal('checkbox-list-prompt'),
+  options: localeOptionList({ limit: 2048 }),
+  other: z.boolean(),
+  validation: promptValidationWithLimits,
+});
 
-const datePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(datePicker).extend({
+const datePickerPrompt = z.object({
+  ...baseCustomPrompt.shape,
+  ...validatedPrompt.shape,
+  ...datePicker.shape,
   component: z.literal('date-picker-prompt'),
 });
 
-const foodSelectionPrompt = baseCustomPrompt.extend({
+const foodSelectionPrompt = z.object({
+  ...baseCustomPrompt.shape,
   component: z.literal('food-selection-prompt'),
   foodFilter: condition.optional(),
   useFlag: z.boolean(),
   flag: z.string().optional(),
 });
 
-const infoPrompt = baseCustomPrompt.merge(hasVideo).extend({
+const infoPrompt = z.object({
+  ...baseCustomPrompt.shape,
+  ...hasVideo.shape,
   component: z.literal('info-prompt'),
   carousel: carousel.optional(),
 });
 
-const noMoreInformationPrompt = baseCustomPrompt.extend({
+const noMoreInformationPrompt = z.object({
+  ...baseCustomPrompt.shape,
   component: z.literal('no-more-information-prompt'),
 });
 
-const radioListPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
+const radioListPrompt = z.object({
+  ...baseCustomPrompt.shape,
+  ...validatedPrompt.shape,
   component: z.literal('radio-list-prompt'),
   options: localeOptionList(),
   orientation: z.enum(radioOrientations),
   other: z.boolean(),
 });
 
-const selectPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
+const selectPrompt = z.object({
+  ...baseCustomPrompt.shape,
+  ...validatedPrompt.shape,
   component: z.literal('select-prompt'),
   options: localeOptionList({ limit: 2048 }),
   multiple: z.boolean(),
 });
 
-const sliderPrompt = baseCustomPrompt.extend({
+const sliderPrompt = z.object({
+  ...baseCustomPrompt.shape,
   component: z.literal('slider-prompt'),
   slider,
 });
 
-const textareaPrompt = baseCustomPrompt.merge(validatedPrompt).extend({
+const textareaPrompt = z.object({
+  ...baseCustomPrompt.shape,
+  ...validatedPrompt.shape,
   component: z.literal('textarea-prompt'),
 });
 
-const timePickerPrompt = baseCustomPrompt.merge(validatedPrompt).merge(timePicker).extend({
+const timePickerPrompt = z.object({
+  ...baseCustomPrompt.shape,
+  ...validatedPrompt.shape,
+  ...timePicker.shape,
   component: z.literal('time-picker-prompt'),
 });
 
-const yesNoPrompt = baseCustomPrompt.extend({
+const yesNoPrompt = z.object({
+  ...baseCustomPrompt.shape,
   component: z.literal('yes-no-prompt'),
   useFlag: z.boolean(),
   flag: z.string().optional(),
@@ -245,100 +264,119 @@ const yesNoPrompt = baseCustomPrompt.extend({
 export const hasMultiple = z.object({ multiple: z.discriminatedUnion('type', [counter, slider]).or(z.literal(false)) });
 export type HasMultiple = z.infer<typeof hasMultiple>;
 
-const asServedPrompt = basePortionPrompt
-  .merge(hasMultiple)
-  .extend({
-    component: z.literal('as-served-prompt'),
-    imageMap,
-    leftovers: z.boolean(),
-  });
+const asServedPrompt = z.object({
+  ...basePortionPrompt.shape,
+  ...hasMultiple.shape,
+  component: z.literal('as-served-prompt'),
+  imageMap,
+  leftovers: z.boolean(),
+});
 
-const cerealPrompt = basePortionPrompt.extend({
+const cerealPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('cereal-prompt'),
   imageMap,
   leftovers: z.boolean(),
 });
 
-const directWeightPrompt = basePortionPrompt.extend({
+const directWeightPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('direct-weight-prompt'),
 });
 
-const drinkScalePrompt = basePortionPrompt
-  .merge(hasMultiple)
-  .extend({
-    component: z.literal('drink-scale-prompt'),
-    imageMap,
-    leftovers: z.boolean(),
-  });
+const drinkScalePrompt = z.object({
+  ...basePortionPrompt.shape,
+  ...hasMultiple.shape,
+  component: z.literal('drink-scale-prompt'),
+  imageMap,
+  leftovers: z.boolean(),
+});
 
-const guideImagePrompt = basePortionPrompt.extend({
+const guideImagePrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('guide-image-prompt'),
   imageMap,
   linkedQuantity,
 });
 
-const milkInAHotDrinkPrompt = basePortionPrompt.extend({
+const milkInAHotDrinkPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('milk-in-a-hot-drink-prompt'),
   orientation: z.enum(radioOrientations),
 });
 
-const milkOnCerealPrompt = basePortionPrompt.extend({
+const milkOnCerealPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('milk-on-cereal-prompt'),
   imageMap,
 });
 
-const missingFoodPrompt = basePortionPrompt.extend({
+const missingFoodPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('missing-food-prompt'),
   barcode: barcodeScannerOptions,
 });
 
-const parentFoodPortionPrompt = basePortionPrompt.extend({
+const parentFoodPortionPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('parent-food-portion-prompt'),
   orientation: z.enum(radioOrientations),
 });
 
-const pizzaPrompt = basePortionPrompt.extend({
+const pizzaPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('pizza-prompt'),
   imageMap,
 });
 
-const pizzaV2Prompt = basePortionPrompt.extend({
+const pizzaV2Prompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('pizza-v2-prompt'),
   imageMap,
 });
 
-const portionSizeOptionPrompt = basePortionPrompt.extend({
+const portionSizeOptionPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('portion-size-option-prompt'),
 });
 
-const recipeBuilderPrompt = basePortionPrompt.merge(foodBrowser).extend({
+const recipeBuilderPrompt = z.object({
+  ...basePortionPrompt.shape,
+  ...foodBrowser.shape,
   component: z.literal('recipe-builder-prompt'),
   hints: foodSearchHint.array(),
 });
 
-const standardPortionPrompt = basePortionPrompt.extend({
+const standardPortionPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('standard-portion-prompt'),
   linkedQuantity,
 });
 
-const unknownPrompt = basePortionPrompt.extend({
+const unknownPrompt = z.object({
+  ...basePortionPrompt.shape,
   component: z.literal('unknown-prompt'),
   defaultWeight: z.number().optional(),
 });
 
 // Standard
-const addonFoodsPrompt = baseStandardPrompt.extend({
+const addonFoodsPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('addon-foods-prompt'),
   addons: addonFood.array(),
 });
 
-const associatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
+const associatedFoodsPrompt = z.object({
+  ...baseStandardPrompt.shape,
+  ...foodBrowser.shape,
   component: z.literal('associated-foods-prompt'),
   hints: foodSearchHint.array(),
   multiple: z.boolean(),
 });
 
-const generalAssociatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).extend({
+const generalAssociatedFoodsPrompt = z.object({
+  ...baseStandardPrompt.shape,
+  ...foodBrowser.shape,
   component: z.literal('general-associated-foods-prompt'),
   categoryCode: z.string(),
   promptText: localeTranslation,
@@ -348,63 +386,77 @@ const generalAssociatedFoodsPrompt = baseStandardPrompt.merge(foodBrowser).exten
   skipPortionSize: z.boolean(),
 });
 
-const editMealPrompt = baseStandardPrompt.extend({
+const editMealPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('edit-meal-prompt'),
   separateDrinks: z.boolean(),
   inputAutoFocus: z.boolean(),
   hints: foodSearchHint.array(),
 });
 
-const externalSourcePrompt = baseStandardPrompt.extend({
+const externalSourcePrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('external-source-prompt'),
   source: externalSourceOptions,
   barcode: barcodeScannerOptions,
   initialSearch: z.union([z.literal(false), z.literal('searchTerm')]),
 });
 
-const finalPrompt = baseStandardPrompt.extend({
+const finalPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('final-prompt'),
   rating: z.boolean(),
 });
 
-const foodSearchPrompt = baseStandardPrompt.merge(foodBrowser).extend({
+const foodSearchPrompt = z.object({
+  ...baseStandardPrompt.shape,
+  ...foodBrowser.shape,
   component: z.literal('food-search-prompt'),
   allowBrowsing: z.boolean(),
   dualLanguage: z.boolean(),
   hints: foodSearchHint.array(),
 });
 
-const mealAddPrompt = baseStandardPrompt.extend({
+const mealAddPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('meal-add-prompt'),
   custom: z.boolean(),
   unique: z.boolean(),
 });
 
-const mealDurationPrompt = baseStandardPrompt.extend({
+const mealDurationPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('meal-duration-prompt'),
   slider,
 });
 
-const mealGapPrompt = baseStandardPrompt.extend({
+const mealGapPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('meal-gap-prompt'),
   gap: z.number(),
   startTime: z.string(),
   endTime: z.string(),
 });
 
-const mealTimePrompt = baseStandardPrompt.merge(timePicker).extend({
+const mealTimePrompt = z.object({
+  ...baseStandardPrompt.shape,
+  ...timePicker.shape,
   component: z.literal('meal-time-prompt'),
 });
 
-const readyMealPrompt = baseStandardPrompt.extend({
+const readyMealPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('ready-meal-prompt'),
 });
 
-const recallDatePrompt = baseStandardPrompt.merge(datePicker).extend({
+const recallDatePrompt = z.object({
+  ...baseStandardPrompt.shape,
+  ...datePicker.shape,
   component: z.literal('recall-date-prompt'),
 });
 
-const redirectPrompt = baseStandardPrompt.extend({
+const redirectPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('redirect-prompt'),
   rating: z.boolean(),
   url: z.string().nullable(),
@@ -413,28 +465,34 @@ const redirectPrompt = baseStandardPrompt.extend({
   target: z.union([z.literal('_self'), z.literal('_blank')]),
 });
 
-const reviewConfirmPrompt = baseStandardPrompt.extend({
+const reviewConfirmPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('review-confirm-prompt'),
 });
 
-const sameAsBeforePrompt = baseStandardPrompt.extend({
+const sameAsBeforePrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('same-as-before-prompt'),
   skipToSAB: z.boolean().optional(),
 });
 
-const sleepSchedulePrompt = baseStandardPrompt.merge(timePicker).extend({
+const sleepSchedulePrompt = z.object({
+  ...baseStandardPrompt.shape,
+  ...timePicker.shape,
   component: z.literal('sleep-schedule-prompt'),
   wakeUpTime: z.string().time(),
   sleepTime: z.string().time(),
 });
 
-const splitFoodPrompt = baseStandardPrompt.extend({
+const splitFoodPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('split-food-prompt'),
 });
 
-const submitPrompt = baseStandardPrompt.extend({
+const submitPrompt = z.object({
+  ...baseStandardPrompt.shape,
   component: z.literal('submit-prompt'),
-  review: z.record(z.enum(layoutTypes), z.union([z.literal(false), z.literal('scroll'), z.literal('checkbox'), z.literal('onecheckbox')])),
+  review: z.record(z.enum(layoutTypes), z.literal([false, 'scroll', 'checkbox', 'onecheckbox'])),
 });
 
 export const singlePrompt = z.discriminatedUnion('component', [

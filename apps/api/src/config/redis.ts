@@ -6,9 +6,9 @@ export const redisOptionsSchema = z.object({
   url: z.string().optional(),
   path: z.string().optional(),
   keyPrefix: z.string().optional(),
-  host: z.string().nonempty(),
-  port: z.coerce.number().int().positive(),
-  db: z.coerce.number().int().nonnegative(),
+  host: z.string().nonempty().default('localhost'),
+  port: z.coerce.number().int().positive().default(6379),
+  db: z.coerce.number().int().nonnegative().default(0),
 });
 
 export type RedisOptions = z.infer<typeof redisOptionsSchema>;

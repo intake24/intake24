@@ -7,7 +7,7 @@ import { bigIntString } from '../generic';
 import { userAttributes } from './users';
 
 export const createUserWithSecurables = z.object({
-  email: z.string().email().toLowerCase(),
+  email: z.email().toLowerCase(),
   name: z.string().max(512).nullish(),
   phone: z.string().max(32).nullish(),
   actions: z.string().array().min(1),

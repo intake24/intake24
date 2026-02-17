@@ -51,14 +51,11 @@ export class KyselyDatabases {
       user: this.config[this.env][database].username,
       connectionString: this.config[this.env][database].url,
       password: this.config[this.env][database].password,
-      max: this.config[this.env][database].pool?.max ?? 10,
+      max: this.config[this.env][database].pool.max,
       log: (...messages: any[]) => this.poolLogger.debug(messages.join('; ')),
     });
 
-    const dialect = new PostgresDialect({
-      pool,
-      cursor,
-    });
+    const dialect = new PostgresDialect({ pool, cursor });
 
     return {
       dialect,

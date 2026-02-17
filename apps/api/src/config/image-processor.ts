@@ -1,6 +1,6 @@
 import z from 'zod';
 
-import { validateConfig } from './validate-config';
+import { validateConfig } from '@intake24/common-backend';
 
 export const sourceImageConfigSchema = z.object({
   thumbnailWidth: z.number().int().positive(),

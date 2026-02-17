@@ -23,14 +23,14 @@ export const surveyAttributes = z.object({
   localeId: z.string(),
   allowGenUsers: z.boolean(),
   genUserKey: z.string().max(256).nullable(),
-  authUrlDomainOverride: z.string().max(512).url().nullable(),
+  authUrlDomainOverride: z.url().max(512).nullable(),
   authUrlTokenCharset: z.string().max(128).nullable().refine(value => !value || value.split('').length === [...new Set(value.split(''))].length),
   authUrlTokenLength: z.number().min(12).max(128).nullable(),
   authCaptcha: z.boolean(),
   authModes: z.enum(surveyAuthModes).array(),
   suspensionReason: z.string().max(512).nullable(),
   surveyMonkeyUrl: z.string().max(512).nullable(),
-  supportEmail: z.string().max(512).email().toLowerCase(),
+  supportEmail: z.email().max(512).toLowerCase(),
   originatingUrl: z.string().max(512).nullable(),
   faqId: z.string().nullable(),
   feedbackSchemeId: z.string().nullable(),
@@ -110,7 +110,7 @@ export type SurveyListEntry = z.infer<typeof surveyListEntry>;
 export type SurveyEntry = z.infer<typeof surveyEntry>;
 
 export const userSurveySessionAttributes = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   userId: z.string(),
   surveyId: z.string(),
   // TODO: survey state

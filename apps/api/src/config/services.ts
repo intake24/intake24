@@ -1,8 +1,7 @@
 import z from 'zod';
 
+import { validateConfig } from '@intake24/common-backend';
 import { captchaProviders } from '@intake24/common/security';
-
-import { validateConfig } from './validate-config';
 
 export const baseEMProvider = z.object({
   lists: z.object({
@@ -22,7 +21,7 @@ export const servicesConfig = z.object({
     publicKey: z.string().nonempty().superRefine((val, ctx) => {
       if (!val) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'See https://docs.intake24.org/config/api/services#web-push',
         });
       }
@@ -30,7 +29,7 @@ export const servicesConfig = z.object({
     privateKey: z.string().nonempty().superRefine((val, ctx) => {
       if (!val) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'See https://docs.intake24.org/config/api/services#web-push',
         });
       }
@@ -43,7 +42,7 @@ export const servicesConfig = z.object({
   comms: z.object({
     provider: z.enum(['email-blaster']).nullable().default(null),
     'email-blaster': baseEMProvider.extend({
-      url: z.string().url().default('https://api.emailblaster.cloud/2.0'),
+      url: z.url().default('https://api.emailblaster.cloud/2.0'),
       apiKey: z.string().default(''),
     }),
   }).superRefine(
@@ -53,7 +52,7 @@ export const servicesConfig = z.object({
 
       if (!val[val.provider].lists.newsletter || !val[val.provider].lists.support) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'Missing mailing lists configuration',
           path: ['email-blaster', 'lists'],
         });
@@ -61,7 +60,7 @@ export const servicesConfig = z.object({
 
       if (val.provider === 'email-blaster' && !val['email-blaster'].apiKey) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'Missing Email Blaster API key',
         });
       }

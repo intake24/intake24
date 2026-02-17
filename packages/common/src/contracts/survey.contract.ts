@@ -41,7 +41,7 @@ export const survey = initContract().router({
     method: 'POST',
     path: '/surveys/:slug/create-user',
     body: z.object({
-      token: z.string().jwt(),
+      token: z.jwt(),
     }),
     responses: {
       200: createUserResponse,

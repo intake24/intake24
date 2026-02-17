@@ -30,9 +30,9 @@ export type SameSiteCookieOptions = (typeof sameSiteCookieOptions)[number];
 export const cookieSettings = z.object({
   name: z.string(),
   maxAge: parsedMsStringValue,
-  httpOnly: z.boolean(),
+  httpOnly: z.boolean().or(z.stringbool()).default(true),
   path: z.string(),
   sameSite: z.enum(sameSiteCookieOptions).default('lax'),
-  secure: z.boolean(),
+  secure: z.boolean().or(z.stringbool()).default(false),
 });
 export type CookieSettings = z.infer<typeof cookieSettings>;

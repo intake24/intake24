@@ -250,7 +250,7 @@ describe('formatZodError', () => {
     it('returns a formatted string with all errors', () => {
       const schema = z.object({
         name: z.string(),
-        email: z.string().email(),
+        email: z.email(),
       });
 
       const input = { name: 123, email: 'not-an-email' };

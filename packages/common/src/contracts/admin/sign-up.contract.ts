@@ -17,8 +17,8 @@ export const signUp = contract.router({
     },
     body: strongPasswordWithConfirm
       .extend({
-        email: z.string().max(512).email().toLowerCase(),
-        emailConfirm: z.string().email().toLowerCase(),
+        email: z.email().max(512).toLowerCase(),
+        emailConfirm: z.email().toLowerCase(),
         name: z.string().min(3).max(512),
         phone: z.string().max(32).nullish(),
         terms: z.literal(true),
@@ -27,7 +27,7 @@ export const signUp = contract.router({
       .superRefine((data, ctx) => {
         if (data.email !== data.emailConfirm) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             path: ['emailConfirm'],
             message: `Emails do not match`,
           });
@@ -35,7 +35,7 @@ export const signUp = contract.router({
 
         if (data.email !== data.emailConfirm) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             path: ['passwordConfirm'],
             message: `Passwords do not match`,
           });
@@ -51,7 +51,7 @@ export const signUp = contract.router({
     method: 'POST',
     path: '/admin/sign-up/verify',
     body: z.object({
-      token: z.string().jwt(),
+      token: z.jwt(),
     }),
     responses: {
       200: contract.noBody(),

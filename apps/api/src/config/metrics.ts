@@ -1,26 +1,26 @@
 import { z } from 'zod';
 
-import { validateConfig } from './validate-config';
+import { validateConfig } from '@intake24/common-backend';
 
 const metricsConfigSchema = z.object({
   prometheusNodeExporter: z.object({
-    enabled: z.boolean(),
-    port: z.number(),
+    enabled: z.boolean().or(z.stringbool()).default(false),
+    port: z.number().default(9100),
   }),
   app: z.object({
-    collectDefaultMetrics: z.boolean(),
+    collectDefaultMetrics: z.boolean().or(z.stringbool()).default(true),
     db: z.object({
-      collectConnectionPoolStats: z.boolean(),
-      collectConnectionDuration: z.boolean(),
-      collectConnectionSource: z.boolean(),
+      collectConnectionPoolStats: z.boolean().or(z.stringbool()).default(true),
+      collectConnectionDuration: z.boolean().or(z.stringbool()).default(true),
+      collectConnectionSource: z.boolean().or(z.stringbool()).default(true),
     }),
     http: z.object({
-      enabled: z.boolean(),
-      collectRequestDuration: z.boolean(),
-      collectContentLength: z.boolean(),
+      enabled: z.boolean().or(z.stringbool()).default(true),
+      collectRequestDuration: z.boolean().or(z.stringbool()).default(true),
+      collectContentLength: z.boolean().or(z.stringbool()).default(true),
     }),
     jobs: z.object({
-      enabled: z.boolean(),
+      enabled: z.boolean().or(z.stringbool()).default(true),
     }),
     instanceId: z.object({
       pm2: z.string().optional(),
@@ -34,27 +34,27 @@ export type MetricsConfig = z.infer<typeof metricsConfigSchema>;
 
 const parsedMetricsConfig = validateConfig('Performance metrics configuration', metricsConfigSchema, {
   prometheusNodeExporter: {
-    enabled: Boolean(process.env.METRICS_PROMETHEUS_NODE_EXPORTER_ENABLED),
-    port: Number.parseInt(process.env.METRICS_PROMETHEUS_NODE_EXPORTER_PORT || '9100'),
+    enabled: process.env.METRICS_PROMETHEUS_NODE_EXPORTER_ENABLED,
+    port: process.env.METRICS_PROMETHEUS_NODE_EXPORTER_PORT,
   },
   app: {
-    collectDefaultMetrics: Boolean(process.env.METRICS_COLLECT_DEFAULT),
+    collectDefaultMetrics: process.env.METRICS_COLLECT_DEFAULT,
     db: {
-      collectConnectionPoolStats: Boolean(process.env.METRICS_COLLECT_DB_CONNECTION_POOL_STATS),
-      collectConnectionDuration: Boolean(process.env.METRICS_COLLECT_DB_CONNECTION_DURATION),
-      collectConnectionSource: Boolean(process.env.METRICS_COLLECT_DB_CONNECTION_SOURCE),
+      collectConnectionPoolStats: process.env.METRICS_COLLECT_DB_CONNECTION_POOL_STATS,
+      collectConnectionDuration: process.env.METRICS_COLLECT_DB_CONNECTION_DURATION,
+      collectConnectionSource: process.env.METRICS_COLLECT_DB_CONNECTION_SOURCE,
     },
     http: {
-      enabled: Boolean(process.env.METRICS_HTTP_ENABLED),
-      collectRequestDuration: Boolean(process.env.METRICS_COLLECT_HTTP_REQUEST_DURATION),
-      collectContentLength: Boolean(process.env.METRICS_COLLECT_HTTP_CONTENT_LENGTH),
+      enabled: process.env.METRICS_HTTP_ENABLED,
+      collectRequestDuration: process.env.METRICS_COLLECT_HTTP_REQUEST_DURATION,
+      collectContentLength: process.env.METRICS_COLLECT_HTTP_CONTENT_LENGTH,
     },
     instanceId: {
       pm2: process.env.NODE_APP_INSTANCE,
       intake24: process.env.METRICS_INSTANCE_ID,
     },
     jobs: {
-      enabled: Boolean(process.env.METRICS_COLLECT_JOBS_DURATION),
+      enabled: process.env.METRICS_COLLECT_JOBS_DURATION,
     },
   },
 });

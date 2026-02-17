@@ -1,9 +1,9 @@
 import z from 'zod';
 
+import { validateConfig } from '@intake24/common-backend';
 import { mfaModes } from '@intake24/common/security';
 
 import { cookieSettings, msStringValue } from './common';
-import { validateConfig } from './validate-config';
 
 export const jwtFrontEndSettings = z.object({
   access: z.object({
@@ -38,7 +38,7 @@ export const securityConfigSchema = z.object({
         clientId: z.string().default(''),
         clientSecret: z.string().default(''),
         apiHost: z.string().default(''),
-        redirectUrl: z.string().url().default('https://localhost:8100'),
+        redirectUrl: z.url().default('https://localhost:8100'),
       }),
       fido: z.object({
         issuer: z.string().min(1).default('intake24'),
@@ -56,7 +56,7 @@ export const securityConfigSchema = z.object({
     alphabet: z.string().min(1).optional(),
   }),
   signInLog: z.object({
-    enabled: z.boolean().default(true),
+    enabled: z.boolean().or(z.stringbool()).default(true),
   }),
 });
 export type SecurityConfig = z.infer<typeof securityConfigSchema>;
@@ -85,7 +85,7 @@ const rawSecurityConfig = {
         httpOnly: true,
         path: process.env.JWT_ADMIN_COOKIE_PATH || '/api/admin/auth',
         sameSite: process.env.JWT_ADMIN_COOKIE_SAMESITE,
-        secure: process.env.JWT_ADMIN_COOKIE_SECURE === 'true',
+        secure: process.env.JWT_ADMIN_COOKIE_SECURE,
       },
     },
     survey: {
@@ -104,7 +104,7 @@ const rawSecurityConfig = {
         httpOnly: true,
         path: process.env.JWT_SURVEY_COOKIE_PATH || '/api/auth',
         sameSite: process.env.JWT_SURVEY_COOKIE_SAMESITE,
-        secure: process.env.JWT_SURVEY_COOKIE_SECURE === 'true',
+        secure: process.env.JWT_SURVEY_COOKIE_SECURE,
       },
     },
   },
@@ -134,7 +134,7 @@ const rawSecurityConfig = {
     alphabet: process.env.AUTH_TOKENS_ALPHABET,
   },
   signInLog: {
-    enabled: !process.env.SIGN_IN_LOG_ENABLED || process.env.SIGN_IN_LOG_ENABLED === 'true',
+    enabled: process.env.SIGN_IN_LOG_ENABLED,
   },
 };
 

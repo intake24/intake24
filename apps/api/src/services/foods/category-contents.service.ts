@@ -118,13 +118,7 @@ function categoryContentsService({
     const { search } = query;
 
     if (search) {
-      const op
-        = Food.sequelize?.getDialect() === 'postgres'
-          ? { [Op.iLike]: `%${search}%` }
-          : { [Op.substring]: search };
-
-      const ops = ['englishName', 'name'].map(column => ({ [column]: op }));
-
+      const ops = ['englishName', 'name'].map(column => ({ [column]: { [Op.iLike]: `%${search}%` } }));
       options.where = { ...options.where, [Op.or]: ops };
     }
 

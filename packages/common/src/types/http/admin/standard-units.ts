@@ -36,7 +36,7 @@ export const standardUnitCategory = z.object({
   name: z.string(),
   simpleName: z.string(),
   altNames: localeTranslation,
-  version: z.string().uuid(),
+  version: z.uuid(),
 });
 
 export type StandardUnitCategory = z.infer<typeof standardUnitCategory>;
@@ -49,7 +49,7 @@ export const standardUnitFood = z.object({
   name: z.string(),
   simpleName: z.string(),
   altNames: localeTranslation,
-  version: z.string().uuid(),
+  version: z.uuid(),
 });
 
 export type StandardUnitFood = z.infer<typeof standardUnitFood>;

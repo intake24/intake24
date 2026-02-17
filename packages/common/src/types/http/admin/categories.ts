@@ -32,7 +32,7 @@ export const categoryAttributes = z.object({
   simpleName: z.string().nullish(),
   hidden: z.boolean(),
   tags: z.string().array(),
-  version: z.string().uuid(),
+  version: z.uuid(),
 });
 export type CategoryAttributes = z.infer<typeof categoryAttributes>;
 

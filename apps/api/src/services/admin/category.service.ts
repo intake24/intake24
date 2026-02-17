@@ -43,13 +43,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     const { search } = query;
 
     if (search) {
-      const op
-        = Category.sequelize?.getDialect() === 'postgres'
-          ? { [Op.iLike]: `%${search}%` }
-          : { [Op.substring]: search };
-
-      const ops = ['code', 'englishName', 'name'].map(column => ({ [column]: op }));
-
+      const ops = ['code', 'englishName', 'name'].map(column => ({ [column]: { [Op.iLike]: `%${search}%` } }));
       options.where = { ...options.where, [Op.or]: ops };
     }
 

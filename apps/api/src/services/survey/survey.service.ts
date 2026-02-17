@@ -117,7 +117,7 @@ function surveyService({
         .object({
           username: z.string().min(1).max(256),
           password: strongPassword.optional(),
-          redirectUrl: z.string().url().optional(),
+          redirectUrl: z.url().optional(),
           name: z.string().min(1).max(512).nullish(),
           customFields: userCustomField.array().optional(),
         })

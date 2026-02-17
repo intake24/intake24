@@ -62,17 +62,15 @@ jobs:
     needs: lint
 
     env:
-      DB_TEST_SYSTEM_DRIVER: postgres
       DB_TEST_SYSTEM_HOST: localhost
       DB_TEST_SYSTEM_PORT: 5432
-      DB_TEST_FOODS_DRIVER: postgres
       DB_TEST_FOODS_HOST: localhost
       DB_TEST_FOODS_PORT: 5432
 
     strategy:
       matrix:
         node-version: [24.x]
-        postgres-version: [17]
+        postgres-version: [18]
         redis-version: [8]
 
     services:
@@ -138,173 +136,6 @@ jobs:
       - name: API - integration tests
         working-directory: apps/api
         run: pnpm test:integration
-
-  # api-mariadb:
-  #   name: API (Node.js ${{ matrix.node-version }}, MariaDB ${{ matrix.mariadb-version }}, Redis ${{ matrix.redis-version }})
-
-  #   runs-on: ubuntu-latest
-
-  #   needs: lint
-
-  #   env:
-  #     DB_TEST_SYSTEM_DRIVER: mariadb
-  #     DB_TEST_SYSTEM_HOST: 127.0.0.1
-  #     DB_TEST_SYSTEM_PORT: 3306
-  #     DB_TEST_FOODS_DRIVER: mariadb
-  #     DB_TEST_FOODS_HOST: 127.0.0.1
-  #     DB_TEST_FOODS_PORT: 3306
-
-  #   strategy:
-  #     matrix:
-  #       node-version: [24.x]
-  #       mariadb-version: [10]
-  #       redis-version: [8]
-
-  #   services:
-  #     mariadb:
-  #       image: mariadb:${{ matrix.mariadb-version }}
-  #       env:
-  #         MYSQL_USER: it24
-  #         MYSQL_PASSWORD: Intake24!
-  #         MYSQL_DATABASE: it24
-  #         MYSQL_ROOT_PASSWORD: Intake24!
-  #       options: >-
-  #         --health-cmd "mysqladmin ping"
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #       ports:
-  #         - 3306:3306
-  #     redis:
-  #       image: redis:${{ matrix.redis-version }}
-  #       options: >-
-  #         --health-cmd "redis-cli ping"
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #       ports:
-  #         - 6379:6379
-
-  #   steps:
-  #     - name: Repository checkout
-  #       uses: actions/checkout@v6
-
-  #     - name: Create foods/system databases
-  #       run: |
-  #         mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "CREATE DATABASE ${{ env.DB_TEST_FOODS_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
-  #         mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "CREATE DATABASE ${{ env.DB_TEST_SYSTEM_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
-  #         mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "GRANT ALL ON *.* TO 'it24'@'%' with grant option; FLUSH PRIVILEGES;"
-
-  #     - name: Install pnpm
-  #       uses: pnpm/action-setup@v3
-
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3.4.1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'pnpm'
-
-  #     - name: Install dependencies
-  #       run: pnpm install
-
-  #     - name: API - build
-  #       working-directory: apps/api
-  #       run: pnpm build
-
-  #     - name: API - use Github test environment file
-  #       working-directory: apps/api
-  #       run: cp ./__tests__/.env-test-gh ./__tests__/.env-test
-
-  #     - name: Repo - unit tests
-  #       run: pnpm test:unit
-
-  #     - name: Repo - integration tests
-  #       run: pnpm test:integration
-
-  # api-mssql:
-  #   name: API (Node.js ${{ matrix.node-version }}, MSSQL ${{ matrix.mssql-version }}, Redis ${{ matrix.redis-version }})
-
-  #   runs-on: ubuntu-latest
-
-  #   needs: lint
-
-  #   env:
-  #     DB_TEST_SYSTEM_DRIVER: mssql
-  #     DB_TEST_SYSTEM_HOST: localhost
-  #     DB_TEST_SYSTEM_PORT: 1433
-  #     DB_TEST_FOODS_DRIVER: mssql
-  #     DB_TEST_FOODS_HOST: localhost
-  #     DB_TEST_FOODS_PORT: 1433
-
-  #   strategy:
-  #     matrix:
-  #       node-version: [24.x]
-  #       mssql-version: [2019]
-  #       redis-version: [8]
-
-  #   services:
-  #     mssql:
-  #       image: mcr.microsoft.com/mssql/server:${{ matrix.mssql-version }}-latest
-  #       env:
-  #         ACCEPT_EULA: Y
-  #         SA_PASSWORD: Intake24!
-  #       ports:
-  #         - 1433:1433
-  #       options: >-
-  #         --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P \"Intake24!\" -l 30 -Q \"SELECT 1\""
-  #         --health-start-period 10s
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #     redis:
-  #       image: redis:${{ matrix.redis-version }}
-  #       options: >-
-  #         --health-cmd "redis-cli ping"
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #       ports:
-  #         - 6379:6379
-
-  #   steps:
-  #     - name: Repository checkout
-  #       uses: actions/checkout@v6
-
-  #     - name: Create foods/system databases
-  #       run: |
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE DATABASE ${{ env.DB_TEST_FOODS_DATABASE }}; ALTER DATABASE ${{ env.DB_TEST_FOODS_DATABASE }} SET READ_COMMITTED_SNAPSHOT ON;"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE DATABASE ${{ env.DB_TEST_SYSTEM_DATABASE }}; ALTER DATABASE ${{ env.DB_TEST_SYSTEM_DATABASE }} SET READ_COMMITTED_SNAPSHOT ON;"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE LOGIN ${{ env.DB_TEST_SYSTEM_USERNAME }} WITH PASSWORD = '${{ env.DB_TEST_SYSTEM_PASSWORD }}';"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_TEST_SYSTEM_DATABASE }}; CREATE USER ${{ env.DB_TEST_SYSTEM_USERNAME }} FOR LOGIN ${{ env.DB_TEST_SYSTEM_USERNAME }};"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_TEST_SYSTEM_DATABASE }}; EXEC sp_addrolemember N'db_owner', N'${{ env.DB_TEST_SYSTEM_USERNAME }}';"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_TEST_FOODS_DATABASE }}; CREATE USER ${{ env.DB_TEST_FOODS_USERNAME }} FOR LOGIN ${{ env.DB_TEST_FOODS_USERNAME }};"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_TEST_FOODS_DATABASE }}; EXEC sp_addrolemember N'db_owner', N'${{ env.DB_TEST_FOODS_USERNAME }}';"
-
-  #     - name: Install pnpm
-  #       uses: pnpm/action-setup@v3
-
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3.4.1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'pnpm'
-
-  #     - name: Install dependencies
-  #       run: pnpm install
-
-  #     - name: API - build
-  #       working-directory: apps/api
-  #       run: pnpm build
-
-  #     - name: API - use Github test environment file
-  #       working-directory: apps/api
-  #       run: cp ./__tests__/.env-test-gh ./__tests__/.env-test
-
-  #     - name: Repo - unit tests
-  #       run: pnpm test:unit
-
-  #     - name: Repo - integration tests
-  #       run: pnpm test:integration
 
   # Admin client
   admin:

@@ -33,7 +33,7 @@ export const media = contract.router({
   read: {
     method: 'GET',
     path: '/admin/media/:mediaId',
-    pathParams: z.object({ mediaId: z.string().uuid() }),
+    pathParams: z.object({ mediaId: z.uuid() }),
     responses: {
       200: mediaEntry,
     },
@@ -43,7 +43,7 @@ export const media = contract.router({
   update: {
     method: 'PATCH',
     path: '/admin/media/:mediaId',
-    pathParams: z.object({ mediaId: z.string().uuid() }),
+    pathParams: z.object({ mediaId: z.uuid() }),
     body: updateMediaWithModelRequest,
     responses: {
       200: mediaEntry,
@@ -54,7 +54,7 @@ export const media = contract.router({
   destroy: {
     method: 'DELETE',
     path: '/admin/media/:mediaId',
-    pathParams: z.object({ mediaId: z.string().uuid() }),
+    pathParams: z.object({ mediaId: z.uuid() }),
     body: null,
     responses: {
       204: contract.noBody(),

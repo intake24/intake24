@@ -21,7 +21,7 @@ const csvRow = z.intersection(
     username: z.string().min(1).max(256),
     password: strongPasswordOptional.transform(val => val || undefined),
     name: z.string().max(512).optional().transform(val => val || undefined),
-    email: z.string().max(512).email().toLowerCase().optional().transform(val => val || undefined),
+    email: z.email().max(512).toLowerCase().optional().transform(val => val || undefined),
     phone: z.string().max(32).optional().transform(val => val || undefined),
   }),
   z.record(z.string(), z.string().transform(val => val || undefined)),

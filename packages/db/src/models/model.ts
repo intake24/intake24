@@ -81,10 +81,7 @@ export default class Model<
     const model = this as BaseModelCtor<R extends Model ? R : Model>;
 
     if (search && columns.length) {
-      const operation
-        = model.sequelize?.getDialect() === 'postgres'
-          ? { [Op.iLike]: `%${search}%` }
-          : { [Op.substring]: search };
+      const operation = { [Op.iLike]: `%${search}%` };
 
       const operations = columns.map(column => where(cast(col(`${model.name}.${snakeCase(column)}`), 'text'), operation));
       // @ts-expect-error where merge types (watch out what is being merged, might not cover all permutations)

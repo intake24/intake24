@@ -174,13 +174,13 @@ export const selection = z.object({
 export type Selection = z.infer<typeof selection>;
 
 export const surveyState = z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid().optional(),
   schemeId: z.string().nullable(),
   recallDate: z.string().date().nullable(),
   startTime: z.coerce.date().nullable(),
   endTime: z.coerce.date().nullable(),
   submissionTime: z.coerce.date().nullable(),
-  uxSessionId: z.string().uuid(),
+  uxSessionId: z.uuid(),
   userAgent: z.string().nullish(),
   flags: surveyFlag.array(),
   customPromptAnswers: z.record(z.string(), customPromptAnswer),
