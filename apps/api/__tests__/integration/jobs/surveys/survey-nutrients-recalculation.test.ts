@@ -280,7 +280,97 @@ export default () => {
       expect(refreshed?.code).toBe(foodCode);
     });
 
+    /**
+     * Test case: values-only removes nutrients when they are dropped from the nutrient table
+     * If a variable is dropped from a nutrient table when it is updated, it should be removed
+     * from all recalls (including those submitted prior to the update) during recalculation.
+     */
+    it('values-only removes nutrient values when underlying record no longer contains them', async () => {
+      const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
+
+      // Add a second nutrient to record A (using nutrient type 2)
+      const recordANutrient2 = await NutrientTableRecordNutrient.create({
+        nutrientTableRecordId: recordA!.id,
+        nutrientTypeId: '2', // Protein or another common nutrient type
+        unitsPer100g: 150,
+      });
+
+      // Update submission to include both nutrients
+      await submissionFood!.update({
+        nutrients: { 1: 50, 2: 150 }, // Both nutrient types present
+      });
+
+      // Verify initial state has both nutrients
+      const current = await SurveySubmissionFood.findByPk(submissionFood!.id);
+      expect(current?.nutrients).toEqual({ 1: 50, 2: 150 });
+
+      // Simulate dropping nutrient type 2 from the nutrient table (variable dropped)
+      await recordANutrient2.destroy();
+
+      dbJob = await DbJob.create({
+        type: 'SurveyNutrientsRecalculation',
+        userId: userId(),
+        params: { surveyId: surveyId(), mode: 'values-only' },
+      });
+
+      const job = ioc.resolve('SurveyNutrientsRecalculation');
+      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
+
+      await job.run(mockBullJob);
+
+      const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+      // Keeps reference to A
+      expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
+      expect(refreshed?.nutrientTableCode).toBe('A');
+      // Only nutrient type 1 remains (type 2 was dropped)
+      expect(refreshed?.nutrients).toEqual({ 1: 50 });
+      expect(refreshed?.code).toBe(foodCode);
+    });
+
+    /**
+     * Test case: values-only adds nutrients when they are introduced in the nutrient table
+     * If a variable is added to a nutrient table, recalculation should add it to prior recalls.
+     */
+    it('values-only adds new nutrient values when underlying record adds a nutrient', async () => {
+      // Seed base nutrient table, record A, and submission food tied to record A.
+      const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
+
+      // Add a second nutrient to record A
+      await NutrientTableRecordNutrient.create({
+        nutrientTableRecordId: recordA!.id,
+        nutrientTypeId: '2',
+        unitsPer100g: 150,
+      });
+
+      dbJob = await DbJob.create({
+        type: 'SurveyNutrientsRecalculation',
+        userId: userId(),
+        params: { surveyId: surveyId(), mode: 'values-only' },
+      });
+
+      const job = ioc.resolve('SurveyNutrientsRecalculation');
+      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
+
+      await job.run(mockBullJob);
+
+      const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+      // Keeps reference to A
+      expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
+      expect(refreshed?.nutrientTableCode).toBe('A');
+      // Both nutrient types should be present after recalculation
+      expect(refreshed?.nutrients).toEqual({ 1: 50, 2: 150 });
+      expect(refreshed?.code).toBe(foodCode);
+    });
+
+    /**
+     * Test case: values-only with syncFields
+     * Verifies that syncFields does not override the values-only mapping choice,
+     * but still recalculates nutrient/field values from the stored record.
+     */
     it('values-only with syncFields updates nutrient values similar to standard values-only', async () => {
+      // Seed base nutrient table, record A, and submission food tied to record A.
       const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
 
       // Update underlying record values (A) - change 50 -> 90
