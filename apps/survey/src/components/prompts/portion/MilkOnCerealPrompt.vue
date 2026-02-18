@@ -83,11 +83,12 @@
 <script lang="ts" setup>
 import type { ImageMapResponse } from '@intake24/common/types/http/foods';
 
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, toRaw } from 'vue';
 
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
 
 import { BaseLayout } from '../layouts';
 import {
@@ -200,6 +201,7 @@ function selectBowl(idx: number, id: string) {
 };
 
 function confirmBowl() {
+  pushPromptHistoryEntry('Confirm bowl (milk on cereal prompt)');
   state.value.bowlConfirmed = true;
   updatePanel();
   update();
@@ -219,6 +221,7 @@ function selectMilk(idx: number, id: string) {
 };
 
 function confirmMilk() {
+  pushPromptHistoryEntry('Confirm milk level (milk on cereal prompt)');
   state.value.milkLevelConfirmed = true;
   updatePanel();
   update();
@@ -230,6 +233,15 @@ function update() {
 
   emit('update:modelValue', state.value);
 };
+
+registerPromptHistoryHandler(
+  () => copy(toRaw(state.value)),
+  (restored) => {
+    state.value = restored as typeof state.value;
+    update();
+  },
+);
+onBeforeUnmount(() => unregisterPromptHistoryHandler());
 </script>
 
 <style lang="scss" scoped></style>

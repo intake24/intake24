@@ -93,11 +93,12 @@ import type { PropType } from 'vue';
 import type { LinkedParent } from '../../handlers/composables';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, toRaw } from 'vue';
 
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
 
 import { BaseLayout } from '../layouts';
 import {
@@ -172,6 +173,7 @@ function selectObject(idx: number, id: string) {
 };
 
 function confirmObject() {
+  pushPromptHistoryEntry('Confirm object (guide image prompt)');
   state.value.objectConfirmed = true;
   updatePanel();
   update();
@@ -182,6 +184,7 @@ function selectQuantity() {
 };
 
 function confirmQuantity() {
+  pushPromptHistoryEntry('Confirm quantity (guide image prompt)');
   updatePanel();
   update();
 };
@@ -191,6 +194,7 @@ function selectLinkedQuantity() {
 };
 
 function confirmLinkedQuantity() {
+  pushPromptHistoryEntry('Confirm linked quantity (guide image prompt)');
   updatePanel();
   update();
 };
@@ -209,6 +213,15 @@ function update() {
 
   emit('update:modelValue', state.value);
 };
+
+registerPromptHistoryHandler(
+  () => copy(toRaw(state.value)),
+  (restored) => {
+    state.value = restored as typeof state.value;
+    update();
+  },
+);
+onBeforeUnmount(() => unregisterPromptHistoryHandler());
 </script>
 
 <style lang="scss" scoped></style>

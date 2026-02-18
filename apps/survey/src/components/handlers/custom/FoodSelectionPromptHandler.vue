@@ -50,9 +50,6 @@ function isFoodSelected(food: FoodState): boolean {
 
 const getInitialState = computed(() => meal.value.foods.filter(food => isFoodSelected(food)).map(food => food.id));
 
-// TODO: use store for intermediate state
-const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
-
 function commitAnswer() {
   function commitAnswers(food: FoodState) {
     const selected = state.value.includes(food.id) && !state.value.includes(foodSelectionNoneUuid);
@@ -75,14 +72,8 @@ function commitAnswer() {
   surveyStore.addMealFlag(meal.value.id, `${props.prompt.id}-complete`);
 }
 
-function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next') {
-    commitAnswer();
-    emit('action', type);
-    return;
-  }
-  emit('action', type, ...args);
-}
+// TODO: use store for intermediate state
+const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 </script>
 
 <style scoped></style>

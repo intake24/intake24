@@ -20,6 +20,7 @@ import { computed, ref } from 'vue';
 
 import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
 
 import { createHandlerProps, useCustomPromptHandler } from '../composables';
 
@@ -51,8 +52,10 @@ function commitAnswer() {
 }
 
 function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next' || isInfoPrompt.value)
+  if (type === 'next' || isInfoPrompt.value) {
+    pushFullHistoryEntry(props.prompt.component);
     commitAnswer();
+  }
 
   emit('action', type, ...args);
 }

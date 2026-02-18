@@ -21,24 +21,11 @@ const emit = defineEmits(['action']);
 
 const getInitialState = computed<string | undefined>(() => undefined);
 
-const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
 const { i18n: { locale } } = useI18n();
 const survey = useSurvey();
 
 const defaultMeals = computed(() => survey.defaultSchemeMeals?.map(({ name }) => name[locale.value] ?? name.en) ?? []);
 const meals = computed(() => survey.meals.map(({ name }) => (name[locale.value] ?? name.en).toLowerCase().trim()));
-
-function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next')
-    commitAnswer();
-
-  if (type === 'cancel') {
-    survey.setAutoSelection();
-    type = 'next';
-  }
-
-  emit('action', type, ...args);
-}
 
 function commitAnswer() {
   if (!state.value) {
@@ -48,5 +35,17 @@ function commitAnswer() {
   }
 
   survey.addMeal({ name: { en: state.value, [locale.value]: state.value } }, locale.value);
+}
+
+const { state, action: composableAction } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
+
+function action(type: string, ...args: [id?: string, params?: object]) {
+  if (type === 'cancel') {
+    survey.setAutoSelection();
+    emit('action', 'next');
+    return;
+  }
+
+  composableAction(type, ...args);
 }
 </script>

@@ -84,8 +84,6 @@ const getInitialState = computed(() => ({
   }, {}),
 }));
 
-const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
-
 function commitAnswer() {
   for (const [foodId, addons] of Object.entries(state.value.foods)) {
     const linkedFoods = addons.reduce<FoodState[]>((acc, addonFood) => {
@@ -123,10 +121,5 @@ function commitAnswer() {
   }
 }
 
-function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next')
-    commitAnswer();
-
-  emit('action', type, ...args);
-}
+const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 </script>
