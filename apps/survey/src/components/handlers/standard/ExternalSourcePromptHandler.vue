@@ -30,8 +30,6 @@ const getInitialState = computed<PromptStates['external-source-prompt']>(() => (
   data: undefined,
 }));
 
-const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
-
 function commitAnswer() {
   const survey = useSurvey();
   const foodEntry = food.value;
@@ -41,15 +39,18 @@ function commitAnswer() {
   } });
 }
 
+const { state, action: composableAction } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
+
 function action(type: string, ...args: [id?: string, params?: object]) {
-  if (!['next', 'missing'].includes(type)) {
-    emit('action', type, ...args);
+  if (type === 'missing') {
+    state.value.type = 'missing';
+    composableAction('next');
     return;
   }
 
-  state.value.type = type === 'next' ? 'selected' : 'missing';
+  if (type === 'next')
+    state.value.type = 'selected';
 
-  commitAnswer();
-  emit('action', 'next');
+  composableAction(type, ...args);
 }
 </script>

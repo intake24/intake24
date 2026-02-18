@@ -6,6 +6,7 @@
 import { resolveMealGaps } from '@intake24/common/surveys';
 import { MealGapPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
 
 import { createHandlerProps } from '../composables';
 
@@ -32,8 +33,10 @@ function commit() {
 }
 
 function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next')
+  if (type === 'next') {
+    pushFullHistoryEntry('meal-gap-prompt');
     commit();
+  }
 
   emit('action', type, ...args);
 }

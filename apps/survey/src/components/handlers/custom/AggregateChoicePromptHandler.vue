@@ -29,9 +29,6 @@ const filteredMeals = computed(() => filterMealsForAggregateChoicePrompt(survey,
 const getInitialState = computed(() =>
   Object.fromEntries(filteredMeals.value.flatMap(meal => meal.foods.map(food => [food.id, resolvePromptAnswer(props.prompt, food)]))));
 
-// TODO: use store for intermediate state
-const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
-
 function commitAnswer() {
   function commitAnswers(food: FoodState) {
     const answer = state.value[food.id];
@@ -46,14 +43,8 @@ function commitAnswer() {
   survey.meals.forEach(meal => meal.foods.forEach(food => commitAnswers(food)));
 }
 
-function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next') {
-    commitAnswer();
-    emit('action', type);
-    return;
-  }
-  emit('action', type, ...args);
-}
+// TODO: use store for intermediate state
+const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 </script>
 
 <style scoped></style>

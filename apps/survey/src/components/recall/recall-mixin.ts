@@ -4,7 +4,7 @@ import type {
   GenericActionType,
   MealActionType,
 } from '@intake24/common/prompts';
-import type { MealCreationState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { MealCreationState, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
@@ -20,7 +20,13 @@ import {
 } from '@intake24/survey/components/handlers';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
+import {
+  destroyRecallHistory,
+  handlePopState,
+  initRecallHistory,
+  invalidateForward,
+  pushFullHistoryEntry,
+} from '@intake24/survey/stores/recall-history';
 
 import { InfoAlert } from '../elements';
 
@@ -44,8 +50,6 @@ export default defineComponent({
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
       hideCurrentPrompt: false,
-      // This is only required to discern between back and forward history events
-      currentPromptTimestamp: 0,
     };
   },
 
@@ -134,6 +138,7 @@ export default defineComponent({
     }
 
     this.recallController = new DynamicRecall(this.surveyScheme, this.survey);
+    initRecallHistory(this.survey);
     await this.survey.startRecall();
   },
 
@@ -144,54 +149,32 @@ export default defineComponent({
 
   beforeUnmount() {
     removeEventListener('popstate', this.onPopState);
+    destroyRecallHistory();
   },
 
   methods: {
     onPopState(event: PopStateEvent) {
+      console.log(`[recall-mixin] onPopState | hasFinished=${this.hasFinished} currentPrompt=${this.currentPrompt?.prompt.component ?? 'null'}`);
+
       if (this.hasFinished)
         return;
 
-      function isValidSelection(meals: MealState[], selection: Selection): boolean {
-        if (
-          selection.element
-          && selection.element.type === 'meal'
-          && getMealIndex(meals, selection.element.mealId) === undefined
-        ) {
-          return false;
-        }
+      const result = handlePopState(event);
 
-        if (
-          selection.element
-          && selection.element.type === 'food'
-          && getFoodIndex(meals, selection.element.foodId) === undefined
-        ) {
-          return false;
-        }
+      if (result === 'full') {
+        this.hideCurrentPrompt = true;
 
-        return true;
+        const nextPrompt = this.recallController?.getNextPrompt();
+        console.log(`[recall-mixin] after full restore, next prompt: ${nextPrompt?.prompt.component ?? 'none'} (${nextPrompt?.prompt.id ?? 'n/a'})`);
+        this.currentPrompt = nextPrompt ?? null;
+
+        this.hideCurrentPrompt = false;
       }
-
-      if (
-        event.state
-        && event.state.promptInstance
-        && event.state.selection
-        && event.state.timeStamp
-      ) {
-        const promptInstance = event.state.promptInstance as PromptInstance;
-        const selection = event.state.selection as Selection;
-        const timeStamp = event.state.timeStamp as number;
-
-        if (isValidSelection(this.meals, selection)) {
-          this.setSelection(selection);
-          this.currentPrompt = promptInstance;
-          this.currentPromptTimestamp = timeStamp;
-        }
-        else if (this.currentPromptTimestamp > timeStamp) {
-          history.back();
-        }
-        else {
-          history.forward();
-        }
+      else if (result === 'prompt') {
+        console.log('[recall-mixin] prompt state restored via callback');
+      }
+      else {
+        console.log('[recall-mixin] handlePopState returned none, no state change');
       }
     },
 
@@ -294,16 +277,20 @@ export default defineComponent({
       }
       switch (type) {
         case 'editMeal':
+          invalidateForward();
           this.showMealPrompt(mealId, 'preFoods', 'edit-meal-prompt');
           break;
         case 'mealTime':
+          invalidateForward();
           this.showMealPrompt(mealId, 'preFoods', 'meal-time-prompt');
           break;
         case 'deleteMeal':
+          pushFullHistoryEntry(`Delete meal: ${meal.name.en ?? Object.values(meal.name)[0] ?? 'unknown'}`);
           this.survey.deleteMeal(mealId);
           await this.nextPrompt();
           break;
         case 'selectMeal':
+          invalidateForward();
           this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
           await this.nextPrompt();
           break;
@@ -315,18 +302,22 @@ export default defineComponent({
     async foodAction(type: FoodActionType, foodId: string) {
       switch (type) {
         case 'changeFood':
+          invalidateForward();
           this.showFoodPrompt(foodId, 'foods', 'food-search-prompt');
           break;
         case 'editFood':
+          pushFullHistoryEntry('Edit food');
           this.survey.editFood(foodId);
           this.setSelection({ element: { type: 'food', foodId }, mode: 'auto' });
           await this.nextPrompt();
           break;
         case 'deleteFood':
+          pushFullHistoryEntry('Delete food');
           this.survey.deleteFood(foodId);
           await this.nextPrompt();
           break;
         case 'selectFood':
+          invalidateForward();
           this.setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
           await this.nextPrompt();
           break;
@@ -343,6 +334,7 @@ export default defineComponent({
         case 'addMeal':
           if (typeof params === 'object' && params !== null && Object.keys(params).length) {
             // TODO: validate params properly
+            pushFullHistoryEntry('Add meal');
             const { name, time, flags } = params as MealCreationState;
             this.survey.addMeal({ name, time, flags }, this.$i18n.locale);
             await this.nextPrompt();
@@ -371,15 +363,6 @@ export default defineComponent({
         );
 
         this.currentPrompt = nextPrompt;
-        this.currentPromptTimestamp = Date.now();
-
-        // Strip Vue reactivity wrappers
-        const promptInstance = JSON.parse(JSON.stringify(this.currentPrompt));
-        const selection = JSON.parse(JSON.stringify(this.selection));
-        const timeStamp = JSON.parse(JSON.stringify(this.currentPromptTimestamp));
-
-        if (selection && promptInstance)
-          history.pushState({ promptInstance, selection, timeStamp }, '', window.location.href);
       }
     },
 

@@ -1,6 +1,7 @@
 export * from './auth';
 export * from './faqs';
 export * from './prompt';
+export * from './recall-history';
 export * from './recall-log';
 export * from './same-as-before';
 export * from './standard-units';
