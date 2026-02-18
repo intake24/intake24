@@ -164,11 +164,12 @@
 import type { DrinkwareScaleEntry } from '@intake24/common/types/http/admin';
 import type { DrinkwareScaleV2Response, DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, toRaw, watch } from 'vue';
 
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
 
 import { BaseLayout } from '../layouts';
 import {
@@ -317,6 +318,7 @@ function selectObject(idx: number, id: string) {
 };
 
 function confirmObject() {
+  pushPromptHistoryEntry('Confirm object (drink scale prompt)');
   state.value.objectConfirmed = true;
 
   if (skipFillLevel.value)
@@ -338,6 +340,7 @@ function updateVolume() {
 };
 
 function confirmVolume() {
+  pushPromptHistoryEntry('Confirm volume (drink scale prompt)');
   state.value.volumeConfirmed = true;
   updatePanel();
   update();
@@ -355,6 +358,7 @@ function updateLeftovers() {
 };
 
 function confirmLeftovers() {
+  pushPromptHistoryEntry('Confirm leftovers (drink scale prompt)');
   state.value.leftoversConfirmed = true;
   updatePanel();
   update();
@@ -366,6 +370,7 @@ function updateQuantity() {
 };
 
 function confirmQuantity() {
+  pushPromptHistoryEntry('Confirm quantity (drink scale prompt)');
   state.value.quantityConfirmed = true;
   updatePanel();
   update();
@@ -381,6 +386,15 @@ function update() {
 
   emit('update:modelValue', state.value);
 };
+
+registerPromptHistoryHandler(
+  () => copy(toRaw(state.value)),
+  (restored) => {
+    state.value = restored as typeof state.value;
+    update();
+  },
+);
+onBeforeUnmount(() => unregisterPromptHistoryHandler());
 
 watch(() => state.value.leftoversPrompt, (val) => {
   state.value.portionSize.leftovers = !!val;

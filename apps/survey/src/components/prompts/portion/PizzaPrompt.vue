@@ -124,12 +124,13 @@
 <script lang="ts" setup>
 import type { ImageMapResponse } from '@intake24/common/types/http/foods';
 
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, toRaw, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
 import { useHttp, useI18n } from '@intake24/ui';
 
 import { BaseLayout } from '../layouts';
@@ -290,6 +291,8 @@ function selectQuantity() {
 };
 
 function confirmType(type: PizzaImageMap | 'quantity', value = true) {
+  if (value)
+    pushPromptHistoryEntry(`Confirm ${type} (pizza prompt)`);
   state.value.confirmed[type] = value;
   updatePanel();
   update();
@@ -314,6 +317,15 @@ function update() {
 
   emit('update:modelValue', state.value);
 };
+
+registerPromptHistoryHandler(
+  () => copy(toRaw(state.value)),
+  (restored) => {
+    state.value = restored as typeof state.value;
+    update();
+  },
+);
+onBeforeUnmount(() => unregisterPromptHistoryHandler());
 
 onMounted(async () => {
   await Promise.all(

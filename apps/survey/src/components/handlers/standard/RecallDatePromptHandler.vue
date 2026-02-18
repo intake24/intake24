@@ -22,18 +22,11 @@ const survey = useSurvey();
 
 const getInitialState = computed(() => survey.data.recallDate);
 
-const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
-
-function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next')
-    commitAnswer();
-
-  emit('action', type, ...args);
-}
-
 function commitAnswer() {
   survey.setRecallDate(state.value);
 }
+
+const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 </script>
 
 <style scoped></style>

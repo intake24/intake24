@@ -6,6 +6,7 @@ import { ref } from 'vue';
 
 import { merge } from '@intake24/common/util';
 import { getOrCreatePromptStateStore, useSurvey } from '@intake24/survey/stores';
+import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
 import { findMeal, mealPortionSizeComplete } from '@intake24/survey/util';
 
 export type UsePromptHandlerStoreProps<P extends keyof PromptStates> = {
@@ -90,26 +91,32 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
 
   const action = (type: string, ...args: [id?: string, params?: object]) => {
     if (type === 'changeMethod') {
+      pushFullHistoryEntry(`${props.prompt.component} (changeMethod)`);
       changePortionSizeMethod(args.at(0));
       emit('action', 'next');
       return;
     }
 
-    if (type === 'next' && commitAnswer)
+    if (type === 'next' && commitAnswer) {
+      pushFullHistoryEntry(props.prompt.component);
       commitAnswer();
+    }
 
     emit('action', type, ...args);
   };
 
   const actionPortionSize = (type: string, ...args: [id?: string | number, params?: object]) => {
     if (type === 'changeMethod') {
+      pushFullHistoryEntry(`${props.prompt.component} (changeMethod)`);
       changePortionSizeMethod(args.at(0));
       emit('action', 'next');
       return;
     }
 
-    if (type === 'next')
+    if (type === 'next') {
+      pushFullHistoryEntry(props.prompt.component);
       commitPortionSize();
+    }
 
     emit('action', type, ...args);
   };
