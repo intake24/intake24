@@ -76,9 +76,6 @@ const getInitialState = computed(() => {
   return false;
 });
 
-// TODO: use store for intermediate state
-const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
-
 function commitAnswer() {
   if (survey.selection.element === null) {
     if (props.prompt.useFlag && props.prompt.flag) {
@@ -122,12 +119,8 @@ function commitAnswer() {
   }
 }
 
-function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next')
-    commitAnswer();
-
-  emit('action', type, ...args);
-}
+// TODO: use store for intermediate state
+const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 </script>
 
 <style scoped></style>
