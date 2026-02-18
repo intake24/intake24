@@ -5,7 +5,7 @@ import { validateConfig } from '@intake24/common-backend';
 const metricsConfigSchema = z.object({
   prometheusNodeExporter: z.object({
     enabled: z.boolean().or(z.stringbool()).default(false),
-    port: z.number().default(9100),
+    port: z.coerce.number().default(9100),
   }),
   app: z.object({
     collectDefaultMetrics: z.boolean().or(z.stringbool()).default(true),
