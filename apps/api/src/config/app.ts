@@ -11,7 +11,7 @@ export type Site = 'base' | 'admin' | 'survey' | 'images' | 'media' | 'docs';
 export type SiteUrls = Record<Site, string>;
 
 export const appConfigSchema = z.object({
-  env: z.enum(environmentOptions),
+  env: z.enum(environmentOptions).default('development'),
 
   name: z.string(),
   icon: z.string().optional(),
@@ -64,7 +64,7 @@ catch {
 }
 
 const rawAppConfig = {
-  env: process.env.NODE_ENV || 'development',
+  env: process.env.NODE_ENV,
 
   name,
   icon,

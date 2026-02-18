@@ -1,14 +1,13 @@
 import z from 'zod';
 
-import { validateConfig } from '@intake24/common-backend';
+import { msStringValue, validateConfig } from '@intake24/common-backend';
 
-import { msStringValue } from './common';
 import { redisOptionsWithKeyPrefixSchema } from './redis';
 
 export const cacheConfigSchema = z.object({
   redis: redisOptionsWithKeyPrefixSchema,
-  ttl: msStringValue,
-  surveySettingsTTL: msStringValue,
+  ttl: msStringValue.default('7d'),
+  surveySettingsTTL: msStringValue.default('120s'),
 });
 
 export type CacheConfig = z.infer<typeof cacheConfigSchema>;
@@ -21,8 +20,8 @@ const rawCacheConfig = {
     db: process.env.CACHE_REDIS_DATABASE || process.env.REDIS_DATABASE,
     keyPrefix: process.env.CACHE_REDIS_PREFIX || 'it24:cache:',
   },
-  ttl: process.env.CACHE_TTL || '7d',
-  surveySettingsTTL: process.env.CACHE_SURVEY_SETTINGS_TTL || '120s',
+  ttl: process.env.CACHE_TTL,
+  surveySettingsTTL: process.env.CACHE_SURVEY_SETTINGS_TTL,
 };
 
 const parsedCacheConfig = validateConfig('Cache configuration', cacheConfigSchema, rawCacheConfig);

@@ -1,9 +1,9 @@
 import z from 'zod';
 
-import { validateConfig } from '@intake24/common-backend';
+import { msStringValue, validateConfig } from '@intake24/common-backend';
 import { mfaModes } from '@intake24/common/security';
 
-import { cookieSettings, msStringValue } from './common';
+import { cookieSettings } from './common';
 
 export const jwtFrontEndSettings = z.object({
   access: z.object({

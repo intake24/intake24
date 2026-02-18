@@ -1,8 +1,8 @@
 import z from 'zod';
 
-import { validateConfig } from '@intake24/common-backend';
+import { msStringValue, validateConfig } from '@intake24/common-backend';
 
-import { msStringValue, parsedBytesStringValue } from './common';
+import { parsedBytesStringValue } from './common';
 
 export const localLocation = z.enum(['public', 'downloads', 'uploads', 'images', 'cache']);
 export type LocalLocation = z.infer<typeof localLocation>;
@@ -15,7 +15,7 @@ export const fileSystemConfigSchema = z.object({
     images: z.string().nonempty().default('storage/public/images'),
     cache: z.string().nonempty().default('storage/private/cache'),
   }),
-  urlExpiresAt: msStringValue,
+  urlExpiresAt: msStringValue.default('2d'),
   maxChunkedUploadSize: parsedBytesStringValue,
   lowDiskSpaceThreshold: parsedBytesStringValue,
 });

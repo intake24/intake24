@@ -2,9 +2,8 @@ import type { Options } from 'express-rate-limit';
 
 import z from 'zod';
 
-import { validateConfig } from '@intake24/common-backend';
+import { parsedMsStringValue, validateConfig } from '@intake24/common-backend';
 
-import { parsedMsStringValue } from './common';
 import { redisOptionsWithKeyPrefixSchema } from './redis';
 
 export const rateLimitSchema = z.object({

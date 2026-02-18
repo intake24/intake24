@@ -1,2 +1,2 @@
+export * from './config';
 export * from './passwords';
-export * from './validate-config';
