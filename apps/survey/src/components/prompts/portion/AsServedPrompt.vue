@@ -147,11 +147,12 @@ import type { PropType } from 'vue';
 
 import type { LinkedParent } from '../../handlers/composables';
 
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, toRaw, watch } from 'vue';
 
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
 
 import { BaseLayout } from '../layouts';
 import {
@@ -239,6 +240,7 @@ function updateServing() {
 };
 
 function confirmServing() {
+  pushPromptHistoryEntry('Confirm serving (as served prompt)');
   state.value.servingImageConfirmed = true;
   updatePanel();
   update();
@@ -256,6 +258,7 @@ function updateLeftovers() {
 };
 
 function confirmLeftovers() {
+  pushPromptHistoryEntry('Confirm leftovers (as served prompt)');
   state.value.leftoversImageConfirmed = true;
   updatePanel();
   update();
@@ -267,6 +270,7 @@ function updateQuantity() {
 };
 
 function confirmQuantity() {
+  pushPromptHistoryEntry('Confirm quantity (as served prompt)');
   state.value.quantityConfirmed = true;
   updatePanel();
   update();
@@ -277,6 +281,7 @@ function selectLinkedQuantity() {
 };
 
 function confirmLinkedQuantity() {
+  pushPromptHistoryEntry('Confirm linked quantity (as served prompt)');
   updatePanel();
   update();
 };
@@ -289,6 +294,15 @@ function update() {
 
   emit('update:modelValue', state.value);
 };
+
+registerPromptHistoryHandler(
+  () => copy(toRaw(state.value)),
+  (restored) => {
+    state.value = restored as typeof state.value;
+    update();
+  },
+);
+onBeforeUnmount(() => unregisterPromptHistoryHandler());
 
 watch(() => state.value.leftoversPrompt, () => {
   state.value.portionSize.leftovers = null;
