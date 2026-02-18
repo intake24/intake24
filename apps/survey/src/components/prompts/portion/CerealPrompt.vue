@@ -125,11 +125,12 @@
 <script lang="ts" setup>
 import type { ImageMapResponse } from '@intake24/common/types/http';
 
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, toRaw, watch } from 'vue';
 
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions, YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
 
 import { BaseLayout } from '../layouts';
 import { AsServedSelector, ImageMapSelector, Next, QuantityBadge, useFetchImageData, usePanel, usePortionSizeMethod } from '../partials';
@@ -214,6 +215,7 @@ function selectBowl(idx: number, id: string) {
 };
 
 function confirmBowl() {
+  pushPromptHistoryEntry('Confirm bowl (cereal prompt)');
   state.value.bowlConfirmed = true;
   updatePanel();
   update();
@@ -225,6 +227,7 @@ function updateServing() {
 };
 
 function confirmServing() {
+  pushPromptHistoryEntry('Confirm serving (cereal prompt)');
   state.value.servingImageConfirmed = true;
   updatePanel();
   update();
@@ -236,6 +239,7 @@ function updateLeftovers() {
 };
 
 function confirmLeftovers() {
+  pushPromptHistoryEntry('Confirm leftovers (cereal prompt)');
   state.value.leftoversImageConfirmed = true;
   updatePanel();
   update();
@@ -247,6 +251,15 @@ function update() {
 
   emit('update:modelValue', state.value);
 };
+
+registerPromptHistoryHandler(
+  () => copy(toRaw(state.value)),
+  (restored) => {
+    state.value = restored as typeof state.value;
+    update();
+  },
+);
+onBeforeUnmount(() => unregisterPromptHistoryHandler());
 </script>
 
 <style lang="scss" scoped>

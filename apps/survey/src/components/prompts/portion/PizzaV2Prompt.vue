@@ -160,12 +160,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, toRaw } from 'vue';
 
 import { pizzaCrusts, pizzaSizes, pizzaUnits } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
+import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
 import { useI18n } from '@intake24/ui';
 
 import { BaseLayout } from '../layouts';
@@ -247,7 +248,18 @@ function update() {
   emit('update:modelValue', state.value);
 }
 
+registerPromptHistoryHandler(
+  () => copy(toRaw(state.value)),
+  (restored) => {
+    state.value = restored as typeof state.value;
+    update();
+  },
+);
+onBeforeUnmount(() => unregisterPromptHistoryHandler());
+
 function confirmType(type: 'size' | 'crust' | 'unit' | 'quantity', value: boolean) {
+  if (value)
+    pushPromptHistoryEntry(`Confirm ${type} (pizza v2 prompt)`);
   state.value.confirmed[type] = value;
   updatePanel();
   update();
