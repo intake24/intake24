@@ -20,6 +20,7 @@ import type { CustomPromptAnswer, PromptSection } from '@intake24/common/surveys
 import { ref } from 'vue';
 
 import { MultiPrompt } from '@intake24/survey/components/prompts';
+import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
 
 import { useCustomPromptHandler } from '../composables';
 
@@ -55,8 +56,10 @@ function commitAnswer() {
 }
 
 function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next')
+  if (type === 'next') {
+    pushFullHistoryEntry('multi-prompt');
     commitAnswer();
+  }
 
   emit('action', type, ...args);
 }

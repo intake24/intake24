@@ -11,6 +11,7 @@ import { computed } from 'vue';
 
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
 
 import { createHandlerProps, useMealPromptUtils, usePromptHandlerNoStore } from '../composables';
 
@@ -23,25 +24,21 @@ const survey = useSurvey();
 
 const getInitialState = computed(() => meal.value.time ?? meal.value.defaultTime);
 
-const { state } = usePromptHandlerNoStore({ emit }, getInitialState);
+function commitAnswer() {
+  survey.setMealTime(meal.value.id, state.value);
+}
+
+const { state, action: composableAction } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
 
 function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next') {
-    commitAnswer();
-    emit('action', type);
-    return;
-  }
   if (type === 'cancel') {
+    pushFullHistoryEntry('meal-time-prompt (cancel)');
     survey.deleteMeal(meal.value.id);
     emit('action', 'next');
     return;
   }
 
-  emit('action', type, ...args);
-}
-
-function commitAnswer() {
-  survey.setMealTime(meal.value.id, state.value);
+  composableAction(type, ...args);
 }
 </script>
 
