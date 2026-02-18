@@ -191,12 +191,12 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
               portionSizeMethods: (categoryPSMs.length ? categoryPSMs : datPSMs)
                 .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
                 .map((psm) => {
-                  const attr = Object.entries(pick(psm, ['method', 'description', 'useForRecipes', 'conversionFactor', 'orderBy'])).map(
+                  const attr = Object.entries(pick(psm, ['method', 'description', 'pathways', 'defaultWeight', 'conversionFactor', 'orderBy'])).map(
                     ([key, value]) => `${key}: ${value?.toString()}`,
-                  ).join(', ');
+                  ).join('; ');
                   const params = Object.entries(psm.parameters).map(
                     ([key, value]) => `${key}: ${value?.toString()}`,
-                  ).join(', ');
+                  ).join('; ');
                   return `${attr}, ${params}`;
                 })
                 .join('\n'),
