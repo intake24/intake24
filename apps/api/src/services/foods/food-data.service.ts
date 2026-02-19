@@ -4,11 +4,13 @@ import type {
   UserFoodData,
 } from '@intake24/common/types/http/foods/user-food-data';
 
+import { NotFoundError } from '@intake24/api/http/errors';
 import {
   AssociatedFood,
   Brand,
   Category,
   Food,
+  FoodBuilder,
   NutrientTableRecordNutrient,
 } from '@intake24/db';
 
@@ -138,9 +140,28 @@ function foodDataService({ inheritableAttributesService, imagesBaseUrl, cachedPa
     };
   };
 
+  async function getFoodBuilders(localeId: string, code: string | string[]): Promise<FoodBuilder[]> {
+    return await FoodBuilder.findAll({
+      where: { localeId, code },
+      attributes: ['code', 'localeId', 'type', 'name', 'triggerWord', 'synonymSetId', 'steps'],
+      include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
+      order: [['code', 'ASC']],
+    });
+  }
+
+  async function getFoodBuilder(localeId: string, code: string): Promise<FoodBuilder> {
+    const result = (await getFoodBuilders(localeId, [code])).at(0);
+    if (!result)
+      throw new NotFoundError('Recipe food not found');
+
+    return result;
+  }
+
   return {
     getNutrientKCalPer100G,
     getFoodData,
+    getFoodBuilder,
+    getFoodBuilders,
   };
 }
 

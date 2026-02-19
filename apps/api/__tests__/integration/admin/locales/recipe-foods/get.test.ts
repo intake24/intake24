@@ -1,41 +1,45 @@
-import type { RecipeFoodRequest } from '@intake24/common/types/http/admin';
+import type { FoodBuilderRequest } from '@intake24/common/types/http/admin';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales:recipe-foods'];
+  const permissions = ['locales', 'locales:food-builders'];
 
   let url: string;
   // let invalidUrl: string;
 
-  let recipeFoods: RecipeFoodRequest[];
+  let foodBuilders: FoodBuilderRequest[];
 
   beforeAll(async () => {
     const { id, code: localeId } = suite.data.system.Locale;
 
-    recipeFoods = [
+    foodBuilders = [
       {
         localeId,
         code: 'RF-TST-1',
+        type: 'recipe',
         name: 'recipe-food-test1',
-        recipeWord: 'test-food-1',
-        synonymsId: null,
+        triggerWord: 'test-food-1',
+        synonymSetId: null,
+        steps: [],
       },
       {
         localeId,
         code: 'RF-TST-2',
         name: 'recipe-food-test2',
-        recipeWord: 'test-food-2',
-        synonymsId: null,
+        type: 'recipe',
+        triggerWord: 'test-food-2',
+        synonymSetId: null,
+        steps: [],
       },
     ];
 
-    await ioc.cradle.localeService.setRecipeFoods(localeId, recipeFoods);
+    await ioc.cradle.localeService.setFoodBuilders(localeId, foodBuilders);
 
-    url = `${baseUrl}/${id}/recipe-foods`;
-    // invalidUrl = `${baseUrl}/999999/recipe-foods`;
+    url = `${baseUrl}/${id}/food-builders`;
+    // invalidUrl = `${baseUrl}/999999/food-builders`;
   });
 
   it('missing authentication / authorization', async () => {
