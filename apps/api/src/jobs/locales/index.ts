@@ -4,6 +4,7 @@ import LocaleFoodNutrientMapping from './locale-food-nutrient-mapping';
 import LocaleFoodRankingUpload from './locale-food-ranking-upload';
 import LocaleFoods from './locale-foods';
 import LocaleIndexBuild from './locale-indexes-build';
+import LocalesSync from './locales-sync';
 
 export default {
   LocaleCategories,
@@ -12,4 +13,5 @@ export default {
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
   LocaleIndexBuild,
+  LocalesSync,
 };

@@ -5,7 +5,29 @@ import { contract } from '@intake24/common/contracts';
 
 export function category() {
   return initServer().router(contract.category, {
-    browse: async ({ params, req }) => {
+    entry: async ({ params, req }) => {
+      const { categoryId } = params;
+
+      const response = await req.scope.cradle.cache.remember(
+        `category-entry:${categoryId}`,
+        req.scope.cradle.cacheConfig.ttl,
+        async () => req.scope.cradle.categoryContentsService.getCategoryData({ id: categoryId }),
+      );
+
+      return { status: 200, body: response };
+    },
+    codeEntry: async ({ params, req }) => {
+      const { code, localeId } = params;
+
+      const response = await req.scope.cradle.cache.remember(
+        `category-entry:${localeId}:${code}`,
+        req.scope.cradle.cacheConfig.ttl,
+        async () => req.scope.cradle.categoryContentsService.getCategoryData({ code, localeId }),
+      );
+
+      return { status: 200, body: response };
+    },
+    search: async ({ params, req }) => {
       const { localeId, code } = params;
 
       const foods = await req.scope.cradle.categoryContentsService.searchCategory(
