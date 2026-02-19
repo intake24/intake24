@@ -90,7 +90,7 @@ export default class Category extends BaseModel<
   @Column({
     allowNull: false,
     defaultValue: [],
-    type: DataType.JSONB,
+    type: DataType.ARRAY(DataType.TEXT),
   })
   declare tags: CreationOptional<string[]>;
 

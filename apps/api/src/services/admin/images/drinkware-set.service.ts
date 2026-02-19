@@ -12,7 +12,7 @@ import type {
   ImageMulterFile,
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
-import type { FoodsDB, JsonValue, PaginateQuery, ProcessedImage } from '@intake24/db';
+import type { FoodsDB, PaginateQuery, ProcessedImage } from '@intake24/db';
 
 import path from 'node:path';
 
@@ -46,26 +46,8 @@ function drinkwareSetService({
     return `${imagesBaseUrl}/${relativeUrl}`;
   }
 
-  function parseLocaleTranslation(text: JsonValue): LocaleTranslation {
+  function parseLocaleTranslation(text: LocaleTranslation | null): LocaleTranslation {
     return (text ?? {}) as LocaleTranslation;
-  }
-
-  function parseFloatArray(value: JsonValue, sourceFieldName: string): number[] {
-    if (!Array.isArray(value)) {
-      throw new TypeError(
-        `Expected a JSON array in field ${sourceFieldName}, but received ${typeof value}`,
-      );
-    }
-
-    for (const v of value) {
-      if (typeof v !== 'number') {
-        throw new TypeError(
-          `Expected an array of numbers in field ${sourceFieldName}, but encountered element of type ${typeof v}`,
-        );
-      }
-    }
-
-    return value as number[];
   }
 
   async function checkSetId(setId: string, transaction?: Kysely<FoodsDB>): Promise<void> {
@@ -375,11 +357,11 @@ function drinkwareSetService({
   type DrinkScaleV2Record = {
     choiceId: string;
     baseImageId: string;
-    outlineCoordinates: JsonValue;
-    volumeSamples: JsonValue;
-    volumeSamplesNormalised: JsonValue;
+    outlineCoordinates: number[];
+    volumeSamples: number[];
+    volumeSamplesNormalised: number[];
     volumeMethod: string;
-    label: JsonValue | null;
+    label: LocaleTranslation | null;
     id: string;
     baseImagePath: string | null;
   };
@@ -409,9 +391,9 @@ function drinkwareSetService({
       version: 2,
       choiceId: record.choiceId,
       label: parseLocaleTranslation(record.label),
-      outlineCoordinates: parseFloatArray(record.outlineCoordinates, 'outline_coordinates'),
-      volumeSamples: parseFloatArray(record.volumeSamples, 'volume_samples'),
-      volumeSamplesNormalised: parseFloatArray(record.volumeSamplesNormalised, 'volume_samples_normalised'),
+      outlineCoordinates: record.outlineCoordinates,
+      volumeSamples: record.volumeSamples,
+      volumeSamplesNormalised: record.volumeSamplesNormalised,
       volumeMethod: parseVolumeMethod(record.volumeMethod),
       baseImageUrl: getImageUrl(record.baseImagePath),
     };

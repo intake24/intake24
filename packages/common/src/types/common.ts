@@ -61,12 +61,13 @@ export type Environment = (typeof environmentOptions)[number];
 export const localeTranslation = z.record(z.string(), z.string().nullable());
 export const sanitizedLocaleTranslation = localeTranslation.transform(val =>
   sanitize(val, { allowHtml: true, emptyStringToNull: true }));
-
 export type LocaleTranslation = z.infer<typeof localeTranslation>;
 
 export const localeTranslationStrict = z.record(z.string(), z.string());
-
 export type LocaleTranslationStrict = z.infer<typeof localeTranslationStrict>;
+
+export const localeTranslations = z.record(z.string(), z.string().array());
+export type LocaleTranslations = z.infer<typeof localeTranslations>;
 
 export const requiredLocaleTranslation = z.intersection(
   z.object({ en: z.string() }),

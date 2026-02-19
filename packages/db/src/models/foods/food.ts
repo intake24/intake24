@@ -9,7 +9,7 @@ import type {
 
 import type { FoodNutrientCreationAttributes } from './food-nutrient';
 import type { FoodPortionSizeMethodCreationAttributes } from './food-portion-size-method';
-import type { AltNames } from '@intake24/common/types/http/admin';
+import type { LocaleTranslations } from '@intake24/common/types';
 
 import {
   BelongsTo,
@@ -96,12 +96,12 @@ export default class Food extends BaseModel<
     defaultValue: {},
     type: DataType.JSONB,
   })
-  declare altNames: CreationOptional<AltNames>;
+  declare altNames: CreationOptional<LocaleTranslations>;
 
   @Column({
     allowNull: false,
     defaultValue: [],
-    type: DataType.JSONB,
+    type: DataType.ARRAY(DataType.TEXT),
   })
   declare tags: CreationOptional<string[]>;
 

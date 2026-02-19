@@ -16,14 +16,16 @@
     "node": ">=24.12.0"
   },
   "scripts": {
+    "db:migrate": "pnpm db:foods:migrate && pnpm db:system:migrate",
+    "db:dts": "pnpm db:foods:dts && pnpm db:system:dts",
     "db:foods:migrate": "pnpm sequelize db:migrate --options-path sequelize/foods/options.json",
     "db:foods:migration:new": "pnpm sequelize migration:generate --options-path sequelize/foods/options.json",
     "db:foods:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/foods/options.json",
-    "db:foods:kysely-codegen": "pnpm exec kysely-codegen --dialect postgres --url \"env(DB_DEV_FOODS_URL)\" --camel-case --out-file ./src/kysely/foods.d.ts",
+    "db:foods:dts": "pnpm kysely-codegen --config-file ./foods.dts-config.ts && eslint ./src/kysely/foods.d.ts --fix",
     "db:system:migrate": "pnpm sequelize db:migrate --options-path sequelize/system/options.json",
     "db:system:migration:new": "pnpm sequelize migration:generate --options-path sequelize/system/options.json",
     "db:system:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/system/options.json",
-    "db:system:kysely-codegen": "pnpm exec kysely-codegen --dialect postgres --url \"env(DB_DEV_SYSTEM_URL)\" --camel-case --out-file ./src/kysely/system.d.ts"
+    "db:system:dts": "pnpm kysely-codegen --config-file ./system.dts-config.ts && eslint ./src/kysely/system.d.ts --fix"
   },
   "dependencies": {
     "dotenv": "^17.3.1",

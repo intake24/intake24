@@ -54,7 +54,7 @@ export default class ImageMapObject extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.JSONB,
+    type: DataType.ARRAY(DataType.FLOAT),
   })
   declare outlineCoordinates: number[];
 

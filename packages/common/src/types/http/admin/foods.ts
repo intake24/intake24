@@ -1,3 +1,4 @@
+import type { LocaleTranslations } from '../../common';
 import type { Pagination } from '../generic';
 import type { AssociatedFood } from './associated-food';
 import type { InheritableAttributes } from './attributes';
@@ -7,20 +8,18 @@ import { z } from 'zod';
 
 import { portionSizeParameters } from '@intake24/common/surveys/portion-size';
 
+import { localeTranslations } from '../../common';
 import { associatedFoodAttributes } from './associated-food';
 import { inheritableAttributes } from './attributes';
 import { categoryAttributes } from './categories';
 import { nutrientTableRecordAttributes } from './nutrient-tables';
 import { foodPortionSizeMethodAttributes, portionSizeMethodAttributes } from './portion-size-methods';
 
-export const altNames = z.record(z.string(), z.string().array());
-export type AltNames = z.infer<typeof altNames>;
-
 export type CreateFoodRequest = {
   code: string;
   englishName: string;
   name: string;
-  altNames?: AltNames;
+  altNames?: LocaleTranslations;
   tags?: string[];
   attributes: InheritableAttributes;
   parentCategories?: string[];
@@ -41,7 +40,7 @@ export const foodAttributes = z.object({
   englishName: z.string().min(1).max(256),
   name: z.string().min(1).max(256).nullable(),
   simpleName: z.string().nullable(),
-  altNames,
+  altNames: localeTranslations,
   tags: z.string().array(),
   version: z.uuid(),
 });

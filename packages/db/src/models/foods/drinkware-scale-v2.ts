@@ -73,19 +73,19 @@ export default class DrinkwareScaleV2 extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.JSONB,
+    type: DataType.ARRAY(DataType.FLOAT),
   })
   declare outlineCoordinates: number[];
 
   @Column({
     allowNull: false,
-    type: DataType.JSONB,
+    type: DataType.ARRAY(DataType.FLOAT),
   })
   declare volumeSamples: number[];
 
   @Column({
     allowNull: false,
-    type: DataType.JSONB,
+    type: DataType.ARRAY(DataType.FLOAT),
   })
   declare volumeSamplesNormalised: number[];
 

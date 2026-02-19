@@ -1,0 +1,39 @@
+import { defineConfig } from 'kysely-codegen';
+
+export default defineConfig({
+  camelCase: true,
+  dialect: 'postgres',
+  url: 'env(DB_DEV_FOODS_URL)',
+  envFile: '../../apps/api/.env',
+  outFile: './src/kysely/foods.d.ts',
+  customImports: {
+    PortionSizeParameter: '@intake24/common/surveys#PortionSizeParameter',
+    LocaleTranslation: '@intake24/common/types#LocaleTranslation',
+    LocaleTranslations: '@intake24/common/types#LocaleTranslations',
+    RequiredLocaleTranslation: '@intake24/common/types#RequiredLocaleTranslation',
+  },
+  overrides: {
+    columns: {
+      'as_served_images.label': 'LocaleTranslation | null',
+      'as_served_sets.label': 'LocaleTranslation | null',
+      'associated_foods.generic_name': 'LocaleTranslation',
+      'associated_foods.text': 'LocaleTranslation',
+      'category_portion_size_methods.parameters': 'PortionSizeParameter',
+      'categories.tags': 'Generated<string[]>',
+      'drinkware_scales.label': 'LocaleTranslation | null',
+      'drinkware_scales_v2.label': 'LocaleTranslation | null',
+      'drinkware_sets.label': 'LocaleTranslation | null',
+      'food_portion_size_methods.parameters': 'PortionSizeParameter',
+      'foods.alt_names': 'Generated<LocaleTranslations>',
+      'foods.tags': 'Generated<string[]>',
+      'guide_image_objects.label': 'LocaleTranslation | null',
+      'guide_images.label': 'LocaleTranslation | null',
+      'image_map_objects.label': 'LocaleTranslation | null',
+      'image_maps.label': 'LocaleTranslation | null',
+      'recipe_foods_steps.description': 'LocaleTranslation',
+      'recipe_foods_steps.name': 'LocaleTranslation',
+      'standard_units.estimate_in': 'RequiredLocaleTranslation',
+      'standard_units.how_many': 'RequiredLocaleTranslation',
+    },
+  },
+});

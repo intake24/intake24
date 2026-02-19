@@ -1,5 +1,5 @@
 import type { RecipeFoodTuple } from '../phrase-index';
-import type { AltNames } from '@intake24/common/types/http/admin';
+import type { LocaleTranslations } from '@intake24/common/types';
 
 import { Category, Food, RecipeFood } from '@intake24/db';
 
@@ -8,7 +8,7 @@ export type FoodData = {
   code: string;
   englishName: string;
   name: string | null;
-  altNames: AltNames;
+  altNames: LocaleTranslations;
   parentCategories: Set<string>;
 };
 
