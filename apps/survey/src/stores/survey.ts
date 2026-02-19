@@ -195,6 +195,14 @@ export const useSurvey = defineStore('survey', {
       findMeal(state.data.meals, mealId).flags.includes(flag),
     hasFoodFlag: state => (foodId: string, flag: FoodFlag) =>
       findFood(state.data.meals, foodId).flags.includes(flag),
+    registeredFoodBuilder(): string[] {
+      return this.foodPrompts.reduce<string[]>((acc, { component }) => {
+        if (component.endsWith('-builder-prompt'))
+          acc.push(component.replace('-builder-prompt', ''));
+
+        return acc;
+      }, []);
+    },
     registeredPortionSizeMethods(): string[] {
       return this.foodPrompts.reduce((acc, item) => {
         if (item.type !== 'portion-size')

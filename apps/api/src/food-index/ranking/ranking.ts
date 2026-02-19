@@ -136,18 +136,18 @@ export async function rankFoodResults(
   algorithm: SearchSortingAlgorithm,
   matchScoreWeight: number,
   logger: Logger,
-  recipeFoodsHeaders: FoodHeader[],
+  foodBuilderHeaders: FoodHeader[],
 ): Promise<FoodHeader[]> {
   const foodCodes = results.map(result => result.key);
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
   if (rankingData !== null) {
-    return recipeFoodsHeaders.concat(
+    return foodBuilderHeaders.concat(
       applyRankingData(rankingData, results, matchScoreWeight, logger),
     );
   }
   else {
-    return recipeFoodsHeaders.concat(noAlgorithmRanking(results));
+    return foodBuilderHeaders.concat(noAlgorithmRanking(results));
   }
 }
 

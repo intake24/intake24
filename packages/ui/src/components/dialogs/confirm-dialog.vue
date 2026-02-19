@@ -6,6 +6,7 @@
           v-if="show"
           v-bind="{
             ...dProps,
+            block,
             class: activatorClass,
             color: iconColor ? iconColor : color,
             disabled,
@@ -93,6 +94,10 @@ const props = defineProps({
   activatorClass: {
     type: Array as PropType<string[]>,
     default: () => [],
+  },
+  block: {
+    type: Boolean,
+    default: false,
   },
   color: {
     type: String,

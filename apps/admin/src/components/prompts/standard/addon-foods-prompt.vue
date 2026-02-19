@@ -77,7 +77,7 @@
                   </language-selector>
                 </v-col>
                 <v-col cols="12">
-                  <condition-list v-model="addon.filter" prompt="addon-foods-prompt" />
+                  <condition-list v-model="addon.filter" :title="$t(`survey-schemes.prompts.addon-foods-prompt.filter`)" />
                 </v-col>
               </v-row>
             </v-container>
@@ -104,10 +104,11 @@ import { deepEqual } from 'fast-equals';
 import { ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
+import { ConditionList } from '@intake24/admin/components/conditions';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { copy, randomString } from '@intake24/common/util';
 
-import { ConditionList, useBasePrompt } from '../partials';
+import { useBasePrompt } from '../partials';
 
 const props = defineProps({
   addons: {

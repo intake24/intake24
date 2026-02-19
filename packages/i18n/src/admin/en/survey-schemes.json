@@ -785,6 +785,10 @@
       "title": "Portion size estimation method",
       "subtitle": "Choose which portion size method to use in case more than one is available for the food"
     },
+    "generic-builder-prompt": {
+      "title": "Build your own food",
+      "subtitle": "Build your own food from defined steps"
+    },
     "recipe-builder-prompt": {
       "title": "Build your own dish",
       "subtitle": "Build your own dish from the ingredients"

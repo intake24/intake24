@@ -497,6 +497,42 @@
     },
     "quantity": "How many of these drinks did you have?"
   },
+  "genericBuilder": {
+    "name": "{food} builder",
+    "text": "",
+    "description": "Follow the steps below to build your own {food}.",
+    "label": "Add your own {searchTerm}",
+    "browse": "{category} categories",
+    "search": "Search for a food",
+    "results": "Search results",
+    "relatedCategories": "Categories/ Subcategories",
+    "showLess": "Show Less",
+    "showAll": "Search by category",
+    "root": "all food categories",
+    "back": "Back to '{category}'",
+    "none": "No food results. Try refining your search.",
+    "refine": "Getting lots of matches — try being more specific to find the right one.",
+    "optional": {
+      "confirm": "Yes",
+      "reject": "No",
+      "infoPrompt": "What was it?"
+    },
+    "addMore": "Add another",
+    "noMore": "Done",
+    "remove": "Remove",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
+    "missing": {
+      "label": "I can't find my food",
+      "description": "<p>Try browsing the food categories listed above to find your food.</p><p>If you still can't find it, click the button below to report a missing food.</p>",
+      "report": "Report a missing food",
+      "tryAgain": "OK, let me try again",
+      "irrelevantIngredient": "I didn't have any"
+    }
+  },
   "guideImage": {
     "name": "Guide image",
     "text": "",

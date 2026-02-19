@@ -80,8 +80,5 @@ export function getUAInfo(userAgent?: string): string | undefined {
 }
 
 export function addDollarSign(str: string): string {
-  if (str.charAt(0) !== '$')
-    return `$${str}`;
-
-  return str;
+  return str.charAt(0) !== '$' ? `$${str}` : str;
 }

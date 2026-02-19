@@ -2,6 +2,7 @@ export { default as AsServedPrompt } from './AsServedPrompt.vue';
 export { default as CerealPrompt } from './CerealPrompt.vue';
 export { default as DirectWeightPrompt } from './DirectWeightPrompt.vue';
 export { default as DrinkScalePrompt } from './DrinkScalePrompt.vue';
+export { default as GenericBuilderPrompt } from './GenericBuilderPrompt.vue';
 export { default as GuideImagePrompt } from './GuideImagePrompt.vue';
 export { default as MilkInAHotDrinkPrompt } from './MilkInAHotDrinkPrompt.vue';
 export { default as MilkOnCerealPrompt } from './MilkOnCerealPrompt.vue';

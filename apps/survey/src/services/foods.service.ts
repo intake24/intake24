@@ -1,5 +1,4 @@
-import type { RecipeFood } from '@intake24/common/types';
-import type { FoodSearchResponse, UserFoodData } from '@intake24/common/types/http';
+import type { FoodBuilder, FoodSearchResponse, UserFoodData } from '@intake24/common/types/http';
 
 import { http } from '@intake24/ui';
 
@@ -24,8 +23,14 @@ export default {
     const { data } = await http.get<UserFoodData>(`/locales/${localeId}/foods/${code}`);
     return data;
   },
-  getRecipeFood: async (localeId: string, code: string): Promise<RecipeFood> => {
-    const { data } = await http.get<RecipeFood>(`/locales/${localeId}/foods/${code}/recipe-food`);
+  getFoodBuilder: async (localeId: string, code: string): Promise<FoodBuilder> => {
+    const { data } = await http.get<FoodBuilder>(`/locales/${localeId}/food-builders/${code}`);
+    return data;
+  },
+  getFoodBuilders: async (localeId: string, code: string[]): Promise<FoodBuilder[]> => {
+    const { data } = await http.get<FoodBuilder[]>(`/locales/${localeId}/food-builders`, {
+      params: { code },
+    });
     return data;
   },
   categories: async (localeId: string, code: string): Promise<string[]> => {

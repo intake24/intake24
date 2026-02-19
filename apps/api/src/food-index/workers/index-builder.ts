@@ -12,9 +12,9 @@ import { ParentCategoryIndex } from '@intake24/api/food-index/workers/parent-cat
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import { logger as servicesLogger } from '@intake24/common-backend';
-import { Database, FoodsLocale, RecipeFood, SynonymSet } from '@intake24/db';
+import { Database, FoodBuilder, FoodsLocale, SynonymSet } from '@intake24/db';
 import type { CategoryData } from './food-data';
-import { fetchCategories, fetchFoods, fetchRecipeFoodsList } from './food-data';
+import { fetchCategories, fetchFoodBuilders, fetchFoods } from './food-data';
 
 if (parentPortNullable === null)
   throw new Error('This file can only be run as a worker thread');
@@ -60,15 +60,15 @@ async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
   return synSets.map(s => parseSynonymSet(s.synonyms));
 }
 
-async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]> {
-  const recipeFoods = await RecipeFood.findAll({
-    attributes: ['recipeWord'],
+async function getFoodBuildersSynonymSets(localeId: string): Promise<Set<string>[]> {
+  const foodBuilders = await FoodBuilder.findAll({
+    attributes: ['triggerWord'],
     where: { localeId },
     include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
   });
-  return recipeFoods.map(recipeFoodEntry =>
+  return foodBuilders.map(entry =>
     parseSynonymSet(
-      recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonymSet?.synonyms ?? ''),
+      entry.triggerWord.concat(' ', entry.synonymSet?.synonyms ?? ''),
     ),
   );
 }
@@ -96,16 +96,16 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     foods,
     allCategories,
     synonymSets,
-    recipeFoodsSynomSet,
+    foodBuildersSynonymSet,
     languageBackendId,
-    recipeFoodslist,
+    foodBuilders,
   ] = await Promise.all([
     fetchFoods(localeId),
     fetchCategories(localeId),
     getSynonymSets(localeId),
-    getRecipeFoodsSynomSets(localeId),
+    getFoodBuildersSynonymSets(localeId),
     getLanguageBackendId(localeId),
-    fetchRecipeFoodsList(localeId),
+    fetchFoodBuilders(localeId),
   ]);
 
   const languageBackend = LanguageBackends[languageBackendId];
@@ -148,8 +148,8 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     foodDescriptions,
     languageBackend,
     synonymSets,
-    recipeFoodsSynomSet,
-    recipeFoodslist,
+    foodBuildersSynonymSet,
+    foodBuilders,
   );
 
   const categoryIndex = new PhraseIndex<string>(
@@ -172,40 +172,41 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
  * @returns FoodHeader[] - array of FoodHeaders of special foods
  */
 
-async function matchRecipeFoods(
+async function matchFoodBuilders(
   interpretedQuery: InterpretedPhrase,
   query: SearchQuery,
 ): Promise<FoodHeader[]> {
   const localeIndex = index[query.parameters.localeId];
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
-  const recipeFoodsTuples = localeIndex.foodIndex.recipeFoodsList;
-  const recipeFoodHeaders: FoodHeader[] = [];
+
+  const foodBuildersTuples = localeIndex.foodIndex.foodBuildersList;
+  const foodBuilderHeaders: FoodHeader[] = [];
 
   // TODO: Optimise the performance of this function
-  for (const recipeFood of recipeFoodsTuples) {
+  for (const foodBuilder of foodBuildersTuples) {
     interpretedQuery.words.forEach((word) => {
-      const asTypedExactMatch = recipeFood[1].synonyms.has(word.asTyped);
+      const asTypedExactMatch = foodBuilder[1].synonyms.has(word.asTyped);
       word.interpretations.forEach((interpretation) => {
-        if (recipeFood[1].synonyms.has(interpretation.dictionaryWord) || asTypedExactMatch) {
-          return recipeFoodHeaders.push({
-            id: recipeFood[1].id,
-            code: recipeFood[1].code,
-            name: recipeFood[1].description,
+        if (foodBuilder[1].synonyms.has(interpretation.dictionaryWord) || asTypedExactMatch) {
+          return foodBuilderHeaders.push({
+            id: foodBuilder[1].id,
+            code: foodBuilder[1].code,
+            name: foodBuilder[1].description,
           });
         }
       });
     });
   }
 
-  const recipeFoodHeadersFiltered: FoodHeader[] = recipeFoodHeaders.reduce((acc, current) => {
+  const foodBuilderHeadersFiltered: FoodHeader[] = foodBuilderHeaders.reduce((acc, current) => {
     const temp = acc.find(item => item.code === current.code);
     if (!temp)
       return acc.concat([current]);
     else
       return acc;
   }, [] as FoodHeader[]);
-  return recipeFoodHeadersFiltered;
+  return foodBuilderHeadersFiltered;
 }
 
 function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchResult<string>[], categoryResults: PhraseMatchResult<string>[], transitiveLimit: number): PhraseMatchResult<string>[] {
@@ -257,14 +258,14 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     spellingCorrectionParameters,
     'foods',
   );
-  const foodInterpretedRecipeFoods = localeIndex.foodIndex.interpretPhrase(
+  const foodInterpretedBuilders = localeIndex.foodIndex.interpretPhrase(
     query.parameters.description,
     spellingCorrectionParameters,
     'recipes',
   );
-  let recipeFoodsHeaders: FoodHeader[] = [];
-  if (foodInterpretedRecipeFoods.words.length > 0)
-    recipeFoodsHeaders = await matchRecipeFoods(foodInterpretedRecipeFoods, query);
+  let foodBuilderHeaders: FoodHeader[] = [];
+  if (foodInterpretedBuilders.words.length > 0)
+    foodBuilderHeaders = await matchFoodBuilders(foodInterpretedBuilders, query);
 
   const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, MAX_PHRASE_COMBINATIONS, matchQualityParameters, (foodCode: string) => {
     const acceptHidden = query.parameters.includeHidden || !localeIndex.parentCategoryIndex.isFoodHidden(foodCode);
@@ -294,7 +295,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
     query.parameters.rankingAlgorithm,
     query.parameters.matchScoreWeight / 100.0,
     logger,
-    recipeFoodsHeaders,
+    foodBuilderHeaders,
   );
 
   const categories = rankCategoryResults(categoryResults);
