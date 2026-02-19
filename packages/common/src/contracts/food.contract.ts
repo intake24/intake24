@@ -2,9 +2,9 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import {
+  foodBuilderResponse,
   foodSearchQuery,
   foodSearchResponse,
-  recipeFoodResponse,
   userFoodData,
 } from '../types/http';
 
@@ -39,15 +39,6 @@ export const food = initContract().router({
     description:
       'Get portion size estimation options, associated foods and related data for a food from the database.',
   },
-  recipeFood: {
-    method: 'GET',
-    path: '/locales/:localeId/foods/:code/recipe-food',
-    responses: {
-      200: recipeFoodResponse,
-    },
-    summary: 'Recipe food',
-    description: 'Get the recipe food data for a food if any.',
-  },
   categories: {
     method: 'GET',
     path: '/locales/:localeId/foods/:code/categories',
@@ -56,5 +47,26 @@ export const food = initContract().router({
     },
     summary: 'Food categories',
     description: 'Get the list of categories for a food.',
+  },
+  builders: {
+    method: 'GET',
+    path: '/locales/:localeId/food-builders',
+    query: z.object({
+      code: z.union([z.string(), z.string().array().nonempty()]),
+    }),
+    responses: {
+      200: foodBuilderResponse.array(),
+    },
+    summary: 'Food builders',
+    description: 'Get the food builders.',
+  },
+  builder: {
+    method: 'GET',
+    path: '/locales/:localeId/food-builders/:code',
+    responses: {
+      200: foodBuilderResponse,
+    },
+    summary: 'Food builder',
+    description: 'Get the food builder data for a specific food code.',
   },
 });

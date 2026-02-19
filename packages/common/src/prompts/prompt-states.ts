@@ -2,12 +2,11 @@ import type {
   FoodState,
   MissingFood,
   PortionSizeStates,
+  StandardUnit,
 } from '../surveys';
-import type {
-  RecipeFood,
-  RequiredLocaleTranslation,
-} from '../types';
 import type { FoodHeader, UserFoodData } from '../types/http';
+import type { CoefficientStep, ConditionStep, FoodBuilderStepType, IngredientStep, LookupResourceStep, LookupUnitStep, QuantityStep } from '../types/http/admin';
+import type { Condition } from './conditions';
 import type { AddonFood } from './prompts';
 
 export type AssociatedFoodPromptItem = {
@@ -25,34 +24,52 @@ export type AssociatedFoodPrompt = {
 
 export type MissingFoodRecipeBuilderItemState = {
   type: 'missing';
-  id: string;
-  idx: number;
   name: string;
   searchTerm?: string | null;
 };
 
 export type SelectedFoodRecipeBuilderItemState = FoodHeader & {
   type: 'selected';
-  id: string;
-  idx: number;
   ingredient: UserFoodData;
 };
+export type FoodRecipeBuilderItemState = MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
 
-export type FoodRecipeBuilderItemState
-  = | MissingFoodRecipeBuilderItemState
-    | SelectedFoodRecipeBuilderItemState;
+export type FoodBuilderCoefficientStepState = Pick<CoefficientStep, 'type'> & {
+  option: number | null;
+};
 
-export type RecipeBuilderStepState = {
+export type FoodBuilderConditionStepState = Pick<ConditionStep, 'type'> & {
+  option: Condition[] | null;
+};
+
+export type FoodBuilderIngredientStepState = Pick<IngredientStep, 'type'> & {
   confirmed?: 'yes' | 'no';
   anotherFoodConfirmed?: boolean;
   foods: FoodRecipeBuilderItemState[];
-  order: number;
-  description: RequiredLocaleTranslation;
-  name: RequiredLocaleTranslation;
-  categoryCode: string;
-  repeat: boolean;
-  required: boolean;
 };
+
+export type FoodBuilderLookupResourceStepState = Pick<LookupResourceStep, 'type'> & {
+  option: string | null;
+};
+
+export type FoodBuilderLookupUnitStepState = Pick<LookupUnitStep, 'type'> & {
+  option: StandardUnit | null;
+};
+
+export type FoodBuilderQuantityStepState = Pick<QuantityStep, 'type'> & {
+  quantity: number;
+  confirmed: boolean;
+};
+
+export type FoodBuilderStepState
+  = | FoodBuilderCoefficientStepState
+    | FoodBuilderConditionStepState
+    | FoodBuilderIngredientStepState
+    | FoodBuilderLookupResourceStepState
+    | FoodBuilderLookupUnitStepState
+    | FoodBuilderQuantityStepState;
+
+export type GetFoodBuilderStateStep<U extends FoodBuilderStepType> = Extract<FoodBuilderStepState, { type: U }>;
 
 export type PromptStates = {
   'as-served-prompt': {
@@ -84,6 +101,12 @@ export type PromptStates = {
     leftoversConfirmed: boolean;
     leftoversPrompt?: boolean;
     quantityConfirmed: boolean;
+  };
+  'generic-builder-prompt': {
+    food: UserFoodData | null;
+    portionSize: PortionSizeStates['standard-portion'];
+    steps: FoodBuilderStepState[];
+    activeStep: number;
   };
   'guide-image-prompt': {
     portionSize: PortionSizeStates['guide-image'];
@@ -135,9 +158,8 @@ export type PromptStates = {
     option: number | null;
   };
   'recipe-builder-prompt': {
-    recipe: RecipeFood;
+    steps: FoodBuilderIngredientStepState[];
     activeStep: number;
-    recipeSteps: RecipeBuilderStepState[];
   };
   'standard-portion-prompt': {
     portionSize: PortionSizeStates['standard-portion'];

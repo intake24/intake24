@@ -1,7 +1,8 @@
 import type { ExternalSource, PromptStates } from '../prompts';
-import type { FoodType, RecipeFood } from '../types';
+import type { FoodType } from '../types';
 import type { Optional } from '../types/common';
 import type { UserFoodData } from '../types/http';
+import type { FoodBuilder } from '../types/http/foods';
 import type { PortionSizeState } from './portion-size';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
@@ -48,7 +49,7 @@ export const staticFoodFlags = [
   'missing-food-complete',
   'portion-size-option-complete',
   'portion-size-method-complete',
-  'recipe-builder-complete',
+  'food-builder-complete',
   'associated-foods-complete',
   'disable-general-associated-foods',
 ] as const;
@@ -75,12 +76,6 @@ export const customPromptAnswer = z.union([
 export type CustomPromptAnswer = z.infer<typeof customPromptAnswer>;
 export const customData = z.record(z.string(), customPromptAnswer);
 export type CustomData = z.infer<typeof customData>;
-
-export const recipeBuilderComponent = z.object({
-  order: z.number(),
-  ingredients: z.string().array(),
-});
-export type RecipeBuilderComponent = z.infer<typeof recipeBuilderComponent>;
 
 export type ExternalSourceRecord = Record<ExternalSource, PromptStates['external-source-prompt'] | undefined>;
 
@@ -119,14 +114,20 @@ export interface MissingFood extends AbstractFoodState {
 export interface RecipeBuilder extends AbstractFoodState {
   type: 'recipe-builder';
   searchTerm: string | null;
-  components: RecipeBuilderComponent[];
   description: string;
-  templateId: string;
-  template: RecipeFood;
-  markedAsComplete: number[];
+  template: FoodBuilder;
 }
 
-export type FoodState = FreeTextFood | EncodedFood | MissingFood | RecipeBuilder;
+export interface GenericBuilder extends AbstractFoodState {
+  type: 'generic-builder';
+  searchTerm: string | null;
+  description: string;
+  template: FoodBuilder;
+}
+
+export type FoodState = FreeTextFood | EncodedFood | MissingFood | RecipeBuilder | GenericBuilder;
+export type ParentFoodState = EncodedFood | RecipeBuilder | GenericBuilder;
+export type FoodBuilderState = RecipeBuilder | GenericBuilder;
 
 export const mealState = z.object({
   id: z.string(),

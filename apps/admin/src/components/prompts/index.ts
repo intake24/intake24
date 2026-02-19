@@ -205,6 +205,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['foods'],
   },
+  'generic-builder-prompt': {
+    tabs: [...tabs],
+    sections: ['foods'],
+  },
   'pizza-prompt': {
     tabs: [...tabs],
     sections: ['foods'],

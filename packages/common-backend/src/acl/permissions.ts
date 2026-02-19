@@ -82,7 +82,7 @@ export const permissions = [
   { name: 'locales:food-list:edit', displayName: 'Locale - edit food list' },
   { name: 'locales:securables', displayName: 'Locales security' },
   { name: 'locales:split-lists', displayName: 'Locale split lists' },
-  { name: 'locales:recipe-foods', displayName: 'Locale recipe foods' },
+  { name: 'locales:food-builders', displayName: 'Locale food builders' },
   { name: 'locales:split-words', displayName: 'Locale split words' },
   { name: 'locales:synonym-sets', displayName: 'Locale synonym sets' },
   { name: 'locales:tasks', displayName: 'Locale tasks' },

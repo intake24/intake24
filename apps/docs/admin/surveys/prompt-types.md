@@ -363,7 +363,7 @@ Portion size option selection prompt
 
 ### Recipe builder prompt
 
-Recipe builder prompt for foods with multiple ingredients, such as sandwiches, salads etc. Recipe foods can be defined in [locales recipe-foods](/admin/localization/locales#recipe-foods).
+Recipe builder prompt for foods with multiple ingredients, such as sandwiches, salads etc. Recipe foods can be defined in [locales food-builders](/admin/localization/locales#food-builders).
 
 - `hints` - hints to be displayed in the prompt based on the search query (inline alerts)
 

@@ -5,8 +5,6 @@ import type { IoC } from '@intake24/api/ioc';
 import type { LocaleCopyFoodsSubTasks, LocaleCopySystemSubTasks } from '@intake24/common/types';
 import type { FoodsDB, SystemDB } from '@intake24/db';
 
-import { sql } from 'kysely';
-
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Job as DbJob, SystemLocale } from '@intake24/db';
 
@@ -535,64 +533,31 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of synonym sets created: ${insResult.numInsertedOrUpdatedRows}`);
   }
 
-  private async recipeFoods({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
-    const delResult = await trx.deleteFrom('recipeFoods').where('localeId', '=', code).executeTakeFirst();
-    this.logger.debug(`Number of recipe foods cleared: ${delResult.numDeletedRows}`);
+  private async foodBuilders({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
+    const delResult = await trx.deleteFrom('foodBuilders').where('localeId', '=', code).executeTakeFirst();
+    this.logger.debug(`Number of food builders cleared: ${delResult.numDeletedRows}`);
 
-    const insResult = await trx.insertInto('recipeFoods')
-      .columns(['code', 'name', 'localeId', 'recipeWord', 'synonymsId', 'createdAt', 'updatedAt'])
+    const insResult = await trx.insertInto('foodBuilders')
+      .columns(['code', 'localeId', 'type', 'name', 'triggerWord', 'synonymSetId', 'steps', 'createdAt', 'updatedAt'])
       .expression(eb => eb
-        .selectFrom('recipeFoods')
+        .selectFrom('foodBuilders')
         .select(eb => [
           'code',
+          eb.val(code).as('localeId'),
+          'type',
           'name',
-          eb.val(code).as('localeId'),
-          'recipeWord',
-          eb.lit(null).as('synonymsId'),
+          'triggerWord',
+          eb.lit(null).as('synonymSetId'),
+          'steps',
           eb.val(new Date()).as('createdAt'),
           eb.val(new Date()).as('updatedAt'),
         ])
-        .where('recipeFoods.localeId', '=', sourceCode)
-        .orderBy('recipeFoods.id'),
+        .where('foodBuilders.localeId', '=', sourceCode)
+        .orderBy('foodBuilders.id'),
       )
       .executeTakeFirst();
 
-    this.logger.debug(`Number of recipe foods created: ${insResult.numInsertedOrUpdatedRows}`);
-
-    const stepsResult = await trx.insertInto('recipeFoodsSteps')
-      .columns(['recipeFoodsId', 'code', 'categoryCode', 'localeId', 'name', 'description', 'order', 'repeatable', 'required', 'createdAt', 'updatedAt'])
-      .expression(eb => eb
-        .selectFrom('recipeFoodsSteps as rfs')
-        .innerJoin(
-          'recipeFoods as rf1',
-          join => join
-            .onRef('rf1.id', '=', 'rfs.recipeFoodsId')
-            .on('rf1.localeId', '=', sourceCode),
-        )
-        .innerJoin(
-          'recipeFoods as rf2',
-          join => join
-            .onRef('rf2.code', '=', 'rf1.code')
-            .on('rf2.localeId', '=', code),
-        )
-        .select(eb => [
-          'rf2.id',
-          sql<string>`concat(rf2.locale_id, '_', rf2.id, '_', rf2.code, '_', rfs.order)`.as('code'),
-          'rfs.categoryCode',
-          eb.val(code).as('localeId'),
-          'rfs.name',
-          'rfs.description',
-          'rfs.order',
-          'rfs.repeatable',
-          'rfs.required',
-          eb.val(new Date()).as('createdAt'),
-          eb.val(new Date()).as('updatedAt'),
-        ])
-        .orderBy('rfs.id'),
-      )
-      .executeTakeFirst();
-
-    this.logger.debug(`Number of recipe food steps created: ${stepsResult.numInsertedOrUpdatedRows}`);
+    this.logger.debug(`Number of food builders created: ${insResult.numInsertedOrUpdatedRows}`);
   }
 
   private async searchFixedRanking({ trx, code, sourceCode }: TransactionOps<SystemDB>) {

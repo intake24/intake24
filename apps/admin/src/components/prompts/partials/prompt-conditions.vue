@@ -112,14 +112,14 @@ import { randomString } from '@intake24/common/util';
 import { copy } from '@intake24/common/util/objects';
 import { useI18n } from '@intake24/ui';
 
-import conditionPartials from './conditions';
+import { conditionChecks, ConditionSummary } from '../../conditions';
 
 export default defineComponent({
   name: 'PromptConditions',
 
   components: {
-    ...conditionPartials.check,
-    ConditionSummary: conditionPartials.summary,
+    ...conditionChecks,
+    ConditionSummary,
     VueDraggable,
   },
 

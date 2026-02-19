@@ -3,9 +3,8 @@ import type { Kysely } from 'kysely';
 import type { IoC } from '@intake24/api/ioc';
 import type { QueueJob } from '@intake24/common/types';
 import type {
+  FoodBuilderRequest,
   LocaleRequest,
-  RecipeFoodRequest,
-  RecipeFoodStepRequest,
   SplitListRequest,
   SplitWordRequest,
   SynonymSetRequest,
@@ -15,10 +14,8 @@ import type { FoodsDB, OnConflictOption, SystemDB } from '@intake24/db';
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { addDollarSign } from '@intake24/api/util';
 import {
-
+  FoodBuilder,
   Op,
-  RecipeFood,
-  RecipeFoodStep,
   SplitList,
   SplitWord,
   SynonymSet,
@@ -155,137 +152,54 @@ function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | '
     return [...records, ...newRecords];
   };
 
-  // Get existing recipe foods for the specified Locale ID
-  const getRecipeFoods = async (localeId: string | SystemLocale) => {
+  // Get existing food builders for the specified Locale ID
+  const getFoodBuilders = async (localeId: string | SystemLocale) => {
     const { code } = await resolveLocale(localeId);
 
-    return RecipeFood.findAll({
+    return FoodBuilder.findAll({
       where: { localeId: code },
-      include: [
-        { association: 'steps' },
-        { association: 'synonymSet' },
-      ],
-      order: [
-        ['id', 'ASC'],
-        [{ model: RecipeFoodStep, as: 'steps' }, 'order', 'ASC'],
-      ],
+      include: [{ association: 'synonymSet' }],
+      order: [['id', 'ASC']],
     });
   };
 
-  // Get existing recipe food steps for the specific recipe food for the specified Locale ID
-  const getRecipeFoodSteps = async (
-    localeId: string | SystemLocale,
-    recipeFoodId: string,
-  ): Promise<RecipeFoodStep[]> => {
-    const { code } = await resolveLocale(localeId);
-
-    return RecipeFoodStep.findAll({
-      where: { localeId: code, recipeFoodsId: recipeFoodId },
-      order: [['order', 'ASC']],
-    });
-  };
-
-  // Add/modify/delete new or existing recipe foods for the specified Locale ID
-  const setRecipeFoods = async (
-    localeId: string | SystemLocale,
-    recipeFoods: RecipeFoodRequest[],
-  ) => {
+  // Add/modify/delete new or existing food builders for the specified Locale ID
+  const setFoodBuilders = async (localeId: string | SystemLocale, foodBuilders: FoodBuilderRequest[]) => {
     const { code: localeCode } = await resolveLocale(localeId);
 
-    const ids = recipeFoods.map(({ id }) => id) as string[];
-    await RecipeFood.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
+    const ids = foodBuilders.map(({ id }) => id) as string[];
+    await FoodBuilder.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
 
-    if (!recipeFoods.length)
+    if (!foodBuilders.length)
       return [];
 
-    const records = await RecipeFood.findAll({
+    const records = await FoodBuilder.findAll({
       where: { localeId: localeCode },
       order: [['id', 'ASC']],
     });
-    const newRecords: RecipeFood[] = [];
+    const newRecords: FoodBuilder[] = [];
 
-    for (const recipeFood of recipeFoods) {
-      const { id, code, name, recipeWord, synonymsId } = recipeFood;
+    for (const foodBuilder of foodBuilders) {
+      const { id, ...rest } = foodBuilder;
       // To distinguish between the locale code and the special food code
-      const recipeFoodCode = addDollarSign(code);
+      const builderCode = addDollarSign(rest.code);
 
       if (id) {
         const match = records.find(record => record.id === id);
         if (match) {
-          await match.update({ code: recipeFoodCode, name, recipeWord, synonymsId });
+          await match.update({ ...rest, code: builderCode });
           continue;
         }
       }
 
-      const newRecord = await RecipeFood.create({
+      const newRecord = await FoodBuilder.create({
+        ...rest,
+        code: builderCode,
         localeId: localeCode,
-        code: recipeFoodCode,
-        name,
-        recipeWord,
-        synonymsId,
       });
       newRecords.push(newRecord);
     }
     await cache.setAdd('locales-index', localeCode);
-
-    return [...records, ...newRecords];
-  };
-
-  // Add/modify/delete new or existing recipe food steps for the specific recipe food for the specified Locale ID
-  const setRecipeFoodSteps = async (
-    localeId: string | SystemLocale,
-    recipeFoodId: string,
-    recipeFoodSteps: RecipeFoodStepRequest[],
-  ) => {
-    const { code: localeCode } = await resolveLocale(localeId);
-    const ids = recipeFoodSteps.map(({ id }) => id) as string[];
-    await RecipeFoodStep.destroy({
-      where: { localeId: localeCode, recipeFoodsId: recipeFoodId, id: { [Op.notIn]: ids } },
-    });
-
-    if (!recipeFoodSteps.length)
-      return [];
-
-    const records = await RecipeFoodStep.findAll({
-      where: { localeId: localeCode, recipeFoodsId: recipeFoodId },
-      order: [['order', 'ASC']],
-    });
-    const newRecords: RecipeFoodStep[] = [];
-
-    for (const recipeFoodStep of recipeFoodSteps) {
-      const { id, code, name, description, categoryCode, order, repeatable, required }
-        = recipeFoodStep;
-
-      if (id) {
-        const match = records.find(record => record.id === id);
-        if (match) {
-          await match.update({
-            code,
-            name,
-            description,
-            categoryCode,
-            localeId: localeCode,
-            order,
-            repeatable,
-            required,
-          });
-          continue;
-        }
-      }
-
-      const newRecord = await RecipeFoodStep.create({
-        localeId: localeCode,
-        recipeFoodsId: recipeFoodId,
-        code,
-        name,
-        description,
-        categoryCode,
-        order,
-        repeatable,
-        required: false,
-      });
-      newRecords.push(newRecord);
-    }
 
     return [...records, ...newRecords];
   };
@@ -466,10 +380,8 @@ function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | '
   const queueTask = async (input: QueueJob) => scheduler.jobs.addJob(input);
 
   return {
-    getRecipeFoods,
-    setRecipeFoods,
-    getRecipeFoodSteps,
-    setRecipeFoodSteps,
+    getFoodBuilders,
+    setFoodBuilders,
     getSplitLists,
     setSplitLists,
     getSplitWords,

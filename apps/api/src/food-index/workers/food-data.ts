@@ -1,7 +1,7 @@
-import type { RecipeFoodTuple } from '../phrase-index';
+import type { FoodBuilderTuple } from '../phrase-index';
 import type { LocaleTranslations } from '@intake24/common/types';
 
-import { Category, Food, RecipeFood } from '@intake24/db';
+import { Category, Food, FoodBuilder } from '@intake24/db';
 
 export type FoodData = {
   id: string;
@@ -78,33 +78,31 @@ export async function fetchCategories(localeId: string): Promise<CategoryData[]>
 /**
  * Build special foods list for a given locale
  * @param {string} localeId - food Locale
- * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
+ * @returns {Promise<Map<string, FoodBuilder>[]>} special foods list
  */
-export async function fetchRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
-  const recipeFoods = await RecipeFood.findAll({
-    attributes: ['id', 'code', 'name', 'recipeWord'],
+export async function fetchFoodBuilders(localeId: string): Promise<FoodBuilderTuple[]> {
+  const foodBuilders = await FoodBuilder.findAll({
+    attributes: ['id', 'code', 'name', 'triggerWord'],
     where: { localeId },
     include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
   });
 
-  const recipeFoodsList: RecipeFoodTuple[] = [];
-  recipeFoods.map((recipeFoodEntry: RecipeFood) =>
-    recipeFoodsList.push([
-      recipeFoodEntry.name.toLowerCase(),
+  return foodBuilders.map((entry: FoodBuilder) =>
+    [
+      entry.name.toLowerCase(),
       {
-        id: recipeFoodEntry.id,
-        code: recipeFoodEntry.code,
-        name: recipeFoodEntry.name.toLowerCase(),
-        recipeWord: recipeFoodEntry.recipeWord,
+        id: entry.id,
+        code: entry.code,
+        name: entry.name.toLowerCase(),
+        triggerWord: entry.triggerWord,
         synonyms: new Set<string>(
-          recipeFoodEntry.recipeWord
-            .concat(' ', recipeFoodEntry.synonymSet?.synonyms ?? '')
+          entry.triggerWord
+            .concat(' ', entry.synonymSet?.synonyms ?? '')
             .trim()
             .split(/\s+/),
         ),
-        description: recipeFoodEntry.name.toLocaleLowerCase(),
+        description: entry.name.toLocaleLowerCase(),
       },
-    ]),
+    ],
   );
-  return recipeFoodsList;
 }

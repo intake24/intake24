@@ -56,23 +56,49 @@
     "synonyms": "Synonyms (space-delimited)"
   },
 
-  "recipe-foods": {
-    "_": "Recipe food sets",
-    "title": "Recipe foods set",
-    "tab": "Recipe foods",
-    "add": "Add recipe food",
-    "remove": "Remove recipe food",
-    "special": "Trigger word",
-    "code": "Recipe Food Code",
-    "step_code": "Step Code (assigned automatically)",
-    "synonymsId": "Synonyms (space-delimited)",
-    "steps": "Recipe Builder Steps",
-    "name": "Step Name",
-    "description": "Step Description",
-    "ingredientsCategory": "Step Ingredients Category",
-    "order": "Step Order",
-    "repeat": "Many ingredients",
-    "require": "Required"
+  "food-builders": {
+    "_": "Food builder sets",
+    "title": "Food builder set",
+    "tab": "Food builders",
+    "add": "Add food builder",
+    "edit": "Edit food builder",
+    "remove": "Remove food builder",
+    "types": {
+      "_": "Food builder type",
+      "title": "Food builder types",
+      "generic": "Generic",
+      "recipe": "Recipe"
+    },
+    "code": "Food builder code",
+    "name": "Food builder name",
+    "triggerWord": "Trigger word",
+    "synonymSetId": "Synonyms (space-delimited)",
+    "steps": {
+      "_": "Food builder step",
+      "title": "Food builder steps",
+      "add": "Add step",
+      "remove": "Remove step",
+      "types": {
+        "_": "Step type",
+        "title": "Step types",
+        "ingredient": "Ingredient",
+        "coefficient": "Coefficient",
+        "condition": "Condition",
+        "lookup-resource": "Entity lookup",
+        "lookup-unit": "Unit lookup",
+        "quantity": "Quantity"
+      },
+      "name": "Step Name",
+      "description": "Step Description",
+      "coefficient": "Coefficient",
+      "multiple": "Many ingredients",
+      "required": "Required"
+    },
+    "tabs": {
+      "general": "General",
+      "steps": "Steps",
+      "json": "JSON"
+    }
   },
 
   "food-ranking": {

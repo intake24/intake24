@@ -13,6 +13,7 @@ export { default as PinchZoomImageMapSelector } from './PinchZoomImageMapSelecto
 export { default as QuantityBadge } from './QuantityBadge.vue';
 export { default as QuantityCard } from './QuantityCard.vue';
 export { default as QuantitySlider } from './QuantitySlider.vue';
+export { default as StandardUnitIcon } from './StandardUnitIcon.vue';
 export * from './use-carousel';
 export * from './use-date-picker';
 export * from './use-fetch-image-data';

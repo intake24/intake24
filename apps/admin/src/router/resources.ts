@@ -78,7 +78,7 @@ export const resources: Resource[] = [
       'split-lists',
       'split-words',
       'synonym-sets',
-      'recipe-foods',
+      'food-builders',
       'tasks',
       'securables',
     ],

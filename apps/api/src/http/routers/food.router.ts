@@ -2,7 +2,6 @@ import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/sea
 
 import { initServer } from '@ts-rest/express';
 
-import foodIndex from '@intake24/api/food-index';
 import { contract } from '@intake24/common/contracts';
 
 export function food() {
@@ -53,15 +52,17 @@ export function food() {
 
       return { status: 200, body: searchResults };
     },
-    recipeFood: async ({ params }) => {
-      const { code, localeId } = params;
-      // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
-      const result = await foodIndex.getRecipeFood(localeId, code);
+    builders: async ({ query: { code }, params: { localeId }, req }) => {
+      const builders = await req.scope.cradle.foodDataService.getFoodBuilders(localeId, code);
 
-      return { status: 200, body: {
-        ...result.get(),
-        steps: result.steps ?? [],
-      } };
+      return { status: 200, body: builders };
+    },
+    builder: async ({ params, req }) => {
+      const { code, localeId } = params;
+
+      const builder = await req.scope.cradle.foodDataService.getFoodBuilder(localeId, code);
+
+      return { status: 200, body: builder };
     },
   });
 }
