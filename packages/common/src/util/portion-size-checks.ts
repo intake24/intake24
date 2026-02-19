@@ -1,4 +1,4 @@
-import type { FoodState, PortionSizeMethodId, RecipeBuilder } from '../surveys';
+import type { FoodBuilderState, FoodState, PortionSizeMethodId } from '../surveys';
 
 export function portionSizeMethodSelected(food: FoodState, method: PortionSizeMethodId): boolean {
   if (food.type !== 'encoded-food')
@@ -301,6 +301,6 @@ export function portionSizeComplete(food: FoodState): boolean {
   return portionSizeCompleteChecks[food.portionSize.method](food);
 }
 
-export function recipeBuilderComplete(food: RecipeBuilder): boolean {
-  return !!food.flags.includes('recipe-builder-complete');
+export function foodBuilderComplete(food: FoodBuilderState): boolean {
+  return !!food.flags.includes('food-builder-complete');
 }

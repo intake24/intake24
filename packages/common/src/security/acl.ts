@@ -40,7 +40,7 @@ export const securableDefs = {
     'food-list',
     'food-list:edit',
     'split-lists',
-    'recipe-foods',
+    'food-builders',
     'split-words',
     'synonym-sets',
     'tasks',

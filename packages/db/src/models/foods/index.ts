@@ -13,6 +13,7 @@ import DrinkwareSet from './drinkware-set';
 import DrinkwareVolumeSample from './drinkware-volume-sample';
 import Food from './food';
 import FoodAttribute from './food-attribute';
+import FoodBuilder from './food-builder';
 import FoodCategory from './food-category';
 import FoodNutrient from './food-nutrient';
 import FoodPortionSizeMethod from './food-portion-size-method';
@@ -34,8 +35,6 @@ import NutrientTypeInKcal from './nutrient-type-in-kcal';
 import FoodsNutrientUnit from './nutrient-unit';
 import PhysicalActivityLevel from './physical-activity-level';
 import ProcessedImage from './processed-image';
-import RecipeFood from './recipe-food';
-import RecipeFoodStep from './recipe-food-step';
 import SourceImage from './source-image';
 import SourceImageKeyword from './source-image-keyword';
 import SplitList from './split-list';
@@ -73,6 +72,8 @@ export { default as Food } from './food';
 export * from './food';
 export { default as FoodAttribute } from './food-attribute';
 export * from './food-attribute';
+export { default as FoodBuilder } from './food-builder';
+export * from './food-builder';
 export { default as FoodCategory } from './food-category';
 export * from './food-category';
 export { default as FoodNutrient } from './food-nutrient';
@@ -115,10 +116,6 @@ export { default as PhysicalActivityLevel } from './physical-activity-level';
 export * from './physical-activity-level';
 export { default as ProcessedImage } from './processed-image';
 export * from './processed-image';
-export { default as RecipeFood } from './recipe-food';
-export * from './recipe-food';
-export { default as RecipeFoodStep } from './recipe-food-step';
-export * from './recipe-food-step';
 export { default as SourceImage } from './source-image';
 export * from './source-image';
 export { default as SourceImageKeyword } from './source-image-keyword';
@@ -149,6 +146,7 @@ export const foods = {
   FoodCategory,
   Food,
   FoodAttribute,
+  FoodBuilder,
   FoodNutrient,
   FoodPortionSizeMethod,
   FoodThumbnailImage,
@@ -175,6 +173,4 @@ export const foods = {
   SplitWord,
   StandardUnit,
   SynonymSet,
-  RecipeFood,
-  RecipeFoodStep,
 };

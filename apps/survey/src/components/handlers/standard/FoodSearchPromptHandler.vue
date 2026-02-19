@@ -3,16 +3,15 @@
     v-bind="{ discardedFoodName, food, meal, localeId, surveySlug, prompt, section }"
     v-model="searchTerm"
     @action="action"
+    @food-builder="foodBuilder"
     @food-missing="foodMissing"
     @food-selected="foodSelected"
-    @recipe-builder="recipeBuilder"
   />
 </template>
 
 <script lang="ts" setup>
-import type { EncodedFood, FoodState, MissingFood, RecipeBuilder } from '@intake24/common/surveys';
-import type { RecipeFood } from '@intake24/common/types';
-import type { UserFoodData } from '@intake24/common/types/http';
+import type { EncodedFood, FoodState, GenericBuilder, MissingFood, RecipeBuilder } from '@intake24/common/surveys';
+import type { FoodBuilder, UserFoodData } from '@intake24/common/types/http';
 
 import { ref } from 'vue';
 
@@ -27,16 +26,14 @@ const emit = defineEmits(['action']);
 
 function getSearchTerm(foodEntry: FoodState) {
   switch (foodEntry.type) {
-    case 'encoded-food':
-    case 'missing-food':
-    case 'recipe-builder':
-      return foodEntry.searchTerm;
     case 'free-text':
       return foodEntry.description;
+    default:
+      return foodEntry.searchTerm;
   }
 }
 
-const { food, localeId, surveySlug, initializeRecipeComponents, resolvePortionSize } = useFoodPromptUtils();
+const { food, localeId, surveySlug, resolvePortionSize } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 const survey = useSurvey();
 
@@ -76,7 +73,7 @@ function getFoodToReplace() {
           'missing-food-complete',
           'portion-size-method-complete',
           'portion-size-option-complete',
-          'recipe-builder-complete',
+          'food-builder-complete',
           'same-as-before-complete',
         ].includes(flag),
     ),
@@ -110,24 +107,18 @@ function foodMissing() {
   action('next');
 };
 
-function recipeBuilder(recipeFood: RecipeFood) {
+function foodBuilder(builder: FoodBuilder) {
   const { id, flags } = getFoodToReplace();
-  const components = initializeRecipeComponents(
-    recipeFood.steps.map(step => step.order - 1),
-  );
 
-  const newState: RecipeBuilder = {
+  const newState: RecipeBuilder | GenericBuilder = {
     id,
-    type: 'recipe-builder',
-    description: recipeFood.recipeWord,
+    type: `${builder.type}-builder`,
+    description: builder.triggerWord,
     searchTerm: searchTerm.value,
     customPromptAnswers: {},
     flags,
     linkedFoods: [],
-    templateId: recipeFood.name,
-    template: recipeFood,
-    markedAsComplete: [],
-    components,
+    template: builder,
   };
 
   survey.replaceFood({ foodId: id, food: newState });
