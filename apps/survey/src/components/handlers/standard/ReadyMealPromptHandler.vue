@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import type { EncodedFood } from '@intake24/common/surveys';
 
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 
 import { ReadyMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -46,11 +46,6 @@ function commitAnswer() {
 }
 
 const { state, action } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);
-
-onMounted(() => {
-  if (!state.value.length)
-    action('next');
-});
 </script>
 
 <style scoped></style>
