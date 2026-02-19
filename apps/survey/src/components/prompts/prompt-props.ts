@@ -1,7 +1,7 @@
 import type { PropType } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState, MealState, MissingFood, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
+import type { EncodedFood, FoodState, GenericBuilder, MealState, MissingFood, ParentFoodState, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 
 export function createBasePromptProps<P extends keyof Prompts, F extends FoodState = EncodedFood>() {
@@ -37,7 +37,11 @@ export function createMealPromptProps<P extends keyof Prompts & keyof PromptStat
   } as const;
 };
 
-export function createFoodPromptProps<P extends keyof Prompts & keyof PromptStates, F extends FoodState = EncodedFood, PF extends EncodedFood | RecipeBuilder = EncodedFood | RecipeBuilder>() {
+export function createFoodPromptProps<
+  P extends keyof Prompts & keyof PromptStates,
+  F extends FoodState = EncodedFood,
+  PF extends ParentFoodState = ParentFoodState,
+>() {
   return {
     ...createBasePromptProps<P, F>(),
     food: {
@@ -58,7 +62,11 @@ export function createFoodPromptProps<P extends keyof Prompts & keyof PromptStat
   } as const;
 };
 
-export function createPortionPromptProps<P extends keyof Prompts & keyof PromptStates, F extends EncodedFood | MissingFood | RecipeBuilder = EncodedFood, PF extends EncodedFood | RecipeBuilder = EncodedFood | RecipeBuilder>() {
+export function createPortionPromptProps<
+  P extends keyof Prompts & keyof PromptStates,
+  F extends EncodedFood | MissingFood | GenericBuilder | RecipeBuilder = EncodedFood,
+  PF extends ParentFoodState = ParentFoodState,
+>() {
   return {
     ...createFoodPromptProps<P, F, PF>(),
     portionSizeMethods: {

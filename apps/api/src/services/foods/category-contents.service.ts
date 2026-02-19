@@ -1,7 +1,7 @@
 import type { FindOptions } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { CategoryContents, CategoryHeader, CategorySearch, FoodHeader } from '@intake24/common/types/http';
+import type { CategoryContents, CategoryHeader, CategorySearch, FoodHeader, UserCategoryData } from '@intake24/common/types/http';
 import type { FoodAttributes, PaginateQuery } from '@intake24/db';
 
 import { Op, QueryTypes } from 'sequelize';
@@ -10,6 +10,7 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { Category, Food, getAllChildCategories } from '@intake24/db';
 
 import { acceptForQuery } from './common';
+import InvalidIdError from './invalid-id-error';
 
 function categoryContentsService({
   adminCategoryService,
@@ -20,6 +21,27 @@ function categoryContentsService({
     headers: { id: string; code: string; name?: string | null; icon?: string | null }[],
   ): (CategoryHeader | FoodHeader)[] =>
     headers.filter(h => h.name).map(h => ({ id: h.id, code: h.code, name: h.name!, icon: h.icon ?? undefined }));
+
+  const getCategoryData = async (ops: { id: string } | { localeId: string; code: string }): Promise<UserCategoryData> => {
+    const category = await Category.findOne({ where: ops });
+
+    if (!category)
+      throw new InvalidIdError(`Invalid category, locale code: ${ops.toString()}`);
+
+    const { id, code, localeId } = category;
+    const { attributes, codes: categories, tags } = await cachedParentCategoriesService.getCategoryCache(id);
+
+    return {
+      id,
+      code,
+      localeId,
+      englishName: category.englishName,
+      localName: category.name ?? category.englishName,
+      categories,
+      ...attributes,
+      tags,
+    };
+  };
 
   const getRootCategories = async (localeCode: string): Promise<CategoryContents> => {
     const categories = await adminCategoryService.getRootCategories(localeCode);
@@ -120,6 +142,7 @@ function categoryContentsService({
   };
 
   return {
+    getCategoryData,
     getCategoryContents,
     getCategoryHeader,
     getRootCategories,

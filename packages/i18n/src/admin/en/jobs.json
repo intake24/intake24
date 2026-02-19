@@ -62,7 +62,7 @@
         "brands": "Brands",
         "categories": "Categories",
         "foods": "Foods",
-        "recipeFoods": "Recipe foods",
+        "foodBuilders": "Food builders",
         "searchPopularity": "Search - popularity",
         "searchFixedRanking": "Search - fixed ranking",
         "splitLists": "Split lists",
@@ -98,6 +98,13 @@
     "LocaleIndexBuild": {
       "_": "Locale - Rebuild Food Indexes for modified locales",
       "force": "Force rebuild for all locales"
+    },
+    "LocalesSync": {
+      "_": "Locales - Synchronize schemes",
+      "subTasks": {
+        "_": "Subtasks",
+        "foodBuilders": "Food builders"
+      }
     },
     "NutrientTableMappingImport": {
       "_": "Nutrient table - Import NDB mapping",
