@@ -156,8 +156,6 @@ export default defineComponent({
 
   methods: {
     onPopState(event: PopStateEvent) {
-      console.log(`[recall-mixin] onPopState | hasFinished=${this.hasFinished} currentPrompt=${this.currentPrompt?.prompt.component ?? 'null'}`);
-
       if (this.hasFinished)
         return;
 
@@ -165,18 +163,8 @@ export default defineComponent({
 
       if (result === 'full') {
         this.hideCurrentPrompt = true;
-
-        const nextPrompt = this.recallController?.getNextPrompt();
-        console.log(`[recall-mixin] after full restore, next prompt: ${nextPrompt?.prompt.component ?? 'none'} (${nextPrompt?.prompt.id ?? 'n/a'})`);
-        this.currentPrompt = nextPrompt ?? null;
-
+        this.currentPrompt = this.recallController?.getNextPrompt() ?? null;
         this.hideCurrentPrompt = false;
-      }
-      else if (result === 'prompt') {
-        console.log('[recall-mixin] prompt state restored via callback');
-      }
-      else {
-        console.log('[recall-mixin] handlePopState returned none, no state change');
       }
     },
 
@@ -353,17 +341,12 @@ export default defineComponent({
 
       if (nextPrompt === undefined) {
         // TODO: handle completion
-        console.log('No prompts remaining');
         if (this.hasMeals)
           await this.recallAction('addMeal');
         else
           this.currentPrompt = null;
       }
       else {
-        console.debug(
-          `Switching prompt to: ${nextPrompt.prompt.id} (${nextPrompt.prompt.component})`,
-        );
-
         this.currentPrompt = nextPrompt;
         createFallbackHistoryEntry(nextPrompt.prompt.component);
       }
