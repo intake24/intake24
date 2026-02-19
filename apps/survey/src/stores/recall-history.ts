@@ -8,6 +8,56 @@ import { copy } from '@intake24/common/util';
 
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
 
+/*
+  History system design goals:
+
+  1) A catch-all implementation that does something reasonable on back/forward buttons
+     (even if it is not great UX) and automatically handles all prompt logic without requiring
+     prompts to be aware of the history system.
+
+  2) Support for "typical prompt flow" that offers better UX by preserving the pre-commit internal prompt
+     state when going back. E.g., meal-edit-prompt should "uncommit" entered foods from the survey state but
+     keep them in the prompt UI.
+
+     This also should not require any custom code in the prompts, and it relies on prompts using prompt
+     stores to preserve their internal state.
+
+  3) Optional support for mid-prompt history states (e.g., when switching panels in a multi-stage prompt).
+
+     This is dependent on the internal prompt logic and requires custom calls to the history system.
+
+  To support 3, there are two types of history entries:
+
+  - FullHistoryEntry: complete survey state + all prompt store snapshots. Automatically
+    created at prompt boundaries. When restored, triggers re-evaluation of the current prompt.
+
+  - PromptHistoryEntry: lightweight snapshot of a single prompt's local state. Can optionally be used
+    for mid-prompt checkpoints. When restored, does not remount or re-evaluate the current prompt.
+
+  In order to meet goals 1 and 2, full entries are pushed in two ways:
+
+  Explicit push: prompt handlers call pushFullHistoryEntry() before committing an answer, capturing
+  the pre-commit state (used by standard handlers via use-prompt-handler-store and for direct survey
+  mutations such as deleteMeal).
+
+  Fallback push: recall-mixin calls createFallbackHistoryEntry() each time a new prompt is displayed,
+  then maybePushFallbackHistoryEntry() when next() is called. If the current prompt handler does an explicit
+  push, it clears fallbackEntry and the fallback push is skipped.
+
+  This ensures non-standard handlers that commit before emitting 'next' (e.g. FoodSearchPromptHandler) are
+  still covered.
+
+  In order to meet goal 3, prompts that support mid-prompt history call registerPromptHistoryHandler and
+  unregisterPromptHistoryHandler on mount/unmount correspondingly. This lets the history system query and
+  restore internal prompt state directly. Accessing current prompt state via component tree would otherwise be
+  complicated.
+
+  Note about mid-prompt states: because there is always a FullHistoryEntry on prompt boundaries, a
+  PromptHistoryEntry cannot be reached in the undo stack without the corresponding prompt component
+  already having been mounted and its callbacks registered. This means there is no need for explicit
+  checks for the prompt component type.
+*/
+
 const MAX_UNDO_STACK = 100;
 
 interface PromptStoreSnapshot {
@@ -41,6 +91,7 @@ let survey: SurveyStore | null = null;
 const undoStack: RecallHistoryEntry[] = [];
 const redoStack: RecallHistoryEntry[] = [];
 let currentStateId = 0;
+let fallbackEntry: FullHistoryEntry | null = null;
 
 let promptHistoryGetState: (() => unknown) | null = null;
 let promptHistorySetState: ((state: unknown) => void) | null = null;
@@ -166,6 +217,7 @@ export function initRecallHistory(store: SurveyStore) {
   undoStack.length = 0;
   redoStack.length = 0;
   currentStateId = 0;
+  fallbackEntry = null;
   history.replaceState({ recallHistory: true, stateId: currentStateId }, '', window.location.href);
   log(`init | stateId=${currentStateId}`);
 }
@@ -175,6 +227,39 @@ export function destroyRecallHistory() {
   survey = null;
   undoStack.length = 0;
   redoStack.length = 0;
+  fallbackEntry = null;
+}
+
+function commitEntryToUndoStack(entry: RecallHistoryEntry, label: string) {
+  if (undoStack.length >= MAX_UNDO_STACK) {
+    const dropped = undoStack.shift();
+    log(`dropped oldest entry: "${dropped?.description}"`);
+  }
+
+  undoStack.push(entry);
+  invalidateForward();
+
+  ++currentStateId;
+  history.pushState({ recallHistory: true, stateId: currentStateId }, '', window.location.href);
+
+  logStacks(`after ${label}`);
+}
+
+export function createFallbackHistoryEntry(description: string) {
+  fallbackEntry = createFullHistoryEntry(description);
+  log(`createFallbackHistoryEntry: "${description}"`);
+}
+
+export function maybePushFallbackHistoryEntry() {
+  if (!fallbackEntry) {
+    log('maybePushFallbackHistoryEntry: fallback entry cleared, skipping');
+    return;
+  }
+
+  log(`maybePushFallbackHistoryEntry: "${fallbackEntry.description}" | stateId before=${currentStateId}`);
+  const entry = fallbackEntry;
+  fallbackEntry = null;
+  commitEntryToUndoStack(entry, 'maybePushFallbackHistoryEntry');
 }
 
 export function pushFullHistoryEntry(description: string) {
@@ -183,21 +268,9 @@ export function pushFullHistoryEntry(description: string) {
     return;
   }
 
+  fallbackEntry = null;
   log(`pushFullHistoryEntry: "${description}" | stateId before=${currentStateId}`);
-
-  if (undoStack.length >= MAX_UNDO_STACK) {
-    const dropped = undoStack.shift();
-    log(`dropped oldest entry: "${dropped?.description}"`);
-  }
-
-  undoStack.push(createFullHistoryEntry(description));
-
-  invalidateForward();
-
-  ++currentStateId;
-  history.pushState({ recallHistory: true, stateId: currentStateId }, '', window.location.href);
-
-  logStacks('after pushFullHistoryEntry');
+  commitEntryToUndoStack(createFullHistoryEntry(description), 'pushFullHistoryEntry');
 }
 
 export function pushPromptHistoryEntry(description: string) {
@@ -207,23 +280,9 @@ export function pushPromptHistoryEntry(description: string) {
   }
 
   log(`pushPromptHistoryEntry: "${description}" | stateId before=${currentStateId}`);
-
-  if (undoStack.length >= MAX_UNDO_STACK) {
-    const dropped = undoStack.shift();
-    log(`dropped oldest entry: "${dropped?.description}"`);
-  }
-
   const entry = createPromptHistoryEntry(description);
-
   if (entry != null)
-    undoStack.push(entry);
-
-  invalidateForward();
-
-  ++currentStateId;
-  history.pushState({ recallHistory: true, stateId: currentStateId }, '', window.location.href);
-
-  logStacks('after pushPromptHistoryEntry');
+    commitEntryToUndoStack(entry, 'pushPromptHistoryEntry');
 }
 
 export function invalidateForward() {
@@ -235,6 +294,7 @@ export function invalidateForward() {
 
 export function goBack(): HandlePopStateResult {
   log(`goBack called | undoStack.length=${undoStack.length}`);
+  fallbackEntry = null;
 
   const entry = undoStack.pop();
   if (!entry) {
@@ -261,6 +321,7 @@ export function goBack(): HandlePopStateResult {
 
 export function goForward(): HandlePopStateResult {
   log(`goForward called | redoStack.length=${redoStack.length}`);
+  fallbackEntry = null;
 
   const entry = redoStack.pop();
   if (!entry) {
