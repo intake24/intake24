@@ -5,6 +5,7 @@ import LocaleFoodNutrientMapping from './locale-food-nutrient-mapping.vue';
 import LocaleFoodRankingUpload from './locale-food-ranking-upload.vue';
 import LocaleFoods from './locale-foods.vue';
 import LocaleIndexBuild from './locale-index-build.vue';
+import LocalesSync from './locales-sync.vue';
 import NutrientTableDataImport from './nutrient-table-data-import.vue';
 import NutrientTableMappingImport from './nutrient-table-mapping-import.vue';
 import ResourceExport from './resource-export.vue';
@@ -24,6 +25,7 @@ export default {
   LocaleCopy,
   LocaleFoods,
   LocaleIndexBuild,
+  LocalesSync,
   NutrientTableDataImport,
   NutrientTableMappingImport,
   ResourceExport,
