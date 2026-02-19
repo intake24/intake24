@@ -19,8 +19,9 @@ import { getOrCreatePromptStateStore, promptStores } from './prompt';
      state when going back. E.g., meal-edit-prompt should "uncommit" entered foods from the survey state but
      keep them in the prompt UI.
 
-     This also should not require any custom code in the prompts, and it relies on prompts using prompt
-     stores to preserve their internal state.
+     This also should not require any custom code in the prompts, but it relies on prompts using prompt
+     stores to preserve their internal state. If the prompt has internal state but does not save it in a prompt
+     store, we lose the state but the back/forward buttons still work.
 
   3) Optional support for mid-prompt history states (e.g., when switching panels in a multi-stage prompt).
 
@@ -58,6 +59,7 @@ import { getOrCreatePromptStateStore, promptStores } from './prompt';
   checks for the prompt component type.
 */
 
+const DEBUG_RECALL_HISTORY: boolean = false;
 const MAX_UNDO_STACK = 100;
 
 interface PromptStoreSnapshot {
@@ -110,7 +112,8 @@ export function unregisterPromptHistoryHandler() {
 }
 
 function log(label: string, ...args: unknown[]) {
-  console.log(`[recall-history] ${label}`, ...args);
+  if (DEBUG_RECALL_HISTORY)
+    console.log(`[recall-history] ${label}`, ...args);
 }
 
 function logStacks(label: string) {
@@ -212,13 +215,31 @@ function restoreState(savedState: RecallHistoryEntry) {
   }
 }
 
+/*
+  Note: Vue router is interfering with popstate calls, there is some internal logic to correct
+  "failed" navigation events resulting in confusing spurious popstate calls when the history
+  entries are not what Vue router expects.
+
+  This can be observed by monkey patching history.go like this (can be down in browser console):
+
+  const baseGo = history.go.bind(history);
+  history.go = function(...args) {
+    console.trace('history.go called with', args);
+    return baseGo(...args);
+  };
+
+  Copying Vue's internal fields from history.state to our history entries seems to resolve the
+  issue, but feels hacky. Not clear if there is a better solution.
+*/
+
 export function initRecallHistory(store: SurveyStore) {
   survey = store;
   undoStack.length = 0;
   redoStack.length = 0;
   currentStateId = 0;
   fallbackEntry = null;
-  history.replaceState({ recallHistory: true, stateId: currentStateId }, '', window.location.href);
+
+  history.replaceState({ ...history.state, recallHistory: true, stateId: currentStateId }, '', window.location.href);
   log(`init | stateId=${currentStateId}`);
 }
 
@@ -240,7 +261,7 @@ function commitEntryToUndoStack(entry: RecallHistoryEntry, label: string) {
   invalidateForward();
 
   ++currentStateId;
-  history.pushState({ recallHistory: true, stateId: currentStateId }, '', window.location.href);
+  history.pushState({ ...history.state, recallHistory: true, stateId: currentStateId }, '', window.location.href);
 
   logStacks(`after ${label}`);
 }
@@ -348,7 +369,6 @@ export function goForward(): HandlePopStateResult {
 
 export function handlePopState(event: PopStateEvent): HandlePopStateResult {
   log('popstate | event.state=', event.state, `| currentStateId=${currentStateId}`);
-
   if (!event.state?.recallHistory || typeof event.state.stateId !== 'number') {
     log('popstate: not a recall history entry, ignoring');
     return 'none';
