@@ -1,8 +1,8 @@
 import browse from './browse.vue';
+import foodBuilders from './food-builders';
 import foodRanking from './food-ranking';
 import form from './form.vue';
 import read from './read.vue';
-import recipeFoods from './recipe-foods';
 import securables from './securables';
 import splitLists from './split-lists';
 import splitWords from './split-words';
@@ -19,6 +19,6 @@ export default {
   'split-words': splitWords,
   'synonym-sets': synonymSets,
   'food-ranking': foodRanking,
-  'recipe-foods': recipeFoods,
+  'food-builders': foodBuilders,
   tasks,
 };

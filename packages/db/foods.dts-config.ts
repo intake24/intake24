@@ -28,6 +28,7 @@ export default defineConfig({
       'drinkware_scales_v2.label': 'LocaleTranslation | null',
       'drinkware_sets.label': 'LocaleTranslation | null',
       'food_attributes.use_in_recipes': 'UseInRecipeType | null',
+      'food_builders.label': 'LocaleTranslation',
       'food_portion_size_methods.method': 'PortionSizeMethodId',
       'food_portion_size_methods.parameters': 'PortionSizeParameter',
       'foods.alt_names': 'Generated<LocaleTranslations>',

@@ -158,6 +158,9 @@ importers:
       '@iconify-json/fluent':
         specifier: ^1.2.44
         version: 1.2.44
+      '@iconify-json/fluent-emoji-high-contrast':
+        specifier: ^1.2.5
+        version: 1.2.5
       '@iconify-json/game-icons':
         specifier: ^1.2.3
         version: 1.2.3
@@ -788,6 +791,9 @@ importers:
       '@iconify-json/fluent':
         specifier: ^1.2.44
         version: 1.2.44
+      '@iconify-json/fluent-emoji-high-contrast':
+        specifier: ^1.2.5
+        version: 1.2.5
       '@iconify-json/game-icons':
         specifier: ^1.2.3
         version: 1.2.3
@@ -2683,6 +2689,9 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@iconify-json/fluent-emoji-high-contrast@1.2.5':
+    resolution: {integrity: sha512-z+bl7GZDrJaX/jf9oaJ+eCvP8XaorGJc6aLNY9JibWDQHKSYRcuq+9YRst8usFExw0pEXIMCuoM1iK8TtsSsZQ==}
 
   '@iconify-json/fluent@1.2.44':
     resolution: {integrity: sha512-cIAVpL2+maZCgKqOzL1ko91p8lviAzFXMI9ha+bnd0x/HaAnSS32Vq0f692CscbIFdev5Y/zW4EPXjsLh5FCHA==}
@@ -11624,6 +11633,10 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@iconify-json/fluent-emoji-high-contrast@1.2.5':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify-json/fluent@1.2.44':
     dependencies:

@@ -43,12 +43,14 @@ export const LocaleIndexBuild = z.object({
   force: z.boolean().optional(),
 });
 
-export const localeCopyFoodsSubTasks = ['categories', 'foods', 'associatedFoods', 'attributes', 'brands', 'recipeFoods', 'splitLists', 'splitWords', 'synonymSets'] as const;
+export const localeCopyFoodsSubTasks = ['categories', 'foods', 'associatedFoods', 'attributes', 'brands', 'foodBuilders', 'splitLists', 'splitWords', 'synonymSets'] as const;
 export type LocaleCopyFoodsSubTasks = (typeof localeCopyFoodsSubTasks)[number];
 export const localeCopySystemSubTasks = ['searchPopularity', 'searchFixedRanking'] as const;
 export type LocaleCopySystemSubTasks = (typeof localeCopySystemSubTasks)[number];
 export const localeCopySubTasks = [...localeCopyFoodsSubTasks, ...localeCopySystemSubTasks] as const;
 export type LocaleCopySubTasks = (typeof localeCopySubTasks)[number];
+export const localesSyncSubTasks = ['foodBuilders'] as const;
+export type LocaleSyncSubTasks = (typeof localesSyncSubTasks)[number];
 
 export const LocaleCopy = z.object({
   localeId: bigIntString,
@@ -68,6 +70,9 @@ export const LocaleFoodRankingUpload = z.object({
   localeId: bigIntString,
   file: z.string().nonempty(),
   targetAlgorithm: z.enum(searchSortingAlgorithms),
+});
+export const LocalesSync = z.object({
+  subTasks: z.enum(localesSyncSubTasks).array(),
 });
 export const NutrientTableDataImport = z.object({
   nutrientTableId: z.string().nonempty(),
@@ -222,6 +227,7 @@ export const jobParams = z.object({
   LocaleFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
+  LocalesSync,
   NutrientTableDataImport,
   NutrientTableMappingImport,
   PopularitySearchUpdateCounters,
@@ -258,6 +264,7 @@ export const jobTypeParams = z.union([
   LocaleFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
+  LocalesSync,
   NutrientTableDataImport,
   NutrientTableMappingImport,
   PopularitySearchUpdateCounters,
@@ -408,6 +415,7 @@ export const jobTypes = [
   'FeedbackSchemesSync',
   'LanguageTranslationsSync',
   'LocaleIndexBuild',
+  'LocalesSync',
   'PopularitySearchUpdateCounters',
   'PurgeExpiredTokens',
   'ResourceExport',
@@ -461,6 +469,9 @@ export const defaultJobsParams: JobParams = {
     localeId: '',
     file: '',
     targetAlgorithm: 'fixed',
+  },
+  LocalesSync: {
+    subTasks: [...localesSyncSubTasks],
   },
   NutrientTableDataImport: {
     nutrientTableId: '',

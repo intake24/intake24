@@ -54,12 +54,14 @@ export default class Category extends BaseModel<
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
+    unique: 'categories_unique',
   })
   declare code: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
+    unique: 'categories_unique',
   })
   declare localeId: string;
 

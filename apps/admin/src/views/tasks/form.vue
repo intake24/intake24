@@ -80,15 +80,18 @@
                 variant="outlined"
               />
             </v-col>
+            <v-col cols="12">
+              <component
+                :is="data.job"
+                v-if="Object.keys(data.params).length"
+                v-model="data.params"
+                :errors="errors"
+                name="params"
+                @update:model-value="errors.clear(paramErrors)"
+              />
+            </v-col>
           </v-row>
-          <component
-            :is="data.job"
-            v-if="Object.keys(data.params).length"
-            v-model="data.params"
-            :errors="errors"
-            name="params"
-            @update:model-value="errors.clear(paramErrors)"
-          />
+
           <submit-footer :disabled="errors.any.value" />
         </v-card-text>
       </v-form>
