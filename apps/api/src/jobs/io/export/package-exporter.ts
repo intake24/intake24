@@ -206,7 +206,7 @@ export class PackageExporter {
 
       const portionSizeMethods = await this.db
         .selectFrom('foodPortionSizeMethods')
-        .select(['foodPortionSizeMethods.id', 'foodPortionSizeMethods.foodId', 'foodPortionSizeMethods.method', 'foodPortionSizeMethods.description', 'foodPortionSizeMethods.parameters', 'foodPortionSizeMethods.conversionFactor', 'foodPortionSizeMethods.pathways', 'foodPortionSizeMethods.defaultWeight', 'foodPortionSizeMethods.orderBy'])
+        .select(['foodPortionSizeMethods.id', 'foodPortionSizeMethods.foodId', 'foodPortionSizeMethods.method', 'foodPortionSizeMethods.description', 'foodPortionSizeMethods.parameters', 'foodPortionSizeMethods.conversionFactor', 'foodPortionSizeMethods.pathways', 'foodPortionSizeMethods.orderBy'])
         .where('foodPortionSizeMethods.foodId', 'in', foodIds)
         .orderBy('foodPortionSizeMethods.orderBy', 'asc')
         .execute();
@@ -360,7 +360,7 @@ export class PackageExporter {
 
       const portionSizeMethods = await this.db
         .selectFrom('categoryPortionSizeMethods')
-        .select(['categoryPortionSizeMethods.id', 'categoryPortionSizeMethods.categoryId', 'categoryPortionSizeMethods.method', 'categoryPortionSizeMethods.description', 'categoryPortionSizeMethods.parameters', 'categoryPortionSizeMethods.conversionFactor', 'categoryPortionSizeMethods.pathways', 'categoryPortionSizeMethods.defaultWeight', 'orderBy'])
+        .select(['categoryPortionSizeMethods.id', 'categoryPortionSizeMethods.categoryId', 'categoryPortionSizeMethods.method', 'categoryPortionSizeMethods.description', 'categoryPortionSizeMethods.parameters', 'categoryPortionSizeMethods.conversionFactor', 'categoryPortionSizeMethods.pathways', 'orderBy'])
         .where('categoryPortionSizeMethods.categoryId', 'in', categoryIds)
         .orderBy('categoryPortionSizeMethods.orderBy', 'asc')
         .execute();

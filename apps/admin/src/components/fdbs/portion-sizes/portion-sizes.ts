@@ -24,7 +24,6 @@ export const psmDefaultAttributes: Omit<PortionSizeMethodItem, 'id' | 'method'> 
   description: '',
   pathways: ['search'],
   conversionFactor: 1,
-  defaultWeight: null,
   orderBy: '0',
   parameters: {},
 };
@@ -86,6 +85,12 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     ...psmDefaultAttributes,
     description: 'use_an_image',
     parameters: { servingImageSet: '' },
+  },
+  {
+    method: 'auto',
+    ...psmDefaultAttributes,
+    description: 'use_an_image',
+    parameters: { mode: 'weight', value: 1 },
   },
   {
     method: 'cereal',

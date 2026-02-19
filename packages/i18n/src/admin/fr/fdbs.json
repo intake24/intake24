@@ -97,7 +97,6 @@
       "search": "Recherche d'aliments"
     },
     "conversionFactor": "Facteur de conversion",
-    "defaultWeight": "Quantité par défaut (g)",
     "labels": "Libellés de la photo à curseur",
     "multiple": "Permettre la spécification de plusieurs éléments",
     "methods": {
@@ -107,6 +106,15 @@
         "servingImageSet": "Série de photos de portions",
         "leftoverImageSet": "Série de photos de restes",
         "removeLeftoverImageSet": "Enlever la série de photos de restes"
+      },
+      "auto": {
+        "_": "Auto",
+        "modes": {
+          "_": "Mode",
+          "weight": "Weight",
+          "weight-per-100g-parent": "Weight per 100g of parent food"
+        },
+        "value": "Value"
       },
       "cereal": {
         "_": "Céréales"

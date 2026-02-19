@@ -92,7 +92,6 @@ export const weightResponse = z.object({
   parameters: z.record(z.string(), z.never()),
   imageUrl: z.string(),
   pathways: z.enum(pathways).array(),
-  defaultWeight: z.number().nonnegative().nullable(),
   conversionFactor: z.number(),
 });
 

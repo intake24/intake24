@@ -1,7 +1,7 @@
 // portion-size.zod.ts
 import { z } from 'zod';
 
-import { pathways } from '@intake24/common/surveys';
+import { autoPsmModes, pathways } from '@intake24/common/surveys';
 
 import { categoryLocaleOptionList, localeOptionList, localeTranslationStrict } from '../common';
 
@@ -14,6 +14,7 @@ export const pkgV2InheritableAttributes = z.object({
 
 export const pkgV2PortionSizeMethodTypes = [
   'as-served',
+  'auto',
   'cereal',
   'direct-weight',
   'drink-scale',
@@ -38,7 +39,6 @@ export const pkgV2PortionSizeMethodBase = z.object({
   method: pkgV2PortionSizeMethodType,
   description: z.string(),
   pathways: pkgV2PortionSizeMethodPathways,
-  defaultWeight: z.number().nonnegative().nullable(),
   conversionFactor: z.number(),
   orderBy: z.string(),
 });
@@ -57,6 +57,12 @@ export const pkgV2AsServedPsm = pkgV2PortionSizeMethodBase.extend({
   leftoversImageSet: z.string().optional(),
   labels: z.boolean().optional(),
   multiple: z.boolean().optional(),
+});
+
+export const pkgV2AutoPsm = pkgV2PortionSizeMethodBase.extend({
+  method: z.literal('auto'),
+  mode: z.enum(autoPsmModes),
+  value: z.number(),
 });
 
 export const pkgV2GuideImagePsm = pkgV2PortionSizeMethodBase.extend({
@@ -122,6 +128,7 @@ export const pkgV2ParentFoodPortionPsm = pkgV2PortionSizeMethodBase.extend({
 
 export const pkgV2PortionSizeMethod = z.discriminatedUnion('method', [
   pkgV2AsServedPsm,
+  pkgV2AutoPsm,
   pkgV2GuideImagePsm,
   pkgV2DrinkScalePsm,
   pkgV2StandardPortionPsm,
@@ -175,6 +182,7 @@ export type PkgV2PortionSizeMethodBase = z.infer<typeof pkgV2PortionSizeMethodBa
 export type PkgV2DirectWeightPsm = z.infer<typeof pkgV2DirectWeightPsm>;
 export type PkgV2UnknownPsm = z.infer<typeof pkgV2UnknownPsm>;
 export type PkgV2AsServedPsm = z.infer<typeof pkgV2AsServedPsm>;
+export type PkgV2AutoPsm = z.infer<typeof pkgV2AutoPsm>;
 export type PkgV2GuideImagePsm = z.infer<typeof pkgV2GuideImagePsm>;
 export type PkgV2DrinkScalePsm = z.infer<typeof pkgV2DrinkScalePsm>;
 export type PkgV2StandardUnit = z.infer<typeof pkgV2StandardUnit>;

@@ -224,7 +224,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
               portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
                 .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
                 .map((psm) => {
-                  const attr = Object.entries(pick(psm, ['method', 'description', 'pathways', 'defaultWeight', 'conversionFactor', 'orderBy'])).map(
+                  const attr = Object.entries(pick(psm, ['method', 'description', 'pathways', 'conversionFactor', 'orderBy'])).map(
                     ([key, value]) => `${key}: ${value?.toString()}`,
                   ).join('; ');
                   const params = Object.entries(psm.parameters).map(

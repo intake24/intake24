@@ -28,7 +28,6 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
         'method',
         'description',
         'pathways',
-        'defaultWeight',
         'conversionFactor',
         'orderBy',
         'parameters',
@@ -69,7 +68,6 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
             'method',
             'description',
             'pathways',
-            'defaultWeight',
             'conversionFactor',
             'orderBy',
             'parameters',
@@ -171,6 +169,7 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
       case 'cereal':
       case 'milk-on-cereal':
         return 'portion/cereal.jpg';
+      case 'auto':
       case 'unknown':
         return '';
 

@@ -39,7 +39,7 @@ function update(event?: number) {
 
 onMounted(() => {
   if (!isValid.value && props.portionSizeMethods.length === 1) {
-    update(0);
+    update(props.portionSizeMethods[0].index);
   }
 });
 </script>

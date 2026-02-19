@@ -314,7 +314,6 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
                   'description',
                   'pathways',
                   'conversionFactor',
-                  'defaultWeight',
                   'orderBy',
                   'parameters',
                 ]),
@@ -554,7 +553,6 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
           pathways: psm.pathways,
           conversionFactor: psm.conversionFactor,
           orderBy: psm.orderBy,
-          defaultWeight: psm.defaultWeight,
           parameters: psm.parameters,
         });
       }

@@ -41,6 +41,25 @@ export function asServedComplete(food: FoodState): boolean {
   return food.portionSize.serving !== null;
 }
 
+export function autoComplete(food: FoodState): boolean {
+  if (
+    food.type !== 'encoded-food'
+    || !food.portionSize
+    || !food.flags.includes('portion-size-method-complete')
+  ) {
+    return false;
+  }
+
+  if (food.portionSize.method !== 'auto') {
+    console.warn(
+      `Selected portion size method is "auto" but portion size data is for ${food.portionSize.method}`,
+    );
+    return false;
+  }
+
+  return food.portionSize.servingWeight !== null;
+}
+
 export function cerealComplete(food: FoodState): boolean {
   if (
     food.type !== 'encoded-food'
@@ -260,6 +279,7 @@ export function unknownComplete(food: FoodState): boolean {
 
 export const portionSizeCompleteChecks = {
   'as-served': asServedComplete,
+  auto: autoComplete,
   cereal: cerealComplete,
   'direct-weight': directWeightComplete,
   'drink-scale': drinkScaleComplete,

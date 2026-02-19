@@ -106,7 +106,6 @@
       "search": "Food search"
     },
     "conversionFactor": "Conversion factor",
-    "defaultWeight": "Default quantity (g)",
     "labels": "Image map labels",
     "multiple": "Allow specifying multiple items",
 
@@ -117,6 +116,15 @@
         "servingImageSet": "Serving image set",
         "leftoverImageSet": "Leftover image set",
         "removeLeftoverImageSet": "Remove leftover image set"
+      },
+      "auto": {
+        "_": "Auto",
+        "modes": {
+          "_": "Mode",
+          "weight": "Weight",
+          "weight-per-100g-parent": "Weight per 100g of parent food"
+        },
+        "value": "Value"
       },
       "cereal": {
         "_": "Cereal"

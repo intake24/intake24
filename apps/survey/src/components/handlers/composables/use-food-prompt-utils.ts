@@ -1,5 +1,5 @@
 import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, FoodFlag, FoodState, Pathway, PortionSizeMethodId, PortionSizeState, PortionSizeStates } from '@intake24/common/surveys';
+import type { AutoPsm, EncodedFood, FoodFlag, FoodState, Pathway, PortionSizeMethodId, PortionSizeState, PortionSizeStates } from '@intake24/common/surveys';
 import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 
 import { computed } from 'vue';
@@ -68,7 +68,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
   });
 
   // TODO: should improve EncodedFood type to avoid this type assertion
-  const encodedFoodPortionSizeData = computed<PortionSizeStates[T] | null>(() => encodedFood.value.portionSize as PortionSizeStates[T] | null);
+  const encodedFoodPortionSizeData = computed<PortionSizeStates[Exclude<T, 'recipe-builder'>] | null>(() => encodedFood.value.portionSize as PortionSizeStates[Exclude<T, 'recipe-builder'>] | null);
 
   const encodedFoodOptional = computed(() => {
     if (foodOptional.value === undefined || foodOptional.value.type !== 'encoded-food')
@@ -175,29 +175,50 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     };
   }
 
-  function resolvePortionSize(foodData: UserFoodData, pathway: Pathway, parent?: FoodState) {
+  function getAutoPsmWeight({ parameters: { mode, value } }: AutoPsm, parent?: FoodState): { servingWeight: number; leftoversWeight: number } {
+    if (mode === 'weight')
+      return { servingWeight: value, leftoversWeight: 0 };
+
+    if (parent?.type !== 'encoded-food' || !parent.portionSize) {
+      console.warn(`Default weight mode "${mode}" requires parent encoded food with portion size to be selected`);
+      return { servingWeight: 0, leftoversWeight: 0 };
+    }
+
+    const { servingWeight, leftoversWeight } = parent.portionSize;
+    return {
+      servingWeight: (servingWeight ?? 0) / 100 * value,
+      leftoversWeight: (leftoversWeight ?? 0) / 100 * value,
+    };
+  }
+
+  function resolvePortionSize(foodData: UserFoodData, pathway: Pathway, parent?: FoodState): {
+    flags: FoodFlag[];
+    portionSizeMethodIndex: number | null;
+    portionSize: PortionSizeState | null;
+  } {
     const flags: FoodFlag[] = [];
     let portionSizeMethodIndex: number | null = null;
     let portionSize: PortionSizeState | null = null;
 
     const portionSizeMethods = getPortionSizeMethods(foodData.portionSizeMethods, pathway, parent);
-    const autoPsmIdx = portionSizeMethods.findIndex(psm => psm.defaultWeight !== null);
-    const autoPsm = autoPsmIdx !== -1 ? portionSizeMethods.at(autoPsmIdx) : undefined;
-    if (autoPsm?.defaultWeight) {
+    const autoPsmIdx = portionSizeMethods.findIndex(psm => psm.method === 'auto');
+    const autoPsm = (autoPsmIdx !== -1 ? portionSizeMethods.at(autoPsmIdx) : undefined) as AutoPsm | undefined;
+    if (autoPsm) {
+      const { servingWeight, leftoversWeight } = getAutoPsmWeight(autoPsm, parent);
       const linkedQuantity = getLinkedParent(foodData, parent)?.quantity ?? 1;
       portionSizeMethodIndex = autoPsmIdx;
       portionSize = {
-        method: 'direct-weight',
-        mode: 'auto',
-        servingWeight: autoPsm.defaultWeight * autoPsm.conversionFactor * linkedQuantity,
-        leftoversWeight: 0,
-        quantity: autoPsm.defaultWeight,
+        method: 'auto',
+        servingWeight: servingWeight * autoPsm.conversionFactor * linkedQuantity,
+        leftoversWeight: leftoversWeight * autoPsm.conversionFactor * linkedQuantity,
+        mode: autoPsm.parameters.mode,
+        quantity: autoPsm.parameters.value,
         linkedQuantity,
       };
       flags.push('portion-size-option-complete', 'portion-size-method-complete');
     }
     else if (portionSizeMethods.length === 1) {
-      portionSizeMethodIndex = 0;
+      portionSizeMethodIndex = portionSizeMethods[0].index;
       flags.push('portion-size-option-complete');
     }
 

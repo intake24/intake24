@@ -98,7 +98,6 @@ export interface CategoryAttributes {
 export interface CategoryPortionSizeMethods {
   categoryId: Int8;
   conversionFactor: number;
-  defaultWeight: number | null;
   description: string;
   id: Generated<Int8>;
   method: string;
@@ -156,7 +155,6 @@ export interface FoodAttributes {
 
 export interface FoodPortionSizeMethods {
   conversionFactor: number;
-  defaultWeight: number | null;
   description: string;
   foodId: Int8;
   id: Generated<Int8>;

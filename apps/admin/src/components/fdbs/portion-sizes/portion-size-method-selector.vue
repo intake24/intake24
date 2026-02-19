@@ -65,13 +65,6 @@
                   :step="0.1"
                   thumb-label="always"
                 />
-                <v-number-input
-                  v-model="dialog.item.defaultWeight"
-                  :label="$t('fdbs.portionSizes.defaultWeight')"
-                  name="defaultWeight"
-                  :precision="2"
-                  prepend-inner-icon="fas fa-weight-scale"
-                />
               </div>
             </v-col>
             <v-divider vertical />

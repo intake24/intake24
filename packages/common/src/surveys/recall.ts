@@ -2,7 +2,7 @@ import type { ExternalSource, PromptStates } from '../prompts';
 import type { FoodType, RecipeFood } from '../types';
 import type { Optional } from '../types/common';
 import type { UserFoodData } from '../types/http';
-import type { PortionSizeStates } from './portion-size';
+import type { PortionSizeState } from './portion-size';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
 import { z } from 'zod';
@@ -103,7 +103,7 @@ export interface EncodedFood extends AbstractFoodState {
   data: UserFoodData;
   searchTerm: string | null;
   portionSizeMethodIndex: number | null;
-  portionSize: PortionSizeStates[keyof Omit<PortionSizeStates, 'recipe-builder'>] | null;
+  portionSize: PortionSizeState | null;
   // brand: string[]; TODO V3?
 }
 

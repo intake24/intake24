@@ -196,11 +196,13 @@ export const useSurvey = defineStore('survey', {
     hasFoodFlag: state => (foodId: string, flag: FoodFlag) =>
       findFood(state.data.meals, foodId).flags.includes(flag),
     registeredPortionSizeMethods(): string[] {
-      return (
-        this.foodPrompts
-          .filter(item => item.type === 'portion-size')
-          .map(item => item.component.replace('-prompt', '')) ?? []
-      );
+      return this.foodPrompts.reduce((acc, item) => {
+        if (item.type !== 'portion-size')
+          return acc;
+
+        acc.push(item.component.replace('-prompt', ''));
+        return acc;
+      }, ['auto']);
     },
     linkedQuantity(): Record<string, LinkedQuantity | undefined> {
       return this.foodPrompts.filter(prompt => 'linkedQuantity' in prompt).reduce((acc, prompt) => {

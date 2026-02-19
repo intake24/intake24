@@ -35,7 +35,6 @@ export interface PkgPortionSizeMethodBase {
   description: string;
   pathways: Pathway[];
   conversionFactor: number;
-  defaultWeight: number | null;
 }
 
 export interface PkgAsServedPsm extends PkgPortionSizeMethodBase {

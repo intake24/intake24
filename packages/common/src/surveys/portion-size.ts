@@ -4,6 +4,7 @@ import { categoryLocaleOptionList, localeOptionList } from '../types/common';
 
 export const portionSizeMethods = [
   'as-served',
+  'auto',
   'cereal',
   'direct-weight',
   'drink-scale',
@@ -45,6 +46,21 @@ export const asServedPortionSizeParameters = z.object({
   labels: z.boolean().optional(),
   multiple: z.boolean().optional(),
 });
+
+export const autoPsmModes = ['weight', 'weight-per-100g-parent'] as const;
+export type AutoPsmMode = (typeof autoPsmModes)[number];
+
+export const autoPortionSizeParameters = z.discriminatedUnion('mode', [
+  z.object({
+    mode: z.literal('weight'),
+    value: z.number(),
+  }),
+  z.object({
+    mode: z.literal('weight-per-100g-parent'),
+    value: z.number(),
+  }),
+]);
+export type AutoPortionSizeParameters = z.infer<typeof autoPortionSizeParameters>;
 
 export const cerealPortionSizeParameters = z.object({
   type: z.enum(cerealTypes),
@@ -96,6 +112,7 @@ export const unknownPortionSizeParameters = z.object({});
 
 export const portionSizeParameter = z.union([
   asServedPortionSizeParameters,
+  autoPortionSizeParameters,
   cerealPortionSizeParameters,
   directWeightPortionSizeParameters,
   drinkScalePortionSizeParameters,
@@ -114,6 +131,7 @@ export type PortionSizeParameter = z.infer<typeof portionSizeParameter>;
 
 export const portionSizeParameters = z.object({
   'as-served': asServedPortionSizeParameters,
+  auto: autoPortionSizeParameters,
   cereal: cerealPortionSizeParameters,
   'direct-weight': directWeightPortionSizeParameters,
   'drink-scale': drinkScalePortionSizeParameters,
@@ -134,7 +152,6 @@ export const portionSizeMethodBase = z.object({
   description: z.string().min(1).max(256),
   pathways: z.enum(pathways).array(),
   conversionFactor: z.number(),
-  defaultWeight: z.number().nonnegative().nullable(),
   orderBy: z.string(),
 });
 export type PortionSizeMethodBase = z.infer<typeof portionSizeMethodBase>;
@@ -142,6 +159,11 @@ export type PortionSizeMethodBase = z.infer<typeof portionSizeMethodBase>;
 export interface AsServedPsm extends PortionSizeMethodBase {
   method: 'as-served';
   parameters: PortionSizeParameters['as-served'];
+}
+
+export interface AutoPsm extends PortionSizeMethodBase {
+  method: 'auto';
+  parameters: PortionSizeParameters['auto'];
 }
 
 export interface CerealPsm extends PortionSizeMethodBase {
@@ -205,6 +227,7 @@ export interface UnknownPortionPsm extends PortionSizeMethodBase {
 
 export type PortionSizeMethod
   = | AsServedPsm
+    | AutoPsm
     | CerealPsm
     | DirectWeightPsm
     | DrinkScalePsm
@@ -248,6 +271,13 @@ const asServedPortionSizeState = portionSizeStateBase.extend({
   linkedQuantity: z.number(),
 });
 
+const autoPortionSizeState = portionSizeStateBase.extend({
+  method: z.literal('auto'),
+  mode: z.enum(autoPsmModes),
+  quantity: z.number(),
+  linkedQuantity: z.number(),
+});
+
 const cerealPortionSizeState = portionSizeStateBase.extend({
   method: z.literal('cereal'),
   imageUrl: z.string().nullable(),
@@ -260,7 +290,6 @@ const cerealPortionSizeState = portionSizeStateBase.extend({
 });
 const directWeightPortionSizeState = portionSizeStateBase.extend({
   method: z.literal('direct-weight'),
-  mode: z.enum(['auto', 'manual']),
   quantity: z.number().nullable(),
   linkedQuantity: z.number(),
 });
@@ -333,7 +362,6 @@ const pizzaV2PortionSizeState = portionSizeStateBase.extend({
   unit: z.enum(pizzaUnits).nullable(),
   quantity: z.number(),
 });
-const recipeBuilderPortionSizeState = z.record(z.string(), z.never());
 const standardPortionPortionSizeState = portionSizeStateBase.extend({
   method: z.literal('standard-portion'),
   unit: standardUnit.nullable(),
@@ -346,6 +374,7 @@ const unknownPortionSizeState = portionSizeStateBase.extend({
 
 export const portionSizeStates = z.object({
   'as-served': asServedPortionSizeState,
+  auto: autoPortionSizeState,
   cereal: cerealPortionSizeState,
   'direct-weight': directWeightPortionSizeState,
   'drink-scale': drinkScalePortionSizeState,
@@ -355,7 +384,6 @@ export const portionSizeStates = z.object({
   'parent-food-portion': parentFoodPortionPortionSizeState,
   pizza: pizzaPortionSizeState,
   'pizza-v2': pizzaV2PortionSizeState,
-  'recipe-builder': recipeBuilderPortionSizeState,
   'standard-portion': standardPortionPortionSizeState,
   unknown: unknownPortionSizeState,
 });

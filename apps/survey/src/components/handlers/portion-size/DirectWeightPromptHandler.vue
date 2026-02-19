@@ -35,7 +35,6 @@ function getInitialState(): PromptStates['direct-weight-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'direct-weight',
-      mode: 'manual',
       quantity: null,
       linkedQuantity: 1,
       servingWeight: 0,

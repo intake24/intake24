@@ -146,7 +146,6 @@ function buildFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFileNames
           omitFoodDescription: false,
         }],
         pathways: ['search', 'afp'],
-        defaultWeight: null,
       }],
       alternativeNames: {},
       name: `Gousto ${recipeData.recipeTitle}`,

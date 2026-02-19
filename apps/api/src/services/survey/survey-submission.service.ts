@@ -60,7 +60,7 @@ export type CollectedFoods = {
 export type CollectedNutrientInfo = {
   nutrients: Dictionary<number>;
   fields: Dictionary<string>;
-  portionSize: PortionSizeState;
+  portionSize: PortionSizeState | null;
 };
 
 export type FoodCodes = { foodCodes: string[] };
@@ -129,7 +129,7 @@ function surveySubmissionService({
     foodState: EncodedFood,
     foods: FoodMap,
   ) => {
-    const collectedData: CollectedNutrientInfo = { fields: {}, nutrients: {}, portionSize: {} };
+    const collectedData: CollectedNutrientInfo = { fields: {}, nutrients: {}, portionSize: null };
 
     const {
       portionSize,
@@ -254,20 +254,15 @@ function surveySubmissionService({
           data: { code, reasonableAmount },
           flags,
           linkedFoods,
-          portionSize,
           searchTerm,
           customPromptAnswers,
         } = foodState;
 
         const foodRecord = foods[code];
-
         if (!foodRecord) {
           logger.warn(`Submission: food '${code}' not found, skipping...`);
           return collectedFoods;
         }
-
-        if (!foodRecord.nutrientRecords)
-          throw new Error('Submission: not loaded foodRecord relationships');
 
         const {
           nutrientRecords,
@@ -276,13 +271,14 @@ function surveySubmissionService({
           localeId,
         } = foodRecord;
 
+        const { fields, nutrients, portionSize } = collectFoodCompositionData(foodState, foods);
+
         if (!portionSize) {
           logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
           return collectedFoods;
         }
 
-        const portionSizeWeight
-          = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
+        const portionSizeWeight = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
         const id = randomUUID();
 
         collectedFoods.inputs.push({
@@ -300,10 +296,12 @@ function surveySubmissionService({
           reasonableAmount: reasonableAmount >= portionSizeWeight,
           brand: null,
           barcode: null,
-          nutrientTableId: nutrientRecords[0]?.nutrientTableId ?? '0',
-          nutrientTableCode: nutrientRecords[0]?.nutrientTableRecordId ?? '0',
+          nutrientTableId: nutrientRecords?.at(0)?.nutrientTableId ?? '0',
+          nutrientTableCode: nutrientRecords?.at(0)?.nutrientTableRecordId ?? '0',
           customData: collectCustomAnswers(customPromptAnswers, foodCustomPrompts),
-          ...collectFoodCompositionData(foodState, foods),
+          fields,
+          nutrients,
+          portionSize,
         });
         collectedFoods.states.push(foodState);
 

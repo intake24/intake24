@@ -364,7 +364,6 @@ export class FrenchAnsesLocaleBuilder {
           description: 'use_an_image',
           pathways: ['search', 'afp', 'recipe'],
           conversionFactor: 1.0,
-          defaultWeight: null,
           servingImageSet: `INCA3_${pictureId.padStart(3, '0')}`,
         });
       });
@@ -418,7 +417,6 @@ export class FrenchAnsesLocaleBuilder {
             method: 'standard-portion',
             description: 'use_a_standard_portion',
             pathways: ['search', 'afp', 'recipe'],
-            defaultWeight: null,
             conversionFactor: 1,
             units,
           });
@@ -438,7 +436,6 @@ export class FrenchAnsesLocaleBuilder {
             description: 'use_an_image',
             pathways: ['search', 'afp', 'recipe'],
             conversionFactor: 1,
-            defaultWeight: null,
             drinkwareId: householdDrinkwareId,
             initialFillLevel: 0.9,
             skipFillLevel: false,
@@ -458,7 +455,6 @@ export class FrenchAnsesLocaleBuilder {
         description: 'use_a_standard_portion',
         pathways: ['search', 'afp', 'recipe'],
         conversionFactor: 1.0,
-        defaultWeight: null,
         units: [
           {
             name: 'pieces',
@@ -513,7 +509,6 @@ export class FrenchAnsesLocaleBuilder {
             description: 'use_a_standard_portion',
             pathways: ['search', 'afp', 'recipe'],
             conversionFactor: 1,
-            defaultWeight: null,
             units,
           });
         }
@@ -538,7 +533,6 @@ export class FrenchAnsesLocaleBuilder {
         description: 'use_a_standard_portion',
         pathways: ['search', 'afp', 'recipe'],
         conversionFactor: 1.0,
-        defaultWeight: null,
         units: [
           {
             name: 'pieces',

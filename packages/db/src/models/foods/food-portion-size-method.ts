@@ -60,12 +60,6 @@ export default class FoodPortionSizeMethod extends BaseModel<
   declare pathways: Pathway[];
 
   @Column({
-    allowNull: true,
-    type: DataType.FLOAT(),
-  })
-  declare defaultWeight: CreationOptional<number | null>;
-
-  @Column({
     allowNull: false,
     type: DataType.FLOAT(17),
   })

@@ -51,7 +51,6 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
             method: m.method,
             description: m.description,
             pathways: m.pathways,
-            defaultWeight: m.defaultWeight,
             conversionFactor: m.conversionFactor,
             orderBy: index,
             parameters: m.parameters,
@@ -176,7 +175,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
 
       const portionSizeRows = await t
         .selectFrom('categoryPortionSizeMethods')
-        .select(['method', 'description', 'pathways', 'conversionFactor', 'defaultWeight', 'orderBy', 'parameters'])
+        .select(['method', 'description', 'pathways', 'conversionFactor', 'orderBy', 'parameters'])
         .where('categoryId', '=', categoryRow.id)
         .execute();
 
@@ -185,7 +184,6 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
         conversionFactor: row.conversionFactor,
         description: row.description,
         pathways: row.pathways as Pathway[] /* unsafe! */,
-        defaultWeight: row.defaultWeight,
         orderBy: row.orderBy,
         parameters: row.parameters as any /* unsafe! */,
       }));

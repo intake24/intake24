@@ -572,7 +572,6 @@ export class FrenchAlbaneLocaleBuilder {
       description: 'use_a_standard_portion',
       pathways: ['search', 'afp', 'recipe'] as Pathway[],
       conversionFactor: 1,
-      defaultWeight: null,
       units: getStandardUnits(rows),
     }));
   }
@@ -648,7 +647,6 @@ export class FrenchAlbaneLocaleBuilder {
           description: 'weight',
           pathways: ['search', 'afp', 'recipe'],
           conversionFactor: 1.0,
-          defaultWeight: null,
         });
       }
 
@@ -694,7 +692,6 @@ export class FrenchAlbaneLocaleBuilder {
           description: 'use_an_image',
           pathways: ['search', 'afp', 'recipe'],
           conversionFactor: asServedConversionFactors[asServedId],
-          defaultWeight: null,
           servingImageSet: asServedId,
           multiple: true,
         });
@@ -707,7 +704,6 @@ export class FrenchAlbaneLocaleBuilder {
           description: 'use_an_image',
           pathways: ['search', 'afp', 'recipe'],
           conversionFactor: guideImageConversionFactors[guideImageId],
-          defaultWeight: null,
         });
       }
 
@@ -724,7 +720,6 @@ export class FrenchAlbaneLocaleBuilder {
           description: 'use_an_image',
           pathways: ['search', 'afp', 'recipe'],
           conversionFactor: drinkwareConversionFactors[drinkwareId],
-          defaultWeight: null,
           multiple: true,
         });
       }
@@ -739,7 +734,6 @@ export class FrenchAlbaneLocaleBuilder {
           conversionFactor: 1.0,
           description: 'unknown',
           pathways: ['search', 'afp', 'recipe'],
-          defaultWeight: null,
         });
       }
 

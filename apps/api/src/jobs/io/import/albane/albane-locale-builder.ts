@@ -45,7 +45,6 @@ const MAX_XLSX_ROWS = 10000;
 const LOCALE_ID = 'fr_albane';
 
 const portionSizePathwayDefaults = ['search', 'afp'] as PkgV2PortionSizeMethodPathways;
-const portionSizeDefaultWeight = null;
 
 const LOCALE_CONFIG: PkgV2Locale = {
   id: LOCALE_ID,
@@ -847,7 +846,6 @@ export class AlbaneLocaleBuilder {
       method: 'standard-portion' as const,
       description: 'use_a_standard_portion',
       pathways: portionSizePathwayDefaults,
-      defaultWeight: portionSizeDefaultWeight,
       conversionFactor: 1,
       orderBy: '99', // Will be overwritten with correct order
       units: getStandardUnits(rows),
@@ -919,7 +917,6 @@ export class AlbaneLocaleBuilder {
           method: 'direct-weight',
           description: 'weight',
           pathways: portionSizePathwayDefaults,
-          defaultWeight: portionSizeDefaultWeight,
           conversionFactor: 1.0,
           orderBy: String(foodPortionSizeMethods.length),
         });
@@ -962,7 +959,6 @@ export class AlbaneLocaleBuilder {
           method: 'as-served',
           description: 'use_an_image',
           pathways: portionSizePathwayDefaults,
-          defaultWeight: portionSizeDefaultWeight,
           conversionFactor: asServedConversionFactors[asServedId],
           servingImageSet: asServedId,
           multiple: true,
@@ -976,7 +972,6 @@ export class AlbaneLocaleBuilder {
           guideImageId,
           description: 'use_an_image',
           pathways: portionSizePathwayDefaults,
-          defaultWeight: portionSizeDefaultWeight,
           conversionFactor: guideImageConversionFactors[guideImageId],
           orderBy: String(foodPortionSizeMethods.length),
         });
@@ -994,7 +989,6 @@ export class AlbaneLocaleBuilder {
           skipFillLevel: false,
           description: 'use_an_image',
           pathways: portionSizePathwayDefaults,
-          defaultWeight: portionSizeDefaultWeight,
           conversionFactor: drinkwareConversionFactors[drinkwareId],
           multiple: true,
           orderBy: String(foodPortionSizeMethods.length),
@@ -1014,7 +1008,6 @@ export class AlbaneLocaleBuilder {
           conversionFactor: 1.0,
           description: 'unknown',
           pathways: portionSizePathwayDefaults,
-          defaultWeight: portionSizeDefaultWeight,
           orderBy: String(foodPortionSizeMethods.length),
         });
       }

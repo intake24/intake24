@@ -209,7 +209,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of category links created: ${insLinksResult.numInsertedOrUpdatedRows}`);
 
     const psmResult = await trx.insertInto('categoryPortionSizeMethods')
-      .columns(['categoryId', 'method', 'description', 'pathways', 'conversionFactor', 'defaultWeight', 'orderBy', 'parameters'])
+      .columns(['categoryId', 'method', 'description', 'pathways', 'conversionFactor', 'orderBy', 'parameters'])
       .expression(eb => eb
         .selectFrom('categoryPortionSizeMethods as cpsm')
         .innerJoin(
@@ -230,7 +230,6 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'cpsm.description',
           'cpsm.pathways',
           'cpsm.conversionFactor',
-          'cpsm.defaultWeight',
           'cpsm.orderBy',
           'cpsm.parameters',
         ])
@@ -303,7 +302,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of food links created: ${insLinksResult.numInsertedOrUpdatedRows}`);
 
     const psmResult = await trx.insertInto('foodPortionSizeMethods')
-      .columns(['foodId', 'method', 'description', 'pathways', 'conversionFactor', 'defaultWeight', 'orderBy', 'parameters'])
+      .columns(['foodId', 'method', 'description', 'pathways', 'conversionFactor', 'orderBy', 'parameters'])
       .expression(eb => eb
         .selectFrom('foodPortionSizeMethods as fpsm')
         .innerJoin(
@@ -324,7 +323,6 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
           'fpsm.description',
           'fpsm.pathways',
           'fpsm.conversionFactor',
-          'fpsm.defaultWeight',
           'fpsm.orderBy',
           'fpsm.parameters',
         ])

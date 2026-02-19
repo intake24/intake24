@@ -26,7 +26,6 @@ export default () => {
       imageUrl: `${imagesBaseUrl}/portion/weight.png`,
       pathways: ['search', 'afp', 'recipe'],
       conversionFactor: 1.0,
-      defaultWeight: null,
     });
   });
 };

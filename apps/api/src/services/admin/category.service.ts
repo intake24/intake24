@@ -326,7 +326,6 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
                   'description',
                   'pathways',
                   'conversionFactor',
-                  'defaultWeight',
                   'orderBy',
                   'parameters',
                 ]),
@@ -474,7 +473,6 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
           description: psm.description,
           pathways: psm.pathways,
           conversionFactor: psm.conversionFactor,
-          defaultWeight: psm.defaultWeight,
           orderBy: psm.orderBy,
           parameters: psm.parameters,
         });

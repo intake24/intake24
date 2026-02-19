@@ -130,7 +130,7 @@ export function canEditFood(food: FoodState) {
   if (food.type !== 'encoded-food')
     return false;
 
-  if (food.portionSize?.method === 'direct-weight' && food.portionSize.mode === 'auto')
+  if (food.portionSize?.method === 'auto')
     return false;
 
   return true;
