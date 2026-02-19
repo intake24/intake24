@@ -52,7 +52,7 @@ import type { PropType } from 'vue';
 
 import { computed, ref } from 'vue';
 
-import icons from './icons';
+import { getIcon, icons } from './icons';
 
 defineOptions({
   name: 'SelectIcon',
@@ -70,7 +70,7 @@ defineProps({
 });
 
 const icon = defineModel('modelValue', { type: String as PropType<string | null>, default: null });
-const iconSvg = computed(() => icon.value && icons[icon.value] ? icons[icon.value] : 'fas fa-icons');
+const iconSvg = computed(() => getIcon(icon.value) ?? 'fas fa-icons');
 
 const dialog = ref(false);
 

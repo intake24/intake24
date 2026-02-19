@@ -3,9 +3,9 @@
     <v-card-text>
       <food-browser
         v-bind="{ localeId, surveySlug, prompt, section, rootCategory, rootCategoryToggleable, modelValue }"
+        @food-builder="foodBuilder"
         @food-missing="foodMissing"
         @food-selected="foodSelected"
-        @recipe-builder="recipeBuilder"
         @update:model-value="$emit('update:modelValue', $event)"
       />
     </v-card-text>
@@ -16,8 +16,7 @@
 import type { PropType } from 'vue';
 
 import type { FoodState } from '@intake24/common/surveys';
-import type { RecipeFood } from '@intake24/common/types';
-import type { FoodHeader } from '@intake24/common/types/http';
+import type { FoodBuilder, FoodHeader } from '@intake24/common/types/http';
 
 import { computed } from 'vue';
 
@@ -43,7 +42,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'foodMissing', 'foodSelected', 'update:modelValue', 'recipeBuilder']);
+const emit = defineEmits(['action', 'foodMissing', 'foodSelected', 'update:modelValue', 'foodBuilder']);
 
 const { action } = usePromptUtils(props, { emit });
 
@@ -77,8 +76,8 @@ function foodMissing(searchTerm?: string | null) {
   emit('foodMissing', searchTerm);
 }
 
-function recipeBuilder(recipeFood: RecipeFood) {
-  emit('recipeBuilder', recipeFood);
+function foodBuilder(builder: FoodBuilder) {
+  emit('foodBuilder', builder);
 }
 </script>
 

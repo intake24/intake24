@@ -36,118 +36,141 @@
       :text="$t('prompts.foodSearch.rootCategory', { category: rootCategoryName })"
       type="warning"
     />
-    <template v-if="recipeBuilderToggle">
-      <v-btn
-        v-for="recipeBuilderFood in recipeBuilderFoods"
-        :key="recipeBuilderFood.code"
-        :block="$vuetify.display.mobile"
+    <template v-if="foodBuilders.detected.value">
+      <v-row
         class="mb-4"
-        color="primary"
-        :disabled="!recipeBuilderToggle"
-        size="large"
-        variant="outlined"
-        @click.stop="recipeBuilder(recipeBuilderFood.code)"
+        justify="center"
       >
-        {{ $t(`prompts.recipeBuilder.label`, { searchTerm: recipeBuilderFood?.name }) }}
-      </v-btn>
+        <v-col
+          v-for="builder in foodBuilders.builders.value"
+          :key="builder.code"
+          cols="12"
+          md="auto"
+          sm="6"
+        >
+          <v-card
+            class="d-flex pa-4"
+            :class="foodBuilders.exclusive.value ? 'flex-column align-center justify-center ga-4' : 'flex-row align-center ga-2'"
+            color="primary"
+            variant="tonal"
+            @click.stop="foodBuilder(builder)"
+          >
+            <v-icon
+              v-if="foodBuilders.icons.value[builder.code]"
+              :icon="foodBuilders.icons.value[builder.code]"
+              :size="foodBuilders.exclusive.value ? 100 : 30"
+              :start="!foodBuilders.exclusive.value"
+            />
+            <span class="text-h5 font-weight-medium">
+              {{ $t(`prompts.recipeBuilder.label`, { searchTerm: builder?.name }) }}
+            </span>
+          </v-card>
+        </v-col>
+      </v-row>
     </template>
-    <v-tabs-window v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab" v-scroll="onScroll">
-      <v-tabs-window-item value="browse">
-        <v-alert
-          v-if="requestFailed"
-          class="mb-4"
-          type="error"
-        >
-          {{ $t('common.errors.500') }}
-          <template #append>
-            <v-btn @click="browseCategory(retryCode, false)">
-              {{ $t('common.errors.retry') }}
-            </v-btn>
-          </template>
-        </v-alert>
+    <template v-if="!foodBuilders.exclusive.value">
+      <v-tabs-window
+        v-show="type === 'foodSearch' || dialog || !showInDialog"
+        v-model="tab"
+        v-scroll="onScroll"
+      >
+        <v-tabs-window-item value="browse">
+          <v-alert
+            v-if="requestFailed"
+            class="mb-4"
+            type="error"
+          >
+            {{ $t('common.errors.500') }}
+            <template #append>
+              <v-btn @click="browseCategory(retryCode, false)">
+                {{ $t('common.errors.retry') }}
+              </v-btn>
+            </template>
+          </v-alert>
+          <v-btn
+            v-if="navigationHistory.length"
+            class="btn-truncate"
+            size="large"
+            variant="text"
+            @click="navigateBack"
+          >
+            <v-icon icon="fas fa-turn-up fa-flip-horizontal" start />
+            {{ promptI18n.back }}
+          </v-btn>
+          <image-placeholder v-if="requestInProgress" class="my-6" />
+          <category-contents-view
+            v-if="currentCategoryContents && !requestInProgress"
+            :allow-thumbnails="prompt.allowThumbnails"
+            :categories-first="prompt.categoriesFirst.browse"
+            :contents="currentCategoryContents"
+            :enable-grid="prompt.enableGrid"
+            :grid-threshold="prompt.gridThreshold"
+            :i18n="promptI18n"
+            :type="type"
+            @category-selected="categorySelected"
+            @food-selected="foodSelected"
+          />
+        </v-tabs-window-item>
+        <v-tabs-window-item value="search">
+          <image-placeholder v-if="requestInProgress" class="my-6" />
+          <category-contents-view
+            v-if="!requestInProgress"
+            :allow-thumbnails="prompt.allowThumbnails"
+            :categories-first="prompt.categoriesFirst.search"
+            :contents="searchContents"
+            :enable-grid="prompt.enableGrid"
+            :grid-threshold="prompt.gridThreshold"
+            :i18n="promptI18n"
+            layout="grid"
+            :percent-scrolled="percentScrolled"
+            :search-count="searchCount"
+            :search-term="searchTerm ?? undefined"
+            :type="type"
+            @category-selected="categorySelected"
+            @food-selected="foodSelected"
+          />
+        </v-tabs-window-item>
+      </v-tabs-window>
+      <div
+        v-if="type === 'foodSearch' || dialog || !showInDialog"
+        class="d-flex flex-column flex-md-row py-4 ga-2"
+      >
         <v-btn
-          v-if="navigationHistory.length"
-          class="btn-truncate"
+          v-if="type === 'foodSearch' && tab === 'search'"
+          color="primary"
+          :disabled="missingDialog"
           size="large"
-          variant="text"
-          @click="navigateBack"
+          :title="promptI18n.browse"
+          variant="outlined"
+          @click.stop="browseRootCategory"
         >
-          <v-icon icon="fas fa-turn-up fa-flip-horizontal" start />
-          {{ promptI18n.back }}
+          {{ promptI18n.browse }}
         </v-btn>
-        <image-placeholder v-if="requestInProgress" class="my-6" />
-        <category-contents-view
-          v-if="currentCategoryContents && !requestInProgress"
-          :allow-thumbnails="prompt.allowThumbnails"
-          :categories-first="prompt.categoriesFirst.browse"
-          :contents="currentCategoryContents"
-          :enable-grid="prompt.enableGrid"
-          :grid-threshold="prompt.gridThreshold"
-          :i18n="promptI18n"
-          :type="type"
-          @category-selected="categorySelected"
-          @food-selected="foodSelected"
-        />
-      </v-tabs-window-item>
-      <v-tabs-window-item value="search">
-        <image-placeholder v-if="requestInProgress" class="my-6" />
-        <category-contents-view
-          v-if="!requestInProgress"
-          :allow-thumbnails="prompt.allowThumbnails"
-          :categories-first="prompt.categoriesFirst.search"
-          :contents="searchContents"
-          :enable-grid="prompt.enableGrid"
-          :grid-threshold="prompt.gridThreshold"
-          :i18n="promptI18n"
-          layout="grid"
-          :percent-scrolled="percentScrolled"
-          :search-count="searchCount"
-          :search-term="searchTerm ?? undefined"
-          :type="type"
-          @category-selected="categorySelected"
-          @food-selected="foodSelected"
-        />
-      </v-tabs-window-item>
-    </v-tabs-window>
-    <div
-      v-if="type === 'foodSearch' || dialog || !showInDialog"
-      class="d-flex flex-column flex-md-row py-4 ga-2"
-    >
-      <v-btn
-        v-if="type === 'foodSearch' && tab === 'search'"
-        color="primary"
-        :disabled="missingDialog"
-        size="large"
-        :title="promptI18n.browse"
-        variant="outlined"
-        @click.stop="browseRootCategory"
-      >
-        {{ promptI18n.browse }}
-      </v-btn>
-      <v-btn
-        class="btn-truncate"
-        color="primary"
-        :disabled="missingDialog"
-        size="large"
-        :title="promptI18n['missing.label']"
-        variant="outlined"
-        @click.stop="openMissingDialog"
-      >
-        {{ promptI18n['missing.label'] }}
-      </v-btn>
-      <v-btn
-        v-if="type === 'recipeBuilder' && !requiredToFill"
-        class="btn-truncate"
-        color="primary"
-        :disabled="missingDialog"
-        size="large"
-        :title="promptI18n['missing.irrelevantIngredient']"
-        variant="outlined"
-        @click.stop="skipTheStep"
-      >
-        {{ promptI18n['missing.irrelevantIngredient'] }}
-      </v-btn>
-    </div>
+        <v-btn
+          class="btn-truncate"
+          color="primary"
+          :disabled="missingDialog"
+          size="large"
+          :title="promptI18n['missing.label']"
+          variant="outlined"
+          @click.stop="openMissingDialog"
+        >
+          {{ promptI18n['missing.label'] }}
+        </v-btn>
+        <v-btn
+          v-if="type === 'recipeBuilder' && !requiredToFill"
+          class="btn-truncate"
+          color="primary"
+          :disabled="missingDialog"
+          size="large"
+          :title="promptI18n['missing.irrelevantIngredient']"
+          variant="outlined"
+          @click.stop="skipTheStep"
+        >
+          {{ promptI18n['missing.irrelevantIngredient'] }}
+        </v-btn>
+      </div>
+    </template>
   </component>
   <missing-food-panel
     v-model="missingDialog"
@@ -162,18 +185,12 @@
 import type { PropType } from 'vue';
 import type { VTextField } from 'vuetify/components';
 
-import type { Prompts } from '@intake24/common/prompts';
+import type { FoodBrowser, FoodSearchHint, Prompt } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { RecipeFood } from '@intake24/common/types';
-import type {
-  CategoryContents,
-  CategoryHeader,
-  FoodHeader,
-  FoodSearchResponse,
-} from '@intake24/common/types/http';
+import type { CategoryContents, CategoryHeader, FoodBuilder, FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 
 import { watchDebounced } from '@vueuse/core';
-import { computed, nextTick, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, toRef } from 'vue';
 import { useGoTo } from 'vuetify';
 import { VCard } from 'vuetify/components';
 
@@ -187,6 +204,7 @@ import FoodBrowserDialog from './FoodBrowserDialog.vue';
 import FoodSearchHints from './FoodSearchHints.vue';
 import ImagePlaceholder from './ImagePlaceholder.vue';
 import MissingFoodPanel from './MissingFoodPanel.vue';
+import { useFoodBuilders } from './use-food-builders.ts';
 
 defineOptions({
   name: 'FoodBrowser',
@@ -217,9 +235,7 @@ const props = defineProps({
     default: false,
   },
   prompt: {
-    type: Object as PropType<
-      Prompts['associated-foods-prompt' | 'general-associated-foods-prompt' | 'food-search-prompt' | 'recipe-builder-prompt']
-    >,
+    type: Object as PropType<Prompt & FoodBrowser & { hints: FoodSearchHint[] }>,
     required: true,
   },
   section: {
@@ -240,10 +256,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'recipeBuilder', 'update:modelValue', 'foodSkipped']);
+const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'foodBuilder', 'update:modelValue', 'foodSkipped']);
 const goTo = useGoTo();
 
-const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
+const { foodBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
 const { i18n: { t } } = useI18n();
 
 const searchTerm = ref(props.modelValue);
@@ -256,13 +272,13 @@ const currentCategoryContents = ref<CategoryContents | undefined>(undefined);
 
 const requestInProgress = ref(true);
 const requestFailed = ref(false);
-const recipeBuilderFoods = ref<FoodHeader[]>([]);
-const recipeFoods = ref<RecipeFood[]>([]);
-const recipeBuilderToggle = ref(false);
+
 const tab = ref<'browse' | 'search'>('browse');
 const searchCount = ref(1);
 const percentScrolled = ref(0);
 const rootCategoryName = ref('...');
+
+const foodBuilders = useFoodBuilders({ localeId: toRef(props, 'localeId'), enabled: foodBuilderEnabled });
 
 function onScroll(event: Event) {
   if (event.target instanceof Document) {
@@ -407,21 +423,12 @@ function browseRootCategory() {
   browseCategory(limitToRootCategory.value ? props.rootCategory : undefined, true);
 }
 
-async function recipeBuilderDetected(foods: FoodHeader[]) {
-  foods.forEach(async (food) => {
-    const recipeFood: RecipeFood = await foodsService.getRecipeFood(props.localeId, food.code);
-    recipeFoods.value.push(recipeFood);
-  });
-  recipeBuilderToggle.value = true;
-}
-
 async function search() {
   if (!searchTerm.value)
     return;
+
   percentScrolled.value = 0;
   requestInProgress.value = true;
-  recipeBuilderToggle.value = false;
-  recipeBuilderFoods.value = [];
   searchResults.value = { foods: [], categories: [] };
 
   try {
@@ -434,7 +441,7 @@ async function search() {
       searchResults.value.foods = searchResults.value.foods.filter(
         (food) => {
           if (food.code.charAt(0) === '$') {
-            recipeBuilderFoods.value.push(food);
+            foodBuilders.foods.value.push(food);
             return false;
           }
           return true;
@@ -448,8 +455,10 @@ async function search() {
         search_results_count: searchResults.value.foods.length,
         percent_scrolled: percentScrolled.value,
       });
-      if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0 && (!props.rootCategory || !limitToRootCategory.value))
-        await recipeBuilderDetected(recipeBuilderFoods.value);
+
+      if (!props.rootCategory || !limitToRootCategory.value)
+        await foodBuilders.fetch();
+
       requestFailed.value = false;
     }
     else {
@@ -484,9 +493,9 @@ function skipTheStep() {
   emit('foodSkipped', null);
 }
 
-function recipeBuilder(key: string) {
+function foodBuilder(builder: FoodBuilder) {
   closeInDialog();
-  emit('recipeBuilder', recipeFoods.value.find(food => food.code === key));
+  emit('foodBuilder', builder);
 }
 
 function navigateBack() {
@@ -529,6 +538,8 @@ watchDebounced(
   [searchTerm, limitToRootCategory],
   async () => {
     emit('update:modelValue', searchTerm.value ?? '');
+
+    foodBuilders.reset();
 
     if (searchTerm.value) {
       searchCount.value++;

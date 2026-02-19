@@ -2,12 +2,11 @@ import type {
   FoodState,
   MissingFood,
   PortionSizeStates,
+  StandardUnit,
 } from '../surveys';
-import type {
-  RecipeFood,
-  RequiredLocaleTranslation,
-} from '../types';
 import type { FoodHeader, UserFoodData } from '../types/http';
+import type { FoodBuilderStepType } from '../types/http/admin';
+import type { Condition } from './conditions';
 import type { AddonFood } from './prompts';
 
 export type AssociatedFoodPromptItem = {
@@ -25,34 +24,64 @@ export type AssociatedFoodPrompt = {
 
 export type MissingFoodRecipeBuilderItemState = {
   type: 'missing';
-  id: string;
-  idx: number;
   name: string;
   searchTerm?: string | null;
 };
 
 export type SelectedFoodRecipeBuilderItemState = FoodHeader & {
   type: 'selected';
-  id: string;
-  idx: number;
   ingredient: UserFoodData;
 };
+export type FoodRecipeBuilderItemState = MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
 
-export type FoodRecipeBuilderItemState
-  = | MissingFoodRecipeBuilderItemState
-    | SelectedFoodRecipeBuilderItemState;
+export type FoodBuilderCoefficientStepState = {
+  type: 'coefficient';
+  option: number | null;
+};
 
-export type RecipeBuilderStepState = {
-  confirmed?: 'yes' | 'no';
+export type FoodBuilderConditionStepState = {
+  type: 'condition';
+  option: Condition[] | null;
+};
+
+export type FoodBuilderIngredientStepState = {
+  type: 'ingredient';
+  confirmed?: boolean;
   anotherFoodConfirmed?: boolean;
   foods: FoodRecipeBuilderItemState[];
-  order: number;
-  description: RequiredLocaleTranslation;
-  name: RequiredLocaleTranslation;
-  categoryCode: string;
-  repeat: boolean;
-  required: boolean;
 };
+
+export type FoodBuilderLookupEntityStepState = {
+  type: 'lookup-entity';
+  option: string | null;
+};
+
+export type FoodBuilderLookupUnitStepState = {
+  type: 'lookup-unit';
+  option: StandardUnit | null;
+};
+
+export type FoodBuilderQuantityStepState = {
+  type: 'quantity';
+  quantity: number;
+  confirmed: boolean;
+};
+
+export type FoodBuilderSelectEntityStepState = {
+  type: 'select-entity';
+  option: string | null;
+};
+
+export type FoodBuilderStepState
+  = | FoodBuilderCoefficientStepState
+    | FoodBuilderConditionStepState
+    | FoodBuilderIngredientStepState
+    | FoodBuilderLookupEntityStepState
+    | FoodBuilderLookupUnitStepState
+    | FoodBuilderQuantityStepState
+    | FoodBuilderSelectEntityStepState;
+
+export type GetFoodBuilderStateStep<U extends FoodBuilderStepType> = Extract<FoodBuilderStepState, { type: U }>;
 
 export type PromptStates = {
   'as-served-prompt': {
@@ -84,6 +113,12 @@ export type PromptStates = {
     leftoversConfirmed: boolean;
     leftoversPrompt?: boolean;
     quantityConfirmed: boolean;
+  };
+  'generic-builder-prompt': {
+    food: UserFoodData | null;
+    portionSize: PortionSizeStates['standard-portion'];
+    steps: FoodBuilderStepState[];
+    activeStep: number;
   };
   'guide-image-prompt': {
     portionSize: PortionSizeStates['guide-image'];
@@ -135,9 +170,8 @@ export type PromptStates = {
     option: number | null;
   };
   'recipe-builder-prompt': {
-    recipe: RecipeFood;
+    steps: FoodBuilderIngredientStepState[];
     activeStep: number;
-    recipeSteps: RecipeBuilderStepState[];
   };
   'standard-portion-prompt': {
     portionSize: PortionSizeStates['standard-portion'];
