@@ -70,7 +70,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
+import type { FoodSearchHint, Prompt } from '@intake24/common/prompts';
 
 import { watchDebounced } from '@vueuse/core';
 import { computed, ref } from 'vue';
@@ -92,9 +92,7 @@ const props = defineProps({
     default: '',
   },
   prompt: {
-    type: Object as PropType<
-      Prompts['associated-foods-prompt' | 'edit-meal-prompt' | 'general-associated-foods-prompt' | 'food-search-prompt' | 'recipe-builder-prompt']
-    >,
+    type: Object as PropType<Prompt & { hints: FoodSearchHint[] }>,
     required: true,
   },
 });

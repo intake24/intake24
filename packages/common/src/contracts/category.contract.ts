@@ -5,12 +5,33 @@ import {
   categoryHeader,
   categorySearch,
   paginationRequest,
+  userCategoryData,
 } from '../types/http';
 
 export const category = initContract().router({
-  browse: {
+  entry: {
+    method: 'GET',
+    path: '/categories/:categoryId',
+    responses: {
+      200: userCategoryData,
+    },
+    summary: 'Category entry',
+    description:
+      'Get related data for a category from the database.',
+  },
+  codeEntry: {
     method: 'GET',
     path: '/locales/:localeId/categories/:code',
+    responses: {
+      200: userCategoryData,
+    },
+    summary: 'Category entry',
+    description:
+      'Get related data for a category from the database.',
+  },
+  search: {
+    method: 'GET',
+    path: '/locales/:localeId/categories/:code/search',
     query: paginationRequest,
     responses: {
       200: categorySearch,

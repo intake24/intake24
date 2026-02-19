@@ -64,12 +64,14 @@ export default class Food extends BaseModel<
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
+    unique: 'foods_unique',
   })
   declare code: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
+    unique: 'foods_unique',
   })
   declare localeId: string;
 

@@ -285,6 +285,8 @@ const linkedFoods = computed(() =>
       return { id, text: food.description };
     if (food.type === 'missing-food')
       return { id, text: food.info?.name ?? food.searchTerm };
+    if (food.type === 'generic-builder')
+      return { id, text: food.searchTerm ?? food.description };
     if (food.type === 'recipe-builder')
       return { id, text: food.template.name ?? food.searchTerm };
 
