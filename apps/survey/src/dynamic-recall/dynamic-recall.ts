@@ -3,10 +3,11 @@ import type { Prompt } from '@intake24/common/prompts';
 import type { PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 
-import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
+import PromptManager, { autoCompleteFoodPrompt, autoCompleteMealPrompt } from '@intake24/survey/dynamic-recall/prompt-manager';
 import SelectionManager from '@intake24/survey/dynamic-recall/selection-manager';
 import {
   findMeal,
+  getFoodByIndex,
   getFoodIndexRequired,
   mealPortionSizeComplete,
   surveyFreeEntryComplete,
@@ -240,7 +241,7 @@ export default class DynamicRecall {
    Once no more pre meals, food/meal, or post meals prompts are available, the recall is
    considered complete and ready for submission.
    */
-  getNextPrompt(): PromptInstance | undefined {
+  private evaluateNextPrompt(): PromptInstance | undefined {
     // First make sure pre meals prompts are complete
 
     // There are two ways to handle the situation when a food/meal is selected but a pre-meal
@@ -298,5 +299,34 @@ export default class DynamicRecall {
 
     // And finally the submission prompts
     return this.getNextSurveySectionPrompt('submission');
+  }
+
+  private tryAutoComplete(instance: PromptInstance): boolean {
+    const selection = this.store.selection.element;
+    const meals = this.store.$state.data.meals;
+
+    if (selection?.type === 'meal') {
+      const mealState = findMeal(meals, selection.mealId);
+      return autoCompleteMealPrompt(this.store, mealState, instance.prompt);
+    }
+
+    if (selection?.type === 'food') {
+      const foodIndex = getFoodIndexRequired(meals, selection.foodId);
+      const foodState = getFoodByIndex(meals, foodIndex);
+      const mealState = meals[foodIndex.mealIndex];
+      return autoCompleteFoodPrompt(this.store, mealState, foodState, instance.prompt);
+    }
+
+    return false;
+  }
+
+  getNextPrompt(): PromptInstance | undefined {
+    for (let i = 0; i < 10; ++i) {
+      const next = this.evaluateNextPrompt();
+      if (!next || !this.tryAutoComplete(next))
+        return next;
+    }
+
+    return undefined;
   }
 }

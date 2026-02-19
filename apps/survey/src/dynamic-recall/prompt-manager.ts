@@ -36,6 +36,7 @@ import {
   foodComplete,
   foodPortionSizeComplete,
   foodSearchComplete,
+  getEntityId,
   getFoodByIndex,
   getFoodIndexInMeal,
   getFoodIndexRequired,
@@ -52,7 +53,8 @@ import {
 } from '@intake24/survey/util';
 import { flattenFoods } from '@intake24/survey/util/meal-food';
 
-import { recallLog } from '../stores';
+import { getSplitSuggestions } from '../components/handlers/standard/split-food';
+import { recallLog, useSameAsBefore } from '../stores';
 import { filterFoodsForFoodSelectionPrompt, filterForAddonFoods, filterMealsForAggregateChoicePrompt } from './prompt-filters';
 
 function foodEnergy(energy: number, food: FoodState): number {
@@ -1070,6 +1072,92 @@ export function checkPromptCustomConditions(survey: SurveyStore, meal: MealState
   catch (e) {
     console.error(`Invalid prompt condition`, e);
     return false;
+  }
+}
+
+export function autoCompleteMealPrompt(
+  surveyStore: SurveyStore,
+  mealState: MealState,
+  prompt: Prompt,
+): boolean {
+  switch (prompt.component) {
+    case 'ready-meal-prompt': {
+      const hasReadyMealFoods = mealState.foods.some(
+        food => food.type === 'encoded-food' && food.data.readyMealOption,
+      );
+      if (hasReadyMealFoods)
+        return false;
+
+      surveyStore.addMealFlag(mealState.id, 'ready-meal-complete');
+      return true;
+    }
+
+    default:
+      return false;
+  }
+}
+
+export function autoCompleteFoodPrompt(
+  surveyStore: SurveyStore,
+  mealState: MealState,
+  foodState: FoodState,
+  prompt: Prompt,
+): boolean {
+  switch (prompt.component) {
+    case 'split-food-prompt': {
+      if (foodState.type !== 'free-text')
+        return false;
+
+      const { suggestions, force } = getSplitSuggestions(
+        foodState.description,
+        surveyStore.parameters?.locale?.splitWords ?? [],
+      );
+
+      if (suggestions.length <= 1) {
+        surveyStore.addFoodFlag(foodState.id, 'split-food-complete');
+        return true;
+      }
+
+      if (!force)
+        return false;
+
+      const { foodIndex } = getFoodIndexRequired(surveyStore.$state.data.meals, foodState.id);
+      const [first, ...rest] = suggestions;
+
+      rest.forEach((suggestion, idx) => {
+        surveyStore.addFood({
+          mealId: mealState.id,
+          food: {
+            id: getEntityId(),
+            type: 'free-text',
+            description: suggestion,
+            flags: ['split-food-complete'],
+            customPromptAnswers: {},
+            linkedFoods: [],
+          },
+          at: foodIndex + (idx + 1),
+        });
+      });
+
+      surveyStore.updateFood({ foodId: foodState.id, update: { description: first } });
+      surveyStore.addFoodFlag(foodState.id, 'split-food-complete');
+      return true;
+    }
+
+    case 'same-as-before-prompt': {
+      if (foodState.type !== 'encoded-food')
+        return false;
+
+      const sabFood = useSameAsBefore().getItem(surveyStore.localeId, foodState.data.code);
+      if (sabFood)
+        return false;
+
+      surveyStore.addFoodFlag(foodState.id, 'same-as-before-complete');
+      return true;
+    }
+
+    default:
+      return false;
   }
 }
 
