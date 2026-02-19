@@ -21,10 +21,12 @@ import {
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import {
+  createFallbackHistoryEntry,
   destroyRecallHistory,
   handlePopState,
   initRecallHistory,
   invalidateForward,
+  maybePushFallbackHistoryEntry,
   pushFullHistoryEntry,
 } from '@intake24/survey/stores/recall-history';
 
@@ -363,6 +365,7 @@ export default defineComponent({
         );
 
         this.currentPrompt = nextPrompt;
+        createFallbackHistoryEntry(nextPrompt.prompt.component);
       }
     },
 
@@ -377,6 +380,8 @@ export default defineComponent({
       //
       // The correct implementation would be re-evaluating the current prompt type immediately
       // (via the reactivity system) in response to changes in commitAnswer.
+      maybePushFallbackHistoryEntry();
+
       this.hideCurrentPrompt = true;
 
       await this.nextPrompt();
