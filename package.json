@@ -26,7 +26,7 @@
     "prepare": "pnpm simple-git-hooks",
     "clean": "rimraf --glob **/coverage **/dist **/node_modules",
     "build": "pnpm  --filter \"./apps/**\" build",
-    "db:migrate": "pnpm db:migrate",
+    "db:migrate": "pnpm --filter @intake24/db db:migrate",
     "db:foods:migrate": "pnpm --filter @intake24/db db:foods:migrate",
     "db:foods:migrate:undo": "pnpm --filter @intake24/db db:foods:migrate:undo",
     "db:system:migrate": "pnpm --filter @intake24/db db:system:migrate",
