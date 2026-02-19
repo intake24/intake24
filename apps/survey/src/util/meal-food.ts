@@ -86,9 +86,9 @@ export function foodPortionSizeComplete(food: FoodState) {
       return food.portionSize !== null && food.flags.includes('portion-size-method-complete');
     case 'missing-food':
       return food.info !== null && food.flags.includes('missing-food-complete');
+    case 'generic-builder':
     case 'recipe-builder':
-      // FIXME: correct completeness check for recipe builder
-      return food.flags.includes('recipe-builder-complete');
+      return food.flags.includes(`${food.type}-complete`);
   }
 }
 
@@ -108,7 +108,11 @@ export function missingFoodComplete(food: FoodState) {
 }
 
 export function recipeBuilderComplete(food: FoodState) {
-  return food.type === 'recipe-builder' && food.flags.includes('recipe-builder-complete');
+  return food.type === 'recipe-builder' && food.flags.includes('food-builder-complete');
+}
+
+export function genericBuilderComplete(food: FoodState) {
+  return food.type === 'generic-builder' && food.flags.includes('food-builder-complete');
 }
 
 export function foodComplete(food: FoodState) {
@@ -116,6 +120,7 @@ export function foodComplete(food: FoodState) {
     'free-text': () => false,
     'encoded-food': encodedFoodComplete,
     'missing-food': missingFoodComplete,
+    'generic-builder': genericBuilderComplete,
     'recipe-builder': recipeBuilderComplete,
   };
 

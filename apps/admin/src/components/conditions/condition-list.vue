@@ -2,7 +2,7 @@
   <v-card border flat>
     <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
-        {{ $t(`survey-schemes.prompts.${prompt}.filter`) }}
+        {{ title ?? $t('survey-schemes.conditions._') }}
       </v-toolbar-title>
       <v-spacer />
       <v-btn
@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type { Condition } from '@intake24/common/prompts';
+import type { Condition, ConditionObjectId } from '@intake24/common/prompts';
 
 import { useVModel } from '@vueuse/core';
 
@@ -49,9 +49,12 @@ const props = defineProps({
     type: Array as PropType<Condition[]>,
     required: true,
   },
-  prompt: {
+  objects: {
+    type: Array as PropType<ConditionObjectId[]>,
+    default: () => ['survey', 'meal', 'food'],
+  },
+  title: {
     type: String,
-    required: true,
   },
 });
 
