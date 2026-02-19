@@ -136,16 +136,16 @@ export async function rankFoodResults(
   algorithm: SearchSortingAlgorithm,
   matchScoreWeight: number,
   logger: Logger,
-  recipeFoodsHeaders: FoodHeader[],
+  foodBuilderHeaders: FoodHeader[],
 ): Promise<FoodHeader[]> {
   const foodCodes = results.map(result => result.key);
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
   if (rankingData !== null) {
-    return [...recipeFoodsHeaders, ...applyRankingData(rankingData, results, matchScoreWeight, logger)];
+    return [...foodBuilderHeaders, ...applyRankingData(rankingData, results, matchScoreWeight, logger)];
   }
   else {
-    return [...recipeFoodsHeaders, ...noAlgorithmRanking(results)];
+    return [...foodBuilderHeaders, ...noAlgorithmRanking(results)];
   }
 }
 

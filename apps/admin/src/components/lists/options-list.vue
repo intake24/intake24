@@ -39,14 +39,16 @@
             :label="$t('common.options.shortLabel')"
             variant="outlined"
           />
-          <v-text-field
-            v-model="option.value"
-            density="compact"
-            hide-details="auto"
-            :label="$t('common.options.value')"
-            :rules="optionValueRules"
-            variant="outlined"
-          />
+          <slot :name="`value.${idx}`">
+            <v-text-field
+              v-model="option.value"
+              density="compact"
+              hide-details="auto"
+              :label="$t('common.options.value')"
+              :rules="optionValueRules"
+              variant="outlined"
+            />
+          </slot>
           <div class="d-flex flex-column flex-sm-row gc-6 px-2">
             <v-switch
               v-model="option.selected"
@@ -75,7 +77,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
-import type { ZodNumber, ZodString } from 'zod';
+import type { ZodType } from 'zod';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { ListOption } from '@intake24/common/types';
@@ -89,6 +91,9 @@ import { toIndexedList } from '@intake24/admin/util';
 defineOptions({ name: 'OptionsList' });
 
 const props = defineProps({
+  default: {
+    type: [String, Number, Array] as PropType<string | number | unknown[]>,
+  },
   exclusive: {
     type: Boolean,
   },
@@ -96,7 +101,7 @@ const props = defineProps({
     type: Boolean,
   },
   options: {
-    type: Array as PropType<ListOption<ZodString | ZodNumber>[]>,
+    type: Array as PropType<ListOption<ZodType>[]>,
     required: true,
   },
   readonly: {
@@ -120,12 +125,12 @@ const defaultValueRules = [
   },
 ];
 
-const outputOptions = computed<ListOption<ZodString | ZodNumber>[]>(() => currentOptions.value.map(({ id, ...rest }) => (rest)));
+const outputOptions = computed<ListOption<ZodAny>[]>(() => currentOptions.value.map(({ id, ...rest }) => (rest)));
 const optionValueRules = computed<RuleCallback[]>(() => [...defaultValueRules, ...props.rules]);
 
 function add() {
   const size = currentOptions.value.length + 1;
-  currentOptions.value.push({ id: size, label: `label-${size}`, shortLabel: `shortLabel-${size}`, value: props.numeric ? size : `value-${size}` });
+  currentOptions.value.push({ id: size, label: `label-${size}`, shortLabel: `shortLabel-${size}`, value: props.default ?? (props.numeric ? size : `value-${size}`) });
 };
 
 function remove(index: number) {

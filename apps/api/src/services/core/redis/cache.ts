@@ -16,6 +16,7 @@ export type CacheKeyPrefix
   = | typeof ACL_PAT_KEY
     | typeof ACL_PERMISSIONS_KEY
     | typeof ACL_ROLES_KEY
+    | 'category-entry'
     | 'category-parent-categories'
     | 'category-parent-cache'
     | 'food-parent-cache'
