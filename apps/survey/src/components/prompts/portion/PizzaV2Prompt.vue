@@ -115,10 +115,7 @@
                         "
                       >
                         <span class="text-center">
-                          <component
-                            :is="`pizza-${unit.value}`"
-                            class="pizza-unit__svg"
-                          />
+                          <standard-unit-icon :icon="`pizza_${unit.value}`" />
                         </span>
                         <span class="font-weight-bold text-uppercase">
                           {{ $t(`prompts.${type}.units.${unit.value}`) }}
@@ -143,10 +140,7 @@
           <v-container>
             <v-row>
               <v-col class="d-none d-sm-flex justify-center align-center" cols="6">
-                <component
-                  :is="`pizza-${state.portionSize.unit}`"
-                  class="pizza-unit__svg"
-                />
+                <standard-unit-icon :icon="`pizza_${state.portionSize.unit}`" />
               </v-col>
               <v-col cols="12" sm="6">
                 <quantity-card
@@ -166,10 +160,6 @@
 </template>
 
 <script lang="ts" setup>
-// @ts-expect-error - virtual types
-import PizzaSlice from 'virtual:icons/fluent/food-pizza-24-filled';
-// @ts-expect-error - virtual types
-import PizzaWhole from 'virtual:icons/game-icons/full-pizza';
 import { computed, ref } from 'vue';
 
 import { pizzaCrusts, pizzaSizes, pizzaUnits } from '@intake24/common/surveys';
@@ -179,13 +169,9 @@ import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
 
 import { BaseLayout } from '../layouts';
-import { Next, QuantityCard, usePanel, usePortionSizeMethod } from '../partials';
+import { Next, QuantityCard, StandardUnitIcon, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
-
-defineOptions({
-  components: { PizzaSlice, PizzaWhole },
-});
 
 const props = defineProps({
   ...createPortionPromptProps<'pizza-v2-prompt'>(),
@@ -269,9 +255,4 @@ function confirmType(type: 'size' | 'crust' | 'unit' | 'quantity', value: boolea
 </script>
 
 <style lang="scss" scoped>
-.pizza-unit__svg {
-  height: auto;
-  width: 100%;
-  max-width: 150px;
-}
 </style>

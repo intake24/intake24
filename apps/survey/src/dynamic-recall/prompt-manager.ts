@@ -9,7 +9,7 @@ import type {
   Prompt,
   Prompts,
 } from '@intake24/common/prompts';
-import type { CustomData, FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { CustomData, FoodBuilderState, FoodSection, FoodState, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 
 import { conditionOps, foodCompletionStateOptions, standardUserFields } from '@intake24/common/prompts';
@@ -19,6 +19,7 @@ import {
   cerealComplete,
   directWeightComplete,
   drinkScaleComplete,
+  foodBuilderComplete,
   guideImageComplete,
   milkInAHotDrinkComplete,
   milkOnCerealComplete,
@@ -26,7 +27,6 @@ import {
   pizzaComplete,
   pizzaV2Complete,
   portionSizeMethodSelected,
-  recipeBuilderComplete,
   standardPortionComplete,
   unknownComplete,
 } from '@intake24/common/util/portion-size-checks';
@@ -344,7 +344,7 @@ function checkFoodStandardConditions(surveyStore: SurveyStore, mealState: MealSt
     case 'food-search-prompt': {
       const freeEntryComplete = surveyFreeEntryComplete(surveyState.data);
 
-      if (['encoded-food', 'missing-food', 'recipe-builder'].includes(foodState.type)) {
+      if (foodState.type !== 'free-text') {
         recallLog().promptCheck(
           component,
           false,
@@ -764,11 +764,12 @@ function checkFoodStandardConditions(surveyStore: SurveyStore, mealState: MealSt
     case 'multi-prompt':
       return prompt.prompts.some(item => checkFoodStandardConditions(surveyStore, mealState, foodState, withSelection, item));
 
+    case 'generic-builder-prompt':
     case 'recipe-builder-prompt': {
-      if (foodState.type !== 'recipe-builder')
+      if (foodState.type !== component.replace('-prompt', ''))
         return false;
 
-      if (recipeBuilderComplete(foodState)) {
+      if (foodBuilderComplete(foodState as FoodBuilderState)) {
         recallLog().promptCheck(component, false, `Recipe Builder food info entered.`);
         return false;
       }
@@ -833,17 +834,32 @@ function getFoodCompletionState(food: FoodState): FoodCompletionState {
   return 'freeEntryComplete';
 }
 
-export function evaluateCondition(condition: Condition, surveyStore: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, debugContext: string): boolean {
+export type EvaluateConditionOps = {
+  survey?: SurveyStore;
+  meal?: MealState;
+  food?: FoodState;
+  debugContext?: string;
+};
+
+export function evaluateCondition(condition: Condition, ops: EvaluateConditionOps): boolean {
+  const { survey, meal, food, debugContext = 'unknown context' } = ops;
+
+  function requireSurvey(conditionId: string): SurveyStore {
+    if (!survey)
+      throw new Error(`Condition "${conditionId}" in ${debugContext} refers to the survey, but no survey store was provided`);
+    return survey;
+  }
+
   function requireMeal(conditionId: string): MealState {
-    if (mealState === undefined)
+    if (meal === undefined)
       throw new Error(`Condition "${conditionId}" in ${debugContext} refers to the current meal, but a meal is currently not selected`);
-    return mealState;
+    return meal;
   }
 
   function requireFood(conditionId: string): FoodState {
-    if (foodState === undefined)
+    if (food === undefined)
       throw new Error(`Condition "${conditionId}" in prompt ${debugContext} refers to the current food, but a food is currently not selected`);
-    return foodState;
+    return food;
   }
 
   switch (condition.property.id) {
@@ -851,7 +867,7 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       let drinksEntered = false;
       switch (condition.object) {
         case 'survey':
-          drinksEntered = surveyDrinks(0, surveyStore.meals) > 0;
+          drinksEntered = surveyDrinks(0, requireSurvey(condition.property.id).meals) > 0;
           break;
         case 'meal':
           drinksEntered = mealDrinks(0, requireMeal(condition.property.id)) > 0;
@@ -866,7 +882,7 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       let energy = 0;
       switch (condition.object) {
         case 'survey':
-          energy = surveyEnergy(0, surveyStore.meals);
+          energy = surveyEnergy(0, requireSurvey(condition.property.id).meals);
           break;
         case 'meal':
           energy = mealEnergy(0, requireMeal(condition.property.id));
@@ -884,7 +900,7 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       let flag = false;
       switch (condition.object) {
         case 'survey':
-          flag = surveyStore.hasFlag(condition.property.check.flagId);
+          flag = requireSurvey(condition.property.id).hasFlag(condition.property.check.flagId);
           break;
         case 'meal':
           flag = requireMeal(condition.property.id).flags.includes(condition.property.check.flagId);
@@ -899,7 +915,7 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       let count = 0;
       switch (condition.object) {
         case 'survey':
-          count = surveyFoodCount(condition.property)(0, surveyStore.meals);
+          count = surveyFoodCount(condition.property)(0, requireSurvey(condition.property.id).meals);
           break;
         case 'meal':
           count = mealFoodCount(condition.property)(0, requireMeal(condition.property.id));
@@ -917,7 +933,7 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       let count = 0;
       switch (condition.object) {
         case 'survey':
-          count = surveyMealCount(condition.property)(0, surveyStore.meals);
+          count = surveyMealCount(condition.property)(0, requireSurvey(condition.property.id).meals);
           break;
         case 'meal':
           count = mealCount(condition.property)(0, requireMeal(condition.property.id));
@@ -944,7 +960,7 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
       let answer;
       switch (condition.object) {
         case 'survey':
-          answer = surveyStore.data.customPromptAnswers[condition.property.check.promptId];
+          answer = requireSurvey(condition.property.id).data.customPromptAnswers[condition.property.check.promptId];
           break;
         case 'meal':
           answer = requireMeal(condition.property.id).customPromptAnswers[condition.property.check.promptId];
@@ -963,29 +979,29 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
     }
     case 'recallNumber': {
       return conditionOps[condition.property.check.op]({
-        answer: surveyStore.recallNumber,
+        answer: requireSurvey(condition.property.id).recallNumber,
         value: condition.property.check.value,
       });
     }
     case 'userField': {
-      if (!surveyStore.user)
+      if (!requireSurvey(condition.property.id).user)
         return false;
 
       const { field, op, value } = condition.property.check;
       if ((standardUserFields as unknown as string[]).includes(field)) {
         return conditionOps[op]({
-          answer: surveyStore.user[field as 'name' | 'submissions' | 'userId'] ?? null,
+          answer: requireSurvey(condition.property.id).user?.[field as 'name' | 'submissions' | 'userId'] ?? null,
           value,
         });
       }
 
-      return conditionOps[op]({ answer: surveyStore.user.customFields[field] ?? null, value });
+      return conditionOps[op]({ answer: requireSurvey(condition.property.id).user?.customFields[field] ?? null, value });
     }
     case 'mealCompletion': {
       let completionState: FoodCompletionState | undefined;
       switch (condition.object) {
         case 'survey':
-          completionState = getSurveyCompletionState(surveyStore);
+          completionState = getSurveyCompletionState(requireSurvey(condition.property.id));
           break;
         case 'meal':
           completionState = getMealCompletionState(requireMeal(condition.property.id));
@@ -1029,23 +1045,23 @@ export function evaluateCondition(condition: Condition, surveyStore: SurveyStore
   throw new Error(`Prompt condition didn't match any switch branches`);
 }
 
-export function checkPromptCustomConditions(store: SurveyStore, mealState: MealState | undefined, foodState: FoodState | undefined, prompt: Prompt) {
+export function checkPromptCustomConditions(survey: SurveyStore, meal: MealState | undefined, food: FoodState | undefined, prompt: Prompt) {
   try {
     let currentValue = true;
     for (let i = 0; i < prompt.conditions.length; ++i) {
       const condition = prompt.conditions[i];
       if (i === 0) {
-        currentValue = evaluateCondition(condition, store, mealState, foodState, `prompt conditions (${prompt.id})`);
+        currentValue = evaluateCondition(condition, { survey, meal, food, debugContext: `prompt conditions (${prompt.id})` });
       }
       else {
         if (condition.orPrevious) {
-          currentValue ||= evaluateCondition(condition, store, mealState, foodState, `prompt conditions (${prompt.id})`);
+          currentValue ||= evaluateCondition(condition, { survey, meal, food, debugContext: `prompt conditions (${prompt.id})` });
         }
         else {
           if (currentValue === false)
             return false;
 
-          currentValue = evaluateCondition(condition, store, mealState, foodState, `prompt conditions (${prompt.id})`);
+          currentValue = evaluateCondition(condition, { survey, meal, food, debugContext: `prompt conditions (${prompt.id})` });
         }
       }
     }

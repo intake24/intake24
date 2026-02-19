@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 import { searchSortingAlgorithms } from '@intake24/common/surveys';
-import { recipeFood } from '@intake24/common/types';
 
 import { paginationMeta } from '../generic';
+import { foodBuilder } from './builders';
 
 export const categoryHeader = z.object({
   id: z.string(),
@@ -66,5 +66,5 @@ export const surveyFoodSearchQuery = z.object({
 
 export type SurveyFoodSearchQuery = z.infer<typeof surveyFoodSearchQuery>;
 
-export const recipeFoodResponse = recipeFood;
-export type RecipeFoodResponse = z.infer<typeof recipeFoodResponse>;
+export const foodBuilderResponse = foodBuilder;
+export type FoodBuilderResponse = z.infer<typeof foodBuilderResponse>;

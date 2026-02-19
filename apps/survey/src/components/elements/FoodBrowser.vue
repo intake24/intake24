@@ -36,19 +36,19 @@
       :text="$t('prompts.foodSearch.rootCategory', { category: rootCategoryName })"
       type="warning"
     />
-    <template v-if="recipeBuilderToggle">
+    <template v-if="foodBuilderToggle">
       <v-btn
-        v-for="recipeBuilderFood in recipeBuilderFoods"
-        :key="recipeBuilderFood.code"
+        v-for="foodBuilderFood in foodBuilders"
+        :key="foodBuilderFood.code"
         :block="$vuetify.display.mobile"
         class="mb-4"
         color="primary"
-        :disabled="!recipeBuilderToggle"
+        :disabled="!foodBuilderToggle"
         size="large"
         variant="outlined"
-        @click.stop="recipeBuilder(recipeBuilderFood.code)"
+        @click.stop="foodBuilder(foodBuilderFood.code)"
       >
-        {{ $t(`prompts.recipeBuilder.label`, { searchTerm: recipeBuilderFood?.name }) }}
+        {{ $t(`prompts.recipeBuilder.label`, { searchTerm: foodBuilderFood?.name }) }}
       </v-btn>
     </template>
     <v-tabs-window v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab" v-scroll="onScroll">
@@ -162,15 +162,9 @@
 import type { PropType } from 'vue';
 import type { VTextField } from 'vuetify/components';
 
-import type { Prompts } from '@intake24/common/prompts';
+import type { FoodBrowser, FoodSearchHint, Prompt } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { RecipeFood } from '@intake24/common/types';
-import type {
-  CategoryContents,
-  CategoryHeader,
-  FoodHeader,
-  FoodSearchResponse,
-} from '@intake24/common/types/http';
+import type { CategoryContents, CategoryHeader, FoodBuilder, FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 
 import { watchDebounced } from '@vueuse/core';
 import { computed, nextTick, onMounted, ref } from 'vue';
@@ -217,9 +211,7 @@ const props = defineProps({
     default: false,
   },
   prompt: {
-    type: Object as PropType<
-      Prompts['associated-foods-prompt' | 'general-associated-foods-prompt' | 'food-search-prompt' | 'recipe-builder-prompt']
-    >,
+    type: Object as PropType<Prompt & FoodBrowser & { hints: FoodSearchHint[] }>,
     required: true,
   },
   section: {
@@ -240,10 +232,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'recipeBuilder', 'update:modelValue', 'foodSkipped']);
+const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'foodBuilder', 'update:modelValue', 'foodSkipped']);
 const goTo = useGoTo();
 
-const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
+const { foodBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
 const { i18n: { t } } = useI18n();
 
 const searchTerm = ref(props.modelValue);
@@ -256,9 +248,9 @@ const currentCategoryContents = ref<CategoryContents | undefined>(undefined);
 
 const requestInProgress = ref(true);
 const requestFailed = ref(false);
-const recipeBuilderFoods = ref<FoodHeader[]>([]);
-const recipeFoods = ref<RecipeFood[]>([]);
-const recipeBuilderToggle = ref(false);
+const foodBuilderFoods = ref<FoodHeader[]>([]);
+const foodBuilders = ref<FoodBuilder[]>([]);
+const foodBuilderToggle = ref(false);
 const tab = ref<'browse' | 'search'>('browse');
 const searchCount = ref(1);
 const percentScrolled = ref(0);
@@ -407,12 +399,10 @@ function browseRootCategory() {
   browseCategory(limitToRootCategory.value ? props.rootCategory : undefined, true);
 }
 
-async function recipeBuilderDetected(foods: FoodHeader[]) {
-  foods.forEach(async (food) => {
-    const recipeFood: RecipeFood = await foodsService.getRecipeFood(props.localeId, food.code);
-    recipeFoods.value.push(recipeFood);
-  });
-  recipeBuilderToggle.value = true;
+async function foodBuilderDetected(foods: FoodHeader[]) {
+  const builders = await foodsService.getFoodBuilders(props.localeId, foods.map(food => food.code));
+  foodBuilders.value.push(...builders);
+  foodBuilderToggle.value = true;
 }
 
 async function search() {
@@ -420,8 +410,8 @@ async function search() {
     return;
   percentScrolled.value = 0;
   requestInProgress.value = true;
-  recipeBuilderToggle.value = false;
-  recipeBuilderFoods.value = [];
+  foodBuilderToggle.value = false;
+  foodBuilderFoods.value = [];
   searchResults.value = { foods: [], categories: [] };
 
   try {
@@ -434,7 +424,7 @@ async function search() {
       searchResults.value.foods = searchResults.value.foods.filter(
         (food) => {
           if (food.code.charAt(0) === '$') {
-            recipeBuilderFoods.value.push(food);
+            foodBuilderFoods.value.push(food);
             return false;
           }
           return true;
@@ -448,8 +438,8 @@ async function search() {
         search_results_count: searchResults.value.foods.length,
         percent_scrolled: percentScrolled.value,
       });
-      if (recipeBuilderEnabled.value && recipeBuilderFoods.value.length > 0 && (!props.rootCategory || !limitToRootCategory.value))
-        await recipeBuilderDetected(recipeBuilderFoods.value);
+      if (foodBuilderEnabled.value && foodBuilderFoods.value.length > 0 && (!props.rootCategory || !limitToRootCategory.value))
+        await foodBuilderDetected(foodBuilderFoods.value);
       requestFailed.value = false;
     }
     else {
@@ -484,9 +474,9 @@ function skipTheStep() {
   emit('foodSkipped', null);
 }
 
-function recipeBuilder(key: string) {
+function foodBuilder(key: string) {
   closeInDialog();
-  emit('recipeBuilder', recipeFoods.value.find(food => food.code === key));
+  emit('foodBuilder', foodBuilders.value.find(food => food.code === key));
 }
 
 function navigateBack() {

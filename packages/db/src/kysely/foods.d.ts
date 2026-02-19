@@ -18,6 +18,8 @@ export type ArrayTypeImpl<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export type EnumCategoryPortionSizeMethodsPathways = 'addon' | 'afp' | 'recipe' | 'search';
 
+export type EnumFoodBuildersType = 'generic' | 'recipe';
+
 export type EnumFoodPortionSizeMethodsPathways = 'addon' | 'afp' | 'recipe' | 'search';
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
@@ -25,6 +27,18 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 
 export type Int8 = ColumnType<string, bigint | number | string, bigint | number | string>;
+
+export type Json = JsonValue;
+
+export type JsonArray = JsonValue[];
+
+export type JsonObject = {
+  [x: string]: JsonValue | undefined;
+};
+
+export type JsonPrimitive = boolean | number | string | null;
+
+export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
@@ -151,6 +165,19 @@ export interface FoodAttributes {
   reasonableAmount: number | null;
   sameAsBeforeOption: boolean | null;
   useInRecipes: UseInRecipeType | null;
+}
+
+export interface FoodBuilders {
+  code: string;
+  createdAt: Timestamp;
+  id: Generated<Int8>;
+  localeId: string;
+  name: string;
+  steps: Json;
+  synonymSetId: Int8 | null;
+  triggerWord: string;
+  type: EnumFoodBuildersType;
+  updatedAt: Timestamp;
 }
 
 export interface FoodPortionSizeMethods {
@@ -417,6 +444,7 @@ export interface DB {
   drinkwareSets: DrinkwareSets;
   drinkwareVolumeSamples: DrinkwareVolumeSamples;
   foodAttributes: FoodAttributes;
+  foodBuilders: FoodBuilders;
   foodPortionSizeMethods: FoodPortionSizeMethods;
   foods: Foods;
   foodsCategories: FoodsCategories;
