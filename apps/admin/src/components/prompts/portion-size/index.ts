@@ -2,6 +2,7 @@ import AsServedPrompt from './as-served-prompt.vue';
 import CerealPrompt from './cereal-prompt.vue';
 import DirectWeightPrompt from './direct-weight-prompt.vue';
 import DrinkScalePrompt from './drink-scale-prompt.vue';
+import GenericBuilderPrompt from './generic-builder-prompt.vue';
 import GuideImagePrompt from './guide-image-prompt.vue';
 import MilkInAHotDrinkPrompt from './milk-in-a-hot-drink-prompt.vue';
 import MilkOnCerealPrompt from './milk-on-cereal-prompt.vue';
@@ -19,6 +20,7 @@ export default {
   CerealPrompt,
   DirectWeightPrompt,
   DrinkScalePrompt,
+  GenericBuilderPrompt,
   GuideImagePrompt,
   MilkInAHotDrinkPrompt,
   MilkOnCerealPrompt,

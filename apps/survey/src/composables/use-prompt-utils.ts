@@ -3,7 +3,7 @@ import type { SetupContext } from 'vue';
 import type { UseFoodUtilsProps } from './use-food-utils';
 import type { UseMealUtilsProps } from './use-meal-utils';
 import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState, PromptSection, RecipeBuilder } from '@intake24/common/surveys';
+import type { FoodState, ParentFoodState, PromptSection } from '@intake24/common/surveys';
 import type { PartialRecord } from '@intake24/common/types';
 import type { LocaleContentOptions } from '@intake24/ui';
 import type { GtmEventParams } from '@intake24/ui/tracking';
@@ -25,13 +25,13 @@ export type UsePromptPropsBase<P extends keyof Prompts> = {
 export type UsePromptProps<
   P extends keyof Prompts,
   F extends FoodState | undefined,
-  FP extends EncodedFood | RecipeBuilder | undefined,
+  FP extends ParentFoodState | undefined,
 > = UsePromptPropsBase<P> & UseFoodUtilsProps<F, FP> & UseMealUtilsProps;
 
 export function usePromptUtils<
   P extends keyof Prompts,
   F extends FoodState | undefined,
-  FP extends EncodedFood | RecipeBuilder | undefined,
+  FP extends ParentFoodState | undefined,
 >(props: UsePromptProps<P, F, FP>, { emit }: Pick<SetupContext<'action'[]>, 'emit'>, confirmCallback?: () => boolean) {
   const { i18n: { d, t } } = useI18n();
   const survey = useSurvey();
@@ -55,7 +55,7 @@ export function usePromptUtils<
 
   const type = computed(() => promptType(props.prompt.component));
 
-  const recipeBuilderEnabled = computed(() => type.value === 'foodSearch' && survey.registeredPortionSizeMethods.includes('recipe-builder'));
+  const foodBuilderEnabled = computed(() => type.value === 'foodSearch' && !!survey.registeredFoodBuilder.length);
 
   const params = computed(() => {
     const build: Record<string, string | number> = {
@@ -148,7 +148,7 @@ export function usePromptUtils<
     isInMultiPrompt,
     mealName,
     params,
-    recipeBuilderEnabled,
+    foodBuilderEnabled,
     translatePrompt,
     type,
   };

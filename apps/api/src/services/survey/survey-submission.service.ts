@@ -199,6 +199,11 @@ function surveySubmissionService({
           return collectedFoods;
         }
 
+        if (foodState.type === 'generic-builder') {
+          logger.warn(`Submission: ${foodState.type} food record present in submission, skipping...`);
+          return collectedFoods;
+        }
+
         if (foodState.type === 'missing-food') {
           const { info } = foodState;
           if (!info) {

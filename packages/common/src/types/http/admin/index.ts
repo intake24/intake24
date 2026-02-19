@@ -7,6 +7,7 @@ export * from './drinkware-sets';
 export * from './faqs';
 export * from './fdbs';
 export * from './feedback-schemes';
+export * from './food-builders';
 export * from './foods';
 export * from './guide-images';
 export * from './image-maps';

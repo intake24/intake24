@@ -6,15 +6,12 @@
   "create": "Add FoodDB",
   "edit": "Edit FoodDB",
   "delete": "Delete FoodDB",
-
   "showGlobalName": "Show global name",
-
   "food-list": {
     "_": "Food list",
     "title": "Food list",
     "tab": "Food list"
   },
-
   "search": {
     "_": "Search",
     "title": "Search categories & foods"
@@ -23,6 +20,7 @@
     "_": "Tag",
     "title": "Tags"
   },
+  "entity": "Entity",
   "categories": {
     "_": "Category",
     "title": "Categories",

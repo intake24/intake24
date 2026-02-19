@@ -48,23 +48,39 @@
     "remove": "Enlever une série de synonymes",
     "synonyms": "Synonymes (délimités par des espaces)"
   },
-  "recipe-foods": {
+  "food-builders": {
     "_": "Séries d'aliments pour des recettes",
     "title": "Séries d'aliments pour des recettes",
     "tab": "Ingrédients de la recette",
     "add": "Ajouter un ingrédient",
+    "edit": "Edit food builder",
     "remove": "Enlever l'ingrédient",
-    "special": "Mot déclencheur",
+    "types": {
+      "_": "Food builder type",
+      "title": "Food builder types",
+      "recipe": "Recipe",
+      "pizza": "Pizza"
+    },
     "code": "Code de l'ingrédient",
-    "step_code": "Code de l'étape (assigné automatiquement)",
-    "synonymsId": "Synonymes (délimités par des espaces)",
-    "steps": "Etapes de le construction de recettes",
     "name": "Nom de l'étape",
-    "description": "Description de l'étape",
-    "ingredientsCategory": "Catégorie des ingrédients de l'étape",
-    "order": "Ordre des étapes",
-    "repeat": "Beaucoup d'ingrédients",
-    "require": "Required"
+    "triggerWord": "Trigger word",
+    "synonymSetId": "Synonymes (délimités par des espaces)",
+    "steps:": {
+      "_": "Food builder step",
+      "title": "Food builder steps",
+      "add": "Add food builder step",
+      "remove": "Remove food builder step",
+      "name": "Step Name",
+      "description": "Step Description",
+      "ingredientsCategory": "Step Ingredients Category",
+      "order": "Step Order",
+      "repeat": "Many ingredients",
+      "require": "Required"
+    },
+    "tabs": {
+      "general": "General",
+      "steps": "Steps"
+    }
   },
   "food-ranking": {
     "_": "Classement des aliments",
