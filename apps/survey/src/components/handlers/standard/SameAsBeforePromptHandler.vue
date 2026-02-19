@@ -8,8 +8,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
-
 import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
 import { getEntityId } from '@intake24/survey/util';
@@ -95,9 +93,4 @@ function action(type: string, ...args: [id?: string, params?: object]) {
 
   emit('action', type, ...args);
 }
-
-onMounted(() => {
-  if (!sabFood)
-    sabAction('notSame');
-});
 </script>
