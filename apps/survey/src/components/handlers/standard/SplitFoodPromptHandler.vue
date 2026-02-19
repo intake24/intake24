@@ -6,13 +6,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 
 import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils } from '../composables';
+import { getSplitSuggestions } from './split-food';
 
 defineProps(createHandlerProps<'split-food-prompt'>());
 
@@ -24,35 +25,9 @@ const survey = useSurvey();
 
 const food = freeTextFood.value;
 
-const splits = computed(() => {
-  const suggestionTokens: string[] = [];
-  const forceTokens: string[] = [];
-
-  const items = survey.parameters?.locale?.splitWords;
-  if (!items?.length)
-    return { suggestions: [], force: false };
-
-  for (const item of items) {
-    if (item.match(/^!\w+:\w+!$/)) {
-      forceTokens.push(item
-        .replace(/!/g, '')
-        .split(':')
-        .sort((a, b) => a.localeCompare(b))
-        .join(':')
-        .toLowerCase(),
-      );
-      continue;
-    }
-
-    suggestionTokens.push(item.replace(/!_!/g, ' ').toLowerCase());
-  }
-
-  const suggestions = food.description.split(new RegExp(`(?:${suggestionTokens.join('|')})`, 'i')).map(item => item.trim());
-  const forceCheck = [...suggestions].sort((a, b) => a.localeCompare(b)).join(':').toLowerCase();
-  const force = forceTokens.includes(forceCheck);
-
-  return { suggestions, force };
-});
+const splits = computed(() =>
+  getSplitSuggestions(food.description, survey.parameters?.locale?.splitWords ?? []),
+);
 
 function single() {
   survey.addFoodFlag(food.id, 'split-food-complete');
@@ -95,14 +70,4 @@ function action(type: string, ...args: [id?: string, params?: object]) {
 
   emit('action', type, ...args);
 }
-
-onMounted(() => {
-  if (splits.value.force) {
-    separate();
-    return;
-  }
-
-  if (splits.value.suggestions.length <= 1)
-    single();
-});
 </script>
