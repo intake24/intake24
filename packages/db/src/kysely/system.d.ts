@@ -3,7 +3,16 @@
  * Please do not edit it manually.
  */
 
+import type { AuthenticatorTransportFuture, CredentialDeviceType } from '@simplewebauthn/server';
 import type { ColumnType } from 'kysely';
+
+import type { Card, DemographicGroup, FeedbackMeals, FeedbackOutput, FeedbackPhysicalDataField, FeedbackSection, FeedbackType, HenryCoefficient, TopFoods } from '@intake24/common/feedback';
+import type { SinglePrompt } from '@intake24/common/prompts';
+import type { MFAProvider, RecordVisibility, SecurableType } from '@intake24/common/security';
+import type { CustomData, ExportSection, Meal, PortionSizeMethodId, PortionSizeState, RecallPrompts, SchemeOverrides, SchemeSettings, SessionSettings, SurveyAuthMode, SurveySearchSettings, SurveyState, SurveyStatus } from '@intake24/common/surveys';
+import type { Dictionary, JobType, JobTypeParams, Notification, Subscription, SubscriptionType } from '@intake24/common/types';
+import type { FAQSection } from '@intake24/common/types/http/admin';
+import type { LocaleMessageDictionary } from '@intake24/i18n';
 
 export type EnumMediaDisk = 'private' | 'public';
 
@@ -33,7 +42,7 @@ export interface ClientErrorReports {
   new: Generated<boolean>;
   stackTrace: string;
   surveyId: Int8 | null;
-  surveyStateJson: Json;
+  surveyStateJson: SurveyState;
   updatedAt: Timestamp;
   userId: Int8 | null;
 }
@@ -46,31 +55,31 @@ export interface ExternalTestUsers {
 }
 
 export interface Faqs {
-  content: Json;
+  content: FAQSection[];
   createdAt: Timestamp;
   id: Generated<Int8>;
   name: string;
   ownerId: Int8 | null;
   updatedAt: Timestamp;
-  visibility: Generated<string>;
+  visibility: Generated<RecordVisibility>;
 }
 
 export interface FeedbackSchemes {
-  cards: Generated<Json>;
+  cards: Generated<Card[]>;
   createdAt: Timestamp;
-  demographicGroups: Generated<Json>;
-  henryCoefficients: Generated<Json>;
+  demographicGroups: Generated<DemographicGroup[]>;
+  henryCoefficients: Generated<HenryCoefficient[]>;
   id: Generated<Int8>;
-  meals: Json;
+  meals: FeedbackMeals;
   name: string;
-  outputs: Generated<Json>;
+  outputs: Generated<FeedbackOutput[]>;
   ownerId: Int8 | null;
-  physicalDataFields: Generated<Json>;
-  sections: Generated<Json>;
-  topFoods: Json;
-  type: string;
+  physicalDataFields: Generated<FeedbackPhysicalDataField[]>;
+  sections: Generated<FeedbackSection[]>;
+  topFoods: TopFoods;
+  type: FeedbackType;
   updatedAt: Timestamp;
-  visibility: Generated<string>;
+  visibility: Generated<RecordVisibility>;
 }
 
 export interface FixedFoodRanking {
@@ -95,13 +104,13 @@ export interface Jobs {
   errorDetails: Json | null;
   id: Generated<Int8>;
   message: string | null;
-  params: Json;
+  params: JobTypeParams;
   progress: number | null;
   returnValue: Json | null;
   stackTrace: string | null;
   startedAt: Timestamp | null;
   successful: boolean | null;
-  type: string;
+  type: JobType;
   updatedAt: Timestamp;
   userId: Int8 | null;
 }
@@ -116,7 +125,7 @@ export interface Languages {
   ownerId: Int8 | null;
   textDirection: Generated<string>;
   updatedAt: Timestamp;
-  visibility: Generated<string>;
+  visibility: Generated<RecordVisibility>;
 }
 
 export interface LanguageTranslations {
@@ -124,7 +133,7 @@ export interface LanguageTranslations {
   createdAt: Timestamp;
   id: Generated<Int8>;
   languageId: Int8 | null;
-  messages: Json;
+  messages: LocaleMessageDictionary<any>;
   section: string;
   updatedAt: Timestamp;
 }
@@ -143,7 +152,7 @@ export interface Locales {
   respondentLanguageId: string;
   textDirection: Generated<string>;
   updatedAt: Timestamp;
-  visibility: Generated<string>;
+  visibility: Generated<RecordVisibility>;
 }
 
 export interface Media {
@@ -165,10 +174,10 @@ export interface MfaAuthenticators {
   counter: Int8;
   createdAt: Timestamp;
   deviceId: Int8;
-  deviceType: string;
+  deviceType: CredentialDeviceType;
   id: string;
-  publicKey: Buffer;
-  transports: Json;
+  publicKey: Uint8Array<ArrayBuffer>;
+  transports: AuthenticatorTransportFuture[];
   updatedAt: Timestamp;
 }
 
@@ -177,7 +186,7 @@ export interface MfaDevices {
   id: Generated<Int8>;
   name: string;
   preferred: Generated<boolean>;
-  provider: string;
+  provider: MFAProvider;
   secret: string;
   updatedAt: Timestamp;
   userId: Int8;
@@ -255,7 +264,7 @@ export interface PersonalAccessTokens {
   id: Generated<Int8>;
   name: string;
   revoked: Generated<boolean>;
-  scopes: Json | null;
+  scopes: string[] | null;
   token: string;
   updatedAt: Timestamp;
   usedAt: Timestamp | null;
@@ -316,7 +325,7 @@ export interface SigninLog {
 export interface Surveys {
   allowGenUsers: boolean | null;
   authCaptcha: Generated<boolean>;
-  authModes: Generated<Json>;
+  authModes: Generated<SurveyAuthMode[]>;
   authUrlDomainOverride: string | null;
   authUrlTokenCharset: string | null;
   authUrlTokenLength: number | null;
@@ -331,19 +340,19 @@ export interface Surveys {
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: Generated<number>;
   name: string;
-  notifications: Generated<Json>;
+  notifications: Generated<Notification[]>;
   numberOfSubmissionsForFeedback: Generated<number>;
   originatingUrl: string | null;
   ownerId: Int8 | null;
-  searchSettings: Json;
-  session: Json;
+  searchSettings: SurveySearchSettings;
+  session: SessionSettings;
   slug: string;
   startDate: Timestamp;
-  state: string;
+  state: SurveyStatus;
   supportEmail: string | null;
   surveyMonkeyUrl: string | null;
   surveySchemeId: Int8;
-  surveySchemeOverrides: Json;
+  surveySchemeOverrides: SchemeOverrides;
   suspensionReason: string | null;
   updatedAt: Timestamp;
   userCustomFields: Generated<boolean>;
@@ -354,22 +363,22 @@ export interface SurveySchemePrompts {
   createdAt: Timestamp;
   id: Generated<Int8>;
   name: string;
-  prompt: Json;
+  prompt: SinglePrompt;
   promptId: string;
   updatedAt: Timestamp;
 }
 
 export interface SurveySchemes {
   createdAt: Timestamp;
-  dataExport: Generated<Json>;
+  dataExport: Generated<ExportSection[]>;
   id: Generated<Int8>;
-  meals: Generated<Json>;
+  meals: Generated<Meal[]>;
   name: string;
   ownerId: Int8 | null;
-  prompts: Json;
-  settings: Json;
+  prompts: RecallPrompts;
+  settings: SchemeSettings;
   updatedAt: Timestamp;
-  visibility: Generated<string>;
+  visibility: Generated<RecordVisibility>;
 }
 
 export interface SurveySubmissionExternalSources {
@@ -386,27 +395,27 @@ export interface SurveySubmissionFoods {
   barcode: string | null;
   brand: string | null;
   code: string;
-  customData: Json | null;
+  customData: CustomData | null;
   englishName: string;
-  fields: Json | null;
+  fields: Dictionary<string> | null;
   id: string;
   index: number;
   locale: string;
   localName: string | null;
   mealId: string;
-  nutrients: Json | null;
+  nutrients: Dictionary<number> | null;
   nutrientTableCode: string;
   nutrientTableId: string;
   parentId: string | null;
-  portionSize: Json | null;
-  portionSizeMethodId: string;
+  portionSize: PortionSizeState | null;
+  portionSizeMethodId: PortionSizeMethodId;
   readyMeal: boolean;
   reasonableAmount: boolean;
   searchTerm: string;
 }
 
 export interface SurveySubmissionMeals {
-  customData: Json | null;
+  customData: CustomData | null;
   duration: number | null;
   hours: number;
   id: string;
@@ -430,7 +439,7 @@ export interface SurveySubmissionMissingFoods {
 
 export interface SurveySubmissions {
   createdAt: Timestamp;
-  customData: Json | null;
+  customData: CustomData | null;
   endTime: Timestamp;
   id: string;
   log: string | null;
@@ -462,7 +471,7 @@ export interface Tasks {
   id: Generated<Int8>;
   job: string;
   name: string;
-  params: Json;
+  params: JobTypeParams;
   updatedAt: Timestamp;
 }
 
@@ -525,9 +534,9 @@ export interface Users {
 export interface UserSecurables {
   action: string;
   createdAt: Timestamp;
-  fields: Json | null;
+  fields: string[] | null;
   securableId: Int8;
-  securableType: string;
+  securableType: SecurableType;
   updatedAt: Timestamp;
   userId: Int8;
 }
@@ -535,8 +544,8 @@ export interface UserSecurables {
 export interface UserSubscriptions {
   createdAt: Timestamp;
   id: Generated<Int8>;
-  subscription: Json;
-  type: string;
+  subscription: Subscription;
+  type: SubscriptionType;
   updatedAt: Timestamp;
   userId: Int8;
 }
@@ -566,7 +575,7 @@ export interface UserSurveyRatings {
 export interface UserSurveySessions {
   createdAt: Timestamp;
   id: string;
-  sessionData: Json;
+  sessionData: SurveyState;
   surveyId: Int8;
   updatedAt: Timestamp;
   userId: Int8;
