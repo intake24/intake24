@@ -97,14 +97,18 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
   }
 
   /**
-   * Resolve recalculation flags based on mode and syncFields option
+   * Resolve recalculation flags based on mode and syncFields option.
+   *
+   * syncFields controls structural changes to nutrients and fields:
+   * - false: only update values of existing nutrients/fields; no add/remove
+   * - true:  full sync — add new, remove dropped, update all values
    */
   private getRecalculationFlags() {
     const { mode = 'values-only', syncFields = false } = this.params;
 
     const shouldUpdateNutrientCodes = mode === 'values-and-codes';
     const shouldSyncFields = syncFields;
-    // Auto-prune when syncing fields (note: non-synced fields are also strictly replaced/pruned in current behavior)
+    // Prune obsolete fields only when syncing (structural changes allowed)
     const shouldPruneFields = shouldSyncFields;
     const shouldSkipRecalculation = mode === 'none';
 
@@ -521,10 +525,11 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
             };
 
         // Build fields object
-        let fieldsObj: Dictionary = { ...food.fields };
+        const fieldsObj: Dictionary = { ...food.fields };
 
         if (flags.shouldSyncFields && currentMapping) {
-          // Add new fields
+          // syncFields = true: Full structural sync of fields.
+          // Add new fields from nutrientData, update existing values, and prune obsolete ones.
           // Note: nutrientData depends on the mode.
           // In values-only mode, nutrientData comes from the stored reference (old record).
           // In values-and-codes mode, it comes from the current food mapping (new record).
@@ -553,21 +558,49 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
           }
         }
         else {
-          // Standard behavior (syncFields = false):
-          // Completely replace fields with the data from the referenced nutrient record.
-          // This implicitly prunes any fields not present in the nutrient record.
-          fieldsObj = nutrientData.fields.reduce<Dictionary>((acc, { name, value }) => {
-            acc[name] = value;
-            return acc;
-          }, {});
+          // syncFields = false:
+          // Only update values of fields that already exist in the submission.
+          // Do NOT add new fields or remove existing fields (structure preserved).
+          const nutrientFieldMap = new Map(nutrientData.fields.map(f => [f.name, f.value]));
+          for (const fieldName of Object.keys(fieldsObj)) {
+            const newValue = nutrientFieldMap.get(fieldName);
+            if (newValue !== undefined) {
+              fieldsObj[fieldName] = newValue;
+            }
+            // Fields not present in nutrientData are left unchanged (not removed)
+          }
         }
 
         // Calculate nutrients
         const portionWeight = portionWeights.get(food.id) ?? 0;
-        const nutrientsObj = nutrientData.nutrients.reduce<Dictionary>((acc, { nutrientTypeId, unitsPer100g }) => {
-          acc[nutrientTypeId.toString()] = (unitsPer100g * portionWeight) / 100.0;
-          return acc;
-        }, {});
+        let nutrientsObj: Dictionary;
+
+        if (flags.shouldSyncFields) {
+          // syncFields = true: Full replacement — build entirely from nutrientData.
+          // New nutrients are added, dropped nutrients are removed.
+          nutrientsObj = nutrientData.nutrients.reduce<Dictionary>((acc, { nutrientTypeId, unitsPer100g }) => {
+            acc[nutrientTypeId.toString()] = (unitsPer100g * portionWeight) / 100.0;
+            return acc;
+          }, {});
+        }
+        else {
+          // syncFields = false: Only recalculate nutrients already present in the submission.
+          // Do NOT add new nutrients. Unresolvable nutrients (no longer in source) are zeroed out.
+          const sourceNutrientMap = new Map(
+            nutrientData.nutrients.map(n => [n.nutrientTypeId.toString(), n.unitsPer100g]),
+          );
+          nutrientsObj = { ...food.nutrients };
+          for (const nutrientId of Object.keys(nutrientsObj)) {
+            const unitsPer100g = sourceNutrientMap.get(nutrientId);
+            if (unitsPer100g !== undefined) {
+              nutrientsObj[nutrientId] = (unitsPer100g * portionWeight) / 100.0;
+            }
+            else {
+              // Nutrient no longer in source record — zero out
+              nutrientsObj[nutrientId] = 0;
+            }
+          }
+        }
 
         // Build update record
         const record: UpdateRecord = {
