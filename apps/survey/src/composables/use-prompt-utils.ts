@@ -55,7 +55,7 @@ export function usePromptUtils<
 
   const type = computed(() => promptType(props.prompt.component));
 
-  const recipeBuilderEnabled = computed(() => type.value === 'foodSearch' && survey.registeredPortionSizeMethods.includes('recipe-builder'));
+  const foodBuilderEnabled = computed(() => type.value === 'foodSearch' && !!survey.registeredFoodBuilder.length);
 
   const params = computed(() => {
     const build: Record<string, string | number> = {
@@ -148,7 +148,7 @@ export function usePromptUtils<
     isInMultiPrompt,
     mealName,
     params,
-    recipeBuilderEnabled,
+    foodBuilderEnabled,
     translatePrompt,
     type,
   };

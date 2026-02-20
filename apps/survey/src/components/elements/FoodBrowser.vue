@@ -235,7 +235,7 @@ const props = defineProps({
 const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'foodBuilder', 'update:modelValue', 'foodSkipped']);
 const goTo = useGoTo();
 
-const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
+const { foodBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
 const { i18n: { t } } = useI18n();
 
 const searchTerm = ref(props.modelValue);
@@ -438,7 +438,7 @@ async function search() {
         search_results_count: searchResults.value.foods.length,
         percent_scrolled: percentScrolled.value,
       });
-      if (recipeBuilderEnabled.value && foodBuilderFoods.value.length > 0 && (!props.rootCategory || !limitToRootCategory.value))
+      if (foodBuilderEnabled.value && foodBuilderFoods.value.length > 0 && (!props.rootCategory || !limitToRootCategory.value))
         await foodBuilderDetected(foodBuilderFoods.value);
       requestFailed.value = false;
     }
