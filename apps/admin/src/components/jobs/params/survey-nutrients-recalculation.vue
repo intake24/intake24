@@ -59,12 +59,11 @@
         color="warning"
         variant="tonal"
       >
-        <v-alert-title>Important: Data Changes</v-alert-title>
+        <v-alert-title>Important: Mapping Changes</v-alert-title>
         <div class="text-body-2">
-          This will update nutrient composition codes in submitted data. This may affect:
-          <ul class="mt-2">
+          This will update submitted data using new nutrient codes in the NDB. This may affect:
+          <ul class="mt-2 list-disc pl-4">
             <li>Historical data comparability</li>
-            <li>Audit trails and data provenance</li>
             <li>Previously exported datasets</li>
           </ul>
           Consider backing up data before proceeding.
