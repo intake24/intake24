@@ -152,7 +152,7 @@ async function initDefaultData(db: KyselyDatabases) {
         localName,
         countryFlagCode,
         textDirection,
-        visibility: 'public',
+        visibility: 'public' as const,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -247,10 +247,10 @@ async function initDefaultData(db: KyselyDatabases) {
 
   await db.system.insertInto('surveySchemes').values({
     name: 'Default',
-    settings: JSON.stringify(defaultSchemeSettings),
-    meals: JSON.stringify(defaultMeals),
-    prompts: JSON.stringify(prompts),
-    dataExport: JSON.stringify(defaultExport),
+    settings: defaultSchemeSettings,
+    meals: defaultMeals,
+    prompts,
+    dataExport: defaultExport,
     createdAt: new Date(),
     updatedAt: new Date(),
   }).executeTakeFirst();
