@@ -154,9 +154,9 @@ export function food() {
           where: { id: localeId },
         });
 
-        const categories = await cachedParentCategoriesService.getFoodAllCategories(foodId);
+        const { ids } = await cachedParentCategoriesService.getFoodAllCategories(foodId);
 
-        return { status: 200, body: categories };
+        return { status: 200, body: ids };
       },
     },
   });

@@ -31,10 +31,10 @@ export function food() {
     },
     categories: async ({ params, req }) => {
       const { code, localeId } = params;
-      const categories
-        = await req.scope.cradle.cachedParentCategoriesService.getFoodAllCategoryCodes({ code, localeId });
+      const { codes }
+        = await req.scope.cradle.cachedParentCategoriesService.getFoodAllCategories({ code, localeId });
 
-      return { status: 200, body: categories };
+      return { status: 200, body: codes };
     },
     search: async ({ params, query, req }) => {
       const { description, matchScoreWeight, rankingAlgorithm, hidden, category: limitToCategory, limit, previous, recipe } = query;

@@ -22,8 +22,7 @@ export type ItemTransform = {
   category: Category;
   dat: {
     attributes: Record<string, InheritableAttributes | null>;
-    categoryIds: string[];
-    categoryCodes: string[];
+    categories: { ids: string[]; codes: string[] };
     portionSizeMethods: (CategoryPortionSizeMethod | FoodPortionSizeMethod)[];
   };
 };
@@ -105,8 +104,8 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
       { label: 'Attr: Same As Before (Effective)', value: 'sameAsBeforeOptionEffective' },
       { label: 'Attr: Reasonable Amount (Effective)', value: 'reasonableAmountEffective' },
       { label: 'Attr: Use In Recipes (Effective)', value: 'useInRecipesEffective' },
-      { label: 'Category IDs', value: 'categoryIds' },
-      { label: 'Category Codes', value: 'categoryCodes' },
+      { label: 'Parent category IDs', value: 'categoryIds' },
+      { label: 'Parent category Codes', value: 'categoryCodes' },
       { label: 'Portion Size methods', value: 'portionSizeMethods' },
     ];
 
@@ -134,16 +133,15 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
       ],
       order: [['code', 'asc']],
       transform: async (category: Category) => {
-        const [attributes, categoryIds, categoryCodes, portionSizeMethods] = await Promise.all([
+        const [attributes, categories, portionSizeMethods] = await Promise.all([
           this.inheritableAttributesService.getCategoryAttributes([category.id]),
           this.cachedParentCategoriesService.getCategoryAllCategories(category.id),
-          this.cachedParentCategoriesService.getCategoryAllCategoryCodes(category.id),
           category.portionSizeMethods?.length
             ? this.portionSizeMethodsService.getCategoryPortionSizeMethods(category.id)
             : [],
         ]);
 
-        return { category, dat: { attributes, categoryIds, categoryCodes, portionSizeMethods } };
+        return { category, dat: { attributes, categories, portionSizeMethods } };
       },
     });
 
@@ -163,7 +161,7 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
               portionSizeMethods: categoryPSMs = [],
               tags,
             } = category;
-            const { attributes: datAttributes, categoryIds, categoryCodes, portionSizeMethods: datPSMs } = dat;
+            const { attributes: datAttributes, categories, portionSizeMethods: datPSMs } = dat;
 
             return {
               id,
@@ -186,8 +184,8 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
                     datAttributes[id]?.useInRecipes as number
                   ]
                 : 'N/A',
-              categoryIds: categoryIds.toSorted().join(', '),
-              categoryCodes: categoryCodes.toSorted().join(', '),
+              categoryIds: categories.ids.join(', '),
+              categoryCodes: categories.codes.join(', '),
               portionSizeMethods: (categoryPSMs.length ? categoryPSMs : datPSMs)
                 .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
                 .map((psm) => {

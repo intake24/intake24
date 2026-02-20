@@ -1,7 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
 
-import { Category, Food } from '@intake24/db';
-
 import {
   getCategoryParentCategories as localGetCategoryParentCategories,
   getFoodParentCategories as localGetFoodParentCategories,
@@ -10,7 +8,8 @@ import {
 function cachedParentCategoriesService({
   cache,
   cacheConfig,
-}: Pick<IoC, 'cache' | 'cacheConfig'>) {
+  kyselyDb,
+}: Pick<IoC, 'cache' | 'cacheConfig' | 'kyselyDb'>) {
   async function getFoodParentCategories(foodId: string): Promise<string[]> {
     return cache.remember<string[]>(
       `food-parent-categories:${foodId}`,
@@ -27,94 +26,107 @@ function cachedParentCategoriesService({
     );
   }
 
-  async function getFoodAllCategories(foodId: string): Promise<string[]> {
-    return cache.remember<string[]>(
-      `food-all-categories:${foodId}`,
-      cacheConfig.ttl,
-      async () => {
-        let nextLevel = await getFoodParentCategories(foodId);
-        const allCategories = new Set<string>();
-
-        while (nextLevel.length > 0) {
-          nextLevel.forEach(code => allCategories.add(code));
-          nextLevel = await Promise.all(nextLevel.map(getCategoryParentCategories)).then(x =>
-            x.flat(),
-          );
-        }
-
-        return [...allCategories];
-      },
-    );
-  }
-
-  async function getFoodAllCategoryCodes(ops: string | { code: string; localeId: string }): Promise<string[]> {
+  async function getFoodAllCategories(ops: string | { code: string; localeId: string }): Promise<{ ids: string[]; codes: string[] }> {
     let foodId: string;
-
     if (typeof ops !== 'string') {
-      const food = await Food.findOne({ where: ops, attributes: ['id', 'code', 'localeId'] });
-      if (!food)
-        return [];
-
+      const food = await kyselyDb.foods
+        .selectFrom('foods')
+        .select(['id', 'code', 'localeId'])
+        .where('code', '=', ops.code)
+        .where('localeId', '=', ops.localeId)
+        .executeTakeFirstOrThrow();
       foodId = food.id;
     }
     else {
       foodId = ops;
     }
 
-    return cache.remember<string[]>(
-      `food-all-category-codes:${foodId}`,
+    return cache.remember<{ ids: string[]; codes: string[] }>(
+      `food-all-categories:${foodId}`,
       cacheConfig.ttl,
       async () => {
-        const id = await getFoodAllCategories(foodId);
-        const categories = await Category.findAll({ where: { id }, attributes: ['code'] });
+        const records = await kyselyDb.foods.withRecursive('rows', qb =>
+          qb.selectFrom('foods as f')
+            .innerJoin('foodsCategories as fc', 'f.id', 'fc.foodId')
+            .innerJoin('categories as c', 'fc.categoryId', 'c.id')
+            .select(['c.id', 'c.code'])
+            .where('f.id', '=', foodId)
+            .unionAll(qb =>
+              qb.selectFrom('categoriesCategories as cc')
+                .innerJoin('categories as c', 'cc.categoryId', 'c.id')
+                .innerJoin('rows', 'rows.id', 'cc.subCategoryId')
+                .select(['c.id', 'c.code']),
+            ))
+          .selectFrom('rows')
+          .selectAll()
+          .orderBy('rows.id')
+          .execute();
 
-        return categories.map(category => category.code);
+        const categories = records.reduce<{ ids: string[]; codes: string[] }>(
+          (acc, { id, code }) => {
+            acc.ids.push(id);
+            acc.codes.push(code);
+            return acc;
+          },
+          { ids: [], codes: [] },
+        );
+
+        return {
+          ids: categories.ids,
+          codes: categories.codes.toSorted(),
+        };
       },
     );
   }
 
-  async function getCategoryAllCategories(categoryId: string): Promise<string[]> {
-    return cache.remember<string[]>(
-      `category-all-categories:${categoryId}`,
-      cacheConfig.ttl,
-      async () => {
-        let nextLevel = await getCategoryParentCategories(categoryId);
-        const allCategories = new Set<string>();
-
-        while (nextLevel.length > 0) {
-          nextLevel.forEach(code => allCategories.add(code));
-          nextLevel = await Promise.all(nextLevel.map(getCategoryParentCategories)).then(x =>
-            x.flat(),
-          );
-        }
-
-        return [...allCategories];
-      },
-    );
-  }
-
-  async function getCategoryAllCategoryCodes(ops: string | { code: string; localeId: string }): Promise<string[]> {
+  async function getCategoryAllCategories(ops: string | { code: string; localeId: string }): Promise<{ ids: string[]; codes: string[] }> {
     let categoryId: string;
-
     if (typeof ops !== 'string') {
-      const category = await Category.findOne({ where: ops, attributes: ['id', 'code', 'localeId'] });
-      if (!category)
-        return [];
-
-      categoryId = category.id;
+      const food = await kyselyDb.foods
+        .selectFrom('categories')
+        .select('id')
+        .where('code', '=', ops.code)
+        .where('localeId', '=', ops.localeId)
+        .executeTakeFirstOrThrow();
+      categoryId = food.id;
     }
     else {
       categoryId = ops;
     }
 
-    return cache.remember<string[]>(
-      `category-all-category-codes:${categoryId}`,
+    return cache.remember<{ ids: string[]; codes: string[] }>(
+      `category-all-categories:${categoryId}`,
       cacheConfig.ttl,
       async () => {
-        const id = await getCategoryAllCategories(categoryId);
-        const categories = await Category.findAll({ where: { id }, attributes: ['code'] });
+        const records = await kyselyDb.foods.withRecursive('rows', qb =>
+          qb.selectFrom('categoriesCategories as cc')
+            .innerJoin('categories as c', 'cc.categoryId', 'c.id')
+            .select(['c.id', 'c.code'])
+            .where('cc.subCategoryId', '=', categoryId)
+            .unionAll(qb =>
+              qb.selectFrom('categoriesCategories as cc')
+                .innerJoin('categories as c', 'cc.categoryId', 'c.id')
+                .innerJoin('rows', 'rows.id', 'cc.subCategoryId')
+                .select(['c.id', 'c.code']),
+            ))
+          .selectFrom('rows')
+          .selectAll()
+          .orderBy('rows.id')
+          .execute();
 
-        return categories.map(category => category.code);
+        const categories = records.reduce<{ ids: string[]; codes: string[] }>(
+          (acc, { id, code }) => {
+            acc.ids.push(id);
+            acc.codes.push(code);
+            return acc;
+          },
+          { ids: [], codes: [] },
+        );
+
+        return {
+          ids: categories.ids,
+          codes: categories.codes.toSorted(),
+        };
       },
     );
   }
@@ -123,9 +135,7 @@ function cachedParentCategoriesService({
     getFoodParentCategories,
     getCategoryParentCategories,
     getFoodAllCategories,
-    getFoodAllCategoryCodes,
     getCategoryAllCategories,
-    getCategoryAllCategoryCodes,
   };
 }
 

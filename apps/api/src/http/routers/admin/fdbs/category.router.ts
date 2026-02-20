@@ -139,9 +139,9 @@ export function category() {
           where: { id: localeId },
         });
 
-        const categories = await cachedParentCategoriesService.getCategoryAllCategories(categoryId);
+        const { ids } = await cachedParentCategoriesService.getCategoryAllCategories(categoryId);
 
-        return { status: 200, body: categories };
+        return { status: 200, body: ids };
       },
     },
     contents: {

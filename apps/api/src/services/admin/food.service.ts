@@ -21,7 +21,6 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
       `food-entry:${foodId}`,
       `food-entry:${localeId}:${foodCode}`,
       `food-all-categories:${foodId}`,
-      `food-all-category-codes:${foodId}`,
       `food-parent-categories:${foodId}`,
     ];
   }

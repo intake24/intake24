@@ -22,8 +22,7 @@ export type ItemTransform = {
   food: Food;
   dat: {
     attributes: Record<string, InheritableAttributes | null>;
-    categoryIds: string[];
-    categoryCodes: string[];
+    categories: { ids: string[]; codes: string[] };
     portionSizeMethods: (CategoryPortionSizeMethod | FoodPortionSizeMethod)[];
   };
 };
@@ -149,16 +148,15 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
       ],
       order: [['code', 'asc']],
       transform: async (food: Food) => {
-        const [attributes, categoryIds, categoryCodes, portionSizeMethods] = await Promise.all([
+        const [attributes, categories, portionSizeMethods] = await Promise.all([
           this.inheritableAttributesService.getFoodAttributes([food.id]),
           this.cachedParentCategoriesService.getFoodAllCategories(food.id),
-          this.cachedParentCategoriesService.getFoodAllCategoryCodes(food.id),
           food.portionSizeMethods?.length
             ? this.portionSizeMethodsService.resolvePortionSizeMethods(food)
             : [],
         ]);
 
-        return { food, dat: { attributes, categoryIds, categoryCodes, portionSizeMethods } };
+        return { food, dat: { attributes, categories, portionSizeMethods } };
       },
     });
 
@@ -182,7 +180,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
               portionSizeMethods: foodPSMs = [],
               tags,
             } = food;
-            const { attributes: datAttributes, categoryIds, categoryCodes, portionSizeMethods: datPSMs } = dat;
+            const { attributes: datAttributes, categories, portionSizeMethods: datPSMs } = dat;
 
             return {
               id,
@@ -218,8 +216,8 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
                 )
                 .toSorted()
                 .join(', '),
-              categoryIds: categoryIds.toSorted().join(', '),
-              categoryCodes: categoryCodes.toSorted().join(', '),
+              categoryIds: categories.ids.join(', '),
+              categoryCodes: categories.codes.join(', '),
               brands: brands.map(({ name }) => name).toSorted().join(', '),
               portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
                 .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
