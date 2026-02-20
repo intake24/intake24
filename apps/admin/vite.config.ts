@@ -77,6 +77,8 @@ export default defineConfig(({ mode }) => {
               return 'json-editor';
             if (id.includes('tinymce'))
               return 'tinymce';
+            if (id.includes('vuetify'))
+              return 'vuetify';
           },
         },
       },
