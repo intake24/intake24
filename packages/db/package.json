@@ -42,7 +42,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@simplewebauthn/server": "^13.2.2",
+    "@simplewebauthn/server": "^13.2.3",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.10.13",
     "@types/pg": "^8.16.0",

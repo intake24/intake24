@@ -54,7 +54,7 @@
     "@types/node": "^24.10.13",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
-    "@typescript/native-preview": "7.0.0-dev.20260216.1",
+    "@typescript/native-preview": "7.0.0-dev.20260221.1",
     "tsdown": "^0.20.3",
     "typescript": "^5.9.3"
   }
