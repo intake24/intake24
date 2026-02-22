@@ -99,7 +99,7 @@ export default defineComponent({
       SurveyRatingsExport: { surveyId: props.id },
       SurveyRespondentsImport: { surveyId: props.id, file: '' },
       SurveySessionsExport: { surveyId: props.id },
-    }) as unknown as Pick<JobParams, SurveyJob>);
+    }) as unknown as Pick<JobParams, SurveyJob>); // Type assertion as suggested by TypeScript error message
 
     const disabledJobParams = {
       SurveyAuthUrlsExport: { surveyId: true },

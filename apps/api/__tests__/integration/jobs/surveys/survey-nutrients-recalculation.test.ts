@@ -19,7 +19,10 @@ import {
 } from '@intake24/db';
 
 export default () => {
-  const createMockBullJob = (dbJobId: string, params: { surveyId: string; mode: string; syncFields?: boolean }): BullJob => {
+  type RecalculationMode = 'none' | 'values-only' | 'values-and-codes';
+  type RecalculationJobParams = { surveyId: string; mode: RecalculationMode; syncFields?: boolean };
+
+  const createMockBullJob = (dbJobId: string, params: RecalculationJobParams): BullJob => {
     return {
       id: `db-${dbJobId}`,
       data: { params },
@@ -112,6 +115,28 @@ export default () => {
     const localeId = 'en_GB';
     const userId = () => suite.data.system.user.id;
     const surveyId = () => suite.data.system.Survey.id;
+
+    const runRecalculationJob = async (params: RecalculationJobParams) => {
+      const createdDbJob = await DbJob.create({
+        type: 'SurveyNutrientsRecalculation',
+        userId: userId(),
+        params,
+      });
+      dbJob = createdDbJob;
+
+      const job = ioc.resolve('SurveyNutrientsRecalculation');
+      const mockBullJob = createMockBullJob(createdDbJob.id, params);
+
+      await job.run(mockBullJob);
+
+      return { mockBullJob, dbJob: createdDbJob };
+    };
+
+    const expectFoodIdentityUnchanged = (refreshed: SurveySubmissionFood | null, foodCode: string) => {
+      expect(refreshed?.code).toBe(foodCode);
+      expect(refreshed?.englishName).toBe('Test Food English');
+      expect(refreshed?.localName).toBe('Test Food');
+    };
 
     afterEach(async () => {
       await cleanupRecords([
@@ -249,16 +274,7 @@ export default () => {
       });
 
       // Run job in `none` mode (dry-run)
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'none' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'none' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'none' });
 
       // Verify nothing changed
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
@@ -267,9 +283,45 @@ export default () => {
       expect(refreshed?.nutrientTableCode).toBe(initialCode);
       expect(refreshed?.nutrients).toEqual(initialNutrients);
       expect(refreshed?.fields).toEqual(initialFields);
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
+    });
+
+    it('completes with summary when there are no submission records', async () => {
+      const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+
+      await createdDbJob.reload();
+
+      expect(createdDbJob.message).toContain('Total: 0');
+      expect(createdDbJob.message).toContain('Updated: 0');
+      expect(createdDbJob.message).toContain('Skipped: 0');
+      expect(mockBullJob.updateProgress).not.toHaveBeenCalled();
+    });
+
+    it('completes with summary when submissions have no foods', async () => {
+      const submission = await SurveySubmission.create(mocker.system.submission(surveyId(), userId())) as SurveySubmission;
+      const meal = await SurveySubmissionMeal.create({
+        id: randomUUID(),
+        surveySubmissionId: submission.id,
+        hours: 12,
+        minutes: 30,
+        name: 'Lunch',
+        duration: null,
+        customData: {},
+      });
+
+      try {
+        const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+
+        await createdDbJob.reload();
+
+        expect(createdDbJob.message).toContain('Total: 0');
+        expect(createdDbJob.message).toContain('Updated: 0');
+        expect(createdDbJob.message).toContain('Skipped: 0');
+        expect(mockBullJob.updateProgress).not.toHaveBeenCalled();
+      }
+      finally {
+        await cleanupRecords([meal, submission]);
+      }
     });
 
     it('values-only keeps stored nutrient codes', async () => {
@@ -278,16 +330,7 @@ export default () => {
       // Switch mapping to record B after submission
       await foodNutrient!.update({ nutrientTableRecordId: recordB!.id });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-only' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -295,9 +338,7 @@ export default () => {
       expect(refreshed?.nutrientTableCode).toBe('A');
       expect(refreshed?.nutrients).toEqual({ 1: 50 });
       expect(refreshed?.fields).toEqual({ sub_group_code: '62R' });
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     it('values-only w/o syncFields updates nutrient values when underlying record changes', async () => {
@@ -308,16 +349,7 @@ export default () => {
       // Update underlying field value - change '62R' -> '62R_v2'
       await recordAField!.update({ value: '62R_v2' });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-only' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -326,9 +358,7 @@ export default () => {
       expect(refreshed?.nutrientTableCode).toBe('A');
       expect(refreshed?.nutrients).toEqual({ 1: 75 });
       expect(refreshed?.fields).toEqual({ sub_group_code: '62R_v2' });
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     /**
@@ -359,25 +389,14 @@ export default () => {
       // Simulate dropping nutrient type 2 from the nutrient table
       await recordANutrient2.destroy();
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-only' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
       expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
       expect(refreshed?.nutrientTableCode).toBe('A');
       expect(refreshed?.nutrients).toEqual({ 1: 50, 2: 0 }); // Nutrient type 1 recalculated; type 2 zeroed out (unresolvable), NOT removed
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     /**
@@ -396,24 +415,13 @@ export default () => {
       // Delete the nutrient record (simulate dropped variable)
       await recordA!.destroy();
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-only' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
 
       // Verify nutrients and fields are cleared
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
       expect(refreshed?.nutrients).toEqual({});
       expect(refreshed?.fields).toEqual({});
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     /**
@@ -432,25 +440,14 @@ export default () => {
         unitsPer100g: 150,
       });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-only' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
       expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
       expect(refreshed?.nutrientTableCode).toBe('A');
       expect(refreshed?.nutrients).toEqual({ 1: 50 }); // Only existing nutrient type 1 is recalculated; type 2 NOT added
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     /**
@@ -472,16 +469,7 @@ export default () => {
         nutrientTableRecordId: recordB!.id,
       });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-only', syncFields: true },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only', syncFields: true });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only', syncFields: true });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -490,9 +478,7 @@ export default () => {
       expect(refreshed?.nutrientTableCode).toBe('A');
       expect(refreshed?.nutrients).toEqual({ 1: 90 });// Updates values based on A's new state (90)
       expect(refreshed?.fields).toEqual({ sub_group_code: '62R_v2' });
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     /**
@@ -500,7 +486,7 @@ export default () => {
      * When a new nutrient variable is added to the underlying record and syncFields=true,
      * the new nutrient should appear in the submission after recalculation.
      */
-    it('values-only + syncFields adds new nutrients when underlying nurtrient table record adds them', async () => {
+    it('values-only + syncFields adds new nutrients when underlying nutrient table record adds them', async () => {
       const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
 
       // Add a second nutrient to record A (submission only has type 1)
@@ -514,25 +500,14 @@ export default () => {
       const current = await SurveySubmissionFood.findByPk(submissionFood!.id);
       expect(current?.nutrients).toEqual({ 1: 100 });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-only', syncFields: true },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only', syncFields: true });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only', syncFields: true });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
       expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
       expect(refreshed?.nutrientTableCode).toBe('A');
       expect(refreshed?.nutrients).toEqual({ 1: 50, 2: 150 }); // syncFields=true: both nutrients present (type 2 added)
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     /**
@@ -558,25 +533,14 @@ export default () => {
       // Drop nutrient type 2 from record A
       await recordANutrient2.destroy();
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-only', syncFields: true },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-only', syncFields: true });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only', syncFields: true });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
       expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
       expect(refreshed?.nutrientTableCode).toBe('A');
       expect(refreshed?.nutrients).toEqual({ 1: 50 }); // syncFields=true: nutrient type 2 fully removed (not zeroed)
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     it('values-and-codes w/o syncFields updates nutrient codes to current food-nutrient mapping', async () => {
@@ -590,16 +554,7 @@ export default () => {
       });
       expect(foodNutrient.nutrientTableRecordId === recordB!.id, 'FoodNutrient mapping should be to record B');
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-and-codes' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-and-codes' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -607,9 +562,7 @@ export default () => {
       expect(refreshed?.nutrientTableCode).toBe('B');
       expect(refreshed?.nutrients).toEqual({ 1: 200 });
       expect(refreshed?.fields).toEqual({ sub_group_code: '37L' });
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     /**
@@ -634,16 +587,7 @@ export default () => {
         nutrientTableRecordId: recordB!.id,
       });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-and-codes' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-and-codes' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -651,9 +595,7 @@ export default () => {
       expect(refreshed?.nutrientTableCode).toBe('B');
       expect(refreshed?.nutrients).toEqual({ 1: 200 }); // Nutrient 1 recalculated from B (200); nutrient 2 NOT added (syncFields=false)
       expect(refreshed?.fields).toEqual({ sub_group_code: '37L' }); // existing field value updated from B
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
 
       // Cleanup extra nutrient
       await recordBNutrient2.destroy();
@@ -679,25 +621,14 @@ export default () => {
         nutrientTableRecordId: recordB!.id,
       });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-and-codes' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-and-codes' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
       expect(refreshed?.nutrientTableId).toBe(nutrientTableId);
       expect(refreshed?.nutrientTableCode).toBe('B');
       expect(refreshed?.nutrients).toEqual({ 1: 200, 2: 0 }); // Nutrient 1 recalculated from B; nutrient 2 zeroed out (not in B)
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
     it('values-and-codes w/o syncFields does clear nutrients and fields when food-nutrient mapping is removed', async () => {
@@ -706,24 +637,13 @@ export default () => {
       // Remove the nutrient mapping (food still exists, but no nutrient association)
       await foodNutrient!.destroy();
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-and-codes' },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-and-codes' });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
 
       // Verify nutrients and fields are cleared
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
       expect(refreshed?.nutrients).toEqual({});
       expect(refreshed?.fields).toEqual({});
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
     });
     it('values-and-codes + syncFields recalculates nutrients, mappings and add nutrient types to submission', async () => {
       const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
@@ -746,16 +666,7 @@ export default () => {
         englishName: 'Renamed Food',
       });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-and-codes', syncFields: true },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -763,9 +674,7 @@ export default () => {
       expect(refreshed?.nutrientTableCode).toBe('B');
       expect(refreshed?.nutrients).toEqual({ 1: 200, 2: 300 }); // syncFields=true: both nutrients present (type 2 added)
       expect(refreshed?.fields).toEqual({ sub_group_code: '37L' });
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
 
       // Cleanup extra nutrient
       await recordBNutrient2.destroy();
@@ -795,16 +704,7 @@ export default () => {
         englishName: 'Renamed Food',
       });
 
-      dbJob = await DbJob.create({
-        type: 'SurveyNutrientsRecalculation',
-        userId: userId(),
-        params: { surveyId: surveyId(), mode: 'values-and-codes', syncFields: true },
-      });
-
-      const job = ioc.resolve('SurveyNutrientsRecalculation');
-      const mockBullJob = createMockBullJob(dbJob.id, { surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
-
-      await job.run(mockBullJob);
+      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -812,12 +712,49 @@ export default () => {
       expect(refreshed?.nutrientTableCode).toBe('B');
       expect(refreshed?.nutrients).toEqual({ 2: 300 }); // syncFields=true: nutrient type 1 removed (not in B); nutrient 2 added
       expect(refreshed?.fields).toEqual({ sub_group_code: '37L' });
-      expect(refreshed?.code).toBe(foodCode);
-      expect(refreshed?.englishName).toBe('Test Food English');
-      expect(refreshed?.localName).toBe('Test Food');
+      expectFoodIdentityUnchanged(refreshed, foodCode);
 
       // Cleanup extra nutrient
       await recordBNutrient2.destroy();
+    });
+
+    it('recalculates in batches when there are more than 100 submission foods', async () => {
+      const { nutrientTableId, foodCode } = await setupFoodAndNutrients();
+
+      const totalFoods = 120;
+      const extraFoods = totalFoods - 1;
+      const extraRecords: Array<{ destroy: () => Promise<unknown> }> = [];
+
+      try {
+        for (let i = 0; i < extraFoods; i++) {
+          const extra = await createSubmissionData({
+            surveyId: surveyId(),
+            userId: userId(),
+            localeId,
+            foodCode,
+            foodEnglishName: 'Test Food English',
+            foodLocalName: 'Test Food',
+            nutrientTableId,
+            nutrientTableCode: recordA!.nutrientTableRecordId,
+          });
+
+          extraRecords.push(extra.food, extra.meal, extra.submission);
+        }
+
+        const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+
+        await createdDbJob.reload();
+
+        expect(createdDbJob.message).toContain(`Total: ${totalFoods}`);
+        expect(createdDbJob.message).toContain(`Updated: ${totalFoods}`);
+        expect(mockBullJob.updateProgress).toHaveBeenCalledTimes(2);
+        const progressSpy = mockBullJob.updateProgress as ReturnType<typeof vi.fn>;
+        expect(progressSpy.mock.calls[0][0]).toBeCloseTo(100 / totalFoods, 4);
+        expect(progressSpy.mock.calls[1][0]).toBeCloseTo(1, 4);
+      }
+      finally {
+        await cleanupRecords(extraRecords);
+      }
     });
   });
 };
