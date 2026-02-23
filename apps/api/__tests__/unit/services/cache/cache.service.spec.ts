@@ -37,35 +37,35 @@ describe('cache', () => {
   });
 
   it('set and get multiple items without an expiration time', async () => {
-    const data = { 'food-attributes:a': 1, 'food-attributes:b': 2, 'food-attributes:c': 3 };
+    const data = { 'food-parent-cache:a': 1, 'food-parent-cache:b': 2, 'food-parent-cache:c': 3 };
 
     await cache.mset(data);
     const cached = await cache.mget<number>([
-      'food-attributes:a',
-      'food-attributes:b',
-      'food-attributes:c',
+      'food-parent-cache:a',
+      'food-parent-cache:b',
+      'food-parent-cache:c',
     ]);
 
     expect(cached).toEqual([1, 2, 3]);
   });
 
   it('set and get multiple items with an expiration time', async () => {
-    const data = { 'food-attributes:d': 1, 'food-attributes:e': 2, 'food-attributes:f': 3 };
+    const data = { 'food-parent-cache:d': 1, 'food-parent-cache:e': 2, 'food-parent-cache:f': 3 };
 
     await cache.mset(data, 0.2);
     const cached = await cache.mget<number>([
-      'food-attributes:d',
-      'food-attributes:e',
-      'food-attributes:f',
+      'food-parent-cache:d',
+      'food-parent-cache:e',
+      'food-parent-cache:f',
     ]);
     expect(cached).toEqual([1, 2, 3]);
 
     await delay(300);
 
     const cachedAfterDelay = await cache.mget<number>([
-      'food-attributes:d',
-      'food-attributes:e',
-      'food-attributes:f',
+      'food-parent-cache:d',
+      'food-parent-cache:e',
+      'food-parent-cache:f',
     ]);
     expect(cachedAfterDelay).toEqual([null, null, null]);
   });
@@ -73,7 +73,7 @@ describe('cache', () => {
   it('remember many - fetch missing', async () => {
     const stage1 = await cache.rememberMany(
       ['one', 'two'],
-      'food-attributes',
+      'food-parent-cache',
       60,
       (keys: string[]) => getData(keys, ['one', 'two']),
     );
@@ -82,7 +82,7 @@ describe('cache', () => {
 
     const stage2 = await cache.rememberMany(
       ['one', 'two', 'three', 'four', 'five'],
-      'food-attributes',
+      'food-parent-cache',
       60,
       (keys: string[]) => getData(keys, ['three', 'four', 'five']),
     );
@@ -93,7 +93,7 @@ describe('cache', () => {
   it('remember many - no data available', async () => {
     const response = await cache.rememberMany(
       ['something'],
-      'food-attributes',
+      'food-parent-cache',
       60,
       (keys: string[]) => getData(keys, ['something']),
     );
@@ -102,7 +102,7 @@ describe('cache', () => {
   });
 
   it('remember many - should not crash on empty input', async () => {
-    const response = await cache.rememberMany([], 'food-attributes', 60, (keys: string[]) =>
+    const response = await cache.rememberMany([], 'food-parent-cache', 60, (keys: string[]) =>
       getData(keys, []));
 
     expect(response).toEqual({});

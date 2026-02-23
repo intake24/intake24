@@ -6,7 +6,7 @@
 import type { ColumnType } from 'kysely';
 
 import type { PortionSizeParameter } from '@intake24/common/surveys';
-import type { LocaleTranslation, LocaleTranslations, RequiredLocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation, LocaleTranslations, RequiredLocaleTranslation, UseInRecipeType } from '@intake24/common/types';
 
 export type ArrayType<T> = ArrayTypeImpl<T> extends (infer U)[]
   ? U[]
@@ -92,7 +92,7 @@ export interface CategoryAttributes {
   readyMealOption: boolean | null;
   reasonableAmount: number | null;
   sameAsBeforeOption: boolean | null;
-  useInRecipes: number | null;
+  useInRecipes: UseInRecipeType | null;
 }
 
 export interface CategoryPortionSizeMethods {
@@ -150,7 +150,7 @@ export interface FoodAttributes {
   readyMealOption: boolean | null;
   reasonableAmount: number | null;
   sameAsBeforeOption: boolean | null;
-  useInRecipes: number | null;
+  useInRecipes: UseInRecipeType | null;
 }
 
 export interface FoodPortionSizeMethods {

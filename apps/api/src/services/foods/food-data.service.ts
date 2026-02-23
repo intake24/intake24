@@ -1,16 +1,7 @@
 import type { IoC } from '@intake24/api/ioc';
-import type {
-  UserAssociatedFoodPrompt,
-  UserFoodData,
-} from '@intake24/common/types/http/foods/user-food-data';
+import type { UserAssociatedFoodPrompt, UserFoodData } from '@intake24/common/types/http/foods/user-food-data';
 
-import {
-  AssociatedFood,
-  Brand,
-  Category,
-  Food,
-  NutrientTableRecordNutrient,
-} from '@intake24/db';
+import { AssociatedFood, Brand, Food, NutrientTableRecordNutrient } from '@intake24/db';
 
 import InvalidIdError from './invalid-id-error';
 import PortionSizeMethodsImpl from './portion-size-methods.service';
@@ -18,8 +9,7 @@ import PortionSizeMethodsImpl from './portion-size-methods.service';
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;
 
-function foodDataService({ inheritableAttributesService, imagesBaseUrl, cachedParentCategoriesService }: Pick<IoC, 'inheritableAttributesService' | 'imagesBaseUrl' | 'cachedParentCategoriesService'>) {
-  const { resolveFoodAttributes } = inheritableAttributesService;
+function foodDataService({ imagesBaseUrl, cachedParentCategoriesService }: Pick<IoC, 'imagesBaseUrl' | 'cachedParentCategoriesService'>) {
   const portionSizeMethodsImpl = PortionSizeMethodsImpl(imagesBaseUrl);
 
   const getNutrientKCalPer100G = async (foodId: string): Promise<number> => {
@@ -90,34 +80,24 @@ function foodDataService({ inheritableAttributesService, imagesBaseUrl, cachedPa
     return brands.length ? brands.map(brand => brand.name) : [];
   };
 
-  const getAllTags = async (id: string[], foodTags: string[] = []) => {
-    const categories = await Category.findAll({ where: { id }, attributes: ['tags'] });
-
-    return [...new Set(categories.reduce((acc, { tags }) => acc.concat(tags), foodTags))];
-  };
-
   const getFoodData = async (ops: { id: string } | { localeId: string; code: string }): Promise<UserFoodData> => {
     const food = await Food.findOne({ where: ops });
     if (!food)
       throw new InvalidIdError(`Invalid food, locale code: ${ops.toString()}`);
 
     const { id, code, localeId } = food;
-    const categories = await cachedParentCategoriesService.getFoodAllCategories(id);
+    const { attributes, codes: categories, tags } = await cachedParentCategoriesService.getFoodCache(id);
 
     const [
       associatedFoodPrompts,
       brandNames,
-      inheritableAttributes,
       kcalPer100g,
       portionSizeMethods,
-      tags,
     ] = await Promise.all([
       getAssociatedFoodPrompts(id),
       getBrands(id),
-      resolveFoodAttributes(id),
       getNutrientKCalPer100G(id),
       portionSizeMethodsImpl.resolveUserPortionSizeMethods(id),
-      getAllTags(categories.ids, food.tags),
     ]);
 
     return {
@@ -129,8 +109,8 @@ function foodDataService({ inheritableAttributesService, imagesBaseUrl, cachedPa
       englishName: food.englishName,
       kcalPer100g,
       localName: food.name ?? food.englishName,
-      categories: categories.codes,
-      ...inheritableAttributes,
+      categories,
+      ...attributes,
       portionSizeMethods,
       tags,
     };

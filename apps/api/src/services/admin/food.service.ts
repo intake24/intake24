@@ -17,10 +17,8 @@ import { AssociatedFood, Category, Food, FoodAttribute, FoodPortionSizeMethod, O
 function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'kyselyDb'>) {
   function getFoodCacheKeys(localeId: string, foodId: string, foodCode: string): CacheKey[] {
     return [
-      `food-attributes:${foodId}`,
       `food-entry:${foodId}`,
       `food-entry:${localeId}:${foodCode}`,
-      `food-all-categories:${foodId}`,
       `food-parent-categories:${foodId}`,
     ];
   }

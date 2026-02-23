@@ -36,7 +36,6 @@ import {
   i18nService,
   i18nStore,
   imageMapService,
-  inheritableAttributesService,
   jwtRotationService,
   jwtService,
   languageService,
@@ -107,7 +106,6 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     portionSizeService: asFunction(portionSizeService).singleton(),
     categoryContentsService: asFunction(categoryContentsService).singleton(),
     cachedParentCategoriesService: asFunction(cachedParentCategoriesService).singleton(),
-    inheritableAttributesService: asFunction(inheritableAttributesService).singleton(),
 
     adminCategoryService: asFunction(adminCategoryService).singleton(),
     adminFoodService: asFunction(adminFoodService).singleton(),

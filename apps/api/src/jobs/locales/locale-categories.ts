@@ -1,7 +1,7 @@
 import type { Job } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { InheritableAttributes } from '@intake24/api/services/foods/types/inheritable-attributes';
+import type { ResolvedParentData } from '@intake24/api/services';
 import type { CategoryPortionSizeMethod, FoodPortionSizeMethod } from '@intake24/db';
 
 import { createWriteStream } from 'node:fs';
@@ -21,8 +21,7 @@ import BaseJob from '../job';
 export type ItemTransform = {
   category: Category;
   dat: {
-    attributes: Record<string, InheritableAttributes | null>;
-    categories: { ids: string[]; codes: string[] };
+    cache: ResolvedParentData;
     portionSizeMethods: (CategoryPortionSizeMethod | FoodPortionSizeMethod)[];
   };
 };
@@ -35,26 +34,22 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
   private readonly fsConfig;
 
   private readonly cachedParentCategoriesService;
-  private readonly inheritableAttributesService;
   private readonly portionSizeMethodsService;
 
   constructor({
     fsConfig,
     logger,
     cachedParentCategoriesService,
-    inheritableAttributesService,
     portionSizeMethodsService,
   }: Pick<
     IoC,
     | 'cachedParentCategoriesService'
-    | 'inheritableAttributesService'
     | 'fsConfig'
     | 'logger'
     | 'portionSizeMethodsService'
   >) {
     super({ logger });
 
-    this.inheritableAttributesService = inheritableAttributesService;
     this.fsConfig = fsConfig;
     this.cachedParentCategoriesService = cachedParentCategoriesService;
     this.portionSizeMethodsService = portionSizeMethodsService;
@@ -96,6 +91,7 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
       { label: 'English name', value: 'englishName' },
       { label: 'Local name', value: 'name' },
       { label: 'Tags', value: 'tags' },
+      { label: 'Tags (Effective)', value: 'tagsEffective' },
       { label: 'Attr: Ready Meal', value: 'readyMealOption' },
       { label: 'Attr: Same As Before', value: 'sameAsBeforeOption' },
       { label: 'Attr: Reasonable Amount', value: 'reasonableAmount' },
@@ -133,15 +129,14 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
       ],
       order: [['code', 'asc']],
       transform: async (category: Category) => {
-        const [attributes, categories, portionSizeMethods] = await Promise.all([
-          this.inheritableAttributesService.getCategoryAttributes([category.id]),
-          this.cachedParentCategoriesService.getCategoryAllCategories(category.id),
+        const [cache, portionSizeMethods] = await Promise.all([
+          this.cachedParentCategoriesService.getCategoryCache(category.id),
           category.portionSizeMethods?.length
             ? this.portionSizeMethodsService.getCategoryPortionSizeMethods(category.id)
             : [],
         ]);
 
-        return { category, dat: { attributes, categories, portionSizeMethods } };
+        return { category, dat: { cache, portionSizeMethods } };
       },
     });
 
@@ -161,7 +156,7 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
               portionSizeMethods: categoryPSMs = [],
               tags,
             } = category;
-            const { attributes: datAttributes, categories, portionSizeMethods: datPSMs } = dat;
+            const { cache, portionSizeMethods: datPSMs } = dat;
 
             return {
               id,
@@ -170,22 +165,17 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
               englishName,
               name,
               tags: tags.toSorted().join(', '),
+              tagsEffective: cache.tags.join(','),
               readyMealOption: attributes?.readyMealOption ?? 'Inherited',
               sameAsBeforeOption: attributes?.sameAsBeforeOption ?? 'Inherited',
               reasonableAmount: attributes?.reasonableAmount ?? 'Inherited',
-              useInRecipes: attributes?.useInRecipes
-                ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes]
-                : 'Inherited',
-              readyMealOptionEffective: datAttributes[id]?.readyMealOption ?? 'N/A',
-              sameAsBeforeOptionEffective: datAttributes[id]?.sameAsBeforeOption ?? 'N/A',
-              reasonableAmountEffective: datAttributes[id]?.reasonableAmount ?? 'N/A',
-              useInRecipesEffective: datAttributes[id]?.useInRecipes
-                ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][
-                    datAttributes[id]?.useInRecipes as number
-                  ]
-                : 'N/A',
-              categoryIds: categories.ids.join(', '),
-              categoryCodes: categories.codes.join(', '),
+              useInRecipes: attributes?.useInRecipes != null ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes] : 'Inherited',
+              readyMealOptionEffective: cache.attributes.readyMealOption ?? 'N/A',
+              sameAsBeforeOptionEffective: cache.attributes.sameAsBeforeOption ?? 'N/A',
+              reasonableAmountEffective: cache.attributes.reasonableAmount ?? 'N/A',
+              useInRecipesEffective: ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][cache.attributes.useInRecipes] ?? 'N/A',
+              categoryIds: cache.ids.join(', '),
+              categoryCodes: cache.codes.join(', '),
               portionSizeMethods: (categoryPSMs.length ? categoryPSMs : datPSMs)
                 .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
                 .map((psm) => {

@@ -41,7 +41,6 @@ import type {
   I18nService,
   I18nStore,
   ImageMapService,
-  InheritableAttributesService,
   JwtRotationService,
   JwtService,
   LanguageService,
@@ -177,7 +176,6 @@ export interface IoC extends PackageWritersAndJobs {
   portionSizeService: PortionSizeService;
   foodSearchService: FoodSearchService;
   cachedParentCategoriesService: CachedParentCategoriesService;
-  inheritableAttributesService: InheritableAttributesService;
 
   // Categories
   categoryContentsService: CategoryContentsService;

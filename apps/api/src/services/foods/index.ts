@@ -6,8 +6,6 @@ export * from './food-data.service';
 export { default as foodDataService } from './food-data.service';
 export * from './food-search.service';
 export { default as foodSearchService } from './food-search.service';
-export * from './inheritable-attributes-service';
-export { default as inheritableAttributesService } from './inheritable-attributes-service';
 export { default as InvalidIdError } from './invalid-id-error';
 export { default as portionSizeMethodsService } from './portion-size-methods.service';
 export * from './portion-size-methods.service';

@@ -32,7 +32,7 @@ export function food() {
     categories: async ({ params, req }) => {
       const { code, localeId } = params;
       const { codes }
-        = await req.scope.cradle.cachedParentCategoriesService.getFoodAllCategories({ code, localeId });
+        = await req.scope.cradle.cachedParentCategoriesService.getFoodCache({ code, localeId });
 
       return { status: 200, body: codes };
     },

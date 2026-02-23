@@ -16,12 +16,10 @@ export type CacheKeyPrefix
   = | typeof ACL_PAT_KEY
     | typeof ACL_PERMISSIONS_KEY
     | typeof ACL_ROLES_KEY
-    | 'category-attributes'
-    | 'category-all-categories'
     | 'category-parent-categories'
-    | 'food-attributes'
+    | 'category-parent-cache'
+    | 'food-parent-cache'
     | 'food-entry'
-    | 'food-all-categories'
     | 'food-parent-categories'
     | 'survey-search-settings'
     | 'user-submissions';
@@ -208,12 +206,16 @@ export default class Cache extends HasRedisClient {
 
     const keysToFetch = keys.filter((_, i) => cached[i] === null);
 
-    const data = await getData(keysToFetch);
+    let data: Record<string, T | null> = {};
 
-    await this.mset(
-      mapKeys(data, k => `${cacheKeyPrefix}:${k}`) as Record<CacheKey, CacheValue>,
-      ttl,
-    );
+    if (keysToFetch.length) {
+      data = await getData(keysToFetch);
+
+      await this.mset(
+        mapKeys(data, k => `${cacheKeyPrefix}:${k}`) as Record<CacheKey, CacheValue>,
+        ttl,
+      );
+    }
 
     return Object.fromEntries(keys.map((k, i) => [k, cached[i] ?? data[k]]));
   }

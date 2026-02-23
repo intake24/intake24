@@ -33,7 +33,6 @@ import {
 function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'kyselyDb'>) {
   function getCategoryCacheKeys(categoryId: string): CacheKey[] {
     return [
-      `category-all-categories:${categoryId}`,
       `category-parent-categories:${categoryId}`,
     ];
   }

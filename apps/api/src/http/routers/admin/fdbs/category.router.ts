@@ -139,7 +139,7 @@ export function category() {
           where: { id: localeId },
         });
 
-        const { ids } = await cachedParentCategoriesService.getCategoryAllCategories(categoryId);
+        const { ids } = await cachedParentCategoriesService.getCategoryCache(categoryId);
 
         return { status: 200, body: ids };
       },

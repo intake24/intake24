@@ -1,27 +1,17 @@
 import type { IoC } from '@intake24/api/ioc';
-import type {
-  CategoryContents,
-  CategoryHeader,
-  CategorySearch,
-  FoodHeader,
-} from '@intake24/common/types/http';
+import type { CategoryContents, CategoryHeader, CategorySearch, FoodHeader } from '@intake24/common/types/http';
 import type { FindOptions, FoodAttributes, PaginateQuery } from '@intake24/db';
 
 import { NotFoundError } from '@intake24/api/http/errors';
-import {
-  Category,
-  Food,
-  getAllChildCategories,
-  Op,
-  QueryTypes,
-} from '@intake24/db';
+import { Category, Food, getAllChildCategories, Op, QueryTypes } from '@intake24/db';
+
+import { acceptForQuery } from './common';
 
 function categoryContentsService({
   adminCategoryService,
   db,
-  inheritableAttributesService,
-}: Pick<IoC, 'db' | 'adminCategoryService' | 'inheritableAttributesService'>) {
-  const { getCategoryAttributes, acceptForQuery } = inheritableAttributesService;
+  cachedParentCategoriesService,
+}: Pick<IoC, 'db' | 'adminCategoryService' | 'cachedParentCategoriesService'>) {
   const filterUndefined = (
     headers: { id: string; code: string; name?: string | null }[],
   ): (CategoryHeader | FoodHeader)[] =>
@@ -31,7 +21,7 @@ function categoryContentsService({
     const categories = await adminCategoryService.getRootCategories(localeCode);
 
     const catIds = categories.map(({ id }) => id);
-    const categoryAttrs = await getCategoryAttributes(catIds);
+    const categoryCache = await cachedParentCategoriesService.getCategoriesCache(catIds);
     const isRecipe = false; // Root categories are not recipes
 
     return {
@@ -39,7 +29,7 @@ function categoryContentsService({
       foods: [],
       subcategories: categories
         .filter(({ hidden }) => !hidden)
-        .filter(category => acceptForQuery(isRecipe, categoryAttrs[category.id]?.useInRecipes))
+        .filter(category => acceptForQuery(isRecipe, categoryCache[category.id]?.attributes.useInRecipes))
         .map(({ id, code, name }) => ({ id, code, name })),
     };
   };
