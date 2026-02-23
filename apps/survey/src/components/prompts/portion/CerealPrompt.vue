@@ -147,7 +147,7 @@ const props = defineProps({
 const emit = defineEmits(['action', 'update:modelValue']);
 
 const { action, type } = usePromptUtils(props, { emit });
-const { parameters, psmValid } = usePortionSizeMethod<'cereal'>(props);
+const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'cereal'>(props);
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
@@ -242,8 +242,8 @@ function confirmLeftovers() {
 };
 
 function update() {
-  state.value.portionSize.servingWeight = state.value.portionSize.serving?.weight ?? 0;
-  state.value.portionSize.leftoversWeight = state.value.portionSize.leftovers?.weight ?? 0;
+  state.value.portionSize.servingWeight = (state.value.portionSize.serving?.weight ?? 0) * conversionFactor.value;
+  state.value.portionSize.leftoversWeight = (state.value.portionSize.leftovers?.weight ?? 0) * conversionFactor.value;
 
   emit('update:modelValue', state.value);
 };

@@ -185,7 +185,7 @@ const props = defineProps({
 const emit = defineEmits(['action', 'update:modelValue']);
 
 const { action, type } = usePromptUtils(props, { emit });
-const { parameters, psmValid } = usePortionSizeMethod<'as-served'>(props);
+const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'as-served'>(props);
 const { multipleProps, multipleEnabled } = useMultiple(props);
 const { foodName } = useFoodUtils(props);
 
@@ -283,9 +283,9 @@ function confirmLinkedQuantity() {
 
 function update() {
   state.value.portionSize.servingWeight
-        = (state.value.portionSize.serving?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity;
+        = (state.value.portionSize.serving?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity * conversionFactor.value;
   state.value.portionSize.leftoversWeight
-        = (state.value.portionSize.leftovers?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity;
+        = (state.value.portionSize.leftovers?.weight ?? 0) * state.value.portionSize.quantity * state.value.portionSize.linkedQuantity * conversionFactor.value;
 
   emit('update:modelValue', state.value);
 };
