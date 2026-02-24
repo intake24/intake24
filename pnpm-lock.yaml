@@ -565,24 +565,6 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@24.10.13)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(sass@1.97.3)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  apps/api/storage/private/uploads/i24-pkg-import-1272724c7cdda5bc53483c081b5011b3: {}
-
-  apps/api/storage/private/uploads/i24-pkg-import-29b56615080bff594ff426bd74a0c454: {}
-
-  apps/api/storage/private/uploads/i24-pkg-import-38b5004fa565dd5a1ddc1c15eddd33b0: {}
-
-  apps/api/storage/private/uploads/i24-pkg-import-3b3badae131751f5176032b53c1c845f: {}
-
-  apps/api/storage/private/uploads/i24-pkg-import-67d41e94f6ff9f42678948f5f81cff7f: {}
-
-  apps/api/storage/private/uploads/i24-pkg-import-8cd7d1bdcc7b8574a46b7a915077d00c: {}
-
-  apps/api/storage/private/uploads/i24-pkg-import-b3dd5441871a699c49b245340df6146e: {}
-
-  apps/api/storage/private/uploads/i24-pkg-import-d8015c3820baa0a4c219065038ce21ca: {}
-
-  apps/api/storage/private/uploads/i24-pkg-import-f1fc50424305afa3dcfa64e4cebc4b46: {}
-
   apps/cli:
     dependencies:
       '@clack/prompts':
