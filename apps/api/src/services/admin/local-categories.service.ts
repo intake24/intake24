@@ -1,7 +1,7 @@
 import type { Kysely } from 'kysely';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { Pathway, PortionSizeMethod, PortionSizeMethodId } from '@intake24/common/surveys';
+import type { PortionSizeMethod } from '@intake24/common/surveys';
 import type {
   CreateCategoryRequest,
   SimpleCategoryEntry,
@@ -180,10 +180,10 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
         .execute();
 
       const portionSizeMethods: PortionSizeMethod[] = portionSizeRows.map(row => ({
-        method: row.method as PortionSizeMethodId /* unsafe! */,
+        method: row.method,
         conversionFactor: row.conversionFactor,
         description: row.description,
-        pathways: row.pathways as Pathway[] /* unsafe! */,
+        pathways: row.pathways,
         orderBy: row.orderBy,
         parameters: row.parameters as any /* unsafe! */,
       }));

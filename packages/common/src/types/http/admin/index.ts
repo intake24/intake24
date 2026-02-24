@@ -1,6 +1,7 @@
 export * from './as-served';
 export * from './associated-food';
 export * from './attributes';
+export * from './brands';
 export * from './categories';
 export * from './drinkware-sets';
 export * from './faqs';

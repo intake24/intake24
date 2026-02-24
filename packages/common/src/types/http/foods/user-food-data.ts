@@ -5,7 +5,6 @@ import { localeTranslation } from '@intake24/common/types';
 import { portionSizeMethodAttributes } from '../admin/portion-size-methods';
 
 export const userPortionSizeMethod = portionSizeMethodAttributes
-  .omit({ id: true })
   .extend({
     imageUrl: z.string(),
   });

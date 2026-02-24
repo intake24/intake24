@@ -5,7 +5,7 @@
 
 import type { ColumnType } from 'kysely';
 
-import type { PortionSizeParameter } from '@intake24/common/surveys';
+import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
 import type { LocaleTranslation, LocaleTranslations, RequiredLocaleTranslation, UseInRecipeType } from '@intake24/common/types';
 
 export type ArrayType<T> = ArrayTypeImpl<T> extends (infer U)[]
@@ -100,7 +100,7 @@ export interface CategoryPortionSizeMethods {
   conversionFactor: number;
   description: string;
   id: Generated<Int8>;
-  method: string;
+  method: PortionSizeMethodId;
   orderBy: Int8;
   parameters: PortionSizeParameter;
   pathways: ArrayType<EnumCategoryPortionSizeMethodsPathways>;
@@ -158,7 +158,7 @@ export interface FoodPortionSizeMethods {
   description: string;
   foodId: Int8;
   id: Generated<Int8>;
-  method: string;
+  method: PortionSizeMethodId;
   orderBy: Int8;
   parameters: PortionSizeParameter;
   pathways: ArrayType<EnumFoodPortionSizeMethodsPathways>;

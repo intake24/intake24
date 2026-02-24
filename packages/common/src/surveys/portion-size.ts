@@ -18,14 +18,13 @@ export const portionSizeMethods = [
   'standard-portion',
   'unknown',
 ] as const;
+export type PortionSizeMethodId = (typeof portionSizeMethods)[number];
 
 export const pathways = ['addon', 'afp', 'recipe', 'search'] as const;
 export type Pathway = (typeof pathways)[number];
 
 export const pathwaysSchema = z.enum(pathways).array();
 export type Pathways = z.infer<typeof pathwaysSchema>;
-
-export type PortionSizeMethodId = (typeof portionSizeMethods)[number];
 
 export const cerealTypes = ['hoop', 'flake', 'rkris'] as const;
 export type CerealType = (typeof cerealTypes)[number];
@@ -156,90 +155,107 @@ export const portionSizeMethodBase = z.object({
 });
 export type PortionSizeMethodBase = z.infer<typeof portionSizeMethodBase>;
 
-export interface AsServedPsm extends PortionSizeMethodBase {
-  method: 'as-served';
-  parameters: PortionSizeParameters['as-served'];
-}
+export const asServedPsm = portionSizeMethodBase.extend({
+  method: z.literal('as-served'),
+  parameters: asServedPortionSizeParameters,
+});
+export type AsServedPsm = z.infer<typeof asServedPsm>;
 
-export interface AutoPsm extends PortionSizeMethodBase {
-  method: 'auto';
-  parameters: PortionSizeParameters['auto'];
-}
+export const autoPsm = portionSizeMethodBase.extend({
+  method: z.literal('auto'),
+  parameters: autoPortionSizeParameters,
+});
+export type AutoPsm = z.infer<typeof autoPsm>;
 
-export interface CerealPsm extends PortionSizeMethodBase {
-  method: 'cereal';
-  parameters: PortionSizeParameters['cereal'];
-}
+export const cerealPsm = portionSizeMethodBase.extend({
+  method: z.literal('cereal'),
+  parameters: cerealPortionSizeParameters,
+});
+export type CerealPsm = z.infer<typeof cerealPsm>;
 
-export interface DirectWeightPsm extends PortionSizeMethodBase {
-  method: 'direct-weight';
-  parameters: PortionSizeParameters['direct-weight'];
-}
+export const directWeightPsm = portionSizeMethodBase.extend({
+  method: z.literal('direct-weight'),
+  parameters: directWeightPortionSizeParameters,
+});
+export type DirectWeightPsm = z.infer<typeof directWeightPsm>;
 
-export interface DrinkScalePsm extends PortionSizeMethodBase {
-  method: 'drink-scale';
-  parameters: PortionSizeParameters['drink-scale'];
-}
+export const drinkScalePsm = portionSizeMethodBase.extend({
+  method: z.literal('drink-scale'),
+  parameters: drinkScalePortionSizeParameters,
+});
+export type DrinkScalePsm = z.infer<typeof drinkScalePsm>;
 
-export interface GuideImagePsm extends PortionSizeMethodBase {
-  method: 'guide-image';
-  parameters: PortionSizeParameters['guide-image'];
-}
+export const guideImagePsm = portionSizeMethodBase.extend({
+  method: z.literal('guide-image'),
+  parameters: guideImagePortionSizeParameters,
+});
+export type GuideImagePsm = z.infer<typeof guideImagePsm>;
 
-export interface MilkInHotDrinkPsm extends PortionSizeMethodBase {
-  method: 'milk-in-a-hot-drink';
-  parameters: PortionSizeParameters['milk-in-a-hot-drink'];
-}
-export interface MilkOnCerealPsm extends PortionSizeMethodBase {
-  method: 'milk-on-cereal';
-  parameters: PortionSizeParameters['milk-on-cereal'];
-}
+export const milkInHotDrinkPsm = portionSizeMethodBase.extend({
+  method: z.literal('milk-in-a-hot-drink'),
+  parameters: milkInHotDrinkPortionSizeParameters,
+});
+export type MilkInHotDrinkPsm = z.infer<typeof milkInHotDrinkPsm>;
 
-export interface ParentFoodPsm extends PortionSizeMethodBase {
-  method: 'parent-food-portion';
-  parameters: PortionSizeParameters['parent-food-portion'];
-}
+export const milkOnCerealPsm = portionSizeMethodBase.extend({
+  method: z.literal('milk-on-cereal'),
+  parameters: milkOnCerealPortionSizeParameters,
+});
+export type MilkOnCerealPsm = z.infer<typeof milkOnCerealPsm>;
 
-export interface PizzaPsm extends PortionSizeMethodBase {
-  method: 'pizza';
-  parameters: PortionSizeParameters['pizza'];
-}
+export const parentFoodPsm = portionSizeMethodBase.extend({
+  method: z.literal('parent-food-portion'),
+  parameters: parentFoodPortionParameters,
+});
+export type ParentFoodPsm = z.infer<typeof parentFoodPsm>;
 
-export interface PizzaV2Psm extends PortionSizeMethodBase {
-  method: 'pizza-v2';
-  parameters: PortionSizeParameters['pizza-v2'];
-}
+export const pizzaPsm = portionSizeMethodBase.extend({
+  method: z.literal('pizza'),
+  parameters: pizzaPortionSizeParameters,
+});
+export type PizzaPsm = z.infer<typeof pizzaPsm>;
 
-export interface RecipeBuilderPsm extends PortionSizeMethodBase {
-  method: 'recipe-builder';
-  parameters: PortionSizeParameters['recipe-builder'];
-}
+export const pizzaV2Psm = portionSizeMethodBase.extend({
+  method: z.literal('pizza-v2'),
+  parameters: pizzaV2PortionSizeParameters,
+});
+export type PizzaV2Psm = z.infer<typeof pizzaV2Psm>;
 
-export interface StandardPortionPsm extends PortionSizeMethodBase {
-  method: 'standard-portion';
-  parameters: PortionSizeParameters['standard-portion'];
-}
+export const recipeBuilderPsm = portionSizeMethodBase.extend({
+  method: z.literal('recipe-builder'),
+  parameters: recipeBuilderPortionSizeParameters,
+});
+export type RecipeBuilderPsm = z.infer<typeof recipeBuilderPsm>;
 
-export interface UnknownPortionPsm extends PortionSizeMethodBase {
-  method: 'unknown';
-  parameters: PortionSizeParameters['unknown'];
-}
+export const standardPortionPsm = portionSizeMethodBase.extend({
+  method: z.literal('standard-portion'),
+  parameters: standardPortionSizeParameters,
+});
+export type StandardPortionPsm = z.infer<typeof standardPortionPsm>;
 
-export type PortionSizeMethod
-  = | AsServedPsm
-    | AutoPsm
-    | CerealPsm
-    | DirectWeightPsm
-    | DrinkScalePsm
-    | GuideImagePsm
-    | MilkInHotDrinkPsm
-    | MilkOnCerealPsm
-    | ParentFoodPsm
-    | PizzaPsm
-    | PizzaV2Psm
-    | RecipeBuilderPsm
-    | StandardPortionPsm
-    | UnknownPortionPsm;
+export const unknownPsm = portionSizeMethodBase.extend({
+  method: z.literal('unknown'),
+  parameters: unknownPortionSizeParameters,
+});
+export type UnknownPsm = z.infer<typeof unknownPsm>;
+
+export const portionSizeMethod = z.discriminatedUnion('method', [
+  asServedPsm,
+  autoPsm,
+  cerealPsm,
+  directWeightPsm,
+  drinkScalePsm,
+  guideImagePsm,
+  milkInHotDrinkPsm,
+  milkOnCerealPsm,
+  parentFoodPsm,
+  pizzaPsm,
+  pizzaV2Psm,
+  recipeBuilderPsm,
+  standardPortionPsm,
+  unknownPsm,
+]);
+export type PortionSizeMethod = z.infer<typeof portionSizeMethod>;
 
 export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
 export type PizzaSize = (typeof pizzaSizes)[number];

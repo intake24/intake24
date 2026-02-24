@@ -105,7 +105,7 @@ export const bulkFoodInput = foodAttributes.omit({
   associatedFoods: associatedFoodAttributes.omit({ id: true, foodId: true }).array(),
   nutrientRecords: nutrientTableRecordAttributes.pick({ nutrientTableId: true, nutrientTableRecordId: true }).array(),
   parentCategories: categoryAttributes.shape.code.array(),
-  portionSizeMethods: portionSizeMethodAttributes.omit({ id: true }).array(),
+  portionSizeMethods: portionSizeMethodAttributes.array(),
 });
 export type BulkFoodInput = z.infer<typeof bulkFoodInput>;
 

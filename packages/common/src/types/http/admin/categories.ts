@@ -96,7 +96,7 @@ export const bulkCategoryInput = categoryAttributes.omit({
 }).extend({
   attributes: inheritableAttributes.optional(),
   parentCategories: categoryAttributes.shape.code.array().optional(),
-  portionSizeMethods: portionSizeMethodAttributes.omit({ id: true }).array().optional(),
+  portionSizeMethods: portionSizeMethodAttributes.array().optional(),
 });
 export type BulkCategoryInput = z.infer<typeof bulkCategoryInput>;
 

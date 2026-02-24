@@ -38,7 +38,7 @@ function groupParameters<
   return result as WithParameters<T, K>;
 }
 
-type InputPortionSizeMethod = Omit<PortionSizeMethodAttributes, 'id'>;
+type InputPortionSizeMethod = PortionSizeMethodAttributes;
 
 function fromPackagePortionSizeMethod(psm: PkgV2PortionSizeMethod): InputPortionSizeMethod {
   const baseKeys = Object.keys(pkgV2PortionSizeMethodBase.shape) as (keyof PkgV2PortionSizeMethod)[];
