@@ -1,26 +1,24 @@
 import type { Job } from 'bullmq';
+import type { InferResult } from 'kysely';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { ResolvedParentData } from '@intake24/api/services';
 
 import { createWriteStream } from 'node:fs';
 import path from 'node:path';
+import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 
 import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
+import { jsonArrayFrom, jsonObjectFrom } from 'kysely/helpers/postgres';
 import { pick } from 'lodash-es';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { addTime } from '@intake24/api/util';
-import { Category, Job as DbJob, SystemLocale } from '@intake24/db';
+import { Category, Job as DbJob, ExtendedCamelCasePlugin, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
-
-export type ItemTransform = {
-  category: Category;
-  cache: ResolvedParentData;
-};
 
 export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
   readonly name = 'LocaleCategories';
@@ -30,12 +28,14 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
   private readonly fsConfig;
 
   private readonly cachedParentCategoriesService;
+  private readonly kyselyDb;
 
-  constructor({ fsConfig, logger, cachedParentCategoriesService }: Pick<IoC, | 'cachedParentCategoriesService' | 'fsConfig' | 'logger'>) {
+  constructor({ fsConfig, logger, cachedParentCategoriesService, kyselyDb }: Pick<IoC, | 'cachedParentCategoriesService' | 'fsConfig' | 'kyselyDb' | 'logger'>) {
     super({ logger });
 
     this.fsConfig = fsConfig;
     this.cachedParentCategoriesService = cachedParentCategoriesService;
+    this.kyselyDb = kyselyDb;
   }
 
   public async run(job: Job): Promise<void> {
@@ -104,26 +104,51 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
     const filepath = path.resolve(this.fsConfig.local.downloads, filename);
     const output = createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
 
-    const categories = Category.findAllWithStream({
-      where: { localeId: localeCode },
-      include: [
-        { association: 'attributes' },
-        { association: 'portionSizeMethods' },
-      ],
-      order: [['code', 'asc']],
-      transform: async (category: Category) => {
-        const cache = await this.cachedParentCategoriesService.getCategoryCache(category.id);
+    const query = this.kyselyDb.foods
+      .withoutPlugins()
+      .withPlugin(new ExtendedCamelCasePlugin({
+        maintainNestedObjectKeys: true,
+        transformNestedObjects: ['attributes', 'portion_size_methods'],
+      }))
+      .selectFrom('categories')
+      .selectAll()
+      .select(eb => [
+        jsonObjectFrom(
+          eb.selectFrom('categoryAttributes as ca')
+            .select([
+              'ca.readyMealOption',
+              'ca.sameAsBeforeOption',
+              'ca.reasonableAmount',
+              'ca.useInRecipes',
+            ])
+            .whereRef('ca.categoryId', '=', 'categories.id'),
+        ).as('attributes'),
+        jsonArrayFrom(
+          eb.selectFrom('categoryPortionSizeMethods as cpsm')
+            .select([
+              'cpsm.method',
+              'cpsm.description',
+              'cpsm.pathways',
+              'cpsm.conversionFactor',
+              'cpsm.orderBy',
+              'cpsm.parameters',
+            ])
+            .whereRef('cpsm.categoryId', '=', 'categories.id')
+            .orderBy('cpsm.orderBy'),
+        ).as('portionSizeMethods'),
+      ])
+      .where('categories.localeId', '=', localeCode)
+      .orderBy('categories.code');
+    const records = Readable.from(query.stream());
 
-        return { category, cache };
-      },
-    });
+    type QueryRow = InferResult<typeof query>[number];
 
     const transform = new Transform(
       {
         fields,
         withBOM: true,
         transforms: [
-          ({ category, cache }: ItemTransform) => {
+          ({ category, cache }: { category: QueryRow; cache: ResolvedParentData }) => {
             const {
               id,
               code,
@@ -131,7 +156,7 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
               englishName,
               name,
               attributes,
-              portionSizeMethods = [],
+              portionSizeMethods,
               tags,
             } = category;
 
@@ -154,7 +179,6 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
               categoryIds: cache.ids.join(', '),
               categoryCodes: cache.codes.join(', '),
               portionSizeMethods: portionSizeMethods
-                .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
                 .map((psm) => {
                   const attr = Object.entries(pick(psm, ['method', 'description', 'pathways', 'conversionFactor', 'orderBy'])).map(
                     ([key, value]) => `${key}: ${value?.toString()}`,
@@ -178,7 +202,18 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
     });
 
     try {
-      await pipeline(categories, transform, output);
+      await pipeline(
+        records,
+        async function* (this: InstanceType<typeof LocaleCategories>, source: any) {
+          for await (const chunk of source) {
+            const category = chunk as QueryRow;
+            const cache = await this.cachedParentCategoriesService.getCategoryCache(category.id);
+            yield { category, cache };
+          }
+        }.bind(this),
+        transform,
+        output,
+      );
       await this.dbJob.update({
         downloadUrl: filename,
         downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),

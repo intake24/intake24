@@ -1,26 +1,24 @@
 import type { Job } from 'bullmq';
+import type { InferResult } from 'kysely';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { ResolvedParentData } from '@intake24/api/services';
 
 import { createWriteStream } from 'node:fs';
 import path from 'node:path';
+import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 
 import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
+import { jsonArrayFrom, jsonObjectFrom } from 'kysely/helpers/postgres';
 import { pick } from 'lodash-es';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { addTime } from '@intake24/api/util';
-import { Job as DbJob, Food, SystemLocale } from '@intake24/db';
+import { Job as DbJob, ExtendedCamelCasePlugin, Food, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
-
-export type ItemTransform = {
-  food: Food;
-  cache: ResolvedParentData;
-};
 
 export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
   readonly name = 'LocaleFoods';
@@ -30,12 +28,14 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
   private readonly fsConfig;
 
   private readonly cachedParentCategoriesService;
+  private readonly kyselyDb;
 
-  constructor({ fsConfig, logger, cachedParentCategoriesService }: Pick<IoC, | 'cachedParentCategoriesService' | 'fsConfig' | 'logger'>) {
+  constructor({ fsConfig, logger, cachedParentCategoriesService, kyselyDb }: Pick<IoC, | 'cachedParentCategoriesService' | 'fsConfig' | 'kyselyDb' | 'logger'>) {
     super({ logger });
 
     this.fsConfig = fsConfig;
     this.cachedParentCategoriesService = cachedParentCategoriesService;
+    this.kyselyDb = kyselyDb;
   }
 
   /**
@@ -116,29 +116,74 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
     const filepath = path.resolve(this.fsConfig.local.downloads, filename);
     const output = createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
 
-    const foods = Food.findAllWithStream({
-      where: { localeId: localeCode },
-      include: [
-        { association: 'associatedFoods' },
-        { association: 'attributes' },
-        { association: 'brands' },
-        { association: 'nutrientRecords' },
-        { association: 'portionSizeMethods' },
-      ],
-      order: [['code', 'asc']],
-      transform: async (food: Food) => {
-        const cache = await this.cachedParentCategoriesService.getFoodCache(food.id);
+    const query = this.kyselyDb.foods
+      .withoutPlugins()
+      .withPlugin(new ExtendedCamelCasePlugin({
+        maintainNestedObjectKeys: true,
+        transformNestedObjects: [
+          'associated_foods',
+          'attributes',
+          'brands',
+          'nutrient_records',
+          'portion_size_methods',
+        ],
+      }))
+      .selectFrom('foods')
+      .selectAll()
+      .select(eb => [
+        jsonArrayFrom(
+          eb.selectFrom('associatedFoods as af')
+            .select(['af.associatedFoodCode', 'af.associatedCategoryCode'])
+            .whereRef('af.foodId', '=', 'foods.id')
+            .orderBy('af.orderBy'),
+        ).as('associatedFoods'),
+        jsonObjectFrom(
+          eb.selectFrom('foodAttributes as fa')
+            .select([
+              'fa.readyMealOption',
+              'fa.sameAsBeforeOption',
+              'fa.reasonableAmount',
+              'fa.useInRecipes',
+            ])
+            .whereRef('fa.foodId', '=', 'foods.id'),
+        ).as('attributes'),
+        jsonArrayFrom(
+          eb.selectFrom('brands')
+            .select(['brands.name'])
+            .whereRef('brands.foodId', '=', 'foods.id'),
+        ).as('brands'),
+        jsonArrayFrom(
+          eb.selectFrom('nutrientTableRecords as ntr')
+            .select(['ntr.nutrientTableId', 'ntr.nutrientTableRecordId'])
+            .innerJoin('foodsNutrients', 'ntr.id', 'foodsNutrients.nutrientTableRecordId')
+            .whereRef('foodsNutrients.foodId', '=', 'foods.id'),
+        ).as('nutrientRecords'),
+        jsonArrayFrom(
+          eb.selectFrom('foodPortionSizeMethods as fpsm')
+            .select([
+              'fpsm.method',
+              'fpsm.description',
+              'fpsm.pathways',
+              'fpsm.conversionFactor',
+              'fpsm.orderBy',
+              'fpsm.parameters',
+            ])
+            .whereRef('fpsm.foodId', '=', 'foods.id')
+            .orderBy('fpsm.orderBy'),
+        ).as('portionSizeMethods'),
+      ])
+      .where('foods.localeId', '=', localeCode)
+      .orderBy('foods.code');
+    const records = Readable.from(query.stream());
 
-        return { food, cache };
-      },
-    });
+    type QueryRow = InferResult<typeof query>[number];
 
     const transform = new Transform(
       {
         fields,
         withBOM: true,
         transforms: [
-          ({ food, cache }: ItemTransform) => {
+          ({ food, cache }: { food: QueryRow; cache: ResolvedParentData }) => {
             const {
               id,
               code,
@@ -147,10 +192,10 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
               name,
               altNames,
               attributes,
-              brands = [],
-              associatedFoods = [],
-              nutrientRecords = [],
-              portionSizeMethods = [],
+              brands,
+              associatedFoods,
+              nutrientRecords,
+              portionSizeMethods,
               tags,
             } = food;
 
@@ -187,7 +232,6 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
               categoryCodes: cache.codes.join(', '),
               brands: brands.map(({ name }) => name).toSorted().join(', '),
               portionSizeMethods: portionSizeMethods
-                .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
                 .map((psm) => {
                   const attr = Object.entries(pick(psm, ['method', 'description', 'pathways', 'conversionFactor', 'orderBy'])).map(
                     ([key, value]) => `${key}: ${value?.toString()}`,
@@ -211,7 +255,18 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
     });
 
     try {
-      await pipeline(foods, transform, output);
+      await pipeline(
+        records,
+        async function* (this: InstanceType<typeof LocaleFoods>, source: any) {
+          for await (const chunk of source) {
+            const food = chunk as QueryRow;
+            const cache = await this.cachedParentCategoriesService.getFoodCache(food.id);
+            yield { food, cache };
+          }
+        }.bind(this),
+        transform,
+        output,
+      );
       await this.dbJob.update({
         downloadUrl: filename,
         downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
