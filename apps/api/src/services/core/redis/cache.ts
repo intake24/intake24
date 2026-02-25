@@ -200,7 +200,7 @@ export default class Cache extends HasRedisClient {
     if (!keys.length)
       return {};
 
-    const cacheKeys = keys.map(k => `${cacheKeyPrefix}:${k}`) as CacheKey[];
+    const cacheKeys = keys.map<`${CacheKeyPrefix}:${string}`>(k => `${cacheKeyPrefix}:${k}`);
 
     const cached = await this.mget<T>(cacheKeys);
 
