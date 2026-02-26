@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import type { FoodBuilderIngredientStepState, FoodBuilderStepState, PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, MissingFood } from '@intake24/common/surveys';
+import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/surveys';
 import type { FoodBuilderStep } from '@intake24/common/types/http/admin';
 
 import { GenericBuilderPrompt, RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
@@ -106,8 +106,8 @@ function getInitialState(): PromptStates[FoodBuilderPromptType] {
 
 const { state, update, clearStoredState } = usePromptHandlerStore(props, { emit }, getInitialState);
 
-function commitAnswer() {
-  const ingredients: (EncodedFood | MissingFood)[] = (state.value.steps
+function resolveIngredients(parent?: FoodState): (EncodedFood | MissingFood)[] {
+  return (state.value.steps
     .filter(step => step.type === 'ingredient' && step.confirmed !== 'no') as FoodBuilderIngredientStepState[])
     .flatMap(({ foods }) => foods)
     .map((item) => {
@@ -125,7 +125,7 @@ function commitAnswer() {
         };
       }
 
-      const { flags, portionSizeMethodIndex, portionSize } = resolvePortionSize(item.ingredient, 'recipe', food.value);
+      const { flags, portionSizeMethodIndex, portionSize } = resolvePortionSize(item.ingredient, 'recipe', parent);
       flags.push('associated-foods-complete');
 
       return {
@@ -140,7 +140,9 @@ function commitAnswer() {
         linkedFoods: [],
       };
     });
+}
 
+function commitAnswer() {
   if ('food' in state.value && state.value.food) {
     const mainFood: EncodedFood = {
       id: foodId,
@@ -151,12 +153,15 @@ function commitAnswer() {
       portionSizeMethodIndex: 0,
       portionSize: state.value.portionSize,
       customPromptAnswers: {},
-      linkedFoods: ingredients,
+      linkedFoods: [],
     };
+
+    mainFood.linkedFoods.push(...resolveIngredients(mainFood));
 
     survey.replaceFood({ foodId, food: mainFood });
   }
   else {
+    const ingredients = resolveIngredients(food.value);
     survey.updateFood({ foodId, update: { linkedFoods: [...food.value.linkedFoods, ...ingredients] } });
     survey.addFoodFlag(foodId, ['associated-foods-complete', 'food-builder-complete', 'portion-size-option-complete', 'portion-size-method-complete']);
   }
