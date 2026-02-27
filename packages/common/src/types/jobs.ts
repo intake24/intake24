@@ -34,13 +34,13 @@ export type RedisStoreType = (typeof redisStoreTypes)[number];
 
 export const CleanRedisStore = z.object({
   store: z.enum(redisStoreTypes).array(),
-});
+}).strict();
 export const CleanStorageFiles = z.record(z.string(), z.never());
 export const FeedbackSchemesSync = z.record(z.string(), z.never());
 export const LanguageTranslationsSync = z.record(z.string(), z.never());
 export const LocaleIndexBuild = z.object({
   force: z.boolean().optional(),
-});
+}).strict();
 
 export const localeCopyFoodsSubTasks = ['categories', 'foods', 'associatedFoods', 'attributes', 'brands', 'recipeFoods', 'splitLists', 'splitWords', 'synonymSets'] as const;
 export type LocaleCopyFoodsSubTasks = (typeof localeCopyFoodsSubTasks)[number];
@@ -53,33 +53,33 @@ export const LocaleCopy = z.object({
   localeId: z.string(),
   sourceLocaleId: z.string(),
   subTasks: z.enum(localeCopySubTasks).array(),
-});
+}).strict();
 export const LocaleCategories = z.object({
   localeId: z.string(),
-});
+}).strict();
 export const LocaleFoods = z.object({
   localeId: z.string(),
-});
+}).strict();
 export const LocaleFoodNutrientMapping = z.object({
   localeId: z.string(),
-});
+}).strict();
 export const LocaleFoodRankingUpload = z.object({
   localeId: z.string(),
   file: z.string(),
   targetAlgorithm: z.enum(searchSortingAlgorithms),
-});
+}).strict();
 export const NutrientTableDataImport = z.object({
   nutrientTableId: z.string(),
   file: z.string(),
-});
+}).strict();
 export const NutrientTableMappingImport = z.object({
   nutrientTableId: z.string(),
   file: z.string(),
-});
+}).strict();
 export const PopularitySearchUpdateCounters = z.object({
   localeCode: z.string(),
   foodCodes: z.array(z.string()),
-});
+}).strict();
 export const PurgeExpiredTokens = z.record(z.string(), z.never());
 
 export const resources = [
@@ -101,10 +101,10 @@ export const resources = [
 export const ResourceExport = z.object({
   language: z.string().array().optional(),
   resource: z.enum(resources),
-});
+}).strict();
 export const SurveyAuthUrlsExport = z.object({
   surveyId: z.string(),
-});
+}).strict();
 export const SurveyDataExport = z.object({
   id: z.union([z.string(), z.array(z.string())]).optional(),
   surveyId: z.string(),
@@ -118,7 +118,7 @@ export const SurveyDataExport = z.object({
     z.coerce.date(),
   ]).nullish().transform(val => val ? endOfDay(val) : undefined),
   userId: z.string().optional(),
-});
+}).strict();
 
 const baseSurveyEventNotification = z.object({
   surveyId: z.string(),
@@ -146,7 +146,7 @@ export const SurveyFeedbackNotification = z.object({
   to: z.string(),
   cc: z.string().optional(),
   bcc: z.string().optional(),
-});
+}).strict();
 export const SurveyHelpRequestNotification = z.object({
   surveySlug: z.string(),
   userId: z.string(),
@@ -155,39 +155,44 @@ export const SurveyHelpRequestNotification = z.object({
   phone: z.string().nullish(),
   phoneCountry: z.string().nullish(),
   message: z.string().nullish(),
-});
+}).strict();
+export const recalculationModes = ['none', 'values-only', 'values-and-codes'] as const;
+export type RecalculationMode = (typeof recalculationModes)[number];
+
 export const SurveyNutrientsRecalculation = z.object({
   surveyId: z.string(),
-});
+  mode: z.enum(recalculationModes).default('values-only'),
+  syncFields: z.boolean().default(false),
+}).strict();
 export const SurveyRatingsExport = z.object({
   surveyId: z.string(),
-});
+}).strict();
 export const SurveyRespondentsImport = z.object({
   surveyId: z.string(),
   file: z.string(),
-});
-export const SurveySchemesSync = z.object({});
+}).strict();
+export const SurveySchemesSync = z.object({}).strict();
 export const SurveySessionsExport = z.object({
   surveyId: z.string(),
-});
+}).strict();
 export const SurveySubmission = z.object({
   surveyId: z.string(),
   userId: z.string(),
   // TODO: Fix this
   state: z.any(),
-});
+}).strict();
 export const UserEmailVerificationNotification = z.object({
   email: z.string(),
   userAgent: z.string().optional(),
-});
+}).strict();
 export const UserPasswordResetNotification = z.object({
   email: z.string(),
   userAgent: z.string().optional(),
-});
+}).strict();
 export const PackageVerification = z.object({
   fileId: z.string(),
   packageFormat: z.string(),
-});
+}).strict();
 
 export const PackageExport = packageExportOptions;
 
@@ -201,9 +206,9 @@ export const PackageImport = z.object({
     foodFilter: z.array(z.string()).optional(),
     categoryFilter: z.array(z.string()).optional(),
   }),
-});
+}).strict();
 
-export const PackageConversionToXlsx = z.object({});
+export const PackageConversionToXlsx = z.object({}).strict();
 
 export const jobParams = z.object({
   CleanRedisStore,
@@ -490,6 +495,8 @@ export const defaultJobsParams: JobParams = {
   },
   SurveyNutrientsRecalculation: {
     surveyId: '',
+    mode: 'values-only' as RecalculationMode,
+    syncFields: false,
   },
   SurveyRatingsExport: {
     surveyId: '',

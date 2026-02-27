@@ -56,7 +56,7 @@ export default () => {
 
     it('should return 400 for invalid input data #2', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['params.localeId', 'params.sourceLocaleId', 'params.subTasks'], {
-        input: { type: 'LocaleCopy', params: { nonValidKey: false, subTasks: {} } },
+        input: { type: 'LocaleCopy', params: { localeId: 123, sourceLocaleId: 456, subTasks: 'invalid' } },
       });
     });
 

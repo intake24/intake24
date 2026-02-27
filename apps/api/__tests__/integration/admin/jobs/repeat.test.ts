@@ -39,7 +39,7 @@ export default () => {
           input: {
             type: job.type,
             params: {
-              resource: 'nutrient-types',
+              store: 'invalid',
             },
           },
         },

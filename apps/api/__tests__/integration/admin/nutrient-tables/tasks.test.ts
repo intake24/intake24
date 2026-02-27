@@ -71,7 +71,7 @@ export default () => {
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
-      expect(body.errors).toContainAllKeys(['params.file']);
+      expect(body.errors).toContainAllKeys(['params']);
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
