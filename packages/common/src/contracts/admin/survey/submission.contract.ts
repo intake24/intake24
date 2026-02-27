@@ -1,7 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { paginationMeta, paginationRequest, uuid as submissionId, bigIntString as surveyId } from '@intake24/common/types/http';
+import { bigIntString as surveyId } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   surveySubmissionAttributes,
   surveySubmissionListEntry,
@@ -27,7 +28,7 @@ export const submission = contract.router({
   read: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/submissions/:submissionId',
-    pathParams: z.object({ surveyId, submissionId }),
+    pathParams: z.object({ surveyId, submissionId: z.uuid() }),
     responses: {
       200: surveySubmissionAttributes,
     },
@@ -37,7 +38,7 @@ export const submission = contract.router({
   destroy: {
     method: 'DELETE',
     path: '/admin/surveys/:surveyId/submissions/:submissionId',
-    pathParams: z.object({ surveyId, submissionId }),
+    pathParams: z.object({ surveyId, submissionId: z.uuid() }),
     body: null,
     responses: {
       204: contract.noBody(),

@@ -3,7 +3,8 @@ import { Readable } from 'node:stream';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString as jobId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as jobId } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { jobAttributes, repeatJobRequest } from '@intake24/common/types/http/admin';
 
 const contract = initContract();

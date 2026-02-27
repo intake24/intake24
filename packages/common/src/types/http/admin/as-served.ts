@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-import { localeTranslation } from '../../common';
-import { safeIdentifier } from '../generic';
+import { localeTranslation, safeIdentifier } from '../../common';
 import { uploadSourceImageInput } from './source-images';
 
 export const createAsServedImageRequest = z.object({

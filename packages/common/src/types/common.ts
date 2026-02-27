@@ -143,3 +143,16 @@ export type CategoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber> = z.i
 
 export const textDirections = ['ltr', 'rtl'] as const;
 export type TextDirection = (typeof textDirections)[number];
+
+export const bigIntString = z.union([z.coerce.bigint().positive(), z.coerce.number().int().positive()]).pipe(z.coerce.string());
+export const safeIdentifier = z.string().min(1).regex(/^[\w-]*$/);
+
+const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
+type Literal = z.infer<typeof literalSchema>;
+type Json = Literal | { [key: string]: Json } | Json[];
+
+export const jsonSchema: z.ZodType<Json> = z.lazy(() =>
+  z.union([literalSchema, z.array(jsonSchema), z.record(z.string(), jsonSchema)]),
+);
+
+export const jsonObjectSchema: z.ZodType<Json> = z.lazy(() => z.record(z.string(), jsonSchema));

@@ -1,7 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString as languageId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as languageId } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   languageAttributes,
   languageEntry,

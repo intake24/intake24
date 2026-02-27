@@ -4,7 +4,8 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import { securableDefs } from '@intake24/common/security';
-import { paginationMeta, paginationRequest, bigIntString as userId } from '@intake24/common/types/http';
+import { bigIntString as userId } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   createUserWithSecurables,
   updateSecurableOwnerRequest,

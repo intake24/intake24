@@ -5,6 +5,7 @@ import { pick } from 'lodash-es';
 import { z } from 'zod';
 
 import { searchSortingAlgorithms } from '../surveys';
+import { bigIntString } from './common';
 import { packageExportOptions, packageFileTypes } from './http/admin/io';
 
 export const localisableMessage = z.object({
@@ -50,35 +51,35 @@ export const localeCopySubTasks = [...localeCopyFoodsSubTasks, ...localeCopySyst
 export type LocaleCopySubTasks = (typeof localeCopySubTasks)[number];
 
 export const LocaleCopy = z.object({
-  localeId: z.string(),
-  sourceLocaleId: z.string(),
+  localeId: bigIntString,
+  sourceLocaleId: bigIntString,
   subTasks: z.enum(localeCopySubTasks).array(),
 });
 export const LocaleCategories = z.object({
-  localeId: z.string(),
+  localeId: bigIntString,
 });
 export const LocaleFoods = z.object({
-  localeId: z.string(),
+  localeId: bigIntString,
 });
 export const LocaleFoodNutrientMapping = z.object({
-  localeId: z.string(),
+  localeId: bigIntString,
 });
 export const LocaleFoodRankingUpload = z.object({
-  localeId: z.string(),
-  file: z.string(),
+  localeId: bigIntString,
+  file: z.string().nonempty(),
   targetAlgorithm: z.enum(searchSortingAlgorithms),
 });
 export const NutrientTableDataImport = z.object({
-  nutrientTableId: z.string(),
-  file: z.string(),
+  nutrientTableId: z.string().nonempty(),
+  file: z.string().nonempty(),
 });
 export const NutrientTableMappingImport = z.object({
   nutrientTableId: z.string(),
-  file: z.string(),
+  file: z.string().nonempty(),
 });
 export const PopularitySearchUpdateCounters = z.object({
-  localeCode: z.string(),
-  foodCodes: z.array(z.string()),
+  localeCode: z.string().nonempty(),
+  foodCodes: z.array(z.string().nonempty()),
 });
 export const PurgeExpiredTokens = z.record(z.string(), z.never());
 
@@ -99,15 +100,15 @@ export const resources = [
 ] as const;
 
 export const ResourceExport = z.object({
-  language: z.string().array().optional(),
+  language: z.string().nonempty().array().optional(),
   resource: z.enum(resources),
 });
 export const SurveyAuthUrlsExport = z.object({
-  surveyId: z.string(),
+  surveyId: bigIntString,
 });
 export const SurveyDataExport = z.object({
   id: z.union([z.string(), z.array(z.string())]).optional(),
-  surveyId: z.string(),
+  surveyId: bigIntString,
   // TODO: Fix this - multiform data are not cleaned of empty strings
   startDate: z.union([
     z.string().length(0).transform(val => val || undefined),
@@ -117,13 +118,13 @@ export const SurveyDataExport = z.object({
     z.string().length(0).transform(val => val || undefined),
     z.coerce.date(),
   ]).nullish().transform(val => val ? endOfDay(val) : undefined),
-  userId: z.string().optional(),
+  userId: bigIntString.optional(),
 });
 
 const baseSurveyEventNotification = z.object({
-  surveyId: z.string(),
-  userId: z.string(),
-  sessionId: z.string(),
+  surveyId: bigIntString,
+  userId: bigIntString,
+  sessionId: z.uuid(),
 });
 
 export const SurveyEventNotification = z.discriminatedUnion('type', [
@@ -135,11 +136,11 @@ export const SurveyEventNotification = z.discriminatedUnion('type', [
   }),
   baseSurveyEventNotification.extend({
     type: z.literal('survey.session.submitted'),
-    submissionId: z.string(),
+    submissionId: z.uuid(),
   }),
 ]);
 export const SurveyFeedbackNotification = z.object({
-  surveyId: z.string(),
+  surveyId: bigIntString,
   username: z.string(),
   submissions: z.array(z.string()).optional(),
   lang: z.string().optional(),
@@ -157,27 +158,27 @@ export const SurveyHelpRequestNotification = z.object({
   message: z.string().nullish(),
 });
 export const SurveyNutrientsRecalculation = z.object({
-  surveyId: z.string(),
+  surveyId: bigIntString,
 });
 export const SurveyRatingsExport = z.object({
-  surveyId: z.string(),
+  surveyId: bigIntString,
 });
 export const SurveyRespondentsImport = z.object({
-  surveyId: z.string(),
-  file: z.string(),
+  surveyId: bigIntString,
+  file: z.string().nonempty(),
 });
 export const SurveySchemesSync = z.object({});
 export const SurveySessionsExport = z.object({
-  surveyId: z.string(),
+  surveyId: bigIntString,
 });
 export const SurveySubmission = z.object({
-  surveyId: z.string(),
-  userId: z.string(),
+  surveyId: bigIntString,
+  userId: bigIntString,
   // TODO: Fix this
   state: z.any(),
 });
 export const UserEmailVerificationNotification = z.object({
-  email: z.string(),
+  email: z.email(),
   userAgent: z.string().optional(),
 });
 export const UserPasswordResetNotification = z.object({

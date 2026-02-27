@@ -2,8 +2,7 @@ import type { Pagination } from '../generic';
 
 import { z } from 'zod';
 
-import { localeTranslation } from '../../common';
-import { safeIdentifier } from '../generic';
+import { localeTranslation, safeIdentifier } from '../../common';
 
 export const drinkwareScaleVolumeMethod = ['lookUpTable', 'cylindrical'] as const;
 export type DrinkwareScaleVolumeMethod = typeof drinkwareScaleVolumeMethod[number];

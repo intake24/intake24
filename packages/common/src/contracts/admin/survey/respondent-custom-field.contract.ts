@@ -1,8 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { userCustomField } from '@intake24/common/types';
-import { paginationMeta, paginationRequest, bigIntString as surveyId } from '@intake24/common/types/http';
+import { bigIntString as surveyId, userCustomField } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { userCustomFieldAttributes } from '@intake24/common/types/http/admin';
 
 const contract = initContract();

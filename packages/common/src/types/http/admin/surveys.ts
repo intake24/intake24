@@ -3,8 +3,8 @@ import { z } from 'zod';
 
 import { schemeOverrides, sessionSettings, surveyAuthModes, surveySearchSettings, surveyStatuses } from '@intake24/common/surveys';
 
+import { safeIdentifier } from '../../common';
 import { notification } from '../../notifications';
-import { safeIdentifier } from '../generic';
 import { faqAttributes } from './faqs';
 import { feedbackSchemeAttributes } from './feedback-schemes';
 import { systemLocaleAttributes } from './locales';

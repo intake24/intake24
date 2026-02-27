@@ -1,11 +1,17 @@
 <template>
   <layout v-bind="{ id, entry }">
+    <v-toolbar color="grey-lighten-4">
+      <v-icon color="secondary" end icon="$jobs" />
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t('tasks.title') }}
+      </v-toolbar-title>
+      <v-spacer />
+    </v-toolbar>
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-card-title>{{ $t('nutrient-tables.tasks.title') }}</v-card-title>
-            <v-card-text>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12" md="6">
               <v-select
                 v-model="data.type"
                 hide-details="auto"
@@ -16,35 +22,35 @@
                 variant="outlined"
                 @update:model-value="updateJob"
               />
-            </v-card-text>
-          </v-col>
-          <v-col cols="12" md="6">
-            <component
-              :is="data.type"
-              v-if="Object.keys(data.params).length"
-              v-model="data.params"
-              :disabled="disabledJobParams[data.type]"
-              :errors="errors"
-              name="params"
-              :refs="refs"
-              @update:model-value="errors.clear(paramErrors)"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="px-6" cols="12" md="6">
-            <v-btn
-              block
-              color="primary"
-              :disabled="errors.any.value || jobInProgress || isAppLoading"
-              size="x-large"
-              :title="$t('common.action.upload')"
-              type="submit"
-            >
-              <v-icon icon="fas fa-play" start />{{ $t('common.action.submit') }}
-            </v-btn>
-          </v-col>
-        </v-row>
+            </v-col>
+            <v-col cols="12" md="6">
+              <component
+                :is="data.type"
+                v-if="Object.keys(data.params).length"
+                v-model="data.params"
+                :disabled="disabledJobParams[data.type]"
+                :errors="errors"
+                name="params"
+                :refs="refs"
+                @update:model-value="errors.clear(paramErrors)"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="px-6" cols="12" md="6">
+              <v-btn
+                block
+                color="primary"
+                :disabled="errors.any.value || jobInProgress || isAppLoading"
+                size="x-large"
+                :title="$t('common.action.upload')"
+                type="submit"
+              >
+                <v-icon icon="fas fa-play" start />{{ $t('common.action.submit') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
         <polls-job-list v-bind="{ jobs }" />
       </v-form>
     </v-container>

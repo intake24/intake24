@@ -1,7 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString as feedbackSchemeId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as feedbackSchemeId } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   feedbackSchemeCreateRequest,
   feedbackSchemeEntry,

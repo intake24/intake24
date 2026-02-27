@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { bigIntString } from '../generic';
+import { bigIntString } from '../../common';
 
 export const mediaModels = ['FAQ', 'FeedbackScheme', 'SurveyScheme'] as const;
 export type MediaModel = (typeof mediaModels)[number];

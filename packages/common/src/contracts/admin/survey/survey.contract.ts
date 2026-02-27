@@ -1,8 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { surveyTasks } from '@intake24/common/types';
-import { paginationMeta, paginationRequest, bigIntString as surveyId } from '@intake24/common/types/http';
+import { bigIntString as surveyId, surveyTasks } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   jobAttributes,
   surveyCreateRequest,

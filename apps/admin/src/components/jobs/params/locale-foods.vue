@@ -1,20 +1,14 @@
 <template>
-  <div v-if="!disabled.localeId">
-    <v-card-title>{{ $t('jobs.params') }}</v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-col cols="12">
-          <select-resource
-            v-model="params.localeId"
-            :error-messages="errors.get('params.localeId')"
-            item-name="englishName"
-            :label="$t('jobs.types.LocaleFoods.localeId')"
-            name="localeId"
-            resource="locales"
-          />
-        </v-col>
-      </v-row>
-    </v-card-text>
+  <div class="d-flex flex-column ga-4">
+    <select-resource
+      v-if="!disabled.localeId"
+      v-model="params.localeId"
+      :error-messages="errors.get('params.localeId')"
+      item-name="englishName"
+      :label="$t('jobs.types.LocaleFoods.localeId')"
+      name="localeId"
+      resource="locales"
+    />
   </div>
 </template>
 

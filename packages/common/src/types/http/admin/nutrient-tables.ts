@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { safeIdentifier } from '../generic';
+import { safeIdentifier } from '../../common';
 import { nutrientTypeResponse } from './nutrient-types';
 
 export const nutrientTableAttributes = z.object({

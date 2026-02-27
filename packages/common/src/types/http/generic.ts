@@ -2,20 +2,6 @@ import type { Dictionary } from '../common';
 
 import { z } from 'zod';
 
-export const bigIntString = z.bigint().or(z.number().or(z.string()).pipe(z.coerce.number<number>().int())).pipe(z.coerce.string());
-export const uuid = z.uuid();
-export const safeIdentifier = z.string().min(1).regex(/^[\w-]*$/);
-
-const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
-type Literal = z.infer<typeof literalSchema>;
-type Json = Literal | { [key: string]: Json } | Json[];
-
-export const jsonSchema: z.ZodType<Json> = z.lazy(() =>
-  z.union([literalSchema, z.array(jsonSchema), z.record(z.string(), jsonSchema)]),
-);
-
-export const jsonObjectSchema: z.ZodType<Json> = z.lazy(() => z.record(z.string(), jsonSchema));
-
 export const captcha = z
   .string()
   .nullish()

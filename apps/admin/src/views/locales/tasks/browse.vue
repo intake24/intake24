@@ -1,50 +1,77 @@
 <template>
   <layout v-bind="{ id, entry }">
+    <v-toolbar color="grey-lighten-4">
+      <v-icon color="secondary" end icon="$jobs" />
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t('tasks.title') }}
+      </v-toolbar-title>
+      <v-spacer />
+    </v-toolbar>
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-card-title>{{ $t('locales.tasks.title') }}</v-card-title>
-            <v-card-text>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12" md="6">
               <v-select
                 v-model="data.type"
                 hide-details="auto"
                 :items="jobTypeList"
-                :label="$t('locales.tasks._')"
+                :label="$t('tasks._')"
                 name="job"
                 prepend-inner-icon="$jobs"
                 variant="outlined"
                 @update:model-value="updateJob"
               />
-            </v-card-text>
-          </v-col>
-          <v-col cols="12" md="6">
-            <component
-              :is="data.type"
-              v-if="Object.keys(data.params).length"
-              v-model="data.params"
-              :disabled="disabledJobParams[data.type]"
-              :errors="errors"
-              name="params"
-              :refs="refs"
-              @update:model-value="errors.clear(paramErrors)"
-            />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="px-6" cols="12" md="6">
-            <v-btn
-              block
-              color="primary"
-              :disabled="errors.any.value || jobInProgress || isAppLoading"
-              size="x-large"
-              :title="$t('common.action.upload')"
-              type="submit"
-            >
-              <v-icon icon="fas fa-play" start />{{ $t('common.action.submit') }}
-            </v-btn>
-          </v-col>
-        </v-row>
+            </v-col>
+            <v-col cols="12" md="6">
+              <component
+                :is="data.type"
+                v-if="Object.keys(data.params).length"
+                v-model="data.params"
+                :disabled="disabledJobParams[data.type]"
+                :errors="errors"
+                name="params"
+                :refs="refs"
+                @update:model-value="errors.clear(paramErrors)"
+              />
+            </v-col>
+          </v-row>
+          <v-row v-if="destructiveJobTypes[data.type]">
+            <v-col cols="12">
+              <v-alert
+                icon="fas fa-triangle-exclamation"
+                prominent
+                type="warning"
+                variant="tonal"
+              >
+                <div class="d-flex flex-column ga-4">
+                  <div class="text-h5 font-weight-medium text-uppercase">
+                    {{ $t(`jobs.warning.title`) }}
+                  </div>
+                  <div class="text-subtitle-1 font-weight-medium">
+                    {{ $t(`jobs.warning.subtitle`) }}
+                  </div>
+                  <p v-for="p in destructiveJobTypes[data.type]" :key="p">
+                    {{ $t(`jobs.types.${data.type}.warning.${p}`) }}
+                  </p>
+                </div>
+              </v-alert>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-btn
+                block
+                color="primary"
+                :disabled="errors.any.value || jobInProgress || isAppLoading"
+                size="x-large"
+                :title="$t('common.action.upload')"
+              >
+                <v-icon icon="fas fa-play" start />{{ $t('common.action.submit') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
         <polls-job-list v-bind="{ jobs }" />
       </v-form>
     </v-container>
@@ -99,6 +126,11 @@ export default defineComponent({
       LocaleFoodNutrientMapping: { localeId: true },
     };
 
+    const destructiveJobTypes: Partial<Record<LocaleJob, number>> = {
+      LocaleCopy: 1,
+      LocaleFoodRankingUpload: 3,
+    };
+
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(props);
     useEntryFetch(props);
     const { clearError, data, errors, post } = useForm<LocaleTasksForm>({
@@ -130,6 +162,7 @@ export default defineComponent({
 
     return {
       defaultJobsParams,
+      destructiveJobTypes,
       disabledJobParams,
       jobTypeList,
       entry,

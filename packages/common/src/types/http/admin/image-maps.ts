@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-import { localeTranslation } from '../../common';
-import { safeIdentifier } from '../generic';
+import { localeTranslation, safeIdentifier } from '../../common';
 import { sourceFileInput } from './source-images';
 
 export const imageMapObjectAttributes = z.object({

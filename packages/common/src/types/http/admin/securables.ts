@@ -3,7 +3,7 @@ import type { UserListEntry } from './users';
 
 import { z } from 'zod';
 
-import { bigIntString } from '../generic';
+import { bigIntString } from '../../common';
 import { userAttributes } from './users';
 
 export const createUserWithSecurables = z.object({

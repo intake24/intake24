@@ -1,7 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString as nutrientTypeId, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString as nutrientTypeId } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   nutrientTypeRefs,
   nutrientTypeRequest,

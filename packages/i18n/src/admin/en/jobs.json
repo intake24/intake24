@@ -16,6 +16,10 @@
     "confirmed": "Job has been pushed to the queue",
     "override": "Override job parameters"
   },
+  "warning": {
+    "title": "Warning: risk of data loss - Proceed with caution",
+    "subtitle": "Double-check that you are in the correct locale before proceeding."
+  },
   "types": {
     "_": "Job types",
     "CleanRedisStore": {
@@ -56,6 +60,9 @@
         "splitLists": "Split lists",
         "splitWords": "Split words",
         "synonymSets": "Synonym sets"
+      },
+      "warning": {
+        "1": "The copy operation will delete all existing data in the target locale and replace it with data from the source locale."
       }
     },
     "LocaleFoodNutrientMapping": {
@@ -66,11 +73,11 @@
       "_": "Locale - food ranking CSV upload",
       "file": "CSV file",
       "targetAlgorithm": "Sorting algorithm type to update",
-      "warningTitle": "Warning: risk of data loss. Proceed with caution.",
-      "warningP1": "The food frequency data is automatically updated by the system as new recalls are received.",
-      "warningP2": "Uploading frequency data from a CSV file will override existing records in the database, potentially leading to data loss.",
-      "warningP3": "This feature is intended only for initialising new locales or fixing issues with existing frequency data.",
-      "warningP4": "Double-check that you are in the correct locale before uploading the data."
+      "warning": {
+        "1": "The food frequency data is automatically updated by the system as new recalls are received.",
+        "2": "Uploading frequency data from a CSV file will override existing records in the database, potentially leading to data loss.",
+        "3": "This feature is intended only for initialising new locales or fixing issues with existing frequency data."
+      }
     },
     "LocaleCategories": {
       "_": "Locale - Export categories",

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { bigIntString, safeIdentifier } from '../generic';
+import { bigIntString, safeIdentifier } from '../../common';
 import { permissionAttributes } from './permissions';
 
 export const roleAttributes = z.object({

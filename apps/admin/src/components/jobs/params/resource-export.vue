@@ -1,22 +1,15 @@
 <template>
-  <div>
-    <v-card-title>{{ $t('jobs.params') }}</v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-col cols="12">
-          <v-select
-            v-model="params.resource"
-            :error-messages="errors.get('params.resource')"
-            hide-details="auto"
-            :items="items"
-            :label="$t('jobs.types.ResourceExport.resource')"
-            name="resource"
-            prepend-inner-icon="fas fa-list"
-            variant="outlined"
-          />
-        </v-col>
-      </v-row>
-    </v-card-text>
+  <div class="d-flex flex-column ga-4">
+    <v-select
+      v-model="params.resource"
+      :error-messages="errors.get('params.resource')"
+      hide-details="auto"
+      :items="items"
+      :label="$t('jobs.types.ResourceExport.resource')"
+      name="resource"
+      prepend-inner-icon="fas fa-list"
+      variant="outlined"
+    />
   </div>
 </template>
 

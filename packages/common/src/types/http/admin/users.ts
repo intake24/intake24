@@ -2,8 +2,7 @@ import { z } from 'zod';
 
 import { strongPasswordWithConfirmOptional } from '@intake24/common/security';
 
-import { customField, userCustomField } from '../..';
-import { bigIntString } from '../generic';
+import { bigIntString, customField, userCustomField } from '../../common';
 import { permissionAttributes } from './permissions';
 import { roleAttributes } from './roles';
 

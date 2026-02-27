@@ -76,8 +76,8 @@ This needs to be run if object structure changes, so all database records are sy
 
 `LocaleCopy` copies locale data from specified source locale based on included subtasks.
 
-:::tip Subtask processing
-Each subtask will firstly delete any existing data and then copies over data from specified source locale.
+:::danger Data loss warning
+This will delete any existing data for each included subtask before copying over new data from source locale.
 :::
 
 **Food database subtasks:**

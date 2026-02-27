@@ -1,7 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { bigIntString, paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import { bigIntString } from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   foodCopyInput,
   foodEntry,

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-import { localeTranslation } from '../../common';
-import { safeIdentifier } from '../generic';
+import { localeTranslation, safeIdentifier } from '../../common';
 import { imageMapEntry, imageMapEntryObject } from './image-maps';
 
 export const guideImageObjectAttributes = z.object({
