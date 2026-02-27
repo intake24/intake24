@@ -8,6 +8,7 @@ import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig, loadEnv } from 'vite';
+import { analyzer } from 'vite-bundle-analyzer';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -41,6 +42,7 @@ export default defineConfig(({ mode }) => {
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
     VUE_DEV_TOOLS,
+    ANALYZE_BUNDLE,
   } = loadEnv(mode, process.cwd(), '');
 
   const disablePwa = !!(DISABLE_PWA === 'true');
@@ -49,6 +51,7 @@ export default defineConfig(({ mode }) => {
   const legacy = !!(LEGACY === 'true');
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
   const vueDevTools = !!(VUE_DEV_TOOLS === 'true');
+  const analyzeBundle = !!(ANALYZE_BUNDLE === 'true');
 
   return {
     resolve: {
@@ -77,8 +80,10 @@ export default defineConfig(({ mode }) => {
             return `assets/${subDir}[name]-[hash][extname]`;
           },
           manualChunks: (id) => {
-            if (id.includes('echarts'))
-              return 'echarts';
+            if (/vuetify|echarts/.test(id))
+              return 'ui';
+            if (/strichjs|quagga/.test(id))
+              return 'barcode';
           },
         },
       },
@@ -164,10 +169,11 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           cleanupOutdatedCaches: true,
-          maximumFileSizeToCacheInBytes: 4000000,
+          maximumFileSizeToCacheInBytes: 3000000,
           globPatterns: ['**/*.{css,js,html,svg,png,webp,ico,txt,woff,woff2,ttf}'],
         },
       }),
+      analyzer({ enabled: analyzeBundle }),
     ].filter(Boolean),
   };
 });

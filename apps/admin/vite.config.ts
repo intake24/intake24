@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'node:url';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig, loadEnv } from 'vite';
+import { analyzer } from 'vite-bundle-analyzer';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -36,6 +37,7 @@ export default defineConfig(({ mode }) => {
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
     VUE_DEV_TOOLS,
+    ANALYZE_BUNDLE,
   } = loadEnv(mode, process.cwd(), '');
 
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
@@ -43,6 +45,7 @@ export default defineConfig(({ mode }) => {
   const emptyOutDir = !!(EMPTY_OUT_DIR === 'true');
   const https = !!(DEV_HTTPS === 'true');
   const vueDevTools = !!(VUE_DEV_TOOLS === 'true');
+  const analyzeBundle = !!(ANALYZE_BUNDLE === 'true');
 
   return {
     resolve: {
@@ -71,11 +74,13 @@ export default defineConfig(({ mode }) => {
             return `assets/${subDir}[name]-[hash][extname]`;
           },
           manualChunks: (id) => {
-            if (id.includes('echarts'))
-              return 'echarts';
-            if (id.includes('json-editor-vue'))
+            if (/vuetify|echarts/.test(id))
+              return 'ui';
+            if (/strichjs|quagga/.test(id))
+              return 'barcode';
+            if (/json-editor-vue/.test(id))
               return 'json-editor';
-            if (id.includes('tinymce'))
+            if (/tinymce/.test(id))
               return 'tinymce';
           },
         },
@@ -158,9 +163,10 @@ export default defineConfig(({ mode }) => {
           cleanupOutdatedCaches: true,
           globPatterns: ['**/*.{css,js,html,svg,png,webp,ico,txt,woff,woff2,ttf}'],
           importScripts: ['js/web-push.js'],
-          maximumFileSizeToCacheInBytes: 3500000,
+          maximumFileSizeToCacheInBytes: 3000000,
         },
       }),
+      analyzer({ enabled: analyzeBundle }),
     ].filter(Boolean),
   };
 });
