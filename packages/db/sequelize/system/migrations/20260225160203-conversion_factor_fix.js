@@ -63,6 +63,37 @@ export default {
         { transaction },
       );
 
+      await queryInterface.createTable(
+        'ssf_cf',
+        {
+          id: {
+            type: Sequelize.UUID,
+            primaryKey: true,
+          },
+          session_path: {
+            type: Sequelize.STRING,
+            allowNull: false,
+          },
+          conversion_factor: {
+            type: Sequelize.FLOAT,
+            allowNull: false,
+          },
+          orig_nutrients: {
+            type: Sequelize.JSONB,
+            allowNull: false,
+          },
+          orig_portion_size: {
+            type: Sequelize.JSONB,
+            allowNull: false,
+          },
+          orig_session: {
+            type: Sequelize.JSONB,
+            allowNull: false,
+          },
+        },
+        { transaction },
+      );
+
       const dups = await queryInterface.sequelize.query(`
         SELECT COUNT(ss.id), ss.session_id
         FROM survey_submissions ss
@@ -220,6 +251,8 @@ export default {
               sessionFood,
               psm: { ...cloneDeep(foodPsm), servingWeight, leftoversWeight },
               conversionFactor: psm.conversionFactor,
+              origPsm: foodPsm,
+              origNutrients: dbFood.nutrients,
             });
             const path = `${sessionFood.path}.portionSize`;
 
@@ -256,6 +289,36 @@ export default {
               transaction,
             },
           );
+
+          const insertValues = foodsToUpdate.map((f) => {
+            const id = `${queryInterface.sequelize.escape(f.dbFood.id)}::uuid`;
+            const path = queryInterface.sequelize.escape(f.sessionFood.path);
+            const conversionFactor = f.conversionFactor;
+            const nutrients = `${queryInterface.sequelize.escape(JSON.stringify(f.origNutrients))}::jsonb`;
+            const psm = `${queryInterface.sequelize.escape(JSON.stringify(f.origPsm))}::jsonb`;
+            const session = `${queryInterface.sequelize.escape(JSON.stringify(originalSession))}::jsonb`;
+            return `(${id}, ${path}, ${conversionFactor}, ${nutrients}, ${psm}, ${session})`;
+          }).join(',');
+
+          await queryInterface.sequelize.query(
+            `INSERT INTO ssf_cf (id, session_path, conversion_factor, orig_nutrients, orig_portion_size, orig_session) VALUES ${insertValues};`,
+            { transaction },
+          );
+
+          console.log(`Updated session: ${state.uxSessionId}, submission id: ${submission.id}, foods updated: ${foodsToUpdate.length}`);
+
+          for (const f of foodsToUpdate) {
+            console.log(
+              `Session: ${state.uxSessionId}`,
+              `Food: ${f.dbFood.id}`,
+              `path: ${f.sessionFood.path}`,
+              `conversion factor: ${f.conversionFactor}`,
+              get(originalSession, `${f.sessionFood.path}.portionSize.servingWeight`),
+              get(originalSession, `${f.sessionFood.path}.portionSize.leftoversWeight`),
+              get(newSession, `${f.sessionFood.path}.portionSize.servingWeight`),
+              get(newSession, `${f.sessionFood.path}.portionSize.leftoversWeight`),
+            );
+          }
         }
       }
 
