@@ -36,27 +36,17 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { JobParams } from '@intake24/common/types';
-
-import { defineComponent } from 'vue';
-
+<script lang="ts" setup>
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { eventTypes } from '@intake24/common/types';
 
-import jobParams from './job-params';
+import { createJobParamProps, useJobParams } from './use-job-params';
 
-export default defineComponent({
-  name: 'SurveyEventNotification',
+const props = defineProps(createJobParamProps<'SurveyEventNotification'>());
 
-  components: { SelectResource },
+const emit = defineEmits(['update:modelValue']);
 
-  mixins: [jobParams<JobParams['SurveyEventNotification']>()],
-
-  setup() {
-    return { eventTypes };
-  },
-});
+const { params } = useJobParams<'SurveyEventNotification'>(props, { emit });
 </script>
 
 <style scoped></style>

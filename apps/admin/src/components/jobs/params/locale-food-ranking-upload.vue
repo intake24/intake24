@@ -23,7 +23,7 @@
     <v-select
       v-model="params.targetAlgorithm"
       :error-messages="errors.get('params.targetAlgorithm')"
-      :items="searchSortingAlgorithms"
+      :items="sortingAlgorithms"
       :label="$t('jobs.types.LocaleFoodRankingUpload.targetAlgorithm')"
       name="targetAlgorithm"
       variant="outlined"
@@ -32,35 +32,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { JobParams } from '@intake24/common/types';
-
-import { defineComponent } from 'vue';
-
+<script lang="ts" setup>
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { searchSortingAlgorithms } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/ui';
 
-import jobParams from './job-params';
+import { createJobParamProps, useJobParams } from './use-job-params';
 
-export default defineComponent({
-  name: 'LocaleFoodRankingUpload',
+const props = defineProps(createJobParamProps<'LocaleFoodRankingUpload'>());
 
-  components: { SelectResource },
+const emit = defineEmits(['update:modelValue']);
 
-  mixins: [jobParams<JobParams['LocaleFoodRankingUpload']>()],
+const { params } = useJobParams<'LocaleFoodRankingUpload'>(props, { emit });
 
-  setup() {
-    const { i18n } = useI18n();
+const { i18n } = useI18n();
 
-    return {
-      searchSortingAlgorithms: searchSortingAlgorithms.map(value => ({
-        value,
-        title: i18n.t(`surveys.search.algorithms.${value}`),
-      })),
-    };
-  },
-});
+const sortingAlgorithms = searchSortingAlgorithms.map(value => ({
+  value,
+  title: i18n.t(`surveys.search.algorithms.${value}`),
+}));
 </script>
 
 <style scoped></style>

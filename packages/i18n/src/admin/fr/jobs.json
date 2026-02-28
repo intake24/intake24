@@ -16,9 +16,15 @@
     "confirmed": "Job has been pushed to the queue",
     "override": "Override job parameters"
   },
-  "warning": {
-    "title": "Warning: risk of data loss - Proceed with caution",
-    "subtitle": "Double-check that you are in the correct locale before proceeding."
+  "alerts": {
+    "warning": {
+      "title": "Warning: risk of data modification - Proceed with caution",
+      "subtitle": "This action may modify existing data."
+    },
+    "error": {
+      "title": "Danger: risk of data loss - Proceed with extreme caution",
+      "subtitle": "This action replaces existing data. Ensure you have a backup before proceeding."
+    }
   },
   "types": {
     "_": "Types de tâches",
@@ -61,7 +67,7 @@
         "splitWords": "Split words",
         "synonymSets": "Synonym sets"
       },
-      "warning": {
+      "alert": {
         "1": "The copy operation will delete all existing data in the target locale and replace it with data from the source locale."
       }
     },
@@ -73,7 +79,7 @@
       "_": "Régional - téléchargement du CSV de classement d'aliments",
       "file": "fichier CSV",
       "targetAlgorithm": "Sorting algorithm type to update",
-      "warning": {
+      "alert": {
         "1": "The food frequency data is automatically updated by the system as new recalls are received.",
         "2": "Uploading frequency data from a CSV file will override existing records in the database, potentially leading to data loss.",
         "3": "This feature is intended only for initialising new locales or fixing issues with existing frequency data."
@@ -93,11 +99,17 @@
     },
     "NutrientTableMappingImport": {
       "_": "Tableau des nutriments - Importer le mapping de la BDD nutritionnelle",
-      "file": "fichier CSV"
+      "file": "fichier CSV",
+      "alert": {
+        "1": "The import process will update mapping for all nutrients and fields."
+      }
     },
     "NutrientTableDataImport": {
       "_": "Tableau des nutriments - Importer les données de la BDD nutritionnelle",
-      "file": "fichier CSV"
+      "file": "fichier CSV",
+      "alert": {
+        "1": "The import process will update nutrient values for all foods in the nutrient table based on the provided mapping."
+      }
     },
     "PopularitySearchUpdateCounters": {
       "_": "Chercher - Mettre à jour les compteurs de popularité",
@@ -128,7 +140,11 @@
     },
     "SurveyNutrientsRecalculation": {
       "_": "Enquête - Carculer à nouveau les nutriments",
-      "surveyId": "Identifiant de l'enquête"
+      "surveyId": "Identifiant de l'enquête",
+      "alert": {
+        "1": "This job will recalculate nutrient values for all survey submissions.",
+        "2": "Depending on the number of submissions, this process may take a significant amount of time to complete."
+      }
     },
     "SurveyRatingsExport": {
       "_": "Survey - Ratings export"

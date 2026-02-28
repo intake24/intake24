@@ -31,6 +31,10 @@ export function modelToRequestParam<T extends string>(modelType: T): `${CamelCas
   return `${camelCase(modelType)}Id` as `${CamelCase<T>}Id`;
 }
 
+export function resourceToRequestParam(resource: string): string {
+  return `${camelCase(pluralize.singular(resource))}Id`;
+}
+
 export function getResourceFromSecurable(securableType: any): string {
   if (!isSecurableType(securableType))
     throw new Error('Invalid securable type');

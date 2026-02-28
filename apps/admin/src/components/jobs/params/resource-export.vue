@@ -13,36 +13,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { JobParams } from '@intake24/common/types';
-
-import { defineComponent } from 'vue';
-
+<script lang="ts" setup>
 import { useUser } from '@intake24/admin/stores';
 import { resources } from '@intake24/common/types';
 import { useI18n } from '@intake24/ui';
 
-import jobParams from './job-params';
+import { createJobParamProps, useJobParams } from './use-job-params';
 
-export default defineComponent({
-  name: 'ResourceExport',
+const props = defineProps(createJobParamProps<'ResourceExport'>());
 
-  mixins: [jobParams<JobParams['ResourceExport']>()],
+const emit = defineEmits(['update:modelValue']);
 
-  setup() {
-    const { i18n } = useI18n();
-    const { can } = useUser();
+const { params } = useJobParams<'ResourceExport'>(props, { emit });
 
-    const items = resources.filter(item => can(`${item.split('.')[0]}:browse`)).map(value => ({
-      title: i18n.t(`${value}.title`),
-      value,
-    }));
+const { i18n } = useI18n();
+const { can } = useUser();
 
-    return {
-      items,
-    };
-  },
-});
+const items = resources.filter(item => can(`${item.split('.')[0]}:browse`)).map(value => ({
+  title: i18n.t(`${value}.title`),
+  value,
+}));
 </script>
 
 <style scoped></style>

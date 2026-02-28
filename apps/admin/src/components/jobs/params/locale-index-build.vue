@@ -9,18 +9,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { JobParams } from '@intake24/common/types';
+<script lang="ts" setup>
+import { createJobParamProps, useJobParams } from './use-job-params';
 
-import { defineComponent } from 'vue';
+const props = defineProps(createJobParamProps<'LocaleIndexBuild'>());
 
-import jobParams from './job-params';
+const emit = defineEmits(['update:modelValue']);
 
-export default defineComponent({
-  name: 'LocaleIndexBuild',
-
-  mixins: [jobParams<JobParams['LocaleIndexBuild']>()],
-});
+const { params } = useJobParams<'LocaleIndexBuild'>(props, { emit });
 </script>
 
 <style scoped></style>

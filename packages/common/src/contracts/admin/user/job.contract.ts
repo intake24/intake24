@@ -16,7 +16,7 @@ export const job = initContract().router({
       localeId: z.string().optional(),
       nutrientTableId: z.string().optional(),
       surveyId: z.string().optional(),
-      startedAfter: z.string().datetime().optional(),
+      startedAfter: z.iso.datetime().optional(),
     }),
     responses: {
       200: z.object({
@@ -29,6 +29,7 @@ export const job = initContract().router({
   },
   submit: {
     method: 'POST',
+    contentType: 'multipart/form-data',
     path: '/admin/user/jobs',
     body: userJobRequest,
     responses: {

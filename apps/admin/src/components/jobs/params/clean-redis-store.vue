@@ -12,29 +12,24 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { JobParams } from '@intake24/common/types';
-
-import { defineComponent } from 'vue';
-
+<script lang="ts" setup>
 import { redisStoreTypes } from '@intake24/common/types';
+import { useI18n } from '@intake24/ui';
 
-import jobParams from './job-params';
+import { createJobParamProps, useJobParams } from './use-job-params';
 
-export default defineComponent({
-  name: 'CleanRedisStore',
+const props = defineProps(createJobParamProps<'CleanRedisStore'>());
 
-  mixins: [jobParams<JobParams['CleanRedisStore']>()],
+const emit = defineEmits(['update:modelValue']);
 
-  data() {
-    return {
-      stores: redisStoreTypes.map(value => ({
-        value,
-        title: this.$t(`jobs.types.CleanRedisStore.stores.${value}`),
-      })),
-    };
-  },
-});
+const { params } = useJobParams<'CleanRedisStore'>(props, { emit });
+
+const { i18n: { t } } = useI18n();
+
+const stores = redisStoreTypes.map(value => ({
+  value,
+  title: t(`jobs.types.CleanRedisStore.stores.${value}`),
+}));
 </script>
 
 <style scoped></style>

@@ -22,22 +22,16 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { JobParams } from '@intake24/common/types';
-
-import { defineComponent } from 'vue';
-
+<script lang="ts" setup>
 import { SelectResource } from '@intake24/admin/components/dialogs';
 
-import jobParams from './job-params';
+import { createJobParamProps, useJobParams } from './use-job-params';
 
-export default defineComponent({
-  name: 'SurveyRespondentsImport',
+const props = defineProps(createJobParamProps<'SurveyRespondentsImport'>());
 
-  components: { SelectResource },
+const emit = defineEmits(['update:modelValue']);
 
-  mixins: [jobParams<JobParams['SurveyRespondentsImport']>()],
-});
+const { params } = useJobParams<'SurveyRespondentsImport'>(props, { emit });
 </script>
 
 <style scoped></style>

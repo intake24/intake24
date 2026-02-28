@@ -7,12 +7,16 @@ import path from 'node:path';
 import { initServer } from '@ts-rest/express';
 import fs from 'fs-extra';
 import { pick } from 'lodash-es';
+import multer from 'multer';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { Job, Op } from '@intake24/db';
 
 export function job() {
+  const upload = multer({ dest: ioc.cradle.fsConfig.local.uploads });
+
   return initServer().router(contract.admin.user.job, {
     browse: async ({ query, req }) => {
       const { userId } = req.scope.cradle.user;
@@ -40,36 +44,41 @@ export function job() {
 
       return { status: 200, body: jobs };
     },
-    submit: async ({ body: { type, params }, req }) => {
-      const { userId } = req.scope.cradle.user;
+    submit: {
+      middleware: [upload.single('params[file]')],
+      handler: async ({ body: { type, params }, req }) => {
+        const { userId } = req.scope.cradle.user;
 
-      switch (type) {
-        case 'ResourceExport':
-          if ('resource' in params) {
-            const resource = params.resource.split('.')[0];
-            if (!(await req.scope.cradle.aclService.hasPermission(`${resource}:browse`)))
+        console.log('Submitting job with params', type, params);
+
+        switch (type) {
+          case 'ResourceExport':
+            if ('resource' in params) {
+              const resource = params.resource.split('.')[0];
+              if (!(await req.scope.cradle.aclService.hasPermission(`${resource}:browse`)))
+                throw new ForbiddenError();
+            }
+            break;
+          case 'PackageExport':
+            if (!(await req.scope.cradle.aclService.hasPermission('packages:export')))
               throw new ForbiddenError();
-          }
-          break;
-        case 'PackageExport':
-          if (!(await req.scope.cradle.aclService.hasPermission('packages:export')))
-            throw new ForbiddenError();
-          break;
-        case 'PackageVerification':
-          if (!(await req.scope.cradle.aclService.hasPermission('packages:import')))
-            throw new ForbiddenError();
-          break;
-        case 'PackageImport':
-          if (!(await req.scope.cradle.aclService.hasPermission('packages:import')))
-            throw new ForbiddenError();
-      }
+            break;
+          case 'PackageVerification':
+            if (!(await req.scope.cradle.aclService.hasPermission('packages:import')))
+              throw new ForbiddenError();
+            break;
+          case 'PackageImport':
+            if (!(await req.scope.cradle.aclService.hasPermission('packages:import')))
+              throw new ForbiddenError();
+        }
 
-      const jobEntry = await req.scope.cradle.scheduler.jobs.addJob(
-        { userId, type, params },
-        { delay: 500 },
-      );
+        const jobEntry = await req.scope.cradle.scheduler.jobs.addJob(
+          { userId, type, params },
+          { delay: 500 },
+        );
 
-      return { status: 200, body: jobEntry };
+        return { status: 200, body: jobEntry };
+      },
     },
     read: async ({ params: { jobId: id }, req }) => {
       const { userId } = req.scope.cradle.user;

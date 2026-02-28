@@ -12,22 +12,16 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { JobParams } from '@intake24/common/types';
-
-import { defineComponent } from 'vue';
-
+<script lang="ts" setup>
 import { SelectResource } from '@intake24/admin/components/dialogs';
 
-import jobParams from './job-params';
+import { createJobParamProps, useJobParams } from './use-job-params';
 
-export default defineComponent({
-  name: 'LocaleFoodNutrientMapping',
+const props = defineProps(createJobParamProps<'LocaleFoodNutrientMapping'>());
 
-  components: { SelectResource },
+const emit = defineEmits(['update:modelValue']);
 
-  mixins: [jobParams<JobParams['LocaleFoodNutrientMapping']>()],
-});
+const { params } = useJobParams<'LocaleFoodNutrientMapping'>(props, { emit });
 </script>
 
 <style scoped></style>
