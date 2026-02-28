@@ -125,7 +125,7 @@ const volumeDefs: Record<Bowl, number[]> = {
 const milkLevelImageMapPrefix = 'milkbowl';
 
 const { action, type } = usePromptUtils(props, { emit });
-const { psmValid } = usePortionSizeMethod<'milk-on-cereal'>(props);
+const { conversionFactor, psmValid } = usePortionSizeMethod<'milk-on-cereal'>(props);
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
@@ -226,7 +226,7 @@ function confirmMilk() {
 
 function update() {
   if (milkLevelWeight.value !== undefined)
-    state.value.portionSize.servingWeight = milkLevelWeight.value;
+    state.value.portionSize.servingWeight = milkLevelWeight.value * conversionFactor.value;
 
   emit('update:modelValue', state.value);
 };
