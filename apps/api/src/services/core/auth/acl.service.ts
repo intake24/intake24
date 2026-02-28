@@ -1,8 +1,8 @@
-import type { Attributes, FindOptions } from 'sequelize';
+import type { Attributes, FindOptions, ModelStatic } from 'sequelize';
 
 import type { RequestIoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
-import type { HasVisibility, ModelStatic, Securable } from '@intake24/db';
+import type { HasVisibility, Securable } from '@intake24/db';
 
 export interface CheckAccessOptions {
   params: Dictionary;

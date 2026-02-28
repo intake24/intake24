@@ -6,6 +6,7 @@ import type { SinglePrompt } from '@intake24/common/prompts';
 import type { SurveyStatus } from '@intake24/common/surveys';
 
 import { initServer } from '@ts-rest/express';
+import { Op } from 'sequelize';
 
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
@@ -31,7 +32,7 @@ export function surveyRespondent() {
           {
             association: 'surveys',
             attributes: ['id'],
-            where: { slug: { [FAQ.op('ciEq')]: slug } },
+            where: { slug: { [Op.iLike]: slug } },
           },
         ],
       });

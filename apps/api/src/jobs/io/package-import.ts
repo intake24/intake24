@@ -8,8 +8,10 @@ import type { PkgV2CategoriesFile, PkgV2FoodsFile, PkgV2LocalesFile } from '@int
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+import { Op } from 'sequelize';
+
 import { LocalisableError, NotFoundError } from '@intake24/api/http/errors';
-import { Job as DbJob, Op } from '@intake24/db';
+import { Job as DbJob } from '@intake24/db';
 
 import BaseJob from '../job';
 import { fromPackageCategory, fromPackageFood, fromPackageLocale } from './import/type-conversions';

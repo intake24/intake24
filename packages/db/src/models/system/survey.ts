@@ -1,12 +1,4 @@
-import type {
-  Attributes,
-  CreationAttributes,
-  CreationOptional,
-  FindOptions,
-  InferAttributes,
-  InferCreationAttributes,
-  NonAttribute,
-} from 'sequelize';
+import type { Attributes, CreationAttributes, CreationOptional, FindOptions, InferAttributes, InferCreationAttributes, NonAttribute } from 'sequelize';
 
 import type {
   SchemeOverrides,
@@ -17,6 +9,10 @@ import type {
 } from '@intake24/common/surveys';
 import type { Notification } from '@intake24/common/types';
 
+import {
+
+  Op,
+} from 'sequelize';
 import {
   AfterCreate,
   AfterDestroy,
@@ -354,7 +350,7 @@ export default class Survey extends BaseModel<
   ): Promise<Survey | null> {
     const { where, ...rest } = options;
 
-    return Survey.findOne({ where: { ...where, slug: { [this.op('ciEq')]: slug } }, ...rest });
+    return Survey.findOne({ where: { ...where, slug: { [Op.iLike]: slug } }, ...rest });
   }
 
   // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system

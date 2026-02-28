@@ -1,5 +1,7 @@
+import type { ModelStatic } from 'sequelize';
+
 import type { MediableContract } from '@intake24/common/contracts/admin';
-import type { FAQ, FeedbackScheme, ModelStatic, SurveyScheme } from '@intake24/db';
+import type { FAQ, FeedbackScheme, SurveyScheme } from '@intake24/db';
 
 import { initServer } from '@ts-rest/express';
 import multer from 'multer';

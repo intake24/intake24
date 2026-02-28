@@ -12,11 +12,11 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { FoodsDB, OnConflictOption, SystemDB } from '@intake24/db';
 
+import { Op } from 'sequelize';
+
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { addDollarSign } from '@intake24/api/util';
 import {
-
-  Op,
   RecipeFood,
   RecipeFoodStep,
   SplitList,

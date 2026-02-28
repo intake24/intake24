@@ -1,5 +1,6 @@
+import type { WhereOptions } from 'sequelize';
+
 import type { JobAttributes } from '@intake24/common/types/http/admin';
-import type { WhereOptions } from '@intake24/db';
 
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
@@ -8,11 +9,12 @@ import { initServer } from '@ts-rest/express';
 import fs from 'fs-extra';
 import { pick } from 'lodash-es';
 import multer from 'multer';
+import { Op } from 'sequelize';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
-import { Job, Op } from '@intake24/db';
+import { Job } from '@intake24/db';
 
 export function job() {
   const upload = multer({ dest: ioc.cradle.fsConfig.local.uploads });

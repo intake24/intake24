@@ -1,7 +1,8 @@
+import type { FindOptions, Includeable, WhereOptions } from 'sequelize';
 import type { Model as BaseModel } from 'sequelize-typescript';
 
 import type { RecordVisibility } from '@intake24/common/security';
-import type { FindOptions, Includeable, UserSecurableAttributes, WhereOptions } from '@intake24/db';
+import type { UserSecurableAttributes } from '@intake24/db';
 
 import { Op } from 'sequelize';
 

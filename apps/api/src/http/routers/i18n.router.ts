@@ -1,4 +1,5 @@
-import type { Includeable } from '@intake24/db';
+import type { Includeable } from 'sequelize';
+
 import type { LocaleMessageDictionary } from '@intake24/i18n';
 
 import { initServer } from '@ts-rest/express';

@@ -9,7 +9,7 @@ import path from 'node:path';
 import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash-es';
 import multer from 'multer';
-import { col, fn } from 'sequelize';
+import { col, fn, Op } from 'sequelize';
 
 import languageBackends from '@intake24/api/food-index/language-backends';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
@@ -20,7 +20,7 @@ import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { jobRequiresFile } from '@intake24/common/types';
 import { multerFile } from '@intake24/common/types/http';
-import { FoodsLocale, Language, Op, securableScope, SystemLocale } from '@intake24/db';
+import { FoodsLocale, Language, securableScope, SystemLocale } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { localeId, field }: { localeId?: string; field: string }) {
   const where: WhereOptions = localeId ? { id: { [Op.ne]: localeId } } : {};

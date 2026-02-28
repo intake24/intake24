@@ -1,16 +1,19 @@
+import type { Transaction } from 'sequelize';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { UserCustomField as UserCustomFieldInput } from '@intake24/common/types';
 import type { UserInput } from '@intake24/common/types/http/admin';
-import type { Transaction, UserPasswordAttributes } from '@intake24/db';
+import type { UserPasswordAttributes } from '@intake24/db';
 
 import { uniqBy } from 'lodash-es';
+import { Op } from 'sequelize';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { defaultAlgorithm } from '@intake24/common-backend';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
-import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
+import { Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 
 export type UserPasswordInput = {
   userId: string;

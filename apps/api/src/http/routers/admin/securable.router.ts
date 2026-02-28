@@ -1,10 +1,7 @@
+import type { ModelStatic } from 'sequelize';
+
 import type { SecurableContract } from '@intake24/common/contracts/admin';
-import type {
-  ModelStatic,
-  Securable,
-  UserSecurableAttributes,
-  UserSecurableCreationAttributes,
-} from '@intake24/db';
+import type { Securable, UserSecurableAttributes, UserSecurableCreationAttributes } from '@intake24/db';
 
 import { initServer } from '@ts-rest/express';
 import { Op } from 'sequelize';
@@ -14,15 +11,8 @@ import { permission } from '@intake24/api/http/middleware';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import ioc from '@intake24/api/ioc';
 import { isSecurableType } from '@intake24/common/security';
-import {
-  getResourceFromSecurable,
-  modelToRequestParam,
-  randomString,
-} from '@intake24/common/util';
-import {
-  User,
-  UserSecurable,
-} from '@intake24/db';
+import { getResourceFromSecurable, modelToRequestParam, randomString } from '@intake24/common/util';
+import { User, UserSecurable } from '@intake24/db';
 
 export function securable(securable: ModelStatic<Securable>, contract: SecurableContract) {
   const securableType = securable.name;

@@ -1,9 +1,13 @@
+import type { FindOptions } from 'sequelize';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { CategoryContents, CategoryHeader, CategorySearch, FoodHeader } from '@intake24/common/types/http';
-import type { FindOptions, FoodAttributes, PaginateQuery } from '@intake24/db';
+import type { FoodAttributes, PaginateQuery } from '@intake24/db';
+
+import { Op, QueryTypes } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Category, Food, getAllChildCategories, Op, QueryTypes } from '@intake24/db';
+import { Category, Food, getAllChildCategories } from '@intake24/db';
 
 import { acceptForQuery } from './common';
 

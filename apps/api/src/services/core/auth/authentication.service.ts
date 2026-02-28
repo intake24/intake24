@@ -16,6 +16,8 @@ import type {
 } from '@intake24/common/types/http';
 import type { SurveyAttributes, UserPassword } from '@intake24/db';
 
+import { Op } from 'sequelize';
+
 import { NotFoundError, UnauthorizedError } from '@intake24/api/http/errors';
 import { captcha as captchaCheck } from '@intake24/api/http/rules';
 import { btoa } from '@intake24/api/util';
@@ -288,7 +290,7 @@ function authenticationService({
     const { email, password } = credentials;
 
     const user = await User.findOne({
-      where: { email: { [User.op('ciEq')]: email } },
+      where: { email: { [Op.iLike]: email } },
       include: [{ association: 'password', required: true }],
     });
 
@@ -312,7 +314,7 @@ function authenticationService({
 
     const [user, survey] = await Promise.all([
       User.findOne({
-        where: { email: { [User.op('ciEq')]: email } },
+        where: { email: { [Op.iLike]: email } },
         include: [
           { association: 'password', required: true },
           {
@@ -357,7 +359,7 @@ function authenticationService({
             {
               association: 'survey',
               attributes: ['authCaptcha', 'slug'],
-              where: { slug: { [User.op('ciEq')]: slug } },
+              where: { slug: { [Op.iLike]: slug } },
             },
           ],
         },

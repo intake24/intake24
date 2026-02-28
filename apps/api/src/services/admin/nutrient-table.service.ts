@@ -1,4 +1,4 @@
-import type { CreationAttributes } from 'sequelize';
+import type { CreationAttributes, Transaction } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { JobType, QueueJob } from '@intake24/common/types';
@@ -7,7 +7,8 @@ import type {
   NutrientTableEntry,
   NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
-import type { Transaction } from '@intake24/db';
+
+import { Op } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
@@ -18,7 +19,6 @@ import {
   NutrientTableRecord,
   NutrientTableRecordField,
   NutrientTableRecordNutrient,
-  Op,
 } from '@intake24/db';
 
 export type UploadCsvFileInput = {

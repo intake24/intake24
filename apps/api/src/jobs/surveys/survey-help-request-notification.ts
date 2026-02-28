@@ -4,6 +4,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { Survey } from '@intake24/db';
 
 import nunjucks from 'nunjucks';
+import { Op } from 'sequelize';
 
 import { UserSurveyAlias } from '@intake24/db';
 
@@ -69,7 +70,7 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
         {
           association: 'survey',
           attributes: ['id', 'slug', 'name', 'supportEmail'],
-          where: { slug: { [UserSurveyAlias.op('ciEq')]: surveySlug } },
+          where: { slug: { [Op.iLike]: surveySlug } },
         },
       ],
     });

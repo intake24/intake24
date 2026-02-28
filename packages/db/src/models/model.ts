@@ -47,16 +47,6 @@ export default class Model<
   TModelAttributes extends {} = any,
   TCreationAttributes extends {} = TModelAttributes,
 > extends BaseModel<TModelAttributes, TCreationAttributes> {
-  public static op(op: 'ciEq') {
-    const isPostgres = this.sequelize?.getDialect() === 'postgres';
-
-    const ops = {
-      ciEq: isPostgres ? Op.iLike : Op.eq,
-    };
-
-    return ops[op];
-  }
-
   /**
    * Paginate results of Model.findAll
    *

@@ -3,8 +3,9 @@ import type { TokenPayload } from '@intake24/common/security';
 
 import { subDays } from 'date-fns';
 import jwt from 'jsonwebtoken';
+import { Op } from 'sequelize';
 
-import { Op, PersonalAccessToken, RefreshToken } from '@intake24/db';
+import { PersonalAccessToken, RefreshToken } from '@intake24/db';
 
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 

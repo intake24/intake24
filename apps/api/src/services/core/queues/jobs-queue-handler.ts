@@ -5,8 +5,9 @@ import type { IoC } from '@intake24/api/ioc';
 import type { JobData, JobParams, JobType } from '@intake24/common/types';
 
 import { Queue, Worker } from 'bullmq';
+import { Op } from 'sequelize';
 
-import { Job as DbJob, Op } from '@intake24/db';
+import { Job as DbJob } from '@intake24/db';
 
 import { QueueHandler } from './queue-handler';
 

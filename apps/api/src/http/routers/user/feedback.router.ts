@@ -1,6 +1,7 @@
 import type { Request } from 'express';
 
 import { initServer } from '@ts-rest/express';
+import { Op } from 'sequelize';
 
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
@@ -58,7 +59,7 @@ export function feedback() {
           include: [
             {
               association: 'survey',
-              where: { slug: { [UserSurveyAlias.op('ciEq')]: slug } },
+              where: { slug: { [Op.iLike]: slug } },
               attributes: ['id', 'slug'],
               include: [{ association: 'feedbackScheme', attributes: ['outputs'] }],
             },

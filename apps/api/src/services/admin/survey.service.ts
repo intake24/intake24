@@ -8,12 +8,13 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { UserCustomFieldCreationAttributes } from '@intake24/db';
 
+import { Op } from 'sequelize';
+
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { surveyRespondent } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
 import {
-  Op,
   Permission,
   PermissionUser,
   Survey,

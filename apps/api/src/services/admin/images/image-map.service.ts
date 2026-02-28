@@ -5,8 +5,10 @@ import type {
   UpdateImageMapInput,
 } from '@intake24/common/types/http/admin';
 
+import { Op } from 'sequelize';
+
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { GuideImage, GuideImageObject, ImageMap, ImageMapObject, Op } from '@intake24/db';
+import { GuideImage, GuideImageObject, ImageMap, ImageMapObject } from '@intake24/db';
 
 function imageMapService({
   portionSizeService,

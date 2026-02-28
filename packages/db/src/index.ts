@@ -6,5 +6,3 @@ export * from './models';
 export * from './pg-enum-array-parsers';
 export * from './queries';
 export * from './scopes';
-export * from 'sequelize';
-export { Sequelize as SequelizeTS } from 'sequelize-typescript';

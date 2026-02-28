@@ -1,4 +1,4 @@
-import type { Includeable } from '@intake24/db';
+import type { Includeable } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import {

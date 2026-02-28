@@ -1,3 +1,5 @@
+import type { WhereOptions } from 'sequelize';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { Application } from '@intake24/common/types';
 import type {
@@ -5,10 +7,7 @@ import type {
   LanguageTranslationAttributes,
   UpdateLanguageRequest,
 } from '@intake24/common/types/http/admin';
-import type {
-  LanguageTranslationCreationAttributes,
-  WhereOptions,
-} from '@intake24/db';
+import type { LanguageTranslationCreationAttributes } from '@intake24/db';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';

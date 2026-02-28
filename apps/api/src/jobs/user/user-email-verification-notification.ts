@@ -4,6 +4,7 @@ import type { IoC } from '@intake24/api/ioc';
 
 import ms from 'ms';
 import nunjucks from 'nunjucks';
+import { Op } from 'sequelize';
 
 import { getFrontEndUrl, getUAInfo } from '@intake24/api/util';
 import { User } from '@intake24/db';
@@ -60,7 +61,7 @@ export default class UserEmailVerificationNotification extends BaseJob<'UserEmai
   private async getUser(): Promise<User | null> {
     const { email } = this.params;
 
-    return User.findOne({ attributes: ['id', 'name'], where: { email: { [User.op('ciEq')]: email } } });
+    return User.findOne({ attributes: ['id', 'name'], where: { email: { [Op.iLike]: email } } });
   }
 
   private async sendEmail(user: User) {

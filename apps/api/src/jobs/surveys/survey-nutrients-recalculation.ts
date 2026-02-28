@@ -4,11 +4,12 @@ import type { IoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
 import type { NutrientTableRecordField, NutrientTableRecordNutrient } from '@intake24/db';
 
+import { Op } from 'sequelize';
+
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
   Job as DbJob,
   NutrientTableRecord,
-  Op,
   SurveySubmissionFood,
   values,
 } from '@intake24/db';

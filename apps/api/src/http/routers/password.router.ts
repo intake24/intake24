@@ -2,11 +2,12 @@ import type { Request } from 'express';
 
 import { initServer } from '@ts-rest/express';
 import ms from 'ms';
+import { Op } from 'sequelize';
 
 import { ValidationError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
-import { Op, UserPasswordReset } from '@intake24/db';
+import { UserPasswordReset } from '@intake24/db';
 
 import { captchaCheck } from '../rules';
 
@@ -44,7 +45,7 @@ export function password() {
       const passwordReset = await UserPasswordReset.findOne({
         attributes: ['id', 'userId'],
         where: { token, createdAt: { [Op.gt]: expiredAt } },
-        include: [{ association: 'user', where: { email: { [UserPasswordReset.op('ciEq')]: email } } }],
+        include: [{ association: 'user', where: { email: { [Op.iLike]: email } } }],
       });
 
       if (!passwordReset) {

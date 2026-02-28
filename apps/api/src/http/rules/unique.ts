@@ -1,7 +1,10 @@
-import type { BaseModel, BaseModelCtor, BaseModelStatic, FindOptions } from '@intake24/db';
+import type { FindOptions } from 'sequelize';
+
+import type { BaseModel, BaseModelCtor, BaseModelStatic } from '@intake24/db';
+
+import { Op } from 'sequelize';
 
 import { merge } from '@intake24/common/util';
-import { Op } from '@intake24/db';
 
 export type UniqueCondition = {
   field: string;
@@ -21,7 +24,7 @@ export default async ({ model, condition, options = { attributes: ['id'] } }: Un
   const cModel = model as BaseModelCtor<BaseModel>;
 
   const { field, value, ci } = mergedCondition;
-  const op = ci ? cModel.op('ciEq') : Op.eq;
+  const op = ci ? Op.iLike : Op.eq;
 
   const findOptions: FindOptions = merge(options, { where: { [field]: { [op]: value } } });
 

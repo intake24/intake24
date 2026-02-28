@@ -1,7 +1,7 @@
-import type { Attributes, FindOptions } from 'sequelize';
+import type { Attributes, FindOptions, ModelStatic } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { HasVisibility, ModelStatic, Securable } from '@intake24/db';
+import type { HasVisibility, Securable } from '@intake24/db';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { getResourceFromSecurable } from '@intake24/common/util';

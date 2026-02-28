@@ -5,11 +5,12 @@ import path from 'node:path';
 
 import { initServer } from '@ts-rest/express';
 import fs from 'fs-extra';
+import { Op } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { contract } from '@intake24/common/contracts';
-import { Job, Op } from '@intake24/db';
+import { Job } from '@intake24/db';
 
 export function job() {
   return initServer().router(contract.admin.job, {
