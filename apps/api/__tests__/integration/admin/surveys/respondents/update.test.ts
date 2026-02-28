@@ -129,6 +129,10 @@ export default () => {
       await suite.util.setPermission(['surveys']);
     });
 
+    it('should return 403 when missing securable', async () => {
+      await suite.sharedTests.assertMissingAuthorization('patch', url, { input });
+    });
+
     it('should return 200 and data when securable set', async () => {
       await suite.util.setSecurable({ ...securable, action: ['respondents'] });
 

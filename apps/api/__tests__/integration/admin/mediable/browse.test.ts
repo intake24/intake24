@@ -1,9 +1,12 @@
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import type { MediaModel } from '@intake24/common/types/http/admin';
-import type { Securable } from '@intake24/db';
+import type { BaseModel } from '@intake24/db';
 
-import { suite } from '@intake24/api-tests/integration/helpers';
+import { camelCase } from 'lodash-es';
+
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { modelToResource } from '@intake24/common/util';
+import { models } from '@intake24/db';
 
 export default (type: MediaModel) => () => {
   const resource = modelToResource(type);
@@ -13,18 +16,18 @@ export default (type: MediaModel) => () => {
   let url: string;
   const invalidUrl = `${baseUrl}/999999/media`;
 
+  let model: BaseModel;
   let securable: SetSecurableOptions;
-  let securableModel: Securable;
 
   beforeAll(async () => {
-    securableModel = suite.data.system[type];
-    securable = { securableId: securableModel.id, securableType: type };
+    // @ts-expect-error not typed
+    const modelInput = mocker.system[camelCase(type)]();
+    // @ts-expect-error not typed
+    model = await models.system[type].create(modelInput);
 
-    url = `${baseUrl}/${securableModel.id}/media`;
+    securable = { securableId: model.id, securableType: type };
 
-    await suite.util.setPermission([]);
-    await suite.util.setSecurable({ ...securable, action: [] });
-    await securableModel.update({ ownerId: null });
+    url = `${baseUrl}/${model.id}/media`;
   });
 
   it('missing authentication / authorization', async () => {
@@ -40,7 +43,7 @@ export default (type: MediaModel) => () => {
       await suite.sharedTests.assertMissingRecord('get', invalidUrl);
     });
 
-    it('should return 200 and data', async () => {
+    it('should return 200 and paginated results', async () => {
       await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
     });
   });
@@ -48,6 +51,10 @@ export default (type: MediaModel) => () => {
   describe('authenticated / securables authorized', () => {
     beforeAll(async () => {
       await suite.util.setPermission([resource]);
+    });
+
+    it('should return 403 when missing securable', async () => {
+      await suite.sharedTests.assertMissingAuthorization('get', url);
     });
 
     it('should return 200 and data when securable set', async () => {
@@ -58,7 +65,7 @@ export default (type: MediaModel) => () => {
 
     it('should return 200 and data when owner set', async () => {
       await suite.util.setSecurable(securable);
-      await securableModel.update({ ownerId: suite.data.system.user.id });
+      await model.update({ ownerId: suite.data.system.user.id });
 
       await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
     });

@@ -53,6 +53,10 @@ export default () => {
       await suite.util.setPermission(['surveys']);
     });
 
+    it('should return 403 when missing securable', async () => {
+      await suite.sharedTests.assertMissingAuthorization('delete', url);
+    });
+
     it('should return 200 and data when securable set', async () => {
       const { id } = await refreshSurveyRecord();
       await suite.util.setSecurable({
