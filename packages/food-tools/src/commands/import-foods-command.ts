@@ -12,6 +12,8 @@ import type { CreateGlobalFoodRequest, CreateLocalFoodRequest, InheritableAttrib
 import {
   CsvParserService,
   FoodDataParserService,
+  getAssociatedFoodAliases,
+  getLocalDescriptionAliases,
   USE_IN_RECIPE_TYPES,
 } from '../services';
 import FoodCategoryLookupApiService from '../services/food-category-lookup-api.service';
@@ -438,7 +440,7 @@ class FoodImportOrchestrator {
     const intake24Code = this.getColumnValue(record, ['intake24_code', 'code']);
     const action = this.getColumnValue(record, ['action']);
     const englishDescription = this.getColumnValue(record, ['english_description', 'description']);
-    let localDescription = this.getColumnValue(record, this.getLocalDescriptionAliases());
+    let localDescription = this.getColumnValue(record, getLocalDescriptionAliases(this.options.localeId));
 
     if (!intake24Code)
       throw new Error('Intake24 code is required');
@@ -466,7 +468,7 @@ class FoodImportOrchestrator {
       sameAsBeforeOption: this.getColumnValue(record, ['same_as_before_option']),
       reasonableAmount: this.getColumnValue(record, ['reasonable_amount']),
       useInRecipes: this.getColumnValue(record, ['use_in_recipes']),
-      associatedFood: this.getColumnValue(record, this.getAssociatedFoodAliases()),
+      associatedFood: this.getColumnValue(record, getAssociatedFoodAliases(this.options.localeId)),
       associatedFoodEnglish: this.getColumnValue(record, ['associated_food_category', 'associated_food', 'associated_food__category']),
       brandNames: this.getColumnValue(record, ['brand_names']),
       synonyms: this.getColumnValue(record, ['synonyms']),
@@ -490,68 +492,6 @@ class FoodImportOrchestrator {
     }
 
     return '';
-  }
-
-  /**
-   * Get locale-aware column aliases for local description.
-   * For Malaysian locales, prioritizes language-specific columns:
-   * - ms_MY_* → local_descriptionmalay
-   * - zh_MY_* → local_descriptionmandarin
-   * - ta_MY_* → local_descriptiontamil
-   * Falls back to generic local_description/local_name if language-specific not found.
-   */
-  private getLocalDescriptionAliases(): string[] {
-    const localeId = this.options.localeId.toLowerCase();
-
-    // Malaysian locale mappings (language code → normalized column name)
-    const languageColumnMap: Record<string, string> = {
-      ms_my: 'local_descriptionmalay',
-      zh_my: 'local_descriptionmandarin',
-      ta_my: 'local_descriptiontamil',
-    };
-
-    // Check if this is a Malaysian locale and get the language-specific column
-    for (const [prefix, columnName] of Object.entries(languageColumnMap)) {
-      if (localeId.startsWith(prefix)) {
-        // Prioritize language-specific column, fall back to generic
-        return [columnName, 'local_description', 'local_name'];
-      }
-    }
-
-    // Default aliases for non-Malaysian locales
-    return ['local_description', 'local_name'];
-  }
-
-  /**
-   * Get locale-aware associated food column aliases.
-   * Malaysian locales have language-specific columns like "Associated Food / Category (Malay)".
-   * The CSV headers are normalized to snake_case by csv-parse, e.g.:
-   * - "Associated Food / Category (Malay)" → "associated_food__category_malay"
-   * - ms_MY_* → associated_food__category_malay
-   * - ta_MY_* → associated_food__category_tamil
-   * Note: double underscore from "/" in original header
-   * Falls back to generic associated_food_category if language-specific not found.
-   */
-  private getAssociatedFoodAliases(): string[] {
-    const localeId = this.options.localeId.toLowerCase();
-
-    // Malaysian locale mappings (language code → normalized column name)
-    // Note: double underscore from "/" in original header
-    const languageColumnMap: Record<string, string> = {
-      ms_my: 'associated_food__category_malay',
-      ta_my: 'associated_food__category_tamil',
-    };
-
-    // Check if this is a Malaysian locale and get the language-specific column
-    for (const [prefix, columnName] of Object.entries(languageColumnMap)) {
-      if (localeId.startsWith(prefix)) {
-        // Prioritize language-specific column, fall back to generic
-        return [columnName, 'associated_food_category', 'associated_food', 'associated_food__category'];
-      }
-    }
-
-    // Default aliases for non-Malaysian locales
-    return ['associated_food_category', 'associated_food', 'associated_food__category'];
   }
 
   /**
@@ -599,7 +539,7 @@ class FoodImportOrchestrator {
   private recordValidationSkip(record: Record<string, unknown>, rowNumber: number, message: string): void {
     const foodCode = this.getColumnValue(record, ['intake24_code', 'code']) || `row-${rowNumber}`;
     const englishDescription = this.getColumnValue(record, ['english_description', 'description']);
-    const localDescription = this.getColumnValue(record, this.getLocalDescriptionAliases()) || englishDescription;
+    const localDescription = this.getColumnValue(record, getLocalDescriptionAliases(this.options.localeId)) || englishDescription;
 
     this.validationSkips.push({
       foodCode,

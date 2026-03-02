@@ -31,6 +31,12 @@ export type {
   TokenizedAssociatedFood,
   UseInRecipeType,
 } from './food-data-parser.service';
+// Locale column resolver
+export {
+  getAssociatedFoodAliases,
+  getLocalDescriptionAliases,
+} from './locale-column-resolver';
+
 // Report generator service
 export {
   ReportGeneratorService,
