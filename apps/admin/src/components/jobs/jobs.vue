@@ -13,14 +13,32 @@
           <v-col cols="12" md="6">
             <v-select
               v-model="data.type"
-              hide-details="auto"
               :items="jobTypes"
               :label="$t('tasks._')"
               name="job"
               prepend-inner-icon="$jobs"
-              variant="outlined"
               @update:model-value="updateJob"
-            />
+            >
+              <template #item="{ item, props: itemProps, index }">
+                <template v-if="item.raw.type && index > 0 && !jobTypes[index - 1].type">
+                  <v-divider class="mt-2" color="error" />
+                  <div
+                    class="text-subtitle-2 px-4 py-2 bg-red-lighten-4 d-flex justify-space-between align-items-center"
+                    :class="item.raw.type === 'error' ? 'bg-red-lighten-4' : 'bg-orange-lighten-4'"
+                  >
+                    <span>
+                      {{ $t(`jobs.alerts.${item.raw.type}._`) }}
+                    </span>
+                    <v-icon :color="item.raw.type" icon="fas fa-triangle-exclamation" />
+                  </div>
+                </template>
+                <v-list-item v-bind="itemProps" :title="item.title">
+                  <template v-if="item.raw.type" #append>
+                    <v-icon :color="item.raw.type" icon="fas fa-triangle-exclamation" />
+                  </template>
+                </v-list-item>
+              </template>
+            </v-select>
           </v-col>
           <v-col cols="12" md="6">
             <component
@@ -127,9 +145,23 @@ const props = defineProps({
 
 const { i18n } = useI18n();
 
-const jobTypes = computed(() =>
-  props.types.map(value => ({ value, title: i18n.t(`jobs.types.${value}._`) })),
-);
+const jobTypes = computed(() => {
+  const alertJobs = Object.keys(props.alerts) as JobType[];
+  return props.types
+    .toSorted((a, b) => {
+      if (alertJobs.includes(a) && !alertJobs.includes(b))
+        return 1;
+      if (!alertJobs.includes(a) && alertJobs.includes(b))
+        return -1;
+
+      return 0;
+    })
+    .map(value => ({
+      value,
+      title: i18n.t(`jobs.types.${value}._`),
+      type: props.alerts[value]?.type,
+    }));
+});
 
 const resourceParameter = computed(() => props.resource ? resourceToRequestParam(props.resource) : undefined);
 const disabledJobParams = computed(() => Object.keys(props.defaultParams).reduce((acc, jobType) => {

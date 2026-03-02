@@ -18,12 +18,14 @@
   },
   "alerts": {
     "warning": {
+      "_": "Data modifying tasks",
       "title": "Warning: risk of data modification - Proceed with caution",
       "subtitle": "This action may modify existing data."
     },
     "error": {
+      "_": "Data destructive tasks",
       "title": "Danger: risk of data loss - Proceed with extreme caution",
-      "subtitle": "This action replaces existing data. Ensure you have a backup before proceeding."
+      "subtitle": "This action overwrites existing data. Ensure you have a backup before proceeding."
     }
   },
   "types": {
