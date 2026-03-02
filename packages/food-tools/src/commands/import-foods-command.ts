@@ -231,7 +231,7 @@ class FoodImportOrchestrator {
       skipExisting: options.skipExisting ?? false,
       reportPath: options.reportPath ?? '',
       reportFormat: options.reportFormat ?? 'json',
-      skipInvalidNutrients: options.skipInvalidNutrients ?? false,
+      skipInvalidNutrients: options.skipInvalidNutrients ?? true,
       validateNutrients: options.validateNutrients ?? false,
       skipAssociatedFoods: options.skipAssociatedFoods ?? false,
       deleteAction1Local: options.deleteAction1Local ?? false,
