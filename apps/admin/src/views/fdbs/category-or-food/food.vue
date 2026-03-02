@@ -2,7 +2,7 @@
   <div>
     <div v-if="isEntryLoaded">
       <!-- Sticky context header -->
-      <div class="food-context-header" style="position: sticky; top: 0; z-index: 5; background: rgb(var(--v-theme-surface));">
+      <div class="food-context-header">
         <v-toolbar border color="grey-lighten-5" density="compact" flat>
           <v-chip class="mr-2" size="small" variant="outlined">
             {{ data.main.code }}
@@ -269,7 +269,7 @@
         </v-expansion-panels>
       </v-form>
       <!-- Sticky action footer -->
-      <div class="food-actions-footer" style="position: sticky; bottom: 0; z-index: 5; background: rgb(var(--v-theme-surface)); border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));">
+      <div class="food-actions-footer">
         <div class="d-flex gc-2 pa-3">
           <v-btn color="secondary" type="submit" variant="outlined" @click="submit">
             <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
@@ -514,3 +514,20 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.food-context-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: rgb(var(--v-theme-surface));
+}
+
+.food-actions-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  background: rgb(var(--v-theme-surface));
+  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+</style>
