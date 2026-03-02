@@ -53,6 +53,9 @@ apps/docs/admin/**
 
 packages/excel-reader/**
 reports/*
+!reports/japan/
+!reports/japan/dcd/**
+!reports/japan/food-list/**
 !reports/malaysia/
 
 
