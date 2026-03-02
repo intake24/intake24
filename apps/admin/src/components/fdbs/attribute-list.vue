@@ -283,11 +283,6 @@ export default defineComponent({
       return attributes.value[attribute] === null;
     };
 
-    function title(attribute: AttributeType): string {
-      const key = attributes.value[attribute] === null ? 'override' : 'inherit';
-      return i18n.t(`fdbs.attributes.${key}`);
-    };
-
     function setInheritMode(attribute: AttributeType, mode: 'inherit' | 'override') {
       if (mode === 'inherit') {
         attributes.value[attribute] = null;
@@ -298,22 +293,10 @@ export default defineComponent({
       }
     };
 
-    function toggleInherit(attribute: AttributeType) {
-      if (attributes.value[attribute] !== null) {
-        attributes.value[attribute] = null;
-        return;
-      }
-
-      // @ts-expect-error it doesn't narrow the type correctly
-      attributes.value[attribute] = defaultAttributes[attribute];
-    };
-
     return {
       attributes,
       defaultAttributes,
       isInherited,
-      title,
-      toggleInherit,
       setInheritMode,
       useInRecipeTypeItems,
     };
