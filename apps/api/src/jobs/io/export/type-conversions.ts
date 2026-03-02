@@ -18,8 +18,6 @@ import type {
 } from '@intake24/common/types/package/foods';
 import type { FoodPortionSizeMethods } from '@intake24/db/kysely/foods';
 
-import { ZodError } from 'zod';
-
 import {
   asServedPortionSizeParameters,
   autoPortionSizeParameters,
@@ -194,43 +192,34 @@ function packageUnknown(portionSize: FoodPortionSizeMethodsRow): PkgV2UnknownPsm
 }
 
 export function packagePortionSize(psmRowData: FoodPortionSizeMethodsRow): PkgV2PortionSizeMethod {
-  try {
-    switch (psmRowData.method) {
-      case 'as-served':
-        return packageAsServed(psmRowData);
-      case 'auto':
-        return packageAuto(psmRowData);
-      case 'guide-image':
-        return packageGuideImage(psmRowData);
-      case 'drink-scale':
-        return packageDrinkScale(psmRowData);
-      case 'standard-portion':
-        return packageStandardPortion(psmRowData);
-      case 'cereal':
-        return packageCereal(psmRowData);
-      case 'milk-on-cereal':
-        return packageMilkOnCereal(psmRowData);
-      case 'pizza':
-        return packagePizza(psmRowData);
-      case 'pizza-v2':
-        return packagePizzaV2(psmRowData);
-      case 'milk-in-a-hot-drink':
-        return packageMilkInHotDrink(psmRowData);
-      case 'parent-food-portion':
-        return packageParentFoodPortion(psmRowData);
-      case 'direct-weight':
-        return packageDirectWeight(psmRowData);
-      case 'unknown':
-        return packageUnknown(psmRowData);
-      default:
-        throw new Error(`Unexpected portion size estimation method: ${psmRowData.method}`);
-    }
-  }
-  catch (err: unknown) {
-    if (err instanceof ZodError)
-      throw new Error(`Failed to parse portion size method parameters (record ID = ${psmRowData.id}, parameters = ${psmRowData.parameters})`, { cause: err });
-    if (err instanceof Error)
-      throw new Error(`Failed to parse portion size method data (record ID = ${psmRowData.id}, parameters = ${psmRowData.parameters}): ${err.message}`, { cause: err });
-    throw err;
+  switch (psmRowData.method) {
+    case 'as-served':
+      return packageAsServed(psmRowData);
+    case 'auto':
+      return packageAuto(psmRowData);
+    case 'guide-image':
+      return packageGuideImage(psmRowData);
+    case 'drink-scale':
+      return packageDrinkScale(psmRowData);
+    case 'standard-portion':
+      return packageStandardPortion(psmRowData);
+    case 'cereal':
+      return packageCereal(psmRowData);
+    case 'milk-on-cereal':
+      return packageMilkOnCereal(psmRowData);
+    case 'pizza':
+      return packagePizza(psmRowData);
+    case 'pizza-v2':
+      return packagePizzaV2(psmRowData);
+    case 'milk-in-a-hot-drink':
+      return packageMilkInHotDrink(psmRowData);
+    case 'parent-food-portion':
+      return packageParentFoodPortion(psmRowData);
+    case 'direct-weight':
+      return packageDirectWeight(psmRowData);
+    case 'unknown':
+      return packageUnknown(psmRowData);
+    default:
+      throw new Error(`Unexpected portion size estimation method: ${psmRowData.method}`);
   }
 }

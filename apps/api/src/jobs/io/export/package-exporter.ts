@@ -211,10 +211,27 @@ export class PackageExporter {
         .orderBy('foodPortionSizeMethods.orderBy', 'asc')
         .execute();
 
+      const foodById = new Map(batch.map(f => [f.id, f]));
+
       const foodPortionSizeMethodsIndex = portionSizeMethods.reduce<Record<string, PkgV2PortionSizeMethod[]>>((acc, row) => {
         if (!acc[row.foodId])
           acc[row.foodId] = [];
-        acc[row.foodId].push(packagePortionSize(row));
+        try {
+          acc[row.foodId].push(packagePortionSize(row));
+        }
+        catch (err: unknown) {
+          const food = foodById.get(row.foodId);
+          const foodStr = food ? `[${food.code}] ${food.name ?? food.englishName}` : row.foodId;
+          const paramsStr = JSON.stringify(row.parameters);
+
+          if (err instanceof ZodError) {
+            throw new Error(`${foodStr}: invalid portion size method parameters (PSM record ID = ${row.id}, parameters = ${paramsStr}): ${fromZodError(err).toString()}`, { cause: err });
+          }
+          if (err instanceof Error) {
+            throw new Error(`${foodStr}: invalid portion size method parameters (PSM record ID = ${row.id}, parameters = ${paramsStr}): ${err.message}`, { cause: err });
+          }
+          throw err;
+        }
         return acc;
       }, {});
 
@@ -365,10 +382,27 @@ export class PackageExporter {
         .orderBy('categoryPortionSizeMethods.orderBy', 'asc')
         .execute();
 
+      const categoryById = new Map(batch.map(c => [c.id, c]));
+
       const categoryPortionSizeMethodsIndex = portionSizeMethods.reduce<Record<string, PkgV2PortionSizeMethod[]>>((acc, row) => {
         if (!acc[row.categoryId])
           acc[row.categoryId] = [];
-        acc[row.categoryId].push(packagePortionSize(row));
+        try {
+          acc[row.categoryId].push(packagePortionSize(row));
+        }
+        catch (err: unknown) {
+          const category = categoryById.get(row.categoryId);
+          const catStr = category ? `[${category.code}] ${category.name ?? category.englishName}` : row.categoryId;
+          const paramsStr = JSON.stringify(row.parameters);
+
+          if (err instanceof ZodError) {
+            throw new Error(`${catStr}: invalid portion size method parameters (PSM record ID = ${row.id}, parameters = ${paramsStr}): ${fromZodError(err).toString()}`, { cause: err });
+          }
+          if (err instanceof Error) {
+            throw new Error(`${catStr}: invalid portion size method parameters (PSM record ID = ${row.id}, parameters = ${paramsStr}): ${err.message}`, { cause: err });
+          }
+          throw err;
+        }
         return acc;
       }, {});
 
