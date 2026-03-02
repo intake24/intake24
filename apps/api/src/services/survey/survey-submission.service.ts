@@ -294,6 +294,19 @@ function surveySubmissionService({
     // Collect portion sizes data
     collectedData.portionSizes = portionSizeMappers[portionSize.method](foodId, portionSize);
 
+    // Store conversionFactor from the selected portion size method
+    if (foodState.portionSizeMethodIndex != null) {
+      const psm = foodState.data.portionSizeMethods[foodState.portionSizeMethodIndex];
+      if (psm) {
+        collectedData.portionSizes.push({
+          id: randomUUID(),
+          foodId,
+          name: 'conversionFactor',
+          value: psm.conversionFactor.toString(),
+        });
+      }
+    }
+
     // Bail if no nutrient record links - missing encoded food link
     if (!foodRecord.nutrientRecords.length) {
       logger.warn(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);

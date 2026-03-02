@@ -429,6 +429,35 @@ function dataExportFields() {
         return servingWeight - leftoversWeight;
       },
     },
+    { id: 'conversionFactor', label: 'Conversion Factor' },
+    {
+      id: 'portionVolume',
+      label: 'Portion Volume',
+      value: ({ food }: ExportRow) => {
+        if (!('portionSizes' in food))
+          return undefined;
+
+        const servingWeightVal = food.portionSizes?.find(
+          item => item.name === 'servingWeight',
+        )?.value;
+        const leftoversWeightVal = food.portionSizes?.find(
+          item => item.name === 'leftoversWeight',
+        )?.value;
+        const conversionFactorVal = food.portionSizes?.find(
+          item => item.name === 'conversionFactor',
+        )?.value;
+        if (!servingWeightVal || !leftoversWeightVal || !conversionFactorVal)
+          return undefined;
+
+        const servingWeight = Number.parseFloat(servingWeightVal);
+        const leftoversWeight = Number.parseFloat(leftoversWeightVal);
+        const conversionFactor = Number.parseFloat(conversionFactorVal);
+        if (Number.isNaN(servingWeight) || Number.isNaN(leftoversWeight) || Number.isNaN(conversionFactor) || conversionFactor === 0)
+          return undefined;
+
+        return (servingWeight - leftoversWeight) / conversionFactor;
+      },
+    },
 
     { id: 'bowl', label: 'Bowl' },
     { id: 'bowlId', label: 'Bowl ID' },
