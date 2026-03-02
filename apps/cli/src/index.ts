@@ -51,6 +51,56 @@ import {
   importerSpecificModulesExecutionOptions,
 } from './commands/packager/importer-v4';
 
+/**
+ * Shared nutrient table mappings per locale preset.
+ * Used by import-foods, verify-consistency, and sync-foods commands.
+ */
+const PRESET_NUTRIENT_TABLE_MAPPINGS: Record<string, Record<string, string>> = {
+  japan: {
+    AUSNUT: 'AUSNUT',
+    STFCJ: 'STFCJ',
+    'DCD for Japan': 'DCDJapan',
+  },
+  uk: {
+    NDNS: 'NDNS',
+    McCance: 'MCCANCE',
+  },
+  france: {
+    CIQUAL: 'CIQUAL',
+    ANSES: 'ANSES',
+  },
+  usa: {
+    USDA: 'USDA',
+    SR: 'USDA_SR',
+  },
+  malaysia: {
+    AUSNUT: 'AUSNUT',
+    Australia: 'AUSNUT',
+    MyFCD: 'Malaysia_FCD',
+    MyFCDCombined: 'Malaysia_FCD',
+    MyFCDCurrent: 'Malaysia_FCD',
+    Malaysia_FCD: 'Malaysia_FCD',
+    HPB: 'HPB',
+    'Singapore HPB': 'HPB',
+  },
+};
+
+const PRESET_SKIP_HEADER_ROWS: Record<string, number> = {
+  japan: 2,
+  uk: 1,
+  france: 1,
+  usa: 1,
+  malaysia: 1,
+};
+
+const PRESET_TAGS: Record<string, string[]> = {
+  japan: ['japanese'],
+  uk: ['uk'],
+  france: ['french'],
+  usa: ['usa'],
+  malaysia: ['malaysian'],
+};
+
 async function run() {
   const program = new Command();
 
@@ -437,62 +487,12 @@ async function run() {
     .option('--report-path [path]', 'Path to save import report')
     .option('--report-format [format]', 'Report format (csv, json, markdown)', 'json')
     .action(async (options) => {
-      // Define presets for different locales
-      const presets = {
-        japan: {
-          skipHeaderRows: 2,
-          tags: ['japanese'],
-          nutrientTableMapping: {
-            AUSNUT: 'AUSNUT',
-            STFCJ: 'STFCJ',
-            'DCD for Japan': 'DCDJapan',
-          },
-        },
-        uk: {
-          skipHeaderRows: 1,
-          tags: ['uk'],
-          nutrientTableMapping: {
-            NDNS: 'NDNS',
-            McCance: 'MCCANCE',
-          },
-        },
-        france: {
-          skipHeaderRows: 1,
-          tags: ['french'],
-          nutrientTableMapping: {
-            CIQUAL: 'CIQUAL',
-            ANSES: 'ANSES',
-          },
-        },
-        usa: {
-          skipHeaderRows: 1,
-          tags: ['usa'],
-          nutrientTableMapping: {
-            USDA: 'USDA',
-            SR: 'USDA_SR',
-          },
-        },
-        malaysia: {
-          skipHeaderRows: 1,
-          tags: ['malaysian'],
-          nutrientTableMapping: {
-            AUSNUT: 'AUSNUT',
-            Australia: 'AUSNUT', // Common data entry mistake
-            MyFCD: 'Malaysia_FCD',
-            MyFCDCombined: 'Malaysia_FCD',
-            Malaysia_FCD: 'Malaysia_FCD',
-            HPB: 'HPB',
-            'Singapore HPB': 'HPB',
-          },
-        },
-        custom: {
-          skipHeaderRows: Number.parseInt(options.skipHeaderRows, 10),
-          tags: options.tags || [],
-          nutrientTableMapping: {},
-        },
+      const preset = options.preset as string;
+      const presetConfig = {
+        skipHeaderRows: PRESET_SKIP_HEADER_ROWS[preset] ?? Number.parseInt(options.skipHeaderRows, 10),
+        tags: PRESET_TAGS[preset] ?? options.tags ?? [],
+        nutrientTableMapping: PRESET_NUTRIENT_TABLE_MAPPINGS[preset] ?? {},
       };
-
-      const presetConfig = presets[options.preset as keyof typeof presets] || presets.custom;
 
       await importFoodsCommand({
         inputPath: options.inputPath,
@@ -659,58 +659,9 @@ async function run() {
     .option('--no-check-associated-foods', 'Skip associated food consistency checks')
     .option('--include-valid-rows', 'Include perfectly matching rows in detailed report', false)
     .action(async (options) => {
-      // Define presets for different locales (same as import-foods/sync-foods)
-      const presets = {
-        japan: {
-          skipHeaderRows: 2,
-          nutrientTableMapping: {
-            AUSNUT: 'AUSNUT',
-            STFCJ: 'STFCJ',
-            'DCD for Japan': 'DCDJapan',
-          },
-        },
-        uk: {
-          skipHeaderRows: 1,
-          nutrientTableMapping: {
-            NDNS: 'NDNS',
-            McCance: 'MCCANCE',
-          },
-        },
-        france: {
-          skipHeaderRows: 1,
-          nutrientTableMapping: {
-            CIQUAL: 'CIQUAL',
-            ANSES: 'ANSES',
-          },
-        },
-        usa: {
-          skipHeaderRows: 1,
-          nutrientTableMapping: {
-            USDA: 'USDA',
-            SR: 'USDA_SR',
-          },
-        },
-        malaysia: {
-          skipHeaderRows: 1,
-          nutrientTableMapping: {
-            AUSNUT: 'AUSNUT',
-            Australia: 'AUSNUT', // Common data entry mistake
-            MyFCD: 'Malaysia_FCD',
-            MyFCDCombined: 'Malaysia_FCD',
-            MyFCDCurrent: 'Malaysia_FCD',
-            Malaysia_FCD: 'Malaysia_FCD',
-            HPB: 'HPB',
-            'Singapore HPB': 'HPB',
-          },
-        },
-        custom: {
-          skipHeaderRows: Number.parseInt(options.skipHeaderRows, 10),
-          nutrientTableMapping: {},
-        },
-      };
-
-      const presetConfig = presets[options.preset as keyof typeof presets] || presets.custom;
-      const skipHeaderRows = options.preset !== 'custom' ? presetConfig.skipHeaderRows : Number.parseInt(options.skipHeaderRows);
+      const preset = options.preset as string;
+      const skipHeaderRows = PRESET_SKIP_HEADER_ROWS[preset] ?? Number.parseInt(options.skipHeaderRows, 10);
+      const nutrientTableMapping = PRESET_NUTRIENT_TABLE_MAPPINGS[preset] ?? {};
 
       await verifyConsistencyCommand({
         inputPath: options.inputPath,
@@ -725,7 +676,7 @@ async function run() {
         checkPortionSizes: options.checkPortionSizes,
         checkAssociatedFoods: options.checkAssociatedFoods,
         includeValidRows: options.includeValidRows,
-        nutrientTableMapping: presetConfig.nutrientTableMapping,
+        nutrientTableMapping,
       });
     });
 
@@ -778,51 +729,6 @@ async function run() {
     .option('--enable-all', 'Enable all foods from CSV in the locale', false)
     .option('--preset [preset]', 'Use preset configuration for specific locales', 'custom')
     .action(async (options) => {
-      // Define presets for different locales (same as import-foods)
-      const presets = {
-        japan: {
-          nutrientTableMapping: {
-            AUSNUT: 'AUSNUT',
-            STFCJ: 'STFCJ',
-            'DCD for Japan': 'DCDJapan',
-          },
-        },
-        uk: {
-          nutrientTableMapping: {
-            NDNS: 'NDNS',
-            McCance: 'MCCANCE',
-          },
-        },
-        france: {
-          nutrientTableMapping: {
-            CIQUAL: 'CIQUAL',
-            ANSES: 'ANSES',
-          },
-        },
-        usa: {
-          nutrientTableMapping: {
-            USDA: 'USDA',
-            SR: 'USDA_SR',
-          },
-        },
-        malaysia: {
-          nutrientTableMapping: {
-            AUSNUT: 'AUSNUT',
-            Australia: 'AUSNUT', // Common data entry mistake
-            MyFCD: 'Malaysia_FCD',
-            MyFCDCombined: 'Malaysia_FCD',
-            Malaysia_FCD: 'Malaysia_FCD',
-            HPB: 'HPB',
-            'Singapore HPB': 'HPB',
-          },
-        },
-        custom: {
-          nutrientTableMapping: {},
-        },
-      };
-
-      const presetConfig = presets[options.preset as keyof typeof presets] || presets.custom;
-
       await syncFoodsCommand({
         inputPath: options.inputPath,
         localeId: options.localeId,
@@ -831,7 +737,7 @@ async function run() {
         skipHeaderRows: Number.parseInt(options.skipHeaderRows),
         forceUpdate: options.forceUpdate,
         enableAll: options.enableAll,
-        nutrientTableMapping: presetConfig.nutrientTableMapping,
+        nutrientTableMapping: PRESET_NUTRIENT_TABLE_MAPPINGS[options.preset as string] ?? {},
       });
     });
 
