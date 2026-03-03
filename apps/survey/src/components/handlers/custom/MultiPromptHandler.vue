@@ -1,6 +1,7 @@
 <template>
   <multi-prompt
     v-model="state"
+    v-model:panel="panel"
     v-bind="{
       meal: mealOptional,
       food: foodOptional,
@@ -17,9 +18,10 @@ import type { PropType } from 'vue';
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { CustomPromptAnswer, PromptSection } from '@intake24/common/surveys';
 
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 import { MultiPrompt } from '@intake24/survey/components/prompts';
+import { getOrCreatePromptStateStore, useSurvey } from '@intake24/survey/stores';
 import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
 
 import { useCustomPromptHandler } from '../composables';
@@ -41,13 +43,32 @@ const infoPrompts = ['info-prompt'];
 
 const { commitPromptAnswer, resolvePromptAnswer, foodOptional, mealOptional }
   = useCustomPromptHandler(props);
+const survey = useSurvey();
+
+const promptStore = getOrCreatePromptStateStore<{ answers: (CustomPromptAnswer | undefined)[]; panel: number | undefined }>('multi-prompt')();
+
+function getEntityId(): string {
+  if (survey.selection.element?.type === 'food')
+    return foodOptional.value?.id ?? '$survey';
+  if (survey.selection.element?.type === 'meal')
+    return mealOptional.value?.id ?? '$survey';
+  return '$survey';
+}
+
+const entityId = getEntityId();
+const storedState = promptStore.prompts[entityId]?.[props.prompt.id];
 
 const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
 const state = ref<(CustomPromptAnswer | undefined)[]>(
-  props.prompt.prompts.map(prompt =>
+  storedState?.answers ?? props.prompt.prompts.map(prompt =>
     isInfoPrompt(prompt) ? 'next' : resolvePromptAnswer(prompt),
   ),
 );
+const panel = ref<number | undefined>(storedState ? storedState.panel : 0);
+
+watch([state, panel], ([answers, panel]) => {
+  promptStore.updateState(entityId, props.prompt.id, { answers, panel });
+}, { deep: true });
 
 function commitAnswer() {
   props.prompt.prompts.forEach((prompt, idx) => {
