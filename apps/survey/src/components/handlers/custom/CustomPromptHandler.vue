@@ -16,10 +16,10 @@
 <script lang="ts" setup>
 import type { CustomPromptAnswer } from '@intake24/common/surveys';
 
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { customPrompts } from '@intake24/survey/components/prompts';
-import { useSurvey } from '@intake24/survey/stores';
+import { getOrCreatePromptStateStore, useSurvey } from '@intake24/survey/stores';
 import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
 
 import { createHandlerProps, useCustomPromptHandler } from '../composables';
@@ -36,10 +36,30 @@ const { commitPromptAnswer, resolvePromptAnswer, foodOptional, mealOptional }
   = useCustomPromptHandler(props);
 const survey = useSurvey();
 
+const promptStore = getOrCreatePromptStateStore<{ value: CustomPromptAnswer }>(props.prompt.component)();
+
+function getEntityId(): string {
+  if (survey.selection.element?.type === 'food')
+    return foodOptional.value?.id ?? '$survey';
+  if (survey.selection.element?.type === 'meal')
+    return mealOptional.value?.id ?? '$survey';
+  return '$survey';
+}
+
+const entityId = getEntityId();
+const storedState: CustomPromptAnswer | undefined = promptStore.prompts[entityId]?.[props.prompt.id]?.value;
+
 const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));
 const state = ref<CustomPromptAnswer | undefined>(
-  isInfoPrompt.value ? 'next' : resolvePromptAnswer(props.prompt),
+  isInfoPrompt.value ? 'next' : (storedState ?? resolvePromptAnswer(props.prompt)),
 );
+
+if (!isInfoPrompt.value) {
+  watch(state, (value) => {
+    if (value !== undefined)
+      promptStore.updateState(entityId, props.prompt.id, { value });
+  });
+}
 
 function commitAnswer() {
   if (props.prompt.component === 'no-more-information-prompt') {
