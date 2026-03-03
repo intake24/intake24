@@ -12,8 +12,13 @@ interface FoodOrMealPromptsState<T> {
 
 export const promptStores = new Map<ComponentType, StoreDefinition>();
 
-function storageKey(promptType: ComponentType): string {
+function storeId(promptType: ComponentType): string {
   return `${promptType}-state`;
+}
+
+function storageKey(promptType: ComponentType): string {
+  const prefix = import.meta.env.VITE_APP_PREFIX ?? '';
+  return `${prefix}${storeId(promptType)}`;
 }
 
 export function clearPromptStores(): void {
@@ -30,14 +35,14 @@ export function getOrCreatePromptStateStore<T extends object>(
   let storeDef = promptStores.get(promptType);
 
   if (storeDef === undefined) {
-    const storageKey = `${promptType}-state`;
+    const id = storeId(promptType);
 
-    storeDef = defineStore(`${promptType}-state`, {
+    storeDef = defineStore(id, {
       state: (): FoodOrMealPromptsState<T> => ({
         prompts: {},
       }),
       persist: {
-        key: storageKey,
+        key: id,
       },
       actions: {
         updateState(foodOrMealId: string, promptId: string, data: T) {
@@ -68,7 +73,7 @@ export function getOrCreatePromptStateStore<T extends object>(
           if (!Object.keys(this.prompts).length) {
             this.$dispose();
             promptStores.delete(promptType);
-            localStorage.removeItem(storageKey);
+            localStorage.removeItem(storageKey(promptType));
           }
         },
       },
