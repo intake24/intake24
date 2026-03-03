@@ -19,6 +19,9 @@
               prepend-inner-icon="$jobs"
               @update:model-value="updateJob"
             >
+              <template v-if="alerts[data.type]" #append-inner>
+                <v-icon :color="alerts[data.type]?.type" icon="fas fa-triangle-exclamation" />
+              </template>
               <template #item="{ item, props: itemProps, index }">
                 <template v-if="item.raw.type && index > 0 && !jobTypes[index - 1].type">
                   <v-divider class="mt-2" color="error" />
