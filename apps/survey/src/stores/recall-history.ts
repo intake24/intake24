@@ -57,6 +57,16 @@ import { getOrCreatePromptStateStore, promptStores } from './prompt';
   PromptHistoryEntry cannot be reached in the undo stack without the corresponding prompt component
   already having been mounted and its callbacks registered. This means there is no need for explicit
   checks for the prompt component type.
+
+  Multi-prompt support: multi-prompt registers its own history handler (panel index + collected
+  answers) and uses pushMultiPromptHistoryEntry for panel transitions. Currently the only prompts
+  that use mid-prompt history (pushPromptHistoryEntry) are portion size prompts, and they do not
+  appear inside multi-prompts. A guard (insideMultiPrompt flag) suppresses pushPromptHistoryEntry
+  calls from nested prompts to prevent them from breaking the multi-prompt's back/forward flow.
+
+  To support nested prompts with their own mid-prompt states inside a multi-prompt, their
+  pushPromptHistoryEntry calls would need to be converted to pushMultiPromptHistoryEntry, wrapping
+  the nested prompt's internal state alongside the multi-prompt's state.
 */
 
 const DEBUG_RECALL_HISTORY: boolean = false;
@@ -98,17 +108,26 @@ let fallbackEntry: FullHistoryEntry | null = null;
 let promptHistoryGetState: (() => unknown) | null = null;
 let promptHistorySetState: ((state: unknown) => void) | null = null;
 
+let insideMultiPrompt = false;
+
 export function registerPromptHistoryHandler(
   get: () => unknown,
   set: (state: unknown) => void,
 ) {
+  log('registerPromptHistoryHandler called');
   promptHistoryGetState = get;
   promptHistorySetState = set;
 }
 
 export function unregisterPromptHistoryHandler() {
+  log('unregisterPromptHistoryHandler called');
   promptHistoryGetState = null;
   promptHistorySetState = null;
+}
+
+export function setInsideMultiPrompt(value: boolean) {
+  log(`setInsideMultiPrompt: ${value}`);
+  insideMultiPrompt = value;
 }
 
 function log(label: string, ...args: unknown[]) {
@@ -152,13 +171,13 @@ function restorePromptStores(snapshots: PromptStoreSnapshot[]) {
   }
 }
 
-function restorePromptState(state: unknown) {
+function restorePromptState(entry: PromptHistoryEntry) {
   if (!promptHistorySetState) {
     console.error('[recall-history] No prompt history handler registered, cannot restore');
     return;
   }
 
-  promptHistorySetState(state);
+  promptHistorySetState(entry.promptState);
 }
 
 function createFullHistoryEntry(description: string): FullHistoryEntry {
@@ -211,7 +230,7 @@ function restoreState(savedState: RecallHistoryEntry) {
       `Restoring prompt state: "${savedState.description}"`,
     );
 
-    restorePromptState(savedState.promptState);
+    restorePromptState(savedState);
   }
 }
 
@@ -267,17 +286,17 @@ function commitEntryToUndoStack(entry: RecallHistoryEntry, label: string) {
 }
 
 export function createFallbackHistoryEntry(description: string) {
-  fallbackEntry = createFullHistoryEntry(description);
   log(`createFallbackHistoryEntry: "${description}"`);
+  fallbackEntry = createFullHistoryEntry(description);
 }
 
 export function maybePushFallbackHistoryEntry() {
   if (!fallbackEntry) {
-    log('maybePushFallbackHistoryEntry: fallback entry cleared, skipping');
+    log('maybePushFallbackHistoryEntry: skipped (cleared)');
     return;
   }
 
-  log(`maybePushFallbackHistoryEntry: "${fallbackEntry.description}" | stateId before=${currentStateId}`);
+  log(`maybePushFallbackHistoryEntry: pushing "${fallbackEntry.description}" | stateId before=${currentStateId}`);
   const entry = fallbackEntry;
   fallbackEntry = null;
   commitEntryToUndoStack(entry, 'maybePushFallbackHistoryEntry');
@@ -300,10 +319,27 @@ export function pushPromptHistoryEntry(description: string) {
     return;
   }
 
+  if (insideMultiPrompt) {
+    log(`pushPromptHistoryEntry: suppressed (inside multi-prompt): "${description}"`);
+    return;
+  }
+
   log(`pushPromptHistoryEntry: "${description}" | stateId before=${currentStateId}`);
   const entry = createPromptHistoryEntry(description);
   if (entry != null)
     commitEntryToUndoStack(entry, 'pushPromptHistoryEntry');
+}
+
+export function pushMultiPromptHistoryEntry(description: string) {
+  if (!survey) {
+    console.error('[recall-history] not initialised, cannot save state');
+    return;
+  }
+
+  log(`pushMultiPromptHistoryEntry: "${description}" | stateId before=${currentStateId}`);
+  const entry = createPromptHistoryEntry(description);
+  if (entry != null)
+    commitEntryToUndoStack(entry, 'pushMultiPromptHistoryEntry');
 }
 
 export function invalidateForward() {
