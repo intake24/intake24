@@ -226,7 +226,7 @@ function calculateVolume(scale: DrinkwareScaleEntry | DrinkwareScaleV2Response, 
 }
 
 const { action, type } = usePromptUtils(props, { emit });
-const { parameters, psmValid } = usePortionSizeMethod<'drink-scale'>(props);
+const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'drink-scale'>(props);
 const { multipleProps, multipleEnabled } = useMultiple(props);
 const { foodName } = useFoodUtils(props);
 
@@ -380,8 +380,8 @@ function update() {
 
     state.value.portionSize.fillVolume = fillVolume;
     state.value.portionSize.leftoversVolume = leftoversVolume;
-    state.value.portionSize.servingWeight = fillVolume * state.value.portionSize.quantity;
-    state.value.portionSize.leftoversWeight = leftoversVolume * state.value.portionSize.quantity;
+    state.value.portionSize.servingWeight = fillVolume * state.value.portionSize.quantity * conversionFactor.value;
+    state.value.portionSize.leftoversWeight = leftoversVolume * state.value.portionSize.quantity * conversionFactor.value;
   }
 
   emit('update:modelValue', state.value);
