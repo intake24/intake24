@@ -22,9 +22,13 @@ export function useStandardUnits(props: UseStandardUnitsProps) {
   } = useStandardUnitsStore();
 
   const standardUnitsLoaded = computed(() => {
-    const names = units.value.map(unit => typeof unit === 'string' ? unit : unit.name);
-    const loaded = getStandardUnits(names);
-    return Object.keys(loaded).length === names.length;
+    return units.value.every((unit) => {
+      const isInline = typeof unit === 'object' && (unit.inlineEstimateIn !== undefined || unit.inlineHowMany !== undefined);
+      if (isInline)
+        return true;
+      const name = typeof unit === 'string' ? unit : unit.name;
+      return !!getStandardUnit(name);
+    });
   });
 
   watch(units, async (val) => {
