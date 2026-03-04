@@ -145,7 +145,7 @@ const http = useHttp();
 const { mobile } = useDisplay();
 const { translate } = useI18n();
 const { action, type } = usePromptUtils(props, { emit });
-const { parameters, psmValid } = usePortionSizeMethod<'pizza'>(props);
+const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'pizza'>(props);
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
@@ -310,7 +310,7 @@ function update() {
       Number(portionSize.type.id) - 1,
       Number(portionSize.slice.id),
       Number(portionSize.thickness.id) - 1,
-    ) * portionSize.slice.quantity;
+    ) * portionSize.slice.quantity * conversionFactor.value;
 
   emit('update:modelValue', state.value);
 };
