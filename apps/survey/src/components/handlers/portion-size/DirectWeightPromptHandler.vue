@@ -27,6 +27,7 @@ const emit = defineEmits(['action']);
 const {
   encodedFood: food,
   encodedFoodPortionSizeData,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'direct-weight'>();
 const { meal } = useMealPromptUtils();
@@ -35,6 +36,7 @@ function getInitialState(): PromptStates['direct-weight-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'direct-weight',
+      conversionFactor: portionSize.value.conversionFactor,
       quantity: null,
       linkedQuantity: 1,
       servingWeight: 0,

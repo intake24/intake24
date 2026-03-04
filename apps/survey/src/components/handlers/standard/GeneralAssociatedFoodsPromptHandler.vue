@@ -156,6 +156,7 @@ async function commitAnswer() {
     if (portionSize === null && props.prompt.skipPortionSize) {
       portionSize = {
         method: 'direct-weight',
+        conversionFactor: 1,
         quantity: 0,
         linkedQuantity: 0,
         servingWeight: 0,

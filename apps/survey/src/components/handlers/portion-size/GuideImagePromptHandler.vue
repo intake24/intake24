@@ -32,6 +32,7 @@ const {
   linkedParent,
   linkedParentQuantity,
   parentFoodOptional: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'guide-image'>();
 const { meal } = useMealPromptUtils();
@@ -40,6 +41,7 @@ function getInitialState(): PromptStates['guide-image-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'guide-image',
+      conversionFactor: portionSize.value.conversionFactor,
       guideImageId: '',
       imageUrl: null,
       objectId: undefined,

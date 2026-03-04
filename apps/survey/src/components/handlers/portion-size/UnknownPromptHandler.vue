@@ -29,6 +29,7 @@ const {
   encodedFood: food,
   encodedFoodPortionSizeData,
   parentFoodOptional: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'unknown'>();
 const { meal } = useMealPromptUtils();
@@ -37,6 +38,7 @@ function getInitialState(): PromptStates['unknown-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'unknown',
+      conversionFactor: portionSize.value.conversionFactor,
       servingWeight: 0,
       leftoversWeight: 0,
     },

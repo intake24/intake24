@@ -32,6 +32,7 @@ const {
   linkedParent,
   linkedParentQuantity,
   parentFoodOptional: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'standard-portion'>();
 const { meal } = useMealPromptUtils();
@@ -40,6 +41,7 @@ function getInitialState(): PromptStates['standard-portion-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'standard-portion',
+      conversionFactor: portionSize.value.conversionFactor,
       unit: null,
       quantity: 1,
       linkedQuantity: linkedParentQuantity.value,

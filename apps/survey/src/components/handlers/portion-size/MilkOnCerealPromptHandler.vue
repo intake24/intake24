@@ -29,6 +29,7 @@ const {
   encodedFood: food,
   encodedFoodPortionSizeData,
   parentFoodOptional: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'milk-on-cereal'>();
 const { meal } = useMealPromptUtils();
@@ -37,6 +38,7 @@ function getInitialState(): PromptStates['milk-on-cereal-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'milk-on-cereal',
+      conversionFactor: portionSize.value.conversionFactor,
       imageUrl: null,
       bowl: null,
       bowlId: undefined,

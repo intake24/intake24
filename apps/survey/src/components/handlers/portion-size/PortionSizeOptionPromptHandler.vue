@@ -43,9 +43,15 @@ function commitAnswer() {
     update.portionSize = null;
   }
 
-  if (portionSizeMethods.value?.find(item => item.index === state.value.option && item.method === 'unknown')) {
+  const unknownMethod = portionSizeMethods.value?.find(item => item.index === state.value.option && item.method === 'unknown');
+  if (unknownMethod) {
     flags.push('portion-size-method-complete');
-    update.portionSize = { method: 'unknown', servingWeight: 0, leftoversWeight: 0 };
+    update.portionSize = {
+      method: 'unknown',
+      conversionFactor: unknownMethod.conversionFactor,
+      servingWeight: 0,
+      leftoversWeight: 0,
+    };
   }
 
   survey.updateFood({ foodId: food.id, update });

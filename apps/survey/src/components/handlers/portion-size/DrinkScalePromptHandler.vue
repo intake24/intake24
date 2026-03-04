@@ -31,6 +31,7 @@ const {
   encodedFood: food,
   encodedFoodPortionSizeData,
   parentFoodOptional: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'drink-scale'>();
 
@@ -45,6 +46,7 @@ function getInitialState(): PromptStates['drink-scale-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'drink-scale',
+      conversionFactor: portionSize.value.conversionFactor,
       drinkwareId: '',
       initialFillLevel: 0.9,
       skipFillLevel: false,

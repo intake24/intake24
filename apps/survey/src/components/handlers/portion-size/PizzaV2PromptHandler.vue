@@ -29,6 +29,7 @@ const {
   encodedFood: food,
   encodedFoodPortionSizeData,
   parentFoodOptional: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'pizza-v2'>();
 const { meal } = useMealPromptUtils();
@@ -37,6 +38,7 @@ function getInitialState(): PromptStates['pizza-v2-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'pizza-v2',
+      conversionFactor: portionSize.value.conversionFactor,
       size: null,
       crust: null,
       unit: null,

@@ -267,6 +267,7 @@ export type PizzaUnit = (typeof pizzaUnits)[number];
 
 // Portion size states
 const portionSizeStateBase = z.object({
+  conversionFactor: z.number(),
   servingWeight: z.number().nullable(),
   leftoversWeight: z.number().nullable(),
 });

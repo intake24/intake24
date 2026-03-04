@@ -29,6 +29,7 @@ const {
   encodedFood: food,
   encodedFoodPortionSizeData,
   parentFoodOptional: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'pizza'>();
 const { meal } = useMealPromptUtils();
@@ -37,6 +38,7 @@ function getInitialState(): PromptStates['pizza-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'pizza',
+      conversionFactor: portionSize.value.conversionFactor,
       type: { id: undefined, index: undefined, image: null },
       thickness: { id: undefined, index: undefined, image: null },
       slice: { id: undefined, index: undefined, image: null, quantity: 1 },

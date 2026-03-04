@@ -204,15 +204,17 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     const autoPsmIdx = portionSizeMethods.findIndex(psm => psm.method === 'auto');
     const autoPsm = (autoPsmIdx !== -1 ? portionSizeMethods.at(autoPsmIdx) : undefined) as AutoPsm | undefined;
     if (autoPsm) {
+      const { conversionFactor, parameters } = autoPsm;
       const { servingWeight, leftoversWeight } = getAutoPsmWeight(autoPsm, parent);
       const linkedQuantity = getLinkedParent(foodData, parent)?.quantity ?? 1;
       portionSizeMethodIndex = autoPsmIdx;
       portionSize = {
         method: 'auto',
-        servingWeight: servingWeight * autoPsm.conversionFactor * linkedQuantity,
-        leftoversWeight: leftoversWeight * autoPsm.conversionFactor * linkedQuantity,
-        mode: autoPsm.parameters.mode,
-        quantity: autoPsm.parameters.value,
+        conversionFactor,
+        servingWeight: servingWeight * conversionFactor * linkedQuantity,
+        leftoversWeight: leftoversWeight * conversionFactor * linkedQuantity,
+        mode: parameters.mode,
+        quantity: parameters.value,
         linkedQuantity,
       };
       flags.push('portion-size-option-complete', 'portion-size-method-complete');

@@ -71,6 +71,7 @@ const getInitialState = computed(() => ({
         data: null,
         portionSize: {
           method: 'standard-portion',
+          conversionFactor: 1,
           unit: null,
           quantity: 0,
           linkedQuantity: 1,

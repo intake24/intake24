@@ -30,6 +30,7 @@ const {
   encodedFood: food,
   encodedFoodPortionSizeData,
   parentEncodedFood: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'milk-in-a-hot-drink'>();
 const { meal } = useMealPromptUtils();
@@ -38,6 +39,7 @@ function getInitialState(): PromptStates['milk-in-a-hot-drink-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'milk-in-a-hot-drink',
+      conversionFactor: portionSize.value.conversionFactor,
       milkPartIndex: null,
       milkVolumePercentage: null,
       servingWeight: 0,

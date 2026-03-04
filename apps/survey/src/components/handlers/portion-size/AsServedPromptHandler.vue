@@ -34,6 +34,7 @@ const {
   linkedParent,
   linkedParentQuantity,
   parentFoodOptional: parentFood,
+  portionSize,
   portionSizeMethods,
 } = useFoodPromptUtils<'as-served'>();
 const { meal } = useMealPromptUtils();
@@ -49,6 +50,7 @@ function getInitialState(): PromptStates['as-served-prompt'] {
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'as-served',
+      conversionFactor: portionSize.value.conversionFactor,
       serving: null,
       leftovers: null,
       linkedQuantity: linkedParentQuantity.value,
