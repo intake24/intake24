@@ -8,29 +8,27 @@ import { ref } from 'vue';
 import { useHttp, useI18n } from '@intake24/ui';
 
 export type StandardUnitDef = Pick<StandardUnit, 'name' | 'inlineEstimateIn' | 'inlineHowMany'>;
-export type StandardUnitRef = Pick<StandardUnit, 'inlineEstimateIn' | 'inlineHowMany'> & StandardUnitResponse;
-export type StandardUnitRefs = Record<string, StandardUnitRef>;
 
 export const useStandardUnits = defineStore('standard-units', () => {
   const http = useHttp();
   const { translate } = useI18n();
 
-  const units = ref<StandardUnitRefs>({});
+  const units = ref<Record<string, StandardUnitResponse>>({});
 
   function getStandardUnitHowMany(item: string | StandardUnit) {
-    if (typeof item === 'string')
-      return translate(units.value[item]?.howMany ?? item);
+    if (typeof item !== 'string' && item.inlineHowMany !== undefined)
+      return item.inlineHowMany;
 
-    const { name, inlineHowMany } = item;
-    return translate(inlineHowMany ?? units.value[name]?.howMany ?? name);
+    const name = typeof item === 'string' ? item : item.name;
+    return translate(units.value[name]?.howMany ?? name);
   };
 
   function getStandardUnitEstimateIn(item: string | StandardUnit) {
-    if (typeof item === 'string')
-      return translate(units.value[item]?.estimateIn ?? item);
+    if (typeof item !== 'string' && item.inlineEstimateIn !== undefined)
+      return item.inlineEstimateIn;
 
-    const { name, inlineEstimateIn } = item;
-    return translate(inlineEstimateIn ?? units.value[name]?.estimateIn ?? name);
+    const name = typeof item === 'string' ? item : item.name;
+    return translate(units.value[name]?.estimateIn ?? name);
   };
 
   function getStandardUnit(item: string) {
@@ -45,34 +43,44 @@ export const useStandardUnits = defineStore('standard-units', () => {
     if (!items.length)
       return;
 
-    const names = items.map(item => typeof item === 'string' ? item : item.name);
-    const missing = names.filter(name => !units.value[name]);
-    if (!missing.length)
+    const needsFetch: (string | StandardUnitDef)[] = [];
+
+    for (const item of items) {
+      const name = typeof item === 'string' ? item : item.name;
+
+      if (units.value[name])
+        continue;
+
+      if (typeof item === 'object') {
+        const hasEstimateIn = item.inlineEstimateIn !== undefined;
+        const hasHowMany = item.inlineHowMany !== undefined;
+
+        if (hasEstimateIn !== hasHowMany)
+          console.warn(`Standard unit "${name}" has only one inline value defined: ${hasEstimateIn ? 'inlineEstimateIn' : 'inlineHowMany'}`);
+
+        if (hasEstimateIn || hasHowMany)
+          continue;
+      }
+
+      needsFetch.push(item);
+    }
+
+    if (!needsFetch.length)
       return;
 
-    await fetchStandardUnits(missing);
+    await fetchStandardUnits(needsFetch.map(item => typeof item === 'string' ? item : item.name));
   }
 
-  async function fetchStandardUnits(items: (string | StandardUnitDef)[]) {
-    if (!items.length)
+  async function fetchStandardUnits(names: string[]) {
+    if (!names.length)
       return;
 
-    const unitObjects = items.reduce<Record<string, StandardUnitDef>>((acc, item) => {
-      const name = typeof item === 'string' ? item : item.name;
-      acc[name] = typeof item === 'string' ? { name } : item;
-
-      return acc;
-    }, {});
-
     const { data } = await http.get<StandardUnitResponse[]>('portion-sizes/standard-units', {
-      params: { id: Object.keys(unitObjects) },
+      params: { id: names },
     });
 
     data.forEach((item) => {
-      units.value[item.id] = {
-        ...item,
-        ...pick(unitObjects[item.id], ['inlineEstimateIn', 'inlineHowMany']),
-      };
+      units.value[item.id] = item;
     });
   };
 
