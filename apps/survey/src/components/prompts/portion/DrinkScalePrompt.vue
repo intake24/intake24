@@ -72,7 +72,7 @@
             :is="scale.version === 1 ? 'drink-scale-panel' : 'drink-scale-v2-panel'"
             v-if="scale"
             v-model="state.portionSize.fillLevel"
-            :open="state.panel === 1"
+            :open="state.panel === panelIndex.volume"
             :scale="scale"
             @confirm="confirmVolume"
             @update:model-value="updateVolume"
@@ -114,7 +114,7 @@
               v-if="scale"
               v-model="state.portionSize.leftoversLevel"
               :max-fill-level="state.portionSize.fillLevel"
-              :open="state.panel === 2"
+              :open="state.panel === panelIndex.leftovers"
               :scale="scale"
               type="leftovers"
               @confirm="confirmLeftovers"
@@ -247,6 +247,10 @@ const labelData = computed(() => ({ drinkwareSet: drinkwareSetData.value, imageM
 const { labels } = useLabels(props, { type: 'drinkScale', data: labelData });
 
 const leftoversEnabled = computed(() => props.prompt.leftovers);
+
+// Panel indices for v-expansion-panels v-model binding.
+// Must match the DOM order: method(0), container(1), volume(2), leftovers(3).
+const panelIndex = { volume: 2, leftovers: 3 } as const;
 
 const scale = computed(() => {
   const { containerId } = state.value.portionSize;
