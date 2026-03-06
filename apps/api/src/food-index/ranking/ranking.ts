@@ -142,12 +142,10 @@ export async function rankFoodResults(
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
   if (rankingData !== null) {
-    return recipeFoodsHeaders.concat(
-      applyRankingData(rankingData, results, matchScoreWeight, logger),
-    );
+    return [...recipeFoodsHeaders, ...applyRankingData(rankingData, results, matchScoreWeight, logger)];
   }
   else {
-    return recipeFoodsHeaders.concat(noAlgorithmRanking(results));
+    return [...recipeFoodsHeaders, ...noAlgorithmRanking(results)];
   }
 }
 

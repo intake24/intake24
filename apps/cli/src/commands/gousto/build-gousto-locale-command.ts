@@ -265,7 +265,6 @@ export default async (options: GoustoLocaleOptions): Promise<void> => {
   fs.mkdir(packageThumbnailsPath, { recursive: true });
 
   await Promise.all(
-    [...usedThumbnailNames]
-      .map(fileName => fs.copyFile(path.join(options.thumbnailDir, fileName), path.join(packageThumbnailsPath, fileName))),
+    Array.from(usedThumbnailNames, fileName => fs.copyFile(path.join(options.thumbnailDir, fileName), path.join(packageThumbnailsPath, fileName))),
   );
 };

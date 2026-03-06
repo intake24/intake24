@@ -126,7 +126,10 @@ const prompts = ref<Prompt[]>([]);
 const selected = ref<Prompt[]>([]);
 
 const isSelected = computed(() => !!selected.value.length);
-const promptAlreadyExists = computed(() => !!props.promptIds.find(id => id === selected.value.at(0)?.id));
+const promptAlreadyExists = computed(() => {
+  const id = selected.value.at(0)?.id;
+  return id && props.promptIds.includes(id);
+});
 
 async function fetchLocally(search: string | null, page: number, limit = 5) {
   const currentPage = page - 1;

@@ -221,9 +221,7 @@ export const useSurvey = defineStore('survey', {
       return undefined;
     },
     sameAsBeforeAllowed(): boolean {
-      return !!this.foodPrompts.find(
-        item => item.component === 'same-as-before-prompt',
-      );
+      return this.foodPrompts.some(item => item.component === 'same-as-before-prompt');
     },
     selection: state => state.data.selection,
     selectedMealIndex(): number | undefined {

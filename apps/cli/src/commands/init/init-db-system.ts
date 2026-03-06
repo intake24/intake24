@@ -124,7 +124,7 @@ async function initDefaultData(db: KyselyDatabases) {
     });
     log.success('Collected language codes from foods.locales table.');
 
-    const languageRows = Array.from(langs).map((code) => {
+    const languageRows = Array.from(langs, (code) => {
       const ietf_locale = (ietfLanguageTags as Array<{ locale: string; language: any; country: any }>)
         .find((tag) => {
           return (tag.locale === code) || (tag.locale.split('-')[0] === code.split('-')[0]);

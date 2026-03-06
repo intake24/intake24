@@ -242,7 +242,11 @@ function updateTime(el: 'hours' | 'minutes', val: number) {
   const newIndex = index + val;
 
   if (newIndex < 0) {
-    time.value[el] = items[items.length - 1];
+    const lastItem = items.at(-1);
+    if (lastItem === undefined)
+      return;
+
+    time.value[el] = lastItem;
 
     if (el === 'minutes')
       updateTime('hours', -1);

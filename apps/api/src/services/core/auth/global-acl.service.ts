@@ -37,7 +37,7 @@ function globalAclService({ aclCache }: Pick<IoC, 'aclCache'>) {
     if (Array.isArray(permission))
       return permission.every(item => currentPermissions.includes(item));
 
-    return !!currentPermissions.find(name => name === permission);
+    return currentPermissions.includes(permission);
   };
 
   /**
@@ -70,7 +70,7 @@ function globalAclService({ aclCache }: Pick<IoC, 'aclCache'>) {
     if (Array.isArray(role))
       return role.every(name => currentRoles.includes(name));
 
-    return !!currentRoles.find(name => name === role);
+    return currentRoles.includes(role);
   };
 
   /**

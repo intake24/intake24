@@ -14,7 +14,7 @@ export default {
     if (!userId)
       throw new Error('JWT: Missing userId claim');
 
-    if (new Date().getTime() > exp * 1000)
+    if (Date.now() > exp * 1000)
       throw new Error('JWT: expired token');
 
     return payload;

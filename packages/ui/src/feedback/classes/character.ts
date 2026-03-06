@@ -62,7 +62,7 @@ export class CharacterRules implements Character {
 
     const scaleSectors = results
       .map(dg => dg.resultedDemographicGroup.scaleSectors)
-      .reduce((a, b) => a.slice().concat(b), []);
+      .reduce((a, b) => [...a.slice(), ...b], []);
 
     if (!scaleSectors.length)
       return undefined;

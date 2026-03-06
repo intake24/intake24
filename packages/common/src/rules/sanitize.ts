@@ -11,7 +11,7 @@ export function sanitize<T = string>(input: T, options: SanitizeInputOptions = {
   if (typeof input === 'string') {
     let output: string | null = allowHtml
       ? sanitizeHtml(input, {
-          allowedTags: sanitizeHtml.defaults.allowedTags.concat(['iframe', 'img']),
+          allowedTags: [...sanitizeHtml.defaults.allowedTags, ...['iframe', 'img']],
           allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
             iframe: ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen'],

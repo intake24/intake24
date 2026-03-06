@@ -221,7 +221,7 @@ function calculateVolume(scale: DrinkwareScaleEntry | DrinkwareScaleV2Response, 
   const fillLineY = maxY - scaleHeight * fillLevel;
   const fullVolume = calculateFillVolume(symmetryShape, minY, 0.05);
   const filledVolume = calculateFillVolume(symmetryShape, fillLineY, 0.05);
-  return (filledVolume * scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1]) / fullVolume;
+  return (filledVolume * scale.volumeSamplesNormalised.at(-1)!) / fullVolume;
 }
 
 const { action, type } = usePromptUtils(props, { emit });

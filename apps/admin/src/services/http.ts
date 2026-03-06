@@ -8,6 +8,8 @@ import { HttpStatusCode } from 'axios';
 
 import { http } from '@intake24/ui';
 
+const authRegex = /auth\/(?:login|fido|duo|otp)$/;
+
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];
 
@@ -38,11 +40,7 @@ export function mountInterceptors(router: Router, useAuth: AuthStoreDef) {
         const { config, response: { status } = {} } = err;
 
         // Exclude non-401s and sign-in 401s (/login)
-        if (
-          !config?.url
-          || status !== HttpStatusCode.Unauthorized
-          || config.url?.match(/auth\/(login|fido|duo|otp)$/)
-        ) {
+        if (!config?.url || status !== HttpStatusCode.Unauthorized || authRegex.test(config.url)) {
           return Promise.reject(err);
         }
 

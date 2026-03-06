@@ -28,7 +28,7 @@ export const recallLog = defineStore('recall-log', () => {
   };
 
   function promptCheck(type: ComponentType, applicable: boolean, reason: string) {
-    entries.value[entries.value.length - 1].prompts.push({ type, applicable, reason });
+    entries.value.at(-1)?.prompts.push({ type, applicable, reason });
   };
 
   return {

@@ -233,21 +233,21 @@ const firstThumbnail = computed(() => {
   return asServedData.value?.images[0].thumbnailUrl ?? '';
 });
 const lastThumbnail = computed(() => {
-  if (objectIdx.value === undefined || !asServedData.value)
+  const lastImage = asServedData.value?.images.at(-1);
+  if (objectIdx.value === undefined || !asServedData.value || !lastImage)
     return '';
 
-  return asServedData.value.images[asServedData.value.images.length - 1].thumbnailUrl;
+  return lastImage.thumbnailUrl;
 });
 const showMoreWeightFactor = computed(() => {
   if (props.maxWeight === undefined)
     return true;
 
-  if (objectIdx.value === undefined || !asServedData.value || !asServedData.value.images.length)
+  const lastImage = asServedData.value?.images.at(-1);
+  if (objectIdx.value === undefined || !asServedData.value || !lastImage)
     return false;
 
-  const { weight } = asServedData.value.images[asServedData.value.images.length - 1];
-
-  return ((denominator + 1) / denominator) * weight < props.maxWeight;
+  return ((denominator + 1) / denominator) * lastImage.weight < props.maxWeight;
 });
 const weightFactor = computed(() => weightFactorProps.value.modelValue / weightFactorProps.value.denominator);
 
@@ -305,10 +305,11 @@ function setSelection(idx: number, init = false) {
     return;
 
   if (idx >= asServedData.value.images.length) {
-    weightFactorProps.value = moreWeightFactor(
-      true,
-      asServedData.value.images[asServedData.value.images.length - 1].weight,
-    );
+    const lastImage = asServedData.value.images.at(-1);
+    if (!lastImage)
+      return;
+
+    weightFactorProps.value = moreWeightFactor(true, lastImage.weight);
     update();
     return;
   }

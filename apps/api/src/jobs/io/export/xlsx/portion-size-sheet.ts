@@ -134,7 +134,7 @@ export class PortionSizeWriter {
       return [
         { header: section.overallHeader, width: section.columns[0].width, style: { border: { left: { style: 'thin' } } } },
         ...section.columns.slice(1, -1).map(col => ({ header: '', width: col.width })),
-        { header: '', width: section.columns[section.columns.length - 1].width, style: { border: { right: { style: 'thin' } } } },
+        { header: '', width: section.columns.at(-1)!.width, style: { border: { right: { style: 'thin' } } } },
       ];
     }
 

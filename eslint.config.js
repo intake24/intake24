@@ -15,6 +15,7 @@ export default await antfu({
   ],
 }, {
   rules: {
+    'e18e/prefer-static-regex': 'warn',
     'import/order': 'off',
     'no-console': 'off',
     'node/prefer-global/buffer': ['error', 'always'],

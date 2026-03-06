@@ -201,7 +201,7 @@ async function getAddonFoods() {
       foodCodes.push(...contents.foods.map(({ code }) => code));
     }
 
-    const foods = await Promise.all([...new Set(foodCodes)].map(code => foodsService.getData(props.localeId, code))); ;
+    const foods = await Promise.all(Array.from(new Set(foodCodes), code => foodsService.getData(props.localeId, code))); ;
     addonFoods.value[addon.id] = foods.filter(food =>
       food.portionSizeMethods.some(({ method, pathways }) => method === 'standard-portion' && pathways.includes('addon')));
   }

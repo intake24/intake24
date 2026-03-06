@@ -954,7 +954,7 @@ export class AlbaneLocaleBuilder {
         }
       }
 
-      for (const asServedId of [...asServedSetIds].sort()) {
+      for (const asServedId of [...asServedSetIds].toSorted()) {
         foodPortionSizeMethods.push({
           method: 'as-served',
           description: 'use_an_image',
@@ -966,7 +966,7 @@ export class AlbaneLocaleBuilder {
         });
       }
 
-      for (const guideImageId of [...guideImageIds].sort()) {
+      for (const guideImageId of [...guideImageIds].toSorted()) {
         foodPortionSizeMethods.push({
           method: 'guide-image',
           guideImageId,
@@ -979,7 +979,7 @@ export class AlbaneLocaleBuilder {
 
       const pushToEndIds = ['FR_Baby_Bottles', 'FR_Baby_Cups'];
 
-      const [endIds, startIds] = partition([...drinkwareSetIds].sort(), id => pushToEndIds.includes(id));
+      const [endIds, startIds] = partition([...drinkwareSetIds].toSorted(), id => pushToEndIds.includes(id));
 
       for (const drinkwareId of [...startIds, ...endIds]) {
         foodPortionSizeMethods.push({

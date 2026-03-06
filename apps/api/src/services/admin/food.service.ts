@@ -361,7 +361,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     if (parentCodes.size > 0) {
       const categories = await transaction.selectFrom('categories')
         .select(['id', 'code'])
-        .where('code', 'in', Array.from(parentCodes))
+        .where('code', 'in', [...parentCodes])
         .where('localeId', '=', localeId)
         .execute();
 
@@ -369,7 +369,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
         categoryIdMap.set(category.code, category.id);
       }
 
-      const missing = Array.from(parentCodes).filter(code => !categoryIdMap.has(code));
+      const missing = [...parentCodes].filter(code => !categoryIdMap.has(code));
       if (missing.length) {
         throw new ValidationError(`Invalid category codes: ${missing.join(', ')}`);
       }
@@ -394,7 +394,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('foodsCategories')
-        .where('foodId', 'in', Array.from(idMap.values()))
+        .where('foodId', 'in', [...idMap.values()])
         .execute();
     }
 
@@ -429,7 +429,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('foodAttributes')
-        .where('foodId', 'in', Array.from(idMap.values()))
+        .where('foodId', 'in', [...idMap.values()])
         .execute();
     }
 
@@ -467,11 +467,11 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     if (foodCodes.size > 0) {
       const existingFoods = await transaction.selectFrom('foods')
         .select('code')
-        .where('code', 'in', Array.from(foodCodes))
+        .where('code', 'in', [...foodCodes])
         .execute();
 
       const existingFoodCodes = new Set(existingFoods.map(f => f.code));
-      const missing = Array.from(foodCodes).filter(code => !existingFoodCodes.has(code));
+      const missing = [...foodCodes].filter(code => !existingFoodCodes.has(code));
 
       if (missing.length) {
         throw new ValidationError(`Invalid associated food codes: ${missing.join(', ')}`);
@@ -481,11 +481,11 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     if (categoryCodes.size > 0) {
       const existingCategories = await transaction.selectFrom('categories')
         .select('code')
-        .where('code', 'in', Array.from(categoryCodes))
+        .where('code', 'in', [...categoryCodes])
         .execute();
 
       const existingCategoryCodes = new Set(existingCategories.map(c => c.code));
-      const missing = Array.from(categoryCodes).filter(code => !existingCategoryCodes.has(code));
+      const missing = [...categoryCodes].filter(code => !existingCategoryCodes.has(code));
 
       if (missing.length) {
         throw new ValidationError(`Invalid associated category codes: ${missing.join(', ')}`);
@@ -518,7 +518,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('associatedFoods')
-        .where('foodId', 'in', Array.from(idMap.values()))
+        .where('foodId', 'in', [...idMap.values()])
         .execute();
     }
 
@@ -559,7 +559,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('foodPortionSizeMethods')
-        .where('foodId', 'in', Array.from(idMap.values()))
+        .where('foodId', 'in', [...idMap.values()])
         .execute();
     }
 
@@ -640,7 +640,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('foodsNutrients')
-        .where('foodId', 'in', Array.from(idMap.values()))
+        .where('foodId', 'in', [...idMap.values()])
         .execute();
     }
 

@@ -384,7 +384,7 @@ function removeFood(promptIndex: number, foodIndex: number) {
 
   const update = {
     ...state,
-    foods: state.foods.slice(0, foodIndex).concat(state.foods.slice(foodIndex + 1)),
+    foods: [...state.foods.slice(0, foodIndex), ...state.foods.slice(foodIndex + 1)],
   };
 
   promptStates.value.splice(promptIndex, 1, update);

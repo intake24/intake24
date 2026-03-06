@@ -53,7 +53,7 @@ export function useErrors(props: UseErrorProps = {}) {
 
   function has(field: string) {
     if (!field.endsWith('*'))
-      return Object.prototype.hasOwnProperty.call(errors.value, field);
+      return Object.hasOwn(errors.value, field);
 
     const match = field.slice(0, -1);
 

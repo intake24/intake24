@@ -211,7 +211,7 @@ const canHaveCustomFields = computed(() => {
   return props.section?.id && ['externalSources', 'portionSizes'].includes(props.section.id);
 });
 function isCustomField(id: string) {
-  return !currentFields.value.find(f => f.id === id);
+  return !currentFields.value.some(f => f.id === id);
 }
 
 function loadMoreFields() {

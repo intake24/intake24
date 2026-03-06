@@ -89,14 +89,14 @@ function chooseFood(foodId: string, name: string, entity: string) {
 };
 
 function foodDisplayName(food: FoodState) {
-  let dispalyName = '???';
+  let displayName = '???';
   if (food.type === 'free-text')
-    dispalyName = food.description;
+    displayName = food.description;
   if (food.type === 'encoded-food')
-    dispalyName = food.data.localName;
-  if (dispalyName.length > 16)
-    dispalyName = dispalyName.slice(0, 16).concat('...');
-  return dispalyName;
+    displayName = food.data.localName;
+  if (displayName.length > 16)
+    displayName = `${displayName.slice(0, 16)}...`;
+  return displayName;
 };
 function stringTime(time: Time): string {
   return fromTime(time);

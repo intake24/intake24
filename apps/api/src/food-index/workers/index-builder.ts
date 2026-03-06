@@ -67,8 +67,7 @@ async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]>
     include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
   });
   return recipeFoods.map(recipeFoodEntry =>
-    parseSynonymSet(
-      recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonymSet?.synonyms ?? ''),
+    parseSynonymSet(`${recipeFoodEntry.recipeWord} ${recipeFoodEntry.synonymSet?.synonyms ?? ''}`,
     ),
   );
 }
@@ -201,7 +200,7 @@ async function matchRecipeFoods(
   const recipeFoodHeadersFiltered: FoodHeader[] = recipeFoodHeaders.reduce((acc, current) => {
     const temp = acc.find(item => item.code === current.code);
     if (!temp)
-      return acc.concat([current]);
+      return [...acc, ...[current]];
     else
       return acc;
   }, [] as FoodHeader[]);
@@ -223,7 +222,7 @@ function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchRe
     }
   }
 
-  return [...relevantCategories.entries()].map(([categoryCode, categoryData]) => ({
+  return Array.from(relevantCategories.entries(), ([categoryCode, categoryData]) => ({
     id: categoryData.id,
     key: categoryCode,
     phrase: categoryData.name,

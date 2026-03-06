@@ -362,7 +362,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     const databaseRefs = await transaction.selectFrom('categories')
       .select(['code', 'id'])
       .where('localeId', '=', localeId)
-      .where('code', 'in', Array.from(parentCodes))
+      .where('code', 'in', [...parentCodes])
       .execute();
 
     const parentIdMap = new Map(databaseRefs.map(r => [r.code, r.id]));
@@ -390,7 +390,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('categoriesCategories')
-        .where('subCategoryId', 'in', Array.from(idMap.values()))
+        .where('subCategoryId', 'in', [...idMap.values()])
         .execute();
     }
 
@@ -425,7 +425,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('categoryAttributes')
-        .where('categoryId', 'in', Array.from(idMap.values()))
+        .where('categoryId', 'in', [...idMap.values()])
         .execute();
     }
 
@@ -466,7 +466,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('categoryPortionSizeMethods')
-        .where('categoryId', 'in', Array.from(idMap.values()))
+        .where('categoryId', 'in', [...idMap.values()])
         .execute();
     }
 

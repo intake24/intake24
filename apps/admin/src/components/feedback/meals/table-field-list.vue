@@ -294,7 +294,7 @@ export default defineComponent({
         const match = items.value.find(
           (item, idx) =>
             item.type === 'nutrient'
-            && [...value].sort().join(':') === [...item.types].sort().join(':')
+            && value.toSorted().join(':') === item.types.toSorted().join(':')
             && index !== idx,
         );
 

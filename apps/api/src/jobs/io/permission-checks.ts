@@ -11,7 +11,7 @@ async function checkLocalePermissions(
 ): Promise<void> {
   const unauthorisedLocales = new Set<string>();
 
-  const sortedLocaleIds = [...localeIds].sort();
+  const sortedLocaleIds = [...localeIds].toSorted();
 
   const checks = sortedLocaleIds.map(localeId => (
     globalAclService.findAndCheckRecordAccess(userId, SystemLocale, permission, {
@@ -37,7 +37,7 @@ async function checkLocalePermissions(
   }
 
   if (unauthorisedLocales.size > 0) {
-    throw new AggregateLocalisableError([...unauthorisedLocales].sort().map(locale => ({ key: 'io.permissions.foodListPermission', params: { locale } })));
+    throw new AggregateLocalisableError([...unauthorisedLocales].toSorted().map(locale => ({ key: 'io.permissions.foodListPermission', params: { locale } })));
   }
 }
 

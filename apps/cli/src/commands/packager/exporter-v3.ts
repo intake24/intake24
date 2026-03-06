@@ -239,7 +239,7 @@ export class ExporterV3 {
 
   private async downloadImages(): Promise<void> {
     this.logger.info(`Downloading ${this.images.size} portion size images`);
-    await Promise.all([...this.images].map(imagePath => this.downloadImage(imagePath)));
+    await Promise.all(Array.from(this.images, imagePath => this.downloadImage(imagePath)));
   }
 
   private collectFoodCompositionTableDependencies(localFoods: PkgFood[]): void {
@@ -352,23 +352,23 @@ export class ExporterV3 {
     // Drinkware sets and guide images contain references to image maps, download these first
     // and collect dependencies before downloading image map data
 
-    const sortedDrinkwareIds = [...this.drinkwareIds].sort();
+    const sortedDrinkwareIds = [...this.drinkwareIds].toSorted();
     const drinkwareData = await Promise.all(
       sortedDrinkwareIds.map(id => this.getDrinkwareData(id)),
     );
     this.collectDrinkwareDependencies(drinkwareData);
 
-    const sortedGuideImageIds = [...this.guideImageIds].sort();
+    const sortedGuideImageIds = [...this.guideImageIds].toSorted();
     const guideImageData = await Promise.all(
       sortedGuideImageIds.map(id => this.getGuideImageData(id)),
     );
     this.collectGuideImageDependencies(guideImageData);
 
-    const sortedImageMapIds = [...this.imageMapIds].sort();
+    const sortedImageMapIds = [...this.imageMapIds].toSorted();
     const imageMapData = await Promise.all(sortedImageMapIds.map(id => this.getImageMapData(id)));
     this.collectImageMapDependencies(imageMapData);
 
-    const sortedAsServedIds = [...this.asServedSetIds].sort();
+    const sortedAsServedIds = [...this.asServedSetIds].toSorted();
     const asServedData = await Promise.all(sortedAsServedIds.map(id => this.getAsServedData(id)));
     this.collectAsServedDependencies(asServedData);
 

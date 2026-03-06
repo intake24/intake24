@@ -749,7 +749,7 @@ async function startUpload() {
         }
 
         const parts = upload.url.split('/');
-        const fileId = parts[parts.length - 1];
+        const fileId = parts.at(-1);
 
         uploadedFileId.value = fileId;
 

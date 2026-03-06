@@ -89,7 +89,7 @@ export default {
       { name: 'tasks-delete', display_name: 'Delete tasks' },
     ].map(permission => ({ ...permission, created_at, updated_at }));
 
-    await queryInterface.bulkInsert('permissions', resourcePerms.concat(surveyPerms, fdbPerms));
+    await queryInterface.bulkInsert('permissions', [...resourcePerms, ...surveyPerms, ...fdbPerms]);
 
     const roles = await queryInterface.sequelize.query(`SELECT id, name
                                                         FROM roles;`);

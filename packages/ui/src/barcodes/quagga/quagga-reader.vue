@@ -146,7 +146,7 @@ function drawResult(result: QuaggaJSResultObject) {
 }
 
 function getMedian(numbers: number[]) {
-  const sorted = [...numbers].sort((a, b) => a - b);
+  const sorted = numbers.toSorted((a, b) => a - b);
   const half = Math.floor(sorted.length / 2);
 
   if (sorted.length % 2 === 1)

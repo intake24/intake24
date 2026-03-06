@@ -57,7 +57,7 @@ function findOutlinePath(current: Node, transformStack: string[]): PathWithTrans
   if (current.type === 'element' && current.properties !== undefined) {
     const id = current.properties.id;
     const tx = getTransform(current);
-    const elementTxStack = tx !== undefined ? transformStack.concat(tx) : transformStack;
+    const elementTxStack = tx !== undefined ? [...transformStack, ...tx] : transformStack;
 
     if (current.tagName === 'path' && id === 'outline') {
       const pathData = current.properties.d;
@@ -93,7 +93,7 @@ function findAreaPaths(current: Node, transformStack: string[], paths: PathWithT
   if (current.type === 'element' && current.properties !== undefined) {
     const id = current.properties.id;
     const tx = getTransform(current);
-    const elementTxStack = tx !== undefined ? transformStack.concat(tx) : transformStack;
+    const elementTxStack = tx !== undefined ? [...transformStack, ...tx] : transformStack;
 
     if (current.tagName === 'path' && typeof id === 'string' && id.startsWith('area_')) {
       const pathData = current.properties.d;

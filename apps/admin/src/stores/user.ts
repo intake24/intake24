@@ -51,7 +51,7 @@ export const useUser = defineStore('user', {
         if (this.permissions.includes(`${resource}:${action}`))
           return true;
 
-        if (securables.length && !!securables.find(securable => securable.action === action))
+        if (securables.length && securables.some(securable => securable.action === action))
           return true;
       }
 

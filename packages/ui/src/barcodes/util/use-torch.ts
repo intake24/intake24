@@ -13,7 +13,9 @@ export function useTorch() {
     if (!cameras.length)
       return null;
 
-    const camera = cameras[cameras.length - 1];
+    const camera = cameras.at(-1);
+    if (!camera)
+      return null;
 
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {

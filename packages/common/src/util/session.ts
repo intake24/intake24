@@ -18,5 +18,5 @@ export function isSessionFixedPeriodValid(period: `${StringValue}+${StringValue}
 
   const cutoff = addMilliseconds(startOfDay(addMilliseconds(from, ms(startOffset as StringValue))), ms(endOffset as StringValue));
 
-  return new Date().getTime() < cutoff.getTime();
+  return Date.now() < cutoff.getTime();
 }

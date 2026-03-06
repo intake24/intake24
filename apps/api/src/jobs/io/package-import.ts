@@ -184,7 +184,7 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
           await this.localeService.bulkUpdateLocales(filteredLocaleData.slice(i, i + BATCH_SIZE), conflictStrategies.locales || 'abort', foodsTransaction, systemTransaction);
         }
 
-        for (const locale of [...localesWithFoodListChanges].sort()) {
+        for (const locale of [...localesWithFoodListChanges].toSorted()) {
           const categories = filteredCategoryData[locale];
           const foods = filteredFoodData[locale];
 

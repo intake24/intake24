@@ -33,7 +33,7 @@ const splits = computed(() => {
     return { suggestions: [], force: false };
 
   for (const item of items) {
-    if (item.match(/^!\w+:\w+!$/)) {
+    if (/^!\w+:\w+!$/.test(item)) {
       forceTokens.push(item
         .replace(/!/g, '')
         .split(':')
@@ -48,7 +48,7 @@ const splits = computed(() => {
   }
 
   const suggestions = food.description.split(new RegExp(`(?:${suggestionTokens.join('|')})`, 'i')).map(item => item.trim());
-  const forceCheck = [...suggestions].sort((a, b) => a.localeCompare(b)).join(':').toLowerCase();
+  const forceCheck = suggestions.toSorted((a, b) => a.localeCompare(b)).join(':').toLowerCase();
   const force = forceTokens.includes(forceCheck);
 
   return { suggestions, force };

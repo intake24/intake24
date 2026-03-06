@@ -696,7 +696,7 @@ function drinkwareSetService({
     ): (DrinkwareScaleEntry | DrinkwareScaleV2Entry)[] {
       const merged: (DrinkwareScaleEntry | DrinkwareScaleV2Entry)[] = [...scalesV2];
       for (const scale of scalesV1) {
-        if (merged.find(s => s.choiceId === scale.choiceId) === undefined)
+        if (!merged.some(s => s.choiceId === scale.choiceId))
           merged.push(scale);
       }
       return merged;

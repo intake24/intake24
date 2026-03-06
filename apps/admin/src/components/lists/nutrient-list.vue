@@ -210,7 +210,7 @@ export default defineComponent({
           const { index } = this.dialog;
           const match = this.items.find(
             (nutrientType, idx) =>
-              [...value].sort().join(':') === [...nutrientType.id].sort().join(':') && index !== idx,
+              value.toSorted().join(':') === nutrientType.id.toSorted().join(':') && index !== idx,
           );
 
           return match ? this.$t('nutrient-types.validation.unique') : true;

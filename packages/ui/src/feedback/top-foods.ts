@@ -46,7 +46,7 @@ export function buildTopFoods(topFoods: TopFoods, foods: AggregateFoodStats[], n
     const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(id, foods);
     const other = foodHighInNutrient.slice(max);
 
-    const list = foodHighInNutrient.slice(0, max).concat(summarizeOtherFood(id, other));
+    const list = [...foodHighInNutrient.slice(0, max), ...summarizeOtherFood(id, other)];
 
     const data = list.map(food => ({
       name: food.name,

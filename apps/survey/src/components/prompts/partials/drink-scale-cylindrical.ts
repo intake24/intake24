@@ -35,7 +35,7 @@ export function getSymmetryShape(outlineCoordinates: number[]): Polygon {
 
   // Find faces to the right of the symmetry line
   // There will normaly be just two faces in the result of the cut operation
-  for (const face of Array.from(cut.faces)) {
+  for (const face of [...cut.faces]) {
     const centre = (face as Flatten.Face).box.center;
     if (centre.x > symmetryX)
       facesToDelete.push(face);

@@ -131,7 +131,7 @@ export default class SurveyStats {
   getReducedFoods(selected: string[]) {
     const foods = this.getFoods(selected);
 
-    return [...new Set(foods.map(f => f.code))].map((code) => {
+    return Array.from(new Set(foods.map(f => f.code)), (code) => {
       const totalConsumptionMap: Map<string, number> = new Map();
       const matchingFoods = foods.filter(f => f.code === code);
 

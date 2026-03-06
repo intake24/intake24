@@ -113,7 +113,7 @@ const isAlreadyIncluded = computed(() => {
   if (!props.currentItems.length || !selected.value.length)
     return false;
 
-  return !!props.currentItems.find(item => item.id === selected.value.at(0)?.id);
+  return props.currentItems.some(item => item.id === selected.value.at(0)?.id);
 });
 
 function close() {

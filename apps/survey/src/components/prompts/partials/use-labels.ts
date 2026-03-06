@@ -84,9 +84,9 @@ export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guid
       if (!scale)
         return '';
 
-      const volume = scale.version === 1
-        ? scale.volumeSamples[scale.volumeSamples.length - 1]
-        : scale.volumeSamplesNormalised[scale.volumeSamplesNormalised.length - 1];
+      const volume = (scale.version === 1
+        ? scale.volumeSamples.at(-1)
+        : scale.volumeSamplesNormalised.at(-1)) ?? 0;
 
       return translate(scale.label, { params: { food, volume } }) || translate(object.label, { params: { food, volume } });
     });

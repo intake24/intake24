@@ -91,7 +91,7 @@ const state = computed(() => [...selected.value, otherOutput.value].filter(Boole
 const localeOptions = computed(
   () => props.prompt.options[locale.value] ?? props.prompt.options.en,
 );
-const isExclusiveSelected = computed(() => !!localeOptions.value.find(option => option.exclusive && props.modelValue.includes(option.value)));
+const isExclusiveSelected = computed(() => localeOptions.value.some(option => option.exclusive && props.modelValue.includes(option.value)));
 const isMinSatisfied = computed(() => !props.prompt.validation.min || props.modelValue.length >= props.prompt.validation.min);
 const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.modelValue.length <= props.prompt.validation.max);
 const isRequiredSatisfied = computed(() => !props.prompt.validation.required || !!props.modelValue.length);

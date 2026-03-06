@@ -356,7 +356,7 @@ export class PhraseIndex<K> {
     // function and if the synonym is entered as 'sausage' it will fail to match 'sausag' unless
     // the stemming function is applied to it.
     function stemWordSets(sets: Array<Set<string>>): Array<Set<string>> {
-      return sets.map(set => new Set([...set].map(word => wordOps.stem(word))));
+      return sets.map(set => new Set(Array.from(set, word => wordOps.stem(word))));
     }
 
     const stemmedSynonyms = stemWordSets(synonymSets);

@@ -250,7 +250,7 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
       return role.every(item => currentRoleKeys.includes(item));
     }
 
-    return !!this.roles.find(item => item[key] === role);
+    return this.roles.some(item => item[key] === role);
   }
 
   hasAnyRole(roles: string[], key: 'id' | 'name' = 'name'): boolean {
@@ -281,7 +281,7 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
       return permission.every(item => currentPermissionKeys.includes(item));
     }
 
-    return !!permissions.find(item => item[key] === permission);
+    return permissions.some(item => item[key] === permission);
   }
 
   can(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {

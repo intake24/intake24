@@ -377,7 +377,7 @@ function dataExportFields() {
 
     const fieldNames = fields.map(({ fieldName }) => fieldName);
 
-    return [...new Set(fieldNames)].map(name => ({ id: name, label: name }));
+    return Array.from(new Set(fieldNames), name => ({ id: name, label: name }));
   };
 
   /**
@@ -423,7 +423,7 @@ function dataExportFields() {
   ];
 
   const externalSources = async (): Promise<ExportField[]> => externalSourceProviders.reduce<ExportField[]>((acc, source) => {
-    return acc.concat([
+    return [...acc, ...[
       {
         id: `${source}:id`,
         label: `${source}: ID`,
@@ -444,7 +444,7 @@ function dataExportFields() {
         id: `${source}:data`,
         label: `${source}: Data`,
       },
-    ]);
+    ]];
   }, []);
 
   return {

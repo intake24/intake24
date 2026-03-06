@@ -31,7 +31,7 @@ export class Errors {
 
   has(field: string, index?: number): boolean {
     if (typeof index === 'undefined')
-      return Object.prototype.hasOwnProperty.call(this.errors, field);
+      return Object.hasOwn(this.errors, field);
 
     return Object.keys(this.errors).some(
       key => key === field || key.startsWith(`${field}.${index}.`),

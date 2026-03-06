@@ -201,7 +201,7 @@ function add(device: MFADeviceResponse) {
 async function remove(deviceId: string) {
   await http.delete(`admin/user/mfa/devices/${deviceId}`);
   devices.value = devices.value.filter(device => device.id !== deviceId);
-  if (!devices.value.length || devices.value.find(device => device.preferred))
+  if (!devices.value.length || devices.value.some(device => device.preferred))
     return;
 
   const { data } = await http.patch<MFADeviceResponse>(

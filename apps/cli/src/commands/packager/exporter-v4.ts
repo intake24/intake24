@@ -107,7 +107,7 @@ export class ExporterV4 {
   }
 
   public async export() {
-    const sortedLocaleIds = [...this.localeIds].sort();
+    const sortedLocaleIds = [...this.localeIds].toSorted();
 
     const localeData = await Promise.all(sortedLocaleIds.map(id => this.getLocaleData(id)));
 

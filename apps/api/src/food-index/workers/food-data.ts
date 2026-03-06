@@ -96,12 +96,7 @@ export async function fetchRecipeFoodsList(localeId: string): Promise<RecipeFood
         code: recipeFoodEntry.code,
         name: recipeFoodEntry.name.toLowerCase(),
         recipeWord: recipeFoodEntry.recipeWord,
-        synonyms: new Set<string>(
-          recipeFoodEntry.recipeWord
-            .concat(' ', recipeFoodEntry.synonymSet?.synonyms ?? '')
-            .trim()
-            .split(/\s+/),
-        ),
+        synonyms: new Set<string>(`${recipeFoodEntry.recipeWord} ${recipeFoodEntry.synonymSet?.synonyms ?? ''}`.trim().split(/\s+/)),
         description: recipeFoodEntry.name.toLocaleLowerCase(),
       },
     ]),

@@ -291,9 +291,9 @@ const backCategoryLabel = computed(() => {
   if (!navigationHistory.value.length)
     return '??';
 
-  const last = navigationHistory.value[navigationHistory.value.length - 1];
+  const last = navigationHistory.value.at(-1);
 
-  return last === 'search' ? t(`prompts.${type.value}.results`).toLowerCase() : last.name;
+  return last === 'search' ? t(`prompts.${type.value}.results`).toLowerCase() : last?.name ?? '??';
 });
 
 const promptI18n = computed(() => {
@@ -495,7 +495,7 @@ function navigateBack() {
     return;
   }
 
-  const lastItem = navigationHistory.value[navigationHistory.value.length - 1];
+  const lastItem = navigationHistory.value.at(-1);
   navigationHistory.value = navigationHistory.value.slice(
     0,
     navigationHistory.value.length - 1,
@@ -507,7 +507,7 @@ function navigateBack() {
   }
   else {
     tab.value = 'browse';
-    browseCategory(lastItem.code, false);
+    browseCategory(lastItem?.code, false);
   }
 }
 
