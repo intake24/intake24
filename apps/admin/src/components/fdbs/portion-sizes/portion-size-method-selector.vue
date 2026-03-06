@@ -30,40 +30,30 @@
               <div class="d-flex flex-column ga-4">
                 <v-select
                   v-model="dialog.item.method"
-                  hide-details="auto"
                   :items="estimationMethods"
                   :label="$t('fdbs.portionSizes.methods._')"
                   name="method"
-                  variant="outlined"
                   @update:model-value="updateItemProps"
                 />
                 <v-select
                   v-model="dialog.item.description"
-                  hide-details="auto"
                   :items="selections"
                   :label="$t('fdbs.portionSizes.description')"
                   name="description"
-                  variant="outlined"
                 />
                 <v-select
                   v-model="dialog.item.pathways"
-                  hide-details="auto"
                   :items="pathways"
                   :label="$t('fdbs.portionSizes.pathways._')"
                   multiple
                   name="pathways"
                   prepend-inner-icon="fas fa-route"
                 />
-                <v-slider
-                  v-model="dialog.item.conversionFactor"
-                  class="mt-5"
+                <v-text-field
+                  v-model.number="dialog.item.conversionFactor"
                   :label="$t('fdbs.portionSizes.conversionFactor')"
-                  :max="10"
-                  :min="0.2"
                   name="conversionFactor"
-                  :readonly
-                  :step="0.1"
-                  thumb-label="always"
+                  prepend-inner-icon="fas fa-x"
                 />
               </div>
             </v-col>
