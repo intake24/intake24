@@ -16,6 +16,10 @@
     "_": "Chercher",
     "title": "Chercher des catégories et des aliments"
   },
+  "tags": {
+    "_": "Tag",
+    "title": "Tags"
+  },
   "categories": {
     "_": "Catégorie",
     "title": "Catégories",
@@ -29,9 +33,7 @@
     "code": "Code de la catégorie",
     "hidden": "Est caché",
     "englishName": "Nom anglais",
-    "name": "Nom régional",
-    "altNames": "Autres noms",
-    "tags": "Tags"
+    "name": "Nom régional"
   },
   "foods": {
     "_": "Aliment",
@@ -42,8 +44,10 @@
     "code": "Code de l'aliment",
     "englishName": "Nom anglais",
     "name": "Nom régional",
-    "altNames": "Autres noms",
-    "tags": "Tags"
+    "altNames": {
+      "_": "Autre nom",
+      "title": "Autres noms"
+    }
   },
   "attributes": {
     "_": "Attributs",

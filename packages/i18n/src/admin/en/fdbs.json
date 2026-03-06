@@ -19,7 +19,10 @@
     "_": "Search",
     "title": "Search categories & foods"
   },
-
+  "tags": {
+    "_": "Tag",
+    "title": "Tags"
+  },
   "categories": {
     "_": "Category",
     "title": "Categories",
@@ -33,9 +36,7 @@
     "code": "Category code",
     "hidden": "Is hidden",
     "englishName": "English name",
-    "name": "Local name",
-    "altNames": "Alternative names",
-    "tags": "Tags"
+    "name": "Local name"
   },
   "foods": {
     "_": "Food",
@@ -46,8 +47,10 @@
     "code": "Food code",
     "englishName": "English name",
     "name": "Local name",
-    "altNames": "Alternative names",
-    "tags": "Tags"
+    "altNames": {
+      "_": "Alternative name",
+      "title": "Alternative names"
+    }
   },
   "attributes": {
     "_": "Attributes",

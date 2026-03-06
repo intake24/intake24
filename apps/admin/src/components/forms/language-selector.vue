@@ -1,5 +1,5 @@
 <template>
-  <v-card v-bind="{ border, flat, outlined, tile }">
+  <v-card v-bind="{ flat }">
     <v-toolbar color="grey-lighten-4">
       <v-toolbar-title class="font-weight-medium">
         {{ label }}
@@ -34,7 +34,7 @@
     </v-toolbar>
     <v-tabs-window v-model="selected">
       <v-tabs-window-item v-for="lang in languages" :key="lang">
-        <v-card-text>
+        <v-card-text :class="contentClass">
           <slot :lang="lang" :name="`lang.${lang}`" />
         </v-card-text>
         <v-card-actions>
@@ -61,8 +61,8 @@ export default defineComponent({
   name: 'LanguageSelector',
 
   props: {
-    border: {
-      type: Boolean,
+    contentClass: {
+      type: String,
     },
     default: {
       type: [String, Array],
@@ -84,15 +84,9 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    outlined: {
-      type: Boolean,
-    },
     required: {
       type: Boolean,
       default: false,
-    },
-    tile: {
-      type: Boolean,
     },
   },
 

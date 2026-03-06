@@ -91,20 +91,14 @@
 import type { PropType } from 'vue';
 
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
-import type { Nullable } from '@intake24/common/types';
-import type { AttributeDefaultsAttributes } from '@intake24/db';
+import type { InheritableAttributes, ResolvedInheritableAttributes } from '@intake24/common/types/http/admin';
 
 import { computed } from 'vue';
 
 import { useInRecipeTypes } from '@intake24/common/types';
 import { useI18n } from '@intake24/ui';
 
-type Attributes = Pick<
-  AttributeDefaultsAttributes,
-  'sameAsBeforeOption' | 'readyMealOption' | 'reasonableAmount' | 'useInRecipes'
->;
-
-type AttributeType = keyof Attributes;
+type AttributeType = keyof InheritableAttributes;
 
 const props = defineProps({
   readonly: {
@@ -116,14 +110,14 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    type: Object as PropType<Nullable<Attributes>>,
+    type: Object as PropType<InheritableAttributes>,
     required: true,
   },
 });
 
 const emit = defineEmits(['update:modelValue']);
 
-const defaultAttributes: Attributes = {
+const defaultAttributes: ResolvedInheritableAttributes = {
   sameAsBeforeOption: false,
   readyMealOption: false,
   reasonableAmount: 0,

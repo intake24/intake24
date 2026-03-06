@@ -221,7 +221,9 @@
     "edit": "Edit {item}",
     "remove": "Remove {item}",
     "standard": "Standard {item}",
-    "custom": "Custom {item}"
+    "custom": "Custom {item}",
+    "exists": "{item} already exists",
+    "required": "{item} must be filled in"
   },
 
   "file": {

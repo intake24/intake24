@@ -28,32 +28,14 @@
             name="hidden"
             @update:model-value="errors.clear('hidden')"
           />
-          <v-combobox
+          <custom-list
             v-model="data.tags"
-            chips
-            :closable-chips="!readonly"
+            border
             :error-messages="errors.get('tags')"
-            :label="$t('fdbs.categories.tags')"
-            multiple
+            flat
+            :item="$t('fdbs.tags._')"
             name="tags"
           />
-          <language-selector
-            v-model="data.altNames"
-            border
-            :label="$t('fdbs.categories.altNames')"
-            :readonly
-          >
-            <template v-for="lang in Object.keys(data.altNames)" :key="lang" #[`lang.${lang}`]>
-              <div v-for="(item, idx) in data.altNames[lang]" :key="item" class="mb-2">
-                <v-text-field
-                  v-model="data.altNames[lang][idx]"
-                  density="compact"
-                  :label="$t('fdbs.categories.altNames')"
-                  :name="`altNames.${lang}.${idx}`"
-                />
-              </div>
-            </template>
-          </language-selector>
           <attribute-list
             v-model="data.attributes"
             :errors
@@ -101,6 +83,7 @@
 <script lang="ts">
 import type {
   CategoryEntry,
+  CategoryInput,
   FoodDatabaseRefs,
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
@@ -115,7 +98,7 @@ import {
   CopyEntryDialog,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
-import { LanguageSelector } from '@intake24/admin/components/forms';
+import { CustomList } from '@intake24/admin/components/lists';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
@@ -129,7 +112,7 @@ export default defineComponent({
     CategoryList,
     ConfirmLeaveDialog,
     CopyEntryDialog,
-    LanguageSelector,
+    CustomList,
     PortionSizeMethodList,
     ConfirmDialog,
   },
@@ -165,7 +148,7 @@ export default defineComponent({
 
     useEntry<LocaleEntry, FoodDatabaseRefs>(props);
     const { clearError, form: { data, errors, put }, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
-      any,
+      Required<CategoryInput>,
       LocaleEntry
     >(props, {
       data: {
@@ -179,10 +162,10 @@ export default defineComponent({
           sameAsBeforeOption: null,
           useInRecipes: null,
         },
-        altNames: {},
         parentCategories: [],
         portionSizeMethods: [],
         tags: [],
+        version: '',
       },
       config: { extractNestedKeys: true },
     });
