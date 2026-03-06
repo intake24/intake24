@@ -134,7 +134,7 @@
             <expansion-panel-actions :valid="quantityValid">
               <quantity-badge
                 v-if="prompt.badges"
-                :amount="state.portionSize.quantity ?? undefined"
+                :amount="state.portionSize.quantity"
                 unit=""
                 :valid="quantityValid"
               />
