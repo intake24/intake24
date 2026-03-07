@@ -36,7 +36,7 @@
     "vue": "^3.5.29",
     "vue-echarts": "^8.0.1",
     "vue-gtag": "^3.7.0",
-    "vue-i18n": "^11.2.8",
+    "vue-i18n": "^11.3.0",
     "vue-recaptcha": "^2.0.3",
     "vue-router": "^5.0.3",
     "vuetify": "^3.12.2"
