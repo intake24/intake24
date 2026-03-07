@@ -39,7 +39,7 @@
     "pg": "^8.20.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
-    "sequelize": "^6.37.7",
+    "sequelize": "^6.37.8",
     "sequelize-typescript": "^2.1.6",
     "strip-bom-stream": "^5.0.0",
     "unzipper": "^0.12.3",
@@ -54,7 +54,7 @@
     "@types/node": "^24.12.0",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
-    "@typescript/native-preview": "7.0.0-dev.20260216.1",
+    "@typescript/native-preview": "7.0.0-dev.20260307.1",
     "tsdown": "^0.21.0",
     "typescript": "^5.9.3"
   }
