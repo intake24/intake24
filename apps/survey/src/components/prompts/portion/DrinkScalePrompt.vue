@@ -310,9 +310,6 @@ function selectObject(idx: number, id: string) {
 
   clearVolume();
   clearLeftovers();
-
-  state.value.portionSize.servingWeight = calculateVolume(drinkwareSetData.value.scales[idx], state.value.portionSize.fillLevel);
-
   update();
 };
 
@@ -373,10 +370,13 @@ function confirmQuantity() {
 
 function update() {
   if (scale.value) {
-    state.value.portionSize.servingWeight
-      = calculateVolume(scale.value, state.value.portionSize.fillLevel) * state.value.portionSize.quantity;
-    state.value.portionSize.leftoversWeight
-      = calculateVolume(scale.value, state.value.portionSize.leftoversLevel) * state.value.portionSize.quantity;
+    const fillVolume = calculateVolume(scale.value, state.value.portionSize.fillLevel);
+    const leftoversVolume = calculateVolume(scale.value, state.value.portionSize.leftoversLevel);
+
+    state.value.portionSize.fillVolume = fillVolume;
+    state.value.portionSize.leftoversVolume = leftoversVolume;
+    state.value.portionSize.servingWeight = fillVolume * state.value.portionSize.quantity;
+    state.value.portionSize.leftoversWeight = leftoversVolume * state.value.portionSize.quantity;
   }
 
   emit('update:modelValue', state.value);

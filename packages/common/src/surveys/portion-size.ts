@@ -319,7 +319,9 @@ const drinkScalePortionSizeState = portionSizeStateBase.extend({
   containerId: z.string().optional(),
   containerIndex: z.number().optional(),
   fillLevel: z.number(),
+  fillVolume: z.number(),
   leftoversLevel: z.number(),
+  leftoversVolume: z.number(),
   leftovers: z.boolean(),
   quantity: z.number(),
 });
