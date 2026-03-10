@@ -1,8 +1,11 @@
 <template>
   <div class="d-flex flex-column ga-4">
-    <v-switch
-      v-model="parameters.labels"
-      :label="$t('fdbs.portionSizes.labels')"
+    <v-number-input
+      v-model="parameters.weight"
+      :label="$t('fdbs.portionSizes.methods.unknown.weight')"
+      name="unknown.weight"
+      :precision="2"
+      prepend-inner-icon="fas fa-weight-scale"
       :readonly
     />
   </div>
@@ -15,11 +18,11 @@ import type { PortionSizeParameters } from '@intake24/common/surveys';
 
 import { useParameters } from './use-parameters';
 
-defineOptions({ name: 'PizzaParameters' });
+defineOptions({ name: 'UnknownParameters' });
 
 const props = defineProps({
   modelValue: {
-    type: Object as PropType<PortionSizeParameters['pizza']>,
+    type: Object as PropType<PortionSizeParameters['unknown']>,
     required: true,
   },
   readonly: {
@@ -30,5 +33,5 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const { parameters } = useParameters<'pizza'>(props, { emit });
+const { parameters } = useParameters<'unknown'>(props, { emit });
 </script>

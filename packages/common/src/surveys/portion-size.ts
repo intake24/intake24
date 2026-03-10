@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { categoryLocaleOptionList, localeOptionList } from '../types/common';
 
-export const portionSizeMethods = [
+export const portionSizeMethodIds = [
   'as-served',
   'auto',
   'cereal',
@@ -18,7 +18,7 @@ export const portionSizeMethods = [
   'standard-portion',
   'unknown',
 ] as const;
-export type PortionSizeMethodId = (typeof portionSizeMethods)[number];
+export type PortionSizeMethodId = (typeof portionSizeMethodIds)[number];
 
 export const pathways = ['addon', 'afp', 'recipe', 'search'] as const;
 export type Pathway = (typeof pathways)[number];
@@ -107,7 +107,9 @@ export const standardPortionSizeParameters = z.object({
   units: standardUnit.array(),
 });
 
-export const unknownPortionSizeParameters = z.object({});
+export const unknownPortionSizeParameters = z.object({
+  weight: z.number().nullish(),
+});
 
 export const portionSizeParameter = z.union([
   asServedPortionSizeParameters,
@@ -257,6 +259,24 @@ export const portionSizeMethod = z.discriminatedUnion('method', [
 ]);
 export type PortionSizeMethod = z.infer<typeof portionSizeMethod>;
 
+export const portionSizeMethods = z.object({
+  'as-served': asServedPsm,
+  auto: autoPsm,
+  cereal: cerealPsm,
+  'direct-weight': directWeightPsm,
+  'drink-scale': drinkScalePsm,
+  'guide-image': guideImagePsm,
+  'milk-in-a-hot-drink': milkInHotDrinkPsm,
+  'milk-on-cereal': milkOnCerealPsm,
+  'parent-food-portion': parentFoodPsm,
+  pizza: pizzaPsm,
+  'pizza-v2': pizzaV2Psm,
+  'recipe-builder': recipeBuilderPsm,
+  'standard-portion': standardPortionPsm,
+  unknown: unknownPsm,
+});
+export type PortionSizeMethods = z.infer<typeof portionSizeMethods>;
+
 export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
 export type PizzaSize = (typeof pizzaSizes)[number];
 export const pizzaCrusts = ['classic', 'italian-thin', 'stuffed'] as const;
@@ -389,6 +409,7 @@ const standardPortionPortionSizeState = portionSizeStateBase.extend({
 });
 const unknownPortionSizeState = portionSizeStateBase.extend({
   method: z.literal('unknown'),
+  quantity: z.number().nullable(),
 });
 
 export const portionSizeStates = z.object({

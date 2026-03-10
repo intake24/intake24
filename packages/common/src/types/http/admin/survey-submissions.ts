@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { customData, portionSizeMethods } from '@intake24/common/surveys';
+import { customData, portionSizeMethodIds } from '@intake24/common/surveys';
 
 // Foods
 export const surveySubmissionFood = z.object({
@@ -14,7 +14,7 @@ export const surveySubmissionFood = z.object({
   locale: z.string().max(64),
   readyMeal: z.boolean(),
   searchTerm: z.string().max(256),
-  portionSizeId: z.enum(portionSizeMethods),
+  portionSizeId: z.enum(portionSizeMethodIds),
   reasonableAmount: z.boolean(),
   brand: z.string().max(128).nullable(),
   nutrientTableId: z.string().max(64),

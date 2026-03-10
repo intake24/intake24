@@ -791,7 +791,8 @@
     },
     "unknown-prompt": {
       "title": "Unknown",
-      "subtitle": "Unknown portion size"
+      "subtitle": "Unknown portion size",
+      "weight": "Weight (g)"
     }
   },
   "theme": {

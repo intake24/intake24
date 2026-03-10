@@ -1,23 +1,21 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <language-selector
-        v-model="parameters.options"
-        :default="[]"
-        :label="$t('fdbs.portionSizes.methods.parent-food-portion.options')"
-        :readonly
-        :required="true"
-      >
-        <template v-for="lang in Object.keys(parameters.options)" :key="lang" #[`lang.${lang}`]>
-          <options-list
-            :options="parameters.options[lang]"
-            :rules="rules"
-            @update:options="updateOption(lang, $event)"
-          />
-        </template>
-      </language-selector>
-    </v-col>
-  </v-row>
+  <div class="d-flex flex-column ga-4">
+    <language-selector
+      v-model="parameters.options"
+      :default="[]"
+      :label="$t('fdbs.portionSizes.methods.parent-food-portion.options')"
+      :readonly
+      :required="true"
+    >
+      <template v-for="lang in Object.keys(parameters.options)" :key="lang" #[`lang.${lang}`]>
+        <options-list
+          :options="parameters.options[lang]"
+          :rules="rules"
+          @update:options="updateOption(lang, $event)"
+        />
+      </template>
+    </language-selector>
+  </div>
 </template>
 
 <script lang="ts" setup>

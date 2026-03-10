@@ -35,11 +35,13 @@ const {
 const { meal } = useMealPromptUtils();
 
 function getInitialState(): PromptStates['unknown-prompt'] {
+  const quantity = portionSize.value.parameters.weight ?? props.prompt.weight ?? 0;
   return {
     portionSize: encodedFoodPortionSizeData.value ?? {
       method: 'unknown',
       conversionFactor: portionSize.value.conversionFactor,
-      servingWeight: 0,
+      quantity,
+      servingWeight: quantity * portionSize.value.conversionFactor,
       leftoversWeight: 0,
     },
     panel: 0,

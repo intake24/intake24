@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-import { portionSizeMethodBase, portionSizeMethods, portionSizeParameter } from '@intake24/common/surveys/portion-size';
+import { portionSizeMethodBase, portionSizeMethodIds, portionSizeParameter } from '@intake24/common/surveys/portion-size';
 
 export const portionSizeMethodAttributes = portionSizeMethodBase.extend({
-  method: z.enum(portionSizeMethods),
+  method: z.enum(portionSizeMethodIds),
   parameters: portionSizeParameter,
 });
 export type PortionSizeMethodAttributes = z.infer<typeof portionSizeMethodAttributes>;

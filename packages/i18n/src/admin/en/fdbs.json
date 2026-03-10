@@ -168,7 +168,8 @@
         "omitFoodDescription": "Omit food description"
       },
       "unknown": {
-        "_": "Unknown"
+        "_": "Unknown",
+        "weight": "Weight (g)"
       }
     }
   }

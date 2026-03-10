@@ -1,12 +1,11 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <v-switch
-        v-model="parameters.labels"
-        :label="$t('fdbs.portionSizes.labels')"
-      />
-    </v-col>
-  </v-row>
+  <div class="d-flex flex-column ga-4">
+    <v-switch
+      v-model="parameters.labels"
+      :label="$t('fdbs.portionSizes.labels')"
+      :readonly
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>

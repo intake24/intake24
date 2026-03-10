@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { EncodedFood } from '@intake24/common/surveys';
+import type { EncodedFood, UnknownPsm } from '@intake24/common/surveys';
 
 import { computed } from 'vue';
 
@@ -43,13 +43,15 @@ function commitAnswer() {
     update.portionSize = null;
   }
 
-  const unknownMethod = portionSizeMethods.value?.find(item => item.index === state.value.option && item.method === 'unknown');
+  const unknownMethod = portionSizeMethods.value?.find(item => item.index === state.value.option && item.method === 'unknown') as UnknownPsm | undefined;
   if (unknownMethod) {
     flags.push('portion-size-method-complete');
+    const quantity = unknownMethod.parameters.weight ?? 0;
     update.portionSize = {
       method: 'unknown',
       conversionFactor: unknownMethod.conversionFactor,
-      servingWeight: 0,
+      quantity,
+      servingWeight: quantity * unknownMethod.conversionFactor,
       leftoversWeight: 0,
     };
   }

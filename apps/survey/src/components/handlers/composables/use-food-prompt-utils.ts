@@ -1,5 +1,15 @@
 import type { Prompts } from '@intake24/common/prompts';
-import type { AutoPsm, EncodedFood, FoodFlag, FoodState, Pathway, PortionSizeMethodId, PortionSizeState, PortionSizeStates } from '@intake24/common/surveys';
+import type {
+  AutoPsm,
+  EncodedFood,
+  FoodFlag,
+  FoodState,
+  Pathway,
+  PortionSizeMethodId,
+  PortionSizeMethods,
+  PortionSizeState,
+  PortionSizeStates,
+} from '@intake24/common/surveys';
 import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 
 import { computed } from 'vue';
@@ -141,7 +151,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     if (selectedFood.portionSizeMethodIndex === null)
       throw new Error('This prompt requires a portion size option to be selected');
 
-    return selectedFood.data.portionSizeMethods[selectedFood.portionSizeMethodIndex];
+    return selectedFood.data.portionSizeMethods[selectedFood.portionSizeMethodIndex] as unknown as PortionSizeMethods[Exclude<T, 'recipe-builder'>];
   });
 
   function getLinkedParent(foodData: UserFoodData | undefined, parentFood: FoodState | undefined): LinkedParent | undefined {

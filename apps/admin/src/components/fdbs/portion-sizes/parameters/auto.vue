@@ -12,6 +12,7 @@
       name="auto.value"
       :precision="2"
       prepend-inner-icon="fas fa-weight-scale"
+      :readonly
     />
   </div>
 </template>
