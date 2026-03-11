@@ -489,8 +489,14 @@ export class AlbaneLocaleBuilder {
     for (const row of this.sourceFoodRecords!) {
       const categories = this.foodCategories![row.A_CODE] ?? [];
 
-      if (ALBANE_SALT_CODES.includes(row.A_CODE))
+      if (ALBANE_SALT_CODES.includes(row.A_CODE)) {
         categories.push('FRFSEL');
+
+        for (const psm of (this.portionSizeMethods![row.A_CODE] ?? [])) {
+          if (!psm.pathways.includes('addon'))
+            psm.pathways = [...psm.pathways, 'addon'];
+        }
+      }
 
       if (categories.length === 0)
         this.logger.warn(`Food ${row.A_CODE} is not assigned to any categories`);
