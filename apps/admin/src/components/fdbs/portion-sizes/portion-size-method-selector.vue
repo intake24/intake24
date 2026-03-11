@@ -64,7 +64,7 @@
                 {{ $t('fdbs.portionSizes.parameters') }}
               </v-card-title>
               <component
-                :is="dialog.item.method"
+                :is="`${dialog.item.method}-params`"
                 v-model="dialog.item.parameters"
                 :readonly
                 @validate="validate"

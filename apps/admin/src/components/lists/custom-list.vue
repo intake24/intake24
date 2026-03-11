@@ -86,7 +86,7 @@
     <v-dialog v-model="editDialog.show" max-width="500px">
       <v-card>
         <v-card-title>
-          {{ $t('common.list.add', { item: item.toLowerCase() }) }}
+          {{ $t(`common.list.${editDialog.index === -1 ? 'add' : 'edit'}`, { item: item.toLowerCase() }) }}
         </v-card-title>
         <v-form ref="form" validate-on="submit" @submit.prevent="save">
           <v-card-text>
@@ -95,7 +95,6 @@
               :density
               :label="hasStandardItems ? $t('common.list.custom', { item: item.toLowerCase() }) : $t('common.list._', { item })"
               name="item"
-              outlined
               :rules
             />
           </v-card-text>
