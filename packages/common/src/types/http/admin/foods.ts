@@ -65,7 +65,7 @@ export const foodInput = foodAttributes.omit({
   version: true,
 }).extend({
   attributes: inheritableAttributes.optional(),
-  associatedFoods: associatedFoodAttributes.array().optional(),
+  associatedFoods: associatedFoodAttributes.partial({ id: true, foodId: true }).array().optional(),
   nutrientRecords: nutrientTableRecordAttributes.pick({ id: true }).array().optional(),
   parentCategories: categoryAttributes.pick({ id: true }).array().optional(),
   portionSizeMethods: foodPortionSizeMethodAttributes
