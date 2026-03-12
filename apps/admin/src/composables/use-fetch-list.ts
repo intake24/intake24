@@ -49,17 +49,13 @@ export function useFetchList<T = any>(props: UseFetchListProps) {
     }
   };
 
-  const get = async (id: string | string[]) => {
+  const get = async (key: string, value: string | string[]) => {
     loading.value = true;
 
     try {
-      const results = await Promise.all(
-        (Array.isArray(id) ? id : [id]).map(search =>
-          http.get<Pagination<T>>(apiUrl.value, { params: { ...query.value, search, page: 1, limit: 6 } }),
-        ),
-      );
+      const { data: { data } } = await http.get<Pagination<T>>(apiUrl.value, { params: { ...query.value, [key]: value, page: 1, limit: 6 } });
 
-      return results.flatMap(({ data: { data } }) => data);
+      return data;
     }
     finally {
       loading.value = false;

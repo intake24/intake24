@@ -28,14 +28,24 @@ import {
   visibilityScope,
 } from '@intake24/db';
 
+function filterUndefined<T extends Record<string, string | string[] | undefined>>(record: T): Record<string, string | string[]> {
+  return Object.entries(record).reduce((acc, [key, value]) => {
+    if (value)
+      acc[key] = value;
+
+    return acc;
+  }, {} as Record<string, string | string[]>);
+};
+
 export function reference() {
   const responseCollection = imageResponseCollection(ioc.cradle.imagesBaseUrl);
 
   return initServer().router(contract.admin.reference, {
     asServedSets: {
       middleware: [anyPermission('locales')],
-      handler: async ({ query }) => {
+      handler: async ({ query: { id, ...query } }) => {
         const asServedSets = await AsServedSet.paginate({
+          where: id ? { id } : undefined,
           query,
           columns: ['id', 'description'],
           order: [[fn('lower', col('AsServedSet.id')), 'ASC']],
@@ -48,12 +58,17 @@ export function reference() {
     },
     categories: {
       middleware: [anyPermission('locales')],
-      handler: async ({ query }) => {
-        const { localeId, ...rest } = query;
+      handler: async ({ query: { id, code, localeId, ...query } }) => {
+        const where = Object.entries({ id, code, localeId }).reduce((acc, [key, value]) => {
+          if (value)
+            acc[key] = value;
+
+          return acc;
+        }, {} as Record<string, string | string[]>);
 
         const categories: Pagination<{ id: string; code: string; name: string }> = await Category.paginate({
-          query: rest,
-          where: localeId ? { localeId } : {},
+          query,
+          where,
           attributes: localeId ? ['id', 'code', 'name'] : ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],
@@ -65,8 +80,9 @@ export function reference() {
     },
     drinkwareSets: {
       middleware: [anyPermission('locales')],
-      handler: async ({ query }) => {
+      handler: async ({ query: { id, ...query } }) => {
         const drinkwareSets = await DrinkwareSet.paginate({
+          where: id ? { id } : undefined,
           query,
           columns: ['id', 'description'],
           order: [[fn('lower', col('DrinkwareSet.id')), 'ASC']],
@@ -79,13 +95,11 @@ export function reference() {
     },
     faqs: {
       middleware: [anyPermission('faqs', 'surveys')],
-      handler: async ({ query, req }) => {
-        const {
-          aclService,
-          user: { userId },
-        } = req.scope.cradle;
+      handler: async ({ query: { id, ...query }, req }) => {
+        const { aclService, user: { userId } } = req.scope.cradle;
 
         const paginateOptions: PaginateOptions<FeedbackScheme> = {
+          where: id ? { id } : undefined,
           query,
           attributes: ['id', 'name'],
           columns: ['id', 'name'],
@@ -108,13 +122,11 @@ export function reference() {
     },
     feedbackSchemes: {
       middleware: [anyPermission('feedback-schemes', 'surveys')],
-      handler: async ({ query, req }) => {
-        const {
-          aclService,
-          user: { userId },
-        } = req.scope.cradle;
+      handler: async ({ query: { id, ...query }, req }) => {
+        const { aclService, user: { userId } } = req.scope.cradle;
 
         const paginateOptions: PaginateOptions<FeedbackScheme> = {
+          where: id ? { id } : undefined,
           query,
           columns: ['id', 'name'],
           order: [[fn('lower', col('FeedbackScheme.name')), 'ASC']],
@@ -136,12 +148,10 @@ export function reference() {
     },
     foods: {
       middleware: [anyPermission('locales')],
-      handler: async ({ query }) => {
-        const { localeId, ...rest } = query;
-
+      handler: async ({ query: { id, code, localeId, ...query } }) => {
         const foods = await Food.paginate({
-          query: rest,
-          where: { localeId },
+          query,
+          where: filterUndefined({ id, code, localeId }),
           attributes: ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],
@@ -152,8 +162,9 @@ export function reference() {
     },
     guideImages: {
       middleware: [anyPermission('locales')],
-      handler: async ({ query }) => {
+      handler: async ({ query: { id, ...query } }) => {
         const guideImages = await GuideImage.paginate({
+          where: id ? { id } : undefined,
           query,
           columns: ['id', 'description'],
           order: [[fn('lower', col('GuideImage.id')), 'ASC']],
@@ -166,8 +177,9 @@ export function reference() {
     },
     imageMaps: {
       middleware: [anyPermission('locales', 'guide-images')],
-      handler: async ({ query }) => {
+      handler: async ({ query: { id, ...query } }) => {
         const images = await ImageMap.paginate({
+          where: id ? { id } : undefined,
           query,
           columns: ['id', 'description'],
           order: [[fn('lower', col('ImageMap.id')), 'ASC']],
@@ -180,13 +192,11 @@ export function reference() {
     },
     languages: {
       middleware: [anyPermission('locales', 'feedback-schemes', 'survey-schemes')],
-      handler: async ({ query, req }) => {
-        const {
-          aclService,
-          user: { userId },
-        } = req.scope.cradle;
+      handler: async ({ query: { id, code, ...query }, req }) => {
+        const { aclService, user: { userId } } = req.scope.cradle;
 
         const paginateOptions: PaginateOptions<Language> = {
+          where: filterUndefined({ id, code }),
           query,
           attributes: ['id', 'code', 'englishName', 'localName'],
           columns: ['id', 'code', 'englishName', 'localName'],
@@ -209,13 +219,11 @@ export function reference() {
     },
     locales: {
       middleware: [anyPermission('surveys', 'tasks')],
-      handler: async ({ query, req }) => {
-        const {
-          aclService,
-          user: { userId },
-        } = req.scope.cradle;
+      handler: async ({ query: { id, code, ...query }, req }) => {
+        const { aclService, user: { userId } } = req.scope.cradle;
 
         const paginateOptions: PaginateOptions<SystemLocale> = {
+          where: filterUndefined({ id, code }),
           query,
           attributes: ['id', 'code', 'englishName', 'localName'],
           columns: ['id', 'code', 'englishName', 'localName'],
@@ -238,8 +246,9 @@ export function reference() {
     },
     nutrientTables: {
       middleware: [anyPermission('locales', 'survey-schemes')],
-      handler: async ({ query }) => {
+      handler: async ({ query: { id, ...query } }) => {
         const nutrientTables = await NutrientTable.paginate({
+          where: id ? { id } : undefined,
           query,
           attributes: ['id', 'description'],
           columns: ['id', 'description'],
@@ -251,11 +260,11 @@ export function reference() {
     },
     nutrientTableRecords: {
       middleware: [anyPermission('locales')],
-      handler: async ({ params: { nutrientTableId }, query }) => {
+      handler: async ({ params: { nutrientTableId }, query: { id, ...query } }) => {
         const nutrientTableRecords = await NutrientTableRecord.paginate({
+          where: filterUndefined({ id, nutrientTableId }),
           query,
           columns: ['id', 'name', 'localName', 'nutrientTableRecordId'],
-          where: { nutrientTableId },
           order: [[fn('lower', col('NutrientTableRecord.name')), 'ASC']],
         });
 
@@ -264,9 +273,7 @@ export function reference() {
     },
     nutrientTypes: {
       middleware: [anyPermission('feedback-schemes', 'survey-schemes')],
-      handler: async ({ query }) => {
-        const { nutrientTableId } = query;
-
+      handler: async ({ query: { id, nutrientTableId, ...query } }) => {
         if (nutrientTableId) {
           const nutrientTypes = await FoodsNutrientType.paginate({
             query,
@@ -288,6 +295,7 @@ export function reference() {
         }
 
         const nutrientTypes = await FoodsNutrientType.paginate({
+          where: id ? { id } : undefined,
           query,
           attributes: ['id', 'description', 'unitId'],
           columns: ['id', 'description'],
@@ -299,8 +307,9 @@ export function reference() {
     },
     standardUnits: {
       middleware: [anyPermission('locales', 'survey-schemes')],
-      handler: async ({ query }) => {
+      handler: async ({ query: { id, ...query } }) => {
         const standardUnits = await StandardUnit.paginate({
+          where: id ? { id } : undefined,
           query,
           attributes: ['id', 'name', 'estimateIn', 'howMany'],
           columns: ['id', 'name'],
@@ -312,8 +321,9 @@ export function reference() {
     },
     surveys: {
       middleware: [anyPermission('tasks')],
-      handler: async ({ query }) => {
+      handler: async ({ query: { id, ...query } }) => {
         const surveys = await Survey.paginate({
+          where: id ? { id } : undefined,
           query,
           attributes: ['id', 'slug', 'name'],
           columns: ['id', 'name'],
@@ -325,13 +335,14 @@ export function reference() {
     },
     surveySchemes: {
       middleware: [anyPermission('survey-schemes', 'surveys')],
-      handler: async ({ query, req }) => {
+      handler: async ({ query: { id, ...query }, req }) => {
         const {
           aclService,
           user: { userId },
         } = req.scope.cradle;
 
         const paginateOptions: PaginateOptions<SurveyScheme> = {
+          where: id ? { id } : undefined,
           query,
           columns: ['id', 'name'],
           order: [[fn('lower', col('SurveyScheme.name')), 'ASC']],

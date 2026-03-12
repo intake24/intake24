@@ -275,7 +275,7 @@ async function fetchInitialEntry() {
   if (!selectedItemId.value.length)
     return;
 
-  const data = await get(selectedItemId.value);
+  const data = await get(props.itemId, selectedItemId.value);
 
   const match = data.filter(item => selectedItemId.value.includes(item[props.itemId]));
   if (!match.length)

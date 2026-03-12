@@ -2,6 +2,7 @@ import { initContract } from '@ts-rest/core';
 import validator from 'validator';
 import { z } from 'zod';
 
+import { bigIntString } from '@intake24/common/types';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   asServedSetListEntry,
@@ -22,11 +23,23 @@ import {
   surveySchemeEntry,
 } from '@intake24/common/types/http/admin';
 
+const query = paginationRequest.extend({
+  id: z.union([z.string().min(1), z.string().min(1).array()]).optional(),
+});
+
+const bigIntQuery = paginationRequest.extend({
+  id: z.union([bigIntString, bigIntString.array()]).optional(),
+});
+
+const bigIntQueryWithCode = bigIntQuery.extend({
+  code: z.union([z.string().min(1), z.string().min(1).array()]).optional(),
+});
+
 export const reference = initContract().router({
   asServedSets: {
     method: 'GET',
     path: '/admin/references/as-served-sets',
-    query: paginationRequest,
+    query,
     responses: {
       200: z.object({
         data: asServedSetListEntry.array(),
@@ -39,7 +52,10 @@ export const reference = initContract().router({
   categories: {
     method: 'GET',
     path: '/admin/references/categories',
-    query: paginationRequest.extend({ localeId: z.string().min(1).optional() }),
+    query: bigIntQuery.extend({
+      code: z.union([z.string().min(1), z.string().min(1).array()]).optional(),
+      localeId: z.string().min(1).optional(),
+    }),
     responses: {
       200: z.object({
         data: categoryReference.array(),
@@ -52,7 +68,7 @@ export const reference = initContract().router({
   drinkwareSets: {
     method: 'GET',
     path: '/admin/references/drinkware-sets',
-    query: paginationRequest,
+    query,
     responses: {
       200: z.object({
         data: drinkwareSetListEntry.array(),
@@ -65,7 +81,7 @@ export const reference = initContract().router({
   faqs: {
     method: 'GET',
     path: '/admin/references/faqs',
-    query: paginationRequest,
+    query: bigIntQuery,
     responses: {
       200: z.object({
         data: faqEntry.array(),
@@ -78,7 +94,7 @@ export const reference = initContract().router({
   feedbackSchemes: {
     method: 'GET',
     path: '/admin/references/feedback-schemes',
-    query: paginationRequest,
+    query: bigIntQuery,
     responses: {
       200: z.object({
         data: feedbackSchemeEntry.array(),
@@ -91,7 +107,9 @@ export const reference = initContract().router({
   foods: {
     method: 'GET',
     path: '/admin/references/foods',
-    query: paginationRequest.extend({ localeId: z.string().min(1) }),
+    query: bigIntQueryWithCode.extend({
+      localeId: z.string().min(1),
+    }),
     responses: {
       200: z.object({
         data: foodReference.array(),
@@ -104,7 +122,7 @@ export const reference = initContract().router({
   guideImages: {
     method: 'GET',
     path: '/admin/references/guide-images',
-    query: paginationRequest,
+    query,
     responses: {
       200: z.object({
         data: guideImageListEntry.array(),
@@ -117,7 +135,7 @@ export const reference = initContract().router({
   imageMaps: {
     method: 'GET',
     path: '/admin/references/image-maps',
-    query: paginationRequest,
+    query,
     responses: {
       200: z.object({
         data: imageMapListEntry.array(),
@@ -130,7 +148,7 @@ export const reference = initContract().router({
   languages: {
     method: 'GET',
     path: '/admin/references/languages',
-    query: paginationRequest,
+    query: bigIntQueryWithCode,
     responses: {
       200: z.object({
         data: languageReference.array(),
@@ -143,7 +161,7 @@ export const reference = initContract().router({
   locales: {
     method: 'GET',
     path: '/admin/references/locales',
-    query: paginationRequest,
+    query: bigIntQueryWithCode,
     responses: {
       200: z.object({
         data: localeReference.array(),
@@ -156,7 +174,7 @@ export const reference = initContract().router({
   nutrientTables: {
     method: 'GET',
     path: '/admin/references/nutrient-tables',
-    query: paginationRequest,
+    query,
     responses: {
       200: z.object({
         data: nutrientTableAttributes.array(),
@@ -169,7 +187,7 @@ export const reference = initContract().router({
   nutrientTableRecords: {
     method: 'GET',
     path: '/admin/references/nutrient-tables/:nutrientTableId/records',
-    query: paginationRequest,
+    query: bigIntQuery,
     responses: {
       200: z.object({
         data: nutrientTableRecordReference.array(),
@@ -182,7 +200,7 @@ export const reference = initContract().router({
   nutrientTypes: {
     method: 'GET',
     path: '/admin/references/nutrient-types',
-    query: paginationRequest.extend({
+    query: bigIntQuery.extend({
       nutrientTableId: z.string().min(1).transform(val => validator.escape(val)).optional(),
     }),
     responses: {
@@ -197,7 +215,7 @@ export const reference = initContract().router({
   standardUnits: {
     method: 'GET',
     path: '/admin/references/standard-units',
-    query: paginationRequest,
+    query,
     responses: {
       200: z.object({
         data: standardUnitReference.array(),
@@ -210,7 +228,7 @@ export const reference = initContract().router({
   surveys: {
     method: 'GET',
     path: '/admin/references/surveys',
-    query: paginationRequest,
+    query: bigIntQuery,
     responses: {
       200: z.object({
         data: surveyReference.array(),
@@ -223,7 +241,7 @@ export const reference = initContract().router({
   surveySchemes: {
     method: 'GET',
     path: '/admin/references/survey-schemes',
-    query: paginationRequest,
+    query: bigIntQuery,
     responses: {
       200: z.object({
         data: surveySchemeEntry.array(),

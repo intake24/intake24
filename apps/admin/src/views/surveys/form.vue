@@ -29,7 +29,6 @@
               <select-resource
                 v-model="data.localeId"
                 :error-messages="errors.get('localeId')"
-                :initial-item="entry.locale"
                 item-name="englishName"
                 :label="$t('locales._')"
                 name="localeId"
@@ -41,7 +40,6 @@
               <select-resource
                 v-model="data.surveySchemeId"
                 :error-messages="errors.get('surveySchemeId')"
-                :initial-item="entry.surveyScheme"
                 :label="$t('survey-schemes._')"
                 name="surveySchemeId"
                 resource="survey-schemes"
@@ -81,7 +79,6 @@
                 v-model="data.faqId"
                 clearable
                 :error-messages="errors.get('faqId')"
-                :initial-item="entry.faq"
                 item-name="name"
                 :label="$t('faqs._')"
                 name="faqId"
@@ -581,7 +578,6 @@
                 class="mb-4"
                 clearable
                 :error-messages="errors.get('feedbackSchemeId')"
-                :initial-item="entry.feedbackScheme"
                 :label="$t('feedback-schemes._')"
                 name="feedbackSchemeId"
                 resource="feedback-schemes"

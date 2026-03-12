@@ -40,7 +40,6 @@
               <select-resource
                 v-model="data.respondentLanguageId"
                 :error-messages="errors.get('respondentLanguageId')"
-                :initial-item="entry.respondentLanguage"
                 item-id="code"
                 item-name="englishName"
                 :label="$t('locales.respondentLanguageId')"
@@ -53,7 +52,6 @@
               <select-resource
                 v-model="data.adminLanguageId"
                 :error-messages="errors.get('adminLanguageId')"
-                :initial-item="entry.adminLanguage"
                 item-id="code"
                 item-name="englishName"
                 :label="$t('locales.adminLanguageId')"
