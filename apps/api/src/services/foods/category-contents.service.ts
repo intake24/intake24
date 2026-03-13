@@ -32,8 +32,7 @@ function categoryContentsService({
       header: { id: '', code: '', name: 'Root' },
       foods: [],
       subcategories: categories
-        .filter(({ hidden }) => !hidden)
-        .filter(category => acceptForQuery(isRecipe, categoryCache[category.id]?.attributes.useInRecipes))
+        .filter(({ id, hidden }) => !hidden && acceptForQuery(isRecipe, categoryCache[id]?.attributes.useInRecipes))
         .map(({ id, code, name }) => ({ id, code, name })),
     };
   };
