@@ -58,9 +58,8 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
           eb.exists(eb.selectFrom('categoriesCategories as cc2')
             .innerJoin('categories as c2', 'cc2.categoryId', 'c2.id')
             .select('cc2.categoryId')
-            .whereRef('cc2.subCategoryId', '=', eb.ref('categories.id'))
-            .where('c2.hidden', '=', false)),
-
+            .whereRef('cc2.subCategoryId', '=', eb.ref('categories.id')),
+          ),
         ),
       )
       .orderBy('name')
