@@ -95,6 +95,12 @@ export default class Category extends BaseModel<
   declare tags: CreationOptional<string[]>;
 
   @Column({
+    allowNull: true,
+    type: DataType.STRING(64),
+  })
+  declare icon: string | null;
+
+  @Column({
     allowNull: false,
     type: DataType.UUID,
   })

@@ -48,6 +48,12 @@ export default class StandardUnit extends BaseModel<
   })
   declare howMany: RequiredLocaleTranslation;
 
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(64),
+  })
+  declare icon: string | null;
+
   @CreatedAt
   declare createdAt: CreationOptional<Date>;
 

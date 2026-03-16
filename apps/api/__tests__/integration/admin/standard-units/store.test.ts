@@ -29,6 +29,7 @@ export default () => {
         'name',
         'estimateIn',
         'howMany',
+        'icon',
       ]);
     });
 
@@ -36,13 +37,14 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['id', 'name', 'estimateIn.en', 'howMany'],
+        ['id', 'name', 'estimateIn.en', 'howMany', 'icon'],
         {
           input: {
             id: { value: 'should be string' },
             name: ['should be string'],
             estimateIn: { en: { value: 'test' } },
             howMany: 'ten',
+            icon: { value: 'should be string' },
           },
         },
       );

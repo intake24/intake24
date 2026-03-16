@@ -20,10 +20,16 @@
               <v-text-field
                 v-model="data.name"
                 :error-messages="errors.get('name')"
-                hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
-                variant="outlined"
+              />
+            </v-col>
+            <v-col cols="12" md="6">
+              <select-icon
+                v-model="data.icon"
+                clearable
+                :error-messages="errors.get('icon')"
+                @update:model-value="errors.clear('icon')"
               />
             </v-col>
             <v-col cols="12">
@@ -81,18 +87,20 @@ import { defineComponent } from 'vue';
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { SelectIcon } from '@intake24/ui';
 
 type StandardUnitForm = {
   id: string | null;
   name: string | null;
   estimateIn: RequiredLocaleTranslation;
   howMany: RequiredLocaleTranslation;
+  icon: string | null;
 };
 
 export default defineComponent({
   name: 'StandardUnitForm',
 
-  components: { LanguageSelector },
+  components: { LanguageSelector, SelectIcon },
 
   mixins: [formMixin],
 
@@ -103,7 +111,13 @@ export default defineComponent({
       StandardUnitForm,
       StandardUnitAttributes
     >(props, {
-      data: { id: null, name: null, estimateIn: { en: '' }, howMany: { en: '' } },
+      data: {
+        id: null,
+        name: null,
+        estimateIn: { en: '' },
+        howMany: { en: '' },
+        icon: null,
+      },
     });
 
     return { entry, entryLoaded, isEdit, clearError, data, errors, routeLeave, submit };

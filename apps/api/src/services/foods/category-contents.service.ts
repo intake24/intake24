@@ -17,9 +17,9 @@ function categoryContentsService({
   cachedParentCategoriesService,
 }: Pick<IoC, 'db' | 'adminCategoryService' | 'cachedParentCategoriesService'>) {
   const filterUndefined = (
-    headers: { id: string; code: string; name?: string | null }[],
+    headers: { id: string; code: string; name?: string | null; icon?: string | null }[],
   ): (CategoryHeader | FoodHeader)[] =>
-    headers.filter(h => h.name).map(h => ({ id: h.id, code: h.code, name: h.name! }));
+    headers.filter(h => h.name).map(h => ({ id: h.id, code: h.code, name: h.name!, icon: h.icon ?? undefined }));
 
   const getRootCategories = async (localeCode: string): Promise<CategoryContents> => {
     const categories = await adminCategoryService.getRootCategories(localeCode);
@@ -41,20 +41,20 @@ function categoryContentsService({
   const getCategoryHeader = async (localeCode: string, code: string): Promise<CategoryHeader> => {
     const category = await Category.findOne({
       where: { code, localeId: localeCode },
-      attributes: ['id', 'code', 'name'],
+      attributes: ['id', 'code', 'name', 'icon'],
     });
 
     if (!category)
       throw new NotFoundError(`Category ${code} not found`);
 
-    return { id: category.id, code, name: category.name };
+    return { id: category.id, code, name: category.name, icon: category.icon ?? undefined };
   };
 
   const getCategoryContents = async (localeCode: string, code: string): Promise<CategoryContents> => {
     const [header, categories, foods] = await Promise.all([
       getCategoryHeader(localeCode, code),
       Category.findAll({
-        attributes: ['id', 'code', 'name'],
+        attributes: ['id', 'code', 'name', 'icon'],
         where: { localeId: localeCode },
         include: [
           {
@@ -66,7 +66,7 @@ function categoryContentsService({
         ],
       }),
       Food.findAll({
-        attributes: ['id', 'code', 'name'],
+        attributes: ['id', 'code', 'name', 'icon'],
         where: { localeId: localeCode },
         include: [
           {
@@ -79,13 +79,10 @@ function categoryContentsService({
       }),
     ]);
 
-    const foodHeaders = foods.map(({ id, code, name }) => ({ id, code, name }));
-    const categoryHeaders = categories.map(({ id, code, name }) => ({ id, code, name }));
-
     return {
       header,
-      foods: filterUndefined(foodHeaders).sort((a, b) => a.name.localeCompare(b.name)),
-      subcategories: filterUndefined(categoryHeaders).sort((a, b) => a.name.localeCompare(b.name)),
+      foods: filterUndefined(foods).sort((a, b) => a.name.localeCompare(b.name)),
+      subcategories: filterUndefined(categories).sort((a, b) => a.name.localeCompare(b.name)),
     };
   };
 
@@ -98,7 +95,7 @@ function categoryContentsService({
     });
 
     const options: FindOptions<FoodAttributes> = {
-      attributes: ['id', 'code', 'name'],
+      attributes: ['id', 'code', 'name', 'icon'],
       where: { code, localeId: localeCode },
       include: [
         {
@@ -119,7 +116,7 @@ function categoryContentsService({
     return Food.paginate({
       query,
       ...options,
-      transform: food => ({ id: food.id, code: food.code, name: food.name }),
+      transform: food => ({ id: food.id, code: food.code, name: food.name, icon: food.icon }),
     });
   };
 

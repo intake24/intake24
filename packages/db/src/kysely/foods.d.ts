@@ -74,6 +74,7 @@ export interface Categories {
   code: string;
   englishName: string;
   hidden: boolean;
+  icon: string | null;
   id: Generated<Int8>;
   localeId: string;
   name: string;
@@ -168,6 +169,7 @@ export interface Foods {
   altNames: Generated<LocaleTranslations>;
   code: string;
   englishName: string;
+  icon: string | null;
   id: Generated<Int8>;
   localeId: string;
   name: string | null;
@@ -391,6 +393,7 @@ export interface StandardUnits {
   createdAt: Timestamp;
   estimateIn: RequiredLocaleTranslation;
   howMany: RequiredLocaleTranslation;
+  icon: string | null;
   id: string;
   name: string;
   updatedAt: Timestamp;

@@ -141,6 +141,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
           simpleName: toSimpleName(input.name),
           altNames: input.altNames,
           tags: input.tags,
+          icon: input.icon,
           version: randomUUID(),
         },
         { transaction },
@@ -191,7 +192,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
         cache.forget(getFoodCacheKeys(localeId, foodId, food.code)),
         cache.setAdd('locales-index', localeId),
         food.update({
-          ...pick(input, ['code', 'englishName', 'name', 'altNames', 'tags']),
+          ...pick(input, ['code', 'englishName', 'name', 'altNames', 'tags', 'icon']),
           simpleName: toSimpleName(input.name),
           version: randomUUID(),
         }, { transaction }),
@@ -238,7 +239,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     const food = await db.foods.transaction(async (transaction) => {
       const food = await Food.create(
         {
-          ...pick(sourceFood, ['code', 'localeId', 'englishName', 'name', 'simpleName', 'altNames', 'tags']),
+          ...pick(sourceFood, ['code', 'localeId', 'englishName', 'name', 'simpleName', 'altNames', 'tags', 'icon']),
           ...input,
           simpleName: toSimpleName(input.name)!,
           version: randomUUID(),
@@ -669,6 +670,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
         simpleName: toSimpleName(food.name),
         altNames: food.altNames,
         tags: food.tags,
+        icon: food.icon,
         version: randomUUID(),
       }));
 
@@ -687,6 +689,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
                 simpleName: eb => eb.ref('excluded.simpleName'),
                 altNames: eb => eb.ref('excluded.altNames'),
                 tags: eb => eb.ref('excluded.tags'),
+                icon: eb => eb.ref('excluded.icon'),
                 version: eb => eb.ref('excluded.version'),
               }),
             )

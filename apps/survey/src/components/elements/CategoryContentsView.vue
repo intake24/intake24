@@ -91,7 +91,7 @@
           @click="foodSelected(food)"
         >
           <template #prepend>
-            <v-icon icon="$food" />
+            <v-icon :icon="foodIcon(food.icon)" />
           </template>
           <v-list-item-title>{{ food.name }}</v-list-item-title>
 
@@ -124,145 +124,126 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
 
-import { defineComponent, reactive } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
 import { sendGtmEvent } from '@intake24/survey/util';
+import { icons } from '@intake24/ui';
 
 import NoImagePlaceholder from './NoImagePlaceholder.vue';
 
-export default defineComponent({
+defineOptions({
   name: 'CategoryContentsView',
+});
 
-  components: { NoImagePlaceholder },
-
-  props: {
-    contents: {
-      type: Object as PropType<CategoryContents>,
-      required: true,
-    },
-    i18n: {
-      type: Object as PropType<Record<string, string>>,
-      required: true,
-    },
-    categoriesFirst: {
-      type: Boolean,
-      default: true,
-    },
-    searchTerm: {
-      type: String as PropType<string>,
-      default: '',
-    },
-    type: {
-      type: String as PropType<string>,
-      default: '',
-    },
-    allowThumbnails: {
-      type: Boolean,
-      required: true,
-    },
-    enableGrid: {
-      type: Boolean,
-      required: true,
-    },
-    gridThreshold: {
-      type: Number,
-      required: true,
-    },
-    searchCount: {
-      type: Number as PropType<number>,
-      default: 0,
-    },
-    percentScrolled: {
-      type: Number as PropType<number>,
-      default: 0,
-    },
+const props = defineProps({
+  contents: {
+    type: Object as PropType<CategoryContents>,
+    required: true,
   },
-
-  emits: ['foodSelected', 'categorySelected'],
-
-  data() {
-    return {
-      expanded: false,
-      showAll: false,
-      threshold: 0,
-      thumbnailExpanded: reactive<Record<string, boolean>>({}),
-    };
+  i18n: {
+    type: Object as PropType<Record<string, string>>,
+    required: true,
   },
-
-  computed: {
-    firstCategories(): CategoryHeader[] {
-      return this.contents.subcategories.slice(0, this.threshold);
-    },
-    remainingCategories(): CategoryHeader[] {
-      return this.contents.subcategories.slice(this.threshold);
-    },
-    containsPizza(): boolean | null {
-      return this.searchTerm.toLowerCase().includes('pizza');
-    },
-    useGridLayout(): boolean {
-      if (!(this.enableGrid && this.allowThumbnails))
-        return false;
-
-      const totalFoodCount = this.contents.foods.length;
-      const foodsWithThumbnailsCount = this.contents.foods.filter(f => f.thumbnailImageUrl).length;
-
-      if (totalFoodCount === 0)
-        return false;
-      else
-        return Math.round(foodsWithThumbnailsCount * 100.0 / totalFoodCount) >= this.gridThreshold;
-    },
+  categoriesFirst: {
+    type: Boolean,
+    default: true,
   },
-
-  watch: {
-    'contents.foods.length': {
-      handler(newLength) {
-        if (newLength === 0) {
-          this.showAll = true;
-        }
-      },
-      immediate: true,
-    },
+  searchTerm: {
+    type: String as PropType<string>,
+    default: '',
   },
-
-  methods: {
-    categorySelected(category: CategoryHeader): void {
-      this.$emit('categorySelected', category);
-      sendGtmEvent({
-        event: 'selectFoodCategory',
-        scheme_prompts: 'foods',
-        food_category: category.name,
-        search_term: this.searchTerm,
-        search_count: this.searchCount,
-        percent_scrolled: this.percentScrolled,
-      });
-    },
-
-    foodSelected(food: FoodHeader): void {
-      this.$emit('foodSelected', food);
-      sendGtmEvent({
-        event: 'selectFood',
-        scheme_prompts: 'foods',
-        food: food.name,
-        search_term: this.searchTerm,
-        search_count: this.searchCount,
-        percent_scrolled: this.percentScrolled,
-      });
-    },
-
-    toggleExpand() {
-      this.expanded = !this.expanded;
-    },
-
-    toggleFoodThumbnail(foodCode: string) {
-      this.thumbnailExpanded[foodCode] = !this.thumbnailExpanded[foodCode];
-    },
+  type: {
+    type: String as PropType<string>,
+    default: '',
+  },
+  allowThumbnails: {
+    type: Boolean,
+    required: true,
+  },
+  enableGrid: {
+    type: Boolean,
+    required: true,
+  },
+  gridThreshold: {
+    type: Number,
+    required: true,
+  },
+  searchCount: {
+    type: Number as PropType<number>,
+    default: 0,
+  },
+  percentScrolled: {
+    type: Number as PropType<number>,
+    default: 0,
   },
 });
+
+const emit = defineEmits(['foodSelected', 'categorySelected']);
+
+const showAll = ref(false);
+const threshold = ref(0);
+const thumbnailExpanded = reactive<Record<string, boolean>>({});
+
+const firstCategories = computed(() => props.contents.subcategories.slice(0, threshold.value));
+const containsPizza = computed(() => props.searchTerm.toLowerCase().includes('pizza'));
+const useGridLayout = computed(() => {
+  if (!(props.enableGrid && props.allowThumbnails))
+    return false;
+
+  const totalFoodCount = props.contents.foods.length;
+  const foodsWithThumbnailsCount = props.contents.foods.filter(f => f.thumbnailImageUrl).length;
+
+  if (totalFoodCount === 0)
+    return false;
+  else
+    return Math.round(foodsWithThumbnailsCount * 100.0 / totalFoodCount) >= props.gridThreshold;
+});
+
+function foodIcon(icon?: string | null) {
+  if (!icon)
+    return '$food';
+
+  return icons[icon] ?? '$food';
+};
+
+function categorySelected(category: CategoryHeader) {
+  emit('categorySelected', category);
+  sendGtmEvent({
+    event: 'selectFoodCategory',
+    scheme_prompts: 'foods',
+    food_category: category.name,
+    search_term: props.searchTerm,
+    search_count: props.searchCount,
+    percent_scrolled: props.percentScrolled,
+  });
+};
+
+function foodSelected(food: FoodHeader) {
+  emit('foodSelected', food);
+  sendGtmEvent({
+    event: 'selectFood',
+    scheme_prompts: 'foods',
+    food: food.name,
+    search_term: props.searchTerm,
+    search_count: props.searchCount,
+    percent_scrolled: props.percentScrolled,
+  });
+};
+
+function toggleFoodThumbnail(foodCode: string) {
+  thumbnailExpanded[foodCode] = !thumbnailExpanded[foodCode];
+};
+
+watch(() => props.contents.foods.length, (newLength) => {
+  if (newLength === 0) {
+    showAll.value = true;
+  }
+}, { immediate: true });
 </script>
 
 <style scoped>

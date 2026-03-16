@@ -5,25 +5,27 @@ import { toStandardUnitId } from '@intake24/common/util';
 import { localeTranslation, requiredLocaleTranslation } from '../../common';
 
 export const standardUnitAttributes = z.object({
-  id: z.string(),
-  name: z.string(),
+  id: z.string().min(1).max(64),
+  name: z.string().min(1).max(128),
   estimateIn: requiredLocaleTranslation,
   howMany: requiredLocaleTranslation,
+  icon: z.string().min(1).max(64).nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
 
 export type StandardUnitAttributes = z.infer<typeof standardUnitAttributes>;
 
-export const standardUnitRequest = z.object({
+export const standardUnitRequest = standardUnitAttributes.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
   id: z
     .string()
-    .min(3)
+    .min(1)
     .max(64)
     .transform(v => toStandardUnitId(v)),
-  name: z.string().min(3).max(128),
-  estimateIn: requiredLocaleTranslation,
-  howMany: requiredLocaleTranslation,
 });
 
 export type StandardUnitRequest = z.infer<typeof standardUnitRequest>;

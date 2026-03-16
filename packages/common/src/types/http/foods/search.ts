@@ -9,6 +9,7 @@ export const categoryHeader = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string(),
+  icon: z.string().nullish(),
 });
 
 export type CategoryHeader = z.infer<typeof categoryHeader>;
@@ -19,6 +20,7 @@ export const foodHeader = z.object({
   name: z.string(),
   searchTerm: z.string().nullish(),
   thumbnailImageUrl: z.string().optional(),
+  icon: z.string().nullish(),
 });
 
 export type FoodHeader = z.infer<typeof foodHeader>;

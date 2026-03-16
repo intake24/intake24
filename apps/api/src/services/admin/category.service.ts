@@ -187,6 +187,8 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
           name: input.name,
           simpleName: toSimpleName(input.name)!,
           hidden: input.hidden,
+          tags: input.tags,
+          icon: input.icon,
           version: randomUUID(),
         },
         { transaction },
@@ -231,7 +233,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
         cache.forget(getCategoryCacheKeys(categoryId)),
         cache.setAdd('locales-index', localeId),
         category.update({
-          ...pick(input, ['code', 'englishName', 'name', 'simpleName', 'hidden', 'tags']),
+          ...pick(input, ['code', 'englishName', 'name', 'simpleName', 'hidden', 'tags', 'icon']),
           simpleName: toSimpleName(input.name)!,
           version: randomUUID(),
         }, { transaction }),
@@ -272,7 +274,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     const category = await db.foods.transaction(async (transaction) => {
       const category = await Category.create(
         {
-          ...pick(sourceCategory, ['code', 'localeId', 'englishName', 'name', 'simpleName', 'hidden', 'tags']),
+          ...pick(sourceCategory, ['code', 'localeId', 'englishName', 'name', 'simpleName', 'hidden', 'tags', 'icon']),
           ...input,
           simpleName: toSimpleName(input.name)!,
           version: randomUUID(),
@@ -495,6 +497,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
         simpleName: toSimpleName(category.name)!,
         hidden: category.hidden,
         tags: category.tags,
+        icon: category.icon,
         version: randomUUID(),
       }));
 
@@ -513,6 +516,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
                 simpleName: eb => eb.ref('excluded.simpleName'),
                 hidden: eb => eb.ref('excluded.hidden'),
                 tags: eb => eb.ref('excluded.tags'),
+                icon: eb => eb.ref('excluded.icon'),
                 version: eb => eb.ref('excluded.version'),
               }),
             )

@@ -42,6 +42,7 @@ export const foodAttributes = z.object({
   simpleName: z.string().nullable(),
   altNames: localeTranslations,
   tags: z.string().array(),
+  icon: z.string().min(1).max(64).nullable(),
   version: z.uuid(),
 });
 export type FoodAttributes = z.infer<typeof foodAttributes>;
@@ -62,6 +63,7 @@ export const foodInput = foodAttributes.omit({
 }).partial({
   altNames: true,
   tags: true,
+  icon: true,
   version: true,
 }).extend({
   attributes: inheritableAttributes.optional(),
@@ -99,6 +101,7 @@ export const bulkFoodInput = foodAttributes.omit({
 }).partial({
   altNames: true,
   tags: true,
+  icon: true,
   version: true,
 }).extend({
   attributes: inheritableAttributes,

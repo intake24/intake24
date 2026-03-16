@@ -21,6 +21,12 @@
             :label="$t('fdbs.categories.name')"
             name="name"
           />
+          <select-icon
+            v-model="data.icon"
+            clearable
+            :error-messages="errors.get('icon')"
+            @update:model-value="errors.clear('icon')"
+          />
           <v-switch
             v-model="data.hidden"
             :error-messages="errors.get('hidden')"
@@ -101,7 +107,7 @@ import {
 import { CustomList } from '@intake24/admin/components/lists';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
-import { ConfirmDialog, useI18n } from '@intake24/ui';
+import { ConfirmDialog, SelectIcon, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
@@ -111,10 +117,11 @@ export default defineComponent({
     AttributeList,
     CategoryList,
     ConfirmLeaveDialog,
+    ConfirmDialog,
     CopyEntryDialog,
     CustomList,
     PortionSizeMethodList,
-    ConfirmDialog,
+    SelectIcon,
   },
 
   props: {
@@ -165,6 +172,7 @@ export default defineComponent({
         parentCategories: [],
         portionSizeMethods: [],
         tags: [],
+        icon: null,
         version: '',
       },
       config: { extractNestedKeys: true },

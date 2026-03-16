@@ -32,6 +32,7 @@ export const categoryAttributes = z.object({
   simpleName: z.string().nullish(),
   hidden: z.boolean(),
   tags: z.string().array(),
+  icon: z.string().min(1).max(64).nullable(),
   version: z.uuid(),
 });
 export type CategoryAttributes = z.infer<typeof categoryAttributes>;
@@ -51,6 +52,7 @@ export const categoryInput = categoryAttributes.omit({
   simpleName: true,
 }).partial({
   tags: true,
+  icon: true,
   version: true,
 }).extend({
   attributes: inheritableAttributes.optional(),
@@ -92,6 +94,7 @@ export const bulkCategoryInput = categoryAttributes.omit({
   simpleName: true,
 }).partial({
   tags: true,
+  icon: true,
   version: true,
 }).extend({
   attributes: inheritableAttributes.optional(),

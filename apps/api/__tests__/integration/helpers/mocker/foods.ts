@@ -133,6 +133,7 @@ function standardUnit(): StandardUnitCreationAttributes {
     name: faker.word.words(2),
     estimateIn: { en: faker.word.words(5), es: faker.word.words(5) },
     howMany: { en: faker.word.words(5), es: faker.word.words(5) },
+    icon: faker.word.words(1),
   };
 }
 

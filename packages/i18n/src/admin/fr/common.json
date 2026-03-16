@@ -115,7 +115,7 @@
   },
   "clipboard": {
     "_": "Copier dans le presse-papiers",
-    "na": "Clipboard API not available",
+    "na": "API Presse-papiers non disponible",
     "copied": "Données copiées dans le presse-papiers"
   },
   "sw": {
@@ -140,7 +140,7 @@
     "edit": "Modifier",
     "export": "Exporter",
     "load": "Charger",
-    "media": "Media",
+    "media": "Médias",
     "ok": "Confirmer",
     "print": "Imprimer",
     "remove": "Enlever",
@@ -152,7 +152,7 @@
     "securables": "Sécurité",
     "submit": "Soumettre",
     "sync": "Synchroniser",
-    "select": "Select",
+    "select": "Sélectionner",
     "transfer": "Transférer",
     "upload": "Mettre en ligne",
     "confirm": {
@@ -189,7 +189,7 @@
   "redirect": "Rediriger vers une autre entrée",
   "errors": "{count} errors",
   "selected": "{count} éléments sélectionnés",
-  "noneSelected": "No items selected",
+  "noneSelected": "Aucun élément sélectionné",
   "not": {
     "assigned": "Non attribué",
     "found": "Non trouvé",
@@ -200,16 +200,22 @@
     "_": "JSON brut",
     "title": "Editeur de contenu JSON"
   },
+  "icons": {
+    "_": "Icône",
+    "title": "Icônes",
+    "select": "Sélectionner une icône",
+    "search": "Rechercher des icônes"
+  },
   "list": {
     "_": "{item}",
     "title": "{item}",
-    "add": "Add {item}",
-    "edit": "Edit {item}",
-    "remove": "Remove {item}",
+    "add": " Ajouter {item}",
+    "edit": "Modifier {item}",
+    "remove": "Supprimer {item}",
     "standard": "Standard {item}",
-    "custom": "Custom {item}",
-    "exists": "{item} already exists",
-    "required": "{item} must be filled in"
+    "custom": "Personnalisé {item}",
+    "exists": "{item} existe déjà",
+    "required": "{item} doit être renseigné"
   },
   "file": {
     "csv": "Fichier CSV à importer"

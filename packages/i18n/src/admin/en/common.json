@@ -214,6 +214,13 @@
     "title": "JSON Content editor"
   },
 
+  "icons": {
+    "_": "Icon",
+    "title": "Icons",
+    "select": "Select icon",
+    "search": "Search icons"
+  },
+
   "list": {
     "_": "{item}",
     "title": "{item}",

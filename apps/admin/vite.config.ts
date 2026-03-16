@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import vue from '@vitejs/plugin-vue';
+import Icons from 'unplugin-icons/vite';
 import { defineConfig, loadEnv } from 'vite';
 import { analyzer } from 'vite-bundle-analyzer';
 import { createHtmlPlugin } from 'vite-plugin-html';
@@ -104,6 +105,7 @@ export default defineConfig(({ mode }) => {
         styles: { configFile: 'src/scss/settings.scss' },
       }),
       VueI18nPlugin(),
+      Icons(),
       webfontDownload([
         'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
       ]),

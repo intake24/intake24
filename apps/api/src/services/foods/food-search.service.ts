@@ -26,11 +26,18 @@ function foodSearchService({ foodThumbnailImageService, cachedParentCategoriesSe
         if (!acceptForQuery(isRecipe, foodCache[food.id]?.attributes.useInRecipes))
           return acc;
 
-        acc.push({ ...food, thumbnailImageUrl: thumbnailImages[food.id] });
+        acc.push({ ...food, icon: foodCache[food.id]?.icon, thumbnailImageUrl: thumbnailImages[food.id] });
 
         return acc;
       }, []),
-      categories: results.categories.filter(category => acceptForQuery(isRecipe, categoryCache[category.id]?.attributes.useInRecipes)),
+      categories: results.categories.reduce<FoodSearchResponse['categories']>((acc, cat) => {
+        if (!acceptForQuery(isRecipe, categoryCache[cat.id]?.attributes.useInRecipes))
+          return acc;
+
+        acc.push({ ...cat, icon: categoryCache[cat.id]?.icon });
+
+        return acc;
+      }, []),
     };
 
     return withFilteredIngredients;

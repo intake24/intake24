@@ -17,6 +17,7 @@ export type CacheRecord = {
   source: string;
   id: string | null;
   code: string | null;
+  icon: string | null;
   tags: string[];
   readyMealOption: boolean | null;
   reasonableAmount: number | null;
@@ -29,6 +30,7 @@ export type ParentData = {
   codes: Set<string>;
   attributes: InheritableAttributes[];
   tags: string[];
+  icon: string | null;
 };
 
 export type ResolvedParentData = {
@@ -36,6 +38,7 @@ export type ResolvedParentData = {
   codes: string[];
   attributes: ResolvedInheritableAttributes;
   tags: string[];
+  icon: string | null;
 };
 
 function cachedParentCategoriesService({
@@ -87,12 +90,13 @@ function cachedParentCategoriesService({
 
   const processCacheRecords = async (records: CacheRecord[]): Promise<Record<string, ResolvedParentData | null>> => {
     const groupedRecords = records.reduce<Record<string, ParentData>>(
-      (acc, { source, id, code, readyMealOption, reasonableAmount, sameAsBeforeOption, useInRecipes, tags }) => {
+      (acc, { source, id, code, readyMealOption, reasonableAmount, sameAsBeforeOption, useInRecipes, tags, icon }) => {
         if (!acc[source])
-          acc[source] = { ids: new Set(), codes: new Set(), attributes: [], tags: [] };
+          acc[source] = { ids: new Set(), codes: new Set(), attributes: [], tags: [], icon: null };
 
         acc[source].attributes.push({ readyMealOption, reasonableAmount, sameAsBeforeOption, useInRecipes });
         acc[source].tags.push(...tags);
+        acc[source].icon = acc[source].icon ?? icon;
 
         if (!id || !code)
           return acc;
@@ -107,7 +111,7 @@ function cachedParentCategoriesService({
 
     const parentData: Record<string, ResolvedParentData | null> = {};
 
-    for (const [key, { ids, codes, attributes, tags }] of Object.entries(groupedRecords)) {
+    for (const [key, { ids, codes, attributes, tags, icon }] of Object.entries(groupedRecords)) {
       const maybeAttributes = attributes.reduce((attrAcc, attr) => {
         attrAcc.readyMealOption = attrAcc.readyMealOption ?? attr.readyMealOption ?? undefined;
         attrAcc.reasonableAmount = attrAcc.reasonableAmount ?? attr.reasonableAmount ?? undefined;
@@ -121,6 +125,7 @@ function cachedParentCategoriesService({
         codes: [...codes].toSorted(),
         attributes: completeAttributes(maybeAttributes) ?? await completeAttributesWithDefaults(maybeAttributes),
         tags: [...new Set(tags)].toSorted(),
+        icon,
       };
     };
 
@@ -160,6 +165,7 @@ function cachedParentCategoriesService({
             'c.id as source',
             sql.lit<string | null>(null).as('id'),
             sql.lit<string | null>(null).as('code'),
+            'c.icon',
             'c.tags',
             'ca.readyMealOption',
             'ca.reasonableAmount',
@@ -177,6 +183,7 @@ function cachedParentCategoriesService({
                 'cc.subCategoryId as source',
                 'c.id',
                 'c.code',
+                'c.icon',
                 'c.tags',
                 'ca.readyMealOption',
                 'ca.reasonableAmount',
@@ -196,6 +203,7 @@ function cachedParentCategoriesService({
                 'rows.source',
                 'c.id',
                 'c.code',
+                'c.icon',
                 'c.tags',
                 'ca.readyMealOption',
                 'ca.reasonableAmount',
@@ -246,6 +254,7 @@ function cachedParentCategoriesService({
             'f.id as source',
             sql.lit<string | null>(null).as('id'),
             sql.lit<string | null>(null).as('code'),
+            'f.icon',
             'f.tags',
             'fa.readyMealOption',
             'fa.reasonableAmount',
@@ -263,6 +272,7 @@ function cachedParentCategoriesService({
                 'fc.foodId as source',
                 'c.id',
                 'c.code',
+                'c.icon',
                 'c.tags',
                 'ca.readyMealOption',
                 'ca.reasonableAmount',
@@ -282,6 +292,7 @@ function cachedParentCategoriesService({
                 'rows.source',
                 'c.id',
                 'c.code',
+                'c.icon',
                 'c.tags',
                 'ca.readyMealOption',
                 'ca.reasonableAmount',
