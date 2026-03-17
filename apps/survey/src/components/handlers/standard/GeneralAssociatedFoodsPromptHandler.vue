@@ -44,7 +44,7 @@ function initialPromptState(allowMultiple: boolean): AssociatedFoodPrompt {
 }
 
 const { translate } = useI18n();
-const { encodedFood: food, localeId, surveySlug, meals, resolvePortionSize } = useFoodPromptUtils();
+const { encodedFood: food, localeId, surveySlug, meals, getAutoPsmWeight, resolvePortionSize } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 const survey = useSurvey();
 
@@ -153,17 +153,20 @@ async function commitAnswer() {
 
   const linkedFoods: FoodState[] = foodData.map((data, index) => {
     let { flags, portionSizeMethodIndex, portionSize } = resolvePortionSize(data, 'afp', food.value);
-    if (portionSize === null && props.prompt.skipPortionSize) {
+    if (portionSize === null && props.prompt.autoPortionSize !== null) {
+      const { mode, value } = props.prompt.autoPortionSize;
+      const { servingWeight, leftoversWeight } = getAutoPsmWeight(props.prompt.autoPortionSize, food.value);
       portionSize = {
-        method: 'direct-weight',
+        method: 'auto',
         conversionFactor: 1,
-        quantity: 0,
-        linkedQuantity: 0,
-        servingWeight: 0,
-        leftoversWeight: 0,
+        mode,
+        quantity: value,
+        linkedQuantity: 1,
+        servingWeight,
+        leftoversWeight,
       };
       portionSizeMethodIndex = 0;
-      flags.push('portion-size-option-complete');
+      flags.push('portion-size-option-complete', 'portion-size-method-complete');
     }
 
     return {

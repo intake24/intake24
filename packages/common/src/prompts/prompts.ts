@@ -3,6 +3,7 @@ import type { PortionSizeMethodId } from '../surveys';
 import { z } from 'zod';
 
 import { barcodeScannerOptions } from '../barcodes';
+import { autoPortionSizeParameters } from '../surveys/portion-size';
 import { localeOptionList, localeTranslation, sanitizedLocaleTranslation } from '../types/common';
 import { actions } from './actions';
 import { condition } from './conditions';
@@ -383,7 +384,7 @@ const generalAssociatedFoodsPrompt = z.object({
   genericName: localeTranslation,
   hints: foodSearchHint.array(),
   multiple: z.boolean(),
-  skipPortionSize: z.boolean(),
+  autoPortionSize: autoPortionSizeParameters.nullable(),
 });
 
 const editMealPrompt = z.object({

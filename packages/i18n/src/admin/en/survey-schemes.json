@@ -544,7 +544,9 @@
       "title": "Associated foods (general)",
       "subtitle": "Suggest foods typically consumed together. Suggested foods are defined at the prompt level, and its relevance is determined by conditions.",
       "multiple": "Allow multiple foods to be selected",
-      "skipPortionSize": "Skip portion size estimation for selected foods",
+      "autoPortionSize": "Use default portion size (skip estimation prompts)",
+      "autoPortionSizeMode": "Weight mode",
+      "autoPortionSizeValue": "Default weight (g)",
       "categoryCode": "Associated foods category",
       "promptText": "Prompt text",
       "genericName": "Placeholder name for associated foods"

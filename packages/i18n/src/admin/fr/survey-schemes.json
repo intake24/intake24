@@ -540,7 +540,9 @@
       "title": "Aliments associés",
       "subtitle": "Proposer des aliments classiquement consommés ensemble. Les aliments suggérés sont définis au niveau de cet affichage, et leur pertinence est déterminée par des conditions.",
       "multiple": "Permettre la sélection de plusieurs aliments",
-      "skipPortionSize": "Passer l'estimation de la taille de portion pour ces aliments",
+      "autoPortionSize": "Passer l'estimation de la taille de portion pour ces aliments",
+      "autoPortionSizeMode": "Mode de taille de portion par défaut",
+      "autoPortionSizeValue": "Valeur de taille de portion par défaut",
       "categoryCode": "Catégorie des aliments associés",
       "promptText": "Texte affiché",
       "genericName": "Nom générique pour les aliments associés"

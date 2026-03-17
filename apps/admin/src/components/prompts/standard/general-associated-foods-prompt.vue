@@ -49,10 +49,26 @@
           />
           <v-switch
             hide-details="auto"
-            :label="$t('survey-schemes.prompts.general-associated-foods-prompt.skipPortionSize')"
-            :model-value="skipPortionSize"
-            @update:model-value="update('skipPortionSize', $event)"
+            :label="$t('survey-schemes.prompts.general-associated-foods-prompt.autoPortionSize')"
+            :model-value="autoPortionSize !== null"
+            @update:model-value="update('autoPortionSize', $event ? { mode: 'weight', value: 0 } : null)"
           />
+          <template v-if="autoPortionSize !== null">
+            <v-select
+              hide-details="auto"
+              :items="autoPortionSizeModeItems"
+              :label="$t('survey-schemes.prompts.general-associated-foods-prompt.autoPortionSizeMode')"
+              :model-value="autoPortionSize.mode"
+              @update:model-value="update('autoPortionSize', { ...autoPortionSize, mode: $event })"
+            />
+            <v-text-field
+              hide-details="auto"
+              :label="$t('survey-schemes.prompts.general-associated-foods-prompt.autoPortionSizeValue')"
+              :model-value="autoPortionSize.value"
+              type="number"
+              @update:model-value="update('autoPortionSize', { ...autoPortionSize, value: Number($event) })"
+            />
+          </template>
         </v-col>
         <v-col cols="12" md="6">
           <food-browser-settings
@@ -75,6 +91,9 @@
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+
+import { autoPsmModes } from '@intake24/common/surveys/portion-size';
+import { useI18n } from '@intake24/ui';
 
 import { LanguageSelector } from '../../forms';
 import { foodBrowserProps, FoodBrowserSettings, FoodSearchHints, useBasePrompt } from '../partials';
@@ -101,15 +120,22 @@ const props = defineProps({
     type: Boolean as PropType<Prompts['general-associated-foods-prompt']['multiple']>,
     required: true,
   },
-  skipPortionSize: {
-    type: Boolean as PropType<Prompts['general-associated-foods-prompt']['skipPortionSize']>,
-    required: true,
+  autoPortionSize: {
+    type: Object as PropType<Prompts['general-associated-foods-prompt']['autoPortionSize']>,
+    default: null,
   },
 });
 
 const emit = defineEmits(['update:options']);
 
+const { i18n: { t } } = useI18n();
+
 const { update, updateLanguage } = useBasePrompt(props, { emit });
+
+const autoPortionSizeModeItems = autoPsmModes.map(value => ({
+  value,
+  title: t(`fdbs.portionSizes.methods.auto.modes.${value}`),
+}));
 </script>
 
 <style lang="scss" scoped></style>
