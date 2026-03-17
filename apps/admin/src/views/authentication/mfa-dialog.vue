@@ -18,7 +18,7 @@
                 :width="20"
               >
                 <div class="d-flex align-center flex-column">
-                  <v-icon class="provider-icon mb-2 ml-2" color="secondary" size="80">
+                  <v-icon class="mb-2 ml-2" color="secondary" size="80">
                     $duo
                   </v-icon>
                   <span class="font-weight-bold text-h4">{{ duo.value / 20 }} </span>
@@ -33,7 +33,7 @@
               class="d-flex flex-column align-center"
               @click="fidoChallenge"
             >
-              <v-icon class="provider-icon mb-6" color="secondary">
+              <v-icon class="mb-6" color="secondary" size="80">
                 $fido
               </v-icon>
               <v-btn block color="secondary" rounded @click="fidoChallenge">
@@ -42,7 +42,7 @@
             </div>
             <v-form v-if="provider === 'otp'" autocomplete="off" @submit.prevent="otpChallenge">
               <div class="d-flex flex-column align-center">
-                <v-icon class="provider-icon mb-4" color="secondary">
+                <v-icon class="mb-4" color="secondary" size="80">
                   $otp
                 </v-icon>
                 <p class="mb-2 text-subtitle-1">

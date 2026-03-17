@@ -118,6 +118,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { MFAProvider } from '@intake24/common/security';
 import type { MFADeviceResponse, MFADevicesResponse } from '@intake24/common/types/http/admin';
 
 import { HttpStatusCode, isAxiosError } from 'axios';
@@ -145,7 +146,7 @@ const route = useRoute();
 const providerRefs = ref<InstanceType<typeof Otp | typeof Fido | typeof Duo>[]>();
 
 const dialog = ref(false);
-const tab = ref(mfaProviders[0]);
+const tab = ref<MFAProvider>(mfaProviders[0]);
 const status = ref(false);
 const devices = ref<MFADeviceResponse[]>([]);
 const providers = ref(mfaProviders);

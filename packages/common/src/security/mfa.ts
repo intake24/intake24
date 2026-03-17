@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const mfaModes = ['optional', 'required'] as const;
 export type MFAMode = (typeof mfaModes)[number];
 
-export const mfaProviders = ['duo', 'fido', 'otp'] as const;
+export const mfaProviders = ['fido', 'otp', 'duo'] as const;
 export type MFAProvider = (typeof mfaProviders)[number];
 
 export function isMFAProvider(provider: any): provider is MFAProvider {
@@ -14,7 +14,7 @@ export const duoAuthChallenge = z.object({
   challengeId: z.string(),
   deviceId: z.string(),
   provider: z.literal('duo'),
-  challengeUrl: z.string().url(),
+  challengeUrl: z.url(),
 });
 export type DuoAuthChallenge = z.infer<typeof duoAuthChallenge>;
 

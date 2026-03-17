@@ -66,7 +66,7 @@
       "otp": {
         "_": "OTP",
         "title": "Mot de passe à usage unique",
-        "description": "Mots de passe temporaires générés par des applications de génération de mots de passe. Applications gérées: Google Authenticator, Microsoft Authenticator, Authy, Duo Security etc."
+        "description": "Mots de passe temporaires générés par des applications de génération de mots de passe. Applications gérées: Google Authenticator, Microsoft Authenticator, Authy, Ente etc."
       },
       "fido": {
         "_": "FIDO",
