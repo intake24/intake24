@@ -151,7 +151,7 @@ export default defineComponent({
         cron: null,
         active: false,
         description: null,
-        params: { ...defaultJobsParams.CleanRedisStore },
+        params: {},
       },
       loadCallback,
     });

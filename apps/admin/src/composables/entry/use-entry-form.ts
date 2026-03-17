@@ -83,9 +83,13 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
       data = await form.post<EntryState>(`${resource.api}`);
 
       const { id, name } = data;
+
+      setEntry(data);
+      routeLeave.value = { dialog: false, to: null, confirmed: true };
       await router.push({ name: `${resource.name}-edit`, params: { id } });
 
       useMessages().success(i18n.t('common.msg.created', { name: name ?? id }));
+      return;
     }
 
     setEntry(data);

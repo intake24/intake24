@@ -287,6 +287,37 @@ export default () => {
       expectFoodIdentityUnchanged(refreshed, foodCode);
     });
 
+    /**
+     * Test case: `none` mode reports full statistics without writing to the database.
+     * After the refactor, "none" acts as a dry run: it processes every food and
+     * builds the same stats it would in `values-only` mode, but skips the DB write.
+     */
+    it('none mode reports recalculation statistics without updating the database', async () => {
+      await setupFoodAndNutrients();
+
+      // Capture initial state before running the job
+      const initial = await SurveySubmissionFood.findByPk(submissionFood!.id);
+      const initialNutrients = { ...initial!.nutrients };
+      const initialFields = { ...initial!.fields };
+
+      const { dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'none' });
+      await createdDbJob.reload();
+
+      // Message should carry the dry-run prefix
+      expect(createdDbJob.message).toContain('DRY RUN - NO DATA WAS MODIFIED. ');
+
+      // At least one food was processed
+      expect(createdDbJob.message).toContain('Total: 1');
+
+      // The food would have been updated (nutrient value recalculated from record A)
+      expect(createdDbJob.message).toContain('Updated: 1');
+
+      // Database must remain untouched
+      const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+      expect(refreshed?.nutrients).toEqual(initialNutrients);
+      expect(refreshed?.fields).toEqual(initialFields);
+    });
+
     it('completes with summary when there are no submission records', async () => {
       const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
 

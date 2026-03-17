@@ -1,10 +1,11 @@
 import type { SurveyState } from '../surveys';
 
 import { endOfDay, startOfDay } from 'date-fns';
+import { pick } from 'lodash-es';
 import { z } from 'zod';
 
 import { searchSortingAlgorithms } from '../surveys';
-import { bigIntString, booleanString } from './common';
+import { bigIntString } from './common';
 import { packageExportOptions, packageFileTypes } from './http/admin/io';
 
 export const localisableMessage = z.object({
@@ -162,7 +163,7 @@ export type RecalculationMode = (typeof recalculationModes)[number];
 export const SurveyNutrientsRecalculation = z.object({
   surveyId: bigIntString,
   mode: z.enum(recalculationModes).default('values-only'),
-  syncFields: booleanString.default(false),
+  syncFields: z.boolean().or(z.stringbool()).default(false),
 });
 export const SurveyRatingsExport = z.object({
   surveyId: bigIntString,
@@ -558,25 +559,14 @@ export const defaultJobsParams: JobParams = {
 
 export const isValidJob = (job: any): boolean => jobTypes.includes(job);
 
-const defaultJobParamKeySets = Object.fromEntries(
-  Object.entries(defaultJobsParams).map(([job, params]) => [job, new Set(Object.keys(params))]),
-) as Record<keyof JobParams, Set<string>>;
-
-function jobParamKeys<T extends keyof JobParams>(job: T): Set<string> {
-  return defaultJobParamKeySets[job];
-}
-
 export function pickJobParams<T extends keyof JobParams>(object: object, job: T): JobParams[T] {
-  const keys = jobParamKeys(job);
-  return Object.fromEntries(
-    Object.entries(object).filter(([key]) => keys.has(key)),
-  ) as JobParams[T];
+  return pick(object, Object.keys(defaultJobsParams[job])) as JobParams[T];
 }
 
 export function jobRequiresFile<T extends keyof JobParams>(job: T) {
-  return jobParamKeys(job).has('file');
+  return Object.keys(defaultJobsParams[job]).includes('file');
 }
 
 export function jobHasParam<T extends keyof JobParams>(job: T, key: string) {
-  return jobParamKeys(job).has(key);
+  return Object.keys(defaultJobsParams[job]).includes(key);
 }
