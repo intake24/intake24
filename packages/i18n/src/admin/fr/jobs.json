@@ -115,7 +115,6 @@
     },
     "PopularitySearchUpdateCounters": {
       "_": "Chercher - Mettre à jour les compteurs de popularité",
-      "localeCode": "Code de langue",
       "foodCodes": "Codes des aliments"
     },
     "ResourceExport": {

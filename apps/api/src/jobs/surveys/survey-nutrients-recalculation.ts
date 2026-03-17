@@ -124,7 +124,9 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     this.resetStats();
     await this.recalculate();
 
-    const summary = `Recalculation completed. Total: ${this.stats.totalProcessed}, Updated: ${this.stats.updated}, Skipped: ${this.stats.skipped}, Nutrient codes updated: ${this.stats.nutrientCodesUpdated}, Fields added: ${this.stats.fieldsAdded}, Fields removed: ${this.stats.fieldsRemoved}, Cleared due to missing records: ${this.stats.clearedDueToMissingRecords}, Errors: ${this.stats.errors}`;
+    const isDryRun = this.params.mode === 'none';
+    const prefix = isDryRun ? 'DRY RUN - NO DATA WAS MODIFIED. ' : '';
+    const summary = `${prefix}Recalculation completed. Total: ${this.stats.totalProcessed}, Updated: ${this.stats.updated}, Skipped: ${this.stats.skipped}, Nutrient codes updated: ${this.stats.nutrientCodesUpdated}, Fields added: ${this.stats.fieldsAdded}, Fields removed: ${this.stats.fieldsRemoved}, Cleared due to missing records: ${this.stats.clearedDueToMissingRecords}, Errors: ${this.stats.errors}`;
     this.logger.info(summary);
 
     await this.dbJob.update({ message: summary });
@@ -471,10 +473,8 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     const { surveyId } = this.params;
     const flags = this.getRecalculationFlags();
 
-    if (flags.shouldSkipRecalculation) {
-      this.logger.info('Recalculation mode is "none", skipping.');
-      return;
-    }
+    if (flags.shouldSkipRecalculation)
+      this.logger.info('Recalculation mode is "none" (dry run) - processing foods without writing to database.');
 
     const total = await SurveySubmissionFood.count({
       include: [{
@@ -636,8 +636,8 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         }
       }
 
-      // Update database
-      if (records.length > 0) {
+      // Update database (skipped in dry-run mode)
+      if (records.length > 0 && !flags.shouldSkipRecalculation) {
         const baseQuery = this.kyselyDb.system
           .updateTable('surveySubmissionFoods')
           .from(values(records, 'data'))
