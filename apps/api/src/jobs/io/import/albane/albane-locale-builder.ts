@@ -118,6 +118,7 @@ export class AlbaneLocaleBuilder {
   private foodCategories: Record<string, string[]> | undefined;
 
   private categoryNames: Record<string, string> | undefined;
+  private categoryEnglishNames: Record<string, string> | undefined;
 
   private associatedFoodPrompts: Record<string, PkgV2AssociatedFood[]> | undefined;
   private facetFlags: Record<string, string[]> | undefined;
@@ -127,6 +128,7 @@ export class AlbaneLocaleBuilder {
   private standardUnitLabels: Record<string, Record<string, string>> | undefined;
   private householdMeasuresMap: Record<string, string> | undefined;
   private categoryTags: Record<string, Set<string>> | undefined;
+  private categoryParents: Record<string, string[]> | undefined;
 
   constructor(logger: Logger, sourceDirPath: string, deeplConfig: DeepLConfig, cacheDir: string) {
     this.sourceDirPath = sourceDirPath;
@@ -328,10 +330,15 @@ export class AlbaneLocaleBuilder {
     }
 
     this.categoryNames = {};
+    this.categoryEnglishNames = {};
     this.categoryTags = {};
+    this.categoryParents = {};
     const missingTranslations: string[] = [];
 
     const rows = await this.readXLSX<Record<number, string>>('CATEGORIES_I24_LIST.xlsx', { header: 1, range: 1 });
+
+    let lastLevel0: string | undefined;
+    let lastLevel1: string | undefined;
 
     for (const row of rows) {
       const trCol1 = row[1];
@@ -340,13 +347,39 @@ export class AlbaneLocaleBuilder {
       const catCode = row[7];
 
       if (catCode) {
-        const translatedName = trCol1 || trCol2 || trCol3;
+        let translatedName: string | undefined;
+        let englishName: string | undefined;
+        let parentCategories: string[];
+
+        if (trCol1) {
+          translatedName = trCol1;
+          englishName = row[0];
+          parentCategories = [];
+          lastLevel0 = catCode;
+          lastLevel1 = undefined;
+        }
+        else if (trCol2) {
+          translatedName = trCol2;
+          englishName = row[2];
+          parentCategories = lastLevel0 ? [lastLevel0] : [];
+          lastLevel1 = catCode;
+        }
+        else {
+          translatedName = trCol3;
+          englishName = row[4];
+          parentCategories = lastLevel1 ? [lastLevel1] : [];
+        }
 
         if (translatedName)
           this.categoryNames![catCode] = translatedName;
         else
           missingTranslations.push(catCode);
 
+        if (englishName)
+          this.categoryEnglishNames![catCode] = englishName;
+
+        const existingParents = this.categoryParents![catCode] ?? [];
+        this.categoryParents![catCode] = [...new Set([...existingParents, ...parentCategories])];
         this.categoryTags![catCode] = readTags(row[8], this.categoryTags![catCode]);
       }
     }
@@ -561,76 +594,6 @@ export class AlbaneLocaleBuilder {
   private buildCategories(): PkgV2Category[] {
     const categories: PkgV2Category[] = [
       {
-        code: 'FRPEPO',
-        attributes: {},
-        englishName: 'Baby food and savoury snacks',
-        name: 'Petits pots salés & plats infantiles',
-        parentCategories: ['19TODSFD'],
-        portionSize: [],
-        version: '0fd3f027-6f2a-47f3-9838-7bb0037a4fd4',
-        hidden: false,
-      },
-      {
-        code: 'FRDEIN',
-        attributes: {},
-        englishName: 'Baby desserts',
-        name: 'Desserts infantiles',
-        parentCategories: ['19TODSFD'],
-        portionSize: [],
-        version: '64f6bd7b-0f0b-41b6-ab20-afac96078a28',
-        hidden: false,
-      },
-      {
-        code: 'FRCEBI',
-        attributes: {},
-        englishName: 'Baby cereals and biscuits',
-        name: 'Céréales & biscuits infantiles',
-        parentCategories: ['19TODSFD'],
-        portionSize: [],
-        version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
-        hidden: false,
-      },
-      {
-        code: 'FRLABO',
-        attributes: {},
-        englishName: 'Baby milk and drinks',
-        name: 'Laits & boissons infantiles',
-        parentCategories: ['19TODSFD'],
-        portionSize: [],
-        version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
-        hidden: false,
-      },
-      {
-        code: 'FRLAMA',
-        attributes: {},
-        englishName: 'Breast milk',
-        name: 'Lait maternel',
-        parentCategories: ['FRLABO'],
-        portionSize: [],
-        version: 'e309274c-12be-49d0-88e2-26744ce7f3c1',
-        hidden: false,
-      },
-      {
-        code: 'FRCIT',
-        attributes: {},
-        englishName: 'Lemon juice for cooking',
-        name: 'Jus de citron',
-        parentCategories: ['COND'],
-        portionSize: [],
-        version: '0555155a-8073-4a00-b30c-26691082b7d1',
-        hidden: false,
-      },
-      {
-        code: 'FRHPME',
-        attributes: {},
-        englishName: 'Chili oil',
-        name: 'Huile pimentée',
-        parentCategories: ['COND'],
-        portionSize: [],
-        version: 'eeba6915-790e-42a6-be9d-2fd78ee80567',
-        hidden: false,
-      },
-      {
         code: 'FRFSEL',
         attributes: {},
         englishName: 'Salt (for salt facet)',
@@ -652,10 +615,10 @@ export class AlbaneLocaleBuilder {
         categories.push({
           code,
           name,
-          englishName: name,
+          englishName: this.categoryEnglishNames![code] ?? name,
           hidden: false,
           attributes: {},
-          parentCategories: [],
+          parentCategories: this.categoryParents![code] ?? [],
           portionSize: [],
           version: randomUUID(),
         });
