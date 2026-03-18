@@ -49,6 +49,7 @@ export const pkgV2DirectWeightPsm = pkgV2PortionSizeMethodBase.extend({
 
 export const pkgV2UnknownPsm = pkgV2PortionSizeMethodBase.extend({
   method: z.literal('unknown'),
+  weight: z.number().nullish(),
 });
 
 export const pkgV2AsServedPsm = pkgV2PortionSizeMethodBase.extend({

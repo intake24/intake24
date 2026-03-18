@@ -30,6 +30,7 @@ import {
   pizzaPortionSizeParameters,
   pizzaV2PortionSizeParameters,
   standardPortionSizeParameters,
+  unknownPortionSizeParameters,
 } from '@intake24/common/surveys/portion-size';
 
 type FoodPortionSizeMethodsRow = Pick<Selectable<FoodPortionSizeMethods>, 'id' | 'method' | 'description' | 'conversionFactor' | 'pathways' | 'parameters' | 'orderBy'>;
@@ -182,12 +183,14 @@ function packageDirectWeight(portionSize: FoodPortionSizeMethodsRow): PkgV2Direc
 }
 
 function packageUnknown(portionSize: FoodPortionSizeMethodsRow): PkgV2UnknownPsm {
+  const parameters = unknownPortionSizeParameters.parse(portionSize.parameters);
   return {
     method: 'unknown',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
     pathways: portionSize.pathways,
     orderBy: portionSize.orderBy,
+    weight: parameters.weight,
   };
 }
 

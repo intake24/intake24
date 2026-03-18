@@ -972,11 +972,13 @@ export class AlbaneLocaleBuilder {
       }
 
       if (row.VALEUR_ne_sait_pas !== undefined && row.VALEUR_ne_sait_pas !== '') {
+        const defaultWeight = Number.parseFloat(row.VALEUR_ne_sait_pas);
         foodPortionSizeMethods.push({
           method: 'unknown',
           conversionFactor: 1.0,
           description: 'unknown',
           pathways: portionSizePathwayDefaults,
+          weight: Number.isNaN(defaultWeight) ? undefined : defaultWeight,
           orderBy: String(foodPortionSizeMethods.length),
         });
       }
