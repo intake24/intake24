@@ -62,7 +62,8 @@
       "_": "Use for recipes",
       "0": "Use anywhere",
       "1": "Use only as regular food",
-      "2": "Use only as recipe ingredient"
+      "2": "Use only as recipe ingredient",
+      "3": "Hide anywhere"
     }
   },
 

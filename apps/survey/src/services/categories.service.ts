@@ -7,9 +7,10 @@ export default {
     const { data } = await http.get<UserCategoryData>(`/locales/${localeId}/categories/${code}`);
     return data;
   },
-  contents: async (localeId: string, code?: string) => {
+  contents: async (localeId: string, code?: string, recipe = false) => {
     const { data } = await http.get<CategoryContents>(
       code ? `locales/${localeId}/category-contents/${code}` : `locales/${localeId}/category-contents`,
+      { params: code && recipe ? { recipe: true } : undefined },
     );
     return data;
   },
