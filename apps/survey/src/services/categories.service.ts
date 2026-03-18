@@ -3,9 +3,10 @@ import type { CategoryContents, CategoryHeader, CategorySearch } from '@intake24
 import { http } from '@intake24/ui';
 
 export default {
-  contents: async (localeId: string, code?: string) => {
+  contents: async (localeId: string, code?: string, recipe = false) => {
     const { data } = await http.get<CategoryContents>(
       code ? `locales/${localeId}/category-contents/${code}` : `locales/${localeId}/category-contents`,
+      { params: code && recipe ? { recipe: true } : undefined },
     );
     return data;
   },
