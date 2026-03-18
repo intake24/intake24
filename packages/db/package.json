@@ -1,7 +1,7 @@
 {
   "name": "@intake24/db",
   "type": "module",
-  "version": "2026.0",
+  "version": "2026.0.0",
   "private": true,
   "description": "Intake24 database layer",
   "author": "",
@@ -29,20 +29,20 @@
   },
   "dependencies": {
     "dotenv": "^17.3.1",
-    "kysely": "^0.28.11",
+    "kysely": "^0.28.12",
     "lodash-es": "^4.17.23",
-    "nanoid": "^5.1.6",
+    "nanoid": "^5.1.7",
     "pg": "^8.20.0",
     "pg-cursor": "^2.19.0",
     "pg-hstore": "^2.3.4",
     "postgres-array": "^3.0.4",
     "reflect-metadata": "^0.2.2",
-    "sequelize": "^6.37.7",
+    "sequelize": "^6.37.8",
     "sequelize-typescript": "^2.1.6",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@simplewebauthn/server": "^13.2.3",
+    "@simplewebauthn/server": "^13.3.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.12.0",
     "@types/pg": "^8.18.0",

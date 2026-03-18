@@ -1,7 +1,7 @@
 {
   "name": "@intake24/i18n",
   "type": "module",
-  "version": "2026.0",
+  "version": "2026.0.0",
   "private": true,
   "description": "Intake24 localization",
   "author": "",
@@ -22,8 +22,8 @@
   "devDependencies": {
     "@types/node": "^24.12.0",
     "typescript": "^5.9.3",
-    "unrun": "^0.2.30",
-    "vitest": "^4.0.18",
-    "vue-i18n": "^11.2.8"
+    "unrun": "^0.2.32",
+    "vitest": "^4.1.0",
+    "vue-i18n": "^11.3.0"
   }
 }

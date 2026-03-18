@@ -6,7 +6,7 @@ export function getSplitSuggestions(description: string, splitWords: string[]): 
   const forceTokens: string[] = [];
 
   for (const item of splitWords) {
-    if (item.match(/^!\w+:\w+!$/)) {
+    if (/^!\w+:\w+!$/.test(item)) {
       forceTokens.push(
         item
           .replace(/!/g, '')

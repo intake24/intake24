@@ -68,7 +68,6 @@ function product<T>(tuples: Array<Array<T>>, values: Array<T>): Array<Array<T>> 
 
   for (const tuple of tuples) {
     for (const value of values) {
-      // eslint-disable-next-line e18e/prefer-spread-syntax
       result.push(tuple.concat(value));
     }
   }
