@@ -68,7 +68,7 @@ export default {
 
         const sessions = await queryInterface.sequelize.query(`
         SELECT id, session_data, created_at
-        FROM user_survey_sessions where created_at > now() - INTERVAL '5 DAY'
+        FROM user_survey_sessions where created_at > now() - INTERVAL '7 DAY'
         ORDER BY created_at desc
         LIMIT :limit OFFSET :offset
         `, {
@@ -142,6 +142,29 @@ export default {
 
       await queryInterface.sequelize.query(
         `UPDATE jobs SET session_id = (params->'state'->>'uxSessionId')::uuid WHERE type = 'SurveySubmission'`,
+        { transaction },
+      );
+
+      await queryInterface.createTable(
+        'ssf_cf',
+        {
+          id: {
+            type: Sequelize.UUID,
+            primaryKey: true,
+          },
+          session_path: {
+            type: Sequelize.STRING,
+            allowNull: false,
+          },
+          conversion_factor: {
+            type: Sequelize.FLOAT,
+            allowNull: false,
+          },
+          orig_portion_size: {
+            type: Sequelize.JSONB,
+            allowNull: false,
+          },
+        },
         { transaction },
       );
 
@@ -358,6 +381,24 @@ export default {
             `UPDATE survey_submission_foods as ssf SET portion_size = data.psm::jsonb
               FROM (VALUES ${values}) AS data(id, psm)
               WHERE data.id::uuid = ssf.id;`,
+            { transaction },
+          );
+
+          const insertValues = foodsToUpdate
+            .filter(f => f.conversionFactor !== 1)
+            .map((f) => {
+              const id = `${queryInterface.sequelize.escape(f.dbFood.id)}::uuid`;
+              const path = queryInterface.sequelize.escape(f.sessionFood.path);
+              const conversionFactor = f.conversionFactor;
+              const psm = `${queryInterface.sequelize.escape(JSON.stringify(f.origPsm))}::jsonb`;
+              return `(${id}, ${path}, ${conversionFactor}, ${psm})`;
+            });
+
+          if (!insertValues.length)
+            continue;
+
+          await queryInterface.sequelize.query(
+            `INSERT INTO ssf_cf (id, session_path, conversion_factor, orig_portion_size) VALUES ${insertValues.join(',')};`,
             { transaction },
           );
         }
