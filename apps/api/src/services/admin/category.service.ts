@@ -21,6 +21,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     return [
       `category-parent-cache:${categoryId}`,
       `category-parent-categories:${categoryId}`,
+      `category-parent-cache:${categoryId}`,
     ];
   }
 

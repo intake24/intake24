@@ -78,10 +78,22 @@ function categoryContentsService({
       }),
     ]);
 
+    const foodIds = foods.map(({ id }) => id);
+    const catIds = categories.map(({ id }) => id);
+    const [foodCache, categoryCache] = await Promise.all([
+      cachedParentCategoriesService.getFoodsCache(foodIds),
+      cachedParentCategoriesService.getCategoriesCache(catIds),
+    ]);
+    const isRecipe = false;
+
     return {
       header,
-      foods: filterUndefined(foods).sort((a, b) => a.name.localeCompare(b.name)),
-      subcategories: filterUndefined(categories).sort((a, b) => a.name.localeCompare(b.name)),
+      foods: filterUndefined(foods)
+        .filter(({ id }) => acceptForQuery(isRecipe, foodCache[id]?.attributes.useInRecipes))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+      subcategories: filterUndefined(categories)
+        .filter(({ id }) => acceptForQuery(isRecipe, categoryCache[id]?.attributes.useInRecipes))
+        .sort((a, b) => a.name.localeCompare(b.name)),
     };
   };
 

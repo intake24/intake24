@@ -9,6 +9,8 @@ export function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
       return !recipe;
     case useInRecipeTypes.USE_AS_RECIPE_INGREDIENT:
       return recipe;
+    case useInRecipeTypes.HIDE_ANYWHERE:
+      return false;
     default:
       return true;
   }
