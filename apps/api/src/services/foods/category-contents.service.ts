@@ -71,7 +71,7 @@ function categoryContentsService({
     return { id: category.id, code, name: category.name, icon: category.icon ?? undefined };
   };
 
-  const getCategoryContents = async (localeCode: string, code: string): Promise<CategoryContents> => {
+  const getCategoryContents = async (localeCode: string, code: string, recipe = false): Promise<CategoryContents> => {
     const [header, categories, foods] = await Promise.all([
       getCategoryHeader(localeCode, code),
       Category.findAll({
@@ -100,10 +100,21 @@ function categoryContentsService({
       }),
     ]);
 
+    const foodIds = foods.map(({ id }) => id);
+    const catIds = categories.map(({ id }) => id);
+    const [foodCache, categoryCache] = await Promise.all([
+      cachedParentCategoriesService.getFoodsCache(foodIds),
+      cachedParentCategoriesService.getCategoriesCache(catIds),
+    ]);
+
     return {
       header,
-      foods: filterUndefined(foods).sort((a, b) => a.name.localeCompare(b.name)),
-      subcategories: filterUndefined(categories).sort((a, b) => a.name.localeCompare(b.name)),
+      foods: filterUndefined(foods)
+        .filter(({ id }) => acceptForQuery(recipe, foodCache[id]?.attributes.useInRecipes))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+      subcategories: filterUndefined(categories)
+        .filter(({ id }) => acceptForQuery(recipe, categoryCache[id]?.attributes.useInRecipes))
+        .sort((a, b) => a.name.localeCompare(b.name)),
     };
   };
 

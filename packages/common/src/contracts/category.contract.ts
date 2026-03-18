@@ -1,4 +1,5 @@
 import { initContract } from '@ts-rest/core';
+import { z } from 'zod';
 
 import {
   categoryContents,
@@ -52,6 +53,9 @@ export const category = initContract().router({
   contents: {
     method: 'GET',
     path: '/locales/:localeId/category-contents/:code',
+    query: z.object({
+      recipe: z.coerce.boolean().optional(),
+    }),
     responses: {
       200: categoryContents,
     },

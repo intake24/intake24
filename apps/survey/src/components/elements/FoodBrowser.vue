@@ -234,6 +234,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  recipe: {
+    type: Boolean,
+    default: false,
+  },
   prompt: {
     type: Object as PropType<Prompt & FoodBrowser & { hints: FoodSearchHint[] }>,
     required: true,
@@ -397,7 +401,7 @@ async function browseCategory(categoryCode: string | undefined, makeHistoryEntry
   tab.value = 'browse';
 
   try {
-    const contents = await categoriesService.contents(props.localeId, categoryCode);
+    const contents = await categoriesService.contents(props.localeId, categoryCode, props.recipe);
 
     requestInProgress.value = false;
     requestFailed.value = false;

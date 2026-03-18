@@ -9,7 +9,7 @@ export const pkgV2InheritableAttributes = z.object({
   readyMealOption: z.boolean().optional(),
   sameAsBeforeOption: z.boolean().optional(),
   reasonableAmount: z.number().optional(),
-  useInRecipes: (z.literal(0).or(z.literal(1)).or(z.literal(2))).optional(),
+  useInRecipes: z.literal([0, 1, 2, 3]).optional(),
 });
 
 export const pkgV2PortionSizeMethodTypes = [
