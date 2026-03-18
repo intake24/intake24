@@ -18,12 +18,13 @@ export function category() {
 
       return { status: 200, body: foods };
     },
-    contents: async ({ params, req }) => {
+    contents: async ({ params, query, req }) => {
       const { localeId, code } = params;
 
       const categoryContents = await req.scope.cradle.categoryContentsService.getCategoryContents(
         localeId,
         code,
+        query.recipe ?? false,
       );
 
       categoryContents.foods = await req.scope.cradle.foodThumbnailImageService.appendThumbnailUrls(categoryContents.foods);
