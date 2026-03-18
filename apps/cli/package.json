@@ -35,7 +35,7 @@
     "fs-extra": "^11.3.4",
     "ky": "^1.14.3",
     "lodash-es": "^4.17.23",
-    "nanoid": "^5.1.6",
+    "nanoid": "^5.1.7",
     "pg": "^8.20.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
@@ -54,8 +54,8 @@
     "@types/node": "^24.12.0",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
-    "@typescript/native-preview": "7.0.0-dev.20260216.1",
-    "tsdown": "^0.21.0",
+    "@typescript/native-preview": "7.0.0-dev.20260318.1",
+    "tsdown": "^0.21.4",
     "typescript": "^5.9.3"
   }
 }
