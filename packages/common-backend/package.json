@@ -1,7 +1,7 @@
 {
   "name": "@intake24/common-backend",
   "type": "module",
-  "version": "2026.0.0",
+  "version": "2026.1.0",
   "private": true,
   "description": "Intake24 common code for backend apps",
   "author": "",
