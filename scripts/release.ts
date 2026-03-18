@@ -3,7 +3,6 @@ import type { Options } from 'execa';
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import * as calver from 'calver';
 import { execa } from 'execa';
 import colors from 'picocolors';
 import prompts from 'prompts';
@@ -30,27 +29,25 @@ function updatePackageVersion(path: string, version: string) {
 }
 
 async function main() {
-  const targetVersions = (['auto'] as calver.CalVerCycle[]).reduce<
-    { title: string; value: string }[]
-  >((acc, item) => {
-    try {
-      const value = calver.cycle(pkg.version, { cycle: item });
+  const versionCheck = /\d{4}\.\d+\.\d+/.test(pkg.version);
+  if (!versionCheck)
+    throw new Error(`Version ${pkg.version} does not match expected format`);
 
-      acc.push({ title: `${item} | ${value}`, value });
-    }
-    catch {
-      //
-    }
+  const [year, release] = pkg.version.split('.').map(Number);
 
-    return acc;
-  }, []);
+  const versions = [
+    { title: `release | ${year}.${release + 1}.0`, value: `${year}.${release + 1}.0` },
+  ];
+
+  if (new Date().getFullYear() > year)
+    versions.push({ title: `year release | ${year + 1}.1.0`, value: `${year + 1}.1.0` });
 
   // Select release type
   const { version: targetVersion } = await prompts({
     type: 'select',
     name: 'version',
     message: `Select release type for ${colors.bold(pkg.name)}`,
-    choices: targetVersions,
+    choices: versions,
     initial: 0,
   });
 

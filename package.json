@@ -34,7 +34,7 @@
     "cli": "pnpm --filter @intake24/cli cli",
     "cli:dev": "pnpm --filter @intake24/cli dev",
     "i18n:sync": "pnpm --filter @intake24/i18n i18n:sync",
-    "changelog": "conventional-changelog -p angular",
+    "changelog": "conventional-changelog -p angular --stdout",
     "release": "pnpm unrun scripts/release.ts",
     "lint": "eslint . --fix",
     "test": "pnpm test:unit && test:integration",
