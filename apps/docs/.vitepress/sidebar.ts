@@ -407,6 +407,10 @@ export const sidebar = {
           link: '/cli/init-db-system',
         },
         {
+          text: 'Synchronize ACL',
+          link: '/cli/acl-sync',
+        },
+        {
           text: 'Download assets',
           link: '/cli/init-assets',
         },

@@ -130,11 +130,19 @@ Now you have both `foods` and `system` databases imported from snapshots.
 
 ## Migrations
 
-Since snapshots might be outdated, run the migrations to bring both databases to the latest version.
+Whether fresh system is being set up or existing system is being upgraded:
 
-Database migrations are being handled by [sequelize-cli](https://sequelize.org/docs/v6/other-topics/migrations).
+1. Database migrations
+2. Access control list (ACL) synchronization
 
-On the project root, run this single command to migrate both `foods` and `system` databases:
+need to be run to bring the databases up to date with the latest version of the source code.
+
+- Database migrations are being handled by [sequelize-cli](https://sequelize.org/docs/v6/other-topics/migrations).
+
+- ACL synchronization is being handled by [CLI command](/cli/acl-sync), which needs to be run after database migrations to update permissions and roles in the system database.
+
+On the project root, run this single command to migrate both `foods` and `system` databases
+and synchronize ACL:
 
 ```sh
 pnpm db:migrate
@@ -162,6 +170,15 @@ pnpm db:foods:migrate
 # shorthand for
 
 pnpm sequelize db:migrate --options-path sequelize/foods/options.js
+```
+
+### Synchronize ACL
+
+```sh
+pnpm acl:sync
+
+# shorthand for
+pnpm --filter @intake24/cli cli acl:sync
 ```
 
 ## Initialize system database
