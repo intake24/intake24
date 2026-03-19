@@ -19,6 +19,7 @@ import { Category, CategoryAttribute, CategoryPortionSizeMethod } from '@intake2
 function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'kyselyDb'>) {
   function getCategoryCacheKeys(categoryId: string): CacheKey[] {
     return [
+      `category-parent-cache:${categoryId}`,
       `category-parent-categories:${categoryId}`,
     ];
   }
