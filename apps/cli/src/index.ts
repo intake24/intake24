@@ -22,6 +22,7 @@ import {
   packageExportV4,
   packageImportV4,
   searchTest,
+  synchronizeAccessControlList,
 } from './commands';
 import {
   conflictResolutionOptions,
@@ -33,6 +34,13 @@ async function run() {
 
   program.name('Intake24 CLI');
   program.version(pkg.version);
+
+  program
+    .command('acl:sync')
+    .description('Synchronize access control list (ACL) between source and database')
+    .action(async () => {
+      await synchronizeAccessControlList();
+    });
 
   program
     .command('init:db:system')
