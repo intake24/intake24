@@ -62,27 +62,33 @@ export default defineConfig(({ mode }) => {
       emptyOutDir,
       outDir,
       sourcemap,
-      rollupOptions: {
+      rolldownOptions: {
         output: {
-          assetFileNames: ({ name }) => {
+          assetFileNames: ({ names }) => {
             let subDir = '';
 
-            if (name?.match(/\.(woff2|ttf)$/))
+            if (names.some(n => n.match(/\.(woff2|ttf)$/)))
               subDir = 'fonts/';
-            else if (name?.match(/\.(jpe?g|png|svg)$/))
+            else if (names.some(n => n.match(/\.(jpe?g|png|svg)$/)))
               subDir = 'imgs/';
 
             return `assets/${subDir}[name]-[hash][extname]`;
           },
-          manualChunks: (id) => {
-            if (/vuetify|echarts/.test(id))
+          manualChunks: (moduleId) => {
+            if (/vuetify|echarts|zrender/.test(moduleId))
               return 'ui';
-            if (/strichjs|quagga/.test(id))
+            if (/strichjs|quagga/.test(moduleId))
               return 'barcode';
-            if (/json-editor-vue/.test(id))
+
+            if (/json-editor-vue/.test(moduleId))
               return 'json-editor';
-            if (/tinymce/.test(id))
+            if (/tinymce/.test(moduleId))
               return 'tinymce';
+
+            if (/node_modules/.test(moduleId))
+              return 'vendor';
+
+            return null;
           },
         },
       },
