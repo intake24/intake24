@@ -21,7 +21,7 @@
             item-title="text"
             item-value="value"
             :items="modeOptions"
-            :label="$t('jobs.types.SurveyNutrientsRecalculation.mode')"
+            :label="$t('jobs.types.SurveyNutrientsRecalculation.mode.label')"
             name="mode"
             variant="outlined"
           >
@@ -44,9 +44,9 @@
           >
             <template #label>
               <div>
-                <div>{{ $t('jobs.types.SurveyNutrientsRecalculation.syncFields') }}</div>
+                <div>{{ $t('jobs.types.SurveyNutrientsRecalculation.syncFields.label') }}</div>
                 <div class="text-caption text-medium-emphasis">
-                  {{ $t('jobs.types.SurveyNutrientsRecalculation.syncFieldsDescription') }}
+                  {{ $t('jobs.types.SurveyNutrientsRecalculation.syncFields.description') }}
                 </div>
               </div>
             </template>
@@ -60,14 +60,14 @@
         color="warning"
         variant="tonal"
       >
-        <v-alert-title>{{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChangesTitle') }}</v-alert-title>
+        <v-alert-title>{{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChanges.title') }}</v-alert-title>
         <div class="text-body-2">
-          {{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChangesDescription') }}
+          {{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChanges.description') }}
           <ul class="mt-2 list-disc pl-4">
-            <li>{{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChangesImpact.historicalData') }}</li>
-            <li>{{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChangesImpact.exportedDatasets') }}</li>
+            <li>{{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChanges.impact.historicalData') }}</li>
+            <li>{{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChanges.impact.exportedDatasets') }}</li>
           </ul>
-          {{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChangesWarning') }}
+          {{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChanges.warning') }}
         </div>
       </v-alert>
     </v-card-text>
@@ -93,18 +93,18 @@ const { i18n } = useI18n();
 const modeOptions: { value: RecalculationMode; text: string; description: string }[] = [
   {
     value: 'none',
-    text: i18n.t('jobs.types.SurveyNutrientsRecalculation.modeOptions.none'),
-    description: i18n.t('jobs.types.SurveyNutrientsRecalculation.modeOptions.noneDescription'),
+    text: i18n.t('jobs.types.SurveyNutrientsRecalculation.mode.options.none.label'),
+    description: i18n.t('jobs.types.SurveyNutrientsRecalculation.mode.options.none.description'),
   },
   {
     value: 'values-only',
-    text: i18n.t('jobs.types.SurveyNutrientsRecalculation.modeOptions.valuesOnly'),
-    description: i18n.t('jobs.types.SurveyNutrientsRecalculation.modeOptions.valuesOnlyDescription'),
+    text: i18n.t('jobs.types.SurveyNutrientsRecalculation.mode.options.valuesOnly.label'),
+    description: i18n.t('jobs.types.SurveyNutrientsRecalculation.mode.options.valuesOnly.description'),
   },
   {
     value: 'values-and-codes',
-    text: i18n.t('jobs.types.SurveyNutrientsRecalculation.modeOptions.valuesAndCodes'),
-    description: i18n.t('jobs.types.SurveyNutrientsRecalculation.modeOptions.valuesAndCodesDescription'),
+    text: i18n.t('jobs.types.SurveyNutrientsRecalculation.mode.options.valuesAndCodes.label'),
+    description: i18n.t('jobs.types.SurveyNutrientsRecalculation.mode.options.valuesAndCodes.description'),
   },
 ];
 </script>
