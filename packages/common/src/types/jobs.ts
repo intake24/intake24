@@ -123,7 +123,7 @@ export const SurveyDataExport = z.object({
 
 const baseSurveyEventNotification = z.object({
   surveyId: bigIntString,
-  userId: bigIntString,
+  userId: z.preprocess(v => (v === '' || v === null) ? undefined : v, bigIntString.optional()),
   sessionId: z.uuid(),
 });
 
@@ -157,8 +157,13 @@ export const SurveyHelpRequestNotification = z.object({
   phoneCountry: z.string().nullish(),
   message: z.string().nullish(),
 });
+export const recalculationModes = ['none', 'values-only', 'values-and-codes'] as const;
+export type RecalculationMode = (typeof recalculationModes)[number];
+
 export const SurveyNutrientsRecalculation = z.object({
   surveyId: bigIntString,
+  mode: z.enum(recalculationModes).default('values-only'),
+  syncFields: z.boolean().or(z.stringbool()).default(false),
 });
 export const SurveyRatingsExport = z.object({
   surveyId: bigIntString,
@@ -491,6 +496,8 @@ export const defaultJobsParams: JobParams = {
   },
   SurveyNutrientsRecalculation: {
     surveyId: '',
+    mode: 'values-only' as RecalculationMode,
+    syncFields: false,
   },
   SurveyRatingsExport: {
     surveyId: '',
