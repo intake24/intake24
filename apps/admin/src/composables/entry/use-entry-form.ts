@@ -71,28 +71,22 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
   };
 
   const submit = async () => {
-    let data: any;
-
     if (isEdit.value) {
-      data = await form[editMethod]<EntryState>(`${resource.api}/${entryId.value}`);
+      const data: any = await form[editMethod]<EntryState>(`${resource.api}/${entryId.value}`);
 
       const { id, name } = data;
-      useMessages().success(i18n.t('common.msg.updated', { name: name ?? id }));
-    }
-    else {
-      data = await form.post<EntryState>(`${resource.api}`);
-
-      const { id, name } = data;
-
       setEntry(data);
-      routeLeave.value = { dialog: false, to: null, confirmed: true };
-      await router.push({ name: `${resource.name}-edit`, params: { id } });
-
-      useMessages().success(i18n.t('common.msg.created', { name: name ?? id }));
+      useMessages().success(i18n.t('common.msg.updated', { name: name ?? id }));
       return;
     }
 
+    const data: any = await form.post<EntryState>(`${resource.api}`);
+    const { id, name } = data;
+
     setEntry(data);
+    routeLeave.value = { dialog: false, to: null, confirmed: true };
+    await router.push({ name: `${resource.name}-edit`, params: { id } });
+    useMessages().success(i18n.t('common.msg.created', { name: name ?? id }));
   };
 
   const clearError = (event: KeyboardEvent) => {

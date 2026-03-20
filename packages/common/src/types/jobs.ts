@@ -123,7 +123,7 @@ export const SurveyDataExport = z.object({
 
 const baseSurveyEventNotification = z.object({
   surveyId: bigIntString,
-  userId: z.preprocess(v => (v === '' || v === null) ? undefined : v, bigIntString.optional()),
+  userId: bigIntString, // TODO - Fix certain Task UIs to provide userId as string
   sessionId: z.uuid(),
 });
 
