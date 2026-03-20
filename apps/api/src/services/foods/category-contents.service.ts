@@ -7,6 +7,7 @@ import type { FoodAttributes, PaginateQuery } from '@intake24/db';
 import { Op, QueryTypes } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
+import { useInRecipeTypes } from '@intake24/common/types';
 import { Category, Food, getAllChildCategories } from '@intake24/db';
 
 import { acceptForQuery } from './common';
@@ -84,15 +85,14 @@ function categoryContentsService({
       cachedParentCategoriesService.getFoodsCache(foodIds),
       cachedParentCategoriesService.getCategoriesCache(catIds),
     ]);
-    const isRecipe = false;
 
     return {
       header,
       foods: filterUndefined(foods)
-        .filter(({ id }) => acceptForQuery(isRecipe, foodCache[id]?.attributes.useInRecipes))
+        .filter(({ id }) => (foodCache[id]?.attributes.useInRecipes ?? useInRecipeTypes.USE_AS_REGULAR_FOOD) !== useInRecipeTypes.HIDE_ANYWHERE)
         .sort((a, b) => a.name.localeCompare(b.name)),
       subcategories: filterUndefined(categories)
-        .filter(({ id }) => acceptForQuery(isRecipe, categoryCache[id]?.attributes.useInRecipes))
+        .filter(({ id }) => (categoryCache[id]?.attributes.useInRecipes ?? useInRecipeTypes.USE_AS_REGULAR_FOOD) !== useInRecipeTypes.HIDE_ANYWHERE)
         .sort((a, b) => a.name.localeCompare(b.name)),
     };
   };
