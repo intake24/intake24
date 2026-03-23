@@ -221,6 +221,7 @@ export const generalAssociatedFoodsPrompt: Prompts['general-associated-foods-pro
   genericName: {},
   hints: [],
   multiple: false,
+  skipConfirmation: false,
   autoPortionSize: null,
   ...foodBrowserDefaults,
 });

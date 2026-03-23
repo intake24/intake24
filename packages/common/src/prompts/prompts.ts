@@ -392,6 +392,7 @@ const generalAssociatedFoodsPrompt = z.object({
   genericName: localeTranslation,
   hints: foodSearchHint.array(),
   multiple: z.boolean(),
+  skipConfirmation: z.boolean(),
   autoPortionSize: autoPortionSizeParameters.nullable(),
 });
 
