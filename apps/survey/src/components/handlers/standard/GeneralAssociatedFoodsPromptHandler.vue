@@ -35,9 +35,9 @@ const props = defineProps(createHandlerProps<'general-associated-foods-prompt'>(
 
 const emit = defineEmits(['action']);
 
-function initialPromptState(allowMultiple: boolean): AssociatedFoodPrompt {
+function initialPromptState(allowMultiple: boolean, skipConfirmation: boolean): AssociatedFoodPrompt {
   return {
-    mainFoodConfirmed: undefined,
+    mainFoodConfirmed: skipConfirmation ? true : undefined,
     additionalFoodConfirmed: allowMultiple ? undefined : false,
     foods: [],
   };
@@ -49,7 +49,7 @@ const { meal } = useMealPromptUtils();
 const survey = useSurvey();
 
 function getInitialState(): PromptStates['general-associated-foods-prompt'] {
-  return initialPromptState(props.prompt.multiple);
+  return initialPromptState(props.prompt.multiple, props.prompt.skipConfirmation);
 }
 
 const { state, update, clearStoredState } = usePromptHandlerStore(props, { emit }, getInitialState);

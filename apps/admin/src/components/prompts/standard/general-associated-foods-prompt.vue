@@ -49,6 +49,12 @@
           />
           <v-switch
             hide-details="auto"
+            :label="$t('survey-schemes.prompts.general-associated-foods-prompt.skipConfirmation')"
+            :model-value="skipConfirmation"
+            @update:model-value="update('skipConfirmation', $event)"
+          />
+          <v-switch
+            hide-details="auto"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.autoPortionSize')"
             :model-value="autoPortionSize !== null"
             @update:model-value="update('autoPortionSize', $event ? { mode: 'weight', value: 0 } : null)"
@@ -118,6 +124,10 @@ const props = defineProps({
   },
   multiple: {
     type: Boolean as PropType<Prompts['general-associated-foods-prompt']['multiple']>,
+    required: true,
+  },
+  skipConfirmation: {
+    type: Boolean as PropType<Prompts['general-associated-foods-prompt']['skipConfirmation']>,
     required: true,
   },
   autoPortionSize: {
