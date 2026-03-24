@@ -307,9 +307,9 @@ export class AppMetricsService {
   }
 
   private collectSequelizeConnectionPoolStats() {
-    // These are not public in Sequelize v6 but will be in v7, remove this hack when/if upgraded to v7
-    const systemPool = (this.sequelizeDb.system!.connectionManager as any).pool;
-    const foodsPool = (this.sequelizeDb.foods!.connectionManager as any).pool;
+    // connectionManager is not public in Sequelize v6 but will be in v7, remove this cast when/if upgraded to v7
+    const systemPool = (this.sequelizeDb.system.connectionManager as any).pool;
+    const foodsPool = (this.sequelizeDb.foods.connectionManager as any).pool;
 
     this.dbConnectionPoolTotal!.set(sequelizeSystemLabels, systemPool.size);
     this.dbConnectionPoolTotal!.set(sequelizeFoodsLabels, foodsPool.size);

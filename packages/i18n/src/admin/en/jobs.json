@@ -146,6 +146,27 @@
       "alert": {
         "1": "This job will recalculate nutrient values for all survey submissions.",
         "2": "Depending on the number of submissions, this process may take a significant amount of time to complete."
+      },
+      "mode": {
+        "label": "Recalculation mode",
+        "options": {
+          "none": { "label": "None", "description": "Skip recalculation (no changes)" },
+          "valuesOnly": { "label": "Values only (Default)", "description": "Recalculate existing nutrient values using stored nutrient table codes" },
+          "valuesAndCodes": { "label": "Values and nutrient codes", "description": "Update nutrient codes to current food mappings and recalculate values" }
+        }
+      },
+      "syncFields": {
+        "label": "Sync nutrient variables and fields",
+        "description": "Add new nutrients/fields, remove dropped ones, and update all values. Without this, only existing values are updated."
+      },
+      "mappingChanges": {
+        "title": "Important: Mapping Changes",
+        "description": "This will update submitted data using new nutrient codes in the NDB. This may affect:",
+        "impact": {
+          "historicalData": "Historical data comparability",
+          "exportedDatasets": "Previously exported datasets"
+        },
+        "warning": "Consider backing up data before proceeding."
       }
     },
     "SurveyRatingsExport": {
