@@ -259,11 +259,9 @@ export default defineComponent({
       await fetchCategoryOrFood(props.id, props.entryId);
     });
 
-    onBeforeRouteUpdate(async (to, from, next) => {
+    onBeforeRouteUpdate(async (to, from) => {
       if (to.params.entryId !== from.params.entryId)
         await fetchCategoryOrFood(to.params.id.toString(), to.params.entryId.toString());
-
-      next();
     });
 
     return {

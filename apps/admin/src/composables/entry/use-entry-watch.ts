@@ -1,5 +1,5 @@
 import type { ComputedRef, Ref } from 'vue';
-import type { NavigationGuardNext, RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router';
+import type { RouteLocationNormalized } from 'vue-router';
 
 import type { RouteLeave } from '@intake24/admin/types';
 
@@ -21,27 +21,22 @@ export function useEntryWatch(originalEntry: Ref<object>, changed?: ComputedRef<
     originalEntry.value = copy(data);
   };
 
-  const beforeRouteCheck = (to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, next: NavigationGuardNext) => {
+  const beforeRouteCheck = (to: RouteLocationNormalized) => {
     if (routeLeave.value.confirmed) {
       routeLeave.value = { dialog: false, to: null, confirmed: false };
-      next();
-      return;
+      return true;
     }
 
-    if (entryChanged.value) {
+    if (entryChanged.value)
       routeLeave.value = { dialog: true, to, confirmed: false };
-      return;
-    }
-
-    next();
   };
 
-  onBeforeRouteUpdate((to, from, next) => {
-    beforeRouteCheck(to, from, next);
+  onBeforeRouteUpdate((to) => {
+    beforeRouteCheck(to);
   });
 
-  onBeforeRouteLeave((to, from, next) => {
-    beforeRouteCheck(to, from, next);
+  onBeforeRouteLeave((to) => {
+    beforeRouteCheck(to);
   });
 
   return { originalEntry, routeLeave, entryChanged, setOriginalEntry };

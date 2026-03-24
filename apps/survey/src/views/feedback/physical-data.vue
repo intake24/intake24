@@ -138,11 +138,8 @@ export interface NullablePhysicalActivityLevel extends Omit<PhysicalActivityLeve
 export default defineComponent({
   name: 'FeedbackPhysicalData',
 
-  beforeRouteEnter({ params }, from, next) {
-    if (useSurvey().parameters?.feedbackScheme?.physicalDataFields.length)
-      next();
-    else
-      next({ name: 'feedback-home', params });
+  beforeRouteEnter({ params }) {
+    return useSurvey().parameters?.feedbackScheme?.physicalDataFields.length ? true : { name: 'survey-home', params };
   },
 
   props: {

@@ -4,7 +4,7 @@ import { useAuth, useResource, useUser } from '../stores';
 import resources from './resources';
 
 export default (router: Router): void => {
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to) => {
     const { meta: { perm, public: unrestricted } = {} } = to;
 
     const auth = useAuth();
@@ -14,13 +14,11 @@ export default (router: Router): void => {
     if (unrestricted) {
       const name = user.isVerified ? 'dashboard' : 'verify';
       if (auth.loggedIn && to.name !== name) {
-        next({ name });
+        return { name };
       }
       else {
-        next();
+        return true;
       }
-
-      return;
     }
 
     // Get logged-in user information if not yet loaded
@@ -28,18 +26,12 @@ export default (router: Router): void => {
       await auth.refresh(false);
 
     // Any other page (requires to be logged in)
-    if (!auth.loggedIn) {
-      next({ name: 'login' });
-      return;
-    }
+    if (!auth.loggedIn)
+      return { name: 'login' };
 
     // Check correct permissions if any
-    if (perm && !user.can(perm)) {
-      next({ name: 'dashboard' });
-      return;
-    }
-
-    next();
+    if (perm && !user.can(perm))
+      return { name: 'dashboard' };
   });
 
   router.beforeResolve(async (to) => {

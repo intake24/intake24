@@ -15,15 +15,12 @@ export default defineComponent({
 
   components: { RecallDesktop, RecallMobile },
 
-  beforeRouteEnter({ params }, from, next) {
+  beforeRouteEnter({ params }) {
     const survey = useSurvey();
 
     survey.validateState(survey.data, survey.parameters?.session);
 
-    if (survey.recallAllowed)
-      next();
-    else
-      next({ name: 'survey-home', params });
+    return survey.recallAllowed ? true : { name: 'survey-home', params };
   },
 
   computed: {

@@ -16,20 +16,16 @@ export function useEntryFetch(props: UseStoreEntryProps) {
 
   fetch();
 
-  onBeforeRouteLeave(async (to, from, next) => {
+  onBeforeRouteLeave(async (to, from) => {
     if (from.params.id === to.params.id) {
       const fromModule = from.meta?.module.parent ?? from.meta?.module.current;
       const toModule = to.meta?.module.parent ?? to.meta?.module.current;
-      if (fromModule === toModule) {
-        next();
-        return;
-      }
+      if (fromModule === toModule)
+        return true;
     }
 
     if (typeof to.params.id === 'string')
       await fetch(to.params.id, to.meta?.module.parent ?? to.meta?.module.current);
-
-    next();
   });
 
   return { fetch };

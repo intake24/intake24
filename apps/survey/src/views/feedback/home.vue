@@ -149,11 +149,8 @@ export default defineComponent({
     SurveyRating,
   },
 
-  beforeRouteEnter({ params }, from, next) {
-    if (useSurvey().feedbackAllowed)
-      next();
-    else
-      next({ name: 'survey-home', params });
+  beforeRouteEnter({ params }) {
+    return useSurvey().feedbackAllowed ? true : { name: 'survey-home', params };
   },
 
   props: {

@@ -199,11 +199,9 @@ async function findActiveInTree(entryId: string, type: string) {
   await findActiveInChildren(items.value);
 }
 
-onBeforeRouteUpdate((to, from, next) => {
+onBeforeRouteUpdate((to) => {
   if (to.params.entryId !== activatedEntryId.value)
     findActiveInTree(to.params.entryId?.toString(), to.meta.module.current);
-
-  next();
 });
 
 onMounted(async () => {
