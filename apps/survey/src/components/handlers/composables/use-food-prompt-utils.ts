@@ -169,7 +169,7 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
       food.type === 'encoded-food'
       && food.portionSize
       && 'quantity' in food.portionSize
-      && (food.portionSize.quantity ?? 0) > 1,
+      && (food.portionSize.quantity ?? 0) > 0,
     ) as EncodedFood | undefined;
 
     if (!food?.portionSize)
