@@ -16,6 +16,21 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: Re
   const { i18n } = useI18n();
   const cc = useCookieConsent();
 
+  const browserMatchesUiLocale = (uiLang: string) => {
+    const primaryLang = (id: string) => id.toLowerCase().split('-')[0];
+    return navigator.languages.some(bl => bl.toLowerCase() === uiLang.toLowerCase() || primaryLang(bl) === primaryLang(uiLang.toLowerCase()));
+  };
+
+  const updateGoogleNoTranslate = (uiLang: string) => {
+    if (browserMatchesUiLocale(uiLang)) {
+      if (!document.head.querySelector('meta[name="google"]'))
+        document.head.append(Object.assign(document.createElement('meta'), { name: 'google', content: 'notranslate' }));
+    }
+    else {
+      document.head.querySelector('meta[name="google"]')?.remove();
+    }
+  };
+
   async function loadCookieConsentLang(lang: string) {
     const languages = i18n.availableLocales;
     const { translations } = cc.getConfig('language');
@@ -60,6 +75,7 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: Re
     vI18n.current.value = languageId;
 
     document.querySelector('html')?.setAttribute('lang', languageId);
+    updateGoogleNoTranslate(languageId);
     http.axios.defaults.headers.common['Accept-Language'] = languageId;
   };
 
