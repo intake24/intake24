@@ -27,6 +27,10 @@ export const sidebar = {
           link: '/guide/integrations',
         },
         {
+          text: 'Internationalization',
+          link: '/guide/i18n',
+        },
+        {
           text: 'Researcher guides',
           link: links.researcherGuides,
           target: '_blank',
@@ -34,12 +38,16 @@ export const sidebar = {
       ],
     },
     {
-      text: 'Guide',
+      text: 'Dev Guide',
       collapsed: false,
       items: [
         {
           text: 'Get started',
           link: '/guide/get-started',
+        },
+        {
+          text: 'Update',
+          link: '/guide/update',
         },
         {
           text: 'Development using Docker',
