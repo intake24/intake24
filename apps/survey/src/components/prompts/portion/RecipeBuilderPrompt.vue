@@ -97,11 +97,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
 import type {
   MissingFoodRecipeBuilderItemState,
-  PromptStates,
   RecipeBuilderStepState,
   SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
@@ -124,20 +121,16 @@ import { useI18n } from '@intake24/ui';
 
 import { BaseLayout } from '../layouts';
 import { Next } from '../partials';
-import { createBasePromptProps } from '../prompt-props';
+import { createFoodPromptProps } from '../prompt-props';
 
 const props = defineProps({
-  ...createBasePromptProps<'recipe-builder-prompt', RecipeBuilder>(),
+  ...createFoodPromptProps<'recipe-builder-prompt', RecipeBuilder>(),
   localeId: {
     type: String,
     required: true,
   },
   surveySlug: {
     type: String,
-  },
-  modelValue: {
-    type: Object as PropType<PromptStates['recipe-builder-prompt']>,
-    required: true,
   },
 });
 

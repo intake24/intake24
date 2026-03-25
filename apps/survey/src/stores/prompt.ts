@@ -29,7 +29,7 @@ export function clearPromptStores(): void {
   promptStores.clear();
 }
 
-export function getOrCreatePromptStateStore<T extends object>(
+export function getOrCreatePromptStateStore<T>(
   promptType: ComponentType,
 ): StoreDefinition {
   let storeDef = promptStores.get(promptType);

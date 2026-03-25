@@ -6,7 +6,7 @@
           {{ promptI18n.split }}
         </v-card-title>
         <v-card-text class="d-flex flex-column align-start gr-2">
-          <v-chip v-for="(suggestion) in suggestions" :key="suggestion" class="px-4" color="info" variant="flat">
+          <v-chip v-for="(suggestion) in modelValue" :key="suggestion" class="px-4" color="info" variant="flat">
             <v-icon class="mr-2" icon="$food" />
             {{ suggestion }}
           </v-chip>
@@ -31,8 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
 import type { FreeTextFood } from '@intake24/common/surveys';
 
 import { computed } from 'vue';
@@ -40,19 +38,9 @@ import { computed } from 'vue';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import { CardLayout } from '../layouts';
-import { createBasePromptProps } from '../prompt-props';
+import { createFoodPromptProps } from '../prompt-props';
 
-const props = defineProps({
-  ...createBasePromptProps<'split-food-prompt', FreeTextFood>(),
-  food: {
-    type: Object as PropType<FreeTextFood>,
-    required: true,
-  },
-  suggestions: {
-    type: Array as PropType<string[]>,
-    required: true,
-  },
-});
+const props = defineProps(createFoodPromptProps<'split-food-prompt', FreeTextFood>());
 
 const emit = defineEmits(['action', 'update:modelValue']);
 

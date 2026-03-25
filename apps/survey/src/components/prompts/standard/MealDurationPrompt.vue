@@ -44,10 +44,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
-import type { MealState } from '@intake24/common/surveys';
-
 import { computed, onMounted } from 'vue';
 
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -55,15 +51,9 @@ import { useI18n } from '@intake24/ui';
 
 import { CardLayout } from '../layouts';
 import { Next } from '../partials';
-import { createBasePromptProps } from '../prompt-props';
+import { createMealPromptProps } from '../prompt-props';
 
-const props = defineProps({
-  ...createBasePromptProps<'meal-duration-prompt'>(),
-  meal: {
-    type: Object as PropType<MealState>,
-    required: true,
-  },
-});
+const props = defineProps(createMealPromptProps<'meal-duration-prompt'>());
 
 const emit = defineEmits(['action', 'update:modelValue']);
 

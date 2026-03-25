@@ -56,11 +56,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
-import type { PromptStates } from '@intake24/common/prompts';
-import type { MealState } from '@intake24/common/surveys';
-
 import { computed } from 'vue';
 
 import { useMealUtils, usePromptUtils } from '@intake24/survey/composables';
@@ -68,19 +63,9 @@ import { ConfirmDialog } from '@intake24/ui';
 
 import { CardLayout } from '../layouts';
 import { EditableFoodList, Next } from '../partials';
-import { createBasePromptProps } from '../prompt-props';
+import { createMealPromptProps } from '../prompt-props';
 
-const props = defineProps({
-  ...createBasePromptProps<'edit-meal-prompt'>(),
-  meal: {
-    type: Object as PropType<MealState>,
-    required: true,
-  },
-  modelValue: {
-    type: Array as PropType<PromptStates['edit-meal-prompt']>,
-    required: true,
-  },
-});
+const props = defineProps(createMealPromptProps<'edit-meal-prompt'>());
 
 const emit = defineEmits(['action', 'update:modelValue']);
 

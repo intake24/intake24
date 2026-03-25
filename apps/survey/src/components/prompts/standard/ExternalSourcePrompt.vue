@@ -18,8 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
 import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/surveys';
 
@@ -29,22 +27,12 @@ import { usePromptUtils } from '@intake24/survey/composables';
 
 import { BaseLayout } from '../layouts';
 import { Next } from '../partials';
-import { createBasePromptProps } from '../prompt-props';
+import { createFoodPromptProps } from '../prompt-props';
 import externalSources from './external-sources';
 
 defineOptions({ components: { ...externalSources } });
 
-const props = defineProps({
-  ...createBasePromptProps<'external-source-prompt', FoodState>(),
-  food: {
-    type: Object as PropType<FoodState>,
-    required: true,
-  },
-  modelValue: {
-    type: Object as PropType<PromptStates['external-source-prompt']>,
-    required: true,
-  },
-});
+const props = defineProps(createFoodPromptProps<'external-source-prompt', FoodState>());
 
 const emit = defineEmits(['action', 'update:modelValue']);
 

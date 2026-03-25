@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type { FoodState, MealState } from '@intake24/common/surveys';
+import type { FoodState } from '@intake24/common/surveys';
 
 import { computed, ref } from 'vue';
 
@@ -38,7 +38,7 @@ import { usePromptUtils } from '@intake24/survey/composables';
 
 import { BaseLayout, CardLayout, PanelLayout } from '../../layouts';
 import { Next } from '../../partials';
-import { createBasePromptProps } from '../../prompt-props';
+import { createMealPromptProps } from '../../prompt-props';
 import { foodSelectionNoneUuid } from './food-selection';
 
 defineOptions({
@@ -47,15 +47,7 @@ defineOptions({
 });
 
 const props = defineProps({
-  ...createBasePromptProps<'food-selection-prompt'>(),
-  modelValue: {
-    type: Array as PropType<string[]>,
-    default: () => [] as string[],
-  },
-  meal: {
-    type: Object as PropType<MealState>,
-    required: true,
-  },
+  ...createMealPromptProps<'food-selection-prompt'>(),
   filteredFoods: {
     type: Array as PropType<FoodState[]>,
     required: true,
@@ -64,10 +56,7 @@ const props = defineProps({
 
 const emit = defineEmits(['action', 'update:modelValue']);
 
-const { action, getFoodName, customPromptLayout } = usePromptUtils(
-  props,
-  { emit },
-);
+const { action, getFoodName, customPromptLayout } = usePromptUtils(props, { emit });
 
 const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
 const isValid = computed(() => props.modelValue?.length > 0);

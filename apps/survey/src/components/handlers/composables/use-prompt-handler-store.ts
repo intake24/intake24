@@ -68,7 +68,7 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
   };
 
   const commitPortionSize = () => {
-    if (!('portionSize' in state.value))
+    if (!state.value || typeof state.value !== 'object' || !('portionSize' in state.value))
       throw new Error('This prompt does not support portion size method');
 
     const { portionSize } = state.value;

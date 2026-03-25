@@ -20,11 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
-import type { PromptStates } from '@intake24/common/prompts';
-import type { MealState } from '@intake24/common/surveys';
-
 import { computed } from 'vue';
 
 import { YesNoToggle } from '@intake24/survey/components/elements';
@@ -32,19 +27,9 @@ import { usePromptUtils } from '@intake24/survey/composables';
 
 import { CardLayout } from '../layouts';
 import { Next } from '../partials';
-import { createBasePromptProps } from '../prompt-props';
+import { createMealPromptProps } from '../prompt-props';
 
-const props = defineProps({
-  ...createBasePromptProps<'ready-meal-prompt'>(),
-  meal: {
-    type: Object as PropType<MealState>,
-    required: true,
-  },
-  modelValue: {
-    type: Array as PropType<PromptStates['ready-meal-prompt']>,
-    required: true,
-  },
-});
+const props = defineProps(createMealPromptProps<'ready-meal-prompt'>());
 
 const emit = defineEmits(['action', 'update:modelValue']);
 

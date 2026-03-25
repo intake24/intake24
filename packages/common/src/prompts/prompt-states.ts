@@ -8,6 +8,7 @@ import type {
   RequiredLocaleTranslation,
 } from '../types';
 import type { FoodHeader, UserFoodData } from '../types/http';
+import type { Time } from '../util';
 import type { AddonFood } from './prompts';
 
 export type AssociatedFoodPromptItem = {
@@ -173,6 +174,10 @@ export type PromptStates = {
     type?: 'selected' | 'missing';
     data?: object;
   };
+  'food-search-prompt': string | null;
+  'food-selection-prompt': string[];
+  'meal-duration-prompt': number;
+  'meal-time-prompt': Time;
   'ready-meal-prompt': { id: string; name: string; value: boolean | undefined }[];
   'sleep-schedule-prompt': {
     panel: number;
@@ -181,6 +186,7 @@ export type PromptStates = {
       sleep: string;
     };
   };
+  'split-food-prompt': string[];
 };
 
 export type PromptState = PromptStates[keyof PromptStates];

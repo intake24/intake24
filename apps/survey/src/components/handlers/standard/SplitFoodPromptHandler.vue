@@ -1,6 +1,6 @@
 <template>
   <split-food-prompt
-    v-bind="{ food, meal, prompt, section, suggestions: splits.suggestions }"
+    v-bind="{ food, meal, prompt, section, modelValue: splits.suggestions }"
     @action="action"
   />
 </template>

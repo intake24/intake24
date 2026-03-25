@@ -13,8 +13,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
 import type { FoodState } from '@intake24/common/surveys';
 import type { RecipeFood } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
@@ -26,20 +24,16 @@ import { usePromptUtils } from '@intake24/survey/composables';
 import { foodsService } from '@intake24/survey/services';
 
 import { CardLayout } from '../layouts';
-import { createBasePromptProps } from '../prompt-props';
+import { createFoodPromptProps } from '../prompt-props';
 
 const props = defineProps({
-  ...createBasePromptProps<'food-search-prompt', FoodState>(),
+  ...createFoodPromptProps<'food-search-prompt', FoodState>(),
   localeId: {
     type: String,
     required: true,
   },
   surveySlug: {
     type: String,
-  },
-  modelValue: {
-    type: String as PropType<string | null>,
-    required: true,
   },
 });
 

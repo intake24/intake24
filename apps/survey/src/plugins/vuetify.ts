@@ -13,6 +13,9 @@ export default createVuetify({
     PromptActions: VCardActions,
   },
   defaults: {
+    global: {
+      hideDetails: 'auto',
+    },
     PromptActions: {
       class: ['d-flex', 'flex-row', 'align-stretch', 'flex-wrap', 'ga-3'],
       VBtn: {

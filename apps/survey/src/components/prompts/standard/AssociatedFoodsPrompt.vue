@@ -175,12 +175,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type {
-  AssociatedFoodPrompt,
-  AssociatedFoodPromptItem,
-  PromptStates,
-} from '@intake24/common/prompts';
-import type { EncodedFood } from '@intake24/common/surveys';
+import type { AssociatedFoodPrompt, AssociatedFoodPromptItem } from '@intake24/common/prompts';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 
 import { computed, ref, watch } from 'vue';
@@ -193,14 +188,10 @@ import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { BaseLayout } from '../layouts';
 import { Next } from '../partials';
-import { createBasePromptProps } from '../prompt-props';
+import { createFoodPromptProps } from '../prompt-props';
 
 const props = defineProps({
-  ...createBasePromptProps<'associated-foods-prompt'>(),
-  food: {
-    type: Object as PropType<EncodedFood>,
-    required: true,
-  },
+  ...createFoodPromptProps<'associated-foods-prompt'>(),
   prompts: {
     type: Array as PropType<Array<UserAssociatedFoodPrompt>>,
     required: true,
@@ -211,10 +202,6 @@ const props = defineProps({
   },
   surveySlug: {
     type: String,
-  },
-  modelValue: {
-    type: Object as PropType<PromptStates['associated-foods-prompt']>,
-    required: true,
   },
 });
 
