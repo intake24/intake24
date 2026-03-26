@@ -94,12 +94,14 @@
     "description": "",
     "yes": "Yes, I had some",
     "yesAnother": "Yes, I had another",
-    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
     "no": "No, I did not",
     "moreFoodsQuestion": "Did you have any other foods from this category?",
-    "databaseLookupTitle": "What was it?",
-    "databaseLookupWithExisting": "If not, what was it?",
-    "existingFoodsTitle": "Was it something you already entered?",
+    "databaseLookup": "What was it?",
+    "existingFoods": {
+      "title": "Was it something you already entered?",
+      "hint": "Choose \"Yes, I had some\" if you have already entered it.",
+      "select": "Select what it was."
+    },
     "select": {
       "different": "Change",
       "remove": "Remove"
@@ -133,12 +135,14 @@
     "description": "",
     "yes": "Yes, I had some",
     "yesAnother": "Yes, I had another",
-    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
     "no": "No, I did not",
     "moreFoodsQuestion": "Did you have any other foods from this category?",
-    "databaseLookupTitle": "What was it?",
-    "databaseLookupWithExisting": "If not, what was it?",
-    "existingFoodsTitle": "Was it something you already entered?",
+    "databaseLookup": "What was it?",
+    "existingFoods": {
+      "title": "Was it something you already entered?",
+      "hint": "Choose \"Yes, I had some\" if you have already entered it.",
+      "select": "Select what it was."
+    },
     "select": {
       "different": "Change",
       "remove": "Remove"

@@ -94,12 +94,14 @@
     "description": "",
     "yes": "Inde, Ndinadya",
     "yesAnother": "Inde, Ndinadya zina",
-    "existingFoodHint": "Sankhani \"Inde, Ndinadya\" ngati munane kale.",
     "no": "Ayi, sindinadye",
     "moreFoodsQuestion": "Munadya zakudya china mugulu ili?",
-    "databaseLookupTitle": "Chinali chakudya chanji?",
-    "databaseLookupWithExisting": "Ngati sichoncho, chinali chakudya chanji?",
-    "existingFoodsTitle": "Ndi chakudya choti munalemba kale?",
+    "databaseLookup": "Chinali chakudya chanji?",
+    "existingFoods": {
+      "title": "Ndi chakudya choti munalemba kale?",
+      "hint": "Sankhani \"Inde, Ndinadya\" ngati munane kale.",
+      "select": "Select what it was."
+    },
     "select": {
       "different": "Sinthani",
       "remove": "Chotsani"
@@ -133,12 +135,14 @@
     "description": "",
     "yes": "Inde, Ndinadya",
     "yesAnother": "Inde, Ndinadya zina",
-    "existingFoodHint": "Sankhani \"Inde, Ndinadya\" ngati munane kale..",
     "no": "Ayi, sindinadye",
     "moreFoodsQuestion": "Munadya zakudya china mugulu ili?",
-    "databaseLookupTitle": "Chinali chakudya chanji?",
-    "databaseLookupWithExisting": "Ngati sichoncho, chinali chakudya chanji?",
-    "existingFoodsTitle": "Ndi chakudya choti munalemba kale?",
+    "databaseLookup": "Chinali chakudya chanji?",
+    "existingFoods": {
+      "title": "Ndi chakudya choti munalemba kale?",
+      "hint": "Sankhani \"Inde, Ndinadya\" ngati munane kale.",
+      "select": "Select what it was."
+    },
     "select": {
       "different": "Sinthani",
       "remove": "Chotsani"
