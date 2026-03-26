@@ -21,6 +21,7 @@ export type AssociatedFoodPromptItem = {
 export type AssociatedFoodPrompt = {
   mainFoodConfirmed?: boolean;
   additionalFoodConfirmed?: boolean;
+  existing?: boolean;
   foods: AssociatedFoodPromptItem[];
 };
 
