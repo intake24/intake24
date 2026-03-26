@@ -94,12 +94,13 @@
     "description": "",
     "yes": "是的，我有",
     "yesAnother": "是的，我还有一个",
-    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
     "no": "不是的，我没有",
     "moreFoodsQuestion": "你还有食物从这个类别吗?",
-    "databaseLookupTitle": "是什么?",
-    "databaseLookupWithExisting": "如果不是，那是什么?",
-    "existingFoodsTitle": "是你已经输入的东西吗?",
+    "databaseLookup": "是什么?",
+    "existingFoods": {
+      "title": "是你已经输入的东西吗?",
+      "hint": "Choose \"Yes, I had some\" if you have already entered it."
+    },
     "select": {
       "different": "选择另一种食物",
       "remove": "去除"
@@ -133,12 +134,13 @@
     "description": "",
     "yes": "Yes, I had some",
     "yesAnother": "Yes, I had another",
-    "existingFoodHint": "Choose \"Yes, I had some\" if you have already entered it.",
     "no": "No, I did not",
     "moreFoodsQuestion": "Did you have any other foods from this category?",
-    "databaseLookupTitle": "What was it?",
-    "databaseLookupWithExisting": "If not, what was it?",
-    "existingFoodsTitle": "Was it something you already entered?",
+    "databaseLookup": "What was it?",
+    "existingFoods": {
+      "title": "是你已经输入的东西吗?",
+      "hint": "Choose \"Yes, I had some\" if you have already entered it."
+    },
     "select": {
       "different": "Change",
       "remove": "Remove"

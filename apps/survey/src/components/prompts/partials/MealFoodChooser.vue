@@ -1,64 +1,48 @@
 <template>
-  <v-list-item v-for="food in filteredFoods" :key="food.id" @click="foodSelected(food)">
-    <template #prepend>
-      <v-icon>$food</v-icon>
-    </template>
-    <v-list-item-title>{{ getFoodDescription(food) }} </v-list-item-title>
-  </v-list-item>
+  <div class="d-flex flex-column ga-2">
+    <v-card
+      v-for="food in foods"
+      :key="food.id"
+      class="pa-3 text"
+      color="primary"
+      variant="tonal"
+      @click="foodSelected(food)"
+    >
+      <div class="text-black opacity-90 text-body-2 font-weight-medium">
+        <v-icon icon="$food" start />
+        {{ getFoodDescription(food) }}
+      </div>
+    </v-card>
+  </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type { FoodState } from '@intake24/common/surveys';
+import type { FoodState, MealState } from '@intake24/common/surveys';
 
-import { defineComponent, ref } from 'vue';
+import { computed } from 'vue';
 
 import { getFoodDescription } from '@intake24/common/surveys';
-import { useSurvey } from '@intake24/survey/stores';
-import { findMeal } from '@intake24/survey/util';
 
-export default defineComponent({
-  name: 'MealFoodChooser',
-
-  props: {
-    mealId: {
-      type: String,
-      required: true,
-    },
-    filter: {
-      type: Function as PropType<(foodId: string) => boolean>,
-      required: true,
-    },
+const props = defineProps({
+  meal: {
+    type: Object as PropType<MealState>,
+    required: true,
   },
-
-  emits: {
-    selected: (_foodId: string) => true,
-  },
-
-  setup(props) {
-    const store = useSurvey();
-    const meal = findMeal(store.currentState.meals, props.mealId);
-
-    const foods = ref<FoodState[]>(meal.foods);
-
-    return { foods };
-  },
-
-  computed: {
-    filteredFoods(): FoodState[] {
-      return this.foods.filter(food => this.filter(food.id));
-    },
-  },
-
-  methods: {
-    getFoodDescription,
-
-    foodSelected(food: FoodState): void {
-      this.$emit('selected', food.id);
-    },
+  filter: {
+    type: Function as PropType<(food: FoodState) => boolean>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['selected']);
+
+const foods = computed(() => props.meal.foods.filter(props.filter));
+
+function foodSelected(food: FoodState): void {
+  emit('selected', food.id);
+};
 </script>
 
 <style lang="scss" scoped></style>

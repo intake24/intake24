@@ -94,12 +94,13 @@
     "description": "",
     "yes": "Oui",
     "yesAnother": "Oui, j'en ai consommé un autre.",
-    "existingFoodHint": "Choisissez 'oui' si vous l'avez déjà saisi.",
     "no": "Non.",
     "moreFoodsQuestion": "Est-ce que vous avez consommé un autre aliment de cette catégorie ?",
-    "databaseLookupTitle": "De quoi s'agissait-il ?",
-    "databaseLookupWithExisting": "Sinon, de quoi s'agissait-il ?",
-    "existingFoodsTitle": "S'agissait-il de quelque chose que vous aviez déjà renseigné ?",
+    "databaseLookup": "De quoi s'agissait-il ?",
+    "existingFoods": {
+      "title": "S'agissait-il de quelque chose que vous aviez déjà renseigné ?",
+      "hint": "Choisissez 'oui' si vous l'avez déjà saisi."
+    },
     "select": {
       "different": "Modifier",
       "remove": "Supprimer"
@@ -133,12 +134,13 @@
     "description": "",
     "yes": "Oui",
     "yesAnother": "Oui, j'en ai consommé un autre.",
-    "existingFoodHint": "Choisissez 'oui' si vous l'avez déjà saisi.",
     "no": "Non",
     "moreFoodsQuestion": "Est-ce que vous avez consommé un autre aliment de cette catégorie ?",
-    "databaseLookupTitle": "De quoi s'agissait-il ?",
-    "databaseLookupWithExisting": "Sinon, de quoi s'agissait-il ?",
-    "existingFoodsTitle": "S'agissait-il de quelque chose que vous aviez déjà renseigné ?",
+    "databaseLookup": "De quoi s'agissait-il ?",
+    "existingFoods": {
+      "title": "S'agissait-il de quelque chose que vous aviez déjà renseigné ?",
+      "hint": "Choisissez 'oui' si vous l'avez déjà saisi."
+    },
     "select": {
       "different": "Modifier",
       "remove": "Supprimer"
