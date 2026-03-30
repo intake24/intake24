@@ -45,25 +45,11 @@ import { surveyService } from '../services';
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';
 
-export type MealUndo = {
-  type: 'meal';
-  index: number;
-  value: MealState;
-};
-
-export type FoodUndo = {
-  type: 'food';
-  index: number;
-  mealIndex: number;
-  value: FoodState;
-};
-
 export interface SurveyState {
   parameters: SurveyEntryResponse | null;
   user: SurveyUserInfoResponse | null;
   data: CurrentSurveyState;
   isSubmitting: boolean;
-  undo: MealUndo | FoodUndo | null;
 }
 
 export interface MealFoodIndex {
@@ -137,7 +123,6 @@ export const useSurvey = defineStore('survey', {
     user: null,
     data: surveyInitialState(),
     isSubmitting: false,
-    undo: null,
   }),
   debounce: {
     storeUserSession: [
@@ -334,7 +319,6 @@ export const useSurvey = defineStore('survey', {
 
     setState(payload: CurrentSurveyState) {
       this.data = payload;
-      this.undo = null;
     },
 
     clearEntityPromptStores(entityId: string | string[]) {
@@ -346,10 +330,6 @@ export const useSurvey = defineStore('survey', {
     clearState() {
       clearPromptStores();
       this.setState(surveyInitialState());
-    },
-
-    async clearUndo() {
-      this.undo = null;
     },
 
     setParameters(parameters: SurveyEntryResponse) {
@@ -534,14 +514,6 @@ export const useSurvey = defineStore('survey', {
     },
 
     deleteMeal(mealId: string) {
-      /*
-      Undo system needs review & a more general solution
-
-       const mealUndo: MealState[] = this.data.meals.splice(mealIndex, 1);
-       if (mealUndo.length !== 0) {
-        this.undo = { type: 'meal', index: mealIndex, value: mealUndo[0] };
-      } */
-
       function getAlternativeMealSelection(meals: MealState[], mealIndex: number): Selection {
         // Try selecting next meal first
 
@@ -592,10 +564,6 @@ export const useSurvey = defineStore('survey', {
       this.data.meals.splice(mealIndex, 1);
       this.sortMeals();
       this.clearEntityPromptStores(entityIds);
-    },
-
-    undoDeleteMeal(data: { mealIndex: number; meal: MealState }) {
-      this.data.meals.splice(data.mealIndex, 0, data.meal);
     },
 
     addMeal(data: MealCreationState, locale: string) {
@@ -803,19 +771,6 @@ export const useSurvey = defineStore('survey', {
     },
 
     deleteFood(foodId: string) {
-      /*
-      Undo system needs review & a more general solution
-
-      const foodUndo: FoodState[] = this.data.meals[data.mealIndex].foods.splice(data.foodIndex, 1);
-      if (foodUndo.length !== 0) {
-        this.undo = {
-          type: 'food',
-          index: data.foodIndex,
-          mealIndex: data.mealIndex,
-          value: foodUndo[0],
-        };
-      } */
-
       const foodIndex = getFoodIndexRequired(this.data.meals, foodId);
 
       if (foodIndex.linkedFoodIndex === undefined) {
