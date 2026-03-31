@@ -16,7 +16,7 @@ export type UseCustomPromptHandlerProps<P extends keyof Prompts> = {
 
 export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustomPromptHandlerProps<P>) {
   const { i18n: { locale } } = useI18n();
-  const { foodOptional } = useFoodPromptUtils();
+  const { foodOptional, parentFoodOptional } = useFoodPromptUtils();
   const { mealOptional } = useMealPromptUtils();
   const survey = useSurvey();
 
@@ -113,5 +113,6 @@ export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustom
     foodOptional,
     isAnswerRequired,
     mealOptional,
+    parentFoodOptional,
   };
 }

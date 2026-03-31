@@ -4,8 +4,9 @@
     :key="prompt.id"
     v-model="state"
     v-bind="{
-      meal: mealOptional,
-      food: foodOptional,
+      meal,
+      food,
+      parentFood,
       prompt,
       section,
     }"
@@ -32,7 +33,13 @@ const emit = defineEmits(['action']);
 
 const infoPrompts = ['info-prompt'];
 
-const { commitPromptAnswer, resolvePromptAnswer, foodOptional, mealOptional }
+const {
+  commitPromptAnswer,
+  resolvePromptAnswer,
+  foodOptional: food,
+  mealOptional: meal,
+  parentFoodOptional: parentFood,
+}
   = useCustomPromptHandler(props);
 const survey = useSurvey();
 
@@ -40,9 +47,9 @@ const promptStore = getOrCreatePromptStateStore<{ value: CustomPromptAnswer }>(p
 
 function getEntityId(): string {
   if (survey.selection.element?.type === 'food')
-    return foodOptional.value?.id ?? '$survey';
+    return food.value?.id ?? '$survey';
   if (survey.selection.element?.type === 'meal')
-    return mealOptional.value?.id ?? '$survey';
+    return meal.value?.id ?? '$survey';
   return '$survey';
 }
 
