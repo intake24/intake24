@@ -99,7 +99,8 @@
     "databaseLookup": "Apakah makanan tersebut?",
     "existingFoods": {
       "title": "Adakah anda sudah memasukkan ia sebelum ini?",
-      "hint": "Choose \"Yes, I had some\" if you have already entered it."
+      "hint": "Choose \"Yes, I had some\" if you have already entered it.",
+      "select": "Select what it was."
     },
     "select": {
       "different": "Pilih makanan yang lain",
@@ -139,7 +140,8 @@
     "databaseLookup": "What was it?",
     "existingFoods": {
       "title": "Adakah anda sudah memasukkan ia sebelum ini?",
-      "hint": "Choose \"Yes, I had some\" if you have already entered it."
+      "hint": "Choose \"Yes, I had some\" if you have already entered it.",
+      "select": "Select what it was."
     },
     "select": {
       "different": "Change",

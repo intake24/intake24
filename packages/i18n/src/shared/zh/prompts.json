@@ -99,7 +99,8 @@
     "databaseLookup": "是什么?",
     "existingFoods": {
       "title": "是你已经输入的东西吗?",
-      "hint": "Choose \"Yes, I had some\" if you have already entered it."
+      "hint": "Choose \"Yes, I had some\" if you have already entered it.",
+      "select": "Select what it was."
     },
     "select": {
       "different": "选择另一种食物",
@@ -139,7 +140,8 @@
     "databaseLookup": "What was it?",
     "existingFoods": {
       "title": "是你已经输入的东西吗?",
-      "hint": "Choose \"Yes, I had some\" if you have already entered it."
+      "hint": "Choose \"Yes, I had some\" if you have already entered it.",
+      "select": "Select what it was."
     },
     "select": {
       "different": "Change",

@@ -99,7 +99,8 @@
     "databaseLookup": "What was it?",
     "existingFoods": {
       "title": "Was it something you already entered?",
-      "hint": "Choose \"Yes, I had some\" if you have already entered it."
+      "hint": "Choose \"Yes, I had some\" if you have already entered it.",
+      "select": "Select what it was."
     },
     "select": {
       "different": "Change",
@@ -139,7 +140,8 @@
     "databaseLookup": "What was it?",
     "existingFoods": {
       "title": "Was it something you already entered?",
-      "hint": "Choose \"Yes, I had some\" if you have already entered it."
+      "hint": "Choose \"Yes, I had some\" if you have already entered it.",
+      "select": "Select what it was."
     },
     "select": {
       "different": "Change",
