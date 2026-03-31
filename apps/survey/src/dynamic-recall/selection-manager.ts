@@ -1,8 +1,8 @@
 import type { SurveyStore } from '../stores';
-import type { Selection } from '@intake24/common/surveys';
+import type { FoodState, Selection } from '@intake24/common/surveys';
 import type PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 
-import { getFoodIndexRequired, getMealIndexRequired } from '@intake24/survey/util';
+import { getFoodByIndex, getFoodIndexRequired, getMealIndexRequired } from '@intake24/survey/util';
 
 function makeMealSelection(mealId: string): Selection {
   return {
@@ -49,24 +49,31 @@ export default class SelectionManager {
     return this.foodPromptsAvailable(foodId, selection) ? selection : undefined;
   }
 
+  private selectNestedLinkedFood(foods: FoodState[]): Selection | undefined {
+    for (const food of foods) {
+      const nestedSelection = this.selectNestedLinkedFood(food.linkedFoods);
+      if (nestedSelection !== undefined)
+        return nestedSelection;
+
+      const linkedSelection = makeFoodSelection(food.id);
+      if (this.foodPromptsAvailable(food.id, linkedSelection))
+        return linkedSelection;
+    }
+  }
+
   public tryAnyFoodInMeal(mealId: string): Selection | undefined {
     const meals = this.store.meals;
     const mealIndex = getMealIndexRequired(meals, mealId);
+    const meal = meals[mealIndex];
 
-    for (let foodIndex = 0; foodIndex < meals[mealIndex].foods.length; ++foodIndex) {
-      const foodId = meals[mealIndex].foods[foodIndex].id;
+    for (let foodIndex = 0; foodIndex < meal.foods.length; ++foodIndex) {
+      const food = meal.foods[foodIndex];
 
-      for (
-        let linkedFoodIndex = 0;
-        linkedFoodIndex < meals[mealIndex].foods[foodIndex].linkedFoods.length;
-        ++linkedFoodIndex
-      ) {
-        const linkedFoodId = meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex].id;
-        const selection = makeFoodSelection(linkedFoodId);
-        if (this.foodPromptsAvailable(linkedFoodId, selection))
-          return selection;
-      }
+      const linkedSelection = this.selectNestedLinkedFood(food.linkedFoods);
+      if (linkedSelection !== undefined)
+        return linkedSelection;
 
+      const foodId = food.id;
       const selection = makeFoodSelection(foodId);
       if (this.foodPromptsAvailable(foodId, selection))
         return selection;
@@ -134,15 +141,24 @@ export default class SelectionManager {
     const foodIndex = getFoodIndexRequired(meals, foodId);
     const meal = meals[foodIndex.mealIndex];
 
-    if (foodIndex.linkedFoodIndex !== undefined) {
-      const parentFood = meal.foods[foodIndex.foodIndex];
+    if (!foodIndex.linkedFoodIndex.length)
+      return undefined;
 
-      for (let i = foodIndex.linkedFoodIndex + 1; i < parentFood.linkedFoods.length; ++i) {
-        const nextLinkedFoodId = parentFood.linkedFoods[i].id;
-        const selection = makeFoodSelection(nextLinkedFoodId);
-        if (this.foodPromptsAvailable(nextLinkedFoodId, selection))
-          return selection;
-      }
+    // Navigate to the parent linkedFoods array by traversing the index path
+    let parentLinkedFoods = meal.foods[foodIndex.foodIndex].linkedFoods;
+    for (const linkedIndex of foodIndex.linkedFoodIndex.slice(0, -1)) {
+      parentLinkedFoods = parentLinkedFoods[linkedIndex].linkedFoods;
+    }
+
+    // Get the current index in the parent's linkedFoods array
+    const currentIndex = foodIndex.linkedFoodIndex.at(-1)!;
+
+    // Try subsequent linked foods at this nesting level
+    for (let i = currentIndex + 1; i < parentLinkedFoods.length; ++i) {
+      const nextLinkedFoodId = parentLinkedFoods[i].id;
+      const selection = makeFoodSelection(nextLinkedFoodId);
+      if (this.foodPromptsAvailable(nextLinkedFoodId, selection))
+        return selection;
     }
 
     return undefined;
@@ -161,15 +177,12 @@ export default class SelectionManager {
 
     for (let i = foodIndex.foodIndex + 1; i < meal.foods.length; ++i) {
       const nextFood = meal.foods[i];
+
+      const linkedSelection = this.selectNestedLinkedFood(nextFood.linkedFoods);
+      if (linkedSelection !== undefined)
+        return linkedSelection;
+
       const nextFoodId = nextFood.id;
-
-      for (let li = 0; li < nextFood.linkedFoods.length; ++li) {
-        const linkedFoodId = nextFood.linkedFoods[li].id;
-        const selection = makeFoodSelection(linkedFoodId);
-        if (this.foodPromptsAvailable(linkedFoodId, selection))
-          return selection;
-      }
-
       const selection = makeFoodSelection(nextFoodId);
       if (this.foodPromptsAvailable(nextFoodId, selection))
         return selection;
@@ -181,12 +194,15 @@ export default class SelectionManager {
   tryParentFood(foodId: string): Selection | undefined {
     const meals = this.store.meals;
     const foodIndex = getFoodIndexRequired(meals, foodId);
-    const meal = meals[foodIndex.mealIndex];
 
-    if (foodIndex.linkedFoodIndex !== undefined) {
-      const parentFood = meal.foods[foodIndex.foodIndex];
-      return this.selectFoodIfPromptsAvailable(parentFood.id);
-    }
+    if (!foodIndex.linkedFoodIndex.length)
+      return undefined;
+
+    const parentFood = getFoodByIndex(meals, {
+      ...foodIndex,
+      linkedFoodIndex: foodIndex.linkedFoodIndex.slice(0, -1),
+    });
+    return this.selectFoodIfPromptsAvailable(parentFood.id);
   }
 
   nextSelection(): Selection {

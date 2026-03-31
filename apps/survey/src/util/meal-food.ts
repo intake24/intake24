@@ -1,23 +1,45 @@
 import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState, Selection, SurveyState } from '@intake24/common/surveys';
 import type { SurveyStore } from '@intake24/survey/stores';
-import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 
 import { randomString } from '@intake24/common/util';
 import { filterForIncompleteCustomPrompts } from '@intake24/survey/dynamic-recall/prompt-filters';
+
+export type MealFoodIndex = {
+  mealIndex: number;
+  foodIndex: number;
+  linkedFoodIndex: number[];
+};
+
+export type FoodIndex = {
+  foodIndex: number;
+  linkedFoodIndex: number[];
+};
 
 // Helper to generate unique id for each meal/food with same length
 export const getEntityId = () => randomString(12);
 
 export function getFoodIndexInMeal(meal: MealState, id: string): FoodIndex | undefined {
+  function findLinkedFoodIndexPath(foods: FoodState[], foodId: string): number[] | undefined {
+    for (let index = 0; index < foods.length; ++index) {
+      if (foods[index].id === foodId)
+        return [index];
+
+      const nestedIndexPath = findLinkedFoodIndexPath(foods[index].linkedFoods, foodId);
+      if (nestedIndexPath !== undefined)
+        return [index, ...nestedIndexPath];
+    }
+
+    return undefined;
+  }
+
   for (let i = 0; i < meal.foods.length; ++i) {
     if (meal.foods[i].id === id)
-      return { foodIndex: i, linkedFoodIndex: undefined };
+      return { foodIndex: i, linkedFoodIndex: [] };
 
-    for (let li = 0; li < meal.foods[i].linkedFoods.length; ++li) {
-      if (meal.foods[i].linkedFoods[li].id === id)
-        return { foodIndex: i, linkedFoodIndex: li };
-    }
+    const linkedFoodIndex = findLinkedFoodIndexPath(meal.foods[i].linkedFoods, id);
+    if (linkedFoodIndex !== undefined)
+      return { foodIndex: i, linkedFoodIndex };
   }
 
   return undefined;
@@ -62,9 +84,9 @@ export function getFoodIndexRequired(meals: MealState[], id: string): MealFoodIn
 }
 
 export function getFoodByIndex(meals: MealState[], foodIndex: MealFoodIndex): FoodState {
-  return foodIndex.linkedFoodIndex === undefined
+  return !foodIndex.linkedFoodIndex.length
     ? meals[foodIndex.mealIndex].foods[foodIndex.foodIndex]
-    : meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods[foodIndex.linkedFoodIndex];
+    : foodIndex.linkedFoodIndex.reduce((currentFood, index) => currentFood.linkedFoods[index], meals[foodIndex.mealIndex].foods[foodIndex.foodIndex]);
 }
 
 export function findFood(meals: MealState[], id: string): FoodState {
@@ -111,7 +133,7 @@ export function recipeBuilderComplete(food: FoodState) {
   return food.type === 'recipe-builder' && food.flags.includes('recipe-builder-complete');
 }
 
-export function foodComplete(food: FoodState) {
+export function foodComplete(food: FoodState, deep = false): boolean {
   const foodTypeChecks = {
     'free-text': () => false,
     'encoded-food': encodedFoodComplete,
@@ -119,7 +141,15 @@ export function foodComplete(food: FoodState) {
     'recipe-builder': recipeBuilderComplete,
   };
 
-  return foodTypeChecks[food.type](food);
+  let complete = foodTypeChecks[food.type](food);
+
+  if (deep && complete) {
+    complete = food.linkedFoods.reduce<boolean>((acc, linkedFood) => {
+      return acc && foodComplete(linkedFood, deep);
+    }, complete);
+  }
+
+  return complete;
 }
 
 export function canEditFood(food: FoodState) {
@@ -140,8 +170,8 @@ export function foodSearchComplete(food: FoodState) {
   return food.type !== 'free-text';
 }
 
-export function mealComplete(meal: MealState) {
-  return !!meal.foods.length && meal.foods.every(foodComplete);
+export function mealComplete(meal: MealState, deep = false) {
+  return !!meal.foods.length && meal.foods.every(food => foodComplete(food, deep));
 }
 
 export function mealPortionSizeComplete(meal: MealState) {

@@ -18,6 +18,7 @@ import type {
 } from '@intake24/common/surveys';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import type { Time } from '@intake24/common/util';
+import type { MealFoodIndex } from '@intake24/survey/util';
 
 import { addDays } from 'date-fns';
 import { defineStore } from 'pinia';
@@ -32,11 +33,13 @@ import {
   findFood,
   findMeal,
   getEntityId,
+  getFoodByIndex,
   getFoodIndex,
   getFoodIndexRequired,
   getMealIndex,
   getMealIndexForSelection,
   getMealIndexRequired,
+
   sendGtmEvent,
 } from '@intake24/survey/util';
 import { useApp, useLoading } from '@intake24/ui/stores';
@@ -50,17 +53,6 @@ export interface SurveyState {
   user: SurveyUserInfoResponse | null;
   data: CurrentSurveyState;
   isSubmitting: boolean;
-}
-
-export interface MealFoodIndex {
-  mealIndex: number;
-  foodIndex: number;
-  linkedFoodIndex: number | undefined;
-}
-
-export interface FoodIndex {
-  foodIndex: number;
-  linkedFoodIndex: number | undefined;
 }
 
 export function createMeal(data: MealCreationState, flow: RecallFlow = '2-pass'): MealState {
@@ -239,21 +231,17 @@ export const useSurvey = defineStore('survey', {
       if (foodIndex === undefined)
         return undefined;
 
-      if (foodIndex.linkedFoodIndex === undefined) {
-        return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
-      }
-      else {
-        return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods[
-          foodIndex.linkedFoodIndex
-        ];
-      }
+      return getFoodByIndex(this.data.meals, foodIndex);
     },
     selectedParentFood(): FoodState | undefined {
       const foodIndex = this.selectedFoodIndex;
-      if (foodIndex?.linkedFoodIndex === undefined)
+      if (!foodIndex?.linkedFoodIndex.length)
         return undefined;
 
-      return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
+      return getFoodByIndex(this.data.meals, {
+        ...foodIndex,
+        linkedFoodIndex: foodIndex.linkedFoodIndex.slice(0, -1),
+      });
     },
   },
   actions: {
@@ -667,15 +655,20 @@ export const useSurvey = defineStore('survey', {
         foodId,
       );
 
-      const originalFood
-        = linkedFoodIndex === undefined
-          ? this.data.meals[mealIndex].foods[foodIndex]
-          : this.data.meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex];
+      const originalFood = getFoodByIndex(this.data.meals, { mealIndex, foodIndex, linkedFoodIndex });
 
-      if (linkedFoodIndex === undefined)
+      if (!linkedFoodIndex.length) {
         this.data.meals[mealIndex].foods.splice(foodIndex, 1, food);
-      else
-        this.data.meals[mealIndex].foods[foodIndex].linkedFoods.splice(linkedFoodIndex, 1, food);
+      }
+      else {
+        let parentLinkedFoods = this.data.meals[mealIndex].foods[foodIndex].linkedFoods;
+
+        for (const linkedIndex of linkedFoodIndex.slice(0, -1))
+          parentLinkedFoods = parentLinkedFoods[linkedIndex].linkedFoods;
+
+        const replaceIndex = linkedFoodIndex.at(-1)!;
+        parentLinkedFoods.splice(replaceIndex, 1, food);
+      }
 
       // Clear food prompt stores if replacing food with different type or different code
       if (
@@ -771,26 +764,57 @@ export const useSurvey = defineStore('survey', {
     },
 
     deleteFood(foodId: string) {
-      const foodIndex = getFoodIndexRequired(this.data.meals, foodId);
+      const { mealIndex, foodIndex, linkedFoodIndex } = getFoodIndexRequired(this.data.meals, foodId);
+      const deletedFoodIds: string[] = [];
 
-      if (foodIndex.linkedFoodIndex === undefined) {
-        this.data.meals[foodIndex.mealIndex].foods.splice(foodIndex.foodIndex, 1);
+      const collectEntityIdCallback = (acc: string[], { id, linkedFoods }: FoodState) => {
+        acc.push(id);
+
+        if (linkedFoods.length)
+          linkedFoods.reduce(collectEntityIdCallback, acc);
+
+        return acc;
+      };
+
+      const deleteLinkedFoodAtPath = (parentFood: FoodState, path: number[]) => {
+        const [linkedIndex, ...restPath] = path;
+        const linkedFood = parentFood.linkedFoods[linkedIndex];
+
+        if (!restPath.length) {
+          linkedFood.linkedFoods.reduce(collectEntityIdCallback, deletedFoodIds);
+          deletedFoodIds.push(linkedFood.id);
+          parentFood.linkedFoods.splice(linkedIndex, 1);
+          return;
+        }
+
+        deleteLinkedFoodAtPath(linkedFood, restPath);
+
+        // If a nested recipe-builder becomes empty, remove it from its parent as well.
+        if (linkedFood.type === 'recipe-builder' && !linkedFood.linkedFoods.length) {
+          deletedFoodIds.push(linkedFood.id);
+          parentFood.linkedFoods.splice(linkedIndex, 1);
+        }
+      };
+
+      if (!linkedFoodIndex.length) {
+        this.data.meals[mealIndex].foods[foodIndex].linkedFoods.reduce(collectEntityIdCallback, deletedFoodIds);
+        deletedFoodIds.push(this.data.meals[mealIndex].foods[foodIndex].id);
+        this.data.meals[mealIndex].foods.splice(foodIndex, 1);
       }
       else {
-        this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods.splice(
-          foodIndex.linkedFoodIndex,
-          1,
-        );
+        const parentFood = this.data.meals[mealIndex].foods[foodIndex];
+        deleteLinkedFoodAtPath(parentFood, linkedFoodIndex);
 
-        const parentFood = this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
-        if (parentFood.type === 'recipe-builder' && !parentFood.linkedFoods.length)
-          this.data.meals[foodIndex.mealIndex].foods.splice(foodIndex.foodIndex, 1);
+        if (parentFood.type === 'recipe-builder' && !parentFood.linkedFoods.length) {
+          deletedFoodIds.push(parentFood.id);
+          this.data.meals[mealIndex].foods.splice(foodIndex, 1);
+        }
       }
 
       // FIXME: update selection
       this.data.selection = { mode: 'auto', element: null };
 
-      this.clearEntityPromptStores(foodId);
+      this.clearEntityPromptStores(deletedFoodIds);
     },
 
     addFood({ mealId, food, at }: { mealId: string; food: FoodState; at?: number }) {

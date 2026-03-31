@@ -17,6 +17,7 @@
     "build-only": "vite build",
     "generate-pwa-assets": "pwa-assets-generator",
     "start": "node server/index.js",
+    "test:unit": "vitest",
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
@@ -51,6 +52,7 @@
     "@iconify-json/fluent": "^1.2.41",
     "@iconify-json/game-icons": "^1.2.3",
     "@intlify/unplugin-vue-i18n": "^11.0.7",
+    "@pinia/testing": "^1.0.3",
     "@tsconfig/node24": "^24.0.4",
     "@types/jsdom": "^28.0.0",
     "@types/lodash-es": "^4.17.12",
@@ -58,6 +60,7 @@
     "@vite-pwa/assets-generator": "^1.0.2",
     "@vitejs/plugin-legacy": "^7.2.1",
     "@vitejs/plugin-vue": "^6.0.5",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.9.0",
     "cross-env": "^10.1.0",
     "jsdom": "^28.1.0",

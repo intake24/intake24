@@ -175,5 +175,16 @@ export default defineConfig(({ mode }) => {
       }),
       analyzer({ enabled: analyzeBundle }),
     ].filter(Boolean),
+    test: {
+      globals: true,
+      include: ['**/*.spec.?(c|m)[jt]s?(x)'],
+      environment: 'jsdom',
+      server: {
+        deps: {
+          inline: ['vuetify'],
+        },
+      },
+      setupFiles: ['./src/setup.ts'],
+    },
   };
 });
