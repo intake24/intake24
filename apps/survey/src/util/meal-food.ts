@@ -110,7 +110,7 @@ export function foodPortionSizeComplete(food: FoodState) {
       return food.info !== null && food.flags.includes('missing-food-complete');
     case 'generic-builder':
     case 'recipe-builder':
-      return food.flags.includes(`${food.type}-complete`);
+      return food.flags.includes(`food-builder-complete`);
   }
 }
 
