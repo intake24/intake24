@@ -99,7 +99,8 @@
     "databaseLookup": "De quoi s'agissait-il ?",
     "existingFoods": {
       "title": "S'agissait-il de quelque chose que vous aviez déjà renseigné ?",
-      "hint": "Choisissez 'oui' si vous l'avez déjà saisi."
+      "hint": "Choisissez 'oui' si vous l'avez déjà saisi.",
+      "select": "Sélectionnez ce que c'était"
     },
     "select": {
       "different": "Modifier",
@@ -139,7 +140,8 @@
     "databaseLookup": "De quoi s'agissait-il ?",
     "existingFoods": {
       "title": "S'agissait-il de quelque chose que vous aviez déjà renseigné ?",
-      "hint": "Choisissez 'oui' si vous l'avez déjà saisi."
+      "hint": "Choisissez 'oui' si vous l'avez déjà saisi.",
+      "select": "Sélectionnez ce que c'était"
     },
     "select": {
       "different": "Modifier",

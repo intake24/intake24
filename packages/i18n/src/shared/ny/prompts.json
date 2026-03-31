@@ -99,7 +99,8 @@
     "databaseLookup": "Chinali chakudya chanji?",
     "existingFoods": {
       "title": "Ndi chakudya choti munalemba kale?",
-      "hint": "Sankhani \"Inde, Ndinadya\" ngati munane kale."
+      "hint": "Sankhani \"Inde, Ndinadya\" ngati munane kale.",
+      "select": "Select what it was."
     },
     "select": {
       "different": "Sinthani",
@@ -139,7 +140,8 @@
     "databaseLookup": "Chinali chakudya chanji?",
     "existingFoods": {
       "title": "Ndi chakudya choti munalemba kale?",
-      "hint": "Sankhani \"Inde, Ndinadya\" ngati munane kale."
+      "hint": "Sankhani \"Inde, Ndinadya\" ngati munane kale.",
+      "select": "Select what it was."
     },
     "select": {
       "different": "Sinthani",

@@ -159,7 +159,7 @@
             <v-expand-transition>
               <div v-if="showFoodChooser(index)" flat>
                 <div class="mb-2">
-                  {{ promptI18n.databaseLookup }}
+                  {{ promptState.existing && availableFoods[index].length ? promptI18n['existingFoods.select'] : promptI18n.databaseLookup }}
                 </div>
                 <meal-food-chooser
                   v-if="promptState.existing && availableFoods[index].length"
@@ -246,6 +246,7 @@ const promptI18n = computed(() =>
   translatePrompt([
     'existingFoods.title',
     'existingFoods.hint',
+    'existingFoods.select',
     'yes',
     'yesAnother',
     'no',
