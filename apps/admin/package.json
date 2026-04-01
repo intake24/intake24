@@ -68,7 +68,7 @@
     "sass": "^1.98.0",
     "typescript": "^5.9.3",
     "unplugin-icons": "^23.0.1",
-    "unplugin-vue-components": "^31.0.0",
+    "unplugin-vue-components": "^32.0.0",
     "vite": "^7.3.1",
     "vite-bundle-analyzer": "^1.3.6",
     "vite-plugin-html": "^3.2.2",
