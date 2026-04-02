@@ -186,15 +186,16 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     };
   }
 
-  function getAutoPsmWeight({ mode, value }: AutoPortionSizeParameters, parent?: FoodState): { servingWeight: number; leftoversWeight: number } {
+  function getAutoPsmWeight({ mode, value }: AutoPortionSizeParameters, linkedQuantity: number, parent?: FoodState): { servingWeight: number; leftoversWeight: number } {
     if (mode === 'weight')
-      return { servingWeight: value, leftoversWeight: 0 };
+      return { servingWeight: value * linkedQuantity, leftoversWeight: 0 };
 
     if (parent?.type !== 'encoded-food' || !parent.portionSize) {
-      console.warn(`Default weight mode "${mode}" requires parent encoded food with portion size to be selected`);
+      console.warn(`Auto weight mode "${mode}" requires parent encoded food with portion size to be selected`);
       return { servingWeight: 0, leftoversWeight: 0 };
     }
 
+    // Linked quantity is already applied through relative weight-per-100g-parent rule
     const { servingWeight, leftoversWeight } = parent.portionSize;
     return {
       servingWeight: (servingWeight ?? 0) / 100 * value,
@@ -216,14 +217,14 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     const autoPsm = (autoPsmIdx !== -1 ? portionSizeMethods.at(autoPsmIdx) : undefined) as AutoPsm | undefined;
     if (autoPsm) {
       const { conversionFactor, parameters } = autoPsm;
-      const { servingWeight, leftoversWeight } = getAutoPsmWeight(parameters, parent);
       const linkedQuantity = getLinkedParent(foodData, parent)?.quantity ?? 1;
+      const { servingWeight, leftoversWeight } = getAutoPsmWeight(parameters, linkedQuantity, parent);
       portionSizeMethodIndex = autoPsmIdx;
       portionSize = {
         method: 'auto',
         conversionFactor,
-        servingWeight: servingWeight * conversionFactor * linkedQuantity,
-        leftoversWeight: leftoversWeight * conversionFactor * linkedQuantity,
+        servingWeight: servingWeight * conversionFactor,
+        leftoversWeight: leftoversWeight * conversionFactor,
         mode: parameters.mode,
         quantity: parameters.value,
         linkedQuantity,
