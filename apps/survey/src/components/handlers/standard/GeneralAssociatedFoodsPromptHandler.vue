@@ -154,14 +154,15 @@ async function commitAnswer() {
   const linkedFoods: FoodState[] = foodData.map((data, index) => {
     let { flags, portionSizeMethodIndex, portionSize } = resolvePortionSize(data, 'afp', food.value);
     if (portionSize === null && props.prompt.autoPortionSize !== null) {
+      const linkedQuantity = 1;
       const { mode, value } = props.prompt.autoPortionSize;
-      const { servingWeight, leftoversWeight } = getAutoPsmWeight(props.prompt.autoPortionSize, food.value);
+      const { servingWeight, leftoversWeight } = getAutoPsmWeight(props.prompt.autoPortionSize, linkedQuantity, food.value);
       portionSize = {
         method: 'auto',
         conversionFactor: 1,
         mode,
         quantity: value,
-        linkedQuantity: 1,
+        linkedQuantity,
         servingWeight,
         leftoversWeight,
       };
