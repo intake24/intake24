@@ -156,6 +156,7 @@
                     rootCategory: associatedFoodPrompts[index].categoryCode,
                     section,
                     includeHidden: true,
+                    recipe: true,
                   }"
                   @food-missing="foodMissing(index)"
                   @food-selected="(food) => foodSelected(food, index)"

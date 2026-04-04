@@ -416,7 +416,7 @@ export class PackageExporter {
             readyMealOption: row.readyMealOption ?? undefined,
             reasonableAmount: row.reasonableAmount ?? undefined,
             sameAsBeforeOption: row.sameAsBeforeOption ?? undefined,
-            useInRecipes: (row.useInRecipes as 0 | 1 | 2 | null) ?? undefined,
+            useInRecipes: (row.useInRecipes as 0 | 1 | 2 | 3 | null) ?? undefined,
           },
           parentCategories: parentCategoryIndex[row.id] ?? [],
           portionSize: categoryPortionSizeMethodsIndex[row.id] ?? [],
