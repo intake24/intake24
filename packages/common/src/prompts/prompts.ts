@@ -271,6 +271,7 @@ const asServedPrompt = z.object({
   component: z.literal('as-served-prompt'),
   imageMap,
   leftovers: z.boolean(),
+  linkedQuantity,
 });
 
 const cerealPrompt = z.object({

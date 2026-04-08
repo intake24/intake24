@@ -209,6 +209,7 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         useGraph: false,
         conditions,
         multiple: false,
+        linkedQuantity: { auto: false, parent: [], source: [] },
       };
     }
     case 'drink-scale-prompt': {

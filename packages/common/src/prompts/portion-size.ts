@@ -15,6 +15,11 @@ export const asServedPrompt: Prompts['as-served-prompt'] = copy({
     pinchZoom: false,
   },
   leftovers: false,
+  linkedQuantity: {
+    auto: false,
+    parent: [],
+    source: [],
+  },
   multiple: false,
 });
 
