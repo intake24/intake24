@@ -159,10 +159,7 @@ export default class LocaleCategories extends BaseJob<'LocaleCategories'> {
                   const attr = Object.entries(pick(psm, ['method', 'description', 'pathways', 'conversionFactor', 'orderBy'])).map(
                     ([key, value]) => `${key}: ${value?.toString()}`,
                   ).join('; ');
-                  const params = Object.entries(psm.parameters).map(
-                    ([key, value]) => `${key}: ${value?.toString()}`,
-                  ).join('; ');
-                  return `${attr}, ${params}`;
+                  return `${attr}, parameters: ${JSON.stringify(psm.parameters)}`;
                 })
                 .join('\n'),
             };
