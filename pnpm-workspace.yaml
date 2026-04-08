@@ -1,12 +1,10 @@
 shellEmulator: true
 
 trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 10080
 
 trustPolicyExclude:
-  - chokidar@4.0.3
-  - express-rate-limit@8.3.0
-  - rollup@2.80.0
-  - semver@6.3.1
+  - '@flatten-js/core@1.6.12'
 
 packages:
   - apps/**
@@ -16,13 +14,7 @@ patchedDependencies:
   '@ts-rest/core': patches/@ts-rest__core.patch
 
 onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - core-js
-  - es5-ext
   - esbuild
-  - json-editor-vue
-  - msgpackr-extract
   - puppeteer
   - sharp
   - simple-git-hooks
-  - vue-demi

@@ -62,7 +62,7 @@ function emailBlaster({ logger: globalLogger, servicesConfig }: Pick<IoC, 'servi
   const logger = globalLogger.child({ service: 'EmailBlaster' });
 
   const client = ky.create({
-    prefixUrl: url,
+    baseUrl: url,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
