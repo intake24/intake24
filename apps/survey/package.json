@@ -63,7 +63,7 @@
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.9.0",
     "cross-env": "^10.1.0",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.0.2",
     "sass": "^1.98.0",
     "terser": "^5.46.1",
     "type-fest": "^5.4.4",
