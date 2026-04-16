@@ -22,7 +22,7 @@ services:
       - ${POSTGRES_PORT:-5432}:5432
     volumes:
       - ./docker/init:/docker-entrypoint-initdb.d/
-      - data-db:/var/lib/postgresql/data
+      - data-db:/var/lib/postgresql
 
   redis:
     image: redis:8-alpine
