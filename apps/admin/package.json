@@ -47,7 +47,7 @@
     "vue-gtag": "^3.7.0",
     "vue-i18n": "^11.3.2",
     "vue-router": "^5.0.4",
-    "vuetify": "^3.12.5"
+    "vuetify": "^4.0.5"
   },
   "devDependencies": {
     "@iconify-json/fluent": "^1.2.44",

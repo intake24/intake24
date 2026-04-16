@@ -152,8 +152,8 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4(@vue/compiler-sfc@3.5.32)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))(vue@3.5.32(typescript@5.9.3))
       vuetify:
-        specifier: ^3.12.5
-        version: 3.12.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
+        specifier: ^4.0.5
+        version: 4.0.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
     devDependencies:
       '@iconify-json/fluent':
         specifier: ^1.2.44
@@ -232,7 +232,7 @@ importers:
         version: 8.1.1(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))
       vite-plugin-vuetify:
         specifier: ^2.1.3
-        version: 2.1.3(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))(vuetify@3.12.5)
+        version: 2.1.3(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))(vuetify@4.0.5)
       vite-plugin-webfont-dl:
         specifier: ^3.12.0
         version: 3.12.0(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))
@@ -782,8 +782,8 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4(@vue/compiler-sfc@3.5.32)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))(vue@3.5.32(typescript@5.9.3))
       vuetify:
-        specifier: ^3.12.5
-        version: 3.12.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
+        specifier: ^4.0.5
+        version: 4.0.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
     devDependencies:
       '@iconify-json/fluent':
         specifier: ^1.2.44
@@ -868,7 +868,7 @@ importers:
         version: 8.1.1(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))
       vite-plugin-vuetify:
         specifier: ^2.1.3
-        version: 2.1.3(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))(vuetify@3.12.5)
+        version: 2.1.3(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))(vuetify@4.0.5)
       vite-plugin-webfont-dl:
         specifier: ^3.12.0
         version: 3.12.0(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))
@@ -1248,8 +1248,8 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4(@vue/compiler-sfc@3.5.32)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))(vue@3.5.32(typescript@5.9.3))
       vuetify:
-        specifier: ^3.12.5
-        version: 3.12.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
+        specifier: ^4.0.5
+        version: 4.0.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
     devDependencies:
       '@types/lodash-es':
         specifier: ^4.17.12
@@ -4900,6 +4900,7 @@ packages:
   basic-ftp@5.2.0:
     resolution: {integrity: sha512-VoMINM2rqJwJgfdHq6RiUudKt2BV+FY5ZFezP/ypmwayk68+NzzAQy4XXLlqsGD4MCzq3DrmNFD/uUmBJuGoXw==}
     engines: {node: '>=10.0.0'}
+    deprecated: Security vulnerability fixed in 5.2.1, please upgrade
 
   bcryptjs@3.0.3:
     resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
@@ -9761,8 +9762,8 @@ packages:
       typescript:
         optional: true
 
-  vuetify@3.12.5:
-    resolution: {integrity: sha512-Gk3eDIiBXpv+QjMTYmXXk/uvpqaSNAgprcV/Og0btBUx4saLN7AUmqUi34hRmBqu2tpype2GVvg2yxJUqP2mdg==}
+  vuetify@4.0.5:
+    resolution: {integrity: sha512-pFysKOHuY3dROTVh9PdlhVz50ZR0E5/goY5ecTXc8F8tajUA2ee3xZ8Lqs1WtEw/X3w93wx/LogyjgaQCAL/Ig==}
     peerDependencies:
       typescript: '>=4.7'
       vite-plugin-vuetify: '>=2.1.0'
@@ -13472,11 +13473,11 @@ snapshots:
       typescript: 5.9.3
       vue: 3.5.32(typescript@5.9.3)
 
-  '@vuetify/loader-shared@2.1.2(vue@3.5.32(typescript@5.9.3))(vuetify@3.12.5)':
+  '@vuetify/loader-shared@2.1.2(vue@3.5.32(typescript@5.9.3))(vuetify@4.0.5)':
     dependencies:
       upath: 2.0.1
       vue: 3.5.32(typescript@5.9.3)
-      vuetify: 3.12.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
+      vuetify: 4.0.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
 
   '@vueuse/core@14.2.1(vue@3.5.32(typescript@5.9.3))':
     dependencies:
@@ -19136,14 +19137,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vuetify@2.1.3(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))(vuetify@3.12.5):
+  vite-plugin-vuetify@2.1.3(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))(vuetify@4.0.5):
     dependencies:
-      '@vuetify/loader-shared': 2.1.2(vue@3.5.32(typescript@5.9.3))(vuetify@3.12.5)
+      '@vuetify/loader-shared': 2.1.2(vue@3.5.32(typescript@5.9.3))(vuetify@4.0.5)
       debug: 4.4.3
       upath: 2.0.1
       vite: 7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
       vue: 3.5.32(typescript@5.9.3)
-      vuetify: 3.12.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
+      vuetify: 4.0.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3))
     transitivePeerDependencies:
       - supports-color
 
@@ -19358,12 +19359,12 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  vuetify@3.12.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3)):
+  vuetify@4.0.5(typescript@5.9.3)(vite-plugin-vuetify@2.1.3)(vue@3.5.32(typescript@5.9.3)):
     dependencies:
       vue: 3.5.32(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
-      vite-plugin-vuetify: 2.1.3(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))(vuetify@3.12.5)
+      vite-plugin-vuetify: 2.1.3(vite@7.3.2(@types/node@24.12.2)(jiti@2.6.1)(sass@1.99.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vue@3.5.32(typescript@5.9.3))(vuetify@4.0.5)
 
   w3c-keyname@2.2.8: {}
 
