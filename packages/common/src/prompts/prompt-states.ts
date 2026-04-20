@@ -1,15 +1,25 @@
 import type {
+  PortionSizeStates,
+} from '../surveys/portion-size';
+import type {
   FoodState,
   MissingFood,
-  PortionSizeStates,
-} from '../surveys';
+} from '../surveys/recall';
 import type {
   RecipeFood,
   RequiredLocaleTranslation,
 } from '../types';
-import type { FoodHeader, UserFoodData } from '../types/http';
+import type { FoodHeader } from '../types/http/foods/search';
+import type { UserFoodData } from '../types/http/foods/user-food-data';
 import type { Time } from '../util';
 import type { AddonFood } from './prompts';
+
+import { z } from 'zod';
+
+import { portionSizeStates } from '../surveys/portion-size';
+import { localeTranslation } from '../types/common';
+import { userFoodData } from '../types/http/foods/user-food-data';
+import { condition } from './conditions';
 
 export type AssociatedFoodPromptItem = {
   confirmed?: 'yes' | 'no';
@@ -153,6 +163,7 @@ export type PromptStates = {
   };
   // Standard prompts
   'addon-foods-prompt': {
+    opened: string[];
     foods: Record<string, {
       confirmed: boolean | null;
       data: UserFoodData | null;
@@ -191,3 +202,24 @@ export type PromptStates = {
 };
 
 export type PromptState = PromptStates[keyof PromptStates];
+
+const addonFoodState = z.object({
+  id: z.string().min(1),
+  name: localeTranslation,
+  entity: z.enum(['category', 'food']),
+  code: z.string(),
+  filter: condition.array(),
+});
+
+export const addonFoodsPromptState = z.object({
+  opened: z.string().array(),
+  foods: z.record(
+    z.string(),
+    z.object({
+      confirmed: z.boolean().nullable(),
+      data: userFoodData.nullable(),
+      portionSize: portionSizeStates.shape['standard-portion'],
+      addon: addonFoodState,
+    }).array(),
+  ),
+});
