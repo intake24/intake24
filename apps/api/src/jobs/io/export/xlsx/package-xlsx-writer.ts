@@ -32,12 +32,24 @@ interface FoodsWorkbook {
 interface CategoriesWorkbook {
   workbook: ExcelJS.stream.xlsx.WorkbookWriter;
   categoriesSheet: ExcelJS.Worksheet;
+  hierarchySheet: ExcelJS.Worksheet;
   attributesSheet: ExcelJS.Worksheet;
   portionSizesSheet: ExcelJS.Worksheet;
   portionSizeWriter: PortionSizeWriter;
   standardUnitsSheet: ExcelJS.Worksheet;
   parentPortionSheet: ExcelJS.Worksheet;
+  nextCategoryMasterRow: number;
+  hierarchyCategories: BufferedCategoryRecord[];
 }
+
+type BufferedCategoryRecord = Pick<PkgV2Category, 'code' | 'name' | 'englishName' | 'hidden' | 'parentCategories'> & {
+  masterRowNumber: number;
+};
+
+type CategoryHierarchyRow = {
+  category: BufferedCategoryRecord;
+  depth: number;
+};
 
 export class PackageXlsxWriter implements PackageWriter {
   private outputPath: string;
@@ -63,6 +75,10 @@ export class PackageXlsxWriter implements PackageWriter {
       default:
         return '';
     }
+  }
+
+  private getCategoryDisplayName(category: Pick<BufferedCategoryRecord, 'name' | 'englishName' | 'code'>): string {
+    return category.name || category.englishName || category.code;
   }
 
   private createAttributesSheet(workbook: ExcelJS.stream.xlsx.WorkbookWriter, codeHeader: string): ExcelJS.Worksheet {
@@ -121,6 +137,139 @@ export class PackageXlsxWriter implements PackageWriter {
     parentPortionSheet.getRow(1).font = { bold: true };
     parentPortionSheet.getRow(1).border = { bottom: { style: 'thin' } };
     return parentPortionSheet;
+  }
+
+  private compareBufferedCategories(left: BufferedCategoryRecord, right: BufferedCategoryRecord): number {
+    return this.getCategoryDisplayName(left).localeCompare(this.getCategoryDisplayName(right)) || left.code.localeCompare(right.code);
+  }
+
+  private createCategoryHierarchySheet(workbook: ExcelJS.stream.xlsx.WorkbookWriter): ExcelJS.Worksheet {
+    const hierarchySheet = workbook.addWorksheet('Category structure', {
+      properties: {
+        outlineLevelRow: 7,
+      },
+      views: [{ state: 'frozen', ySplit: 1 }],
+    });
+
+    return hierarchySheet;
+  }
+
+  private buildCategoryHierarchyRows(categories: BufferedCategoryRecord[]): CategoryHierarchyRow[] {
+    const categoriesByCode = new Map(categories.map(category => [category.code, category]));
+    const childCodesByParent = new Map<string, string[]>();
+    const roots: BufferedCategoryRecord[] = [];
+
+    for (const category of categories) {
+      const knownParents = category.parentCategories.filter(parentCode => categoriesByCode.has(parentCode));
+
+      if (!knownParents.length || knownParents.every(parentCode => categoriesByCode.get(parentCode)?.hidden)) {
+        roots.push(category);
+      }
+
+      for (const parentCode of knownParents) {
+        const childCodes = childCodesByParent.get(parentCode) ?? [];
+        childCodes.push(category.code);
+        childCodesByParent.set(parentCode, childCodes);
+      }
+    }
+
+    const getSortedChildren = (parentCode: string): BufferedCategoryRecord[] => {
+      const childCodes = childCodesByParent.get(parentCode);
+      if (!childCodes)
+        return [];
+
+      return childCodes
+        .map(code => categoriesByCode.get(code))
+        .filter((category): category is BufferedCategoryRecord => category !== undefined)
+        .sort((left, right) => this.compareBufferedCategories(left, right));
+    };
+
+    const rows: CategoryHierarchyRow[] = [];
+
+    const visitCategory = (
+      category: BufferedCategoryRecord,
+      depth: number,
+      pathCodes: string[],
+    ) => {
+      rows.push({
+        category,
+        depth,
+      });
+
+      const children = getSortedChildren(category.code);
+
+      children.forEach((child) => {
+        if (pathCodes.includes(child.code))
+          return;
+
+        visitCategory(
+          child,
+          depth + 1,
+          [...pathCodes, child.code],
+        );
+      });
+    };
+
+    const sortedRoots = roots.sort((left, right) => this.compareBufferedCategories(left, right));
+
+    sortedRoots.forEach((root) => {
+      visitCategory(root, 0, [root.code]);
+    });
+
+    return rows;
+  }
+
+  private writeCategoryHierarchySheet(workbook: CategoriesWorkbook) {
+    const hierarchyRows = this.buildCategoryHierarchyRows(workbook.hierarchyCategories);
+
+    workbook.hierarchySheet.columns = [
+      { header: 'Local name', width: 60 },
+      { header: 'Code', width: 16 },
+      { header: 'Hidden', width: 10 },
+      { header: 'English name', width: 50 },
+    ];
+
+    const headerRow = workbook.hierarchySheet.getRow(1);
+    headerRow.font = { bold: true };
+    headerRow.border = { bottom: { style: 'thin' } };
+    workbook.hierarchySheet.autoFilter = 'A1:D1';
+
+    for (const hierarchyRow of hierarchyRows) {
+      const localName = `${'\u00A0\u00A0\u00A0\u00A0'.repeat(hierarchyRow.depth)}${this.getCategoryDisplayName(hierarchyRow.category)}`;
+      const row = workbook.hierarchySheet.addRow([
+        localName,
+        hierarchyRow.category.code,
+        hierarchyRow.category.hidden,
+        hierarchyRow.category.englishName,
+      ]);
+
+      row.outlineLevel = Math.min(hierarchyRow.depth, 7);
+
+      if (hierarchyRow.depth === 0) {
+        row.font = { bold: true };
+      }
+      if (hierarchyRow.category.hidden) {
+        row.font = {
+          ...(row.font ?? {}),
+          color: { argb: 'FF808080' },
+        };
+      }
+
+      row.getCell(2).value = {
+        text: hierarchyRow.category.code,
+        hyperlink: `#'Categories master list'!A${hierarchyRow.category.masterRowNumber}`,
+        tooltip: `Go to Categories master list row ${hierarchyRow.category.masterRowNumber}`,
+      };
+      row.getCell(2).font = {
+        ...(row.font ?? {}),
+        color: { argb: 'FF0563C1' },
+        underline: true,
+      };
+
+      row.getCell(3).alignment = { horizontal: 'center' };
+
+      row.commit();
+    }
   }
 
   private getOrCreateFoodsWorkbook(localeId: string): FoodsWorkbook {
@@ -245,6 +394,7 @@ export class PackageXlsxWriter implements PackageWriter {
     categoriesHeaderRow.font = { bold: true };
     categoriesHeaderRow.border = { bottom: { style: 'thin' } };
 
+    const hierarchySheet = this.createCategoryHierarchySheet(workbook);
     const attributesSheet = this.createAttributesSheet(workbook, 'Category code');
     const { portionSizesSheet, portionSizeWriter } = this.createPortionSizesSheet(workbook, 'Category code', 'Category name', `'Categories master list'`);
     const standardUnitsSheet = this.createStandardUnitsSheet(workbook, 'Category code');
@@ -253,11 +403,14 @@ export class PackageXlsxWriter implements PackageWriter {
     const categoriesWorkbook: CategoriesWorkbook = {
       workbook,
       categoriesSheet,
+      hierarchySheet,
       attributesSheet,
       portionSizesSheet,
       portionSizeWriter,
       standardUnitsSheet,
       parentPortionSheet,
+      nextCategoryMasterRow: 2,
+      hierarchyCategories: [],
     };
 
     this.categoryWorkbooks.set(localeId, categoriesWorkbook);
@@ -398,15 +551,18 @@ export class PackageXlsxWriter implements PackageWriter {
   }
 
   public async writeCategory(localeId: string, category: PkgV2Category) {
+    const categoryWorkbook = this.getOrCreateCategoriesWorkbook(localeId);
     const {
       categoriesSheet,
       attributesSheet,
       portionSizeWriter,
       standardUnitsSheet,
       parentPortionSheet,
-    } = this.getOrCreateCategoriesWorkbook(localeId);
+      hierarchyCategories,
+    } = categoryWorkbook;
 
     const parentCategories = category.parentCategories.join('; ');
+    const masterRowNumber = categoryWorkbook.nextCategoryMasterRow++;
     categoriesSheet.addRow([
       category.code,
       category.name,
@@ -415,6 +571,15 @@ export class PackageXlsxWriter implements PackageWriter {
       parentCategories,
 
     ]).commit();
+
+    hierarchyCategories.push({
+      code: category.code,
+      name: category.name,
+      englishName: category.englishName,
+      hidden: category.hidden,
+      parentCategories: [...category.parentCategories],
+      masterRowNumber,
+    });
 
     this.writeAttributes(category.code, category.attributes, attributesSheet);
 
@@ -677,6 +842,7 @@ export class PackageXlsxWriter implements PackageWriter {
       await foodWb.workbook.commit();
     }
     for (const categoryWb of this.categoryWorkbooks.values()) {
+      this.writeCategoryHierarchySheet(categoryWb);
       await categoryWb.workbook.commit();
     }
     if (this.portionWorkbook) {
