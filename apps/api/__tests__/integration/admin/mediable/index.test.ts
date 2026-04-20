@@ -4,6 +4,6 @@ import browse from './browse.test';
 import store from './store.test';
 
 export default (desc: string, type: MediaModel) => {
-  describe(`${desc}/media`, browse(type));
-  describe(`${desc}/media`, store(type));
+  describe(`get ${desc}/media`, browse(type));
+  describe(`post ${desc}/media`, store(type));
 };

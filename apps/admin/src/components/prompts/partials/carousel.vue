@@ -10,7 +10,6 @@
         <v-switch
           v-model="toggle"
           class="mx-3"
-          hide-details="auto"
           @update:model-value="changeToggle"
         />
       </v-toolbar-items>
@@ -20,19 +19,15 @@
         <v-col cols="12" md="6">
           <v-select
             v-model="carousel.variant"
-            hide-details="auto"
             :items="variants"
             :label="$t('survey-schemes.theme.variants._')"
-            variant="outlined"
           />
         </v-col>
         <v-col cols="12" md="6">
           <v-select
             v-model="carousel.color"
-            hide-details="auto"
             :items="colors"
             :label="$t('survey-schemes.theme.colors._')"
-            variant="outlined"
           >
             <template #item="{ item, props }">
               <v-list-item v-bind="props" :title="item.raw.title">
@@ -56,7 +51,6 @@
         <v-col cols="12" md="6">
           <v-switch
             v-model="carousel.required"
-            hide-details="auto"
             :label="$t('survey-schemes.prompts.carousel.required')"
           />
         </v-col>
@@ -97,20 +91,16 @@
                       <v-text-field
                         v-model="slide.image.desktop"
                         append-inner-icon="$desktop"
-                        hide-details="auto"
                         :label="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('survey-schemes.theme.layouts.desktop')})`"
                         prepend-inner-icon="fas fa-image"
-                        variant="outlined"
                       />
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="slide.image.mobile"
                         append-inner-icon="$mobile"
-                        hide-details="auto"
                         :label="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('survey-schemes.theme.layouts.mobile')})`"
                         prepend-inner-icon="fas fa-image"
-                        variant="outlined"
                       />
                     </v-col>
                     <v-col cols="12">

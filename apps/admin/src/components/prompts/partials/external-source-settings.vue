@@ -12,17 +12,14 @@
         :label="$t('survey-schemes.prompts.externalSources.sources._')"
         :model-value="source.type"
         name="source"
-        variant="outlined"
         @update:model-value="updateType"
       />
       <template v-if="source.type === 'open-food-facts'">
         <v-combobox
-
+          v-model="source.country"
           :items="countries"
           :label="$t('survey-schemes.prompts.externalSources.countries._')"
-          :model-value="source.country"
           name="country"
-          variant="outlined"
         />
         <v-toolbar flat tile>
           <v-toolbar-title class="font-weight-medium">
@@ -48,16 +45,12 @@
               <v-text-field
                 v-model="item.key"
                 density="compact"
-                hide-details="auto"
                 :label="$t('common.options.key')"
-                variant="outlined"
               />
               <v-text-field
                 v-model="item.value"
                 density="compact"
-                hide-details="auto"
                 :label="$t('common.options.value')"
-                variant="outlined"
               />
             </div>
             <template #append>
