@@ -1,11 +1,16 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card flat>
-      <v-list v-model:opened="opened" class="list-border" density="compact">
+      <v-list
+        class="list-border"
+        density="compact"
+        :opened="opened"
+        @update:opened="updateOpened"
+      >
         <v-list-group v-for="meal in meals" :key="meal.id" class="mb-2" :value="meal.id">
-          <template #activator="{ props }">
+          <template #activator="{ props: activatorProps }">
             <v-list-item class="text-primary">
-              <v-list-item-title class="font-weight-bold text-wrap" v-bind="props">
+              <v-list-item-title class="font-weight-bold text-wrap" v-bind="activatorProps">
                 {{ translate(meal.name) }}
               </v-list-item-title>
               <template #append>
@@ -103,7 +108,7 @@ import type { PromptStates } from '@intake24/common/prompts';
 import type { MealState, PortionSizeParameters, StandardUnit } from '@intake24/common/surveys';
 import type { UserFoodData } from '@intake24/common/types/http';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import { getFoodDescription } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
@@ -145,7 +150,7 @@ const promptI18n = computed(() =>
   ]),
 );
 
-const opened = ref(props.meals.map(meal => meal.id));
+const opened = ref(copy(props.modelValue.opened));
 const foods = ref(copy(props.modelValue.foods));
 const addonFoods = ref<Record<string, UserFoodData[]>>({});
 const addonFoodUnits = computed(() => Object.values(addonFoods.value).flat().reduce<Record<string, { conversionFactor: number; units: StandardUnit[] }>>((acc, food) => {
@@ -185,7 +190,7 @@ const isValid = computed(() => Object.values(foods.value).every(foods => foods.e
 
 function getAddonFoodsUnits(foodId: string, idx: number) {
   const code = foods.value[foodId][idx].data?.code;
-  return code ? addonFoodUnits.value[code].units : [];
+  return code ? (addonFoodUnits.value[code]?.units ?? []) : [];
 }
 
 async function getAddonFoods() {
@@ -208,13 +213,18 @@ async function getAddonFoods() {
 }
 
 function update() {
-  emit('update:modelValue', { foods: foods.value });
+  emit('update:modelValue', { opened: opened.value, foods: foods.value });
 };
+
+function updateOpened(value: string[]) {
+  opened.value = value;
+  update();
+}
 
 function updatePortionSize(foodId: string, idx: number) {
   const { portionSize: { unit, quantity, linkedQuantity }, data } = foods.value[foodId][idx];
 
-  const conversionFactor = data?.code ? addonFoodUnits.value[data.code].conversionFactor : 1;
+  const conversionFactor = data?.code ? (addonFoodUnits.value[data.code]?.conversionFactor ?? 1) : 1;
   foods.value[foodId][idx].portionSize.servingWeight = (unit?.weight ?? 0) * quantity * conversionFactor * linkedQuantity;
 
   update();
@@ -253,6 +263,11 @@ function updateQuantity(foodId: string, idx: number) {
 onMounted(async () => {
   await getAddonFoods();
 });
+
+watch(() => props.modelValue, (modelValue) => {
+  opened.value = copy(modelValue.opened);
+  foods.value = copy(modelValue.foods);
+}, { deep: true });
 </script>
 
 <style lang="scss" scoped></style>
