@@ -4,9 +4,13 @@ import type { IoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
 import type { NutrientTableRecordField, NutrientTableRecordNutrient } from '@intake24/db';
 
+import { writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
 import { Op } from 'sequelize';
 
 import { NotFoundError } from '@intake24/api/http/errors';
+import { addTime } from '@intake24/api/util';
 import {
   Job as DbJob,
   Food as FoodModel,
@@ -45,9 +49,18 @@ type UpdateRecord = {
 };
 
 type ProcessFoodResult
-  = { type: 'skipped'; error: boolean }
+  = { type: 'skipped'; error: false }
+    | { type: 'skipped'; error: true; reason: string }
     | { type: 'cleared'; record: UpdateRecord }
     | { type: 'updated'; record: UpdateRecord; nutrientCodeUpdated: boolean; fieldsAdded: number; fieldsRemoved: number };
+
+interface SkippedErrorEntry {
+  foodCode: string;
+  locale: string;
+  nutrientTableId: string;
+  nutrientTableCode: string;
+  reason: string;
+}
 
 interface RecalculationFlags {
   shouldUpdateNutrientCodes: boolean;
@@ -84,9 +97,12 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     errors: 0,
   };
 
-  constructor({ kyselyDb, logger }: Pick<IoC, 'kyselyDb' | 'logger'>) {
+  private readonly fsConfig;
+
+  constructor({ fsConfig, kyselyDb, logger }: Pick<IoC, 'fsConfig' | 'kyselyDb' | 'logger'>) {
     super({ logger });
 
+    this.fsConfig = fsConfig;
     this.kyselyDb = kyselyDb;
   }
 
@@ -122,14 +138,34 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     this.logger.debug('Job started.', { params: this.params });
 
     this.resetStats();
-    await this.recalculate();
+    const skippedErrors = await this.recalculate();
 
     const isDryRun = this.params.mode === 'none';
     const prefix = isDryRun ? 'DRY RUN - NO DATA WAS MODIFIED. ' : '';
-    const summary = `${prefix}Recalculation completed. Total: ${this.stats.totalProcessed}, Updated: ${this.stats.updated}, Skipped: ${this.stats.skipped}, Nutrient codes updated: ${this.stats.nutrientCodesUpdated}, Fields added: ${this.stats.fieldsAdded}, Fields removed: ${this.stats.fieldsRemoved}, Cleared due to missing records: ${this.stats.clearedDueToMissingRecords}, Errors: ${this.stats.errors}`;
+
+    const errorNote = this.stats.errors > 0
+      ? ` ${this.stats.errors} food(s) were skipped because they are not defined in the foods DB for their submission locale — download the error log for details.`
+      : '';
+
+    const summary = `${prefix}Recalculation completed. Total: ${this.stats.totalProcessed}, Updated: ${this.stats.updated}, Skipped: ${this.stats.skipped}, Nutrient codes updated: ${this.stats.nutrientCodesUpdated}, Fields added: ${this.stats.fieldsAdded}, Fields removed: ${this.stats.fieldsRemoved}, Cleared due to missing records: ${this.stats.clearedDueToMissingRecords}, Errors: ${this.stats.errors}.${errorNote}`;
     this.logger.info(summary);
 
-    await this.dbJob.update({ message: summary });
+    const dbJobUpdate: Parameters<typeof this.dbJob.update>[0] = { message: summary };
+
+    if (skippedErrors.length > 0) {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const filename = `intake24-${this.name}-errors-${this.params.surveyId}-${timestamp}.csv`;
+      const filepath = path.resolve(this.fsConfig.local.downloads, filename);
+      const csvHeader = 'food_code,locale,nutrient_table_id,nutrient_table_code,reason\n';
+      const csvRows = skippedErrors
+        .map(e => `${e.foodCode},${e.locale},${e.nutrientTableId},${e.nutrientTableCode},"${e.reason}"`)
+        .join('\n');
+      await writeFile(filepath, csvHeader + csvRows, 'utf-8');
+      dbJobUpdate.downloadUrl = filename;
+      dbJobUpdate.downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
+    }
+
+    await this.dbJob.update(dbJobUpdate);
 
     this.logger.debug('Job finished.');
   }
@@ -206,9 +242,16 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       });
     }
 
-    // Add null entries for missing foods
+    // Add null entries for missing foods and warn — most common cause is a locale mismatch
+    // where the submission stores a locale (e.g. 'UK_current') that differs from the locale
+    // the food is defined under in the foods DB (e.g. 'UK_V3_2023').
     for (const code of foodCodes) {
       if (!mappingMap.has(code)) {
+        this.logger.warn(
+          'Food not found in foods DB for submission locale — NDB update may target a different locale. '
+          + 'Check that foods_nutrients was updated for the locale stored in survey_submission_foods.locale.',
+          { code, locale },
+        );
         mappingMap.set(code, null);
       }
     }
@@ -325,7 +368,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         code: food.code,
         locale: food.locale,
       });
-      return { type: 'skipped', error: true };
+      return { type: 'skipped', error: true, reason: 'Food not found in foods DB for submission locale' };
     }
 
     // Handle food with warning (e.g., no nutrient mappings) — clear nutrients and fields
@@ -469,7 +512,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     return { type: 'updated', record, nutrientCodeUpdated, fieldsAdded, fieldsRemoved };
   }
 
-  private async recalculate(batchSize = BATCH_SIZE) {
+  private async recalculate(batchSize = BATCH_SIZE): Promise<SkippedErrorEntry[]> {
     const { surveyId } = this.params;
     const flags = this.getRecalculationFlags();
 
@@ -486,7 +529,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
     if (total === 0) {
       this.logger.info('No foods found for survey, completing successfully.');
-      return;
+      return [];
     }
 
     this.initProgress(total);
@@ -495,6 +538,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
     // Persist across batches to avoid re-fetching the same food codes
     const currentMappings = new Map<string, FoodMapping | null>();
+    const skippedErrors: SkippedErrorEntry[] = [];
 
     for (const offset of offsets) {
       const limit = Math.min(batchSize, total - offset);
@@ -619,8 +663,16 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         switch (result.type) {
           case 'skipped':
             batchSkipped++;
-            if (result.error)
+            if (result.error) {
               this.stats.errors++;
+              skippedErrors.push({
+                foodCode: food.code,
+                locale: food.locale,
+                nutrientTableId: food.nutrientTableId ?? '',
+                nutrientTableCode: food.nutrientTableCode ?? '',
+                reason: result.reason,
+              });
+            }
             break;
           case 'cleared':
             records.push(result.record);
@@ -681,5 +733,7 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
       await this.incrementProgress(limit);
     }
+
+    return skippedErrors;
   }
 }
