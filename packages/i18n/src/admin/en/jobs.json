@@ -42,6 +42,23 @@
     "CleanStorageFiles": {
       "_": "Clean storage files"
     },
+    "LocaleDeduplicateFoods": {
+      "_": "Locale - Deduplicate foods",
+      "localeId": "Locale ID",
+      "primaryCodes": "Primary food codes",
+      "upload": "Primary food codes text file",
+      "uploadHint": "Plain text file, one food code per line.",
+      "dryRun": "Dry run (check for errors, but do not modify data)",
+      "uploadReadError": "The uploaded file could not be read.",
+      "errors": {
+        "noPrimaryCode": "No primary code was found for \"{name}\". Codes used for this food: {codes}.",
+        "multiplePrimaryCodes": "Multiple primary codes were provided for \"{name}\". Codes used for this food: {codes}."
+      },
+      "alert": {
+        "1": "This action will remove duplicate foods (based on their local names) and only keep foods whose codes are in the primary codes list.",
+        "2": "The change is destructive and cannot be undone. Review the primary codes carefully and make sure you have a backup of the locale food database before proceeding."
+      }
+    },
     "FeedbackSchemesSync": {
       "_": "Feedback schemes - Synchronize schemes"
     },

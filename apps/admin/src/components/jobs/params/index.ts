@@ -1,6 +1,7 @@
 import CleanRedisStore from './clean-redis-store.vue';
 import LocaleCategories from './locale-categories.vue';
 import LocaleCopy from './locale-copy.vue';
+import LocaleDeduplicateFoods from './locale-deduplicate-foods.vue';
 import LocaleFoodNutrientMapping from './locale-food-nutrient-mapping.vue';
 import LocaleFoodRankingUpload from './locale-food-ranking-upload.vue';
 import LocaleFoods from './locale-foods.vue';
@@ -18,6 +19,7 @@ import SurveySessionsExport from './survey-sessions-export.vue';
 
 export default {
   CleanRedisStore,
+  LocaleDeduplicateFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
   LocaleCategories,

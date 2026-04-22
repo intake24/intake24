@@ -61,6 +61,11 @@ export const LocaleCategories = z.object({
 export const LocaleFoods = z.object({
   localeId: bigIntString,
 });
+export const LocaleDeduplicateFoods = z.object({
+  localeId: bigIntString,
+  primaryCodes: z.array(z.string().nonempty()),
+  dryRun: z.boolean().or(z.stringbool()).default(false),
+});
 export const LocaleFoodNutrientMapping = z.object({
   localeId: bigIntString,
 });
@@ -220,6 +225,7 @@ export const jobParams = z.object({
   LocaleCopy,
   LocaleCategories,
   LocaleFoods,
+  LocaleDeduplicateFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
   NutrientTableDataImport,
@@ -256,6 +262,7 @@ export const jobTypeParams = z.union([
   LocaleCopy,
   LocaleCategories,
   LocaleFoods,
+  LocaleDeduplicateFoods,
   LocaleFoodNutrientMapping,
   LocaleFoodRankingUpload,
   NutrientTableDataImport,
@@ -296,6 +303,10 @@ export const localeTasks = z.discriminatedUnion('type', [
     params: LocaleFoods,
   }),
   z.object({
+    type: z.literal('LocaleDeduplicateFoods'),
+    params: LocaleDeduplicateFoods,
+  }),
+  z.object({
     type: z.literal('LocaleFoodNutrientMapping'),
     params: LocaleFoodNutrientMapping,
   }),
@@ -310,6 +321,7 @@ export const localeJobs = [
   'LocaleCategories',
   'LocaleCopy',
   'LocaleFoods',
+  'LocaleDeduplicateFoods',
   'LocaleFoodNutrientMapping',
   'LocaleFoodRankingUpload',
 ] as const;
@@ -453,6 +465,11 @@ export const defaultJobsParams: JobParams = {
   },
   LocaleFoods: {
     localeId: '',
+  },
+  LocaleDeduplicateFoods: {
+    localeId: '',
+    primaryCodes: [],
+    dryRun: false,
   },
   LocaleFoodNutrientMapping: {
     localeId: '',

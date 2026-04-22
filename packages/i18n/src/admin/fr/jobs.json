@@ -42,6 +42,23 @@
     "CleanStorageFiles": {
       "_": "Nettoyer les fichiers de stockage"
     },
+    "LocaleDeduplicateFoods": {
+      "_": "Locale - Dédupliquer les aliments",
+      "localeId": "Identifiant régional",
+      "primaryCodes": "Codes aliments principaux",
+      "upload": "Fichier texte des codes aliments principaux",
+      "uploadHint": "Fichier texte brut, un code aliment par ligne.",
+      "dryRun": "Simulation (vérifie les erreurs, sans modifier les données)",
+      "uploadReadError": "Le fichier téléversé n'a pas pu être lu.",
+      "errors": {
+        "noPrimaryCode": "Aucun code principal n'a été trouvé pour \"{name}\". Codes utilisés pour cet aliment : {codes}.",
+        "multiplePrimaryCodes": "Plusieurs codes principaux ont été fournis pour \"{name}\". Codes utilisés pour cet aliment : {codes}."
+      },
+      "alert": {
+        "1": "Cette action supprimera les aliments en double (selon leurs noms locaux) et conservera uniquement les aliments dont les codes figurent dans la liste des codes principaux.",
+        "2": "Cette modification est destructive et ne peut pas être annulée. Vérifiez soigneusement les codes principaux et assurez-vous d'avoir une sauvegarde de la base de données des aliments de la locale avant de continuer."
+      }
+    },
     "FeedbackSchemesSync": {
       "_": "Feedback schemes - Synchronize schemes"
     },
