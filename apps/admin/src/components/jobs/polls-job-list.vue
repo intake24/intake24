@@ -5,9 +5,11 @@
         <v-avatar color="grey" icon="$jobs" />
       </template>
       <v-list-item-title>{{ $t(`jobs.types.${job.type}._`) }}</v-list-item-title>
-      <v-list-item-subtitle v-if="job.message">
-        {{ job.message }}
-      </v-list-item-subtitle>
+      <template v-if="getJobMessages(job).length">
+        <v-list-item-subtitle v-for="(message, index) in getJobMessages(job)" :key="`${job.id}-${index}`">
+          {{ message }}
+        </v-list-item-subtitle>
+      </template>
       <template #append>
         <v-list-item-action class="d-flex flex-column">
           <v-chip size="small">
@@ -66,6 +68,8 @@ import type { JobAttributes } from '@intake24/common/types/http/admin';
 
 import { defineComponent } from 'vue';
 
+import { useI18n } from '@intake24/ui';
+
 import { useDownloadJob } from './use-download-job';
 
 export default defineComponent({
@@ -79,9 +83,23 @@ export default defineComponent({
   },
 
   setup() {
+    const { i18n } = useI18n();
     const { download, downloadUrlAvailable } = useDownloadJob(true);
 
-    return { download, downloadUrlAvailable };
+    const getJobMessages = (job: JobAttributes): string[] => {
+      if (job.errorType === 'LocalisableError' && job.errorDetails) {
+        return [i18n.t((job.errorDetails as any).key, (job.errorDetails as any).params || {})];
+      }
+
+      if (job.errorType === 'AggregateLocalisableError' && Array.isArray(job.errorDetails)) {
+        return job.errorDetails
+          .map(error => i18n.t((error as any).key, (error as any).params || {}));
+      }
+
+      return job.message ? [job.message] : [];
+    };
+
+    return { download, downloadUrlAvailable, getJobMessages };
   },
 });
 </script>
