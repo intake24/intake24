@@ -39,6 +39,7 @@ export default defineComponent({
       LocaleCopy: { localeId: props.id, sourceLocaleId: '', subTasks: [...localeCopySubTasks] },
       LocaleCategories: { localeId: props.id },
       LocaleFoods: { localeId: props.id },
+      LocaleDeduplicateFoods: { localeId: props.id, primaryCodes: [], dryRun: false },
       LocaleFoodRankingUpload: { localeId: props.id, file: '', targetAlgorithm: 'fixed' },
       LocaleFoodNutrientMapping: { localeId: props.id },
     }));
@@ -46,6 +47,7 @@ export default defineComponent({
     const alerts = {
       LocaleCopy: { type: 'error' as const, lines: 1 },
       LocaleFoodRankingUpload: { type: 'error' as const, lines: 3 },
+      LocaleDeduplicateFoods: { type: 'error' as const, lines: 2 },
     };
 
     return {
