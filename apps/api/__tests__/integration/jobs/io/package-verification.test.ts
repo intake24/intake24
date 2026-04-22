@@ -219,7 +219,11 @@ export default () => {
       catch (error) {
         expect(error).toBeInstanceOf(PackageValidationFileErrors);
         const fileError = (error as PackageValidationFileErrors).details.fileErrors._uploadedFile?.[0];
-        expect(fileError?.key).toBe('io.verification.zodError');
+        expect(fileError?.key).toBe('io.verification.schemaError');
+        expect(fileError?.params).toEqual({
+          path: 'version',
+          errors: 'Invalid input: expected string, received undefined',
+        });
       }
     });
   });

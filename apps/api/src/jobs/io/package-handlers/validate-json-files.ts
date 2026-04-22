@@ -41,14 +41,36 @@ export type ValidatedPackageContents = {
   drinkwareSets?: PkgV2DrinkwareSetsFile;
 };
 
+function getZodValidationErrorMessages(error: z.ZodError): FileValidationErrorMessage[] {
+  const groupedIssues = new Map<string, string[]>();
+
+  for (const issue of error.issues) {
+    const path = issue.path.length > 0
+      ? issue.path.map(element => String(element)).join('.')
+      : '(root)';
+
+    const existingMessages = groupedIssues.get(path);
+    if (existingMessages) {
+      if (!existingMessages.includes(issue.message))
+        existingMessages.push(issue.message);
+    }
+    else {
+      groupedIssues.set(path, [issue.message]);
+    }
+  }
+
+  return [...groupedIssues.entries()].map(([path, errors]) => ({
+    key: 'io.verification.schemaError',
+    params: {
+      path,
+      errors: errors.join('; '),
+    },
+  }));
+}
+
 export function getFileValidationErrorMessages(error: unknown): FileValidationErrorMessage[] {
   if (error instanceof z.ZodError) {
-    return [{
-      key: 'io.verification.zodError',
-      params: {
-        message: JSON.stringify(error.format()),
-      },
-    }];
+    return getZodValidationErrorMessages(error);
   }
   else if (error instanceof SyntaxError) {
     return [{

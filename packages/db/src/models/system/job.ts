@@ -87,6 +87,12 @@ export default class Job extends BaseModel<InferAttributes<Job>, InferCreationAt
 
   @Column({
     allowNull: true,
+    type: DataType.STRING(255),
+  })
+  declare errorType: CreationOptional<string | null>;
+
+  @Column({
+    allowNull: true,
     type: DataType.JSONB,
   })
   declare returnValue: CreationOptional<any>;
@@ -108,7 +114,7 @@ export default class Job extends BaseModel<InferAttributes<Job>, InferCreationAt
 
   set stackTrace(value: string[] | null) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('stackTrace', value.join('\n'));
+    this.setDataValue('stackTrace', value ? value.join('\n') : null);
   }
 
   @Column({

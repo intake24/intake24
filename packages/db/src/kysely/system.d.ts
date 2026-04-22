@@ -102,6 +102,7 @@ export interface Jobs {
   downloadUrl: string | null;
   downloadUrlExpiresAt: Timestamp | null;
   errorDetails: Json | null;
+  errorType: string | null;
   id: Generated<Int8>;
   message: string | null;
   params: JobTypeParams;

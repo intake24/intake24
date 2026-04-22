@@ -23,6 +23,17 @@ export type NotificationPayload = {
   message?: string;
 };
 
+function getErrorType(error: unknown): string | null {
+  if (!error || typeof error !== 'object')
+    return null;
+
+  const constructorName = 'constructor' in error && typeof error.constructor === 'function'
+    ? error.constructor.name
+    : null;
+
+  return constructorName && constructorName !== 'Object' ? constructorName : null;
+}
+
 export default class JobsQueueHandler extends QueueHandler<JobData> {
   readonly name = 'jobs';
 
@@ -103,7 +114,12 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
             }
 
             await Promise.all([
-              dbJob.update({ completedAt: new Date(), progress: 1, successful: true, returnValue: job.returnvalue as any }),
+              dbJob.update({
+                completedAt: new Date(),
+                progress: 1,
+                successful: true,
+                returnValue: job.returnvalue as any,
+              }),
               this.notify(dbJob.userId, { jobId: dbId, status: 'success' }),
             ]);
           }
@@ -134,6 +150,8 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
               return;
             }
 
+            const errorType = getErrorType(err);
+
             await Promise.all([
               dbJob.update({
                 completedAt: new Date(),
@@ -141,6 +159,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
                 successful: false,
                 message: job.failedReason,
                 errorDetails: 'details' in err ? (err as any).details : null,
+                errorType,
                 returnValue: job.returnvalue as any,
                 stackTrace: job.stacktrace,
               }),
@@ -188,7 +207,16 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
       return;
     }
 
-    await dbJob.update({ progress: 0, startedAt: new Date() });
+    // Reset completion/error state explicitly so retries do not show stale failure metadata
+    await dbJob.update({
+      progress: 0,
+      startedAt: new Date(),
+      completedAt: null,
+      successful: null,
+      errorDetails: null,
+      errorType: null,
+      stackTrace: null,
+    });
 
     const newJob = this.resolveDynamic(type);
     return await newJob.run(job);
