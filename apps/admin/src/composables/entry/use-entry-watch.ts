@@ -27,16 +27,18 @@ export function useEntryWatch(originalEntry: Ref<object>, changed?: ComputedRef<
       return true;
     }
 
-    if (entryChanged.value)
+    if (entryChanged.value) {
       routeLeave.value = { dialog: true, to, confirmed: false };
+      return false;
+    }
   };
 
   onBeforeRouteUpdate((to) => {
-    beforeRouteCheck(to);
+    return beforeRouteCheck(to);
   });
 
   onBeforeRouteLeave((to) => {
-    beforeRouteCheck(to);
+    return beforeRouteCheck(to);
   });
 
   return { originalEntry, routeLeave, entryChanged, setOriginalEntry };
