@@ -87,15 +87,10 @@ function adminUserService({
     { userId, password }: UserPasswordInput,
     transaction?: Transaction,
   ): Promise<UserPassword> => {
-    const { salt, hash } = await defaultAlgorithm.hash(password);
+    const { hash, salt } = await defaultAlgorithm.hash(password);
 
     return UserPassword.create(
-      {
-        userId,
-        passwordSalt: salt,
-        passwordHash: hash,
-        passwordHasher: defaultAlgorithm.id,
-      },
+      { userId, hash, salt, hasher: defaultAlgorithm.id },
       { transaction },
     );
   };
@@ -115,14 +110,9 @@ function adminUserService({
 
     for (const input of inputs) {
       const { userId, password } = input;
-      const { salt, hash } = await defaultAlgorithm.hash(password);
+      const { hash, salt } = await defaultAlgorithm.hash(password);
 
-      records.push({
-        userId,
-        passwordSalt: salt,
-        passwordHash: hash,
-        passwordHasher: defaultAlgorithm.id,
-      });
+      records.push({ userId, hash, salt, hasher: defaultAlgorithm.id });
     }
 
     return UserPassword.bulkCreate(records, { transaction });
@@ -185,20 +175,11 @@ function adminUserService({
     password: string,
     transaction?: Transaction,
   ): Promise<UserPassword> => {
-    const userPassword = await UserPassword.findByPk(userId);
-    if (!userPassword)
-      throw new NotFoundError();
+    const { hash, salt } = await defaultAlgorithm.hash(password);
 
-    const { salt, hash } = await defaultAlgorithm.hash(password);
+    const [userPassword] = await UserPassword.upsert({ userId, hash, salt, hasher: defaultAlgorithm.id }, { transaction });
 
-    return userPassword.update(
-      {
-        passwordSalt: salt,
-        passwordHash: hash,
-        passwordHasher: defaultAlgorithm.id,
-      },
-      { transaction },
-    );
+    return userPassword;
   };
 
   /**

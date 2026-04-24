@@ -35,10 +35,8 @@ export function code() {
       }
 
       const userPassword = await UserPassword.findByPk(userId);
-      if (!userPassword
-        || !(await req.scope.cradle.authenticationService.verifyPassword(password, userPassword))) {
+      if (!(await req.scope.cradle.authenticationService.verifyPassword(password, userPassword)))
         throw new ValidationError('Enter your current valid password.', { path: 'password' });
-      }
 
       const { codes, hashes } = await req.scope.cradle.codeProvider.generateCodes();
       const device = await req.scope.cradle.codeProvider.registrationVerification({ userId, name, secret: JSON.stringify(hashes) });

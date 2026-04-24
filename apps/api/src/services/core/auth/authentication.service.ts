@@ -89,20 +89,19 @@ function authenticationService({
    * @param {UserPassword} [userPassword]
    * @returns {Promise<boolean>}
    */
-  const verifyPassword = async (
-    password: string,
-    userPassword?: UserPassword,
-  ): Promise<boolean> => {
-    if (!userPassword)
-      throw new Error('Password login not enabled for this user.');
+  const verifyPassword = async (password: string, userPassword?: UserPassword | null): Promise<boolean> => {
+    if (!userPassword) {
+      logger.warn('Password login not enabled for this user.');
+      return false;
+    }
 
-    const { passwordHasher, passwordSalt, passwordHash } = userPassword;
+    const { hasher, salt, hash } = userPassword;
 
-    const algorithm = supportedAlgorithms.find(a => a.id === passwordHasher);
+    const algorithm = supportedAlgorithms.find(a => a.id === hasher);
     if (!algorithm)
-      throw new Error(`Password algorithm '${passwordHasher}' not supported.`);
+      throw new Error(`Password algorithm '${hasher}' not supported.`);
 
-    return algorithm.verify(password, { salt: passwordSalt, hash: passwordHash });
+    return algorithm.verify(password, { salt, hash });
   };
 
   /**

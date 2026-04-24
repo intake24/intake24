@@ -16,17 +16,8 @@ export function profile() {
 
       const userPassword = await UserPassword.findByPk(userId);
 
-      if (
-        !userPassword
-        || !(await req.scope.cradle.authenticationService.verifyPassword(
-          passwordCurrent,
-          userPassword,
-        ))
-      ) {
-        throw new ValidationError('Enter your current valid password.', {
-          path: 'passwordCurrent',
-        });
-      }
+      if (!(await req.scope.cradle.authenticationService.verifyPassword(passwordCurrent, userPassword)))
+        throw new ValidationError('Enter your current valid password.', { path: 'passwordCurrent' });
 
       await req.scope.cradle.adminUserService.updatePassword(userId, password);
 

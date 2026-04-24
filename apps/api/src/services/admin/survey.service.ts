@@ -122,7 +122,7 @@ function adminSurveyService({
             { transaction },
           ),
           user.$add('permissions', surveyRespondentPermission, { transaction }),
-          adminUserService.createPassword({ userId, password: password ?? randomString(12) }, transaction),
+          password ? adminUserService.createPassword({ userId, password }, transaction) : null,
           userCustomFields && customFields?.length
             ? UserCustomField.bulkCreate(
                 customFields.map(field => ({ ...field, userId })),
@@ -196,8 +196,10 @@ function adminSurveyService({
           username,
           urlAuthToken: randomString(urlTokenLength, urlTokenCharset),
         });
-        passwordRecords.push({ userId, password: password ?? randomString(12) });
         permissionRecords.push({ userId, permissionId });
+
+        if (password)
+          passwordRecords.push({ userId, password });
       }
 
       const [aliases] = await Promise.all([

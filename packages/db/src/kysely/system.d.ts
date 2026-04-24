@@ -500,9 +500,9 @@ export interface UserPasswordResets {
 }
 
 export interface UserPasswords {
-  passwordHash: string;
-  passwordHasher: string;
-  passwordSalt: string;
+  hash: string;
+  hasher: string;
+  salt: string;
   userId: Int8;
 }
 

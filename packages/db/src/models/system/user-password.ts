@@ -34,19 +34,19 @@ export default class UserPassword extends BaseModel<
     allowNull: false,
     type: DataType.STRING(128),
   })
-  declare passwordHash: string;
+  declare hash: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  declare passwordSalt: string;
+  declare salt: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  declare passwordHasher: string;
+  declare hasher: string;
 
   @BelongsTo(() => User, 'userId')
   declare user?: NonAttribute<User[]>;

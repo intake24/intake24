@@ -280,13 +280,11 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     .executeTakeFirstOrThrow();
   log.success('Created superuser account.');
 
-  const { salt, hash } = await defaultAlgorithm.hash(superuser.password);
-  await db.system.insertInto('userPasswords').values({
-    userId: suUser.id,
-    passwordHasher: defaultAlgorithm.id,
-    passwordHash: hash,
-    passwordSalt: salt,
-  }).executeTakeFirstOrThrow();
+  const { hash, salt } = await defaultAlgorithm.hash(superuser.password);
+  await db.system
+    .insertInto('userPasswords')
+    .values({ userId: suUser.id, hash, salt, hasher: defaultAlgorithm.id })
+    .executeTakeFirstOrThrow();
   log.success('Set password for superuser account.');
 
   /*
