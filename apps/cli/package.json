@@ -56,6 +56,6 @@
     "@types/web-push": "^3.6.4",
     "@typescript/native-preview": "7.0.0-dev.20260408.1",
     "tsdown": "^0.21.7",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
