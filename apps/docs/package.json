@@ -20,8 +20,8 @@
     "@openapi-contrib/json-schema-to-openapi-schema": "^4.3.2",
     "@ts-rest/open-api": "3.53.0-rc.1",
     "@types/node": "^24.12.2",
-    "typescript": "^5.9.3",
-    "unrun": "^0.2.34",
+    "typescript": "^6.0.3",
+    "unrun": "^0.2.37",
     "vitepress": "2.0.0-alpha.16",
     "zod": "^4.3.6"
   }

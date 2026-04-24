@@ -10,6 +10,7 @@ import { colors } from '@intake24/common/theme';
 
 import resources from '../router/resources';
 
+// @ts-expect-error - will be fixed in next release
 import 'vuetify/styles';
 
 const resourceIcons = resources.reduce<Partial<IconAliases>>((acc, resource) => {

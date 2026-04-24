@@ -5,6 +5,7 @@ import { aliases, fa } from 'vuetify/iconsets/fa';
 
 import { colors } from '@intake24/common/theme';
 
+// @ts-expect-error - will be fixed in next release
 import 'vuetify/styles';
 
 export default createVuetify({
