@@ -62,7 +62,7 @@ const { update } = useBasePrompt(props, { emit });
 const videoDefaults = {
   youtube: ytVideoDefaults,
 };
-const videoTypes = [undefined, 'youtube'] as const;
+const videoTypes = [null, 'youtube'] as const;
 const videoItems = videoTypes.map(value => ({
   value,
   title: value ? i18n.t(`survey-schemes.prompts.video.${value}._`) : i18n.t('common.disabled'),

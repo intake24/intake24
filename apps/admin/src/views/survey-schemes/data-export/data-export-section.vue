@@ -34,7 +34,7 @@
                   :key="field.id"
                 >
                   <template #prepend>
-                    <v-avatar class="drag-and-drop__handle" icon="$handle" />
+                    <v-drag-and-drop-handle />
                   </template>
                   <v-list-item-subtitle class="mb-1">
                     {{ $t('survey-schemes.data-export.fields.id') }}:

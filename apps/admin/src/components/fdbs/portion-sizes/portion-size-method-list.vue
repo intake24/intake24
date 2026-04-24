@@ -28,7 +28,7 @@
           :variant="errors.has(`portionSizeMethods.${index}.*`) ? 'tonal' : undefined"
         >
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
           </template>
           <v-list-item-title>
             {{ $t(`prompts.portionSizeOption.selections.${item.description}`) }}

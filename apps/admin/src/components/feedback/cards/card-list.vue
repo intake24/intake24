@@ -32,15 +32,18 @@
         <v-list-item
           v-for="(card, index) in cards"
           :key="card.id"
+          :class="itemErrors[index]?.length ? 'text-error' : undefined"
+          :variant="itemErrors[index]?.length ? 'tonal' : undefined"
         >
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
           </template>
           <v-list-item-title>{{ getListItemTitle(card) }}</v-list-item-title>
           <v-list-item-subtitle>
             {{ `Type: ${card.type}` }}
           </v-list-item-subtitle>
           <template #append>
+            <list-item-error :errors="itemErrors[index]" />
             <v-list-item-action>
               <v-btn
                 icon
@@ -74,15 +77,17 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
+import type { ReturnUseErrors } from '@intake24/admin/composables';
 import type { Card } from '@intake24/common/feedback';
 import type { FeedbackImage, NutrientTypeResponse } from '@intake24/common/types/http/admin';
 
 import { useVModel } from '@vueuse/core';
-import { useTemplateRef } from 'vue';
+import { computed, useTemplateRef } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
+import { ListItemError } from '@intake24/admin/components/lists';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -96,6 +101,10 @@ type CardEvent = {
 defineOptions({ name: 'CardList' });
 
 const props = defineProps({
+  errors: {
+    type: Object as PropType<ReturnUseErrors>,
+    required: true,
+  },
   images: {
     type: Array as PropType<FeedbackImage[]>,
     default: () => [],
@@ -115,6 +124,11 @@ const emit = defineEmits(['update:modelValue']);
 const cards = useVModel(props, 'modelValue', emit, { deep: true, passive: true, clone: copy });
 const selector = useTemplateRef('selector');
 
+const itemErrors = computed(() => cards.value.map((_, index) => props.errors.get(`cards.${index}.*`)));
+function clearErrors(index?: number) {
+  props.errors.clear(typeof index === 'undefined' ? 'prompts.*' : `cards.${index}.*`);
+}
+
 function getListItemTitle(card: Card): string {
   const { image } = card;
 
@@ -133,6 +147,7 @@ function add() {
 };
 
 function load(items: Card[]) {
+  clearErrors();
   cards.value = [...items];
 };
 
@@ -144,9 +159,12 @@ function save({ card, index }: CardEvent) {
   if (index === -1)
     cards.value.push(card);
   else cards.value.splice(index, 1, card);
+
+  clearErrors(index);
 };
 
 function remove(index: number) {
+  clearErrors(index);
   cards.value.splice(index, 1);
 };
 </script>

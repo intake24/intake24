@@ -1,6 +1,7 @@
 import type { IconAliases } from 'vuetify';
 
 import { createVuetify } from 'vuetify';
+import { VAvatar } from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
 import { VDateInput } from 'vuetify/labs/VDateInput';
@@ -25,6 +26,9 @@ export default createVuetify({
     VStepperVerticalItem,
   },
   directives,
+  aliases: {
+    VDragAndDropHandle: VAvatar,
+  },
   defaults: {
     VAlert: {
       variant: 'tonal',
@@ -40,6 +44,11 @@ export default createVuetify({
     VCombobox: {
       hideDetails: 'auto',
       variant: 'outlined',
+    },
+    VDragAndDropHandle: {
+      class: ['drag-and-drop__handle'],
+      icon: '$handle',
+      variant: 'plain',
     },
     VDataTableServer: {
       VBtn: {

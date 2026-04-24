@@ -43,15 +43,18 @@
         <v-list-item
           v-for="(coefficient, index) in items"
           :key="coefficient.id"
+          :class="errors[index]?.length ? 'text-error' : undefined"
+          :variant="errors[index]?.length ? 'tonal' : undefined"
         >
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
             <v-icon>{{ getListItemIcon(coefficient) }}</v-icon>
           </template>
           <v-list-item-title class="font-weight-medium">
             {{ getListItemTitle(coefficient) }}
           </v-list-item-title>
           <template #append>
+            <list-item-error :errors="errors[index]" />
             <v-list-item-action>
               <v-btn
                 icon
@@ -188,70 +191,68 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
+import type { ReturnUseErrors } from '@intake24/admin/composables';
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
 
-import { defineComponent } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
+import { ListItemError } from '@intake24/admin/components/lists';
 import { useListWithDialog } from '@intake24/admin/composables';
-import { sexes } from '@intake24/common/feedback';
-import { ConfirmDialog } from '@intake24/ui';
+import { sexes as sexesRef } from '@intake24/common/feedback';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { getHenryCoefficientDefaults } from './henry-coefficient';
 
-export default defineComponent({
-  name: 'HenryCoefficientList',
+defineOptions({ name: 'HenryCoefficientList' });
 
-  components: { ConfirmDialog, JsonEditorDialog, OptionsMenu, SelectResource, VueDraggable },
-
-  props: {
-    modelValue: {
-      type: Array as PropType<HenryCoefficient[]>,
-      required: true,
-    },
+const props = defineProps({
+  errors: {
+    type: Object as PropType<ReturnUseErrors>,
+    required: true,
   },
-
-  setup(props, context) {
-    const { dialog, form, items, add, edit, load, remove, reset, save, update }
-      = useListWithDialog(props, context, { newItem: getHenryCoefficientDefaults });
-
-    return { dialog, form, items, add, edit, load, remove, reset, save, update };
-  },
-
-  data() {
-    return {
-      sexes: sexes.map(value => ({
-        title: this.$t(`feedback-schemes.sexes.${value}`),
-        value,
-        icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
-      })),
-    };
-  },
-
-  methods: {
-    getGenderIcon(gender: Sex): string {
-      const icons: Record<Sex, string> = { m: 'fas fa-mars', f: 'fas fa-venus' };
-      return icons[gender];
-    },
-
-    getListItemIcon(coefficient: HenryCoefficient): string {
-      const { sex } = coefficient;
-
-      return this.getGenderIcon(sex);
-    },
-
-    getListItemTitle(coefficient: HenryCoefficient): string {
-      const { sex, age } = coefficient;
-
-      return `${this.$t(`feedback-schemes.sexes.${sex}`)} (${age.start} => ${age.end})`;
-    },
+  modelValue: {
+    type: Array as PropType<HenryCoefficient[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+const { i18n: { t } } = useI18n();
+
+const { dialog, errors, form, items, add, edit, load, remove, reset, save, update }
+  = useListWithDialog(
+    props,
+    { emit },
+    { newItem: getHenryCoefficientDefaults, errorPrefix: 'henryCoefficients' },
+  );
+
+const sexes = sexesRef.map(value => ({
+  title: t(`feedback-schemes.sexes.${value}`),
+  value,
+  icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
+}));
+
+function getGenderIcon(gender: Sex): string {
+  const icons: Record<Sex, string> = { m: 'fas fa-mars', f: 'fas fa-venus' };
+  return icons[gender];
+}
+
+function getListItemIcon(coefficient: HenryCoefficient): string {
+  const { sex } = coefficient;
+
+  return getGenderIcon(sex);
+};
+
+function getListItemTitle(coefficient: HenryCoefficient): string {
+  const { sex, age } = coefficient;
+
+  return `${t(`feedback-schemes.sexes.${sex}`)} (${age.start} => ${age.end})`;
+};
 </script>
 
 <style lang="scss" scoped></style>

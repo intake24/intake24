@@ -10,7 +10,7 @@ export type RangeType = (typeof rangeType)[number];
 export const demographicGroupScaleSector = z.object({
   name: requiredLocaleTranslation,
   summary: sanitizedLocaleTranslation,
-  description: requiredLocaleTranslation,
+  description: sanitizedLocaleTranslation,
   intake: z.enum(['summary', 'description']).array(),
   range,
   sentiment: z.enum(sentiments),

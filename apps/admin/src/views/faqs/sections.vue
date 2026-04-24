@@ -48,7 +48,7 @@
       >
         <div class="d-flex align-center">
           <div class="">
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
           </div>
           <div class="text-h5 font-weight-medium flex-1-1 text-truncate">
             {{ translate(item.title) }}

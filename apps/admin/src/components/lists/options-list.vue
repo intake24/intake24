@@ -22,7 +22,7 @@
         :ripple="false"
       >
         <template #prepend>
-          <v-avatar class="drag-and-drop__handle" icon="$handle" />
+          <v-drag-and-drop-handle />
         </template>
         <div class="d-flex flex-column align-stretch align-lg-stretch gr-2 pa-2">
           <v-text-field

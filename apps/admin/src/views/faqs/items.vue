@@ -37,7 +37,7 @@
               :variant="itemErrors(index).length ? 'tonal' : undefined"
             >
               <template #prepend>
-                <v-avatar class="drag-and-drop__handle" icon="$handle" />
+                <v-drag-and-drop-handle />
               </template>
               <v-list-item-title>{{ translate(item.title) }}</v-list-item-title>
               <template #append>

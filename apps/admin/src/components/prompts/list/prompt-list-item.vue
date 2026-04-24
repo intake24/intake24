@@ -4,7 +4,7 @@
     :variant="errors.length ? 'tonal' : undefined"
   >
     <template #prepend>
-      <v-avatar class="drag-and-drop__handle" icon="$handle" />
+      <v-drag-and-drop-handle />
     </template>
     <v-list-item-title>{{ prompt.name }}</v-list-item-title>
     <v-list-item-subtitle>

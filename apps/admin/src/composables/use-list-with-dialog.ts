@@ -1,5 +1,7 @@
 import type { Ref, SetupContext, UnwrapRef } from 'vue';
 
+import type { ReturnUseErrors } from './use-errors';
+
 import { deepEqual } from 'fast-equals';
 import { computed, ref, toRefs, useTemplateRef, watch } from 'vue';
 import { VForm } from 'vuetify/components';
@@ -9,13 +11,15 @@ import { copy } from '@intake24/common/util';
 export type ListProps<O> = {
   modelValue: O[];
   defaults?: O[];
+  errors?: ReturnUseErrors;
 };
 
 export type ListOps<I, O = I> = {
   newItem: () => I;
   transformIn?: (item: O, index: number) => I;
-  transformOut?: (item: I, index: number) => O;
+  transformOut?: (item: UnwrapRef<I>, index: number) => O;
   watch?: boolean;
+  errorPrefix?: string;
 };
 
 // TODO: fix generic types casting
@@ -28,6 +32,7 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
   const items = ref(copy(transformIn ? modelValue.value.map(transformIn) : modelValue.value)) as Ref<
     UnwrapRef<I>[]
   >;
+  const errors = computed(() => items.value.map((_, index) => props.errors?.get(`henryCoefficients.${index}.*`)));
 
   const outputItems = computed(() => (transformOut ? items.value.map(transformOut) : items.value));
 
@@ -56,6 +61,22 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
     }, { deep: true });
   }
 
+  function clearErrors(index?: number) {
+    if (!props.errors)
+      return;
+
+    const prefix = [];
+    if (ops.errorPrefix)
+      prefix.push(ops.errorPrefix);
+
+    if (typeof index === 'number')
+      prefix.push(index);
+
+    prefix.push('*');
+
+    props.errors.clear(prefix.join('.'));
+  }
+
   const add = () => {
     dialog.value = newDialog(true);
   };
@@ -72,11 +93,13 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
   };
 
   const load = (list: UnwrapRef<I>[]) => {
+    clearErrors();
     items.value = [...list];
     update();
   };
 
   const remove = (index: number) => {
+    clearErrors(index);
     items.value.splice(index, 1);
     update();
   };
@@ -90,6 +113,7 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
     if (!props.defaults)
       return;
 
+    clearErrors();
     items.value = [...props.defaults] as UnwrapRef<I>[];
     update();
   };
@@ -105,6 +129,7 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
       items.value.push(item);
     else items.value.splice(index, 1, item);
 
+    clearErrors(index);
     reset();
     update();
   };
@@ -113,6 +138,7 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
     form,
     items,
     dialog,
+    errors,
     newDialog,
     add,
     edit,

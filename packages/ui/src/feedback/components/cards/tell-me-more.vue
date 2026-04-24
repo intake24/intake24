@@ -21,10 +21,8 @@
         <v-toolbar
           class="font-weight-medium text-h3 tell-me-more-title flex-grow-0"
           color="secondary"
-          dark
-          flat
         >
-          <v-btn icon="$close" :title="$t('common.action.ok')" @click.stop="close" />
+          <v-btn icon="$close" :title="$t('common.action.ok')" variant="text" @click.stop="close" />
           <v-toolbar-title class="ps-2">
             {{ detail.name }}
           </v-toolbar-title>

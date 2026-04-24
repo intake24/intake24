@@ -20,9 +20,9 @@
       "createdAt": "2022-02-11T11:11:06.818Z",
       "updatedAt": "2022-02-11T11:11:06.818Z",
       "aliases": [],
-      "customFields": []
+      "customData": []
     },
-    "customFields": [
+    "customData": [
       {
         "id": "636",
         "surveySubmissionId": "e95edf00-97bc-441a-b979-18689a107089",
@@ -55,7 +55,7 @@
         "hours": 8,
         "minutes": 0,
         "name": "Breakfast",
-        "customFields": [
+        "customData": [
           {
             "id": "250",
             "mealId": "318",
@@ -78,7 +78,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "7621",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "2131",
@@ -1237,9 +1237,9 @@
       "createdAt": "2022-02-11T11:11:06.818Z",
       "updatedAt": "2022-02-11T11:11:06.818Z",
       "aliases": [],
-      "customFields": []
+      "customData": []
     },
-    "customFields": [
+    "customData": [
       {
         "id": "675",
         "surveySubmissionId": "55f1c730-a775-45b9-84b9-676b9393fab4",
@@ -1272,7 +1272,7 @@
         "hours": 8,
         "minutes": 0,
         "name": "Breakfast",
-        "customFields": [
+        "customData": [
           {
             "id": "261",
             "mealId": "330",
@@ -1295,7 +1295,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "2306",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "2151",
@@ -2460,7 +2460,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "10338",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "2150",
@@ -3608,7 +3608,7 @@
         "hours": 13,
         "minutes": 0,
         "name": "Lunch",
-        "customFields": [
+        "customData": [
           {
             "id": "262",
             "mealId": "331",
@@ -3631,7 +3631,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "113",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "2152",
@@ -4778,7 +4778,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "7895",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "2154",
@@ -5943,7 +5943,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "851",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "2153",
@@ -7096,9 +7096,9 @@
       "createdAt": "2022-02-11T11:11:06.818Z",
       "updatedAt": "2022-02-11T11:11:06.818Z",
       "aliases": [],
-      "customFields": []
+      "customData": []
     },
-    "customFields": [
+    "customData": [
       {
         "id": "25",
         "surveySubmissionId": "18729af6-f45a-4777-922f-d4d24a75785c",
@@ -7125,7 +7125,7 @@
         "hours": 13,
         "minutes": 0,
         "name": "Lunch",
-        "customFields": [
+        "customData": [
           {
             "id": "33",
             "mealId": "57",
@@ -7148,7 +7148,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "1306",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "1788",
@@ -8290,7 +8290,7 @@
         "hours": 16,
         "minutes": 0,
         "name": "Afternoon snack or drink",
-        "customFields": [
+        "customData": [
           {
             "id": "34",
             "mealId": "58",
@@ -8313,7 +8313,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "8713",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "1789",
@@ -9466,7 +9466,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "613",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "1791",
@@ -10589,7 +10589,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "2314",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "1790",
@@ -11749,7 +11749,7 @@
         "hours": 19,
         "minutes": 0,
         "name": "Evening meal",
-        "customFields": [
+        "customData": [
           {
             "id": "35",
             "mealId": "59",
@@ -11772,7 +11772,7 @@
             "brand": "N/A",
             "nutrientTableId": "NDNS_Yr12",
             "nutrientTableCode": "3680",
-            "customFields": [],
+            "customData": [],
             "fields": [
               {
                 "id": "1792",

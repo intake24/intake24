@@ -55,7 +55,7 @@
           :key="section.id"
         >
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
           </template>
           <v-list-item-title>{{ section.title }}</v-list-item-title>
           <template #append>

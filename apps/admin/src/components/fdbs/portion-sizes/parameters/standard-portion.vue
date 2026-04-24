@@ -31,9 +31,7 @@
       >
         <tr v-for="(unit, idx) in parameters.units" :key="unit.name">
           <td>
-            <v-icon class="drag-and-drop__handle">
-              $handle
-            </v-icon>
+            <v-drag-and-drop-handle />
           </td>
           <td>
             <select-resource v-model="unit.name" :readonly resource="standard-units">

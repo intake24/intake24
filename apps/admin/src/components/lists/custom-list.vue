@@ -59,7 +59,7 @@
       >
         <v-list-item v-for="(item, index) in items" :key="item">
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
           </template>
           <v-chip color="info">
             {{ item }}

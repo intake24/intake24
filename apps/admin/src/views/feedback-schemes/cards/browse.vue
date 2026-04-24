@@ -3,7 +3,7 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
-    <card-list v-model="data.cards" :images="refs?.images" :nutrient-types="refs?.nutrientTypes" />
+    <card-list v-model="data.cards" :errors :images="refs?.images" :nutrient-types="refs?.nutrientTypes" />
   </layout>
 </template>
 
@@ -29,7 +29,7 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
-    const { form: { data }, routeLeave, submit } = useEntryForm<
+    const { form: { data, errors }, routeLeave, submit } = useEntryForm<
       FeedbackSchemeFoodGroupsForm,
       FeedbackSchemeEntry
     >(props, {
@@ -42,7 +42,7 @@ export default defineComponent({
       ...data.value,
     }));
 
-    return { currentFeedbackScheme, entry, entryLoaded, refs, data, routeLeave, submit };
+    return { currentFeedbackScheme, entry, entryLoaded, errors, refs, data, routeLeave, submit };
   },
 });
 </script>

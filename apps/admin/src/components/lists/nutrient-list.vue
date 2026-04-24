@@ -37,7 +37,7 @@
           :key="nutrientType.id.join(':')"
         >
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
           </template>
           <v-list-item-title>{{ nutrientType.name.en }}</v-list-item-title>
           <template #append>

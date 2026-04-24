@@ -12,7 +12,7 @@
           :key="item._id"
         >
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
             <v-icon
               class="mx-2 my-auto pa-4 rounded-circle"
               :style="{ backgroundColor: item.color }"

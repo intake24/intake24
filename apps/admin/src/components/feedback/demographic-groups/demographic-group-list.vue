@@ -43,14 +43,17 @@
         <v-list-item
           v-for="(group, index) in items"
           :key="group.id"
+          :class="errors[index]?.length ? 'text-error' : undefined"
+          :variant="errors[index]?.length ? 'tonal' : undefined"
         >
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
           </template>
           <v-list-item-title class="font-weight-medium">
             {{ getListItemTitle(group) }}
           </v-list-item-title>
           <template #append>
+            <list-item-error :errors="errors[index]" />
             <v-list-item-action>
               <v-btn
                 icon
@@ -223,122 +226,86 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
+import type { ReturnUseErrors } from '@intake24/admin/composables';
 import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeResponse, PhysicalActivityLevelAttributes } from '@intake24/common/types/http/admin';
 
-import { computed, defineComponent, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor, JsonEditorDialog, useTinymce } from '@intake24/admin/components/editors';
+import { ListItemError } from '@intake24/admin/components/lists';
 import { useListWithDialog } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
-import { cardTypes as cardTypesRef, nutrientRuleTypes, rangeType, sexes } from '@intake24/common/feedback';
+import { cardTypes as cardTypesRef, nutrientRuleTypes as nutrientRuleTypesRef, rangeType, sexes as sexesRef } from '@intake24/common/feedback';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { getDemographicGroupDefaults } from './demographic-group';
 import DemographicGroupRange from './demographic-group-range.vue';
 import DemographicGroupSectors from './demographic-group-sectors.vue';
 
-export default defineComponent({
-  name: 'DemographicGroupList',
+defineOptions({ name: 'DemographicGroupList' });
 
-  components: {
-    ConfirmDialog,
-    DemographicGroupRange,
-    DemographicGroupSectors,
-    JsonEditor,
-    JsonEditorDialog,
-    OptionsMenu,
-    SelectResource,
-    VueDraggable,
+const props = defineProps({
+  errors: {
+    type: Object as PropType<ReturnUseErrors>,
+    required: true,
   },
-
-  props: {
-    nutrientTypes: {
-      type: Array as PropType<NutrientTypeResponse[]>,
-      default: () => [],
-    },
-    modelValue: {
-      type: Array as PropType<DemographicGroup[]>,
-      required: true,
-    },
+  nutrientTypes: {
+    type: Array as PropType<NutrientTypeResponse[]>,
+    default: () => [],
   },
-
-  setup(props, context) {
-    useTinymce();
-    const { i18n } = useI18n();
-    const { dialog, form, items, add, edit, load, remove, reset: resetItem, save, update }
-      = useListWithDialog(props, context, { newItem: getDemographicGroupDefaults });
-
-    const tab = ref('general');
-
-    const cardTypes = computed(() =>
-      cardTypesRef.map(value => ({
-        title: i18n.t(`feedback-schemes.cards.${value}.title`),
-        value,
-      })),
-    );
-
-    const reset = () => {
-      tab.value = 'general';
-      resetItem();
-    };
-
-    return {
-      cardTypes,
-      dialog,
-      form,
-      items,
-      tab,
-      add,
-      edit,
-      load,
-      rangeType,
-      remove,
-      reset,
-      save,
-      update,
-    };
-  },
-
-  data() {
-    return {
-      nutrientRuleTypes: nutrientRuleTypes.map(value => ({
-        title: this.$t(`feedback-schemes.nutrientRuleTypes.${value}`),
-        value,
-      })),
-      sexes: [
-        { title: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
-        ...sexes.map(value => ({
-          title: this.$t(`feedback-schemes.sexes.${value}`),
-          value,
-          icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
-        })),
-      ],
-    };
-  },
-
-  computed: {
-    physicalActivityLevels(): PhysicalActivityLevelAttributes[] {
-      return [
-        { name: this.$t('common.not.selected'), id: null },
-        ...(useEntry().refs.physicalActivityLevels ?? []),
-      ];
-    },
-  },
-
-  methods: {
-    getListItemTitle(group: DemographicGroup): string {
-      const nutrient = this.nutrientTypes.find(({ id }) => group.nutrientTypeId === id);
-
-      return [nutrient?.description, group.scaleSectors[0].name.en].filter(Boolean).join(' | ');
-    },
+  modelValue: {
+    type: Array as PropType<DemographicGroup[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+useTinymce();
+const { i18n } = useI18n();
+const { dialog, errors, form, items, add, edit, load, remove, reset: resetItem, save, update }
+  = useListWithDialog(
+    props,
+    { emit },
+    { newItem: getDemographicGroupDefaults, errorPrefix: 'demographicGroups' },
+  );
+
+const tab = ref('general');
+
+const cardTypes = cardTypesRef.map(value => ({ title: i18n.t(`feedback-schemes.cards.${value}.title`), value }));
+
+function reset() {
+  tab.value = 'general';
+  resetItem();
+}
+
+const nutrientRuleTypes = nutrientRuleTypesRef.map(value => ({ title: i18n.t(`feedback-schemes.nutrientRuleTypes.${value}`), value }));
+
+const sexes = [
+  { title: i18n.t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
+  ...sexesRef.map(value => ({
+    title: i18n.t(`feedback-schemes.sexes.${value}`),
+    value,
+    icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
+  })),
+];
+
+const physicalActivityLevels = computed<PhysicalActivityLevelAttributes[]>(() => [
+  { name: i18n.t('common.not.selected'), id: null },
+  ...(useEntry().refs.physicalActivityLevels ?? []),
+]);
+
+function getListItemTitle(group: DemographicGroup): string {
+  const nutrient = props.nutrientTypes.find(({ id }) => group.nutrientTypeId === id);
+
+  return [nutrient?.description, group.scaleSectors[0].name.en].filter(Boolean).join(' | ');
+}
 </script>
 
 <style lang="scss" scoped></style>

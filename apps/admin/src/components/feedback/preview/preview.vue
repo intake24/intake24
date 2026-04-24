@@ -14,7 +14,7 @@
     </template>
     <v-card tile>
       <v-toolbar color="secondary">
-        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
+        <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="text" @click.stop="close" />
         <v-toolbar-title>{{ $t('feedback-schemes.preview.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-container class="pa-0" fluid>

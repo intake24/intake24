@@ -43,7 +43,7 @@
           :key="item.fieldId"
         >
           <template #prepend>
-            <v-avatar class="drag-and-drop__handle" icon="$handle" />
+            <v-drag-and-drop-handle />
           </template>
           <v-list-item-title class="font-weight-medium">
             {{ item.header.en }}

@@ -5,6 +5,7 @@
     </template>
     <demographic-group-list
       v-model="data.demographicGroups"
+      :errors
       :nutrient-types="refs?.nutrientTypes"
     />
   </layout>
@@ -32,7 +33,7 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
-    const { form: { data }, routeLeave, submit } = useEntryForm<
+    const { form: { data, errors }, routeLeave, submit } = useEntryForm<
       FeedbackSchemeDemographicGroupsForm,
       FeedbackSchemeEntry
     >(props, {
@@ -42,7 +43,7 @@ export default defineComponent({
 
     const currentFeedbackScheme = computed(() => ({ ...entry.value, ...data.value }));
 
-    return { currentFeedbackScheme, entry, entryLoaded, refs, data, routeLeave, submit };
+    return { currentFeedbackScheme, entry, entryLoaded, errors, refs, data, routeLeave, submit };
   },
 });
 </script>
