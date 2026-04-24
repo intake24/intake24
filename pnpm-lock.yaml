@@ -764,8 +764,8 @@ importers:
         specifier: ^4.7.1
         version: 4.7.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.32(typescript@5.9.3)))
       uuid:
-        specifier: ^13.0.0
-        version: 13.0.0
+        specifier: ^14.0.0
+        version: 14.0.0
       vanilla-cookieconsent:
         specifier: ^3.1.0
         version: 3.1.0
@@ -4900,6 +4900,7 @@ packages:
   basic-ftp@5.2.0:
     resolution: {integrity: sha512-VoMINM2rqJwJgfdHq6RiUudKt2BV+FY5ZFezP/ypmwayk68+NzzAQy4XXLlqsGD4MCzq3DrmNFD/uUmBJuGoXw==}
     engines: {node: '>=10.0.0'}
+    deprecated: Security vulnerability fixed in 5.2.1, please upgrade
 
   bcryptjs@3.0.3:
     resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
@@ -9450,6 +9451,10 @@ packages:
 
   uuid@13.0.0:
     resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
+    hasBin: true
+
+  uuid@14.0.0:
+    resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
     hasBin: true
 
   uuid@8.3.2:
@@ -18985,6 +18990,8 @@ snapshots:
   uuid@11.1.0: {}
 
   uuid@13.0.0: {}
+
+  uuid@14.0.0: {}
 
   uuid@8.3.2: {}
 
