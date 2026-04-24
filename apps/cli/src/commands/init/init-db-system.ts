@@ -114,6 +114,8 @@ async function initDefaultData(db: KyselyDatabases) {
   );
   log.success('Cleared existing default data.');
 
+  const now = new Date();
+
   const locales = await db.foods.selectFrom('locales').selectAll().execute();
   if (locales.length) {
     const ietfLanguageTags = await fetchIetfLanguageTags();
@@ -153,8 +155,8 @@ async function initDefaultData(db: KyselyDatabases) {
         countryFlagCode,
         textDirection,
         visibility: 'public' as const,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
       };
     });
 
@@ -170,12 +172,7 @@ async function initDefaultData(db: KyselyDatabases) {
         locales.map((locale) => {
           const { id: code, ...rest } = locale;
 
-          return {
-            code,
-            ...rest,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          };
+          return { code, ...rest, createdAt: now, updatedAt: now };
         }),
       )
       .execute();
@@ -251,8 +248,8 @@ async function initDefaultData(db: KyselyDatabases) {
     meals: defaultMeals,
     prompts,
     dataExport: defaultExport,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: now,
+    updatedAt: now,
   }).executeTakeFirst();
   log.success('Inserted default survey scheme into system.surveySchemes table.');
 }
@@ -264,18 +261,14 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
   );
   log.success('Cleared existing access control data.');
 
+  const now = new Date();
+
   /*
   * Create system admin user
   */
-  const suUser = await db.system
+  const { id: userId } = await db.system
     .insertInto('users')
-    .values({
-      name: superuser.name,
-      email: superuser.email,
-      verifiedAt: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
+    .values({ name: superuser.name, email: superuser.email, verifiedAt: now, createdAt: now, updatedAt: now })
     .returningAll()
     .executeTakeFirstOrThrow();
   log.success('Created superuser account.');
@@ -283,21 +276,21 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
   const { hash, salt } = await defaultAlgorithm.hash(superuser.password);
   await db.system
     .insertInto('userPasswords')
-    .values({ userId: suUser.id, hash, salt, hasher: defaultAlgorithm.id })
+    .values({ userId, hash, salt, hasher: defaultAlgorithm.id })
     .executeTakeFirstOrThrow();
   log.success('Set password for superuser account.');
 
   /*
   * Create system admin role
   */
-  const suRole = await db.system
+  const { id: roleId } = await db.system
     .insertInto('roles')
     .values({
       name: config.acl.roles.superuser,
       displayName: config.acl.roles.superuser,
       description: 'Role gets assigned with all permissions created in system.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: now,
+      updatedAt: now,
     })
     .returningAll()
     .executeTakeFirstOrThrow();
@@ -308,12 +301,7 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
   */
   await db.system
     .insertInto('roleUser')
-    .values({
-      roleId: suRole.id,
-      userId: suUser.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
+    .values({ roleId, userId, createdAt: now, updatedAt: now })
     .execute();
   log.success('Assigned superuser role to superuser account.');
   /*
@@ -325,8 +313,8 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
       defaultPermissions.map(perm => ({
         name: perm.name,
         displayName: perm.displayName,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
       })),
     )
     .returningAll()
@@ -338,9 +326,9 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     .values(
       permissions.map(perm => ({
         permissionId: perm.id,
-        roleId: suRole.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        roleId,
+        createdAt: now,
+        updatedAt: now,
       })),
     )
     .execute();
