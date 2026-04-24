@@ -8,7 +8,7 @@ import { HttpStatusCode } from 'axios';
 
 import { http } from '@intake24/ui';
 
-const authRegex = /auth\/(?:login|fido|duo|otp)$/;
+const authRegex = /auth\/(?:login|verify)$/;
 
 let isRefreshing = false;
 let tokenSubscribers: SubscribeCallback[] = [];

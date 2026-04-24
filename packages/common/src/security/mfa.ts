@@ -3,16 +3,20 @@ import { z } from 'zod';
 export const mfaModes = ['optional', 'required'] as const;
 export type MFAMode = (typeof mfaModes)[number];
 
-export const mfaProviders = ['fido', 'otp', 'duo'] as const;
+export const mfaProviders = ['fido', 'otp', 'code', 'duo'] as const;
 export type MFAProvider = (typeof mfaProviders)[number];
 
 export function isMFAProvider(provider: any): provider is MFAProvider {
   return mfaProviders.includes(provider);
 }
 
-export const duoAuthChallenge = z.object({
+export const baseChallenge = z.object({
   challengeId: z.string(),
   deviceId: z.string(),
+});
+export type BaseChallenge = z.infer<typeof baseChallenge>;
+
+export const duoAuthChallenge = baseChallenge.extend({
   provider: z.literal('duo'),
   challengeUrl: z.url(),
 });
@@ -44,20 +48,21 @@ export type PublicKeyCredentialDescriptorJSON = z.infer<
   typeof publicKeyCredentialDescriptorJSON
 >;
 
-export const fidoAuthChallenge = z.object({
-  challengeId: z.string(),
-  deviceId: z.string(),
+export const fidoAuthChallenge = baseChallenge.extend({
   provider: z.literal('fido'),
   options: publicKeyCredentialDescriptorJSON,
 });
 export type FIDOAuthChallenge = z.infer<typeof fidoAuthChallenge>;
 
-export const otpAuthChallenge = z.object({
-  challengeId: z.string(),
-  deviceId: z.string(),
+export const otpAuthChallenge = baseChallenge.extend({
   provider: z.literal('otp'),
 });
 export type OTPAuthChallenge = z.infer<typeof otpAuthChallenge>;
 
-export const mfaAuthChallenge = z.union([duoAuthChallenge, fidoAuthChallenge, otpAuthChallenge]);
+export const codeAuthChallenge = baseChallenge.extend({
+  provider: z.literal('code'),
+});
+export type CodeAuthChallenge = z.infer<typeof codeAuthChallenge>;
+
+export const mfaAuthChallenge = z.union([duoAuthChallenge, fidoAuthChallenge, otpAuthChallenge, codeAuthChallenge]);
 export type MFAAuthChallenge = z.infer<typeof mfaAuthChallenge>;

@@ -11,6 +11,7 @@
     "_": "MFA",
     "title": "Confirmer la demande d'authentification",
     "devices": "Autres appareils",
+    "code": "Enter backup code",
     "otp": "Entrer le mot de passe temporaire",
     "error": "Demande d'authentification invalide. Réessayez."
   },

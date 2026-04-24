@@ -31,7 +31,7 @@ export default {
    * @returns {Promise<string>}
    */
   async challenge(payload: MFAChallengeRequest): Promise<MFAChallengeResponse> {
-    const { data } = await http.post<MFAChallengeResponse>(`admin/auth/challenge`, payload, { withLoading: true });
+    const { data } = await http.post<MFAChallengeResponse>('admin/auth/challenge', payload, { withLoading: true });
 
     return data;
   },
@@ -43,11 +43,7 @@ export default {
    * @returns {Promise<string>}
    */
   async verify(payload: MFAVerificationRequest): Promise<string> {
-    const {
-      data: { accessToken },
-    } = await http.post<LoginResponse>(`admin/auth/${payload.provider}`, payload, {
-      withLoading: true,
-    });
+    const { data: { accessToken } } = await http.post<LoginResponse>('admin/auth/verify', payload, { withLoading: true });
 
     return accessToken;
   },
@@ -58,9 +54,7 @@ export default {
    * @returns {Promise<string>}
    */
   async refresh(): Promise<string> {
-    const {
-      data: { accessToken },
-    } = await http.post<LoginResponse>('admin/auth/refresh');
+    const { data: { accessToken } } = await http.post<LoginResponse>('admin/auth/refresh');
 
     return accessToken;
   },

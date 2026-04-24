@@ -71,6 +71,9 @@ export default createVuetify({
       hideDetails: 'auto',
       variant: 'outlined',
     },
+    VOtpInput: {
+      hideDetails: 'auto',
+    },
     VSwitch: {
       hideDetails: 'auto',
       color: 'primary',
@@ -131,6 +134,7 @@ export default createVuetify({
       upload: 'fas fa-upload',
       user: 'fas fa-user-circle',
       // MFA Provider icons
+      code: 'fas fa-key',
       duo: 'fas fa-mobile-screen-button',
       fido: 'fas fa-microchip',
       otp: 'fas fa-stopwatch',

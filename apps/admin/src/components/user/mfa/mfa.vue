@@ -62,7 +62,7 @@
               <v-card-subtitle>
                 {{ $t(`user.mfa.providers.${provider}.description`) }}
               </v-card-subtitle>
-              <component :is="provider" ref="providerRefs" @registered="add" />
+              <component :is="provider" ref="providerRefs" @close="close" @registered="add" />
             </v-card>
           </v-tabs-window-item>
         </v-tabs-window>
@@ -130,20 +130,21 @@ import { useMessages } from '@intake24/admin/stores';
 import { mfaProviders } from '@intake24/common/security';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
+import Code from './code.vue';
 import Duo from './duo.vue';
 import Fido from './fido.vue';
 import Otp from './otp.vue';
 
 defineOptions({
   name: 'UserMFA',
-  components: { Duo, Otp, Fido },
+  components: { Code, Duo, Fido, Otp },
 });
 
 const { i18n: { t } } = useI18n();
 const http = useHttp();
 const route = useRoute();
 
-const providerRefs = ref<InstanceType<typeof Otp | typeof Fido | typeof Duo>[]>();
+const providerRefs = ref<InstanceType<typeof Code | typeof Duo | typeof Fido | typeof Otp>[]>();
 
 const dialog = ref(false);
 const tab = ref<MFAProvider>(mfaProviders[0]);

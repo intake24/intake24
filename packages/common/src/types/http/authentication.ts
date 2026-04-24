@@ -69,6 +69,15 @@ export type DuoAuthenticationVerificationRequest = z.infer<
   typeof duoAuthenticationVerificationRequest
 >;
 
+export const codeAuthenticationVerificationRequest = z.object({
+  challengeId: z.string(),
+  provider: z.literal('code'),
+  token: z.string(),
+});
+export type CodeAuthenticationVerificationRequest = z.infer<
+  typeof codeAuthenticationVerificationRequest
+>;
+
 /* validation for  import type { AuthenticationResponseJSON,} from '@simplewebauthn/server'; */
 export const authenticationResponseJSON = z.object({
   id: z.string(),
@@ -99,9 +108,12 @@ export type FIDOAuthenticationVerificationRequest = z.infer<
   typeof fidoAuthenticationVerificationRequest
 >;
 
-export type MFAVerificationRequest
-  = | OTPAuthenticationVerificationRequest
-    | DuoAuthenticationVerificationRequest
-    | FIDOAuthenticationVerificationRequest;
+export const mfaVerificationRequest = z.union([
+  codeAuthenticationVerificationRequest,
+  duoAuthenticationVerificationRequest,
+  fidoAuthenticationVerificationRequest,
+  otpAuthenticationVerificationRequest,
+]);
+export type MFAVerificationRequest = z.infer<typeof mfaVerificationRequest>;
 
 export type RefreshResponse = LoginResponse;

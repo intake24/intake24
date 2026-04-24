@@ -1,3 +1,5 @@
+export * from './code.provider';
+export { default as codeProvider } from './code.provider';
 export * from './duo.provider';
 export { default as duoProvider } from './duo.provider';
 export * from './fido.provider';

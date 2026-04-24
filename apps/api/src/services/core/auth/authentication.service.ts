@@ -58,6 +58,7 @@ function authenticationService({
   jwtService,
   logger: globalLogger,
   signInService,
+  codeProvider,
   duoProvider,
   otpProvider,
   fidoProvider,
@@ -69,6 +70,7 @@ function authenticationService({
   | 'jwtService'
   | 'logger'
   | 'signInService'
+  | 'codeProvider'
   | 'duoProvider'
   | 'otpProvider'
   | 'fidoProvider'
@@ -135,7 +137,7 @@ function authenticationService({
       throw new NotFoundError('No MFA devices found.');
 
     const { id: deviceId, provider } = device;
-    const providers = { duo: duoProvider, otp: otpProvider, fido: fidoProvider };
+    const providers = { code: codeProvider, duo: duoProvider, otp: otpProvider, fido: fidoProvider };
 
     const challenge = await providers[provider].authenticationChallenge(device);
 
@@ -558,6 +560,9 @@ function authenticationService({
       } = device;
 
       switch (provider) {
+        case 'code':
+          await codeProvider.authenticationVerification({ deviceId, secret, token: body.token });
+          break;
         case 'duo':
           await duoProvider.authenticationVerification({ email, token: body.token });
           break;

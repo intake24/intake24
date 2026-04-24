@@ -1,7 +1,14 @@
 <template>
   <v-stepper-vertical v-model="progress" flat hide-actions>
     <template #default="{ step }">
-      <v-stepper-vertical-item :complete="step > 1" :title="$t('user.mfa.devices.init.title')" value="1">
+      <v-stepper-vertical-item
+        :complete="step > 1"
+        :title="$t('user.mfa.providers.fido.challenge.title')"
+        value="1"
+      >
+        <div class="text-subtitle-2">
+          {{ $t('user.mfa.providers.fido.challenge.text') }}
+        </div>
         <v-row>
           <v-col cols="12" sm="6">
             <v-btn
@@ -12,35 +19,50 @@
               rounded
               @click="challenge"
             >
-              {{ $t('user.mfa.devices.init._') }}
+              {{ $t('user.mfa.providers.fido.challenge._') }}
             </v-btn>
           </v-col>
         </v-row>
       </v-stepper-vertical-item>
-      <v-stepper-vertical-item :complete="step > 2" :title="$t('user.mfa.devices.name.title')" value="2">
+      <v-stepper-vertical-item
+        :complete="step > 2"
+        :title="$t('user.mfa.providers.fido.verify.title')"
+        value="2"
+      >
         <v-container>
           <v-row>
             <v-col cols="12" sm="8">
               <v-form @submit.prevent="verify">
                 <v-text-field
                   v-model="data.name"
-                  class="my-2"
+                  class="mb-4"
                   :error-messages="errors.get('name')"
-                  hide-details="auto"
                   :label="$t('user.mfa.devices.name._')"
                   name="name"
-                  variant="outlined"
                   @update:model-value="errors.clear('name')"
                 />
-                <v-btn block class="my-4" color="secondary" rounded type="submit">
-                  {{ $t('user.mfa.devices.verify') }}
+                <v-btn block color="secondary" rounded type="submit">
+                  {{ $t('user.mfa.providers.fido.verify._') }}
                 </v-btn>
               </v-form>
             </v-col>
           </v-row>
         </v-container>
       </v-stepper-vertical-item>
-      <v-stepper-vertical-item :complete="step >= 3" :title="$t('user.mfa.devices.registered')" value="3" />
+      <v-stepper-vertical-item
+        :complete="step >= 3"
+        :title="$t('user.mfa.providers.fido.finalize.title')"
+        value="3"
+      >
+        <div class="d-flex flex-column ga-4">
+          <div>
+            {{ $t('user.mfa.providers.fido.finalize.text') }}
+          </div>
+          <v-btn class="align-self-end" color="info" rounded variant="text" @click="emit('close')">
+            {{ $t('common.action.close') }}
+          </v-btn>
+        </div>
+      </v-stepper-vertical-item>
     </template>
   </v-stepper-vertical>
 </template>
@@ -64,7 +86,7 @@ export interface FIDOForm extends Omit<FIDORegistrationVerificationRequest, 'res
 
 defineOptions({ name: 'FidoDevice' });
 
-const emit = defineEmits(['registered']);
+const emit = defineEmits(['close', 'registered']);
 
 const http = useHttp();
 
@@ -72,7 +94,7 @@ const url = 'admin/user/mfa/providers/fido';
 const progress = ref(1);
 const { data, errors, post, reset } = useForm<FIDOForm>({ data: {
   challengeId: '',
-  name: 'My FIDO device',
+  name: 'FIDO device',
   response: null,
 } });
 

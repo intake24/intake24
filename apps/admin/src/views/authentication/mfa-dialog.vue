@@ -6,8 +6,8 @@
         <v-toolbar-title>{{ $t('common.mfa.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-row no-gutters>
-        <v-col cols="12" sm="6">
-          <v-sheet color="grey-lighten-3 d-flex justify-center align-center pa-6 h-100">
+        <v-col ref="input" cols="12" md="6">
+          <v-sheet color="grey-lighten-3 d-flex justify-center align-center pa-4 pa-md-6 h-100">
             <div v-if="provider === 'duo'" class="d-flex flex-column align-center">
               <v-progress-circular
                 class="mb-4"
@@ -18,9 +18,7 @@
                 :width="20"
               >
                 <div class="d-flex align-center flex-column">
-                  <v-icon class="mb-2 ml-2" color="secondary" size="80">
-                    $duo
-                  </v-icon>
+                  <v-icon class="mb-2 ml-2" color="secondary" icon="$duo" size="80" />
                   <span class="font-weight-bold text-h4">{{ duo.value / 20 }} </span>
                 </div>
               </v-progress-circular>
@@ -33,28 +31,27 @@
               class="d-flex flex-column align-center"
               @click="fidoChallenge"
             >
-              <v-icon class="mb-6" color="secondary" size="80">
-                $fido
-              </v-icon>
+              <v-icon class="mb-6" color="secondary" icon="$fido" size="80" />
               <v-btn block color="secondary" rounded @click="fidoChallenge">
                 {{ $t('common.action.retry') }}
               </v-btn>
             </div>
-            <v-form v-if="provider === 'otp'" autocomplete="off" @submit.prevent="otpChallenge">
-              <div class="d-flex flex-column align-center">
-                <v-icon class="mb-4" color="secondary" size="80">
-                  $otp
-                </v-icon>
-                <p class="mb-2 text-subtitle-1">
+            <v-form
+              v-if="provider === 'otp'"
+              autocomplete="off"
+              class="w-100"
+              @submit.prevent="otpChallenge"
+            >
+              <div class="d-flex flex-column align-center ga-4">
+                <v-icon color="secondary" icon="$otp" size="80" />
+                <p class="text-subtitle-1">
                   {{ $t('common.mfa.otp') }}
                 </p>
                 <v-otp-input
                   v-model="otp.data.value.token"
                   autocomplete="off"
-                  class="mb-4"
                   color="white"
                   :error-messages="otp.errors.get('token')"
-                  hide-details="auto"
                   length="6"
                   name="token"
                   @update:model-value="otp.errors.clear('token')"
@@ -64,9 +61,39 @@
                 </v-btn>
               </div>
             </v-form>
+            <v-form
+              v-if="provider === 'code'"
+              autocomplete="off"
+              class="w-100"
+              @submit.prevent="codeChallenge"
+            >
+              <div class="d-flex flex-column align-center ga-4">
+                <v-icon color="secondary" icon="$code" size="80" />
+                <p class="text-subtitle-1">
+                  {{ $t('common.mfa.code') }}
+                </p>
+                <v-text-field
+                  v-model="code.data.value.token"
+                  autocomplete="off"
+                  class="w-100 bg-white"
+                  :error-messages="code.errors.get('token')"
+                  name="token"
+                  variant="outlined"
+                  @update:model-value="code.errors.clear('token')"
+                />
+                <v-btn block color="secondary" rounded type="submit">
+                  {{ $t('common.action.confirm._') }}
+                </v-btn>
+              </div>
+            </v-form>
           </v-sheet>
         </v-col>
-        <v-col cols="12" sm="6">
+        <v-col
+          class="overflow-auto"
+          cols="12"
+          md="6"
+          :style="{ height: $vuetify.display.smAndDown ? 'auto' : `${height}px` }"
+        >
           <v-list
             v-model:selected="deviceId"
             class="list-border"
@@ -81,7 +108,7 @@
                 </v-icon>
               </template>
               <v-list-item-title>{{ device.name }}</v-list-item-title>
-              <v-list-item-subtitle>{{ device.provider }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ $t(`user.mfa.providers.${device.provider}.title`) }}</v-list-item-subtitle>
             </v-list-item>
           </v-list>
         </v-col>
@@ -96,8 +123,9 @@ import type { PropType } from 'vue';
 import type { LoginResponse, MFAChallengeResponse } from '@intake24/common/types/http';
 
 import { startAuthentication } from '@simplewebauthn/browser';
+import { useElementSize } from '@vueuse/core';
 import { HttpStatusCode, isAxiosError } from 'axios';
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useForm } from '@intake24/admin/composables';
@@ -114,15 +142,18 @@ const props = defineProps({
     required: true,
   },
 });
-
 const emit = defineEmits(['close', 'confirm']);
 
 const auth = useAuth();
 const router = useRouter();
 const { i18n: { t } } = useI18n();
 
+const input = useTemplateRef('input');
+const { height } = useElementSize(input);
+
 const deviceId = ref(props.authData.challenge?.deviceId ? [props.authData.challenge?.deviceId] : []);
 const otp = useForm({ data: { challengeId: '', provider: 'otp', token: '' } });
+const code = useForm({ data: { challengeId: '', provider: 'code', token: '' } });
 const duo = ref({
   interval: undefined as undefined | number,
   value: 100,
@@ -195,6 +226,26 @@ async function fidoChallenge() {
   }
 };
 
+async function codeChallenge() {
+  if (props.authData.challenge?.provider !== 'code')
+    throw new Error('Invalid MFA provider');
+
+  const { challengeId, provider } = props.authData.challenge;
+
+  code.data.value.challengeId = challengeId;
+  code.data.value.provider = provider;
+
+  try {
+    const { accessToken } = await code.post<LoginResponse>('admin/auth/verify', { withLoading: true });
+    await auth.successfulLogin(accessToken);
+    await finalizeLogin();
+  }
+  catch (err) {
+    if (isAxiosError(err) && err.response?.status !== HttpStatusCode.BadRequest)
+      fail();
+  }
+};
+
 async function otpChallenge() {
   if (props.authData.challenge?.provider !== 'otp')
     throw new Error('Invalid MFA provider');
@@ -205,9 +256,7 @@ async function otpChallenge() {
   otp.data.value.provider = provider;
 
   try {
-    const { accessToken } = await otp.post<LoginResponse>(`admin/auth/${provider}`, {
-      withLoading: true,
-    });
+    const { accessToken } = await otp.post<LoginResponse>('admin/auth/verify', { withLoading: true });
     await auth.successfulLogin(accessToken);
     await finalizeLogin();
   }

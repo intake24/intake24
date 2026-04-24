@@ -38,13 +38,17 @@ It is encouraged to set up more than one multi-factor authentication method to a
 
 One-time password (OTP) authentication method can be set up by installing an authenticator app (e.g. `Google Authenticator`, `MS Authenticator`, `Ente Auth` etc) and scanning the QR code or entering the secret key manually.
 
-### FIDO2 / WebAuthn
+### Passkey (FIDO2 / WebAuthn)
 
 Several `FIDO2` / `WebAuthn` authentication methods are available based on user's browser / platform support:
 
+- platform `passkey` authentication flows (e.g. fingerprint, face recognition, PIN) - available on supported mobile devices and desktop platforms
+
 - hardware security key (e.g. YubiKey)
 
-- platform `passkey` authentication flows (e.g. Windows Hello on Windows, Touch ID / Face ID on macOS / iOS)
+### Backup codes
+
+Backup codes can be used as a fallback authentication method when other methods are unavailable. Each code can be used only once. It is recommended to generate backup codes and store them in a safe place when setting up multi-factor authentication.
 
 ### Duo Security
 

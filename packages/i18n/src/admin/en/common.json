@@ -9,8 +9,9 @@
   },
   "mfa": {
     "_": "MFA",
-    "title": "Authentication challenge",
-    "devices": "Other devices",
+    "title": "Multi-factor authentication",
+    "devices": "My devices",
+    "code": "Enter backup code",
     "otp": "Enter one-time password",
     "error": "Invalid authentication challenge. Try again."
   },

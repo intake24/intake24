@@ -38,29 +38,7 @@ export function authentication() {
 
       return { status: 200, body: result };
     },
-    duo: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
-
-      attachRefreshToken(
-        refreshToken,
-        res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie,
-      );
-
-      return { status: 200, body: { accessToken } };
-    },
-    fido: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
-
-      attachRefreshToken(
-        refreshToken,
-        res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie,
-      );
-
-      return { status: 200, body: { accessToken } };
-    },
-    otp: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+    verify: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
       const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
 
       attachRefreshToken(

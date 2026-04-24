@@ -65,7 +65,7 @@ export default class MFADevice extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128),
+    type: DataType.TEXT,
   })
   declare secret: string;
 

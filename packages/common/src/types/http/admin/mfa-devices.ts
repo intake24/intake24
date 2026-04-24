@@ -18,6 +18,12 @@ export type MFADeviceAttributes = z.infer<typeof mfaDeviceAttributes>;
 export const mfaDeviceResponse = mfaDeviceAttributes.omit({ secret: true });
 export type MFADeviceResponse = z.infer<typeof mfaDeviceResponse>;
 
+export const codeDeviceResponse = z.object({
+  codes: z.string().array(),
+  device: mfaDeviceResponse,
+});
+export type CodeDeviceResponse = z.infer<typeof codeDeviceResponse>;
+
 export const mfaDevicesResponse = z.object({
   status: z.boolean(),
   devices: mfaDeviceResponse.array(),
@@ -25,11 +31,22 @@ export const mfaDevicesResponse = z.object({
 
 export type MFADevicesResponse = z.infer<typeof mfaDevicesResponse>;
 
+export const codeRegistrationChallenge = z.object({
+  challengeId: z.string(),
+});
+export type CodeRegistrationChallenge = z.infer<typeof codeRegistrationChallenge>;
+
+export const codeRegistrationVerificationRequest = z.object({
+  challengeId: z.string(),
+  name: z.string().min(3).max(128),
+  password: z.string(),
+});
+export type CodeRegistrationVerificationRequest = z.infer<typeof codeRegistrationVerificationRequest>;
+
 export const duoRegistrationChallenge = z.object({
   challengeId: z.string(),
   challengeUrl: z.url(),
 });
-
 export type DuoRegistrationChallenge = z.infer<typeof duoRegistrationChallenge>;
 
 export const duoRegistrationVerificationRequest = z.object({

@@ -24,6 +24,7 @@ import type {
   Cache,
   CachedParentCategoriesService,
   CategoryContentsService,
+  CodeProvider,
   CommsProvider,
   CommsService,
   DataExportFields,
@@ -150,6 +151,7 @@ export interface IoC extends PackageWritersAndJobs {
   otpProvider: OTPProvider;
   fidoProvider: FIDOProvider;
   duoProvider: DuoProvider;
+  codeProvider: CodeProvider;
 
   // Data export
   dataExportFields: DataExportFields;

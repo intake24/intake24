@@ -81,7 +81,7 @@ function fidoProvider({
 
     return db.system.transaction(async (transaction) => {
       const device = await MFADevice.create(
-        { userId, provider: 'fido', name, secret: randomString(32) },
+        { userId, provider, name, secret: randomString(32) },
         { transaction },
       );
 

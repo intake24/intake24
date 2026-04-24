@@ -18,6 +18,7 @@ import {
   Cache,
   cachedParentCategoriesService,
   categoryContentsService,
+  codeProvider,
   commsProviders,
   commsService,
   dataExportFields,
@@ -85,6 +86,7 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     duoProvider: asFunction(duoProvider).singleton(),
     fidoProvider: asFunction(fidoProvider).singleton(),
     otpProvider: asFunction(otpProvider).singleton(),
+    codeProvider: asFunction(codeProvider).singleton(),
 
     jwtService: asFunction(jwtService).singleton(),
     jwtRotationService: asFunction(jwtRotationService).singleton(),

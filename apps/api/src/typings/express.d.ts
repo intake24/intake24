@@ -23,6 +23,9 @@ declare module 'express-session' {
       userId: string;
       amr: AmrMethod[];
     };
+    codeRegChallenge: {
+      challengeId: string;
+    };
     duoRegChallenge: {
       challengeId: string;
     };

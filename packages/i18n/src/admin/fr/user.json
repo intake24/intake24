@@ -20,13 +20,13 @@
     "create": "New job"
   },
   "personalAccessTokens": {
-    "_": "Personal access token",
-    "title": "Personal access tokens",
-    "issue": "Issue token",
-    "revoke": "Revoke token",
-    "revoked": "Revoked",
-    "none": "No personal access token created.",
-    "save": "Store the token below securely. You won't be able to access it again."
+    "_": "Jeton d'accès personnel",
+    "title": "Jeton d'accès personnel",
+    "issue": "Émettre un jeton",
+    "revoke": "Révoquer un jeton",
+    "revoked": "Révoqué",
+    "none": "Aucun jeton d'accès personnel créé.",
+    "save": "Conservez le jeton ci-dessous en lieu sûr. Vous ne pourrez plus y accéder."
   },
   "mfa": {
     "_": "MFA",
@@ -48,35 +48,87 @@
         "_": "Preféré",
         "promote": "Faire passer au statut préféré ?",
         "promoteConfirm": "Faire passer {name} au statut préféré ?"
-      },
-      "init": {
-        "_": "Initialiser",
-        "title": "Initialiser l'appareil"
-      },
-      "qr": {
-        "title": "Scanner le QR code et vérifier",
-        "text": "Scanner le QR code with avec votre application de génération de mots de passe et entrez le code ci-dessous."
-      },
-      "registered": "Appareil enregistré avec succès",
-      "verify": "Vérifier l'appareil"
+      }
     },
     "providers": {
       "_": "Fournisseur",
       "title": "Fournisseurs",
-      "otp": {
-        "_": "OTP",
-        "title": "Mot de passe à usage unique",
-        "description": "Mots de passe temporaires générés par des applications de génération de mots de passe. Applications gérées: Google Authenticator, Microsoft Authenticator, Authy, Ente etc."
-      },
-      "fido": {
-        "_": "FIDO",
-        "title": "FIDO / WebAuthn",
-        "description": "Appareils conformes à WebAuthn / FIDO2. Appareils gérés: hardware keys, Windows Hello, Face ID etc."
+      "code": {
+        "_": "Code",
+        "title": "Code de sauvegarde",
+        "description": "Codes de sauvegarde à usage unique. Chaque code ne peut être utilisé qu'une seule fois.",
+        "challenge": {
+          "_": "Initialiser",
+          "title": "Initialiser les codes de sauvegarde"
+        },
+        "verify": {
+          "_": "Enregistrer",
+          "title": "Confirmer le mot de passe",
+          "text": "Entrez votre mot de passe pour enregistrer les codes de sauvegarde."
+        },
+        "finalize": {
+          "_": "Finaliser",
+          "title": "Finaliser l'enregistrement des codes de sauvegarde",
+          "text": "Les codes de sauvegarde ont été enregistrés avec succès.",
+          "codes": "Stockez les codes de sauvegarde ci-dessous en toute sécurité. Chaque code ne peut être utilisé qu'une seule fois."
+        }
       },
       "duo": {
         "_": "Duo",
         "title": "Duo Security",
-        "description": "Duo Security est un fournisseur d'authentification multifacteurs associé au cloud. Assurez-vous que votre compte (mail) est inscrit à Duo Security avant d'ajouter cet appareil."
+        "description": "Duo Security est un fournisseur d'authentification multifacteurs basé sur le cloud. Assurez-vous que votre compte (adresse e-mail) est enregistré auprès de Duo Security avant d'ajouter cet appareil.",
+        "challenge": {
+          "_": "Initialiser",
+          "title": "Initialiser Duo Security",
+          "text": "Approve the Duo Security notification in your Duo Mobile app to register the device."
+        },
+        "verify": {
+          "_": "Enregistrer",
+          "title": "Enregistrer l'appareil Duo Security"
+        },
+        "finalize": {
+          "_": "Finaliser",
+          "title": "Finaliser l'enregistrement Duo Security",
+          "text": "Duo Security a été enregistré avec succès."
+        }
+      },
+      "fido": {
+        "_": "FIDO",
+        "title": "Passkey / FIDO2",
+        "description": "Passkey (appareils compatibles FIDO2) authentification avec tous les authentificateurs de plateforme (par exemple, empreinte digitale, visage, code PIN) ou clés matérielles sécurisées (par exemple, YubiKey).",
+        "challenge": {
+          "_": "Initialiser",
+          "title": "Initialiser l'appareil FIDO",
+          "text": "Suivez les instructions dans votre navigateur et l'appareil FIDO pour initialiser l'enregistrement."
+        },
+        "verify": {
+          "_": "Enregistrer",
+          "title": "Enregistrer l'appareil FIDO"
+        },
+        "finalize": {
+          "_": "Finaliser",
+          "title": "Finaliser l'enregistrement FIDO",
+          "text": "L'appareil FIDO a été enregistré avec succès."
+        }
+      },
+      "otp": {
+        "_": "OTP",
+        "title": "Mot de passe à usage unique",
+        "description": "Mots de passe temporaires générés par des applications de génération de mots de passe. Applications gérées: Google Authenticator, Microsoft Authenticator, Authy, Ente etc.",
+        "challenge": {
+          "_": "Initialiser",
+          "title": "Initialiser l'application OTP"
+        },
+        "verify": {
+          "_": "Enregistrer",
+          "title": "Scanner le code QR et enregistrer",
+          "text": "Scanner le code QR avec votre application d'authentification et entrer le code à usage unique ci-dessous."
+        },
+        "finalize": {
+          "_": "Finaliser",
+          "title": "Finaliser l'enregistrement OTP",
+          "text": "L'appareil OTP a été enregistré avec succès."
+        }
       }
     }
   }

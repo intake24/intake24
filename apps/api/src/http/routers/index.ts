@@ -126,6 +126,7 @@ export function registerRouters(express: Router) {
   // Admin endpoints - authenticated & verified
   const adminAuthVerifiedContract = {
     device: contract.admin.user.mfa.device,
+    code: contract.admin.user.mfa.code,
     duo: contract.admin.user.mfa.duo,
     fido: contract.admin.user.mfa.fido,
     otp: contract.admin.user.mfa.otp,
@@ -135,6 +136,7 @@ export function registerRouters(express: Router) {
     adminAuthVerifiedContract,
     server.router(adminAuthVerifiedContract, {
       device: admin.user.mfa.device(),
+      code: admin.user.mfa.code(),
       duo: admin.user.mfa.duo(),
       fido: admin.user.mfa.fido(),
       otp: admin.user.mfa.otp(),

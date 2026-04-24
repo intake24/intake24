@@ -110,12 +110,7 @@ function duoProvider({
     const { userId, name, email, token } = ops;
     await verification({ email, token }, 'user');
 
-    return MFADevice.create({
-      userId,
-      provider: 'duo',
-      name,
-      secret: randomString(32),
-    });
+    return MFADevice.create({ userId, provider, name, secret: randomString(32) });
   };
 
   const authenticationVerification = async (ops: DuoAuthenticationVerificationOps) =>

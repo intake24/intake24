@@ -3,12 +3,10 @@ import { z } from 'zod';
 
 import {
   adminAuthResponse,
-  duoAuthenticationVerificationRequest,
-  fidoAuthenticationVerificationRequest,
   loginResponse,
   mfaChallengeRequest,
   mfaChallengeResponse,
-  otpAuthenticationVerificationRequest,
+  mfaVerificationRequest,
 } from '@intake24/common/types/http';
 
 const contract = initContract();
@@ -41,44 +39,18 @@ export const authentication = contract.router({
     summary: 'Request MFA challenge',
     description: 'Request multi-factor authentication challenge',
   },
-  duo: {
+  verify: {
     method: 'POST',
-    path: '/admin/auth/duo',
+    path: '/admin/auth/verify',
     headers: {
       'user-agent': z.string().optional(),
     },
-    body: duoAuthenticationVerificationRequest,
+    body: mfaVerificationRequest,
     responses: {
       200: loginResponse,
     },
-    summary: 'Verify Duo challenge',
-    description: 'Verify Duo multi-factor authentication challenge',
-  },
-  fido: {
-    method: 'POST',
-    path: '/admin/auth/fido',
-    headers: {
-      'user-agent': z.string().optional(),
-    },
-    body: fidoAuthenticationVerificationRequest,
-    responses: {
-      200: loginResponse,
-    },
-    summary: 'Verify FIDO challenge',
-    description: 'Verify FIDO multi-factor authentication challenge',
-  },
-  otp: {
-    method: 'POST',
-    path: '/admin/auth/otp',
-    headers: {
-      'user-agent': z.string().optional(),
-    },
-    body: otpAuthenticationVerificationRequest,
-    responses: {
-      200: loginResponse,
-    },
-    summary: 'Verify OTP challenge',
-    description: 'Verify OTP multi-factor authentication challenge',
+    summary: 'Verify MFA challenge',
+    description: 'Verify multi-factor authentication challenge',
   },
   refresh: {
     method: 'POST',

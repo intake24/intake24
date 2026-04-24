@@ -46,7 +46,7 @@ function optProvider({ securityConfig }: Pick<IoC, 'securityConfig'>) {
     if (delta === null)
       throw new ValidationError('Invalid OTP token.', { path: 'token' });
 
-    return MFADevice.create({ userId, provider: 'otp', name, secret });
+    return MFADevice.create({ userId, provider, name, secret });
   };
 
   /**
