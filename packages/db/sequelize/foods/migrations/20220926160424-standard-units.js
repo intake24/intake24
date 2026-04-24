@@ -15,11 +15,11 @@ export default {
           },
           estimate_in: {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           how_many: {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           created_at: {
             allowNull: false,

@@ -6,7 +6,7 @@ export default {
           queryInterface.addColumn(
             table,
             'label',
-            { allowNull: true, type: Sequelize.TEXT({ length: 'long' }) },
+            { allowNull: true, type: Sequelize.TEXT },
             { transaction },
           ),
         ),

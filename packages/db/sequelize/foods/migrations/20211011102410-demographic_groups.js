@@ -147,7 +147,7 @@ export default {
             allowNull: false,
           },
           description: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: true,
           },
           sentiment: {

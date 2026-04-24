@@ -4,14 +4,14 @@ export default {
       await queryInterface.changeColumn(
         'category_portion_size_method_params',
         'value',
-        { type: Sequelize.TEXT({ length: 'long' }), allowNull: false },
+        { type: Sequelize.TEXT, allowNull: false },
         { transaction },
       );
 
       await queryInterface.changeColumn(
         'food_portion_size_method_params',
         'value',
-        { type: Sequelize.TEXT({ length: 'long' }), allowNull: false },
+        { type: Sequelize.TEXT, allowNull: false },
         { transaction },
       );
     }),

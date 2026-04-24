@@ -3,7 +3,7 @@ export default {
   async up(queryInterface, Sequelize) {
     await queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.addColumn('surveys', 'search_settings', {
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
         allowNull: true,
       }, { transaction });
 

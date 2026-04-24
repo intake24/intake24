@@ -30,7 +30,7 @@ export default {
             allowNull: true,
           },
           data: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: true,
           },
         },

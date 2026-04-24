@@ -23,7 +23,7 @@ export default {
             allowNull: false,
           },
           synonyms: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: false,
           },
         },
@@ -76,7 +76,7 @@ export default {
             allowNull: false,
           },
           words: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: false,
           },
         },
@@ -128,7 +128,7 @@ export default {
             allowNull: false,
           },
           words: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: false,
           },
         },

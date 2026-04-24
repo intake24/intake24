@@ -291,12 +291,12 @@ export default {
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.changeColumn('client_error_reports', 'survey_state_json', {
         allowNull: false,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('faqs', 'content', {
         allowNull: false,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await Promise.all(
@@ -312,34 +312,34 @@ export default {
         ].map(column =>
           queryInterface.changeColumn('feedback_schemes', column, {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
 
       await queryInterface.changeColumn('jobs', 'params', {
         allowNull: true,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('language_translations', 'messages', {
         allowNull: false,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('mfa_authenticators', 'transports', {
         allowNull: false,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('personal_access_tokens', 'scopes', {
         allowNull: true,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('survey_scheme_prompts', 'prompt', {
         allowNull: false,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await Promise.all(
@@ -351,14 +351,14 @@ export default {
         ].map(column =>
           queryInterface.changeColumn('survey_schemes', column, {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
 
       await queryInterface.changeColumn('survey_submission_external_sources', 'data', {
         allowNull: true,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await Promise.all(
@@ -369,7 +369,7 @@ export default {
         ].map(column =>
           queryInterface.changeColumn('surveys', column, {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
@@ -377,27 +377,27 @@ export default {
       await queryInterface.changeColumn('surveys', 'notifications', {
         allowNull: false,
         defaultValue: '[]',
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('tasks', 'params', {
         allowNull: true,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('user_securables', 'fields', {
         allowNull: true,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('user_subscriptions', 'subscription', {
         allowNull: false,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await queryInterface.changeColumn('user_survey_sessions', 'session_data', {
         allowNull: false,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
     }),
 };

@@ -6,7 +6,7 @@ export default {
         'outline_coordinates_json',
         {
           allowNull: true,
-          type: Sequelize.TEXT({ length: 'long' }),
+          type: Sequelize.TEXT,
           after: 'outline_coordinates',
         },
         { transaction },
@@ -20,7 +20,7 @@ export default {
       await queryInterface.changeColumn(
         'image_map_objects',
         'outline_coordinates_json',
-        { allowNull: false, type: Sequelize.TEXT({ length: 'long' }) },
+        { allowNull: false, type: Sequelize.TEXT },
         { transaction },
       );
 

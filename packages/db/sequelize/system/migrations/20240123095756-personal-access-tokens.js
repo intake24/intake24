@@ -25,7 +25,7 @@ export default {
           },
           scopes: {
             allowNull: true,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           revoked: {
             allowNull: false,

@@ -17,13 +17,13 @@ export default {
       await queryInterface.addColumn(
         'category_portion_size_methods',
         'parameters',
-        { type: Sequelize.TEXT({ length: 'long' }), allowNull: false, defaultValue: '{}' },
+        { type: Sequelize.TEXT, allowNull: false, defaultValue: '{}' },
         { transaction },
       );
       await queryInterface.addColumn(
         'food_portion_size_methods',
         'parameters',
-        { type: Sequelize.TEXT({ length: 'long' }), allowNull: false, defaultValue: '{}' },
+        { type: Sequelize.TEXT, allowNull: false, defaultValue: '{}' },
         { transaction },
       );
 

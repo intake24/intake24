@@ -28,11 +28,11 @@ export default {
             allowNull: false,
           },
           stack_trace: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: false,
           },
           survey_state_json: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: false,
           },
           new: {
@@ -92,7 +92,7 @@ export default {
             allowNull: true,
           },
           stack_trace: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: true,
           },
           started_at: {

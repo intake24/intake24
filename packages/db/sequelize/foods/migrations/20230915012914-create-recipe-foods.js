@@ -76,11 +76,11 @@ export default {
           },
           name: {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           description: {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           order: {
             allowNull: false,

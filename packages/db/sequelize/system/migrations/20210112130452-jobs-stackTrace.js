@@ -5,7 +5,7 @@ export default {
         'tools_tasks',
         'stack_trace',
         {
-          type: Sequelize.TEXT({ length: 'long' }),
+          type: Sequelize.TEXT,
           allowNull: true,
         },
         { transaction },

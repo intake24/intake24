@@ -7,7 +7,7 @@ export default {
         'session',
         {
           allowNull: true,
-          type: Sequelize.TEXT({ length: 'long' }),
+          type: Sequelize.TEXT,
         },
         { transaction },
       );

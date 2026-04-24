@@ -19,10 +19,10 @@ export default {
             type: Sequelize.STRING(64),
           },
           questions: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           meals: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           created_at: {
             allowNull: false,

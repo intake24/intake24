@@ -24,7 +24,7 @@ export default {
             allowNull: false,
           },
           messages: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: false,
           },
           created_at: {

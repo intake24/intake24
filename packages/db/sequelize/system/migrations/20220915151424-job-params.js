@@ -4,7 +4,7 @@ export default {
       await queryInterface.addColumn(
         'jobs',
         'params',
-        { allowNull: true, type: Sequelize.TEXT({ length: 'long' }) },
+        { allowNull: true, type: Sequelize.TEXT },
         { transaction },
       );
     }),

@@ -139,7 +139,7 @@ export default {
         ].map(table =>
           queryInterface.changeColumn(table, 'label', {
             allowNull: true,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
@@ -148,7 +148,7 @@ export default {
         ['text', 'generic_name'].map(column =>
           queryInterface.changeColumn('associated_foods', column, {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
@@ -157,7 +157,7 @@ export default {
         ['category_portion_size_methods', 'food_portion_size_methods'].map(table =>
           queryInterface.changeColumn(table, 'parameters', {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
@@ -167,7 +167,7 @@ export default {
           queryInterface.changeColumn(table, 'tags', {
             allowNull: false,
             defaultValue: '[]',
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
@@ -175,28 +175,28 @@ export default {
       await queryInterface.changeColumn('foods', 'alt_names', {
         allowNull: false,
         defaultValue: '{}',
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await Promise.all(
         ['outline_coordinates', 'volume_samples', 'volume_samples_normalised'].map(column =>
           queryInterface.changeColumn('drinkware_scales_v2', column, {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
 
       await queryInterface.changeColumn('image_map_objects', 'outline_coordinates', {
         allowNull: false,
-        type: Sequelize.TEXT({ length: 'long' }),
+        type: Sequelize.TEXT,
       }, { transaction });
 
       await Promise.all(
         ['name', 'description'].map(column =>
           queryInterface.changeColumn('recipe_foods_steps', column, {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );
@@ -205,7 +205,7 @@ export default {
         ['estimate_in', 'how_many'].map(column =>
           queryInterface.changeColumn('standard_units', column, {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           }, { transaction }),
         ),
       );

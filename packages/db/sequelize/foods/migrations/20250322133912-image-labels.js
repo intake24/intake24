@@ -8,7 +8,7 @@ export default {
             table,
             'label',
             {
-              type: Sequelize.TEXT({ length: 'long' }),
+              type: Sequelize.TEXT,
               allowNull: true,
             },
             { transaction },
@@ -19,7 +19,7 @@ export default {
         'drinkware_scales_v2',
         'label',
         {
-          type: Sequelize.TEXT({ length: 'long' }),
+          type: Sequelize.TEXT,
           allowNull: true,
         },
         { transaction },

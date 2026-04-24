@@ -36,15 +36,15 @@ export default {
           },
           top_foods: {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           food_groups: {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           henry_coefficients: {
             allowNull: true,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           created_at: {
             allowNull: false,

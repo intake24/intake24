@@ -31,7 +31,7 @@ export default {
           },
           content: {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           owner_id: {
             type: Sequelize.BIGINT,

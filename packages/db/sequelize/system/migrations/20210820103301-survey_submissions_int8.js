@@ -35,7 +35,7 @@ export default {
             allowNull: false,
           },
           log: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: true,
           },
           ux_session_id: {

@@ -21,15 +21,15 @@ export default {
           },
           questions: {
             allowNull: true,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           meals: {
             allowNull: true,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           data_export: {
             allowNull: true,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           created_at: {
             allowNull: false,

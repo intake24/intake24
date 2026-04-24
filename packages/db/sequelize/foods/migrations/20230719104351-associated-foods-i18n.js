@@ -4,14 +4,14 @@ export default {
       await queryInterface.changeColumn(
         'associated_foods',
         'generic_name',
-        { type: Sequelize.TEXT({ length: 'long' }), allowNull: false },
+        { type: Sequelize.TEXT, allowNull: false },
         { transaction },
       );
 
       await queryInterface.changeColumn(
         'associated_foods',
         'text',
-        { type: Sequelize.TEXT({ length: 'long' }), allowNull: false },
+        { type: Sequelize.TEXT, allowNull: false },
         { transaction },
       );
 

@@ -570,7 +570,7 @@ export default {
       await queryInterface.addColumn(
         'feedback_schemes',
         'demographic_groups',
-        { allowNull: true, type: Sequelize.TEXT({ length: 'long' }) },
+        { allowNull: true, type: Sequelize.TEXT },
         { transaction },
       );
 
@@ -766,14 +766,14 @@ export default {
       await queryInterface.changeColumn(
         'feedback_schemes',
         'demographic_groups',
-        { allowNull: false, type: Sequelize.TEXT({ length: 'long' }) },
+        { allowNull: false, type: Sequelize.TEXT },
         { transaction },
       );
 
       await queryInterface.changeColumn(
         'feedback_schemes',
         'henry_coefficients',
-        { allowNull: false, type: Sequelize.TEXT({ length: 'long' }) },
+        { allowNull: false, type: Sequelize.TEXT },
         { transaction },
       );
 
@@ -791,7 +791,7 @@ export default {
       await queryInterface.changeColumn(
         'feedback_schemes',
         'henry_coefficients',
-        { allowNull: true, type: Sequelize.TEXT({ length: 'long' }) },
+        { allowNull: true, type: Sequelize.TEXT },
         { transaction },
       );
 

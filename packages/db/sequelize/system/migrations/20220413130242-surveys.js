@@ -137,7 +137,7 @@ export default {
           },
           survey_scheme_overrides: {
             allowNull: true,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           search_sorting_algorithm: {
             allowNull: false,
@@ -364,11 +364,11 @@ export default {
             allowNull: true,
           },
           stack_trace: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: false,
           },
           survey_state_json: {
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
             allowNull: false,
           },
           new: {
@@ -648,7 +648,7 @@ export default {
           },
           log: {
             allowNull: true,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           ux_session_id: {
             allowNull: false,
@@ -932,7 +932,7 @@ export default {
           },
           session_data: {
             allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
+            type: Sequelize.TEXT,
           },
           created_at: {
             allowNull: false,
