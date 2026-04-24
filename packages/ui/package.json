@@ -39,7 +39,7 @@
     "vue-i18n": "^11.4.0",
     "vue-recaptcha": "^2.0.3",
     "vue-router": "^5.0.6",
-    "vuetify": "^3.12.5"
+    "vuetify": "^4.0.6"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
