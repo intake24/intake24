@@ -20,11 +20,7 @@
       </template>
       <template v-else>
         This site is protected by
-        <a href="https://www.google.com/recaptcha" target="_blank">reCAPTCHA</a>
-        and Google
-        <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
-        <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a>
-        apply.
+        <a href="https://www.google.com/recaptcha" target="_blank">reCAPTCHA</a>.
       </template>
     </v-card-text>
   </div>
