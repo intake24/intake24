@@ -22,7 +22,7 @@
     "@types/node": "^24.12.2",
     "typescript": "^6.0.3",
     "unrun": "^0.2.37",
-    "vitepress": "2.0.0-alpha.16",
+    "vitepress": "2.0.0-alpha.17",
     "zod": "^4.3.6"
   }
 }
