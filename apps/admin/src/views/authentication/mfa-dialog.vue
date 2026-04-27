@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-bind="{ modelValue }" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
+  <v-dialog v-bind="{ modelValue }" :fullscreen="$vuetify.display.smAndDown" max-width="600px" min-height="380px">
     <v-card :tile="$vuetify.display.smAndDown">
       <v-toolbar color="secondary">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
@@ -50,6 +50,7 @@
                 <v-otp-input
                   v-model="otp.data.value.token"
                   autocomplete="off"
+                  class="py-0"
                   color="white"
                   :error-messages="otp.errors.get('token')"
                   length="6"
@@ -98,10 +99,11 @@
             v-model:selected="deviceId"
             class="list-border"
             lines="two"
-            @update:selected="selectDevice"
+            mandatory
+            selectable
           >
             <v-list-subheader>{{ $t('common.mfa.devices') }}</v-list-subheader>
-            <v-list-item v-for="device in authData.devices" :key="device.id" link :value="device.id">
+            <v-list-item v-for="device in authData.devices" :key="device.id" :value="device.id">
               <template #prepend>
                 <v-icon :title="$t(`user.mfa.providers.${device.provider}._`)">
                   {{ `$${device.provider}` }}
@@ -122,7 +124,7 @@ import type { PropType } from 'vue';
 
 import type { LoginResponse, MFAChallengeResponse } from '@intake24/common/types/http';
 
-import { startAuthentication } from '@simplewebauthn/browser';
+import { startAuthentication, WebAuthnError } from '@simplewebauthn/browser';
 import { useElementSize } from '@vueuse/core';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { computed, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
@@ -177,6 +179,8 @@ function clearDuoInterval() {
 };
 
 async function selectDevice(devices: string[]) {
+  clearDuoInterval();
+
   const deviceId = devices.at(0);
   if (!deviceId || !props.authData.challenge)
     return;
@@ -221,7 +225,15 @@ async function fidoChallenge() {
     await auth.verify({ challengeId, provider, response });
     await finalizeLogin();
   }
-  catch {
+  catch (err) {
+    if (
+      err instanceof WebAuthnError
+      && (err.name === 'NotAllowedError' || (err.name === 'AbortError' && err.code === 'ERROR_CEREMONY_ABORTED'))
+    ) {
+      return;
+    }
+
+    console.error(err);
     useMessages().error(t('common.mfa.error'));
   }
 };
@@ -290,6 +302,13 @@ async function initializeChallenge() {
 
 onBeforeUnmount(() => {
   clearDuoInterval();
+});
+
+watch(deviceId, async (val, oldVal) => {
+  if (val.at(0) === oldVal.at(0))
+    return;
+
+  selectDevice(val);
 });
 
 watch(() => props.modelValue, async (val, oldVal) => {
