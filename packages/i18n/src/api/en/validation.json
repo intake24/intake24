@@ -91,6 +91,7 @@
     "page": "Page",
     "password": "Password",
     "passwordConfirm": "Password confirmation",
+    "passwordCurrent": "Current password",
     "params": {
       "_": "Parameters",
       "file": "File",

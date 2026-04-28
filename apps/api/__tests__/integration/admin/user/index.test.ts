@@ -1,10 +1,12 @@
 import jobs from './jobs/index.test';
 import personalAccessTokens from './personal-access-tokens/index.test';
 import profile from './profile.test';
+import update from './update.test';
 import verify from './verify.test';
 
 export default () => {
   describe('get /api/admin/user', profile);
+  describe('patch /api/admin/user', update);
   describe('get /api/admin/user/verify', verify);
 
   describe('get /api/admin/user/jobs', jobs.browse);

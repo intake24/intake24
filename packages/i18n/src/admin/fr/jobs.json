@@ -150,9 +150,18 @@
       "mode": {
         "label": "Mode de recalcul",
         "options": {
-          "none": { "label": "Aucun", "description": "Ignorer le recalcul (aucune modification)" },
-          "valuesOnly": { "label": "Valeurs uniquement (Par défaut)", "description": "Recalculer les valeurs de nutriments existantes en utilisant les codes de tableaux de nutriments stockés" },
-          "valuesAndCodes": { "label": "Valeurs et codes de nutriments", "description": "Mettre à jour les codes de nutriments avec les mappages alimentaires actuels et recalculer les valeurs" }
+          "none": {
+            "label": "Aucun",
+            "description": "Ignorer le recalcul (aucune modification)"
+          },
+          "valuesOnly": {
+            "label": "Valeurs uniquement (Par défaut)",
+            "description": "Recalculer les valeurs de nutriments existantes en utilisant les codes de tableaux de nutriments stockés"
+          },
+          "valuesAndCodes": {
+            "label": "Valeurs et codes de nutriments",
+            "description": "Mettre à jour les codes de nutriments avec les mappages alimentaires actuels et recalculer les valeurs"
+          }
         }
       },
       "syncFields": {

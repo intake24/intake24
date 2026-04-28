@@ -1,6 +1,7 @@
 {
   "_": "Account",
   "title": "Account",
+  "credentials": "Credentials",
   "info": "Information",
   "access": "Access",
   "profile": "Profile",

@@ -1,5 +1,5 @@
 import type { AdminTokenPayload } from '@intake24/common/security';
-import type { AdminUserProfile } from '@intake24/common/types/http/admin';
+import type { AdminUserProfile, UpdateUserProfile } from '@intake24/common/types/http/admin';
 import type { Permission } from '@intake24/ui/types';
 
 import { defineStore } from 'pinia';
@@ -70,6 +70,15 @@ export const useUser = defineStore('user', {
       this.profile = { ...profile };
       this.permissions = [...permissions];
       this.roles = [...roles];
+    },
+
+    async update(payload: UpdateUserProfile) {
+      if (!this.profile)
+        return;
+
+      await useHttp().patch<UpdateUserProfile>('admin/user', payload, { withLoading: true });
+
+      this.profile = { ...this.profile, ...payload };
     },
 
     loadPayload(accessToken: string) {

@@ -1,12 +1,26 @@
 <template>
-  <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="500px">
+  <v-dialog
+    v-model="dialog"
+    :fullscreen="$vuetify.display.smAndDown"
+    max-width="500px"
+  >
     <template #activator="{ props }">
-      <v-btn :title="$t('common.password.change')" variant="outlined" v-bind="props">
-        {{ $t('common.password.change') }}
-      </v-btn>
+      <div class="d-flex gc-4 align-center">
+        <v-avatar color="primary-darken-2" icon="fas fa-key" />
+        <v-btn
+          v-bind="props"
+          class="flex-grow-1"
+          color="primary-darken-2"
+          size="large"
+          :title="$t('common.password.change')"
+          variant="tonal"
+        >
+          {{ $t('common.password.change') }}
+        </v-btn>
+      </div>
     </template>
     <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar color="primary-darken-2">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="cancel" />
         <v-toolbar-title>
           {{ $t('common.password.change') }}
@@ -25,13 +39,11 @@
             v-model="data.passwordCurrent"
             autocomplete="current-password"
             :error-messages="errors.get('passwordCurrent')"
-            hide-details="auto"
             :label="$t('common.password.current')"
             name="passwordCurrent"
             prepend-inner-icon="fas fa-key"
             required
             :type="showPassword.current ? 'text' : 'password'"
-            variant="outlined"
           >
             <template #append-inner>
               <v-icon class="me-2" @click="showPassword.current = !showPassword.current">
@@ -43,13 +55,11 @@
             v-model="data.password"
             autocomplete="new-password"
             :error-messages="errors.get('password')"
-            hide-details="auto"
             :label="$t('common.password.new')"
             name="password"
             prepend-inner-icon="fas fa-key"
             required
             :type="showPassword.password ? 'text' : 'password'"
-            variant="outlined"
           >
             <template #append-inner>
               <v-icon class="me-2" @click="showPassword.password = !showPassword.password">
@@ -61,13 +71,11 @@
             v-model="data.passwordConfirm"
             autocomplete="new-password"
             :error-messages="errors.get('passwordConfirm')"
-            hide-details="auto"
             :label="$t('common.password.confirm')"
             name="passwordConfirm"
             prepend-inner-icon="fas fa-key"
             required
             :type="showPassword.confirm ? 'text' : 'password'"
-            variant="outlined"
           >
             <template #append-inner>
               <v-icon class="me-2" @click="showPassword.confirm = !showPassword.confirm">
@@ -77,7 +85,13 @@
           </v-text-field>
         </v-card-text>
         <v-card-actions class="px-6 pb-6">
-          <v-btn color="primary" size="x-large" type="submit" variant="flat" width="100%">
+          <v-btn
+            class="w-100"
+            color="primary-darken-2"
+            size="x-large"
+            type="submit"
+            variant="flat"
+          >
             {{ $t('common.password.update') }}
           </v-btn>
         </v-card-actions>

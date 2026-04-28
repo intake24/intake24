@@ -3,51 +3,84 @@
     <h2 class="mb-4">
       {{ $t('user.profile') }}
     </h2>
-    <v-card v-if="profile" :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" :tile="$vuetify.display.mobile">
-      <v-list lines="two">
-        <v-list-subheader>{{ $t('user.info') }}</v-list-subheader>
-        <v-list-item>
-          <template #prepend>
-            <v-avatar color="secondary" icon="fas fa-envelope" />
-          </template>
-          <v-list-item-title>{{ $t('user.email') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ profile.email || $t('common.not.provided') }}
-          </v-list-item-subtitle>
-        </v-list-item>
-        <v-list-item>
-          <template #prepend>
-            <v-avatar color="secondary" icon="fas fa-user" />
-          </template>
-          <v-list-item-title>{{ $t('user.name') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ profile.name || $t('common.not.provided') }}
-          </v-list-item-subtitle>
-        </v-list-item>
-        <v-list-item>
-          <template #prepend>
-            <v-avatar color="secondary" icon="fas fa-phone" />
-          </template>
-          <v-list-item-title>{{ $t('user.phone') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ profile.phone ?? $t('common.not.provided') }}
-          </v-list-item-subtitle>
-        </v-list-item>
-        <v-list-item>
-          <template #prepend>
-            <v-avatar color="secondary" icon="fas fa-key" />
-          </template>
-          <v-list-item-title>
-            <user-password :email="profile.email" />
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
+    <v-card
+      v-if="profile"
+      :border="!$vuetify.display.mobile"
+      :flat="$vuetify.display.mobile"
+      :tile="$vuetify.display.mobile"
+    >
+      <v-row no-gutters>
+        <v-col class="pa-4 d-flex flex-column gr-4" cols="12" md="6" sm="8">
+          <v-list-subheader>{{ $t('user.credentials') }}</v-list-subheader>
+          <v-text-field
+            v-model="profile.email"
+            class="py-1"
+            :label="$t('user.email')"
+            readonly
+          >
+            <template #prepend>
+              <v-avatar color="primary-darken-2" icon="fas fa-envelope" />
+            </template>
+            <!-- <template #append-inner>
+              <v-icon
+                color="primary-darken-2"
+                icon="fas fa-pencil"
+                :title="$t('common.action.edit')"
+                @click="changeEmail"
+              />
+            </template> -->
+          </v-text-field>
+          <user-password :email="profile.email" />
+        </v-col>
+      </v-row>
+      <v-divider />
+      <v-row no-gutters>
+        <v-col class="pa-4 d-flex flex-column gr-4" cols="12" md="6" sm="8">
+          <v-list-subheader>{{ $t('user.info') }}</v-list-subheader>
+          <v-text-field
+            v-model="profile.name"
+            class="py-1"
+            :error-messages="errors.get('name')"
+            :label="$t('user.name')"
+            name="name"
+            prepend-inner-icon="fas fa-user"
+            @update:model-value="errors.clear('phone')"
+          >
+            <template #prepend>
+              <v-avatar color="primary-darken-2" icon="fas fa-user" />
+            </template>
+          </v-text-field>
+          <v-text-field
+            v-model="profile.phone"
+            class="py-1"
+            :error-messages="errors.get('phone')"
+            :label="$t('user.phone')"
+            name="phone"
+            prepend-inner-icon="fas fa-phone"
+            @update:model-value="errors.clear('phone')"
+          >
+            <template #prepend>
+              <v-avatar color="primary-darken-2" icon="fas fa-phone" />
+            </template>
+          </v-text-field>
+          <v-btn
+            color="primary-darken-2"
+            size="large"
+            type="submit"
+            variant="tonal"
+            @click="updateProfile"
+          >
+            <v-icon icon="fas fa-save" start />
+            {{ $t('common.action.save') }}
+          </v-btn>
+        </v-col>
+      </v-row>
       <v-divider />
       <v-list lines="two">
         <v-list-subheader>{{ $t('user.access') }}</v-list-subheader>
         <v-list-item>
           <template #prepend>
-            <v-avatar color="secondary" icon="fas fa-users" />
+            <v-avatar color="primary-darken-2" icon="fas fa-users" />
           </template>
           <v-list-item-title>{{ $t('user.roles') }}</v-list-item-title>
           <v-list-item-subtitle>
@@ -56,7 +89,7 @@
         </v-list-item>
         <v-list-item>
           <template #prepend>
-            <v-avatar color="secondary" icon="fas fa-eye-slash" />
+            <v-avatar color="primary-darken-2" icon="fas fa-eye-slash" />
           </template>
           <v-list-item-title>{{ $t('user.permissions') }}</v-list-item-title>
           <v-list-item-subtitle>
@@ -71,7 +104,7 @@
             <v-list-subheader>{{ $t('user.settings') }}</v-list-subheader>
             <v-list-item>
               <template #prepend>
-                <v-avatar color="secondary" icon="fas fa-language" />
+                <v-avatar color="primary-darken-2" icon="fas fa-language" />
               </template>
               <v-select
                 class="py-1"
@@ -108,38 +141,53 @@
   </div>
 </template>
 
-<script lang="ts">
-import { mapState } from 'pinia';
-import { computed, defineComponent } from 'vue';
+<script lang="ts" setup>
+import axios, { HttpStatusCode } from 'axios';
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 
 import { UserMfa, UserPassword } from '@intake24/admin/components/user';
-import { useApp, useUser } from '@intake24/admin/stores';
-import { AppInfo } from '@intake24/ui';
+import { useApp, useMessages, useUser } from '@intake24/admin/stores';
+import { Errors } from '@intake24/common/util';
+import { AppInfo, useI18n } from '@intake24/ui';
 
-export default defineComponent({
-  name: 'UserProfile',
+defineOptions({ name: 'UserProfile' });
 
-  components: { AppInfo, UserMfa, UserPassword },
+const { i18n: { t } } = useI18n();
 
-  setup() {
-    const app = useApp();
+const app = useApp();
+const user = useUser();
 
-    const language = computed(() => app.lang);
-    const languages = computed(() => app.availableLanguages);
+const language = computed(() => app.lang);
+const languages = computed(() => app.availableLanguages);
 
-    const updateLanguage = async (languageId: string) => {
-      useApp().setLanguage(languageId);
-    };
+const { profile, permissions, roles } = storeToRefs(user);
 
-    return {
-      language,
-      languages,
-      updateLanguage,
-    };
-  },
+const errors = ref(new Errors());
 
-  computed: {
-    ...mapState(useUser, ['profile', 'permissions', 'roles']),
-  },
-});
+async function updateLanguage(languageId: string) {
+  useApp().setLanguage(languageId);
+}
+
+async function updateProfile() {
+  if (!profile.value)
+    return;
+
+  try {
+    await user.update(profile.value);
+    useMessages().success(t('common.msg.updated', { name: profile.value.name }));
+  }
+  catch (err) {
+    if (axios.isAxiosError(err)) {
+      const { response: { status, data = {} } = {} } = err;
+
+      if (status === HttpStatusCode.BadRequest && 'errors' in data) {
+        errors.value.record(data.errors);
+        return;
+      }
+    }
+
+    throw err;
+  }
+}
 </script>
