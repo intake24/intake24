@@ -73,10 +73,6 @@ export const sidebar = {
           text: 'Version 3 recall model',
           link: '/guide/v3-survey',
         },
-        {
-          text: 'Portion size methods',
-          link: '/guide/portion-size',
-        },
       ],
     },
   ],
@@ -236,6 +232,10 @@ export const sidebar = {
         {
           text: 'Food databases',
           link: '/admin/foods/fdbs',
+        },
+        {
+          text: 'Portion size methods',
+          link: '/admin/foods/portion-sizes',
         },
         {
           text: 'Nutrient tables',

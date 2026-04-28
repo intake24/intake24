@@ -6,13 +6,7 @@ Permissions resource defines system-level implemented access control.
 Permissions are managed through database migrations to ensure correct system functionality as they are tied to source code implementation. Usually, there is no need to `create` / `edit` / `delete` any of the permission records.
 :::
 
-## Detail
-
-Detail tab displays selected permission info.
-
-## Create / Edit
-
-Edit tab allows to modify selected permission.
+## Properties
 
 - `Name` - Unique `slug-based` permission name within `permission` records
 

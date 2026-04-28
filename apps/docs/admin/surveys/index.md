@@ -6,13 +6,7 @@
 
 Survey section allows to manage surveys.
 
-## Detail
-
-Detail tab displays selected survey info.
-
-## Create / Edit
-
-Edit tab allows to modify selected survey.
+## Properties
 
 - `Survey ID` - Short and unique, ideally slug-based string. It forms public URL of the login / authentication links.
 

@@ -6,13 +6,7 @@
 
 Survey recall flow is defined by scheme, which has couple of sections.
 
-## Detail
-
-Detail tab displays selected survey scheme info.
-
-## Create / Edit
-
-Edit tab allows to modify selected survey scheme.
+## Properties
 
 - `Name` - `survey-scheme-wide` unique name
 

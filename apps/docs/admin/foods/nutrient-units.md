@@ -2,13 +2,7 @@
 
 Nutrient unit defines a unit that can be assigned to nutrient type(s).
 
-## Detail
-
-Detail tab displays selected nutrient unit info.
-
-## Create / Edit
-
-Edit tab allows to modify selected nutrient unit.
+## Properties
 
 - `Nutrient unit ID` - Unique numerical ID
 

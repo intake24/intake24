@@ -2,13 +2,7 @@
 
 Nutrient type is nutrient record definition within food composition table.
 
-## Detail
-
-Detail tab displays selected nutrient type info.
-
-## Create / Edit
-
-Edit tab allows to modify selected nutrient type.
+## Properties
 
 - `Nutrient type ID` - Unique numerical ID
 

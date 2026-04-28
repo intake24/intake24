@@ -2,13 +2,10 @@
 
 Prompt / Prompt templates allows to define scheme prompt `template` that can be reused throughout the schemes.
 
-## Detail
+## Properties
 
-Detail tab displays selected scheme prompt.
-
-## Create / Edit
-
-Edit tab allows to modify selected scheme prompt. It uses same editor UI as scheme section.
+- `Name` - Unique string within `prompt templates` records
+- `Content` - The prompt content
 
 ## Synchronization
 

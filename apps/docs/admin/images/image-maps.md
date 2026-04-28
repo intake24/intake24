@@ -2,13 +2,7 @@
 
 Image maps allow to define selectable objects on uploaded image. They are used either independently or as base image for `guide image` or `drink scale`.
 
-## Detail
-
-Detail tab displays selected image map info.
-
-## Create / Edit
-
-Edit tab allows to modify selected image map.
+## Properties
 
 - `Image map ID` - Unique string within `image map` records
 

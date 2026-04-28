@@ -2,13 +2,7 @@
 
 `As served set` forms a group of images to be used by selected portion size methods.
 
-## Detail
-
-Detail tab displays selected as served set info.
-
-## Create / Edit
-
-Edit tab allows to modify selected as served set.
+## Properties
 
 - `As served set ID` - Unique string within `as served set` records
 

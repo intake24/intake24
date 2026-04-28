@@ -2,13 +2,7 @@
 
 Locale is a grouping record to hold a specific list of categories / foods and its inheritance.
 
-## Detail
-
-Detail tab displays selected locale.
-
-## Create / Edit
-
-Edit tab allows to modify selected locale.
+## Properties
 
 - `Locale ID` - Valid locale ID and unique string within `locale` records
 

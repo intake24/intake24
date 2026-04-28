@@ -7,13 +7,7 @@ It is recommended to start with an existing feedback scheme, which can be adapte
 
 The `PREVIEW` button can be used to view changes during the customisation process.
 
-## Detail
-
-Detail tab displays selected feedback scheme info.
-
-## Edit
-
-Edit tab allows modification of selected feedback scheme.
+## Properties
 
 - `Name` - `feedback-scheme-wide` unique name
 

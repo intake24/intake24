@@ -2,13 +2,7 @@
 
 Users resource defines primary user records.
 
-## Detail
-
-Detail tab displays selected user info.
-
-## Create / Edit
-
-Edit tab allows to modify selected user.
+## Properties
 
 - `Name` - User name
 
@@ -25,6 +19,10 @@ When setting up survey-related users, it's better to handle permissions through 
 :::
 
 - `Multi-factor authentication` - Turns `on` / `off` multi-factor authentication for specific user. This firstly needs to be enabled on system level and correctly configured with 3rd party provider.
+
+- `Verified` - User verification status. Verified user can log in to admin tool and use the system. Unverified user cannot log in to admin tool and is treated as non-existing user in the system.
+
+- `Disabled` - User disabled status. Disabled user cannot log in to admin tool and is treated as non-existing user in the system.
 
 - `Email notifications` - To be clarified
 

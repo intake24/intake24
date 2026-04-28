@@ -1,3 +1,7 @@
+---
+{ "outline": { "level": [2, 3] } }
+---
+
 # Profile
 
 Profile allows user to see the profile information and perform profile-related changes.

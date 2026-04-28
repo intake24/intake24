@@ -2,13 +2,7 @@
 
 Drinkware set is enhanced record of corresponding `image map`. Drinkware set allow to assign localized labels and weights to each of the object defined in [Image map record](/admin/images/image-maps).
 
-## Detail
-
-Detail tab displays selected drinkware set info.
-
-## Create / Edit
-
-Edit tab allows to modify selected drinkware set.
+## Properties
 
 - `Drinkware set ID` - Unique string within `drinkware set` records
 

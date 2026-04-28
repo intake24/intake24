@@ -8,12 +8,6 @@ Setting up multiple independent `guide image` record of the same `image map` all
 
 ## Detail
 
-Detail tab displays selected guide image info.
-
-## Create / Edit
-
-Edit tab allows to modify selected image map.
-
 - `Guide image ID` - Unique string within `guide image` records
 
 - `Description` - Free text to describe the guide image

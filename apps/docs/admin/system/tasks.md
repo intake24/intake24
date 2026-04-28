@@ -2,13 +2,7 @@
 
 Tasks resource allows to schedule repeatable jobs or run one-off jobs.
 
-## Detail
-
-Detail tab displays selected task info.
-
-## Create / Edit
-
-Edit tab allows to modify selected task.
+## Properties
 
 - `Name` - Unique string within `tasks` records
 
