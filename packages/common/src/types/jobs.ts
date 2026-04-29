@@ -4,7 +4,7 @@ import { endOfDay, startOfDay } from 'date-fns';
 import { pick } from 'lodash-es';
 import { z } from 'zod';
 
-import { searchSortingAlgorithms } from '../surveys';
+import { searchSortingAlgorithms } from '../surveys/search-settings';
 import { bigIntString } from './common';
 import { packageExportOptions, packageFileTypes } from './http/admin/io';
 
