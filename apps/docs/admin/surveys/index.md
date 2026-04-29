@@ -12,11 +12,11 @@ Survey section allows to manage surveys.
 
 - `Survey name` - User friendly name to display participant, e.g. on survey login / dashboard pages
 
-- `Locale` - Associated [locale](/admin/localization/locales)
+- `Locale` - Associated [locale](/admin/locales/)
 
 - `Scheme` - Associated [survey scheme](/admin/surveys/schemes)
 
-- `FAQ` - Associated [FAQ](/admin/surveys/faqs)
+- `FAQ` - Associated [FAQ](/admin/system/faqs)
 
 - `Start date` - Start date of the survey
 

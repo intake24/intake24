@@ -1,6 +1,6 @@
 # Languages
 
-Intake24 bundles English texts by default. Additional languages can be added to source code and bundled during build or added to database. See [Translations](/admin/localization/languages#translations) for more details.
+Intake24 bundles English texts by default. Additional languages can be added to source code and bundled during build or added to database. See [Translations](/admin/system/languages#translations) for more details.
 
 Languages are then associated with locales and they are displayed as a list of available languages in frontend UI (`admin tool` or `survey recall`).
 

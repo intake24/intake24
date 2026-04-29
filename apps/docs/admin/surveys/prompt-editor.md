@@ -45,7 +45,7 @@ Content tab defines respondent facing content text fields and their localized ve
 - `Text` - Text displayed in the header component just below the breadcrumb (usually defaults to blank)
 - `Description` - Main body of prompt details, which allows to embed `rich-text` content
 
-All fields can be localized to [languages](/admin/localization/languages) set up in the database.
+All fields can be localized to [languages](/admin/system/languages) set up in the database.
 
 Following variables can be used in the fields:
 

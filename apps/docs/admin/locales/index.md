@@ -55,27 +55,13 @@ Entry has following fields:
 
 - `Synonyms` - space delimited list of synonyms
 
-## Tasks
-
-Tasks section allows to submit resource specific tasks into the job queue with additional parameters. See [job types](/admin/system/job-types) for more information.
-
-Jobs that can be submitted:
-
-- [Copy locale](/admin/system/job-types#localecopy)
-
-- [Export foods](/admin/system/job-types#localefoods)
-
-- [Export foods nutrients mapping](/admin/system/job-types#localefoodnutrientmapping)
-
-- [Food ranking upload](/admin/system/job-types#localefoodrankingupload)
-
 ### New locale setup
 
-1. Within the [`locales`](/admin/localization/locales) section, click on the `New locale` button.
+1. Within the [`locales`](/admin/locales/) section, click on the `New locale` button.
 
 2. Complete all fields and ensure `Food index enabled` is toggled on. Click `save` to create the new locale.
 
-3. Go to the [`Tasks`](/admin/localization/locales#tasks) tab.
+3. Go to the [`Tasks`](/admin/locales/#tasks) tab.
 
 4. From the drop-down list, select `Locale - Copy data` job.
 

@@ -51,10 +51,10 @@ Owner of the record has full access to the record, without the need to grant add
 
 It is possible to set record visibility on following resources:
 
-- [FAQ](/admin/surveys/faqs)
-- [Languages](/admin/localization/languages)
-- [Locales](/admin/localization/locales)
-- [Feedback schemes](/admin/feedback/schemes)
+- [FAQ](/admin/system/faqs)
+- [Languages](/admin/system/languages)
+- [Locales](/admin/locales/)
+- [Feedback schemes](/admin/system/feedback-schemes)
 - [Survey schemes](/admin/surveys/schemes)
 
 ### Visibility types

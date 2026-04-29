@@ -75,7 +75,7 @@ List nutrient table records attached to food record.
 
 ## Portion size methods
 
-List of portion size methods attached to food record. See [portion size methods documentation](/admin/foods/portion-sizes) for more details on portion size methods.
+List of portion size methods attached to food record. See [portion size methods documentation](/admin/locales/portion-sizes) for more details on portion size methods.
 
 ## Associated foods (foods-only)
 

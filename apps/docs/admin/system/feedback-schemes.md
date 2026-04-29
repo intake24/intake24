@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The functions in [Feedback schemes](/admin/feedback/schemes) allow dietary feedback to be customised.
+The functions in [Feedback schemes](/admin/system/feedback-schemes) allow dietary feedback to be customised.
 It is recommended to start with an existing feedback scheme, which can be adapted.
 
 The `PREVIEW` button can be used to view changes during the customisation process.

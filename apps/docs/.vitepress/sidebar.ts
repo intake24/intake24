@@ -230,14 +230,6 @@ export const sidebar = {
       text: 'Foods',
       items: [
         {
-          text: 'Food databases',
-          link: '/admin/foods/fdbs',
-        },
-        {
-          text: 'Portion size methods',
-          link: '/admin/foods/portion-sizes',
-        },
-        {
           text: 'Nutrient tables',
           link: '/admin/foods/nutrient-tables',
         },
@@ -256,15 +248,27 @@ export const sidebar = {
       ],
     },
     {
-      text: 'Localization',
+      text: 'Locales',
       items: [
         {
-          text: 'Languages',
-          link: '/admin/localization/languages',
+          text: 'Introduction',
+          link: '/admin/locales',
         },
         {
-          text: 'Locales',
-          link: '/admin/localization/locales',
+          text: 'Food databases',
+          link: '/admin/locales/fdbs',
+        },
+        {
+          text: 'Portion size methods',
+          link: '/admin/locales/portion-sizes',
+        },
+        {
+          text: 'Tasks',
+          link: '/admin/locales/tasks',
+        },
+        {
+          text: 'Import / Export',
+          link: '/admin/locales/import-export',
         },
       ],
     },
@@ -290,19 +294,6 @@ export const sidebar = {
         {
           text: 'Drinkware sets',
           link: '/admin/images/drinkware-sets',
-        },
-        {
-          text: 'Media',
-          link: '/admin/media',
-        },
-      ],
-    },
-    {
-      text: 'Feedback',
-      items: [
-        {
-          text: 'Schemes',
-          link: '/admin/feedback/schemes',
         },
       ],
     },
@@ -330,8 +321,45 @@ export const sidebar = {
           link: '/admin/surveys/prompt-templates',
         },
         {
+          text: 'Tasks',
+          link: '/admin/surveys/tasks',
+        },
+      ],
+    },
+    {
+      text: 'System',
+      items: [
+        {
           text: 'FAQs',
-          link: '/admin/surveys/faqs',
+          link: '/admin/system/faqs',
+        },
+        {
+          text: 'Feedback schemes',
+          link: '/admin/system/feedback-schemes',
+        },
+        {
+          text: 'Job types',
+          link: '/admin/system/job-types',
+        },
+        {
+          text: 'Jobs',
+          link: '/admin/system/jobs',
+        },
+        {
+          text: 'Languages',
+          link: '/admin/system/languages',
+        },
+        {
+          text: 'Media',
+          link: '/admin/system/media',
+        },
+        {
+          text: 'Sign-in logs',
+          link: '/admin/system/sign-in-logs',
+        },
+        {
+          text: 'Tasks',
+          link: '/admin/system/tasks',
         },
       ],
     },
@@ -361,27 +389,6 @@ export const sidebar = {
         {
           text: 'Users',
           link: '/admin/acl/users',
-        },
-      ],
-    },
-    {
-      text: 'System',
-      items: [
-        {
-          text: 'Job types',
-          link: '/admin/system/job-types',
-        },
-        {
-          text: 'Jobs',
-          link: '/admin/system/jobs',
-        },
-        {
-          text: 'Sign-in logs',
-          link: '/admin/system/sign-in-logs',
-        },
-        {
-          text: 'Tasks',
-          link: '/admin/system/tasks',
         },
       ],
     },
