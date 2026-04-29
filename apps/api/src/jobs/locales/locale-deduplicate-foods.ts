@@ -30,10 +30,7 @@ type DuplicateFoodSet = {
   duplicates: FoodReference[];
 };
 
-type LocaleDeduplicateFoodsResult = {
-  localeId: string;
-  localeCode: string;
-  dryRun: boolean;
+type LocaleDeduplicateFoodsStats = {
   duplicateSets: number;
   deletedFoods: number;
   submissionFoodsUpdated: number;
@@ -72,7 +69,7 @@ function getFoodCacheKeys(localeCode: string, foodId: string, foodCode: string):
   ];
 }
 
-export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFoods', LocaleDeduplicateFoodsResult> {
+export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFoods'> {
   readonly name = 'LocaleDeduplicateFoods';
 
   private readonly cache;
@@ -85,7 +82,7 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
     this.kyselyDb = kyselyDb;
   }
 
-  public async run(job: BullJob): Promise<LocaleDeduplicateFoodsResult> {
+  public async run(job: BullJob): Promise<void> {
     this.init(job);
 
     const dbJob = await DbJob.findByPk(this.dbId);
@@ -101,31 +98,19 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
     const duplicateGroups = await this.findDuplicateFoods(localeCode);
 
     if (!duplicateGroups.length) {
-      this.logger.info(`No duplicate foods found for locale ${localeCode}.`);
+      const message = `No duplicate foods found for locale ${localeCode}.`;
+      this.logger.info(message);
+      await dbJob.update({ message });
 
-      return {
-        localeId: this.params.localeId,
-        localeCode,
-        dryRun,
-        duplicateSets: 0,
-        deletedFoods: 0,
-        submissionFoodsUpdated: 0,
-        associatedFoodReferencesUpdated: 0,
-        popularityCounterRowsMerged: 0,
-        pairwiseAssociationsOccurrencesRowsDeleted: 0,
-        cacheKeysInvalidated: 0,
-      };
+      return;
     }
 
-    const duplicateSets = this.selectPrimaryFoods(localeCode, duplicateGroups);
+    const duplicateSets = this.selectPrimaryFoods(duplicateGroups);
     const duplicateSetBatches = this.batchDuplicateSets(duplicateSets);
 
     this.initProgress(duplicateSets.length * 2);
 
-    const result: LocaleDeduplicateFoodsResult = {
-      localeId: this.params.localeId,
-      localeCode,
-      dryRun,
+    const stats: LocaleDeduplicateFoodsStats = {
       duplicateSets: duplicateSets.length,
       deletedFoods: 0,
       submissionFoodsUpdated: 0,
@@ -142,16 +127,16 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
 
     if (dryRun) {
       for (const duplicateSetBatch of duplicateSetBatches) {
-        result.submissionFoodsUpdated += await this.countSurveySubmissionFoods(localeCode, duplicateSetBatch);
-        result.popularityCounterRowsMerged += await this.countPopularityCounterChanges(duplicateSetBatch);
-        result.pairwiseAssociationsOccurrencesRowsDeleted += await this.countPairwiseAssociationsOccurrencesChanges(localeCode, duplicateSetBatch);
+        stats.submissionFoodsUpdated += await this.countSurveySubmissionFoods(localeCode, duplicateSetBatch);
+        stats.popularityCounterRowsMerged += await this.countPopularityCounterChanges(duplicateSetBatch);
+        stats.pairwiseAssociationsOccurrencesRowsDeleted += await this.countPairwiseAssociationsOccurrencesChanges(localeCode, duplicateSetBatch);
 
         await this.incrementProgress(duplicateSetBatch.length);
       }
 
       for (const duplicateSetBatch of duplicateSetBatches) {
-        result.associatedFoodReferencesUpdated += await this.countAssociatedFoodReferences(localeCode, duplicateSetBatch);
-        result.deletedFoods += await this.countDuplicateFoods(localeCode, duplicateSetBatch);
+        stats.associatedFoodReferencesUpdated += await this.countAssociatedFoodReferences(localeCode, duplicateSetBatch);
+        stats.deletedFoods += await this.countDuplicateFoods(localeCode, duplicateSetBatch);
 
         await this.incrementProgress(duplicateSetBatch.length);
       }
@@ -159,9 +144,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
     else {
       await this.kyselyDb.system.transaction().execute(async (trx) => {
         for (const duplicateSetBatch of duplicateSetBatches) {
-          result.submissionFoodsUpdated += await this.replaceSurveySubmissionFoods(trx, localeCode, duplicateSetBatch);
-          result.popularityCounterRowsMerged += await this.mergePopularityCounters(trx, duplicateSetBatch);
-          result.pairwiseAssociationsOccurrencesRowsDeleted += await this.cleanPairwiseAssociationsOccurrences(trx, localeCode, duplicateSetBatch);
+          stats.submissionFoodsUpdated += await this.replaceSurveySubmissionFoods(trx, localeCode, duplicateSetBatch);
+          stats.popularityCounterRowsMerged += await this.mergePopularityCounters(trx, duplicateSetBatch);
+          stats.pairwiseAssociationsOccurrencesRowsDeleted += await this.cleanPairwiseAssociationsOccurrences(trx, localeCode, duplicateSetBatch);
 
           await this.incrementProgress(duplicateSetBatch.length);
         }
@@ -169,8 +154,8 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
 
       await this.kyselyDb.foods.transaction().execute(async (trx) => {
         for (const duplicateSetBatch of duplicateSetBatches) {
-          result.associatedFoodReferencesUpdated += await this.replaceAssociatedFoods(trx, localeCode, duplicateSetBatch);
-          result.deletedFoods += await this.deleteDuplicateFoods(trx, localeCode, duplicateSetBatch);
+          stats.associatedFoodReferencesUpdated += await this.replaceAssociatedFoods(trx, localeCode, duplicateSetBatch);
+          stats.deletedFoods += await this.deleteDuplicateFoods(trx, localeCode, duplicateSetBatch);
 
           await this.incrementProgress(duplicateSetBatch.length);
         }
@@ -182,9 +167,24 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
       ]);
     }
 
-    result.cacheKeysInvalidated = cacheKeys.length;
+    stats.cacheKeysInvalidated = cacheKeys.length;
 
-    return result;
+    const message = this.createSummaryMessage(localeCode, dryRun, stats);
+    this.logger.info(message);
+    await dbJob.update({ message });
+  }
+
+  private createSummaryMessage(localeCode: string, dryRun: boolean, stats: LocaleDeduplicateFoodsStats): string {
+    const prefix = dryRun ? 'Dry run: no data has been modified, stats are for reference only. ' : '';
+
+    return `${prefix}Deduplicated foods for locale ${localeCode}. `
+      + `Duplicate sets: ${stats.duplicateSets}, `
+      + `deleted foods: ${stats.deletedFoods}, `
+      + `submission foods updated: ${stats.submissionFoodsUpdated}, `
+      + `associated food references updated: ${stats.associatedFoodReferencesUpdated}, `
+      + `popularity counter rows merged: ${stats.popularityCounterRowsMerged}, `
+      + `pairwise association occurrence rows deleted: ${stats.pairwiseAssociationsOccurrencesRowsDeleted}, `
+      + `cache keys invalidated: ${stats.cacheKeysInvalidated}`;
   }
 
   private async findDuplicateFoods(localeCode: string): Promise<FoodRow[][]> {
@@ -253,7 +253,7 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
     return batches;
   }
 
-  private selectPrimaryFoods(localeCode: string, duplicateGroups: FoodRow[][]): DuplicateFoodSet[] {
+  private selectPrimaryFoods(duplicateGroups: FoodRow[][]): DuplicateFoodSet[] {
     const primaryCodes = new Set(this.params.primaryCodes);
     const errors: LocalisableMessage[] = [];
     const duplicateSets: DuplicateFoodSet[] = [];
