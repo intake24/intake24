@@ -14,3 +14,15 @@
 a {
   font-weight: 600;
 }
+/* Mermaid diagrams are rendered client-side from Markdown code fences. */
+.mermaid-diagram {
+  margin: 24px 0;
+}
+
+.mermaid-diagram__svg {
+  overflow-x: auto;
+}
+
+.mermaid-diagram__fallback {
+  white-space: pre-wrap;
+}
