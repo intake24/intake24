@@ -6,5 +6,5 @@ export default defineConfig({
   },
   name: 'CLI',
   sourcemap: true,
-  inlineOnly: false,
+  deps: { onlyBundle: false },
 });
