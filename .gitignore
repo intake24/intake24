@@ -40,3 +40,4 @@ yarn.lock
 !apps/**/components.d.ts
 apps/survey/components.d.ts
 apps/admin/components.d.ts
+**/.vitepress/.temp

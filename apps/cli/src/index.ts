@@ -12,6 +12,7 @@ import {
   extractCategories,
   findPortionImages,
   generateKey,
+  generateLocaleNdbData,
   generateVapidKeys,
   hashPassword,
   initAssets,
@@ -267,6 +268,13 @@ async function run() {
     .requiredOption('--path <path>', 'Jsonl file path')
     .action(async (cmd) => {
       await searchTest(cmd);
+    });
+
+  program
+    .command('gen-locale-ndb-data')
+    .description('Export NDB nutrient data to a CSV file for "Nutrient table - Import NDB data"')
+    .action(async () => {
+      await generateLocaleNdbData();
     });
 
   program

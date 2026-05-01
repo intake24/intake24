@@ -234,6 +234,10 @@ export const sidebar = {
           link: '/admin/foods/nutrient-tables',
         },
         {
+          text: 'Nutrient data model',
+          link: '/admin/foods/nutrient-data-model',
+        },
+        {
           text: 'Nutrient types',
           link: '/admin/foods/nutrient-types',
         },
