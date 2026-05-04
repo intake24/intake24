@@ -32,7 +32,7 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
   const items = ref(copy(transformIn ? modelValue.value.map(transformIn) : modelValue.value)) as Ref<
     UnwrapRef<I>[]
   >;
-  const errors = computed(() => items.value.map((_, index) => props.errors?.get(`henryCoefficients.${index}.*`)));
+  const errors = computed(() => items.value.map((_, index) => props.errors?.get(ops.errorPrefix ? `${ops.errorPrefix}.${index}.*` : `${index}.*`)));
 
   const outputItems = computed(() => (transformOut ? items.value.map(transformOut) : items.value));
 
