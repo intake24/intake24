@@ -29,12 +29,12 @@
     "litegraph.js": "^0.7.18",
     "lodash-es": "^4.18.1",
     "ms": "^2.1.3",
-    "nanoid": "^5.1.9",
+    "nanoid": "^5.1.11",
     "pluralize": "^8.0.0",
     "sanitize-html": "^2.17.3",
     "slugify": "^1.6.9",
     "validator": "^13.15.35",
-    "zod": "^4.3.6"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@simplewebauthn/server": "^13.3.0",
