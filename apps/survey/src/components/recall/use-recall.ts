@@ -4,11 +4,12 @@ import type {
   GenericActionType,
   MealActionType,
 } from '@intake24/common/prompts';
-import type { MealCreationState, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { FreeTextFood, MealCreationState, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { Time } from '@intake24/common/util';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
 import { storeToRefs } from 'pinia';
-import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useGoTo } from 'vuetify';
 
@@ -24,7 +25,10 @@ import {
   maybePushFallbackHistoryEntry,
   pushFullHistoryEntry,
 } from '@intake24/survey/stores/recall-history';
+import { getEntityId } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui/i18n';
+
+import { FoodAdd } from '../layouts';
 
 export function useRecall() {
   const route = useRoute();
@@ -33,6 +37,8 @@ export function useRecall() {
   const goTo = useGoTo();
 
   const { i18n: { locale } } = useI18n();
+
+  const foodAddRef = useTemplateRef<InstanceType<typeof FoodAdd>>('foodAddRef');
 
   const currentPrompt = ref<PromptInstance | null>(null);
   const recallController = shallowRef<DynamicRecall | null>(null);
@@ -264,6 +270,50 @@ export function useRecall() {
       return;
 
     switch (action) {
+      case 'addFood': {
+        if (!params) {
+          foodAddRef.value?.open(id);
+          return;
+        }
+
+        // TODO: validate params properly
+        if (typeof params !== 'object' || params === null || !('time' in params) || !('foods' in params)) {
+          console.warn('Recall: Invalid parameters for addFood action. Name is required.', params);
+          return;
+        }
+
+        const payload = params as { time: Time; foods: string[] };
+
+        const foods: FreeTextFood[] = payload.foods.map(item => ({
+          type: 'free-text',
+          id: getEntityId(),
+          description: item,
+          flags: [],
+          customPromptAnswers: {},
+          linkedFoods: [],
+        }));
+
+        if (id) {
+          const meal = meals.value.find(meal => meal.id === id);
+          if (!meal) {
+            console.warn(`Meal with id ${id} not found.`);
+            break;
+          }
+
+          survey.addFood({ mealId: id, food: foods });
+        }
+        else {
+          survey.addMeal({
+            name: { en: 'custom', [locale.value]: 'custom' },
+            time: payload.time,
+            flags: ['free-entry-complete'],
+            foods,
+          }, locale.value);
+        }
+
+        await nextPrompt();
+        break;
+      }
       case 'addMeal':
         // TODO: validate params properly
         if (typeof params === 'object' && params !== null && Object.keys(params).length) {
@@ -351,6 +401,7 @@ export function useRecall() {
 
   return {
     currentPrompt,
+    foodAddRef,
     handlerComponent,
     handlerKey,
     hideCurrentPrompt,
