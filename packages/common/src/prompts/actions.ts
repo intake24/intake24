@@ -6,13 +6,13 @@ import { layoutTypes } from './partials';
 
 export const genericActionTypes = ['addMeal', 'next', 'review'] as const;
 export const mealActionTypes = [
+  'addFood',
   'deleteMeal',
   'editMeal',
   'mealTime',
   'selectMeal',
 ] as const;
 export const foodActionTypes = [
-  'addFood',
   'deleteFood',
   'editFood',
   'selectFood',

@@ -27,8 +27,8 @@ export function useLayout(props: UseLayoutProps, ctx: Pick<SetupContext<'action'
 
   const meals = computed(() => survey.data.meals);
   const showSummary = computed(() => {
-    if (props.prompt.component === 'submit-prompt' && props.prompt.review.mobile !== false)
-      return false;
+    /* if (props.prompt.component === 'submit-prompt' && props.prompt.review.mobile !== false)
+      return false; */
 
     if (survey.hasFinished)
       return false;
