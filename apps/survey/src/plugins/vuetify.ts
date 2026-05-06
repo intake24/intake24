@@ -2,6 +2,7 @@ import { createVuetify } from 'vuetify';
 import { VCardActions } from 'vuetify/components/VCard';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
+import { VStepperVertical, VStepperVerticalItem } from 'vuetify/labs/VStepperVertical';
 
 import { colors } from '@intake24/common/theme';
 
@@ -9,6 +10,10 @@ import { colors } from '@intake24/common/theme';
 import 'vuetify/styles';
 
 export default createVuetify({
+  components: {
+    VStepperVertical,
+    VStepperVerticalItem,
+  },
   directives,
   aliases: {
     PromptActions: VCardActions,

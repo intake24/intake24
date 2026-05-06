@@ -56,7 +56,15 @@ export interface SurveyState {
 }
 
 export function createMeal(data: MealCreationState, flow: RecallFlow = '2-pass'): MealState {
-  const { name, defaultTime = { hours: 8, minutes: 0 }, time, duration = null, flags = [] } = copy(data);
+  const {
+    name,
+    defaultTime = { hours: 8, minutes: 0 },
+    time,
+    duration = null,
+    flags = [],
+    foods = [],
+    customPromptAnswers = {},
+  } = copy(data);
 
   if (flow === '1-pass')
     flags.push('free-entry-complete');
@@ -68,8 +76,8 @@ export function createMeal(data: MealCreationState, flow: RecallFlow = '2-pass')
     time: flags.includes('meal-time:confirmed') ? (time ?? defaultTime) : time,
     duration,
     flags,
-    foods: [],
-    customPromptAnswers: {},
+    foods,
+    customPromptAnswers,
   };
 }
 
@@ -825,12 +833,13 @@ export const useSurvey = defineStore('survey', {
       this.clearEntityPromptStores(deletedFoodIds);
     },
 
-    addFood({ mealId, food, at }: { mealId: string; food: FoodState; at?: number }) {
+    addFood({ mealId, food, at }: { mealId: string; food: FoodState | FoodState[]; at?: number }) {
       const mealIndex = getMealIndexRequired(this.data.meals, mealId);
+      const foods = Array.isArray(food) ? food : [food];
 
       if (at !== undefined)
-        this.data.meals[mealIndex].foods.splice(at, 0, food);
-      else this.data.meals[mealIndex].foods.push(food);
+        this.data.meals[mealIndex].foods.splice(at, 0, ...foods);
+      else this.data.meals[mealIndex].foods.push(...foods);
     },
 
     setFoods(data: { mealId: string; foods: FoodState[] }) {

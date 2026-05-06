@@ -1,7 +1,7 @@
 import type { SetupContext } from 'vue';
 
-import type { FoodActionType, GenericActionType, MealActionType } from '@intake24/common/prompts';
-import type { MealState } from '@intake24/common/surveys';
+import type { ActionType } from '@intake24/common/prompts';
+import type { FoodState, MealState } from '@intake24/common/surveys';
 
 import { computed } from 'vue';
 
@@ -14,6 +14,19 @@ export type UseMealListProps = {
 
 export function useMealList(props: UseMealListProps, { emit }: Pick<SetupContext<'action'[]>, 'emit'>) {
   const survey = useSurvey();
+
+  function countLinkedFoods(acc: number, food: FoodState): number {
+    if (!food.linkedFoods.length)
+      return acc;
+
+    acc += food.linkedFoods.length;
+    return food.linkedFoods.reduce(countLinkedFoods, acc);
+  }
+
+  const foodCount = computed(() => props.meals.reduce((acc, meal) => {
+    acc += meal.foods.length;
+    return meal.foods.reduce(countLinkedFoods, acc);
+  }, 0));
 
   const selectedMealId = computed(() => {
     if (survey.selection.element?.type !== 'meal')
@@ -36,11 +49,12 @@ export function useMealList(props: UseMealListProps, { emit }: Pick<SetupContext
     return props.meals[foodIndex.mealIndex].id === mealId;
   };
 
-  const action = (type: FoodActionType | MealActionType | GenericActionType, id?: string) => {
-    emit('action', type, id);
+  const action = (type: ActionType, id?: string, params?: object) => {
+    emit('action', type, id, params);
   };
 
   return {
+    foodCount,
     selectedMealId,
     selectedFoodId,
     isSelectedFoodInMeal,

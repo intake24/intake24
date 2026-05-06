@@ -26,10 +26,9 @@ export function useMealItem(props: UseMealItemProps, { emit }: Pick<SetupContext
     (
       [
         {
-          name: t('recall.menu.meal.editFoods'),
-          action: 'editMeal',
-          icon: '$meal',
-          if: (meal: MealState) => meal.flags.includes('free-entry-complete'),
+          name: t('recall.menu.food.add'),
+          action: 'addFood',
+          icon: '$add',
         },
         {
           name: t('recall.menu.meal.editTime'),
