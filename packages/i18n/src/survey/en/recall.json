@@ -39,9 +39,10 @@
     "recall": "Recall: {number}"
   },
   "menu": {
-    "title": "Review panel",
+    "title": "My foods",
     "mealSuggested": "This meal is suggested by the system but you have not yet confirmed that you have had it",
     "food": {
+      "add": "Add food",
       "delete": "Delete food",
       "deleteConfirm": "Do you want to delete {item}?",
       "change": "Change food",
@@ -77,15 +78,6 @@
       "editTime": "Change time"
     }
   },
-  "contextMenu": {
-    "close": "Close",
-    "select": "Continue with {name}",
-    "editMeal": "Revise foods",
-    "delete": "Delete {name}",
-    "confirmDeletion": "Are you sure you want to delete '{name}'?",
-    "confirm": "Confirm {name}",
-    "changeTime": "Change time"
-  },
   "actions": {
     "feedback": "Dietary feedback",
     "next": "Continue",
@@ -103,7 +95,6 @@
       "next": "Continue",
       "redirect": "Continue",
       "remove": "Remove",
-      "review": "Review",
       "submit": "Submit",
       "addMeal": "Add meal",
       "deleteFood": "Delete food",
