@@ -1,6 +1,5 @@
 import type { ExternalSource, PromptStates } from '../prompts';
 import type { FoodType } from '../types';
-import type { Optional } from '../types/common';
 import type { UserFoodData } from '../types/http';
 import type { FoodBuilder } from '../types/http/foods';
 import type { PortionSizeState } from './portion-size';
@@ -145,10 +144,24 @@ export const mealState = z.object({
 
 export type MealState = z.infer<typeof mealState>;
 
-export type MealCreationState = Optional<
-  Pick<MealState, 'name' | 'defaultTime' | 'time' | 'duration' | 'flags'>,
-  'defaultTime' | 'time' | 'duration' | 'flags'
->;
+export const mealCreationState = mealState
+  .omit({ id: true })
+  .partial({
+    defaultTime: true,
+    time: true,
+    duration: true,
+    flags: true,
+    foods: true,
+    customPromptAnswers: true,
+  });
+export type MealCreationState = z.infer<typeof mealCreationState>;
+
+export const foodCreationState = z.object({
+  name: requiredLocaleTranslationWithLimit({ max: 64 }),
+  time,
+  foods: z.string().nonempty().array(),
+});
+export type FoodCreationState = z.infer<typeof foodCreationState>;
 
 export const selectedMeal = z.object({
   type: z.literal('meal'),
