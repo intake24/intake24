@@ -7,12 +7,12 @@
       <v-btn
         color="primary"
         rounded="pill"
-        :title="$t('recall.menu.meal.add')"
+        :title="$t('recall.menu.food.add')"
         variant="outlined"
-        @click="action('addMeal')"
+        @click="action('addFood')"
       >
         <v-icon icon="$add" start />
-        {{ $t('recall.menu.meal.add') }}
+        {{ $t('recall.menu.food.add') }}
       </v-btn>
     </v-toolbar>
     <v-divider />
@@ -55,16 +55,6 @@
               </template>
             </v-checkbox-btn>
           </v-alert>
-          <v-btn
-            color="primary"
-            rounded="pill"
-            size="small"
-            :title="$t('recall.menu.meal.editFoods')"
-            variant="outlined"
-            @click="action('editMeal', meal.id)"
-          >
-            {{ $t('recall.menu.meal.editFoods') }}
-          </v-btn>
         </div>
       </div>
     </v-list>

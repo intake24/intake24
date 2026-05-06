@@ -18,6 +18,19 @@
       </v-slide-y-transition>
     </v-col>
   </v-row>
+  <food-add ref="foodAddRef" :meals @action="action">
+    <template #activator="{ props }">
+      <v-fab
+        v-bind="props"
+        app
+        color="primary"
+        icon="fas fa-plus"
+        location="bottom right"
+        size="large"
+        :title="$t('common.nav.foods')"
+      />
+    </template>
+  </food-add>
 </template>
 
 <script lang="ts" setup>
@@ -27,17 +40,24 @@ import {
   standardHandlers,
 } from '@intake24/survey/components/handlers';
 
-import { MealList } from '../layouts';
+import { FoodAdd, MealList } from '../layouts';
 import { useRecall } from './use-recall';
 
 defineOptions({
   name: 'RecallDesktop',
 
-  components: { MealList, ...customHandlers, ...standardHandlers, ...portionSizeHandlers },
+  components: {
+    FoodAdd,
+    MealList,
+    ...customHandlers,
+    ...standardHandlers,
+    ...portionSizeHandlers,
+  },
 });
 
 const {
   currentPrompt,
+  foodAddRef,
   handlerComponent,
   handlerKey,
   hideCurrentPrompt,

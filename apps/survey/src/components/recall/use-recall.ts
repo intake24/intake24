@@ -4,15 +4,15 @@ import type {
   GenericActionType,
   MealActionType,
 } from '@intake24/common/prompts';
-import type { MealCreationState, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { FreeTextFood, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
 import { storeToRefs } from 'pinia';
-import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useGoTo } from 'vuetify';
 
-import { isSelectionEqual } from '@intake24/common/surveys';
+import { foodCreationState, isSelectionEqual, mealCreationState } from '@intake24/common/surveys';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import {
@@ -24,8 +24,10 @@ import {
   maybePushFallbackHistoryEntry,
   pushFullHistoryEntry,
 } from '@intake24/survey/stores/recall-history';
-import { recordPromptTransition } from '@intake24/survey/util';
+import { getEntityId, recordPromptTransition } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui/i18n';
+
+import { FoodAdd } from '../layouts';
 
 export function useRecall() {
   const route = useRoute();
@@ -34,6 +36,8 @@ export function useRecall() {
   const goTo = useGoTo();
 
   const { i18n: { locale } } = useI18n();
+
+  const foodAddRef = useTemplateRef<InstanceType<typeof FoodAdd>>('foodAddRef');
 
   const currentPrompt = ref<PromptInstance | null>(null);
   const recallController = shallowRef<DynamicRecall | null>(null);
@@ -280,18 +284,57 @@ export function useRecall() {
       return;
 
     switch (action) {
-      case 'addMeal':
-        // TODO: validate params properly
-        if (typeof params === 'object' && params !== null && Object.keys(params).length) {
-          pushFullHistoryEntry('Add meal');
-          const { name, time, flags } = params as MealCreationState;
-          survey.addMeal({ name, time, flags }, locale.value);
-          await nextPrompt();
+      case 'addFood': {
+        if (!params) {
+          foodAddRef.value?.open(id);
+          return;
+        }
+
+        const { data, success } = foodCreationState.safeParse(params);
+        if (!success) {
+          console.warn('Recall: Invalid parameters for addFood action.', params);
+          return;
+        }
+
+        const { name, time } = data;
+        const foods: FreeTextFood[] = data.foods.map(item => ({
+          type: 'free-text',
+          id: getEntityId(),
+          description: item,
+          flags: [],
+          customPromptAnswers: {},
+          linkedFoods: [],
+        }));
+
+        if (id) {
+          const meal = meals.value.find(meal => meal.id === id);
+          if (!meal) {
+            console.warn(`Meal with id ${id} not found.`);
+            return;
+          }
+
+          survey.addFood({ mealId: id, food: foods });
         }
         else {
-          showSurveyPrompt('preMeals', 'meal-add-prompt');
+          survey.addMeal({ name, time, flags: ['free-entry-complete'], foods }, locale.value);
         }
+
+        await nextPrompt();
         break;
+      }
+      case 'addMeal': {
+        const { data, success } = mealCreationState.safeParse(params);
+        if (!success) {
+          showSurveyPrompt('preMeals', 'meal-add-prompt');
+          return;
+        }
+
+        pushFullHistoryEntry('Add meal');
+        const { name, time, flags } = data;
+        survey.addMeal({ name, time, flags }, locale.value);
+        await nextPrompt();
+        break;
+      }
     }
   };
 
@@ -402,6 +445,7 @@ export function useRecall() {
 
   return {
     currentPrompt,
+    foodAddRef,
     handlerComponent,
     handlerKey,
     hideCurrentPrompt,
