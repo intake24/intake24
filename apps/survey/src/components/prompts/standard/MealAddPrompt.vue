@@ -51,11 +51,10 @@ import type { PropType } from 'vue';
 import { computed } from 'vue';
 import { VCombobox, VSelect } from 'vuetify/components';
 
-import { usePromptUtils } from '@intake24/survey/composables';
+import { useForm, usePromptUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
 
 import { CardLayout } from '../layouts';
-import { useForm } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({ components: { VCombobox, VSelect } });

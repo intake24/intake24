@@ -13,6 +13,7 @@
       </transition>
     </v-col>
   </v-row>
+  <food-add ref="foodAddRef" :meals @action="action" />
 </template>
 
 <script lang="ts" setup>
@@ -22,19 +23,22 @@ import {
   standardHandlers,
 } from '@intake24/survey/components/handlers';
 
+import { FoodAdd } from '../layouts';
 import { useRecall } from './use-recall';
 
 defineOptions({
   name: 'RecallMobile',
 
-  components: { ...customHandlers, ...standardHandlers, ...portionSizeHandlers },
+  components: { FoodAdd, ...customHandlers, ...standardHandlers, ...portionSizeHandlers },
 });
 
 const {
   currentPrompt,
+  foodAddRef,
   handlerComponent,
   handlerKey,
   hideCurrentPrompt,
+  meals,
   action,
 } = useRecall();
 </script>

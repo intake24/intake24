@@ -42,6 +42,7 @@
     "title": "Powonera zomwe mwalemba",
     "mealSuggested": "Chakudyachi chaperekedwa ndi makina koma simunatsimikize ngati munadya",
     "food": {
+      "add": "Add food",
       "delete": "Fufutani chakudya",
       "deleteConfirm": "Mukufuna kufufuta {item}?",
       "change": "Sinthani chakudya",
@@ -83,15 +84,6 @@
       "editTime": "Sinthani nthawi"
     }
   },
-  "contextMenu": {
-    "close": "Tsekani",
-    "select": "Pitilizani ndi {name}",
-    "editMeal": "Onaninso zomwe munadya",
-    "delete": "Fufutani {name}",
-    "confirmDeletion": "Mwatsimikiza kuti mukufuna kufufuta '{name}'?",
-    "confirm": "Tsimikizani {name}",
-    "changeTime": "Sinthani nthawi"
-  },
   "actions": {
     "feedback": "Ndemanga zotsatira za kadyedwe",
     "next": "Pitilizani",
@@ -109,7 +101,6 @@
       "next": "Pitilizani",
       "redirect": "Pitilizani",
       "remove": "Chotsani",
-      "review": "Onani",
       "submit": "Tumizani",
       "addMeal": "Onjezani chakudya",
       "deleteFood": "Fufutani chakudya",

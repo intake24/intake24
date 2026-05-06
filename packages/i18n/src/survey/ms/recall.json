@@ -42,6 +42,7 @@
     "title": "Review panel",
     "mealSuggested": "Hidangan ini dicadangkan oleh sistem tetapi anda masih belum mengesahkan bahawa anda telah mengambilnya",
     "food": {
+      "add": "Add food",
       "delete": "Padam makanan",
       "deleteConfirm": "Adakah anda mahu memadam {item}?",
       "change": "Tukar makanan",
@@ -83,15 +84,6 @@
       "editTime": "Sunting/ubah masa"
     }
   },
-  "contextMenu": {
-    "close": "Tutup",
-    "select": "Teruskan dengan {name}",
-    "editMeal": "Semak semula makanan",
-    "delete": "Padam {name}",
-    "confirmDeletion": "Adakah anda pasti mahu padam '{name}' ini?",
-    "confirm": "Sahkan {name}",
-    "changeTime": "Ubah masa"
-  },
   "actions": {
     "feedback": "Pergi ke maklum balas",
     "next": "Teruskan",
@@ -109,7 +101,6 @@
       "next": "Teruskan",
       "redirect": "Bersambung",
       "remove": "Buang",
-      "review": "Semak",
       "submit": "Hantar",
       "addMeal": "Tambah hidangan",
       "deleteFood": "Padam makanan",

@@ -17,27 +17,29 @@
       <v-icon icon="$home" />
       <span>{{ $t('common.nav.home') }}</span>
     </v-btn>
-    <v-btn
-      v-if="feedback"
-      class="order-1"
-      :title="$t('common.nav.feedback')"
-      :to="{ name: 'feedback-home', params: { surveyId } }"
-      value="feedback"
-    >
-      <v-icon icon="$feedback" />
-      <span>{{ $t('common.nav.feedback') }}</span>
-    </v-btn>
-    <v-spacer v-else class="order-1" />
-    <v-btn
-      v-if="recall && $route.name !== 'survey-recall'"
-      class="order-2"
-      :title="$t('common.nav.recall')"
-      :to="{ name: 'survey-recall', params: { surveyId } }"
-      value="recall"
-    >
-      <v-icon icon="$survey" />
-      <span>{{ $t('common.nav.recall') }}</span>
-    </v-btn>
+    <template v-if="$route.name !== 'survey-recall'">
+      <v-btn
+        v-if="feedback"
+        class="order-1"
+        :title="$t('common.nav.feedback')"
+        :to="{ name: 'feedback-home', params: { surveyId } }"
+        value="feedback"
+      >
+        <v-icon icon="$feedback" />
+        <span>{{ $t('common.nav.feedback') }}</span>
+      </v-btn>
+      <v-spacer v-else class="order-1" />
+      <v-btn
+        v-if="recall"
+        class="order-2"
+        :title="$t('common.nav.recall')"
+        :to="{ name: 'survey-recall', params: { surveyId } }"
+        value="recall"
+      >
+        <v-icon icon="$survey" />
+        <span>{{ $t('common.nav.recall') }}</span>
+      </v-btn>
+    </template>
     <help-nav :survey-id @close="removeActiveState('help')" />
     <v-btn
       class="order-4 nav-item__options"
