@@ -20,24 +20,31 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import {
+  customHandlers,
+  portionSizeHandlers,
+  standardHandlers,
+} from '@intake24/survey/components/handlers';
 
 import { MealList } from '../layouts';
-import recallMixin from './recall-mixin';
+import { useRecall } from './use-recall';
 
-/* defineOptions({
-  name: 'RecallDesktop',
-  mixins: [recallMixin],
-}); */
-
-export default defineComponent({
+defineOptions({
   name: 'RecallDesktop',
 
-  components: { MealList },
-
-  mixins: [recallMixin],
+  components: { MealList, ...customHandlers, ...standardHandlers, ...portionSizeHandlers },
 });
+
+const {
+  currentPrompt,
+  handlerComponent,
+  handlerKey,
+  hideCurrentPrompt,
+  meals,
+  showMealList,
+  action,
+} = useRecall();
 </script>
 
 <style lang="scss" scoped></style>
