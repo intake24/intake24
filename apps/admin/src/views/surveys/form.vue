@@ -581,7 +581,7 @@
                 :label="$t('feedback-schemes._')"
                 name="feedbackSchemeId"
                 resource="feedback-schemes"
-                @update:model-value="errors.clear('feedbackSchemeId')"
+                @update:model-value="resetFeedback"
               />
               <v-text-field
                 v-model.number="data.numberOfSubmissionsForFeedback"
@@ -747,6 +747,11 @@ export default defineComponent({
       data.value.genUserKey = randomString(64);
     };
 
+    const resetFeedback = () => {
+      data.value.numberOfSubmissionsForFeedback = surveyForm.numberOfSubmissionsForFeedback;
+      errors.clear('feedbackSchemeId');
+    };
+
     return {
       entry,
       entryLoaded,
@@ -766,6 +771,7 @@ export default defineComponent({
       submit,
       authModes,
       surveyStates,
+      resetFeedback,
     };
   },
 
