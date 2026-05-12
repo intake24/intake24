@@ -4,6 +4,7 @@ import permissions from './permissions.test';
 import read from './read.test';
 import refs from './refs.test';
 import roles from './roles.test';
+import securables from './securables.test';
 import store from './store.test';
 import update from './update.test';
 
@@ -16,4 +17,5 @@ export default () => {
   describe('delete /api/admin/users/:userId', destroy);
   describe('get /api/admin/users/:userId/permissions', permissions);
   describe('get /api/admin/users/:userId/roles', roles);
+  describe('get /api/admin/users/:userId/securables', securables);
 };

@@ -6,6 +6,8 @@
   "edit": "Modifier l'accès utilisateur",
   "search": "Chercher un utilisateur",
   "create": "Créer un nouvel utilisateur",
+  "securableType": "Type de ressource",
+  "securableId": "ID de ressource",
   "owner": {
     "_": "Propriétaire",
     "title": "Propriété"

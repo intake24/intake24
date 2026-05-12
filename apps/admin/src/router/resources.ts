@@ -230,7 +230,7 @@ export const resources: Resource[] = [
     icon: 'fas fa-fw fa-users',
     api: 'admin/users',
     generateRoutes: true,
-    routes: [...routes, 'permissions', 'roles'],
+    routes: [...routes, 'permissions', 'roles', 'securables'],
     refs: true,
   },
   {

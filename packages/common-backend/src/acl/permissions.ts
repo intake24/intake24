@@ -191,6 +191,7 @@ export const permissions = [
   { name: 'users:delete', displayName: 'Delete users' },
   { name: 'users:permissions', displayName: 'User permissions' },
   { name: 'users:roles', displayName: 'User roles' },
+  { name: 'users:securables', displayName: 'User securables' },
 ] as const;
 
 export type PermissionName = (typeof permissions)[number]['name'];

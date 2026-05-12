@@ -8,7 +8,7 @@ import { permission } from '@intake24/api/http/middleware';
 import { userEntryResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
-import { Permission, Role, User } from '@intake24/db';
+import { Permission, Role, User, UserSecurable } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { userId }: { userId?: string } = {}) {
   const where: WhereOptions = userId ? { id: { [Op.ne]: userId } } : {};
@@ -148,6 +148,23 @@ export function user() {
         });
 
         return { status: 200, body: roles };
+      },
+    },
+    securables: {
+      middleware: [permission('acl', 'users', 'users:securables')],
+      handler: async ({ params: { userId }, query }) => {
+        const user = await User.findByPk(userId, { attributes: ['id'] });
+        if (!user)
+          throw new NotFoundError();
+
+        const securables = await UserSecurable.paginate({
+          query,
+          columns: ['securableType', 'securableId', 'action'],
+          where: { userId },
+          order: [['securableType', 'ASC'], ['securableId', 'ASC']],
+        });
+
+        return { status: 200, body: securables };
       },
     },
   });

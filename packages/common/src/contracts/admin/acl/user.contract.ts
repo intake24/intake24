@@ -7,6 +7,7 @@ import {
   userAttributes,
   userRefs,
   userRequest,
+  userSecurableAttributes,
 } from '@intake24/common/types/http/admin';
 
 const contract = initContract();
@@ -103,5 +104,19 @@ export const user = contract.router({
     },
     summary: 'Browse assigned roles',
     description: 'Browse assigned roles (paginated list)',
+  },
+  securables: {
+    method: 'GET',
+    path: '/admin/users/:userId/securables',
+    pathParams: z.object({ userId }),
+    query: paginationRequest,
+    responses: {
+      200: z.object({
+        data: userSecurableAttributes.array(),
+        meta: paginationMeta,
+      }),
+    },
+    summary: 'Browse assigned securables',
+    description: 'Browse assigned securables (paginated list)',
   },
 });
