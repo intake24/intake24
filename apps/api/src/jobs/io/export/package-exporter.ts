@@ -565,11 +565,11 @@ export class PackageExporter {
 
     const imageMapsStream = this.db
       .selectFrom('imageMaps')
-      .innerJoin('sourceImages', 'sourceImages.id', 'imageMaps.baseImageId')
+      .innerJoin('processedImages', 'processedImages.id', 'imageMaps.baseImageId')
       .select([
         'imageMaps.id',
         'imageMaps.description',
-        'sourceImages.path as baseImagePath',
+        'processedImages.path as baseImagePath',
       ])
       .where('imageMaps.id', 'in', [...imageMapIds])
       .orderBy(sql`lower(${sql.ref('imageMaps.id')})`)
@@ -712,7 +712,7 @@ export class PackageExporter {
 
       const v2ScaleRows = await this.db
         .selectFrom('drinkwareScalesV2')
-        .innerJoin('sourceImages', 'sourceImages.id', 'drinkwareScalesV2.baseImageId')
+        .innerJoin('processedImages', 'processedImages.id', 'drinkwareScalesV2.baseImageId')
         .select([
           'drinkwareScalesV2.drinkwareSetId',
           'drinkwareScalesV2.choiceId',
@@ -720,7 +720,7 @@ export class PackageExporter {
           'drinkwareScalesV2.outlineCoordinates',
           'drinkwareScalesV2.volumeMethod',
           'drinkwareScalesV2.volumeSamples',
-          'sourceImages.path as baseImagePath',
+          'processedImages.path as baseImagePath',
         ])
         .where('drinkwareScalesV2.drinkwareSetId', 'in', setIds)
         .execute();
