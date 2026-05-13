@@ -160,6 +160,7 @@ import axios, { isAxiosError, isCancel } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
 
 import { usePromptUtils } from '@intake24/survey/composables';
+import { useSurvey } from '@intake24/survey/stores';
 import { barcodes } from '@intake24/ui';
 import { useApp } from '@intake24/ui/stores';
 
@@ -219,6 +220,10 @@ export type SearchResponse = {
 };
 
 const app = useApp();
+const userAgent = computed(() => {
+  const surveyId = useSurvey().slug;
+  return surveyId ? `intake24:${surveyId}` : 'intake24';
+});
 
 const { translatePrompt } = usePromptUtils(props, { emit });
 
@@ -238,7 +243,12 @@ const categoriesTags = computed(() => {
 });
 const hasSearchFilters = computed(() => !!(Object.keys(props.prompt.source.query).length || categoriesTags.value.length));
 
-const client = axios.create({ baseURL: baseUrl.value });
+const client = axios.create({
+  baseURL: baseUrl.value,
+  headers: {
+    'x-user-agent': userAgent.value,
+  },
+});
 let clientCtrl = new AbortController();
 const clientError = ref<string | number | undefined>();
 
