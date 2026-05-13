@@ -30,62 +30,81 @@
           {{ promptI18n.search }}
         </v-btn>
       </div>
-      <template v-if="selectedProductDetails">
-        <v-btn class="my-4" color="grey-lighten-2" elevation="0" size="large" @click="back">
-          <v-icon icon="fas fa-turn-up fa-flip-horizontal" start />
-          {{ promptI18n.back }}
-        </v-btn>
-        <v-card class="off-product-card pa-3">
-          <div class="pa-2 bg-white rounded">
-            <v-img
-              height="250px"
-              :src="selectedProductDetails.url"
+      <!-- Error Message -->
+      <v-alert v-if="clientError" class="my-4" type="error">
+        <i18n-t :keypath="`prompts.externalSource.errors.${clientError ?? 'fetch'}`" tag="span">
+          <template #source>
+            <span class="font-weight-medium">{{ $t(`prompts.externalSource.sources.${prompt.source.type}`) }}</span>
+          </template>
+        </i18n-t>
+      </v-alert>
+      <!-- Search Results -->
+      <v-container class="pa-0" fluid>
+        <!-- Loading State -->
+        <v-row v-if="loading" class="mt-12" justify="center">
+          <v-col v-for="(item, idx) in Array.from({ length: 6 })" :key="idx" cols="12" md="4" sm="6">
+            <v-skeleton-loader
+              class="mx-auto border"
+              type="image, heading"
+            />
+          </v-col>
+        </v-row>
+        <!-- Selected Product Details -->
+        <template v-else-if="selectedProductDetails">
+          <v-btn class="my-4" color="grey-lighten-2" elevation="0" size="large" @click="back">
+            <v-icon icon="fas fa-turn-up fa-flip-horizontal" start />
+            {{ promptI18n.back }}
+          </v-btn>
+          <v-card class="off-product-card pa-3">
+            <div class="pa-2 bg-white rounded">
+              <v-img
+                height="250px"
+                :src="selectedProductDetails.url"
+              />
+            </div>
+            <v-card-title class="px-0">
+              {{ selectedProductDetails.name }}
+            </v-card-title>
+            <v-card-text class="px-0">
+              <div v-if="selectedProductDetails.code" class="my-2">
+                <span class="font-weight-medium">
+                  {{ promptI18n['products.code'] }}:
+                </span>
+                {{ selectedProductDetails.code }}
+              </div>
+              <div v-if="selectedProductDetails.name || selectedProductDetails.genericName" class="my-2">
+                <span class="font-weight-medium">
+                  {{ promptI18n['products.name'] }}:
+                </span>
+                {{ selectedProductDetails.name || selectedProductDetails.genericName }}
+              </div>
+              <div v-if="selectedProductDetails.quantity" class="my-2">
+                <span class="font-weight-medium">
+                  {{ promptI18n['products.quantity'] }}:
+                </span>
+                {{ selectedProductDetails.quantity }}
+              </div>
+              <div v-if="selectedProductDetails.packaging" class="my-2">
+                <span class="font-weight-medium">
+                  {{ promptI18n['products.packaging'] }}:</span>
+                {{ selectedProductDetails.packaging }}
+              </div>
+            </v-card-text>
+          </v-card>
+        </template>
+        <template v-else-if="!selected && response.data">
+          <div class="d-flex flex-column flex-md-row justify-space-between align-center py-3 gr-2">
+            <div>
+              {{ promptI18n['products.results'] }}
+            </div>
+            <v-pagination
+              v-model="response.data.page"
+              :length="Math.ceil(response.data.count / response.data.page_size)"
+              rounded
+              :total-visible="7"
+              @update:model-value="search"
             />
           </div>
-          <v-card-title class="px-0">
-            {{ selectedProductDetails.name }}
-          </v-card-title>
-          <v-card-text class="px-0">
-            <div v-if="selectedProductDetails.code" class="my-2">
-              <span class="font-weight-medium">
-                {{ promptI18n['products.code'] }}:
-              </span>
-              {{ selectedProductDetails.code }}
-            </div>
-            <div v-if="selectedProductDetails.name || selectedProductDetails.genericName" class="my-2">
-              <span class="font-weight-medium">
-                {{ promptI18n['products.name'] }}:
-              </span>
-              {{ selectedProductDetails.name || selectedProductDetails.genericName }}
-            </div>
-            <div v-if="selectedProductDetails.quantity" class="my-2">
-              <span class="font-weight-medium">
-                {{ promptI18n['products.quantity'] }}:
-              </span>
-              {{ selectedProductDetails.quantity }}
-            </div>
-            <div v-if="selectedProductDetails.packaging" class="my-2">
-              <span class="font-weight-medium">
-                {{ promptI18n['products.packaging'] }}:</span>
-              {{ selectedProductDetails.packaging }}
-            </div>
-          </v-card-text>
-        </v-card>
-      </template>
-      <v-container v-if="!selected && canSearch" class="pa-0" fluid>
-        <div class="d-flex flex-column flex-md-row justify-space-between align-center py-3 gr-2">
-          <div>
-            {{ promptI18n['products.results'] }}
-          </div>
-          <v-pagination
-            v-model="response.data.page"
-            :length="Math.ceil(response.data.count / response.data.page_size)"
-            rounded
-            :total-visible="7"
-            @update:model-value="search"
-          />
-        </div>
-        <template v-if="!loading">
           <v-row justify="center">
             <v-col v-for="product in response.data.products" :key="product.code" cols="12" md="4" sm="6">
               <v-card class="off-product-card off-product-card--result pa-3" height="100%" link @click="select(product)">
@@ -93,7 +112,18 @@
                   <v-img
                     height="250px"
                     :src="resolveImageUrl(product)"
-                  />
+                  >
+                    <template #placeholder>
+                      <div class="d-flex align-center justify-center fill-height">
+                        <v-progress-circular
+                          color="primary"
+                          indeterminate
+                          :size="100"
+                          :width="15"
+                        />
+                      </div>
+                    </template>
+                  </v-img>
                 </div>
                 <v-card-title class="px-0">
                   {{ getProductName(product, true) }}
@@ -111,18 +141,10 @@
               @update:model-value="search"
             />
           </div>
-          <v-alert v-if="!loading && !response.data.products.length" class="my-4" type="warning">
+          <v-alert v-if="!response.data.products.length" class="my-4" type="warning">
             {{ promptI18n['products.none'] }}
           </v-alert>
         </template>
-        <v-row v-else justify="center">
-          <v-col v-for="(item, idx) in Array.from({ length: 6 })" :key="idx" cols="12" md="4" sm="6">
-            <v-skeleton-loader
-              class="mx-auto border"
-              type="image, heading"
-            />
-          </v-col>
-        </v-row>
       </v-container>
     </v-card-text>
   </v-card>
@@ -193,19 +215,11 @@ export type OOFProductsResponse = {
 
 export type SearchResponse = {
   searchTerm: string;
-  data: OOFProductsResponse;
-};
-
-const emptyResponse: SearchResponse['data'] = {
-  count: 0,
-  page: 1,
-  page_count: 0,
-  page_size: 1,
-  products: [],
-  skip: 0,
+  data?: OOFProductsResponse;
 };
 
 const app = useApp();
+
 const { translatePrompt } = usePromptUtils(props, { emit });
 
 const baseUrl = computed(() => `https://${props.prompt.source.country || 'world'}.openfoodfacts.org`);
@@ -226,6 +240,7 @@ const hasSearchFilters = computed(() => !!(Object.keys(props.prompt.source.query
 
 const client = axios.create({ baseURL: baseUrl.value });
 let clientCtrl = new AbortController();
+const clientError = ref<string | number | undefined>();
 
 function cancelRequest() {
   clientCtrl.abort();
@@ -253,10 +268,7 @@ const searchFields = computed(() => [
 
 const productFields = computed(() => []);
 
-const response = ref<SearchResponse>({
-  searchTerm: '',
-  data: emptyResponse,
-});
+const response = ref<SearchResponse>({ searchTerm: '' });
 const selected = ref<OOFProduct | undefined>();
 const searchTerm = ref(props.modelValue.searchTerm);
 const canSearch = computed(() => hasSearchFilters.value || !!searchTerm.value);
@@ -272,7 +284,7 @@ const promptI18n = computed(() =>
     'products.quantity',
     'products.packaging',
   ], {
-    'products.results': { count: response.value.data.count ?? 0 },
+    'products.results': { count: response.value.data?.count ?? 0 },
   }),
 );
 
@@ -310,8 +322,18 @@ const selectedProductDetails = computed(() => {
   };
 });
 
+function logError(err: unknown) {
+  if (isAxiosError(err)) {
+    clientError.value = err.response?.status ?? 'fetch';
+    return;
+  }
+
+  throw err;
+}
+
 async function fetchProduct(barcode: string) {
   cancelRequest();
+  clientError.value = undefined;
   loading.value = true;
 
   try {
@@ -328,12 +350,14 @@ async function fetchProduct(barcode: string) {
     if (isCancel(err))
       return;
 
-    if (isAxiosError(err) && err.response?.status === 404) {
-      response.value.data = { ...emptyResponse };
-      return;
+    if (isAxiosError(err)) {
+      if (err.response?.status === 404) {
+        response.value.data = undefined;
+        return;
+      }
     }
 
-    throw err;
+    logError(err);
   }
   finally {
     loading.value = false;
@@ -342,6 +366,7 @@ async function fetchProduct(barcode: string) {
 
 async function fetchProducts(search: string) {
   cancelRequest();
+  clientError.value = undefined;
   loading.value = true;
   selected.value = undefined;
   response.value.searchTerm = search;
@@ -354,7 +379,7 @@ async function fetchProducts(search: string) {
         categories_tags: categoriesTags.value.length ? categoriesTags.value.join('|') : undefined,
         search_terms: search,
         fields: searchFields.value.length ? searchFields.value.join(',') : undefined,
-        page: response.value.searchTerm === search ? response.value.data.page : 1,
+        page: (response.value.searchTerm === search ? response.value.data?.page : 1) ?? 1,
       },
       signal: clientCtrl.signal,
     });
@@ -364,7 +389,7 @@ async function fetchProducts(search: string) {
     if (isCancel(err))
       return;
 
-    throw err;
+    logError(err);
   }
   finally {
     loading.value = false;
@@ -374,7 +399,7 @@ async function fetchProducts(search: string) {
 async function search() {
   const searchValue = searchTerm.value ?? '';
   if (!searchValue && !hasSearchFilters.value) {
-    response.value = { searchTerm: '', data: { ...emptyResponse } };
+    response.value = { searchTerm: '' };
     return;
   }
 

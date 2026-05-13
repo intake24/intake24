@@ -195,6 +195,14 @@
       "code": "Code",
       "quantity": "Quantity",
       "packaging": "Packaging"
+    },
+    "sources": {
+      "open-food-facts": "Open Food Facts"
+    },
+    "errors": {
+      "429": "Too many requests to {source}. Please wait a moment and try again.",
+      "503": "{source} is currently unavailable. Please try again later.",
+      "fetch": "An error occurred while fetching data from {source}. Please try again later."
     }
   },
   "final": {

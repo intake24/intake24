@@ -195,6 +195,14 @@
       "code": "Code",
       "quantity": "Quantité",
       "packaging": "Emballage"
+    },
+    "sources": {
+      "open-food-facts": "Open Food Facts"
+    },
+    "errors": {
+      "429": "Trop de requêtes vers {source}. Veuillez patienter un instant et réessayer.",
+      "503": "{source} est actuellement indisponible. Veuillez réessayer plus tard.",
+      "fetch": "Une erreur s'est produite lors de la récupération des données depuis {source}. Veuillez réessayer plus tard."
     }
   },
   "final": {
