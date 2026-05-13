@@ -41,19 +41,21 @@
         </v-btn>
       </template>
       <v-card :tile="$vuetify.display.mobile">
-        <v-toolbar color="secondary">
+        <v-toolbar color="secondary" extended>
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
           <v-toolbar-title>
             {{ $t('user.mfa.devices.add') }}
           </v-toolbar-title>
+          <template #extension>
+            <v-tabs v-model="tab" bg-color="secondary" grow @update:model-value="clear">
+              <v-tab v-for="provider in providers" :key="provider" :value="provider">
+                <v-icon :icon="`$${provider}`" start />
+                {{ $t(`user.mfa.providers.${provider}._`) }}
+              </v-tab>
+            </v-tabs>
+          </template>
         </v-toolbar>
-        <v-tabs v-model="tab" bg-color="secondary" grow @update:model-value="clear">
-          <v-tab v-for="provider in providers" :key="provider" :value="provider">
-            <v-icon :icon="`$${provider}`" start />
-            {{ $t(`user.mfa.providers.${provider}._`) }}
-          </v-tab>
-        </v-tabs>
-        <v-tabs-window v-model="tab">
+        <v-tabs-window v-model="tab" class="overflow-y-auto">
           <v-tabs-window-item v-for="provider in providers" :key="provider" :value="provider">
             <v-card flat>
               <v-card-title class="text-h5 font-weight-bold mb-2">

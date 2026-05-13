@@ -57,7 +57,13 @@
                   name="token"
                   @update:model-value="otp.errors.clear('token')"
                 />
-                <v-btn block color="secondary" rounded type="submit">
+                <v-btn
+                  block
+                  color="secondary"
+                  :disabled="otp.data.value.token.length !== 6"
+                  rounded
+                  type="submit"
+                >
                   {{ $t('common.action.confirm._') }}
                 </v-btn>
               </div>

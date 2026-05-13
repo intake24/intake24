@@ -39,7 +39,14 @@
                 name="token"
                 @update:model-value="errors.clear('token')"
               />
-              <v-btn block class="my-4" color="secondary" rounded type="submit">
+              <v-btn
+                block
+                class="my-4"
+                color="secondary"
+                :disabled="data.token.length !== 6"
+                rounded
+                type="submit"
+              >
                 {{ $t('user.mfa.providers.otp.verify._') }}
               </v-btn>
             </v-form>
