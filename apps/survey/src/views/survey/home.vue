@@ -44,7 +44,7 @@
                 </v-list-item>
               </template>
               <template v-else-if="hasFinished">
-                <v-list-item link>
+                <v-list-item>
                   <template #prepend>
                     <v-icon color="info" size="large">
                       $check
@@ -89,7 +89,7 @@
                 </v-list-item>
               </template>
               <template v-else-if="hasStarted">
-                <v-list-item link>
+                <v-list-item>
                   <template #prepend>
                     <v-icon color="info" size="large">
                       $pause
@@ -176,7 +176,7 @@
                 </v-list-item>
               </template>
               <template v-else>
-                <v-list-item link>
+                <v-list-item>
                   <template #prepend>
                     <v-icon color="info" size="large">
                       $start
@@ -224,7 +224,7 @@
             <v-list class="list__no-wrap">
               <v-list-subheader>{{ $t('feedback.info') }}</v-list-subheader>
               <template v-if="feedbackAvailable">
-                <v-list-item link>
+                <v-list-item>
                   <template #prepend>
                     <v-icon color="info" size="large">
                       $feedback
@@ -262,7 +262,7 @@
                   </v-btn>
                 </v-list-item>
               </template>
-              <v-list-item v-else link>
+              <v-list-item v-else>
                 <template #prepend>
                   <v-icon color="info" size="large">
                     $info
