@@ -193,9 +193,47 @@ function getAddonFoodsUnits(foodId: string, idx: number) {
   return code ? (addonFoodUnits.value[code]?.units ?? []) : [];
 }
 
+function isAddonFoodCompatible(food: PromptStates['addon-foods-prompt']['foods'][string][number]) {
+  const code = food.data?.code;
+  if (!code)
+    return true;
+
+  const foodAvailable = addonFoods.value[food.addon.id]?.some(addonFood => addonFood.code === code);
+  if (!foodAvailable)
+    return false;
+
+  const unitName = food.portionSize.unit?.name;
+  return !unitName || !!addonFoodUnits.value[code]?.units.some(unit => unit.name === unitName);
+}
+
+// Edge case: https://intake24.atlassian.net/browse/V4-1776
+//
+// This can happen if the user completes the prompt, the compatible foods change in the back-end
+// (someone edits the food database), user goes back and ends up in inconsistent state.
+function resetIncompatibleAddonFoods() {
+  let changed = false;
+
+  Object.values(foods.value).forEach((addonRows) => {
+    addonRows.forEach((food) => {
+      if (isAddonFoodCompatible(food))
+        return;
+
+      food.confirmed = null;
+      food.data = null;
+      food.portionSize.unit = null;
+      food.portionSize.quantity = 0;
+      food.portionSize.servingWeight = 0;
+      changed = true;
+    });
+  });
+
+  if (changed)
+    update();
+}
+
 async function getAddonFoods() {
   for (const addon of props.prompt.addons) {
-    const foodCodes = [];
+    const foodCodes: string[] = [];
 
     if (addon.entity === 'food') {
       foodCodes.push(addon.code);
@@ -262,6 +300,7 @@ function updateQuantity(foodId: string, idx: number) {
 
 onMounted(async () => {
   await getAddonFoods();
+  resetIncompatibleAddonFoods();
 });
 
 watch(() => props.modelValue, (modelValue) => {
