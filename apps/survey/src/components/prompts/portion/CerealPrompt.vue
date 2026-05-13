@@ -102,6 +102,7 @@
             </i18n-t>
             <as-served-selector
               v-if="leftoverImageSet"
+              v-model="state.portionSize.leftovers"
               v-bind="{
                 food,
                 prompt,
@@ -223,6 +224,7 @@ function confirmBowl() {
 
 function updateServing() {
   state.value.servingImageConfirmed = false;
+  clearLeftovers();
   update();
 };
 
@@ -231,6 +233,12 @@ function confirmServing() {
   state.value.servingImageConfirmed = true;
   updatePanel();
   update();
+};
+
+function clearLeftovers() {
+  state.value.portionSize.leftovers = null;
+  state.value.leftoversImageConfirmed = false;
+  state.value.leftoversPrompt = undefined;
 };
 
 function updateLeftovers() {
