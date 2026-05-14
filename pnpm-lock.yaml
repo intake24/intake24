@@ -5,9 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  '@ts-rest/core':
-    hash: 9dc6a3817bb88dba251d6862ba2cf78c9ee2adc359bc99a683dba6eb02ea57e9
-    path: patches/@ts-rest__core.patch
+  '@ts-rest/core': 9dc6a3817bb88dba251d6862ba2cf78c9ee2adc359bc99a683dba6eb02ea57e9
 
 importers:
 
