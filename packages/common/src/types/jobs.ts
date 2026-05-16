@@ -68,6 +68,7 @@ export const LocaleDeduplicateFoods = z.object({
 });
 export const LocaleFoodNutrientMapping = z.object({
   localeId: bigIntString,
+  nutrientTableId: z.string().optional(),
 });
 export const LocaleFoodRankingUpload = z.object({
   localeId: bigIntString,
