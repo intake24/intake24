@@ -5,10 +5,9 @@ import { pipeline } from 'node:stream/promises';
 
 import { cancel, group, intro, log, outro, spinner, text } from '@clack/prompts';
 import { Transform } from '@json2csv/node';
-import { Op } from 'sequelize';
 
 import config from '@intake24/cli/config';
-import { logger } from '@intake24/common-backend';
+import { buildNdbCsvLayout, buildNdbRow, logger } from '@intake24/common-backend';
 import {
   Database,
   Food,
@@ -16,20 +15,6 @@ import {
   NutrientTableCsvMapping,
   NutrientTableCsvMappingNutrient,
 } from '@intake24/db';
-
-const FIXED_HEADERS = [
-  'FCT record ID', // 0
-  'FCT', // 1
-  'Food ID', // 2
-  'Locale', // 3
-  'Food code', // 4
-  'English name', // 5
-  'Local name', // 6
-  'Sub-group code', // 7
-  'Alternative Name', // 8
-  'Tags', // 9
-];
-const NUTRIENT_COL_START = 10;
 
 export default async function genLocaleNdbData(): Promise<void> {
   intro('Generate locale NDB data CSV');
@@ -90,19 +75,7 @@ export default async function genLocaleNdbData(): Promise<void> {
   try {
     await db.init();
 
-    // --- Validate ---
     s.start('Validating inputs...');
-
-    if (filterByTable) {
-      const csvMapping = await NutrientTableCsvMapping.findOne({
-        where: { nutrientTableId: tableId },
-      });
-      if (!csvMapping) {
-        s.stop('Validation failed.');
-        log.error(`No CSV mapping found for nutrient table "${tableId}". Run "Nutrient table - Import NDB mapping" first.`);
-        process.exit(1);
-      }
-    }
 
     const linkedCount = await Food.count({
       where: { localeId },
@@ -121,11 +94,11 @@ export default async function genLocaleNdbData(): Promise<void> {
 
     s.stop(`Found ${linkedCount} linked food records.`);
 
-    // --- Build nutrient column layout (only when filtering by specific table) ---
-    s.start('Building column layout from mapping config...');
+    s.start('Building column layout...');
 
-    let offsetByNutrientType = new Map<string, number>();
-    const nutrientFields: { label: string; value: string }[] = [];
+    let fields: { label: string; value: string }[] = [];
+    let ndbLayout: ReturnType<typeof buildNdbCsvLayout> | null = null;
+    let csvMapping: InstanceType<typeof NutrientTableCsvMapping> | null = null;
 
     const allNutrientTypes = await FoodsNutrientType.findAll({
       attributes: ['id', 'description'],
@@ -133,36 +106,35 @@ export default async function genLocaleNdbData(): Promise<void> {
     });
 
     if (filterByTable) {
-      const mappingNutrients = await NutrientTableCsvMappingNutrient.findAll({
-        where: { nutrientTableId: tableId, columnOffset: { [Op.gte]: NUTRIENT_COL_START } },
-        order: [['columnOffset', 'ASC']],
-      });
+      const [mapping, mappingNutrients] = await Promise.all([
+        NutrientTableCsvMapping.findOne({ where: { nutrientTableId: tableId } }),
+        NutrientTableCsvMappingNutrient.findAll({
+          where: { nutrientTableId: tableId },
+          order: [['columnOffset', 'ASC']],
+        }),
+      ]);
 
-      const maxOffset = mappingNutrients.length > 0
-        ? Math.max(...mappingNutrients.map(n => n.columnOffset))
-        : NUTRIENT_COL_START - 1;
-
-      const nutrientByOffset = new Map(mappingNutrients.map(n => [n.columnOffset, n.nutrientTypeId.toString()]));
-      offsetByNutrientType = new Map(mappingNutrients.map(n => [n.nutrientTypeId.toString(), n.columnOffset]));
-      const nutrientTypeById = new Map(allNutrientTypes.map(nt => [nt.id.toString(), nt.description]));
-
-      for (let i = NUTRIENT_COL_START; i <= maxOffset; i++) {
-        const nutrientTypeId = nutrientByOffset.get(i);
-        nutrientFields.push({ label: nutrientTypeId ? (nutrientTypeById.get(nutrientTypeId) ?? '') : '', value: String(i) });
+      if (!mapping) {
+        s.stop('Validation failed.');
+        log.error(`No CSV mapping found for nutrient table "${tableId}". Run "Nutrient table - Import NDB mapping" first.`);
+        process.exit(1);
       }
+
+      csvMapping = mapping;
+      const nutrientTypeById = new Map(allNutrientTypes.map(nt => [nt.id.toString(), nt.description]));
+      ndbLayout = buildNdbCsvLayout(csvMapping, mappingNutrients, nutrientTypeById);
+      fields = ndbLayout.fields;
     }
     else {
-      // All-tables export: nutrients ordered by nutrient type ID, keyed as nt-{id}
-      for (const nt of allNutrientTypes) {
-        nutrientFields.push({ label: nt.description, value: `nt-${nt.id}` });
-      }
+      const nutrientFields: { label: string; value: string }[] = allNutrientTypes.map(nt => ({
+        label: nt.description,
+        value: `nt-${nt.id}`,
+      }));
+      fields = nutrientFields;
     }
-
-    const fixedFields = FIXED_HEADERS.map((label, i) => ({ label, value: `f${i}` }));
 
     s.stop('Column layout built.');
 
-    // --- Stream foods with associated NTR data ---
     s.start(`Exporting to ${outputPath}...`);
 
     await mkdir(dirname(outputPath), { recursive: true });
@@ -184,7 +156,7 @@ export default async function genLocaleNdbData(): Promise<void> {
 
     const transform = new Transform(
       {
-        fields: [...fixedFields, ...nutrientFields],
+        fields,
         withBOM: true,
         transforms: [
           (food: Food) => {
@@ -192,34 +164,19 @@ export default async function genLocaleNdbData(): Promise<void> {
             if (!ntrs.length)
               return {};
 
-            return ntrs.map((ntr) => {
-              const obj: Record<string, string> = {
-                f0: ntr.nutrientTableRecordId,
-                f1: ntr.nutrientTableId,
-                f2: food.id.toString(),
-                f3: food.localeId,
-                f4: food.code,
-                f5: food.englishName,
-                f6: food.name ?? '',
-                f7: ntr.fields?.filter(f => f.name === 'sub_group_code').map(f => f.value).join(', ') ?? '',
-                f8: Object.values(food.altNames ?? {}).flatMap(names => names).toSorted().join(', '),
-                f9: (food.tags ?? []).toSorted().join(', '),
-              };
-
-              for (const n of ntr.nutrients ?? []) {
-                const ntId = n.nutrientTypeId?.toString() ?? '';
-                if (filterByTable) {
-                  const offset = offsetByNutrientType.get(ntId);
-                  if (offset !== undefined)
-                    obj[String(offset)] = n.unitsPer100g.toString();
-                }
-                else {
+            if (filterByTable) {
+              return ntrs.map(ntr => buildNdbRow(food, ntr, ndbLayout!, csvMapping!));
+            }
+            else {
+              return ntrs.map((ntr) => {
+                const obj: Record<string, string> = {};
+                for (const n of ntr.nutrients ?? []) {
+                  const ntId = n.nutrientTypeId?.toString() ?? '';
                   obj[`nt-${ntId}`] = n.unitsPer100g.toString();
                 }
-              }
-
-              return obj;
-            });
+                return obj;
+              });
+            }
           },
         ],
       },

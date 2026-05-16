@@ -92,7 +92,12 @@
     },
     "LocaleFoodNutrientMapping": {
       "_": "Régional - Exporter le mapping des nutriments",
-      "localeId": "Identifiant régional"
+      "localeId": "Identifiant régional",
+      "nutrientTableId": "Nutrient table (optional)",
+      "alert": {
+        "ndb": "Output is offset-aligned for this nutrient table. Compatible with Admin → Nutrient Tables → Import NDB data.",
+        "allTables": "No table selected — all linked FCT records exported. Nutrient columns ordered by nutrient type ID, not spreadsheet offset. Not compatible with Import NDB data."
+      }
     },
     "LocaleFoodRankingUpload": {
       "_": "Régional - téléchargement du CSV de classement d'aliments",
