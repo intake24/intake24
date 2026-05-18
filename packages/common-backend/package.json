@@ -32,9 +32,9 @@
   "devDependencies": {
     "@types/html-to-text": "^9.0.4",
     "@types/ms": "^2.1.0",
-    "@types/node": "^24.12.2",
+    "@types/node": "^24.12.4",
     "@types/nodemailer": "^8.0.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.6"
   }
 }
