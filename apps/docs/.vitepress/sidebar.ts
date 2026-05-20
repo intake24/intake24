@@ -270,6 +270,10 @@ export const sidebar = {
           text: 'Import / Export',
           link: '/admin/locales/import-export',
         },
+        {
+          text: 'Food database package format',
+          link: '/admin/locales/package-format',
+        },
       ],
     },
     {
