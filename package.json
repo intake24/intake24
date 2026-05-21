@@ -3,7 +3,7 @@
   "type": "module",
   "version": "2026.1.0",
   "private": true,
-  "packageManager": "pnpm@10.33.3",
+  "packageManager": "pnpm@11.2.2",
   "description": "Dietary recall system",
   "author": "",
   "license": "Apache-2.0",
