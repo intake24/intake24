@@ -1,4 +1,4 @@
-import type { SelectQueryBuilder, Simplify, StringReference } from 'kysely';
+import type { Expression, OperationNode, SelectQueryBuilder, Simplify, StringReference } from 'kysely';
 
 import type { Pagination, PaginationMeta } from '@intake24/common/types/http';
 import type { PaginateQuery } from '@intake24/db';
@@ -88,4 +88,22 @@ export function values<R extends Record<string, unknown>, A extends string>(rows
   const aliasSql = sql`${sql.ref(alias)}(${sql.join(columns.map(sql.ref))})`;
 
   return sql<R>`(VALUES ${valuesSql})`.as<A>(aliasSql);
+}
+
+// https://kysely.dev/docs/recipes/extending-kysely#expression
+export class JsonValue<T> implements Expression<T> {
+  #value: T;
+
+  constructor(value: T) {
+    this.#value = value;
+  }
+
+  get expressionType(): T | undefined {
+    return undefined;
+  }
+
+  toOperationNode(): OperationNode {
+    const json = JSON.stringify(this.#value);
+    return sql`cast(${json} as jsonb)`.toOperationNode();
+  }
 }

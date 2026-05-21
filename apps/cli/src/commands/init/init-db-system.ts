@@ -37,7 +37,7 @@ import {
   submitPrompt,
 } from '@intake24/common/prompts';
 import { defaultExport, defaultMeals, defaultSchemeSettings } from '@intake24/common/surveys';
-import { KyselyDatabases } from '@intake24/db';
+import { JsonValue, KyselyDatabases } from '@intake24/db';
 
 import initAssets from './init-assets';
 
@@ -245,9 +245,9 @@ async function initDefaultData(db: KyselyDatabases) {
   await db.system.insertInto('surveySchemes').values({
     name: 'Default',
     settings: defaultSchemeSettings,
-    meals: defaultMeals,
+    meals: new JsonValue(defaultMeals),
     prompts,
-    dataExport: defaultExport,
+    dataExport: new JsonValue(defaultExport),
     createdAt: now,
     updatedAt: now,
   }).executeTakeFirst();
