@@ -19,6 +19,7 @@
     "@ericblade/quagga2": "^1.12.1",
     "@gtm-support/vue-gtm": "^3.2.0",
     "@hcaptcha/vue3-hcaptcha": "^1.3.0",
+    "@iconify/vue": "^5.0.1",
     "@microsoft/clarity": "^1.0.2",
     "@pinia/plugin-debounce": "^1.0.1",
     "@pixelverse/strichjs-sdk": "^1.14.1",

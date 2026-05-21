@@ -91,7 +91,14 @@
           @click="foodSelected(food)"
         >
           <template #prepend>
-            <v-icon :icon="foodIcon(food.icon)" />
+            <icon
+              v-if="food.icon"
+              class="mr-4 opacity-60"
+              height="26"
+              :icon="food.icon"
+              width="26"
+            />
+            <v-icon v-else icon="$food" />
           </template>
           <v-list-item-title>{{ food.name }}</v-list-item-title>
 
@@ -129,10 +136,10 @@ import type { PropType } from 'vue';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
 
+import { Icon } from '@iconify/vue';
 import { computed, reactive, ref, watch } from 'vue';
 
 import { sendGtmEvent } from '@intake24/survey/util';
-import { icons } from '@intake24/ui';
 
 import NoImagePlaceholder from './NoImagePlaceholder.vue';
 
@@ -203,13 +210,6 @@ const useGridLayout = computed(() => {
   else
     return Math.round(foodsWithThumbnailsCount * 100.0 / totalFoodCount) >= props.gridThreshold;
 });
-
-function foodIcon(icon?: string | null) {
-  if (!icon)
-    return '$food';
-
-  return icons[icon] ?? '$food';
-};
 
 function categorySelected(category: CategoryHeader) {
   emit('categorySelected', category);

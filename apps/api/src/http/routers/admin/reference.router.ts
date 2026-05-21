@@ -311,7 +311,7 @@ export function reference() {
         const standardUnits = await StandardUnit.paginate({
           where: id ? { id } : undefined,
           query,
-          attributes: ['id', 'name', 'estimateIn', 'howMany'],
+          attributes: ['id', 'name', 'icon', 'estimateIn', 'howMany'],
           columns: ['id', 'name'],
           order: [[fn('lower', col('id')), 'ASC']],
         });

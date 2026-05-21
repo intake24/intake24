@@ -192,7 +192,7 @@ function portionSizeService() {
   const getStandardUnits = async (id: string | string[]): Promise<StandardUnit[]> =>
     StandardUnit.findAll({
       where: { id },
-      attributes: ['id', 'estimateIn', 'howMany'],
+      attributes: ['id', 'name', 'icon', 'estimateIn', 'howMany'],
       order: [['id', 'ASC']],
     });
 

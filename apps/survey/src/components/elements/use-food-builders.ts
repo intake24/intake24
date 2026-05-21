@@ -1,11 +1,11 @@
-import type { FunctionalComponent, MaybeRefOrGetter } from 'vue';
+import type { MaybeRefOrGetter } from 'vue';
 
 import type { FoodBuilder, FoodHeader } from '@intake24/common/types/http';
 
 import { computed, ref, toRef } from 'vue';
 
 import { foodsService } from '@intake24/survey/services';
-import { getIcon, useI18n } from '@intake24/ui';
+import { useI18n } from '@intake24/ui';
 
 export type UseFoodBuildersProps = {
   enabled: MaybeRefOrGetter<boolean>;
@@ -22,17 +22,6 @@ export function useFoodBuilders(props: UseFoodBuildersProps) {
   const builders = ref<FoodBuilder[]>([]);
   const detected = computed(() => enabled.value && !!builders.value.length);
   const exclusive = computed(() => enabled.value && builders.value.some(builder => builder.exclusive));
-
-  const icons = computed(() => builders.value.reduce((acc, { code, icon }) => {
-    if (!icon)
-      return acc;
-
-    const svg = getIcon(icon);
-    if (svg)
-      acc[code] = svg;
-
-    return acc;
-  }, {} as Record<string, FunctionalComponent>));
 
   function label(builder: FoodBuilder) {
     return translate(builder.label) || t('prompts.recipeBuilder.label', { searchTerm: builder?.name });
@@ -53,7 +42,6 @@ export function useFoodBuilders(props: UseFoodBuildersProps) {
   return {
     foods,
     builders,
-    icons,
     detected,
     exclusive,
     label,

@@ -40,6 +40,7 @@ export type NutrientTableRecordReference = z.infer<typeof nutrientTableRecordRef
 export const standardUnitReference = standardUnitAttributes.pick({
   id: true,
   name: true,
+  icon: true,
   estimateIn: true,
   howMany: true,
 });

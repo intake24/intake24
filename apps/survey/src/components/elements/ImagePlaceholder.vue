@@ -1,8 +1,7 @@
 <template>
-  <div class="d-flex img-placeholder">
+  <div class="d-flex h-100 w-100 align-center justify-center">
     <v-progress-circular
       v-bind="{ color, size, width }"
-      class="ma-auto"
       indeterminate
     />
   </div>
@@ -32,8 +31,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.img-placeholder {
-  width: 100%;
-  height: 100%;
-}
 </style>

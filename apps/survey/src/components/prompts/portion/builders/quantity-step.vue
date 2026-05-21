@@ -11,7 +11,7 @@
   <v-container v-if="unit">
     <v-row>
       <v-col class="d-none d-sm-flex justify-center align-center" cols="6">
-        <standard-unit-icon :icon="unit.name" />
+        <standard-unit-icon :icon="getStandardUnit(unit.name)?.icon" />
       </v-col>
       <v-col cols="12" sm="6">
         <quantity-card
@@ -39,7 +39,7 @@ const { getStepState, update } = useStep(props, { emit });
 
 const unit = computed(() => getStepState('lookup-unit')?.option);
 const units = computed(() => unit.value ? [unit.value] : []);
-const { getStandardUnitHowMany } = useStandardUnits({ units });
+const { getStandardUnit, getStandardUnitHowMany } = useStandardUnits({ units });
 </script>
 
 <style lang="scss">

@@ -115,7 +115,7 @@
                         "
                       >
                         <span class="text-center">
-                          <standard-unit-icon :icon="`pizza_${unit.value}`" />
+                          <standard-unit-icon :icon="icons[unit.value]" />
                         </span>
                         <span class="font-weight-bold text-uppercase">
                           {{ $t(`prompts.${type}.units.${unit.value}`) }}
@@ -140,7 +140,7 @@
           <v-container>
             <v-row>
               <v-col class="d-none d-sm-flex justify-center align-center" cols="6">
-                <standard-unit-icon :icon="`pizza_${state.portionSize.unit}`" />
+                <standard-unit-icon v-if="state.portionSize.unit" :icon="icons[state.portionSize.unit]" />
               </v-col>
               <v-col cols="12" sm="6">
                 <quantity-card
@@ -167,25 +167,23 @@ import { copy } from '@intake24/common/util';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
-import { icons, useI18n } from '@intake24/ui';
+import { useI18n } from '@intake24/ui';
 
 import { BaseLayout } from '../layouts';
 import { Next, QuantityCard, StandardUnitIcon, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
-defineOptions({
-  components: {
-    PizzaSlice: icons['fluent-food-pizza-24-filled'],
-    PizzaWhole: icons['game-icons-full-pizza'],
-  },
-});
-
 const props = defineProps({
   ...createPortionPromptProps<'pizza-v2-prompt'>(),
 });
 
 const emit = defineEmits(['action', 'update:modelValue']);
+
+const icons = {
+  slice: 'fluent:food-pizza-24-filled',
+  whole: 'game-icons:full-pizza',
+};
 
 const { i18n: { t } } = useI18n();
 const { action, type } = usePromptUtils(props, { emit });

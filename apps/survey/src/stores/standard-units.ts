@@ -31,7 +31,7 @@ export const useStandardUnits = defineStore('standard-units', () => {
     return translate(units.value[name]?.estimateIn ?? name);
   };
 
-  function getStandardUnit(item: string) {
+  function getStandardUnit(item: string): StandardUnitResponse | undefined {
     return units.value[item];
   }
 

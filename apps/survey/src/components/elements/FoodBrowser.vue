@@ -55,11 +55,11 @@
             variant="tonal"
             @click.stop="foodBuilder(builder)"
           >
-            <v-icon
-              v-if="foodBuilders.icons.value[builder.code]"
-              :icon="foodBuilders.icons.value[builder.code]"
-              :size="foodBuilders.exclusive.value ? 100 : 30"
-              :start="!foodBuilders.exclusive.value"
+            <icon
+              v-if="builder.icon"
+              :height="foodBuilders.exclusive.value ? 100 : 30"
+              :icon="builder.icon"
+              :width="foodBuilders.exclusive.value ? 100 : 30"
             />
             <span class="text-h5 font-weight-medium">
               {{ foodBuilders.label(builder) }}
@@ -189,6 +189,7 @@ import type { FoodBrowser, FoodSearchHint, Prompt } from '@intake24/common/promp
 import type { PromptSection } from '@intake24/common/surveys';
 import type { CategoryContents, CategoryHeader, FoodBuilder, FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 
+import { Icon } from '@iconify/vue';
 import { watchDebounced } from '@vueuse/core';
 import { computed, nextTick, onMounted, ref, toRef } from 'vue';
 import { useGoTo } from 'vuetify';
