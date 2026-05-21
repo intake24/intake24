@@ -62,6 +62,12 @@
         "incomplete": "Missing information for this food is not yet known.",
         "edit": "Edit missing food"
       },
+      "generic-builder": {
+        "_": "This food has been matched with a food from our database.",
+        "complete": "Steps for this food are complete.",
+        "incomplete": "Steps for this food are not yet finished.",
+        "edit": "Edit food"
+      },
       "recipe-builder": {
         "_": "This food has been matched with a recipe from our database.",
         "complete": "Recipe Steps for this food are complete.",

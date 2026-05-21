@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { recordVisibilities } from '@intake24/common/security';
 
-import { requiredLocaleTranslation, textDirections } from '../../common';
+import { textDirections } from '../../common';
 import { languageAttributes } from './languages';
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';
@@ -107,39 +107,3 @@ export type SynonymSetAttributes = z.infer<typeof synonymSetAttributes>;
 
 export const synonymSetRequest = synonymSetAttributes.partial({ id: true });
 export type SynonymSetRequest = z.infer<typeof synonymSetRequest>;
-
-export const recipeFoodStepAttributes = z.object({
-  id: z.string(),
-  recipeFoodsId: z.string(),
-  code: z.string().min(1).max(128),
-  localeId: z.string().min(1).max(64),
-  categoryCode: z.string().max(64),
-  name: requiredLocaleTranslation,
-  description: requiredLocaleTranslation,
-  order: z.number(),
-  repeatable: z.boolean(),
-  required: z.boolean(),
-});
-export type RecipeFoodStepAttributes = z.infer<typeof recipeFoodStepAttributes>;
-
-export const recipeFoodStepRequest = recipeFoodStepAttributes.partial({ id: true });
-export type RecipeFoodStepRequest = z.infer<typeof recipeFoodStepRequest>;
-
-export const recipeFoodAttributes = z.object({
-  id: z.string(),
-  localeId: z.string().min(1).max(64),
-  code: z.string().min(1).max(64),
-  name: z.string().min(1).max(128),
-  recipeWord: z.string().min(1).max(512),
-  synonymsId: z.string().nullable(),
-});
-export type RecipeFoodAttributes = z.infer<typeof recipeFoodAttributes>;
-
-export const recipeFoodRequest = recipeFoodAttributes.partial({ id: true });
-export type RecipeFoodRequest = z.infer<typeof recipeFoodRequest>;
-
-export const recipeFoodEntry = recipeFoodAttributes.extend({
-  steps: recipeFoodStepAttributes.array(),
-  synonymSet: synonymSetAttributes,
-});
-export type RecipeFoodEntry = z.infer<typeof recipeFoodEntry>;

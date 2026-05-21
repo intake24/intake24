@@ -1,4 +1,4 @@
-import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
+import type { FoodBuilderTuple, PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
@@ -29,7 +29,7 @@ describe('phrase index', () => {
 
   const synonyms: Array<Set<string>> = [];
   const specialFoodsSynonyms: Array<Set<string>> = [];
-  const specialFoodsList: RecipeFoodTuple[] = [];
+  const specialFoodsList: FoodBuilderTuple[] = [];
 
   const index = new PhraseIndex(
     phrases,

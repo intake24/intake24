@@ -59,7 +59,7 @@ export function useRecall() {
           : 'custom-prompt-handler';
       case 'standard':
       case 'portion-size':
-        return `${prompt.component}-handler`;
+        return prompt.component.endsWith('builder-prompt') ? `food-builder-prompt-handler` : `${prompt.component}-handler`;
       default:
         throw new Error(`Unexpected prompt type: ${(prompt as any).type}`);
     }

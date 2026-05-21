@@ -4,7 +4,7 @@ import type {
   PhoneticEncoder,
   SpellingCorrectionParameters,
 } from '@intake24/api/food-index/dictionary';
-import type { RecipeFoodsHeader } from '@intake24/common/types';
+import type { FoodBuilderHeader } from '@intake24/common/types/http';
 
 import { uniq } from 'lodash-es';
 
@@ -24,7 +24,7 @@ export interface PhraseWithKey<K> {
   key: K;
 }
 
-export type RecipeFoodTuple = [key: string, entry: RecipeFoodsHeader];
+export type FoodBuilderTuple = [key: string, entry: FoodBuilderHeader];
 
 export interface LanguageBackend {
   name: string;
@@ -84,9 +84,9 @@ export class PhraseIndex<K> {
 
   readonly wordIndex: Map<string, Array<[number, number]>>;
 
-  readonly recipeFoodsList: RecipeFoodTuple[];
+  readonly foodBuildersList: FoodBuilderTuple[];
 
-  readonly recipeFoodsDictionary: RichDictionary;
+  readonly foodBuildersDictionary: RichDictionary;
 
   getWordList(phrase: string): Array<string> {
     const sanitised = this.languageBackend.sanitiseDescription(phrase.toLocaleLowerCase());
@@ -121,7 +121,7 @@ export class PhraseIndex<K> {
       case 'recipes':
         interpretedWords = words
           .map(w =>
-            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters),
+            this.foodBuildersDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters),
           )
           .filter(w => w.interpretations.length > 0);
         break;
@@ -329,13 +329,13 @@ export class PhraseIndex<K> {
     phrases: PhraseWithKey<K>[],
     wordOps: LanguageBackend,
     synonymSets: Set<string>[],
-    recipeFoodsSynonymsSet: Set<string>[] = [],
-    recipeFoodsList: RecipeFoodTuple[] = [],
+    foodBuildersSynonymsSet: Set<string>[] = [],
+    foodBuildersList: FoodBuilderTuple[] = [],
   ) {
     this.languageBackend = wordOps;
     this.phraseIndex = Array.from({ length: phrases.length });
     this.wordIndex = new Map<string, Array<[number, number]>>();
-    this.recipeFoodsList = recipeFoodsList;
+    this.foodBuildersList = foodBuildersList;
 
     const dictionaryWords = new Set<string>();
 
@@ -361,23 +361,23 @@ export class PhraseIndex<K> {
 
     const stemmedSynonyms = stemWordSets(synonymSets);
 
-    const stemmedRecipeSynonyms = stemWordSets(recipeFoodsSynonymsSet);
+    const stemmedFoodBuildersSynonyms = stemWordSets(foodBuildersSynonymsSet);
 
     // Creatinf a dictionary for Locale Indexing with all the synonym sets and dictionary words
     this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, stemmedSynonyms);
 
     // Falten Array of recipe Foods int othe Set of string
-    const recipeDictionaryWords = new Set<string>();
-    for (const recipeFoodSet of stemmedRecipeSynonyms) {
-      for (const recipeFood of recipeFoodSet)
-        recipeDictionaryWords.add(recipeFood);
+    const foodBuildersDictionaryWords = new Set<string>();
+    for (const foodBuilderSet of stemmedFoodBuildersSynonyms) {
+      for (const foodBuilder of foodBuilderSet)
+        foodBuildersDictionaryWords.add(foodBuilder);
     }
 
     // Create a dictionary for Recipe Foods Indexing with all the synonym sets and recipe foods
-    this.recipeFoodsDictionary = new RichDictionary(
-      recipeDictionaryWords,
+    this.foodBuildersDictionary = new RichDictionary(
+      foodBuildersDictionaryWords,
       wordOps.phoneticEncoder,
-      stemmedRecipeSynonyms,
+      stemmedFoodBuildersSynonyms,
     );
   }
 }

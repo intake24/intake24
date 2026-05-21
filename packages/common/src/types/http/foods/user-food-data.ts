@@ -4,6 +4,20 @@ import { localeTranslation } from '@intake24/common/types';
 
 import { portionSizeMethodAttributes } from '../admin/portion-size-methods';
 
+export const userCategoryData = z.object({
+  id: z.string(),
+  code: z.string(),
+  localeId: z.string(),
+  englishName: z.string(),
+  localName: z.string(),
+  reasonableAmount: z.number(),
+  readyMealOption: z.boolean(),
+  sameAsBeforeOption: z.boolean(),
+  categories: z.array(z.string()),
+  tags: z.array(z.string()),
+});
+export type UserCategoryData = z.infer<typeof userCategoryData>;
+
 export const userPortionSizeMethod = portionSizeMethodAttributes
   .extend({
     imageUrl: z.string(),
