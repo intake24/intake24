@@ -26,7 +26,7 @@
                 "
               >
                 <span class="text-center">
-                  <standard-unit-icon :icon="unit.name" />
+                  <standard-unit-icon :icon="getStandardUnit(unit.name)?.icon" />
                 </span>
                 <span class="font-weight-bold text-uppercase">
                   {{ getStandardUnitEstimateIn(unit) }}
@@ -66,7 +66,7 @@ const { translate } = useI18n();
 const { update } = useStep(props, { emit });
 
 const { units } = toRefs(props);
-const { getStandardUnitEstimateIn } = useStandardUnits({ units });
+const { getStandardUnit, getStandardUnitEstimateIn } = useStandardUnits({ units });
 </script>
 
 <style lang="scss">

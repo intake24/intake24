@@ -1,18 +1,15 @@
 <template>
-  <component :is="icon" class="standard-unit__svg" />
+  <icon class="standard-unit__svg" :icon="icon ?? ''" />
 </template>
 
 <script lang="ts" setup>
-import { standardUnitIcons } from './standard-unit-icons';
+import type { PropType } from 'vue';
 
-defineOptions({
-  components: { ...standardUnitIcons },
-});
+import { Icon } from '@iconify/vue';
 
 defineProps({
   icon: {
-    type: String,
-    required: true,
+    type: String as PropType<string | null>,
   },
 });
 </script>

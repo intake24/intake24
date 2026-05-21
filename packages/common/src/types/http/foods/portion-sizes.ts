@@ -80,6 +80,7 @@ export type DrinkwareSetResponse = z.infer<typeof drinkwareSetResponse>;
 export const standardUnitResponse = z.object({
   id: z.string(),
   name: z.string(),
+  icon: z.string().nullable(),
   estimateIn: requiredLocaleTranslation,
   howMany: requiredLocaleTranslation,
 });

@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
+    "@iconify/vue": "^5.0.1",
     "@simplewebauthn/browser": "^13.3.0",
     "@tinymce/tinymce-vue": "^6.3.0",
     "@vueuse/core": "^14.3.0",
@@ -50,9 +51,6 @@
     "vuetify": "^3.12.5"
   },
   "devDependencies": {
-    "@iconify-json/fluent": "^1.2.46",
-    "@iconify-json/fluent-emoji-high-contrast": "^1.2.5",
-    "@iconify-json/game-icons": "^1.2.4",
     "@intlify/unplugin-vue-i18n": "^11.1.2",
     "@pinia/testing": "^1.0.3",
     "@tsconfig/node24": "^24.0.4",
