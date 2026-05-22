@@ -108,7 +108,7 @@ export function usePromptUtils<
     );
   };
 
-  const action = (type: string, ...args: [id?: string, params?: object]) => {
+  const action = (type: string, ...args: [id?: string | number | null, params?: object]) => {
     if (type !== 'next') {
       console.debug(`track event in use-prompt-utils: ${type}`);
       const gtmEventParams: GtmEventParams = {
