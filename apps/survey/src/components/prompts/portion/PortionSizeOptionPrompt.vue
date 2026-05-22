@@ -28,7 +28,7 @@ const { action } = usePromptUtils(props, { emit });
 const { foodName } = useFoodUtils(props);
 const isValid = computed(() => props.modelValue !== null);
 
-function update(event?: number) {
+function update(event?: number | null) {
   emit('update:modelValue', { option: event ?? null });
 
   if (!isValid.value)

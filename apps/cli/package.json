@@ -24,19 +24,19 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@clack/prompts": "^1.3.0",
+    "@clack/prompts": "^1.4.0",
     "@css-inline/css-inline": "^0.20.2",
     "@json2csv/node": "^7.0.6",
     "commander": "^14.0.3",
-    "csv-parser": "^3.2.0",
+    "csv-parser": "^3.2.1",
     "decompress": "^4.2.1",
     "dotenv": "^17.4.2",
     "dotenv-expand": "^13.0.0",
-    "fs-extra": "^11.3.4",
+    "fs-extra": "^11.3.5",
     "ky": "^2.0.2",
     "lodash-es": "^4.18.1",
     "nanoid": "^5.1.11",
-    "pg": "^8.20.0",
+    "pg": "^8.21.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.8",
@@ -51,11 +51,11 @@
     "@types/decompress": "^4.2.7",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^24.12.2",
+    "@types/node": "^24.12.4",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
-    "@typescript/native-preview": "7.0.0-dev.20260506.1",
-    "tsdown": "^0.21.10",
+    "@typescript/native-preview": "7.0.0-dev.20260521.1",
+    "tsdown": "^0.22.0",
     "typescript": "^6.0.3"
   }
 }

@@ -2,19 +2,28 @@ shellEmulator: true
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 10080
-
 trustPolicyExclude:
-  - '@flatten-js/core@1.6.12'
+  - xlsx@0.20.3
+
+pmOnFail: warn
 
 packages:
   - apps/**
   - packages/**
 
+overrides:
+  axios: ^1.16.1
+
 patchedDependencies:
   '@ts-rest/core': patches/@ts-rest__core.patch
 
-onlyBuiltDependencies:
-  - esbuild
-  - puppeteer
-  - sharp
-  - simple-git-hooks
+allowBuilds:
+  '@parcel/watcher': false
+  core-js: false
+  esbuild: true
+  json-editor-vue: false
+  msgpackr-extract: false
+  puppeteer: true
+  sharp: true
+  simple-git-hooks: true
+  vue-demi: false
