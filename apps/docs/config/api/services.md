@@ -15,7 +15,7 @@ V2 (invisible) version is currently implemented.
 
 ### Provider
 
-Captcha provider to use. Captcha will be disabled if left empty.
+Captcha provider to use. Possible values `h-captcha` or `re-captcha`, and cannot be left empty.
 
 - object-path: `captcha.provider`
 - dotenv var: `CAPTCHA_PROVIDER`
@@ -23,6 +23,8 @@ Captcha provider to use. Captcha will be disabled if left empty.
 - default: `''`
 
 ### Secret key
+
+(Mandatory) Secret key provided by the captcha provider.
 
 - object-path: `captcha.secret`
 - dotenv var: `CAPTCHA_SECRET`
@@ -57,7 +59,7 @@ Base URL for Email Blaster API.
 
 #### API key
 
-API key for Email Blaster.
+(Mandatory) API key for Email Blaster.
 
 - object-path: `comms.emailBlaster.apiKey`
 - dotenv var: `COMMS_EMAIL_BLASTER_API_KEY`
