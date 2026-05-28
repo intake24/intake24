@@ -7,7 +7,7 @@
           <template #prepend>
             <v-avatar :image="logo" rounded="0" variant="text" />
           </template>
-          <v-list-item-title class="my-1 text-h6">
+          <v-list-item-title class="my-1 text-title-medium">
             {{ app.name }}
           </v-list-item-title>
         </v-list-item>

@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" :no-gutters="$vuetify.display.mobile">
+  <v-row class="justify-center" :no-gutters="$vuetify.display.mobile">
     <v-col class="p-4" cols="12" sm="auto">
       <v-card
         :class="{ 'mt-10': $vuetify.display.smAndUp, [contentClass]: contentClass }"
@@ -14,7 +14,7 @@
             </v-avatar>
           </slot>
           <slot name="title">
-            <v-card-title class="text-h2 font-weight-medium justify-center">
+            <v-card-title class="font-weight-medium justify-center">
               {{ title }}
             </v-card-title>
           </slot>

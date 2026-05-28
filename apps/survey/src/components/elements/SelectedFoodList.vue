@@ -7,8 +7,8 @@
     flat
   >
     <v-card-text class="pa-2">
-      <v-row align="center" justify="space-between" no-gutters>
-        <v-col class="text-h6" cols="12" sm>
+      <v-row class="align-start justify-space-between" no-gutters>
+        <v-col class="text-title-large" cols="12" sm>
           <v-icon icon="$food" start />
           {{ food.name }}
         </v-col>

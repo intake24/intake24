@@ -40,7 +40,7 @@
           />
         </div>
         <v-item-group v-if="response" v-model="icon">
-          <v-row dense>
+          <v-row density="compact">
             <v-col v-for="(item) in response.icons" :key="item" cols="4" md="3">
               <v-item
                 v-slot="{ isSelected, toggle }"
@@ -53,10 +53,10 @@
                   @click="isSelected ? update() : update(toggle)"
                 >
                   <iconify class="icon__iconify h-auto w-100 " :icon="item" />
-                  <span class="text-center text-caption">
+                  <span class="text-center text-body-small">
                     {{ item.split(':').at(1) }}
                   </span>
-                  <span class="text-center text-caption font-weight-medium">
+                  <span class="text-center text-body-small font-weight-medium">
                     {{ response.collections[item.split(':').at(0) ?? '']?.name }}
                   </span>
                 </v-card>

@@ -27,20 +27,20 @@
       </slot>
     </template>
     <v-card>
-      <v-card-title class="text-h4 d-flex justify-center">
+      <v-card-title class="d-flex justify-center">
         <slot name="title">
           {{ titleLabel }}
         </slot>
       </v-card-title>
       <v-card-text class="px-6 py-4">
-        <div class="text-subtitle-1 d-flex justify-center">
+        <div class="text-body-large d-flex justify-center">
           <slot />
         </div>
       </v-card-text>
       <template v-if="typedConfirm">
         <v-divider />
         <v-card-text class="px-6 py-4">
-          <i18n-t class="text-subtitle-1 mb-2" keypath="common.action.confirm.typed" tag="p">
+          <i18n-t class="text-body-large mb-2" keypath="common.action.confirm.typed" tag="p">
             <template #name>
               <code class="font-weight-bold text-error">{{ `DELETE ${typedConfirm}` }}</code>
             </template>

@@ -1,7 +1,7 @@
 <template>
   <v-toolbar flat tile>
     <v-toolbar-title class="font-weight-medium">
-      <div class="text-h5">
+      <div class="text-headline-small">
         {{ $t('common.options._') }}
       </div>
     </v-toolbar-title>

@@ -7,12 +7,12 @@
     </v-toolbar>
     <v-card-text>
       <v-row>
-        <v-col align-self="center" cols="auto">
+        <v-col class="align-self-center" cols="auto">
           <v-btn :readonly variant="outlined" @click="toggleInherit('sameAsBeforeOption')">
             {{ title('sameAsBeforeOption') }}
           </v-btn>
         </v-col>
-        <v-col align-self="center">
+        <v-col class="align-self-center">
           <v-switch
             v-model="attributes.sameAsBeforeOption"
             class="mt-0"
@@ -26,12 +26,12 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col align-self="center" cols="auto">
+        <v-col class="align-self-center" cols="auto">
           <v-btn :readonly variant="outlined" @click="toggleInherit('readyMealOption')">
             {{ title('readyMealOption') }}
           </v-btn>
         </v-col>
-        <v-col align-self="center">
+        <v-col class="align-self-center">
           <v-switch
             v-model="attributes.readyMealOption"
             class="mt-0"
@@ -45,12 +45,12 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col align-self="center" cols="auto">
+        <v-col class="align-self-center" cols="auto">
           <v-btn :readonly variant="outlined" @click="toggleInherit('reasonableAmount')">
             {{ title('reasonableAmount') }}
           </v-btn>
         </v-col>
-        <v-col align-self="center">
+        <v-col class="align-self-center">
           <v-text-field
             v-model.number="attributes.reasonableAmount"
             density="compact"
@@ -64,12 +64,12 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col align-self="center" cols="auto">
+        <v-col class="align-self-center" cols="auto">
           <v-btn :readonly variant="outlined" @click="toggleInherit('useInRecipes')">
             {{ title('useInRecipes') }}
           </v-btn>
         </v-col>
-        <v-col align-self="center" cols>
+        <v-col class="align-self-center" cols>
           <v-select
             v-model="attributes.useInRecipes"
             density="compact"

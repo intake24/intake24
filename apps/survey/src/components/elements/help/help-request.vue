@@ -70,7 +70,7 @@
                   single-line
                 >
                   <template #item="{ props, item }">
-                    <v-list-item v-bind="props" :title="item.raw.text">
+                    <v-list-item v-bind="props" :title="item.text">
                       <template #prepend>
                         <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
                       </template>
@@ -78,7 +78,7 @@
                   </template>
                   <template #selection="{ item }">
                     <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
-                    {{ item.raw.countryCode }}
+                    {{ item.countryCode }}
                   </template>
                 </v-autocomplete>
               </v-col>
@@ -105,7 +105,7 @@
               />
             </v-col>
           </v-row>
-          <v-row justify="center">
+          <v-row class="justify-center">
             <v-col :cols="mobile ? '12' : 'auto'">
               <v-btn
                 :block="mobile"

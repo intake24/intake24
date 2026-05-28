@@ -80,7 +80,7 @@
       </tbody>
     </v-table>
     <div class="d-flex flex-column gr-2 pa-4">
-      <div class="font-weight-medium text-body-2">
+      <div class="font-weight-medium text-body-medium">
         {{ $t('jobs.params') }}
       </div>
       <json-editor :model-value="entry.params" read-only />

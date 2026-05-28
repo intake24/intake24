@@ -1,6 +1,6 @@
 <template>
   <v-toolbar class="px-4" color="white" :density="$vuetify.display.mobile ? 'compact' : 'default'">
-    <v-breadcrumbs class="ps-0 text-body-2" :items="items">
+    <v-breadcrumbs class="ps-0 text-body-medium" :items="items">
       <template #divider>
         <v-icon icon="fas fa-caret-right" />
       </template>

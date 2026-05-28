@@ -15,7 +15,7 @@
         />
       </v-col>
     </v-row>
-    <v-row justify="space-between">
+    <v-row class="justify-space-between">
       <v-col col="12" sm="auto">
         {{ $t('common.search.filter') }}:
         <v-chip v-for="item in items" :key="item" class="mr-1" color="info" pill>

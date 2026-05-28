@@ -1,6 +1,6 @@
 <template>
   <v-container :class="{ 'pa-0': $vuetify.display.mobile }">
-    <v-row justify="center" :no-gutters="$vuetify.display.mobile">
+    <v-row class="justify-center" :no-gutters="$vuetify.display.mobile">
       <v-col cols="12" md="8" sm="9">
         <v-card :tile="$vuetify.display.mobile">
           <v-card-title>{{ $t('feedback.physicalData.title') }}</v-card-title>
@@ -23,15 +23,15 @@
                     @update:model-value="errors.clear('sex')"
                   >
                     <template #item="{ props, item }">
-                      <v-list-item v-bind="props" :title="item.raw.text">
+                      <v-list-item v-bind="props" :title="item.text">
                         <template #prepend>
-                          <span :class="`${item.raw.icon} me-3`" />
+                          <span :class="`${item.icon} me-3`" />
                         </template>
                       </v-list-item>
                     </template>
                     <template #selection="{ item }">
-                      <span :class="`${item.raw.icon} me-3`" />
-                      {{ item.raw.text }}
+                      <span :class="`${item.icon} me-3`" />
+                      {{ item.text }}
                     </template>
                   </v-select>
                 </v-col>
@@ -93,7 +93,7 @@
                   />
                 </v-col>
               </v-row>
-              <v-row class="mt-3" justify="center">
+              <v-row class="justify-center mt-3">
                 <v-col cols="12" sm="auto">
                   <v-btn
                     block

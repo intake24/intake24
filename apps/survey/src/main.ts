@@ -1,10 +1,12 @@
 /* eslint-disable perfectionist/sort-imports */
 import { createApp } from 'vue';
+// Vuetify must be imported before any components that use it to make the css layers work correctly
+import vuetify from './plugins/vuetify';
+
 import pinia from '@intake24/ui/stores/bootstrap';
 import App from './app.vue';
 import i18n from './i18n';
 import { loading } from './mixins';
-import vuetify from './plugins/vuetify';
 import router from './router';
 import { errorHandler, mountInterceptors, useHttp } from './services';
 import { bootstrapAnalytics, cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui';

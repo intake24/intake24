@@ -19,9 +19,9 @@
       </v-stepper-vertical-item>
       <v-stepper-vertical-item :complete="step > 2" :title="$t('user.mfa.providers.otp.verify.title')" value="2">
         <v-row>
-          <v-col cols="12" order="last" order-sm="first" sm="6">
+          <v-col class="order-last order-sm-first" cols="12" sm="6">
             <v-form @submit.prevent="verify">
-              <p class="mb-4 text-subtitle-2">
+              <p class="mb-4 text-title-small">
                 {{ $t('user.mfa.providers.otp.verify.text') }}
               </p>
               <v-text-field
@@ -51,7 +51,7 @@
               </v-btn>
             </v-form>
           </v-col>
-          <v-col cols="12" order="first" order-sm="last" sm="6">
+          <v-col class="order-first order-sm-last" cols="12" sm="6">
             <v-img v-if="regChallenge" :aspect-ratio="1 / 1" :src="regChallenge?.qrCode" />
           </v-col>
         </v-row>

@@ -8,7 +8,7 @@
       variant="tonal"
       @click="foodSelected(food)"
     >
-      <div class="text-black opacity-90 text-body-2 font-weight-medium">
+      <div class="text-black opacity-90 text-body-medium font-weight-medium">
         <v-icon icon="$food" start />
         {{ getFoodDescription(food) }}
       </div>

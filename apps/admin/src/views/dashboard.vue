@@ -7,10 +7,10 @@
       type="warning"
     >
       <div class="d-flex flex-column ga-2">
-        <p class="text-subtitle-1 font-weight-medium">
+        <p class="text-body-large font-weight-medium">
           Your account's email address is not yet verified.
         </p>
-        <p class="text-body-2">
+        <p class="text-body-medium">
           Please check your inbox for a verification email or request a new one by
           clicking the "Verify" button below.
         </p>
@@ -29,10 +29,10 @@
       :type="isAalSatisfied ? 'warning' : 'error'"
     >
       <div class="d-flex flex-column ga-2">
-        <p class="text-subtitle-1 font-weight-medium">
+        <p class="text-body-large font-weight-medium">
           Multi-factor authentication (MFA) is not yet enabled for your account.
         </p>
-        <p class="text-body-2">
+        <p class="text-body-medium">
           Navigate to your user profile and enable MFA by adding at least one authentication device.
           More information about MFA and how to set it up can be found in
           <a
@@ -51,7 +51,7 @@
             <v-icon class="me-2" icon="fas fa-exclamation-triangle" />
             Your access is limited until MFA is enabled.
           </div>
-          <v-btn color="primary" size="large" :to="{ name: 'user' }">
+          <v-btn color="primary" :to="{ name: 'user' }">
             <v-icon class="me-2" icon="fas fa-fingerprint" />
             Set up MFA
           </v-btn>

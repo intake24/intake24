@@ -1,10 +1,10 @@
 <template>
   <v-sheet class="feedback-section">
-    <h2 class="text-h2 font-weight-medium text-center mb-6 chart-print-title">
+    <h2 class="text-headline-large font-weight-medium text-center mb-6 chart-print-title">
       {{ $t('feedback.cards.title') }}
     </h2>
     <v-container class="container-max">
-      <v-row class="d-print-none" justify="center">
+      <v-row class="d-print-none justify-center">
         <v-col v-for="card in cards" :key="`screen-${card.id}`" cols="12" md="4" sm="6">
           <screen-card :parameters="card" />
         </v-col>

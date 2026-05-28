@@ -1,16 +1,16 @@
 <template>
   <div>
     <v-sheet color="white py-4">
-      <h1 v-if="surveyName" class="text-h1 font-weight-medium text-center px-4 pb-4">
+      <h1 v-if="surveyName" class="text-headline-large font-weight-medium text-center">
         {{ surveyName }}
       </h1>
-      <h2 class="text-h2 font-weight-medium text-center px-4 pb-4">
+      <h2 class="text-headline-large font-weight-medium text-center">
         {{ $t('feedback.title', { name: userName ? `${userName}'s` : '' }) }}
       </h2>
       <v-container class="container-max">
-        <v-row class="d-print-none" justify="center">
+        <v-row class="d-print-none justify-center">
           <v-col cols="12" lg="7" md="8" xl="6">
-            <v-row justify="space-around">
+            <v-row class="justify-space-around">
               <!-- @vue-expect-error class prop issues -->
               <feedback-user-info
                 v-if="userDemographic?.hasData()"
@@ -30,12 +30,12 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row v-if="showSubmissions" class="d-print-none" justify="center">
+        <v-row v-if="showSubmissions" class="d-print-none justify-center">
           <v-col cols="12" lg="7" md="8" xl="6">
             <v-expansion-panels>
               <v-expansion-panel>
                 <v-expansion-panel-title
-                  class="text-subtitle-1 font-weight-medium"
+                  class="text-body-large font-weight-medium"
                   color="grey-lighten-4"
                 >
                   {{ $t('recall.submissions.title') }}
@@ -73,7 +73,7 @@
             </v-expansion-panels>
           </v-col>
         </v-row>
-        <v-row v-if="hasMissingFoods" justify="center">
+        <v-row v-if="hasMissingFoods" class="justify-center">
           <v-col cols="12" lg="7" md="8" xl="6">
             <v-alert class="mb-0" color="info" icon="fas fa-circle-exclamation">
               {{ $t('feedback.missingFoods') }}

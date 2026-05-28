@@ -24,7 +24,7 @@
       </cookie-consent>
     </v-list-group>
   </v-list>
-  <div class="text--secondary text-caption px-4 py-2">
+  <div class="text--secondary text-body-small px-4 py-2">
     <v-icon icon="fas fa-tag" size="small" start />
     {{ appInfo.build.fullVersion }}
   </div>

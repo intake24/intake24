@@ -2,11 +2,6 @@
 @use 'settings';
 @use 'variables';
 
-ul,
-ol {
-  padding-left: settings.$spacer * 6;
-}
-
 p {
   margin-bottom: settings.$spacer * 3;
 }

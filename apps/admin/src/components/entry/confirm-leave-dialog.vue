@@ -5,7 +5,7 @@
         {{ $t('common.action.confirm.title') }}
       </v-card-title>
       <v-card-text class="px-6 py-4 d-flex justify-center">
-        <div class="text-subtitle-1">
+        <div class="text-body-large">
           {{ $t('common.action.confirm.msg') }}
         </div>
       </v-card-text>

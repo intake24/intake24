@@ -113,7 +113,7 @@
         </v-tabs-window>
         <v-card-title>{{ $t('securables.actions.title') }}</v-card-title>
         <v-card-text>
-          <v-row dense>
+          <v-row density="compact">
             <v-col v-for="action in actions" :key="action" cols="12" sm="6">
               <v-checkbox-btn
                 v-model="data.actions"

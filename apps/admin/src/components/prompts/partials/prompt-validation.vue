@@ -29,7 +29,7 @@
         </language-selector>
       </v-col>
       <v-col v-if="limits" cols="6">
-        <div class="text-h5 mb-4">
+        <div class="text-headline-small mb-4">
           {{ $t('survey-schemes.prompts.validation.limits._') }}
         </div>
         <v-text-field

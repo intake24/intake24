@@ -28,7 +28,7 @@
               <i18n-t keypath="survey-schemes.prompts.timePicker.allowedMinutes.item">
                 <template #item>
                   <v-chip class="mx-1">
-                    <span>{{ item.raw }}</span>
+                    <span>{{ item }}</span>
                   </v-chip>
                 </template>
               </i18n-t>
@@ -39,7 +39,7 @@
           <i18n-t keypath="survey-schemes.prompts.timePicker.allowedMinutes.item">
             <template #item>
               <v-chip class="mx-1">
-                <span>{{ item.raw }}</span>
+                <span>{{ item }}</span>
               </v-chip>
             </template>
           </i18n-t>

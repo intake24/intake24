@@ -104,10 +104,10 @@
                                 variant="outlined"
                               >
                                 <template #item="{ item, props }">
-                                  <v-list-item v-bind="props" :title="item.raw.id">
+                                  <v-list-item v-bind="props" :title="item.id">
                                     <template #prepend>
                                       <v-avatar class="mr-4 my-2" tile>
-                                        <v-img :alt="item.raw.id" :src="item.raw.url" />
+                                        <v-img :alt="item.id" :src="item.url" />
                                       </v-avatar>
                                     </template>
                                   </v-list-item>

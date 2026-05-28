@@ -49,7 +49,7 @@
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="data.outputs.length === 1">{{ item.raw.title }}</span>
+                    <span v-if="data.outputs.length === 1">{{ item.title }}</span>
                     <span v-if="data.outputs.length > 1">
                       {{ $t('common.selected', { count: data.outputs.length }) }}
                     </span>
@@ -69,15 +69,15 @@
                 @update:model-value="errors.clear('visibility')"
               >
                 <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.raw.title">
+                  <v-list-item v-bind="props" :title="item.title">
                     <template #prepend>
-                      <v-icon :icon="item.raw.icon" start />
+                      <v-icon :icon="item.icon" start />
                     </template>
                   </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <v-icon :icon="item.raw.icon" start />
-                  {{ item.raw.title }}
+                  <v-icon :icon="item.icon" start />
+                  {{ item.title }}
                 </template>
               </v-select>
             </v-col>
@@ -97,7 +97,7 @@
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="data.physicalDataFields.length === 1">{{ item.raw.title }}</span>
+                    <span v-if="data.physicalDataFields.length === 1">{{ item.title }}</span>
                     <span v-if="data.physicalDataFields.length > 1">
                       {{ $t('common.selected', { count: data.physicalDataFields.length }) }}
                     </span>
@@ -107,7 +107,7 @@
               <template v-for="(value, key) in requiredPhysicalDataFields" :key="key">
                 <v-alert
                   v-if="!value && data.physicalDataFields.includes(key)"
-                  class="text-caption mb-1"
+                  class="text-body-small mb-1"
                   density="compact"
                   type="info"
                 >
@@ -122,7 +122,7 @@
                 <v-alert
                   v-if="value && !data.physicalDataFields.includes(key)"
                   :key="key"
-                  class="text-caption mb-1"
+                  class="text-body-small mb-1"
                   density="compact"
                   type="warning"
                 >

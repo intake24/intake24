@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col align-self="start" cols="12" md="6">
+    <v-col class="align-self-start" cols="12" md="6">
       <v-switch
         class="my-4"
         hide-details="auto"

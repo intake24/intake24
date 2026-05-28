@@ -9,7 +9,7 @@
         >
           {{ stringTime(item.time) }}
         </v-chip>
-        <span class="text-caption">{{ translate(item.name) }}</span>
+        <span class="text-body-small">{{ translate(item.name) }}</span>
       </div>
     </v-chip-group>
   </div>

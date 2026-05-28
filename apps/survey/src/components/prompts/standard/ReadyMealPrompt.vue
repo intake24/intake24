@@ -7,7 +7,7 @@
             <v-btn class="bg-secondary font-weight-medium me-2" icon readonly size="x-small">
               {{ idx + 1 }}
             </v-btn>
-            <span class="text-subtitle-1 font-weight-medium">{{ food.name }}</span>
+            <span class="text-body-large font-weight-medium">{{ food.name }}</span>
           </div>
           <yes-no-toggle v-model="food.value" mandatory />
         </v-card-text>

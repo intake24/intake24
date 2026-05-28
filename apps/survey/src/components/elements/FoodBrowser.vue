@@ -38,8 +38,7 @@
     />
     <template v-if="foodBuilders.detected.value">
       <v-row
-        class="mb-4"
-        justify="center"
+        class="mb-4 justify-center"
       >
         <v-col
           v-for="builder in foodBuilders.builders.value"
@@ -61,7 +60,7 @@
               :icon="builder.icon"
               :width="foodBuilders.exclusive.value ? 100 : 30"
             />
-            <span class="text-h5 font-weight-medium">
+            <span class="text-headline-small font-weight-medium">
               {{ foodBuilders.label(builder) }}
             </span>
           </v-card>

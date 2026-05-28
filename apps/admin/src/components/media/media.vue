@@ -10,7 +10,7 @@
     <v-form @keydown="clearError" @submit.prevent="submit">
       <v-card-text>
         <v-row>
-          <v-col align-self="center" class="d-flex gc-4" cols="12">
+          <v-col class="d-flex gc-4 align-self-center" cols="12">
             <v-switch
               v-model="customId"
               :label="$t('media.id.custom')"

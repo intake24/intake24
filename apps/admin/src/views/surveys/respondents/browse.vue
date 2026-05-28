@@ -107,7 +107,7 @@
                 </v-toolbar>
                 <v-card-text>
                   <template v-for="(field, idx) in data.customFields" :key="`r-${idx}`">
-                    <v-row dense>
+                    <v-row density="compact">
                       <v-col cols="12" md="4">
                         <v-text-field
                           v-model="field.name"
@@ -129,7 +129,7 @@
                         />
                       </v-col>
                     </v-row>
-                    <v-row dense justify="space-between">
+                    <v-row class="justify-space-between" density="compact">
                       <v-col cols="auto">
                         <v-checkbox-btn v-model="field.public" hide-details="auto" :label="$t('users.customFields.public')" />
                       </v-col>

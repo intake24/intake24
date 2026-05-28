@@ -23,21 +23,21 @@
                 <v-icon :color="alerts[data.type]?.type" icon="fas fa-triangle-exclamation" />
               </template>
               <template #item="{ item, props: itemProps, index }">
-                <template v-if="item.raw.type && index > 0 && !jobTypes[index - 1].type">
+                <template v-if="item.type && index > 0 && !jobTypes[index - 1].type">
                   <v-divider class="mt-2" color="error" />
                   <div
-                    class="text-subtitle-2 px-4 py-2 bg-red-lighten-4 d-flex justify-space-between align-items-center"
-                    :class="item.raw.type === 'error' ? 'bg-red-lighten-4' : 'bg-orange-lighten-4'"
+                    class="text-title-small px-4 py-2 bg-red-lighten-4 d-flex justify-space-between align-items-center"
+                    :class="item.type === 'error' ? 'bg-red-lighten-4' : 'bg-orange-lighten-4'"
                   >
                     <span>
-                      {{ $t(`jobs.alerts.${item.raw.type}._`) }}
+                      {{ $t(`jobs.alerts.${item.type}._`) }}
                     </span>
-                    <v-icon :color="item.raw.type" icon="fas fa-triangle-exclamation" />
+                    <v-icon :color="item.type" icon="fas fa-triangle-exclamation" />
                   </div>
                 </template>
                 <v-list-item v-bind="itemProps" :title="item.title">
-                  <template v-if="item.raw.type" #append>
-                    <v-icon :color="item.raw.type" icon="fas fa-triangle-exclamation" />
+                  <template v-if="item.type" #append>
+                    <v-icon :color="item.type" icon="fas fa-triangle-exclamation" />
                   </template>
                 </v-list-item>
               </template>
@@ -65,10 +65,10 @@
               variant="tonal"
             >
               <div class="d-flex flex-column ga-4">
-                <div class="text-h5 font-weight-medium text-uppercase">
+                <div class="text-headline-small font-weight-medium text-uppercase">
                   {{ $t(`jobs.alerts.${alert.type}.title`) }}
                 </div>
-                <div class="text-subtitle-1 font-weight-medium">
+                <div class="text-body-large font-weight-medium">
                   {{ $t(`jobs.alerts.${alert.type}.subtitle`) }}
                 </div>
                 <p v-for="p in alert.lines" :key="p">

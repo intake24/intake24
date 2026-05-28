@@ -18,7 +18,7 @@
         </v-row>
       </v-stepper-vertical-item>
       <v-stepper-vertical-item :complete="step > 2" :title="$t('user.mfa.providers.code.verify.title')" value="2">
-        <p class="mb-4 text-subtitle-2">
+        <p class="mb-4 text-title-small">
           {{ $t('user.mfa.providers.code.verify.text') }}
         </p>
         <v-row>
@@ -62,7 +62,7 @@
             {{ $t('user.mfa.providers.code.finalize.text') }}
           </div>
           <v-card v-if="codes.length" class="pa-4" color="info" icon="fas fa-exclamation-mark" variant="tonal">
-            <div class="mb-2 text-subtitle-2 ">
+            <div class="mb-2 text-title-small ">
               {{ $t('user.mfa.providers.code.finalize.codes') }}
             </div>
             <div class="d-flex ga-2 flex-wrap">

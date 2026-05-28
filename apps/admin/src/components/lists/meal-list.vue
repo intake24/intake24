@@ -6,7 +6,7 @@
         <v-toolbar-title class="font-weight-medium">
           {{ title }}
         </v-toolbar-title>
-        <span v-if="subtitle" class="text-subtitle-2">{{ subtitle }}</span>
+        <span v-if="subtitle" class="text-title-small">{{ subtitle }}</span>
       </div>
       <v-spacer />
       <v-btn color="primary" icon="$add" size="small" :title="$t('survey-schemes.meals.create')" @click.stop="add" />
@@ -110,7 +110,7 @@
           </template>
         </v-toolbar>
         <v-form ref="form" @submit.prevent="save">
-          <v-container class="dialog-container" fluid>
+          <v-container class="dialog-container">
             <error-list :errors="errors.get(`meals.${dialog.index}.*`)" />
             <v-tabs-window v-model="tab" class="pt-1 flex-grow-1">
               <v-tabs-window-item value="general">

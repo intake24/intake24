@@ -9,7 +9,7 @@
     @update:model-value="update('option', $event)"
   >
     <v-container>
-      <v-row justify="center">
+      <v-row class="justify-center">
         <v-col v-for="unit in units" :key="unit.name" cols="6">
           <v-item v-slot="{ isSelected, toggle }" :value="unit">
             <v-hover v-slot="{ isHovering }">

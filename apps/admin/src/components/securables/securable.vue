@@ -8,7 +8,7 @@
         {{ $t('securables.title') }}
       </v-toolbar-title>
       <v-spacer />
-      <div class="d-flex align-center font-weight-medium text-button">
+      <div class="d-flex align-center font-weight-medium text-label-large">
         {{ $t('securables.owner._') }}:
         <owner-dialog v-bind="{ api, owner, resource }" />
       </div>

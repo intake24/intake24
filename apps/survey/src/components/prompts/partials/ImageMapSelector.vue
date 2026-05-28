@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-alert v-if="labels.image" class="mb-2 text-body-2" color="info" variant="tonal">
+      <v-alert v-if="labels.image" class="mb-2 text-body-medium" color="info" variant="tonal">
         {{ labels.image }}
       </v-alert>
       <div class="guide-drawer">
@@ -44,7 +44,7 @@
           <slot name="label">
             <v-chip
               v-if="label"
-              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold border-info-1"
+              class="ma-1 ma-md-2 pa-3 pa-md-4 text-title-large font-weight-bold border-info-1"
               color="info"
             >
               {{ label }}

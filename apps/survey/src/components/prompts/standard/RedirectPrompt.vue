@@ -13,7 +13,7 @@
             :width="30"
           >
             <div class="d-flex align-center flex-column">
-              <span class="font-weight-bold text-h1">{{ timerSecs }}</span>
+              <span class="font-weight-bold text-headline-large">{{ timerSecs }}</span>
             </div>
           </v-progress-circular>
         </v-card>

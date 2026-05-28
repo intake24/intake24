@@ -6,7 +6,7 @@
         :title="$t('user.mfa.providers.fido.challenge.title')"
         value="1"
       >
-        <div class="text-subtitle-2">
+        <div class="text-title-small">
           {{ $t('user.mfa.providers.fido.challenge.text') }}
         </div>
         <v-row>

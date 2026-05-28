@@ -5,7 +5,7 @@
         <v-icon color="secondary" end icon="fas fa-list" />
         <v-toolbar-title
           class="font-weight-medium"
-          :class="density === 'compact' ? 'text-h6' : density === 'comfortable' ? 'text-h5' : ''"
+          :class="density === 'compact' ? 'text-title-large' : density === 'comfortable' ? 'text-headline-small' : ''"
         >
           {{ $t('common.list.title', { item: pluralize(item) }) }}
         </v-toolbar-title>
@@ -31,7 +31,7 @@
         multiple
       >
         <template #item="{ item, props }">
-          <v-list-item v-bind="props" :title="item.raw">
+          <v-list-item v-bind="props" :title="item">
             <template #prepend="{ isSelected, select }">
               <v-list-item-action class="mr-2">
                 <v-checkbox-btn :model-value="isSelected" @update:model-value="select" />
@@ -42,7 +42,7 @@
         <template #selection="{ item, index }">
           <template v-if="index === 0">
             <span v-if="selectedStandardItems.length === 1">
-              {{ item.raw }}
+              {{ item }}
             </span>
             <span v-if="selectedStandardItems.length > 1">
               {{ $t('common.selected', { count: selectedStandardItems.length }) }}

@@ -13,7 +13,7 @@
       <slot name="prompt-description">
         <div
           v-if="i18n.description"
-          class="px-4 pt-4"
+          class="px-4"
           :class="{ 'pb-4': !hasDefaultSlot }"
           v-html="i18n.description"
         />
@@ -21,7 +21,7 @@
       <slot />
       <prompt-actions
         id="actions"
-        class="navigation px-4 pt-0 pb-4"
+        class="navigation px-4 pb-4"
       >
         <template v-if="desktopActions.length">
           <v-btn

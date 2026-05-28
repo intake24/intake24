@@ -25,7 +25,7 @@
                   <v-col class="text-medium-emphasis" cols="8">
                     <span v-if="fileSelected">
                       {{ selectedFile?.name }}
-                      <span class="text-caption ml-2">
+                      <span class="text-body-small ml-2">
                         ({{ (selectedFile?.size ? (selectedFile.size / 1024 / 1024).toFixed(2) : 0) }} MB)
                       </span>
                     </span>
@@ -78,7 +78,7 @@
                   />
                 </v-col>
               </v-row>
-              <v-row v-if="fileSelected" align="center">
+              <v-row v-if="fileSelected" class="align-start">
                 <v-col class="d-flex align-center" cols="12" sm="8">
                   <v-progress-linear
                     v-if="importState === 'uploading'"
@@ -173,7 +173,7 @@
                 {{ $t('io.import.verify.success') }}
               </div>
               <template v-if="verifyError">
-                <v-row align="center">
+                <v-row class="align-start">
                   <v-col class="text-error" cols="12" sm="8">
                     <template v-if="verificationJobStatus?.errorDetails">
                       <div v-if="verificationJobStatus.errorDetails.fileErrors">
@@ -263,7 +263,7 @@
                 <v-card-text class="px-0" :disabled="importState === 'importing' || isImportComplete">
                   <v-row>
                     <v-col cols="12">
-                      <div class="text-subtitle-1 mb-2">
+                      <div class="text-body-large mb-2">
                         {{ $t('io.import.import.options.locales') }}
                       </div>
                       <v-checkbox
@@ -274,14 +274,14 @@
                         :label="locale"
                         :value="locale"
                       />
-                      <div v-if="packageContentsSummary?.targetLocales.length === 0" class="text-caption text-medium-emphasis">
+                      <div v-if="packageContentsSummary?.targetLocales.length === 0" class="text-body-small text-medium-emphasis">
                         {{ $t('io.import.import.options.noLocales') }}
                       </div>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12">
-                      <div class="text-subtitle-1 mb-2">
+                      <div class="text-body-large mb-2">
                         {{ $t('io.import.import.options.files._') }}
                       </div>
                       <v-table class="mb-4 import-files-table" density="compact">
@@ -349,7 +349,7 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12">
-                      <div class="text-subtitle-1 mb-2">
+                      <div class="text-body-large mb-2">
                         {{ $t('io.import.import.options.filtering') }}
                       </div>
                       <v-text-field

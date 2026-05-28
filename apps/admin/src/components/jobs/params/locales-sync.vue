@@ -13,7 +13,7 @@
     >
       <template #selection="{ item, index }">
         <template v-if="index === 0">
-          <span v-if="params.subTasks.length === 1">{{ item.raw.title }}</span>
+          <span v-if="params.subTasks.length === 1">{{ item.title }}</span>
           <span v-if="params.subTasks.length > 1">
             {{ $t('common.selected', { count: params.subTasks.length }) }}
           </span>

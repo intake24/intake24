@@ -1,10 +1,10 @@
 <template>
   <v-sheet class="feedback-section">
-    <h2 v-if="data.title" class="text-h2 font-weight-medium text-center mb-6">
+    <h2 v-if="data.title" class="text-headline-large font-weight-medium text-center mb-6">
       {{ data.title }}
     </h2>
     <v-container v-if="section.content">
-      <v-row justify="center">
+      <v-row class="justify-center">
         <v-col cols md="10">
           <div class="px-4" v-html="data.content" />
         </v-col>

@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panels v-model="panel" flat>
     <v-expansion-panel>
-      <v-expansion-panel-title class="text-h5 font-weight-medium">
+      <v-expansion-panel-title class="text-headline-small font-weight-medium">
         <template #default="{ collapseIcon, expandIcon, expanded }">
           <v-icon
             class="my-auto me-2"
@@ -13,7 +13,7 @@
           <v-btn
             color="primary"
             icon="$add"
-            size="x-small"
+            size="small"
             :title=" $t('faqs.items.add')"
             @click.stop="add"
           />

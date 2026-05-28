@@ -113,7 +113,7 @@
           <v-divider class="my-6" />
           <v-row>
             <v-col cols="12" md="6">
-              <div class="text-h5 mb-4">
+              <div class="text-headline-small mb-4">
                 {{ $t('surveys.search._') }}
               </div>
               <v-switch
@@ -136,7 +136,7 @@
                 step="1"
                 thumb-label="always"
               />
-              <div class="text-h6 mb-6 mt-6 underline">
+              <div class="text-title-large mb-6 mt-6 underline">
                 {{ $t('surveys.search.sorting') }}
               </div>
               <div class="mt-4">
@@ -190,7 +190,7 @@
               </v-slider>
             </v-col>
             <v-col cols="12" md="6">
-              <div class="text-h6 mb-10 mt-4 underline">
+              <div class="text-title-large mb-10 mt-4 underline">
                 <v-icon
                   class="mr-3"
                   @click="showInformationPopup('matchQualityInfo')"
@@ -248,7 +248,7 @@
               />
             </v-col>
             <v-col cols="12" md="6">
-              <div class="text-h6 mb-4 mt-4 underline">
+              <div class="text-title-large mb-4 mt-4 underline">
                 <v-icon
                   class="mr-3"
                   @click="showInformationPopup('spellingCorrectionInfo')"
@@ -327,7 +327,7 @@
               />
             </v-col>
             <v-col cols="12" md="6">
-              <div class="text-h6 mb-4 mt-4 underline">
+              <div class="text-title-large mb-4 mt-4 underline">
                 <v-icon
                   class="mr-3"
                   @click="showInformationPopup('relevantCategoriesInfo')"
@@ -365,7 +365,7 @@
           <v-divider class="my-6" />
           <v-row>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">
+              <div class="text-headline-small mb-4">
                 {{ $t('surveys.auth._') }}
               </div>
               <v-select
@@ -423,7 +423,7 @@
               <v-divider :vertical="$vuetify.display.mdAndUp" />
             </v-col>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">
+              <div class="text-headline-small mb-4">
                 {{ $t('surveys.submissionLimits._') }}
               </div>
               <v-text-field
@@ -457,7 +457,7 @@
           <v-divider class="my-6" />
           <v-row>
             <v-col cols="12" md>
-              <div class="text-h5">
+              <div class="text-headline-small">
                 {{ $t('surveys.externalComm._') }}
               </div>
               <v-switch
@@ -511,7 +511,7 @@
               <v-divider :vertical="$vuetify.display.mdAndUp" />
             </v-col>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">
+              <div class="text-headline-small mb-4">
                 {{ $t('surveys.session._') }}
               </div>
               <v-switch
@@ -549,7 +549,7 @@
           <v-divider class="my-6" />
           <v-row>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">
+              <div class="text-headline-small mb-4">
                 {{ $t('surveys.users._') }}
               </div>
               <v-switch
@@ -570,7 +570,7 @@
               />
             </v-col>
             <v-col cols="12" md="6">
-              <div class="text-h5 mb-4">
+              <div class="text-headline-small mb-4">
                 {{ $t('surveys.feedback._') }}
               </div>
               <select-resource

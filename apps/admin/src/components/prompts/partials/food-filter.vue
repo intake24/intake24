@@ -1,5 +1,5 @@
 <template>
-  <v-row class="ml-2" dense>
+  <v-row class="ml-2" density="compact">
     <v-col cols="12" md="6">
       <v-switch
         hide-details="auto"

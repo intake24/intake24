@@ -86,7 +86,7 @@
           />
         </div>
         <template v-if="!loading">
-          <v-row justify="center">
+          <v-row class="justify-center">
             <v-col v-for="product in response.data.products" :key="product.code" cols="12" md="4" sm="6">
               <v-card class="off-product-card off-product-card--result pa-3" height="100%" link @click="select(product)">
                 <div class="pa-2 bg-white rounded">
@@ -115,7 +115,7 @@
             {{ promptI18n['products.none'] }}
           </v-alert>
         </template>
-        <v-row v-else justify="center">
+        <v-row v-else class="justify-center">
           <v-col v-for="(item, idx) in Array.from({ length: 6 })" :key="idx" cols="12" md="4" sm="6">
             <v-skeleton-loader
               class="mx-auto border"

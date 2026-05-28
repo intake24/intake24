@@ -10,7 +10,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
 import vueDevToolsPlugin from 'vite-plugin-vue-devtools';
-import vuetify from 'vite-plugin-vuetify';
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import webfontDownload from 'vite-plugin-webfont-dl';
 
 import { resolveCaptchaScript } from '../../packages/common/src/security';
@@ -99,7 +99,9 @@ export default defineConfig(({ mode }) => {
       },
     },
     plugins: [
-      vue(),
+      vue({
+        template: { transformAssetUrls },
+      }),
       vuetify({
         autoImport: true,
         styles: { configFile: 'src/scss/settings.scss' },

@@ -24,8 +24,7 @@
                 <v-row
                   v-for="food in meal.foods"
                   :key="food.id"
-                  align="center"
-                  class="mb-2"
+                  class="align-start mb-2"
                   no-gutters
                 >
                   <v-col cols="12" md="4">

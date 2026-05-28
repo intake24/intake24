@@ -22,8 +22,8 @@
         >
           <template #thumb-label="{ modelValue: thumbValue }">
             <div v-if="isInitialized" class="d-flex flex-column align-center pa-2">
-              <span class="text-h5 font-weight-bold">{{ thumbValue }}</span>
-              <span v-if="prompt.slider.current.label" class="text-h6 font-weight-bold">
+              <span class="text-headline-small font-weight-bold">{{ thumbValue }}</span>
+              <span v-if="prompt.slider.current.label" class="text-title-large font-weight-bold">
                 {{ translate(prompt.slider.current.label) }}
               </span>
             </div>
@@ -31,16 +31,16 @@
           </template>
           <template #prepend>
             <div v-if="prompt.slider.min.label" class="d-flex flex-column align-center">
-              <span class="text-h5 font-weight-bold">{{ prompt.slider.min.value }}</span>
-              <span class="text-h6 font-weight-bold">
+              <span class="text-headline-small font-weight-bold">{{ prompt.slider.min.value }}</span>
+              <span class="text-title-large font-weight-bold">
                 {{ translate(prompt.slider.min.label) }}
               </span>
             </div>
           </template>
           <template #append>
             <div v-if="prompt.slider.max.label" class="d-flex flex-column align-center">
-              <span class="text-h5 font-weight-bold">{{ prompt.slider.max.value }}</span>
-              <span class="text-h6 font-weight-bold">
+              <span class="text-headline-small font-weight-bold">{{ prompt.slider.max.value }}</span>
+              <span class="text-title-large font-weight-bold">
                 {{ translate(prompt.slider.max.label) }}
               </span>
             </div>

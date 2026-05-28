@@ -20,8 +20,8 @@
       <template #item="{ item, props }">
         <v-list-item v-bind="props">
           <template #subtitle>
-            <div class="text-caption">
-              {{ item.raw.description }}
+            <div class="text-body-small">
+              {{ item.description }}
             </div>
           </template>
         </v-list-item>
@@ -35,7 +35,7 @@
       <template #label>
         <div>
           <div>{{ $t('jobs.types.SurveyNutrientsRecalculation.syncFields.label') }}</div>
-          <div class="text-caption text-medium-emphasis">
+          <div class="text-body-small text-medium-emphasis">
             {{ $t('jobs.types.SurveyNutrientsRecalculation.syncFields.description') }}
           </div>
         </div>
@@ -48,7 +48,7 @@
       variant="tonal"
     >
       <v-alert-title>{{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChanges.title') }}</v-alert-title>
-      <div class="text-body-2">
+      <div class="text-body-medium">
         {{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChanges.description') }}
         <ul class="mt-2 list-disc pl-4">
           <li>{{ $t('jobs.types.SurveyNutrientsRecalculation.mappingChanges.impact.historicalData') }}</li>

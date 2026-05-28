@@ -32,7 +32,6 @@
             </transition-group>
           </v-list>
         </v-col>
-        <v-divider vertical />
         <v-col cols="12" md="6">
           <v-card-title>{{ $t('nutrient-types.available') }}</v-card-title>
           <v-text-field

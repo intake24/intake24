@@ -4,14 +4,14 @@
     :title="$t('common.verify._')"
   >
     <v-card-text class="px-6">
-      <p class="text-subtitle-2">
+      <p class="text-title-small">
         {{ $t('common.spam') }}
       </p>
       <error-list :errors="errors.getErrors()" />
     </v-card-text>
     <v-card-text class="pt-0">
       <v-container>
-        <v-row justify="center">
+        <v-row class="justify-center">
           <v-col cols="12">
             <v-btn
               block
