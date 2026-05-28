@@ -80,6 +80,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
    */
   private async validate(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
+      let offset = 0;
       const stream = createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
 
       stream
@@ -88,9 +89,10 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
 
           if (chunk > 0 && this.content.length === chunk) {
             stream.pause();
-            this.validateChunk()
+            this.validateChunk(offset)
               .then(() => {
                 stream.resume();
+                offset += chunk;
               })
               .catch((err) => {
                 stream.destroy(err);
@@ -102,7 +104,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
           this.initProgress(records);
           await this.waitForUnlock();
 
-          this.validateChunk()
+          this.validateChunk(offset)
             .then(() => resolve())
             .catch((err) => {
               stream.destroy(err);
@@ -123,15 +125,21 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
    * @returns {Promise<void>}
    * @memberof SurveyRespondentsImport
    */
-  private async validateChunk(): Promise<void> {
+  private async validateChunk(offset: number): Promise<void> {
     if (!this.content.length)
       return;
 
     this.lock();
 
     const result = csvRow.array().safeParse(this.content);
-    if (!result.success)
-      throw fromError(result.error);
+
+    if (!result.success) {
+      throw fromError({
+        ...result.error,
+        issues: result.error.issues.map(issue =>
+          ({ ...issue, path: issue.path.map(p => typeof p === 'number' ? p + offset : p) })),
+      });
+    }
 
     const username = result.data.map(item => item.username);
     const { surveyId } = this.params;
