@@ -58,4 +58,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.v-list-group__items .v-list-item {
+  padding-inline-start: 8px;
+}
+</style>

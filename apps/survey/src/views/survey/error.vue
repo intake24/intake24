@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center" class="pt-2" justify="center">
+  <v-row class="align-start pt-2 justify-center">
     <v-col cols="12" md="6">
       <v-card>
         <v-sheet class="d-flex justify-center" color="ternary" tile>
@@ -11,12 +11,12 @@
           <v-icon class="me-sm-6" color="warning" size="large">
             fas fa-exclamation-triangle
           </v-icon>
-          <span class="text-subtitle-1">
+          <span class="text-body-large">
             Oops ... Something went wrong. Survey could not be loaded.
           </span>
         </v-card-text>
         <v-card-text class="pa-6">
-          <div class="text-subtitle-2">
+          <div class="text-title-small">
             Details
           </div>
           <p>Network error</p>
@@ -30,7 +30,7 @@
             <v-icon class="py-3 me-sm-6" size="100">
               fas fa-sync-alt
             </v-icon>
-            <span class="py-3 text-h3 font-weight-bold text--primary text-uppercase">
+            <span class="py-3 text-headline-medium font-weight-bold text--primary text-uppercase">
               {{ $t('common.action.reload') }}
             </span>
           </div>

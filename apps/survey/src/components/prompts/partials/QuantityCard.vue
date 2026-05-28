@@ -1,9 +1,9 @@
 <template>
-  <v-row justify="center">
+  <v-row class="justify-center">
     <v-col cols="auto">
       <div class="d-flex flex-column align-center">
         <div v-if="showAll" class="pa-2">
-          <v-btn block @click.stop="setAll">
+          <v-btn block color="primary" variant="tonal" @click.stop="setAll">
             {{ $t('prompts.linkedAmount.all') }}
           </v-btn>
         </div>
@@ -22,7 +22,7 @@
                   $increment
                 </v-icon>
               </v-btn>
-              <span class="my-4 font-weight-medium text-h4">{{ wholeLabel }}</span>
+              <span class="my-4 font-weight-medium text-headline-large">{{ wholeLabel }}</span>
               <v-btn
                 color="secondary"
                 :disabled="minDisabled"
@@ -54,7 +54,7 @@
                   $increment
                 </v-icon>
               </v-btn>
-              <span class="my-4 font-weight-medium text-h4">{{ fractionLabel }}</span>
+              <span class="my-4 font-weight-medium text-headline-large">{{ fractionLabel }}</span>
               <v-btn
                 color="secondary"
                 :disabled="minDisabled"
@@ -71,10 +71,10 @@
           </div>
         </div>
         <div v-if="whole && fraction" class="px-3 d-flex flex-row justify-space-between align-self-stretch">
-          <span v-if="whole" class="font-weight-medium text-button">
+          <span v-if="whole" class="font-weight-medium text-label-large">
             {{ $t('prompts.quantity.whole') }}
           </span>
-          <span v-if="fraction" class="font-weight-medium text-button">
+          <span v-if="fraction" class="font-weight-medium text-label-large">
             {{ $t('prompts.quantity.fraction') }}
           </span>
         </div>

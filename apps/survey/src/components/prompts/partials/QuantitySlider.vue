@@ -27,7 +27,7 @@
       </template>
       <template #thumb-label="{ modelValue: thumbValue }">
         <div class="d-flex flex-column align-center">
-          <span class="text-h5 font-weight-bold">{{ thumbValue }}</span>
+          <span class="text-headline-small font-weight-bold">{{ thumbValue }}</span>
         </div>
       </template>
     </v-slider>

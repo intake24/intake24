@@ -69,7 +69,7 @@
       md="12"
       @change="toggle('help', $event)"
     >
-      <div class="text-subtitle-1 font-weight-medium">
+      <div class="text-body-large font-weight-medium">
         {{ $t('survey-schemes.settings.help._') }}
       </div>
       <template #addon>

@@ -6,10 +6,10 @@
     >
       <v-card-text class="d-flex flex-column ga-4 px-6 pt-0 pb-6">
         <v-divider class="mt-4" />
-        <div class="text-h3 font-weight-medium text-center">
+        <div class="text-headline-medium font-weight-medium text-center">
           {{ $t('survey.participant._') }}
         </div>
-        <div class="text-subtitle-2 text-center font-weight-medium opacity-70">
+        <div class="text-title-small text-center font-weight-medium opacity-70">
           {{ $t('survey.participant.subtitle') }}
         </div>
         <v-alert type="info">
@@ -19,10 +19,10 @@
         <image-placeholder v-if="isLoading" />
         <template v-if="hasDemo">
           <v-divider />
-          <div class="text-h3 font-weight-medium text-center">
+          <div class="text-headline-medium font-weight-medium text-center">
             {{ $t('survey.visitor._') }}
           </div>
-          <div class="text-subtitle-2 text-center font-weight-medium opacity-70">
+          <div class="text-title-small text-center font-weight-medium opacity-70">
             {{ $t('survey.visitor.subtitle') }}
           </div>
           <v-btn

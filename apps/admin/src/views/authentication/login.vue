@@ -49,7 +49,7 @@
               </v-btn>
             </v-col>
           </v-row>
-          <v-row justify="center">
+          <v-row class="justify-center">
             <v-col cols="12">
               <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
                 {{ $t('common.login._') }}
@@ -61,12 +61,12 @@
     </v-form>
     <template v-if="signupEnabled">
       <v-divider class="mx-6" />
-      <v-card-title class="text-h3 font-weight-medium text-center pt-6">
+      <v-card-title class="font-weight-medium text-center pt-6">
         {{ $t('common.signup.noAccount') }}
       </v-card-title>
       <v-card-text>
         <v-container>
-          <v-row justify="center">
+          <v-row class="justify-center">
             <v-col cols="12">
               <v-btn block color="primary" rounded size="x-large" :to="{ name: 'signup' }" variant="outlined">
                 {{ $t('common.signup._') }}

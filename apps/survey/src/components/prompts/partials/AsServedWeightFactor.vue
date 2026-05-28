@@ -27,7 +27,7 @@
         </v-btn>
         <v-chip>
           <i18n-t
-            class="font-weight-medium text-h6"
+            class="font-weight-medium text-title-large"
             :keypath="`prompts.asServed.weightFactor.${type}.${subType}`"
             tag="span"
           >
@@ -39,10 +39,10 @@
             </template>
           </i18n-t>
         </v-chip>
-        <span class="my-1 font-weight-medium text-h6">
+        <span class="my-1 font-weight-medium text-title-large">
           {{ $t(`prompts.asServed.weightFactor.${subType}`) }}
         </span>
-        <span class="mb-3 font-weight-medium text-h6">
+        <span class="mb-3 font-weight-medium text-title-large">
           (<span class="font-weight-bold">{{ amount }}g</span>)
         </span>
         <div>

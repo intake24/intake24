@@ -52,7 +52,7 @@
                   variant="tonal"
                 >
                   <v-card-text class="d-flex flex-column flex-sm-row justify-space-between align-stretch align-sm-center ga-4 pa-4 py-sm-2 ">
-                    <div class="text-h6 text-black opacity-90">
+                    <div class="text-title-large text-black opacity-90">
                       <v-icon icon="$food" start />
                       {{ associatedFoodDescription(foodItem) }}
                     </div>

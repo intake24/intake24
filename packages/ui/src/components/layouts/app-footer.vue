@@ -1,7 +1,7 @@
 <template>
   <v-divider v-if="$vuetify.display.mobile" />
   <v-footer v-if="!$vuetify.display.mobile || !loggedIn" class="justify-center pa-4 flex-grow-0">
-    <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-2 gr-2">
+    <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-medium gr-2">
       <a class="text-decoration-none text-primary" :href="links.home" target="_blank">
         {{ $t('common._') }}
       </a>

@@ -83,7 +83,7 @@
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="data.roles.length === 1">{{ item.raw.displayName }}</span>
+                    <span v-if="data.roles.length === 1">{{ item.displayName }}</span>
                     <span v-if="data.roles.length > 1">{{ data.roles.length }} selected </span>
                   </template>
                 </template>
@@ -107,7 +107,7 @@
               >
                 <template #selection="{ item, index }">
                   <template v-if="index === 0">
-                    <span v-if="data.permissions.length === 1">{{ item.raw.displayName }}</span>
+                    <span v-if="data.permissions.length === 1">{{ item.displayName }}</span>
                     <span v-if="data.permissions.length > 1">{{ data.permissions.length }} selected
                     </span>
                   </template>

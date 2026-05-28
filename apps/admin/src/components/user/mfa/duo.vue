@@ -2,7 +2,7 @@
   <v-stepper-vertical v-model="progress" flat hide-actions>
     <template #default="{ step }">
       <v-stepper-vertical-item :complete="step > 1" :title="$t('user.mfa.providers.duo.challenge.title')" value="1">
-        <div class="text-subtitle-2">
+        <div class="text-title-small">
           {{ $t('user.mfa.providers.duo.challenge.text') }}
         </div>
         <v-row>

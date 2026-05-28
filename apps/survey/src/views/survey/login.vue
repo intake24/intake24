@@ -2,7 +2,7 @@
   <v-container :class="{ 'pa-0': $vuetify.display.mobile }">
     <app-entry-screen content-class="login-screen" :title="$t('common._')">
       <template #subtitle>
-        <div class="text-h6 text-center font-weight-medium py-4">
+        <div class="text-title-large text-center font-weight-medium py-4">
           {{ survey?.name }}
         </div>
       </template>
@@ -70,7 +70,7 @@
       <template v-if="isOpenAccess">
         <v-divider />
         <v-card-text class="d-flex flex-column ga-4 pa-6">
-          <div class="text-h3 font-weight-medium text-center">
+          <div class="text-title-large font-weight-medium text-center">
             {{ $t('survey.generateUser.noAccount') }}
           </div>
           <v-card-subtitle class="text-center font-weight-medium">

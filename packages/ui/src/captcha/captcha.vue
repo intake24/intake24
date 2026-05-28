@@ -1,7 +1,7 @@
 <template>
   <div v-if="provider">
     <v-divider class="mx-6 mt-3" />
-    <v-card-text class="px-6 pt-2 pb-6 text-caption">
+    <v-card-text class="px-6 pt-2 pb-6 text-body-small">
       <component
         :is="provider"
         ref="captcha"

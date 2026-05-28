@@ -64,7 +64,6 @@
               :last-label="$t('feedback-schemes.top-foods.other')"
             />
           </v-col>
-          <v-divider vertical />
           <v-col cols="12" md="6">
             <nutrient-list
               v-model="data.topFoods.nutrientTypes"

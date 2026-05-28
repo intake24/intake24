@@ -72,7 +72,6 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-divider vertical />
         <v-col cols="12" md="6">
           <v-card-text class="d-flex flex-column gr-4">
             <v-select

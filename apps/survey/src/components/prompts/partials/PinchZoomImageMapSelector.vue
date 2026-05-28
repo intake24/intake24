@@ -4,7 +4,7 @@
       <slot name="activator" v-bind="{ props }" />
     </template>
     <v-sheet class="text-center pa-3">
-      <v-row dense no-gutter>
+      <v-row density="compact" no-gutter>
         <v-col cols="12">
           <pinch-scroll-zoom
             ref="zoomer"
@@ -16,7 +16,7 @@
           >
             <div v-if="label" class="label">
               <v-chip
-                class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold border-info-1"
+                class="ma-1 ma-md-2 pa-3 pa-md-4 text-title-large font-weight-bold border-info-1"
                 color="info"
               >
                 {{ label }}

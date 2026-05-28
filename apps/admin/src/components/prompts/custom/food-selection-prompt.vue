@@ -1,7 +1,7 @@
 <template>
   <v-tabs-window-item value="options">
     <v-container>
-      <v-row class="ml-2" dense>
+      <v-row class="ml-2" density="compact">
         <v-col cols="12" md="6">
           <v-switch
             hide-details="auto"
@@ -12,7 +12,7 @@
         </v-col>
       </v-row>
       <v-expand-transition>
-        <v-row v-show="useFlag" class="ml-2" dense>
+        <v-row v-show="useFlag" class="ml-2" density="compact">
           <v-col cols="12" md="6">
             <v-text-field
               :label="$t('survey-schemes.prompts.food-selection-prompt.flag')"

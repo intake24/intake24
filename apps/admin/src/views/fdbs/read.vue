@@ -1,10 +1,9 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-row class="pa-4" justify="space-between">
+    <v-row class="justify-space-between pa-4">
       <v-col cols="5" lg="4" xl="3">
         <food-explorer :id :code :readonly />
       </v-col>
-      <v-divider vertical />
       <v-col cols="7" lg="8" xl="8">
         <router-view v-slot="{ Component }">
           <v-scroll-y-transition mode="out-in">

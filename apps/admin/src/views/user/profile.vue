@@ -118,15 +118,15 @@
                 @update:model-value="updateLanguage"
               >
                 <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.raw.englishName">
+                  <v-list-item v-bind="props" :title="item.englishName">
                     <template #prepend>
-                      <span :class="`fi fi-${item.raw.countryFlagCode} mr-3`" />
+                      <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
                     </template>
                   </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.raw.countryFlagCode} mr-3`" />
-                  {{ item.raw.englishName }}
+                  <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
+                  {{ item.englishName }}
                 </template>
               </v-select>
             </v-list-item>

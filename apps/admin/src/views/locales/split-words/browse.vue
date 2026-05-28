@@ -19,7 +19,7 @@
       type="info"
     >
       <div class="d-flex flex-column gr-3">
-        <span class="font-weight-medium text-subtitle-1">
+        <span class="font-weight-medium text-body-large">
           {{ $t('locales.split-words.hints._') }}
         </span>
         <span>

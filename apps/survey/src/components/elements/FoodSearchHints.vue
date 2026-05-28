@@ -19,7 +19,7 @@
       @keydown.esc="tryAgain"
     >
       <v-card>
-        <v-card-title class="font-weight-medium text-h4 text-uppercase text-center">
+        <v-card-title class="font-weight-medium text-headline-large text-uppercase text-center">
           {{ promptI18n['hints.label'] }}
         </v-card-title>
         <v-card-text class="d-flex flex-column gr-4">

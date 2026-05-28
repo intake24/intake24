@@ -77,10 +77,8 @@
           max-width="360"
         >
           <v-card>
-            <v-card-title class="text-center justify-center text-h1">
-              <h2 class="font-weight-medium text-h2 text-uppercase">
-                {{ promptI18n['picker.title'] }}
-              </h2>
+            <v-card-title class="text-center justify-center font-weight-medium text-uppercase text-headline-large">
+              {{ promptI18n['picker.title'] }}
             </v-card-title>
             <v-tabs v-model="tab" grow>
               <v-tab key="hours" value="hours">

@@ -47,10 +47,10 @@
         <template #extension>
           <div class="px-4 d-flex justify-center items-center flex-column mx-auto">
             <v-card class="px-4 py-4 py-md-6 faqs-hero__card rounded-lg d-flex flex-column gr-2" flat>
-              <h1 class="text-h1 font-weight-medium text-center px-4">
+              <h1 class="text-headline-large font-weight-medium text-center px-4">
                 {{ $t('common.help.faqs.title') }}
               </h1>
-              <h2 class="text-h6 font-weight-medium text-center px-4">
+              <h2 class="text-title-large font-weight-medium text-center px-4">
                 {{ $t('common.help.faqs.subtitle') }}
               </h2>
             </v-card>
@@ -67,7 +67,7 @@
               flat
               rounded
             >
-              <div class="text-h5 font-weight-medium mb-4">
+              <div class="text-headline-small font-weight-medium mb-4">
                 {{ translate(section.title) }}
               </div>
               <v-expansion-panels focusable>

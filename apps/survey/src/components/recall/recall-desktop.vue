@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" :no-gutters="$vuetify.display.mobile">
+  <v-row class="justify-center" :no-gutters="$vuetify.display.mobile">
     <v-slide-x-transition mode="out-in">
       <v-col v-if="showMealList" cols="3">
         <meal-list v-bind="{ meals }" @action="action" />

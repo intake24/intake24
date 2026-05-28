@@ -1,11 +1,13 @@
+/* eslint-disable perfectionist/sort-imports */
 import { createVuetify } from 'vuetify';
+// Vuetify styles must be imported before any components that use it to make the css layers work correctly
+import 'vuetify/styles';
+
 import { VCardActions } from 'vuetify/components/VCard';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
 
 import { colors } from '@intake24/common/theme';
-
-import 'vuetify/styles';
 
 export default createVuetify({
   directives,
@@ -21,7 +23,7 @@ export default createVuetify({
       VBtn: {
         variant: 'tonal',
         color: 'primary',
-        class: ['px-4', 'flex-grow-1', 'flex-md-grow-0', 'flex-shrink-1'],
+        class: ['px-4', 'flex-grow-1', 'flex-md-grow-0', 'flex-shrink-1', 'text-uppercase'],
         size: 'large',
       },
     },
@@ -33,6 +35,7 @@ export default createVuetify({
       variant: 'tonal',
     },
     VBtn: {
+      class: 'text-uppercase',
       variant: 'flat',
     },
     VCardActions: {

@@ -4,7 +4,7 @@
   </h2>
   <v-card :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" :tile="$vuetify.display.mobile">
     <v-toolbar flat>
-      <v-toolbar-title class="font-weight-medium text-h6">
+      <v-toolbar-title class="font-weight-medium text-title-large">
         <slot name="title">
           {{ $t('user.personalAccessTokens.title') }}
         </slot>

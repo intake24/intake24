@@ -1,10 +1,10 @@
 <template>
   <v-container :class="{ 'pa-0': $vuetify.display.mobile }">
-    <v-row justify="center" :no-gutters="$vuetify.display.mobile">
+    <v-row class="justify-center" :no-gutters="$vuetify.display.mobile">
       <v-col cols="12" lg="9">
         <v-card :tile="$vuetify.display.mobile">
           <!-- Survey info -->
-          <v-card-title class="text-h5 font-weight-medium mb-2 pt-4">
+          <v-card-title class="text-headline-small font-weight-medium mb-2 pt-4">
             {{ $t('survey.welcome._') }}
           </v-card-title>
           <v-card-subtitle class="pb-4">
@@ -295,7 +295,7 @@
                   <v-row class="pt-1">
                     <v-col>
                       <strong>{{ `${$t('recall.submissions._')} ${idx + 1}` }}</strong>
-                      <div class="text-caption">
+                      <div class="text-body-small">
                         {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
                       </div>
                     </v-col>

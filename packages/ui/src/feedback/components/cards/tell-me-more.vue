@@ -18,22 +18,21 @@
       scrollable
     >
       <v-card :tile="$vuetify.display.smAndDown">
-        <v-toolbar
-          class="font-weight-medium text-h3 tell-me-more-title flex-grow-0"
-          color="secondary"
-        >
+        <v-toolbar color="secondary">
           <v-btn icon="$close" :title="$t('common.action.ok')" variant="text" @click.stop="close" />
-          <v-toolbar-title class="ps-2">
+          <v-toolbar-title
+            class="font-weight-medium text-headline-medium tell-me-more-title"
+          >
             {{ detail.name }}
           </v-toolbar-title>
         </v-toolbar>
         <template v-if="detail.showIntake.includes('description') || detail.unitDescription">
           <v-card-text v-if="detail.showIntake.includes('description')" class="flex-grow-0 flex-shrink-0 pt-4 pb-0">
-            <div class="text-subtitle-1">
+            <div class="text-body-large">
               <span class="font-weight-medium">{{ $t('feedback.intake.estimated') }}: </span>
               <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
             </div>
-            <div v-if="detail.recommendedIntake" class="text-subtitle-1">
+            <div v-if="detail.recommendedIntake" class="text-body-large">
               <span class="font-weight-medium">{{ $t('feedback.intake.recommended') }}: </span>
               {{ detail.recommendedIntake.toString() }}
               {{ detail.unit }}

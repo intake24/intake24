@@ -1,6 +1,6 @@
 <template>
   <v-sheet class="d-flex flex-column align-center" :class="{ 'feedback-section': type === 'feedback' }">
-    <h2 class="text-h2 font-weight-medium text-center mb-4">
+    <h2 class="text-headline-large font-weight-medium text-center mb-4">
       {{ $t(`${type}.rating.title`) }}
     </h2>
     <v-rating
@@ -32,7 +32,7 @@
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" @click.stop="close" />
           <v-toolbar-title>{{ $t(`${type}.rating._`) }}</v-toolbar-title>
         </v-toolbar>
-        <h3 class="text-h3 font-weight-medium text-center mt-3">
+        <h3 class="text-headline-large font-weight-medium text-center mt-3">
           {{ $t(`${type}.rating.title`) }}
         </h3>
         <v-form @keydown="errors.clear()" @submit.prevent="rate">
@@ -68,7 +68,7 @@
                   />
                 </v-col>
               </v-row>
-              <v-row justify="center">
+              <v-row class="justify-center">
                 <v-col cols="12" md="8">
                   <v-btn
                     block

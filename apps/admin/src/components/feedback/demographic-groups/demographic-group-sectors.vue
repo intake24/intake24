@@ -39,7 +39,7 @@
                 />
               </v-col>
               <v-col class="d-flex justify-end" cols="12" lg="4" md="6">
-                <div class="mr-4 text-subtitle-1">
+                <div class="mr-4 text-body-large">
                   <v-icon icon="fas fa-left-right" start />
                   {{ $t('feedback-schemes.ranges._') }}
                 </div>

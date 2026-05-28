@@ -16,19 +16,19 @@
         >
           <template #thumb-label="{ modelValue: thumbValue }">
             <div class="d-flex flex-column align-center">
-              <span class="text-h5 font-weight-bold">{{ thumbValue }}</span>
-              <span v-if="prompt.slider.current.label" class="text-h6 font-weight-bold">
+              <span class="text-headline-small font-weight-bold">{{ thumbValue }}</span>
+              <span v-if="prompt.slider.current.label" class="text-title-large font-weight-bold">
                 {{ translate(prompt.slider.current.label) }}
               </span>
             </div>
           </template>
           <template #prepend>
-            <span v-if="prompt.slider.min.label" class="text-h6 font-weight-bold">
+            <span v-if="prompt.slider.min.label" class="text-title-large font-weight-bold">
               {{ translate(prompt.slider.min.label) }}
             </span>
           </template>
           <template #append>
-            <span v-if="prompt.slider.max.label" class="text-h6 font-weight-bold">
+            <span v-if="prompt.slider.max.label" class="text-title-large font-weight-bold">
               {{ translate(prompt.slider.max.label) }}
             </span>
           </template>

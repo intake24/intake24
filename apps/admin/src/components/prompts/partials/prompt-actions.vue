@@ -18,7 +18,7 @@
       </v-col>
     </v-row>
     <div v-if="currentActions" class="mt-4">
-      <div class="text-h5 mb-4">
+      <div class="text-headline-small mb-4">
         {{ $t(`survey-schemes.actions.title`) }}
       </div>
       <div class="d-flex flex-row ga-2">
@@ -102,11 +102,11 @@
                       variant="outlined"
                     >
                       <template #item="{ item, props }">
-                        <v-list-item v-bind="props" :title="item.raw.title">
+                        <v-list-item v-bind="props" :title="item.title">
                           <template #prepend>
                             <span
                               class="mr-2 pa-4 rounded-circle"
-                              :style="{ backgroundColor: item.raw.color }"
+                              :style="{ backgroundColor: item.color }"
                             />
                           </template>
                         </v-list-item>
@@ -114,9 +114,9 @@
                       <template #selection="{ item }">
                         <span
                           class="mr-2 pa-2 rounded-circle"
-                          :style="{ backgroundColor: item.raw.color }"
+                          :style="{ backgroundColor: item.color }"
                         />
-                        {{ item.raw.title }}
+                        {{ item.title }}
                       </template>
                     </v-select>
                   </v-col>

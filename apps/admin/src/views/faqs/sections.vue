@@ -50,7 +50,7 @@
           <div class="">
             <v-drag-and-drop-handle />
           </div>
-          <div class="text-h5 font-weight-medium flex-1-1 text-truncate">
+          <div class="text-headline-small font-weight-medium flex-1-1 text-truncate">
             {{ translate(item.title) }}
           </div>
           <div class="">

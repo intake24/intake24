@@ -17,7 +17,7 @@
       </v-toolbar>
       <v-card-text>
         <v-container>
-          <v-row justify="center">
+          <v-row class="justify-center">
             <v-col cols="12" md="6" sm="8">
               <v-btn block color="primary" :disabled="jobInProgress" size="x-large" @click="submit">
                 <v-icon icon="$download" start />

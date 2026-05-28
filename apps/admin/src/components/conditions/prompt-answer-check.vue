@@ -18,15 +18,15 @@
         variant="outlined"
       >
         <template #item="{ item, props }">
-          <v-list-item v-bind="props" :title="item.raw.title">
+          <v-list-item v-bind="props" :title="item.title">
             <template #prepend>
-              <v-icon :icon="item.raw.icon" start />
+              <v-icon :icon="item.icon" start />
             </template>
           </v-list-item>
         </template>
         <template #selection="{ item }">
-          <v-icon :icon="item.raw.icon" start />
-          {{ item.raw.title }}
+          <v-icon :icon="item.icon" start />
+          {{ item.title }}
         </template>
       </v-select>
     </v-col>

@@ -24,7 +24,7 @@
   <v-bottom-sheet v-model="drawer" content-class="meal-list-mobile__sheet" scrollable>
     <v-card class="meal-list-mobile__card">
       <div class="py-4 ps-4 pe-3 d-flex flex-row justify-space-between align-center">
-        <div class="text-h6 font-weight-medium">
+        <div class="text-title-large font-weight-medium">
           {{ $t('recall.menu.title') }}
         </div>
         <v-btn color="white" icon :title="$t('recall.menu.meal.add')" @click="action('addMeal')">

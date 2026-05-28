@@ -60,7 +60,6 @@
               </vue-draggable>
             </v-list>
           </v-col>
-          <v-divider vertical />
           <v-col cols="12" md="6">
             <div class="d-flex align-center justify-space-between mb-2">
               <v-card-title>

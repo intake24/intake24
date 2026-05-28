@@ -58,7 +58,7 @@
         <v-tabs-window v-model="tab" class="overflow-y-auto">
           <v-tabs-window-item v-for="provider in providers" :key="provider" :value="provider">
             <v-card flat>
-              <v-card-title class="text-h5 font-weight-bold mb-2">
+              <v-card-title class="text-headline-small font-weight-bold mb-2">
                 {{ $t(`user.mfa.providers.${provider}.title`) }}
               </v-card-title>
               <v-card-subtitle>

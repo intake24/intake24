@@ -5,9 +5,9 @@
       link
       @click="action('selectFood', food.id)"
     >
-      <v-list-item-title class="text-body-2 text-wrap d-flex flex-column">
+      <v-list-item-title class="text-body-medium text-wrap d-flex flex-column">
         <span class="food-name">{{ foodName }}</span>
-        <span v-if="customPromptAnswerLabels" class="text-caption text-grey">
+        <span v-if="customPromptAnswerLabels" class="text-body-small text-grey">
           {{ customPromptAnswerLabels }}
         </span>
       </v-list-item-title>

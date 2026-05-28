@@ -10,7 +10,7 @@
       </v-icon>
     </template> -->
     <template #activator>
-      <v-list-item-title class="text-body-2 font-weight-medium text-wrap">
+      <v-list-item-title class="text-body-medium font-weight-medium text-wrap">
         {{ mealName }}
       </v-list-item-title>
       <v-list-item-action>

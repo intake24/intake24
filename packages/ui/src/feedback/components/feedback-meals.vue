@@ -1,10 +1,10 @@
 <template>
   <v-sheet class="feedback-section">
-    <h2 class="text-h2 font-weight-medium text-center mb-6 chart-print-title">
+    <h2 class="text-headline-large font-weight-medium text-center mb-6 chart-print-title">
       {{ $t('feedback.meals.title') }}
     </h2>
     <v-container>
-      <v-row class="mb-6" justify="center">
+      <v-row class="justify-center mb-6">
         <v-col cols="12" sm="auto">
           <v-select
             v-model="selected"
@@ -24,7 +24,7 @@
           />
         </v-col>
       </v-row>
-      <v-row class="d-print-none" justify="center" no-gutters>
+      <v-row class="d-print-none justify-center" no-gutters>
         <v-col
           v-for="chart in charts"
           :key="`screen-${chart.id}`"

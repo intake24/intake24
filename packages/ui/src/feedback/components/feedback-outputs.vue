@@ -2,7 +2,7 @@
   <v-col cols="12" sm="auto">
     <v-card height="100%">
       <v-toolbar color="grey-lighten-4">
-        <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
+        <v-toolbar-title class="text-body-large font-weight-medium text-uppercase">
           {{ $t('feedback.outputs.title') }}
         </v-toolbar-title>
       </v-toolbar>
@@ -116,7 +116,7 @@
               <v-toolbar-title>{{ $t('feedback.outputs.download.title') }}</v-toolbar-title>
             </v-toolbar>
             <v-card-text class="pa-6 d-flex flex-column ga-6">
-              <div class="text-subtitle-1 font-weight-medium">
+              <div class="text-body-large font-weight-medium">
                 {{ $t('feedback.outputs.download.subtitle') }}
               </div>
               <v-alert v-if="message" type="success" variant="outlined">

@@ -57,7 +57,6 @@
                 />
               </div>
             </v-col>
-            <v-divider vertical />
             <v-col cols="12" md>
               <v-card-title class="px-0">
                 {{ $t(`fdbs.portionSizes.methods.${dialog.item.method}._`) }}

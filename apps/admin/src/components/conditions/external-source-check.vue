@@ -18,7 +18,7 @@
         variant="outlined"
       />
     </v-col>
-    <v-col align-self="center" cols="12" md="6">
+    <v-col class="align-self-center" cols="12" md="6">
       <v-checkbox-btn
         v-model="currentValue.value"
         :label="$t('survey-schemes.conditions.showIfSet')"

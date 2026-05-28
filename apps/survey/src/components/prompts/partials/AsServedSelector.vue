@@ -1,5 +1,5 @@
 <template>
-  <v-alert v-if="labels.image" class="mb-2 text-body-2" color="info" variant="tonal">
+  <v-alert v-if="labels.image" class="mb-2 text-body-medium" color="info" variant="tonal">
     {{ labels.image }}
   </v-alert>
   <v-img :aspect-ratio="16 / 9" cover rounded :src="image">
@@ -10,7 +10,7 @@
       <slot name="label" />
       <v-chip
         v-if="label"
-        class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold border-info-1"
+        class="ma-1 ma-md-2 pa-3 pa-md-4 text-title-large font-weight-bold border-info-1"
         color="info"
       >
         {{ label }}
@@ -21,8 +21,8 @@
       @update:model-value="updateWeightFactor"
     />
   </v-img>
-  <v-container class="px-2">
-    <v-row v-if="asServedData">
+  <v-container class="px-0">
+    <v-row v-if="asServedData" class="ga-1">
       <v-col class="pa-1 rounded-lg" :class="{ 'border-primary-2': isLessWeightFactorActive }" cols="3" lg sm="2">
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           <v-img cover :src="firstThumbnail" />

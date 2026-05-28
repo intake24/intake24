@@ -9,11 +9,6 @@
 // Components
 @use 'time-picker';
 
-// Not padded sidebar
-.v-list-group__items .v-list-item {
-  padding-inline-start: 8px !important;
-}
-
 .list-border {
   .v-list-item:not(:last-child) {
     border-bottom: 1px solid map.get(settings.$grey, 'lighten-3');
@@ -43,14 +38,6 @@
 
 .drag-and-drop-leave-active {
   position: absolute;
-}
-
-ul.v-breadcrumbs {
-  padding-left: 12px;
-}
-
-.v-breadcrumbs--large {
-  font-weight: 600;
 }
 
 .dialog-container {

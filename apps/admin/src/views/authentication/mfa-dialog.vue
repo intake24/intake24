@@ -19,7 +19,7 @@
               >
                 <div class="d-flex align-center flex-column">
                   <v-icon class="mb-2 ml-2" color="secondary" icon="$duo" size="80" />
-                  <span class="font-weight-bold text-h4">{{ duo.value / 20 }} </span>
+                  <span class="font-weight-bold text-headline-large">{{ duo.value / 20 }} </span>
                 </div>
               </v-progress-circular>
               <v-btn block color="secondary" rounded @click="duoChallenge">
@@ -44,7 +44,7 @@
             >
               <div class="d-flex flex-column align-center ga-4">
                 <v-icon color="secondary" icon="$otp" size="80" />
-                <p class="text-subtitle-1">
+                <p class="text-body-large">
                   {{ $t('common.mfa.otp') }}
                 </p>
                 <v-otp-input
@@ -76,7 +76,7 @@
             >
               <div class="d-flex flex-column align-center ga-4">
                 <v-icon color="secondary" icon="$code" size="80" />
-                <p class="text-subtitle-1">
+                <p class="text-body-large">
                   {{ $t('common.mfa.code') }}
                 </p>
                 <v-text-field

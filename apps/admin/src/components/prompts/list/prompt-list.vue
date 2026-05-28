@@ -3,13 +3,13 @@
     <v-expansion-panel-title>
       <div class="d-flex flex-row justify-content-space-between">
         <v-avatar class="mr-3" color="primary" size="28">
-          <span class="text-white font-weight-medium text-h6">{{ step }}</span>
+          <span class="text-white font-weight-medium text-title-large">{{ step }}</span>
         </v-avatar>
         <div class="d-flex flex-column">
-          <div class="text-h6">
+          <div class="text-title-large">
             {{ title }}
           </div>
-          <div class="text-subtitle-2">
+          <div class="text-title-small">
             {{ subtitle }}
           </div>
         </div>

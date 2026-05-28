@@ -69,7 +69,6 @@
             <error-list :errors="nonInputErrors" />
             <color-list v-model="data.meals.chart.colors" />
           </v-col>
-          <v-divider vertical />
           <v-col cols="12" md="6">
             <nutrient-list
               v-model="data.meals.chart.nutrients"

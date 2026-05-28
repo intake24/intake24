@@ -4,10 +4,10 @@
     :title="$t('common.password.request._')"
   >
     <v-card-text v-if="submitted" class="pa-6">
-      <p class="text-h5 ma-4">
+      <p class="text-headline-small ma-4">
         {{ $t('common.password.request.sent') }}
       </p>
-      <p class="text-subtitle-2 ma-4">
+      <p class="text-title-small ma-4">
         {{ $t('common.spam') }}
       </p>
     </v-card-text>

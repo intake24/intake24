@@ -1,6 +1,10 @@
+/* eslint-disable perfectionist/sort-imports */
 import type { IconAliases } from 'vuetify';
 
 import { createVuetify } from 'vuetify';
+// Vuetify styles must be imported before any components that use it to make the css layers work correctly
+import 'vuetify/styles';
+
 import { VAvatar } from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
@@ -10,8 +14,6 @@ import { VStepperVertical, VStepperVerticalItem } from 'vuetify/labs/VStepperVer
 import { colors } from '@intake24/common/theme';
 
 import resources from '../router/resources';
-
-import 'vuetify/styles';
 
 const resourceIcons = resources.reduce<Partial<IconAliases>>((acc, resource) => {
   acc[resource.name] = resource.icon;
@@ -33,6 +35,7 @@ export default createVuetify({
       variant: 'tonal',
     },
     VBtn: {
+      class: 'text-uppercase',
       variant: 'flat',
     },
     VCardActions: {

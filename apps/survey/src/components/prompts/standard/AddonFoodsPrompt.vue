@@ -29,7 +29,7 @@
             </v-list-item-title>
             <div class="d-flex flex-column gr-2">
               <template v-for="(addon, idx) in foods[food.id]" :key="idx">
-                <div v-if="translate(addon.addon.name)" class="text-body-2 opacity-80">
+                <div v-if="translate(addon.addon.name)" class="text-body-medium opacity-80">
                   {{ translate(addon.addon.name) }}
                 </div>
                 <div class="d-flex flex-column flex-md-row align-stretch align-md-center ga-2">

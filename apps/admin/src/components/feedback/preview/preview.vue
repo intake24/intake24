@@ -18,7 +18,7 @@
         <v-toolbar-title>{{ $t('feedback-schemes.preview.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-container class="pa-0" fluid>
-        <h2 class="text-h2 font-weight-medium text-center px-4 pb-4">
+        <h2 class="text-headline-large font-weight-medium text-center px-4 pb-4">
           {{ $t('feedback.title') }}
         </h2>
         <div v-if="feedbackScheme && feedbackDicts && standardSections" class="d-flex flex-column">

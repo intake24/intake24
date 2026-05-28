@@ -2,7 +2,7 @@
   <v-card class="card-screen d-flex flex-column" :color="detail.color" height="100%">
     <v-img :aspect-ratio="16 / 9" cover :src="backgroundImage" />
     <!-- <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div> -->
-    <div v-if="detail.showIntake.includes('summary')" class="pa-4 font-weight-medium text-body-2" :class="textColor">
+    <div v-if="detail.showIntake.includes('summary')" class="pa-4 font-weight-medium text-body-medium" :class="textColor">
       <i18n-t class="mb-2" keypath="feedback.intake.your" tag="div">
         <template #nutrient>
           <span>{{ detail.name.toLowerCase() }}</span>

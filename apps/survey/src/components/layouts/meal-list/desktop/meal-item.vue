@@ -4,12 +4,12 @@
       :class="{ 'selected': isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
       @click="action('selectMeal', meal.id)"
     >
-      <v-list-item-title class="text-body-2 font-weight-medium text-wrap">
+      <v-list-item-title class="text-body-medium font-weight-medium text-wrap">
         {{ mealName }}
       </v-list-item-title>
       <template #append>
         <v-list-item-action class="me-4 my-auto">
-          <span v-if="mealTime && !meal.flags.includes('meal-time:hidden')" class="text-body-2">
+          <span v-if="mealTime && !meal.flags.includes('meal-time:hidden')" class="text-body-medium">
             {{ mealTime }}
           </span>
           <v-tooltip v-else-if="!mealTime" location="bottom">

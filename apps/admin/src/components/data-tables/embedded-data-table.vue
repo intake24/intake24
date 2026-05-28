@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-container fluid>
-      <v-row justify="center">
-        <v-col align-self="center" cols="12" sm="auto">
+      <v-row class="justify-center">
+        <v-col class="align-self-center" cols="12" sm="auto">
           <slot name="header-add" />
         </v-col>
         <v-col cols="12" sm>

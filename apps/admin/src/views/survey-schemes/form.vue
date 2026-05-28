@@ -30,20 +30,20 @@
                 @update:model-value="errors.clear('visibility')"
               >
                 <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.raw.title">
+                  <v-list-item v-bind="props" :title="item.title">
                     <template #prepend>
-                      <v-icon :icon="item.raw.icon" start />
+                      <v-icon :icon="item.icon" start />
                     </template>
                   </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <v-icon :icon="item.raw.icon" start />
-                  {{ item.raw.title }}
+                  <v-icon :icon="item.icon" start />
+                  {{ item.title }}
                 </template>
               </v-select>
             </v-col>
           </v-row>
-          <div class="text-subtitle-1 font-weight-medium py-4">
+          <div class="text-body-large font-weight-medium py-4">
             {{ $t('survey-schemes.settings.title') }}
           </div>
           <scheme-settings v-bind="{ errors }" v-model="data.settings" />

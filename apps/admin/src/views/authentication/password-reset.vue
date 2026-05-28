@@ -50,7 +50,7 @@
             </v-col>
             <error-list :errors="nonInputErrors" tag="v-col" />
           </v-row>
-          <v-row justify="center">
+          <v-row class="justify-center">
             <v-col cols="12">
               <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
                 {{ $t('common.password.reset._') }}

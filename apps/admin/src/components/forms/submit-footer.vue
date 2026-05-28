@@ -1,5 +1,5 @@
 <template>
-  <v-row class="mt-3" :justify="justify">
+  <v-row class="mt-3 justify-center">
     <v-col cols="12" lg="3" md="4" sm="6">
       <v-btn
         block
@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
-
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -32,10 +30,6 @@ export default defineComponent({
     icon: {
       type: String,
       default: '$save',
-    },
-    justify: {
-      type: String as PropType<'center' | 'end' | 'start' | 'space-around' | 'space-between' | 'space-evenly' | 'stretch'>,
-      default: 'center',
     },
     label: {
       type: String,

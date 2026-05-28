@@ -20,15 +20,15 @@
             name="entity"
           >
             <template #item="{ item, props }">
-              <v-list-item v-bind="props" :title="item.raw.title">
+              <v-list-item v-bind="props" :title="item.title">
                 <template #prepend>
-                  <v-icon :icon="item.raw.icon" />
+                  <v-icon :icon="item.icon" />
                 </template>
               </v-list-item>
             </template>
             <template #selection="{ item }">
-              <v-icon :icon="item.raw.icon" start />
-              {{ item.raw.title }}
+              <v-icon :icon="item.icon" start />
+              {{ item.title }}
             </template>
           </v-select>
           <v-text-field
