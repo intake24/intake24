@@ -12,16 +12,20 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 
-import type { Resource } from '@intake24/admin/types';
-
 import { defineComponent } from 'vue';
+
+type MenuItem = {
+  name: string;
+  icon: string;
+  title?: string;
+};
 
 export default defineComponent({
   name: 'MenuItem',
 
   props: {
     item: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<MenuItem>,
       required: true,
     },
   },
@@ -35,8 +39,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-list-item {
-  padding-inline-start: 8px;
+  padding-inline-start: 16px;
 }
 </style>

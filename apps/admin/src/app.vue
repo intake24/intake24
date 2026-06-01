@@ -17,33 +17,10 @@
           <template #activator="{ props }">
             <v-list-item v-bind="props" :title="$t('user._')" />
           </template>
-          <v-list-item link prepend-icon="fas fa-tachometer-alt" :to="{ name: 'dashboard' }">
-            <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            v-if="isVerified"
-            link
-            prepend-icon="fas fa-circle-user"
-            :to="{ name: 'user' }"
-          >
-            <v-list-item-title>{{ $t('user.profile') }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            v-if="isAalSatisfied && isVerified"
-            link
-            prepend-icon="fas fa-key"
-            :to="{ name: 'user.personal-access-tokens' }"
-          >
-            <v-list-item-title>{{ $t('user.personalAccessTokens.title') }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            v-if="isAalSatisfied && isVerified"
-            link
-            prepend-icon="$jobs"
-            :to="{ name: 'user.jobs' }"
-          >
-            <v-list-item-title>{{ $t('user.jobs.title') }}</v-list-item-title>
-          </v-list-item>
+          <menu-item :item="{ name: 'dashboard', icon: 'fas fa-tachometer-alt', title: 'dashboard._' }" link />
+          <menu-item v-if="isVerified" :item="{ name: 'user', icon: 'fas fa-circle-user', title: 'user.profile' }" link />
+          <menu-item v-if="isAalSatisfied && isVerified" :item="{ name: 'user.personal-access-tokens', icon: 'fas fa-key', title: 'user.personalAccessTokens.title' }" link />
+          <menu-item v-if="isAalSatisfied && isVerified" :item="{ name: 'user.jobs', icon: '$jobs', title: 'user.jobs.title' }" link />
         </v-list-group>
       </v-list>
       <menu-tree
@@ -98,7 +75,7 @@
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="loggedIn" color="background" flat>
+    <v-app-bar v-if="loggedIn" id="header" color="background" flat>
       <v-app-bar-nav-icon @click.stop="toggleSidebar" />
       <v-spacer />
       <v-btn :href="app.docs" target="_blank" :title="$t('common.docs')" variant="text">
@@ -143,6 +120,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay, useLocale, useTheme } from 'vuetify';
 
+import MenuItem from '@intake24/admin/components/sidebar/menu-item.vue';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import { useWebPush } from '@intake24/admin/components/web-push';
 import defaultResources from '@intake24/admin/router/resources';
