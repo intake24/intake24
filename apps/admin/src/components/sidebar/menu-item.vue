@@ -35,8 +35,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-list-item {
-  padding-inline-start: 8px;
+  padding-inline-start: 16px;
 }
 </style>
