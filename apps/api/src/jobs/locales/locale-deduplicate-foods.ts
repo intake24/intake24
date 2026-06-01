@@ -232,9 +232,15 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
     for (const food of foods.values()) {
       food.parentCategoryCodes = [...new Set(food.parentCategoryCodes)].toSorted();
 
-      // Some food records have the same names intentionally (e.g. milk as a drink/milk in hot drinks),
-      // so we have to use parent categories to differentiate them and avoid unwanted merging
-      const key = `${food.name}.${food.parentCategoryCodes.join('.')}`;
+      const inMhdk = food.parentCategoryCodes.includes('MHDK');
+      if (inMhdk && food.parentCategoryCodes.length > 1) {
+        this.logger.warn(
+          `Food ${food.code} ("${food.name}") is in MHDK but also in other categories: ${food.parentCategoryCodes.join(', ')}`,
+        );
+      }
+
+      // Foods in MHDK are intentionally duplicated to offer a different estimation method
+      const key = `${food.name}.${inMhdk ? 'MHDK' : ''}`;
 
       const group = duplicateFoods.get(key) ?? [];
       group.push(food);
