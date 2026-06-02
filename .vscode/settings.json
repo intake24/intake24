@@ -1,12 +1,11 @@
 {
-  // Enable the ESlint flat config support
-  "eslint.useFlatConfig": true,
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,
   "editor.formatOnSave": false,
   // Auto fix
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
   },
   "eslint.validate": [
     "javascript",
@@ -61,9 +60,9 @@
     "node_modules": true,
     "tmp": true
   },
-  "typescript.inlayHints.enumMemberValues.enabled": true,
+  "js/ts.inlayHints.enumMemberValues.enabled": true,
+  "js/ts.tsdk.path": "node_modules/@typescript/native-preview/lib",
   "files.watcherExclude": {
     "**/target": true
-  },
-  "typescript.tsdk": "node_modules/@typescript/native-preview/lib"
+  }
 }
