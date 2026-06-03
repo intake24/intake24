@@ -1,9 +1,7 @@
 <template>
   <v-card flat tile>
     <v-toolbar color="grey-lighten-4">
-      <v-icon color="secondary" end>
-        fas fa-bars-staggered
-      </v-icon>
+      <v-icon color="secondary" end icon="fas fa-bars-staggered" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.sections.title') }}
       </v-toolbar-title>
@@ -61,13 +59,12 @@
           <template #append>
             <v-list-item-action>
               <v-btn
+                v-if="!['rating', 'submissions'].includes(section.id)"
                 icon
                 :title="$t('feedback-schemes.sections.edit')"
                 @click.stop="edit(index, items[index])"
               >
-                <v-icon color="secondary-lighten-2">
-                  $edit
-                </v-icon>
+                <v-icon color="secondary-lighten-2" icon=" $edit" />
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -100,9 +97,7 @@
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
             <v-icon icon="fas fa-bars-staggered" start />
-            {{
-              $t(`feedback-schemes.sections.${dialog.index === -1 ? 'add' : 'edit'}`)
-            }}
+            {{ $t(`feedback-schemes.sections.${dialog.index === -1 ? 'add' : 'edit'}`) }}
           </v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>

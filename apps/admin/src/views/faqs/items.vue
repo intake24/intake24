@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panels v-model="panel" flat>
     <v-expansion-panel>
-      <v-expansion-panel-title class="text-headline-small font-weight-medium">
+      <v-expansion-panel-title class="text-title-large font-weight-medium">
         <template #default="{ collapseIcon, expandIcon, expanded }">
           <v-icon
             class="my-auto me-2"

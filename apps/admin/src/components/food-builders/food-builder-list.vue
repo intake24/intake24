@@ -180,7 +180,7 @@
                   handle=".drag-and-drop__handle"
                 >
                   <v-expansion-panel v-for="(step, index) in dialog.item.steps" :key="step.id">
-                    <v-expansion-panel-title class="text-headline-large font-weight-medium mb-2">
+                    <v-expansion-panel-title class="text-title-large font-weight-medium mb-2">
                       <v-avatar class="drag-and-drop__handle me-2" color="primary" size="36">
                         <span class="text-white font-weight-medium text-title-large">{{ index + 1 }}</span>
                       </v-avatar>

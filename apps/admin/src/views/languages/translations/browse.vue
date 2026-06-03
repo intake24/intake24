@@ -11,6 +11,7 @@
           icon
           icon-left="fas fa-rotate"
           :label="$t('common.action.sync')"
+          rounded="pill"
           size="small"
           @confirm="sync"
         >
@@ -22,6 +23,7 @@
           icon
           icon-left="$delete"
           :label="$t('common.action.delete')"
+          rounded="pill"
           size="small"
           @confirm="remove"
         >

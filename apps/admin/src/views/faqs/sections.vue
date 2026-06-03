@@ -43,14 +43,10 @@
         class="pa-3"
         color="grey-lighten-3"
         flat
-        rounded
-        tile
       >
         <div class="d-flex align-center">
-          <div class="">
-            <v-drag-and-drop-handle />
-          </div>
-          <div class="text-headline-small font-weight-medium flex-1-1 text-truncate">
+          <v-drag-and-drop-handle />
+          <div class="text-title-large font-weight-medium flex-1-1 text-truncate">
             {{ translate(item.title) }}
           </div>
           <div class="">
