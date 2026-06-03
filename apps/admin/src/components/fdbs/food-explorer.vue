@@ -26,6 +26,7 @@
       v-model:activated="activated"
       v-model:opened="opened"
       activatable
+      class="food-list"
       color="primary"
       density="compact"
       item-title="name"

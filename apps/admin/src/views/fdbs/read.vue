@@ -5,7 +5,7 @@
         <food-explorer :id :code :readonly />
       </v-col>
       <v-col cols="7" lg="8" xl="8">
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component }" class="food-list-item">
           <v-scroll-y-transition mode="out-in">
             <component :is="Component" :code :readonly />
           </v-scroll-y-transition>

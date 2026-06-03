@@ -8,6 +8,7 @@
 
 // Components
 @use 'time-picker';
+@use 'food-list';
 
 .list-border {
   .v-list-item:not(:last-child) {
