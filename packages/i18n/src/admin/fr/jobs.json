@@ -116,6 +116,13 @@
       "_": "Locale - Rebuild Food Indexes for modified locales",
       "force": "Force rebuild for all locales"
     },
+    "LocalesSync": {
+      "_": "Locales - Synchronize schemes",
+      "subTasks": {
+        "_": "Subtasks",
+        "foodBuilders": "Food builders"
+      }
+    },
     "NutrientTableMappingImport": {
       "_": "Tableau des nutriments - Importer le mapping de la BDD nutritionnelle",
       "file": "fichier CSV",

@@ -501,6 +501,42 @@
     },
     "quantity": "Combien en avez-vous pris à ce moment-là (même récipient et même remplissage) ?"
   },
+  "genericBuilder": {
+    "name": "{food} builder",
+    "text": "",
+    "description": "Suivez les étapes ci-dessous pour préparer votre propre {food}.",
+    "label": "Ajoutez votre propre {searchTerm}",
+    "browse": "{category} catégories",
+    "search": "Chercher un aliment",
+    "results": "Résultats",
+    "relatedCategories": "Catégories / sous-catégories associées",
+    "showLess": "Afficher moins",
+    "showAll": "Afficher les catégories associées",
+    "root": "toutes les catégories alimentaires",
+    "back": "Retour vers les résultats",
+    "none": "Pas d'aliments correspondants. Essayez de préciser votre recherche.",
+    "refine": "Cette recherche a généré beaucoup de résultats. Essayez d'affiner votre recherche.",
+    "optional": {
+      "confirm": "Oui",
+      "reject": "Non",
+      "infoPrompt": "Qu'est-ce que c'était?"
+    },
+    "addMore": "Ajouter un autre",
+    "noMore": "Complet",
+    "remove": "Enlever",
+    "hints": {
+      "label": "You have entered",
+      "confirm": "Keep",
+      "tryAgain": "Try again"
+    },
+    "missing": {
+      "label": "Je ne trouve pas mon aliment.",
+      "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans la barre de recherche ci-dessus et cliquez sur 'Chercher à nouveau'.</p><p>Ou cliquez 'Parcourir tous les aliments' et explorez les catégories alimentaires.</p><p>Si vous n'arrivez toujours pas à trouver votre aliment, cliquez sur 'Créer un nouvel aliment'.</p>",
+      "report": "Créer un nouvel aliment",
+      "tryAgain": "Ok, laissez-moi réessayer",
+      "irrelevantIngredient": "Je n'ai pas consommé"
+    }
+  },
   "guideImage": {
     "name": "Photo",
     "text": "",

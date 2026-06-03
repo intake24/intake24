@@ -58,28 +58,42 @@
     "types": {
       "_": "Food builder type",
       "title": "Food builder types",
-      "recipe": "Recipe",
-      "pizza": "Pizza"
+      "generic": "Generic",
+      "recipe": "Recipe"
     },
     "code": "Code de l'ingrédient",
     "name": "Nom de l'étape",
-    "triggerWord": "Trigger word",
+    "label": "Libellé de l'étape",
+    "exclusive": "Exclusif",
+    "triggerWord": "Mot déclenchant",
     "synonymSetId": "Synonymes (délimités par des espaces)",
-    "steps:": {
+    "steps": {
       "_": "Food builder step",
       "title": "Food builder steps",
-      "add": "Add food builder step",
-      "remove": "Remove food builder step",
+      "add": "Add step",
+      "remove": "Remove step",
+      "types": {
+        "_": "Step type",
+        "title": "Step types",
+        "ingredient": "Ingredient",
+        "coefficient": "Coefficient",
+        "condition": "Condition",
+        "lookup-entity": "Entity lookup",
+        "lookup-unit": "Unit lookup",
+        "quantity": "Quantity",
+        "select-entity": "Select entity"
+      },
       "name": "Step Name",
       "description": "Step Description",
-      "ingredientsCategory": "Step Ingredients Category",
-      "order": "Step Order",
-      "repeat": "Many ingredients",
-      "require": "Required"
+      "coefficient": "Coefficient",
+      "multiple": "Many ingredients",
+      "required": "Required",
+      "afp": "Allow associated food prompts"
     },
     "tabs": {
       "general": "General",
-      "steps": "Steps"
+      "steps": "Steps",
+      "json": "JSON"
     }
   },
   "food-ranking": {
