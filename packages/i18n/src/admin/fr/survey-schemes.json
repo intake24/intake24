@@ -783,6 +783,10 @@
       "title": "Méthode d'estimation de la taille de la portion",
       "subtitle": "Choisir quelle méthode de quantification sélectionner au cas où plus d'une soit disponible pour l'aliment"
     },
+    "generic-builder-prompt": {
+      "title": "Build your own food",
+      "subtitle": "Build your own food from defined steps"
+    },
     "recipe-builder-prompt": {
       "title": "Construire son propre plat",
       "subtitle": "Construire son propre plat à partir des ingrédients"

@@ -62,6 +62,12 @@
         "incomplete": "Les informations manquantes pour cet aliment ne sont pas encore connues.",
         "edit": "Modifier l’aliment manquant"
       },
+      "generic-builder": {
+        "_": "Cet aliment a été associé à un aliment de notre base de données.",
+        "complete": "Les étapes pour cet aliment sont terminées.",
+        "incomplete": "Les étapes pour cet aliment ne sont pas encore terminées.",
+        "edit": "Modifier l'aliment"
+      },
       "recipe-builder": {
         "_": "Cet aliment correspond à une recette présente dans notre base de données.",
         "complete": "Les étapes pour cette recette sont complètes.",

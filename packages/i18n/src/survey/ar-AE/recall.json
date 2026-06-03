@@ -62,6 +62,12 @@
         "incomplete": "المعلومات المفقودة لهذا الطعام ليست معروفة بعد",
         "edit": "تعديل الطعام المفقود"
       },
+      "generic-builder": {
+        "_": "This food has been matched with a food from our database.",
+        "complete": "Steps for this food are complete.",
+        "incomplete": "Steps for this food are not yet finished.",
+        "edit": "Edit food"
+      },
       "recipe-builder": {
         "_": "تمت مطابقة هذا الطعام مع وصفة من قاعدة بياناتنا",
         "complete": "اكتملت خطوات الوصفة لهذا الطعام",

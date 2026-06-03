@@ -62,6 +62,12 @@
         "incomplete": "此食物的缺失信息尚未知晓。",
         "edit": "编辑找不到食物"
       },
+      "generic-builder": {
+        "_": "This food has been matched with a food from our database.",
+        "complete": "Steps for this food are complete.",
+        "incomplete": "Steps for this food are not yet finished.",
+        "edit": "Edit food"
+      },
       "recipe-builder": {
         "_": "T这种食物已与我们数据库中的食谱相匹配。",
         "complete": "这种食物的食谱步骤已经完成。",
