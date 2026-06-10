@@ -17,11 +17,13 @@ import {
   createMalformedPackageJsonPackage,
   createMissingPackageJsonPackage,
   createValidEmptyPackage,
+  createValidSynonymSetsPackage,
 } from './test-package-fixtures';
 
 export default () => {
   let testUser: User;
   let packageImportPermission: Permission;
+  let localeFoodListEditPermission: Permission;
 
   beforeAll(async () => {
     testUser = await User.create({
@@ -36,6 +38,15 @@ export default () => {
         name: 'packages:import',
         displayName: 'Import Package',
         description: 'Permission to import packages',
+      },
+    });
+
+    [localeFoodListEditPermission] = await Permission.findOrCreate({
+      where: { name: 'locales:food-list:edit' },
+      defaults: {
+        name: 'locales:food-list:edit',
+        displayName: 'Edit locale food list',
+        description: 'Permission to edit locale food list data',
       },
     });
   });
@@ -72,6 +83,7 @@ export default () => {
 
       // Grant permission
       await testUser.$add('permissions', packageImportPermission);
+      await testUser.$add('permissions', localeFoodListEditPermission);
     });
 
     afterEach(async () => {
@@ -79,6 +91,7 @@ export default () => {
       if (dbJob)
         await dbJob.destroy();
       await testUser.$remove('permissions', packageImportPermission);
+      await testUser.$remove('permissions', localeFoodListEditPermission);
     });
 
     it('should complete successfully with a valid package', async () => {
@@ -90,6 +103,37 @@ export default () => {
       // Verify extracted files exist
       const extractedPath = path.join(path.resolve(ioc.cradle.fsConfig.local.uploads), `i24-pkg-import-${fileId}`);
       await expect(fs.stat(extractedPath)).resolves.toBeDefined();
+    });
+  });
+
+  describe('valid synonym sets package', () => {
+    let fileId: string;
+    let dbJob: DbJob;
+
+    beforeEach(async () => {
+      fileId = await createValidSynonymSetsPackage();
+      dbJob = await createDbJob(testUser.id, { fileId, packageFormat: 'intake24' });
+
+      await testUser.$add('permissions', packageImportPermission);
+      await testUser.$add('permissions', localeFoodListEditPermission);
+    });
+
+    afterEach(async () => {
+      await cleanupTestPackage(fileId);
+      if (dbJob)
+        await dbJob.destroy();
+      await testUser.$remove('permissions', packageImportPermission);
+      await testUser.$remove('permissions', localeFoodListEditPermission);
+    });
+
+    it('should report synonym sets in the package summary', async () => {
+      const job = ioc.resolve('PackageVerification');
+      const mockBullJob = createMockBullJob(dbJob.id, { fileId, packageFormat: 'intake24' });
+
+      const summary = await job.run(mockBullJob);
+
+      expect(summary.targetLocales).toContain('en');
+      expect(summary.files.synonymSets).toBe(true);
     });
   });
 
