@@ -66,6 +66,7 @@
           "locales": "Locale configuration",
           "foods": "Food list",
           "categories": "Category list",
+          "synonymSets": "Synonym sets",
           "asServedSets": "\"As served\" image sets",
           "imageMaps": "Image maps (required for guide images and drinkware)",
           "guideImages": "Guide images",
@@ -147,6 +148,7 @@
       "locales": "Locales",
       "foods": "Food list",
       "categories": "Category list",
+      "synonymSets": "Synonym sets",
       "portionSizeMethods": "Portion size data",
       "portionSizeImages": "Portion size images"
     },

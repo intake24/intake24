@@ -10,6 +10,7 @@ import type {
   PkgV2GuideImagesFile,
   PkgV2ImageMapsFile,
   PkgV2LocalesFile,
+  PkgV2SynonymSetsFile,
 } from '@intake24/common/types/package/file-schemas';
 
 import fs from 'node:fs/promises';
@@ -26,6 +27,7 @@ import {
   pkgV2GuideImagesFileSchema,
   pkgV2ImageMapsFileSchema,
   pkgV2LocalesFileSchema,
+  pkgV2SynonymSetsFileSchema,
 } from '@intake24/common/types/package/file-schemas';
 import { formatZodError } from '@intake24/common/util';
 
@@ -39,6 +41,7 @@ export type ValidatedPackageContents = {
   imageMaps?: PkgV2ImageMapsFile;
   guideImages?: PkgV2GuideImagesFile;
   drinkwareSets?: PkgV2DrinkwareSetsFile;
+  synonymSets?: PkgV2SynonymSetsFile;
 };
 
 function getZodValidationErrorMessages(error: z.ZodError): FileValidationErrorMessage[] {
@@ -207,6 +210,7 @@ export async function validateJsonFiles(extractedPath: string): Promise<Validate
     validateFile('locales.json', pkgV2LocalesFileSchema, 'locales'),
     validateFile('foods.json', pkgV2FoodsFileSchema, 'foods', true),
     validateFile('categories.json', pkgV2CategoriesFileSchema, 'categories', true),
+    validateFile('synonym-sets.json', pkgV2SynonymSetsFileSchema, 'synonymSets'),
     validateFile('as-served-sets.json', pkgV2AsServedSetsFileSchema, 'asServedSets'),
     validateFile('image-maps.json', pkgV2ImageMapsFileSchema, 'imageMaps'),
     validateFile('guide-images.json', pkgV2GuideImagesFileSchema, 'guideImages'),

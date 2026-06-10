@@ -7,6 +7,7 @@ import type { PkgV2Food, PkgV2PortionSizeMethod } from '@intake24/common/types/p
 import type { PkgV2GuideImage } from '@intake24/common/types/package/guide-image';
 import type { PkgV2ImageMap } from '@intake24/common/types/package/image-map';
 import type { PkgV2Locale } from '@intake24/common/types/package/locale';
+import type { PkgV2SynonymSet } from '@intake24/common/types/package/synonym-sets';
 
 import path from 'node:path';
 
@@ -58,6 +59,7 @@ export class PackageXlsxWriter implements PackageWriter {
   private categoryWorkbooks: Map<string, CategoriesWorkbook> = new Map();
   private portionWorkbook?: ExcelJS.stream.xlsx.WorkbookWriter;
   private localesWorkbook?: ExcelJS.stream.xlsx.WorkbookWriter;
+  private synonymSetsWorkbook?: ExcelJS.stream.xlsx.WorkbookWriter;
 
   constructor(outputPath: string, exportOptions: PackageExportOptions) {
     this.outputPath = outputPath;
@@ -606,6 +608,32 @@ export class PackageXlsxWriter implements PackageWriter {
     ]).commit();
   }
 
+  private getOrCreateSynonymSetsWorkbook(): ExcelJS.stream.xlsx.WorkbookWriter {
+    if (this.synonymSetsWorkbook !== undefined)
+      return this.synonymSetsWorkbook;
+
+    const filename = path.join(this.outputPath, `synonym-sets.xlsx`);
+    const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({ filename, useStyles: true });
+    const sheet = workbook.addWorksheet('Synonym sets');
+    sheet.columns = [
+      { header: 'Locale', width: 16 },
+      { header: 'Synonyms', width: 120 },
+    ];
+    sheet.getRow(1).font = { bold: true };
+    sheet.getRow(1).border = { bottom: { style: 'thin' } };
+
+    this.synonymSetsWorkbook = workbook;
+
+    return workbook;
+  }
+
+  public async writeSynonymSet(localeId: string, synonymSet: PkgV2SynonymSet) {
+    const workbook = this.getOrCreateSynonymSetsWorkbook();
+    const sheet = workbook.getWorksheet('Synonym sets')!;
+
+    sheet.addRow([localeId, synonymSet.join(' ')]).commit();
+  }
+
   private getPortionWorkbook(): ExcelJS.stream.xlsx.WorkbookWriter {
     if (!this.portionWorkbook) {
       const filename = path.join(this.outputPath, `portion-size.xlsx`);
@@ -850,6 +878,9 @@ export class PackageXlsxWriter implements PackageWriter {
     }
     if (this.localesWorkbook) {
       await this.localesWorkbook.commit();
+    }
+    if (this.synonymSetsWorkbook) {
+      await this.synonymSetsWorkbook.commit();
     }
   }
 }
