@@ -8,8 +8,8 @@ trustPolicyExclude:
 pmOnFail: warn
 
 packages:
-  - apps/**
-  - packages/**
+  - apps/*
+  - packages/*
 
 overrides:
   axios: ^1.16.1
