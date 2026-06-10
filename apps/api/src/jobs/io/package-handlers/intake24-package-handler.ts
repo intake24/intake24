@@ -52,6 +52,10 @@ export class Intake24PackageHandler implements PackageHandler {
       Object.keys(packageContents.categories).forEach(locale => targetLocales.add(locale));
     }
 
+    if (packageContents.synonymSets) {
+      Object.keys(packageContents.synonymSets).forEach(locale => targetLocales.add(locale));
+    }
+
     return {
       extractedPath: this.extractedPath,
       summary: {
@@ -60,6 +64,7 @@ export class Intake24PackageHandler implements PackageHandler {
           locales: !!packageContents.locales,
           foods: !!packageContents.foods,
           categories: !!packageContents.categories,
+          synonymSets: !!packageContents.synonymSets,
           asServedSets: !!packageContents.asServedSets,
           imageMaps: !!packageContents.imageMaps,
           guideImages: !!packageContents.guideImages,

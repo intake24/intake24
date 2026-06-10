@@ -7,6 +7,7 @@ import type { PkgV2DrinkScale, PkgV2DrinkwareSet } from '@intake24/common/types/
 import type { PkgV2AssociatedFood, PkgV2PortionSizeMethod } from '@intake24/common/types/package/foods';
 import type { PkgV2GuideImage } from '@intake24/common/types/package/guide-image';
 import type { PkgV2ImageMap, PkgV2ImageMapObject } from '@intake24/common/types/package/image-map';
+import type { PkgV2SynonymSet } from '@intake24/common/types/package/synonym-sets';
 import type { FoodsDB } from '@intake24/db/kysely';
 
 import fs from 'node:fs/promises';
@@ -107,9 +108,12 @@ export async function* batchStreamGrouped<T>(
   }
 }
 
+const SYNONYM_WORD_SEPARATOR = /\s+/;
+
 const progressWeights: Record<PackageIncludeOption, number> = {
   foods: 0.35,
   categories: 0.10,
+  synonymSets: 0.05,
   locales: 0.05,
   portionSizeMethods: 0.10,
   portionSizeImages: 0.40,
@@ -449,6 +453,46 @@ export class PackageExporter {
     }
   }
 
+  async processSynonymSets(localeId: string): Promise<void> {
+    const { count } = await this.db
+      .selectFrom('synonymSets')
+      .select(this.db.fn.countAll().as('count'))
+      .where('synonymSets.localeId', '=', localeId)
+      .executeTakeFirstOrThrow();
+
+    const synonymSetRecordCount = Number(count);
+    let synonymSetsProcessed = 0;
+
+    if (synonymSetRecordCount === 0) {
+      await this.updateProgress(localeId, 'synonymSets', 1);
+      return;
+    }
+
+    const synonymSetsStream = this.db
+      .selectFrom('synonymSets')
+      .select(['synonymSets.synonyms'])
+      .where('synonymSets.localeId', '=', localeId)
+      .orderBy('synonymSets.id', 'asc')
+      .stream(this.dbBatchSize);
+
+    const batchedStream = batchStream(synonymSetsStream, this.dbBatchSize);
+
+    for await (const batch of batchedStream) {
+      for (const row of batch) {
+        const synonymSetRecord: PkgV2SynonymSet = row.synonyms.trim().split(SYNONYM_WORD_SEPARATOR).filter(Boolean);
+
+        ++synonymSetsProcessed;
+
+        if (synonymSetRecord.length === 0)
+          continue;
+
+        await this.packageWriter.writeSynonymSet(localeId, synonymSetRecord);
+      }
+
+      await this.updateProgress(localeId, 'synonymSets', synonymSetsProcessed / synonymSetRecordCount);
+    }
+  }
+
   async processLocale(localeId: string): Promise<void> {
     const localeRecord = await this.db
       .selectFrom('locales')
@@ -782,7 +826,7 @@ export class PackageExporter {
     if (this.exportOptions.locales.length === 0 || this.exportOptions.options.include.length === 0)
       return 1;
 
-    const localeDependentOptions: PackageIncludeOption[] = ['foods', 'categories', 'locales'];
+    const localeDependentOptions: PackageIncludeOption[] = ['foods', 'categories', 'synonymSets', 'locales'];
     const globalOptions: PackageIncludeOption[] = ['portionSizeMethods', 'portionSizeImages'];
 
     const includedLocaleOptions = this.exportOptions.options.include.filter(opt => localeDependentOptions.includes(opt));
@@ -853,6 +897,8 @@ export class PackageExporter {
         await this.processFoods(localeId);
       if (this.include('categories'))
         await this.processCategories(localeId);
+      if (this.include('synonymSets'))
+        await this.processSynonymSets(localeId);
     }
 
     if (this.include('portionSizeMethods')) {

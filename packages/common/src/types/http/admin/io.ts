@@ -8,6 +8,7 @@ export const packageIncludeOptions = [
   'locales',
   'foods',
   'categories',
+  'synonymSets',
   'portionSizeMethods',
   'portionSizeImages',
 ] as const;
@@ -32,6 +33,7 @@ export const packageFileTypes = [
   'locales',
   'foods',
   'categories',
+  'synonymSets',
   'asServedSets',
   'imageMaps',
   'guideImages',

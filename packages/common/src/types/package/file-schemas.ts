@@ -7,6 +7,7 @@ import { pkgV2Food } from './foods';
 import { pkgV2GuideImage } from './guide-image';
 import { pkgV2ImageMap } from './image-map';
 import { pkgV2Locale } from './locale';
+import { pkgV2SynonymSet } from './synonym-sets';
 
 export const pkgV2FoodsFileSchema = z.record(z.string(), z.array(pkgV2Food));
 export const pkgV2CategoriesFileSchema = z.record(z.string(), z.array(pkgV2Category));
@@ -15,6 +16,7 @@ export const pkgV2ImageMapsFileSchema = z.array(pkgV2ImageMap);
 export const pkgV2GuideImagesFileSchema = z.array(pkgV2GuideImage);
 export const pkgV2DrinkwareSetsFileSchema = z.array(pkgV2DrinkwareSet);
 export const pkgV2LocalesFileSchema = z.array(pkgV2Locale);
+export const pkgV2SynonymSetsFileSchema = z.record(z.string(), z.array(pkgV2SynonymSet));
 
 export type PkgV2FoodsFile = z.infer<typeof pkgV2FoodsFileSchema>;
 export type PkgV2CategoriesFile = z.infer<typeof pkgV2CategoriesFileSchema>;
@@ -23,3 +25,4 @@ export type PkgV2ImageMapsFile = z.infer<typeof pkgV2ImageMapsFileSchema>;
 export type PkgV2GuideImagesFile = z.infer<typeof pkgV2GuideImagesFileSchema>;
 export type PkgV2DrinkwareSetsFile = z.infer<typeof pkgV2DrinkwareSetsFileSchema>;
 export type PkgV2LocalesFile = z.infer<typeof pkgV2LocalesFileSchema>;
+export type PkgV2SynonymSetsFile = z.infer<typeof pkgV2SynonymSetsFileSchema>;
