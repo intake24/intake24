@@ -6,11 +6,13 @@ import type { PkgV2Food } from '@intake24/common/types/package/foods';
 import type { PkgV2GuideImage } from '@intake24/common/types/package/guide-image';
 import type { PkgV2ImageMap } from '@intake24/common/types/package/image-map';
 import type { PkgV2Locale } from '@intake24/common/types/package/locale';
+import type { PkgV2SynonymSet } from '@intake24/common/types/package/synonym-sets';
 
 export interface PackageWriter
 {
   writeFood: (localeId: string, food: PkgV2Food) => Promise<void>;
   writeCategory: (localeId: string, category: PkgV2Category) => Promise<void>;
+  writeSynonymSet: (localeId: string, synonymSet: PkgV2SynonymSet) => Promise<void>;
   writeLocale: (locale: PkgV2Locale) => Promise<void>;
   writeAsServedSet: (asServedSet: PkgV2AsServedSet) => Promise<void>;
   writeImageMap: (imageMap: PkgV2ImageMap) => Promise<void>;

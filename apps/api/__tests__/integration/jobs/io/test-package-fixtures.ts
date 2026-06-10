@@ -13,6 +13,8 @@ export interface TestPackageOptions {
   foodsContent?: object | string;
   includeCategories?: boolean;
   categoriesContent?: object | string;
+  includeSynonymSets?: boolean;
+  synonymSetsContent?: object | string;
   corrupt?: boolean;
 }
 
@@ -59,6 +61,16 @@ export async function createTestPackage(options: TestPackageOptions = {}): Promi
     }
     else if (options.includeCategories) {
       await fs.writeFile(path.join(tempDir, 'categories.json'), JSON.stringify({}));
+    }
+
+    if (options.synonymSetsContent !== undefined) {
+      const content = typeof options.synonymSetsContent === 'string'
+        ? options.synonymSetsContent
+        : JSON.stringify(options.synonymSetsContent);
+      await fs.writeFile(path.join(tempDir, 'synonym-sets.json'), content);
+    }
+    else if (options.includeSynonymSets) {
+      await fs.writeFile(path.join(tempDir, 'synonym-sets.json'), JSON.stringify({}));
     }
 
     await zipDirectory(tempDir, filePath);
@@ -114,5 +126,17 @@ export function createInvalidFoodsPackage(): Promise<string> {
   return createTestPackage({
     includePackageJson: true,
     foodsContent: '{ invalid json',
+  });
+}
+
+export function createValidSynonymSetsPackage(): Promise<string> {
+  return createTestPackage({
+    includePackageJson: true,
+    synonymSetsContent: {
+      en: [
+        ['aubergine', 'eggplant'],
+        ['courgette', 'zucchini'],
+      ],
+    },
   });
 }

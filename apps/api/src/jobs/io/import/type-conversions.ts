@@ -2,6 +2,7 @@ import type { AssociatedFoodAttributes, BulkCategoryInput, BulkFoodInput, Locale
 import type { PkgV2Locale } from '@intake24/common/types/package';
 import type { PkgV2Category } from '@intake24/common/types/package/categories';
 import type { PkgV2AssociatedFood, PkgV2Food, PkgV2PortionSizeMethod } from '@intake24/common/types/package/foods';
+import type { PkgV2SynonymSet } from '@intake24/common/types/package/synonym-sets';
 
 import { pkgV2PortionSizeMethodBase } from '@intake24/common/types/package/foods';
 
@@ -100,6 +101,12 @@ export function fromPackageCategory(category: PkgV2Category): BulkCategoryInput 
     attributes: category.attributes,
     parentCategories: category.parentCategories,
     portionSizeMethods: category.portionSize.map(fromPackagePortionSizeMethod),
+  };
+}
+
+export function fromPackageSynonymSet(synonymSet: PkgV2SynonymSet): { synonyms: string } {
+  return {
+    synonyms: synonymSet.join(' '),
   };
 }
 

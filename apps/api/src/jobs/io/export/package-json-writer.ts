@@ -7,6 +7,7 @@ import type { PkgV2Food } from '@intake24/common/types/package/foods';
 import type { PkgV2GuideImage } from '@intake24/common/types/package/guide-image';
 import type { PkgV2ImageMap } from '@intake24/common/types/package/image-map';
 import type { PkgV2Locale } from '@intake24/common/types/package/locale';
+import type { PkgV2SynonymSet } from '@intake24/common/types/package/synonym-sets';
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -14,6 +15,7 @@ import path from 'node:path';
 const PORTION_SIZE_DIRECTORY_NAME = 'portion-size';
 const FOODS_FILE_NAME = 'foods.json';
 const CATEGORIES_FILE_NAME = 'categories.json';
+const SYNONYM_SETS_FILE_NAME = 'synonym-sets.json';
 const AS_SERVED_FILE_NAME = 'as-served.json';
 const IMAGE_MAPS_FILE_NAME = 'image-maps.json';
 const GUIDE_IMAGES_FILE_NAME = 'guide-images.json';
@@ -23,6 +25,7 @@ export class PackageJsonWriter implements PackageWriter {
   private outputPath: string;
   private foodsByLocale: Map<string, PkgV2Food[]> = new Map();
   private categoriesByLocale: Map<string, PkgV2Category[]> = new Map();
+  private synonymSetsByLocale: Map<string, PkgV2SynonymSet[]> = new Map();
   private asServedSets: PkgV2AsServedSet[] = [];
   private imageMaps: PkgV2ImageMap[] = [];
   private guideImages: PkgV2GuideImage[] = [];
@@ -49,6 +52,15 @@ export class PackageJsonWriter implements PackageWriter {
       this.categoriesByLocale.set(localeId, categories);
     }
     categories.push(category);
+  }
+
+  public async writeSynonymSet(localeId: string, synonymSet: PkgV2SynonymSet): Promise<void> {
+    let synonymSets = this.synonymSetsByLocale.get(localeId);
+    if (synonymSets === undefined) {
+      synonymSets = [];
+      this.synonymSetsByLocale.set(localeId, synonymSets);
+    }
+    synonymSets.push(synonymSet);
   }
 
   public async writeLocale(locale: PkgV2Locale): Promise<void> {
@@ -87,6 +99,12 @@ export class PackageJsonWriter implements PackageWriter {
       const categories: Record<string, PkgV2Category[]> = Object.fromEntries(this.categoriesByLocale);
       const filePath = path.join(this.outputPath, CATEGORIES_FILE_NAME);
       await fs.writeFile(filePath, JSON.stringify(categories, null, 2), 'utf-8');
+    }
+
+    if (this.synonymSetsByLocale.size > 0) {
+      const synonymSets: Record<string, PkgV2SynonymSet[]> = Object.fromEntries(this.synonymSetsByLocale);
+      const filePath = path.join(this.outputPath, SYNONYM_SETS_FILE_NAME);
+      await fs.writeFile(filePath, JSON.stringify(synonymSets, null, 2), 'utf-8');
     }
 
     const portionSizeDir = path.join(this.outputPath, PORTION_SIZE_DIRECTORY_NAME);
