@@ -15,6 +15,23 @@ import ExcelJS from 'exceljs';
 
 import { PortionSizeWriter } from './portion-size-sheet';
 
+const FOOD_ACTIONS = ['Retain', 'Delete', 'Amend', 'Add'] as const;
+const FOOD_ACTION_VALIDATION: ExcelJS.DataValidation = {
+  type: 'list',
+  formulae: [`"${FOOD_ACTIONS.join(',')}"`],
+  showErrorMessage: true,
+  errorStyle: 'error',
+  errorTitle: 'Invalid action',
+  error: `Choose one of: ${FOOD_ACTIONS.join(', ')}`,
+};
+const FOOD_ACTION_VALIDATION_RANGE = 'B2:B1048576';
+
+type WorksheetWithDataValidations = ExcelJS.Worksheet & {
+  dataValidations?: {
+    add: (range: string, validation: ExcelJS.DataValidation) => void;
+  };
+};
+
 interface FoodsWorkbook {
   workbook: ExcelJS.stream.xlsx.WorkbookWriter;
   foodsSheet: ExcelJS.Worksheet;
@@ -81,6 +98,14 @@ export class PackageXlsxWriter implements PackageWriter {
 
   private getCategoryDisplayName(category: Pick<BufferedCategoryRecord, 'name' | 'englishName' | 'code'>): string {
     return category.name || category.englishName || category.code;
+  }
+
+  private includeFoodActionColumn(): boolean {
+    return this.exportOptions.options.xlsx?.includeActionColumn === true;
+  }
+
+  private addDataValidation(sheet: ExcelJS.Worksheet, range: string, validation: ExcelJS.DataValidation) {
+    (sheet as WorksheetWithDataValidations).dataValidations?.add(range, validation);
   }
 
   private createAttributesSheet(workbook: ExcelJS.stream.xlsx.WorkbookWriter, codeHeader: string): ExcelJS.Worksheet {
@@ -283,13 +308,24 @@ export class PackageXlsxWriter implements PackageWriter {
     const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({ filename, useStyles: true });
 
     const foodsSheet = workbook.addWorksheet('Foods master list');
-    foodsSheet.columns = [
+    const foodsColumns = [
       { header: 'Code', width: 12 },
       { header: 'Name', width: 120 },
       { header: 'English Name', width: 120 },
       { header: 'Parent Categories', width: 80 },
       { header: 'Thumbnail Path', width: 80 },
     ];
+
+    if (this.includeFoodActionColumn()) {
+      foodsColumns.splice(1, 0, { header: 'Action', width: 14 });
+    }
+
+    foodsSheet.columns = foodsColumns;
+
+    if (this.includeFoodActionColumn()) {
+      this.addDataValidation(foodsSheet, FOOD_ACTION_VALIDATION_RANGE, FOOD_ACTION_VALIDATION);
+    }
+
     const foodsHeaderRow = foodsSheet.getRow(1);
     foodsHeaderRow.font = { bold: true };
     foodsHeaderRow.border = { bottom: { style: 'thin' } };
@@ -504,7 +540,17 @@ export class PackageXlsxWriter implements PackageWriter {
     } = this.getOrCreateFoodsWorkbook(localeId);
 
     const parentCategories = food.parentCategories.join('; ');
-    foodsSheet.addRow([food.code, food.name, food.englishName ?? '', parentCategories, food.thumbnailPath ?? '']).commit();
+    const foodRowValues = [
+      food.code,
+      ...(this.includeFoodActionColumn() ? ['Retain'] : []),
+      food.name,
+      food.englishName ?? '',
+      parentCategories,
+      food.thumbnailPath ?? '',
+    ];
+    const foodRow = foodsSheet.addRow(foodRowValues);
+
+    foodRow.commit();
 
     for (const lang in food.alternativeNames) {
       for (const name of food.alternativeNames[lang]) {
