@@ -16,7 +16,7 @@ import { Job as DbJob } from '@intake24/db';
 import BaseJob from '../job';
 import { fromPackageCategory, fromPackageFood, fromPackageLocale, fromPackageSynonymSet } from './import/type-conversions';
 import { getVerifiedOutputPath } from './import/utils';
-import { checkEditFoodListPermissions, checkGlobalLocalePermissions } from './permission-checks';
+import { checkGlobalLocalePermissions, checkImportLocalePermissions } from './permission-checks';
 
 const BATCH_SIZE = 200;
 
@@ -189,7 +189,7 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
       }
     }
 
-    await checkEditFoodListPermissions(this.globalAclService, this.userId, localesWithFoodListChanges);
+    await checkImportLocalePermissions(this.globalAclService, this.userId, localesWithFoodListChanges);
 
     await this.kyselyDb.system.transaction().execute(async (systemTransaction) => {
       await this.kyselyDb.foods.transaction().execute(async (foodsTransaction) => {
