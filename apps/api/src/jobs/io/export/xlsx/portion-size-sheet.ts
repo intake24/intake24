@@ -5,6 +5,8 @@ import type { PkgV2Food, PkgV2PortionSizeMethod, PkgV2PortionSizeMethodType } fr
 import ExcelJS from 'exceljs';
 import { groupBy, max } from 'lodash-es';
 
+import { XLSX_COLUMN_NAMES, xlsxBoolean } from '../../xlsx-format-constants';
+
 interface PortionSizeColumn {
   header: string;
   width: number;
@@ -19,84 +21,100 @@ interface PortionSizeSection {
 const portionSizeSections: PortionSizeSection[] = [
   {
     method: 'as-served',
-    overallHeader: 'As served',
+    overallHeader: XLSX_COLUMN_NAMES.portionSize.asServed,
     columns: [
-      { header: 'Serving image set ID', width: 25 },
-      { header: 'Leftovers image set ID', width: 25 },
-      { header: 'Conversion factor', width: 18 },
-      { header: 'Show labels', width: 18 },
-      { header: 'Multiple option', width: 18 },
-      { header: 'Pathways', width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.asServedServingImageSetId, width: 25 },
+      { header: XLSX_COLUMN_NAMES.portionSize.asServedLeftoversImageSetId, width: 25 },
+      { header: XLSX_COLUMN_NAMES.portionSize.asServedDescription, width: 26 },
+      { header: XLSX_COLUMN_NAMES.portionSize.asServedDisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.asServedConversionFactor, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.asServedShowLabels, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.asServedMultipleOption, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.asServedPathways, width: 18 },
     ],
   },
   {
     method: 'auto',
-    overallHeader: 'Auto',
+    overallHeader: XLSX_COLUMN_NAMES.portionSize.auto,
     columns: [
-      { header: 'Conversion factor', width: 18 },
-      { header: 'Mode', width: 18 },
-      { header: 'Value', width: 18 },
-      { header: 'Pathways', width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.autoDescription, width: 26 },
+      { header: XLSX_COLUMN_NAMES.portionSize.autoDisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.autoConversionFactor, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.autoMode, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.autoValue, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.autoPathways, width: 18 },
     ],
   },
   {
     method: 'guide-image',
-    overallHeader: 'Guide image',
+    overallHeader: XLSX_COLUMN_NAMES.portionSize.guideImage,
     columns: [
-      { header: 'Guide image ID', width: 25 },
-      { header: 'Conversion factor', width: 18 },
-      { header: 'Show labels', width: 18 },
-      { header: 'Visibility', width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.guideImageId, width: 25 },
+      { header: XLSX_COLUMN_NAMES.portionSize.guideImageDescription, width: 26 },
+      { header: XLSX_COLUMN_NAMES.portionSize.guideImageDisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.guideImageConversionFactor, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.guideImageShowLabels, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.guideImageVisibility, width: 18 },
     ],
   },
   {
     method: 'drink-scale',
-    overallHeader: 'Drink scale',
+    overallHeader: XLSX_COLUMN_NAMES.portionSize.drinkScale,
     columns: [
-      { header: 'Drinkware set ID', width: 25 },
-      { header: 'Conversion factor', width: 18 },
-      { header: 'Show labels', width: 18 },
-      { header: 'Multiple option', width: 18 },
-      { header: 'Initial fill level', width: 18 },
-      { header: 'Skip fill level', width: 18 },
-      { header: 'Pathways', width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScaleDrinkwareSetId, width: 25 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScaleDescription, width: 26 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScaleDisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScaleConversionFactor, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScaleShowLabels, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScaleMultipleOption, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScaleInitialFillLevel, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScaleSkipFillLevel, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.drinkScalePathways, width: 18 },
     ],
   },
   {
     method: 'cereal',
-    overallHeader: 'Cereals',
+    overallHeader: XLSX_COLUMN_NAMES.portionSize.cereals,
     columns: [
-      { header: 'Cereal type', width: 25 },
-      { header: 'Conversion factor', width: 18 },
-      { header: 'Show labels', width: 18 },
-      { header: 'Pathways', width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.cerealType, width: 25 },
+      { header: XLSX_COLUMN_NAMES.portionSize.cerealDescription, width: 26 },
+      { header: XLSX_COLUMN_NAMES.portionSize.cerealDisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.cerealConversionFactor, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.cerealShowLabels, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.cerealPathways, width: 18 },
     ],
   },
   {
     method: 'milk-on-cereal',
-    overallHeader: 'Milk on cereal',
+    overallHeader: XLSX_COLUMN_NAMES.portionSize.milkOnCereal,
     columns: [
-      { header: 'Conversion factor', width: 18 },
-      { header: 'Show labels', width: 18 },
-      { header: 'Pathways', width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.milkOnCerealDescription, width: 26 },
+      { header: XLSX_COLUMN_NAMES.portionSize.milkOnCerealDisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.milkOnCerealConversionFactor, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.milkOnCerealShowLabels, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.milkOnCerealPathways, width: 18 },
     ],
   },
   {
     method: 'pizza',
-    overallHeader: 'Pizza',
+    overallHeader: XLSX_COLUMN_NAMES.portionSize.pizza,
     columns: [
-      { header: 'Conversion factor', width: 18 },
-      { header: 'Show labels', width: 18 },
-      { header: 'Pathways', width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaDescription, width: 26 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaDisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaConversionFactor, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaShowLabels, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaPathways, width: 18 },
     ],
   },
   {
     method: 'pizza-v2',
-    overallHeader: 'Pizza (Version 2)',
+    overallHeader: XLSX_COLUMN_NAMES.portionSize.pizzaV2,
     columns: [
-      { header: 'Conversion factor', width: 18 },
-      { header: 'Show labels', width: 18 },
-      { header: 'Pathways', width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaV2Description, width: 26 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaV2DisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaV2ConversionFactor, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaV2ShowLabels, width: 18 },
+      { header: XLSX_COLUMN_NAMES.portionSize.pizzaV2Pathways, width: 18 },
     ],
   },
 ];
@@ -126,8 +144,10 @@ export class PortionSizeWriter {
     this.fixedColumns = [
       { header: codeHeader, width: 12 },
       { header: nameHeader, width: 70 },
-      { header: '"Enter weight" option', width: 20 },
-      { header: '"Don\'t know" option', width: 23 },
+      { header: XLSX_COLUMN_NAMES.portionSize.enterWeightOption, width: 20 },
+      { header: XLSX_COLUMN_NAMES.portionSize.enterWeightDisplayOrder, width: 14 },
+      { header: XLSX_COLUMN_NAMES.portionSize.dontKnowOption, width: 23 },
+      { header: XLSX_COLUMN_NAMES.portionSize.dontKnowDisplayOrder, width: 14 },
     ];
 
     function sectionColumns(section: PortionSizeSection): Partial<ExcelJS.Column>[] {
@@ -145,7 +165,7 @@ export class PortionSizeWriter {
     ];
 
     const firstHeaderRow = worksheet.getRow(1);
-    const secondHeaderRow = worksheet.addRow([...this.fixedColumns.map(col => col.header), ...portionSizeSections.flatMap(section => section.columns.map(col => col.header)), 'Color group']);
+    const secondHeaderRow = worksheet.addRow([...this.fixedColumns.map(col => col.header), ...portionSizeSections.flatMap(section => section.columns.map(col => col.header)), XLSX_COLUMN_NAMES.portionSize.colorGroup]);
     secondHeaderRow.font = { bold: true };
     secondHeaderRow.border = { bottom: { style: 'thin' } };
 
@@ -196,18 +216,25 @@ export class PortionSizeWriter {
   }
 
   private getParameterValues(psm: PkgV2PortionSizeMethod): any[] {
+    // psm.orderBy is normalised to a 1-based display order by the package writer before export
+    const displayOrder = Number(psm.orderBy);
+
     switch (psm.method) {
       case 'as-served':
         return [
           psm.servingImageSet,
           psm.leftoversImageSet,
+          psm.description,
+          displayOrder,
           psm.conversionFactor,
-          psm.labels,
-          psm.multiple,
+          xlsxBoolean(psm.labels),
+          xlsxBoolean(psm.multiple),
           psm.pathways.join('; '),
         ];
       case 'auto':
         return [
+          psm.description,
+          displayOrder,
           psm.conversionFactor,
           psm.mode,
           psm.value,
@@ -216,43 +243,55 @@ export class PortionSizeWriter {
       case 'guide-image':
         return [
           psm.guideImageId,
+          psm.description,
+          displayOrder,
           psm.conversionFactor,
-          psm.labels,
+          xlsxBoolean(psm.labels),
           psm.pathways.join('; '),
         ];
       case 'drink-scale':
         return [
           psm.drinkwareId,
+          psm.description,
+          displayOrder,
           psm.conversionFactor,
-          psm.labels,
-          psm.multiple,
+          xlsxBoolean(psm.labels),
+          xlsxBoolean(psm.multiple),
           psm.initialFillLevel,
-          psm.skipFillLevel,
+          xlsxBoolean(psm.skipFillLevel),
           psm.pathways.join('; '),
         ];
       case 'cereal':
         return [
           psm.type,
+          psm.description,
+          displayOrder,
           psm.conversionFactor,
-          psm.labels,
+          xlsxBoolean(psm.labels),
           psm.pathways.join('; '),
         ];
       case 'milk-on-cereal':
         return [
+          psm.description,
+          displayOrder,
           psm.conversionFactor,
-          psm.labels,
+          xlsxBoolean(psm.labels),
           psm.pathways.join('; '),
         ];
       case 'pizza':
         return [
+          psm.description,
+          displayOrder,
           psm.conversionFactor,
-          psm.labels,
+          xlsxBoolean(psm.labels),
           psm.pathways.join('; '),
         ];
       case 'pizza-v2':
         return [
+          psm.description,
+          displayOrder,
           psm.conversionFactor,
-          psm.labels,
+          xlsxBoolean(psm.labels),
           psm.pathways.join('; '),
         ];
 
@@ -281,13 +320,18 @@ export class PortionSizeWriter {
     const groupedPsm = groupBy(item.portionSize, psm => psm.method);
     const rowCount = max(Object.entries(groupedPsm).map(([_, v]) => v.length)) || 0;
 
+    const directWeightPsm = groupedPsm['direct-weight']?.[0];
+    const unknownPsm = groupedPsm.unknown?.[0];
+
     for (let i = 0; i < rowCount; ++i) {
       const rowValues: any[]
         = [
           item.code,
           '',
-          groupedPsm['direct-weight'] !== undefined,
-          groupedPsm.unknown !== undefined,
+          xlsxBoolean(directWeightPsm !== undefined),
+          directWeightPsm ? Number(directWeightPsm.orderBy) : '',
+          xlsxBoolean(unknownPsm !== undefined),
+          unknownPsm ? Number(unknownPsm.orderBy) : '',
           ...this.getParameterCellValues(groupedPsm, i),
           '',
         ];

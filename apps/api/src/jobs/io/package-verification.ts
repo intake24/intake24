@@ -18,7 +18,7 @@ import {
   AlbanePackageHandler,
   Intake24PackageHandler,
 } from './package-handlers';
-import { checkEditFoodListPermissions } from './permission-checks';
+import { checkImportLocalePermissions } from './permission-checks';
 
 export default class PackageVerification extends BaseJob<'PackageVerification', PackageContentsSummary> {
   readonly name = 'PackageVerification';
@@ -105,10 +105,7 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
 
       const result = await handler.verify(uploadedPath);
 
-      const targetLocales = result.summary.targetLocales;
-      if (targetLocales.length > 0) {
-        await checkEditFoodListPermissions(this.globalAclService, this.userId, new Set(targetLocales));
-      }
+      await checkImportLocalePermissions(this.globalAclService, this.userId, new Set(result.summary.targetLocales));
 
       return result.summary;
     }

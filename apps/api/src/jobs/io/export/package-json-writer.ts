@@ -83,7 +83,7 @@ export class PackageJsonWriter implements PackageWriter {
     this.drinkwareSets.push(drinkwareSet);
   }
 
-  public async finish(): Promise<void> {
+  public async finalise(): Promise<undefined> {
     if (this.locales.length > 0) {
       const filePath = path.join(this.outputPath, 'locales.json');
       await fs.writeFile(filePath, JSON.stringify(this.locales, null, 2), 'utf-8');
@@ -133,6 +133,8 @@ export class PackageJsonWriter implements PackageWriter {
       const filePath = path.join(portionSizeDir, DRINKWARE_SETS_FILE_NAME);
       await fs.writeFile(filePath, JSON.stringify(this.drinkwareSets, null, 2), 'utf-8');
     }
+
+    return undefined;
   }
 }
 
