@@ -684,7 +684,7 @@ async function verifyPackage() {
             selectedFiles.value = [];
             if (packageSummary.files) {
               packageFileTypes.filter(k => packageSummary.files[k]).forEach((k) => {
-                conflictStrategies.value[k] = k === 'asServedSets' ? 'skip' : 'overwrite';
+                conflictStrategies.value[k] = 'overwrite';
                 selectedFiles.value.push(k);
               });
             }
@@ -751,7 +751,7 @@ async function startUpload() {
         const parts = upload.url.split('/');
         const fileId = parts.at(-1);
 
-        uploadedFileId.value = fileId;
+        uploadedFileId.value = fileId ?? null;
 
         await verifyPackage();
       },

@@ -57,6 +57,40 @@ export async function checkEditFoodListPermissions(
   return checkLocalePermissions(globalAclService, userId, localeIds, 'food-list:edit');
 }
 
+/**
+ * Check that the user is allowed to import the given target locales.
+ *
+ * Locales that already exist in the database require the per-locale
+ * `food-list:edit` permission. Locales that do not exist yet will be created by
+ * the import, so there is no record to check edit permissions against - those
+ * require the global locale-create permission instead.
+ */
+export async function checkImportLocalePermissions(
+  globalAclService: GlobalACLService,
+  userId: string,
+  localeIds: Set<string>,
+): Promise<void> {
+  if (localeIds.size === 0)
+    return;
+
+  const existingLocales = await SystemLocale.findAll({
+    attributes: ['code'],
+    where: { code: [...localeIds] },
+  });
+
+  const existingLocaleIds = new Set(existingLocales.map(locale => locale.code));
+  const newLocaleIds = new Set([...localeIds].filter(id => !existingLocaleIds.has(id)));
+
+  await Promise.all([
+    existingLocaleIds.size > 0
+      ? checkLocalePermissions(globalAclService, userId, existingLocaleIds, 'food-list:edit')
+      : undefined,
+    newLocaleIds.size > 0
+      ? checkGlobalLocalePermissions(globalAclService, userId, true)
+      : undefined,
+  ]);
+}
+
 export async function checkGlobalLocalePermissions(
   globalAclService: GlobalACLService,
   userId: string,
