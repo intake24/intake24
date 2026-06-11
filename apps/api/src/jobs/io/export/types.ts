@@ -18,7 +18,7 @@ export interface PackageWriter
   writeImageMap: (imageMap: PkgV2ImageMap) => Promise<void>;
   writeGuideImage: (guideImage: PkgV2GuideImage) => Promise<void>;
   writeDrinkwareSet: (drinkwareSet: PkgV2DrinkwareSet) => Promise<void>;
-  finish: () => Promise<void>;
+  finalise: () => Promise<Record<string, unknown> | undefined>;
 }
 
 export type PackageWriterFactory = (path: string, options: PackageExportOptions) => Promise<PackageWriter>;

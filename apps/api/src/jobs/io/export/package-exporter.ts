@@ -933,11 +933,12 @@ export class PackageExporter {
       await this.updateGlobalProgress('portionSizeMethods', 1);
     }
 
-    await this.packageWriter.finish();
+    const packageMeta = await this.packageWriter.finalise();
 
     const packageJson = {
       version: '2.0',
       format: this.exportOptions.format,
+      ...packageMeta,
     };
 
     await fs.writeFile(path.join(this.outputPath, 'package.json'), JSON.stringify(packageJson, null, 2));
