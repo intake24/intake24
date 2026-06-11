@@ -152,6 +152,10 @@
       "portionSizeMethods": "Portion size data",
       "portionSizeImages": "Portion size images"
     },
+    "xlsxOptions": {
+      "_": "Export options",
+      "includeActionColumn": "Include \"Action\" column"
+    },
     "portionSizeImagesWarning": "This will include original full-resolution portion size images, which may result in a very large download (several gigabytes)."
   }
 }
