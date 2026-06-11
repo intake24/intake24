@@ -24,6 +24,9 @@ export const packageExportOptions = z.object({
   locales: z.array(z.string()).nonempty(),
   options: z.object({
     include: z.array(z.enum(packageIncludeOptions)).nonempty(),
+    xlsx: z.object({
+      includeActionColumn: z.boolean().optional(),
+    }).optional(),
   }),
 });
 
