@@ -151,6 +151,7 @@ import type { RouteLocationRaw } from 'vue-router';
 import type { Dictionary } from '@intake24/common/types';
 
 import { groupBy } from 'lodash-es';
+import { storeToRefs } from 'pinia';
 import pluralize from 'pluralize';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -178,6 +179,7 @@ const http = useHttp();
 const vI18n = useLocale();
 const display = useDisplay();
 const entry = useEntry();
+const auth = useAuth();
 const resource = useResource();
 const route = useRoute();
 const router = useRouter();
@@ -191,9 +193,8 @@ const sidebar = ref(display.lgAndUp);
 const resources = groupBy(defaultResources, 'group');
 
 const app = computed(() => useApp().app);
-const loggedIn = computed(() => useAuth().loggedIn);
-const isVerified = computed(() => user.isVerified);
-const isAalSatisfied = computed(() => user.isAalSatisfied);
+const { loggedIn } = storeToRefs(auth);
+const { isAalSatisfied, isVerified } = storeToRefs(user);
 
 const title = computed(() => {
   const { meta: { title } = {} } = route;
@@ -277,7 +278,7 @@ function toggleSidebar() {
 };
 
 async function logout() {
-  await useAuth().logout(true);
+  await auth.logout(true);
   await router.push({ name: 'login' });
 };
 
@@ -293,7 +294,7 @@ onMounted(async () => {
     if ([state, code].every(item => typeof item === 'string' && item.length))
       return;
 
-    await useAuth().refresh();
+    await auth.refresh();
     await router.push({ name: 'dashboard' });
   }
 

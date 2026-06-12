@@ -34,7 +34,7 @@
     "title": "Authentification à facteurs multiples",
     "enable": "Permettre l'authentification multifacteurs",
     "disable": "Desactiver l'authentification multifacteurs",
-    "disabled": "L'authentification multifacteurs est desactivée, veuillez ajouter un appareil pour l'activer.",
+    "disabled": "Ajoutez au moins {count} méthodes d'authentification pour activer l'authentification multifactorielle.",
     "devices": {
       "_": "Appareil",
       "title": "Appareils",

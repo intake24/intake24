@@ -50,6 +50,7 @@
                 <v-otp-input
                   v-model="otp.data.value.token"
                   autocomplete="off"
+                  autofocus
                   class="py-0"
                   color="white"
                   :error-messages="otp.errors.get('token')"

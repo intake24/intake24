@@ -31,12 +31,12 @@ export function device() {
         user: { userId },
       } = req.scope.cradle;
 
-      const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
-      if (!devices.length)
-        throw new NotFoundError();
+      if (!status && mfa.mode === 'required')
+        throw new ForbiddenError('Multi-factor authentication is required for your account.');
 
-      if (mfa.mode === 'required' && !status)
-        throw new ForbiddenError();
+      const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
+      if (status && devices.length < 2)
+        throw new ForbiddenError('At least two authentication methods are required to enable multi-factor authentication.');
 
       await User.update({ multiFactorAuthentication: status }, { where: { id: userId } });
 

@@ -33,7 +33,7 @@
           Multi-factor authentication (MFA) is not yet enabled for your account.
         </p>
         <p class="text-body-medium">
-          Navigate to your user profile and enable MFA by adding at least one authentication device.
+          Navigate to your user profile and enable MFA by adding at least two authentication methods.
           More information about MFA and how to set it up can be found in
           <a
             class="text-decoration-none text-primary-darken-2 font-weight-bold"

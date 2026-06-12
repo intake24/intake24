@@ -2,24 +2,19 @@
   <v-list>
     <v-list-subheader>{{ $t('user.mfa.title') }}</v-list-subheader>
   </v-list>
-  <v-card-text class="d-flex flex-row align-center justify-space-between">
+  <v-card-text class="d-flex">
+    <v-alert v-if="disabled" type="info">
+      {{ $t('user.mfa.disabled', { count: MIN_DEVICES }) }}
+    </v-alert>
     <v-switch
+      v-else
       v-model="status"
       class="my-auto"
-      :disabled="!devices.length"
       hide-details="auto"
       :label="$t(`user.mfa.${status ? 'disable' : 'enable'}`)"
       name="status"
       @update:model-value="toggle"
     />
-    <v-alert
-      v-if="!devices.length"
-      class="my-auto ml-4"
-      density="compact"
-      type="info"
-    >
-      {{ $t('user.mfa.disabled') }}
-    </v-alert>
   </v-card-text>
   <v-toolbar flat>
     <v-toolbar-title>
@@ -29,7 +24,6 @@
     <v-dialog v-model="dialog" :fullscreen="$vuetify.display.mobile" max-width="600px">
       <template #activator="{ props }">
         <v-btn
-
           color="primary"
           rounded
           :title="$t('user.mfa.devices.add')"
@@ -124,7 +118,7 @@ import type { MFAProvider } from '@intake24/common/security';
 import type { MFADeviceResponse, MFADevicesResponse } from '@intake24/common/types/http/admin';
 
 import { HttpStatusCode, isAxiosError } from 'axios';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { useHttp } from '@intake24/admin/services';
@@ -142,6 +136,8 @@ defineOptions({
   components: { Code, Duo, Fido, Otp },
 });
 
+const MIN_DEVICES = 2;
+
 const { i18n: { t } } = useI18n();
 const http = useHttp();
 const route = useRoute();
@@ -153,6 +149,7 @@ const tab = ref<MFAProvider>(mfaProviders[0]);
 const status = ref(false);
 const devices = ref<MFADeviceResponse[]>([]);
 const providers = ref(mfaProviders);
+const disabled = computed(() => devices.value.length < MIN_DEVICES);
 
 onMounted(async () => {
   const { data } = await http.get<MFADevicesResponse>('admin/user/mfa');
