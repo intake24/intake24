@@ -15,8 +15,7 @@
     <v-dialog
       max-width="450"
       :model-value="!!hint && props.mode === 'dialog'"
-      @keydown.enter="confirm"
-      @keydown.esc="tryAgain"
+      @keydown.enter.esc="keydown"
     >
       <v-card>
         <v-card-title class="font-weight-medium text-headline-large text-uppercase text-center">
@@ -150,6 +149,13 @@ function confirm() {
 function tryAgain() {
   hint.value = null;
   emit('tryAgain');
+}
+
+function keydown(event: KeyboardEvent) {
+  if (event.key === 'Enter')
+    confirm();
+  else if (event.key === 'Escape')
+    tryAgain();
 }
 
 if (props.activator === 'watch') {

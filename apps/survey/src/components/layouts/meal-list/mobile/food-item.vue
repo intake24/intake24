@@ -97,13 +97,13 @@ export default defineComponent({
     },
   },
 
-  emits: ['action', 'update:context-id'],
+  emits: ['action', 'update:contextId'],
 
   setup(props, ctx) {
     const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels } = useFoodItem(props, ctx);
 
     const updateContextId = (id: string) => {
-      ctx.emit('update:context-id', id);
+      ctx.emit('update:contextId', id);
     };
 
     return {
