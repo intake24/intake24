@@ -19,9 +19,9 @@
   "devDependencies": {
     "@openapi-contrib/json-schema-to-openapi-schema": "^4.3.2",
     "@ts-rest/open-api": "3.53.0-rc.1",
-    "@types/node": "^24.12.4",
+    "@types/node": "^24.13.2",
     "typescript": "^6.0.3",
-    "unrun": "^0.3.0",
+    "unrun": "^0.3.1",
     "vitepress": "2.0.0-alpha.17",
     "zod": "^4.4.3"
   }

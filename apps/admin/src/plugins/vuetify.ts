@@ -8,8 +8,6 @@ import 'vuetify/styles';
 import { VAvatar } from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { aliases, fa } from 'vuetify/iconsets/fa';
-import { VDateInput } from 'vuetify/labs/VDateInput';
-import { VStepperVertical, VStepperVerticalItem } from 'vuetify/labs/VStepperVertical';
 
 import { colors } from '@intake24/common/theme';
 
@@ -21,11 +19,6 @@ const resourceIcons = resources.reduce<Partial<IconAliases>>((acc, resource) => 
 }, {});
 
 export default createVuetify({
-  components: {
-    VDateInput,
-    VStepperVertical,
-    VStepperVerticalItem,
-  },
   directives,
   aliases: {
     VDragAndDropHandle: VAvatar,
