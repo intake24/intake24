@@ -68,7 +68,7 @@
     "typescript": "^6.0.3",
     "unplugin-icons": "^23.0.1",
     "unplugin-vue-components": "^32.1.0",
-    "vite": "^7.3.5",
+    "vite": "^8.0.16",
     "vite-bundle-analyzer": "^1.3.8",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-mkcert": "^2.1.0",
