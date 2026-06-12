@@ -111,9 +111,9 @@
                 hide-details="auto"
                 item-title="englishName"
                 item-value="code"
-                :items="languages"
+                :items="availableLanguages"
                 :label="$t('user.languages._')"
-                :model-value="language"
+                :model-value="lang"
                 variant="outlined"
                 @update:model-value="updateLanguage"
               >
@@ -144,7 +144,7 @@
 <script lang="ts" setup>
 import axios, { HttpStatusCode } from 'axios';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 import { UserMfa, UserPassword } from '@intake24/admin/components/user';
 import { useApp, useMessages, useUser } from '@intake24/admin/stores';
@@ -158,15 +158,13 @@ const { i18n: { t } } = useI18n();
 const app = useApp();
 const user = useUser();
 
-const language = computed(() => app.lang);
-const languages = computed(() => app.availableLanguages);
-
+const { lang, availableLanguages } = storeToRefs(app);
 const { profile, permissions, roles } = storeToRefs(user);
 
 const errors = ref(new Errors());
 
 async function updateLanguage(languageId: string) {
-  useApp().setLanguage(languageId);
+  app.setLanguage(languageId);
 }
 
 async function updateProfile() {

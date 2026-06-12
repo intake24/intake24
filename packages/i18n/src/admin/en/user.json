@@ -35,7 +35,7 @@
     "title": "Multi-factor authentication",
     "enable": "Enable multi-factor authentication",
     "disable": "Disable multi-factor authentication",
-    "disabled": "Multi-factor authentication is disabled, add a device to enable it.",
+    "disabled": "Add at least {count} authentication methods to enable multi-factor authentication.",
     "devices": {
       "_": "Device",
       "title": "Devices",
