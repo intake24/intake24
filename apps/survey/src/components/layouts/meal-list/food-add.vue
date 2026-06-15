@@ -1,5 +1,10 @@
 <template>
-  <v-dialog v-if="mealTimePrompt" v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600">
+  <v-dialog
+    v-if="mealTimePrompt"
+    v-model="dialog"
+    :fullscreen="$vuetify.display.smAndDown"
+    max-width="600"
+  >
     <template #activator="{ props }">
       <slot name="activator" v-bind="{ props }" />
     </template>
@@ -7,44 +12,48 @@
       <v-toolbar color="primary" variant="tonal">
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
-          {{ $t('recall.menu.food.add') }}
+          {{ $t('prompts.foodAdd.name') }}
         </v-toolbar-title>
       </v-toolbar>
       <v-divider />
       <v-stepper-vertical v-model="panel" flat>
         <v-stepper-vertical-item
           :complete="mealStepComplete"
-          subtitle="Select meal or specify name"
-          title="When did you have it?"
+          editable
+          :title="$t('prompts.foodAdd.meal')"
           :value="1"
         >
-          <v-combobox
-            v-model="meal"
-            autocomplete="off"
-            autofocus
-            clearable
-            hide-details="auto"
-            :items="meals"
-            outlined
-            return-object
-          >
-            <template #item="{ item, props }">
-              <v-list-item v-bind="props" :title="item.name.en">
-                <template #append>
-                  <v-chip
-                    v-if="item.time"
-                    color="primary"
-                    variant="tonal"
-                  >
-                    {{ fromTime(item.time) }}
-                  </v-chip>
-                </template>
-              </v-list-item>
-            </template>
-            <template #selection="{ item }">
-              {{ typeof item === 'string' ? item : item.name.en }}
-            </template>
-          </v-combobox>
+          <v-form ref="form" @submit.prevent>
+            <v-combobox
+              v-model="meal"
+              autocomplete="off"
+              autofocus
+              clearable
+              :items="meals"
+              outlined
+              return-object
+              :rules="[inputTooLog(64)]"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.name.en">
+                  <template #append>
+                    <v-chip
+                      v-if="item.time"
+                      color="primary"
+                      variant="tonal"
+                    >
+                      {{ fromTime(item.time) }}
+                    </v-chip>
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <v-chip class="font-weight-medium" color="primary">
+                  {{ typeof item === 'string' ? item : item.name.en }}
+                </v-chip>
+              </template>
+            </v-combobox>
+          </v-form>
           <v-expand-transition>
             <component
               :is="`time-picker-${mealTimePrompt.ui}`"
@@ -55,13 +64,16 @@
             />
           </v-expand-transition>
           <template #next="{ next }">
-            <v-btn color="primary" :disabled="!mealStepComplete" @click="next" />
+            <v-btn color="primary" :disabled="!mealStepComplete" @click="next">
+              {{ $t('common.action.continue') }}
+            </v-btn>
           </template>
           <template #prev />
         </v-stepper-vertical-item>
         <v-stepper-vertical-item
           :complete="foodStepComplete"
-          title="What did you have?"
+          editable
+          :title="$t('prompts.foodAdd.food')"
           :value="2"
         >
           <div class="d-flex">
@@ -74,11 +86,10 @@
                 <v-icon
                   class="px-2"
                   :disabled="!foodInput.length"
+                  icon="fas fa-turn-down fa-rotate-90"
                   :title="$t('recall.menu.food.add')"
                   @click="moveToList"
-                >
-                  fas fa-turn-down fa-rotate-90
-                </v-icon>
+                />
               </template>
             </v-text-field>
             <v-btn
@@ -115,14 +126,10 @@
           </v-card>
           <template #next>
             <v-btn color="primary" :disabled="!foodStepComplete" @click="confirm">
-              confirm
+              {{ $t('common.action.continue') }}
             </v-btn>
           </template>
-          <template #prev="{ prev }">
-            <v-btn variant="plain" @click="prev">
-              previous
-            </v-btn>
-          </template>
+          <template #prev />
         </v-stepper-vertical-item>
       </v-stepper-vertical>
     </v-card>
@@ -132,13 +139,15 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type { MealState } from '@intake24/common/surveys';
+import type { FoodCreationState, MealState } from '@intake24/common/surveys';
 
 import { computed, ref, watch } from 'vue';
 
 import { fromTime, toTime } from '@intake24/common/util';
 import { timePickers } from '@intake24/survey/components/elements';
+import { useForm } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
+import { useI18n } from '@intake24/ui';
 
 defineOptions({
   name: 'FoodAdd',
@@ -154,11 +163,12 @@ const props = defineProps({
 
 const emit = defineEmits(['action']);
 
+const { i18n: { locale } } = useI18n();
 const survey = useSurvey();
+const { form, inputTooLog } = useForm();
 
-const mealTimePrompt = computed(() => {
-  return survey.parameters?.surveyScheme.prompts.meals.preFoods.find(prompt => prompt.component === 'meal-time-prompt');
-});
+const mealTimePrompt = computed(() =>
+  survey.parameters?.surveyScheme.prompts.meals.preFoods.find(prompt => prompt.component === 'meal-time-prompt'));
 
 const dialog = ref(false);
 const meal = ref<MealState | string | undefined>(undefined);
@@ -167,7 +177,7 @@ const foodItems = ref<string[]>([]);
 const foodInput = ref('');
 const panel = ref<number | undefined>();
 
-const mealStepComplete = computed(() => !!meal.value);
+const mealStepComplete = computed(() => !!(form.value === null || form.value.isValid) && !!meal.value);
 const foods = computed(() => [...foodItems.value, foodInput.value.trim()].filter(Boolean));
 const foodStepComplete = computed(() => !!foods.value.length);
 
@@ -185,10 +195,14 @@ function confirm() {
   if (!isComplete.value)
     return;
 
-  emit('action', 'addFood', typeof meal.value === 'string' ? undefined : meal.value?.id, {
+  const id = typeof meal.value === 'string' ? undefined : meal.value!.id;
+  const foodCreationState: FoodCreationState = {
+    name: typeof meal.value === 'string' ? { en: meal.value.trim(), [locale.value]: meal.value.trim() } : meal.value!.name,
     time: toTime(time.value),
     foods: foods.value,
-  });
+  };
+
+  emit('action', 'addFood', id, foodCreationState);
   close();
 }
 
@@ -198,7 +212,7 @@ function remove(idx: number) {
 
 function reset() {
   meal.value = undefined;
-  time.value = '12:00';
+  time.value = '8:00';
   foodItems.value = [];
   foodInput.value = '';
   panel.value = undefined;

@@ -4,8 +4,7 @@ import type {
   GenericActionType,
   MealActionType,
 } from '@intake24/common/prompts';
-import type { FreeTextFood, MealCreationState, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
-import type { Time } from '@intake24/common/util';
+import type { FreeTextFood, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 
 import { storeToRefs } from 'pinia';
@@ -13,7 +12,7 @@ import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef, u
 import { useRoute, useRouter } from 'vue-router';
 import { useGoTo } from 'vuetify';
 
-import { isSelectionEqual } from '@intake24/common/surveys';
+import { foodCreationState, isSelectionEqual, mealCreationState } from '@intake24/common/surveys';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import {
@@ -276,15 +275,14 @@ export function useRecall() {
           return;
         }
 
-        // TODO: validate params properly
-        if (typeof params !== 'object' || params === null || !('time' in params) || !('foods' in params)) {
-          console.warn('Recall: Invalid parameters for addFood action. Name is required.', params);
+        const { data, success } = foodCreationState.safeParse(params);
+        if (!success) {
+          console.warn('Recall: Invalid parameters for addFood action.', params);
           return;
         }
 
-        const payload = params as { time: Time; foods: string[] };
-
-        const foods: FreeTextFood[] = payload.foods.map(item => ({
+        const { name, time } = data;
+        const foods: FreeTextFood[] = data.foods.map(item => ({
           type: 'free-text',
           id: getEntityId(),
           description: item,
@@ -297,35 +295,31 @@ export function useRecall() {
           const meal = meals.value.find(meal => meal.id === id);
           if (!meal) {
             console.warn(`Meal with id ${id} not found.`);
-            break;
+            return;
           }
 
           survey.addFood({ mealId: id, food: foods });
         }
         else {
-          survey.addMeal({
-            name: { en: 'custom', [locale.value]: 'custom' },
-            time: payload.time,
-            flags: ['free-entry-complete'],
-            foods,
-          }, locale.value);
+          survey.addMeal({ name, time, flags: ['free-entry-complete'], foods }, locale.value);
         }
 
         await nextPrompt();
         break;
       }
-      case 'addMeal':
-        // TODO: validate params properly
-        if (typeof params === 'object' && params !== null && Object.keys(params).length) {
-          pushFullHistoryEntry('Add meal');
-          const { name, time, flags } = params as MealCreationState;
-          survey.addMeal({ name, time, flags }, locale.value);
-          await nextPrompt();
-        }
-        else {
+      case 'addMeal': {
+        const { data, success } = mealCreationState.safeParse(params);
+        if (!success) {
           showSurveyPrompt('preMeals', 'meal-add-prompt');
+          return;
         }
+
+        pushFullHistoryEntry('Add meal');
+        const { name, time, flags } = data;
+        survey.addMeal({ name, time, flags }, locale.value);
+        await nextPrompt();
         break;
+      }
     }
   };
 
