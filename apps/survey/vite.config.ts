@@ -53,6 +53,8 @@ export default defineConfig(({ mode }) => {
   const vueDevTools = !!(VUE_DEV_TOOLS === 'true');
   const analyzeBundle = !!(ANALYZE_BUNDLE === 'true');
 
+  const noOp = fileURLToPath(new URL('./src/no-op.ts', import.meta.url));
+
   return {
     resolve: {
       alias: {
@@ -60,6 +62,11 @@ export default defineConfig(({ mode }) => {
         '@intake24/common': fileURLToPath(new URL('../../packages/common/src', import.meta.url)),
         '@intake24/i18n': fileURLToPath(new URL('../../packages/i18n/src', import.meta.url)),
         '@intake24/ui': fileURLToPath(new URL('../../packages/ui/src', import.meta.url)),
+        // workaround sanitize-html dependency which imports fs, url and path modules
+        fs: noOp,
+        url: noOp,
+        path: noOp,
+        'source-map-js': noOp,
       },
     },
     base,
