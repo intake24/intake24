@@ -1,0 +1,122 @@
+{
+  "_": "Recordatório",
+  "info": "Informação do recordatório",
+  "none": "Nenhum recordatório em curso de momento.",
+  "startedAt": "Recordatório iniciado às: {startedAt}.",
+  "finishedAt": "Recordatório concluído às: {finishedAt}.",
+  "submittedAt": "Submetido às",
+  "limitReached": {
+    "daily": "Atingiu o limite diário de recordatórios.",
+    "total": "Atingiu o limite total de recordatórios."
+  },
+  "rating": {
+    "_": "Avalie a sua experiência",
+    "title": "Como avalia o recordatório?",
+    "comment": "Diga-nos mais sobre a avaliação que deu ao recordatório",
+    "send": "Enviar comentário",
+    "sent": "Comentário enviado, obrigado!"
+  },
+  "survey": "Estudo: {name}",
+  "submissions": {
+    "_": "Dia de recordatório",
+    "title": "Dias de recordatório",
+    "all": "todos",
+    "past": "Recordatórios anteriores",
+    "none": "Ainda não tem recordatórios anteriores.",
+    "count": "Número do recordatório: {count}"
+  },
+  "start": {
+    "_": "Iniciar recordatório",
+    "another": "Iniciar outro recordatório"
+  },
+  "continue": "Continuar",
+  "abort": {
+    "_": "Cancelar",
+    "label": "Cancelar recordatório",
+    "confirm": "Cancelar o recordatório atual?"
+  },
+  "surveyInfo": {
+    "recall": "Recordatório: {number}"
+  },
+  "menu": {
+    "title": "Painel de revisão",
+    "mealSuggested": "Esta refeição é sugerida pelo sistema, mas ainda não confirmou que a teve",
+    "food": {
+      "delete": "Eliminar alimento",
+      "deleteConfirm": "Pretende eliminar {item}?",
+      "change": "Alterar alimento",
+      "free-text": {
+        "_": "Este alimento ainda não foi associado a um alimento da nossa base de dados.",
+        "incomplete": "O tamanho da porção deste alimento ainda não é conhecido.",
+        "edit": "Editar pesquisa"
+      },
+      "encoded-food": {
+        "_": "Este alimento foi associado a um alimento da nossa base de dados.",
+        "complete": "A estimativa do tamanho da porção deste alimento está concluída.",
+        "incomplete": "O tamanho da porção deste alimento ainda não é conhecido.",
+        "edit": "Editar tamanho da porção"
+      },
+      "missing-food": {
+        "_": "Este alimento foi marcado como em falta na nossa base de dados.",
+        "complete": "A informação em falta para este alimento está completa.",
+        "incomplete": "A informação em falta para este alimento ainda não é conhecida.",
+        "edit": "Editar alimento em falta"
+      },
+      "generic-builder": {
+        "_": "Este alimento foi associado a um alimento da nossa base de dados.",
+        "complete": "Os passos para este alimento estão concluídos.",
+        "incomplete": "Os passos para este alimento ainda não estão concluídos.",
+        "edit": "Editar alimento"
+      },
+      "recipe-builder": {
+        "_": "Este alimento foi associado a uma receita da nossa base de dados.",
+        "complete": "Os passos da receita para este alimento estão concluídos.",
+        "incomplete": "Os passos da receita para este alimento ainda não estão concluídos.",
+        "edit": "Editar ingredientes"
+      }
+    },
+    "meal": {
+      "add": "Adicionar refeição",
+      "delete": "Eliminar refeição",
+      "deleteConfirm": "Está prestes a eliminar tudo o que teve em {item}.",
+      "editFoods": "Atualizar alimentos",
+      "editTime": "Alterar hora"
+    }
+  },
+  "contextMenu": {
+    "close": "Fechar",
+    "select": "Continuar com {name}",
+    "editMeal": "Rever alimentos",
+    "delete": "Eliminar {name}",
+    "confirmDeletion": "Tem a certeza de que pretende eliminar '{name}'?",
+    "confirm": "Confirmar {name}",
+    "changeTime": "Alterar hora"
+  },
+  "actions": {
+    "feedback": "Feedback alimentar",
+    "next": "Continuar",
+    "submit": "Submeter o recordatório",
+    "addMeal": "Adicionar refeição",
+    "deleteFood": "Eliminar alimento",
+    "deleteMeal": "Eliminar refeição",
+    "editFood": "Editar alimento",
+    "editMeal": "Adicionar alimentos",
+    "mealTime": "Alterar hora da refeição",
+    "nav": {
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "feedback": "Feedback alimentar",
+      "next": "Continuar",
+      "redirect": "Continuar",
+      "remove": "Remover",
+      "review": "Revisão",
+      "submit": "Submeter",
+      "addMeal": "Adicionar refeição",
+      "deleteFood": "Eliminar alimento",
+      "deleteMeal": "Eliminar refeição",
+      "editFood": "Editar alimento",
+      "editMeal": "Adicionar alimentos",
+      "mealTime": "Hora da refeição"
+    }
+  }
+}

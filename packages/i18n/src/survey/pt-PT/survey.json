@@ -1,0 +1,39 @@
+{
+  "_": "Inquérito",
+  "welcome": {
+    "_": "Bem-vindo ao Intake24",
+    "subtitle": "O Intake24 é utilizado em investigação, inquéritos e estudos clínicos para recolher informação sobre o que as pessoas comem e bebem."
+  },
+  "info": "Informação do inquérito",
+  "states": {
+    "_": "Estado do inquérito",
+    "notStarted": "A recolha de dados ainda não começou.",
+    "active": "A recolha de dados está ativa.",
+    "suspended": "A recolha de dados está suspensa.",
+    "completed": "A recolha de dados está concluída."
+  },
+  "participant": {
+    "_": "É participante?",
+    "subtitle": "Chegou à página principal do Intake24.",
+    "link": "Para aceder ao Intake24 irá precisar do <strong>seu próprio link de inquérito</strong>.",
+    "info": "<p>Se foi convidado a participar num inquérito Intake24, deverá ter recebido um link.</p><p>Por favor, verifique o seu convite para participar. Se tiver dúvidas, contacte a equipa do seu estudo de investigação.</p>"
+  },
+  "visitor": {
+    "_": "É visitante?",
+    "subtitle": "Pode experimentar o nosso inquérito de demonstração!",
+    "try": "Experimentar a demonstração agora!"
+  },
+  "generateUser": {
+    "400": "Captcha inválido.",
+    "403": "O inquérito {surveyId} não permite a geração de utilizadores.",
+    "404": "O inquérito {surveyId} não foi reconhecido.",
+    "429": "Acabou de ser gerado um novo utilizador, tente novamente mais tarde.",
+    "_": "Gerar acesso",
+    "subtitle": "Este é um estudo de acesso livre, pode obter acesso gratuito.",
+    "noAccount": "Não tem conta?",
+    "link": "link",
+    "info1": "Selecione 'Gerar acesso' para gerar novas credenciais. Anote estas credenciais se pretender retomar mais tarde.",
+    "info2": "Este inquérito demorará aproximadamente 15 minutos.",
+    "info3": "Se fechar a janela do navegador, pode regressar utilizando este {action}."
+  }
+}

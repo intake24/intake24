@@ -1,0 +1,106 @@
+{
+  "_": "Intake24",
+  "home": "Início",
+  "dashboard": "Painel",
+  "welcome": {
+    "_": "Bem-vindo ao Intake24",
+    "subtitle": "O Intake24 é um sistema informatizado de avaliação alimentar de código aberto, baseado no recordatório de 24 horas de múltiplas passagens."
+  },
+  "login": {
+    "_": "Iniciar sessão",
+    "start": "Vamos começar",
+    "captcha": "Complete o desafio captcha",
+    "back": "Voltar ao início de sessão",
+    "username": {
+      "_": "Iniciar sessão com nome de utilizador e palavra-passe"
+    },
+    "token": {
+      "_": "Iniciar sessão através do link do inquérito",
+      "subtitle": "Utilize o link de início de sessão fornecido nas instruções do convite do inquérito."
+    },
+    "err": {
+      "captcha": "Resposta ao desafio captcha inválida.",
+      "credentials": "Nome de utilizador e palavra-passe inválidos.",
+      "token": "Token de acesso inválido.",
+      "survey": "Este inquérito ({surveyId}) não parece corresponder a um URL de início de sessão válido."
+    }
+  },
+  "logout": {
+    "_": "Terminar sessão",
+    "text": "Terminar sessão na aplicação"
+  },
+  "nav": {
+    "_": "Navegação",
+    "home": "Início",
+    "feedback": "Feedback",
+    "recall": "Recordatório",
+    "review": "Revisão",
+    "help": "Ajuda",
+    "options": "Opções"
+  },
+  "username": "Nome de utilizador",
+  "name": "Nome",
+  "email": "E-mail",
+  "emailConfirm": "Confirmar e-mail",
+  "password": "Palavra-passe",
+  "phone": "Telefone",
+  "message": "Mensagem",
+  "continue": "Continuar",
+  "help": {
+    "_": "Ajuda e FAQ",
+    "faqs": {
+      "_": "FAQ",
+      "title": "Perguntas frequentes",
+      "subtitle": "Encontre respostas para perguntas comuns sobre o Intake24"
+    },
+    "request": {
+      "_": "Ajuda",
+      "title": "Pedir ajuda",
+      "text": "Preencha o formulário abaixo e um dos nossos colaboradores de apoio entrará em contacto assim que possível.",
+      "sent": "O seu pedido de ajuda foi enviado."
+    }
+  },
+  "app": {
+    "_": "Aplicação",
+    "info": "Informação da aplicação",
+    "build": "Compilação"
+  },
+  "clipboard": {
+    "_": "Copiar para a área de transferência",
+    "copied": "Dados copiados para a área de transferência"
+  },
+  "sw": {
+    "check": "Está disponível uma atualização de conteúdo",
+    "update": "Atualizar"
+  },
+  "action": {
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "continue": "Continuar",
+    "confirm": {
+      "_": "Confirmar",
+      "title": "Pretende continuar?",
+      "delete": "Pretende eliminar {name}?"
+    },
+    "ok": "OK",
+    "reload": "Recarregar",
+    "remove": "Remover",
+    "reset": "Repor",
+    "start": "Iniciar",
+    "submit": "Submeter",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "not": {
+    "provided": "Não fornecido",
+    "selected": "Não selecionado"
+  },
+  "errors": {
+    "500": "Algo correu mal :(",
+    "retry": "Tentar novamente"
+  },
+  "validation": {
+    "tooLong": "O texto introduzido é demasiado longo (máximo de {max} caracteres)."
+  },
+  "noImagePlaceholder": "Nenhuma imagem disponível"
+}
