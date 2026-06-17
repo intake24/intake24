@@ -16,6 +16,8 @@ overrides:
 
 patchedDependencies:
   '@ts-rest/core': patches/@ts-rest__core.patch
+  sharp@0.33.5: patches/sharp@0.33.5.patch
+  sharp@0.34.5: patches/sharp@0.34.5.patch
 
 allowBuilds:
   '@parcel/watcher': false

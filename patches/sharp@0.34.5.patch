@@ -1,0 +1,7 @@
+diff --git a/install/check.js b/install/check.js
+index d03002e9737a919e067af9202e58354b96b8f5c8..7c89d391f0cb89fb6cf8d8e669eabcf65f52e4ef 100644
+--- a/install/check.js
++++ b/install/check.js
+@@ -6,0 +7,2 @@
++  process.env.SHARP_IGNORE_GLOBAL_LIBVIPS = process.env.SHARP_IGNORE_GLOBAL_LIBVIPS || '1';
++

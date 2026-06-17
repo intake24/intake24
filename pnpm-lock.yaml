@@ -9,6 +9,8 @@ overrides:
 
 patchedDependencies:
   '@ts-rest/core': 9dc6a3817bb88dba251d6862ba2cf78c9ee2adc359bc99a683dba6eb02ea57e9
+  sharp@0.33.5: 0891fa222910d6d7dccd6a46069ef30cf4812ade1de0f5557a6674adafdd9b87
+  sharp@0.34.5: 7f45a6b6d56d5f4671825f79bd39e1c8b2c80cbd3a46216b919c8921abb33300
 
 importers:
 
@@ -437,7 +439,7 @@ importers:
         version: 2.1.6(@types/node@24.12.4)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(pg-hstore@2.3.4)(pg@8.21.0))
       sharp:
         specifier: ^0.34.5
-        version: 0.34.5
+        version: 0.34.5(patch_hash=7f45a6b6d56d5f4671825f79bd39e1c8b2c80cbd3a46216b919c8921abb33300)
       slugify:
         specifier: ^1.6.9
         version: 1.6.9
@@ -11386,7 +11388,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
       ndarray-pixels: 5.0.1
-      sharp: 0.34.5
+      sharp: 0.34.5(patch_hash=7f45a6b6d56d5f4671825f79bd39e1c8b2c80cbd3a46216b919c8921abb33300)
 
   '@es-joy/jsdoccomment@0.84.0':
     dependencies:
@@ -13314,7 +13316,7 @@ snapshots:
       cac: 6.7.14
       colorette: 2.0.20
       consola: 3.4.2
-      sharp: 0.33.5
+      sharp: 0.33.5(patch_hash=0891fa222910d6d7dccd6a46069ef30cf4812ade1de0f5557a6674adafdd9b87)
       sharp-ico: 0.1.5
       unconfig: 7.5.0
 
@@ -17260,7 +17262,7 @@ snapshots:
       '@types/ndarray': 1.0.14
       ndarray: 1.0.19
       ndarray-ops: 1.2.2
-      sharp: 0.34.5
+      sharp: 0.34.5(patch_hash=7f45a6b6d56d5f4671825f79bd39e1c8b2c80cbd3a46216b919c8921abb33300)
     optional: true
 
   ndarray@1.0.19:
@@ -18281,9 +18283,9 @@ snapshots:
     dependencies:
       decode-ico: 0.4.1
       ico-endec: 0.1.6
-      sharp: 0.34.5
+      sharp: 0.34.5(patch_hash=7f45a6b6d56d5f4671825f79bd39e1c8b2c80cbd3a46216b919c8921abb33300)
 
-  sharp@0.33.5:
+  sharp@0.33.5(patch_hash=0891fa222910d6d7dccd6a46069ef30cf4812ade1de0f5557a6674adafdd9b87):
     dependencies:
       color: 4.2.3
       detect-libc: 2.1.2
@@ -18309,7 +18311,7 @@ snapshots:
       '@img/sharp-win32-ia32': 0.33.5
       '@img/sharp-win32-x64': 0.33.5
 
-  sharp@0.34.5:
+  sharp@0.34.5(patch_hash=7f45a6b6d56d5f4671825f79bd39e1c8b2c80cbd3a46216b919c8921abb33300):
     dependencies:
       '@img/colour': 1.1.0
       detect-libc: 2.1.2
