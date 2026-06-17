@@ -1,0 +1,87 @@
+{
+  "_": "Feedback alimentar",
+  "info": "Informação do feedback alimentar",
+  "status": {
+    "available": "O feedback alimentar está disponível",
+    "lowRecalls": "O feedback alimentar ficará disponível assim que tiver submetido pelo menos {minRecalls} recordatórios.",
+    "notAvailable": "O feedback alimentar não está disponível para este inquérito."
+  },
+  "title": "Feedback alimentar de {name} recordatórios",
+  "missingFoods": "Quaisquer alimentos comunicados como em falta não serão incluídos no feedback alimentar",
+  "physicalData": {
+    "title": "Sobre si",
+    "subtitle": "Para podermos apresentar o seu feedback da forma correta, introduza os seguintes dados.",
+    "change": "Alterar os meus dados",
+    "recall": "Registar outro dia",
+    "sexes": {
+      "_": "Sexo",
+      "m": "Masculino",
+      "f": "Feminino"
+    },
+    "sex": "Sexo: {sex}",
+    "age": "Idade: {age}",
+    "birthdate": "Ano de nascimento",
+    "height": "Altura: {height} cm",
+    "heightCm": "Altura em centímetros",
+    "weight": "Peso: {weight} kg",
+    "weightKg": "Peso em quilogramas",
+    "physicalActivityLevelId": "Nível de atividade física",
+    "weightTarget": "Objetivo: {target}",
+    "weightTargets": {
+      "_": "Objetivo de peso",
+      "title": "Objetivos de peso",
+      "keep_weight": "Manter o peso",
+      "lose_weight": "Perder peso",
+      "gain_weight": "Ganhar peso"
+    }
+  },
+  "outputs": {
+    "title": "Resultados",
+    "download": {
+      "_": "Transferir",
+      "title": "Transferir como PDF",
+      "subtitle": "Transfira uma cópia do seu feedback alimentar em ficheiro PDF. Demorará alguns segundos, aguarde um momento.",
+      "send": "Submeter pedido",
+      "sent": "O ficheiro PDF do feedback alimentar foi guardado."
+    },
+    "email": {
+      "_": "E-mail",
+      "title": "Enviar por e-mail",
+      "send": "Submeter pedido",
+      "sent": "Enviámos o seu feedback alimentar para o endereço de e-mail fornecido."
+    },
+    "retry": "O resultado do feedback alimentar foi solicitado recentemente, tente novamente dentro de {secs} s.",
+    "print": "Imprimir"
+  },
+  "cards": {
+    "title": "Resumo da sua ingestão"
+  },
+  "topFoods": {
+    "title": "Alimentos que mais contribuem para a sua ingestão de nutrientes",
+    "chart": "Mais elevado em {nutrient}"
+  },
+  "meals": {
+    "title": "Detalhe por dia das refeições",
+    "chart": "{nutrient}"
+  },
+  "rating": {
+    "_": "Avalie a sua experiência",
+    "title": "Como avalia o feedback alimentar?",
+    "comment": "Diga-nos mais sobre a avaliação que deu ao feedback alimentar",
+    "send": "Enviar comentário",
+    "sent": "Comentário enviado, obrigado!"
+  },
+  "intake": {
+    "your": "A sua ingestão de {nutrient} é {amount}",
+    "estimated": "Ingestão estimada",
+    "recommended": "Ingestão recomendada",
+    "tellMeMore": "Saber mais",
+    "gotIt": "Percebi!"
+  },
+  "unitDescription": {
+    "percentage_of_energy": "O feedback sobre este nutriente baseia-se na contribuição para a sua ingestão de energia a partir dos alimentos e quantidades que comunicou.",
+    "energy_divided_by_bmr": "O feedback alimentar baseia-se na sua ingestão de energia dividida pela TMB e na forma como esta se compara com as recomendações.",
+    "per_unit_of_weight": "O feedback alimentar baseia-se na sua ingestão deste nutriente por kg de peso corporal e na forma como esta se compara com as recomendações.",
+    "range": "O feedback sobre este nutriente baseia-se nos alimentos e quantidades que comunicou."
+  }
+}
