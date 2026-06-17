@@ -109,7 +109,9 @@
           </template>
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <quantity-card
+          <component
+            :is="quantityCardComponent"
+            v-bind="quantityCardProps"
             v-model="state.portionSize.slice.quantity"
             v-model:confirmed="state.confirmed.quantity"
             @update:confirmed="confirmType('quantity', $event)"
@@ -137,7 +139,7 @@ import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptH
 import { useHttp, useI18n } from '@intake24/ui';
 
 import { BaseLayout } from '../layouts';
-import { ImageMapSelector, Next, QuantityCard, usePanel, usePortionSizeMethod } from '../partials';
+import { ImageMapSelector, Next, QuantityCard, QuantityCardAccessible, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
@@ -221,6 +223,15 @@ const imageMapLabels = computed(() => {
 });
 
 const isWholeSelected = computed(() => state.value.portionSize.slice.index === 0);
+const quantityCardComponent = computed(() => {
+  if (props.prompt.quantityCard === 'accessible')
+    return QuantityCardAccessible;
+
+  return QuantityCard;
+});
+const quantityCardProps = computed(() => (
+  props.prompt.quantityCard === 'accessible' ? { foodLabel: foodName.value } : {}
+));
 
 const typeValid = computed(() => (
   state.value.portionSize.type.id !== undefined

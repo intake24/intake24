@@ -143,7 +143,9 @@
                 <standard-unit-icon v-if="state.portionSize.unit" :icon="icons[state.portionSize.unit]" />
               </v-col>
               <v-col cols="12" sm="6">
-                <quantity-card
+                <component
+                  :is="quantityCardComponent"
+                  v-bind="quantityCardProps"
                   v-model="state.portionSize.quantity"
                   @update:confirmed="confirmType('quantity', $event)"
                 />
@@ -170,7 +172,7 @@ import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptH
 import { useI18n } from '@intake24/ui';
 
 import { BaseLayout } from '../layouts';
-import { Next, QuantityCard, StandardUnitIcon, usePanel, usePortionSizeMethod } from '../partials';
+import { Next, QuantityCard, QuantityCardAccessible, StandardUnitIcon, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
@@ -208,6 +210,15 @@ const sizeValid = computed(() => state.value.confirmed.size);
 const crustValid = computed(() => state.value.confirmed.crust);
 const unitValid = computed(() => state.value.confirmed.unit);
 const quantityValid = computed(() => state.value.confirmed.quantity);
+const quantityCardComponent = computed(() => {
+  if (props.prompt.quantityCard === 'accessible')
+    return QuantityCardAccessible;
+
+  return QuantityCard;
+});
+const quantityCardProps = computed(() => (
+  props.prompt.quantityCard === 'accessible' ? { foodLabel: foodName.value } : {}
+));
 const validConditions = computed(() => [
   psmValid.value,
   sizeValid.value,
