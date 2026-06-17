@@ -1,0 +1,107 @@
+{
+  "_": "Legal",
+  "contact": "Contacto",
+  "copyright": "© {team} {year}",
+  "privacy": "Política de Privacidade",
+  "terms": "Termos de Utilização",
+  "cookies": {
+    "_": "Cookies",
+    "consent": {
+      "consentModal": {
+        "label": "Cookies",
+        "title": "O Intake24 utiliza cookies!",
+        "description": "Utilizamos cookies <strong>necessários</strong> para fornecer funcionalidades essenciais, cookies de <strong>funcionalidade</strong> para recordar as preferências do utilizador e cookies de <strong>análise</strong> para nos ajudar a compreender e melhorar a experiência do utilizador.",
+        "acceptAllBtn": "Aceitar",
+        "showPreferencesBtn": "Alterar preferências"
+      },
+      "preferencesModal": {
+        "title": "Preferências de cookies",
+        "acceptAllBtn": "Aceitar tudo",
+        "savePreferencesBtn": "Guardar preferências",
+        "closeIconLabel": "Fechar",
+        "sections": [
+          {
+            "title": "Como utilizamos os cookies 📢",
+            "description": "Utilizamos cookies <strong>necessários</strong> para fornecer funcionalidades essenciais, cookies de <strong>funcionalidade</strong> para recordar as preferências do utilizador e cookies de <strong>análise</strong> para nos ajudar a compreender e melhorar a experiência do utilizador."
+          },
+          {
+            "title": "Cookies necessários <span class=\"pm__badge\">Sempre ativos</span>",
+            "description": "Cookies estritamente necessários para o funcionamento adequado do website.",
+            "linkedCategory": "necessary",
+            "cookieTable": {
+              "headers": {
+                "name": "Nome",
+                "desc": "Descrição",
+                "exp": "Validade"
+              },
+              "body": [
+                {
+                  "name": "it24(a|s)_session",
+                  "desc": "Funcionalidade técnica dos websites.",
+                  "exp": "1 hora"
+                },
+                {
+                  "name": "it24(a|s)_refresh_token",
+                  "desc": "Funcionalidade técnica dos websites.",
+                  "exp": "1 hora"
+                },
+                {
+                  "name": "it24_cc",
+                  "desc": "Preferências de consentimento de cookies utilizadas pelo website.",
+                  "exp": "1 ano"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Cookies de funcionalidade",
+            "description": "Os cookies de funcionalidade permitem que o website recorde informação que altera o seu comportamento ou aspeto, como o seu idioma preferido ou a região em que se encontra.",
+            "linkedCategory": "functionality",
+            "cookieTable": {
+              "headers": {
+                "name": "Nome",
+                "desc": "Descrição",
+                "exp": "Validade"
+              },
+              "body": [
+                {
+                  "name": "^it24(a|s)_",
+                  "desc": "Armazena as preferências e definições do utilizador para os websites.",
+                  "exp": "1 ano"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Cookies de análise e estatística",
+            "description": "Os cookies de análise e estatística ajudam-nos a compreender como os visitantes utilizam os websites para melhorar os serviços oferecidos. A informação é recolhida e armazenada de forma anónima.",
+            "linkedCategory": "analytics",
+            "cookieTable": {
+              "headers": {
+                "name": "Nome",
+                "desc": "Descrição",
+                "exp": "Validade"
+              },
+              "body": [
+                {
+                  "name": "^_ga",
+                  "desc": "Cookies do Google Analytics utilizados para distinguir utilizadores e manter o estado da sessão.",
+                  "exp": "2 anos"
+                },
+                {
+                  "name": "_clck<br>_clsk<br>CLID<br>ANONCHK<br>MR<br>MUID<br>SM",
+                  "desc": "Cookies do MS Clarity utilizados para distinguir utilizadores e manter o estado da sessão.",
+                  "exp": "até 1 ano"
+                }
+              ]
+            }
+          },
+          {
+            "title": "Mais informação",
+            "description": "Se tiver alguma questão, por favor contacte-nos."
+          }
+        ]
+      }
+    }
+  }
+}
