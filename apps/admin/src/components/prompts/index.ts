@@ -88,7 +88,7 @@ export const promptSettings: PromptSettings = {
     sections: [...promptSectionsExceptSubmission],
   },
   'yes-no-prompt': {
-    tabs: [...tabs],
+    tabs: [...tabsWithValidation],
     sections: [...promptSectionsExceptSubmission],
   },
   // Standard

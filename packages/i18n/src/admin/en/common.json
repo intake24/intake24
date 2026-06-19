@@ -97,6 +97,7 @@
     "label": "Label",
     "shortLabel": "Short label",
     "value": "Value",
+    "updateFood": "Food Code",
     "exclusive": "Exclusive",
     "selected": "Selected"
   },

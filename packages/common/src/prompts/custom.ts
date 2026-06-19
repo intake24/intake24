@@ -73,6 +73,7 @@ export const radioListPrompt: Prompts['radio-list-prompt'] = copy({
   options: { en: [] },
   orientation: 'column',
   other: false,
+  updateFood: false,
 });
 
 export const selectPrompt: Prompts['select-prompt'] = copy({
@@ -83,6 +84,7 @@ export const selectPrompt: Prompts['select-prompt'] = copy({
   id: 'select-prompt',
   name: 'Select prompt',
   multiple: false,
+  updateFood: false,
   options: { en: [] },
 });
 
@@ -123,8 +125,12 @@ export const timePickerPrompt: Prompts['time-picker-prompt'] = copy({
 
 export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({
   ...basePrompt,
+  ...promptValidation,
   component: 'yes-no-prompt',
   useFlag: false,
+  updateFood: false,
+  updateFoodOptionYes: 'NO_UPDATE',
+  updateFoodOptionNo: 'NO_UPDATE',
   type: 'custom',
   id: 'yes-no-prompt',
   name: 'Yes / No prompt',

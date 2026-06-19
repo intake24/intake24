@@ -137,6 +137,7 @@
             />
             <component
               :is="dialog.prompt.component"
+              :prompt-section="section"
               v-bind="dialog.prompt"
               @update:options="updateOptions"
               @validate="validate"
