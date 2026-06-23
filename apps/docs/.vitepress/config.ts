@@ -21,6 +21,23 @@ export default defineConfig({
 
   vite: { server: { port: 8400 } },
 
+  markdown: {
+    config(md) {
+      const defaultFence = md.renderer.rules.fence!;
+
+      md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+        const token = tokens[idx];
+
+        if (token.info.trim() !== 'mermaid')
+          return defaultFence(tokens, idx, options, env, self);
+
+        const graph = encodeURIComponent(token.content);
+
+        return `<ClientOnly><MermaidDiagram graph="${graph}" /></ClientOnly>`;
+      };
+    },
+  },
+
   themeConfig: {
     logo: '/icons/pwa-512x512.png',
     nav,
