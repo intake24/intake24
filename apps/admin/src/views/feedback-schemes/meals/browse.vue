@@ -1,5 +1,5 @@
 <template>
-  <layout
+  <entry-layout
     v-if="entryLoaded && refsLoaded"
     v-bind="{ id, entry }"
     v-model:route-leave="routeLeave"
@@ -8,10 +8,8 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
-    <v-toolbar>
-      <v-icon color="secondary" end>
-        fas fa-sort-amount-down
-      </v-icon>
+    <v-toolbar color="surface">
+      <v-icon end icon="fas fa-sort-amount-down" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.meals.title') }}
       </v-toolbar-title>
@@ -34,36 +32,40 @@
     </v-toolbar>
 
     <v-form @keydown="clearError" @submit.prevent="submit">
-      <v-toolbar>
-        <v-icon color="secondary" end icon="fas fa-chart-pie" />
+      <v-toolbar color="surface">
+        <v-icon end icon="fas fa-chart-pie" />
         <v-toolbar-title class="font-weight-medium">
           {{ $t('feedback-schemes.meals.chart') }}
         </v-toolbar-title>
       </v-toolbar>
+      <v-divider />
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="6">
-            <v-toolbar>
-              <v-icon color="secondary" end icon="fas fa-palette" />
-              <v-toolbar-title class="font-weight-medium">
-                {{ $t('feedback-schemes.meals.colors.title') }}
-              </v-toolbar-title>
-              <v-spacer />
-              <v-text-field
-                v-model.number="colorMax"
-                bg-color="grey lighten-5"
-                density="compact"
-                hide-details
-                :label="$t('feedback-schemes.meals.colors._')"
-                name="colorMax"
-                :rules="maxRules"
-                single-line
-                :style="{ maxWidth: '75px' }"
-                variant="outlined"
-              />
-            </v-toolbar>
-            <error-list :errors="nonInputErrors" />
-            <color-list v-model="data.meals.chart.colors" />
+            <v-card border>
+              <v-toolbar color="surface">
+                <v-icon end icon="fas fa-palette" />
+                <v-toolbar-title class="font-weight-medium">
+                  {{ $t('feedback-schemes.meals.colors.title') }}
+                </v-toolbar-title>
+                <v-spacer />
+                <v-text-field
+                  v-model.number="colorMax"
+                  bg-color="grey lighten-5"
+                  density="compact"
+                  hide-details
+                  :label="$t('feedback-schemes.meals.colors._')"
+                  name="colorMax"
+                  :rules="maxRules"
+                  single-line
+                  :style="{ maxWidth: '75px' }"
+                  variant="outlined"
+                />
+              </v-toolbar>
+              <v-divider />
+              <error-list :errors="nonInputErrors" />
+              <color-list v-model="data.meals.chart.colors" />
+            </v-card>
           </v-col>
           <v-col cols="12" md="6">
             <nutrient-list
@@ -83,7 +85,7 @@
         <submit-footer :disabled="errors.any.value" />
       </v-card-text>
     </v-form>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

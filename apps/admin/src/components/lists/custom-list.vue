@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-toolbar :density>
+    <v-toolbar color="surface" :density>
       <template v-if="title">
         <v-icon end icon="fas fa-list" />
         <v-toolbar-title

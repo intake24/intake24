@@ -1,35 +1,50 @@
 <template>
-  <v-card class="mb-2" flat rounded="xl">
-    <v-toolbar class="toolbar-items" color="surface">
+  <v-card border class="ma-2 pa-4" flat rounded="xl">
+    <v-toolbar color="surface">
       <v-breadcrumbs v-if="breadcrumbs.length" class="px-1 py-2" :items="breadcrumbs">
         <template #divider>
           <v-icon icon="fas fa-caret-right" />
         </template>
       </v-breadcrumbs>
       <v-spacer />
-      <slot name="create">
-        <v-btn
-          v-if="actions && canCreate"
-          color="primary"
-          rounded="pill"
-          :title="$t(`${resource.name}.create`)"
-          :to="{ name: `${resource.name}-create` }"
+      <div class="d-flex align-center gc-2">
+        <v-menu
+          v-if="slots.actions"
+          :close-on-content-click="true"
+          :persistent="false"
         >
-          <v-icon icon="$create" start />
-          {{ $t(`${resource.name}.create`) }}
-        </v-btn>
-      </slot>
-      <slot name="actions" />
+          <template #activator="{ props }">
+            <v-btn
+              v-bind="props"
+              icon="$options"
+              size="small"
+              :title="$t('common.options._')"
+            />
+          </template>
+          <v-list>
+            <slot name="actions" />
+          </v-list>
+        </v-menu>
+        <slot name="create">
+          <v-btn
+            v-if="canCreate"
+            color="primary"
+            rounded="pill"
+            :title="$t(`${resource.name}.create`)"
+            :to="{ name: `${resource.name}-create` }"
+          >
+            <v-icon icon="$create" start />
+            {{ $t(`${resource.name}.create`) }}
+          </v-btn>
+        </slot>
+      </div>
     </v-toolbar>
-    <v-divider />
     <slot />
   </v-card>
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
-import { computed } from 'vue';
+import { computed, useSlots } from 'vue';
 
 import { useBreadcrumbs } from '@intake24/admin/composables/use-breadcrumbs.ts';
 import resources from '@intake24/admin/router/resources';
@@ -37,12 +52,7 @@ import { useResource, useUser } from '@intake24/admin/stores';
 
 defineOptions({ name: 'BrowseLayout' });
 
-defineProps({
-  actions: {
-    type: Boolean as PropType<boolean>,
-    default: true,
-  },
-});
+const slots = useSlots();
 
 const resource = useResource();
 const { can } = useUser();

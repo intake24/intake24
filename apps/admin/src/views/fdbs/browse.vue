@@ -1,5 +1,5 @@
 <template>
-  <browse-layout :actions="false">
+  <browse-layout>
     <data-table :actions="['read']" api-url="admin/fdbs" :headers>
       <template #[`item.code`]="{ item }">
         <span :class="`fi fi-${item.countryFlagCode} mr-3`" />

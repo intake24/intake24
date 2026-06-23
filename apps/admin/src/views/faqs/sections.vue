@@ -1,6 +1,6 @@
 <template>
   <v-card flat tile>
-    <v-toolbar>
+    <v-toolbar color="surface">
       <v-icon end icon="fas fa-bars-staggered" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('faqs.sections.title') }}
@@ -30,6 +30,7 @@
         <json-editor-dialog v-model="items" @update:model-value="update" />
       </options-menu>
     </v-toolbar>
+    <v-divider />
     <vue-draggable
       v-model="items"
       :animation="300"

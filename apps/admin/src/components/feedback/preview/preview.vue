@@ -2,15 +2,7 @@
   <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
     <template #activator="{ props }">
       <slot name="activator" v-bind="props">
-        <v-btn
-          v-bind="props"
-          color="primary"
-          :title="$t('feedback-schemes.preview.title')"
-          variant="tonal"
-        >
-          <v-icon icon="$search" start />
-          {{ $t('feedback-schemes.preview._') }}
-        </v-btn>
+        <v-list-item v-bind="props" prepend-icon="$search" :title="$t('feedback-schemes.preview.title')" />
       </slot>
     </template>
     <v-card tile>

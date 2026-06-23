@@ -83,7 +83,6 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-divider />
     <v-list class="list-border" lines="two">
       <v-list-item
         v-for="(token, idx) in tokens"
@@ -92,7 +91,7 @@
         link
       >
         <template #prepend>
-          <v-avatar icon="fas fa-key" />
+          <v-avatar color="primary" icon="fas fa-key" />
         </template>
         <v-list-item-title>{{ token.name }}</v-list-item-title>
         <v-list-item-subtitle v-if="token.revoked">
