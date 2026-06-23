@@ -108,6 +108,10 @@ export default () => {
     let recordBField: NutrientTableRecordField | null = null;
     let food: Food | null = null;
     let foodNutrient: FoodNutrient | null = null;
+    let nutrientTable2: NutrientTable | null = null;
+    let recordC: NutrientTableRecord | null = null;
+    let recordCNutrient: NutrientTableRecordNutrient | null = null;
+    let recordCField: NutrientTableRecordField | null = null;
     let submissionFood: SurveySubmissionFood | null = null;
     let submissionMeal: SurveySubmissionMeal | null = null;
     let submission: SurveySubmission | null = null;
@@ -152,6 +156,10 @@ export default () => {
         recordA,
         recordB,
         nutrientTable,
+        recordCNutrient,
+        recordCField,
+        recordC,
+        nutrientTable2,
         food,
         dbJob,
       ]);
@@ -167,6 +175,10 @@ export default () => {
       recordA = null;
       recordB = null;
       nutrientTable = null;
+      recordCNutrient = null;
+      recordCField = null;
+      recordC = null;
+      nutrientTable2 = null;
       food = null;
       dbJob = null;
     });
@@ -748,6 +760,178 @@ export default () => {
 
       // Cleanup extra nutrient
       await recordBNutrient2.destroy();
+    });
+
+    /**
+     * Setup for cross-FCT scenarios (1+2):
+     * - NT1/recordA: the original FCT the food was submitted with
+     * - NT2/recordC: a different FCT the food mapping is later switched to
+     * Scenarios 3-6 test how each recalculation mode handles this cross-FCT situation.
+     */
+    const setupFoodWithDifferentNutrientTables = async () => {
+      const { nutrientTableId: nutrientTableId1, foodCode } = await setupFoodAndNutrients();
+
+      const nutrientTableId2 = `NT2${Date.now()}`;
+      nutrientTable2 = await NutrientTable.create({
+        id: nutrientTableId2,
+        description: 'Test nutrient table 2 (different FCT)',
+      });
+
+      recordC = await NutrientTableRecord.create({
+        nutrientTableId: nutrientTableId2,
+        nutrientTableRecordId: 'C',
+        name: 'Record C',
+        localName: 'Record C',
+      });
+
+      recordCNutrient = await NutrientTableRecordNutrient.create({
+        nutrientTableRecordId: recordC.id,
+        nutrientTypeId: '1',
+        unitsPer100g: 200,
+      });
+
+      recordCField = await NutrientTableRecordField.create({
+        nutrientTableRecordId: recordC.id,
+        name: 'sub_group_code',
+        value: 'FCT2_CODE',
+      });
+
+      return { nutrientTableId1, nutrientTableId2, foodCode };
+    };
+
+    describe('cross FCT (different nutrient tables)', () => {
+      /**
+       * Scenario 3: values-only w/o syncFields
+       * Food submitted with NT1/A (scenario 1), food mapping later switched to NT2/C (scenario 2).
+       * Recalculation must use the STORED reference (NT1/A), update existing nutrient values
+       * from that record, and NOT add or remove nutrient codes.
+       * Nutrients missing from recordA are zeroed out (not removed).
+       */
+      it('values-only w/o syncFields keeps stored FCT reference and zeroes unresolvable nutrients without adding or removing codes', async () => {
+        const { nutrientTableId1, foodCode } = await setupFoodWithDifferentNutrientTables();
+
+        // Submission has nutrient1 and nutrient2; recordA only has nutrient1
+        await submissionFood!.update({ nutrients: { 1: 100, 2: 200 } });
+
+        // Scenario 2: food mapping switched to NT2/recordC (different FCT)
+        await foodNutrient!.destroy();
+        foodNutrient = await FoodNutrient.create({
+          foodId: food!.id,
+          nutrientTableRecordId: recordC!.id,
+        });
+
+        await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+
+        const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+        // Stays on stored FCT (NT1/A), ignores new mapping to NT2/C
+        expect(refreshed?.nutrientTableId).toBe(nutrientTableId1);
+        expect(refreshed?.nutrientTableCode).toBe('A');
+        // Nutrient 1 updated from recordA (50); nutrient 2 zeroed (not in recordA, preserved since syncFields=false)
+        expect(refreshed?.nutrients).toEqual({ 1: 50, 2: 0 });
+        expectFoodIdentityUnchanged(refreshed, foodCode);
+      });
+
+      /**
+       * Scenario 4: values-only + syncFields
+       * Same cross-FCT setup. Recalculation still uses the STORED reference (NT1/A),
+       * but syncFields=true removes nutrient codes not present in recordA.
+       */
+      it('values-only + syncFields keeps stored FCT reference and removes nutrient codes not in stored record', async () => {
+        const { nutrientTableId1, foodCode } = await setupFoodWithDifferentNutrientTables();
+
+        // Submission has nutrient1 and nutrient2; recordA only has nutrient1
+        await submissionFood!.update({ nutrients: { 1: 100, 2: 200 } });
+
+        // Scenario 2: food mapping switched to NT2/recordC (different FCT)
+        await foodNutrient!.destroy();
+        foodNutrient = await FoodNutrient.create({
+          foodId: food!.id,
+          nutrientTableRecordId: recordC!.id,
+        });
+
+        await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only', syncFields: true });
+
+        const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+        // Stays on stored FCT (NT1/A), ignores new mapping to NT2/C
+        expect(refreshed?.nutrientTableId).toBe(nutrientTableId1);
+        expect(refreshed?.nutrientTableCode).toBe('A');
+        // Nutrient 1 updated from recordA (50); nutrient 2 REMOVED (not in recordA, syncFields=true removes it)
+        expect(refreshed?.nutrients).toEqual({ 1: 50 });
+        expectFoodIdentityUnchanged(refreshed, foodCode);
+      });
+
+      /**
+       * Scenario 5: values-and-codes w/o syncFields
+       * Food mapping switched to NT2/C. Recalculation follows the NEW mapping (NT2/C),
+       * updating nutrientTableId and nutrientTableCode, but does NOT add or remove nutrient codes.
+       * Nutrients missing from recordC are zeroed out (not removed).
+       */
+      it('values-and-codes w/o syncFields updates to new FCT mapping but does not add or remove nutrient codes', async () => {
+        const { nutrientTableId2, foodCode } = await setupFoodWithDifferentNutrientTables();
+
+        // Submission has nutrient1 and nutrient2; recordC only has nutrient1
+        await submissionFood!.update({ nutrients: { 1: 100, 2: 200 } });
+
+        // Scenario 2: food mapping switched to NT2/recordC (different FCT)
+        await foodNutrient!.destroy();
+        foodNutrient = await FoodNutrient.create({
+          foodId: food!.id,
+          nutrientTableRecordId: recordC!.id,
+        });
+
+        await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
+
+        const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+        // Updated to new FCT (NT2/C)
+        expect(refreshed?.nutrientTableId).toBe(nutrientTableId2);
+        expect(refreshed?.nutrientTableCode).toBe('C');
+        // Nutrient 1 updated from recordC (200); nutrient 2 zeroed (not in recordC, syncFields=false preserves key)
+        expect(refreshed?.nutrients).toEqual({ 1: 200, 2: 0 });
+        expect(refreshed?.fields).toEqual({ sub_group_code: 'FCT2_CODE' });
+        expectFoodIdentityUnchanged(refreshed, foodCode);
+      });
+
+      /**
+       * Scenario 6: values-and-codes + syncFields
+       * Food mapping switched to NT2/C. Recalculation follows the NEW mapping (NT2/C),
+       * updates nutrientTableId and nutrientTableCode, AND adds or removes nutrient codes
+       * to fully match the new record's nutrient set.
+       */
+      it('values-and-codes + syncFields updates to new FCT mapping and fully syncs nutrient codes', async () => {
+        const { nutrientTableId2, foodCode } = await setupFoodWithDifferentNutrientTables();
+
+        // Add nutrient2 to recordC so NT2/C has both nutrient1 (200) and nutrient2 (300)
+        const recordCNutrient2 = await NutrientTableRecordNutrient.create({
+          nutrientTableRecordId: recordC!.id,
+          nutrientTypeId: '2',
+          unitsPer100g: 300,
+        });
+
+        // Submission has only nutrient1; syncFields will add nutrient2 from NT2/C
+        // Scenario 2: food mapping switched to NT2/recordC (different FCT)
+        await foodNutrient!.destroy();
+        foodNutrient = await FoodNutrient.create({
+          foodId: food!.id,
+          nutrientTableRecordId: recordC!.id,
+        });
+
+        await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
+
+        const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
+
+        // Updated to new FCT (NT2/C)
+        expect(refreshed?.nutrientTableId).toBe(nutrientTableId2);
+        expect(refreshed?.nutrientTableCode).toBe('C');
+        // syncFields=true: nutrient1 updated from recordC (200), nutrient2 ADDED from recordC (300)
+        expect(refreshed?.nutrients).toEqual({ 1: 200, 2: 300 });
+        expect(refreshed?.fields).toEqual({ sub_group_code: 'FCT2_CODE' });
+        expectFoodIdentityUnchanged(refreshed, foodCode);
+
+        await recordCNutrient2.destroy();
+      });
     });
 
     it('recalculates in batches when there are more than 100 submission foods', async () => {
