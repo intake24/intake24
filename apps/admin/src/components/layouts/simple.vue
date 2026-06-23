@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-2" flat rounded="xl">
+  <v-card border class="ma-2 pa-4" flat rounded="xl">
     <slot />
   </v-card>
 </template>

@@ -30,6 +30,7 @@
       {{ $t('feedback-schemes.meals.fields.reset.text') }}
     </confirm-dialog>
   </v-toolbar>
+  <v-divider />
   <v-list class="list-border" lines="two">
     <vue-draggable
       v-model="items"

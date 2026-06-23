@@ -1,6 +1,6 @@
 <template>
-  <v-card flat tile>
-    <v-toolbar>
+  <v-card border>
+    <v-toolbar color="surface">
       <v-icon end icon="$nutrient-types" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('nutrient-types.title') }}
@@ -25,6 +25,7 @@
         {{ $t('nutrient-types.reset.text') }}
       </confirm-dialog>
     </v-toolbar>
+    <v-divider />
     <v-list class="list-border">
       <vue-draggable
         v-model="items"

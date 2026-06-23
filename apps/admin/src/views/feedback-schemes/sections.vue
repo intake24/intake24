@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile>
-    <v-toolbar>
-      <v-icon color="secondary" end icon="fas fa-bars-staggered" />
+    <v-toolbar color="surface">
+      <v-icon end icon="fas fa-bars-staggered" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.sections.title') }}
       </v-toolbar-title>
@@ -41,6 +41,7 @@
         <json-editor-dialog v-model="items" @update:model-value="update" />
       </options-menu>
     </v-toolbar>
+    <v-divider />
     <v-list class="list-border py-0">
       <vue-draggable
         v-model="items"
@@ -60,12 +61,10 @@
             <v-list-item-action>
               <v-btn
                 v-if="!['rating', 'submissions'].includes(section.id)"
-                icon
+                icon="$edit"
                 :title="$t('feedback-schemes.sections.edit')"
                 @click.stop="edit(index, items[index])"
-              >
-                <v-icon color="secondary-lighten-2" icon=" $edit" />
-              </v-btn>
+              />
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
@@ -107,7 +106,7 @@
           </v-toolbar-items>
           <template #extension>
             <v-container>
-              <v-tabs v-model="tab" bg-color="secondary">
+              <v-tabs v-model="tab">
                 <v-tab v-for="item in ['general', 'json']" :key="item" :value="item">
                   {{ $t(`common.tabs.${item}`) }}
                 </v-tab>

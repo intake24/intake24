@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mb-2" flat rounded="xl">
-    <v-toolbar class="toolbar-items" color="surface">
+  <v-card border class="ma-2 pa-4" flat rounded="xl">
+    <v-toolbar color="surface">
       <v-btn
         icon="$back"
         :title="$t(`common.action.back`)"
@@ -13,26 +13,53 @@
         </template>
       </v-breadcrumbs>
       <v-spacer />
-      <v-btn
-        v-if="editsResource"
-        color="primary"
-        rounded="pill"
-        :title="$t(`common.action.save`)"
-        @click="$emit('save')"
-      >
-        <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
-      </v-btn>
-      <slot name="actions" />
-      <confirm-dialog
-        v-if="canHandleEntry('delete')"
-        color="error"
-        icon-left="$delete"
-        :label="$t('common.action.delete')"
-        :typed-confirm="['surveys'].includes(resource.name) ? entry?.name : undefined"
-        @confirm="remove"
-      >
-        {{ $t('common.action.confirm.delete', { name: entry?.name ?? entry?.id }) }}
-      </confirm-dialog>
+      <div class="d-flex align-center gc-2">
+        <v-menu
+          v-if="slots.actions || canHandleEntry('delete')"
+          :close-on-content-click="true"
+          :persistent="false"
+        >
+          <template #activator="{ props }">
+            <v-btn
+              v-bind="props"
+              icon="$options"
+              size="small"
+              :title="$t('common.options._')"
+            />
+          </template>
+          <v-list>
+            <slot name="actions" />
+            <v-divider v-if="slots.actions" />
+            <confirm-dialog
+              v-if="canHandleEntry('delete')"
+              color="error"
+              icon-left="$delete"
+              :label="$t('common.action.delete')"
+              :typed-confirm="['surveys'].includes(resource.name) ? entry?.name : undefined"
+              @confirm="remove"
+            >
+              <template #activator="{ props }">
+                <v-list-item
+                  v-bind="props"
+                  base-color="error"
+                  prepend-icon="$delete"
+                  :title="$t('common.action.delete')"
+                />
+              </template>
+              {{ $t('common.action.confirm.delete', { name: entry?.name ?? entry?.id }) }}
+            </confirm-dialog>
+          </v-list>
+        </v-menu>
+        <v-btn
+          v-if="editsResource"
+          color="primary"
+          rounded="pill"
+          :title="$t(`common.action.save`)"
+          @click="$emit('save')"
+        >
+          <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
+        </v-btn>
+      </div>
     </v-toolbar>
     <v-tabs color="primary">
       <v-tab
@@ -62,7 +89,7 @@ import type { RouteLeave } from '@intake24/admin/types';
 import type { Dictionary } from '@intake24/common/types';
 
 import { has } from 'lodash-es';
-import { computed, inject } from 'vue';
+import { computed, inject, useSlots } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useBreadcrumbs } from '@intake24/admin/composables/use-breadcrumbs.ts';
@@ -96,6 +123,7 @@ const props = defineProps({
 defineEmits(['save', 'update:routeLeave']);
 
 const editsResource = inject('editsResource', false);
+const slots = useSlots();
 
 const { i18n: { t, locale, messages } } = useI18n();
 const resource = useResource();

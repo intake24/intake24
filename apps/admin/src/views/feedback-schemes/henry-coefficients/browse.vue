@@ -1,10 +1,10 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
     <henry-coefficient-list v-model="data.henryCoefficients" :errors />
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

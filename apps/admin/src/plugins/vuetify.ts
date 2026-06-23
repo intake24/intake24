@@ -103,7 +103,6 @@ export default createVuetify({
       title: '',
     },
     VToolbar: {
-      class: ['px-2'],
       VBtn: {
         variant: 'flat',
       },

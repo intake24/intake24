@@ -1,6 +1,6 @@
 <template>
   <v-card border flat>
-    <v-toolbar>
+    <v-toolbar color="surface">
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.attributes.title') }}
       </v-toolbar-title>

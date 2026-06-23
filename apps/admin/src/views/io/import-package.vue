@@ -116,7 +116,6 @@
                   </v-btn>
                   <v-btn
                     v-if="importState === 'selecting-file' && fileSelected"
-                    color="secondary"
                     variant="text"
                     @click="resetState"
                   >
@@ -417,7 +416,6 @@
                   v-if="isImportComplete"
                   block
                   class="mt-4"
-                  color="secondary"
                   variant="outlined"
                   @click="resetState"
                 >

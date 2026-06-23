@@ -8,6 +8,9 @@
         :label="$t('tasks.run._')"
         @confirm="triggerJob"
       >
+        <template #activator="{ props }">
+          <v-list-item v-bind="props" prepend-icon="fas fa-play" :title="$t('tasks.run._')" />
+        </template>
         {{ $t('tasks.run.confirm') }}
       </confirm-dialog>
     </template>

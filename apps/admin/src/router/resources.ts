@@ -9,7 +9,7 @@ export const resources: Resource[] = [
     icon: 'fas fa-circle-user',
     api: 'admin/user/jobs',
     generateRoutes: false,
-    routes: ['read'],
+    routes: ['create', 'read'],
   },
   // Food databases
   {

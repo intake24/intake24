@@ -1,13 +1,7 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.display.mobile || fullscreen" max-width="800px">
     <template #activator="{ props }">
-      <v-btn
-        color="primary"
-        :title="$t('jobs.repeat._')"
-        v-bind="props"
-      >
-        <v-icon icon="$jobs" start /> {{ $t('jobs.repeat._') }}
-      </v-btn>
+      <v-list-item v-bind="props" prepend-icon="$jobs" :title="$t('jobs.repeat._')" />
     </template>
     <v-card :tile="$vuetify.display.mobile">
       <v-toolbar>
