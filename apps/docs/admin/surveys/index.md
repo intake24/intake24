@@ -248,14 +248,14 @@ Tasks section allows to submit resource specific tasks into the job queue with a
 
 Jobs that can be submitted:
 
-- [Authentication URLs export](/admin/system/job-types#surveyauthurlsexport)
+- [Authentication URLs export](/admin/surveys/tasks#surveyauthurlsexport)
 
-- [Nutrient recalculation](/admin/system/job-types#surveynutrientsrecalculation)
+- [Nutrient recalculation](/admin/surveys/survey-nutrients-recalculation-job)
 
-- [Ratings export](/admin/system/job-types#surveyratingsexport)
+- [Ratings export](/admin/surveys/tasks#surveyratingsexport)
 
-- [Respondents import](/admin/system/job-types#surveyrespondentsimport)
+- [Respondents import](/admin/surveys/tasks#surveyrespondentsimport)
 
-- [Submission data export](/admin/system/job-types#surveydataexport)
+- [Submission data export](/admin/surveys/tasks#surveydataexport)
 
-- [Sessions export](/admin/system/job-types#surveysessionsexport)
+- [Sessions export](/admin/surveys/tasks#surveysessionsexport)
