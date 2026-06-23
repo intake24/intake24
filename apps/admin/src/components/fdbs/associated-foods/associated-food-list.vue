@@ -1,6 +1,6 @@
 <template>
   <v-card border flat>
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('fdbs.associatedFoods.title') }}
       </v-toolbar-title>
@@ -63,7 +63,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="secondary">
+        <v-toolbar>
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
             {{ $t(`fdbs.associatedFoods.${dialog.index === -1 ? 'add' : 'edit'}`) }}

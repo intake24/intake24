@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <media media-model="SurveyScheme" :resource-id="id" />
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

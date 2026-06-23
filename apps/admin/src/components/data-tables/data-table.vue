@@ -1,48 +1,42 @@
 <template>
-  <tool-bar
-    v-if="actions.length"
-    v-bind="{ actions, api, selected: tracked }"
-    @refresh="onRefresh"
+  <data-table-filter
+    :count="meta.total"
+    @filter-reset="resetFilter"
+    @filter-set="setFilter"
   />
-  <v-card
-    v-bind="{ variant }"
-    :flat="$vuetify.display.mobile"
-    :rounded="$vuetify.display.mobile ? 0 : undefined"
+  <v-expand-transition>
+    <tool-bar
+      v-if="actions.length && tracked.length"
+      v-bind="{ actions, api, selected: tracked }"
+      @refresh="onRefresh"
+    />
+  </v-expand-transition>
+  <v-data-table-server
+    v-model="selected"
+    v-model:options="options"
+    :headers="headers"
+    :item-value="trackBy"
+    :items="items"
+    :items-length="meta.total ?? 0"
+    :items-per-page="50"
+    :loading="isAppLoading"
+    return-object
+    show-select
   >
-    <v-card-text>
-      <data-table-filter
-        :count="meta.total"
-        @filter-reset="resetFilter"
-        @filter-set="setFilter"
-      />
-      <v-data-table-server
-        v-model="selected"
-        v-model:options="options"
-        :headers="headers"
-        :item-value="trackBy"
-        :items="items"
-        :items-length="meta.total ?? 0"
-        :items-per-page="50"
-        :loading="isAppLoading"
-        return-object
-        show-select
-      >
-        <template v-for="(_, scopedSlotName) in $slots" #[scopedSlotName]="slotData">
-          <slot :name="scopedSlotName" v-bind="slotData" />
-        </template>
-        <template #item.action="{ item }">
-          <slot name="action" v-bind="{ item }">
-            <action-bar
-              :actions="actions.filter((action) => action !== 'create')"
-              :api="api"
-              :item="item"
-              @refresh="onRefresh"
-            />
-          </slot>
-        </template>
-      </v-data-table-server>
-    </v-card-text>
-  </v-card>
+    <template v-for="(_, scopedSlotName) in $slots" #[scopedSlotName]="slotData">
+      <slot :name="scopedSlotName" v-bind="slotData" />
+    </template>
+    <template #item.action="{ item }">
+      <slot name="action" v-bind="{ item }">
+        <action-bar
+          :actions="actions.filter((action) => action !== 'create')"
+          :api="api"
+          :item="item"
+          @refresh="onRefresh"
+        />
+      </slot>
+    </template>
+  </v-data-table-server>
 </template>
 
 <script lang="ts" setup>

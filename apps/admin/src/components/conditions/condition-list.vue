@@ -1,6 +1,6 @@
 <template>
   <v-card border flat>
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar>
       <v-toolbar-title class="font-weight-medium">
         {{ title ?? $t('survey-schemes.conditions._') }}
       </v-toolbar-title>

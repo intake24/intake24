@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey-lighten-2">
-      <v-icon color="secondary" end icon="fas fa-hamburger" />
+    <v-toolbar>
+      <v-icon end icon="fas fa-hamburger" />
       <div class="d-flex flex-column ms-4">
         <v-toolbar-title class="font-weight-medium">
           {{ title }}
@@ -88,7 +88,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="secondary">
+        <v-toolbar>
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
             {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
@@ -101,7 +101,7 @@
           </v-toolbar-items>
           <template #extension>
             <v-container fluid>
-              <v-tabs v-model="tab" bg-color="secondary">
+              <v-tabs v-model="tab">
                 <v-tab v-for="item in ['general', 'json']" :key="item" :value="item">
                   {{ item }}
                 </v-tab>
@@ -143,8 +143,8 @@
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-card border class="w-100" flat>
-                      <v-toolbar color="grey-lighten-4">
-                        <v-icon color="secondary" end icon="fas fa-clock" />
+                      <v-toolbar>
+                        <v-icon end icon="fas fa-clock" />
                         <v-toolbar-title class="font-weight-medium">
                           {{ $t('survey-schemes.meals.defaultTime') }}
                         </v-toolbar-title>

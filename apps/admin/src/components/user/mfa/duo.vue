@@ -1,5 +1,5 @@
 <template>
-  <v-stepper-vertical v-model="progress" flat hide-actions>
+  <v-stepper-vertical v-model="progress" color="primary" flat hide-actions>
     <template #default="{ step }">
       <v-stepper-vertical-item :complete="step > 1" :title="$t('user.mfa.providers.duo.challenge.title')" value="1">
         <div class="text-title-small">
@@ -7,7 +7,7 @@
         </div>
         <v-row>
           <v-col cols="12" sm="6">
-            <v-btn block class="my-4" color="secondary" rounded @click="challenge">
+            <v-btn block class="my-4" color="primary" rounded @click="challenge">
               {{ $t('user.mfa.providers.duo.challenge._') }}
             </v-btn>
           </v-col>
@@ -25,7 +25,7 @@
                   name="name"
                   @update:model-value="errors.clear('name')"
                 />
-                <v-btn block class="my-4" color="secondary" rounded type="submit">
+                <v-btn block class="my-4" color="primary" rounded type="submit">
                   {{ $t('user.mfa.providers.duo.verify._') }}
                 </v-btn>
               </v-form>

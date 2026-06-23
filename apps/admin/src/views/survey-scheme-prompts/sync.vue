@@ -1,12 +1,12 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-card-title>
       {{
         $t(`survey-scheme-prompts.sync.title`, { id: entry.prompt.id })
       }}
     </v-card-title>
     <v-card-text v-if="!schemes.length">
-      <v-alert color="secondary" type="info">
+      <v-alert type="info">
         {{ $t(`survey-scheme-prompts.sync.noSchemes`) }}
       </v-alert>
     </v-card-text>
@@ -56,7 +56,7 @@
         </template>
       </v-list-item>
     </v-list>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row>
       <v-col cols="12" md="6">
         <v-table>
@@ -21,7 +21,7 @@
       </v-col>
     </v-row>
     <as-served-images :items="entry.images" readonly :set-id="entry.id" />
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

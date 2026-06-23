@@ -3,10 +3,9 @@
     <v-btn
       v-if="!readonly"
       class="mb-4 align-self-end"
-      color="secondary"
+      color="primary"
       rounded
       :title="$t('standard-units.add')"
-      variant="outlined"
       @click="add"
     >
       <v-icon icon="$add" start />

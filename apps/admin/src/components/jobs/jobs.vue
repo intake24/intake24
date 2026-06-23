@@ -1,6 +1,6 @@
 <template>
-  <v-toolbar color="grey-lighten-4">
-    <v-icon color="secondary" end icon="$jobs" />
+  <v-toolbar color="surface">
+    <v-icon end icon="$jobs" />
     <v-toolbar-title class="font-weight-medium">
       {{ $t('tasks.title') }}
     </v-toolbar-title>

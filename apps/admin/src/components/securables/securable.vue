@@ -1,57 +1,52 @@
 <template>
-  <div>
-    <v-toolbar color="grey-lighten-4">
-      <v-icon color="secondary" end>
-        fas fa-shield-halved
-      </v-icon>
-      <v-toolbar-title class="font-weight-medium">
-        {{ $t('securables.title') }}
-      </v-toolbar-title>
-      <v-spacer />
-      <div class="d-flex align-center font-weight-medium text-label-large">
-        {{ $t('securables.owner._') }}:
-        <owner-dialog v-bind="{ api, owner, resource }" />
-      </div>
-    </v-toolbar>
-    <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">
-      <template #header-add>
-        <user-dialog
-          v-bind="{ api, actions, resource }"
-          ref="dialog"
-          @update:table="updateTable"
-        />
-      </template>
-      <template #[`item.securables`]="{ item }">
-        {{
-          item.securables
-            .map(({ action }) => action)
-            .sort()
-            .join(' | ')
-        }}
-      </template>
-      <template #[`item.action`]="{ item }">
-        <v-btn
-          color="secondary"
-          icon
-          :title="$t('common.action.edit')"
-          @click.stop="editUser(item)"
-        >
-          <v-icon>
-            $edit
-          </v-icon>
-        </v-btn>
-        <confirm-dialog
-          color="error"
-          icon
-          icon-left="$delete"
-          :label="$t('common.action.delete')"
-          @confirm="removeUser(item.id)"
-        >
-          {{ $t('common.action.confirm.delete', { name: item.name ? item.name : item.id }) }}
-        </confirm-dialog>
-      </template>
-    </embedded-data-table>
-  </div>
+  <v-toolbar color="surface">
+    <v-icon end icon="fas fa-shield-halved" />
+    <v-toolbar-title class="font-weight-medium">
+      {{ $t('securables.title') }}
+    </v-toolbar-title>
+    <v-spacer />
+    <div class="d-flex align-center font-weight-medium text-label-large">
+      {{ $t('securables.owner._') }}:
+      <owner-dialog v-bind="{ api, owner, resource }" />
+    </div>
+  </v-toolbar>
+  <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">
+    <template #header-add>
+      <user-dialog
+        v-bind="{ api, actions, resource }"
+        ref="dialog"
+        @update:table="updateTable"
+      />
+    </template>
+    <template #[`item.securables`]="{ item }">
+      {{
+        item.securables
+          .map(({ action }) => action)
+          .sort()
+          .join(' | ')
+      }}
+    </template>
+    <template #[`item.action`]="{ item }">
+      <v-btn
+        icon
+        :title="$t('common.action.edit')"
+        @click.stop="editUser(item)"
+      >
+        <v-icon>
+          $edit
+        </v-icon>
+      </v-btn>
+      <confirm-dialog
+        color="error"
+        icon
+        icon-left="$delete"
+        :label="$t('common.action.delete')"
+        @confirm="removeUser(item.id)"
+      >
+        {{ $t('common.action.confirm.delete', { name: item.name ? item.name : item.id }) }}
+      </confirm-dialog>
+    </template>
+  </embedded-data-table>
 </template>
 
 <script lang="ts" setup>

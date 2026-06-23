@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-bind="{ modelValue }" :fullscreen="$vuetify.display.smAndDown" max-width="600px" min-height="380px">
     <v-card :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>{{ $t('common.mfa.title') }}</v-toolbar-title>
       </v-toolbar>
@@ -18,11 +18,11 @@
                 :width="20"
               >
                 <div class="d-flex align-center flex-column">
-                  <v-icon class="mb-2 ml-2" color="secondary" icon="$duo" size="80" />
+                  <v-icon class="mb-2 ml-2" color="primary" icon="$duo" size="80" />
                   <span class="font-weight-bold text-headline-large">{{ duo.value / 20 }} </span>
                 </div>
               </v-progress-circular>
-              <v-btn block color="secondary" rounded @click="duoChallenge">
+              <v-btn block color="primary" rounded @click="duoChallenge">
                 {{ $t('common.action.redirect') }}
               </v-btn>
             </div>
@@ -31,8 +31,8 @@
               class="d-flex flex-column align-center"
               @click="fidoChallenge"
             >
-              <v-icon class="mb-6" color="secondary" icon="$fido" size="80" />
-              <v-btn block color="secondary" rounded @click="fidoChallenge">
+              <v-icon class="mb-6" color="primary" icon="$fido" size="80" />
+              <v-btn block color="primary" rounded @click="fidoChallenge">
                 {{ $t('common.action.retry') }}
               </v-btn>
             </div>
@@ -43,7 +43,7 @@
               @submit.prevent="otpChallenge"
             >
               <div class="d-flex flex-column align-center ga-4">
-                <v-icon color="secondary" icon="$otp" size="80" />
+                <v-icon color="primary" icon="$otp" size="80" />
                 <p class="text-body-large">
                   {{ $t('common.mfa.otp') }}
                 </p>
@@ -60,7 +60,7 @@
                 />
                 <v-btn
                   block
-                  color="secondary"
+                  color="primary"
                   :disabled="otp.data.value.token.length !== 6"
                   rounded
                   type="submit"
@@ -76,7 +76,7 @@
               @submit.prevent="codeChallenge"
             >
               <div class="d-flex flex-column align-center ga-4">
-                <v-icon color="secondary" icon="$code" size="80" />
+                <v-icon color="primary" icon="$code" size="80" />
                 <p class="text-body-large">
                   {{ $t('common.mfa.code') }}
                 </p>
@@ -89,7 +89,7 @@
                   variant="outlined"
                   @update:model-value="code.errors.clear('token')"
                 />
-                <v-btn block color="secondary" rounded type="submit">
+                <v-btn block color="primary" rounded type="submit">
                   {{ $t('common.action.confirm._') }}
                 </v-btn>
               </div>

@@ -1,15 +1,16 @@
 <template>
   <v-tabs-window-item :key="type">
     <v-container fluid>
-      <v-alert v-if="prompts.length === 0" color="secondary" type="info">
+      <v-alert v-if="prompts.length === 0" type="info">
         {{ $t(`survey-schemes.prompts.${type}.noPrompts`) }}
       </v-alert>
       <v-row v-else>
         <v-col v-for="prompt in prompts" :key="prompt.id" cols="12" md="3">
           <v-item v-slot="{ isSelected, toggle }" :value="prompt.component">
             <v-card
-              :color="isSelected ? 'primary' : 'secondary'"
+              :color="isSelected ? 'primary' : 'primary-lighten-4'"
               dark
+              flat
               height="180"
               @click.stop="tryToggle(isSelected, toggle)"
             >

@@ -1,7 +1,7 @@
 <template>
   <v-col cols>
     <v-card>
-      <v-toolbar color="grey-lighten-4">
+      <v-toolbar>
         <v-toolbar-title class="text-body-large font-weight-medium text-uppercase">
           {{ $t('feedback.physicalData.title') }}
         </v-toolbar-title>

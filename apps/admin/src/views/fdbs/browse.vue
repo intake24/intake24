@@ -1,21 +1,22 @@
 <template>
-  <data-table :actions="['read']" api-url="admin/fdbs" :headers="headers">
-    <template #[`item.code`]="{ item }">
-      <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
-      {{ item.code }}
-    </template>
-    <template #[`item.action`]="{ item }">
-      <v-btn color="secondary" icon :to="{ name: 'fdbs-food-list', params: { id: item.id } }" variant="text">
-        <v-icon>far fa-file</v-icon>
-      </v-btn>
-    </template>
-  </data-table>
+  <browse-layout :actions="false">
+    <data-table :actions="['read']" api-url="admin/fdbs" :headers>
+      <template #[`item.code`]="{ item }">
+        <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
+        {{ item.code }}
+      </template>
+      <template #[`item.action`]="{ item }">
+        <v-btn icon="$read" :to="{ name: 'fdbs-food-list', params: { id: item.id } }" variant="text" />
+      </template>
+    </data-table>
+  </browse-layout>
 </template>
 
 <script lang="ts" setup>
 import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 
 import { DataTable } from '@intake24/admin/components/data-tables';
+import { BrowseLayout } from '@intake24/admin/components/layouts';
 import { useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'FoodDbList' });

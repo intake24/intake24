@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table :api-url="`admin/permissions/${id}/users`" v-bind="{ headers }">
       <template #[`item.action`]="{ item }">
         <component
@@ -11,7 +11,7 @@
         />
       </template>
     </embedded-data-table>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

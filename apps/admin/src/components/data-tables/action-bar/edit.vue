@@ -1,6 +1,5 @@
 <template>
   <v-btn
-    color="secondary"
     :title="internalTitle"
     :to="internalTo"
   >

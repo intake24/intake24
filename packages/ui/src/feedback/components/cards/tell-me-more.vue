@@ -18,7 +18,7 @@
       scrollable
     >
       <v-card :tile="$vuetify.display.smAndDown">
-        <v-toolbar color="secondary">
+        <v-toolbar>
           <v-btn icon="$close" :title="$t('common.action.ok')" variant="text" @click.stop="close" />
           <v-toolbar-title
             class="font-weight-medium text-headline-medium tell-me-more-title"

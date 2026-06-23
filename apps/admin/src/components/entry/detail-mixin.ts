@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 
-import Layout from './layout.vue';
+import { EntryLayout } from '../layouts';
 
 export default defineComponent({
   name: 'DetailMixin',
 
-  components: { Layout },
+  components: { EntryLayout },
 
   props: {
     id: {

@@ -1,7 +1,6 @@
 <template>
   <v-btn
     v-if="downloadUrlAvailable(item)"
-    color="secondary"
     :title="internalTitle"
     @click="download(item)"
   >

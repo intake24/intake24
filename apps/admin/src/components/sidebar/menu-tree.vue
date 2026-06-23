@@ -1,12 +1,10 @@
 <template>
-  <v-list density="compact" nav :opened="[name]">
-    <v-list-group color="grey-lighten-1" :prepend-icon="icon" :value="name">
+  <v-list color="primary" density="compact" nav :opened="[name]">
+    <v-list-group :prepend-icon="icon" :value="name">
       <template #activator="{ props }">
-        <v-list-item v-bind="props">
-          {{ $t(`common.${name}`) }}
-        </v-list-item>
+        <v-list-item v-bind="props" :title="$t(`common.${name}`)" />
       </template>
-      <menu-item v-for="item in items" :key="item.name" :item="item" />
+      <menu-item v-for="item in items" :key="item.name" :item />
     </v-list-group>
   </v-list>
 </template>

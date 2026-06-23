@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-table>
       <tbody>
         <tr>
@@ -23,7 +23,7 @@
     <v-container fluid>
       <json-editor v-bind="{ readOnly: true, modelValue: entry.prompt }" />
     </v-container>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

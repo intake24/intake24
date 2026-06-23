@@ -1,5 +1,6 @@
 export * from './entry';
 export * from './op-icon-map';
+export * from './use-breadcrumbs';
 export * from './use-datetime';
 export * from './use-errors';
 export * from './use-fetch-list';

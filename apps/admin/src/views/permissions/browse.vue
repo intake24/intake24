@@ -1,15 +1,18 @@
 <template>
-  <data-table :headers="headers">
-    <template #[`item.createdAt`]="{ item }">
-      {{ formatDateTime(item.createdAt) }}
-    </template>
-  </data-table>
+  <browse-layout>
+    <data-table :headers>
+      <template #[`item.createdAt`]="{ item }">
+        {{ formatDateTime(item.createdAt) }}
+      </template>
+    </data-table>
+  </browse-layout>
 </template>
 
 <script lang="ts" setup>
 import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 
 import { DataTable } from '@intake24/admin/components/data-tables';
+import { BrowseLayout } from '@intake24/admin/components/layouts';
 import { useDateTime } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/ui';
 

@@ -30,7 +30,7 @@
       </slot>
     </template>
     <v-card :tile="mobile">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" @click.stop="close" />
         <v-toolbar-title>{{ $t('common.help.request.title') }}</v-toolbar-title>
       </v-toolbar>

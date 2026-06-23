@@ -1,6 +1,6 @@
 <template>
-  <layout v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
-    <v-toolbar color="grey-lighten-4">
+  <entry-layout v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="save">
+    <v-toolbar color="surface">
       <v-toolbar-title class="font-weight-medium">
         {{ $t('languages.translations.title') }}
       </v-toolbar-title>
@@ -57,7 +57,7 @@
         {{ $t('languages.translations.create') }}
       </v-card-title>
       <v-card-text class="d-flex justify-center align-center">
-        <v-btn color="secondary" icon="$add" size="x-large" />
+        <v-btn color="primary" icon="$add" size="x-large" />
       </v-card-text>
     </v-card>
     <translation-section
@@ -65,7 +65,7 @@
       @close="close"
       @update="update"
     />
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

@@ -1,11 +1,11 @@
 <template>
-  <v-toolbar color="grey-lighten-4">
+  <v-toolbar color="surface">
     <v-toolbar-title class="font-weight-medium">
       {{ $t('locales.food-builders.title') }}
     </v-toolbar-title>
     <v-spacer />
     <v-btn
-      color="secondary"
+      color="primary"
       icon="$add"
       size="small"
       :title="$t('locales.food-builders.add')"
@@ -28,12 +28,10 @@
         <list-item-error :errors="errors.get(`${index}.*`)" />
         <v-list-item-action>
           <v-btn
-            icon
+            icon="$edit"
             :title="$t('locales.food-builders.edit')"
             @click.stop="edit(index, item)"
-          >
-            <v-icon color="secondary-lighten-2" icon="$edit" />
-          </v-btn>
+          />
         </v-list-item-action>
         <v-list-item-action>
           <confirm-dialog
@@ -59,7 +57,7 @@
     :z-index="1050"
   >
     <v-card tile>
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           <v-icon icon="fas fas fa-blender" start />
@@ -73,7 +71,7 @@
         </v-toolbar-items>
         <template #extension>
           <v-container>
-            <v-tabs v-model="tab" bg-color="secondary">
+            <v-tabs v-model="tab">
               <v-tab v-for="item in ['general', 'steps', 'json']" :key="item" :value="item">
                 {{ $t(`locales.food-builders.tabs.${item}`) }}
               </v-tab>

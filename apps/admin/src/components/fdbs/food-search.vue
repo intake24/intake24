@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-card :loading :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('fdbs.search.title') }}

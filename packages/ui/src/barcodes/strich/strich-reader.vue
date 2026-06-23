@@ -7,7 +7,7 @@
     :min-height="$vuetify.display.mobile ? undefined : '480px'"
   >
     <v-card ref="card" :tile="$vuetify.display.mobile">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$close" :title="$t('common.action.close')" @click.stop="close" />
         <v-toolbar-title>Scan barcode</v-toolbar-title>
         <v-spacer />

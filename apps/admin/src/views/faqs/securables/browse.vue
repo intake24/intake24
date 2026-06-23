@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <securables :owner="entry.owner" :resource-id="id" securable-type="FAQ" />
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

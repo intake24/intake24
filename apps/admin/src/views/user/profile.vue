@@ -1,27 +1,21 @@
 <template>
-  <div>
-    <h2 class="mb-4">
+  <simple-layout v-if="profile">
+    <v-card-title>
       {{ $t('user.profile') }}
-    </h2>
-    <v-card
-      v-if="profile"
-      :border="!$vuetify.display.mobile"
-      :flat="$vuetify.display.mobile"
-      :tile="$vuetify.display.mobile"
-    >
-      <v-row no-gutters>
-        <v-col class="pa-4 d-flex flex-column gr-4" cols="12" md="6" sm="8">
-          <v-list-subheader>{{ $t('user.credentials') }}</v-list-subheader>
-          <v-text-field
-            v-model="profile.email"
-            class="py-1"
-            :label="$t('user.email')"
-            readonly
-          >
-            <template #prepend>
-              <v-avatar color="primary-darken-2" icon="fas fa-envelope" />
-            </template>
-            <!-- <template #append-inner>
+    </v-card-title>
+    <v-row no-gutters>
+      <v-col class="pa-4 d-flex flex-column gr-4" cols="12" md="6" sm="8">
+        <v-list-subheader>{{ $t('user.credentials') }}</v-list-subheader>
+        <v-text-field
+          v-model="profile.email"
+          class="py-1"
+          :label="$t('user.email')"
+          readonly
+        >
+          <template #prepend>
+            <v-avatar color="primary-darken-2" icon="fas fa-envelope" />
+          </template>
+          <!-- <template #append-inner>
               <v-icon
                 color="primary-darken-2"
                 icon="fas fa-pencil"
@@ -29,116 +23,115 @@
                 @click="changeEmail"
               />
             </template> -->
-          </v-text-field>
-          <user-password :email="profile.email" />
-        </v-col>
-      </v-row>
-      <v-divider />
-      <v-row no-gutters>
-        <v-col class="pa-4 d-flex flex-column gr-4" cols="12" md="6" sm="8">
-          <v-list-subheader>{{ $t('user.info') }}</v-list-subheader>
-          <v-text-field
-            v-model="profile.name"
-            class="py-1"
-            :error-messages="errors.get('name')"
-            :label="$t('user.name')"
-            name="name"
-            prepend-inner-icon="fas fa-user"
-            @update:model-value="errors.clear('phone')"
-          >
-            <template #prepend>
-              <v-avatar color="primary-darken-2" icon="fas fa-user" />
-            </template>
-          </v-text-field>
-          <v-text-field
-            v-model="profile.phone"
-            class="py-1"
-            :error-messages="errors.get('phone')"
-            :label="$t('user.phone')"
-            name="phone"
-            prepend-inner-icon="fas fa-phone"
-            @update:model-value="errors.clear('phone')"
-          >
-            <template #prepend>
-              <v-avatar color="primary-darken-2" icon="fas fa-phone" />
-            </template>
-          </v-text-field>
-          <v-btn
-            color="primary-darken-2"
-            size="large"
-            type="submit"
-            variant="tonal"
-            @click="updateProfile"
-          >
-            <v-icon icon="fas fa-save" start />
-            {{ $t('common.action.save') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-divider />
-      <v-list lines="two">
-        <v-list-subheader>{{ $t('user.access') }}</v-list-subheader>
-        <v-list-item>
+        </v-text-field>
+        <user-password :email="profile.email" />
+      </v-col>
+    </v-row>
+    <v-divider />
+    <v-row no-gutters>
+      <v-col class="pa-4 d-flex flex-column gr-4" cols="12" md="6" sm="8">
+        <v-list-subheader>{{ $t('user.info') }}</v-list-subheader>
+        <v-text-field
+          v-model="profile.name"
+          class="py-1"
+          :error-messages="errors.get('name')"
+          :label="$t('user.name')"
+          name="name"
+          prepend-inner-icon="fas fa-user"
+          @update:model-value="errors.clear('phone')"
+        >
           <template #prepend>
-            <v-avatar color="primary-darken-2" icon="fas fa-users" />
+            <v-avatar color="primary-darken-2" icon="fas fa-user" />
           </template>
-          <v-list-item-title>{{ $t('user.roles') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ roles.length ? roles.join(', ') : '' }}
-          </v-list-item-subtitle>
-        </v-list-item>
-        <v-list-item>
+        </v-text-field>
+        <v-text-field
+          v-model="profile.phone"
+          class="py-1"
+          :error-messages="errors.get('phone')"
+          :label="$t('user.phone')"
+          name="phone"
+          prepend-inner-icon="fas fa-phone"
+          @update:model-value="errors.clear('phone')"
+        >
           <template #prepend>
-            <v-avatar color="primary-darken-2" icon="fas fa-eye-slash" />
+            <v-avatar color="primary-darken-2" icon="fas fa-phone" />
           </template>
-          <v-list-item-title>{{ $t('user.permissions') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ permissions.length ? permissions.join(', ') : '' }}
-          </v-list-item-subtitle>
-        </v-list-item>
-      </v-list>
-      <v-divider />
-      <v-row no-gutters>
-        <v-col cols="12" md="6">
-          <v-list lines="two">
-            <v-list-subheader>{{ $t('user.settings') }}</v-list-subheader>
-            <v-list-item>
-              <template #prepend>
-                <v-avatar color="primary-darken-2" icon="fas fa-language" />
+        </v-text-field>
+        <v-btn
+          color="primary-darken-2"
+          size="large"
+          type="submit"
+          variant="tonal"
+          @click="updateProfile"
+        >
+          <v-icon icon="fas fa-save" start />
+          {{ $t('common.action.save') }}
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-divider />
+    <v-list lines="two">
+      <v-list-subheader>{{ $t('user.access') }}</v-list-subheader>
+      <v-list-item>
+        <template #prepend>
+          <v-avatar color="primary-darken-2" icon="fas fa-users" />
+        </template>
+        <v-list-item-title>{{ $t('user.roles') }}</v-list-item-title>
+        <v-list-item-subtitle>
+          {{ roles.length ? roles.join(', ') : '' }}
+        </v-list-item-subtitle>
+      </v-list-item>
+      <v-list-item>
+        <template #prepend>
+          <v-avatar color="primary-darken-2" icon="fas fa-eye-slash" />
+        </template>
+        <v-list-item-title>{{ $t('user.permissions') }}</v-list-item-title>
+        <v-list-item-subtitle>
+          {{ permissions.length ? permissions.join(', ') : '' }}
+        </v-list-item-subtitle>
+      </v-list-item>
+    </v-list>
+    <v-divider />
+    <v-row no-gutters>
+      <v-col cols="12" md="6">
+        <v-list lines="two">
+          <v-list-subheader>{{ $t('user.settings') }}</v-list-subheader>
+          <v-list-item>
+            <template #prepend>
+              <v-avatar color="primary-darken-2" icon="fas fa-language" />
+            </template>
+            <v-select
+              class="py-1"
+              hide-details="auto"
+              item-title="englishName"
+              item-value="code"
+              :items="availableLanguages"
+              :label="$t('user.languages._')"
+              :model-value="lang"
+              variant="outlined"
+              @update:model-value="updateLanguage"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.englishName">
+                  <template #prepend>
+                    <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
+                  </template>
+                </v-list-item>
               </template>
-              <v-select
-                class="py-1"
-                hide-details="auto"
-                item-title="englishName"
-                item-value="code"
-                :items="availableLanguages"
-                :label="$t('user.languages._')"
-                :model-value="lang"
-                variant="outlined"
-                @update:model-value="updateLanguage"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.englishName">
-                    <template #prepend>
-                      <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
-                  {{ item.englishName }}
-                </template>
-              </v-select>
-            </v-list-item>
-          </v-list>
-        </v-col>
-      </v-row>
-      <v-divider />
-      <user-mfa />
-      <v-divider />
-      <app-info />
-    </v-card>
-  </div>
+              <template #selection="{ item }">
+                <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
+                {{ item.englishName }}
+              </template>
+            </v-select>
+          </v-list-item>
+        </v-list>
+      </v-col>
+    </v-row>
+    <v-divider />
+    <user-mfa />
+    <v-divider />
+    <app-info />
+  </simple-layout>
 </template>
 
 <script lang="ts" setup>
@@ -146,6 +139,7 @@ import axios, { HttpStatusCode } from 'axios';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
+import { SimpleLayout } from '@intake24/admin/components/layouts';
 import { UserMfa, UserPassword } from '@intake24/admin/components/user';
 import { useApp, useMessages, useUser } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';

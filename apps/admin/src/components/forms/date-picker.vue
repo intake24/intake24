@@ -22,7 +22,7 @@
         <v-spacer />
         <v-btn
           class="font-weight-medium"
-          color="secondary"
+          color="info"
           variant="text"
           @click="update"
         >

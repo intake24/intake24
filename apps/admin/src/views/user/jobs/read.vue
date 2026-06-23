@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <template #actions>
       <job-repeat v-if="entry && can({ action: 'edit' })" :model-value="entry" />
     </template>
@@ -29,9 +29,7 @@
               :title="$t('common.action.download')"
               @click="download(entry)"
             >
-              <v-icon color="secondary">
-                $download
-              </v-icon>
+              <v-icon icon="$download" />
             </v-btn>
           </td>
           <th>{{ $t('jobs.downloadUrlExpiresAt') }}</th>
@@ -85,7 +83,7 @@
       </div>
       <json-editor :model-value="entry.params" read-only />
     </div>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

@@ -164,7 +164,7 @@ export default defineComponent({
             default: () => [
               h(
                 VToolbar,
-                { color: 'secondary' },
+                { },
                 {
                   default: () => [
                     h(

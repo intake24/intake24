@@ -1,77 +1,71 @@
 <template>
-  <v-card flat tile>
-    <v-toolbar color="grey-lighten-4">
-      <v-icon color="secondary" end icon="fas fa-cloud-meatball" />
-      <v-toolbar-title class="font-weight-medium">
-        {{ $t('feedback-schemes.cards.title') }}
-      </v-toolbar-title>
-      <v-spacer />
-      <v-btn color="primary" icon="$add" size="small" :title="$t('feedback-schemes.cards.add')" @click.stop="add" />
-      <options-menu>
-        <select-resource resource="feedback-schemes" return-object="cards" @update:model-value="load">
-          <template #activator="{ props }">
-            <v-list-item v-bind="props" link>
-              <template #prepend>
-                <v-icon icon="$download" />
-              </template>
-              <v-list-item-title>
-                {{ $t('feedback-schemes.load') }}
-              </v-list-item-title>
-            </v-list-item>
-          </template>
-        </select-resource>
-        <json-editor-dialog v-model="cards" />
-      </options-menu>
-    </v-toolbar>
-    <v-list class="list-border" lines="two">
-      <vue-draggable
-        v-model="cards"
-        :animation="300"
-        handle=".drag-and-drop__handle"
+  <v-toolbar color="surface">
+    <v-icon end icon="fas fa-cloud-meatball" />
+    <v-toolbar-title class="font-weight-medium">
+      {{ $t('feedback-schemes.cards.title') }}
+    </v-toolbar-title>
+    <v-spacer />
+    <v-btn color="primary" icon="$add" size="small" :title="$t('feedback-schemes.cards.add')" @click.stop="add" />
+    <options-menu>
+      <select-resource resource="feedback-schemes" return-object="cards" @update:model-value="load">
+        <template #activator="{ props }">
+          <v-list-item v-bind="props" link>
+            <template #prepend>
+              <v-icon icon="$download" />
+            </template>
+            <v-list-item-title>
+              {{ $t('feedback-schemes.load') }}
+            </v-list-item-title>
+          </v-list-item>
+        </template>
+      </select-resource>
+      <json-editor-dialog v-model="cards" />
+    </options-menu>
+  </v-toolbar>
+  <v-list class="list-border" lines="two">
+    <vue-draggable
+      v-model="cards"
+      :animation="300"
+      handle=".drag-and-drop__handle"
+    >
+      <v-list-item
+        v-for="(card, index) in cards"
+        :key="card.id"
+        :class="itemErrors[index]?.length ? 'text-error' : undefined"
+        :variant="itemErrors[index]?.length ? 'tonal' : undefined"
       >
-        <v-list-item
-          v-for="(card, index) in cards"
-          :key="card.id"
-          :class="itemErrors[index]?.length ? 'text-error' : undefined"
-          :variant="itemErrors[index]?.length ? 'tonal' : undefined"
-        >
-          <template #prepend>
-            <v-drag-and-drop-handle />
-          </template>
-          <v-list-item-title>{{ getListItemTitle(card) }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ `Type: ${card.type}` }}
-          </v-list-item-subtitle>
-          <template #append>
-            <list-item-error :errors="itemErrors[index]" />
-            <v-list-item-action>
-              <v-btn
-                icon
-                :title="$t('feedback-schemes.cards.edit')"
-                @click.stop="edit({ card, index })"
-              >
-                <v-icon color="secondary-lighten-1">
-                  $edit
-                </v-icon>
-              </v-btn>
-            </v-list-item-action>
-            <v-list-item-action>
-              <confirm-dialog
-                color="error"
-                icon
-                icon-left="$delete"
-                :label="$t('feedback-schemes.cards.remove')"
-                @confirm="remove(index)"
-              >
-                {{ $t('common.action.confirm.delete', { name: getListItemTitle(card) }) }}
-              </confirm-dialog>
-            </v-list-item-action>
-          </template>
-        </v-list-item>
-      </vue-draggable>
-    </v-list>
-    <card-selector ref="selector" :images="images" @save="save" />
-  </v-card>
+        <template #prepend>
+          <v-drag-and-drop-handle />
+        </template>
+        <v-list-item-title>{{ getListItemTitle(card) }}</v-list-item-title>
+        <v-list-item-subtitle>
+          {{ `Type: ${card.type}` }}
+        </v-list-item-subtitle>
+        <template #append>
+          <list-item-error :errors="itemErrors[index]" />
+          <v-list-item-action>
+            <v-btn
+              icon="$edit"
+              :title="$t('feedback-schemes.cards.edit')"
+              @click.stop="edit({ card, index })"
+            />
+          </v-list-item-action>
+          <v-list-item-action>
+            <confirm-dialog
+              color="error"
+              icon
+              icon-left="$delete"
+              :label="$t('feedback-schemes.cards.remove')"
+              @confirm="remove(index)"
+            >
+              {{ $t('common.action.confirm.delete', { name: getListItemTitle(card) }) }}
+            </confirm-dialog>
+          </v-list-item-action>
+        </template>
+      </v-list-item>
+    </vue-draggable>
+  </v-list>
+  <card-selector ref="selector" :images="images" @save="save" />
 </template>
 
 <script lang="ts" setup>

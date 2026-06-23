@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-if="loggedIn" v-model="sidebar" color="secondary">
+    <v-navigation-drawer v-if="loggedIn" v-model="sidebar" color="background">
       <v-list>
         <v-list-item link to="/">
           <template #prepend>
@@ -12,13 +12,10 @@
           </v-list-item-title>
         </v-list-item>
       </v-list>
-      <v-divider />
-      <v-list density="compact" nav>
-        <v-list-group color="grey-lighten-1" prepend-icon="fas fa-user" :value="true">
+      <v-list color="primary" density="compact" nav>
+        <v-list-group prepend-icon="fas fa-user" :value="true">
           <template #activator="{ props }">
-            <v-list-item v-bind="props">
-              <v-list-item-title>{{ $t('user._') }}</v-list-item-title>
-            </v-list-item>
+            <v-list-item v-bind="props" :title="$t('user._')" />
           </template>
           <v-list-item link prepend-icon="fas fa-tachometer-alt" :to="{ name: 'dashboard' }">
             <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
@@ -101,41 +98,37 @@
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="loggedIn" color="primary">
+    <v-app-bar v-if="loggedIn" color="background" flat>
       <v-app-bar-nav-icon @click.stop="toggleSidebar" />
       <v-spacer />
       <v-btn :href="app.docs" target="_blank" :title="$t('common.docs')" variant="text">
-        <v-icon :start="!$vuetify.display.mobile">
-          $docs
-        </v-icon>
+        <v-icon icon="$docs" :start="!$vuetify.display.mobile" />
         <span class="d-none d-sm-block">{{ $t('common.docs') }}</span>
       </v-btn>
       <v-btn v-if="isVerified" :to="{ name: 'user' }" variant="text">
-        <v-icon :start="!$vuetify.display.mobile">
-          $user
-        </v-icon>
+        <v-icon icon="$user" :start="!$vuetify.display.mobile" />
         <span class="d-none d-sm-block">{{ $t('user.profile') }}</span>
       </v-btn>
-      <v-divider class="mx-2" vertical />
+      <v-divider class="mx-2" inset vertical />
+      <v-btn
+        :icon="theme.name.value === 'dark' ? 'far fa-moon' : 'far fa-sun'"
+        size="small"
+        variant="text"
+        @click="theme.cycle()"
+      />
+      <v-divider class="mx-2" inset vertical />
       <confirm-dialog :label="$t('common.logout._')" @confirm="logout">
         <template #activator="{ props }">
           <v-btn variant="text" v-bind="props">
             <span class="d-none d-sm-block">{{ $t('common.logout._') }}</span>
-            <v-icon :end="!$vuetify.display.mobile">
-              $logout
-            </v-icon>
+            <v-icon :end="!$vuetify.display.mobile" icon="$logout" />
           </v-btn>
         </template>
         {{ $t('common.logout.text') }}
       </confirm-dialog>
     </v-app-bar>
     <v-main>
-      <v-container :class="{ 'pa-0': $vuetify.display.mobile }" fluid>
-        <v-breadcrumbs v-if="breadcrumbs.length" class="px-1 py-2" :items="breadcrumbs">
-          <template #divider>
-            <v-icon>fas fa-caret-right</v-icon>
-          </template>
-        </v-breadcrumbs>
+      <v-container fluid>
         <router-view />
       </v-container>
     </v-main>
@@ -146,35 +139,22 @@
 </template>
 
 <script lang="ts" setup>
-import type { RouteLocationRaw } from 'vue-router';
-
-import type { Dictionary } from '@intake24/common/types';
-
 import { groupBy } from 'lodash-es';
 import { storeToRefs } from 'pinia';
-import pluralize from 'pluralize';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useDisplay, useLocale } from 'vuetify';
+import { useDisplay, useLocale, useTheme } from 'vuetify';
 
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import { useWebPush } from '@intake24/admin/components/web-push';
 import defaultResources from '@intake24/admin/router/resources';
 import { useApp, useAuth, useEntry, useResource, useUser } from '@intake24/admin/stores';
-import { iconWhite as logo } from '@intake24/common/theme/assets';
+import { iconPrimary as logo } from '@intake24/common/theme/assets';
 import { AppFooter, AppNavFooter, ConfirmDialog, Loader, MessageBox, ServiceWorker, useI18n, useLanguage } from '@intake24/ui';
 
 import { useHttp } from './services';
 
-type Breadcrumbs = {
-  disabled?: boolean;
-  exact?: boolean;
-  href?: string;
-  link?: boolean;
-  title: string;
-  to?: string | RouteLocationRaw;
-};
-
+const theme = useTheme();
 const http = useHttp();
 const vI18n = useLocale();
 const display = useDisplay();
@@ -208,69 +188,6 @@ const title = computed(() => {
 
   // TODO: we should resole breadcrumb name in better way based on entry field
   return name ?? englishName ?? description ?? id ?? t(`${resource.name}.title`);
-});
-
-function buildBreadCrumb(module: string, action: string, currentParams: Dictionary, parent?: string) {
-  const defaults = { disabled: false, exact: true, link: true };
-  const items: Breadcrumbs[] = [];
-
-  if (parent) {
-    items.push(
-      ...buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams),
-    );
-  }
-
-  const name = parent ? `${parent}-${module}` : module;
-  const title = parent && !['media', 'securables'].includes(module) ? `${parent}.${module}` : module;
-  const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
-  const { [identifier]: currentId, id } = currentParams;
-
-  const params: Dictionary<string> = { [identifier]: currentId };
-  if (parent)
-    params.id = id;
-
-  items.push({ ...defaults, title: t(`${title}.title`), to: { name } });
-
-  if (!currentId)
-    return items;
-
-  if (currentId === 'create') {
-    items.push({
-      ...defaults,
-      title: t(`${title}.${action}`),
-      to: { name: `${name}-${action}`, params },
-    });
-    return items;
-  }
-
-  // TODO: we should resole breadcrumb name in better way based on entry field
-  const { id: entryId, name: entryName, englishName, description } = entry.data;
-  const text = entryName ?? englishName ?? description ?? entryId ?? t(`${title}.read`);
-
-  items.push({
-    ...defaults,
-    title: parent ? t(`${title}.${action}`) : text,
-    to: { name: `${name}-${action === 'edit' ? 'read' : action}`, params },
-  });
-
-  if (['edit'].includes(action)) {
-    items.push({
-      ...defaults,
-      title: t(`${title}.${action}`),
-      to: { name: `${name}-${action}`, params },
-    });
-  }
-
-  return items;
-};
-
-const breadcrumbs = computed(() => {
-  const { meta: { module, action } = {}, params } = route;
-  if (!module || !action)
-    return [];
-
-  const { current, parent } = module;
-  return buildBreadCrumb(current, action, params, parent);
 });
 
 function toggleSidebar() {

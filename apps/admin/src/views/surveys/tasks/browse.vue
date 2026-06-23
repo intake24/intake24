@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }">
+  <entry-layout v-bind="{ id, entry }">
     <jobs
       v-bind="{
         id,
@@ -9,7 +9,7 @@
         types,
       }"
     />
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

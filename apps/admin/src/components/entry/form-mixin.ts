@@ -2,12 +2,12 @@ import { defineComponent } from 'vue';
 
 import { ErrorList, SubmitFooter } from '@intake24/admin/components/forms';
 
-import Layout from './layout.vue';
+import { EntryLayout } from '../layouts';
 
 export default defineComponent({
   name: 'FormMixin',
 
-  components: { ErrorList, Layout, SubmitFooter },
+  components: { ErrorList, EntryLayout, SubmitFooter },
 
   provide: () => ({
     editsResource: true,

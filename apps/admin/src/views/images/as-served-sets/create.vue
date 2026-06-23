@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -53,7 +53,7 @@
         </v-card-text>
       </v-form>
     </v-container>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

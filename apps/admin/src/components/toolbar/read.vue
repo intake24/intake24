@@ -1,8 +1,8 @@
 <template>
   <v-btn
-    color="secondary"
     :disabled="disabled"
     :title="$t('common.action.read')"
+    variant="tonal"
     @click.stop="onClick"
   >
     <v-icon :icon="icon" start />

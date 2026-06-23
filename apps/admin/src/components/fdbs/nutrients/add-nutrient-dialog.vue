@@ -4,7 +4,7 @@
       <v-btn color="primary" icon="$add" size="small" :title="$t('fdbs.nutrients.add')" v-bind="props" />
     </template>
     <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('fdbs.nutrients.title') }}
@@ -49,7 +49,7 @@
             <v-pagination v-model="page" :length="lastPage" rounded />
           </div>
         </template>
-        <v-alert v-else color="secondary" type="info">
+        <v-alert v-else type="info">
           {{ $t('fdbs.nutrients.none') }}
         </v-alert>
       </v-card-text>

@@ -1,30 +1,22 @@
 <template>
-  <h2 class="mb-4">
-    {{ $t('user.profile') }}
-  </h2>
-  <v-card :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" :tile="$vuetify.display.mobile">
-    <v-toolbar flat>
-      <v-toolbar-title class="font-weight-medium text-title-large">
-        <slot name="title">
-          {{ $t('user.personalAccessTokens.title') }}
-        </slot>
+  <simple-layout>
+    <v-toolbar color="surface">
+      <v-toolbar-title>
+        {{ $t('user.personalAccessTokens.title') }}
       </v-toolbar-title>
       <v-spacer />
       <v-dialog v-model="dialog" max-width="500px" persistent>
         <template #activator="{ props }">
           <v-btn
-            color="primary"
-            icon
-            :title="$t('user.personalAccessTokens.issue')"
             v-bind="props"
-          >
-            <v-icon color="white">
-              $add
-            </v-icon>
-          </v-btn>
+            color="primary"
+            icon="$add"
+            size="small"
+            :title="$t('user.personalAccessTokens.issue')"
+          />
         </template>
         <v-card :loading="false" :tile="$vuetify.display.smAndDown">
-          <v-toolbar color="secondary">
+          <v-toolbar>
             <v-btn icon="$cancel" :title="$t('common.action.close')" variant="plain" @click.stop="close" />
             <v-toolbar-title>{{ $t('user.personalAccessTokens.issue') }}</v-toolbar-title>
           </v-toolbar>
@@ -52,21 +44,17 @@
                 v-model="data.name"
                 class="mb-4"
                 :error-messages="errors.get('name')"
-                hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
-                variant="outlined"
               />
               <v-text-field
                 append-icon="fas fa-calendar-alt"
                 class="mb-4"
                 :error-messages="errors.get('expiresAt')"
-                hide-details="auto"
                 :label="$t('common.expiresAt')"
                 :model-value="formatDate(data.expiresAt, 'dd/MM/yyyy')"
                 name="expiresAt"
                 readonly
-                variant="outlined"
                 @click:append="datePicker = !datePicker"
                 @focusin="datePicker = true"
               />
@@ -75,7 +63,6 @@
                   v-show="datePicker"
                   v-model="data.expiresAt"
                   :error-messages="errors.get('expiresAt')"
-                  hide-details="auto"
                   name="expiresAt"
                   scrollable
                   width="auto"
@@ -96,6 +83,7 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+    <v-divider />
     <v-list class="list-border" lines="two">
       <v-list-item
         v-for="(token, idx) in tokens"
@@ -104,7 +92,7 @@
         link
       >
         <template #prepend>
-          <v-avatar color="secondary" icon="fas fa-key" />
+          <v-avatar icon="fas fa-key" />
         </template>
         <v-list-item-title>{{ token.name }}</v-list-item-title>
         <v-list-item-subtitle v-if="token.revoked">
@@ -136,96 +124,76 @@
         </template>
       </v-list-item>
     </v-list>
-  </v-card>
+  </simple-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type {
   PersonalAccessTokenResponse,
   PersonalAccessTokensResponse,
 } from '@intake24/common/types/http/admin';
 
 import { addYears } from 'date-fns';
-import { defineComponent, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
+import { SimpleLayout } from '@intake24/admin/components/layouts';
 import { useDateTime, useForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { useMessages } from '@intake24/admin/stores';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 import { useClipboard } from '@intake24/ui/composables';
 
-export default defineComponent({
-  name: 'PersonalAccessTokens',
+defineOptions({ name: 'PersonalAccessTokens' });
 
-  components: { ConfirmDialog },
+const { i18n } = useI18n();
 
-  setup() {
-    const { i18n } = useI18n();
+const http = useHttp();
+const { formatDate } = useDateTime();
+const { toClipboard } = useClipboard();
 
-    const http = useHttp();
-    const { formatDate } = useDateTime();
-    const { toClipboard } = useClipboard();
+const jwt = ref('');
+const tokens = ref<PersonalAccessTokenResponse[]>([]);
+const dialog = ref(false);
+const datePicker = ref(false);
 
-    const jwt = ref('');
-    const tokens = ref<PersonalAccessTokenResponse[]>([]);
-    const dialog = ref(false);
-    const datePicker = ref(false);
+const { clearError, data, errors, post, reset } = useForm({
+  data: { name: '', expiresAt: addYears(new Date(), 1) },
+});
 
-    const { clearError, data, errors, post, reset } = useForm({
-      data: { name: '', expiresAt: addYears(new Date(), 1) },
-    });
+function close() {
+  dialog.value = false;
+}
 
-    const close = () => {
-      dialog.value = false;
-    };
+async function submit() {
+  const data = await post<{ jwt: string; token: PersonalAccessTokenResponse }>(
+    'admin/user/personal-access-tokens',
+  );
+  jwt.value = data.jwt;
+  tokens.value.unshift(data.token);
+}
 
-    const submit = async () => {
-      const data = await post<{ jwt: string; token: PersonalAccessTokenResponse }>(
-        'admin/user/personal-access-tokens',
-      );
-      jwt.value = data.jwt;
-      tokens.value.unshift(data.token);
-    };
+async function revoke(idx: number) {
+  const { id, name } = tokens.value[idx];
 
-    const revoke = async (idx: number) => {
-      const { id, name } = tokens.value[idx];
+  await http.delete(`admin/user/personal-access-tokens/${id}`);
+  tokens.value[idx].revoked = true;
 
-      await http.delete(`admin/user/personal-access-tokens/${id}`);
-      tokens.value[idx].revoked = true;
+  useMessages().success(i18n.t('common.msg.revoked', { name }));
+}
 
-      useMessages().success(i18n.t('common.msg.revoked', { name }));
-    };
+async function getTokens() {
+  const {
+    data: { data },
+  } = await http.get<PersonalAccessTokensResponse>('admin/user/personal-access-tokens');
+  tokens.value = data;
+}
 
-    const getTokens = async () => {
-      const {
-        data: { data },
-      } = await http.get<PersonalAccessTokensResponse>('admin/user/personal-access-tokens');
-      tokens.value = data;
-    };
+watch(dialog, () => {
+  reset();
+  jwt.value = '';
+});
 
-    watch(dialog, () => {
-      reset();
-      jwt.value = '';
-    });
-
-    onMounted(async () => {
-      await getTokens();
-    });
-
-    return {
-      clearError,
-      close,
-      datePicker,
-      dialog,
-      data,
-      errors,
-      formatDate,
-      jwt,
-      revoke,
-      submit,
-      tokens,
-      toClipboard,
-    };
-  },
+onMounted(async () => {
+  await getTokens();
 });
 </script>

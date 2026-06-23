@@ -139,7 +139,10 @@ export default createVuetify({
     defaultTheme: 'light',
     themes: {
       light: {
-        colors,
+        colors: {
+          ...colors,
+          background: '#F5F5F5',
+        },
       },
     },
   },

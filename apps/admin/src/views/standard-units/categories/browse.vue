@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table
       ref="table"
       :api-url="`admin/standard-units/${id}/categories`"
@@ -13,7 +13,7 @@
         />
       </template>
     </embedded-data-table>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

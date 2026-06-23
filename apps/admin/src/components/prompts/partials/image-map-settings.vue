@@ -1,6 +1,6 @@
 <template>
   <v-card border flat>
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar color="surface">
       <v-icon end icon="$image-maps" />
       <v-toolbar-title>
         {{ $t('survey-schemes.prompts.imageMap._') }}

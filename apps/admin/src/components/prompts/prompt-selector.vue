@@ -10,7 +10,7 @@
     :z-index="1050"
   >
     <v-card tile>
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`survey-schemes.prompts.${dialog.index === -1 ? 'create' : 'edit'}`) }}
@@ -23,7 +23,7 @@
         </v-toolbar-items>
         <template #extension>
           <v-container :fluid="$vuetify.display.mdAndDown">
-            <v-tabs v-model="tab" bg-color="secondary">
+            <v-tabs v-model="tab">
               <v-tab
                 v-for="item in promptSettings[dialog.prompt.component].tabs"
                 :key="item"
@@ -43,12 +43,10 @@
               <v-row>
                 <v-col cols="12">
                   <v-card border flat>
-                    <v-toolbar color="grey-lighten-4">
-                      <v-icon end icon="fas fa-fingerprint" />
-                      <v-toolbar-title>
-                        {{ $t('survey-schemes.prompts.internal._') }}
-                      </v-toolbar-title>
-                    </v-toolbar>
+                    <v-card-title>
+                      <v-icon icon="fas fa-fingerprint" />
+                      {{ $t('survey-schemes.prompts.internal._') }}
+                    </v-card-title>
                     <v-container fluid>
                       <v-row>
                         <v-col cols="12" md="6">
@@ -87,23 +85,19 @@
                 </v-col>
                 <v-col v-if="!isOverrideMode" cols="12">
                   <v-card border flat>
-                    <v-toolbar color="grey-lighten-4">
-                      <v-icon end icon="fas fa-circle-question" />
-                      <v-toolbar-title>
-                        {{ $t(`survey-schemes.prompts.type`) }}
-                      </v-toolbar-title>
-                      <template #extension>
-                        <v-tabs v-model="promptTypeTab">
-                          <v-tab
-                            v-for="type in Object.keys(availableGroupedPrompts)"
-                            :key="type"
-                            class="font-weight-medium"
-                          >
-                            {{ $t(`survey-schemes.prompts.${type}._`) }}
-                          </v-tab>
-                        </v-tabs>
-                      </template>
-                    </v-toolbar>
+                    <v-card-title class="font-weight-medium">
+                      <v-icon icon="fas fa-circle-question" />
+                      {{ $t(`survey-schemes.prompts.type`) }}
+                    </v-card-title>
+                    <v-tabs v-model="promptTypeTab">
+                      <v-tab
+                        v-for="type in Object.keys(availableGroupedPrompts)"
+                        :key="type"
+                        class="font-weight-medium"
+                      >
+                        {{ $t(`survey-schemes.prompts.${type}._`) }}
+                      </v-tab>
+                    </v-tabs>
                     <v-item-group
                       v-model="dialog.prompt.component"
                       selected-class="primary"

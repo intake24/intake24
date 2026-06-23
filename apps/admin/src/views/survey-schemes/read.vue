@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <template #actions>
       <copy-record-dialog
         v-if="canHandleEntry('copy')"
@@ -27,7 +27,7 @@
         </tr>
       </tbody>
     </v-table>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

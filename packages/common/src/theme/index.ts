@@ -1,5 +1,4 @@
 export const colors = {
-  background: '#F5F5F5',
   // Primary equivalent to tailwind's 50 -> 950 scale
   'primary-lighten-5': '#fef5ee',
   'primary-lighten-4': '#fde9d7',

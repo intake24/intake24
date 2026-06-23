@@ -11,7 +11,7 @@
       </v-list-item>
     </template>
     <v-card :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="cancel" />
         <v-toolbar-title>
           {{ $t('survey-schemes.prompts.templates.saveAs.title') }}

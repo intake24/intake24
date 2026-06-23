@@ -1,6 +1,6 @@
 <template>
   <v-card flat tile>
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar>
       <v-icon color="secondary" end icon="fas fa-bars-staggered" />
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.sections.title') }}
@@ -93,7 +93,7 @@
       :z-index="1050"
     >
       <v-card tile>
-        <v-toolbar color="secondary" dark>
+        <v-toolbar>
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
           <v-toolbar-title>
             <v-icon icon="fas fa-bars-staggered" start />

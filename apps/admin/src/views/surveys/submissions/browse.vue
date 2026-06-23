@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table ref="table" :api-url="baseAPI" :headers="headers">
       <template #[`item.startTime`]="{ item }">
         {{ formatDateTime(item.startTime) }}
@@ -9,7 +9,6 @@
       </template>
       <template #[`item.action`]="{ item }">
         <v-btn
-          color="secondary"
           icon="$read"
           :title="$t('common.action.read')"
           @click.stop="detail(item.id)"
@@ -27,7 +26,7 @@
     </embedded-data-table>
     <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
       <v-card tile>
-        <v-toolbar color="secondary">
+        <v-toolbar>
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
           <v-toolbar-title>
             {{ selected.id }}
@@ -38,7 +37,7 @@
         </v-container>
       </v-card>
     </v-dialog>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

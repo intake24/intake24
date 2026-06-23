@@ -1,8 +1,8 @@
 <template>
   <v-card>
-    <v-toolbar :color="title ? 'grey-lighten-4' : 'transparent'" :density>
+    <v-toolbar :density>
       <template v-if="title">
-        <v-icon color="secondary" end icon="fas fa-list" />
+        <v-icon end icon="fas fa-list" />
         <v-toolbar-title
           class="font-weight-medium"
           :class="density === 'compact' ? 'text-title-large' : density === 'comfortable' ? 'text-headline-small' : ''"

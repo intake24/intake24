@@ -1,6 +1,6 @@
 <template>
   <v-card border flat>
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar color="surface">
       <v-toolbar-title class="font-weight-medium">
         {{ $t('survey-schemes.prompts.linkedQuantity.title') }}
       </v-toolbar-title>

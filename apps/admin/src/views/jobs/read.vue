@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <template #actions>
       <job-repeat v-if="entry && can({ action: 'edit' })" :model-value="entry" />
     </template>
@@ -24,15 +24,11 @@
             <v-btn
               v-if="downloadUrlAvailable(entry)"
               class="ml-2"
-              icon
+              icon="$download"
               size="large"
               :title="$t('common.action.download')"
               @click="download(entry)"
-            >
-              <v-icon color="secondary">
-                $download
-              </v-icon>
-            </v-btn>
+            />
           </td>
           <th>{{ $t('jobs.downloadUrlExpiresAt') }}</th>
           <td>{{ formatDateTime(entry.downloadUrlExpiresAt) }}</td>
@@ -42,12 +38,8 @@
           <td>{{ entry.progress }}</td>
           <th>{{ $t('jobs.successful') }}</th>
           <td>
-            <v-icon v-if="entry.successful" color="success" start>
-              $check
-            </v-icon>
-            <v-icon v-else color="error" start>
-              $times
-            </v-icon>
+            <v-icon v-if="entry.successful" color="success" icon="$check" start />
+            <v-icon v-else color="error" icon="$times" start />
             {{ $t(`common.${entry.successful}`) }}
           </td>
         </tr>
@@ -85,7 +77,7 @@
       </div>
       <json-editor :model-value="entry.params" read-only />
     </div>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

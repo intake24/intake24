@@ -24,15 +24,11 @@
         <v-list-item-action>
           <v-btn
             :disabled="!downloadUrlAvailable(job)"
-            icon
+            icon="$download"
             size="large"
             :title="$t('common.action.download')"
             @click="download(job)"
-          >
-            <v-icon color="secondary">
-              $download
-            </v-icon>
-          </v-btn>
+          />
         </v-list-item-action>
         <v-list-item-action>
           <v-progress-circular

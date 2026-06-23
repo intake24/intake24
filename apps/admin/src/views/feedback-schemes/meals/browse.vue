@@ -8,7 +8,7 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme" :images="refs?.images" />
     </template>
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar>
       <v-icon color="secondary" end>
         fas fa-sort-amount-down
       </v-icon>
@@ -34,10 +34,8 @@
     </v-toolbar>
 
     <v-form @keydown="clearError" @submit.prevent="submit">
-      <v-toolbar color="grey-lighten-4">
-        <v-icon color="secondary" end>
-          fas fa-chart-pie
-        </v-icon>
+      <v-toolbar>
+        <v-icon color="secondary" end icon="fas fa-chart-pie" />
         <v-toolbar-title class="font-weight-medium">
           {{ $t('feedback-schemes.meals.chart') }}
         </v-toolbar-title>
@@ -45,10 +43,8 @@
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="6">
-            <v-toolbar color="grey-lighten-2">
-              <v-icon color="secondary" end>
-                fas fa-palette
-              </v-icon>
+            <v-toolbar>
+              <v-icon color="secondary" end icon="fas fa-palette" />
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.meals.colors.title') }}
               </v-toolbar-title>
