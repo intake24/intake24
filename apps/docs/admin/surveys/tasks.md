@@ -90,7 +90,7 @@ Content-Type: application/json
 
 ## SurveyNutrientsRecalculation
 
-`SurveyNutrientsRecalculation` recalculates survey submission nutrient values with configurable modes for handling nutrient mapping references and field synchronization. This is useful when nutrient table data or food-to-nutrient mappings change.
+`SurveyNutrientsRecalculation` refreshes nutrient snapshots in submitted recalls. Its modes control whether to preserve stored composition references and whether to synchronise nutrient and field structure.
 
 ### Parameters
 
@@ -134,7 +134,7 @@ This table shows what gets updated in submission data for each mode and `syncFie
 Note: This task does not rename foods or replace missing submission food codes with new codes.
 ```
 
-Click [here](./survey-nutrients-recalculation-job) for detailed mode descriptions and use case examples.
+See [Recalculating nutrients in submitted surveys](./survey-nutrients-recalculation-job) for detailed mode descriptions, provenance warnings, mixed-locale safeguards, and use case examples.
 
 ## SurveyRatingsExport
 

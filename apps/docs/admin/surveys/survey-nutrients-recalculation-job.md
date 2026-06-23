@@ -1,6 +1,46 @@
-## SurveyNutrientsRecalculation job details
+# Recalculating nutrients in submitted surveys
 
-### Database Fields Updated
+`SurveyNutrientsRecalculation` updates nutrient snapshots already stored with submitted recalls. It does not change locale foods, food mappings, or food composition records in the foods database.
+
+Read [How Intake24 stores and calculates nutrient data](/admin/foods/nutrient-data-model) first if the distinction between current source data and submitted snapshots is unfamiliar.
+
+## Choose what should remain historical
+
+The job separates two decisions:
+
+1. `mode` decides whether to preserve the submitted food composition reference or replace it with the latest food mapping.
+2. `syncFields` decides whether to preserve the submitted JSON keys or fully match the source record's current nutrients and fields.
+
+Food codes and saved food names never change. A mode that replaces the composition reference changes data provenance, so choose the intended historical boundary before running the job.
+
+## Per-food locale lookup
+
+Every `survey_submission_foods` row stores its own `locale`. A single survey can therefore contain submitted foods from more than one locale, including when a participant changes locale during a recall.
+
+When the job needs the current food mapping, it looks up each submitted food by its stored `locale + code`. It must not assume that every row uses the survey's current or configured locale.
+
+This matters because the same food code can have different names, composition mappings, fields, or nutrient values in different locales.
+
+:::: warning Check mixed-locale surveys before mutation
+Before running a mutating mode:
+
+1. Make each submitted food's locale visible in review tools or reports.
+2. Verify that each stored `locale + code` still identifies a food and, where required, a current composition mapping.
+3. Run `none` to verify the survey scope and processing counts without writing data.
+4. After the real run, inspect skipped-food warnings and download the error CSV when the job provides one.
+
+`none` follows the non-remapping path. It does not preview which composition references `values-and-codes` would replace.
+::::
+
+### Which modes use the submitted locale?
+
+- `values-and-codes` always uses `locale + code` to find the latest food mapping.
+- `syncFields: true` also checks the current locale food while synchronising structure, even with `values-only`.
+- `values-only` with `syncFields: false` can use the saved composition reference without finding the current locale food.
+
+If a required lookup cannot find the food in its submitted locale, the row is skipped and retained. The job records the reason in its summary and error CSV.
+
+## Database fields updated
 
 **Core submission data objects and properties affected** (depends on mode):
 
@@ -18,9 +58,9 @@
 - Nutrient values are stored as key-value pairs in `SurveySubmissionFood.nutrients` JSONB object (key: nutrient ID, value: amount)
 - Field values are stored as key-value pairs in `SurveySubmissionFood.fields` JSONB object (key: field ID, value: field value)
 
-### Detailed Mode Descriptions
+## Detailed mode descriptions
 
-#### `none`
+### `none`
 
 **No changes made.** This is a safety mode - the job completes without modifying any submission data.
 
@@ -43,7 +83,7 @@
 
 ---
 
-#### `values-only` (Default)
+### `values-only` (default)
 
 **Updates nutrient amounts using original nutrient codes.** Keeps the historical reference to nutrient composition data from submission time.
 
@@ -92,7 +132,7 @@ For each `SurveySubmissionFood`:
 
 ---
 
-#### `values-and-codes`
+### `values-and-codes`
 
 **Updates nutrient amounts using current food-to-nutrient mappings.** Changes the historical reference to use the current nutrient composition data.
 
@@ -147,7 +187,7 @@ For each `SurveySubmissionFood`:
 
 ---
 
-#### Edge Cases Handled
+### Edge cases handled
 
 The job processes these situations gracefully:
 
@@ -174,14 +214,14 @@ When individual nutrient variables are dropped from a record (but the record sti
 - **`syncFields: false`**: The nutrient key is preserved in the submission but its value is set to `0` (zeroed out). This preserves the submission structure while indicating the value is unresolvable.
 - **`syncFields: true`**: The nutrient key is fully removed from the submission, and any new nutrients in the source record are added.
 
-#### Performance Considerations
+### Performance considerations
 
 - Processes foods in batches of 100
 - Progress tracking updates incrementally
 - Job completion message includes statistics
 - Large surveys (10,000+ submissions) may take several minutes
 
-### Mode Combination Summary Table
+## Mode combination summary
 
 **Quick reference for all valid combinations:**
 
@@ -193,9 +233,9 @@ When individual nutrient variables are dropped from a record (but the record sti
 | **Remapped foods**       | `values-and-codes` | `false`    | → Changed         | → Values only  | Codes + existing nutrients/fields only      |
 | **Remapped + full sync** | `values-and-codes` | `true`     | → Changed         | → Full sync    | Codes + all nutrients + fields (add/remove) |
 
-### Use Case Examples
+## Use case examples
 
-#### Example 1: Nutrient Value Correction
+### Example 1: Nutrient value correction
 
 **Problem:** Vitamin C content for commonly-submitted foods was inaccurate in NDNS database. The values have now been corrected (e.g., Orange from 50mg→59mg per 100g).
 
@@ -246,7 +286,7 @@ SurveySubmissionFood {
 
 ---
 
-#### Example 2: New Nutrient Field Added
+### Example 2: New nutrient field added
 
 **Problem:** NDNS released new data with "Omega-3 fatty acids" for all foods. Existing submissions need this new nutrient field added.
 
@@ -304,9 +344,11 @@ SurveySubmissionFood {
 
 ---
 
-#### Example 3: Food Remapped to Better Nutrient Record
+### Example 3: Food remapped to better nutrient record
 
-**Problem:** Apple was originally mapped to generic "Apple" record (0100). NDNS has been updated with more accurate "Apple, Granny Smith" (0102). You want to update submissions to use the more accurate mapping and values, but you don't want to add new nutrients/fields that the new record might have—keep the existing structure.
+**Problem:** Apple was originally mapped to generic "Apple" record (0100). NDNS now has a more accurate "Apple, Granny Smith" record (0102).
+
+You want submissions to use the newer mapping and values while preserving their existing nutrient and field structure.
 
 **Survey context:**
 
@@ -373,7 +415,7 @@ SurveySubmissionFood {
 
 ---
 
-#### Example 4: Complete Food Database Update
+### Example 4: Complete food database update
 
 **Problem:** Nutrient mappings have been revised and nutrient tables restructured. Multiple fields were removed/added. Need complete nutrient synchronization.
 
@@ -441,7 +483,7 @@ SurveySubmissionFood {
 
 ---
 
-#### Example 5: Dry-Run / Testing Configuration
+### Example 5: Dry-run / testing configuration
 
 **Problem:** Want to test the job setup and parameter validation before running on live data.
 
@@ -468,13 +510,13 @@ SurveySubmissionFood {
 **Output example:**
 
 ```
-Started recalculation for survey 59 (mode: none)
-Processed: 2405 submissions
-Updated: 0, Skipped: 2405
-Result: No changes (mode=none)
+DRY RUN - NO DATA WAS MODIFIED. Recalculation completed.
+Total: 2405, Updated: 2405, Skipped: 0, Nutrient codes updated: 0
 ```
 
-### Job Output
+In a dry run, `Updated` counts rows for which the job produced recalculated values. It does not mean those values were written to the database.
+
+## Job output
 
 On completion, the job stores a summary message with statistics:
 
