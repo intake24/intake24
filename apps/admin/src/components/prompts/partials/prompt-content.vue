@@ -9,7 +9,7 @@
       <v-tabs-window v-model="selectedKey" class="flex-grow-1">
         <v-tabs-window-item v-for="key in keys" :key="key" class="pl-3" :value="key">
           <v-card border flat>
-            <v-toolbar color="grey-lighten-4">
+            <v-toolbar color="surface">
               <v-toolbar-title>
                 <i18n-t keypath="survey-schemes.i18n.core">
                   <template #key>
@@ -72,7 +72,7 @@
                 {{ $t('survey-schemes.i18n.init') }}
               </v-card-title>
               <v-card-text class="d-flex justify-center align-center">
-                <v-btn color="secondary" icon="$add" size="x-large" />
+                <v-btn color="primary" icon="$add" size="x-large" />
               </v-card-text>
             </v-card>
           </v-card>

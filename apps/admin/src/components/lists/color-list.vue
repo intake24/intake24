@@ -36,7 +36,7 @@
       persistent
     >
       <v-card :tile="$vuetify.display.smAndDown">
-        <v-toolbar color="secondary">
+        <v-toolbar>
           <v-icon end icon="fas fa-palette" />
           <v-toolbar-title>
             {{ $t('feedback-schemes.colors.edit') }}

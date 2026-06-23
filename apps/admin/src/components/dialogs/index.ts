@@ -1,3 +1,4 @@
+export { default as ConfirmLeaveDialog } from './confirm-leave-dialog.vue';
 export { default as CopyRecordDialog } from './copy-record-dialog.vue';
 export { default as EventNotifications } from './event-notifications.vue';
 export { default as JobRepeat } from './job-repeat.vue';

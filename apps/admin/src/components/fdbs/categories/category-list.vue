@@ -1,6 +1,6 @@
 <template>
   <v-card v-bind="{ border, flat, tile }">
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar color="surface">
       <v-toolbar-title class="font-weight-medium">
         <slot name="title">
           {{ $t('fdbs.categories.title') }}

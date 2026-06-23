@@ -1,5 +1,5 @@
 <template>
-  <layout v-bind="{ id, entry }">
+  <entry-layout v-bind="{ id, entry }">
     <v-table>
       <tbody>
         <tr>
@@ -31,7 +31,7 @@
         </tr>
       </tbody>
     </v-table>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

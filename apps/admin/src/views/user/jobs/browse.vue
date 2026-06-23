@@ -1,26 +1,22 @@
 <template>
-  <h2 class="mb-4">
-    {{ $t('user.profile') }}
-  </h2>
-  <data-table :actions="['create', 'download', 'read']" api-url="admin/user/jobs" :headers="headers">
-    <template #[`item.successful`]="{ item }">
-      <v-icon v-if="item.successful" color="success">
-        $check
-      </v-icon>
-      <v-icon v-else color="error">
-        $times
-      </v-icon>
-    </template>
-    <template #[`item.startedAt`]="{ item }">
-      {{ formatDateTime(item.startedAt) }}
-    </template>
-  </data-table>
+  <browse-layout>
+    <data-table :actions="['create', 'download', 'read']" api-url="admin/user/jobs" :headers>
+      <template #[`item.successful`]="{ item }">
+        <v-icon v-if="item.successful" color="success" icon="$check" />
+        <v-icon v-else color="error" icon="$times" />
+      </template>
+      <template #[`item.startedAt`]="{ item }">
+        {{ formatDateTime(item.startedAt) }}
+      </template>
+    </data-table>
+  </browse-layout>
 </template>
 
 <script lang="ts" setup>
 import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 
 import { DataTable } from '@intake24/admin/components/data-tables';
+import { BrowseLayout } from '@intake24/admin/components/layouts';
 import { useDateTime } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/ui';
 

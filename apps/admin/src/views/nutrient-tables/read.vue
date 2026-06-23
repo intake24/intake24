@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded && refsLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded && refsLoaded" v-bind="{ id, entry }">
     <v-card-title>{{ $t('nutrient-tables._') }}</v-card-title>
     <v-table>
       <tbody>
@@ -64,7 +64,7 @@
         </tr>
       </tbody>
     </v-table>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

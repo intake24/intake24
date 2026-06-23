@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table
       ref="table"
       :api-url="`admin/surveys/${id}/respondents`"
@@ -9,12 +9,12 @@
       <template #header-add>
         <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
           <template #activator="{ props }">
-            <v-btn class="font-weight-bold" color="secondary" variant="text" v-bind="props">
+            <v-btn class="font-weight-bold" variant="text" v-bind="props">
               <v-icon icon="fas fa-user-plus" start />{{ $t('surveys.respondents.add') }}
             </v-btn>
           </template>
           <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
-            <v-toolbar color="secondary">
+            <v-toolbar>
               <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
               <v-toolbar-title>
                 {{ $t(`surveys.respondents.${isCreate ? 'add' : 'edit'}`) }}
@@ -160,7 +160,7 @@
         </v-dialog>
         <v-menu close-on-content-click :persistent="false">
           <template #activator="{ props }">
-            <v-btn class="font-weight-bold" color="secondary" icon="$options" v-bind="props" variant="text" />
+            <v-btn class="font-weight-bold" icon="$options" v-bind="props" variant="text" />
           </template>
           <v-list>
             <respondents-upload :survey-id="id" />
@@ -183,13 +183,13 @@
       <template #[`item.action`]="{ item }">
         <v-menu close-on-content-click :persistent="false">
           <template #activator="{ props }">
-            <v-btn class="font-weight-bold" color="secondary" icon="$options" v-bind="props" />
+            <v-btn class="font-weight-bold" icon="$options" v-bind="props" />
           </template>
           <v-list>
             <respondent-feedback :survey-id="id" :user="item" />
           </v-list>
         </v-menu>
-        <v-btn color="secondary" icon="$edit" :title="$t('common.action.edit')" @click.stop="editRespondent(item)" />
+        <v-btn icon="$edit" :title="$t('common.action.edit')" @click.stop="editRespondent(item)" />
         <confirm-dialog
           color="error"
           icon
@@ -201,7 +201,7 @@
         </confirm-dialog>
       </template>
     </embedded-data-table>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

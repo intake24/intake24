@@ -61,7 +61,7 @@
             :readonly
           />
           <div v-if="!readonly" class="d-flex gc-2">
-            <v-btn color="secondary" type="submit" variant="outlined">
+            <v-btn color="primary" type="submit" variant="outlined">
               <v-icon icon="$save" start />{{ $t(`common.action.save`) }}
             </v-btn>
             <copy-entry-dialog v-bind="{ entryId, localeId: id, type }" />
@@ -97,7 +97,7 @@ import type {
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
+import { ConfirmLeaveDialog } from '@intake24/admin/components/dialogs';
 import {
   AttributeList,
   CategoryList,

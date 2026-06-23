@@ -22,7 +22,7 @@
       </slot>
     </template>
     <v-card :loading="loading" :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           <slot name="title">
@@ -70,7 +70,7 @@
             <v-pagination v-model="page" :length="lastPage" rounded />
           </div>
         </template>
-        <v-alert v-else color="secondary" type="info">
+        <v-alert v-else type="info">
           {{ $t('common.search.none') }}
         </v-alert>
       </v-card-text>

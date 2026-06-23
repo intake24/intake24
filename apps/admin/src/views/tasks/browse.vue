@@ -1,17 +1,15 @@
 <template>
-  <data-table :headers="headers">
-    <template #[`item.active`]="{ item }">
-      <v-icon v-if="item.active" color="success">
-        $check
-      </v-icon>
-      <v-icon v-else color="error">
-        $times
-      </v-icon>
-    </template>
-    <template #[`item.schedule`]="{ item }">
-      {{ readableCron(item.cron) }}
-    </template>
-  </data-table>
+  <browse-layout>
+    <data-table :headers="headers">
+      <template #[`item.active`]="{ item }">
+        <v-icon v-if="item.active" color="success" icon="$check" />
+        <v-icon v-else color="error" icon="$times" />
+      </template>
+      <template #[`item.schedule`]="{ item }">
+        {{ readableCron(item.cron) }}
+      </template>
+    </data-table>
+  </browse-layout>
 </template>
 
 <script lang="ts" setup>
@@ -20,6 +18,7 @@ import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 import cronstrue from 'cronstrue';
 
 import { DataTable } from '@intake24/admin/components/data-tables';
+import { BrowseLayout } from '@intake24/admin/components/layouts';
 import { useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'TaskList' });

@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-row ga-2">
     <v-tabs v-model="selectedSector" direction="vertical">
-      <v-btn class="my-4" color="secondary" @click="add">
+      <v-btn class="my-4" color="primary" variant="tonal" @click="add">
         <v-icon icon="$add" start />
         {{ $t(`feedback-schemes.demographic-groups.sectors.add`) }}
       </v-btn>

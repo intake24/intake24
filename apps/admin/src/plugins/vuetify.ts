@@ -24,10 +24,14 @@ export default createVuetify({
     VDragAndDropHandle: VAvatar,
   },
   defaults: {
+    global: {
+      density: 'comfortable',
+    },
     VAlert: {
       variant: 'tonal',
     },
     VBtn: {
+      density: 'default',
       class: 'text-uppercase',
       variant: 'flat',
     },
@@ -117,7 +121,7 @@ export default createVuetify({
       check: 'fas fa-check-circle',
       close: 'fas fa-circle-xmark',
       create: 'fas fa-plus',
-      back: 'fas fa-level-up-alt',
+      back: 'fas fa-arrow-left',
       dashboard: 'fas fa-tachometer-alt',
       docs: 'fas fa-circle-info',
       delete: 'fas fa-trash',
@@ -153,9 +157,16 @@ export default createVuetify({
     },
   },
   theme: {
-    defaultTheme: 'light',
     themes: {
       light: {
+        colors: {
+          ...colors,
+          background: '#f9f2ee',
+          'surface-light': colors['primary-lighten-4'],
+        },
+      },
+      dark: {
+        dark: true,
         colors,
       },
     },

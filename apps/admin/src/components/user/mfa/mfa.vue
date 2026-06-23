@@ -35,13 +35,13 @@
         </v-btn>
       </template>
       <v-card :tile="$vuetify.display.mobile">
-        <v-toolbar color="secondary" extended>
+        <v-toolbar extended>
           <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
           <v-toolbar-title>
             {{ $t('user.mfa.devices.add') }}
           </v-toolbar-title>
           <template #extension>
-            <v-tabs v-model="tab" bg-color="secondary" grow @update:model-value="clear">
+            <v-tabs v-model="tab" grow @update:model-value="clear">
               <v-tab v-for="provider in providers" :key="provider" :value="provider">
                 <v-icon :icon="`$${provider}`" start />
                 {{ $t(`user.mfa.providers.${provider}._`) }}
@@ -79,12 +79,11 @@
         </v-list-item-subtitle>
         <template #append>
           <v-list-item-action>
-            <v-chip v-if="device.preferred" color="secondary" variant="outlined">
+            <v-chip v-if="device.preferred" variant="outlined">
               {{ $t('user.mfa.devices.preferred._') }}
             </v-chip>
             <confirm-dialog
               v-else
-              color="secondary"
               icon
               icon-left="far fa-circle-up"
               :label="$t('user.mfa.devices.preferred.promote')"

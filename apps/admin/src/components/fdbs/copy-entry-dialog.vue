@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
     <template #activator="{ props }">
       <v-btn
-        color="secondary"
+        color="primary"
         :title="$t(`fdbs.${type}.copy`)"
         variant="outlined"
         v-bind="props"
@@ -11,7 +11,7 @@
       </v-btn>
     </template>
     <v-card :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t(`fdbs.${type}.copy`) }}

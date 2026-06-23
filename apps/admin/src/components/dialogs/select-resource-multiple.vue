@@ -60,7 +60,7 @@
     </template>
 
     <v-card :loading="loading">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           <slot name="title">
@@ -95,7 +95,7 @@
               v-for="item in items"
               :key="`${item[itemId]}:${item[itemName]}`"
               :active="isSelected(item)"
-              color="secondary"
+              color="primary"
               :value="item[itemId]"
               @click="toggleSelection(item)"
             >
@@ -121,7 +121,7 @@
           </div>
         </template>
 
-        <v-alert v-else color="secondary" type="info">
+        <v-alert v-else type="info">
           {{ $t('common.search.none') }}
         </v-alert>
       </v-card-text>

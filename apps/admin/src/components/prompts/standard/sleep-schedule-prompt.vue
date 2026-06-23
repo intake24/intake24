@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" md="7">
         <v-card border flat>
-          <v-toolbar color="grey-lighten-4">
+          <v-toolbar>
             <v-icon end icon="fas fa-bed" />
             <v-toolbar-title>
               {{ $t('survey-schemes.prompts.sleep-schedule-prompt.schedule') }}

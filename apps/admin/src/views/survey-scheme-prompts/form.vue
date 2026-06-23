@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
         <v-card-text>
@@ -27,7 +27,7 @@
               />
             </v-col>
             <v-col align="center">
-              <v-btn class="pa-6" color="secondary" size="x-large" variant="outlined" @click="edit">
+              <v-btn class="pa-6" size="x-large" variant="outlined" @click="edit">
                 <v-icon icon="$edit" start />{{ $t('survey-scheme-prompts.editTemplate') }}
               </v-btn>
             </v-col>
@@ -40,7 +40,7 @@
       </v-form>
       <prompt-selector ref="selector" :prompt-ids="promptIds" @save="save" />
     </v-container>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

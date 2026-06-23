@@ -1,19 +1,18 @@
 <template>
-  <tool-bar
-    :actions="actions.includes('create') ? ['create'] : []"
-    :api="api"
-    :selected="tracked"
-    @refresh="refresh"
+  <data-table-filter
+    :count="meta.total"
+    @filter-reset="resetFilter"
+    @filter-set="setFilter"
   />
-  <v-card :border="!$vuetify.display.mobile" :flat="$vuetify.display.mobile" :tile="$vuetify.display.mobile">
-    <v-card-text>
-      <data-table-filter
-        :count="meta.total"
-        @filter-reset="resetFilter"
-        @filter-set="setFilter"
-      />
-    </v-card-text>
-  </v-card>
+  <v-expand-transition>
+    <tool-bar
+      v-if="actions.length && tracked.length"
+      :actions="actions.includes('create') ? ['create'] : []"
+      :api="api"
+      :selected="tracked"
+      @refresh="refresh"
+    />
+  </v-expand-transition>
   <div v-show="meta.total" class="py-4 text-center">
     <v-pagination v-model="page" :length="meta.lastPage" rounded />
   </div>

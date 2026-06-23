@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table :api-url="`admin/users/${id}/securables`" v-bind="{ headers }">
       <template #[`item.securableType`]="{ item }">
         {{ $t(`${modelToResource(item.securableType)}._`) }}
@@ -17,7 +17,7 @@
         />
       </template>
     </embedded-data-table>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

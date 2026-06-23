@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <template #actions>
       <confirm-dialog
         v-if="!isCreate && can({ action: 'edit' })"
@@ -96,7 +96,7 @@
         </v-card-text>
       </v-form>
     </v-container>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

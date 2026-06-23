@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <template #actions>
       <copy-record-dialog
         v-if="canHandleEntry('copy')"
@@ -55,7 +55,7 @@
         <submit-footer :disabled="errors.any.value" />
       </v-card-text>
     </v-form>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

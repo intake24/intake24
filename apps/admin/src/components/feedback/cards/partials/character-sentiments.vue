@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-row ga-2">
     <v-tabs v-model="selectedSentiment" direction="vertical">
-      <v-btn class="mb-4" color="secondary" @click="add">
+      <v-btn class="mb-4" color="primary" variant="tonal" @click="add">
         <v-icon icon="$add" start />
         {{ $t(`feedback-schemes.sentiments.add`) }}
       </v-btn>

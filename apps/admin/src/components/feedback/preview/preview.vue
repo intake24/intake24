@@ -3,9 +3,10 @@
     <template #activator="{ props }">
       <slot name="activator" v-bind="props">
         <v-btn
-          color="secondary"
-          :title="$t('feedback-schemes.preview.title')"
           v-bind="props"
+          color="primary"
+          :title="$t('feedback-schemes.preview.title')"
+          variant="tonal"
         >
           <v-icon icon="$search" start />
           {{ $t('feedback-schemes.preview._') }}
@@ -13,7 +14,7 @@
       </slot>
     </template>
     <v-card tile>
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="text" @click.stop="close" />
         <v-toolbar-title>{{ $t('feedback-schemes.preview.title') }}</v-toolbar-title>
       </v-toolbar>

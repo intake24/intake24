@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row class="justify-space-between pa-4">
       <v-col cols="5" lg="4" xl="3">
         <food-explorer :id :code :readonly />
@@ -12,7 +12,7 @@
         </router-view>
       </v-col>
     </v-row>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts" setup>
@@ -20,8 +20,8 @@ import type { LocaleEntry } from '@intake24/common/types/http/admin';
 
 import { computed } from 'vue';
 
-import { Layout } from '@intake24/admin/components/entry';
 import { FoodExplorer } from '@intake24/admin/components/fdbs';
+import { EntryLayout } from '@intake24/admin/components/layouts';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 defineOptions({ name: 'FoodDBDetail' });

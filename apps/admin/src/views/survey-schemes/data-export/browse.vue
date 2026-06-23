@@ -1,12 +1,6 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
-    <v-card-title>{{ $t('survey-schemes.data-export.title') }}</v-card-title>
-    <v-card-text>
-      <p>List of export sections to be exported.</p>
-      <p>Export sections can be re-ordered using drag & drop.</p>
-      <p>Each section can be modified to define specific fields and order for export.</p>
-    </v-card-text>
-    <v-toolbar color="grey-lighten-2">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+    <v-toolbar color="surface">
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`survey-schemes.data-export.sections._`) }}
       </v-toolbar-title>
@@ -42,6 +36,11 @@
         <json-editor-dialog v-model="data.dataExport" />
       </options-menu>
     </v-toolbar>
+    <v-card-text>
+      <p>List of export sections to be exported.</p>
+      <p>Export sections can be re-ordered using drag & drop.</p>
+      <p>Each section can be modified to define specific fields and order for export.</p>
+    </v-card-text>
     <data-export-section
       :ref-fields="sectionRefFields"
       :section="selected"
@@ -71,9 +70,7 @@
                 :title="$t('survey-schemes.data-export.edit')"
                 @click.stop="edit(section)"
               >
-                <v-icon color="secondary-lighten-2">
-                  $edit
-                </v-icon>
+                <v-icon icon="$edit" />
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -91,7 +88,7 @@
         </v-list-item>
       </vue-draggable>
     </v-list>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

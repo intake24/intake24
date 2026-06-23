@@ -1,6 +1,6 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <v-toolbar color="grey-lighten-4">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
+    <v-toolbar>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.food-ranking.title') }}
       </v-toolbar-title>
@@ -17,7 +17,7 @@
         />
       </v-card-actions>
     </v-card>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

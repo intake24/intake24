@@ -31,11 +31,7 @@
           :persistent="false"
         >
           <template #activator="{ props }">
-            <v-btn icon v-bind="props">
-              <v-icon color="secondary-lighten-1">
-                $options
-              </v-icon>
-            </v-btn>
+            <v-btn icon="$options" v-bind="props" />
           </template>
           <v-list>
             <v-list-item link @click="copy">
@@ -73,7 +69,6 @@
             />
             <confirm-dialog
               v-if="hasTemplate && !isInSyncWithTemplate"
-              color="secondary-lighten-1"
               :label="$t('survey-scheme-prompts.sync.synchronize')"
               max-width="450px"
               @confirm="sync"

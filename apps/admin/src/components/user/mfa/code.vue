@@ -1,5 +1,5 @@
 <template>
-  <v-stepper-vertical v-model="progress" flat hide-actions>
+  <v-stepper-vertical v-model="progress" color="primary" flat hide-actions>
     <template #default="{ step }">
       <v-stepper-vertical-item :complete="step > 1" :title="$t('user.mfa.providers.code.challenge.title')" value="1">
         <v-row>
@@ -7,7 +7,7 @@
             <v-btn
               block
               class="my-4"
-              color="secondary"
+              color="primary"
               :loading="!!regChallenge"
               rounded
               @click="challenge"
@@ -45,7 +45,7 @@
                 type="password"
                 @update:model-value="errors.clear('password')"
               />
-              <v-btn block class="my-4" color="secondary" rounded type="submit">
+              <v-btn block class="my-4" color="primary" rounded type="submit">
                 {{ $t('user.mfa.providers.code.verify._') }}
               </v-btn>
             </v-form>

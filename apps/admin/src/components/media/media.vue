@@ -1,6 +1,6 @@
 <template>
-  <v-toolbar color="grey-lighten-4">
-    <v-icon color="secondary" end icon="$media" />
+  <v-toolbar color="surface">
+    <v-icon end icon="$media" />
     <v-toolbar-title class="font-weight-medium">
       {{ $t('media.title') }}
     </v-toolbar-title>
@@ -89,12 +89,9 @@
     </template>
     <template #[`item.action`]="{ item }">
       <v-btn
-        color="secondary"
-        icon
+        icon="$edit"
         :title="$t('common.action.edit')"
-      >
-        <v-icon icon="$edit" />
-      </v-btn>
+      />
       <confirm-dialog
         color="error"
         icon

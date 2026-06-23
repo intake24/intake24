@@ -1,6 +1,6 @@
 <template>
   <v-card class="pb-4" flat tile>
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar>
       <v-icon end>
         {{ mode === 'drinksOnly' ? '$drink' : '$food' }}
       </v-icon>

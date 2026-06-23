@@ -1,15 +1,13 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
     <template #activator="{ props }">
-      <v-btn class="ml-3" variant="text" v-bind="props">
-        <v-icon class="mr-2">
-          fas fa-user-shield
-        </v-icon>
+      <v-btn variant="text" v-bind="props">
+        <v-icon icon="fas fa-user-shield" start />
         {{ owner ? owner.name : $t('common.none') }}
       </v-btn>
     </template>
     <v-card :loading="isLoading" :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t('securables.owner.title') }}

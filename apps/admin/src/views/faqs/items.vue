@@ -77,7 +77,7 @@
     :z-index="1050"
   >
     <v-card tile>
-      <v-toolbar color="secondary" dark>
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           <v-icon icon="fas fa-bars-staggered" start />
@@ -91,7 +91,7 @@
         </v-toolbar-items>
         <template #extension>
           <v-container>
-            <v-tabs v-model="tab" bg-color="secondary">
+            <v-tabs v-model="tab">
               <v-tab v-for="item in ['general', 'json']" :key="item" :value="item">
                 {{ $t(`common.tabs.${item}`) }}
               </v-tab>

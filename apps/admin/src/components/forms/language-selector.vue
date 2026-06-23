@@ -1,6 +1,6 @@
 <template>
   <v-card v-bind="{ flat }">
-    <v-toolbar color="grey-lighten-4">
+    <v-toolbar color="surface">
       <v-toolbar-title class="font-weight-medium">
         {{ label }}
       </v-toolbar-title>
@@ -24,7 +24,7 @@
         </v-list>
       </v-menu>
       <template v-if="languages.length" #extension>
-        <v-tabs v-model="selected" bg-color="grey-lighten-4">
+        <v-tabs v-model="selected">
           <v-tab v-for="lang in languages" :key="lang">
             <span :class="`fi fi-${getLanguageFlag(lang)} mr-3`" />
             <span class="font-weight-medium">{{ getLanguageName(lang) }}</span>

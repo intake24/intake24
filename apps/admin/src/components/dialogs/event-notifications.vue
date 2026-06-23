@@ -13,8 +13,8 @@
         <v-icon icon="fas fa-paper-plane" start /> {{ $t('notifications.title') }}
       </v-btn>
     </template>
-    <v-card tile>
-      <v-toolbar color="secondary">
+    <v-card>
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           {{ $t('notifications.title') }}

@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row>
       <v-col cols="12">
         <v-table>
@@ -64,7 +64,7 @@
         <v-img class="ma-2" rounded :src="entry.sizes.md" />
       </v-col>
     </v-row>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

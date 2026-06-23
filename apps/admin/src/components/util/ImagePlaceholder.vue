@@ -17,7 +17,7 @@ export default defineComponent({
   props: {
     color: {
       type: String,
-      default: 'secondary',
+      default: 'primary',
     },
     size: {
       type: Number,

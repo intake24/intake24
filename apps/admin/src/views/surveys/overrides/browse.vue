@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-card-title>{{ $t('survey-schemes.overrides.title') }}</v-card-title>
     <v-card-subtitle>
       {{ $t('survey-schemes.overrides.subtitle') }}
@@ -45,7 +45,7 @@
         </v-card-text>
       </v-form>
     </v-container>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

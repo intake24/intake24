@@ -1,7 +1,7 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <food-builder-list v-model="data.items" :errors :locale-id="entry.code" :synonyms />
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

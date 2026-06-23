@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row>
       <v-col cols="12">
         <v-table>
@@ -21,7 +21,7 @@
       </v-col>
     </v-row>
     <guide-drawer v-bind="{ entry, readonly: true, resource: 'guide-images' }" />
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

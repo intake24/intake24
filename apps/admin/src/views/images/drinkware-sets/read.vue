@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }">
+  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-row>
       <v-col cols="12">
         <v-table>
@@ -20,7 +20,7 @@
         </v-table>
       </v-col>
     </v-row>
-  </layout>
+  </entry-layout>
 </template>
 
 <script lang="ts">

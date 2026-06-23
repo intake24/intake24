@@ -3,9 +3,8 @@
     <template #activator="{ props }">
       <v-btn
         class="font-weight-bold"
-        color="secondary"
+        color="primary"
         variant="outlined"
-
         v-bind="props"
         @click.stop="add"
       >
@@ -13,7 +12,7 @@
       </v-btn>
     </template>
     <v-card :loading="isLoading" :tile="$vuetify.display.smAndDown">
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`securables.${isEdit ? 'edit' : 'add'}`) }}

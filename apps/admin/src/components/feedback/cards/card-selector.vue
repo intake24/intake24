@@ -9,7 +9,7 @@
     :z-index="1050"
   >
     <v-card tile>
-      <v-toolbar color="secondary">
+      <v-toolbar>
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="reset" />
         <v-toolbar-title>
           {{ $t(`feedback-schemes.cards.${dialog.index === -1 ? 'add' : 'edit'}`) }}
@@ -22,7 +22,7 @@
         </v-toolbar-items>
         <template #extension>
           <v-container>
-            <v-tabs v-model="tab" bg-color="secondary">
+            <v-tabs v-model="tab">
               <v-tab
                 v-for="item in cardSettings[dialog.card.type].tabs" :key="item"
                 :value="item"
@@ -41,7 +41,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-card border flat>
-                      <v-toolbar color="grey-lighten-4">
+                      <v-toolbar>
                         <v-icon end icon="fas fa-cloud-meatball" />
                         <v-toolbar-title>
                           {{ $t(`feedback-schemes.cards.type`) }}
@@ -57,7 +57,7 @@
                             <v-col v-for="card in cardDefaults" :key="card.type" cols="12" md="3">
                               <v-item v-slot="{ isSelected, toggle }" :value="card.type">
                                 <v-card
-                                  :color="isSelected ? 'primary' : 'secondary'"
+                                  :color="isSelected ? 'primary' : 'primary-lighten-4'"
                                   dark
                                   height="180"
                                   @click.stop="toggle"
@@ -83,7 +83,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-card border flat>
-                      <v-toolbar color="grey-lighten-4">
+                      <v-toolbar>
                         <v-icon end icon="fas fa-gears" />
                         <v-toolbar-title>
                           {{ $t(`feedback-schemes.cards.options`) }}

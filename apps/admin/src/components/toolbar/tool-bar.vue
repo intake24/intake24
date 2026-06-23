@@ -1,33 +1,27 @@
 <template>
-  <v-card
-    v-if="currentActions.length" class="mb-5 px-2"
-    :flat="$vuetify.display.mobile"
-    :rounded="$vuetify.display.mobile ? 0 : undefined"
-  >
-    <v-toolbar class="toolbar-items" color="white">
-      <template v-for="action in ['create', 'read', 'edit']" :key="action">
-        <component
-          :is="action"
-          v-if="currentActions.includes(action)"
-          :action="action"
-          :disabled="selected.length !== 1"
-          @action="onAction"
-        />
-      </template>
-      <v-spacer />
-      <confirm-dialog
-        v-if="currentActions.includes('delete')"
-        color="error"
-        :disabled="!selected.length"
-        icon-left="$delete"
-        :label="$t('common.action.delete')"
-        variant="flat"
-        @confirm="onDelete"
-      >
-        {{ $t('common.action.confirm.multi.delete', { count: selected.length }) }}
-      </confirm-dialog>
-    </v-toolbar>
-  </v-card>
+  <v-toolbar class="toolbar-items" color="surface">
+    <template v-for="action in ['read', 'edit']" :key="action">
+      <component
+        :is="action"
+        v-if="currentActions.includes(action)"
+        :action="action"
+        :disabled="selected.length !== 1"
+        @action="onAction"
+      />
+    </template>
+    <v-spacer />
+    <confirm-dialog
+      v-if="currentActions.includes('delete')"
+      color="error"
+      :disabled="!selected.length"
+      icon-left="$delete"
+      :label="$t('common.action.delete')"
+      variant="flat"
+      @confirm="onDelete"
+    >
+      {{ $t('common.action.confirm.multi.delete', { count: selected.length }) }}
+    </confirm-dialog>
+  </v-toolbar>
 </template>
 
 <script lang="ts">
@@ -39,7 +33,6 @@ import { defineComponent } from 'vue';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
-import Create from './create.vue';
 import Edit from './edit.vue';
 import Read from './read.vue';
 
@@ -48,7 +41,6 @@ export default defineComponent({
 
   components: {
     ConfirmDialog,
-    Create,
     Read,
     Edit,
   },
