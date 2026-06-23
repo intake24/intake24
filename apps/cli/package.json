@@ -24,8 +24,8 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@clack/prompts": "^1.5.1",
-    "@css-inline/css-inline": "^0.20.2",
+    "@clack/prompts": "^1.6.0",
+    "@css-inline/css-inline": "^0.21.0",
     "@json2csv/node": "^7.0.6",
     "commander": "^15.0.0",
     "csv-parser": "^3.2.1",
@@ -35,14 +35,14 @@
     "fs-extra": "^11.3.5",
     "ky": "^2.0.2",
     "lodash-es": "^4.18.1",
-    "nanoid": "^5.1.11",
-    "pg": "^8.21.0",
+    "nanoid": "^5.1.15",
+    "pg": "^8.22.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.8",
     "sequelize-typescript": "^2.1.6",
     "strip-bom-stream": "^5.0.0",
-    "unzipper": "^0.12.3",
+    "unzipper": "^0.12.5",
     "web-push": "^3.6.7",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^4.4.3"
@@ -54,8 +54,8 @@
     "@types/node": "^24.13.2",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
-    "@typescript/native-preview": "7.0.0-dev.20260611.2",
-    "tsdown": "^0.22.2",
+    "@typescript/native-preview": "7.0.0-dev.20260622.1",
+    "tsdown": "^0.22.3",
     "typescript": "^6.0.3"
   }
 }

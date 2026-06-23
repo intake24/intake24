@@ -29,7 +29,7 @@
     "litegraph.js": "^0.7.18",
     "lodash-es": "^4.18.1",
     "ms": "^2.1.3",
-    "nanoid": "^5.1.11",
+    "nanoid": "^5.1.15",
     "pluralize": "^8.0.0",
     "sanitize-html": "^2.17.5",
     "slugify": "^1.6.9",
@@ -51,6 +51,6 @@
     "type-fest": "^5.7.0",
     "typescript": "^6.0.3",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   }
 }
