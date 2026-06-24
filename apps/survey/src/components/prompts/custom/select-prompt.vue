@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text>
-      <v-form @submit.prevent="action('next')">
+      <v-form @submit.prevent="submitPrompt">
         <v-row>
           <v-col cols="12" md="auto">
             <v-select
@@ -24,7 +24,7 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')" />
+      <next :disabled="!isValid" @click="submitPrompt" />
     </template>
   </component>
 </template>
@@ -35,11 +35,13 @@ import type { PropType } from 'vue';
 import { computed } from 'vue';
 
 import { usePromptUtils } from '@intake24/survey/composables';
+import { useSurvey } from '@intake24/survey/stores';
 import { useI18n } from '@intake24/ui';
 
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
+import { replaceFoodByCode } from './update-food';
 
 defineOptions({
   name: 'SelectPrompt',
@@ -57,6 +59,7 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { i18n: { locale, t } } = useI18n();
 const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
+const survey = useSurvey();
 
 const state = computed({
   get() {
@@ -83,6 +86,25 @@ const isValid = computed(() => {
 const localeOptions = computed(
   () => props.prompt.options[locale.value] ?? props.prompt.options.en,
 );
+
+async function submitPrompt() {
+  if (props.prompt.updateFood) {
+    const selectedValue = Array.isArray(state.value) ? undefined : state.value;
+    const opt = selectedValue === undefined || selectedValue === null
+      ? undefined
+      : localeOptions.value.find(o => o.value === selectedValue || String(o.value) === String(selectedValue));
+
+    await replaceFoodByCode({
+      food: props.food,
+      foodCode: opt?.updateFoodValue,
+      localeId: survey.localeId,
+      replaceFood: data => survey.replaceFood(data),
+      source: 'SelectPrompt',
+    });
+  }
+
+  action('next');
+}
 
 defineExpose({ isValid });
 </script>

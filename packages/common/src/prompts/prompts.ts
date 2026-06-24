@@ -226,6 +226,7 @@ const radioListPrompt = z.object({
   options: localeOptionList(),
   orientation: z.enum(radioOrientations),
   other: z.boolean(),
+  updateFood: z.boolean().default(false),
 });
 
 const selectPrompt = z.object({
@@ -234,6 +235,7 @@ const selectPrompt = z.object({
   component: z.literal('select-prompt'),
   options: localeOptionList({ limit: 2048 }),
   multiple: z.boolean(),
+  updateFood: z.boolean().default(false),
 });
 
 const sliderPrompt = z.object({
@@ -257,9 +259,13 @@ const timePickerPrompt = z.object({
 
 const yesNoPrompt = z.object({
   ...baseCustomPrompt.shape,
+  ...validatedPrompt.shape,
   component: z.literal('yes-no-prompt'),
   useFlag: z.boolean(),
   flag: z.string().optional(),
+  updateFood: z.boolean().default(false),
+  updateFoodOptionYes: z.string(),
+  updateFoodOptionNo: z.string(),
 });
 
 // Portion size

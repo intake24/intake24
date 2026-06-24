@@ -36,7 +36,7 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')" />
+      <next :disabled="!isValid" @click="submitPrompt" />
     </template>
   </component>
 </template>
@@ -47,11 +47,13 @@ import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
 
 import { usePromptUtils } from '@intake24/survey/composables';
+import { useSurvey } from '@intake24/survey/stores';
 import { useI18n } from '@intake24/ui';
 
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next, useForm } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
+import { replaceFoodByCode } from './update-food';
 
 defineOptions({
   name: 'RadioListPrompt',
@@ -70,17 +72,18 @@ const emit = defineEmits(['action', 'update:modelValue']);
 const { i18n: { locale } } = useI18n();
 const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
 const { form, inputTooLog } = useForm({ action });
+const survey = useSurvey();
 
 const otherValue = ref('');
 const otherRules = computed(() => [inputTooLog(256)]);
 const selected = ref(props.modelValue);
 
 const state = computed(() =>
-  selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value,
+  (props.prompt.other && selected.value === 'other') ? `Other: ${otherValue.value}` : selected.value,
 );
 const isValid = computed(
   () => !!form.value?.isValid
-    && (!props.prompt.validation.required || (!!state.value && (selected.value !== 'other' || !!otherValue.value))),
+    && (!props.prompt.validation.required || (!!state.value && (!props.prompt.other || (selected.value !== 'other' || !!otherValue.value)))),
 );
 const localeOptions = computed(
   () => props.prompt.options[locale.value] ?? props.prompt.options.en,
@@ -88,6 +91,22 @@ const localeOptions = computed(
 
 function update() {
   emit('update:modelValue', state.value);
+}
+
+async function submitPrompt() {
+  if (props.prompt.updateFood) {
+    const opt = localeOptions.value.find(o => o.value === selected.value);
+
+    await replaceFoodByCode({
+      food: props.food,
+      foodCode: opt?.updateFoodValue,
+      localeId: survey.localeId,
+      replaceFood: data => survey.replaceFood(data),
+      source: 'RadioListPrompt',
+    });
+  }
+
+  action('next');
 }
 
 defineExpose({ isValid });

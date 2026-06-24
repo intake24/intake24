@@ -91,6 +91,7 @@ export function listOption<T extends z.ZodTypeAny = z.ZodString>(valueSchema?: T
     label: z.string().min(1).max(256),
     shortLabel: z.string().min(1).max(256).optional(),
     value: valueSchema ?? z.string().min(1).max(256),
+    updateFoodValue: z.string().min(1).max(256).optional(),
     exclusive: z.boolean().optional(),
     selected: z.boolean().optional(),
   });

@@ -417,6 +417,7 @@
       "source": "Source categories to trigger"
     },
     "other": "Allow custom other option",
+    "updateFood": "Update food item based on selection",
     "orientation": {
       "_": "Orientation",
       "column": "Column",
@@ -731,7 +732,9 @@
       "title": "Yes / No choice",
       "subtitle": "Ask to choose yes or no",
       "useFlag": "Set a flag instead of custom prompt answer",
-      "flag": "Flag"
+      "flag": "Flag",
+      "updateFoodYes": "Food code for Yes",
+      "updateFoodNo": "Food code for No"
     },
     "aggregate-choice-prompt": {
       "title": "Aggregate choice question",

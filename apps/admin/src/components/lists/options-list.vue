@@ -49,6 +49,14 @@
               variant="outlined"
             />
           </slot>
+          <v-text-field
+            v-if="props.updateFood"
+            v-model="option.updateFoodValue"
+            density="compact"
+            hide-details="auto"
+            :label="$t('common.options.updateFood')"
+            variant="outlined"
+          />
           <div class="d-flex flex-column flex-sm-row gc-6 px-2">
             <v-switch
               v-model="option.selected"
@@ -97,6 +105,10 @@ const props = defineProps({
   exclusive: {
     type: Boolean,
   },
+  updateFood: {
+    type: Boolean,
+    default: false,
+  },
   numeric: {
     type: Boolean,
   },
@@ -130,7 +142,7 @@ const optionValueRules = computed<RuleCallback[]>(() => [...defaultValueRules, .
 
 function add() {
   const size = currentOptions.value.length + 1;
-  currentOptions.value.push({ id: size, label: `label-${size}`, shortLabel: `shortLabel-${size}`, value: props.default ?? (props.numeric ? size : `value-${size}`) });
+  currentOptions.value.push({ id: size, label: `label-${size}`, shortLabel: `shortLabel-${size}`, value: props.default ?? (props.numeric ? size : `value-${size}`), updateFoodValue: 'NO_UPDATE' });
 };
 
 function remove(index: number) {
