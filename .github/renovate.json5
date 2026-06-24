@@ -1,23 +1,40 @@
 {
-  "extends": ["config:base", "schedule:earlyMondays"],
-  "labels": ["dependencies"],
-  "pin": false,
-  "packageRules": [
-    // Typescript (major/minor)
-    {
-      "matchPackageNames": ["typescript"],
-      "matchUpdateTypes": ["major", "minor"],
-      "groupName": "typescript",
-      "groupSlug": "typescript"
-    },
-    // Rest of non-major dependencies
-    {
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
-    }
+  extends: [
+    'config:recommended',
+    'schedule:earlyMondays',
   ],
-  "rangeStrategy": "bump",
-  "ignoreDeps": ["node"]
+  labels: [
+    'dependencies',
+  ],
+  pin: {
+    enabled: false,
+  },
+  packageRules: [
+    {
+      matchPackageNames: [
+        'typescript',
+      ],
+      matchUpdateTypes: [
+        'major',
+        'minor',
+      ],
+      groupName: 'typescript',
+      groupSlug: 'typescript',
+    },
+    {
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      groupName: 'all non-major dependencies',
+      groupSlug: 'all-minor-patch',
+      matchPackageNames: [
+        '*',
+      ],
+    },
+  ],
+  rangeStrategy: 'bump',
+  ignoreDeps: [
+    'node',
+  ],
 }
