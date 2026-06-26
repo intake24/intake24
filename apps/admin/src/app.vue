@@ -98,7 +98,7 @@
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="loggedIn" color="background" flat>
+    <v-app-bar v-if="loggedIn" id="header" color="background" flat>
       <v-app-bar-nav-icon @click.stop="toggleSidebar" />
       <v-spacer />
       <v-btn :href="app.docs" target="_blank" :title="$t('common.docs')" variant="text">
@@ -226,4 +226,8 @@ onMounted(async () => {
 
 <style lang="scss">
 @use '@intake24/admin/scss/app.scss';
+
+a.v-list-item {
+  padding-inline-start: 16px;
+}
 </style>

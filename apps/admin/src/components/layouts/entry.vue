@@ -7,7 +7,7 @@
         :to="{ name: resource.name }"
         variant="text"
       />
-      <v-breadcrumbs v-if="breadcrumbs.length" class="px-1 py-2" :items="breadcrumbs">
+      <v-breadcrumbs v-if="breadcrumbs.length" id="entryBreadcrumb" class="px-1 py-2" :items="breadcrumbs">
         <template #divider>
           <v-icon icon="fas fa-caret-right" />
         </template>
@@ -61,7 +61,7 @@
         </v-btn>
       </div>
     </v-toolbar>
-    <v-tabs color="primary">
+    <v-tabs id="entryTabs" color="primary">
       <v-tab
         v-for="tab in tabs"
         :key="tab"

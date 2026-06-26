@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="listHeader">
     <div class="d-flex flex-row justify-space-between">
       <div class="d-flex ga-2">
         <food-search v-bind="{ id, code }" />
@@ -21,27 +21,28 @@
         </v-list>
       </v-menu>
     </div>
-    <v-divider class="my-3" />
-    <v-treeview
-      v-model:activated="activated"
-      v-model:opened="opened"
-      activatable
-      color="primary"
-      density="compact"
-      item-title="name"
-      item-value="key"
-      :items="items"
-      :load-children="fetchCategoryContent"
-      transition
-    >
-      <template #prepend="{ item }">
-        <v-icon v-if="item.type === 'foods'" icon="$foods" start />
-      </template>
-      <template #title="{ item }">
-        <a @click="openItem(item)">{{ item[itemText] }}</a>
-      </template>
-    </v-treeview>
+    <v-divider class="mt-3" />
   </div>
+  <v-treeview
+    v-model:activated="activated"
+    v-model:opened="opened"
+    activatable
+    color="primary"
+    density="compact"
+    item-title="name"
+    item-value="key"
+    :items="items"
+    :load-children="fetchCategoryContent"
+    :style="listStyle"
+    transition
+  >
+    <template #prepend="{ item }">
+      <v-icon v-if="item.type === 'foods'" icon="$foods" start />
+    </template>
+    <template #title="{ item }">
+      <a :title="item[itemText] || ''" @click="openItem(item)">{{ item[itemText] }}</a>
+    </template>
+  </v-treeview>
 </template>
 
 <script lang="ts" setup>
@@ -51,7 +52,8 @@ import type {
   FoodListEntry,
 } from '@intake24/common/types/http/admin';
 
-import { computed, onMounted, ref } from 'vue';
+import { useElementBounding } from '@vueuse/core';
+import { computed, onMounted, onUpdated, ref, shallowRef, useTemplateRef } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 
 import { useHttp } from '@intake24/admin/services';
@@ -199,13 +201,47 @@ async function findActiveInTree(entryId: string, type: string) {
   await findActiveInChildren(items.value);
 }
 
+const listViewOffset = shallowRef();
+const listHeader = useTemplateRef('listHeader');
+const listHeaderHeight = useElementBounding(listHeader).height;
+const listStyle = computed(() => {
+  return {
+    minHeight: `calc(192px - ${listHeaderHeight.value}px)`,
+    height: `calc(100vh - ${listViewOffset.value}px - ${listHeaderHeight.value}px)`,
+    overflowY: 'auto',
+  };
+});
+
+const activeUpdated = shallowRef(false);
 onBeforeRouteUpdate((to) => {
-  if (to.params.entryId !== activatedEntryId.value)
+  if (to.params.entryId !== activatedEntryId.value) {
     findActiveInTree(to.params.entryId?.toString(), to.meta.module.current);
+    activeUpdated.value = true;
+  }
 });
 
 onMounted(async () => {
   await fetchRootCategories();
   await findActiveInTree(route.params.entryId?.toString(), route.meta.module.current);
 });
+
+onUpdated(() => {
+  // retrieve height of following elements to offset
+  listViewOffset.value = (document.getElementById('header')?.offsetHeight || 0)
+    + (document.getElementById('footer')?.offsetHeight || 0)
+    + (document.getElementById('entryBreadcrumb')?.offsetHeight || 0)
+    + (document.getElementById('entryTabs')?.offsetHeight || 0);
+
+  if (activeUpdated.value) {
+    // scroll to active item in treeview
+    document.querySelector('.v-list-item--active')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    activeUpdated.value = false;
+  }
+});
 </script>
+
+<style lang="scss">
+.v-list-item__prepend .v-treeview-item__level {
+  max-width: fit-content;
+}
+</style>

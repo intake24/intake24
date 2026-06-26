@@ -1,6 +1,6 @@
 <template>
   <v-divider v-if="$vuetify.display.mobile" />
-  <v-footer v-if="!$vuetify.display.mobile || !loggedIn" class="justify-center pa-4 flex-grow-0">
+  <v-footer v-if="!$vuetify.display.mobile || !loggedIn" id="footer" app class="justify-center pa-4 flex-grow-0" style="position: absolute;">
     <div class="d-flex flex-column flex-md-row justify-center align-center text--secondary text-body-medium gr-2">
       <a class="text-decoration-none text-primary" :href="links.home" target="_blank">
         {{ $t('common._') }}
