@@ -32,10 +32,10 @@
     "decompress": "^4.2.1",
     "dotenv": "^17.4.2",
     "dotenv-expand": "^13.0.0",
-    "fs-extra": "^11.3.5",
+    "fs-extra": "^11.3.6",
     "ky": "^2.0.2",
     "lodash-es": "^4.18.1",
-    "nanoid": "^5.1.15",
+    "nanoid": "^5.1.16",
     "pg": "^8.22.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
@@ -54,7 +54,7 @@
     "@types/node": "^24.13.2",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
-    "@typescript/native-preview": "7.0.0-dev.20260622.1",
+    "@typescript/native-preview": "7.0.0-dev.20260701.1",
     "tsdown": "^0.22.3",
     "typescript": "^6.0.3"
   }
