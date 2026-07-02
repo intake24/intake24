@@ -1,6 +1,6 @@
 import type { SetupContext } from 'vue';
 
-import type { ActionItem, Prompt } from '@intake24/common/prompts';
+import type { Prompt, PromptActionItem } from '@intake24/common/prompts';
 import type { FoodState, MealState, PromptSection } from '@intake24/common/surveys';
 
 import { get, set } from 'lodash-es';
@@ -56,7 +56,7 @@ export function useLayout(props: UseLayoutProps, ctx: Pick<SetupContext<'action'
     globalI18n.setLocaleMessage(globalI18n.locale.value, messages);
   };
 
-  const isItemValid = (item: ActionItem) => item.type !== 'next' || props.isValid;
+  const isItemValid = (item: PromptActionItem) => item.type !== 'next' || props.isValid;
 
   const foodOrMealId = computed(() => props.food?.id ?? props.meal?.id);
   const desktopActions = computed(() => props.prompt.actions?.items.filter(

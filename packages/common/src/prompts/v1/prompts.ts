@@ -3,7 +3,7 @@ import type { PortionSizeMethodId } from '../../surveys';
 import { z } from 'zod';
 
 import { localeOptionList, localeTranslation } from '../../types';
-import { actions } from '../actions';
+import { promptActions } from '../actions';
 import { layoutTypes } from '../partials';
 import { condition } from './conditions';
 
@@ -100,7 +100,7 @@ export const basePrompt = z.object({
   id: z.string(),
   name: z.string(),
   i18n: z.record(z.string(), localeTranslation),
-  actions: actions.optional(),
+  actions: promptActions.optional(),
   conditions: condition.array(),
 });
 

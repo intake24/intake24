@@ -17,6 +17,7 @@ export const foodActionTypes = [
   'editFood',
   'selectFood',
   'changeFood',
+  'updateFood',
 ] as const;
 export const actionTypes = [...genericActionTypes, ...mealActionTypes, ...foodActionTypes] as const;
 
@@ -28,6 +29,11 @@ export type ActionType = (typeof actionTypes)[number];
 export const actionItem = z.object({
   type: z.enum(actionTypes),
   params: z.any(),
+});
+
+export type ActionItem = z.infer<typeof actionItem>;
+
+export const promptActionItem = actionItem.extend({
   text: localeTranslation,
   label: localeTranslation,
   color: z.string().nullable(),
@@ -36,16 +42,16 @@ export const actionItem = z.object({
   layout: z.enum(layoutTypes).array(),
 });
 
-export type ActionItem = z.infer<typeof actionItem>; ;
+export type PromptActionItem = z.infer<typeof promptActionItem>;
 
-export const actions = z.object({
+export const promptActions = z.object({
   both: z.boolean(),
-  items: actionItem.array(),
+  items: promptActionItem.array(),
 });
 
-export type Actions = z.infer<typeof actions>;
+export type PromptActions = z.infer<typeof promptActions>;
 
-export const defaultAction: ActionItem = {
+export const defaultAction: PromptActionItem = {
   type: 'next',
   text: { en: '' },
   label: {},

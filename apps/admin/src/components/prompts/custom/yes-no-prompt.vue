@@ -17,6 +17,64 @@
         </v-col>
       </v-row>
     </v-expand-transition>
+    <v-row class="ml-2" density="compact">
+      <v-col cols="12" md="6">
+        <v-switch
+          v-model="toggleTrueAction"
+          hide-details="auto"
+          :label="$t('survey-schemes.prompts.yes-no-prompt.trueActionToggle')"
+          @update:model-value="changeToggle(true, $event)"
+        />
+      </v-col>
+    </v-row>
+    <v-expand-transition>
+      <v-row v-if="currentTrueAction" class="ml-2" density="compact">
+        <v-col cols="12" md="6">
+          <v-select
+            v-model="currentTrueAction.type"
+            hide-details="auto"
+            :items="availableActions"
+            :label="$t('survey-schemes.prompts.yes-no-prompt.actionType')"
+            variant="outlined"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            v-model="currentTrueAction.params.code"
+            :label="$t('survey-schemes.prompts.yes-no-prompt.actionFoodCode')"
+          />
+        </v-col>
+      </v-row>
+    </v-expand-transition>
+    <v-row class="ml-2" density="compact">
+      <v-col cols="12" md="6">
+        <v-switch
+          v-model="toggleFalseAction"
+          hide-details="auto"
+          :label="$t('survey-schemes.prompts.yes-no-prompt.falseActionToggle')"
+          @update:model-value="changeToggle(false, $event)"
+        />
+      </v-col>
+    </v-row>
+    <v-expand-transition>
+      <v-row v-if="currentFalseAction" class="ml-2" density="compact">
+        <v-col cols="12" md="6">
+          <v-select
+            v-model="currentFalseAction.type"
+            hide-details="auto"
+            :items="availableActions"
+            :label="$t('survey-schemes.prompts.yes-no-prompt.actionType')"
+            variant="outlined"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            v-model="currentFalseAction.params.code"
+            :label="$t('survey-schemes.prompts.yes-no-prompt.actionFoodCode')"
+          />
+        </v-col>
+      </v-row>
+    </v-expand-transition>
   </v-tabs-window-item>
 </template>
 
@@ -25,7 +83,7 @@ import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 
 import { basePrompt } from '../partials';
 
@@ -43,6 +101,56 @@ export default defineComponent({
       type: String as PropType<Prompts['yes-no-prompt']['flag']>,
       required: false,
     },
+    trueAction: {
+      type: Object as PropType<Prompts['yes-no-prompt']['trueAction']>,
+      required: false,
+    },
+    falseAction: {
+      type: Object as PropType<Prompts['yes-no-prompt']['falseAction']>,
+      required: false,
+    },
+  },
+
+  emits: ['update:options'],
+
+  setup(props, { emit }) {
+    const availableActions = [{ value: 'updateFood', title: 'Update Food' }];
+    const currentTrueAction = ref(props.trueAction ? { ...props.trueAction } : undefined);
+    const currentFalseAction = ref(props.falseAction ? { ...props.falseAction } : undefined);
+    const toggleTrueAction = ref(!!props.trueAction);
+    const toggleFalseAction = ref(!!props.falseAction);
+
+    function changeToggle(type: boolean, enable: boolean | null) {
+      if (type)
+        currentTrueAction.value = enable ? { type: 'updateFood', params: { code: 'FOOD_CODE' } } : undefined;
+      else
+        currentFalseAction.value = enable ? { type: 'updateFood', params: { code: 'FOOD_CODE' } } : undefined;
+    };
+
+    watch(
+      currentTrueAction,
+      (value) => {
+        emit('update:options', { trueAction: value });
+      },
+      { deep: true },
+    );
+
+    watch(
+      currentFalseAction,
+      (value) => {
+        emit('update:options', { falseAction: value });
+      },
+      { deep: true },
+    );
+
+    return {
+      availableActions,
+      currentTrueAction,
+      currentFalseAction,
+      toggleTrueAction,
+      toggleFalseAction,
+      changeToggle,
+    };
   },
 });
 </script>
