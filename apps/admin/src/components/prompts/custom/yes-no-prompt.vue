@@ -20,9 +20,9 @@
     <v-row class="ml-2" density="compact">
       <v-col cols="12" md="6">
         <v-switch
-          v-model="toggleTrueAction"
           hide-details="auto"
           :label="$t('survey-schemes.prompts.yes-no-prompt.trueActionToggle')"
+          :model-value="!!trueAction"
           @update:model-value="changeToggle(true, $event)"
         />
       </v-col>
@@ -49,9 +49,9 @@
     <v-row class="ml-2" density="compact">
       <v-col cols="12" md="6">
         <v-switch
-          v-model="toggleFalseAction"
           hide-details="auto"
           :label="$t('survey-schemes.prompts.yes-no-prompt.falseActionToggle')"
+          :model-value="!!falseAction"
           @update:model-value="changeToggle(false, $event)"
         />
       </v-col>
@@ -117,8 +117,6 @@ export default defineComponent({
     const availableActions = [{ value: 'updateFood', title: 'Update Food' }];
     const currentTrueAction = ref(props.trueAction ? { ...props.trueAction } : undefined);
     const currentFalseAction = ref(props.falseAction ? { ...props.falseAction } : undefined);
-    const toggleTrueAction = ref(!!props.trueAction);
-    const toggleFalseAction = ref(!!props.falseAction);
 
     function changeToggle(type: boolean, enable: boolean | null) {
       if (type)
@@ -147,8 +145,6 @@ export default defineComponent({
       availableActions,
       currentTrueAction,
       currentFalseAction,
-      toggleTrueAction,
-      toggleFalseAction,
       changeToggle,
     };
   },
