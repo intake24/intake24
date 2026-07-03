@@ -24,7 +24,7 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')" />
+      <next :disabled="!isValid" @click="submit" />
     </template>
   </component>
 </template>
@@ -83,6 +83,18 @@ const isValid = computed(() => {
 const localeOptions = computed(
   () => props.prompt.options[locale.value] ?? props.prompt.options.en,
 );
+
+function submit() {
+  const selected = Array.isArray(state.value) ? undefined : state.value;
+  if (selected !== undefined) {
+    const option = localeOptions.value.find(o => o.value === String(selected));
+    if (option && option.action) {
+      const foodOrMealId = props.food?.id ?? props.meal?.id;
+      action(option.action.type, foodOrMealId, option.action.params);
+    }
+  }
+  action('next');
+}
 
 defineExpose({ isValid });
 </script>

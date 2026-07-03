@@ -49,6 +49,16 @@
               variant="outlined"
             />
           </slot>
+          <v-expand-transition>
+            <v-text-field
+              v-if="!!option.action"
+              v-model="option.action.params.code"
+              density="compact"
+              hide-details="auto"
+              :label="$t('common.options.action.foodCode')"
+              variant="outlined"
+            />
+          </v-expand-transition>
           <div class="d-flex flex-column flex-sm-row gc-6 px-2">
             <v-switch
               v-model="option.selected"
@@ -62,6 +72,13 @@
               density="compact"
               hide-details="auto"
               :label="$t('common.options.exclusive')"
+            />
+            <v-switch
+              density="compact"
+              hide-details="auto"
+              :label="$t('common.options.action.updateFood')"
+              :model-value="!!option.action"
+              @update:model-value="changeActionToggle(option, $event)"
             />
           </div>
         </div>
@@ -135,6 +152,15 @@ function add() {
 
 function remove(index: number) {
   currentOptions.value.splice(index, 1);
+};
+
+function changeActionToggle(option: ListOption<ZodType>, enable: boolean | null) {
+  if (enable) {
+    option.action = { type: 'updateFood', params: { code: 'FOOD_CODE' } };
+  }
+  else {
+    option.action = undefined;
+  }
 };
 
 function update() {
