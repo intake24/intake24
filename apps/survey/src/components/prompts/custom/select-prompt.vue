@@ -88,7 +88,7 @@ function submit() {
   const selected = Array.isArray(state.value) ? undefined : state.value;
   if (selected !== undefined) {
     const option = localeOptions.value.find(o => o.value === String(selected));
-    if (option && option.action) {
+    if (option?.action) {
       const foodOrMealId = props.food?.id ?? props.meal?.id;
       action(option.action.type, foodOrMealId, option.action.params);
     }

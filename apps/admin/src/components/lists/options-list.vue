@@ -50,14 +50,21 @@
             />
           </slot>
           <v-expand-transition>
-            <v-text-field
+            <select-resource
               v-if="!!option.action"
               v-model="option.action.params.code"
-              density="compact"
-              hide-details="auto"
+              item-id="code"
               :label="$t('common.options.action.foodCode')"
-              variant="outlined"
-            />
+              resource="foods"
+            >
+              <template #title>
+                {{ $t('fdbs.foods.title') }}
+              </template>
+              <template #item="{ item }">
+                <v-list-item-title>{{ item.code }}</v-list-item-title>
+                <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+              </template>
+            </select-resource>
           </v-expand-transition>
           <div class="d-flex flex-column flex-sm-row gc-6 px-2">
             <v-switch
@@ -103,6 +110,7 @@ import { deepEqual } from 'fast-equals';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { toIndexedList } from '@intake24/admin/util';
 
 defineOptions({ name: 'OptionsList' });

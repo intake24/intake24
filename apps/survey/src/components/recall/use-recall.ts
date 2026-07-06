@@ -258,7 +258,7 @@ export function useRecall() {
       case 'updateFood':
         // TODO: validate params properly
         if (params && typeof params === 'object' && 'code' in params)
-          survey.swapFood(foodId, params.code as string);
+          await survey.swapFood(foodId, params.code as string);
         await nextPrompt();
         break;
       default:

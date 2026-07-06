@@ -39,10 +39,20 @@
           />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field
+          <select-resource
             v-model="currentTrueAction.params.code"
-            :label="$t('survey-schemes.prompts.yes-no-prompt.actionFoodCode')"
-          />
+            item-id="code"
+            :label="$t('common.options.action.foodCode')"
+            resource="foods"
+          >
+            <template #title>
+              {{ $t('fdbs.foods.title') }}
+            </template>
+            <template #item="{ item }">
+              <v-list-item-title>{{ item.code }}</v-list-item-title>
+              <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+            </template>
+          </select-resource>
         </v-col>
       </v-row>
     </v-expand-transition>
@@ -68,10 +78,20 @@
           />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field
+          <select-resource
             v-model="currentFalseAction.params.code"
-            :label="$t('survey-schemes.prompts.yes-no-prompt.actionFoodCode')"
-          />
+            item-id="code"
+            :label="$t('common.options.action.foodCode')"
+            resource="foods"
+          >
+            <template #title>
+              {{ $t('fdbs.foods.title') }}
+            </template>
+            <template #item="{ item }">
+              <v-list-item-title>{{ item.code }}</v-list-item-title>
+              <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+            </template>
+          </select-resource>
         </v-col>
       </v-row>
     </v-expand-transition>
@@ -85,10 +105,16 @@ import type { Prompts } from '@intake24/common/prompts';
 
 import { defineComponent, ref, watch } from 'vue';
 
+import { SelectResource } from '@intake24/admin/components/dialogs';
+
 import { basePrompt } from '../partials';
 
 export default defineComponent({
   name: 'YesNoPrompt',
+
+  components: {
+    SelectResource,
+  },
 
   mixins: [basePrompt],
 

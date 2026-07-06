@@ -93,7 +93,7 @@ function update() {
 function submit() {
   if (selected.value !== 'other') {
     const option = localeOptions.value.find(o => o.value === selected.value);
-    if (option && option.action) {
+    if (option?.action) {
       const foodOrMealId = props.food?.id ?? props.meal?.id;
       action(option.action.type, foodOrMealId, option.action.params);
     }
