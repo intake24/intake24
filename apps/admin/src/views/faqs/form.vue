@@ -9,49 +9,45 @@
     </template>
     <v-form @keydown="clearError" @submit.prevent="submit">
       <v-container fluid>
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.name"
-                :error-messages="errors.get('name')"
-                hide-details="auto"
-                :label="$t('common.name')"
-                name="name"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.visibility"
-                :error-messages="errors.get('visibility')"
-                hide-details="auto"
-                :items="visibilities"
-                :label="$t('securables.visibility._')"
-                name="visibility"
-                variant="outlined"
-                @update:model-value="errors.clear('visibility')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <v-icon :icon="item.icon" start />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <v-icon :icon="item.icon" start />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-          </v-row>
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.name"
+              :error-messages="errors.get('name')"
+              hide-details="auto"
+              :label="$t('common.name')"
+              name="name"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.visibility"
+              :error-messages="errors.get('visibility')"
+              hide-details="auto"
+              :items="visibilities"
+              :label="$t('securables.visibility._')"
+              name="visibility"
+              variant="outlined"
+              @update:model-value="errors.clear('visibility')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <v-icon :icon="item.icon" start />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <v-icon :icon="item.icon" start />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+        </v-row>
       </v-container>
       <faq-sections v-model="data.content" :errors />
-      <v-card-text>
-        <submit-footer :disabled="errors.any.value" />
-      </v-card-text>
+      <submit-footer :disabled="errors.any.value" />
     </v-form>
   </entry-layout>
 </template>

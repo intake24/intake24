@@ -4,7 +4,6 @@
       <v-row>
         <v-col cols="12" md="6">
           <v-time-picker
-            :landscape="$vuetify.display.smAndUp"
             :model-value="startTime"
             :title="$t('survey-schemes.prompts.meal-gap-prompt.startTime')"
             @update:model-value="update('startTime', $event)"
@@ -12,7 +11,6 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-time-picker
-            :landscape="$vuetify.display.smAndUp"
             :model-value="endTime"
             :title="$t('survey-schemes.prompts.meal-gap-prompt.endTime')"
             @update:model-value="update('endTime', $event)"

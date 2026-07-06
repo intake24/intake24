@@ -2,51 +2,78 @@
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              v-model="data.name"
+              :disabled="isEdit"
+              :error-messages="errors.get('name')"
+              hide-details="auto"
+              :label="$t('common.name')"
+              name="name"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              v-model="data.displayName"
+              :error-messages="errors.get('displayName')"
+              hide-details="auto"
+              :label="$t('common.displayName')"
+              name="displayName"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12">
+            <v-textarea
+              v-model="data.description"
+              :error-messages="errors.get('description')"
+              hide-details="auto"
+              :label="$t('common.description')"
+              name="description"
+              prepend-inner-icon="$description"
+              variant="outlined"
+            />
+          </v-col>
+        </v-row>
+        <v-card-title>{{ $t('permissions.title') }}</v-card-title>
+        <v-row>
+          <v-col key="global" cols="4">
+            <v-card height="100%">
+              <v-card-title>
+                <h6>{{ $t('permissions.groups.global') }}</h6>
+              </v-card-title>
+              <v-card-text>
+                <v-switch
+                  v-for="perm in permissions.global"
+                  :key="perm.id"
+                  v-model="data.permissions"
+                  :disabled="!can(perm.name)"
+                  :label="perm.displayName"
+                  :value="perm.id"
+                />
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <template v-for="group in ['resources', 'surveys', 'fdbs']" :key="`${group}-title`">
+          <v-card-title cols="12">
+            <v-card-title>{{ $t(`permissions.groups.${group}`) }}</v-card-title>
+          </v-card-title>
           <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="data.name"
-                :disabled="isEdit"
-                :error-messages="errors.get('name')"
-                hide-details="auto"
-                :label="$t('common.name')"
-                name="name"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="data.displayName"
-                :error-messages="errors.get('displayName')"
-                hide-details="auto"
-                :label="$t('common.displayName')"
-                name="displayName"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                v-model="data.description"
-                :error-messages="errors.get('description')"
-                hide-details="auto"
-                :label="$t('common.description')"
-                name="description"
-                prepend-inner-icon="$description"
-                variant="outlined"
-              />
-            </v-col>
-          </v-row>
-          <v-card-title>{{ $t('permissions.title') }}</v-card-title>
-          <v-row>
-            <v-col key="global" cols="4">
+            <v-col v-for="(pModule, key) in permissions[group]" :key="key" cols="4">
               <v-card height="100%">
                 <v-card-title>
-                  <h6>{{ $t('permissions.groups.global') }}</h6>
+                  <h6 v-if="group === 'resources'">
+                    {{ $t(`${key}.title`) }}
+                  </h6>
+                  <h6 v-else>
+                    {{ $t(`${group}._`) }} {{ key }}
+                  </h6>
                 </v-card-title>
                 <v-card-text>
                   <v-switch
-                    v-for="perm in permissions.global"
+                    v-for="perm in pModule"
                     :key="perm.id"
                     v-model="data.permissions"
                     :disabled="!can(perm.name)"
@@ -57,37 +84,8 @@
               </v-card>
             </v-col>
           </v-row>
-          <template v-for="group in ['resources', 'surveys', 'fdbs']" :key="`${group}-title`">
-            <v-card-title cols="12">
-              <v-card-title>{{ $t(`permissions.groups.${group}`) }}</v-card-title>
-            </v-card-title>
-            <v-row>
-              <v-col v-for="(pModule, key) in permissions[group]" :key="key" cols="4">
-                <v-card height="100%">
-                  <v-card-title>
-                    <h6 v-if="group === 'resources'">
-                      {{ $t(`${key}.title`) }}
-                    </h6>
-                    <h6 v-else>
-                      {{ $t(`${group}._`) }} {{ key }}
-                    </h6>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-switch
-                      v-for="perm in pModule"
-                      :key="perm.id"
-                      v-model="data.permissions"
-                      :disabled="!can(perm.name)"
-                      :label="perm.displayName"
-                      :value="perm.id"
-                    />
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-          </template>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        </template>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

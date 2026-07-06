@@ -40,9 +40,7 @@
     </v-tabs-window>
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

@@ -8,67 +8,65 @@
   </v-toolbar>
   <v-container fluid>
     <v-form @keydown="clearError" @submit.prevent="submit">
-      <v-card-text>
-        <v-row>
-          <v-col class="d-flex gc-4 align-self-center" cols="12">
-            <v-switch
-              v-model="customId"
-              :label="$t('media.id.custom')"
-              @change="toggleCustomId"
-            />
-            <v-text-field
-              v-if="customId"
-              v-model="data.id"
-              :error-messages="errors.get('id')"
-              :hint="$t('media.id.help')"
-              :label="$t('media.id._')"
-              name="id"
-              prepend-inner-icon="fas fa-id-badge"
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="data.name"
-              :error-messages="errors.get('name')"
-              :label="$t('media.name')"
-              name="name"
-              prepend-inner-icon="$media"
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-file-input
-              v-model="data.file"
-              :error-messages="errors.get('file')"
-              :label="$t('media.file')"
-              name="file"
-              prepend-icon=""
-              prepend-inner-icon="fas fa-paperclip"
-              @change="errors.clear('file')"
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-select
-              v-model="data.disk"
-              :error-messages="errors.get('disk')"
-              :items="disks"
-              :label="$t('media.disks._')"
-              name="disk"
-              prepend-inner-icon="fas fa-hard-drive"
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-select
-              v-model="data.collection"
-              :error-messages="errors.get('collection')"
-              :items="collections"
-              :label="$t('media.collections._')"
-              name="collection"
-              prepend-inner-icon="fas fa-folder"
-            />
-          </v-col>
-        </v-row>
-        <submit-footer :disabled="errors.any.value" />
-      </v-card-text>
+      <v-row>
+        <v-col class="d-flex gc-4 align-self-center" cols="12">
+          <v-switch
+            v-model="customId"
+            :label="$t('media.id.custom')"
+            @change="toggleCustomId"
+          />
+          <v-text-field
+            v-if="customId"
+            v-model="data.id"
+            :error-messages="errors.get('id')"
+            :hint="$t('media.id.help')"
+            :label="$t('media.id._')"
+            name="id"
+            prepend-inner-icon="fas fa-id-badge"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            v-model="data.name"
+            :error-messages="errors.get('name')"
+            :label="$t('media.name')"
+            name="name"
+            prepend-inner-icon="$media"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-file-input
+            v-model="data.file"
+            :error-messages="errors.get('file')"
+            :label="$t('media.file')"
+            name="file"
+            prepend-icon=""
+            prepend-inner-icon="fas fa-paperclip"
+            @change="errors.clear('file')"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-select
+            v-model="data.disk"
+            :error-messages="errors.get('disk')"
+            :items="disks"
+            :label="$t('media.disks._')"
+            name="disk"
+            prepend-inner-icon="fas fa-hard-drive"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-select
+            v-model="data.collection"
+            :error-messages="errors.get('collection')"
+            :items="collections"
+            :label="$t('media.collections._')"
+            name="collection"
+            prepend-inner-icon="fas fa-folder"
+          />
+        </v-col>
+      </v-row>
+      <submit-footer :disabled="errors.any.value" />
     </v-form>
   </v-container>
   <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">

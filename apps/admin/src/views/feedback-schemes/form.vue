@@ -10,139 +10,135 @@
     </template>
     <v-form @keydown="clearError" @submit.prevent="submit">
       <v-container fluid>
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.name"
-                :error-messages="errors.get('name')"
-                hide-details="auto"
-                :label="$t('common.name')"
-                name="name"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.type"
-                :error-messages="errors.get('type')"
-                hide-details="auto"
-                :items="types"
-                :label="$t('feedback-schemes.types._')"
-                name="type"
-                variant="outlined"
-                @update:model-value="errors.clear('type')"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.outputs"
-                :error-messages="errors.get('outputs')"
-                hide-details="auto"
-                :items="outputs"
-                :label="$t('feedback-schemes.outputs.title')"
-                multiple
-                name="outputs"
-                prepend-inner-icon="fas fa-right-from-bracket"
-                variant="outlined"
-                @update:model-value="errors.clear('outputs')"
-              >
-                <template #selection="{ item, index }">
-                  <template v-if="index === 0">
-                    <span v-if="data.outputs.length === 1">{{ item.title }}</span>
-                    <span v-if="data.outputs.length > 1">
-                      {{ $t('common.selected', { count: data.outputs.length }) }}
-                    </span>
-                  </template>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.name"
+              :error-messages="errors.get('name')"
+              hide-details="auto"
+              :label="$t('common.name')"
+              name="name"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.type"
+              :error-messages="errors.get('type')"
+              hide-details="auto"
+              :items="types"
+              :label="$t('feedback-schemes.types._')"
+              name="type"
+              variant="outlined"
+              @update:model-value="errors.clear('type')"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.outputs"
+              :error-messages="errors.get('outputs')"
+              hide-details="auto"
+              :items="outputs"
+              :label="$t('feedback-schemes.outputs.title')"
+              multiple
+              name="outputs"
+              prepend-inner-icon="fas fa-right-from-bracket"
+              variant="outlined"
+              @update:model-value="errors.clear('outputs')"
+            >
+              <template #selection="{ item, index }">
+                <template v-if="index === 0">
+                  <span v-if="data.outputs.length === 1">{{ item.title }}</span>
+                  <span v-if="data.outputs.length > 1">
+                    {{ $t('common.selected', { count: data.outputs.length }) }}
+                  </span>
                 </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.visibility"
-                :error-messages="errors.get('visibility')"
-                hide-details="auto"
-                :items="visibilities"
-                :label="$t('securables.visibility._')"
-                name="visibility"
-                variant="outlined"
-                @update:model-value="errors.clear('visibility')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <v-icon :icon="item.icon" start />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <v-icon :icon="item.icon" start />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.physicalDataFields"
-                class="mb-2"
-                :error-messages="errors.get('physicalDataFields')"
-                hide-details="auto"
-                :items="physicalDataFields"
-                :label="$t('feedback-schemes.physicalDataFields.title')"
-                multiple
-                name="physicalDataFields"
-                prepend-inner-icon="fas fa-person-circle-question"
-                variant="outlined"
-                @update:model-value="errors.clear('physicalDataFields')"
-              >
-                <template #selection="{ item, index }">
-                  <template v-if="index === 0">
-                    <span v-if="data.physicalDataFields.length === 1">{{ item.title }}</span>
-                    <span v-if="data.physicalDataFields.length > 1">
-                      {{ $t('common.selected', { count: data.physicalDataFields.length }) }}
-                    </span>
-                  </template>
-                </template>
-              </v-select>
-              <template v-for="(value, key) in requiredPhysicalDataFields" :key="key">
-                <v-alert
-                  v-if="!value && data.physicalDataFields.includes(key)"
-                  class="text-body-small mb-1"
-                  density="compact"
-                  type="info"
-                >
-                  <i18n-t keypath="feedback-schemes.physicalDataFields.notRequired">
-                    <template #field>
-                      <span class="font-weight-medium">
-                        "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
-                      </span>
-                    </template>
-                  </i18n-t>
-                </v-alert>
-                <v-alert
-                  v-if="value && !data.physicalDataFields.includes(key)"
-                  :key="key"
-                  class="text-body-small mb-1"
-                  density="compact"
-                  type="warning"
-                >
-                  <i18n-t keypath="feedback-schemes.physicalDataFields.required">
-                    <template #field>
-                      <span class="font-weight-medium">
-                        "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
-                      </span>
-                    </template>
-                  </i18n-t>
-                </v-alert>
               </template>
-            </v-col>
-          </v-row>
-        </v-card-text>
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.visibility"
+              :error-messages="errors.get('visibility')"
+              hide-details="auto"
+              :items="visibilities"
+              :label="$t('securables.visibility._')"
+              name="visibility"
+              variant="outlined"
+              @update:model-value="errors.clear('visibility')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <v-icon :icon="item.icon" start />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <v-icon :icon="item.icon" start />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.physicalDataFields"
+              class="mb-2"
+              :error-messages="errors.get('physicalDataFields')"
+              hide-details="auto"
+              :items="physicalDataFields"
+              :label="$t('feedback-schemes.physicalDataFields.title')"
+              multiple
+              name="physicalDataFields"
+              prepend-inner-icon="fas fa-person-circle-question"
+              variant="outlined"
+              @update:model-value="errors.clear('physicalDataFields')"
+            >
+              <template #selection="{ item, index }">
+                <template v-if="index === 0">
+                  <span v-if="data.physicalDataFields.length === 1">{{ item.title }}</span>
+                  <span v-if="data.physicalDataFields.length > 1">
+                    {{ $t('common.selected', { count: data.physicalDataFields.length }) }}
+                  </span>
+                </template>
+              </template>
+            </v-select>
+            <template v-for="(value, key) in requiredPhysicalDataFields" :key="key">
+              <v-alert
+                v-if="!value && data.physicalDataFields.includes(key)"
+                class="text-body-small mb-1"
+                density="compact"
+                type="info"
+              >
+                <i18n-t keypath="feedback-schemes.physicalDataFields.notRequired">
+                  <template #field>
+                    <span class="font-weight-medium">
+                      "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
+                    </span>
+                  </template>
+                </i18n-t>
+              </v-alert>
+              <v-alert
+                v-if="value && !data.physicalDataFields.includes(key)"
+                :key="key"
+                class="text-body-small mb-1"
+                density="compact"
+                type="warning"
+              >
+                <i18n-t keypath="feedback-schemes.physicalDataFields.required">
+                  <template #field>
+                    <span class="font-weight-medium">
+                      "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
+                    </span>
+                  </template>
+                </i18n-t>
+              </v-alert>
+            </template>
+          </v-col>
+        </v-row>
       </v-container>
       <feedback-sections v-model="data.sections" />
-      <v-card-text>
-        <submit-footer :disabled="errors.any.value" />
-      </v-card-text>
+      <submit-footer :disabled="errors.any.value" />
     </v-form>
   </entry-layout>
 </template>

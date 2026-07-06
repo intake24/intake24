@@ -74,7 +74,7 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <v-toolbar flat tile>
+        <v-toolbar color="surface">
           <v-toolbar-title>
             {{ $t('nutrient-tables.mapping.fields._') }}
           </v-toolbar-title>
@@ -88,6 +88,7 @@
             <v-icon icon="$add" start />{{ $t('nutrient-tables.mapping.fields.create') }}
           </v-btn>
         </v-toolbar>
+        <v-divider />
         <v-card-text>
           <v-alert v-if="errors.has('csvMappingFields')" border="start" type="error">
             {{ errors.get('csvMappingFields') }}
@@ -135,7 +136,7 @@
             </tbody>
           </v-table>
         </v-card-text>
-        <v-toolbar flat tile>
+        <v-toolbar color="surface">
           <v-toolbar-title>
             {{ $t('nutrient-tables.mapping.nutrients._') }}
           </v-toolbar-title>
@@ -149,6 +150,7 @@
             <v-icon icon="$add" start />{{ $t('nutrient-tables.mapping.nutrients.create') }}
           </v-btn>
         </v-toolbar>
+        <v-divider />
         <v-card-text>
           <v-alert
             v-if="errors.has('csvMappingNutrients')"
@@ -208,9 +210,7 @@
             </tbody>
           </v-table>
         </v-card-text>
-        <v-card-text>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

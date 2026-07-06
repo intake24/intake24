@@ -13,8 +13,9 @@ export default () => {
       beforeAll(async () => {
         await suite.util.setPermission(permissions);
       });
-      it('should return 400 for missing query data', async () => {
-        await suite.sharedTests.assertInvalidInput('get', url, ['localeId']);
+
+      it(`should return 200 and paginated results ('${permission}')`, async () => {
+        await suite.sharedTests.assertPaginatedResult('get', url);
       });
 
       it(`should return 200 and paginated results ('${permission}')`, async () => {

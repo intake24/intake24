@@ -11,13 +11,11 @@
           </v-toolbar>
           <v-card-text class="d-flex flex-column flex-sm-row pa-0">
             <v-time-picker
-              :landscape="$vuetify.display.smAndUp"
               :model-value="wakeUpTime"
               :title="$t('survey-schemes.prompts.sleep-schedule-prompt.wakeUpTime')"
               @update:model-value="update('wakeUpTime', $event)"
             />
             <v-time-picker
-              :landscape="$vuetify.display.smAndUp"
               :model-value="sleepTime"
               :title="$t('survey-schemes.prompts.sleep-schedule-prompt.sleepTime')"
               @update:model-value="update('sleepTime', $event)"

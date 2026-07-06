@@ -16,87 +16,84 @@
     </template>
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.name"
-                :error-messages="errors.get('name')"
-                hide-details="auto"
-                :label="$t('common.name')"
-                name="name"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.job"
-                :error-messages="errors.get('job')"
-                hide-details="auto"
-                :items="jobs"
-                :label="$t('tasks.job')"
-                name="job"
-                prepend-inner-icon="$jobs"
-                variant="outlined"
-                @update:model-value="jobChanged"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.cron"
-                :error-messages="errors.get('cron')"
-                hide-details="auto"
-                :label="$t('tasks.cron')"
-                name="cron"
-                prepend-inner-icon="far fa-clock"
-                variant="outlined"
-              >
-                <template #append>
-                  <pre>{{ readableCron }}</pre>
-                </template>
-              </v-text-field>
-            </v-col>
-            <v-col v-if="data.active" cols="12" md="6">
-              <div class="d-flex align-center" style="height: 100%">
-                <span v-if="entry.bullJob?.next" class="text-body-large">
-                  {{ $t('tasks.run.next') }}: {{ formatDateTime(new Date(entry.bullJob.next)) }}
-                </span>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-switch
-                v-model="data.active"
-                :error-messages="errors.get('active')"
-                hide-details="auto"
-                :label="$t('common.action.active')"
-                name="active"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                v-model="data.description"
-                :error-messages="errors.get('description')"
-                hide-details="auto"
-                :label="$t('common.description')"
-                name="description"
-                prepend-inner-icon="$description"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12">
-              <component
-                :is="data.job"
-                v-if="Object.keys(data.params).length"
-                v-model="data.params"
-                :errors="errors"
-                name="params"
-                @update:model-value="errors.clear(paramErrors)"
-              />
-            </v-col>
-          </v-row>
-
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.name"
+              :error-messages="errors.get('name')"
+              hide-details="auto"
+              :label="$t('common.name')"
+              name="name"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.job"
+              :error-messages="errors.get('job')"
+              hide-details="auto"
+              :items="jobs"
+              :label="$t('tasks.job')"
+              name="job"
+              prepend-inner-icon="$jobs"
+              variant="outlined"
+              @update:model-value="jobChanged"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.cron"
+              :error-messages="errors.get('cron')"
+              hide-details="auto"
+              :label="$t('tasks.cron')"
+              name="cron"
+              prepend-inner-icon="far fa-clock"
+              variant="outlined"
+            >
+              <template #append>
+                <pre>{{ readableCron }}</pre>
+              </template>
+            </v-text-field>
+          </v-col>
+          <v-col v-if="data.active" cols="12" md="6">
+            <div class="d-flex align-center" style="height: 100%">
+              <span v-if="entry.bullJob?.next" class="text-body-large">
+                {{ $t('tasks.run.next') }}: {{ formatDateTime(new Date(entry.bullJob.next)) }}
+              </span>
+            </div>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-switch
+              v-model="data.active"
+              :error-messages="errors.get('active')"
+              hide-details="auto"
+              :label="$t('common.action.active')"
+              name="active"
+            />
+          </v-col>
+          <v-col cols="12">
+            <v-textarea
+              v-model="data.description"
+              :error-messages="errors.get('description')"
+              hide-details="auto"
+              :label="$t('common.description')"
+              name="description"
+              prepend-inner-icon="$description"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12">
+            <component
+              :is="data.job"
+              v-if="Object.keys(data.params).length"
+              v-model="data.params"
+              :errors="errors"
+              name="params"
+              @update:model-value="errors.clear(paramErrors)"
+            />
+          </v-col>
+        </v-row>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

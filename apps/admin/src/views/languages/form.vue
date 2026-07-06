@@ -2,115 +2,113 @@
   <entry-layout v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.code"
-                :disabled="isEdit"
-                :error-messages="errors.get('code')"
-                hide-details="auto"
-                :label="$t('languages.code')"
-                name="code"
-                prepend-inner-icon="$languages"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.countryFlagCode"
-                :error-messages="errors.get('countryFlagCode')"
-                hide-details="auto"
-                :items="flags"
-                :label="$t('languages.countryFlagCode')"
-                name="countryFlagCode"
-                variant="outlined"
-                @update:model-value="errors.clear('countryFlagCode')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <span :class="`fi fi-${item.value} mr-3`" />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.englishName"
-                :error-messages="errors.get('englishName')"
-                hide-details="auto"
-                :label="$t('languages.englishName')"
-                name="englishName"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.localName"
-                :error-messages="errors.get('localName')"
-                hide-details="auto"
-                :label="$t('languages.localName')"
-                name="localName"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.textDirection"
-                :error-messages="errors.get('textDirection')"
-                hide-details="auto"
-                :items="textDirections"
-                :label="$t('languages.textDirections._')"
-                name="textDirection"
-                variant="outlined"
-                @update:model-value="errors.clear('textDirection')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <v-icon :icon="item.icon" start />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <v-icon :icon="item.icon" start />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.visibility"
-                :error-messages="errors.get('visibility')"
-                hide-details="auto"
-                :items="visibilities"
-                :label="$t('securables.visibility._')"
-                name="visibility"
-                variant="outlined"
-                @update:model-value="errors.clear('visibility')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <v-icon :icon="item.icon" start />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <v-icon :icon="item.icon" start />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-          </v-row>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.code"
+              :disabled="isEdit"
+              :error-messages="errors.get('code')"
+              hide-details="auto"
+              :label="$t('languages.code')"
+              name="code"
+              prepend-inner-icon="$languages"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.countryFlagCode"
+              :error-messages="errors.get('countryFlagCode')"
+              hide-details="auto"
+              :items="flags"
+              :label="$t('languages.countryFlagCode')"
+              name="countryFlagCode"
+              variant="outlined"
+              @update:model-value="errors.clear('countryFlagCode')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <span :class="`fi fi-${item.value} mr-3`" />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <span :class="`fi fi-${item.value} mr-3`" />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.englishName"
+              :error-messages="errors.get('englishName')"
+              hide-details="auto"
+              :label="$t('languages.englishName')"
+              name="englishName"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.localName"
+              :error-messages="errors.get('localName')"
+              hide-details="auto"
+              :label="$t('languages.localName')"
+              name="localName"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.textDirection"
+              :error-messages="errors.get('textDirection')"
+              hide-details="auto"
+              :items="textDirections"
+              :label="$t('languages.textDirections._')"
+              name="textDirection"
+              variant="outlined"
+              @update:model-value="errors.clear('textDirection')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <v-icon :icon="item.icon" start />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <v-icon :icon="item.icon" start />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.visibility"
+              :error-messages="errors.get('visibility')"
+              hide-details="auto"
+              :items="visibilities"
+              :label="$t('securables.visibility._')"
+              name="visibility"
+              variant="outlined"
+              @update:model-value="errors.clear('visibility')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <v-icon :icon="item.icon" start />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <v-icon :icon="item.icon" start />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+        </v-row>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

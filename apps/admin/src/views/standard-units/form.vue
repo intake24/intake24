@@ -2,77 +2,75 @@
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.id"
-                :disabled="isEdit"
-                :error-messages="errors.get('id')"
-                hide-details="auto"
-                :label="$t('standard-units.id')"
-                name="id"
-                prepend-inner-icon="$standard-units"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.name"
-                :error-messages="errors.get('name')"
-                :label="$t('common.name')"
-                name="name"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <select-icon
-                v-model="data.icon"
-                clearable
-                :error-messages="errors.get('icon')"
-                @update:model-value="errors.clear('icon')"
-              />
-            </v-col>
-            <v-col cols="12">
-              <language-selector
-                v-model="data.estimateIn"
-                border
-                :label="$t('standard-units.estimateIn')"
-                required
-              >
-                <template v-for="lang in Object.keys(data.estimateIn)" :key="lang" #[`lang.${lang}`]>
-                  <v-text-field
-                    v-model="data.estimateIn[lang]"
-                    :error-messages="errors.get(`estimateIn.${lang}`)"
-                    hide-details="auto"
-                    :name="`estimateIn.${lang}`"
-                    variant="outlined"
-                    @update:model-value="errors.clear(`estimateIn.${lang}`)"
-                  />
-                </template>
-              </language-selector>
-            </v-col>
-            <v-col cols="12">
-              <language-selector
-                v-model="data.howMany"
-                border
-                :label="$t('standard-units.howMany')"
-                required
-              >
-                <template v-for="lang in Object.keys(data.howMany)" :key="lang" #[`lang.${lang}`]>
-                  <v-text-field
-                    v-model="data.howMany[lang]"
-                    :error-messages="errors.get(`howMany.${lang}`)"
-                    hide-details="auto"
-                    :name="`howMany.${lang}`"
-                    variant="outlined"
-                    @update:model-value="errors.clear(`howMany.${lang}`)"
-                  />
-                </template>
-              </language-selector>
-            </v-col>
-          </v-row>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.id"
+              :disabled="isEdit"
+              :error-messages="errors.get('id')"
+              hide-details="auto"
+              :label="$t('standard-units.id')"
+              name="id"
+              prepend-inner-icon="$standard-units"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.name"
+              :error-messages="errors.get('name')"
+              :label="$t('common.name')"
+              name="name"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <select-icon
+              v-model="data.icon"
+              clearable
+              :error-messages="errors.get('icon')"
+              @update:model-value="errors.clear('icon')"
+            />
+          </v-col>
+          <v-col cols="12">
+            <language-selector
+              v-model="data.estimateIn"
+              border
+              :label="$t('standard-units.estimateIn')"
+              required
+            >
+              <template v-for="lang in Object.keys(data.estimateIn)" :key="lang" #[`lang.${lang}`]>
+                <v-text-field
+                  v-model="data.estimateIn[lang]"
+                  :error-messages="errors.get(`estimateIn.${lang}`)"
+                  hide-details="auto"
+                  :name="`estimateIn.${lang}`"
+                  variant="outlined"
+                  @update:model-value="errors.clear(`estimateIn.${lang}`)"
+                />
+              </template>
+            </language-selector>
+          </v-col>
+          <v-col cols="12">
+            <language-selector
+              v-model="data.howMany"
+              border
+              :label="$t('standard-units.howMany')"
+              required
+            >
+              <template v-for="lang in Object.keys(data.howMany)" :key="lang" #[`lang.${lang}`]>
+                <v-text-field
+                  v-model="data.howMany[lang]"
+                  :error-messages="errors.get(`howMany.${lang}`)"
+                  hide-details="auto"
+                  :name="`howMany.${lang}`"
+                  variant="outlined"
+                  @update:model-value="errors.clear(`howMany.${lang}`)"
+                />
+              </template>
+            </language-selector>
+          </v-col>
+        </v-row>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

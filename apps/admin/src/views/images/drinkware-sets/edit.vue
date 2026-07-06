@@ -2,179 +2,175 @@
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.id"
-                disabled
-                :error-messages="errors.get('id')"
-                :label="$t('drinkware-sets.id')"
-                name="id"
-                prepend-inner-icon="$drinkware-sets"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.imageMapId"
-                disabled
-                :error-messages="errors.get('imageMapId')"
-                :label="$t('image-maps._')"
-                name="imageMapId"
-                prepend-inner-icon="$image-maps"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.description"
-                :error-messages="errors.get('description')"
-                :label="$t('common.description')"
-                name="description"
-                prepend-inner-icon="$description"
-              />
-            </v-col>
-            <v-col cols="12">
-              <language-selector
-                v-if="data.label"
-                v-model="data.label"
-                border
-                :label="$t('common.label')"
-              >
-                <template v-for="lang in Object.keys(data.label)" :key="lang" #[`lang.${lang}`]>
-                  <v-text-field
-                    v-if="data.label"
-                    v-model="data.label[lang]"
-                    :error-messages="errors.get('label')"
-                    :label="$t('common.label')"
-                  />
-                </template>
-              </language-selector>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-card flat>
-                <v-card-title>{{ $t('drinkware-sets.imageMapTitle') }}</v-card-title>
-                <v-card-subtitle> {{ $t('drinkware-sets.imageMapSubtitle') }} </v-card-subtitle>
-                <v-card-text>
-                  <image-placeholder v-if="imageMapLoading" />
-                  <drinkware-object-chooser
-                    v-if="imageMapData"
-                    :id="selectedObjectId"
-                    :config="{
-                      labels: false,
-                      pinchZoom: false,
-                    }"
-                    :image-map-data="imageMapData"
-                    :index="selectedObjectIndex"
-                    @confirm="onObjectConfirmed"
-                    @select="onObjectSelected"
-                  />
-                </v-card-text>
-              </v-card>
-              <v-card v-if="selectedScale" class="mt-4" flat>
-                <v-card-title>{{ $t('drinkware-sets.label.title') }}</v-card-title>
-                <v-card-text>
-                  <language-selector
-                    v-model="selectedScale.label"
-                    border
-                    :label="$t('guide-images.objects.label._')"
-                  >
-                    <template v-for="lang in Object.keys(selectedScale.label)" :key="lang" #[`lang.${lang}`]>
-                      <v-text-field
-                        v-model="selectedScale.label[lang]"
-                        :label="$t('guide-images.objects.label._')"
-                      />
-                    </template>
-                  </language-selector>
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col cols="12" md="6">
-              <!-- No object selected -->
-              <v-card v-if="selectedObjectId === undefined" flat>
-                <v-card-title>{{ $t('drinkware-sets.selector.empty.title') }}</v-card-title>
-                <v-card-text>{{ $t('drinkware-sets.selector.empty.text') }}</v-card-text>
-              </v-card>
-              <!-- Object selected, but scale data is undefined -->
-              <v-card v-if="selectedObjectId !== undefined && selectedScaleIndex === -1" flat>
-                <v-card-title>
-                  <v-icon class="mx-2">
-                    fas fa-exclamation-circle
-                  </v-icon>{{ $t('drinkware-sets.slidingScale.missing.title') }}
-                </v-card-title>
-                <v-card-text>{{ $t('drinkware-sets.slidingScale.missing.text') }}</v-card-text>
-                <v-expand-transition>
-                  <v-card v-if="baseImagePreviewUrls[selectedObjectId]" flat>
-                    <v-card-title>
-                      {{
-                        $t('drinkware-sets.slidingScale.imagePreview')
-                      }}
-                    </v-card-title>
-                    <v-card-text>
-                      <v-img
-                        :src="baseImagePreviewUrls[selectedObjectId]"
-                        style="width: 50%"
-                      />
-                    </v-card-text>
-                  </v-card>
-                </v-expand-transition>
-                <v-card flat>
-                  <v-card-title>{{ $t('drinkware-sets.slidingScale.baseImageFile') }}</v-card-title>
-                  <v-card-text>
-                    <v-file-input
-                      v-model="baseImageFiles[selectedObjectId]"
-                      :label="$t('image-maps.baseImage')"
-                      name="baseImage"
-                      prepend-icon=""
-                      prepend-inner-icon="fas fa-paperclip"
-                    />
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn
-                      color="primary"
-                      :disabled="!baseImageFiles[selectedObjectId]"
-                      size="large"
-                      @click="createSlidingScale(selectedObjectId)"
-                    >
-                      <v-icon class="mr-2">
-                        fas fa-file-circle-plus
-                      </v-icon>{{ $t('drinkware-sets.slidingScale.createButtonLabel') }}
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-card>
-              <!-- Object selected and sliding scale is available  -->
-              <div v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1">
-                <sliding-scale-editor
-                  :scale-index="selectedScaleIndex"
-                  @base-image-changed="onBaseImageChanged"
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.id"
+              disabled
+              :error-messages="errors.get('id')"
+              :label="$t('drinkware-sets.id')"
+              name="id"
+              prepend-inner-icon="$drinkware-sets"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.imageMapId"
+              disabled
+              :error-messages="errors.get('imageMapId')"
+              :label="$t('image-maps._')"
+              name="imageMapId"
+              prepend-inner-icon="$image-maps"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.description"
+              :error-messages="errors.get('description')"
+              :label="$t('common.description')"
+              name="description"
+              prepend-inner-icon="$description"
+            />
+          </v-col>
+          <v-col cols="12">
+            <language-selector
+              v-if="data.label"
+              v-model="data.label"
+              border
+              :label="$t('common.label')"
+            >
+              <template v-for="lang in Object.keys(data.label)" :key="lang" #[`lang.${lang}`]>
+                <v-text-field
+                  v-if="data.label"
+                  v-model="data.label[lang]"
+                  :error-messages="errors.get('label')"
+                  :label="$t('common.label')"
                 />
-                <v-card flat>
+              </template>
+            </language-selector>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-card flat>
+              <v-card-title>{{ $t('drinkware-sets.imageMapTitle') }}</v-card-title>
+              <v-card-subtitle> {{ $t('drinkware-sets.imageMapSubtitle') }} </v-card-subtitle>
+              <v-card-text>
+                <image-placeholder v-if="imageMapLoading" />
+                <drinkware-object-chooser
+                  v-if="imageMapData"
+                  :id="selectedObjectId"
+                  :config="{
+                    labels: false,
+                    pinchZoom: false,
+                  }"
+                  :image-map-data="imageMapData"
+                  :index="selectedObjectIndex"
+                  @confirm="onObjectConfirmed"
+                  @select="onObjectSelected"
+                />
+              </v-card-text>
+            </v-card>
+            <v-card v-if="selectedScale" class="mt-4" flat>
+              <v-card-title>{{ $t('drinkware-sets.label.title') }}</v-card-title>
+              <v-card-text>
+                <language-selector
+                  v-model="selectedScale.label"
+                  border
+                  :label="$t('guide-images.objects.label._')"
+                >
+                  <template v-for="lang in Object.keys(selectedScale.label)" :key="lang" #[`lang.${lang}`]>
+                    <v-text-field
+                      v-model="selectedScale.label[lang]"
+                      :label="$t('guide-images.objects.label._')"
+                    />
+                  </template>
+                </language-selector>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="6">
+            <!-- No object selected -->
+            <v-card v-if="selectedObjectId === undefined" flat>
+              <v-card-title>{{ $t('drinkware-sets.selector.empty.title') }}</v-card-title>
+              <v-card-text>{{ $t('drinkware-sets.selector.empty.text') }}</v-card-text>
+            </v-card>
+            <!-- Object selected, but scale data is undefined -->
+            <v-card v-if="selectedObjectId !== undefined && selectedScaleIndex === -1" flat>
+              <v-card-title>
+                <v-icon class="mx-2">
+                  fas fa-exclamation-circle
+                </v-icon>{{ $t('drinkware-sets.slidingScale.missing.title') }}
+              </v-card-title>
+              <v-card-text>{{ $t('drinkware-sets.slidingScale.missing.text') }}</v-card-text>
+              <v-expand-transition>
+                <v-card v-if="baseImagePreviewUrls[selectedObjectId]" flat>
                   <v-card-title>
-                    {{ $t('drinkware-sets.volumeMethod.title') }}
+                    {{
+                      $t('drinkware-sets.slidingScale.imagePreview')
+                    }}
                   </v-card-title>
                   <v-card-text>
-                    <v-select
-                      v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1"
-                      v-model="entry.scales[selectedScaleIndex].volumeMethod"
-                      item-value="method"
-                      :items="volumeMethodSelectList"
-                      :label="$t('drinkware-sets.volumeMethod.title')"
+                    <v-img
+                      :src="baseImagePreviewUrls[selectedObjectId]"
+                      style="width: 50%"
                     />
                   </v-card-text>
                 </v-card>
-                <volume-samples-table
-                  class="mt-4"
-                  :scale-index="selectedScaleIndex"
-                />
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-text>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+              </v-expand-transition>
+              <v-card flat>
+                <v-card-title>{{ $t('drinkware-sets.slidingScale.baseImageFile') }}</v-card-title>
+                <v-card-text>
+                  <v-file-input
+                    v-model="baseImageFiles[selectedObjectId]"
+                    :label="$t('image-maps.baseImage')"
+                    name="baseImage"
+                    prepend-icon=""
+                    prepend-inner-icon="fas fa-paperclip"
+                  />
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn
+                    color="primary"
+                    :disabled="!baseImageFiles[selectedObjectId]"
+                    size="large"
+                    @click="createSlidingScale(selectedObjectId)"
+                  >
+                    <v-icon class="mr-2">
+                      fas fa-file-circle-plus
+                    </v-icon>{{ $t('drinkware-sets.slidingScale.createButtonLabel') }}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-card>
+            <!-- Object selected and sliding scale is available  -->
+            <div v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1">
+              <sliding-scale-editor
+                :scale-index="selectedScaleIndex"
+                @base-image-changed="onBaseImageChanged"
+              />
+              <v-card flat>
+                <v-card-title>
+                  {{ $t('drinkware-sets.volumeMethod.title') }}
+                </v-card-title>
+                <v-card-text>
+                  <v-select
+                    v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1"
+                    v-model="entry.scales[selectedScaleIndex].volumeMethod"
+                    item-value="method"
+                    :items="volumeMethodSelectList"
+                    :label="$t('drinkware-sets.volumeMethod.title')"
+                  />
+                </v-card-text>
+              </v-card>
+              <volume-samples-table
+                class="mt-4"
+                :scale-index="selectedScaleIndex"
+              />
+            </div>
+          </v-col>
+        </v-row>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

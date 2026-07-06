@@ -2,41 +2,37 @@
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.prompt.id"
-                disabled
-                hide-details="auto"
-                :label="$t('survey-schemes.prompts.internal.id._')"
-                :messages="$t('survey-schemes.prompts.internal.id.hint')"
-                name="id"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.prompt.name"
-                disabled
-                hide-details="auto"
-                :label="$t('survey-schemes.prompts.internal.name._')"
-                :messages="$t('survey-schemes.prompts.internal.name.hint')"
-                name="name"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col align="center">
-              <v-btn class="pa-6" size="x-large" variant="outlined" @click="edit">
-                <v-icon icon="$edit" start />{{ $t('survey-scheme-prompts.editTemplate') }}
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.prompt.id"
+              disabled
+              hide-details="auto"
+              :label="$t('survey-schemes.prompts.internal.id._')"
+              :messages="$t('survey-schemes.prompts.internal.id.hint')"
+              name="id"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.prompt.name"
+              disabled
+              hide-details="auto"
+              :label="$t('survey-schemes.prompts.internal.name._')"
+              :messages="$t('survey-schemes.prompts.internal.name.hint')"
+              name="name"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col align="center">
+            <v-btn class="pa-6" size="x-large" variant="outlined" @click="edit">
+              <v-icon icon="$edit" start />{{ $t('survey-scheme-prompts.editTemplate') }}
+            </v-btn>
+          </v-col>
+        </v-row>
         <error-list :errors="nonInputErrors" tag="v-card-text" />
-        <v-card-text>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
       <prompt-selector ref="selector" :prompt-ids="promptIds" @save="save" />
     </v-container>

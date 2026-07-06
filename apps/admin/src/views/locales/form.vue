@@ -2,173 +2,171 @@
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.code"
-                :disabled="isEdit"
-                :error-messages="errors.get('code')"
-                hide-details="auto"
-                :label="$t('locales.code')"
-                name="code"
-                prepend-inner-icon="$locales"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.englishName"
-                :error-messages="errors.get('englishName')"
-                hide-details="auto"
-                :label="$t('locales.englishName')"
-                name="englishName"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.localName"
-                :error-messages="errors.get('localName')"
-                hide-details="auto"
-                :label="$t('locales.localName')"
-                name="localName"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <select-resource
-                v-model="data.respondentLanguageId"
-                :error-messages="errors.get('respondentLanguageId')"
-                item-id="code"
-                item-name="englishName"
-                :label="$t('locales.respondentLanguageId')"
-                name="respondentLanguageId"
-                resource="languages"
-                @update:model-value="errors.clear('respondentLanguageId')"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <select-resource
-                v-model="data.adminLanguageId"
-                :error-messages="errors.get('adminLanguageId')"
-                item-id="code"
-                item-name="englishName"
-                :label="$t('locales.adminLanguageId')"
-                name="adminLanguageId"
-                resource="languages"
-                @update:model-value="errors.clear('adminLanguageId')"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.countryFlagCode"
-                :error-messages="errors.get('countryFlagCode')"
-                hide-details="auto"
-                :items="flags"
-                :label="$t('locales.countryFlagCode')"
-                name="countryFlagCode"
-                variant="outlined"
-                @update:model-value="errors.clear('countryFlagCode')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <span :class="`fi fi-${item.value} mr-3`" />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.textDirection"
-                :error-messages="errors.get('textDirection')"
-                hide-details="auto"
-                :items="textDirections"
-                :label="$t('languages.textDirections._')"
-                name="textDirection"
-                variant="outlined"
-                @update:model-value="errors.clear('textDirection')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <v-icon :icon="item.icon" start />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <v-icon :icon="item.icon" start />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="data.visibility"
-                :error-messages="errors.get('visibility')"
-                hide-details="auto"
-                :items="visibilities"
-                :label="$t('securables.visibility._')"
-                name="visibility"
-                variant="outlined"
-                @update:model-value="errors.clear('visibility')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <v-icon :icon="item.icon" start />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <v-icon :icon="item.icon" start />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="text-headline-small mb-4">
-                {{ $t('locales.foodIndex._') }}
-              </div>
-              <v-switch
-                v-model="data.foodIndexEnabled"
-                class="mb-4"
-                hide-details="auto"
-                :label="$t('locales.foodIndex.enabled')"
-                name="foodIndexEnabled"
-              />
-              <v-select
-                v-model="data.foodIndexLanguageBackendId"
-                :error-messages="errors.get('foodIndexLanguageBackendId')"
-                hide-details="auto"
-                :items="foodIndexLanguageBackends"
-                :label="$t('locales.foodIndex.languageBackend')"
-                name="foodIndexLanguageBackendId"
-                variant="outlined"
-                @update:model-value="errors.clear('foodIndexLanguageBackendId')"
-              >
-                <template #item="{ item, props }">
-                  <v-list-item v-bind="props" :title="item.title">
-                    <template #prepend>
-                      <span :class="`fi fi-${item.value} mr-3`" />
-                    </template>
-                  </v-list-item>
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fi fi-${item.value} mr-3`" />
-                  {{ item.title }}
-                </template>
-              </v-select>
-            </v-col>
-          </v-row>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.code"
+              :disabled="isEdit"
+              :error-messages="errors.get('code')"
+              hide-details="auto"
+              :label="$t('locales.code')"
+              name="code"
+              prepend-inner-icon="$locales"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.englishName"
+              :error-messages="errors.get('englishName')"
+              hide-details="auto"
+              :label="$t('locales.englishName')"
+              name="englishName"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.localName"
+              :error-messages="errors.get('localName')"
+              hide-details="auto"
+              :label="$t('locales.localName')"
+              name="localName"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <select-resource
+              v-model="data.respondentLanguageId"
+              :error-messages="errors.get('respondentLanguageId')"
+              item-id="code"
+              item-name="englishName"
+              :label="$t('locales.respondentLanguageId')"
+              name="respondentLanguageId"
+              resource="languages"
+              @update:model-value="errors.clear('respondentLanguageId')"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <select-resource
+              v-model="data.adminLanguageId"
+              :error-messages="errors.get('adminLanguageId')"
+              item-id="code"
+              item-name="englishName"
+              :label="$t('locales.adminLanguageId')"
+              name="adminLanguageId"
+              resource="languages"
+              @update:model-value="errors.clear('adminLanguageId')"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.countryFlagCode"
+              :error-messages="errors.get('countryFlagCode')"
+              hide-details="auto"
+              :items="flags"
+              :label="$t('locales.countryFlagCode')"
+              name="countryFlagCode"
+              variant="outlined"
+              @update:model-value="errors.clear('countryFlagCode')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <span :class="`fi fi-${item.value} mr-3`" />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <span :class="`fi fi-${item.value} mr-3`" />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.textDirection"
+              :error-messages="errors.get('textDirection')"
+              hide-details="auto"
+              :items="textDirections"
+              :label="$t('languages.textDirections._')"
+              name="textDirection"
+              variant="outlined"
+              @update:model-value="errors.clear('textDirection')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <v-icon :icon="item.icon" start />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <v-icon :icon="item.icon" start />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              v-model="data.visibility"
+              :error-messages="errors.get('visibility')"
+              hide-details="auto"
+              :items="visibilities"
+              :label="$t('securables.visibility._')"
+              name="visibility"
+              variant="outlined"
+              @update:model-value="errors.clear('visibility')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <v-icon :icon="item.icon" start />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <v-icon :icon="item.icon" start />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="6">
+            <div class="text-headline-small mb-4">
+              {{ $t('locales.foodIndex._') }}
+            </div>
+            <v-switch
+              v-model="data.foodIndexEnabled"
+              class="mb-4"
+              hide-details="auto"
+              :label="$t('locales.foodIndex.enabled')"
+              name="foodIndexEnabled"
+            />
+            <v-select
+              v-model="data.foodIndexLanguageBackendId"
+              :error-messages="errors.get('foodIndexLanguageBackendId')"
+              hide-details="auto"
+              :items="foodIndexLanguageBackends"
+              :label="$t('locales.foodIndex.languageBackend')"
+              name="foodIndexLanguageBackendId"
+              variant="outlined"
+              @update:model-value="errors.clear('foodIndexLanguageBackendId')"
+            >
+              <template #item="{ item, props }">
+                <v-list-item v-bind="props" :title="item.title">
+                  <template #prepend>
+                    <span :class="`fi fi-${item.value} mr-3`" />
+                  </template>
+                </v-list-item>
+              </template>
+              <template #selection="{ item }">
+                <span :class="`fi fi-${item.value} mr-3`" />
+                {{ item.title }}
+              </template>
+            </v-select>
+          </v-col>
+        </v-row>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

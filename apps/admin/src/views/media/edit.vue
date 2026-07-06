@@ -2,32 +2,28 @@
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.id"
-                disabled
-                :error-messages="errors.get('id')"
-                :label="$t('common.id')"
-                name="id"
-                prepend-inner-icon="$media"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.name"
-                :error-messages="errors.get('name')"
-                :label="$t('common.name')"
-                name="name"
-                prepend-inner-icon="$description"
-              />
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-text>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.id"
+              disabled
+              :error-messages="errors.get('id')"
+              :label="$t('common.id')"
+              name="id"
+              prepend-inner-icon="$media"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.name"
+              :error-messages="errors.get('name')"
+              :label="$t('common.name')"
+              name="name"
+              prepend-inner-icon="$description"
+            />
+          </v-col>
+        </v-row>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

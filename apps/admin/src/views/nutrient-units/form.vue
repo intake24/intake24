@@ -2,45 +2,43 @@
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.id"
-                :disabled="isEdit"
-                :error-messages="errors.get('id')"
-                hide-details="auto"
-                :label="$t('nutrient-units.id')"
-                name="id"
-                prepend-inner-icon="$nutrient-units"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.description"
-                :error-messages="errors.get('description')"
-                hide-details="auto"
-                :label="$t('common.description')"
-                name="description"
-                prepend-inner-icon="$description"
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.symbol"
-                :error-messages="errors.get('symbol')"
-                hide-details="auto"
-                :label="$t('nutrient-units.symbol')"
-                name="symbol"
-                prepend-inner-icon="fas fa-square-root-variable"
-                variant="outlined"
-              />
-            </v-col>
-          </v-row>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.id"
+              :disabled="isEdit"
+              :error-messages="errors.get('id')"
+              hide-details="auto"
+              :label="$t('nutrient-units.id')"
+              name="id"
+              prepend-inner-icon="$nutrient-units"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.description"
+              :error-messages="errors.get('description')"
+              hide-details="auto"
+              :label="$t('common.description')"
+              name="description"
+              prepend-inner-icon="$description"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.symbol"
+              :error-messages="errors.get('symbol')"
+              hide-details="auto"
+              :label="$t('nutrient-units.symbol')"
+              name="symbol"
+              prepend-inner-icon="fas fa-square-root-variable"
+              variant="outlined"
+            />
+          </v-col>
+        </v-row>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

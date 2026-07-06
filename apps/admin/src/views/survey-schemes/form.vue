@@ -49,11 +49,8 @@
           <scheme-settings v-bind="{ errors }" v-model="data.settings" />
         </v-container>
       </v-card-text>
-      <v-divider />
       <meal-list v-model="data.meals" :errors="errors" :scheme-id="id" />
-      <v-card-text>
-        <submit-footer :disabled="errors.any.value" />
-      </v-card-text>
+      <submit-footer :disabled="errors.any.value" />
     </v-form>
   </entry-layout>
 </template>

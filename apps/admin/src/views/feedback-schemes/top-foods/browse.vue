@@ -72,9 +72,7 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-card-text>
-        <submit-footer :disabled="errors.any.value" />
-      </v-card-text>
+      <submit-footer :disabled="errors.any.value" />
     </v-form>
   </entry-layout>
 </template>

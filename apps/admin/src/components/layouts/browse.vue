@@ -11,6 +11,7 @@
         <v-menu
           v-if="slots.actions"
           :close-on-content-click="true"
+          location="bottom end"
           :persistent="false"
         >
           <template #activator="{ props }">

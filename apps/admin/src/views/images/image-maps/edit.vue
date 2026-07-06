@@ -2,53 +2,49 @@
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
       <v-form @keydown="clearError" @submit.prevent="submit">
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.id"
-                disabled
-                :error-messages="errors.get('id')"
-                :label="$t('image-maps.id')"
-                name="id"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="data.description"
-                :error-messages="errors.get('description')"
-                :label="$t('common.description')"
-                name="description"
-                prepend-inner-icon="$description"
-              />
-            </v-col>
-            <v-col cols="12">
-              <language-selector
-                v-if="data.label"
-                v-model="data.label"
-                border
-                :label="$t('common.label')"
-              >
-                <template v-for="lang in Object.keys(data.label)" :key="lang" #[`lang.${lang}`]>
-                  <v-text-field
-                    v-if="data.label"
-                    v-model="data.label[lang]"
-                    :error-messages="errors.get('label')"
-                    :label="$t('common.label')"
-                  />
-                </template>
-              </language-selector>
-            </v-col>
-          </v-row>
-        </v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.id"
+              disabled
+              :error-messages="errors.get('id')"
+              :label="$t('image-maps.id')"
+              name="id"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="data.description"
+              :error-messages="errors.get('description')"
+              :label="$t('common.description')"
+              name="description"
+              prepend-inner-icon="$description"
+            />
+          </v-col>
+          <v-col cols="12">
+            <language-selector
+              v-if="data.label"
+              v-model="data.label"
+              border
+              :label="$t('common.label')"
+            >
+              <template v-for="lang in Object.keys(data.label)" :key="lang" #[`lang.${lang}`]>
+                <v-text-field
+                  v-if="data.label"
+                  v-model="data.label[lang]"
+                  :error-messages="errors.get('label')"
+                  :label="$t('common.label')"
+                />
+              </template>
+            </language-selector>
+          </v-col>
+        </v-row>
         <guide-drawer
           v-bind="{ entry, resource: 'image-maps' }"
           @image-map-objects="updateObjects"
         />
         <error-list :errors="nonInputErrors" tag="v-card-text" />
-        <v-card-text>
-          <submit-footer :disabled="errors.any.value" />
-        </v-card-text>
+        <submit-footer :disabled="errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>

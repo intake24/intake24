@@ -81,9 +81,7 @@
         :defaults="defaultMeals.table.fields"
         :nutrient-types="refs.nutrientTypes"
       />
-      <v-card-text>
-        <submit-footer :disabled="errors.any.value" />
-      </v-card-text>
+      <submit-footer :disabled="errors.any.value" />
     </v-form>
   </entry-layout>
 </template>

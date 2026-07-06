@@ -1,6 +1,6 @@
 <template>
   <v-card flat tile>
-    <v-toolbar>
+    <v-toolbar color="surface">
       <v-icon end icon="fas fa-hamburger" />
       <div class="d-flex flex-column ms-4">
         <v-toolbar-title class="font-weight-medium">
@@ -43,6 +43,7 @@
         <json-editor-dialog v-model="meals" />
       </options-menu>
     </v-toolbar>
+    <v-divider />
     <v-list class="list-border" lines="two">
       <vue-draggable
         v-model="meals"
@@ -143,7 +144,7 @@
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-card border class="w-100" flat>
-                      <v-toolbar>
+                      <v-toolbar color="surface">
                         <v-icon end icon="fas fa-clock" />
                         <v-toolbar-title class="font-weight-medium">
                           {{ $t('survey-schemes.meals.defaultTime') }}
@@ -152,8 +153,6 @@
                       <v-card-text class="pt-0 d-flex justify-center">
                         <v-time-picker
                           v-model="dialog.meal.time"
-                          class="time-picker pa-0"
-                          :landscape="$vuetify.display.smAndUp"
                         />
                       </v-card-text>
                     </v-card>
