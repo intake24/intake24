@@ -108,7 +108,7 @@ export const reference = initContract().router({
     method: 'GET',
     path: '/admin/references/foods',
     query: bigIntQueryWithCode.extend({
-      localeId: z.string().min(1),
+      localeId: z.string().min(1).optional(),
     }),
     responses: {
       200: z.object({

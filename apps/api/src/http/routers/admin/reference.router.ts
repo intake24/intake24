@@ -59,16 +59,9 @@ export function reference() {
     categories: {
       middleware: [anyPermission('locales')],
       handler: async ({ query: { id, code, localeId, ...query } }) => {
-        const where = Object.entries({ id, code, localeId }).reduce((acc, [key, value]) => {
-          if (value)
-            acc[key] = value;
-
-          return acc;
-        }, {} as Record<string, string | string[]>);
-
         const categories: Pagination<{ id: string; code: string; name: string }> = await Category.paginate({
           query,
-          where,
+          where: filterUndefined({ id, code, localeId }),
           attributes: localeId ? ['id', 'code', 'name'] : ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],
@@ -152,9 +145,10 @@ export function reference() {
         const foods = await Food.paginate({
           query,
           where: filterUndefined({ id, code, localeId }),
-          attributes: ['code', 'name'],
+          attributes: localeId ? ['id', 'code', 'name'] : ['code', 'name'],
           columns: ['code', 'name'],
           order: [[fn('lower', col('code')), 'ASC']],
+          group: localeId ? undefined : ['code', 'name'],
         });
 
         return { status: 200, body: foods };
