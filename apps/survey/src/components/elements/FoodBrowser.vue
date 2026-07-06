@@ -449,7 +449,6 @@ async function search() {
       );
       sendGtmEvent({
         event: 'foodSearch',
-        scheme_prompts: 'foods',
         search_term: searchTerm.value,
         search_term_order: searchCount.value,
         search_results_count: searchResults.value.foods.length,

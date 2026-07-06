@@ -114,7 +114,6 @@ export function usePromptUtils<
       const gtmEventParams: GtmEventParams = {
         event: type as GtmEventParams['event'],
         action: type,
-        prompt_id: props.prompt.id,
         meal: mealName.value,
         food: foodName.value,
       };
