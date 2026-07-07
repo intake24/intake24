@@ -83,7 +83,8 @@
       "editMeal": "Modifier le repas",
       "mealTime": "Heure du repas",
       "selectFood": "Sélectionner un aliment",
-      "selectMeal": "Sélectionner un repas"
+      "selectMeal": "Sélectionner un repas",
+      "updateFood": "Update food"
     }
   },
   "conditions": {
@@ -727,7 +728,11 @@
       "title": "Choix OUI/NON",
       "subtitle": "Demander de choisir oui ou non",
       "useFlag": "Set a flag instead of custom prompt answer",
-      "flag": "Flag"
+      "flag": "Flag",
+      "trueActionToggle": "Trigger custom action on 'Yes' answer",
+      "falseActionToggle": "Trigger custom action on 'No' answer",
+      "actionType": "Action Type",
+      "actionFoodCode": "Action Food Code"
     },
     "aggregate-choice-prompt": {
       "title": "Question agregée sur plusieurs aliments",
