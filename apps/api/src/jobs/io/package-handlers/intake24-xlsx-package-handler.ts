@@ -529,6 +529,7 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
     const workbookReader = await XlsxWorkbookReader.fromFile(sourcePath, fileName, this.addValidationError.bind(this));
     const foods: PkgV2Food[] = [];
     const foodsByCode = new Map<string, PkgV2Food>();
+    const deletedFoodCodes = new Set<string>();
 
     const reader = workbookReader.getWorksheetReader(XLSX_SHEET_NAMES.foodsMasterList, [
       requiredHeader(XLSX_COLUMN_NAMES.foodsMasterList.code),
@@ -567,8 +568,13 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
           'Retain, Delete, Amend, Add',
         );
 
-        if (!action || action.toLowerCase() === 'delete')
+        if (!action)
           return;
+
+        if (action.toLowerCase() === 'delete') {
+          deletedFoodCodes.add(code);
+          return;
+        }
       }
 
       const name = reader.cellAsNonEmptyString(rowNumber, foodColumns.name);
@@ -671,7 +677,7 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
     if (brandsReader)
       this.readBrands(brandsReader, foodsByCode);
     if (associatedFoodsReader)
-      this.readAssociatedFoods(associatedFoodsReader, foodsByCode);
+      this.readAssociatedFoods(associatedFoodsReader, foodsByCode, deletedFoodCodes);
     if (attributesReader)
       this.readAttributes(attributesReader, foodsByCode, XLSX_COLUMN_NAMES.portionSize.foodCode);
     if (portionSizeReader)
@@ -858,6 +864,7 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
   private readAssociatedFoods(
     reader: XlsxWorksheetReader,
     foodsByCode: Map<string, PkgV2Food>,
+    deletedFoodCodes: Set<string>,
   ): void {
     const associatedFoodRecords = new Map<string, PkgV2AssociatedFood>();
     const columns = reader.getColumnIndices(XLSX_COLUMN_NAMES.associatedFoods);
@@ -867,6 +874,9 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
         return;
 
       const code = reader.cellAsNonEmptyString(rowNumber, columns.code);
+      if (code && deletedFoodCodes.has(code))
+        return;
+
       const lang = reader.cellAsNonEmptyString(rowNumber, columns.language);
       const foodCode = reader.cellAsOptionalString(rowNumber, columns.associatedFoodCode);
       const categoryCode = reader.cellAsOptionalString(rowNumber, columns.associatedCategoryCode);
@@ -884,7 +894,9 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
         );
       }
 
-      if (foodCode && !foodsByCode.has(foodCode)) {
+      const associatedFoodInvalid = foodCode && (!foodsByCode.has(foodCode) || deletedFoodCodes.has(foodCode));
+
+      if (associatedFoodInvalid) {
         this.addValidationError(
           reader.cellContext(rowNumber, columns.associatedFoodCode),
           'associatedFoodCodeNotFound',
@@ -892,7 +904,7 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
         );
       }
 
-      if (!foodRecord || !lang || !genericName || !promptText || (foodCode && !foodsByCode.has(foodCode)))
+      if (!foodRecord || !lang || !genericName || !promptText || associatedFoodInvalid)
         return;
 
       const associatedFoodKey = JSON.stringify([

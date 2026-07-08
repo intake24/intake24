@@ -18,6 +18,12 @@ interface PortionSizeSection {
   columns: PortionSizeColumn[];
 }
 
+export interface PortionSizeNameLookupReference {
+  sheetName: string;
+  range: string;
+  nameColumnIndex: number;
+}
+
 const portionSizeSections: PortionSizeSection[] = [
   {
     method: 'as-served',
@@ -132,14 +138,14 @@ function excelCol(num: number): string {
 
 export class PortionSizeWriter {
   private readonly worksheet: ExcelJS.Worksheet;
-  private readonly nameReference: string;
+  private readonly nameLookupReference: PortionSizeNameLookupReference;
   private currentRowIndex: number;
   private colourGroupColumn: string;
   private fixedColumns: PortionSizeColumn[];
 
-  constructor(worksheet: ExcelJS.Worksheet, codeHeader: string, nameHeader: string, nameReference: string) {
+  constructor(worksheet: ExcelJS.Worksheet, codeHeader: string, nameHeader: string, nameLookupReference: PortionSizeNameLookupReference) {
     this.worksheet = worksheet;
-    this.nameReference = nameReference;
+    this.nameLookupReference = nameLookupReference;
 
     this.fixedColumns = [
       { header: codeHeader, width: 12 },
@@ -338,7 +344,7 @@ export class PortionSizeWriter {
 
       const row = this.worksheet.addRow(rowValues);
 
-      row.getCell(2).value = { formula: `VLOOKUP(A${this.currentRowIndex}, ${this.nameReference}!A:B, 2, FALSE)` };
+      row.getCell(2).value = { formula: `VLOOKUP(A${this.currentRowIndex}, '${this.nameLookupReference.sheetName}'!${this.nameLookupReference.range}, ${this.nameLookupReference.nameColumnIndex}, FALSE)` };
 
       const colourGroupCell = row.getCell(this.colourGroupColumn);
       if (this.currentRowIndex === 3) {

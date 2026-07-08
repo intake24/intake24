@@ -1,4 +1,5 @@
 import type { PackageWriter, PackageWriterFactory } from '../types';
+import type { PortionSizeNameLookupReference } from './portion-size-sheet';
 import type { PackageExportOptions } from '@intake24/common/types/http/admin';
 import type { PkgV2AsServedSet } from '@intake24/common/types/package/as-served';
 import type { PkgV2Category } from '@intake24/common/types/package/categories';
@@ -160,9 +161,14 @@ export class PackageXlsxWriter implements PackageWriter {
     return attributesSheet;
   }
 
-  private createPortionSizesSheet(workbook: ExcelJS.stream.xlsx.WorkbookWriter, codeHeader: string, nameHeader: string, nameReference: string): { portionSizesSheet: ExcelJS.Worksheet; portionSizeWriter: PortionSizeWriter } {
+  private createPortionSizesSheet(
+    workbook: ExcelJS.stream.xlsx.WorkbookWriter,
+    codeHeader: string,
+    nameHeader: string,
+    nameLookupReference: PortionSizeNameLookupReference,
+  ): { portionSizesSheet: ExcelJS.Worksheet; portionSizeWriter: PortionSizeWriter } {
     const portionSizesSheet = workbook.addWorksheet(XLSX_SHEET_NAMES.portionSize);
-    const portionSizeWriter = new PortionSizeWriter(portionSizesSheet, codeHeader, nameHeader, nameReference);
+    const portionSizeWriter = new PortionSizeWriter(portionSizesSheet, codeHeader, nameHeader, nameLookupReference);
     return { portionSizesSheet, portionSizeWriter };
   }
 
@@ -427,7 +433,16 @@ export class PackageXlsxWriter implements PackageWriter {
     associatedFoodsHeaderRow.border = { bottom: { style: 'thin' } };
 
     const attributesSheet = this.createAttributesSheet(workbook, XLSX_COLUMN_NAMES.portionSize.foodCode);
-    const { portionSizesSheet, portionSizeWriter } = this.createPortionSizesSheet(workbook, XLSX_COLUMN_NAMES.portionSize.foodCode, XLSX_COLUMN_NAMES.portionSize.foodName, `'${XLSX_SHEET_NAMES.foodsMasterList}'`);
+    const { portionSizesSheet, portionSizeWriter } = this.createPortionSizesSheet(
+      workbook,
+      XLSX_COLUMN_NAMES.portionSize.foodCode,
+      XLSX_COLUMN_NAMES.portionSize.foodName,
+      {
+        sheetName: XLSX_SHEET_NAMES.foodsMasterList,
+        range: this.includeFoodActionColumn() ? 'A:C' : 'A:B',
+        nameColumnIndex: this.includeFoodActionColumn() ? 3 : 2,
+      },
+    );
     const standardUnitsSheet = this.createStandardUnitsSheet(workbook, XLSX_COLUMN_NAMES.portionSize.foodCode);
     const parentPortionSheet = this.createParentPortionSheet(workbook, XLSX_COLUMN_NAMES.portionSize.foodCode);
 
@@ -474,7 +489,16 @@ export class PackageXlsxWriter implements PackageWriter {
 
     const hierarchySheet = this.createCategoryHierarchySheet(workbook);
     const attributesSheet = this.createAttributesSheet(workbook, XLSX_COLUMN_NAMES.portionSize.categoryCode);
-    const { portionSizesSheet, portionSizeWriter } = this.createPortionSizesSheet(workbook, XLSX_COLUMN_NAMES.portionSize.categoryCode, XLSX_COLUMN_NAMES.portionSize.categoryName, `'${XLSX_SHEET_NAMES.categoriesMasterList}'`);
+    const { portionSizesSheet, portionSizeWriter } = this.createPortionSizesSheet(
+      workbook,
+      XLSX_COLUMN_NAMES.portionSize.categoryCode,
+      XLSX_COLUMN_NAMES.portionSize.categoryName,
+      {
+        sheetName: XLSX_SHEET_NAMES.categoriesMasterList,
+        range: 'A:B',
+        nameColumnIndex: 2,
+      },
+    );
     const standardUnitsSheet = this.createStandardUnitsSheet(workbook, XLSX_COLUMN_NAMES.portionSize.categoryCode);
     const parentPortionSheet = this.createParentPortionSheet(workbook, XLSX_COLUMN_NAMES.portionSize.categoryCode);
 

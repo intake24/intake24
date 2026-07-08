@@ -120,7 +120,7 @@
       "cellCannotBeEmpty": "Sheet \"{sheetName}\", row {rowNumber}: cell {columnIndex} (\"{columnName}\") cannot be empty",
       "cellInvalidValue": "Sheet \"{sheetName}\", row {rowNumber}: cell {columnIndex} (\"{columnName}\") has invalid value \"{value}\"; expected {expected}",
       "foodCodeNotFound": "Sheet \"{sheetName}\", row {rowNumber}: food code \"{foodCode}\" does not exist in the foods master list",
-      "associatedFoodCodeNotFound": "Sheet \"{sheetName}\", row {rowNumber}: associated food code \"{foodCode}\" does not exist in the foods master list"
+      "associatedFoodCodeNotFound": "Sheet \"{sheetName}\", row {rowNumber}: associated food code \"{foodCode}\" does not exist in the foods master list or is marked for deletion"
     }
   },
   "importJob": {
