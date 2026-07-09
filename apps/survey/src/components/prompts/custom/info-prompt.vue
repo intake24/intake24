@@ -47,7 +47,7 @@
             tile
             :variant="prompt.carousel.variant"
           >
-            <div v-html="item.text.en" />
+            <div v-html="translate(item.text)" />
           </v-card>
           <v-img
             v-if="item.image[$vuetify.display.mobile ? 'mobile' : 'desktop']"
@@ -72,6 +72,7 @@
 import { computed } from 'vue';
 
 import { usePromptUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/ui';
 
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
 import { Next, useCarousel, useYoutubeVideo } from '../partials';
@@ -87,6 +88,7 @@ const props = defineProps(createBasePromptProps<'info-prompt'>());
 const emit = defineEmits(['action', 'update:modelValue']);
 
 const { action, customPromptLayout } = usePromptUtils(props, { emit });
+const { translate } = useI18n();
 const { video, watched: videoWatched } = useYoutubeVideo(props.prompt, updateAndAction);
 const { carousel, resolveSlideUrl, watched: carouselWatched } = useCarousel(props.prompt);
 
