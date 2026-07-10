@@ -12,7 +12,7 @@ export function usePromptHandlerNoStore<T>({ emit }: Pick<SetupContext<'action'[
   });
 
   const action = (type: string, ...args: [id?: string, params?: object]) => {
-    if (type === 'next' && commitAnswer) {
+    if ((type === 'next' || type === 'updateFood') && commitAnswer) {
       pushFullHistoryEntry('no-store handler');
       commitAnswer();
     }

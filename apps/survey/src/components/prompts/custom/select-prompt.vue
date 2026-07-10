@@ -92,8 +92,13 @@ function submit() {
       const foodOrMealId = props.food?.id ?? props.meal?.id;
       action(option.action.type, foodOrMealId, option.action.params);
     }
+    else {
+      action('next');
+    }
   }
-  action('next');
+  else {
+    action('next');
+  }
 }
 
 defineExpose({ isValid });

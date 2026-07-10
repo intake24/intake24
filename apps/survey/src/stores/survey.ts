@@ -766,7 +766,7 @@ export const useSurvey = defineStore('survey', {
         portionSizeMethodIndex: null,
         portionSize: null,
         customPromptAnswers: { ...existingFood.customPromptAnswers },
-        flags: [...existingFood.flags],
+        flags: [],
         linkedFoods: [],
       };
 

@@ -52,7 +52,9 @@ const state = computed({
       else if (!value && props.prompt.falseAction) {
         action(props.prompt.falseAction.type, foodOrMealId, props.prompt.falseAction.params);
       }
-      action('next');
+      else {
+        action('next');
+      }
     }
   },
 });
