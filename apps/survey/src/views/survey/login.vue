@@ -149,7 +149,7 @@ async function submit() {
 onMounted(async () => {
   sendGtmEvent({
     event: 'surveyLogin',
-    scheme_prompts: 'preMeals',
+    section: 'preMeals',
   });
   await fetchSurveyPublicInfo();
   if (!survey.value) {

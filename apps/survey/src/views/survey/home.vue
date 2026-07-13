@@ -367,7 +367,7 @@ export default defineComponent({
       sendGtmEvent({
         event: 'surveyHome',
         action: 'login',
-        scheme_prompts: 'preMeals',
+        section: 'preMeals',
       });
       submissions.value = await userService.submissions(props.surveyId);
     });

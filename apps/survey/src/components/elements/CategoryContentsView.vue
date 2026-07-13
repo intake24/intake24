@@ -215,7 +215,6 @@ function categorySelected(category: CategoryHeader) {
   emit('categorySelected', category);
   sendGtmEvent({
     event: 'selectFoodCategory',
-    scheme_prompts: 'foods',
     food_category: category.name,
     search_term: props.searchTerm,
     search_count: props.searchCount,
@@ -227,7 +226,6 @@ function foodSelected(food: FoodHeader) {
   emit('foodSelected', food);
   sendGtmEvent({
     event: 'selectFood',
-    scheme_prompts: 'foods',
     food: food.name,
     search_term: props.searchTerm,
     search_count: props.searchCount,
