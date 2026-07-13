@@ -1,23 +1,7 @@
 {
-  "extends": ["config:base", "schedule:earlyMondays"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", "schedule:weekly", "group:allNonMajor"],
   "labels": ["dependencies"],
-  "pin": false,
-  "packageRules": [
-    // Typescript (major/minor)
-    {
-      "matchPackageNames": ["typescript"],
-      "matchUpdateTypes": ["major", "minor"],
-      "groupName": "typescript",
-      "groupSlug": "typescript"
-    },
-    // Rest of non-major dependencies
-    {
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
-    }
-  ],
   "rangeStrategy": "bump",
   "ignoreDeps": ["node"]
 }
