@@ -49,7 +49,7 @@ export const foodSearchQuery = z.object({
   description: z.string().max(120),
   previous: z.string().array().optional(),
   limit: z.coerce.number().int().optional(),
-  rankingAlgorithm: z.enum(searchSortingAlgorithms).optional(),
+  sortingAlgorithm: z.enum(searchSortingAlgorithms).optional(),
   matchScoreWeight: z.coerce.number().int().min(0).max(100).optional(),
   recipe: z.string().optional(),
   category: z.string().optional(),

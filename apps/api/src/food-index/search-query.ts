@@ -5,7 +5,7 @@ import { defaultSearchSettings } from '@intake24/common/surveys';
 export interface OptionalSearchQueryParameters {
   previous?: string[];
   limit?: number;
-  rankingAlgorithm?: SearchSortingAlgorithm;
+  sortingAlgorithm?: SearchSortingAlgorithm;
   matchScoreWeight?: number;
   includeHidden?: boolean;
   limitToCategory?: string;
@@ -28,7 +28,7 @@ export interface SearchQueryParameters {
   description: string;
   previous: string[];
   limit: number;
-  rankingAlgorithm: SearchSortingAlgorithm;
+  sortingAlgorithm: SearchSortingAlgorithm;
   matchScoreWeight: number;
   includeHidden: boolean;
   limitToCategory?: string;
@@ -58,7 +58,7 @@ export function applyDefaultSearchQueryParameters(localeId: string, description:
     description,
     previous: optionalParameters.previous ?? [],
     limit: optionalParameters.limit ?? defaultSearchSettings.maxResults,
-    rankingAlgorithm: optionalParameters.rankingAlgorithm ?? defaultSearchSettings.sortingAlgorithm,
+    sortingAlgorithm: optionalParameters.sortingAlgorithm ?? defaultSearchSettings.sortingAlgorithm,
     matchScoreWeight: optionalParameters.matchScoreWeight ?? defaultSearchSettings.matchScoreWeight,
     includeHidden: optionalParameters.includeHidden ?? false,
     limitToCategory: optionalParameters.limitToCategory ?? optionalParameters.limitToCategory,

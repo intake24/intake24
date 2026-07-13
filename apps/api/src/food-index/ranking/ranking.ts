@@ -7,8 +7,6 @@ import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking'
 import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';
 import { getLocalPopularityRanking } from '@intake24/api/food-index/ranking/local-popularity';
 
-export type RankingAlgorithm = '';
-
 export type RankingData = {
   [foodCode: string]: number;
 };
