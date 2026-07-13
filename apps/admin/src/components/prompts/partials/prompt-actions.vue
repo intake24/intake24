@@ -193,7 +193,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type { Actions } from '@intake24/common/prompts';
+import type { PromptActions } from '@intake24/common/prompts';
 
 import { deepEqual } from 'fast-equals';
 import { computed, ref, watch } from 'vue';
@@ -210,7 +210,7 @@ defineOptions({ name: 'PromptActions' });
 
 const props = defineProps({
   actions: {
-    type: Object as PropType<Actions>,
+    type: Object as PropType<PromptActions>,
   },
 });
 

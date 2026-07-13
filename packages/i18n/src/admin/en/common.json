@@ -98,7 +98,11 @@
     "shortLabel": "Short label",
     "value": "Value",
     "exclusive": "Exclusive",
-    "selected": "Selected"
+    "selected": "Selected",
+    "action": {
+      "foodCode": "Food code",
+      "updateFood": "Update food when selected"
+    }
   },
   "tabs": {
     "general": "General",

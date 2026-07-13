@@ -5,7 +5,8 @@ import { z } from 'zod';
 import { barcodeScannerOptions } from '../barcodes';
 import { autoPortionSizeParameters } from '../surveys/portion-size';
 import { localeOptionList, localeTranslation, sanitizedLocaleTranslation } from '../types/common';
-import { actions } from './actions';
+import { actionItem } from './action-item';
+import { promptActions } from './actions';
 import { condition } from './conditions';
 import { externalSourceOptions } from './external-sources';
 import { carousel, counter, datePicker, hasVideo, layoutTypes, slider, timePicker } from './partials';
@@ -113,7 +114,7 @@ export const basePrompt = z.object({
   name: z.string().min(1).max(128),
   version: z.number(),
   i18n: z.record(z.string(), sanitizedLocaleTranslation),
-  actions: actions.optional(),
+  actions: promptActions.optional(),
   conditions: condition.array(),
   useGraph: z.boolean(),
   graph: z.any().optional(),
@@ -260,6 +261,8 @@ const yesNoPrompt = z.object({
   component: z.literal('yes-no-prompt'),
   useFlag: z.boolean(),
   flag: z.string().optional(),
+  trueAction: actionItem.optional(),
+  falseAction: actionItem.optional(),
 });
 
 // Portion size

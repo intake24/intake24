@@ -49,6 +49,23 @@
               variant="outlined"
             />
           </slot>
+          <v-expand-transition>
+            <select-resource
+              v-if="!!option.action"
+              v-model="option.action.params.code"
+              item-id="code"
+              :label="$t('common.options.action.foodCode')"
+              resource="foods"
+            >
+              <template #title>
+                {{ $t('fdbs.foods.title') }}
+              </template>
+              <template #item="{ item }">
+                <v-list-item-title>{{ item.code }}</v-list-item-title>
+                <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+              </template>
+            </select-resource>
+          </v-expand-transition>
           <div class="d-flex flex-column flex-sm-row gc-6 px-2">
             <v-switch
               v-model="option.selected"
@@ -62,6 +79,13 @@
               density="compact"
               hide-details="auto"
               :label="$t('common.options.exclusive')"
+            />
+            <v-switch
+              density="compact"
+              hide-details="auto"
+              :label="$t('common.options.action.updateFood')"
+              :model-value="!!option.action"
+              @update:model-value="changeActionToggle(option, $event)"
             />
           </div>
         </div>
@@ -86,6 +110,7 @@ import { deepEqual } from 'fast-equals';
 import { computed, ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { toIndexedList } from '@intake24/admin/util';
 
 defineOptions({ name: 'OptionsList' });
@@ -135,6 +160,15 @@ function add() {
 
 function remove(index: number) {
   currentOptions.value.splice(index, 1);
+};
+
+function changeActionToggle(option: ListOption<ZodType>, enable: boolean | null) {
+  if (enable) {
+    option.action = { type: 'updateFood', params: { code: 'FOOD_CODE' } };
+  }
+  else {
+    option.action = undefined;
+  }
 };
 
 function update() {

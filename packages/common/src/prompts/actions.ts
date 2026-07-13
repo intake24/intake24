@@ -2,32 +2,10 @@ import { z } from 'zod';
 
 import { variants } from '../theme';
 import { localeTranslation } from '../types/common';
+import { actionItem } from './action-item';
 import { layoutTypes } from './partials';
 
-export const genericActionTypes = ['addMeal', 'next', 'review'] as const;
-export const mealActionTypes = [
-  'deleteMeal',
-  'editMeal',
-  'mealTime',
-  'selectMeal',
-] as const;
-export const foodActionTypes = [
-  'addFood',
-  'deleteFood',
-  'editFood',
-  'selectFood',
-  'changeFood',
-] as const;
-export const actionTypes = [...genericActionTypes, ...mealActionTypes, ...foodActionTypes] as const;
-
-export type GenericActionType = (typeof genericActionTypes)[number];
-export type MealActionType = (typeof mealActionTypes)[number];
-export type FoodActionType = (typeof foodActionTypes)[number];
-export type ActionType = (typeof actionTypes)[number];
-
-export const actionItem = z.object({
-  type: z.enum(actionTypes),
-  params: z.any(),
+export const promptActionItem = actionItem.extend({
   text: localeTranslation,
   label: localeTranslation,
   color: z.string().nullable(),
@@ -36,16 +14,16 @@ export const actionItem = z.object({
   layout: z.enum(layoutTypes).array(),
 });
 
-export type ActionItem = z.infer<typeof actionItem>; ;
+export type PromptActionItem = z.infer<typeof promptActionItem>;
 
-export const actions = z.object({
+export const promptActions = z.object({
   both: z.boolean(),
-  items: actionItem.array(),
+  items: promptActionItem.array(),
 });
 
-export type Actions = z.infer<typeof actions>;
+export type PromptActions = z.infer<typeof promptActions>;
 
-export const defaultAction: ActionItem = {
+export const defaultAction: PromptActionItem = {
   type: 'next',
   text: { en: '' },
   label: {},

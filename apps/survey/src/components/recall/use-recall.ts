@@ -198,12 +198,13 @@ export function useRecall() {
       case 'changeFood':
       case 'editFood':
       case 'selectFood':
+      case 'updateFood':
         if (id === undefined) {
           console.warn('Recall: Food id must be defined for food action.', type, id);
           return;
         }
 
-        await foodAction(type, id);
+        await foodAction(type, id, params);
         break;
       default:
         console.warn(`Recall: Unknown action type: ${type}`);
@@ -241,7 +242,7 @@ export function useRecall() {
     }
   };
 
-  async function foodAction(type: FoodActionType, foodId: string) {
+  async function foodAction(type: FoodActionType, foodId: string, params?: object) {
     switch (type) {
       case 'changeFood':
         invalidateForward();
@@ -261,6 +262,12 @@ export function useRecall() {
       case 'selectFood':
         invalidateForward();
         setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
+        await nextPrompt();
+        break;
+      case 'updateFood':
+        // TODO: validate params properly
+        if (params && typeof params === 'object' && 'code' in params)
+          await survey.swapFood(foodId, params.code as string);
         await nextPrompt();
         break;
       default:

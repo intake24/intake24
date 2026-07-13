@@ -44,7 +44,7 @@ import {
 } from '@intake24/survey/util';
 import { useApp, useLoading } from '@intake24/ui/stores';
 
-import { surveyService } from '../services';
+import { foodsService, surveyService } from '../services';
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';
 
@@ -752,6 +752,25 @@ export const useSurvey = defineStore('survey', {
         return;
 
       this.removeFoodFlag(foodId, flags);
+    },
+
+    // replace existing food while retaining custom prompt answers
+    async swapFood(foodId: string, newFoodCode: string) {
+      const existingFood = findFood(this.data.meals, foodId);
+      const newFoodData = await foodsService.getData(this.localeId, newFoodCode);
+      const newFood: EncodedFood = {
+        id: foodId,
+        type: 'encoded-food',
+        data: newFoodData,
+        searchTerm: 'searchTerm' in existingFood ? existingFood.searchTerm ?? '' : '',
+        portionSizeMethodIndex: null,
+        portionSize: null,
+        customPromptAnswers: { ...existingFood.customPromptAnswers },
+        flags: [],
+        linkedFoods: [],
+      };
+
+      this.replaceFood({ foodId, food: newFood });
     },
 
     updateFood(data: {

@@ -79,7 +79,7 @@ function commitAnswer() {
 }
 
 function action(type: string, ...args: [id?: string, params?: object]) {
-  if (type === 'next' || isInfoPrompt.value) {
+  if (type === 'next' || type === 'updateFood' || isInfoPrompt.value) {
     pushFullHistoryEntry(props.prompt.component);
     commitAnswer();
   }

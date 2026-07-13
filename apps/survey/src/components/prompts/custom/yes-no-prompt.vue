@@ -44,8 +44,18 @@ const state = computed({
   set(value) {
     emit('update:modelValue', value);
 
-    if (typeof value === 'boolean')
-      action('next');
+    if (typeof value === 'boolean') {
+      const foodOrMealId = props.food?.id ?? props.meal?.id;
+      if (value && props.prompt.trueAction) {
+        action(props.prompt.trueAction.type, foodOrMealId, props.prompt.trueAction.params);
+      }
+      else if (!value && props.prompt.falseAction) {
+        action(props.prompt.falseAction.type, foodOrMealId, props.prompt.falseAction.params);
+      }
+      else {
+        action('next');
+      }
+    }
   },
 });
 

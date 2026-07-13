@@ -36,7 +36,7 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')" />
+      <next :disabled="!isValid" @click="submit" />
     </template>
   </component>
 </template>
@@ -88,6 +88,22 @@ const localeOptions = computed(
 
 function update() {
   emit('update:modelValue', state.value);
+}
+
+function submit() {
+  if (selected.value !== 'other') {
+    const option = localeOptions.value.find(o => o.value === selected.value);
+    if (option?.action) {
+      const foodOrMealId = props.food?.id ?? props.meal?.id;
+      action(option.action.type, foodOrMealId, option.action.params);
+    }
+    else {
+      action('next');
+    }
+  }
+  else {
+    action('next');
+  }
 }
 
 defineExpose({ isValid });
