@@ -16,8 +16,8 @@ export const gtmEvents = [
 ] as const;
 type GtmEvent = (typeof gtmEvents)[number];
 
-// Event category for Google Analytics, deduced from Scheme prompts structure, or section of Prompts
-export const gtmSchemePrompts = [
+// Event category for Google Analytics, deduced from the prompt section.
+export const gtmSections = [
   'preMeals',
   'postMeals',
   'submission',
@@ -26,11 +26,11 @@ export const gtmSchemePrompts = [
   'postFoods',
   'foodsDeferred',
 ] as const;
-export type GtmSchemePrompt = typeof gtmSchemePrompts[number];
+export type GtmSection = typeof gtmSections[number];
 
 export type GtmEventParams = {
   event?: GtmEvent; // event type, e.g. GtmEvents.DeleteMeal, which is 'deleteMeal'. Open to new event types
-  scheme_prompts?: GtmSchemePrompt | string;
+  section?: GtmSection | string;
   meal?: string;
   food?: string; // food name, e.g. "Fresh fruit salad"
   food_category?: string; // food category, e.g. "Ham / gammon"

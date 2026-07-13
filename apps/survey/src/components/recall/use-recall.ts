@@ -24,6 +24,7 @@ import {
   maybePushFallbackHistoryEntry,
   pushFullHistoryEntry,
 } from '@intake24/survey/stores/recall-history';
+import { recordPromptTransition } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui/i18n';
 
 export function useRecall() {
@@ -37,6 +38,11 @@ export function useRecall() {
   const currentPrompt = ref<PromptInstance | null>(null);
   const recallController = shallowRef<DynamicRecall | null>(null);
   const hideCurrentPrompt = ref(false);
+  const {
+    clearPromptTransition,
+    setCurrentPrompt,
+    setPromptTransitionAction,
+  } = createPromptTransitionController();
 
   const {
     hasFinished,
@@ -102,7 +108,8 @@ export function useRecall() {
 
     if (result === 'full') {
       hideCurrentPrompt.value = true;
-      currentPrompt.value = recallController.value?.getNextPrompt() ?? null;
+      setPromptTransitionAction('popstate');
+      setCurrentPrompt(recallController.value?.getNextPrompt() ?? null);
       hideCurrentPrompt.value = false;
     }
   };
@@ -112,7 +119,7 @@ export function useRecall() {
       return;
 
     // Prevent the currently active prompt from crashing if it expects a different selection type
-    currentPrompt.value = null;
+    setCurrentPrompt(null);
     survey.setSelection(newSelection);
   };
 
@@ -131,7 +138,7 @@ export function useRecall() {
       );
     }
 
-    currentPrompt.value = { section: promptSection, prompt };
+    setCurrentPrompt({ section: promptSection, prompt });
   };
 
   function showFoodPrompt(foodId: string, promptSection: MealSection, promptType: ComponentType) {
@@ -142,7 +149,7 @@ export function useRecall() {
     if (!prompt)
       throw new Error(`Survey scheme is missing required food prompt of type ${promptType}`);
 
-    currentPrompt.value = { section: promptSection, prompt };
+    setCurrentPrompt({ section: promptSection, prompt });
   };
 
   function showSurveyPrompt(promptSection: SurveyPromptSection, promptType: ComponentType) {
@@ -159,10 +166,12 @@ export function useRecall() {
       );
     }
 
-    currentPrompt.value = { section: promptSection, prompt };
+    setCurrentPrompt({ section: promptSection, prompt });
   };
 
   async function action(type: string, id?: string, params?: object) {
+    setPromptTransitionAction(type);
+
     switch (type) {
       case 'next':
         await next();
@@ -294,10 +303,10 @@ export function useRecall() {
       if (hasMeals.value)
         await recallAction('addMeal');
       else
-        currentPrompt.value = null;
+        setCurrentPrompt(null);
     }
     else {
-      currentPrompt.value = nextPrompt;
+      setCurrentPrompt(nextPrompt);
       createFallbackHistoryEntry(nextPrompt.prompt.component);
     }
   };
@@ -323,7 +332,7 @@ export function useRecall() {
   };
 
   async function restart() {
-    currentPrompt.value = null;
+    setCurrentPrompt(null);
     await survey.cancelRecall();
     await router.push({
       name: 'survey-home',
@@ -348,13 +357,48 @@ export function useRecall() {
 
   onMounted(async () => {
     addEventListener('popstate', onPopState);
+    setPromptTransitionAction('loadRecallUI');
     await nextPrompt();
   });
 
   onBeforeUnmount(() => {
     removeEventListener('popstate', onPopState);
+    clearPromptTransition();
     destroyRecallHistory();
   });
+
+  function createPromptTransitionController() {
+    let promptTransitionAction = 'not mapped';
+
+    function setPromptTransitionAction(action: string) {
+      promptTransitionAction = action;
+    }
+
+    function setCurrentPrompt(promptInstance: PromptInstance | null) {
+      currentPrompt.value = promptInstance;
+
+      if (!promptInstance)
+        return;
+
+      recordPromptTransition({
+        action: promptTransitionAction,
+        prompt_id: promptInstance.prompt.id,
+        section: promptInstance.section,
+        prompt_component: promptInstance.prompt.component,
+      });
+    }
+
+    function clearPromptTransition() {
+      promptTransitionAction = 'not mapped';
+      recordPromptTransition(null);
+    }
+
+    return {
+      clearPromptTransition,
+      setCurrentPrompt,
+      setPromptTransitionAction,
+    };
+  }
 
   return {
     currentPrompt,

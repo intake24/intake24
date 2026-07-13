@@ -296,7 +296,7 @@ export const useSurvey = defineStore('survey', {
       sendGtmEvent({
         event: 'startRecall',
         action: 'start',
-        scheme_prompts: 'preMeals',
+        section: 'preMeals',
       });
 
       await this.startUserSession();
@@ -307,7 +307,7 @@ export const useSurvey = defineStore('survey', {
       sendGtmEvent({
         event: 'cancelRecall',
         action: 'cancel',
-        scheme_prompts: 'preMeals',
+        section: 'preMeals',
       });
       this.clearState();
       await this.clearUserSession(uxSessionId);
@@ -439,7 +439,7 @@ export const useSurvey = defineStore('survey', {
         this.data.submissionTime = submission.submissionTime;
         sendGtmEvent({
           event: 'recallSubmitted',
-          scheme_prompts: 'submission',
+          section: 'submission',
         });
 
         clearPromptStores();
