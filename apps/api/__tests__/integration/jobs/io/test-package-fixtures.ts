@@ -118,7 +118,7 @@ export function createMalformedPackageJsonPackage(): Promise<string> {
 
 export function createInvalidSchemaPackageJsonPackage(): Promise<string> {
   return createTestPackage({
-    packageJsonContent: { wrongField: 'wrong value' },
+    packageJsonContent: { format: 'json' },
   });
 }
 
@@ -133,7 +133,7 @@ export function createValidSynonymSetsPackage(): Promise<string> {
   return createTestPackage({
     includePackageJson: true,
     synonymSetsContent: {
-      en: [
+      en_GB: [
         ['aubergine', 'eggplant'],
         ['courgette', 'zucchini'],
       ],

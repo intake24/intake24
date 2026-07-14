@@ -132,7 +132,7 @@ export default () => {
 
       const summary = await job.run(mockBullJob);
 
-      expect(summary.targetLocales).toContain('en');
+      expect(summary.targetLocales).toContain('en_GB');
       expect(summary.files.synonymSets).toBe(true);
     });
   });
