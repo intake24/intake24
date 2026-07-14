@@ -288,7 +288,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   const foods = await rankFoodResults(
     foodResults,
     query.parameters.localeId,
-    query.parameters.rankingAlgorithm,
+    query.parameters.sortingAlgorithm,
     query.parameters.matchScoreWeight / 100.0,
     logger,
     foodBuilderHeaders,

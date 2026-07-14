@@ -36,14 +36,14 @@ export function food() {
       return { status: 200, body: codes };
     },
     search: async ({ params, query, req }) => {
-      const { description, matchScoreWeight, rankingAlgorithm, hidden, category: limitToCategory, limit, previous, recipe } = query;
+      const { description, matchScoreWeight, sortingAlgorithm, hidden, category: limitToCategory, limit, previous, recipe } = query;
       const { localeId } = params;
 
       const searchOptions: OptionalSearchQueryParameters = {
         previous,
         limit,
         includeHidden: hidden === 'true',
-        rankingAlgorithm,
+        sortingAlgorithm,
         matchScoreWeight,
         limitToCategory,
       };

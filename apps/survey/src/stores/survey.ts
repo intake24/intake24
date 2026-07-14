@@ -145,10 +145,10 @@ export const useSurvey = defineStore('survey', {
     meals: state => state.data.meals,
     parametersLoaded: state => !!state.parameters && !!state.user,
     searchParameters: (state) => {
-      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight }
+      const { searchSortingAlgorithm: sortingAlgorithm, searchMatchScoreWeight: matchScoreWeight }
         = state.parameters ?? {};
 
-      return { matchScoreWeight, rankingAlgorithm };
+      return { matchScoreWeight, sortingAlgorithm };
     },
     surveyEnabled: state => state.parameters?.state === 'active',
     dailyLimitReached: state => !!state.user?.maximumDailySubmissionsReached,
