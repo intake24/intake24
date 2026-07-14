@@ -4,6 +4,7 @@ import type { FileSystemConfig } from './filesystem';
 import type { ImageProcessorConfig } from './image-processor';
 import type { MediaConfig } from './media';
 import type { MetricsConfig } from './metrics';
+import type { PackageIoConfig } from './package-io';
 import type { PdfConfig } from './pdf';
 import type { PublisherConfig, SubscriberConfig } from './pub-sub';
 import type { QueueConfig } from './queue';
@@ -23,6 +24,7 @@ import filesystem from './filesystem';
 import imageProcessor from './image-processor';
 import media from './media';
 import metrics from './metrics';
+import packageIo from './package-io';
 import pdf from './pdf';
 import { publisherConfig as publisher, subscriberConfig as subscriber } from './pub-sub';
 import queue from './queue';
@@ -36,6 +38,7 @@ export * from './cache';
 export * from './filesystem';
 export * from './image-processor';
 export * from './media';
+export * from './package-io';
 export * from './pdf';
 export * from './queue';
 export * from './rate-limiter';
@@ -62,6 +65,7 @@ export type Config = {
   session: SessionConfig;
   imageProcessor: ImageProcessorConfig;
   publisher: PublisherConfig;
+  packageIo: PackageIoConfig;
   subscriber: SubscriberConfig;
 };
 
@@ -83,6 +87,7 @@ const config: Config = {
   session,
   imageProcessor,
   publisher,
+  packageIo,
   subscriber,
 };
 

@@ -37,19 +37,25 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
 
   private readonly localeService;
 
+  private readonly scheduler;
+
   private readonly kyselyDb;
 
   private readonly fsConfig;
 
-  constructor({ logger, globalAclService, adminCategoryService, adminFoodService, localeService, kyselyDb, fsConfig }: Pick<IoC, 'logger' | 'globalAclService' | 'adminCategoryService' | 'adminFoodService' | 'localeService' | 'kyselyDb' | 'fsConfig'>) {
+  private readonly packageIoConfig;
+
+  constructor({ logger, globalAclService, adminCategoryService, adminFoodService, localeService, scheduler, kyselyDb, fsConfig, packageIoConfig }: Pick<IoC, 'logger' | 'globalAclService' | 'adminCategoryService' | 'adminFoodService' | 'localeService' | 'scheduler' | 'kyselyDb' | 'fsConfig' | 'packageIoConfig'>) {
     super({ logger });
 
     this.globalAclService = globalAclService;
     this.adminCategoryService = adminCategoryService;
     this.adminFoodService = adminFoodService;
     this.localeService = localeService;
+    this.scheduler = scheduler;
     this.kyselyDb = kyselyDb;
     this.fsConfig = fsConfig;
+    this.packageIoConfig = packageIoConfig;
   }
 
   public async run(job: Job): Promise<void> {
@@ -220,6 +226,14 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
         }
       });
     });
+
+    if (this.packageIoConfig.instantIndexRebuild) {
+      await this.scheduler.jobs.addJob({
+        type: 'LocaleIndexBuild',
+        userId: this.userId,
+        params: { force: false },
+      });
+    }
 
     await this.job.updateProgress(1);
   }

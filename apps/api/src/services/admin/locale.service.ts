@@ -204,6 +204,8 @@ function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | '
     if (input.length === 0)
       return;
 
+    const dirtyLocaleCodes = input.map(locale => locale.code);
+
     const foodsImpl = async (transaction: Kysely<FoodsDB>) => {
       const values = input.map(locale => ({
         id: locale.code,
@@ -359,6 +361,10 @@ function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | '
     }
     else {
       await kyselyDb.system.transaction().execute(systemImpl);
+    }
+
+    if (dirtyLocaleCodes.length) {
+      await cache.setAdd('locales-index', ...dirtyLocaleCodes);
     }
   };
 

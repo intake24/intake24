@@ -38,6 +38,7 @@ function configureContainer() {
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
     imageProcessorConfig: asValue(config.imageProcessor),
+    packageIoConfig: asValue(config.packageIo),
     db: asClass(Database).singleton(),
     kyselyDb: asClass(KyselyDatabases).singleton(),
     models: asValue(models),

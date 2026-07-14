@@ -104,6 +104,7 @@ export interface IoC extends PackageWritersAndJobs {
   servicesConfig: Config['services'];
   sessionConfig: Config['session'];
   imageProcessorConfig: Config['imageProcessor'];
+  packageIoConfig: Config['packageIo'];
   // Expose some config settings directly to avoid pulling in the whole config when it doesn't
   // make sense, e.g. for testing
   environment: Environment;
