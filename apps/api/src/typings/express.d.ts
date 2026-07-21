@@ -36,5 +36,10 @@ declare module 'express-session' {
       challengeId: string;
       secret: string;
     };
+    oidc: {
+      provider: string;
+      pkce: string;
+      nonce: string | undefined;
+    };
   }
 }

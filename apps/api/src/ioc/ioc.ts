@@ -53,6 +53,7 @@ import type {
   NutrientTableService,
   NutrientTypeService,
   NutrientUnitService,
+  OIDCService,
   OTPProvider,
   PopularityCountersService,
   PortionSizeMethodsService,
@@ -146,6 +147,7 @@ export interface IoC extends PackageWritersAndJobs {
   authenticationService: AuthenticationService;
   jwtService: JwtService;
   jwtRotationService: JwtRotationService;
+  oidcService: OIDCService;
   signInService: SignInService;
 
   // MFA Providers

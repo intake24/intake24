@@ -1,13 +1,13 @@
 import type { MFAProvider } from './mfa';
 
-export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken';
+export type SubjectProvider = 'email' | 'surveyAlias' | 'URLToken' | 'oidc';
 
 export type Subject = {
   provider: SubjectProvider | MFAProvider;
   providerKey: string;
 };
 
-export type Amr = 'pwd' | MFAProvider;
+export type Amr = 'pwd' | 'oidc' | MFAProvider;
 export type AmrMethod = { method: Amr; timestamp: number };
 
 export function createAmrMethod(amr: Amr): AmrMethod {

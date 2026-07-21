@@ -2,6 +2,37 @@
 
 Path: `apps/api/src/config/services.ts`
 
+## Single Sign-On
+
+System supports Single Sign-On (SSO) using `OpenID Connect`. It is possible to configure
+multiple providers.
+
+Refer to your `OpenID Connect` provider documentation for the required configuration values. Usually, you will need to register your application with the provider and obtain a client ID and client secret.
+
+### Issuer
+
+Issuer URL of the OpenID Connect provider to be used for the discovery document / specification.
+
+- object-path: `oidc[provider].issuer`
+- dotenv var: `OIDC_{PROVIDER}_ISSUER`
+- type: `string`
+
+### Client ID
+
+Client ID of the OpenID Connect provider.
+
+- object-path: `oidc[provider].clientId`
+- dotenv var: `OIDC_{PROVIDER}_CLIENT_ID`
+- type: `string`
+
+### Client Secret
+
+Client secret of the OpenID Connect provider.
+
+- object-path: `oidc[provider].clientSecret`
+- dotenv var: `OIDC_{PROVIDER}_CLIENT_SECRET`
+- type: `string`
+
 ## CAPTCHA
 
 Password recovery and user generation can be protected by captcha services.
