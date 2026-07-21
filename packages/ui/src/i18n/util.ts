@@ -40,9 +40,17 @@ export function createTranslate(i18n: ReturnType<typeof useI18nLib<DefaultLocale
     if (typeof content === 'string')
       return replaceParams(content, params);
 
-    const localeContent = content ? content[locale.value] : undefined;
-    if (localeContent)
-      return replaceParams(localeContent, params);
+    if (content) {
+      const localeContent = content[locale.value];
+      if (localeContent)
+        return replaceParams(localeContent, params);
+
+      if (/[a-z]+-/i.test(locale.value)) {
+        const localeContent = content[locale.value.split('-')[0]];
+        if (localeContent)
+          return replaceParams(localeContent, params);
+      }
+    }
 
     if (path && has(messages.value[locale.value], path))
       return t(path, params);
