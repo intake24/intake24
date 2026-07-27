@@ -63,6 +63,29 @@
                 variant="outlined"
               />
             </confirm-dialog>
+            <confirm-dialog
+              color="info"
+              :label="$t('survey-schemes.prompts.subsections.change')"
+              max-width="450px"
+              @close="clearMoveToSubsection"
+              @confirm="changeSubsection"
+            >
+              <template #activator="{ props }">
+                <v-list-item link v-bind="props">
+                  <v-list-item-title>
+                    <v-icon icon="fas fa-exchange-alt" start />
+                    {{ $t('survey-schemes.prompts.subsections.change') }}
+                  </v-list-item-title>
+                </v-list-item>
+              </template>
+              <v-select
+                v-model="moveToSubsection"
+                hide-details="auto"
+                :items="moveSubsections"
+                :label="$t('survey-schemes.prompts.subsections.change')"
+                variant="outlined"
+              />
+            </confirm-dialog>
             <save-as-template-dialog
               v-if="can('survey-scheme-prompts:create') && !hasTemplate"
               :prompt="prompt"
@@ -104,7 +127,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-import type { MoveSection } from './prompt-list.vue';
+import type { MoveSection, MoveSubsection } from './prompt-list.vue';
 import type { Prompt } from '@intake24/common/prompts';
 
 import { deepEqual } from 'fast-equals';
@@ -139,16 +162,21 @@ const props = defineProps({
     type: Array as PropType<MoveSection[]>,
     default: () => [],
   },
+  moveSubsections: {
+    type: Array as PropType<MoveSubsection[]>,
+    default: () => [],
+  },
   templates: {
     type: Array as PropType<Prompt[]>,
     default: () => [],
   },
 });
 
-const emit = defineEmits(['promptCopy', 'promptEdit', 'promptMove', 'promptRemove', 'promptSync']);
+const emit = defineEmits(['promptCopy', 'promptEdit', 'promptMove', 'promptChangeSubsection', 'promptRemove', 'promptSync']);
 
 const contextMenu = ref(false);
 const moveToSection = ref<string | null>(null);
+const moveToSubsection = ref<number | null>(null);
 
 const isOverrideMode = computed(() => props.mode === 'override');
 const template = computed(() => props.templates.find(
@@ -184,6 +212,23 @@ function move() {
 
 function clearMoveToSection() {
   moveToSection.value = null;
+};
+
+function changeSubsection() {
+  if (moveToSubsection.value === null)
+    return;
+
+  emit('promptChangeSubsection', {
+    subsectionIndex: moveToSubsection.value,
+    index: props.index,
+    prompt: copyObject(props.prompt),
+  });
+
+  clearMoveToSubsection();
+};
+
+function clearMoveToSubsection() {
+  moveToSubsection.value = null;
 };
 
 function remove() {
