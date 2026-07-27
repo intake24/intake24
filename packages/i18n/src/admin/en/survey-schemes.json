@@ -249,7 +249,8 @@
     },
     "prompts": {
       "title": "Scheme prompts overrides",
-      "subtitle": "Override specific scheme prompt. Changes will get merged by Prompts ID."
+      "subtitle": "Override specific scheme prompt. Changes will get merged by Prompts ID.",
+      "subsectionName": "Overrides"
     },
     "settings": {
       "title": "Scheme settings overrides",
@@ -266,6 +267,11 @@
     "move": "Move prompt",
     "remove": "Remove prompt",
     "section": "Prompts section",
+    "subsections": {
+      "add": "Add subsection",
+      "change": "Change subsection",
+      "rename": "Rename subsection"
+    },
     "preMeals": {
       "title": "Pre-recall prompts",
       "subtitle": "General prompts asked before the dietary recall, including personal prompts and the initial instructions."

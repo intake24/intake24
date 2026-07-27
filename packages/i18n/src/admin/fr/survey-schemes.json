@@ -245,7 +245,8 @@
     },
     "prompts": {
       "title": "Déroger à certaines invites de la configuration",
-      "subtitle": "Déroger à certaines invites spécifiques. Les changements seront fusionnés par identifiant d'invite."
+      "subtitle": "Déroger à certaines invites spécifiques. Les changements seront fusionnés par identifiant d'invite.",
+      "subsectionName": "Overrides"
     },
     "settings": {
       "title": "Scheme settings overrides",
@@ -262,6 +263,11 @@
     "move": "Déplacer l'invite",
     "remove": "Enlever l'invite",
     "section": "Section des invites",
+    "subsections": {
+      "add": "Add subsection",
+      "change": "Change subsection",
+      "rename": "Rename subsection"
+    },
     "preMeals": {
       "title": "Invites pré-rappel",
       "subtitle": "Invites générales affichées avant le rappel alimentaire, incluant des invites personnelles et les consignes initiales."
