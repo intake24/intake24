@@ -9,7 +9,7 @@
     <div class="label">
       <slot name="label" />
       <v-chip
-        v-if="label"
+        v-if="labelsEnabled && label"
         class="ma-1 ma-md-2 pa-3 pa-md-4 text-title-large font-weight-bold border-info-1"
         color="info"
       >
@@ -38,6 +38,7 @@
               :disabled="isLessWeightFactorActive"
               icon
               size="x-large"
+              tabindex="-1"
               :title="$t(`prompts.asServed.${type}.less`)"
             >
               <v-icon color="white" size="large">
@@ -55,7 +56,12 @@
         lg
         sm="2"
       >
-        <v-card @click="setSelection(idx)">
+        <v-card
+          :aria-label="labels.objects?.[idx]"
+          tabindex="0"
+          @click="setSelection(idx)"
+          @keydown="onKeydown($event, idx)"
+        >
           <v-img cover :src="images.thumbnailUrl" />
         </v-card>
       </v-col>
@@ -74,6 +80,7 @@
               :disabled="isMoreWeightFactorActive"
               icon
               size="x-large"
+              tabindex="-1"
               :title="$t(`prompts.asServed.${type}.more`)"
             >
               <v-icon color="white" size="large">
@@ -148,7 +155,7 @@ const { imageData: asServedData } = useFetchImageData<AsServedSetResponse>({
     initSelection();
   },
 });
-const { labels } = useLabels(props, { type: 'asServed', data: asServedData });
+const { labels, labelsEnabled } = useLabels(props, { type: 'asServed', data: asServedData });
 const label = computed(() => {
   if (objectIdx.value === undefined || !asServedData.value)
     return null;
@@ -370,6 +377,13 @@ function confirm() {
 
   emit('confirm');
 };
+
+function onKeydown(e: KeyboardEvent, idx: number) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    setSelection(idx);
+  }
+}
 </script>
 
 <style lang="scss" scoped>

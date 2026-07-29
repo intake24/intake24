@@ -204,7 +204,7 @@ const imageMapIds = computed(() => ({
   slice: sliceImageMapId.value,
 }));
 
-const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.labels);
+const labelsEnabled = computed(() => !!(props.prompt.imageMap.labels && !!parameters.value.labels));
 console.log(props.prompt.imageMap.labels);
 console.log(parameters.value);
 const imageMapLabels = computed(() => {
