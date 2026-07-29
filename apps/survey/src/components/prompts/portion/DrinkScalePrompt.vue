@@ -39,6 +39,7 @@
               id: state.portionSize.containerId,
               index: state.portionSize.containerIndex,
               labels,
+              labelsEnabled,
             }"
             @confirm="confirmObject"
             @select="selectObject"
@@ -244,7 +245,7 @@ const imageMapUrl = computed(() => drinkwareSetData.value ? `portion-sizes/image
 const { imageData: imageMapData } = useFetchImageData<ImageMapResponse>({ url: imageMapUrl });
 
 const labelData = computed(() => ({ drinkwareSet: drinkwareSetData.value, imageMap: imageMapData.value }));
-const { labels } = useLabels(props, { type: 'drinkScale', data: labelData });
+const { labels, labelsEnabled } = useLabels(props, { type: 'drinkScale', data: labelData });
 
 const leftoversEnabled = computed(() => props.prompt.leftovers);
 

@@ -102,9 +102,6 @@ export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guid
   };
 
   const labels = computed(() => {
-    if (!labelsEnabled.value)
-      return { image: '', objects: [] };
-
     // @ts-expect-error - narrow down the type
     return resolveLabels[source.type](source.data.value);
   });
