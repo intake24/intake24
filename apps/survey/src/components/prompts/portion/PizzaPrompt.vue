@@ -205,8 +205,6 @@ const imageMapIds = computed(() => ({
 }));
 
 const labelsEnabled = computed(() => !!(props.prompt.imageMap.labels && !!parameters.value.labels));
-console.log(props.prompt.imageMap.labels);
-console.log(parameters.value);
 const imageMapLabels = computed(() => {
   return Object.keys(imageMapIds.value).reduce<Record<PizzaImageMap, { image: string; objects: string[] }>>(
     (acc, key) => {
