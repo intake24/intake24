@@ -2,7 +2,7 @@
   <browse-layout>
     <data-table :headers>
       <template #[`item.code`]="{ item }">
-        <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
+        <span class="mr-3" :class="`fi fi-${item.countryFlagCode}`" />
         {{ item.code }}
       </template>
     </data-table>

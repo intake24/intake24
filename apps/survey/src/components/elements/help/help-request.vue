@@ -72,12 +72,12 @@
                   <template #item="{ props, item }">
                     <v-list-item v-bind="props" :title="item.text">
                       <template #prepend>
-                        <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
+                        <span class="me-3" :class="`fi fi-${item.value.toLowerCase()}`" />
                       </template>
                     </v-list-item>
                   </template>
                   <template #selection="{ item }">
-                    <span :class="`fi fi-${item.value.toLowerCase()} me-3`" />
+                    <span class="me-3" :class="`fi fi-${item.value.toLowerCase()}`" />
                     {{ item.countryCode }}
                   </template>
                 </v-autocomplete>

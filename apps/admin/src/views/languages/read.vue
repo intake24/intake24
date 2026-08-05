@@ -17,7 +17,7 @@
         <tr>
           <th>{{ $t('languages.countryFlagCode') }}</th>
           <td>
-            <span :class="`fi fi-${entry.countryFlagCode} mr-2`" />
+            <span class="mr-3" :class="`fi fi-${entry.countryFlagCode}`" />
             {{ entry.countryFlagCode }}
           </td>
         </tr>

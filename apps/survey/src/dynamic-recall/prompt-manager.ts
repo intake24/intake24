@@ -183,7 +183,7 @@ function checkSurveyStandardConditions(surveyStore: SurveyStore, prompt: Prompt)
   switch (component) {
     case 'addon-foods-prompt': {
       const addons = filterForAddonFoods(surveyStore, prompt);
-      return surveyStore.data.meals.some(meal => !!flattenFoods(meal.foods).filter(food => addons[meal.id][food.id].length).length);
+      return surveyStore.data.meals.some(meal => flattenFoods(meal.foods).some(food => addons[meal.id][food.id].length));
     }
     case 'info-prompt':
       return !surveyStore.data.flags.includes(`${prompt.id}-acknowledged`);
@@ -268,7 +268,7 @@ function checkMealStandardConditions(surveyStore: SurveyStore, mealState: MealSt
       );
     case 'addon-foods-prompt': {
       const addons = filterForAddonFoods(surveyStore, prompt, mealState);
-      return !!flattenFoods(mealState.foods).filter(food => addons[mealState.id][food.id].length).length;
+      return flattenFoods(mealState.foods).some(food => addons[mealState.id][food.id].length);
     }
     case 'no-more-information-prompt':
       if (selection.mode === 'manual') {
@@ -691,7 +691,7 @@ function checkFoodStandardConditions(surveyStore: SurveyStore, mealState: MealSt
 
     case 'addon-foods-prompt': {
       const addons = filterForAddonFoods(surveyStore, prompt, mealState);
-      return !!flattenFoods([foodState]).filter(food => addons[mealState.id][food.id].length).length;
+      return flattenFoods([foodState]).some(food => addons[mealState.id][food.id].length);
     }
 
     case 'associated-foods-prompt': {

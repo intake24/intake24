@@ -8,7 +8,7 @@ import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http
 import fs from 'node:fs';
 
 import axios, { Axios, HttpStatusCode } from 'axios';
-import { parse as parseCookie, serialize as serializeCookie } from 'cookie';
+import { parseCookie, stringifySetCookie } from 'cookie';
 import PQueue from 'p-queue';
 
 const DEFAULT_REFRESH_TOKEN_COOKIE_NAME = 'it24a_refresh_token';
@@ -133,7 +133,7 @@ export class BaseClientV4 {
         undefined,
         {
           headers: {
-            Cookie: serializeCookie(this.cookieName, this.refreshToken ?? ''),
+            Cookie: stringifySetCookie({ name: this.cookieName, value: this.refreshToken ?? '' }),
           },
         },
       );

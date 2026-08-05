@@ -18,7 +18,7 @@
         </template>
         <v-list class="bg-grey-lighten-3">
           <v-list-item v-for="lang in availableLanguages" :key="lang.code" @click="add(lang.code)">
-            <span :class="`fi fi-${lang.countryFlagCode} mr-3`" />
+            <span class="mr-3" :class="`fi fi-${lang.countryFlagCode}`" />
             <span class="font-weight-medium">{{ lang.englishName }}</span>
           </v-list-item>
         </v-list>
@@ -26,7 +26,7 @@
       <template v-if="languages.length" #extension>
         <v-tabs v-model="selected">
           <v-tab v-for="lang in languages" :key="lang">
-            <span :class="`fi fi-${getLanguageFlag(lang)} mr-3`" />
+            <span class="mr-3" :class="`fi fi-${getLanguageFlag(lang)}`" />
             <span class="font-weight-medium">{{ getLanguageName(lang) }}</span>
           </v-tab>
         </v-tabs>

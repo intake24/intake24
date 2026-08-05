@@ -17,21 +17,21 @@
         <tr>
           <th>{{ $t('locales.respondentLanguageId') }}</th>
           <td>
-            <span :class="`fi fi-${entry.respondentLanguageId} mr-2`" />
+            <span class="mr-2" :class="`fi fi-${entry.respondentLanguageId}`" />
             {{ entry.respondentLanguageId }}
           </td>
         </tr>
         <tr>
           <th>{{ $t('locales.adminLanguageId') }}</th>
           <td>
-            <span :class="`fi fi-${entry.adminLanguageId} mr-2`" />
+            <span class="mr-2" :class="`fi fi-${entry.adminLanguageId}`" />
             {{ entry.adminLanguageId }}
           </td>
         </tr>
         <tr>
           <th>{{ $t('locales.countryFlagCode') }}</th>
           <td>
-            <span :class="`fi fi-${entry.countryFlagCode} mr-2`" />
+            <span class="mr-2" :class="`fi fi-${entry.countryFlagCode}`" />
             {{ entry.countryFlagCode }}
           </td>
         </tr>
@@ -46,7 +46,7 @@
         <tr>
           <th>{{ $t('locales.foodIndex.languageBackend') }}</th>
           <td>
-            <span :class="`fi fi-${entry.foodIndexLanguageBackendId} mr-2`" />
+            <span class="mr-2" :class="`fi fi-${entry.foodIndexLanguageBackendId}`" />
             {{ entry.foodIndexLanguageBackendId }}
           </td>
         </tr>
