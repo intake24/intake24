@@ -43,7 +43,7 @@
         <div class="label">
           <slot name="label">
             <v-chip
-              v-if="label"
+              v-if="labelsEnabled && label"
               class="ma-1 ma-md-2 pa-3 pa-md-4 text-title-large font-weight-bold border-info-1"
               color="info"
             >
@@ -58,11 +58,15 @@
           <polygon
             v-for="(object, idx) in objects"
             :key="idx"
+            :aria-label="labels.objects?.[idx]"
             class="guide-drawer-polygon"
             :class="{ active: idx === index }"
             :points="object.polygon"
+            role="image"
+            tabindex="0"
             @click.stop="select(idx, object.id)"
-            @keypress.stop="select(idx, object.id)"
+            @keydown.enter.prevent="select(idx, object.id)"
+            @keydown.space.prevent="select(idx, object.id)"
             @mouseleave="hoverIndex = undefined"
             @mouseover="hoverIndex = idx"
           />
@@ -116,6 +120,10 @@ const props = defineProps({
   labels: {
     type: Object as PropType<{ image: string; objects: string[] }>,
     default: () => ({ image: '', objects: [] }),
+  },
+  labelsEnabled: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -199,12 +207,14 @@ onMounted(() => {
         filter: url(#polygon-blur);
       }
 
-      &:hover {
+      &:hover,
+      &:focus {
         stroke-width: 8;
         stroke: variables.$info;
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);
+        outline: none;
       }
     }
   }
