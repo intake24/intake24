@@ -42,7 +42,7 @@ const updatedSabFood = {
 function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
   console.debug('Received sabOptions from child:', sabOptions);
   if (!sabOptions.portionSize && updatedSabFood.food.portionSize) {
-    Object.assign(updatedSabFood.food, { portionSizeMethodIndex: undefined, portionSize: undefined });
+    Object.assign(updatedSabFood.food, { portionSizeMethodIndex: null, portionSize: null });
     updatedSabFood.food.flags = updatedSabFood.food.flags.filter(flag => !['portion-size-option-complete', 'portion-size-method-complete'].includes(flag));
     console.debug(
       `SAB prompt: portion size option is false. Removed portionSize, portionSizeMethodIndex, and flags 'portion-size-option-complete', 'portion-size-method-complete'. Updated flags: [${updatedSabFood.food.flags.join(', ')}]`,
