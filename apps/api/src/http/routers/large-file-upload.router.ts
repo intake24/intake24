@@ -13,10 +13,17 @@ import { permission } from '../middleware';
 
 export function createLargeFileUploadRouter(authMiddleware: RequestHandler[]): Router {
   const uploadPath = ioc.cradle.fsConfig.local.uploads;
+  const corsOrigins = ioc.cradle.securityConfig.cors.origin;
+
+  const allowedOrigins = Array.isArray(corsOrigins)
+    ? corsOrigins
+    : typeof corsOrigins === 'string' ? [corsOrigins] : [];
 
   const tusServer = new TusServer({
     path: '/admin/large-file-upload',
     relativeLocation: true,
+    allowedOrigins,
+    allowedCredentials: true,
     datastore: new FileStore({
       directory: uploadPath,
     }),
