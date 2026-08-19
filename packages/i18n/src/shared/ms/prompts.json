@@ -202,6 +202,13 @@
     "text": "",
     "description": ""
   },
+  "foodAdd": {
+    "name": "Add Food",
+    "text": "",
+    "description": "",
+    "meal": "When did you have it?",
+    "food": "What did you have?"
+  },
   "foodSearch": {
     "name": "Cari Makanan",
     "text": "Senarai makanan di bawah adalah daripada pangkalan data kami yang kelihatan seperti \"{food}\".",

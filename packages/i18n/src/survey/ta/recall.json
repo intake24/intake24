@@ -42,6 +42,7 @@
     "title": "Review panel",
     "mealSuggested": "இந்த உணவு முறையால் பரிந்துரைக்கப்படுகிறது, ஆனால் நீங்கள் அதை சாப்பிட்டுள்ளீர்கள் என்பதை இன்னும் உறுதிப்படுத்தவில்லை",
     "food": {
+      "add": "Add food",
       "delete": "Delete food",
       "deleteConfirm": "Do you want to delete {item}?",
       "change": "Change food",
@@ -83,15 +84,6 @@
       "editTime": "நேரத்தை திருத்து/மாற்று"
     }
   },
-  "contextMenu": {
-    "close": "மூடு",
-    "select": "{name} உடன் தொடரவும்",
-    "editMeal": "உணவுகளை மறுபரிசீலனை செய்யுங்கள்",
-    "delete": "{name} ஐ நீக்கு",
-    "confirmDeletion": "'{name} ஐ நிச்சயமாக நீக்க விரும்புகிறீர்களா?",
-    "confirm": "{name} ஐ உறுதிப்படுத்தவும்",
-    "changeTime": "நேரத்தை மாற்றவும்"
-  },
   "actions": {
     "feedback": "பின்னூட்டத்திற்கு செல்",
     "next": "தொடரவும்",
@@ -109,7 +101,6 @@
       "next": "தொடரவும்",
       "redirect": "Continue",
       "remove": "அகற்று",
-      "review": "மதிப்பீடு",
       "submit": "சமர்ப்பிக்கவும்",
       "addMeal": "சாப்பாடு சேர்க்கவும்",
       "deleteFood": "உணவை நீக்கவும்",

@@ -39,8 +39,8 @@
   "foods": {
     "_": "Aliment",
     "title": "Aliments",
-    "add": "Add food",
-    "copy": "Copy food",
+    "add": "Ajouter de la nourriture",
+    "copy": "Copier l'aliment",
     "id": "Identifiant de l'aliment",
     "code": "Code de l'aliment",
     "englishName": "Nom anglais",

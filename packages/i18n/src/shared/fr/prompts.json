@@ -202,6 +202,13 @@
     "text": "",
     "description": ""
   },
+  "foodAdd": {
+    "name": "Ajouter un aliment",
+    "text": "",
+    "description": "",
+    "meal": "Quand l'avez-vous eu?",
+    "food": "Qu'est-ce que vous avez pris?"
+  },
   "foodSearch": {
     "name": "Chercher un aliment",
     "text": "",

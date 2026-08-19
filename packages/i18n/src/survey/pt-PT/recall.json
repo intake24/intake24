@@ -42,6 +42,7 @@
     "title": "Painel de revisão",
     "mealSuggested": "Esta refeição é sugerida pelo sistema, mas ainda não confirmou que a teve",
     "food": {
+      "add": "Adicionar alimento",
       "delete": "Eliminar alimento",
       "deleteConfirm": "Pretende eliminar {item}?",
       "change": "Alterar alimento",
@@ -83,15 +84,6 @@
       "editTime": "Alterar hora"
     }
   },
-  "contextMenu": {
-    "close": "Fechar",
-    "select": "Continuar com {name}",
-    "editMeal": "Rever alimentos",
-    "delete": "Eliminar {name}",
-    "confirmDeletion": "Tem a certeza de que pretende eliminar '{name}'?",
-    "confirm": "Confirmar {name}",
-    "changeTime": "Alterar hora"
-  },
   "actions": {
     "feedback": "Feedback alimentar",
     "next": "Continuar",
@@ -109,7 +101,6 @@
       "next": "Continuar",
       "redirect": "Continuar",
       "remove": "Remover",
-      "review": "Revisão",
       "submit": "Submeter",
       "addMeal": "Adicionar refeição",
       "deleteFood": "Eliminar alimento",

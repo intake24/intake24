@@ -42,6 +42,7 @@
     "title": "审查小组",
     "mealSuggested": "此餐点是由系统建议的，但您尚未确认您已食用。",
     "food": {
+      "add": "Add food",
       "delete": "删除食物 ",
       "deleteConfirm": "删除食物 {item}?",
       "change": "更换食物",
@@ -83,15 +84,6 @@
       "editTime": "编辑/更改时间"
     }
   },
-  "contextMenu": {
-    "close": "关闭",
-    "select": "继续使用{name}",
-    "editMeal": "修改食物",
-    "delete": "删除 {name}",
-    "confirmDeletion": "您确定要删除'{name}'吗？",
-    "confirm": "确认 {name}",
-    "changeTime": "更改时间"
-  },
   "actions": {
     "feedback": "前往反馈",
     "next": "继续",
@@ -109,7 +101,6 @@
       "next": "下一步",
       "redirect": "下一步",
       "remove": "移除",
-      "review": "查看",
       "submit": "提交",
       "addMeal": "添加餐点",
       "deleteFood": "删除食物",
