@@ -1028,6 +1028,15 @@ export function evaluateCondition(condition: Condition, ops: EvaluateConditionOp
       const completionState = getFoodCompletionState(requireFood(condition.property.id));
       return foodCompletionStateOptions.indexOf(condition.property.check.completionState) <= foodCompletionStateOptions.indexOf(completionState);
     }
+    case 'foodCode': {
+      const food = requireFood(condition.property.id);
+      if (food.type !== 'encoded-food')
+        return false;
+      return conditionOps[condition.property.check.op]({
+        answer: food.data.code,
+        value: condition.property.check.value,
+      });
+    }
     case 'foodCategory': {
       const food = requireFood(condition.property.id);
       if (food.type !== 'encoded-food')
