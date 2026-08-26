@@ -26,7 +26,7 @@
               type="info"
             >
               <template #prepend>
-                <span :class="`fi fi-${lang} mr-3`" />
+                <span class="mr-3" :class="`fi fi-${lang}`" />
               </template>
               <template #default>
                 <template v-if="$t(`prompts.${promptType}.${key}`, lang)">

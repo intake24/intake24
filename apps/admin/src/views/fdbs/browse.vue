@@ -2,7 +2,7 @@
   <browse-layout>
     <data-table :actions="['read']" api-url="admin/fdbs" :headers>
       <template #[`item.code`]="{ item }">
-        <span :class="`fi fi-${item.countryFlagCode} mr-3`" />
+        <span class="mr-3" :class="`fi fi-${item.countryFlagCode}`" />
         {{ item.code }}
       </template>
       <template #[`item.action`]="{ item }">

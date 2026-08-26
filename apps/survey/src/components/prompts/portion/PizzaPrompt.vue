@@ -35,6 +35,7 @@
               id: state.portionSize.type.id,
               index: state.portionSize.type.index,
               labels: imageMapLabels.type,
+              labelsEnabled,
             }"
             @confirm="confirmType('type')"
             @select="(idx, id) => selectType('type', idx, id)"
@@ -57,6 +58,7 @@
               id: state.portionSize.thickness.id,
               index: state.portionSize.thickness.index,
               labels: imageMapLabels.thickness,
+              labelsEnabled,
             }"
             @confirm="confirmType('thickness')"
             @select="(idx, id) => selectType('thickness', idx, id)"
@@ -80,6 +82,7 @@
               id: state.portionSize.slice.id,
               index: state.portionSize.slice.index ? state.portionSize.slice.index - 1 : undefined,
               labels: imageMapLabels.slice,
+              labelsEnabled,
             }"
             @confirm="confirmType('slice')"
             @select="(idx, id) => selectType('slice', idx + 1, id)"
@@ -201,16 +204,8 @@ const imageMapIds = computed(() => ({
   slice: sliceImageMapId.value,
 }));
 
-const labelsEnabled = computed(() => props.prompt.imageMap.labels && !!parameters.value.labels);
+const labelsEnabled = computed(() => !!(props.prompt.imageMap.labels && !!parameters.value.labels));
 const imageMapLabels = computed(() => {
-  if (!labelsEnabled.value) {
-    return {
-      type: { image: '', objects: [] },
-      thickness: { image: '', objects: [] },
-      slice: { image: '', objects: [] },
-    };
-  }
-
   return Object.keys(imageMapIds.value).reduce<Record<PizzaImageMap, { image: string; objects: string[] }>>(
     (acc, key) => {
       const pizzaType = key as PizzaImageMap;

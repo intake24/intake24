@@ -1,4 +1,4 @@
-import type { AdminTokenPayload } from '@intake24/common/security';
+import type { AdminTokenPayload, Subject } from '@intake24/common/security';
 import type { AdminUserProfile, UpdateUserProfile } from '@intake24/common/types/http/admin';
 import type { Permission } from '@intake24/ui/types';
 
@@ -25,6 +25,18 @@ export const useUser = defineStore('user', {
   getters: {
     isAalSatisfied: state => state.aal,
     isVerified: state => !!state.payload?.verified,
+    isOIDC(state) {
+      try {
+        if (!state.payload?.sub)
+          return false;
+
+        const { provider } = JSON.parse(atob(state.payload.sub)) as Subject;
+        return provider === 'oidc';
+      }
+      catch {
+        return false;
+      }
+    },
     loaded: state => !!state.profile,
   },
   actions: {

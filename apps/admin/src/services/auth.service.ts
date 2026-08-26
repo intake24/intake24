@@ -25,6 +25,29 @@ export default {
   },
 
   /**
+   * Generate OIDC redirect URL for the given provider.
+   * @param provider
+   * @returns
+   */
+  async oidcRedirect(provider: string): Promise<{ url: string }> {
+    const { data } = await http.get<{ url: string }>(`admin/auth/oidc/${provider}`, { withLoading: true });
+
+    return data;
+  },
+
+  /**
+   * Handle OIDC callback and return access token.
+   * @param provider
+   * @param url
+   * @returns {Promise<LoginResponse>}
+   */
+  async oidcCallback(provider: string, url: string): Promise<LoginResponse> {
+    const { data } = await http.post<LoginResponse>(`admin/auth/oidc/${provider}`, { url }, { withLoading: true });
+
+    return data;
+  },
+
+  /**
    * Request multi-factor challenge response
    *
    * @param {MFAChallengeRequest} payload

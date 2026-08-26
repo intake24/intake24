@@ -48,6 +48,7 @@ import {
   nutrientTableService,
   nutrientTypeService,
   nutrientUnitService,
+  oidcService,
   otpProvider,
   PopularityCountersService,
   portionSizeMethodsService,
@@ -90,6 +91,7 @@ export default (container: AwilixContainer<RequestIoC>): void => {
 
     jwtService: asFunction(jwtService).singleton(),
     jwtRotationService: asFunction(jwtRotationService).singleton(),
+    oidcService: asFunction(oidcService).singleton(),
     signInService: asFunction(signInService).singleton(),
 
     asServedService: asFunction(asServedService).singleton(),

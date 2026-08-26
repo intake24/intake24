@@ -15,6 +15,9 @@
     "otp": "Enter one-time password",
     "error": "Invalid authentication challenge. Try again."
   },
+  "oidc": {
+    "_": "or continue with"
+  },
   "logout": {
     "_": "Sign out",
     "text": "Sign out from application"

@@ -15,6 +15,9 @@
     "otp": "Entrer le mot de passe temporaire",
     "error": "Demande d'authentification invalide. Réessayez."
   },
+  "oidc": {
+    "_": "ou continuer avec"
+  },
   "logout": {
     "_": "Se déconnecter",
     "text": "Se déconnecter de l'application"

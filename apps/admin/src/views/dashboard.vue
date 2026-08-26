@@ -32,7 +32,7 @@
           </div>
         </v-alert>
         <v-alert
-          v-if="!hasMfa"
+          v-if="!isOIDC && !hasMfa"
           border="start"
           prominent
           :type="isAalSatisfied ? 'warning' : 'error'"
@@ -74,6 +74,7 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 
 import { SimpleLayout } from '@intake24/admin/components/layouts';
@@ -84,8 +85,7 @@ import { useUser } from '../stores';
 const user = useUser();
 
 const hasMfa = computed(() => !!user.profile?.mfa);
-const isAalSatisfied = computed(() => user.isAalSatisfied);
-const isVerified = computed(() => user.isVerified);
+const { isAalSatisfied, isOIDC, isVerified } = storeToRefs(user);
 </script>
 
 <style lang="scss"></style>

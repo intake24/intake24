@@ -73,4 +73,25 @@ export const authentication = contract.router({
     summary: 'Logout from survey',
     description: 'Clears cookie which stores refresh token and revokes refresh token.',
   },
+  oidcRedirect: {
+    method: 'GET',
+    path: '/admin/auth/oidc/:provider',
+    pathParams: z.object({ provider: z.string().min(1) }),
+    responses: {
+      200: z.object({ url: z.url() }),
+    },
+    summary: 'OpenID Connect authentication',
+    description: 'Initiate OpenID Connect authentication flow.',
+  },
+  oidcCallback: {
+    method: 'POST',
+    path: '/admin/auth/oidc/:provider',
+    pathParams: z.object({ provider: z.string().min(1) }),
+    body: z.object({ url: z.url() }),
+    responses: {
+      200: z.object({ accessToken: z.string() }),
+    },
+    summary: 'OpenID Connect callback',
+    description: 'Handle OpenID Connect callback.',
+  },
 });

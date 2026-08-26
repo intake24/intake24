@@ -73,12 +73,12 @@
               <template #item="{ item, props }">
                 <v-list-item v-bind="props" :title="item.title">
                   <template #prepend>
-                    <span :class="`fi fi-${item.value} mr-3`" />
+                    <span class="mr-3" :class="`fi fi-${item.value}`" />
                   </template>
                 </v-list-item>
               </template>
               <template #selection="{ item }">
-                <span :class="`fi fi-${item.value} mr-3`" />
+                <span class="mr-3" :class="`fi fi-${item.value}`" />
                 {{ item.title }}
               </template>
             </v-select>
@@ -155,12 +155,12 @@
               <template #item="{ item, props }">
                 <v-list-item v-bind="props" :title="item.title">
                   <template #prepend>
-                    <span :class="`fi fi-${item.value} mr-3`" />
+                    <span class="mr-3" :class="`fi fi-${item.value}`" />
                   </template>
                 </v-list-item>
               </template>
               <template #selection="{ item }">
-                <span :class="`fi fi-${item.value} mr-3`" />
+                <span class="mr-3" :class="`fi fi-${item.value}`" />
                 {{ item.title }}
               </template>
             </v-select>

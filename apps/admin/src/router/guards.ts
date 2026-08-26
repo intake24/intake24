@@ -1,7 +1,19 @@
-import type { Router } from 'vue-router';
+import type { NavigationGuard, Router } from 'vue-router';
 
 import { useAuth, useResource, useUser } from '../stores';
 import resources from './resources';
+
+export const oidcGuard: NavigationGuard = async (to) => {
+  const { params: { provider } } = to;
+
+  try {
+    await useAuth().oidcCallback(provider.toString(), window.location.href);
+    return { name: 'dashboard' };
+  }
+  catch {
+    return { name: 'login' };
+  }
+};
 
 export default (router: Router): void => {
   router.beforeEach(async (to) => {
@@ -35,9 +47,7 @@ export default (router: Router): void => {
   });
 
   router.beforeResolve(async (to) => {
-    const {
-      meta: { module },
-    } = to;
+    const { meta: { module } } = to;
 
     // Update module/resource name
     const name = module.parent ?? module.current;

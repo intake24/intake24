@@ -3,79 +3,84 @@
     :subtitle="$t('common.login.subtitle')"
     :title="$t('common._')"
   >
-    <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="login">
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="email"
-                autocomplete="email"
-                :error-messages="errors.get('email')"
-                hide-details="auto"
-                :label="$t('common.email')"
-                name="email"
-                prepend-inner-icon="fas fa-envelope"
-                required
-                variant="outlined"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="password"
-                autocomplete="current-password"
-                :error-messages="errors.get('password')"
-                hide-details="auto"
-                :label="$t('common.password._')"
-                name="password"
-                prepend-inner-icon="fas fa-key"
-                required
-                :type="showPassword ? 'text' : 'password'"
-                variant="outlined"
-              >
-                <template #append-inner>
-                  <v-icon class="me-2" @click="showPassword = !showPassword">
-                    {{ showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' }}
-                  </v-icon>
-                </template>
-              </v-text-field>
-              <v-btn
-                class="mt-2 font-weight-bold"
-                color="info"
-                :to="{ name: 'password-request' }"
-                variant="text"
-              >
-                {{ $t('common.password.forgot') }}
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-row class="justify-center">
-            <v-col cols="12">
-              <v-btn block color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
-                {{ $t('common.login._') }}
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </v-form>
-    <template v-if="signupEnabled">
-      <v-divider class="mx-6" />
-      <v-card-title class="font-weight-medium text-center pt-6">
-        {{ $t('common.signup.noAccount') }}
-      </v-card-title>
-      <v-card-text>
-        <v-container>
-          <v-row class="justify-center">
-            <v-col cols="12">
-              <v-btn block color="primary" rounded size="x-large" :to="{ name: 'signup' }" variant="outlined">
-                {{ $t('common.signup._') }}
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </template>
+    <div class="d-flex flex-column ga-4 pa-4">
+      <v-form @keydown="errors.clear($event.target.name)" @submit.prevent="login">
+        <v-card-text class="d-flex flex-column ga-4 px-4">
+          <v-text-field
+            v-model="email"
+            autocomplete="email"
+            :error-messages="errors.get('email')"
+            :label="$t('common.email')"
+            name="email"
+            prepend-inner-icon="fas fa-envelope"
+            required
+          />
+          <v-text-field
+            v-model="password"
+            autocomplete="current-password"
+            :error-messages="errors.get('password')"
+            :label="$t('common.password._')"
+            name="password"
+            prepend-inner-icon="fas fa-key"
+            required
+            :type="showPassword ? 'text' : 'password'"
+          >
+            <template #append-inner>
+              <v-icon class="me-2" @click="showPassword = !showPassword">
+                {{ showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' }}
+              </v-icon>
+            </template>
+          </v-text-field>
+          <v-btn
+            class="font-weight-bold justify-start"
+            color="info"
+            :to="{ name: 'password-request' }"
+            variant="text"
+          >
+            {{ $t('common.password.forgot') }}
+          </v-btn>
+          <v-btn color="primary" :disabled="isAppLoading" rounded size="x-large" type="submit">
+            {{ $t('common.login._') }}
+          </v-btn>
+        </v-card-text>
+      </v-form>
+      <div v-if="oidcProviders.length" class="d-flex flex-column ga-4 pa-4">
+        <div class="d-flex flex-row justify-between align-center text-uppercase font-weight-medium text-body-small">
+          <v-divider class="flex-shrink-1" />
+          <span class="mx-4 text-body-medium font-weight-medium flex-shrink-0">
+            {{ $t('common.oidc._') }}
+          </span>
+          <v-divider />
+        </div>
+        <v-row class="justify-center">
+          <v-col v-for="provider in oidcProviders" :key="provider" cols="6">
+            <v-btn
+              block
+              color="primary"
+              rounded size="x-large"
+              variant="outlined"
+              @click="oidc(provider)"
+            >
+              <v-icon start>
+                {{ `fab fa-${provider.toLowerCase()}` }}
+              </v-icon>
+              {{ provider.at(0)?.toUpperCase() + provider.slice(1) }}
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
+      <div v-if="signupEnabled" class="d-flex flex-column ga-4 pa-4">
+        <v-divider />
+        <div class="font-weight-medium text-center text-headline-small">
+          {{ $t('common.signup.noAccount') }}
+        </div>
+        <v-card-text>
+          <v-btn block color="primary" rounded size="x-large" :to="{ name: 'signup' }" variant="outlined">
+            {{ $t('common.signup._') }}
+          </v-btn>
+        </v-card-text>
+      </div>
+    </div>
     <mfa-dialog
       v-if="auth.mfa"
       :auth-data="auth.mfa"
@@ -109,6 +114,8 @@ const password = ref('');
 const showPassword = ref(false);
 const errors = ref(new Errors());
 const signupEnabled = import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true';
+
+const oidcProviders = import.meta.env.VITE_OIDC_PROVIDERS?.split(',') ?? [];
 
 onMounted(async () => {
   // Check for Duo MFA response
@@ -167,6 +174,11 @@ async function login() {
     throw err;
   }
 };
+
+async function oidc(provider: string) {
+  const { url } = await auth.oidcRedirect(provider);
+  window.location.href = url;
+}
 </script>
 
 <style lang="scss"></style>

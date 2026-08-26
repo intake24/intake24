@@ -53,6 +53,15 @@ export const useAuth = defineStore('auth', {
       else this.mfaRequest(data);
     },
 
+    async oidcRedirect(provider: string) {
+      return await authService.oidcRedirect(provider);
+    },
+
+    async oidcCallback(provider: string, url: string) {
+      const { accessToken } = await authService.oidcCallback(provider, url);
+      await this.successfulLogin(accessToken);
+    },
+
     async challenge(request: MFAChallengeRequest) {
       const data = await authService.challenge(request);
       this.mfaRequest(data);

@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import views from '@intake24/admin/views';
 
+import { oidcGuard } from './guards';
 import resources from './resources';
 
 export interface GenerateRoutesOps extends Resource {
@@ -99,6 +100,13 @@ const routes: RouteRecordRaw[] = [
     name: 'login',
     component: authentication.login,
     meta: { module: { current: 'login' }, public: true, title: 'common.login._' },
+  },
+  {
+    path: '/oidc/:provider',
+    name: 'oidc',
+    component: authentication.login,
+    beforeEnter: oidcGuard,
+    meta: { module: { current: 'login' }, public: true },
   },
   {
     path: '/password',

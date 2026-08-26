@@ -75,5 +75,17 @@ export function authentication() {
 
       return { status: 200, body: undefined };
     },
+    oidcRedirect: async ({ req, params: { provider } }) => {
+      const url = await req.scope.cradle.oidcService.redirect(provider, { req });
+
+      return { status: 200, body: { url } };
+    },
+    oidcCallback: async ({ req, res, params: { provider }, body: { url } }) => {
+      const { accessToken, refreshToken } = await req.scope.cradle.oidcService.callback(provider, url, { req });
+
+      attachRefreshToken(refreshToken, res, req.scope.cradle.securityConfig.jwt.admin.cookie);
+
+      return { status: 200, body: { accessToken } };
+    },
   });
 }

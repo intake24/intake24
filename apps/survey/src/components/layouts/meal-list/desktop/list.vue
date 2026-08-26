@@ -1,6 +1,9 @@
 <template>
   <v-card>
-    <v-card-title class="pa-4">
+    <v-card-title class="pa-4 d-flex flex-row align-center ga-4">
+      <v-badge bordered color="primary" :content="foodCount" location="top right">
+        <v-icon icon="fas fa-list-check" />
+      </v-badge>
       {{ $t('recall.menu.title') }}
     </v-card-title>
     <v-divider />
@@ -18,58 +21,50 @@
       <v-btn
         block
         color="primary"
-        :title="$t('recall.menu.meal.add')"
+        :title="$t('recall.menu.food.add')"
         variant="tonal"
-        @click="action('addMeal')"
+        @click="action('addFood')"
       >
         <v-icon icon="$add" start />
-        {{ $t('recall.menu.meal.add') }}
+        {{ $t('recall.menu.food.add') }}
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { MealState } from '@intake24/common/surveys';
-
-import { defineComponent } from 'vue';
 
 import { useMealList } from '../use-meal-list';
 import MealItemExpandable from './meal-item-expandable.vue';
 import MealItem from './meal-item.vue';
 
-export default defineComponent({
+defineOptions({
   name: 'MealList',
-
   components: { MealItem, MealItemExpandable },
+});
 
-  props: {
-    expandable: {
-      type: Boolean,
-      default: false,
-    },
-    meals: {
-      type: Array as PropType<MealState[]>,
-      required: true,
-    },
+const props = defineProps({
+  expandable: {
+    type: Boolean,
+    default: false,
   },
-
-  setup(props, ctx) {
-    const { selectedMealId, selectedFoodId, isSelectedFoodInMeal, action } = useMealList(
-      props,
-      ctx,
-    );
-
-    return {
-      selectedMealId,
-      selectedFoodId,
-      isSelectedFoodInMeal,
-      action,
-    };
+  meals: {
+    type: Array as PropType<MealState[]>,
+    required: true,
   },
 });
+const emit = defineEmits(['action']);
+
+const {
+  foodCount,
+  selectedMealId,
+  selectedFoodId,
+  isSelectedFoodInMeal,
+  action,
+} = useMealList(props, { emit });
 </script>
 
 <style lang="scss"></style>

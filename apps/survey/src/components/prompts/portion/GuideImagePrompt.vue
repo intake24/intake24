@@ -39,6 +39,7 @@
               id: state.portionSize.objectId,
               index: state.portionSize.objectIndex,
               labels,
+              labelsEnabled,
             }"
             @confirm="confirmObject"
             @select="selectObject"
@@ -138,10 +139,10 @@ const { imageData } = useFetchImageData<GuideImageResponse>({
   },
 });
 
-const { labels } = useLabels(props, { type: 'guideImage', data: imageData });
+const { labels, labelsEnabled } = useLabels(props, { type: 'guideImage', data: imageData });
 
 const selectedFoodLabel = computed(() => {
-  if (!labels.value.objects.length || state.value.portionSize.objectIndex === undefined)
+  if (!labelsEnabled.value || !labels.value.objects.length || state.value.portionSize.objectIndex === undefined)
     return foodName.value;
 
   return labels.value.objects[state.value.portionSize.objectIndex] || foodName.value;

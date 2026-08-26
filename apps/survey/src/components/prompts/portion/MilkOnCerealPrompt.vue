@@ -39,6 +39,7 @@
               id: state.portionSize.bowlId,
               index: state.portionSize.bowlIndex,
               labels: bowlLabels,
+              labelsEnabled,
             }"
             @confirm="confirmBowl"
             @select="selectBowl"
@@ -67,6 +68,7 @@
               id: state.portionSize.milkLevelId,
               index: state.portionSize.milkLevelIndex,
               labels: milkLevelLabels,
+              labelsEnabled,
             }"
             @confirm="confirmMilk"
             @select="selectMilk"
@@ -148,7 +150,7 @@ const { imageData: bowlImageMap } = useFetchImageData<ImageMapResponse>({
     }
   },
 });
-const { labels: bowlLabels } = useLabels(props, { type: 'imageMap', data: bowlImageMap });
+const { labels: bowlLabels, labelsEnabled } = useLabels(props, { type: 'imageMap', data: bowlImageMap });
 
 const bowl = computed(() => state.value.portionSize.bowl ?? undefined);
 const milkLevelImageMapId = computed(() => {

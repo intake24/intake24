@@ -8,6 +8,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { SameAsBeforeItem } from '@intake24/survey/stores';
+
 import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
 import { getEntityId } from '@intake24/survey/util';
@@ -28,21 +30,28 @@ const {
 const survey = useSurvey();
 
 const sabFood = useSameAsBefore().getItem(survey.localeId, code);
-const updatedSabFood = {
-  ...(sabFood ?? {}),
-  food: {
-    ...(sabFood?.food ?? {}),
-    portionSize: sabFood?.food?.portionSize ? { ...sabFood.food.portionSize } : undefined,
-    portionSizeMethodIndex: sabFood?.food?.portionSizeMethodIndex ?? undefined,
-    linkedFoods: sabFood?.food?.linkedFoods ? [...sabFood.food.linkedFoods] : [],
-    customPromptAnswers: sabFood?.food?.customPromptAnswers ? { ...sabFood.food.customPromptAnswers } : {},
-    flags: sabFood?.food?.flags ? [...sabFood.food.flags] : [],
-  },
-};
+const updatedSabFood: SameAsBeforeItem | undefined = sabFood
+  ? {
+      ...(sabFood ?? {}),
+      food: {
+        ...(sabFood?.food ?? {}),
+        portionSize: sabFood?.food?.portionSize ? { ...sabFood.food.portionSize } : null,
+        portionSizeMethodIndex: sabFood?.food?.portionSizeMethodIndex ?? null,
+        linkedFoods: sabFood?.food?.linkedFoods ? [...sabFood.food.linkedFoods] : [],
+        customPromptAnswers: sabFood?.food?.customPromptAnswers ? { ...sabFood.food.customPromptAnswers } : {},
+        flags: sabFood?.food?.flags ? [...sabFood.food.flags] : [],
+      },
+    }
+  : undefined;
+
 function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
+  if (!updatedSabFood)
+    return;
+
   console.debug('Received sabOptions from child:', sabOptions);
   if (!sabOptions.portionSize && updatedSabFood.food.portionSize) {
-    Object.assign(updatedSabFood.food, { portionSizeMethodIndex: undefined, portionSize: undefined });
+    updatedSabFood.food.portionSize = null;
+    updatedSabFood.food.portionSizeMethodIndex = null;
     updatedSabFood.food.flags = updatedSabFood.food.flags.filter(flag => !['portion-size-option-complete', 'portion-size-method-complete'].includes(flag));
     console.debug(
       `SAB prompt: portion size option is false. Removed portionSize, portionSizeMethodIndex, and flags 'portion-size-option-complete', 'portion-size-method-complete'. Updated flags: [${updatedSabFood.food.flags.join(', ')}]`,
@@ -67,7 +76,7 @@ function onSabOptionsUpdate(sabOptions: Record<string, boolean>): void {
 }
 
 function sabAction(type: 'notSame' | 'same') {
-  if (type === 'same' && updatedSabFood.food) {
+  if (type === 'same' && updatedSabFood?.food) {
     const { id, ...update } = updatedSabFood.food;
     survey.updateFood({
       foodId,

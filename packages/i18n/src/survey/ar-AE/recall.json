@@ -42,6 +42,7 @@
     "title": "لوحة المراجعة",
     "mealSuggested": "هذه الوجبة يقترحها النظام لكنك لم تؤكد بعد أنك تناولتها",
     "food": {
+      "add": "أضف طعاماً",
       "delete": "احذف الطعام",
       "deleteConfirm": "هل تريد حذف هذه {item}?",
       "change": "تغيير الطعام",
@@ -83,15 +84,6 @@
       "editTime": "تغيير الوقت"
     }
   },
-  "contextMenu": {
-    "close": "إغلاق",
-    "select": "استمر مع  {name}",
-    "editMeal": "مراجعة الطعام",
-    "delete": "حذف {name}",
-    "confirmDeletion": "هل أنت متأكد أنك تريد حذف '{name}'?",
-    "confirm": "تأكيد {name}",
-    "changeTime": "تغيير الوقت"
-  },
   "actions": {
     "feedback": "الاسترجاع الغذائي",
     "next": "استمرار",
@@ -109,7 +101,6 @@
       "next": "استمرار",
       "redirect": "استمرار",
       "remove": "إزالة",
-      "review": "مراجعة",
       "submit": "إرسال",
       "addMeal": "أضف وجبة",
       "deleteFood": "حذف الأطعمة",

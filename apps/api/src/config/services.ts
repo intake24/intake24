@@ -11,6 +11,38 @@ export const baseEMProvider = z.object({
 });
 export type BaseEMProvider = z.infer<typeof baseEMProvider>;
 
+export const oidcConfigSchema = z.object({
+  issuer: z.url(),
+  clientId: z.string().min(1),
+  clientSecret: z.string().min(1),
+});
+export type OidcConfig = z.infer<typeof oidcConfigSchema>;
+
+function parseOidcConfig(env: NodeJS.ProcessEnv) {
+  const config: Record<string, Partial<OidcConfig>> = {};
+
+  for (const key of Object.keys(env)) {
+    if (!key.startsWith('OIDC_'))
+      continue;
+
+    const envProvider = key.split('_').at(1);
+    if (!envProvider)
+      continue;
+
+    const provider = envProvider.toLowerCase();
+    if (config[envProvider])
+      continue;
+
+    config[provider] = {
+      issuer: env[`OIDC_${envProvider}_ISSUER`],
+      clientId: env[`OIDC_${envProvider}_CLIENT_ID`],
+      clientSecret: env[`OIDC_${envProvider}_CLIENT_SECRET`],
+    };
+  }
+
+  return config;
+}
+
 export const servicesConfig = z.object({
   captcha: z.object({
     provider: z.enum(captchaProviders).nullable().default(null),
@@ -66,6 +98,7 @@ export const servicesConfig = z.object({
       }
     },
   ),
+  oidc: z.record(z.string(), oidcConfigSchema),
 });
 export type ServicesConfig = z.infer<typeof servicesConfig>;
 export type CaptchaConfig = ServicesConfig['captcha'];
@@ -98,6 +131,7 @@ const rawServicesConfig = {
       },
     },
   },
+  oidc: parseOidcConfig(process.env),
 };
 
 const parsedServicesConfig = validateConfig('Services configuration', servicesConfig, rawServicesConfig);

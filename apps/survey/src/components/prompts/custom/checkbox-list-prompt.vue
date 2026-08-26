@@ -54,11 +54,11 @@ import type { ListOption } from '@intake24/common/types';
 
 import { computed, ref, watch } from 'vue';
 
-import { usePromptUtils } from '@intake24/survey/composables';
+import { useForm, usePromptUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
 
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
-import { Next, useForm } from '../partials';
+import { Next } from '../partials';
 import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({

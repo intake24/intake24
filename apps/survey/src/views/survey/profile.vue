@@ -54,12 +54,12 @@
                 <template #item="{ props, item }">
                   <v-list-item v-bind="props" :title="item.englishName">
                     <template #prepend>
-                      <span :class="`fi fi-${item.countryFlagCode} me-3`" />
+                      <span class="me-3" :class="`fi fi-${item.countryFlagCode}`" />
                     </template>
                   </v-list-item>
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} me-3`" />
+                  <span class="me-3" :class="`fi fi-${item.countryFlagCode}`" />
                   {{ item.englishName }}
                 </template>
               </v-select>

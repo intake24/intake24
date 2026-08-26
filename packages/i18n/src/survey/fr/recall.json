@@ -42,6 +42,7 @@
     "title": "Panneau d'avancement",
     "mealSuggested": "Ce repas est suggéré par le système mais vous n'avez pas encore confirmé que vous l'avez consommé",
     "food": {
+      "add": "Ajouter de la nourriture",
       "delete": "Supprimer l'aliment",
       "deleteConfirm": "Souhaitez-vous supprimer {item}?",
       "change": "Changer l'aliment",
@@ -83,15 +84,6 @@
       "editTime": "Modifier l'horaire"
     }
   },
-  "contextMenu": {
-    "close": "Fermer",
-    "select": "Continuer avec {name}",
-    "editMeal": "Modifier les aliments",
-    "delete": "Supprimer {name}",
-    "confirmDeletion": "Souhaitez-vous vraiment supprimer '{name}'?",
-    "confirm": "Confirmer {name}",
-    "changeTime": "Modifier l'horaire"
-  },
   "actions": {
     "feedback": "Synthèse",
     "next": "Continuer",
@@ -109,7 +101,6 @@
       "next": "Continuer",
       "redirect": "Continuer",
       "remove": "Supprimer",
-      "review": "Récap",
       "submit": "Soumettre",
       "addMeal": "Ajouter un repas",
       "deleteFood": "Supprimer un aliment",
