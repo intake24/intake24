@@ -91,18 +91,22 @@ function update() {
 }
 
 function submit() {
+  const tracking = selected.value === undefined
+    ? undefined
+    : { selectedOption: selected.value === 'other' ? 'other' : selected.value };
+
   if (selected.value !== 'other') {
     const option = localeOptions.value.find(o => o.value === selected.value);
     if (option?.action) {
       const foodOrMealId = props.food?.id ?? props.meal?.id;
-      action(option.action.type, foodOrMealId, option.action.params);
+      action(option.action.type, foodOrMealId, option.action.params, tracking);
     }
     else {
-      action('next');
+      action('next', undefined, undefined, tracking);
     }
   }
   else {
-    action('next');
+    action('next', undefined, undefined, tracking);
   }
 }
 

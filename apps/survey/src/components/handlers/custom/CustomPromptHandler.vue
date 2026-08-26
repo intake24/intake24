@@ -16,6 +16,7 @@
 
 <script lang="ts" setup>
 import type { CustomPromptAnswer } from '@intake24/common/surveys';
+import type { TrackingContext } from '@intake24/survey/util';
 
 import { computed, ref, watch } from 'vue';
 
@@ -78,7 +79,7 @@ function commitAnswer() {
   commitPromptAnswer(props.prompt, state.value);
 }
 
-function action(type: string, ...args: [id?: string, params?: object]) {
+function action(type: string, ...args: [id?: string, params?: object, tracking?: TrackingContext]) {
   if (type === 'next' || type === 'updateFood' || isInfoPrompt.value) {
     pushFullHistoryEntry(props.prompt.component);
     commitAnswer();

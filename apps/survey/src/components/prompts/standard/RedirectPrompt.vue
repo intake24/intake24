@@ -27,6 +27,7 @@
           v-if="feedbackEnabled"
           :disabled="!feedbackAvailable"
           :to="{ name: 'feedback-home', params: { surveyId } }"
+          @click="sendPrePostSurveyLinkEvent('postSurveyLinkClicked', 'dietary_feedback')"
         >
           <v-icon icon="$feedback" start />
           {{ $t('recall.actions.feedback') }}
@@ -37,6 +38,7 @@
             :href="followUpUrl"
             :target="prompt.target"
             :title="promptI18n.goTo"
+            @click="sendPrePostSurveyLinkEvent('postSurveyLinkClicked', 'follow_up')"
           >
             <v-icon icon="$redirect" start />
             {{ promptI18n.goTo }}
@@ -57,6 +59,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import { SurveyRating } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
+import { sendPrePostSurveyLinkEvent } from '@intake24/survey/util';
 
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
@@ -133,6 +136,11 @@ function startTimer() {
 }
 
 onMounted(() => {
+  if (props.feedbackEnabled && props.feedbackAvailable)
+    sendPrePostSurveyLinkEvent('postSurveyLinkShown', 'dietary_feedback');
+  if (props.followUpUrl)
+    sendPrePostSurveyLinkEvent('postSurveyLinkShown', 'follow_up');
+
   startTimer();
 });
 
