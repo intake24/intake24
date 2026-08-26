@@ -54,7 +54,7 @@
     "@intlify/unplugin-vue-i18n": "^11.2.4",
     "@pinia/testing": "^2.0.1",
     "@tsconfig/node24": "^24.0.4",
-    "@types/jsdom": "^28.0.3",
+    "@types/jsdom": "^30.0.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.13.3",
     "@types/pluralize": "^0.0.33",
