@@ -18,6 +18,7 @@ import type { PropType } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { CustomPromptAnswer, PromptSection } from '@intake24/common/surveys';
+import type { TrackingContext } from '@intake24/survey/util';
 
 import { ref, watch } from 'vue';
 
@@ -83,7 +84,7 @@ function commitAnswer() {
   });
 }
 
-function action(type: string, ...args: [id?: string, params?: object]) {
+function action(type: string, ...args: [id?: string, params?: object, tracking?: TrackingContext]) {
   if (type === 'next') {
     pushFullHistoryEntry('multi-prompt');
     commitAnswer();
