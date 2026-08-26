@@ -110,9 +110,9 @@ export function useRecall() {
 
     const result = handlePopState(event);
 
-    if (result === 'full') {
+    if (result?.entryType === 'full') {
       hideCurrentPrompt.value = true;
-      setPromptTransitionAction('popstate');
+      setPromptTransitionAction(`popstate-${result.direction}`);
       setCurrentPrompt(recallController.value?.getNextPrompt() ?? null);
       hideCurrentPrompt.value = false;
     }
