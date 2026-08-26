@@ -13,6 +13,8 @@ export const gtmEvents = [
   'startRecall',
   'cancelRecall',
   'selectFAQ',
+  'feedbackLinkOffered',
+  'feedbackLinkClicked',
 ] as const;
 type GtmEvent = (typeof gtmEvents)[number];
 
@@ -47,4 +49,5 @@ export type GtmEventParams = {
   search_results_count?: number; // number of search results returned for the search term
   faq_section_title?: string; // title of the FAQ section
   faq_question_title?: string; // title of the FAQ question
+  link_kind?: 'dietary_feedback' | 'follow_up';
 };

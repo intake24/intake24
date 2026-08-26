@@ -43,6 +43,7 @@ const eventFieldNames = [
   'search_results_count',
   'faq_section_title',
   'faq_question_title',
+  'link_kind',
   'target',
   'target-properties',
   'value',
@@ -132,4 +133,15 @@ export function sendGtmEvent(params: GtmEventParams): void {
   catch (e) {
     console.error('Error sending GTM event:', e);
   }
+}
+
+export function sendFeedbackLinkEvent(
+  event: 'feedbackLinkOffered' | 'feedbackLinkClicked',
+  link_kind: 'dietary_feedback' | 'follow_up',
+): void {
+  sendGtmEvent({
+    event,
+    link_kind,
+    noninteraction: event === 'feedbackLinkOffered',
+  });
 }

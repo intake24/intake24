@@ -319,4 +319,31 @@ describe('sendGtmEvent', async () => {
       uxUserId: 'ux-user-id',
     }));
   });
+
+  it.each(['dietary_feedback', 'follow_up'] as const)(
+    'tracks %s link offers without exposing a URL',
+    (linkKind) => {
+      gtmEvent.sendFeedbackLinkEvent('feedbackLinkOffered', linkKind);
+
+      expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+        event: 'feedbackLinkOffered',
+        link_kind: linkKind,
+        noninteraction: true,
+      }));
+      expect(trackEvent.mock.calls[0][0]).not.toHaveProperty('url');
+    },
+  );
+
+  it.each(['dietary_feedback', 'follow_up'] as const)(
+    'tracks %s link clicks as interactions',
+    (linkKind) => {
+      gtmEvent.sendFeedbackLinkEvent('feedbackLinkClicked', linkKind);
+
+      expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+        event: 'feedbackLinkClicked',
+        link_kind: linkKind,
+        noninteraction: false,
+      }));
+    },
+  );
 });
