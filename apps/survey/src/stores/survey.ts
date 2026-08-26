@@ -39,7 +39,6 @@ import {
   getMealIndex,
   getMealIndexForSelection,
   getMealIndexRequired,
-
   sendGtmEvent,
 } from '@intake24/survey/util';
 import { useApp, useLoading } from '@intake24/ui/stores';
