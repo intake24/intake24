@@ -90,6 +90,7 @@ Conditions tab defines list of conditions that needs to be met to display the pr
 | `Energy`          | active                                           | Total energy (`food` / `meal` / `survey`)                                  |
 | `ExternalSource`  | active                                           | Status of external source data collection for particular food              |
 | `Flag`            | active                                           | Whether `food` / `meal` / `survey` has a specific flag                     |
+| `Food code`       | active                                           | Whether `food` has the matching food code assigned                         |
 | `Food category`   | active                                           | Whether `food` has the category assigned                                   |
 | `Food completion` | active                                           | Whether `food` is completed                                                |
 | `Meal completion` | active                                           | Whether `meal` is completed                                                |

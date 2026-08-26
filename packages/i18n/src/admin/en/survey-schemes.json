@@ -111,6 +111,7 @@
       "flag": "Flag",
       "tag": "Tag",
       "foodTopLevel": "Is top level",
+      "foodCode": "Food code",
       "foodCategory": "Food category",
       "numberOfFoods": "Number of foods",
       "numberOfMeals": "Number of meals",
