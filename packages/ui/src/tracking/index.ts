@@ -51,4 +51,5 @@ export type GtmEventParams = {
   faq_section_title?: string; // title of the FAQ section
   faq_question_title?: string; // title of the FAQ question
   link_kind?: 'dietary_feedback' | 'follow_up';
+  selected_option?: string; // controlled option value, never free text
 };

@@ -9,6 +9,7 @@ export const GTM_PROMPT_CONTEXT_EVENT = 'promptChanged';
 
 export type TrackingContext = {
   fromPersistentMealList?: true;
+  selectedOption?: string;
 };
 
 export type PromptTransition = Pick<GtmEventParams, 'action' | 'prompt_id' | 'section'> & {
@@ -54,6 +55,7 @@ const eventFieldNames = [
   'interaction-type',
   'content-name',
   'content-view-name',
+  'selected_option',
 ] as const;
 
 const clearedEventFields = Object.fromEntries(eventFieldNames.map(field => [field, null]));
@@ -112,7 +114,10 @@ function buildEvent(params: GtmPayload) {
   };
 }
 
-export function recordPromptTransition(transition: PromptTransition | null): void {
+export function recordPromptTransition(
+  transition: PromptTransition | null,
+  params: Pick<GtmEventParams, 'selected_option'> = {},
+): void {
   if (transition) {
     promptContext.previous = promptContext.current;
     promptContext.current = {
@@ -127,6 +132,7 @@ export function recordPromptTransition(transition: PromptTransition | null): voi
 
   window.dataLayer?.push(buildEvent({
     event: GTM_PROMPT_CONTEXT_EVENT,
+    ...params,
   }));
 }
 

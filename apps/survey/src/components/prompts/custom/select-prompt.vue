@@ -5,7 +5,7 @@
     @action="action"
   >
     <v-card-text>
-      <v-form @submit.prevent="action('next')">
+      <v-form @submit.prevent="submit">
         <v-row>
           <v-col cols="12" md="auto">
             <v-select
@@ -86,14 +86,16 @@ const localeOptions = computed(
 
 function submit() {
   const selected = Array.isArray(state.value) ? undefined : state.value;
+  const tracking = selected === undefined ? undefined : { selectedOption: String(selected) };
+
   if (selected !== undefined) {
     const option = localeOptions.value.find(o => o.value === String(selected));
     if (option?.action) {
       const foodOrMealId = props.food?.id ?? props.meal?.id;
-      action(option.action.type, foodOrMealId, option.action.params);
+      action(option.action.type, foodOrMealId, option.action.params, tracking);
     }
     else {
-      action('next');
+      action('next', undefined, undefined, tracking);
     }
   }
   else {

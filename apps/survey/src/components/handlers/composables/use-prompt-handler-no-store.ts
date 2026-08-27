@@ -1,5 +1,7 @@
 import type { ComputedRef, Ref, SetupContext } from 'vue';
 
+import type { TrackingContext } from '@intake24/survey/util';
+
 import { ref, watch } from 'vue';
 
 import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
@@ -11,7 +13,7 @@ export function usePromptHandlerNoStore<T>({ emit }: Pick<SetupContext<'action'[
     state.value = initialState;
   });
 
-  const action = (type: string, ...args: [id?: string, params?: object]) => {
+  const action = (type: string, ...args: [id?: string, params?: object, tracking?: TrackingContext]) => {
     if ((type === 'next' || type === 'updateFood') && commitAnswer) {
       pushFullHistoryEntry('no-store handler');
       commitAnswer();

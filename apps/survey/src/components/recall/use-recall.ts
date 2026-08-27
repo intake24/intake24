@@ -175,7 +175,7 @@ export function useRecall() {
   };
 
   async function action(type: string, id?: string, params?: object, tracking?: TrackingContext) {
-    setPromptTransitionAction(type);
+    setPromptTransitionAction(type, tracking?.selectedOption);
 
     if (tracking?.fromPersistentMealList && isMealListAction(type))
       sendMealListEvent(type);
@@ -418,12 +418,16 @@ export function useRecall() {
 
   function createPromptTransitionController() {
     let promptTransitionAction = 'not mapped';
+    let selectedOption: string | undefined;
 
-    function setPromptTransitionAction(action: string) {
+    function setPromptTransitionAction(action: string, option?: string) {
       promptTransitionAction = action;
+      selectedOption = option;
     }
 
     function setCurrentPrompt(promptInstance: PromptInstance | null) {
+      const option = selectedOption;
+      selectedOption = undefined;
       currentPrompt.value = promptInstance;
 
       if (!promptInstance)
@@ -434,11 +438,12 @@ export function useRecall() {
         prompt_id: promptInstance.prompt.id,
         section: promptInstance.section,
         prompt_component: promptInstance.prompt.component,
-      });
+      }, option === undefined ? undefined : { selected_option: option });
     }
 
     function clearPromptTransition() {
       promptTransitionAction = 'not mapped';
+      selectedOption = undefined;
       recordPromptTransition(null);
     }
 

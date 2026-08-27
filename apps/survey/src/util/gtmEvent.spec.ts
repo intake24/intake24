@@ -147,6 +147,41 @@ describe('sendGtmEvent', async () => {
     ));
   });
 
+  it('attaches a selected option only to its prompt transition', () => {
+    gtmEvent.recordPromptTransition({
+      prompt_id: 'yes-no-prompt',
+      section: 'foods',
+      prompt_component: 'yes-no-prompt',
+    });
+    window.dataLayer = [];
+
+    gtmEvent.recordPromptTransition({
+      action: 'next',
+      prompt_id: 'detail-prompt',
+      section: 'foods',
+      prompt_component: 'text-prompt',
+    }, { selected_option: 'yes' });
+    gtmEvent.recordPromptTransition({
+      action: 'popstateBack',
+      prompt_id: 'yes-no-prompt',
+      section: 'foods',
+      prompt_component: 'yes-no-prompt',
+    });
+
+    expect(window.dataLayer).toContainEqual(expect.objectContaining({
+      action: 'next',
+      event: 'promptChanged',
+      previous_prompt_id: 'yes-no-prompt',
+      prompt_id: 'detail-prompt',
+      selected_option: 'yes',
+    }));
+    expect(window.dataLayer).toContainEqual(expect.objectContaining({
+      action: 'popstateBack',
+      event: 'promptChanged',
+      selected_option: null,
+    }));
+  });
+
   it('clears event-scoped fields on prompt context events', () => {
     gtmEvent.recordPromptTransition({
       action: 'next',
@@ -168,6 +203,7 @@ describe('sendGtmEvent', async () => {
       search_results_count: null,
       search_term: null,
       search_term_order: null,
+      selected_option: null,
       target: null,
       'content-name': null,
       'content-view-name': null,
