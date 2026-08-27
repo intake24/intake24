@@ -2,17 +2,22 @@ import type { SetupContext } from 'vue';
 
 import type { ActionType } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/surveys';
+import type { TrackingContext } from '@intake24/survey/util';
 
 import { computed } from 'vue';
 
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndexRequired, GTM_MEAL_LIST } from '@intake24/survey/util';
+import { getFoodIndexRequired, isMealListAction } from '@intake24/survey/util';
 
 export type UseMealListProps = {
   meals: MealState[];
 };
 
-export function useMealList(props: UseMealListProps, { emit }: Pick<SetupContext<'action'[]>, 'emit'>) {
+export function useMealList(
+  props: UseMealListProps,
+  { emit }: Pick<SetupContext<'action'[]>, 'emit'>,
+  tracking?: TrackingContext,
+) {
   const survey = useSurvey();
 
   function countLinkedFoods(acc: number, food: FoodState): number {
@@ -50,11 +55,12 @@ export function useMealList(props: UseMealListProps, { emit }: Pick<SetupContext
   };
 
   const action = (type: ActionType, id?: string, params?: object) => {
-    const trackingParams = type === 'deleteFood' || type === 'deleteMeal'
-      ? { ...params, trackingSource: GTM_MEAL_LIST }
-      : params;
+    if (tracking?.fromPersistentMealList && isMealListAction(type)) {
+      emit('action', type, id, params, tracking);
+      return;
+    }
 
-    emit('action', type, id, trackingParams);
+    emit('action', type, id, params);
   };
 
   return {

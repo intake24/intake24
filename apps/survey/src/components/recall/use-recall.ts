@@ -6,6 +6,7 @@ import type {
 } from '@intake24/common/prompts';
 import type { FreeTextFood, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import type { TrackingContext } from '@intake24/survey/util';
 
 import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
@@ -24,7 +25,7 @@ import {
   maybePushFallbackHistoryEntry,
   pushFullHistoryEntry,
 } from '@intake24/survey/stores/recall-history';
-import { getEntityId, GTM_MEAL_LIST, recordPromptTransition, sendDeletionEvent } from '@intake24/survey/util';
+import { getEntityId, isMealListAction, recordPromptTransition, sendDeletionEvent, sendMealListEvent } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui/i18n';
 
 import { FoodAdd } from '../layouts';
@@ -112,7 +113,7 @@ export function useRecall() {
 
     if (result?.entryType === 'full') {
       hideCurrentPrompt.value = true;
-      setPromptTransitionAction(`popstate-${result.direction}`);
+      setPromptTransitionAction(result.direction === 'back' ? 'popstateBack' : 'popstateForward');
       setCurrentPrompt(recallController.value?.getNextPrompt() ?? null);
       hideCurrentPrompt.value = false;
     }
@@ -173,15 +174,13 @@ export function useRecall() {
     setCurrentPrompt({ section: promptSection, prompt });
   };
 
-  async function action(type: string, id?: string, params?: object) {
+  async function action(type: string, id?: string, params?: object, tracking?: TrackingContext) {
     setPromptTransitionAction(type);
 
-    if (type === 'deleteFood' || type === 'deleteMeal') {
-      const source = (params as { trackingSource?: string } | undefined)?.trackingSource === GTM_MEAL_LIST
-        ? GTM_MEAL_LIST
-        : undefined;
-      sendDeletionEvent(type, source);
-    }
+    if (tracking?.fromPersistentMealList && isMealListAction(type))
+      sendMealListEvent(type);
+    else if (type === 'deleteFood' || type === 'deleteMeal')
+      sendDeletionEvent(type);
 
     switch (type) {
       case 'next':

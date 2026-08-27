@@ -6,7 +6,10 @@ import { useSurvey } from '@intake24/survey/stores';
 
 export const GTM_PROMPT_ID_NOT_MAPPED = 'not mapped';
 export const GTM_PROMPT_CONTEXT_EVENT = 'promptChanged';
-export const GTM_MEAL_LIST = 'meal-list';
+
+export type TrackingContext = {
+  fromPersistentMealList?: true;
+};
 
 export type PromptTransition = Pick<GtmEventParams, 'action' | 'prompt_id' | 'section'> & {
   prompt_component?: string;
@@ -147,20 +150,26 @@ export function sendFeedbackLinkEvent(
   });
 }
 
-const mealListDeletionActions = {
-  deleteFood: `${GTM_MEAL_LIST}-delete-food`,
-  deleteMeal: `${GTM_MEAL_LIST}-delete-meal`,
+const mealListActions = {
+  addFood: 'mealListAddFood',
+  changeFood: 'mealListChangeFood',
+  mealTime: 'mealListMealTime',
+  deleteFood: 'mealListDeleteFood',
+  deleteMeal: 'mealListDeleteMeal',
 } as const;
+
+export type MealListAction = keyof typeof mealListActions;
+
+export function isMealListAction(action: string): action is MealListAction {
+  return action in mealListActions;
+}
+
+export function sendMealListEvent(event: MealListAction): void {
+  sendGtmEvent({ event, action: mealListActions[event] });
+}
 
 export function sendDeletionEvent(
   event: 'deleteFood' | 'deleteMeal',
-  source?: typeof GTM_MEAL_LIST,
 ): void {
-  sendGtmEvent({ event, action: source ? mealListDeletionActions[event] : event });
-}
-
-export function sendNavigateCarouselEvent(
-  action: 'carousel-back' | 'carousel-next',
-): void {
-  sendGtmEvent({ event: 'navigateCarousel', action });
+  sendGtmEvent({ event, action: event });
 }

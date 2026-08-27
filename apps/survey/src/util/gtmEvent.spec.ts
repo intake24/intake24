@@ -292,8 +292,11 @@ describe('sendGtmEvent', async () => {
   });
 
   it.each([
-    ['deleteFood', `${gtmEvent.GTM_MEAL_LIST}-delete-food`],
-    ['deleteMeal', `${gtmEvent.GTM_MEAL_LIST}-delete-meal`],
+    ['addFood', 'mealListAddFood'],
+    ['changeFood', 'mealListChangeFood'],
+    ['mealTime', 'mealListMealTime'],
+    ['deleteFood', 'mealListDeleteFood'],
+    ['deleteMeal', 'mealListDeleteMeal'],
   ] as const)(
     'tracks MealList %s with source and current prompt context',
     (event, action) => {
@@ -306,7 +309,7 @@ describe('sendGtmEvent', async () => {
         prompt_component: 'edit-meal-prompt',
       });
 
-      gtmEvent.sendDeletionEvent(event, gtmEvent.GTM_MEAL_LIST);
+      gtmEvent.sendMealListEvent(event);
 
       expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
         action,
@@ -399,10 +402,10 @@ describe('sendGtmEvent', async () => {
     });
     trackEvent.mockClear();
 
-    gtmEvent.sendNavigateCarouselEvent('carousel-back');
+    gtmEvent.sendGtmEvent({ event: 'navigateCarousel', action: 'carouselBack' });
 
     expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
-      action: 'carousel-back',
+      action: 'carouselBack',
       event: 'navigateCarousel',
       noninteraction: false,
       prompt_id: 'instructions-carousel',

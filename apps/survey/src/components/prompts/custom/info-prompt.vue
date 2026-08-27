@@ -21,7 +21,7 @@
           :color="prompt.carousel.color"
           :icon="controlProps.icon"
           variant="flat"
-          @click="navigateCarousel('carousel-back', controlProps.onClick)"
+          @click="navigateCarousel('carouselBack', controlProps.onClick)"
         />
       </template>
       <template #next="{ props: controlProps }">
@@ -30,7 +30,7 @@
           :color="prompt.carousel.color"
           :icon="controlProps.icon"
           variant="flat"
-          @click="navigateCarousel('carousel-next', controlProps.onClick)"
+          @click="navigateCarousel('carouselNext', controlProps.onClick)"
         />
       </template>
       <v-carousel-item v-for="(item, idx) in prompt.carousel.slides" :key="idx" class="px-6" eager>
@@ -72,7 +72,7 @@
 import { computed } from 'vue';
 
 import { usePromptUtils } from '@intake24/survey/composables';
-import { sendNavigateCarouselEvent } from '@intake24/survey/util';
+import { sendGtmEvent } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui';
 
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
@@ -100,9 +100,9 @@ function updateAndAction(type: string, ...args: [id?: string, params?: object]) 
   action(type, ...args);
 }
 
-function navigateCarousel(action: 'carousel-back' | 'carousel-next', navigate: () => void) {
+function navigateCarousel(action: 'carouselBack' | 'carouselNext', navigate: () => void) {
   navigate();
-  sendNavigateCarouselEvent(action);
+  sendGtmEvent({ event: 'navigateCarousel', action });
 }
 
 const isVideoValid = computed(() => !props.prompt.video?.required || videoWatched.value);

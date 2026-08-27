@@ -64,7 +64,7 @@ const {
   selectedFoodId,
   isSelectedFoodInMeal,
   action,
-} = useMealList(props, { emit });
+} = useMealList(props, { emit }, { fromPersistentMealList: true });
 </script>
 
 <style lang="scss"></style>

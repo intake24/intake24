@@ -11,31 +11,29 @@ vi.mock('@intake24/survey/stores', () => ({
 
 describe('useMealList', async () => {
   const { useMealList } = await import('./use-meal-list');
-  const { GTM_MEAL_LIST: GTM_MEAL_LIST_SOURCE } = await import('@intake24/survey/util');
 
   beforeEach(() => {
     emit.mockClear();
   });
 
-  it.each(['deleteFood', 'deleteMeal'] as const)(
+  it.each(['addFood', 'changeFood', 'mealTime', 'deleteFood', 'deleteMeal'] as const)(
     'marks %s as originating from MealList',
     (type) => {
-      const { action } = useMealList({ meals: [] }, { emit });
+      const { action } = useMealList({ meals: [] }, { emit }, { fromPersistentMealList: true });
 
       action(type, 'entity-id');
 
-      expect(emit).toHaveBeenCalledWith('action', type, 'entity-id', {
-        trackingSource: GTM_MEAL_LIST_SOURCE,
+      expect(emit).toHaveBeenCalledWith('action', type, 'entity-id', undefined, {
+        fromPersistentMealList: true,
       });
     },
   );
 
-  it('preserves parameters for non-deletion actions', () => {
+  it('leaves reviewed-list actions owned by their prompt', () => {
     const { action } = useMealList({ meals: [] }, { emit });
-    const params = { origin: 'test' };
 
-    action('editFood', 'food-id', params);
+    action('deleteFood', 'food-id');
 
-    expect(emit).toHaveBeenCalledWith('action', 'editFood', 'food-id', params);
+    expect(emit).toHaveBeenCalledWith('action', 'deleteFood', 'food-id', undefined);
   });
 });
