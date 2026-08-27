@@ -145,3 +145,9 @@ export function sendFeedbackLinkEvent(
     noninteraction: event === 'feedbackLinkOffered',
   });
 }
+
+export function sendNavigateCarouselEvent(
+  action: 'carousel-back' | 'carousel-next',
+): void {
+  sendGtmEvent({ event: 'navigateCarousel', action });
+}

@@ -346,4 +346,24 @@ describe('sendGtmEvent', async () => {
       }));
     },
   );
+
+  it('tracks carousel arrow navigation as an action using current prompt context', () => {
+    gtmEvent.recordPromptTransition({
+      prompt_id: 'instructions-carousel',
+      prompt_component: 'info-prompt',
+      section: 'preMeals',
+    });
+    trackEvent.mockClear();
+
+    gtmEvent.sendNavigateCarouselEvent('carousel-back');
+
+    expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+      action: 'carousel-back',
+      event: 'navigateCarousel',
+      noninteraction: false,
+      prompt_id: 'instructions-carousel',
+      prompt_component: 'info-prompt',
+    }));
+    expect(trackEvent.mock.calls[0][0]).not.toHaveProperty('direction');
+  });
 });

@@ -15,6 +15,7 @@ export const gtmEvents = [
   'selectFAQ',
   'feedbackLinkOffered',
   'feedbackLinkClicked',
+  'navigateCarousel',
 ] as const;
 type GtmEvent = (typeof gtmEvents)[number];
 
