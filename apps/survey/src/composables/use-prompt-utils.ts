@@ -109,7 +109,9 @@ export function usePromptUtils<
   };
 
   const action = (type: string, ...args: [id?: string | number | null, params?: object]) => {
-    if (type !== 'next') {
+    const isDeletion = type === 'deleteFood' || type === 'deleteMeal';
+
+    if (type !== 'next' && !isDeletion) {
       console.debug(`track event in use-prompt-utils: ${type}`);
       const gtmEventParams: GtmEventParams = {
         event: type as GtmEventParams['event'],
@@ -121,6 +123,9 @@ export function usePromptUtils<
         gtmEventParams.event = 'deleteMeal';
       }
       sendGtmEvent(gtmEventParams);
+    }
+
+    if (type !== 'next') {
       emit('action', type, ...args);
       return;
     }

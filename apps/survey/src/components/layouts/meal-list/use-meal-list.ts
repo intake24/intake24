@@ -6,7 +6,7 @@ import type { FoodState, MealState } from '@intake24/common/surveys';
 import { computed } from 'vue';
 
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndexRequired } from '@intake24/survey/util';
+import { getFoodIndexRequired, GTM_MEAL_LIST } from '@intake24/survey/util';
 
 export type UseMealListProps = {
   meals: MealState[];
@@ -50,7 +50,11 @@ export function useMealList(props: UseMealListProps, { emit }: Pick<SetupContext
   };
 
   const action = (type: ActionType, id?: string, params?: object) => {
-    emit('action', type, id, params);
+    const trackingParams = type === 'deleteFood' || type === 'deleteMeal'
+      ? { ...params, trackingSource: GTM_MEAL_LIST }
+      : params;
+
+    emit('action', type, id, trackingParams);
   };
 
   return {

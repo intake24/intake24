@@ -24,7 +24,7 @@ import {
   maybePushFallbackHistoryEntry,
   pushFullHistoryEntry,
 } from '@intake24/survey/stores/recall-history';
-import { getEntityId, recordPromptTransition } from '@intake24/survey/util';
+import { getEntityId, GTM_MEAL_LIST, recordPromptTransition, sendDeletionEvent } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui/i18n';
 
 import { FoodAdd } from '../layouts';
@@ -175,6 +175,13 @@ export function useRecall() {
 
   async function action(type: string, id?: string, params?: object) {
     setPromptTransitionAction(type);
+
+    if (type === 'deleteFood' || type === 'deleteMeal') {
+      const source = (params as { trackingSource?: string } | undefined)?.trackingSource === GTM_MEAL_LIST
+        ? GTM_MEAL_LIST
+        : undefined;
+      sendDeletionEvent(type, source);
+    }
 
     switch (type) {
       case 'next':

@@ -291,6 +291,50 @@ describe('sendGtmEvent', async () => {
     }));
   });
 
+  it.each([
+    ['deleteFood', `${gtmEvent.GTM_MEAL_LIST}-delete-food`],
+    ['deleteMeal', `${gtmEvent.GTM_MEAL_LIST}-delete-meal`],
+  ] as const)(
+    'tracks MealList %s with source and current prompt context',
+    (event, action) => {
+      survey.selectedMealOptional = {
+        name: { en: 'Breakfast' },
+      };
+      gtmEvent.recordPromptTransition({
+        prompt_id: 'edit-meal-prompt',
+        section: 'preFoods',
+        prompt_component: 'edit-meal-prompt',
+      });
+
+      gtmEvent.sendDeletionEvent(event, gtmEvent.GTM_MEAL_LIST);
+
+      expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+        action,
+        event,
+        food: null,
+        meal: 'Breakfast',
+        noninteraction: false,
+        prompt_component: 'edit-meal-prompt',
+        prompt_id: 'edit-meal-prompt',
+        section: 'preFoods',
+        uxSessionId: 'ux-session-id',
+        uxUserId: 'ux-user-id',
+      }));
+    },
+  );
+
+  it.each(['deleteFood', 'deleteMeal'] as const)(
+    'tracks non-MealList %s with its existing action',
+    (event) => {
+      gtmEvent.sendDeletionEvent(event);
+
+      expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+        action: event,
+        event,
+      }));
+    },
+  );
+
   it('clears prompt context when transition is reset', () => {
     gtmEvent.recordPromptTransition({
       prompt_id: 'edit-meal-prompt',
