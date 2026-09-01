@@ -20,10 +20,10 @@
     "@openapi-contrib/json-schema-to-openapi-schema": "^4.3.4",
     "@ts-rest/open-api": "3.53.0-rc.1",
     "@types/node": "^24.13.3",
-    "mermaid": "^11.16.0",
+    "mermaid": "^11.17.2",
     "typescript": "^6.0.3",
     "unrun": "^0.3.1",
     "vitepress": "2.0.0-alpha.19",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   }
 }

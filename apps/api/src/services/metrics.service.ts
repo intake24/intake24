@@ -11,11 +11,11 @@ import { stat } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { writeHeapSnapshot } from 'node:v8';
 
+import prom, { collectDefaultMetrics, register as defaultRegister } from '@prometheus-io/client';
 import { createMiddleware } from '@promster/express';
 import { format } from 'date-fns';
 import { ensureDir, exists } from 'fs-extra';
 import cron from 'node-cron';
-import prom, { collectDefaultMetrics, register as defaultRegister } from 'prom-client';
 
 import { NotFoundError } from '../http/errors';
 
@@ -74,12 +74,12 @@ export function normalizeRequestPath(path: string): string {
 }
 
 export class AppMetricsService {
-  private dbConnectionPoolTotal?: prom.Gauge;
-  private dbConnectionPoolIdle?: prom.Gauge;
-  private dbConnectionPoolActive?: prom.Gauge;
-  private dbConnectionPoolPending?: prom.Gauge;
-  private dbConnectionDuration?: prom.Histogram;
-  private jobsDuration?: prom.Summary;
+  private dbConnectionPoolTotal?: prom.Gauge<'db' | 'interface'>;
+  private dbConnectionPoolIdle?: prom.Gauge<'db' | 'interface'>;
+  private dbConnectionPoolActive?: prom.Gauge<'db' | 'interface'>;
+  private dbConnectionPoolPending?: prom.Gauge<'db' | 'interface'>;
+  private dbConnectionDuration?: prom.Histogram<'db' | 'interface'>;
+  private jobsDuration?: prom.Summary<'job' | 'queue' | 'outcome'>;
 
   private readonly sequelizeDb: DatabasesInterface;
   private readonly kyselyDb: KyselyDatabases;

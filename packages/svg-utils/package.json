@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "svg-parser": "^2.0.4",
+    "svg-parser": "^2.1.0",
     "svgpath": "^2.6.0"
   },
   "devDependencies": {

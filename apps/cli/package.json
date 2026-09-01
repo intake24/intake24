@@ -25,18 +25,18 @@
   },
   "dependencies": {
     "@clack/prompts": "^1.7.0",
-    "@css-inline/css-inline": "^0.21.0",
-    "@json2csv/node": "^7.0.7",
+    "@css-inline/css-inline": "^0.21.2",
+    "@json2csv/node": "^7.0.8",
     "commander": "^15.0.0",
     "csv-parser": "^3.2.1",
     "decompress": "^4.2.1",
     "dotenv": "^17.4.2",
     "dotenv-expand": "^13.0.0",
     "fs-extra": "^11.4.0",
-    "ky": "^2.0.2",
+    "ky": "^2.1.0",
     "lodash-es": "^4.18.1",
     "nanoid": "^6.0.1",
-    "pg": "^8.22.0",
+    "pg": "^8.23.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.8",
@@ -44,7 +44,7 @@
     "strip-bom-stream": "^5.0.0",
     "unzipper": "^0.12.5",
     "web-push": "^3.6.7",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7",
