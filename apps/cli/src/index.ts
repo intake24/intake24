@@ -1,8 +1,6 @@
 /* eslint-disable perfectionist/sort-imports */
 import './bootstrap';
 import { Argument, Command, CommanderError, Option } from 'commander';
-import buildFrAlbaneLocaleCommand from '@intake24/cli/commands/fr-albane/build-fr-albane-command';
-import buildFrInca3LocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
 import buildGoustoLocaleCommand from './commands/gousto/build-gousto-locale-command';
 import buildUaeLocaleCommand from './commands/uae/build-uae-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
@@ -177,24 +175,6 @@ async function run() {
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (localeId, options) => {
       await extractCategories(localeId, options);
-    });
-
-  program
-    .command('build-fr-locale')
-    .description('Build French INCA3 locale')
-    .requiredOption('-i, --input-path [input path]', 'Source file path')
-    .requiredOption('-o, --output-path [output path]', 'Output file path')
-    .action(async (options) => {
-      await buildFrInca3LocaleCommand(options);
-    });
-
-  program
-    .command('build-fr-albane')
-    .description('Build French Albane locale')
-    .requiredOption('-i, --input-path [input path]', 'Source file path')
-    .requiredOption('-o, --output-path [output path]', 'Output file path')
-    .action(async (options) => {
-      await buildFrAlbaneLocaleCommand(options);
     });
 
   program
