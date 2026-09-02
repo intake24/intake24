@@ -71,7 +71,7 @@ export default () => {
     });
     await NutrientTableCsvMapping.create({
       nutrientTableId,
-      rowOffset: 1,
+      rowOffset: 5,
       idColumnOffset: 0,
       descriptionColumnOffset: 2,
       localDescriptionColumnOffset: 3,
@@ -117,14 +117,14 @@ export default () => {
     await expect(fs.readFile(headerlessFile, 'utf8')).resolves.toBe('source-1,Vegetables,Source food,Local food,12.3,4.5');
     await fs.rm(headerlessFile);
 
-    await NutrientTableCsvMapping.update({ rowOffset: 1 }, { where: { nutrientTableId } });
+    await NutrientTableCsvMapping.update({ rowOffset: 5 }, { where: { nutrientTableId } });
     await ioc.resolve('NutrientTableDataExport').run(createMockBullJob(exportDbJob.id, { nutrientTableId }));
     await exportDbJob.reload();
 
     exportedFile = path.resolve(ioc.cradle.fsConfig.local.downloads, exportDbJob.downloadUrl!);
     expect(exportDbJob.message).toBe('Nutrient table data export: exported 1 record with 6 CSV columns.');
     await expect(fs.readFile(exportedFile, 'utf8')).resolves.toBe(
-      `NDB food ID (FCT record ID),Food group,NDB food description,NDB local food description,${nutrientTypes[0].description},${nutrientTypes[1].description}\nsource-1,Vegetables,Source food,Local food,12.3,4.5`,
+      `NDB food ID (FCT record ID),Food group,NDB food description,NDB local food description,${nutrientTypes[0].description},${nutrientTypes[1].description}\n\n\n\n\nsource-1,Vegetables,Source food,Local food,12.3,4.5`,
     );
 
     await record.update({ name: 'Changed food', localName: 'Changed local food' });

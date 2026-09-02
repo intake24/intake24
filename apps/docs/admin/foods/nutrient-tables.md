@@ -29,7 +29,7 @@ Jobs that can be submitted:
 }
 ```
 
-The export places values at the configured CSV mapping column indexes. If the mapping has a positive row offset, it writes the CSV header in the final skipped row; otherwise it exports headerless data so the file remains importable. Header names are `NDB food ID (FCT record ID)`, `NDB food description`, `NDB local food description`, configured field names, and nutrient type descriptions. The first value is the nutrient table record ID used as the locale-food nutrient mapping reference.
+The export places values at the configured CSV mapping column indexes. If the mapping has a positive row offset, it writes the CSV header in the first skipped row and leaves the remaining skipped rows empty; otherwise it exports headerless data so the file remains importable. Header names are `NDB food ID (FCT record ID)`, `NDB food description`, `NDB local food description`, configured field names, and nutrient type descriptions. The first value is the nutrient table record ID used as the locale-food nutrient mapping reference.
 
 ### NutrientTableMappingImport
 

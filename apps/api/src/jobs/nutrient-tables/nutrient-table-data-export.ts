@@ -110,8 +110,8 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
     const output = createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), { encoding: 'utf-8', flags: 'w+' });
     await pipeline(
       Readable.from([
-        ...Array.from({ length: Math.max(csvMapping.rowOffset - 1, 0) }, () => []),
         ...(csvMapping.rowOffset ? [header] : []),
+        ...Array.from({ length: Math.max(csvMapping.rowOffset - 1, 0) }, () => []),
         ...rows,
       ]),
       formatCsv({ headers: false }),
