@@ -83,6 +83,9 @@ export const NutrientTableDataImport = z.object({
   nutrientTableId: z.string().nonempty(),
   file: z.string().nonempty(),
 });
+export const NutrientTableDataExport = z.object({
+  nutrientTableId: z.string(),
+});
 export const NutrientTableMappingImport = z.object({
   nutrientTableId: z.string(),
   file: z.string().nonempty(),
@@ -238,6 +241,7 @@ export const jobParams = z.object({
   LocaleFoodRankingUpload,
   LocalesSync,
   NutrientTableDataImport,
+  NutrientTableDataExport,
   NutrientTableMappingImport,
   NutrientTableMappingExport,
   PopularitySearchUpdateCounters,
@@ -277,6 +281,7 @@ export const jobTypeParams = z.union([
   LocaleFoodRankingUpload,
   LocalesSync,
   NutrientTableDataImport,
+  NutrientTableDataExport,
   NutrientTableMappingImport,
   NutrientTableMappingExport,
   PopularitySearchUpdateCounters,
@@ -345,6 +350,10 @@ export const nutrientTableTasks = z.discriminatedUnion('type', [
     params: NutrientTableDataImport.omit({ file: true }),
   }),
   z.object({
+    type: z.literal('NutrientTableDataExport'),
+    params: NutrientTableDataExport,
+  }),
+  z.object({
     type: z.literal('NutrientTableMappingImport'),
     params: NutrientTableMappingImport.omit({ file: true }),
   }),
@@ -355,7 +364,7 @@ export const nutrientTableTasks = z.discriminatedUnion('type', [
 ]);
 export type NutrientTableTask = z.infer<typeof nutrientTableTasks>;
 
-export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableMappingExport', 'NutrientTableDataImport'] as const;
+export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableMappingExport', 'NutrientTableDataImport', 'NutrientTableDataExport'] as const;
 export type NutrientTableJob = (typeof nutrientTableJobs)[number];
 
 export const surveyJobs = [
@@ -502,6 +511,9 @@ export const defaultJobsParams: JobParams = {
   NutrientTableDataImport: {
     nutrientTableId: '',
     file: '',
+  },
+  NutrientTableDataExport: {
+    nutrientTableId: '',
   },
   NutrientTableMappingImport: {
     nutrientTableId: '',

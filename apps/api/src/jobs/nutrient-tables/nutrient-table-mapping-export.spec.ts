@@ -62,7 +62,7 @@ describe('nutrient table mapping export', () => {
     await expect(job.run(bullJob)).resolves.toBeUndefined();
 
     const update = dbJob.update.mock.calls[0][0];
-    expect(update.message).toBe('Nutrient table mapping export: no mapping configured for nutrient table "FCT".');
+    expect(update.message).toBe('Nutrient table mapping export: exported 0 records with 3 CSV columns.');
     const { downloadUrl } = update;
     await expect(fs.readFile(path.join(downloadsDir, downloadUrl), 'utf-8')).resolves.toBe(
       '\uFEFF"Intake24 nutrient ID","NDB spreadsheet column index","Nutrient name"',
