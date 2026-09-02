@@ -10,6 +10,10 @@ describe('jobExists rule', () => {
     expect(isValidJob('InvalidJob')).toBe(false);
   });
 
+  it('should recognise nutrient table mapping export as a valid job', () => {
+    expect(isValidJob('NutrientTableMappingExport')).toBe(true);
+  });
+
   it('should pick correct job parameters', () => {
     const params = pickJobParams(
       { a: 1, b: 2, c: 3, sourceLocaleId: 'locale1', localeId: 'locale2' },

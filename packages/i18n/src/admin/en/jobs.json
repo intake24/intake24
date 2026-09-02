@@ -130,6 +130,9 @@
         "1": "The import process will update mapping for all nutrients and fields."
       }
     },
+    "NutrientTableMappingExport": {
+      "_": "Nutrient table - Export NDB mapping"
+    },
     "NutrientTableDataImport": {
       "_": "Nutrient table - Import NDB data",
       "file": "CSV file",

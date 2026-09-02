@@ -87,6 +87,9 @@ export const NutrientTableMappingImport = z.object({
   nutrientTableId: z.string(),
   file: z.string().nonempty(),
 });
+export const NutrientTableMappingExport = z.object({
+  nutrientTableId: z.string(),
+});
 export const PopularitySearchUpdateCounters = z.object({
   localeCode: z.string().nonempty(),
   foodCodes: z.array(z.string().nonempty()),
@@ -237,6 +240,7 @@ export const jobParams = z.object({
   LocalesSync,
   NutrientTableDataImport,
   NutrientTableMappingImport,
+  NutrientTableMappingExport,
   PopularitySearchUpdateCounters,
   PurgeExpiredTokens,
   ResourceExport,
@@ -275,6 +279,7 @@ export const jobTypeParams = z.union([
   LocalesSync,
   NutrientTableDataImport,
   NutrientTableMappingImport,
+  NutrientTableMappingExport,
   PopularitySearchUpdateCounters,
   PurgeExpiredTokens,
   ResourceExport,
@@ -344,10 +349,14 @@ export const nutrientTableTasks = z.discriminatedUnion('type', [
     type: z.literal('NutrientTableMappingImport'),
     params: NutrientTableMappingImport.omit({ file: true }),
   }),
+  z.object({
+    type: z.literal('NutrientTableMappingExport'),
+    params: NutrientTableMappingExport,
+  }),
 ]);
 export type NutrientTableTask = z.infer<typeof nutrientTableTasks>;
 
-export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableDataImport'] as const;
+export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableMappingExport', 'NutrientTableDataImport'] as const;
 export type NutrientTableJob = (typeof nutrientTableJobs)[number];
 
 export const surveyJobs = [
@@ -498,6 +507,9 @@ export const defaultJobsParams: JobParams = {
   NutrientTableMappingImport: {
     nutrientTableId: '',
     file: '',
+  },
+  NutrientTableMappingExport: {
+    nutrientTableId: '',
   },
   PopularitySearchUpdateCounters: {
     localeCode: '',
