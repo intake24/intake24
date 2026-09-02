@@ -36,3 +36,19 @@ Jobs that can be submitted:
 | ---------------------------- | -------------------------------------------------------- |
 | Intake24 nutrient ID         | [Intake24 nutrient type ID](/admin/foods/nutrient-types) |
 | NDB spreadsheet column index | Excel-based column name                                  |
+
+### NutrientTableMappingExport
+
+`NutrientTableMappingExport` exports the configured nutrient mapping as a downloadable CSV file.
+
+```json
+{
+  "nutrientTableId": string
+}
+```
+
+| Column                       | Description                                                |
+| ---------------------------- | ---------------------------------------------------------- |
+| Intake24 nutrient ID         | [Intake24 nutrient type ID](/admin/foods/nutrient-types)   |
+| NDB spreadsheet column index | Excel-based column name                                    |
+| Nutrient name                | Informational nutrient type description; ignored on import |
