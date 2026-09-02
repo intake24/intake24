@@ -4,8 +4,6 @@ import type { ModelStatic, WhereOptions } from 'sequelize';
 
 import type { PaginateOptions } from '@intake24/db';
 
-import path from 'node:path';
-
 import { initServer } from '@ts-rest/express';
 import { pick } from 'lodash-es';
 import multer from 'multer';
@@ -14,12 +12,12 @@ import { col, fn, Op } from 'sequelize';
 import languageBackends from '@intake24/api/food-index/language-backends';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
+import { requireCsvUploadPath } from '@intake24/api/http/requests/util';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { jobRequiresFile } from '@intake24/common/types';
-import { multerFile } from '@intake24/common/types/http';
 import { FoodsLocale, Language, securableScope, SystemLocale } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { localeId, field }: { localeId?: string; field: string }) {
@@ -223,18 +221,8 @@ export function locale() {
         const { type } = body;
 
         if (jobRequiresFile(type)) {
-          if (!file)
-            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
-
-          const res = multerFile.safeParse(file);
-          if (!res.success)
-            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
-
-          if (path.extname(res.data.originalname).toLowerCase() !== '.csv')
-            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file.ext', params: { ext: 'CSV (comma-delimited)' } } });
-
           // @ts-expect-error not narrowed yet
-          params.file = res.data.path;
+          params.file = requireCsvUploadPath(file);
         }
 
         await aclService.findAndCheckRecordAccess(SystemLocale, 'tasks', {

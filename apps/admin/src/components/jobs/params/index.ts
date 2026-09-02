@@ -8,6 +8,7 @@ import LocaleFoods from './locale-foods.vue';
 import LocaleIndexBuild from './locale-index-build.vue';
 import LocalesSync from './locales-sync.vue';
 import NutrientTableDataImport from './nutrient-table-data-import.vue';
+import NutrientTableMappingExport from './nutrient-table-mapping-export.vue';
 import NutrientTableMappingImport from './nutrient-table-mapping-import.vue';
 import ResourceExport from './resource-export.vue';
 import SurveyAuthUrlsExport from './survey-auth-urls-export.vue';
@@ -28,7 +29,9 @@ export default {
   LocaleFoods,
   LocaleIndexBuild,
   LocalesSync,
+  NutrientTableDataExport: NutrientTableMappingExport,
   NutrientTableDataImport,
+  NutrientTableMappingExport,
   NutrientTableMappingImport,
   ResourceExport,
   SurveyAuthUrlsExport,
