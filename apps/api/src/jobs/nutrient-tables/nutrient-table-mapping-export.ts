@@ -80,7 +80,7 @@ export default class NutrientTableMappingExport extends BaseJob<'NutrientTableMa
     await this.dbJob.update({
       downloadUrl: filename,
       downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-      ...(mappings.length ? {} : { message: `Nutrient table mapping export: no mapping configured for nutrient table "${nutrientTableId}".` }),
+      message: `Nutrient table mapping export: exported ${mappings.length} record${mappings.length === 1 ? '' : 's'} with 3 CSV columns.`,
     });
   }
 }

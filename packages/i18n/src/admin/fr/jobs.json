@@ -140,6 +140,9 @@
         "1": "The import process will update nutrient values for all foods in the nutrient table based on the provided mapping."
       }
     },
+    "NutrientTableDataExport": {
+      "_": "Tableau des nutriments - Exporter les données de la BDD nutritionnelle"
+    },
     "PopularitySearchUpdateCounters": {
       "_": "Chercher - Mettre à jour les compteurs de popularité",
       "foodCodes": "Codes des aliments"

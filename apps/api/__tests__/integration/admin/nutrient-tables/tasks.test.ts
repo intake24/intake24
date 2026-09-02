@@ -110,5 +110,17 @@ export default () => {
       expect(status).toBe(200);
       expect(body.type).toBe('NutrientTableMappingExport');
     });
+
+    it('should queue nutrient table data export without a file upload', async () => {
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .field('type', 'NutrientTableDataExport')
+        .field('params[nutrientTableId]', nutrientTable.id);
+
+      expect(status).toBe(200);
+      expect(body.type).toBe('NutrientTableDataExport');
+    });
   });
 };

@@ -29,6 +29,7 @@ export default {
   LocaleFoods,
   LocaleIndexBuild,
   LocalesSync,
+  NutrientTableDataExport: NutrientTableMappingExport,
   NutrientTableDataImport,
   NutrientTableMappingExport,
   NutrientTableMappingImport,
