@@ -34,7 +34,7 @@
     "@types/ms": "^2.1.0",
     "@types/node": "^24.13.3",
     "@types/nodemailer": "^8.0.1",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.11"
   }
 }
