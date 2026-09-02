@@ -37,7 +37,9 @@ export default defineComponent({
 
     const defaultParams = computed<Pick<JobParams, NutrientTableJob>>(() => ({
       NutrientTableMappingImport: { nutrientTableId: props.id, file: '' },
+      NutrientTableMappingExport: { nutrientTableId: props.id },
       NutrientTableDataImport: { nutrientTableId: props.id, file: '' },
+      NutrientTableDataExport: { nutrientTableId: props.id },
     }));
 
     const alerts = {
