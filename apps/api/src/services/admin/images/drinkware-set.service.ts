@@ -109,7 +109,7 @@ function drinkwareSetService({
     imageUploaderId: string,
     input: UpdateDrinkwareSetInputWithFiles,
   ): Promise<void> => {
-    await kyselyDb.foods.transaction().execute(async (tx) => {
+    await kyselyDb.foods.contextTransaction(async (tx) => {
       // Update the drinkware set record
       await tx
         .selectFrom('imageMaps')
@@ -562,7 +562,7 @@ function drinkwareSetService({
     await translateSqlErrors(async () => {
       if (transaction)
         await executeQueries(transaction);
-      else await kyselyDb.foods.transaction().execute(async tx => executeQueries(tx));
+      else await kyselyDb.foods.contextTransaction(async tx => executeQueries(tx));
     });
   };
 
@@ -651,7 +651,7 @@ function drinkwareSetService({
     );
 
     await translateSqlErrors(() =>
-      kyselyDb.foods.transaction().execute(async (tx) => {
+      kyselyDb.foods.contextTransaction(async (tx) => {
         if (update) {
           await tx
             .deleteFrom('drinkwareScales')

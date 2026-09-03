@@ -7,6 +7,9 @@ export default defineConfig({
   envFile: '../../apps/api/.env',
   outFile: './src/kysely/foods.d.ts',
   customImports: {
+    AuditContextType: '@intake24/common/types#AuditContextType',
+    AuditJsonValue: '@intake24/common/types#AuditJsonValue',
+    AuditOperation: '@intake24/common/types#AuditOperation',
     UseInRecipeType: '@intake24/common/types#UseInRecipeType',
     PortionSizeMethodId: '@intake24/common/surveys#PortionSizeMethodId',
     PortionSizeParameter: '@intake24/common/surveys#PortionSizeParameter',
@@ -16,6 +19,10 @@ export default defineConfig({
   },
   overrides: {
     columns: {
+      'audit_log.ctx_type': 'AuditContextType | null',
+      'audit_log.operation': 'AuditOperation',
+      'audit_log.old_value': 'AuditJsonValue | null',
+      'audit_log.new_value': 'AuditJsonValue | null',
       'as_served_images.label': 'LocaleTranslation | null',
       'as_served_sets.label': 'LocaleTranslation | null',
       'associated_foods.generic_name': 'LocaleTranslation',
