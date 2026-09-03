@@ -16,6 +16,8 @@ export default abstract class Job<T extends JobType, R = any> {
 
   protected params!: JobParams[T];
 
+  protected userId: string | null = null;
+
   protected isRepeatable!: boolean;
 
   protected logger;
@@ -27,10 +29,7 @@ export default abstract class Job<T extends JobType, R = any> {
   }
 
   protected init(job: BullJob<JobData<T>>): void {
-    const {
-      id,
-      data: { params },
-    } = job;
+    const { id, data: { params, userId = null } } = job;
 
     this.logger = this.logger.child({ service: this.name, id });
 
@@ -42,6 +41,7 @@ export default abstract class Job<T extends JobType, R = any> {
     this.job = job;
     this.params = params;
     this.isRepeatable = id.startsWith('repeat:');
+    this.userId = userId;
   }
 
   /**

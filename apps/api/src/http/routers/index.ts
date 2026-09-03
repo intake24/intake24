@@ -156,6 +156,7 @@ export function registerRouters(express: Router) {
 
   // Admin endpoints - authenticated & verified & MFA satisfied
   const adminAuthVerifiedMfaContract = {
+    audit: contract.admin.audit,
     asServedImage: contract.admin.images.asServedImage,
     asServedSet: contract.admin.images.asServedSet,
     drinkwareSet: contract.admin.images.drinkwareSet,
@@ -218,6 +219,7 @@ export function registerRouters(express: Router) {
   createExpressEndpoints(
     adminAuthVerifiedMfaContract,
     server.router(adminAuthVerifiedMfaContract, {
+      audit: admin.audit(),
       asServedImage: admin.images.asServedImage(),
       asServedSet: admin.images.asServedSet(),
       drinkwareSet: admin.images.drinkwareSet(),

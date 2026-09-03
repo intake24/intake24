@@ -1,0 +1,24 @@
+{
+  "_": "Audit",
+  "title": "Audit",
+  "tables": {
+    "title": "Audit settings",
+    "subtitle": "Select a database and tables to enable/disable auditing.",
+    "selected": "Selected tables",
+    "available": "Available tables",
+    "table": {
+      "id": "ID",
+      "exclude": "Exclude"
+    }
+  },
+  "record": {
+    "id": "ID",
+    "recordId": "Record ID",
+    "operation": "Operation",
+    "tableName": "Table name",
+    "oldValue": "Old value",
+    "newValue": "New value",
+    "changedAt": "Changed at",
+    "user": "User"
+  }
+}

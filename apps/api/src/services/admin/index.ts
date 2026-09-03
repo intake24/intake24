@@ -1,3 +1,5 @@
+export * from './audit.service';
+export { default as auditService } from './audit.service';
 export * from './category.service';
 export { default as adminCategoryService } from './category.service';
 export * from './data-export';

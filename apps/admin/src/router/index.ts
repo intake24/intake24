@@ -176,6 +176,12 @@ const routes: RouteRecordRaw[] = [
     component: views.user.personalAccessTokens.browse,
     meta: { module: { current: 'user.personal-access-tokens' }, title: 'user.personalAccessTokens._' },
   },
+  {
+    path: '/audit',
+    name: 'audit',
+    component: views.audit.browse,
+    meta: { module: { current: 'audit' }, title: 'audit._' },
+  },
   // Food databases explorer
   {
     path: '/fdbs',

@@ -15,7 +15,7 @@
       <v-spacer />
       <div class="d-flex align-center gc-2">
         <v-menu
-          v-if="slots.actions || canHandleEntry('delete')"
+          v-if="slots.actions || canHandleEntry(['audit', 'delete'])"
           :close-on-content-click="true"
           location="bottom end"
           :persistent="false"
@@ -30,7 +30,12 @@
           </template>
           <v-list>
             <slot name="actions" />
-            <v-divider v-if="slots.actions" />
+            <audit-dialog
+              v-if="canHandleEntry('audit')"
+              :resource="resource.module ?? resource.name"
+              :resource-id="id"
+            />
+            <v-divider v-if="slots.actions || canHandleEntry('audit')" />
             <confirm-dialog
               v-if="canHandleEntry('delete')"
               color="error"
@@ -99,7 +104,7 @@ import { useHttp } from '@intake24/admin/services';
 import { useMessages, useResource, useUser } from '@intake24/admin/stores';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
-import { ConfirmLeaveDialog } from '../dialogs';
+import { AuditDialog, ConfirmLeaveDialog } from '../dialogs';
 
 defineOptions({ name: 'EntryLayout' });
 
@@ -156,12 +161,14 @@ const tabs = computed(() => {
   );
 });
 
-function canHandleEntry(action: string) {
+function canHandleEntry(action: string | string[]) {
   if (isCreate.value || !props.entry)
     return false;
 
   const { securables, ownerId } = props.entry;
-  return can({ action, securables, ownerId });
+  return Array.isArray(action)
+    ? action.some(a => can({ action: a, securables, ownerId }))
+    : can({ action, securables, ownerId });
 };
 
 function tabTitle(tab: string) {

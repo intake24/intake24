@@ -26,7 +26,7 @@
                 <template v-if="item.type && index > 0 && !jobTypes[index - 1].type">
                   <v-divider class="mt-2" color="error" />
                   <div
-                    class="text-title-small px-4 py-2 bg-red-lighten-4 d-flex justify-space-between align-items-center"
+                    class="text-title-small px-4 py-2 bg-red-lighten-4 d-flex justify-space-between align-center"
                     :class="item.type === 'error' ? 'bg-red-lighten-4' : 'bg-orange-lighten-4'"
                   >
                     <span>
