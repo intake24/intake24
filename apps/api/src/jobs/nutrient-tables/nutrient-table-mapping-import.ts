@@ -1,4 +1,5 @@
 import type { Job } from 'bullmq';
+import type { Transaction } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 
@@ -27,8 +28,12 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
 
   private content: CSVRow[] = [];
 
-  constructor({ logger }: Pick<IoC, 'logger'>) {
+  private readonly db;
+
+  constructor({ logger, db }: Pick<IoC, 'logger' | 'db'>) {
     super({ logger });
+
+    this.db = db;
   }
 
   /**
@@ -149,39 +154,41 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
   private async import(chunk = 100): Promise<void> {
     const { nutrientTableId } = this.params;
 
-    // Clean old data
-    await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId } });
+    return await this.db.foods.contextTransaction(async (transaction) => {
+      // Clean old data
+      await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId }, transaction });
 
-    return new Promise((resolve, reject) => {
-      const stream = createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
+      await new Promise<void>((resolve, reject) => {
+        const stream = createReadStream(this.file).pipe(parse({ headers: true, trim: true }));
 
-      stream
-        .on('data', (row: CSVRow) => {
-          this.content.push(row);
+        stream
+          .on('data', (row: CSVRow) => {
+            this.content.push(row);
 
-          if (chunk > 0 && this.content.length === chunk) {
-            stream.pause();
-            this.importChunk()
-              .then(() => {
-                stream.resume();
-              })
+            if (chunk > 0 && this.content.length === chunk) {
+              stream.pause();
+              this.importChunk(transaction)
+                .then(() => {
+                  stream.resume();
+                })
+                .catch((err) => {
+                  stream.destroy(err);
+                  reject(err);
+                });
+            }
+          })
+          .on('end', async () => {
+            await this.waitForUnlock();
+
+            this.importChunk(transaction)
+              .then(() => resolve())
               .catch((err) => {
                 stream.destroy(err);
                 reject(err);
               });
-          }
-        })
-        .on('end', async () => {
-          await this.waitForUnlock();
-
-          this.importChunk()
-            .then(() => resolve())
-            .catch((err) => {
-              stream.destroy(err);
-              reject(err);
-            });
-        })
-        .on('error', err => reject(err));
+          })
+          .on('error', err => reject(err));
+      });
     });
   }
 
@@ -192,7 +199,7 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
    * @returns {Promise<void>}
    * @memberof NutrientTableMappingImport
    */
-  private async importChunk(): Promise<void> {
+  private async importChunk(transaction: Transaction): Promise<void> {
     if (!this.content.length)
       return;
 
@@ -213,7 +220,7 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
       };
     });
 
-    await NutrientTableCsvMappingNutrient.bulkCreate(records);
+    await NutrientTableCsvMappingNutrient.bulkCreate(records, { transaction });
 
     await this.incrementProgress(this.content.length);
 

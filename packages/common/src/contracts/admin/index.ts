@@ -1,4 +1,5 @@
 import acl from './acl';
+import { audit } from './audit.contract';
 import { authentication } from './authentication.contract';
 import { faq } from './faq.contract';
 import fdbs from './fdbs';
@@ -28,6 +29,7 @@ import user from './user';
 
 export default {
   acl,
+  audit,
   authentication,
   faq,
   faqMedia: mediable('FAQ', '/admin/faqs/:faqId'),

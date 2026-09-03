@@ -1,3 +1,4 @@
+import audit from './audit/index.test';
 import authentication from './authentication/index.test';
 import faqs from './faqs/index.test';
 import fdbs from './fdbs/index.test';
@@ -23,6 +24,7 @@ import user from './user/index.test';
 import users from './users/index.test';
 
 export default () => {
+  describe('/api/admin/audit', audit);
   describe('/api/admin/auth', authentication);
   describe('/api/admin/sign-up', signup);
   describe('/api/admin/faqs', faqs);

@@ -7,7 +7,7 @@ import type { ColumnType } from 'kysely';
 
 import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
 import type { Variant } from '@intake24/common/theme';
-import type { LocaleTranslation, LocaleTranslations, RequiredLocaleTranslation, UseInRecipeType } from '@intake24/common/types';
+import type { AuditContextType, AuditJsonValue, AuditOperation, LocaleTranslation, LocaleTranslations, RequiredLocaleTranslation, UseInRecipeType } from '@intake24/common/types';
 
 export type ArrayType<T> = ArrayTypeImpl<T> extends (infer U)[]
   ? U[]
@@ -77,6 +77,26 @@ export interface AttributeDefaults {
   reasonableAmount: number | null;
   sameAsBeforeOption: boolean | null;
   useInRecipes: number | null;
+}
+
+export interface AuditLog {
+  createdAt: Generated<Timestamp>;
+  ctxId: string | null;
+  ctxType: AuditContextType | null;
+  ctxUserId: Int8 | null;
+  id: Generated<string>;
+  newValue: AuditJsonValue | null;
+  oldValue: AuditJsonValue | null;
+  operation: AuditOperation;
+  recordId: string | null;
+  tableName: string;
+}
+
+export interface AuditTables {
+  createdAt: Generated<Timestamp>;
+  exclude: Generated<string[]>;
+  id: string;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface Brands {
@@ -365,32 +385,6 @@ export interface ProcessedImages {
   sourceId: Int8;
 }
 
-export interface RecipeFoods {
-  code: string;
-  createdAt: Timestamp;
-  id: Generated<Int8>;
-  localeId: string;
-  name: string;
-  recipeWord: string;
-  synonymsId: Int8 | null;
-  updatedAt: Timestamp;
-}
-
-export interface RecipeFoodsSteps {
-  categoryCode: string;
-  code: string;
-  createdAt: Timestamp;
-  description: LocaleTranslation;
-  id: Generated<Int8>;
-  localeId: string;
-  name: LocaleTranslation;
-  order: number;
-  recipeFoodsId: Int8;
-  repeatable: Generated<boolean>;
-  required: Generated<boolean>;
-  updatedAt: Timestamp;
-}
-
 export interface SequelizeMeta {
   name: string;
 }
@@ -442,6 +436,8 @@ export interface DB {
   asServedSets: AsServedSets;
   associatedFoods: AssociatedFoods;
   attributeDefaults: AttributeDefaults;
+  auditLog: AuditLog;
+  auditTables: AuditTables;
   brands: Brands;
   categories: Categories;
   categoriesCategories: CategoriesCategories;
@@ -477,8 +473,6 @@ export interface DB {
   nutrientUnits: NutrientUnits;
   physicalActivityLevels: PhysicalActivityLevels;
   processedImages: ProcessedImages;
-  recipeFoods: RecipeFoods;
-  recipeFoodsSteps: RecipeFoodsSteps;
   sequelizeMeta: SequelizeMeta;
   sourceImageKeywords: SourceImageKeywords;
   sourceImages: SourceImages;
