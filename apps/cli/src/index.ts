@@ -7,6 +7,7 @@ import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-dri
 import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image-map';
 import pkg from '../package.json';
 import {
+  audit,
   extractCategories,
   findPortionImages,
   generateKey,
@@ -39,6 +40,8 @@ async function run() {
     .action(async () => {
       await synchronizeAccessControlList();
     });
+
+  audit(program);
 
   program
     .command('init:db:system')

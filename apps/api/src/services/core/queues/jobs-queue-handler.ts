@@ -7,6 +7,7 @@ import type { JobData, JobParams, JobType } from '@intake24/common/types';
 import { Queue, Worker } from 'bullmq';
 import { Op } from 'sequelize';
 
+import { requestContextStorage } from '@intake24/common-backend/acl';
 import { Job as DbJob } from '@intake24/db';
 
 import { QueueHandler } from './queue-handler';
@@ -193,7 +194,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   async processor(job: BullJob<JobData>) {
-    const { id, data: { type } } = job;
+    const { id, data: { type, userId = null } } = job;
 
     if (!id) {
       this.logger.error(`Queue ${this.name}: Job ID missing.`);
@@ -218,8 +219,11 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
       stackTrace: null,
     });
 
-    const newJob = this.resolveDynamic(type);
-    return await newJob.run(job);
+    await requestContextStorage.run({ userId }, () => {
+      this.logger.debug(`Job initialized with user ID: ${userId}.`);
+      const newJob = this.resolveDynamic(type);
+      return newJob.run(job);
+    });
   }
 
   /**
@@ -231,9 +235,9 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   private async queueJob(job: DbJob, options: JobsOptions = {}) {
-    const { id, type, params } = job;
+    const { id, type, params, userId } = job;
 
-    const bullJob = await this.queue.add(type, { type, params }, { ...options, jobId: `db-${id}` });
+    const bullJob = await this.queue.add(type, { type, params, userId }, { ...options, jobId: `db-${id}` });
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
 
