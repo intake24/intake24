@@ -83,9 +83,15 @@ export const NutrientTableDataImport = z.object({
   nutrientTableId: z.string().nonempty(),
   file: z.string().nonempty(),
 });
+export const NutrientTableDataExport = z.object({
+  nutrientTableId: z.string(),
+});
 export const NutrientTableMappingImport = z.object({
   nutrientTableId: z.string(),
   file: z.string().nonempty(),
+});
+export const NutrientTableMappingExport = z.object({
+  nutrientTableId: z.string(),
 });
 export const PopularitySearchUpdateCounters = z.object({
   localeCode: z.string().nonempty(),
@@ -235,7 +241,9 @@ export const jobParams = z.object({
   LocaleFoodRankingUpload,
   LocalesSync,
   NutrientTableDataImport,
+  NutrientTableDataExport,
   NutrientTableMappingImport,
+  NutrientTableMappingExport,
   PopularitySearchUpdateCounters,
   PurgeExpiredTokens,
   ResourceExport,
@@ -273,7 +281,9 @@ export const jobTypeParams = z.union([
   LocaleFoodRankingUpload,
   LocalesSync,
   NutrientTableDataImport,
+  NutrientTableDataExport,
   NutrientTableMappingImport,
+  NutrientTableMappingExport,
   PopularitySearchUpdateCounters,
   PurgeExpiredTokens,
   ResourceExport,
@@ -340,13 +350,21 @@ export const nutrientTableTasks = z.discriminatedUnion('type', [
     params: NutrientTableDataImport.omit({ file: true }),
   }),
   z.object({
+    type: z.literal('NutrientTableDataExport'),
+    params: NutrientTableDataExport,
+  }),
+  z.object({
     type: z.literal('NutrientTableMappingImport'),
     params: NutrientTableMappingImport.omit({ file: true }),
+  }),
+  z.object({
+    type: z.literal('NutrientTableMappingExport'),
+    params: NutrientTableMappingExport,
   }),
 ]);
 export type NutrientTableTask = z.infer<typeof nutrientTableTasks>;
 
-export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableDataImport'] as const;
+export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableMappingExport', 'NutrientTableDataImport', 'NutrientTableDataExport'] as const;
 export type NutrientTableJob = (typeof nutrientTableJobs)[number];
 
 export const surveyJobs = [
@@ -494,9 +512,15 @@ export const defaultJobsParams: JobParams = {
     nutrientTableId: '',
     file: '',
   },
+  NutrientTableDataExport: {
+    nutrientTableId: '',
+  },
   NutrientTableMappingImport: {
     nutrientTableId: '',
     file: '',
+  },
+  NutrientTableMappingExport: {
+    nutrientTableId: '',
   },
   PopularitySearchUpdateCounters: {
     localeCode: '',

@@ -130,12 +130,18 @@
         "1": "The import process will update mapping for all nutrients and fields."
       }
     },
+    "NutrientTableMappingExport": {
+      "_": "Tableau des nutriments - Exporter le mapping de la BDD nutritionnelle"
+    },
     "NutrientTableDataImport": {
       "_": "Tableau des nutriments - Importer les données de la BDD nutritionnelle",
       "file": "fichier CSV",
       "alert": {
         "1": "The import process will update nutrient values for all foods in the nutrient table based on the provided mapping."
       }
+    },
+    "NutrientTableDataExport": {
+      "_": "Tableau des nutriments - Exporter les données de la BDD nutritionnelle"
     },
     "PopularitySearchUpdateCounters": {
       "_": "Chercher - Mettre à jour les compteurs de popularité",
