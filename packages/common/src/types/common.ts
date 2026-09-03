@@ -4,12 +4,16 @@ import { sanitize } from '@intake24/common/rules';
 
 import { actionItem } from '../prompts/action-item.ts';
 
-export const frontEnds = ['admin', 'survey'] as const;
+export const databaseTypes = ['foods', 'system'] as const;
+export type DatabaseType = typeof databaseTypes[number];
 
+export const environmentOptions = ['development', 'test', 'production'] as const;
+export type Environment = (typeof environmentOptions)[number];
+
+export const frontEnds = ['admin', 'survey'] as const;
 export type FrontEnd = (typeof frontEnds)[number];
 
 export const applications = [...frontEnds, 'api', 'shared'] as const;
-
 export type Application = (typeof applications)[number];
 
 export const isApplication = (app: any): app is Application => applications.includes(app);
@@ -53,12 +57,7 @@ export type WithKey<K extends string | number | symbol> = {
 export type UnwrapAII<P> = P extends AsyncIterableIterator<infer T> ? T : never;
 
 export const emailCopy = ['cc', 'bcc', 'none'] as const;
-
 export type EmailCopy = (typeof emailCopy)[number];
-
-export const environmentOptions = ['development', 'test', 'production'] as const;
-
-export type Environment = (typeof environmentOptions)[number];
 
 export const localeTranslation = z.record(z.string(), z.string().nullable());
 export const sanitizedLocaleTranslation = localeTranslation.transform(val =>
