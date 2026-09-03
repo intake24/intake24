@@ -63,7 +63,7 @@ export default () => {
     exportedFile = null;
   });
 
-  it('exports a header only when the row offset skips it, then the importer restores the data', async () => {
+  it('exports a header only when the row offset >= 1, then the importer restores the data', async () => {
     const nutrientTableId = `data-${Date.now()}`;
     nutrientTable = await NutrientTable.create({
       id: nutrientTableId,
@@ -108,9 +108,11 @@ export default () => {
     });
 
     await NutrientTableCsvMapping.update({ rowOffset: 0 }, { where: { nutrientTableId } });
-    await ioc.resolve('NutrientTableDataExport').run(createMockBullJob(exportDbJob.id, { nutrientTableId }));
+    const headerlessExportJob = createMockBullJob(exportDbJob.id, { nutrientTableId });
+    await ioc.resolve('NutrientTableDataExport').run(headerlessExportJob);
     await exportDbJob.reload();
 
+    expect(headerlessExportJob.updateProgress).toHaveBeenCalledWith(1);
     expect(exportDbJob.downloadUrl).toBeTruthy();
     expect(exportDbJob.message).toBe('Nutrient table data export: exported 1 record with 6 CSV columns. No headers were included because rowOffset is 0.');
     const headerlessFile = path.resolve(ioc.cradle.fsConfig.local.downloads, exportDbJob.downloadUrl!);

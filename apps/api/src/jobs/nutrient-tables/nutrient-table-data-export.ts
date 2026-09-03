@@ -9,13 +9,13 @@ import { pipeline } from 'node:stream/promises';
 
 import { format } from 'date-fns';
 import { format as formatCsv } from 'fast-csv';
+import { sql } from 'kysely';
 
 import { NotFoundError } from '@intake24/api/http/errors';
 import { addTime } from '@intake24/api/util';
 import {
   Job as DbJob,
   NutrientTable,
-  NutrientTableRecord,
 } from '@intake24/db';
 
 import BaseJob from '../job';
@@ -26,11 +26,13 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
   private dbJob!: DbJob;
 
   private readonly fsConfig;
+  private readonly kyselyDb;
 
-  constructor({ fsConfig, logger }: Pick<IoC, 'fsConfig' | 'logger'>) {
+  constructor({ fsConfig, kyselyDb, logger }: Pick<IoC, 'fsConfig' | 'kyselyDb' | 'logger'>) {
     super({ logger });
 
     this.fsConfig = fsConfig;
+    this.kyselyDb = kyselyDb;
   }
 
   public async run(job: Job): Promise<void> {
@@ -84,43 +86,97 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
     for (const mapping of csvMappingNutrients)
       header[mapping.columnOffset] = mapping.nutrientType?.description ?? '';
 
-    const records = await NutrientTableRecord.findAll({
-      where: { nutrientTableId },
-      include: [
-        { association: 'fields', attributes: ['name', 'value'] },
-        { association: 'nutrients', attributes: ['nutrientTypeId', 'unitsPer100g'] },
-      ],
-      order: [['nutrientTableRecordId', 'ASC']],
-    });
-    const rows = records.map((record) => {
-      const row = Array.from<string>({ length: maxOffset + 1 }).fill('');
-      row[csvMapping.idColumnOffset] = record.nutrientTableRecordId;
-      row[csvMapping.descriptionColumnOffset] = record.name;
-      if (csvMapping.localDescriptionColumnOffset)
-        row[csvMapping.localDescriptionColumnOffset] = record.localName ?? '';
-      for (const mapping of csvMappingFields)
-        row[mapping.columnOffset] = record.fields?.find(field => field.name === mapping.fieldName)?.value ?? '';
-      for (const mapping of csvMappingNutrients)
-        row[mapping.columnOffset] = String(record.nutrients?.find(nutrient => nutrient.nutrientTypeId === mapping.nutrientTypeId)?.unitsPer100g ?? 0);
-      return row;
-    });
+    const { total } = await this.kyselyDb.foods
+      .selectFrom('nutrientTableRecords')
+      .select(({ fn }) => [fn.count<number>('id').as('total')])
+      .where('nutrientTableId', '=', nutrientTableId)
+      .executeTakeFirstOrThrow();
+    this.initProgress(Number(total));
+
+    const fields = new Map(csvMappingFields.map(mapping => [mapping.fieldName, mapping.columnOffset]));
+    const nutrients = new Map(csvMappingNutrients.map(mapping => [mapping.nutrientTypeId, mapping.columnOffset]));
+    const cursor = this.kyselyDb.foods
+      .selectFrom('nutrientTableRecords')
+      .leftJoin('nutrientTableRecordFields', 'nutrientTableRecordFields.nutrientTableRecordId', 'nutrientTableRecords.id')
+      .leftJoin('nutrientTableRecordNutrients', 'nutrientTableRecordNutrients.nutrientTableRecordId', 'nutrientTableRecords.id')
+      .select([
+        'nutrientTableRecords.id',
+        'nutrientTableRecords.nutrientTableRecordId',
+        'nutrientTableRecords.name',
+        'nutrientTableRecords.localName',
+        'nutrientTableRecordFields.name as fieldName',
+        'nutrientTableRecordFields.value as fieldValue',
+        'nutrientTableRecordNutrients.nutrientTypeId',
+        sql<number | null>`nutrient_table_record_nutrients.units_per_100g`.as('unitsPer100g'),
+      ])
+      .where('nutrientTableRecords.nutrientTableId', '=', nutrientTableId)
+      .orderBy('nutrientTableRecords.nutrientTableRecordId')
+      .stream();
+    let recordCount = 0;
+    const rows = (async function* () {
+      if (csvMapping.rowOffset)
+        yield header;
+      for (let index = 1; index < csvMapping.rowOffset; index++)
+        yield [];
+
+      let currentId: string | null = null;
+      let row: string[] | null = null;
+
+      for await (const record of cursor) {
+        if (currentId !== null && currentId !== record.id) {
+          if (row)
+            yield row;
+          row = null;
+        }
+
+        if (!row) {
+          currentId = record.id;
+          recordCount++;
+          row = Array.from<string>({ length: maxOffset + 1 }).fill('');
+          row[csvMapping.idColumnOffset] = record.nutrientTableRecordId;
+          row[csvMapping.descriptionColumnOffset] = record.name;
+          if (csvMapping.localDescriptionColumnOffset)
+            row[csvMapping.localDescriptionColumnOffset] = record.localName ?? '';
+        }
+
+        if (record.fieldName) {
+          const columnOffset = fields.get(record.fieldName);
+          if (columnOffset !== undefined)
+            row[columnOffset] = record.fieldValue ?? '';
+        }
+
+        if (record.nutrientTypeId !== null) {
+          const columnOffset = nutrients.get(record.nutrientTypeId.toString());
+          if (columnOffset !== undefined)
+            row[columnOffset] = String(record.unitsPer100g ?? 0);
+        }
+      }
+
+      if (row)
+        yield row;
+    })();
 
     const timestamp = format(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-${this.name}-${nutrientTableId}-${timestamp}.csv`;
     const output = createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), { encoding: 'utf-8', flags: 'w+' });
-    await pipeline(
-      Readable.from([
-        ...(csvMapping.rowOffset ? [header] : []),
-        ...Array.from({ length: Math.max(csvMapping.rowOffset - 1, 0) }, () => []),
-        ...rows,
-      ]),
-      formatCsv({ headers: false }),
-      output,
-    );
+    const progressInterval = setInterval(async () => {
+      await this.setProgress(recordCount);
+    }, 2000);
+    try {
+      await pipeline(
+        Readable.from(rows),
+        formatCsv({ headers: false }),
+        output,
+      );
+      await this.setProgress(recordCount);
+    }
+    finally {
+      clearInterval(progressInterval);
+    }
     await this.dbJob.update({
       downloadUrl: filename,
       downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-      message: `Nutrient table data export: exported ${records.length} record${records.length === 1 ? '' : 's'} with ${maxOffset + 1} CSV columns.${csvMapping.rowOffset ? '' : ' No headers were included because rowOffset is 0.'}`,
+      message: `Nutrient table data export: exported ${recordCount} record${recordCount === 1 ? '' : 's'} with ${maxOffset + 1} CSV columns.${csvMapping.rowOffset ? '' : ' No headers were included because rowOffset is 0.'}`,
     });
   }
 }
