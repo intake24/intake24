@@ -7,6 +7,9 @@ export default defineConfig({
   envFile: '../../apps/api/.env',
   outFile: './src/kysely/system.d.ts',
   customImports: {
+    AuditContextType: '@intake24/common/types#AuditContextType',
+    AuditJsonValue: '@intake24/common/types#AuditJsonValue',
+    AuditOperation: '@intake24/common/types#AuditOperation',
     // Survey related types
     SurveyState: '@intake24/common/surveys#SurveyState',
     // FAQ related types
@@ -58,6 +61,10 @@ export default defineConfig({
   },
   overrides: {
     columns: {
+      'audit_log.ctx_type': 'AuditContextType | null',
+      'audit_log.operation': 'AuditOperation',
+      'audit_log.old_value': 'AuditJsonValue | null',
+      'audit_log.new_value': 'AuditJsonValue | null',
       'client_error_reports.survey_state_json': 'SurveyState',
       'faqs.content': 'FAQSection[]',
       'faqs.visibility': 'Generated<RecordVisibility>',

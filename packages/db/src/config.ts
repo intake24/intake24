@@ -1,10 +1,7 @@
 import { z } from 'zod';
 
 import { validateConfig } from '@intake24/common-backend';
-import { environmentOptions } from '@intake24/common/types';
-
-export const databaseType = ['foods', 'system'] as const;
-export type DatabaseType = typeof databaseType[number];
+import { databaseTypes, environmentOptions } from '@intake24/common/types';
 
 export const dbConnectionInfo = z.object({
   url: z.string().optional(),
@@ -23,7 +20,7 @@ export const dbConnectionInfo = z.object({
   debugQueryLimit: z.coerce.number().int().default(0),
 });
 
-const databaseConfigSchema = z.record(z.enum(environmentOptions), z.record(z.enum(databaseType), dbConnectionInfo));
+const databaseConfigSchema = z.record(z.enum(environmentOptions), z.record(z.enum(databaseTypes), dbConnectionInfo));
 export type DatabaseConfig = z.infer<typeof databaseConfigSchema>;
 
 export const rawDatabaseConfig = {

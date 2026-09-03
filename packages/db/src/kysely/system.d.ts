@@ -10,7 +10,7 @@ import type { Card, DemographicGroup, FeedbackMeals, FeedbackOutput, FeedbackPhy
 import type { SinglePrompt } from '@intake24/common/prompts';
 import type { MFAProvider, RecordVisibility, SecurableType } from '@intake24/common/security';
 import type { CustomData, ExportSection, Meal, PortionSizeMethodId, PortionSizeState, RecallPrompts, SchemeOverrides, SchemeSettings, SessionSettings, SurveyAuthMode, SurveySearchSettings, SurveyState, SurveyStatus } from '@intake24/common/surveys';
-import type { Dictionary, JobType, JobTypeParams, Notification, Subscription, SubscriptionType } from '@intake24/common/types';
+import type { AuditContextType, AuditJsonValue, AuditOperation, Dictionary, JobType, JobTypeParams, Notification, Subscription, SubscriptionType } from '@intake24/common/types';
 import type { FAQSection } from '@intake24/common/types/http/admin';
 import type { LocaleMessageDictionary } from '@intake24/i18n';
 
@@ -35,6 +35,19 @@ export type JsonPrimitive = boolean | number | string | null;
 export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
+
+export interface AuditLog {
+  changedAt: Generated<Timestamp>;
+  ctxId: string | null;
+  ctxType: AuditContextType | null;
+  ctxUserId: Int8 | null;
+  id: Generated<string>;
+  newValue: AuditJsonValue | null;
+  oldValue: AuditJsonValue | null;
+  operation: AuditOperation;
+  recordId: string | null;
+  tableName: string;
+}
 
 export interface ClientErrorReports {
   createdAt: Timestamp;
@@ -594,6 +607,7 @@ export interface UxEvents {
 }
 
 export interface DB {
+  auditLog: AuditLog;
   clientErrorReports: ClientErrorReports;
   externalTestUsers: ExternalTestUsers;
   faqs: Faqs;

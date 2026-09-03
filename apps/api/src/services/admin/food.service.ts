@@ -1,10 +1,10 @@
 import type { Insertable, Kysely } from 'kysely';
-import type { FindOptions, Transaction } from 'sequelize';
+import type { FindOptions } from 'sequelize';
 
 import type { CacheKey } from '../core/redis/cache';
 import type { IoC } from '@intake24/api/ioc';
 import type { BulkFoodInput, FoodCopyInput, FoodInput } from '@intake24/common/types/http/admin';
-import type { FoodAttributes, FoodsDB, OnConflictOption, PaginateQuery } from '@intake24/db';
+import type { AssociatedFood, FoodAttributes, FoodPortionSizeMethod, FoodsDB, OnConflictOption, PaginateQuery } from '@intake24/db';
 
 import { randomUUID } from 'node:crypto';
 
@@ -14,9 +14,9 @@ import { Op } from 'sequelize';
 import { ConflictError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { foodsResponse } from '@intake24/api/http/responses/admin';
 import { toSimpleName } from '@intake24/api/util';
-import { AssociatedFood, Category, Food, FoodAttribute, FoodPortionSizeMethod } from '@intake24/db';
+import { Food } from '@intake24/db';
 
-function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'kyselyDb'>) {
+function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
   function getFoodCacheKeys(localeId: string, foodId: string, foodCode: string): CacheKey[] {
     return [
       `food-entry:${foodId}`,
@@ -67,19 +67,21 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     foodId: string,
     methods: FoodPortionSizeMethod[],
     inputs: FoodInput['portionSizeMethods'],
-    { transaction }: { transaction: Transaction },
+    { transaction }: { transaction: Kysely<FoodsDB> },
   ): Promise<void> => {
     if (!inputs)
       return;
 
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
 
-    await FoodPortionSizeMethod.destroy({ where: { foodId, id: { [Op.notIn]: ids } }, transaction });
+    await transaction
+      .deleteFrom('foodPortionSizeMethods')
+      .where('foodId', '=', foodId)
+      .$if(!!ids.length, qb => qb.where('id', 'not in', ids))
+      .execute();
 
     if (!inputs.length)
       return;
-
-    const newMethods: FoodPortionSizeMethod[] = [];
 
     for (const input of inputs) {
       const { id, ...rest } = input;
@@ -87,13 +89,12 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
       if (id) {
         const match = methods.find(method => method.id === id);
         if (match) {
-          await match.update(rest, { transaction });
+          await transaction.updateTable('foodPortionSizeMethods').set(rest).where('id', '=', id).execute();
           continue;
         }
       }
 
-      const newMethod = await FoodPortionSizeMethod.create({ ...rest, foodId }, { transaction });
-      newMethods.push(newMethod);
+      await transaction.insertInto('foodPortionSizeMethods').values({ ...rest, foodId }).execute();
     }
   };
 
@@ -101,19 +102,21 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     foodId: string,
     foods: AssociatedFood[],
     inputs: FoodInput['associatedFoods'],
-    { transaction }: { transaction: Transaction },
+    { transaction }: { transaction: Kysely<FoodsDB> },
   ): Promise<void> => {
     if (!inputs)
       return;
 
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
 
-    await AssociatedFood.destroy({ where: { foodId, id: { [Op.notIn]: ids } }, transaction });
+    await transaction
+      .deleteFrom('associatedFoods')
+      .where('foodId', '=', foodId)
+      .$if(!!ids.length, qb => qb.where('id', 'not in', ids))
+      .execute();
 
     if (!inputs.length)
       return;
-
-    const newFoods: AssociatedFood[] = [];
 
     for (const input of inputs) {
       const { id, ...rest } = input;
@@ -121,32 +124,24 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
       if (id) {
         const match = foods.find(food => food.id === id);
         if (match) {
-          await match.update(rest, { transaction });
+          // await match.update(rest, { transaction });
+          await transaction.updateTable('associatedFoods').set(rest).where('id', '=', id).execute();
           continue;
         }
       }
 
-      const newFood = await AssociatedFood.create({ ...rest, foodId }, { transaction });
-      newFoods.push(newFood);
+      await transaction.insertInto('associatedFoods').values({ ...rest, foodId }).execute();
     }
   };
 
   const createFood = async (localeId: string, input: FoodInput) => {
-    const food = await db.foods.transaction(async (transaction) => {
-      const food = await Food.create(
-        {
-          code: input.code,
-          localeId,
-          englishName: input.englishName,
-          name: input.name,
-          simpleName: toSimpleName(input.name),
-          altNames: input.altNames,
-          tags: input.tags,
-          icon: input.icon,
-          version: randomUUID(),
-        },
-        { transaction },
-      );
+    const food = await kyselyDb.foods.contextTransaction(async (transaction) => {
+      const food = await transaction.insertInto('foods').values({
+        ...pick(input, ['code', 'englishName', 'name', 'altNames', 'tags', 'icon']),
+        localeId,
+        simpleName: toSimpleName(input.name),
+        version: randomUUID(),
+      }).returningAll().executeTakeFirstOrThrow();
 
       const promises: Promise<any>[] = [
         cache.setAdd('locales-index', localeId),
@@ -156,19 +151,33 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
 
       if (input.parentCategories?.length) {
         const categories = input.parentCategories.map(({ id }) => id);
-        promises.push(food.$add('parentCategories', categories, { transaction }));
+        promises.push(
+          transaction
+            .insertInto('foodsCategories')
+            .values(categories.map(categoryId => ({ foodId: food.id, categoryId })))
+            .execute(),
+        );
       }
 
       if (input.attributes) {
         const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
         if (Object.values(attributesInput).some(item => item !== null)) {
-          promises.push(FoodAttribute.create({ foodId: food.id, ...attributesInput }, { transaction }));
+          promises.push(transaction
+            .insertInto('foodAttributes')
+            .values({ foodId: food.id, ...attributesInput })
+            .execute(),
+          );
         }
       }
 
       if (input.nutrientRecords?.length) {
         const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
-        promises.push(food.$set('nutrientRecords', nutrientRecords, { transaction }));
+        promises.push(
+          transaction
+            .insertInto('foodsNutrients')
+            .values(nutrientRecords.map(nutrientTableRecordId => ({ foodId: food.id, nutrientTableRecordId })))
+            .execute(),
+        );
       }
 
       await Promise.all(promises);
@@ -184,46 +193,76 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     if (!food)
       throw new NotFoundError();
 
-    const { associatedFoods, attributes, portionSizeMethods } = food;
+    const { associatedFoods, attributes, portionSizeMethods, parentCategories } = food;
     if (!associatedFoods || !portionSizeMethods)
       throw new NotFoundError();
 
-    await db.foods.transaction(async (transaction) => {
+    await kyselyDb.foods.contextTransaction(async (transaction) => {
       const promises: Promise<any>[] = [
         cache.forget(getFoodCacheKeys(localeId, foodId, food.code)),
         cache.setAdd('locales-index', localeId),
-        food.update({
+        transaction.updateTable('foods').set({
           ...pick(input, ['code', 'englishName', 'name', 'altNames', 'tags', 'icon']),
           simpleName: toSimpleName(input.name),
           version: randomUUID(),
-        }, { transaction }),
+        }).where('id', '=', foodId).execute(),
         updatePortionSizeMethods(foodId, portionSizeMethods, input.portionSizeMethods, { transaction }),
         updateAssociatedFoods(foodId, associatedFoods, input.associatedFoods, { transaction }),
       ];
 
       if (input.parentCategories) {
+        const currentCategories = parentCategories?.map(({ id }) => id) ?? [];
         const categories = input.parentCategories.map(({ id }) => id);
-        promises.push(food.$set('parentCategories', categories, { transaction }));
+        const inserts = categories.filter(categoryId => !currentCategories.includes(categoryId));
+        promises.push(
+          transaction.deleteFrom('foodsCategories')
+            .where('foodId', '=', foodId)
+            .$if(!!categories.length, qb => qb.where('categoryId', 'not in', categories))
+            .execute(),
+        );
+
+        if (inserts.length) {
+          promises.push(
+            transaction.insertInto('foodsCategories')
+              .values(inserts.map(categoryId => ({ foodId, categoryId })))
+              .execute(),
+          );
+        }
       }
 
       if (input.attributes) {
         const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
         if (Object.values(attributesInput).every(item => item === null)) {
           if (attributes)
-            promises.push(attributes.destroy({ transaction }));
+            promises.push(transaction.deleteFrom('foodAttributes').where('foodId', '=', foodId).execute());
         }
         else {
           promises.push(
             attributes
-              ? attributes.update(attributesInput, { transaction })
-              : FoodAttribute.create({ foodId, ...attributesInput }, { transaction }),
+              ? transaction.updateTable('foodAttributes').set(attributesInput).where('foodId', '=', foodId).execute()
+              : transaction.insertInto('foodAttributes').values({ foodId, ...attributesInput }).execute(),
           );
         }
       }
 
       if (input.nutrientRecords) {
+        const currentNutrientRecords = food.nutrientRecords?.map(({ id }) => id) ?? [];
         const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
-        promises.push(food.$set('nutrientRecords', nutrientRecords, { transaction }));
+        const inserts = nutrientRecords.filter(nutrientTableRecordId => !currentNutrientRecords.includes(nutrientTableRecordId));
+        promises.push(
+          transaction.deleteFrom('foodsNutrients')
+            .where('foodId', '=', foodId)
+            .$if(!!nutrientRecords.length, qb => qb.where('nutrientTableRecordId', 'not in', nutrientRecords))
+            .execute(),
+        );
+
+        if (inserts.length) {
+          promises.push(
+            transaction.insertInto('foodsNutrients')
+              .values(inserts.map(nutrientTableRecordId => ({ foodId, nutrientTableRecordId })))
+              .execute(),
+          );
+        }
       }
 
       await Promise.all(promises);
@@ -237,16 +276,13 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
     if (!sourceFood)
       throw new NotFoundError();
 
-    const food = await db.foods.transaction(async (transaction) => {
-      const food = await Food.create(
-        {
-          ...pick(sourceFood, ['code', 'localeId', 'englishName', 'name', 'simpleName', 'altNames', 'tags', 'icon']),
-          ...input,
-          simpleName: toSimpleName(input.name)!,
-          version: randomUUID(),
-        },
-        { transaction },
-      );
+    const food = await kyselyDb.foods.contextTransaction(async (transaction) => {
+      const food = await transaction.insertInto('foods').values({
+        ...pick(sourceFood, ['code', 'localeId', 'englishName', 'name', 'altNames', 'tags', 'icon']),
+        ...input,
+        simpleName: toSimpleName(input.name),
+        version: randomUUID(),
+      }).returningAll().executeTakeFirstOrThrow();
 
       const promises: Promise<any>[] = [
         cache.setAdd('locales-index', food.localeId),
@@ -254,13 +290,10 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
 
       if (sourceFood.attributes) {
         promises.push(
-          FoodAttribute.create(
-            {
-              ...pick(sourceFood.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
-              foodId: food.id,
-            },
-            { transaction },
-          ),
+          transaction.insertInto('foodAttributes').values({
+            ...pick(sourceFood.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
+            foodId: food.id,
+          }).execute(),
         );
       }
 
@@ -271,58 +304,67 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
         }
         else {
           const code = sourceFood.parentCategories.map(({ code }) => code);
-          const destLocaleCategories = await Category.findAll({
-            attributes: ['id'],
-            where: { code, localeId: input.localeId },
-            transaction,
-          });
+          const destLocaleCategories = await transaction
+            .selectFrom('categories')
+            .select('id')
+            .where('code', 'in', code)
+            .where('localeId', '=', input.localeId)
+            .execute();
 
           categories = destLocaleCategories.map(({ id }) => id);
         }
 
-        if (categories.length)
-          promises.push(food.$set('parentCategories', categories, { transaction }));
+        if (categories.length) {
+          promises.push(
+            transaction.insertInto('foodsCategories')
+              .values(categories.map(categoryId => ({ foodId: food.id, categoryId })))
+              .execute(),
+          );
+        }
       }
 
       if (sourceFood.nutrientRecords?.length) {
         const nutrientRecords = sourceFood.nutrientRecords.map(({ id }) => id);
-        promises.push(food.$set('nutrientRecords', nutrientRecords, { transaction }));
+        promises.push(
+          transaction.insertInto('foodsNutrients')
+            .values(nutrientRecords.map(nutrientTableRecordId => ({ foodId: food.id, nutrientTableRecordId })))
+            .execute(),
+        );
       }
 
       if (sourceFood.associatedFoods?.length) {
-        const associatedFoods = sourceFood.associatedFoods!.map(psm => ({
-          ...pick(psm, [
-            'associatedFoodCode',
-            'associatedCategoryCode',
-            'text',
-            'linkAsMain',
-            'multiple',
-            'genericName',
-            'orderBy',
-          ]),
-          foodId: food.id,
-        }));
-        promises.push(AssociatedFood.bulkCreate(associatedFoods, { transaction }));
+        promises.push(transaction
+          .insertInto('associatedFoods')
+          .values(sourceFood.associatedFoods!.map(psm => ({
+            ...pick(psm, [
+              'associatedFoodCode',
+              'associatedCategoryCode',
+              'text',
+              'linkAsMain',
+              'multiple',
+              'genericName',
+              'orderBy',
+            ]),
+            foodId: food.id,
+          }))).execute());
       }
 
       if (sourceFood.portionSizeMethods?.length) {
-        promises.push(
-          ...sourceFood.portionSizeMethods.map(psm =>
-            FoodPortionSizeMethod.create(
-              {
-                ...pick(psm, [
-                  'method',
-                  'description',
-                  'pathways',
-                  'conversionFactor',
-                  'orderBy',
-                  'parameters',
-                ]),
-                foodId: food.id,
-              },
-              { transaction },
-            ),
-          ),
+        promises.push(transaction
+          .insertInto('foodPortionSizeMethods')
+          .values(
+            sourceFood.portionSizeMethods.map(psm => ({
+              ...pick(psm, [
+                'method',
+                'description',
+                'pathways',
+                'conversionFactor',
+                'orderBy',
+                'parameters',
+              ]),
+              foodId: food.id,
+            })),
+          ).execute(),
         );
       }
 
@@ -335,12 +377,20 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
   };
 
   const deleteFood = async (localeId: string, foodId: string) => {
-    const food = await Food.findOne({ attributes: ['id', 'code'], where: { id: foodId, localeId } });
+    const food = await kyselyDb.foods
+      .selectFrom('foods')
+      .select(['id', 'code'])
+      .where('id', '=', foodId)
+      .where('localeId', '=', localeId)
+      .executeTakeFirst();
+
     if (!food)
       throw new NotFoundError();
 
     await Promise.all([
-      food.destroy(),
+      kyselyDb.foods.contextTransaction(async (transaction) => {
+        await transaction.deleteFrom('foods').where('id', '=', foodId).execute();
+      }),
       cache.forget(getFoodCacheKeys(localeId, foodId, food.code)),
       cache.setAdd('locales-index', localeId),
     ]);
@@ -754,7 +804,7 @@ function adminFoodService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'k
       await impl(transaction);
     }
     else {
-      await kyselyDb.foods.transaction().execute(impl);
+      await kyselyDb.foods.contextTransaction(impl);
     }
   };
 
