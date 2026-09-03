@@ -44,11 +44,11 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assert401and403 = async (method: Method, url: string, ops?: Options) => {
-    await assertMissingAuthentication(method, url);
     await suite.util.setPermission([]);
+    await assertMissingAuthentication(method, url);
     await assertMissingAuthorization(method, url, ops);
 
-    if (ops?.permissions?.length) {
+    if (ops?.permissions && ops.permissions.length > 1) {
       for (const permission of ops.permissions) {
         await suite.util.setPermission(permission);
         await assertMissingAuthorization(method, url, ops);

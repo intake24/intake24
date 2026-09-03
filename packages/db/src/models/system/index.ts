@@ -1,3 +1,5 @@
+import SystemAuditLog from './audit-log';
+import SystemAuditTable from './audit-table';
 import ClientErrorReport from './client-error-report';
 import FAQ from './faq';
 import FeedbackScheme from './feedback-scheme';
@@ -44,6 +46,10 @@ import UserSurveyAlias from './user-survey-alias';
 import UserSurveyRating from './user-survey-rating';
 import UserSurveySession from './user-survey-session';
 
+export { default as SystemAuditLog } from './audit-log';
+export * from './audit-log';
+export { default as SystemAuditTable } from './audit-table';
+export * from './audit-table';
 export { default as ClientErrorReport } from './client-error-report';
 export * from './client-error-report';
 export { default as FAQ } from './faq';
@@ -144,12 +150,9 @@ export const system = {
   Job,
   Language,
   LanguageTranslation,
-  SystemLocale,
   Media,
   MFAAuthenticator,
   MFADevice,
-  SystemNutrientType,
-  SystemNutrientUnit,
   PACoOccurrence,
   PAOccurrence,
   PAOccurrenceTransactionCount,
@@ -181,4 +184,10 @@ export const system = {
   UserSurveyAlias,
   UserSurveyRating,
   UserSurveySession,
+  // Foods & System common
+  SystemAuditLog,
+  SystemAuditTable,
+  SystemLocale,
+  SystemNutrientType,
+  SystemNutrientUnit,
 };

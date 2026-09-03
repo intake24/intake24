@@ -26,7 +26,7 @@ function imageMapService({
 
     const processedBaseImage = await processedImageService.createImageMapBaseImage(id, sourceImage);
 
-    return db.foods.transaction(async (transaction) => {
+    return db.foods.contextTransaction(async (transaction) => {
       const imageMap = await ImageMap.create(
         {
           id,

@@ -18,7 +18,7 @@ import ky from 'ky';
 import color from 'picocolors';
 
 import config from '@intake24/cli/config';
-import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
+import { permissions as defaultPermissions } from '@intake24/common-backend';
 import { logger } from '@intake24/common-backend/services/logger';
 import { defaultAlgorithm } from '@intake24/common-backend/util';
 import {
