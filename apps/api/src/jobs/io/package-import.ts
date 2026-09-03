@@ -23,9 +23,7 @@ const BATCH_SIZE = 200;
 export default class PackageImport extends BaseJob<'PackageImport'> {
   readonly name = 'PackageImport';
 
-  private dbJob!: DbJob;
-
-  private userId!: string;
+  protected userId!: string;
 
   private verifiedPath!: string;
 
@@ -61,15 +59,8 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
   public async run(job: Job): Promise<void> {
     this.init(job);
 
-    const dbJob = await DbJob.findByPk(this.dbId);
-    if (!dbJob)
-      throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
-
-    if (!dbJob.userId)
+    if (!this.userId)
       throw new NotFoundError(`Job ${this.name}: No user ID associated with job (${this.dbId}).`);
-
-    this.dbJob = dbJob;
-    this.userId = dbJob.userId;
 
     this.logger.debug('Job started.');
 
@@ -198,7 +189,7 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
     await checkImportLocalePermissions(this.globalAclService, this.userId, localesWithFoodListChanges);
 
     await this.kyselyDb.system.transaction().execute(async (systemTransaction) => {
-      await this.kyselyDb.foods.transaction().execute(async (foodsTransaction) => {
+      await this.kyselyDb.foods.contextTransaction(async (foodsTransaction) => {
         for (let i = 0; i < filteredLocaleData.length; i += BATCH_SIZE) {
           await this.localeService.bulkUpdateLocales(filteredLocaleData.slice(i, i + BATCH_SIZE), conflictStrategies.locales || 'abort', foodsTransaction, systemTransaction);
         }

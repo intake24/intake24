@@ -4,10 +4,11 @@ import type { DatabaseType } from './config';
 import type { Logger } from '@intake24/common-backend';
 import type { DatabaseOptions, FoodsDB, SystemDB } from '@intake24/db';
 
-import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
+import { CamelCasePlugin, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 import cursor from 'pg-cursor';
 
+import { Kysely } from './kysely';
 import { ENUM_ARRAY_TYPES, setupEnumArrayParsers } from './pg-enum-array-parsers';
 
 function databaseLogQuery(sql: string, logger: Logger, logLevel: string, limit: number) {

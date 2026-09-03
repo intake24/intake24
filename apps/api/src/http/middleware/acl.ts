@@ -7,6 +7,7 @@ import { asValue } from 'awilix';
 import passport from 'passport';
 
 import { ForbiddenError } from '@intake24/api/http/errors';
+import { requestContextStorage } from '@intake24/common-backend/acl';
 import { surveyRespondent } from '@intake24/common/security';
 
 export function isAalSatisfied(req: Request, res: Response, next: NextFunction): void {
@@ -35,9 +36,12 @@ export function isAccountVerified(req: Request, res: Response, next: NextFunctio
  * It assumes successfully authenticated user on request scope hence the assertion to User
  */
 export function registerACLScope(req: Request, res: Response, next: NextFunction): void {
-  req.scope.register({ user: asValue(req.user as TokenPayload) });
+  const payload = req.user as TokenPayload;
+  req.scope.register({ user: asValue(payload) });
 
-  next();
+  requestContextStorage.run({ userId: payload.userId }, () => {
+    next();
+  });
 }
 
 /**
