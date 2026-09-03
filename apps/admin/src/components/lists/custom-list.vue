@@ -10,7 +10,6 @@
           {{ $t('common.list.title', { item: pluralize(item) }) }}
         </v-toolbar-title>
       </template>
-      <v-spacer />
       <v-btn
         color="primary"
         rounded="pill"

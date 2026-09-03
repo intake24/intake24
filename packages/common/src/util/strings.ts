@@ -1,4 +1,4 @@
-import type { CamelCase } from 'type-fest';
+import type { CamelCase, KebabCase, PascalCase } from 'type-fest';
 
 import { camelCase } from 'lodash-es';
 import { customAlphabet, nanoid } from 'nanoid';
@@ -16,26 +16,31 @@ export function capitalize(string: string): string {
  *
  * @param {string} string
  */
-export function kebabCase(string: string): string {
+export function kebabCase<T extends string>(string: T): KebabCase<T> {
   return string
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .replace(/[\s_]+/g, '-')
-    .toLowerCase();
+    .toLowerCase() as KebabCase<T>;
 }
 
-export function modelToResource<T extends string>(modelType: T): string {
-  return kebabCase(pluralize.plural(modelType));
+export function modelToResource<T extends string>(modelType: T): KebabCase<T> {
+  return kebabCase(pluralize.plural(modelType)) as KebabCase<T>;
 }
 
 export function modelToRequestParam<T extends string>(modelType: T): `${CamelCase<T>}Id` {
   return `${camelCase(modelType)}Id` as `${CamelCase<T>}Id`;
 }
 
-export function resourceToRequestParam(resource: string): string {
-  return `${camelCase(pluralize.singular(resource))}Id`;
+export function resourceToModel<T extends string>(resource: T): PascalCase<T> {
+  const model = (pluralize.singular(camelCase(resource)));
+  return `${model.charAt(0).toUpperCase() + model.slice(1)}` as PascalCase<T>;
 }
 
-export function getResourceFromSecurable(securableType: any): string {
+export function resourceToRequestParam<T extends string>(resource: T): `${CamelCase<T>}Id` {
+  return `${camelCase(pluralize.singular(resource))}Id` as `${CamelCase<T>}Id`;
+}
+
+export function securableToResource(securableType: any): string {
   if (!isSecurableType(securableType))
     throw new Error('Invalid securable type');
 

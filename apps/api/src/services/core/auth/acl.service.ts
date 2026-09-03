@@ -61,6 +61,18 @@ function aclService({ globalAclService, user }: Pick<RequestIoC, 'globalAclServi
    */
   const hasAnyRole = async (roles: string[]): Promise<boolean> => globalAclService.hasAnyRole(userId, roles);
 
+  /*
+    * Check is user has access to resource for provided action
+
+  */
+  async function checkAccess<T extends Securable>(
+    resource: string,
+    action: string,
+    findOptions: FindOptions<Attributes<T>>,
+  ): Promise<void> {
+    return await globalAclService.checkAccess(userId, resource, action, findOptions);
+  }
+
   const findAndCheckRecordAccess = async <T extends Securable>(
     securable: ModelStatic<T>,
     action: string,
@@ -114,6 +126,7 @@ function aclService({ globalAclService, user }: Pick<RequestIoC, 'globalAclServi
     hasAnyPermission,
     hasRole,
     hasAnyRole,
+    checkAccess,
     findAndCheckRecordAccess,
     findAndCheckVisibility,
     getResourceAccessActions,
