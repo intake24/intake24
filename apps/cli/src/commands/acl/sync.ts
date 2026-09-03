@@ -2,7 +2,7 @@ import { intro, log, outro } from '@clack/prompts';
 import color from 'picocolors';
 
 import config from '@intake24/cli/config';
-import { permissions as defaultPermissions } from '@intake24/common-backend/acl';
+import { permissions as defaultPermissions } from '@intake24/common-backend';
 import { logger } from '@intake24/common-backend/services/logger';
 import { KyselyDatabases } from '@intake24/db';
 

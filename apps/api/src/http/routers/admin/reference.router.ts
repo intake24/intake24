@@ -41,6 +41,14 @@ export function reference() {
   const responseCollection = imageResponseCollection(ioc.cradle.imagesBaseUrl);
 
   return initServer().router(contract.admin.reference, {
+    audit: {
+      middleware: [anyPermission('audit')],
+      handler: async ({ req }) => {
+        const tables = await req.scope.cradle.auditService.getReferenceAuditTables();
+
+        return { status: 200, body: tables };
+      },
+    },
     asServedSets: {
       middleware: [anyPermission('locales')],
       handler: async ({ query: { id, ...query } }) => {
