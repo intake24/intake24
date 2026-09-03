@@ -102,4 +102,26 @@ export default () => {
       { nutrientTypeId: nutrientTypes[1].id, columnOffset: 27 },
     ]);
   });
+
+  it('exports a header-only CSV when no mappings are configured', async () => {
+    const nutrientTableId = `empty-mapping-${Date.now()}`;
+    nutrientTable = await NutrientTable.create({
+      id: nutrientTableId,
+      description: 'Empty mapping export test',
+    });
+    exportDbJob = await DbJob.create({
+      type: 'NutrientTableMappingExport',
+      userId: suite.data.system.user.id,
+      params: { nutrientTableId },
+    });
+
+    await ioc.resolve('NutrientTableMappingExport').run(createMockBullJob(exportDbJob.id, { nutrientTableId }));
+    await exportDbJob.reload();
+
+    expect(exportDbJob.message).toBe('Nutrient table mapping export: exported 0 records with 3 CSV columns.');
+    exportedFile = path.resolve(ioc.cradle.fsConfig.local.downloads, exportDbJob.downloadUrl!);
+    await expect(fs.readFile(exportedFile, 'utf8')).resolves.toBe(
+      '\uFEFF"Intake24 nutrient ID","NDB spreadsheet column index","Nutrient name"',
+    );
+  });
 };
