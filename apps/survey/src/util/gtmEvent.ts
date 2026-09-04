@@ -55,7 +55,7 @@ const eventFieldNames = [
   'interaction-type',
   'content-name',
   'content-view-name',
-  'selected_option',
+  'previous_selected_option',
 ] as const;
 
 const clearedEventFields = Object.fromEntries(eventFieldNames.map(field => [field, null]));
@@ -116,7 +116,7 @@ function buildEvent(params: GtmPayload) {
 
 export function recordPromptTransition(
   transition: PromptTransition | null,
-  params: Pick<GtmEventParams, 'selected_option'> = {},
+  params: Pick<GtmEventParams, 'previous_selected_option'> = {},
 ): void {
   if (transition) {
     promptContext.previous = promptContext.current;
@@ -145,14 +145,14 @@ export function sendGtmEvent(params: GtmEventParams): void {
   }
 }
 
-export function sendFeedbackLinkEvent(
-  event: 'feedbackLinkOffered' | 'feedbackLinkClicked',
+export function sendPostSurveyLinkEvent(
+  event: 'postSurveyLinkShown' | 'postSurveyLinkClicked',
   link_kind: 'dietary_feedback' | 'follow_up',
 ): void {
   sendGtmEvent({
     event,
     link_kind,
-    noninteraction: event === 'feedbackLinkOffered',
+    noninteraction: event === 'postSurveyLinkShown',
   });
 }
 
@@ -165,17 +165,19 @@ const mealListActions = {
 } as const;
 
 export type MealListAction = keyof typeof mealListActions;
+type MealFoodParams = Pick<GtmEventParams, 'food' | 'meal'>;
 
 export function isMealListAction(action: string): action is MealListAction {
   return action in mealListActions;
 }
 
-export function sendMealListEvent(event: MealListAction): void {
-  sendGtmEvent({ event, action: mealListActions[event] });
+export function sendMealListEvent(event: MealListAction, params: MealFoodParams = {}): void {
+  sendGtmEvent({ event, action: mealListActions[event], ...params });
 }
 
 export function sendDeletionEvent(
   event: 'deleteFood' | 'deleteMeal',
+  params: MealFoodParams = {},
 ): void {
-  sendGtmEvent({ event, action: event });
+  sendGtmEvent({ event, action: event, ...params });
 }

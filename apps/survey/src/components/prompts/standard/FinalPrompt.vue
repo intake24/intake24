@@ -12,7 +12,7 @@
           v-if="feedbackEnabled"
           :disabled="!feedbackAvailable"
           :to="{ name: 'feedback-home', params: { surveyId } }"
-          @click="sendFeedbackLinkEvent('feedbackLinkClicked', 'dietary_feedback')"
+          @click="sendPostSurveyLinkEvent('postSurveyLinkClicked', 'dietary_feedback')"
         >
           <v-icon icon="$feedback" start />
           {{ $t('recall.actions.feedback') }}
@@ -32,7 +32,7 @@ import { onMounted } from 'vue';
 
 import { SurveyRating } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { sendFeedbackLinkEvent } from '@intake24/survey/util';
+import { sendPostSurveyLinkEvent } from '@intake24/survey/util';
 
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
@@ -62,7 +62,7 @@ const isValid = true;
 
 onMounted(() => {
   if (props.feedbackEnabled && props.feedbackAvailable)
-    sendFeedbackLinkEvent('feedbackLinkOffered', 'dietary_feedback');
+    sendPostSurveyLinkEvent('postSurveyLinkShown', 'dietary_feedback');
 });
 </script>
 

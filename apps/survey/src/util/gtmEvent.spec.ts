@@ -147,7 +147,7 @@ describe('sendGtmEvent', async () => {
     ));
   });
 
-  it('attaches a selected option only to its prompt transition', () => {
+  it('attaches the previous selected option only to its prompt transition', () => {
     gtmEvent.recordPromptTransition({
       prompt_id: 'yes-no-prompt',
       section: 'foods',
@@ -160,7 +160,7 @@ describe('sendGtmEvent', async () => {
       prompt_id: 'detail-prompt',
       section: 'foods',
       prompt_component: 'text-prompt',
-    }, { selected_option: 'yes' });
+    }, { previous_selected_option: 'yes' });
     gtmEvent.recordPromptTransition({
       action: 'popstateBack',
       prompt_id: 'yes-no-prompt',
@@ -173,12 +173,12 @@ describe('sendGtmEvent', async () => {
       event: 'promptChanged',
       previous_prompt_id: 'yes-no-prompt',
       prompt_id: 'detail-prompt',
-      selected_option: 'yes',
+      previous_selected_option: 'yes',
     }));
     expect(window.dataLayer).toContainEqual(expect.objectContaining({
       action: 'popstateBack',
       event: 'promptChanged',
-      selected_option: null,
+      previous_selected_option: null,
     }));
   });
 
@@ -203,7 +203,7 @@ describe('sendGtmEvent', async () => {
       search_results_count: null,
       search_term: null,
       search_term_order: null,
-      selected_option: null,
+      previous_selected_option: null,
       target: null,
       'content-name': null,
       'content-view-name': null,
@@ -374,6 +374,24 @@ describe('sendGtmEvent', async () => {
     },
   );
 
+  it('uses explicit deletion target details', () => {
+    gtmEvent.sendDeletionEvent('deleteFood', { food: 'Apple', meal: 'Breakfast' });
+    gtmEvent.sendMealListEvent('deleteMeal', { meal: 'Dinner' });
+
+    expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+      action: 'deleteFood',
+      event: 'deleteFood',
+      food: 'Apple',
+      meal: 'Breakfast',
+    }));
+    expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+      action: 'mealListDeleteMeal',
+      event: 'deleteMeal',
+      food: null,
+      meal: 'Dinner',
+    }));
+  });
+
   it('clears prompt context when transition is reset', () => {
     gtmEvent.recordPromptTransition({
       prompt_id: 'edit-meal-prompt',
@@ -404,12 +422,12 @@ describe('sendGtmEvent', async () => {
   });
 
   it.each(['dietary_feedback', 'follow_up'] as const)(
-    'tracks %s link offers without exposing a URL',
+    'tracks %s links shown without exposing a URL',
     (linkKind) => {
-      gtmEvent.sendFeedbackLinkEvent('feedbackLinkOffered', linkKind);
+      gtmEvent.sendPostSurveyLinkEvent('postSurveyLinkShown', linkKind);
 
       expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
-        event: 'feedbackLinkOffered',
+        event: 'postSurveyLinkShown',
         link_kind: linkKind,
         noninteraction: true,
       }));
@@ -420,10 +438,10 @@ describe('sendGtmEvent', async () => {
   it.each(['dietary_feedback', 'follow_up'] as const)(
     'tracks %s link clicks as interactions',
     (linkKind) => {
-      gtmEvent.sendFeedbackLinkEvent('feedbackLinkClicked', linkKind);
+      gtmEvent.sendPostSurveyLinkEvent('postSurveyLinkClicked', linkKind);
 
       expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
-        event: 'feedbackLinkClicked',
+        event: 'postSurveyLinkClicked',
         link_kind: linkKind,
         noninteraction: false,
       }));
