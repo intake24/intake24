@@ -274,7 +274,7 @@ const requestInProgress = ref(true);
 const requestFailed = ref(false);
 
 const tab = ref<'browse' | 'search'>('browse');
-const searchCount = ref(1);
+const searchCount = ref(0);
 const percentScrolled = ref(0);
 const rootCategoryName = ref('...');
 
@@ -447,6 +447,7 @@ async function search() {
           return true;
         },
       );
+      searchCount.value++;
       sendGtmEvent({
         event: 'foodSearch',
         search_term: searchTerm.value,
@@ -541,7 +542,6 @@ watchDebounced(
     foodBuilders.reset();
 
     if (searchTerm.value) {
-      searchCount.value++;
       await search();
       currentCategoryContents.value = undefined;
       navigationHistory.value = [];

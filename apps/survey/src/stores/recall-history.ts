@@ -97,7 +97,12 @@ interface PromptHistoryEntry extends RecallHistoryBase {
 
 type RecallHistoryEntry = FullHistoryEntry | PromptHistoryEntry;
 
-export type HandlePopStateResult = 'none' | 'full' | 'prompt';
+type HistoryTraversalResult = HistoryEntryType | 'none';
+
+export type HandlePopStateResult = {
+  direction: 'back' | 'forward';
+  entryType: HistoryEntryType;
+} | null;
 
 let survey: SurveyStore | null = null;
 const undoStack: RecallHistoryEntry[] = [];
@@ -349,7 +354,7 @@ export function invalidateForward() {
   }
 }
 
-export function goBack(): HandlePopStateResult {
+export function goBack(): HistoryTraversalResult {
   log(`goBack called | undoStack.length=${undoStack.length}`);
   fallbackEntry = null;
 
@@ -376,7 +381,7 @@ export function goBack(): HandlePopStateResult {
   return entry.recallHistoryType;
 }
 
-export function goForward(): HandlePopStateResult {
+export function goForward(): HistoryTraversalResult {
   log(`goForward called | redoStack.length=${redoStack.length}`);
   fallbackEntry = null;
 
@@ -407,7 +412,7 @@ export function handlePopState(event: PopStateEvent): HandlePopStateResult {
   log('popstate | event.state=', event.state, `| currentStateId=${currentStateId}`);
   if (!event.state?.recallHistory || typeof event.state.stateId !== 'number') {
     log('popstate: not a recall history entry, ignoring');
-    return 'none';
+    return null;
   }
 
   const targetStateId = event.state.stateId as number;
@@ -416,17 +421,19 @@ export function handlePopState(event: PopStateEvent): HandlePopStateResult {
   if (targetStateId < currentStateId) {
     log(`popstate: going BACK (${currentStateId} -> ${targetStateId})`);
     currentStateId = targetStateId;
-    return goBack();
+    const entryType = goBack();
+    return entryType === 'none' ? null : { direction: 'back', entryType };
   }
 
   if (targetStateId > currentStateId) {
     log(`popstate: going FORWARD (${currentStateId} -> ${targetStateId})`);
     currentStateId = targetStateId;
-    return goForward();
+    const entryType = goForward();
+    return entryType === 'none' ? null : { direction: 'forward', entryType };
   }
 
   log(`popstate: same stateId (${targetStateId}), ignoring`);
-  return 'none';
+  return null;
 }
 
 export function undoCount(): number {

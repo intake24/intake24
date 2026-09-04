@@ -15,22 +15,22 @@
       height="100%"
       hide-delimiters
     >
-      <template #prev="{ props }">
+      <template #prev="{ props: controlProps }">
         <v-btn
           class="opacity-80"
           :color="prompt.carousel.color"
-          :icon="props.icon"
+          :icon="controlProps.icon"
           variant="flat"
-          @click="props.onClick"
+          @click="navigateCarousel('carouselBack', controlProps.onClick)"
         />
       </template>
-      <template #next="{ props }">
+      <template #next="{ props: controlProps }">
         <v-btn
           class="opacity-80"
           :color="prompt.carousel.color"
-          :icon="props.icon"
+          :icon="controlProps.icon"
           variant="flat"
-          @click="props.onClick"
+          @click="navigateCarousel('carouselNext', controlProps.onClick)"
         />
       </template>
       <v-carousel-item v-for="(item, idx) in prompt.carousel.slides" :key="idx" class="px-6" eager>
@@ -72,6 +72,7 @@
 import { computed } from 'vue';
 
 import { usePromptUtils } from '@intake24/survey/composables';
+import { sendGtmEvent } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui';
 
 import { BaseLayout, CardLayout, PanelLayout } from '../layouts';
@@ -97,6 +98,11 @@ const state = defineModel('modelValue', { type: String, default: 'next' });
 function updateAndAction(type: string, ...args: [id?: string, params?: object]) {
   state.value = type;
   action(type, ...args);
+}
+
+function navigateCarousel(action: 'carouselBack' | 'carouselNext', navigate: () => void) {
+  navigate();
+  sendGtmEvent({ event: 'navigateCarousel', action });
 }
 
 const isVideoValid = computed(() => !props.prompt.video?.required || videoWatched.value);

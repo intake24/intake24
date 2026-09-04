@@ -4,15 +4,16 @@ import type {
   GenericActionType,
   MealActionType,
 } from '@intake24/common/prompts';
-import type { FreeTextFood, MealSection, Selection, SurveyPromptSection } from '@intake24/common/surveys';
+import type { FreeTextFood, MealSection, MealState, Selection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import type { TrackingContext } from '@intake24/survey/util';
 
 import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useGoTo } from 'vuetify';
 
-import { foodCreationState, isSelectionEqual, mealCreationState } from '@intake24/common/surveys';
+import { foodCreationState, getFoodDescription, isSelectionEqual, mealCreationState } from '@intake24/common/surveys';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import {
@@ -24,7 +25,7 @@ import {
   maybePushFallbackHistoryEntry,
   pushFullHistoryEntry,
 } from '@intake24/survey/stores/recall-history';
-import { getEntityId, recordPromptTransition } from '@intake24/survey/util';
+import { getEntityId, getFoodByIndex, getFoodIndex, isMealListAction, recordPromptTransition, sendDeletionEvent, sendMealListEvent } from '@intake24/survey/util';
 import { useI18n } from '@intake24/ui/i18n';
 
 import { FoodAdd } from '../layouts';
@@ -110,9 +111,9 @@ export function useRecall() {
 
     const result = handlePopState(event);
 
-    if (result === 'full') {
+    if (result?.entryType === 'full') {
       hideCurrentPrompt.value = true;
-      setPromptTransitionAction('popstate');
+      setPromptTransitionAction(result.direction === 'back' ? 'popstateBack' : 'popstateForward');
       setCurrentPrompt(recallController.value?.getNextPrompt() ?? null);
       hideCurrentPrompt.value = false;
     }
@@ -173,8 +174,39 @@ export function useRecall() {
     setCurrentPrompt({ section: promptSection, prompt });
   };
 
-  async function action(type: string, id?: string, params?: object) {
-    setPromptTransitionAction(type);
+  function getMealName(meal: MealState) {
+    return meal.name.en ?? Object.values(meal.name)[0];
+  }
+
+  function getDeletionTarget(event: 'deleteFood' | 'deleteMeal', id?: string) {
+    if (!id)
+      return {};
+
+    if (event === 'deleteMeal') {
+      const meal = meals.value.find(meal => meal.id === id);
+      return meal ? { meal: getMealName(meal) } : {};
+    }
+
+    const foodIndex = getFoodIndex(meals.value, id);
+    if (!foodIndex)
+      return {};
+
+    const meal = meals.value[foodIndex.mealIndex];
+    const food = getFoodDescription(getFoodByIndex(meals.value, foodIndex));
+    return { ...(food && { food }), meal: getMealName(meal) };
+  }
+
+  async function action(type: string, id?: string, params?: object, tracking?: TrackingContext) {
+    setPromptTransitionAction(type, tracking?.selectedOption);
+
+    const deletionTarget = type === 'deleteFood' || type === 'deleteMeal'
+      ? getDeletionTarget(type, id)
+      : undefined;
+
+    if (tracking?.fromPersistentMealList && isMealListAction(type))
+      sendMealListEvent(type, deletionTarget);
+    else if (type === 'deleteFood' || type === 'deleteMeal')
+      sendDeletionEvent(type, deletionTarget);
 
     switch (type) {
       case 'next':
@@ -412,27 +444,32 @@ export function useRecall() {
 
   function createPromptTransitionController() {
     let promptTransitionAction = 'not mapped';
+    let selectedOption: string | undefined;
 
-    function setPromptTransitionAction(action: string) {
+    function setPromptTransitionAction(action: string, option?: string) {
       promptTransitionAction = action;
+      selectedOption = option;
     }
 
     function setCurrentPrompt(promptInstance: PromptInstance | null) {
+      const option = selectedOption;
       currentPrompt.value = promptInstance;
 
       if (!promptInstance)
         return;
 
+      selectedOption = undefined;
       recordPromptTransition({
         action: promptTransitionAction,
         prompt_id: promptInstance.prompt.id,
         section: promptInstance.section,
         prompt_component: promptInstance.prompt.component,
-      });
+      }, option === undefined ? undefined : { previous_selected_option: option });
     }
 
     function clearPromptTransition() {
       promptTransitionAction = 'not mapped';
+      selectedOption = undefined;
       recordPromptTransition(null);
     }
 

@@ -5,6 +5,7 @@ import type { UseMealUtilsProps } from './use-meal-utils';
 import type { Prompts } from '@intake24/common/prompts';
 import type { FoodState, ParentFoodState, PromptSection } from '@intake24/common/surveys';
 import type { PartialRecord } from '@intake24/common/types';
+import type { TrackingContext } from '@intake24/survey/util';
 import type { LocaleContentOptions } from '@intake24/ui';
 import type { GtmEventParams } from '@intake24/ui/tracking';
 
@@ -108,8 +109,11 @@ export function usePromptUtils<
     );
   };
 
-  const action = (type: string, ...args: [id?: string | number | null, params?: object]) => {
-    if (type !== 'next') {
+  const action = (type: string, ...args: [id?: string | number | null, params?: object, tracking?: TrackingContext]) => {
+    const isDeletion = type === 'deleteFood' || type === 'deleteMeal';
+    const tracking = args[2];
+
+    if (type !== 'next' && !isDeletion && !tracking?.fromPersistentMealList) {
       console.debug(`track event in use-prompt-utils: ${type}`);
       const gtmEventParams: GtmEventParams = {
         event: type as GtmEventParams['event'],
@@ -121,6 +125,9 @@ export function usePromptUtils<
         gtmEventParams.event = 'deleteMeal';
       }
       sendGtmEvent(gtmEventParams);
+    }
+
+    if (type !== 'next') {
       emit('action', type, ...args);
       return;
     }

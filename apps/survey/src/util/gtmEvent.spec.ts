@@ -147,6 +147,41 @@ describe('sendGtmEvent', async () => {
     ));
   });
 
+  it('attaches the previous selected option only to its prompt transition', () => {
+    gtmEvent.recordPromptTransition({
+      prompt_id: 'yes-no-prompt',
+      section: 'foods',
+      prompt_component: 'yes-no-prompt',
+    });
+    window.dataLayer = [];
+
+    gtmEvent.recordPromptTransition({
+      action: 'next',
+      prompt_id: 'detail-prompt',
+      section: 'foods',
+      prompt_component: 'text-prompt',
+    }, { previous_selected_option: 'yes' });
+    gtmEvent.recordPromptTransition({
+      action: 'popstateBack',
+      prompt_id: 'yes-no-prompt',
+      section: 'foods',
+      prompt_component: 'yes-no-prompt',
+    });
+
+    expect(window.dataLayer).toContainEqual(expect.objectContaining({
+      action: 'next',
+      event: 'promptChanged',
+      previous_prompt_id: 'yes-no-prompt',
+      prompt_id: 'detail-prompt',
+      previous_selected_option: 'yes',
+    }));
+    expect(window.dataLayer).toContainEqual(expect.objectContaining({
+      action: 'popstateBack',
+      event: 'promptChanged',
+      previous_selected_option: null,
+    }));
+  });
+
   it('clears event-scoped fields on prompt context events', () => {
     gtmEvent.recordPromptTransition({
       action: 'next',
@@ -168,6 +203,7 @@ describe('sendGtmEvent', async () => {
       search_results_count: null,
       search_term: null,
       search_term_order: null,
+      previous_selected_option: null,
       target: null,
       'content-name': null,
       'content-view-name': null,
@@ -291,6 +327,71 @@ describe('sendGtmEvent', async () => {
     }));
   });
 
+  it.each([
+    ['addFood', 'mealListAddFood'],
+    ['changeFood', 'mealListChangeFood'],
+    ['mealTime', 'mealListMealTime'],
+    ['deleteFood', 'mealListDeleteFood'],
+    ['deleteMeal', 'mealListDeleteMeal'],
+  ] as const)(
+    'tracks MealList %s with source and current prompt context',
+    (event, action) => {
+      survey.selectedMealOptional = {
+        name: { en: 'Breakfast' },
+      };
+      gtmEvent.recordPromptTransition({
+        prompt_id: 'edit-meal-prompt',
+        section: 'preFoods',
+        prompt_component: 'edit-meal-prompt',
+      });
+
+      gtmEvent.sendMealListEvent(event);
+
+      expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+        action,
+        event,
+        food: null,
+        meal: 'Breakfast',
+        noninteraction: false,
+        prompt_component: 'edit-meal-prompt',
+        prompt_id: 'edit-meal-prompt',
+        section: 'preFoods',
+        uxSessionId: 'ux-session-id',
+        uxUserId: 'ux-user-id',
+      }));
+    },
+  );
+
+  it.each(['deleteFood', 'deleteMeal'] as const)(
+    'tracks non-MealList %s with its existing action',
+    (event) => {
+      gtmEvent.sendDeletionEvent(event);
+
+      expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+        action: event,
+        event,
+      }));
+    },
+  );
+
+  it('uses explicit deletion target details', () => {
+    gtmEvent.sendDeletionEvent('deleteFood', { food: 'Apple', meal: 'Breakfast' });
+    gtmEvent.sendMealListEvent('deleteMeal', { meal: 'Dinner' });
+
+    expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+      action: 'deleteFood',
+      event: 'deleteFood',
+      food: 'Apple',
+      meal: 'Breakfast',
+    }));
+    expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+      action: 'mealListDeleteMeal',
+      event: 'deleteMeal',
+      food: null,
+      meal: 'Dinner',
+    }));
+  });
+
   it('clears prompt context when transition is reset', () => {
     gtmEvent.recordPromptTransition({
       prompt_id: 'edit-meal-prompt',
@@ -318,5 +419,52 @@ describe('sendGtmEvent', async () => {
       uxSessionId: 'ux-session-id',
       uxUserId: 'ux-user-id',
     }));
+  });
+
+  it.each(['dietary_feedback', 'follow_up'] as const)(
+    'tracks %s links shown without exposing a URL',
+    (linkKind) => {
+      gtmEvent.sendPostSurveyLinkEvent('postSurveyLinkShown', linkKind);
+
+      expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+        event: 'postSurveyLinkShown',
+        link_kind: linkKind,
+        noninteraction: true,
+      }));
+      expect(trackEvent.mock.calls[0][0]).not.toHaveProperty('url');
+    },
+  );
+
+  it.each(['dietary_feedback', 'follow_up'] as const)(
+    'tracks %s link clicks as interactions',
+    (linkKind) => {
+      gtmEvent.sendPostSurveyLinkEvent('postSurveyLinkClicked', linkKind);
+
+      expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+        event: 'postSurveyLinkClicked',
+        link_kind: linkKind,
+        noninteraction: false,
+      }));
+    },
+  );
+
+  it('tracks carousel arrow navigation as an action using current prompt context', () => {
+    gtmEvent.recordPromptTransition({
+      prompt_id: 'instructions-carousel',
+      prompt_component: 'info-prompt',
+      section: 'preMeals',
+    });
+    trackEvent.mockClear();
+
+    gtmEvent.sendGtmEvent({ event: 'navigateCarousel', action: 'carouselBack' });
+
+    expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+      action: 'carouselBack',
+      event: 'navigateCarousel',
+      noninteraction: false,
+      prompt_id: 'instructions-carousel',
+      prompt_component: 'info-prompt',
+    }));
+    expect(trackEvent.mock.calls[0][0]).not.toHaveProperty('direction');
   });
 });

@@ -7,6 +7,11 @@ import { useSurvey } from '@intake24/survey/stores';
 export const GTM_PROMPT_ID_NOT_MAPPED = 'not mapped';
 export const GTM_PROMPT_CONTEXT_EVENT = 'promptChanged';
 
+export type TrackingContext = {
+  fromPersistentMealList?: true;
+  selectedOption?: string;
+};
+
 export type PromptTransition = Pick<GtmEventParams, 'action' | 'prompt_id' | 'section'> & {
   prompt_component?: string;
 };
@@ -43,12 +48,14 @@ const eventFieldNames = [
   'search_results_count',
   'faq_section_title',
   'faq_question_title',
+  'link_kind',
   'target',
   'target-properties',
   'value',
   'interaction-type',
   'content-name',
   'content-view-name',
+  'previous_selected_option',
 ] as const;
 
 const clearedEventFields = Object.fromEntries(eventFieldNames.map(field => [field, null]));
@@ -107,7 +114,10 @@ function buildEvent(params: GtmPayload) {
   };
 }
 
-export function recordPromptTransition(transition: PromptTransition | null): void {
+export function recordPromptTransition(
+  transition: PromptTransition | null,
+  params: Pick<GtmEventParams, 'previous_selected_option'> = {},
+): void {
   if (transition) {
     promptContext.previous = promptContext.current;
     promptContext.current = {
@@ -122,6 +132,7 @@ export function recordPromptTransition(transition: PromptTransition | null): voi
 
   window.dataLayer?.push(buildEvent({
     event: GTM_PROMPT_CONTEXT_EVENT,
+    ...params,
   }));
 }
 
@@ -132,4 +143,41 @@ export function sendGtmEvent(params: GtmEventParams): void {
   catch (e) {
     console.error('Error sending GTM event:', e);
   }
+}
+
+export function sendPostSurveyLinkEvent(
+  event: 'postSurveyLinkShown' | 'postSurveyLinkClicked',
+  link_kind: 'dietary_feedback' | 'follow_up',
+): void {
+  sendGtmEvent({
+    event,
+    link_kind,
+    noninteraction: event === 'postSurveyLinkShown',
+  });
+}
+
+const mealListActions = {
+  addFood: 'mealListAddFood',
+  changeFood: 'mealListChangeFood',
+  mealTime: 'mealListMealTime',
+  deleteFood: 'mealListDeleteFood',
+  deleteMeal: 'mealListDeleteMeal',
+} as const;
+
+export type MealListAction = keyof typeof mealListActions;
+type MealFoodParams = Pick<GtmEventParams, 'food' | 'meal'>;
+
+export function isMealListAction(action: string): action is MealListAction {
+  return action in mealListActions;
+}
+
+export function sendMealListEvent(event: MealListAction, params: MealFoodParams = {}): void {
+  sendGtmEvent({ event, action: mealListActions[event], ...params });
+}
+
+export function sendDeletionEvent(
+  event: 'deleteFood' | 'deleteMeal',
+  params: MealFoodParams = {},
+): void {
+  sendGtmEvent({ event, action: event, ...params });
 }

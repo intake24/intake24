@@ -105,7 +105,7 @@ const {
   selectedFoodId,
   isSelectedFoodInMeal,
   action,
-} = useMealList(props, { emit });
+} = useMealList(props, { emit }, { fromPersistentMealList: true });
 
 const contextId = ref<string | undefined>(undefined);
 const drawer = ref(false);
