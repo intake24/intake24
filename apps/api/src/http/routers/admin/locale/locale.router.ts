@@ -222,7 +222,7 @@ export function locale() {
         const params = { ...body.params, localeId };
         const { type } = body;
 
-        if (jobRequiresFile(type)) {
+        if (jobRequiresFile(type, body.params)) {
           if (!file)
             throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
 

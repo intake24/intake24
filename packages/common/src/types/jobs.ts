@@ -71,6 +71,23 @@ export const LocaleDeduplicateFoods = z.object({
 export const LocaleFoodNutrientMapping = z.object({
   localeId: bigIntString,
 });
+export const LocaleFoodNutrientAssociationAssociate = z.object({
+  localeId: bigIntString,
+  mode: z.literal('associate'),
+  file: z.string().nonempty(),
+  dryRun: z.boolean().or(z.stringbool()).default(false),
+});
+export const LocaleFoodNutrientAssociationReplace = z.object({
+  localeId: bigIntString,
+  mode: z.literal('replace'),
+  sourceNutrientTableId: z.string().nonempty(),
+  targetNutrientTableId: z.string().nonempty(),
+  dryRun: z.boolean().or(z.stringbool()).default(false),
+});
+export const LocaleFoodNutrientAssociation = z.discriminatedUnion('mode', [
+  LocaleFoodNutrientAssociationAssociate,
+  LocaleFoodNutrientAssociationReplace,
+]);
 export const LocaleFoodRankingUpload = z.object({
   localeId: bigIntString,
   file: z.string().nonempty(),
@@ -232,6 +249,7 @@ export const jobParams = z.object({
   LocaleFoods,
   LocaleDeduplicateFoods,
   LocaleFoodNutrientMapping,
+  LocaleFoodNutrientAssociation,
   LocaleFoodRankingUpload,
   LocalesSync,
   NutrientTableDataImport,
@@ -270,6 +288,7 @@ export const jobTypeParams = z.union([
   LocaleFoods,
   LocaleDeduplicateFoods,
   LocaleFoodNutrientMapping,
+  LocaleFoodNutrientAssociation,
   LocaleFoodRankingUpload,
   LocalesSync,
   NutrientTableDataImport,
@@ -318,6 +337,13 @@ export const localeTasks = z.discriminatedUnion('type', [
     params: LocaleFoodNutrientMapping,
   }),
   z.object({
+    type: z.literal('LocaleFoodNutrientAssociation'),
+    params: z.discriminatedUnion('mode', [
+      LocaleFoodNutrientAssociationAssociate.omit({ file: true }),
+      LocaleFoodNutrientAssociationReplace,
+    ]),
+  }),
+  z.object({
     type: z.literal('LocaleFoodRankingUpload'),
     params: LocaleFoodRankingUpload.omit({ file: true }),
   }),
@@ -330,6 +356,7 @@ export const localeJobs = [
   'LocaleFoods',
   'LocaleDeduplicateFoods',
   'LocaleFoodNutrientMapping',
+  'LocaleFoodNutrientAssociation',
   'LocaleFoodRankingUpload',
 ] as const;
 export type LocaleJob = (typeof localeJobs)[number];
@@ -482,6 +509,12 @@ export const defaultJobsParams: JobParams = {
   LocaleFoodNutrientMapping: {
     localeId: '',
   },
+  LocaleFoodNutrientAssociation: {
+    localeId: '',
+    mode: 'associate',
+    file: '',
+    dryRun: false,
+  },
   LocaleFoodRankingUpload: {
     localeId: '',
     file: '',
@@ -591,7 +624,10 @@ export function pickJobParams<T extends keyof JobParams>(object: object, job: T)
   return pick(object, Object.keys(defaultJobsParams[job])) as JobParams[T];
 }
 
-export function jobRequiresFile<T extends keyof JobParams>(job: T) {
+export function jobRequiresFile<T extends keyof JobParams>(job: T, params?: object) {
+  if (job === 'LocaleFoodNutrientAssociation')
+    return (params as { mode?: unknown } | undefined)?.mode === 'associate';
+
   return Object.keys(defaultJobsParams[job]).includes('file');
 }
 

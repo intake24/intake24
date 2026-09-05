@@ -40,6 +40,7 @@ export default defineComponent({
       LocaleCategories: { localeId: props.id },
       LocaleFoods: { localeId: props.id },
       LocaleDeduplicateFoods: { localeId: props.id, primaryCodes: [], dryRun: false },
+      LocaleFoodNutrientAssociation: { localeId: props.id, mode: 'associate', file: '', dryRun: false },
       LocaleFoodRankingUpload: { localeId: props.id, file: '', targetAlgorithm: 'fixed' },
       LocaleFoodNutrientMapping: { localeId: props.id },
     }));

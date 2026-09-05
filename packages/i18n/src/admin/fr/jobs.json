@@ -94,6 +94,18 @@
       "_": "Régional - Exporter le mapping des nutriments",
       "localeId": "Identifiant régional"
     },
+    "LocaleFoodNutrientAssociation": {
+      "_": "Régional - associer les aliments aux enregistrements de table nutritionnelle",
+      "localeId": "Identifiant régional",
+      "mode": "Mode",
+      "modes": {
+        "associate": "Associer depuis un CSV",
+        "replace": "Remplacer la table nutritionnelle"
+      },
+      "sourceNutrientTableId": "Table nutritionnelle source",
+      "targetNutrientTableId": "Table nutritionnelle cible",
+      "dryRun": "Simulation (ne modifie pas les données)"
+    },
     "LocaleFoodRankingUpload": {
       "_": "Régional - téléchargement du CSV de classement d'aliments",
       "file": "fichier CSV",

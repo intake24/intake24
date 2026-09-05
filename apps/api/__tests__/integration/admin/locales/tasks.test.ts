@@ -76,5 +76,36 @@ export default () => {
       expect(status).toBe(200);
       expect(body.type).toBe(input.type);
     });
+
+    it('queues a locale food nutrient association CSV job', async () => {
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .field('type', 'LocaleFoodNutrientAssociation')
+        .field('params[localeId]', sourceLocaleId)
+        .field('params[mode]', 'associate')
+        .field('params[dryRun]', 'true')
+        .attach('params[file]', suite.files.data.csv);
+
+      expect(status).toBe(200);
+      expect(body.type).toBe('LocaleFoodNutrientAssociation');
+    });
+
+    it('queues a locale food nutrient association replacement job without a CSV', async () => {
+      const { status, body } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .field('type', 'LocaleFoodNutrientAssociation')
+        .field('params[localeId]', sourceLocaleId)
+        .field('params[mode]', 'replace')
+        .field('params[sourceNutrientTableId]', 'NDB_2')
+        .field('params[targetNutrientTableId]', 'NDB_3')
+        .field('params[dryRun]', 'true');
+
+      expect(status).toBe(200);
+      expect(body.type).toBe('LocaleFoodNutrientAssociation');
+    });
   });
 };
