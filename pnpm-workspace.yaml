@@ -12,7 +12,7 @@ packages:
   - packages/*
 
 overrides:
-  axios: ^1.18.1
+  axios: ^1.20.0
 
 patchedDependencies:
   '@ts-rest/core': patches/@ts-rest__core.patch
