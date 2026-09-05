@@ -174,7 +174,9 @@ export const reference = initContract().router({
   nutrientTables: {
     method: 'GET',
     path: '/admin/references/nutrient-tables',
-    query,
+    query: query.extend({
+      localeId: z.string().min(1).transform(val => validator.escape(val)).optional(),
+    }),
     responses: {
       200: z.object({
         data: nutrientTableAttributes.array(),

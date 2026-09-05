@@ -220,7 +220,17 @@ export function locale() {
         const params = { ...body.params, localeId };
         const { type } = body;
 
-        if (jobRequiresFile(type)) {
+        if (jobRequiresFile(type, body.params)) {
+          if (!file)
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
+
+          const res = multerFile.safeParse(file);
+          if (!res.success)
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
+
+          if (path.extname(res.data.originalname).toLowerCase() !== '.csv')
+            throw ValidationError.from({ path: 'params.file', i18n: { type: 'file.ext', params: { ext: 'CSV (comma-delimited)' } } });
+
           // @ts-expect-error not narrowed yet
           params.file = requireCsvUploadPath(file);
         }
