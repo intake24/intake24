@@ -94,6 +94,23 @@
       "_": "Locale - Export food nutrient mapping",
       "localeId": "Locale ID"
     },
+    "LocaleFoodNutrientAssociation": {
+      "_": "Locale - associate foods with nutrient table records",
+      "localeId": "Locale ID",
+      "mode": "Mode",
+      "modes": {
+        "associate": "Associate from CSV",
+        "replace": "Replace nutrient table"
+      },
+      "sourceNutrientTableId": "Source nutrient table",
+      "targetNutrientTableId": "Target nutrient table",
+      "dryRun": "Dry run (do not change data)",
+      "alert": {
+        "1": "\"Associate\" mode will batch-create associations from a CSV for the foods specified, in addition to any existing associations.",
+        "2": "\"Replace\" mode permanently removes the existing nutrient table association and replaces it with the target table's record.",
+        "3": "Review with dry-run first."
+      }
+    },
     "LocaleFoodRankingUpload": {
       "_": "Locale - Food ranking CSV upload",
       "file": "CSV file",

@@ -94,6 +94,23 @@
       "_": "Régional - Exporter le mapping des nutriments",
       "localeId": "Identifiant régional"
     },
+    "LocaleFoodNutrientAssociation": {
+      "_": "Régional - associer les aliments aux enregistrements de table nutritionnelle",
+      "localeId": "Identifiant régional",
+      "mode": "Mode",
+      "modes": {
+        "associate": "Associer depuis un CSV",
+        "replace": "Remplacer la table nutritionnelle"
+      },
+      "sourceNutrientTableId": "Table nutritionnelle source",
+      "targetNutrientTableId": "Table nutritionnelle cible",
+      "dryRun": "Simulation (ne modifie pas les données)",
+      "alert": {
+        "1": "Le mode « Associer » crée en lot des associations à partir d'un CSV pour les aliments spécifiés, en plus des associations existantes.",
+        "2": "Le mode « Remplacer » supprime définitivement l'association existante et la remplace par l'enregistrement de la table cible.",
+        "3": "Vérifiez d'abord avec la simulation."
+      }
+    },
     "LocaleFoodRankingUpload": {
       "_": "Régional - téléchargement du CSV de classement d'aliments",
       "file": "fichier CSV",

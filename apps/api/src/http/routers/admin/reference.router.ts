@@ -240,9 +240,29 @@ export function reference() {
     },
     nutrientTables: {
       middleware: [anyPermission('locales', 'survey-schemes')],
-      handler: async ({ query: { id, ...query } }) => {
+      handler: async ({ query: { id, localeId, ...query } }) => {
+        const localeCode = localeId
+          ? (await SystemLocale.findByPk(localeId, { attributes: ['code'] }))?.code
+          : undefined;
+
+        const conditions = [
+          id ? { id } : undefined,
+          localeCode
+            ? {
+                id: {
+                  [Op.in]: literal(`(
+                    SELECT DISTINCT ntr.nutrient_table_id
+                    FROM nutrient_table_records ntr
+                    JOIN foods_nutrients fn ON fn.nutrient_table_record_id = ntr.id
+                    JOIN foods f ON f.id = fn.food_id
+                    WHERE f.locale_id = '${localeCode}')`),
+                },
+              }
+            : undefined,
+        ].filter(condition => condition !== undefined);
+
         const nutrientTables = await NutrientTable.paginate({
-          where: id ? { id } : undefined,
+          where: conditions.length ? { [Op.and]: conditions } : undefined,
           query,
           attributes: ['id', 'description'],
           columns: ['id', 'description'],
