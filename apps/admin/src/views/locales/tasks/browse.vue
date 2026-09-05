@@ -40,12 +40,14 @@ export default defineComponent({
       LocaleCategories: { localeId: props.id },
       LocaleFoods: { localeId: props.id },
       LocaleDeduplicateFoods: { localeId: props.id, primaryCodes: [], dryRun: false },
+      LocaleFoodNutrientAssociation: { localeId: props.id, mode: 'associate', file: '', dryRun: true },
       LocaleFoodRankingUpload: { localeId: props.id, file: '', targetAlgorithm: 'fixed' },
       LocaleFoodNutrientMapping: { localeId: props.id },
     }));
 
     const alerts = {
       LocaleCopy: { type: 'error' as const, lines: 1 },
+      LocaleFoodNutrientAssociation: { type: 'error' as const, lines: 3 },
       LocaleFoodRankingUpload: { type: 'error' as const, lines: 3 },
       LocaleDeduplicateFoods: { type: 'error' as const, lines: 2 },
     };

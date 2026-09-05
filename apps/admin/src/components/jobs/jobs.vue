@@ -7,7 +7,7 @@
     <v-spacer />
   </v-toolbar>
   <v-container fluid>
-    <v-form @keydown="clearError" @submit.prevent="submit">
+    <v-form ref="form" @keydown="clearError" @submit.prevent="submit">
       <v-card-text>
         <v-row>
           <v-col cols="12" md="6">
@@ -100,11 +100,12 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue';
+import type { VForm } from 'vuetify/components';
 
 import type { JobParams, JobType } from '@intake24/common/types';
 import type { JobAttributes } from '@intake24/common/types/http/admin';
 
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, useTemplateRef } from 'vue';
 
 import { useForm } from '@intake24/admin/composables';
 import { resourceToRequestParam } from '@intake24/common/util';
@@ -147,6 +148,7 @@ const props = defineProps({
 });
 
 const { i18n } = useI18n();
+const form = useTemplateRef<InstanceType<typeof VForm>>('form');
 
 const jobTypes = computed(() => {
   const alertJobs = Object.keys(props.alerts) as JobType[];
@@ -194,6 +196,10 @@ function updateJob(type: JobType) {
 
 async function submit() {
   if (jobInProgress.value)
+    return;
+
+  const { valid } = await form.value!.validate();
+  if (!valid)
     return;
 
   const job = await post<JobAttributes>(url.value);
