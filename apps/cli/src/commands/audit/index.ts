@@ -11,7 +11,7 @@ export default async function (program: Command): Promise<void> {
     .command('audit:setup')
     .description('Set up the audit table and trigger function')
     .addArgument(dbArg)
-    .option('--force', 'Force setup (drop existing table and function)', false)
+    .option('-f --force', 'Force setup (drop existing table and function)', false)
     .action(async (db, options) => {
       await setup(db, options);
     });
@@ -20,7 +20,7 @@ export default async function (program: Command): Promise<void> {
     .command('audit:enable')
     .description('Enable audit triggers on all tables')
     .addArgument(dbArg)
-    .option('--force', 'Force enable (drop existing triggers)', false)
+    .option('-f --force', 'Force enable (drop existing triggers)', false)
     .action(async (db, options) => {
       await enable(db, options);
     });
@@ -29,7 +29,7 @@ export default async function (program: Command): Promise<void> {
     .command('audit:disable')
     .description('Disable audit triggers on all tables')
     .addArgument(dbArg)
-    .option('-f, --force', 'Force disable (drop existing triggers)', false)
+    .option('-f --force', 'Force disable (drop existing triggers)', false)
     .action(async (db, options) => {
       await disable(db, options);
     });

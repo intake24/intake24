@@ -20,6 +20,7 @@ import type {
   AdminSurveyService,
   AdminUserService,
   AsServedService,
+  AuditService,
   AuthenticationService,
   Cache,
   CachedParentCategoriesService,
@@ -149,6 +150,8 @@ export interface IoC extends PackageWritersAndJobs {
   jwtRotationService: JwtRotationService;
   oidcService: OIDCService;
   signInService: SignInService;
+
+  auditService: AuditService;
 
   // MFA Providers
   otpProvider: OTPProvider;

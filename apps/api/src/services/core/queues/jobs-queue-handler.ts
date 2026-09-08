@@ -6,6 +6,7 @@ import type { JobData, JobParams, JobType } from '@intake24/common/types';
 
 import { Queue, Worker } from 'bullmq';
 import { Op } from 'sequelize';
+import { v7 } from 'uuid';
 
 import { requestContextStorage } from '@intake24/common-backend/acl';
 import { Job as DbJob } from '@intake24/db';
@@ -219,7 +220,7 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
       stackTrace: null,
     });
 
-    await requestContextStorage.run({ userId }, () => {
+    await requestContextStorage.run({ type: 'request', id: v7(), userId }, () => {
       this.logger.debug(`Job initialized with user ID: ${userId}.`);
       const newJob = this.resolveDynamic(type);
       return newJob.run(job);

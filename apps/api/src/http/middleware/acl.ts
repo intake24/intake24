@@ -5,6 +5,7 @@ import type { FrontEnd } from '@intake24/common/types';
 
 import { asValue } from 'awilix';
 import passport from 'passport';
+import { v7 } from 'uuid';
 
 import { ForbiddenError } from '@intake24/api/http/errors';
 import { requestContextStorage } from '@intake24/common-backend/acl';
@@ -39,7 +40,7 @@ export function registerACLScope(req: Request, res: Response, next: NextFunction
   const payload = req.user as TokenPayload;
   req.scope.register({ user: asValue(payload) });
 
-  requestContextStorage.run({ userId: payload.userId }, () => {
+  requestContextStorage.run({ type: 'request', id: v7(), userId: payload.userId }, () => {
     next();
   });
 }

@@ -1,13 +1,10 @@
 import type { Transaction } from 'kysely';
 
+import type { TransactionContext } from '@intake24/common-backend';
+
 import { Kysely as Base, sql } from 'kysely';
 
 import { getTransactionContext } from '@intake24/common-backend';
-
-type TransactionContext = {
-  userId?: string | number | null;
-  [key: string]: string | number | null | undefined;
-};
 
 export async function executeContextTransaction<DB, T>(
   db: Kysely<DB>,

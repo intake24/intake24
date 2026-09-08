@@ -21,7 +21,7 @@ export default async function (db: DatabaseType, _ops: { force: boolean }) {
   try {
     await kysely.init();
 
-    await createTriggers.execute(kysely[db]);
+    await createTriggers(db).execute(kysely[db]);
 
     outro('Audit triggers enabled.');
   }

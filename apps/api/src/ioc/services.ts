@@ -14,6 +14,7 @@ import {
   adminSurveyService,
   adminUserService,
   asServedService,
+  auditService,
   authenticationService,
   Cache,
   cachedParentCategoriesService,
@@ -83,6 +84,7 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     aclService: asFunction(aclService).scoped(),
     globalAclService: asFunction(globalAclService).singleton(),
     appMetricsService: asClass(AppMetricsService).singleton(),
+    auditService: asFunction(auditService).singleton(),
 
     duoProvider: asFunction(duoProvider).singleton(),
     fidoProvider: asFunction(fidoProvider).singleton(),

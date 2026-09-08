@@ -1,12 +1,9 @@
+import type { TransactionContext } from '@intake24/common-backend';
+
 import { Transaction } from 'sequelize';
 import { Sequelize as Base } from 'sequelize-typescript';
 
 import { getTransactionContext } from '@intake24/common-backend';
-
-type TransactionContext = {
-  userId?: string | number | null;
-  [key: string]: string | number | null | undefined;
-};
 
 export class Sequelize extends Base {
   async contextTransaction<T>(

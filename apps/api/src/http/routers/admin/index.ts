@@ -1,4 +1,5 @@
 import acl from './acl';
+import { audit } from './audit.router';
 import { authentication } from './authentication.router';
 import { faq } from './faq.router';
 import fdbs from './fdbs';
@@ -28,6 +29,7 @@ import user from './user';
 
 export default {
   acl,
+  audit,
   authentication,
   faq,
   fdbs,
