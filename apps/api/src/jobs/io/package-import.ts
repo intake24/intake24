@@ -195,7 +195,12 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
       }
     }
 
-    await checkImportLocalePermissions(this.globalAclService, this.userId, localesWithFoodListChanges);
+    await checkImportLocalePermissions(
+      this.globalAclService,
+      this.userId,
+      localesWithFoodListChanges,
+      new Set(filteredLocaleData.map(locale => locale.code)),
+    );
 
     await this.kyselyDb.system.transaction().execute(async (systemTransaction) => {
       await this.kyselyDb.foods.transaction().execute(async (foodsTransaction) => {

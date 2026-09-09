@@ -124,6 +124,7 @@
     }
   },
   "importJob": {
+    "missingLocale": "Target locale {locale} does not exist. Include its definition in locales.json and select locale configuration for import.",
     "invalidVerification": "A successful verification job is required before importing a package",
     "extractedFilesNotFound": "Extracted package files are no longer available"
   },

@@ -6,6 +6,7 @@ import type {
 } from './package-handlers';
 import type { IoC } from '@intake24/api/ioc';
 import type { ImportPackageFormat, PackageContentsSummary } from '@intake24/common/types/http/admin/io';
+import type { PkgV2LocalesFile } from '@intake24/common/types/package/file-schemas';
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -105,7 +106,16 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
 
       const result = await handler.verify(uploadedPath);
 
-      await checkImportLocalePermissions(this.globalAclService, this.userId, new Set(result.summary.targetLocales));
+      const packageLocales: PkgV2LocalesFile = result.summary.files.locales
+        ? JSON.parse(await fs.readFile(path.join(result.extractedPath, 'locales.json'), 'utf-8'))
+        : [];
+
+      await checkImportLocalePermissions(
+        this.globalAclService,
+        this.userId,
+        new Set(result.summary.targetLocales),
+        new Set(packageLocales.map(locale => locale.id)),
+      );
 
       return result.summary;
     }
