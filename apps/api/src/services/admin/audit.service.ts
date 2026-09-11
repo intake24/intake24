@@ -1,8 +1,8 @@
 import type { ExpressionBuilder, Kysely } from 'kysely';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { AuditAttributes, AuditEntry } from '@intake24/common/types/http/admin';
-import type { DatabaseType } from '@intake24/db/config';
+import type { DatabaseType } from '@intake24/common/types';
+import type { AuditAttributes, AuditEntry, AuditHistory } from '@intake24/common/types/http/admin';
 import type { FoodsDB, SystemDB } from '@intake24/db/kysely';
 
 import { sql } from 'kysely';
@@ -12,10 +12,8 @@ import { AUDIT_SCHEMA, AUDIT_TRIGGER } from '@intake24/common-backend/audit';
 
 type AuditDB = Pick<FoodsDB | SystemDB, 'auditLog'>;
 
-export type Link = { table: string; fk: string[]; pk: string[] };
-
-export type LinkMap = Record<string, { fk: string[]; pk: string[] }>;
-export type TableMap = Record<string, Partial<Record<DatabaseType, Link[]>>>;
+type Link = { table: string; fk: string[]; pk: string[] };
+type TableMap = Record<string, Partial<Record<DatabaseType, Link[]>>>;
 
 const tableInfoSql = sql<{ table: string; links: Link[] }>`
   WITH table_pks AS (
@@ -103,7 +101,7 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
     return await cache.remember('audit', '1d', async () => await buildTableMap());
   }
 
-  async function resolveResource(resource: string): Promise<{ kysely: Kysely<AuditDB>; table: string; links: Link[] }[]> {
+  async function resolveResource(resource: string): Promise<['foods' | 'system', { kysely: Kysely<AuditDB>; table: string; links: Link[] }][]> {
     const tableMap = await getTableMap();
     const table = snakeCase(resource);
     const tableInfo = tableMap[table];
@@ -111,7 +109,7 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
       throw new Error(`Unknown resource: ${resource}`);
 
     return Object.entries(tableInfo)
-      .map(([db, links]) => ({ kysely: kyselyDb[db as 'foods' | 'system'], table, links }));
+      .map(([db, links]) => [db as 'foods' | 'system', { kysely: kyselyDb[db as 'foods' | 'system'], table, links }] as const);
   }
 
   async function mapWithUser(history: AuditAttributes[]): Promise<AuditEntry[]> {
@@ -131,9 +129,7 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
       : [];
     const userMap = new Map(users.map(u => [u.id, u]));
 
-    return history.map((item) => {
-      return { ...item, user: item.ctxUserId ? userMap.get(item.ctxUserId) ?? null : null };
-    });
+    return history.map(item => ({ ...item, user: item.ctxUserId ? userMap.get(item.ctxUserId) ?? null : null }));
   }
 
   function getLinkAuditHistorySql(eb: ExpressionBuilder<AuditDB, 'auditLog'>, { table, fk, pk }: Link, value: string) {
@@ -152,10 +148,10 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
       );
   }
 
-  async function getAuditHistory(resource: string, id: string) {
+  async function getAuditHistory(resource: string, id: string): Promise<AuditHistory> {
     const res = await resolveResource(resource);
 
-    const queries = res.map(({ kysely, table, links }) => {
+    const queries = await Promise.all(res.map(async ([db, { kysely, table, links }]) => {
       let query = kysely
         .selectFrom('auditLog')
         .selectAll()
@@ -167,15 +163,11 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
           getLinkAuditHistorySql(eb, link, id),
         ), query);
       }
-      return query;
-    });
+      const history = await query.orderBy('id', 'desc').execute();
+      return [db, await mapWithUser(history)];
+    }));
 
-    const history = await Promise.all(queries.map(query => query.orderBy('id', 'desc').execute()));
-
-    if (history.length === 1)
-      return await mapWithUser(history[0]);
-
-    return await mapWithUser(history.flat().sort((a, b) => b.id.localeCompare(a.id)));
+    return Object.fromEntries(queries) as AuditHistory;
   }
 
   return {

@@ -1,4 +1,4 @@
-import type { DatabaseType } from '@intake24/db';
+import type { DatabaseType } from '@intake24/common/types';
 
 import { intro, log, outro } from '@clack/prompts';
 import color from 'picocolors';

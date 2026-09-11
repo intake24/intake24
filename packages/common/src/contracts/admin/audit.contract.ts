@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { auditEntry } from '@intake24/common/types/http/admin';
+import { auditHistory } from '@intake24/common/types/http/admin';
 
 const contract = initContract();
 
@@ -14,7 +14,7 @@ export const audit = contract.router({
       resourceId: z.string(),
     }),
     responses: {
-      200: auditEntry.array(),
+      200: auditHistory,
     },
     summary: 'Resource audit',
     description: 'Audit the specified resource',
@@ -29,7 +29,7 @@ export const audit = contract.router({
       subResourceId: z.string(),
     }),
     responses: {
-      200: auditEntry.array(),
+      200: auditHistory.array(),
     },
     summary: 'Sub-resource audit',
     description: 'Audit the specified sub-resource',

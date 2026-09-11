@@ -1,7 +1,7 @@
 import type { Pool } from 'pg';
 import type { Sequelize } from 'sequelize';
 
-import type { DatabaseType } from '.';
+import type { DatabaseType } from '@intake24/common/types';
 
 import { types } from 'pg';
 import pgArray from 'postgres-array';

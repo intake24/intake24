@@ -1,7 +1,7 @@
 import type { Dialect, Logger as KyselyLogFunc, LogEvent } from 'kysely';
 
-import type { DatabaseType } from './config';
 import type { Logger } from '@intake24/common-backend';
+import type { DatabaseType } from '@intake24/common/types';
 import type { DatabaseOptions, FoodsDB, SystemDB } from '@intake24/db';
 
 import { CamelCasePlugin, PostgresDialect } from 'kysely';

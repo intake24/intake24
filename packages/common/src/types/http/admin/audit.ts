@@ -31,3 +31,6 @@ export const auditEntry = auditAttributes.extend({
   }).nullable(),
 });
 export type AuditEntry = z.infer<typeof auditEntry>;
+
+export const auditHistory = z.partialRecord(z.enum(['foods', 'system']), z.array(auditEntry));
+export type AuditHistory = z.infer<typeof auditHistory>;

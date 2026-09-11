@@ -18,42 +18,47 @@
           @click="toggleFullscreen"
         />
         <template #extension>
-          <v-tabs v-model="tab">
-            <v-tab
-              v-for="item in ['table', 'json']" :key="item"
-              :value="item"
-            >
-              {{ item }}
-            </v-tab>
-          </v-tabs>
+          <div class="d-flex align-center w-100 justify-space-between">
+            <v-tabs v-model="tab">
+              <v-tab v-for="tab in tabs" :key="tab" :value="tab">
+                {{ tab }}
+              </v-tab>
+            </v-tabs>
+            <v-btn-toggle v-model="view" mandatory>
+              <v-btn :title="$t('common.audit.view.table')" value="table">
+                <v-icon icon="fas fa-table" />
+              </v-btn>
+              <v-btn :title="$t('common.audit.view.json')" value="json">
+                <v-icon icon="fas fa-code" />
+              </v-btn>
+            </v-btn-toggle>
+          </div>
         </template>
       </v-toolbar>
       <v-container fluid>
         <v-tabs-window v-model="tab" class="pt-1">
-          <v-tabs-window-item value="table">
+          <v-tabs-window-item v-for="tab in tabs" :key="tab" :value="tab">
             <v-data-table
+              v-show="view === 'table'"
               class="elevation-1"
               full-width
-              :headers
+              :headers="headers"
               item-value="id"
-              :items="history"
+              :items="history[tab]"
             >
               <template #item.oldValue="{ item }">
-                <!-- <pre class="text-xs">{{ JSON.stringify(item.oldValue, null, 2) }}</pre> -->
-                <div>
-                  <pre v-for="(value, key) in item.oldValue" :key="key" class="my-1">{{ key }}: {{ value }}</pre>
-                </div>
+                <pre class="text-xs">{{ JSON.stringify(item.oldValue, null, 2) }}</pre>
               </template>
               <template #item.newValue="{ item }">
-                <!-- <pre class="text-xs">{{ JSON.stringify(item.newValue, null, 2) }}</pre> -->
-                <div>
-                  <pre v-for="(value, key) in item.newValue" :key="key" class="my-1">{{ key }}: {{ value }}</pre>
-                </div>
+                <pre class="text-xs">{{ JSON.stringify(item.newValue, null, 2) }}</pre>
               </template>
             </v-data-table>
-          </v-tabs-window-item>
-          <v-tabs-window-item value="json">
-            <json-editor v-model="history" class="flex-1" read-only />
+            <json-editor
+              v-show="view === 'json'"
+              v-model="history"
+              class="flex-1"
+              read-only
+            />
           </v-tabs-window-item>
         </v-tabs-window>
       </v-container>
@@ -65,7 +70,8 @@
 import type { PropType } from 'vue';
 import type { DataTableHeader } from 'vuetify';
 
-import type { AuditEntry } from '@intake24/common/types/http/admin';
+import type { DatabaseType } from '@intake24/common/types';
+import type { AuditEntry, AuditHistory } from '@intake24/common/types/http/admin';
 
 import { computed, ref, shallowRef, watch } from 'vue';
 
@@ -107,8 +113,10 @@ const url = computed(() => {
 
 const dialog = shallowRef(false);
 const fullscreen = shallowRef(false);
-const history = ref<AuditEntry[]>([]);
-const tab = shallowRef('table');
+const history = ref<AuditHistory>({});
+const tabs = computed(() => Object.keys(history.value) as DatabaseType[]);
+const tab = shallowRef(Object.keys(history.value).at(0));
+const view = shallowRef<'table' | 'json'>('table');
 
 const headers: DataTableHeader<AuditEntry>[] = [
   { title: i18n.t('common.audit.table.id'), key: 'id' },
@@ -136,6 +144,7 @@ function close() {
 async function fetch() {
   const { data } = await http.get(url.value);
   history.value = data;
+  tab.value = Object.keys(history.value).at(0);
 };
 
 function toggleFullscreen() {
