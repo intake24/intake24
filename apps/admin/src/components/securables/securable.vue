@@ -60,7 +60,7 @@ import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 import { computed, useTemplateRef } from 'vue';
 
 import { securableDefs } from '@intake24/common/security';
-import { getResourceFromSecurable } from '@intake24/common/util';
+import { securableToResource } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { EmbeddedDataTable } from '../data-tables';
@@ -86,7 +86,7 @@ const { i18n: { t } } = useI18n();
 const table = useTemplateRef('table');
 const dialog = useTemplateRef('dialog');
 
-const resource = computed(() => getResourceFromSecurable(props.securableType));
+const resource = computed(() => securableToResource(props.securableType));
 const actions = computed(() => securableDefs[props.securableType]);
 
 const headers: DataTableHeader[] = [

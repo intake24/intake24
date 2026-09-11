@@ -1,7 +1,6 @@
 import type { Cache } from '@intake24/api/services';
 import type { AdminCategoryService } from '@intake24/api/services/admin/category.service';
 import type { BulkCategoryInput } from '@intake24/common/types/http/admin';
-import type { DatabasesInterface } from '@intake24/db/database';
 import type { KyselyDatabases } from '@intake24/db/kysely-database';
 
 import adminCategoryService from '@intake24/api/services/admin/category.service';
@@ -11,22 +10,20 @@ import {
 } from '@intake24/db';
 
 import { initCache, releaseCache } from '../../helpers/cache';
-import { getKyselyDbs, getSequelizeDbs, releaseDatabases, useDatabases } from '../../helpers/databases';
+import { getKyselyDbs, releaseDatabases, useDatabases } from '../../helpers/databases';
 
 import '@intake24/api/bootstrap';
 
 describe('category service', () => {
-  let db: DatabasesInterface;
   let kyselyDb: KyselyDatabases;
   let cache: Cache;
   let service: AdminCategoryService;
 
   beforeAll(async () => {
     await useDatabases();
-    db = getSequelizeDbs();
     kyselyDb = getKyselyDbs();
     cache = initCache();
-    service = adminCategoryService({ cache, db, kyselyDb });
+    service = adminCategoryService({ cache, kyselyDb });
 
     await FoodsLocale.create({
       id: 'en_GB',

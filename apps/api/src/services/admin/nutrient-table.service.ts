@@ -69,7 +69,7 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   const createTable = async (input: NutrientTableRequest): Promise<NutrientTableEntry> => {
     const { id, description } = input;
 
-    return db.foods.transaction<NutrientTableEntry>(async (transaction) => {
+    return db.foods.contextTransaction<NutrientTableEntry>(async (transaction) => {
       const nutrientTable = await NutrientTable.create({ id, description }, { transaction });
       const csvMapping = await NutrientTableCsvMapping.create(
         { nutrientTableId: id, ...input.csvMapping },
@@ -211,7 +211,7 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
 
     const { csvMapping } = nutrientTable;
 
-    return db.foods.transaction(async (transaction) => {
+    return db.foods.contextTransaction(async (transaction) => {
       await nutrientTable.update({ description }, { transaction });
       await csvMapping.update(input.csvMapping, { transaction });
 
@@ -247,7 +247,9 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
     if (!nutrientTable)
       throw new NotFoundError();
 
-    await nutrientTable.destroy();
+    await db.foods.contextTransaction(async (transaction) => {
+      await nutrientTable.destroy({ transaction });
+    });
   };
 
   /**
@@ -259,7 +261,7 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   const queueTask = async (input: QueueJob) => scheduler.jobs.addJob(input);
 
   const updateRecords = async (nutrientTableId: string, records: ApiNutrientTableRecord[]) => {
-    await db.foods.transaction(async (transaction) => {
+    await db.foods.contextTransaction(async (transaction) => {
       const recordIds = records.map(record => record.recordId);
 
       // Find existing records ids matching nutrientTableId/nutrientTableRecordId

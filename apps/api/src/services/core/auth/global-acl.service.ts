@@ -4,10 +4,19 @@ import type { IoC } from '@intake24/api/ioc';
 import type { HasVisibility, Securable } from '@intake24/db';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { getResourceFromSecurable } from '@intake24/common/util';
+import { isSecurableType } from '@intake24/common/security';
+import { resourceToModel, securableToResource } from '@intake24/common/util';
 import { securableIncludes } from '@intake24/db';
 
-function globalAclService({ aclCache }: Pick<IoC, 'aclCache'>) {
+function globalAclService({ aclCache, models }: Pick<IoC, 'aclCache' | 'db' | 'models'>) {
+  const securableModels = {
+    FAQ: models.system.FAQ,
+    FeedbackScheme: models.system.FeedbackScheme,
+    Language: models.system.Language,
+    Locale: models.system.SystemLocale,
+    Survey: models.system.Survey,
+    SurveyScheme: models.system.SurveyScheme,
+  };
   /**
    * Get user permissions
    *
@@ -90,6 +99,21 @@ function globalAclService({ aclCache }: Pick<IoC, 'aclCache'>) {
 
   /**
    * Check is user can access record based on
+   * - resource permissions
+   *
+   * @param {string} userId
+   * @param {string} securableType
+   * @param {string} action
+   * @returns {Promise<boolean>}
+   */
+  const hasResourceAccess = async (userId: string, securableType: string, action: string): Promise<boolean> => {
+    const resource = securableToResource(securableType);
+
+    return hasPermission(userId, `${resource}:${action}`);
+  };
+
+  /**
+   * Check is user can access record based on
    * - securable actions
    * - ownership
    *
@@ -107,49 +131,9 @@ function globalAclService({ aclCache }: Pick<IoC, 'aclCache'>) {
     return isOwner || canAccess;
   };
 
-  /**
-   * Check is user can access record based on
-   * - resource permissions
-   *
-   * @param {string} userId
-   * @param {string} securableType
-   * @param {string} action
-   * @returns {Promise<boolean>}
-   */
-  const hasResourceAccess = async (userId: string, securableType: string, action: string): Promise<boolean> => {
-    const resource = getResourceFromSecurable(securableType);
-
-    return hasPermission(userId, `${resource}:${action}`);
-  };
-
-  /**
-   * Helper for `findAndCheckRecordAccess`
-   *
-   * @template T
-   * @param {string} userId
-   * @param {ModelStatic<T>} securable
-   * @param {string} action
-   * @param {(T | null)} record
-   * @returns {Promise<T>}
-   */
-  const checkRecordAccess = async <T extends Securable>(
-    userId: string,
-    securable: ModelStatic<T>,
-    action: string,
-    record: T | null,
-  ): Promise<T> => {
-    if (await hasResourceAccess(userId, securable.name, action)) {
-      if (!record)
-        throw new NotFoundError();
-
-      return record;
-    }
-
-    if (!record || !(await hasSecurableAccess(userId, record, action)))
-      throw new ForbiddenError();
-
-    return record;
-  };
+  function resolveSecurable(securableType: string) {
+    return isSecurableType(securableType) ? securableModels[securableType] : undefined;
+  }
 
   const findAndCheckRecordAccess = async <T extends Securable>(
     userId: string,
@@ -167,7 +151,17 @@ function globalAclService({ aclCache }: Pick<IoC, 'aclCache'>) {
       include: [...(Array.isArray(include) ? include : []), ...securableIncludes(userId)],
     });
 
-    return checkRecordAccess(userId, securable, action, record);
+    if (await hasResourceAccess(userId, securable.name, action)) {
+      if (!record)
+        throw new NotFoundError();
+
+      return record;
+    }
+
+    if (!record || !(await hasSecurableAccess(userId, record, action)))
+      throw new ForbiddenError();
+
+    return record;
   };
 
   /**
@@ -214,6 +208,33 @@ function globalAclService({ aclCache }: Pick<IoC, 'aclCache'>) {
   };
 
   /**
+   * Check is user has access to resource for provided action
+   *
+   * @template T
+   * @param {string} userId
+   * @param {string} resource
+   * @param {string} action
+   * @param {FindOptions<Attributes<T>>} findOptions
+   * @returns {Promise<void>}
+   */
+  async function checkAccess<T extends Securable>(
+    userId: string,
+    resource: string,
+    action: string,
+    findOptions: FindOptions<Attributes<T>>,
+  ): Promise<void> {
+    console.log('checkAccess', { userId, resource, action, findOptions });
+    if (await hasPermission(userId, `${resource}:${action}`))
+      return;
+
+    const securable = resolveSecurable(resourceToModel(resource));
+    if (!securable)
+      throw new ForbiddenError();
+
+    await findAndCheckRecordAccess(userId, securable as unknown as ModelStatic<T>, action, findOptions);
+  }
+
+  /**
    * Get user's list of resource-based access actions
    *
    * @param {string} userId
@@ -258,6 +279,7 @@ function globalAclService({ aclCache }: Pick<IoC, 'aclCache'>) {
     hasAnyPermission,
     hasRole,
     hasAnyRole,
+    checkAccess,
     findAndCheckRecordAccess,
     findAndCheckVisibility,
     getResourceAccessActions,

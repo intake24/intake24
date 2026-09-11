@@ -11,7 +11,6 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { LocalisableError, NotFoundError } from '@intake24/api/http/errors';
-import { Job as DbJob } from '@intake24/db';
 
 import BaseJob from '../job';
 import {
@@ -23,15 +22,13 @@ import { checkImportLocalePermissions } from './permission-checks';
 export default class PackageVerification extends BaseJob<'PackageVerification', PackageContentsSummary> {
   readonly name = 'PackageVerification';
 
-  private dbJob!: DbJob;
-
   private readonly globalAclService;
 
   private readonly fsConfig;
 
   private readonly servicesConfig;
 
-  private userId!: string;
+  protected userId!: string;
 
   constructor({ logger, globalAclService, fsConfig, servicesConfig }: Pick<IoC, 'logger' | 'globalAclService' | 'fsConfig' | 'servicesConfig'>) {
     super({ logger });
@@ -44,15 +41,8 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
   public async run(job: Job): Promise<PackageContentsSummary> {
     this.init(job);
 
-    const dbJob = await DbJob.findByPk(this.dbId);
-    if (!dbJob)
-      throw new NotFoundError(`Job record not found in database: ${this.name} ${this.dbId}`);
-
-    if (!dbJob.userId)
+    if (!this.userId)
       throw new NotFoundError(`No user ID associated with job: ${this.name} ${this.dbId}`);
-
-    this.dbJob = dbJob;
-    this.userId = dbJob.userId;
 
     this.logger.debug('Job started.');
 

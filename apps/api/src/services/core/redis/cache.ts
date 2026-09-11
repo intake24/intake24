@@ -27,6 +27,7 @@ export type CacheKeyPrefix
 export type CacheKey
   = | `${CacheKeyPrefix}:${string}`
     | `${CacheKeyPrefix}:${string}:${string}`
+    | 'audit'
     | 'feedback-data'
     | 'locales-index';
 export type CacheValue = string | number | unknown[] | string[] | null | boolean | object;

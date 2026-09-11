@@ -142,7 +142,7 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
       }
     }
     else {
-      await this.kyselyDb.system.transaction().execute(async (trx) => {
+      await this.kyselyDb.system.contextTransaction(async (trx) => {
         for (const duplicateSetBatch of duplicateSetBatches) {
           stats.submissionFoodsUpdated += await this.replaceSurveySubmissionFoods(trx, localeCode, duplicateSetBatch);
           stats.popularityCounterRowsMerged += await this.mergePopularityCounters(trx, duplicateSetBatch);
@@ -152,7 +152,7 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
         }
       });
 
-      await this.kyselyDb.foods.transaction().execute(async (trx) => {
+      await this.kyselyDb.foods.contextTransaction(async (trx) => {
         for (const duplicateSetBatch of duplicateSetBatches) {
           stats.associatedFoodReferencesUpdated += await this.replaceAssociatedFoods(trx, localeCode, duplicateSetBatch);
           stats.deletedFoods += await this.deleteDuplicateFoods(trx, localeCode, duplicateSetBatch);

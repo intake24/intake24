@@ -1,14 +1,11 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
     <template #activator="{ props }">
-      <v-btn
-        color="primary"
-        :title="$t(`fdbs.${type}.copy`)"
-        variant="outlined"
+      <v-list-item
         v-bind="props"
-      >
-        <v-icon icon="fas fa-copy" start />{{ $t(`fdbs.${type}.copy`) }}
-      </v-btn>
+        prepend-icon="fas fa-copy"
+        :title="$t(`fdbs.${type}.copy`)"
+      />
     </template>
     <v-card :tile="$vuetify.display.smAndDown">
       <v-toolbar>

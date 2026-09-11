@@ -6,7 +6,7 @@ import type { LocaleCopyFoodsSubTasks, LocaleCopySystemSubTasks } from '@intake2
 import type { FoodsDB, SystemDB } from '@intake24/db';
 
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Job as DbJob, SystemLocale } from '@intake24/db';
+import { SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
 
@@ -18,8 +18,6 @@ export type TransactionOps<T extends FoodsDB | SystemDB> = {
 
 export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
   readonly name = 'LocaleCopy';
-
-  private dbJob!: DbJob;
 
   private cache;
   private kyselyDb;
@@ -40,12 +38,6 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
-
-    const dbJob = await DbJob.findByPk(this.dbId);
-    if (!dbJob)
-      throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
-
-    this.dbJob = dbJob;
 
     this.logger.debug('Job started.');
 
@@ -91,7 +83,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     });
 
     if (foodsPriorityTasks.length || foodsTasks.length) {
-      await this.kyselyDb.foods.transaction().execute(async (trx) => {
+      await this.kyselyDb.foods.contextTransaction(async (trx) => {
         if (foodsPriorityTasks.includes('categories'))
           await this.categories({ trx, code, sourceCode });
         if (foodsPriorityTasks.includes('foods'))
@@ -103,7 +95,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     }
 
     if (systemTasks.length) {
-      await this.kyselyDb.system.transaction().execute(async (trx) => {
+      await this.kyselyDb.system.contextTransaction(async (trx) => {
         Promise.all(systemTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
       });
     }

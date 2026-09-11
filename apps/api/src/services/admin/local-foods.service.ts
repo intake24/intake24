@@ -205,7 +205,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       await updatePortionSizeMethodsImpl(foodId, methods, transaction);
     }
     else {
-      await db.foods.transaction(async (t) => {
+      await db.foods.contextTransaction(async (t) => {
         await updatePortionSizeMethodsImpl(foodId, methods, t);
       });
     }
@@ -221,7 +221,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       return await createImpl(localeId, request, options, transaction);
     }
     else {
-      return await db.foods.transaction(async (transaction) => {
+      return await db.foods.contextTransaction(async (transaction) => {
         return await createImpl(localeId, request, options, transaction);
       });
     }
@@ -270,7 +270,7 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       return await readImpl(localeId, foodCode, transaction);
     }
     else {
-      return await db.foods.transaction(async (transaction) => {
+      return await db.foods.contextTransaction(async (transaction) => {
         return await readImpl(localeId, foodCode, transaction);
       });
     }

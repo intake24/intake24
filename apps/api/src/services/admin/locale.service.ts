@@ -353,14 +353,14 @@ function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | '
       await foodsImpl(foodsTransaction);
     }
     else {
-      await kyselyDb.foods.transaction().execute(foodsImpl);
+      await kyselyDb.foods.contextTransaction(foodsImpl);
     }
 
     if (systemTransaction) {
       await systemImpl(systemTransaction);
     }
     else {
-      await kyselyDb.system.transaction().execute(systemImpl);
+      await kyselyDb.system.contextTransaction(systemImpl);
     }
 
     if (dirtyLocaleCodes.length) {
@@ -419,7 +419,7 @@ function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | '
       await impl(transaction);
     }
     else {
-      await kyselyDb.foods.transaction().execute(impl);
+      await kyselyDb.foods.contextTransaction(impl);
     }
   };
 

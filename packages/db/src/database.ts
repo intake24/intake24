@@ -1,10 +1,8 @@
-import type { DatabaseConfig, DatabaseType } from './config';
+import type { DatabaseConfig } from './config';
 import type { Logger } from '@intake24/common-backend';
-import type { Environment } from '@intake24/common/types';
+import type { DatabaseType, Environment } from '@intake24/common/types';
 
-import { Sequelize } from 'sequelize-typescript';
-
-import { foods, system } from './models';
+import { foods, Sequelize, system } from './models';
 import { ENUM_ARRAY_TYPES, setupEnumArrayParsersSequelize } from './pg-enum-array-parsers';
 
 export const models = { foods, system };
