@@ -24,7 +24,7 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@clack/prompts": "^1.7.0",
+    "@clack/prompts": "^1.8.0",
     "@css-inline/css-inline": "^0.21.2",
     "@json2csv/node": "^7.0.8",
     "commander": "^15.0.0",
@@ -44,17 +44,17 @@
     "strip-bom-stream": "^5.0.0",
     "unzipper": "^0.12.5",
     "web-push": "^3.6.7",
-    "zod": "^4.5.4"
+    "zod": "^4.6.2"
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^24.13.3",
+    "@types/node": "^24.13.4",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
-    "tsdown": "^0.22.14",
+    "tsdown": "^0.23.0",
     "typescript": "^6.0.3"
   }
 }
