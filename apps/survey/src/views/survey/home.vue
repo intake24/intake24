@@ -238,6 +238,7 @@
                         rounded
                         :to="{ name: 'feedback-home', params: { surveyId } }"
                         variant="outlined"
+                        @click="sendPrePostSurveyLinkEvent('preSurveyLinkClicked', 'dietary_feedback')"
                       >
                         <v-icon start>
                           $feedback
@@ -254,6 +255,7 @@
                     size="large"
                     :to="{ name: 'feedback-home', params: { surveyId } }"
                     variant="outlined"
+                    @click="sendPrePostSurveyLinkEvent('preSurveyLinkClicked', 'dietary_feedback')"
                   >
                     <v-icon start>
                       $feedback
@@ -331,7 +333,7 @@ import { useRouter } from 'vue-router';
 
 import { userService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
-import { sendGtmEvent } from '@intake24/survey/util';
+import { sendGtmEvent, sendPrePostSurveyLinkEvent } from '@intake24/survey/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
@@ -369,6 +371,8 @@ export default defineComponent({
         action: 'login',
         section: 'preMeals',
       });
+      if (survey.feedbackEnabled && survey.feedbackAvailable)
+        sendPrePostSurveyLinkEvent('preSurveyLinkShown', 'dietary_feedback');
       submissions.value = await userService.submissions(props.surveyId);
     });
 
@@ -378,6 +382,7 @@ export default defineComponent({
       endTime,
       cancelRecall,
       startRecall,
+      sendPrePostSurveyLinkEvent,
     };
   },
 
