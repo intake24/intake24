@@ -1,15 +1,14 @@
-import path from 'node:path';
-
 import { initServer } from '@ts-rest/express';
 import multer from 'multer';
 import { col, fn } from 'sequelize';
 
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
+import { requireCsvUploadPath } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
-import { multerFile } from '@intake24/common/types/http';
+import { jobRequiresFile } from '@intake24/common/types';
 import { FoodsNutrientType, NutrientTable } from '@intake24/db';
 
 async function uniqueMiddleware(value: string) {
@@ -87,17 +86,10 @@ export function nutrientTable() {
       handler: async ({ file, params: { nutrientTableId }, body: { params, type }, req }) => {
         const { userId } = req.scope.cradle.user;
 
-        if (!file) {
-          throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
-        }
-
-        const res = multerFile.safeParse(file);
-        if (!res.success) {
-          throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
-        }
-
-        if (path.extname(res.data.originalname).toLowerCase() !== '.csv') {
-          throw ValidationError.from({ path: 'params.file', i18n: { type: 'file.ext', params: { ext: 'CSV (comma-delimited)' } } });
+        const taskParams = { ...params, nutrientTableId };
+        if (jobRequiresFile(type)) {
+          // @ts-expect-error not narrowed yet
+          taskParams.file = requireCsvUploadPath(file);
         }
 
         const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });
@@ -107,7 +99,7 @@ export function nutrientTable() {
         const job = await req.scope.cradle.nutrientTableService.queueTask({
           userId,
           type,
-          params: { ...params, nutrientTableId, file: res.data.path },
+          params: taskParams,
         });
 
         return { status: 200, body: job };
