@@ -46,14 +46,15 @@ const state = computed({
 
     if (typeof value === 'boolean') {
       const foodOrMealId = props.food?.id ?? props.meal?.id;
+      const tracking = { selectedOption: value ? 'yes' : 'no' };
       if (value && props.prompt.trueAction) {
-        action(props.prompt.trueAction.type, foodOrMealId, props.prompt.trueAction.params);
+        action(props.prompt.trueAction.type, foodOrMealId, props.prompt.trueAction.params, tracking);
       }
       else if (!value && props.prompt.falseAction) {
-        action(props.prompt.falseAction.type, foodOrMealId, props.prompt.falseAction.params);
+        action(props.prompt.falseAction.type, foodOrMealId, props.prompt.falseAction.params, tracking);
       }
       else {
-        action('next');
+        action('next', undefined, undefined, tracking);
       }
     }
   },
