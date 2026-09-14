@@ -1,36 +1,36 @@
 {
-  "_": "Ndemanga zotsatira za kadyedwe",
-  "info": "Uthenga wa ndemanga zotsatira za kadyedwe",
+  "_": "Ndemanga za kadyedwe",
+  "info": "Uthenga wa ndemanga za kadyedwe",
   "status": {
-    "available": "Onani ndemanga za kadyedwe kanu",
+    "available": "Ndemanga za kadyedwe zilipo",
     "lowRecalls": "Ndemanga za kadyedwe kanu zipezeka mukamaliza ndi kutumiza mndandanda wa mafunso osachepera {minRecalls}.",
-    "notAvailable": "Ndemanga zotsatira kadyedwe mukafukufukuyu palibe."
+    "notAvailable": "Ndemanga za kadyedwe mukafukufukuyu palibe."
   },
-  "title": "Ndemanga zotsatira zakadyedwe zochokera ku {name} zokumbukira",
-  "missingFoods": "Zakudya zonse mwatiuza kunena kuti zikusowa sizipezeka ku ndemanga za kadyedwe",
+  "title": "zotsatira {name} za kafukufuku",
+  "missingFoods": "Zakudya zonse zimene sizinapezeke sizioneka ku ndemanga za kadyedwe",
   "physicalData": {
     "title": "Zokhuzana ndi inu",
-    "subtitle": "Kuti tikupasena ndemanga ya zotsatira moyenelera, yankhani mafunso awa.",
+    "subtitle": "Kuti tikupatsani demanga moyenelera, yankhani mafunso awa.",
     "change": "Sinthani uthenga wanga",
     "recall": "Yankhani za tsiku lina",
     "sexes": {
-      "_": "Wamuna kapena wamkazi",
-      "m": "Wamuna",
+      "_": "mamuna kapena wamkazi",
+      "m": "mamuna",
       "f": "Wamkazi"
     },
-    "sex": "Wamuna kapena wamkazi: {sex}",
+    "sex": "mamuna kapena wamkazi: {sex}",
     "age": "Dzaka: {age}",
     "birthdate": "Chaka chobadwa",
     "height": "Msinkhu: {height} cm",
-    "heightCm": "Msinkhu muma centimeters",
+    "heightCm": "Msinkhu muma sentimita",
     "weight": "Kulemera: {weight} kg",
-    "weightKg": "Kulemera muma kilograms",
+    "weightKg": "Kulemera muma kilogalamu",
     "physicalActivityLevelId": "Mulingo wama sewelo olimbitsa thuphi",
     "weightTarget": "Cholinga: {target}",
     "weightTargets": {
-      "_": "Kulemera kumene mukufuna kufikira",
-      "title": "Kulemera kumene mukufuna kufikira",
-      "keep_weight": "Kusunga thuphi m'mene lili",
+      "_": "Kulemera/sikero kumene mukufuna kufikira",
+      "title": "Kulemera/sikero kumene mukufuna kufikira",
+      "keep_weight": "Kusunga thuphi m'mene ilili",
       "lose_weight": "Kuchepa thuphi",
       "gain_weight": "Kuonjezera thuphi"
     }
@@ -38,19 +38,19 @@
   "outputs": {
     "title": "Zotsatira",
     "download": {
-      "_": "Tsitsani",
-      "title": "Tsitsani PDF",
-      "subtitle": "Tsitsani ndemanga zotsatira mu fayilo ya PDF. Zitenga ma sekandi ochepa,Chonde dikirani pang'ono.",
+      "_": "Daunilodi",
+      "title": "Daunilodi PDF",
+      "subtitle": "Daunilodi ndemanga mu fayilo ya PDF. Zitenga nthawi yochepa,Chonde dikirani pang'ono.",
       "send": "Tumizani pempho",
-      "sent": "Fayilo ya ndemanga ya zotsatira ya sungidwa."
+      "sent": "Fayilo ya ndemanga ya zotsatira yanu ya sungidwa."
     },
     "email": {
       "_": "imelo",
-      "title": "Tumizani emelo",
+      "title": "Tumizani imelo",
       "send": "Tumizani pempho",
-      "sent": "Tatumiza ndemanga ya zotsatira za kadyedwe kanu ku imelo yomwe mwatipatsa."
+      "sent": "Tatumiza ndemanga za kadyedwe kanu ku imelo yomwe mwatipatsa."
     },
-    "retry": "Zotsatira za ndemanga zakadyedwe zapemphedwa, yeseraninsoni muma sekandi.",
+    "retry": " Ndemanga za kadyedwe zapemphedwa, yeseraninsoni muma {secs} s.",
     "print": "Print"
   },
   "cards": {
@@ -58,30 +58,30 @@
   },
   "topFoods": {
     "title": "Zakudya zomwe zikukupatsani michele yambiri",
-    "chart": "Zachuluka {nutrient}"
+    "chart": "Zachuluka mu {nutrient}"
   },
   "meals": {
-    "title": "Kagawidwe ka zakudya patsiku",
+    "title": " Kagawidwe ka zakudya patsiku",
     "chart": "{nutrient}"
   },
   "rating": {
-    "_": "Maganizo pa zimene mwakumana nazo",
-    "title": "Maganizo anu ndi otani pazotsatira zakadyedwe?",
-    "comment": "Tiuzeni zambiri pa maganizo a zotsatira zakadyedwe?",
-    "send": "Tumizani zotsatira",
-    "sent": "Zotsatira zatumizidwa, zikomo!"
+    "_": "Perekani ndemanga yanu",
+    "title": "Ndemanga yanu ndiyotani pa zotsatira zakadyedwe kanu?",
+    "comment": "Tiuzeni zambiri pa ndemanga yomwe mwapereka",
+    "send": "Tumizani Ndemanga",
+    "sent": "Ndemanga yanu yatumizidwa, zikomo!"
   },
   "intake": {
     "your": "Ma {nutrient} amene mwadya ndi {amount}",
     "estimated": "Mulingo wa zakudya zomwe zayelekezedwa kuti mwadya",
-    "recommended": "Mulingo woyera kudya",
-    "tellMeMore": "Tiuzeni zambiri",
+    "recommended": "Mulingo woyenera kudya",
+    "tellMeMore": "Ndiuzeni zambiri",
     "gotIt": "Zatheka!"
   },
   "unitDescription": {
-    "percentage_of_energy": "Zotsatira pa mchere uwu zikuchokera pamchere wopereka mphamvu kuchokera kuzakudya ndi mulingo wazakudya omwe mwanena.",
-    "energy_divided_by_bmr": "Ndemanga ya zotsatira ikuchokera kumchere womwe umapereka mphamvu womwe mwadya kugawidwa ndi momwe thuphi lanu limagwiritsira ntchito mphamvu kuyelekeza ndi mulingo womwe mumayenera kudya.",
-    "per_unit_of_weight": "Ndemanga ya zotsatira ikuchokera kumchere wu pa kg ya kulemera kwa thuphi lanu kuyelekeza ndi mulingo womwe mumayenera kudya.",
-    "range": "Ndemanga ya zotsatira pa mchere uwu ikuchokera kuzakudya ndi mulingo wazakudya omwe mwanena."
+    "percentage_of_energy": "Zotsatira pa mchere uwu, zikuchokera pamchere wopereka mphamvu kuchokera kuzakudya ndi mulingo wazakudya omwe mwanena.",
+    "energy_divided_by_bmr": "Ndemanga ya zotsatira ikuchokera kumchere womwe umapereka mphamvu womwe mwadya, kugawidwa ndi momwe thuphi lanu limagwiritsira ntchito mphamvu, kuyelekeza ndi mulingo womwe mumayenera kudya.",
+    "per_unit_of_weight": "Ndemanga ya zotsatira ikuchokera kumchere wu pa kg ya kulemera kwa thuphi lanu, kuyelekeza ndi mulingo womwe mumayenera kudya.",
+    "range": "Ndemanga ya zotsatira pa mchere uwu, ikuchokera kuzakudya ndi mulingo wazakudya omwe mwanena."
   }
 }

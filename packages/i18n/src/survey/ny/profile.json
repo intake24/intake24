@@ -1,12 +1,12 @@
 {
   "_": "Profile",
-  "info": "Information",
+  "info": "Uthenga",
   "settings": "Settings",
   "provider": "Provider",
   "providerId": "Provider ID",
   "languages": {
-    "_": "Language",
-    "title": "Languages",
+    "_": "Chilankhulo",
+    "title": "Zilankhulo",
     "ar": "Arabic",
     "de": "German",
     "dk": "Danish",

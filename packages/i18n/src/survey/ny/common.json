@@ -8,11 +8,11 @@
   },
   "login": {
     "_": "Lowani",
-    "start": "Tiyambe",
-    "captcha": "Malizisani mayeso otsimikiza kuti ndinu munthu",
-    "back": "Bwelerani patsamba lolowera ",
+    "start": "Yambani",
+    "captcha": "Tsimikiza kuti ndinu munthu",
+    "back": "Bwelerani ku tsamba lolowera ",
     "username": {
-      "_": "Lowani ndi dzina lanu lolowera ndi mawu a chinsinsi"
+      "_": "Sign in via username & password"
     },
     "token": {
       "_": "Sign in via survey link",
@@ -20,8 +20,8 @@
     },
     "err": {
       "captcha": "Zomwe mwayika potsimikiza kuti ndinu munthu ndi zolakwika.",
-      "credentials": "Dzina lanu ndi mawu a chinsinsi ndizolakwikwa.",
-      "token": "Kachidindo kolowera ndikolakwika.",
+      "credentials": "Dzina lanu lolowera ndi mawu a chinsinsi omwe mwaika ndiolakwikwa.",
+      "token": "Zomwe mwagwilitsira ntchito kulowera ndizolakwika.",
       "survey": "Adilesi mwagwiritsira ntchito siyikuoneka ngati yovomerezeka mukafukufukuyu."
     }
   },
@@ -33,9 +33,9 @@
     "_": "Kuyendayenda pa tsamba",
     "home": "Tsamba lofikira",
     "feedback": "Ndemanga",
-    "recall": "Kumbukirani",
+    "recall": "Kukumbukira zomwe mwadya",
     "foods": "Foods",
-    "help": "Thandizo",
+    "help": "Pemphani chithandizo",
     "options": "Zosankha"
   },
   "username": "Dzina lanu lolowera",
@@ -47,16 +47,16 @@
   "message": "Uthenga",
   "continue": "Pitirizani",
   "help": {
-    "_": "Thandizo & FAQ",
+    "_": "Pemphani chithandizo",
     "faqs": {
       "_": "FAQ",
-      "title": "Mafunso Ofunsidwa Kawirikawiri",
+      "title": "Mafunso amene amafunsidwa Kawirikawiri",
       "subtitle": "Pezani mayankho amafunso ofunsidwa kawirikawiri okhuzana ndi intake24"
     },
     "request": {
-      "_": "Thandizo",
-      "title": "Pemphani thandizo",
-      "text": "Lembani fomu ilipansipa ndipo m'modzi wagulu lathu lothandiza azalumikizana nanu momwe angathere fomu.",
+      "_": "Pemphani chithandizo",
+      "title": "Pemphani chithandizo",
+      "text": "Lembani fomu ilipansipa ndipo m'modzi wagulu lathu lothandiza azalumikizana nanu.",
       "sent": "Pempho lanu lathandizo latumizidwa."
     }
   },
@@ -66,38 +66,38 @@
     "build": "Mtundu wa pulogalamu"
   },
   "clipboard": {
-    "_": "Kopelani mawu",
-    "copied": "Mawu asungwidwa mwakanthawi"
+    "_": "Kopelani mawu ku kilipobodi",
+    "copied": "Mawu asungwidwa mu kilipibodi"
   },
   "sw": {
     "check": "Onani zosintha pa pulogalamu",
     "update": "Sinthani"
   },
   "action": {
-    "cancel": "Letsani",
+    "cancel": "Tsekani",
     "close": "Tsekani",
     "continue": "Pitirizani",
     "confirm": {
       "_": "Tsimikizani",
       "title": "Kodi mukufuna kupitiliza?",
-      "delete": "Kodi mukufuna kufufuta? {dzina}?"
+      "delete": "Kodi mukufuna kufufuta {dzina}?"
     },
-    "ok": "Chabwino",
-    "reload": "Bwezeletsani tsamba",
+    "ok": "Eya",
+    "reload": "Panganinso",
     "remove": "Chotsani",
-    "reset": "Yambitsaninso",
+    "reset": "Bwezeletsani",
     "start": "Yambani",
     "submit": "Tumizani",
     "yes": "Eya",
     "no": "Ayi"
   },
   "not": {
-    "provided": "Sizinaperekedwa",
+    "provided": "Sizinaperekedwe",
     "selected": "Sizinasankhidwe"
   },
   "errors": {
     "500": "China chake chalakwika :(",
-    "retry": "Yesaninso"
+    "retry": "Yeseraninso"
   },
   "validation": {
     "tooLong": "Mawu omwe mwalowesa ndi ochuluka kwambiri ({malire} malire a mawu)."

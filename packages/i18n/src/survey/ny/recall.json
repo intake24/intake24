@@ -1,39 +1,39 @@
 {
   "_": "Kukumbukira zomwe mwadya",
   "info": "Uthenga wokhuzana ndikukumbukira zomwe mwadya",
-  "none": "Zokumbukira zomwe mwadya sizikuchitika panthawi yino.",
-  "startedAt": "Kukumbukira zomwe mwadya mwayamba nthawi ya: {startedAt}.",
-  "finishedAt": "Kukumbukira zomwe mwadya mwamaliza nthawi ya: {finishedAt}.",
+  "none": "Simunayambe kulowetsa chilichonse cha zomwe mwadya.",
+  "startedAt": "Kukumbukira zomwe mwadya mwayamba : {startedAt}.",
+  "finishedAt": "Kukumbukira zomwe mwadya mwamaliza: {finishedAt}.",
   "submittedAt": "Mwatumiza nthawi ya",
   "limitReached": {
     "daily": "Mwakwanitsa chiwelengero cha patsiku chokumbukira zomwe mwadya.",
     "total": "Mwakwanitsa chiwelengero chokumbukira zomwe mwadya."
   },
   "rating": {
-    "_": "Maganizo anu ndiotani pa zimene mwakumana nazo pogwiritsira ntchito webusayitiyi?",
-    "title": "Maganizo anu ndi otani pazotsatira zakadyedwe?",
-    "comment": "Mutiuzeko mmene munapangira chiganizo cha kakumbukiridwe ka zakudya zanu",
-    "send": "Tumizani zotsatira",
-    "sent": "Zotsatira zatumizidwa, zikomo!"
+    "_": "Pelekani maganizo anu pa pakafukufukuyu",
+    "title": "Sankhani mlingo wa momwe mwaonera kafukufukuyu?",
+    "comment": "Fotokokozerani maganizo a mlingo omwe mwapeleka",
+    "send": "Tumizani maganizo anu",
+    "sent": "Maganizo anu atumizidwa, zikomo!"
   },
   "survey": "Dzina lakafukufuku: {name}",
   "submissions": {
-    "_": "Tsiku lokumbukira zomwe mwadya",
-    "title": "Matsiku okumbukira zomwe mwadya",
+    "_": "Tsiku lomwe mukukumbukira zomwe mwadya",
+    "title": "Masiku omwe mwakumbukira zomwe mwadya",
     "all": "Zonse",
-    "past": "Zokumbukira zomwe mwadya zamumbuyo",
-    "none": "Pakadali pano mulibe zokumbukira zomwe mwadya zamumbuyo.",
-    "count": "Nambala ya zokumbukira ya zomwe mwadya: {count}"
+    "past": "Zomwe munakumbukira zam'mbuyo",
+    "none": "Mulibe zomwe munakumbukira zakum'mbuyo.",
+    "count": "Chiwelengelo cha kafukufuku: {count}"
   },
   "start": {
-    "_": "Yambani kukumbukira zomwe munadya",
-    "another": "Yambani kukumbikira zomwe munadya kachikena"
+    "_": "Yambani kukumbukira zomwe",
+    "another": "Yambaninso kukumbikira zomwe mwadya"
   },
   "continue": "Pitilizani",
   "abort": {
     "_": "Lekani",
-    "label": "Lekani kukumbukira zomwe munadya",
-    "confirm": "Lekani kukumbikira zomwe munadya dzulo zomwe mukulemba panopa?"
+    "label": "Lekani Kafukufukuyu",
+    "confirm": "Lekani Kafukufukuyu?"
   },
   "surveyInfo": {
     "recall": "Kukumbukira zomwe mwadya: {number}"
@@ -43,24 +43,24 @@
     "mealSuggested": "Chakudyachi chaperekedwa ndi makina koma simunatsimikize ngati munadya",
     "food": {
       "add": "Add food",
-      "delete": "Fufutani chakudya",
-      "deleteConfirm": "Mukufuna kufufuta {item}?",
+      "delete": "Chotsani chakudya",
+      "deleteConfirm": "Mukufuna kuchotsa {item}?",
       "change": "Sinthani chakudya",
       "free-text": {
-        "_": "Chakudya ichi sichikugwirizana ndi chakudya chilichonse chimene chili mu makina athu.",
+        "_": "Chakudyachi sichikugwirizana ndi chakudya chilichonse chimene chili mu makina athu.",
         "incomplete": "Mulingo wachakudyachi siwukudziwika pakadali pano.",
         "edit": "Sinthani kafufuzidwe"
       },
       "encoded-food": {
-        "_": "Chakudya ichi chagwirizana ndi chakudya chimene chili mu makina athu.",
+        "_": "Chakudyachi chagwirizana ndi chakudya chimene chili mu makina athu.",
         "complete": "Mulingo wa chakudya ichi watheka.",
         "incomplete": "Mulingo wachakudyachi siwukudziwika pakadali pano.",
         "edit": "Sinthani mulingo"
       },
       "missing-food": {
-        "_": "Chakudya ichi chalembedwe ngati chakudya chosowa mu makina athu.",
-        "complete": "Uthenga wosowa wachakudya ichi walembedwa.",
-        "incomplete": "Uthenga wosowa wachakudya ichi siwukudziwika pakadali pano.",
+        "_": "Chakudyachi chalembedwa ngati chakudya chosowa mu makina athu.",
+        "complete": "Uthenga wosowa wachakudyachi walembedwa.",
+        "incomplete": "Uthenga wosowa wachakudyachi siwukudziwika pakadali pano.",
         "edit": "Sinthani chakudya chosowa"
       },
       "generic-builder": {
@@ -70,44 +70,44 @@
         "edit": "Edit food"
       },
       "recipe-builder": {
-        "_": "Chakudya ichi chagwirizana ndi chakudya (kaphikidwe ka chakudya) chomwe chili mu makina athu.",
-        "complete": "Ndondomeko ya kaphikidwe ka chakudya ichi yaperekedwa.",
-        "incomplete": "Ndondomeko yonse yakaphikidwe ka chakudya ichi siyinaperekedwe.",
+        "_": "Chakudyachi chagwirizana ndi chakudya (kaphikidwe ka chakudya) chomwe chili mu makina athu.",
+        "complete": "Ndondomeko ya kaphikidwe ka chakudyachi yaperekedwa.",
+        "incomplete": "Ndondomeko yonse yakaphikidwe ka chakudyachi siyinaperekedwe.",
         "edit": "Sinthani zinthu zothira mu chakudya"
       }
     },
     "meal": {
-      "add": "Onjezani chakudya",
-      "delete": "Fufutani chakudya",
-      "deleteConfirm": "Muchotsa chinachilichonse chomwe munadya cha {item}.",
+      "add": "Ikani chakudya china",
+      "delete": "Chotsani chakudya",
+      "deleteConfirm": "Mukuchotsa chinachilichonse chokhudzana ndi {item}.",
       "editFoods": "Sinthani zakudya",
       "editTime": "Sinthani nthawi"
     }
   },
   "actions": {
-    "feedback": "Ndemanga zotsatira za kadyedwe",
+    "feedback": "Ndemanga ya zotsatira za kadyedwe kanu",
     "next": "Pitilizani",
-    "submit": "Tumizani zokumbukira zomwe munadya",
-    "addMeal": "Onjezani chakudya",
-    "deleteFood": "Fufutani chakudya",
-    "deleteMeal": "Fufutani zakudya",
+    "submit": "Tumizani",
+    "addMeal": "Ikani chakudya china",
+    "deleteFood": "Chotsani chakudya",
+    "deleteMeal": "Chotsani chakudya",
     "editFood": "Sinthani chakudya",
-    "editMeal": "Onjezani zakudya",
-    "mealTime": "Sinthani nthawi yokudya",
+    "editMeal": "Ikani zakudya",
+    "mealTime": "Sinthani nthawi yodyera",
     "nav": {
       "cancel": "Chotsani",
       "confirm": "Tsimikizani",
-      "feedback": "Ndemanga zotsatira za kadyedwe",
+      "feedback": "Ndemanga ya zotsatira za kadyedwe kanu",
       "next": "Pitilizani",
       "redirect": "Pitilizani",
       "remove": "Chotsani",
       "submit": "Tumizani",
-      "addMeal": "Onjezani chakudya",
-      "deleteFood": "Fufutani chakudya",
-      "deleteMeal": "Fufutani zakudya",
+      "addMeal": "Ikani chakudya china",
+      "deleteFood": "Chotsani chakudya",
+      "deleteMeal": "Chotsani chakudya",
       "editFood": "Sinthani chakudya",
-      "editMeal": "Onjezani zakudya",
-      "mealTime": "Nthawi yodyera zakudya"
+      "editMeal": "Ikani zakudya",
+      "mealTime": "Nthawi yodyera"
     }
   }
 }

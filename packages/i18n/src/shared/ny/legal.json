@@ -3,30 +3,30 @@
   "contact": "Njira zolumikizirana",
   "copyright": "{name} © {team} {year}",
   "privacy": "Fundo zachisinsi",
-  "terms": "Mgwirizano pazakagwiritsidwe",
+  "terms": "Malamulo ogwiritsa ntchito",
   "cookies": {
     "_": "Cookies",
     "consent": {
       "consentModal": {
         "label": "Cookies",
         "title": "Intake24 imagwiritsira ntchito ma cookies!",
-        "description": "Timagwiritsira ntchito <strong>necessary</strong> ma cookies kuti tipereke zinthu zofunika, <strong>functionality</strong> ma cookies ogwirira ntchito kuti tikumbukire zomwe ogwiritsira ntchito amakonda komanso <strong>analytics</strong> ma cookies osanthula kuti atithandize kumvetsetsa ndikuwongolera zomwe ogwiritsa ntchito akumana nazo.",
+        "description": "Timagwiritsira ntchito <strong>necessary</strong> ma cookies kuti tipereke zinthu zofunikira, <strong>functionality</strong> ma cookies ogwirira ntchito kuti tikumbukire zomwe ogwiritsira ntchito amakonda komanso <strong>analytics</strong> ma cookies osanthula kuti atithandize kumvetsetsa ndikuwongolera zomwe ogwiritsa ntchito akumana nazo.",
         "acceptAllBtn": "Vomerani",
-        "showPreferencesBtn": "Sinthani nkuyika m'mene mukondera"
+        "showPreferencesBtn": "Sinthani nkuyika m'mene mwakondera"
       },
       "preferencesModal": {
-        "title": "M'mene mukondera Cookies",
+        "title": "M'mene mwakondera ma Cookies",
         "acceptAllBtn": "Vomerani zonse",
         "savePreferencesBtn": "Sungani zomwe mumakonda",
         "closeIconLabel": "Tsekani Close",
         "sections": [
           {
             "title": "M'mene timagwiritsira ntchito ma cookies 📢",
-            "description": "Timagwiritsira ntchito <strong>necessary</strong> ma cookies kuti tipereke zinthu zofunika, <strong>functionality</strong> ma cookies ogwirira ntchito kuti tikumbukire zomwe ogwiritsira ntchito amakonda komanso  <strong>analytics</strong> ma cookies osanthula kuti atithandize kumvetsetsa ndikuwongolera zomwe ogwiritsa ntchito akumana nazo.."
+            "description": "Timagwiritsira ntchito <strong>necessary</strong> ma cookies kuti tipereke zinthu zofunikira, <strong>functionality</strong> ma cookies ogwirira ntchito kuti tikumbukire zomwe ogwiritsira ntchito amakonda komanso  <strong>analytics</strong> ma cookies osanthula kuti atithandize kumvetsetsa ndikuwongolera zomwe ogwiritsa ntchito akumana nazo."
           },
           {
             "title": "Ma cookies ofunikira <span class=\"pm__badge\">Always Enabled</span>",
-            "description": "Ma cookies ndi ofunikira kwambiri kuti tsamba lawebusayiti  ligwire ntchito bwino.",
+            "description": "Ma cookies amene ali ofunikira kwambiri kuti tsamba lawebusayiti  ligwire ntchito bwino.",
             "linkedCategory": "Zofunikira",
             "cookieTable": {
               "headers": {
