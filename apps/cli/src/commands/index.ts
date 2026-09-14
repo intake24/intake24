@@ -1,4 +1,5 @@
 export * from './acl';
+export { default as audit } from './audit';
 export { default as extractCategories } from './category-extract';
 export { default as findPortionImages } from './find-portion-images';
 export { default as generateKey } from './generate-key';
