@@ -20,7 +20,7 @@
     "test:unit": "vitest"
   },
   "devDependencies": {
-    "@types/node": "^24.13.3",
+    "@types/node": "^24.13.4",
     "typescript": "^6.0.3",
     "unrun": "^0.3.1",
     "vitest": "^4.1.11",
