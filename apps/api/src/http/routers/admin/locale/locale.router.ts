@@ -220,7 +220,7 @@ export function locale() {
         const params = { ...body.params, localeId };
         const { type } = body;
 
-        if (jobRequiresFile(type)) {
+        if (jobRequiresFile(type, body.params)) {
           // @ts-expect-error not narrowed yet
           params.file = requireCsvUploadPath(file);
         }
