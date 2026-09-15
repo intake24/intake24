@@ -2,67 +2,108 @@
   "_": "Import/export",
   "import": {
     "_": "Import package",
-    "pageTitle": "Import food database package",
-    "upload": {
-      "title": "Upload package",
-      "subtitle": "Select and upload package file",
-      "dragDrop": "Drag and drop a file here or click to select",
+    "subtitle": "Upload a package archive, validate it, then choose what to import.",
+    "formatHelp": "Package format help",
+    "package": {
       "format": "Package format",
       "formats": {
         "intake24": "Intake24",
-        "albane": "Albane (France)",
-        "gousto": "Gousto Recipe Drop"
+        "albane": "Albane (France)"
       },
-      "ready": "Ready to upload",
-      "success": "File uploaded",
-      "uploadButton": "Upload",
-      "cancelButton": "Cancel",
-      "changeFileButton": "Change file",
-      "status": {
-        "cancelled": "Upload cancelled"
+      "dropHere": "Drop a package here",
+      "browse": "or browse to choose a ZIP archive",
+      "replace": "to replace the selected file, or browse to choose a different one",
+      "replaceBlocked": "The file can't be replaced during import",
+      "choose": "Choose file",
+      "selectedFile": "Selected file",
+      "noFile": "No package selected",
+      "limit": "ZIP archive, up to 100 MB",
+      "uploadAndValidate": "Upload and validate",
+      "notZip": "\"{name}\" is not a ZIP archive. Choose a .zip package file."
+    },
+    "empty": {
+      "title": "Choose a package archive to begin",
+      "subtitle": "It will be validated before anything is imported."
+    },
+    "notice": {
+      "noUploadPermission": "You can't upload packages because your account doesn't have the \"upload-large-files\" permission. Ask an administrator to grant it.",
+      "uploadCancelled": "Upload cancelled.",
+      "validationCancelled": "Validation cancelled.",
+      "filesExpired": "The uploaded package is no longer available on the server. Upload it again to continue."
+    },
+    "uploadError": {
+      "permission": "Upload failed: your account doesn't have the \"upload-large-files\" permission.",
+      "tooLarge": "Upload failed: the file is too large. Packages can be up to 100 MB.",
+      "storage": "Upload failed: the server is low on storage space. Try again later or contact support.",
+      "unexpected": "Upload failed: {message}"
+    },
+    "steps": {
+      "inProgress": "In progress",
+      "upload": {
+        "_": "Upload",
+        "waiting": "Waiting for a file",
+        "ready": "Ready to upload",
+        "done": "{size} uploaded"
       },
-      "error": {
-        "selectFirst": "Please select a file first",
-        "unexpected": "An unexpected error occurred during upload. Please try again or contact support."
+      "validation": {
+        "_": "Validation",
+        "pending": "Runs after upload",
+        "done": "No problems found",
+        "problems": "No problems found | {count} problem found | {count} problems found",
+        "failed": "Failed"
+      },
+      "import": {
+        "_": "Import",
+        "pending": "Choose what to import",
+        "blocked": "Blocked until validation passes",
+        "done": "Completed",
+        "failed": "Failed"
       }
     },
-    "verify": {
-      "title": "Verify file",
-      "subtitle": {
-        "complete": "Verification complete",
-        "verifying": "Verifying file integrity...",
-        "failed": "Verification failed",
-        "pending": "Waiting for file upload"
+    "progress": {
+      "upload": {
+        "heading": "Upload",
+        "title": "Uploading package — {percent}%",
+        "transferred": "{uploaded} of {total}",
+        "secondsRemaining": "about {count} second remaining | about {count} seconds remaining",
+        "minutesRemaining": "about {count} minute remaining | about {count} minutes remaining",
+        "cancel": "Cancel upload"
       },
-      "success": "Package file is correctly formatted",
-      "tryAgainButton": "Try again",
-      "status": {
-        "verifying": "Verifying uploaded file..."
+      "validation": {
+        "heading": "Validation",
+        "title": "Validating package",
+        "cancel": "Cancel validation"
       },
-      "error": {
-        "unexpected": "An unexpected error occurred during package verification (\"{message}\"). Please try again or contact support."
+      "import": {
+        "heading": "Import",
+        "title": "Importing package",
+        "subtitle": "This may take a few minutes."
       }
     },
-    "import": {
-      "title": "Import data",
-      "subtitle": {
-        "complete": "Import complete",
-        "importing": "Importing data...",
-        "configure": "Configure and import"
+    "validation": {
+      "failedTitle": "This package has some validation issues",
+      "failedHint": "Please fix the problems below, then reupload the package file.",
+      "filesWithProblems": "Files with problems",
+      "copy": "Copy all error messages",
+      "copied": "Error messages copied to the clipboard",
+      "copyFailed": "Couldn't copy the problems to the clipboard",
+      "details": "Error details",
+      "unexpected": "Validation could not be completed: {message}"
+    },
+    "configuration": {
+      "heading": "Configuration",
+      "locales": {
+        "title": "Target locales",
+        "subtitle": "Only data for the selected locales will be imported.",
+        "single": "This package targets {locale}.",
+        "none": "This package doesn't target any specific locale."
       },
-      "processingOptions": "Import options",
-      "conflictHandling": "If record already exists",
-      "conflict": {
-        "skip": "Skip",
-        "overwrite": "Overwrite",
-        "abort": "Abort"
-      },
-      "options": {
-        "locales": "Locales to include",
-        "noLocales": "No target locales identified",
-        "files": {
-          "_": "Files to include",
-          "noFiles": "No files to available for import",
+      "records": {
+        "title": "Records",
+        "subtitle": "Choose which record types to import, and what to do when a record already exists.",
+        "type": "Record type",
+        "ifExists": "If already exists",
+        "types": {
           "locales": "Locale configuration",
           "foods": "Food list",
           "categories": "Category list",
@@ -71,27 +112,37 @@
           "imageMaps": "Image maps (required for guide images and drinkware)",
           "guideImages": "Guide images",
           "drinkwareSets": "Drinkware sets (sliding scales)",
-          "nutrientTables": "Food composition tables",
-          "type": "Record type"
-        },
-        "importRecords": "Import records",
-        "dontImport": "Don't import",
-        "filtering": "Only specific foods and categories",
-        "foodCodeFilter": "Food codes",
-        "foodCodeFilterHint": "Comma-separated list of food codes to include (leave empty to include all)",
-        "categoryCodeFilter": "Category codes",
-        "categoryCodeFilterHint": "Comma-separated list of category codes to include (leave empty for all)"
+          "nutrientTables": "Food composition tables"
+        }
       },
-      "startButton": "Start import",
-      "importAnotherButton": "Import another file",
-      "status": {
-        "importing": "Importing file...",
-        "importingAlert": "Importing data, please wait...",
-        "success": "File imported successfully!"
+      "conflict": {
+        "skip": "Skip",
+        "overwrite": "Overwrite",
+        "abort": "Abort"
       },
-      "error": {
-        "unexpected": "An unexpected error occurred during import"
-      }
+      "filters": {
+        "title": "Advanced filters",
+        "subtitle": "Restrict the import to specific food or category codes.",
+        "active": "{count} active",
+        "show": "Show",
+        "hide": "Hide",
+        "foodCodes": "Food codes",
+        "foodCodesHint": "Comma-separated food codes. Leave empty to import all foods.",
+        "categoryCodes": "Category codes",
+        "categoryCodesHint": "Comma-separated category codes. Leave empty to import all categories."
+      },
+      "start": "Start import"
+    },
+    "result": {
+      "heading": "Import",
+      "complete": "Import complete",
+      "completeHint": "To import another package, drop it on the drop area or use \"Choose file\".",
+      "failed": "Import failed",
+      "rolledBack": "No changes were saved.",
+      "details": "Error details",
+      "retryHint": "To try again with a corrected package, drop it on the drop area or use \"Choose package\".",
+      "backToOptions": "Back to options",
+      "unexpected": "An unexpected error occurred during import"
     }
   },
   "permissions": {
@@ -124,7 +175,7 @@
     }
   },
   "importJob": {
-    "missingLocale": "Target locale {locale} does not exist. Include its definition in locales.json and select locale configuration for import.",
+    "missingLocale": "Target locale `{locale}` does not exist. Check that the locale ID in `package.json` is correct. If it is, contact support for assistance.",
     "invalidVerification": "A successful verification job is required before importing a package",
     "extractedFilesNotFound": "Extracted package files are no longer available"
   },
