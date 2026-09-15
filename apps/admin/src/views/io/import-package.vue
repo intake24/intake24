@@ -1,912 +1,1511 @@
 <template>
-  <v-container class="file-upload-container">
-    <v-row>
-      <v-col>
-        <h3>{{ $t('io.import.pageTitle') }}</h3>
-      </v-col>
-    </v-row>
+  <v-container>
+    <div class="d-flex align-center justify-space-between flex-wrap ga-2 mb-4">
+      <div>
+        <h2 class="text-headline-small">
+          {{ t('io.import._') }}
+        </h2>
+        <div class="text-body-medium text-medium-emphasis">
+          {{ t('io.import.subtitle') }}
+        </div>
+      </div>
+      <v-btn
+        :href="formatHelpUrl"
+        prepend-icon="$docs"
+        rel="noopener noreferrer"
+        size="small"
+        target="_blank"
+        variant="text"
+      >
+        {{ t('io.import.formatHelp') }}
+      </v-btn>
+    </div>
 
     <v-row>
-      <v-col>
-        <v-expansion-panels v-model="panel">
-          <!-- Step 1: upload package archive (select file + monitor upload) -->
-          <v-expansion-panel value="0">
-            <v-expansion-panel-title>
-              <template #default>
-                <v-row no-gutters>
-                  <v-col class="d-flex justify-start align-center" cols="4">
-                    <v-icon
-                      class="mr-3"
-                      :color="uploadComplete ? 'success' : 'primary'"
-                      :icon="uploadComplete ? 'fas fa-check-circle' : 'fas fa-cloud-upload-alt'"
-                    />
-                    <span class="font-weight-bold">{{ $t('io.import.upload.title') }}</span>
-                  </v-col>
-                  <v-col class="text-medium-emphasis" cols="8">
-                    <span v-if="fileSelected">
-                      {{ selectedFile?.name }}
-                      <span class="text-body-small ml-2">
-                        ({{ (selectedFile?.size ? (selectedFile.size / 1024 / 1024).toFixed(2) : 0) }} MB)
-                      </span>
-                    </span>
-                    <span v-else>
-                      {{ $t('io.import.upload.subtitle') }}
-                    </span>
-                  </v-col>
-                </v-row>
-              </template>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <v-card
-                v-if="!fileSelected"
-                class="drop-zone mb-4"
-                :class="{ 'drag-over': isDragging && importState === 'selecting-file', 'greyed-out': importState !== 'selecting-file' }"
-                @dragleave="handleDragLeave"
-                @dragover.prevent="handleDragOver"
-                @drop.prevent="handleDrop"
-              >
-                <v-card-text class="text-center">
-                  <p class="drop-message">
-                    {{ $t('io.import.upload.dragDrop') }}
-                  </p>
-                  <v-file-input
-                    ref="fileInput"
-                    v-model="fileInputModel"
-                    class="file-input"
-                    :disabled="importState !== 'selecting-file'"
-                    hide-details
-                    @change="handleFileChange"
-                    @dragleave.prevent="handleDragLeave"
-                    @dragover.prevent="handleDragOver"
-                    @drop.prevent="handleDrop"
-                  />
-                </v-card-text>
-              </v-card>
-              <v-row v-if="fileSelected">
-                <v-col cols="4" sm="6">
-                  <v-select
-                    v-if="fileSelected"
-                    v-model="packageFormat"
-                    class="mt-4"
-                    :disabled="importState !== 'selecting-file'"
-                    hide-details
-                    item-title="title"
-                    item-value="value"
-                    :items="packageFormats"
-                    :label="$t('io.import.upload.format')"
-                    variant="outlined"
-                  />
-                </v-col>
-              </v-row>
-              <v-row v-if="fileSelected" class="align-start">
-                <v-col class="d-flex align-center" cols="12" sm="8">
-                  <v-progress-linear
-                    v-if="importState === 'uploading'"
-                    v-model="uploadProgress"
-                    class="striped"
-                    color="primary"
-                    height="25"
-                  >
-                    {{ uploadProgress.toFixed(0) }}%
-                  </v-progress-linear>
-                  <div v-else-if="uploadComplete" class="text-success d-flex align-center">
-                    <v-icon class="mr-2" icon="fas fa-check" />
-                    {{ $t('io.import.upload.success') }}
-                  </div>
-                  <div v-else>
-                    {{ $t('io.import.upload.ready') }}
-                  </div>
-                </v-col>
-                <v-col class="text-right" cols="12" sm="4">
-                  <v-btn
-                    v-if="importState === 'selecting-file' && fileSelected"
-                    class="mr-2"
-                    color="primary"
-                    @click="startUpload"
-                  >
-                    {{ $t('io.import.upload.uploadButton') }}
-                  </v-btn>
-                  <v-btn
-                    v-if="importState === 'uploading'"
-                    color="error"
-                    variant="text"
-                    @click="cancelUpload"
-                  >
-                    {{ $t('io.import.upload.cancelButton') }}
-                  </v-btn>
-                  <v-btn
-                    v-if="importState === 'selecting-file' && fileSelected"
-                    variant="text"
-                    @click="resetState"
-                  >
-                    {{ $t('io.import.upload.changeFileButton') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
-              <v-alert
-                v-if="uploadError"
-                class="mt-4"
-                density="compact"
-                :text="uploadError"
-                type="error"
-                variant="tonal"
+      <v-col cols="12" lg="4" md="5">
+        <v-card border class="status-panel" flat rounded>
+          <div class="pa-6 d-flex flex-column gr-6">
+            <v-select
+              v-model="packageFormat"
+              :disabled="formatLocked"
+              :items="formats"
+              :label="t('io.import.package.format')"
+            />
+
+            <div
+              class="dropzone d-flex flex-column align-center text-center px-4 py-5"
+              :class="{
+                'dropzone--selected': hasFile,
+                'dropzone--dragover': dragActive,
+                'dropzone--disabled': replaceBlocked,
+              }"
+              @dragenter.prevent="onDragEnter"
+              @dragleave="onDragLeave"
+              @dragover.prevent="onDragOver"
+              @drop.prevent="onDrop"
+            >
+              <v-icon
+                :class="{ 'text-disabled': replaceBlocked }"
+                :color="replaceBlocked ? undefined : hasFile ? 'success' : 'primary'"
+                icon="fas fa-cloud-arrow-up"
+                size="28"
               />
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-
-          <!-- Step 2: Process and verify uploaded file -->
-          <v-expansion-panel :disabled="importState === 'selecting-file' || importState === 'uploading'" value="1">
-            <v-expansion-panel-title>
-              <v-row no-gutters>
-                <v-col class="d-flex justify-start align-center" cols="4">
-                  <v-icon
-                    class="mr-3"
-                    :color="importState === 'verification-successful' ? 'success' : 'primary'"
-                    :icon="importState === 'verification-successful' ? 'fas fa-check-circle' : 'fas fa-shield-alt'"
-                  />
-                  <span class="font-weight-bold">{{ $t('io.import.verify.title') }}</span>
-                </v-col>
-                <v-col class="text-medium-emphasis" cols="8">
-                  <span v-if="importState === 'verification-successful'">
-                    {{ $t('io.import.verify.subtitle.complete') }}
-                  </span>
-                  <span v-else-if="importState === 'verifying'">
-                    {{ $t('io.import.verify.subtitle.verifying') }}
-                  </span>
-                  <span v-else-if="importState === 'verification-failed'">
-                    {{ $t('io.import.verify.subtitle.failed') }}
-                  </span>
-                  <span v-else>
-                    {{ $t('io.import.verify.subtitle.pending') }}
-                  </span>
-                </v-col>
-              </v-row>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <div v-if="importState === 'verifying'" class="d-flex align-center justify-center py-4">
-                <v-progress-circular class="mr-3" color="primary" indeterminate />
-                <span>{{ $t('io.import.verify.status.verifying') }}</span>
+              <div class="text-body-medium font-weight-bold mt-3">
+                {{ t('io.import.package.dropHere') }}
               </div>
-              <div v-else-if="importState === 'verification-successful'" class="text-success d-flex align-center">
-                <v-icon class="mr-2" icon="fas fa-check" />
-                {{ $t('io.import.verify.success') }}
+              <div class="dropzone-hint text-body-medium text-medium-emphasis text-truncate mt-2">
+                {{ dropzoneHint }}
               </div>
-              <template v-if="verifyError">
-                <v-row class="align-start">
-                  <v-col class="text-error" cols="12" sm="8">
-                    <template v-if="verificationJobStatus?.errorDetails">
-                      <div v-if="verificationJobStatus.errorDetails.fileErrors">
-                        <v-expansion-panels flat multiple>
-                          <v-expansion-panel
-                            v-for="(errors, file) in verificationJobStatus.errorDetails.fileErrors"
-                            :key="file"
-                          >
-                            <v-expansion-panel-title>
-                              <span class="font-weight-bold mr-2">
-                                {{ file === '_uploadedFile' ? $t('io.verification.uploadedFile') : file }}
-                              </span>
-                              <v-chip color="error" size="small" variant="flat">
-                                {{ errors.length }}
-                              </v-chip>
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                              <v-virtual-scroll
-                                :height="200"
-                                :items="errors"
-                              >
-                                <template #default="{ item: error }">
-                                  <div class="ml-4 py-1">
-                                    {{ $t((error as any).key, (error as any).params || {}) }}
-                                  </div>
-                                </template>
-                              </v-virtual-scroll>
-                            </v-expansion-panel-text>
-                          </v-expansion-panel>
-                        </v-expansion-panels>
-                      </div>
-                      <template v-else-if="!Array.isArray(verificationJobStatus.errorDetails)">
-                        {{ $t(verificationJobStatus.errorDetails.key, verificationJobStatus.errorDetails.params || {}) }}
-                      </template>
-                      <ul v-else class="ma-0 pa-0">
-                        <li v-for="(error, idx) in verificationJobStatus.errorDetails" :key="idx">
-                          {{ $t(error.key, error.params || {}) }}
-                        </li>
-                      </ul>
-                    </template>
-                    <span v-else>
-                      {{ verifyError }}
-                    </span>
-                  </v-col>
-                  <v-col class="text-right" cols="12" sm="4">
-                    <v-btn color="primary" @click="resetState">
-                      {{ $t('io.import.verify.tryAgainButton') }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </template>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
+              <v-btn class="mt-4" :disabled="replaceBlocked" variant="outlined" @click="fileInput?.click()">
+                {{ t('io.import.package.choose') }}
+              </v-btn>
+              <input
+                ref="fileInput"
+                :accept="zipAccept"
+                class="d-none"
+                type="file"
+                @change="onFileInputChange"
+              >
+            </div>
 
-          <!-- Panel 3: Import Data -->
-          <v-expansion-panel :disabled="importState !== 'verification-successful'" value="2">
-            <v-expansion-panel-title>
-              <template #default>
-                <v-row no-gutters>
-                  <v-col class="d-flex justify-start align-center" cols="4">
+            <div>
+              <!-- Deliberately uses the stepper's step title style -->
+              <div class="step-title font-weight-bold mb-2">
+                {{ t('io.import.package.selectedFile') }}
+              </div>
+              <v-list-item class="px-0">
+                <template #prepend>
+                  <v-avatar
+                    :color="file ? 'primary' : 'grey-lighten-4'"
+                    size="40"
+                    :variant="file ? 'tonal' : 'flat'"
+                  >
                     <v-icon
-                      class="mr-3"
-                      :color="isImportComplete ? 'success' : 'primary'"
-                      :icon="isImportComplete ? 'fas fa-check-circle' : 'fas fa-file-import'"
+                      :class="{ 'text-medium-emphasis': !file }"
+                      :icon="file ? 'fas fa-file-zipper' : 'fas fa-file'"
+                      size="18"
                     />
-                    <span class="font-weight-bold">{{ $t('io.import.import.title') }}</span>
-                  </v-col>
-                  <v-col class="text-medium-emphasis" cols="8">
-                    <span v-if="isImportComplete">
-                      {{ $t('io.import.import.subtitle.complete') }}
-                    </span>
-                    <span v-else-if="importState === 'importing'">
-                      {{ $t('io.import.import.subtitle.importing') }} {{ uploadProgress.toFixed(0) }}%
-                    </span>
-                    <span v-else>
-                      {{ $t('io.import.import.subtitle.configure') }}
-                    </span>
-                  </v-col>
-                </v-row>
+                  </v-avatar>
+                </template>
+                <v-list-item-title
+                  :class="file ? 'text-body-large font-weight-bold' : 'text-medium-emphasis'"
+                  :title="file?.name"
+                >
+                  {{ file ? file.name : t('io.import.package.noFile') }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ file ? formatSize(file.size) : t('io.import.package.limit') }}
+                </v-list-item-subtitle>
+              </v-list-item>
+
+              <v-btn
+                block
+                class="mt-4"
+                color="primary"
+                :disabled="stage !== 'file-selected' || !canUpload"
+                rounded
+                @click="uploadAndValidate"
+              >
+                <v-icon icon="$upload" start />
+                {{ t('io.import.package.uploadAndValidate') }}
+              </v-btn>
+            </div>
+          </div>
+
+          <v-divider />
+
+          <div class="stepper pa-6">
+            <div
+              v-for="(step, i) in steps"
+              :key="step.key"
+              class="step"
+              :class="`step--${step.emphasis}`"
+            >
+              <div class="step-rail">
+                <div class="step-number">
+                  {{ i + 1 }}
+                </div>
+                <div
+                  v-if="i < steps.length - 1"
+                  class="step-connector d-none d-md-block"
+                  :class="{ 'step-connector--done': step.state === 'done' }"
+                />
+              </div>
+
+              <div class="step-avatar d-none d-md-flex">
+                <v-progress-circular
+                  v-if="step.state === 'active'"
+                  class="step-spinner"
+                  color="primary"
+                  indeterminate
+                  size="56"
+                  width="2"
+                />
+                <v-badge
+                  bordered
+                  :color="step.state === 'failed' ? 'error' : 'success'"
+                  :icon="step.state === 'failed' ? 'fas fa-xmark' : 'fas fa-check'"
+                  location="bottom end"
+                  :model-value="step.state === 'done' || step.state === 'failed'"
+                >
+                  <v-avatar color="grey-lighten-4" size="48">
+                    <v-icon
+                      :class="{ 'text-medium-emphasis': step.emphasis !== 'current' }"
+                      :color="step.emphasis === 'current' ? 'primary' : undefined"
+                      :icon="step.icon"
+                      size="20"
+                    />
+                  </v-avatar>
+                </v-badge>
+              </div>
+
+              <div class="step-text min-width-0">
+                <div class="step-title text-truncate">
+                  {{ step.title }}
+                </div>
+                <div class="text-body-medium text-medium-emphasis text-truncate d-none d-md-block">
+                  {{ step.detail }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" lg="8" md="7">
+        <v-card border class="pa-5" flat rounded>
+          <template v-if="stage === 'select' || stage === 'file-selected'">
+            <v-alert
+              v-if="!canUpload"
+              class="mb-4"
+              icon="fas fa-lock"
+              :text="t('io.import.notice.noUploadPermission')"
+              type="warning"
+              variant="tonal"
+            />
+            <v-alert
+              v-if="notice"
+              class="mb-4"
+              closable
+              :text="t(notice.key, notice.params ?? {})"
+              :type="notice.type"
+              variant="tonal"
+              @click:close="notice = null"
+            />
+            <div class="empty-main d-flex flex-column align-center justify-center text-center pa-8">
+              <v-avatar class="mb-4" color="grey-lighten-4" size="56">
+                <v-icon class="text-medium-emphasis" icon="$upload" />
+              </v-avatar>
+              <div class="text-body-large text-medium-emphasis mb-1">
+                {{ t('io.import.empty.title') }}
+              </div>
+              <div class="text-body-medium text-medium-emphasis">
+                {{ t('io.import.empty.subtitle') }}
+              </div>
+            </div>
+          </template>
+
+          <template v-else-if="progressPanel">
+            <h3 class="text-title-large px-4 pt-0 pb-4">
+              {{ progressPanel.heading }}
+            </h3>
+            <v-list-item lines="two">
+              <template #prepend>
+                <v-avatar color="primary" variant="tonal">
+                  <v-icon :icon="progressPanel.icon" />
+                </v-avatar>
               </template>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <v-card flat>
-                <v-card-title class="px-0">
-                  {{ $t('io.import.import.processingOptions') }}
-                </v-card-title>
-                <v-card-text class="px-0" :disabled="importState === 'importing' || isImportComplete">
-                  <v-row>
-                    <v-col cols="12">
-                      <div class="text-body-large mb-2">
-                        {{ $t('io.import.import.options.locales') }}
+              <v-list-item-title>{{ progressPanel.title }}</v-list-item-title>
+              <v-list-item-subtitle v-if="progressPanel.subtitle">
+                {{ progressPanel.subtitle }}
+              </v-list-item-subtitle>
+            </v-list-item>
+            <div class="px-4 pt-3 pb-3">
+              <v-progress-linear
+                color="primary"
+                height="8"
+                :indeterminate="progressPanel.value === null"
+                :model-value="progressPanel.value ?? 0"
+                rounded
+              />
+            </div>
+            <div v-if="progressPanel.cancel" class="d-flex justify-center pt-5 pb-3">
+              <v-btn color="error" rounded variant="outlined" @click="progressPanel.cancel.action">
+                {{ progressPanel.cancel.label }}
+              </v-btn>
+            </div>
+          </template>
+
+          <template v-else-if="stage === 'verify-failed'">
+            <h3 class="text-title-large px-4 pt-0 pb-4">
+              {{ t('io.import.progress.validation.heading') }}
+            </h3>
+            <div class="px-4 pb-3">
+              <v-alert class="mb-5" icon="fas fa-triangle-exclamation" type="error">
+                <div class="font-weight-medium">
+                  {{ t('io.import.validation.failedTitle') }}
+                </div>
+                <div class="text-body-medium">
+                  {{ t('io.import.validation.failedHint') }}
+                </div>
+              </v-alert>
+
+              <template v-if="problems">
+                <div class="d-flex align-center justify-space-between flex-wrap ga-2 pb-3">
+                  <h4 class="panel-subheader">
+                    {{ t('io.import.validation.filesWithProblems') }}
+                  </h4>
+                  <v-btn prepend-icon="fas fa-copy" size="small" variant="text" @click="copyProblems">
+                    {{ t('io.import.validation.copy') }}
+                  </v-btn>
+                </div>
+
+                <v-card border class="problems" flat rounded>
+                  <v-list class="problems-files" density="compact" nav>
+                    <v-list-item
+                      v-for="group in problems"
+                      :key="group.file"
+                      :active="group.file === selectedProblemFile"
+                      color="error"
+                      rounded
+                      @click="selectedProblemFile = group.file"
+                    >
+                      <v-list-item-title class="text-body-medium">
+                        {{ fileLabel(group.file) }}
+                      </v-list-item-title>
+                      <template #append>
+                        <v-chip color="error" label size="x-small" variant="flat">
+                          {{ group.messages.length }}
+                        </v-chip>
+                      </template>
+                    </v-list-item>
+                  </v-list>
+
+                  <!-- A package can report thousands of problems, so the list is virtualised.
+                       Keyed by file so that switching files scrolls back to the top. -->
+                  <v-virtual-scroll
+                    :key="selectedProblemFile ?? ''"
+                    class="problems-messages"
+                    item-height="40"
+                    :items="currentProblems"
+                    max-height="360"
+                  >
+                    <template #default="{ item }">
+                      <div class="d-flex ga-3 px-4 py-2">
+                        <v-icon class="mt-1" color="error" icon="fas fa-circle-exclamation" size="14" />
+                        <div class="error-text text-body-medium min-width-0">
+                          {{ t(item.key, item.params ?? {}) }}
+                        </div>
                       </div>
-                      <v-checkbox
-                        v-for="locale in packageContentsSummary?.targetLocales"
-                        :key="locale"
-                        v-model="selectedLocales"
-                        hide-details
-                        :label="locale"
-                        :value="locale"
-                      />
-                      <div v-if="packageContentsSummary?.targetLocales.length === 0" class="text-body-small text-medium-emphasis">
-                        {{ $t('io.import.import.options.noLocales') }}
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <div class="text-body-large mb-2">
-                        {{ $t('io.import.import.options.files._') }}
-                      </div>
-                      <v-table class="mb-4 import-files-table" density="compact">
-                        <thead>
-                          <tr>
-                            <th class="text-left font-weight-bold" style="width: 1%; white-space: nowrap;">
-                              {{ $t('io.import.import.options.files.type') }}
-                            </th>
-                            <th class="text-left font-weight-bold" style="width: 1%; white-space: nowrap;">
-                              {{ $t('io.import.import.options.importRecords') }}
-                            </th>
-                            <th class="text-left font-weight-bold" style="width: 1%; white-space: nowrap;">
-                              {{ $t('io.import.import.conflictHandling') }}
-                            </th>
-                            <th>
-                              <!-- Spacer -->
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-for="fileKey in availableFiles" :key="fileKey">
-                            <td class="font-weight-medium text-no-wrap pr-6">
-                              {{ $t(`io.import.import.options.files.${fileKey}`) }}
-                            </td>
-                            <td class="py-2 text-no-wrap pr-4">
-                              <v-checkbox
-                                v-model="selectedFiles"
-                                density="compact"
-                                hide-details
-                                :value="fileKey"
-                              />
-                            </td>
-                            <td class="py-2 text-no-wrap pr-4">
-                              <v-btn-toggle
-                                v-model="conflictStrategies[fileKey]"
-                                color="primary"
-                                density="compact"
-                                :disabled="!selectedFiles.includes(fileKey)"
-                                divided
-                                group
-                                mandatory
-                                variant="outlined"
-                              >
-                                <v-btn value="skip">
-                                  {{ $t('io.import.import.conflict.skip') }}
-                                </v-btn>
-                                <v-btn value="overwrite">
-                                  {{ $t('io.import.import.conflict.overwrite') }}
-                                </v-btn>
-                                <v-btn value="abort">
-                                  {{ $t('io.import.import.conflict.abort') }}
-                                </v-btn>
-                              </v-btn-toggle>
-                            </td>
-                            <td />
-                          </tr>
-                          <tr v-if="availableFiles.length === 0">
-                            <td class="text-center text-medium-emphasis py-4" colspan="4">
-                              {{ $t('io.import.import.options.files.noFiles') }}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </v-table>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <div class="text-body-large mb-2">
-                        {{ $t('io.import.import.options.filtering') }}
-                      </div>
-                      <v-text-field
-                        v-model="foodCodeFilter"
-                        :hint="$t('io.import.import.options.foodCodeFilterHint')"
-                        :label="$t('io.import.import.options.foodCodeFilter')"
-                        persistent-hint
-                        variant="outlined"
-                      />
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="categoryCodeFilter"
-                        :hint="$t('io.import.import.options.categoryCodeFilterHint')"
-                        :label="$t('io.import.import.options.categoryCodeFilter')"
-                        persistent-hint
-                        variant="outlined"
-                      />
-                    </v-col>
-                  </v-row>
+                    </template>
+                  </v-virtual-scroll>
+                </v-card>
+              </template>
+
+              <!-- The job failed without localisable error details: show its message -->
+              <template v-else>
+                <h4 class="panel-subheader pb-3">
+                  {{ t('io.import.validation.details') }}
+                </h4>
+                <v-card border flat rounded>
+                  <div class="error-row d-flex ga-3 px-4 py-2">
+                    <v-icon class="mt-1" color="error" icon="fas fa-circle-exclamation" size="14" />
+                    <div class="error-text text-body-medium min-width-0">
+                      {{ validationMessage ?? t('io.import.validation.unexpected', { message: '' }) }}
+                    </div>
+                  </div>
+                </v-card>
+              </template>
+            </div>
+          </template>
+
+          <template v-else-if="stage === 'ready'">
+            <h3 class="text-title-large px-4 pt-0 pb-3">
+              {{ t('io.import.configuration.heading') }}
+            </h3>
+
+            <div class="d-flex flex-column gr-5 px-4 pt-2">
+              <!-- Packages target 1–3 locales, usually one -->
+              <v-card border flat rounded>
+                <v-card-item>
+                  <v-card-title class="config-card-title">
+                    {{ t('io.import.configuration.locales.title') }}
+                  </v-card-title>
+                  <v-card-subtitle class="config-card-subtitle">
+                    {{ t('io.import.configuration.locales.subtitle') }}
+                  </v-card-subtitle>
+                </v-card-item>
+                <v-card-text v-if="targetLocales.length > 1" class="d-flex flex-wrap gc-6">
+                  <v-checkbox
+                    v-for="locale in targetLocales"
+                    :key="locale"
+                    v-model="form.locales"
+                    class="config-checkbox"
+                    density="compact"
+                    :label="locale"
+                    :value="locale"
+                  />
+                </v-card-text>
+                <!-- A single target locale is always imported, so it's shown as text, not a checkbox -->
+                <v-card-text v-else class="config-info">
+                  {{ targetLocales.length
+                    ? t('io.import.configuration.locales.single', { locale: targetLocales[0] })
+                    : t('io.import.configuration.locales.none') }}
                 </v-card-text>
               </v-card>
 
-              <div class="mt-4">
-                <v-progress-linear
-                  v-if="importState === 'importing'"
-                  class="mb-4"
-                  color="primary"
-                  height="25"
-                  indeterminate
-                />
+              <v-card border flat rounded>
+                <v-card-item>
+                  <v-card-title class="config-card-title">
+                    {{ t('io.import.configuration.records.title') }}
+                  </v-card-title>
+                  <v-card-subtitle class="config-card-subtitle">
+                    {{ t('io.import.configuration.records.subtitle') }}
+                  </v-card-subtitle>
+                </v-card-item>
+                <v-card-text>
+                  <div class="contents-list">
+                    <div class="contents-row">
+                      <div class="contents-head-title text-label-large text-medium-emphasis">
+                        {{ t('io.import.configuration.records.type') }}
+                      </div>
+                      <div class="contents-col-switch text-label-large text-medium-emphasis d-none d-sm-block">
+                        {{ t('io.import.configuration.records.ifExists') }}
+                      </div>
+                    </div>
 
-                <v-btn
-                  block
-                  color="primary"
-                  :disabled="!canStartImport"
-                  size="large"
-                  @click="startImport"
+                    <div
+                      v-for="type in presentTypes"
+                      :key="type"
+                      class="contents-row"
+                    >
+                      <v-checkbox
+                        v-model="form.include"
+                        class="config-checkbox"
+                        density="compact"
+                        :label="t(`io.import.configuration.records.types.${type}`)"
+                        :value="type"
+                      />
+                      <v-btn-toggle
+                        v-model="form.conflictStrategies[type]"
+                        class="conflict-slider contents-col-switch"
+                        :class="{ 'conflict-slider--disabled': !form.include.includes(type) }"
+                        color="primary"
+                        :disabled="!form.include.includes(type)"
+                        mandatory
+                        :style="{ '--thumb-index': thumbIndex(form.conflictStrategies[type]) }"
+                        variant="text"
+                      >
+                        <span aria-hidden="true" class="conflict-slider-thumb" />
+                        <v-btn
+                          v-for="option in conflictOptions"
+                          :key="option.value"
+                          class="text-none"
+                          :value="option.value"
+                        >
+                          {{ option.title }}
+                        </v-btn>
+                      </v-btn-toggle>
+                    </div>
+                  </div>
+                </v-card-text>
+              </v-card>
+
+              <v-card border flat rounded>
+                <v-card-item>
+                  <v-card-title class="config-card-title">
+                    {{ t('io.import.configuration.filters.title') }}
+                  </v-card-title>
+                  <v-card-subtitle class="config-card-subtitle">
+                    {{ t('io.import.configuration.filters.subtitle') }}
+                  </v-card-subtitle>
+                  <template #append>
+                    <div class="d-flex align-center ga-2">
+                      <v-chip v-if="activeFilterCount" color="primary" label size="small" variant="tonal">
+                        {{ t('io.import.configuration.filters.active', { count: activeFilterCount }) }}
+                      </v-chip>
+                      <v-btn
+                        :append-icon="showFilters ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+                        size="small"
+                        variant="text"
+                        @click="showFilters = !showFilters"
+                      >
+                        {{ showFilters ? t('io.import.configuration.filters.hide') : t('io.import.configuration.filters.show') }}
+                      </v-btn>
+                    </div>
+                  </template>
+                </v-card-item>
+                <v-expand-transition>
+                  <v-card-text v-show="showFilters" class="d-flex flex-column gr-4">
+                    <v-text-field
+                      v-model="form.foodCodes"
+                      :hint="t('io.import.configuration.filters.foodCodesHint')"
+                      :label="t('io.import.configuration.filters.foodCodes')"
+                      persistent-hint
+                    />
+                    <v-text-field
+                      v-model="form.categoryCodes"
+                      :hint="t('io.import.configuration.filters.categoryCodesHint')"
+                      :label="t('io.import.configuration.filters.categoryCodes')"
+                      persistent-hint
+                    />
+                  </v-card-text>
+                </v-expand-transition>
+              </v-card>
+            </div>
+
+            <div class="d-flex justify-end px-4 pt-6">
+              <v-btn color="primary" :disabled="!canStartImport" rounded @click="startImport">
+                <v-icon icon="fas fa-file-import" start />
+                {{ t('io.import.configuration.start') }}
+              </v-btn>
+            </div>
+          </template>
+
+          <template v-else-if="stage === 'done'">
+            <h3 class="text-title-large px-4 pt-0 pb-4">
+              {{ t('io.import.result.heading') }}
+            </h3>
+            <v-list-item class="pb-3" lines="two">
+              <template #prepend>
+                <v-avatar color="success" icon="$check" />
+              </template>
+              <v-list-item-title>{{ t('io.import.result.complete') }}</v-list-item-title>
+              <v-list-item-subtitle class="text-wrap">
+                {{ t('io.import.result.completeHint') }}
+              </v-list-item-subtitle>
+            </v-list-item>
+          </template>
+
+          <template v-else-if="stage === 'import-failed'">
+            <h3 class="text-title-large px-4 pt-0 pb-4">
+              {{ t('io.import.result.heading') }}
+            </h3>
+            <div class="px-4 pb-3">
+              <v-alert class="mb-5" icon="fas fa-triangle-exclamation" type="error">
+                <div class="font-weight-medium">
+                  {{ t('io.import.result.failed') }}
+                </div>
+                <!-- The import job runs in transactions, so a failure rolls everything back -->
+                <div class="text-body-medium">
+                  {{ t('io.import.result.rolledBack') }}
+                </div>
+              </v-alert>
+
+              <h4 class="panel-subheader pb-3">
+                {{ t('io.import.result.details') }}
+              </h4>
+              <v-card border flat rounded>
+                <div
+                  v-for="(line, index) in importFailureLines"
+                  :key="index"
+                  class="error-row d-flex ga-3 px-4 py-2"
                 >
-                  {{ $t('io.import.import.startButton') }}
-                </v-btn>
-                <v-alert
-                  v-if="importState === 'importing'"
-                  class="mt-4"
-                  :text="$t('io.import.import.status.importingAlert')"
-                  type="info"
-                  variant="tonal"
-                />
-                <v-alert
-                  v-if="isImportComplete"
-                  class="mt-4"
-                  :text="$t('io.import.import.status.success')"
-                  type="success"
-                  variant="tonal"
-                />
-                <v-alert
-                  v-if="importError"
-                  class="mt-4"
-                  density="compact"
-                  :text="importError"
-                  type="error"
-                  variant="tonal"
-                />
-                <v-btn
-                  v-if="isImportComplete"
-                  block
-                  class="mt-4"
-                  variant="outlined"
-                  @click="resetState"
-                >
-                  {{ $t('io.import.import.importAnotherButton') }}
+                  <v-icon class="mt-1" color="error" icon="fas fa-circle-exclamation" size="14" />
+                  <div class="error-text text-body-medium min-width-0">
+                    {{ line }}
+                  </div>
+                </div>
+              </v-card>
+
+              <div class="d-flex align-center justify-space-between flex-wrap ga-2 pt-5">
+                <div class="text-body-medium text-medium-emphasis">
+                  {{ t('io.import.result.retryHint') }}
+                </div>
+                <v-btn color="primary" rounded @click="backToOptions">
+                  <v-icon icon="fas fa-sliders" start />
+                  {{ t('io.import.result.backToOptions') }}
                 </v-btn>
               </div>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-        </v-expansion-panels>
+            </div>
+          </template>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import type { AxiosInstance, AxiosProgressEvent, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
+import type { ConflictStrategy, LocalisableMessage, ProblemGroup } from './package-import';
+import type {
+  ImportPackageFormat,
+  JobAttributes,
+  PackageContentsSummary,
+  PackageFileType,
+  PackageVerificationRequest,
+} from '@intake24/common/types/http/admin';
 
-import type { JobAttributes, PackageContentsSummary, PackageFileType } from '@intake24/common/types/http/admin';
+import { computed, onBeforeUnmount, reactive, ref, shallowRef, useTemplateRef } from 'vue';
 
-import axios from 'axios';
-import * as tus from 'tus-js-client';
-import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { useHttp } from '@intake24/admin/services';
+import { useMessages, useUser } from '@intake24/admin/stores';
+import { importPackageFormats, packageFileTypes } from '@intake24/common/types/http/admin';
+import { useI18n } from '@intake24/ui';
 
-import { packageFileTypes } from '@intake24/common/types/http/admin';
-import { http } from '@intake24/ui';
+import {
+  buildImportRequest,
+  conflictStrategies,
+  formatBytes,
+  getErrorMessage,
+  isZipFile,
+  normaliseErrorDetails,
+  parseCodeList,
+  PollingStopped,
+  UPLOADED_FILE,
+  UploadFailure,
+  useJobPolling,
+  useTusUpload,
+  zipAccept,
+} from './package-import';
 
-// Axios client wrappers for tus-js-client
+defineOptions({ name: 'ImportPackage' });
 
-class AxiosHttpResponse implements tus.HttpResponse {
-  constructor(private axiosResponse: AxiosResponse) {}
+type Stage
+  = | 'select'
+    | 'file-selected'
+    | 'uploading'
+    | 'verifying'
+    | 'verify-failed'
+    | 'ready'
+    | 'importing'
+    | 'done'
+    | 'import-failed';
 
-  getStatus(): number {
-    return this.axiosResponse.status;
-  }
+type StepState = 'pending' | 'active' | 'done' | 'failed';
 
-  getHeader(header: string): string | undefined {
-    return this.axiosResponse.headers[header.toLowerCase()];
-  }
+type StepEmphasis = 'current' | 'failed' | 'done' | 'pending';
 
-  getBody(): any {
-    return this.axiosResponse.data;
-  }
+type Notice = {
+  type: 'info' | 'error';
+  key: string;
+  params?: Record<string, unknown>;
+};
 
-  getUnderlyingObject(): any {
-    return this.axiosResponse;
-  }
-}
+type ImportFailure = {
+  messages: LocalisableMessage[];
+  message: string | null;
+};
 
-class AxiosHttpRequest implements tus.HttpRequest {
-  private headers: { [key: string]: string } = {};
-  private body: any = null;
-  private progressHandler: ((bytesSent: number) => void) | null = null;
-  private cancelTokenSource: CancelTokenSource = axios.CancelToken.source();
+const formatHelpUrl = 'https://docs.intake24.org/admin/locales/package-format';
 
-  constructor(
-    private method: string,
-    private url: string,
-    private axiosInstance: AxiosInstance,
-  ) {}
+// Import job errors that "Back to options" can't recover from: the package has to be uploaded again
+const reuploadErrorKeys = ['io.importJob.extractedFilesNotFound', 'io.importJob.invalidVerification'];
 
-  getMethod(): string {
-    return this.method;
-  }
+const { i18n } = useI18n();
+const { t } = i18n;
+const http = useHttp();
+const messages = useMessages();
+const user = useUser();
+const upload = useTusUpload();
+const polling = useJobPolling();
 
-  getURL(): string {
-    return this.url;
-  }
+const fileInput = useTemplateRef('fileInput');
 
-  setHeader(header: string, value: string): void {
-    this.headers[header] = value;
-  }
+/*
+ * Stage transitions
+ *
+ *   From            To              When
+ *   --------------  --------------  ------------------------------------------------------------
+ *   select          file-selected   a file is picked or dropped
+ *   file-selected   uploading       "Upload and validate" is clicked
+ *   uploading       verifying       the upload finishes
+ *                   file-selected   the upload fails or is cancelled
+ *   verifying       ready           validation passes
+ *                   verify-failed   validation fails
+ *                   file-selected   "Cancel validation" is clicked (the server job is left to finish)
+ *   ready           importing       "Start import" is clicked
+ *   importing       done            the import succeeds
+ *                   import-failed   the import fails
+ *                   file-selected   the uploaded files have expired and must be uploaded again
+ *   import-failed   ready           "Back to options" is clicked
+ *
+ * Picking or dropping a new file also goes to file-selected from any stage except importing.
+ */
+const stage = ref<Stage>('select');
+const packageFormat = ref<ImportPackageFormat>('intake24');
+const file = shallowRef<File | null>(null);
+const fileId = ref<string | null>(null);
+// Kept separately from the file, which is cleared after a successful import
+const uploadedSize = ref(0);
+// Job results can carry thousands of error messages, so they are kept in shallow refs
+const verificationJob = shallowRef<JobAttributes | null>(null);
+const summary = shallowRef<PackageContentsSummary | null>(null);
+const problems = shallowRef<ProblemGroup[] | null>(null);
+const problemCount = ref(0);
+const selectedProblemFile = ref<string | null>(null);
+const validationMessage = ref<string | null>(null);
+const importFailure = shallowRef<ImportFailure | null>(null);
+const notice = shallowRef<Notice | null>(null);
 
-  getHeader(header: string): string | undefined {
-    return this.headers[header];
-  }
+// Import options, set to their defaults when validation succeeds and kept through "Back to options"
+const form = reactive({
+  locales: [] as string[],
+  include: [] as PackageFileType[],
+  conflictStrategies: {} as Partial<Record<PackageFileType, ConflictStrategy>>,
+  foodCodes: '',
+  categoryCodes: '',
+});
+const showFilters = ref(false);
 
-  setProgressHandler(handler: (bytesSent: number) => void): void {
-    this.progressHandler = handler;
-  }
+/*
+ * Incremented whenever the running upload / validation / import is superseded (file replaced,
+ * validation cancelled, page left). Async continuations compare it with the value they started
+ * with and stop if it changed, so an abandoned job can never update the page.
+ */
+let run = 0;
 
-  async send(body: any): Promise<tus.HttpResponse> {
-    this.body = body;
-
-    const config: AxiosRequestConfig = {
-      method: this.method,
-      url: this.url,
-      headers: {
-        ...this.headers,
-      },
-      data: body,
-      cancelToken: this.cancelTokenSource.token,
-      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-        if (this.progressHandler && progressEvent.lengthComputable) {
-          this.progressHandler(progressEvent.loaded);
-        }
-      },
-    };
-
-    try {
-      const response = await this.axiosInstance(config);
-      return new AxiosHttpResponse(response);
-    }
-    catch (error: any) {
-      if (axios.isCancel(error)) {
-        throw new Error('Request aborted');
-      }
-      throw error;
-    }
-  }
-
-  async abort(): Promise<void> {
-    this.cancelTokenSource.cancel('Upload aborted');
-  }
-
-  getUnderlyingObject(): CancelTokenSource {
-    return this.cancelTokenSource;
-  }
-}
-
-class AxiosHttpStack implements tus.HttpStack {
-  constructor(private axiosInstance: AxiosInstance) {}
-
-  createRequest(method: string, url: string): tus.HttpRequest {
-    return new AxiosHttpRequest(method, url, this.axiosInstance);
-  }
-
-  getName(): string {
-    return 'axios-http-stack';
-  }
-}
-
-type ImportState = 'selecting-file' | 'uploading' | 'verifying' | 'verification-failed' | 'verification-successful' | 'importing';
-
-const { t } = useI18n();
-
-const importState = ref<ImportState>('selecting-file');
-
-const fileInput = ref<HTMLInputElement | null>(null);
-const fileInputModel = ref<File | null>(null);
-const selectedFile = ref<File | null>(null);
-const uploadedFileId = ref<string | null>(null);
-const uploadProgress = ref(0);
-
-const uploadError = ref<string | null>(null);
-const verifyError = ref<string | null>(null);
-const importError = ref<string | null>(null);
-
-const verificationJobStatus = ref<JobAttributes | null>(null);
-const showDebugInfo = ref(false);
-
-const isDragging = ref(false);
-let tusUpload: tus.Upload | null = null;
-const isImportComplete = ref(false);
-const panel = ref('0');
-
-const conflictStrategies = ref<Partial<Record<PackageFileType, string>>>({});
-const packageFormat = ref('intake24');
-
-const packageContentsSummary = ref<PackageContentsSummary | null>(null);
-const selectedLocales = ref<string[]>([]);
-const selectedFiles = ref<PackageFileType[]>([]);
-const foodCodeFilter = ref('');
-const categoryCodeFilter = ref('');
-
-const packageFormats = computed(() => [
-  { value: 'intake24', title: t('io.import.upload.formats.intake24') },
-  { value: 'albane', title: t('io.import.upload.formats.albane') },
-  { value: 'gousto', title: t('io.import.upload.formats.gousto') },
-]);
-
-const fileSelected = computed(() => !!selectedFile.value);
-const uploadComplete = computed(() => !!uploadedFileId.value);
-const availableFiles = computed(() => packageFileTypes.filter(fileType => packageContentsSummary.value?.files[fileType]));
-
-const canStartImport = computed(() => {
-  if (importState.value === 'importing' || isImportComplete.value)
-    return false;
-
-  if (selectedLocales.value.length === 0 || selectedFiles.value.length === 0)
-    return false;
-  return true;
+onBeforeUnmount(() => {
+  run++;
 });
 
-async function handleFileChange(file: File | null) {
-  selectedFile.value = file;
-  if (file) {
-    uploadError.value = null;
-    uploadedFileId.value = null; // Reset fileId on new selection
-    isImportComplete.value = false;
-    // Don't auto-advance on selection, remain in panel 0 (Upload)
-  }
-  else {
-    uploadedFileId.value = null;
-    isImportComplete.value = false;
-  }
-  verificationJobStatus.value = null;
-  verifyError.value = null;
+const formats = computed(() => importPackageFormats.map(value => ({
+  value,
+  title: t(`io.import.package.formats.${value}`),
+})));
+
+const conflictOptions = computed(() => conflictStrategies.map(value => ({
+  value,
+  title: t(`io.import.configuration.conflict.${value}`),
+})));
+
+const canUpload = computed(() => user.can('upload-large-files'));
+const hasFile = computed(() => !!file.value);
+// The format is sent for validation, so it can't change once the upload starts. After a successful
+// import no file is selected, so the next package's format can be chosen.
+const formatLocked = computed(() => !['select', 'file-selected', 'done'].includes(stage.value));
+// Import jobs can't be cancelled, so the package can't be replaced mid-import
+const replaceBlocked = computed(() => stage.value === 'importing');
+
+const dropzoneHint = computed(() => {
+  if (replaceBlocked.value)
+    return t('io.import.package.replaceBlocked');
+
+  return hasFile.value ? t('io.import.package.replace') : t('io.import.package.browse');
+});
+
+function formatSize(bytes: number) {
+  return formatBytes(bytes, i18n.locale.value);
 }
 
-function handleDrop(event: DragEvent) {
-  isDragging.value = false;
-  if (event.dataTransfer?.files && event.dataTransfer.files.length > 0 && importState.value === 'selecting-file') {
-    selectedFile.value = event.dataTransfer.files[0];
-    fileInputModel.value = selectedFile.value;
-    uploadError.value = null;
-    uploadedFileId.value = null;
-    isImportComplete.value = false;
-  }
-  verificationJobStatus.value = null;
-  verifyError.value = null;
+function fileLabel(name: string) {
+  return name === UPLOADED_FILE ? t('io.verification.uploadedFile') : name;
 }
 
-function handleDragOver(event: DragEvent) {
-  event.preventDefault();
-  if (importState.value === 'selecting-file') {
-    isDragging.value = true;
-  }
+const dragDepth = ref(0);
+const dragActive = computed(() => dragDepth.value > 0 && !replaceBlocked.value);
+
+function invalidateRun() {
+  run++;
+  upload.abort();
+  polling.stop();
 }
 
-function handleDragLeave(event: DragEvent) {
-  event.preventDefault();
-  isDragging.value = false;
+function clearPackageState() {
+  fileId.value = null;
+  uploadedSize.value = 0;
+  verificationJob.value = null;
+  summary.value = null;
+  problems.value = null;
+  problemCount.value = 0;
+  selectedProblemFile.value = null;
+  validationMessage.value = null;
+  importFailure.value = null;
 }
 
-async function verifyPackage() {
-  importState.value = 'verifying';
-  verifyError.value = null;
-  panel.value = '1';
+function selectFile(selected: File) {
+  if (replaceBlocked.value)
+    return;
 
-  try {
-    // Queue package verification job
-    const { data: jobResponse } = await http.post<{ jobId: string }>('/admin/packages/verify', {
-      fileId: uploadedFileId.value,
-      packageFormat: packageFormat.value,
-    });
-
-    // Poll until the job completes
-    while (true) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const response = await http.get<JobAttributes>(`/admin/user/jobs/${jobResponse.jobId}`);
-
-      if (response.status !== 200) {
-        verifyError.value = t('io.import.verify.error.unexpected');
-        importState.value = 'verification-failed';
-        return;
-      }
-
-      const jobStatus = response.data;
-      verificationJobStatus.value = jobStatus;
-
-      if (jobStatus.completedAt) {
-        if (!jobStatus.successful) {
-          throw new Error(jobStatus.message || t('io.import.verify.error.unexpected')); // FIXME: why does this throw?
-        }
-        else {
-          const packageSummary = jobStatus.returnValue as PackageContentsSummary;
-          if (packageSummary) {
-            packageContentsSummary.value = packageSummary;
-
-            selectedLocales.value = [...packageSummary.targetLocales];
-
-            conflictStrategies.value = {};
-            selectedFiles.value = [];
-            if (packageSummary.files) {
-              packageFileTypes.filter(k => packageSummary.files[k]).forEach((k) => {
-                conflictStrategies.value[k] = 'overwrite';
-                selectedFiles.value.push(k);
-              });
-            }
-          }
-        }
-
-        break;
-      }
-    }
-
-    verifyError.value = null;
-    importState.value = verificationJobStatus.value?.successful ? 'verification-successful' : 'verification-failed';
-
-    panel.value = '2';
-  }
-  catch (err: any) {
-    console.error(err);
-    verifyError.value = t('io.import.verify.error.unexpected', { message: err.message });
-    importState.value = 'verification-failed';
-    showDebugInfo.value = false;
-  }
-}
-
-async function startUpload() {
-  if (!selectedFile.value) {
-    uploadError.value = t('io.import.upload.error.selectFirst');
+  if (!isZipFile(selected)) {
+    messages.error(t('io.import.package.notZip', { name: selected.name }));
     return;
   }
 
-  importState.value = 'uploading';
-  uploadError.value = null;
-  verifyError.value = null;
-  verificationJobStatus.value = null;
-  showDebugInfo.value = false;
+  invalidateRun();
+  clearPackageState();
+  notice.value = null;
+  file.value = selected;
+  stage.value = 'file-selected';
+}
 
-  try {
-    const file = selectedFile.value;
+function onFileInputChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const selected = input.files?.[0];
+  // Reset, so choosing the same file again still triggers a change
+  input.value = '';
 
-    const upload = new tus.Upload(file, {
-      endpoint: '/admin/large-file-upload',
-      retryDelays: [0, 1000, 3000, 5000],
-      chunkSize: 5 * 1024 * 1024, // 5MB chunks
-      metadata: {
-        filename: file.name,
-        filetype: file.type,
-      },
+  if (selected)
+    selectFile(selected);
+}
 
-      httpStack: new AxiosHttpStack(http.axios),
-      onError: (error) => {
-        uploadError.value = error.message;
-        importState.value = 'selecting-file';
-      },
-      onProgress: (bytesUploaded, bytesTotal) => {
-        uploadProgress.value = (bytesUploaded / bytesTotal) * 100.0;
-      },
-      onSuccess: async () => {
-        if (!upload.url) {
-          uploadError.value = t('io.import.upload.error.unexpected');
-          importState.value = 'selecting-file';
-          console.error('Tus upload URL is missing');
-          return;
-        }
+// Enter / leave also fire for the zone's children, so count them rather than toggling a flag
+function onDragEnter(event: DragEvent) {
+  if (event.dataTransfer?.types.includes('Files'))
+    dragDepth.value++;
+}
 
-        const parts = upload.url.split('/');
-        const fileId = parts.at(-1);
+function onDragLeave() {
+  dragDepth.value = Math.max(0, dragDepth.value - 1);
+}
 
-        uploadedFileId.value = fileId ?? null;
+function onDragOver(event: DragEvent) {
+  // Default handling is prevented even when replacement is blocked, or the browser would open the
+  // dropped file; dropEffect 'none' only shows the not-allowed cursor
+  if (event.dataTransfer)
+    event.dataTransfer.dropEffect = replaceBlocked.value ? 'none' : 'copy';
+}
 
-        await verifyPackage();
-      },
-    });
+function onDrop(event: DragEvent) {
+  dragDepth.value = 0;
 
-    tusUpload = upload;
-    upload.start();
-  }
-  catch (error: any) {
-    uploadError.value = error.message || t('io.import.upload.error.unexpected');
-    resetState();
+  const dropped = event.dataTransfer?.files?.[0];
+  if (dropped && !replaceBlocked.value)
+    selectFile(dropped);
+}
+
+function uploadFailureNotice(err: unknown): Notice {
+  if (!(err instanceof UploadFailure))
+    return { type: 'error', key: 'io.import.uploadError.unexpected', params: { message: getErrorMessage(err) } };
+
+  switch (err.reason) {
+    case 'cancelled':
+      return { type: 'info', key: 'io.import.notice.uploadCancelled' };
+    case 'permission':
+      return { type: 'error', key: 'io.import.uploadError.permission' };
+    case 'tooLarge':
+      return { type: 'error', key: 'io.import.uploadError.tooLarge' };
+    case 'storage':
+      return { type: 'error', key: 'io.import.uploadError.storage' };
+    default:
+      return { type: 'error', key: 'io.import.uploadError.unexpected', params: { message: err.message } };
   }
 }
 
-async function startImport() {
-  if (!uploadedFileId.value || !verificationJobStatus.value?.id)
+function applyDefaultOptions(contents: PackageContentsSummary) {
+  const present = packageFileTypes.filter(type => contents.files[type]);
+
+  form.locales = [...contents.targetLocales];
+  form.include = present;
+  form.conflictStrategies = Object.fromEntries(present.map(type => [type, 'overwrite']));
+  form.foodCodes = '';
+  form.categoryCodes = '';
+  showFilters.value = false;
+}
+
+function showValidationFailure(groups: ProblemGroup[] | null, message: string | null) {
+  problems.value = groups;
+  problemCount.value = groups?.reduce((total, group) => total + group.messages.length, 0) ?? 0;
+  selectedProblemFile.value = groups?.[0]?.file ?? null;
+  validationMessage.value = message;
+  stage.value = 'verify-failed';
+}
+
+function applyVerificationResult(job: JobAttributes) {
+  verificationJob.value = job;
+
+  if (!job.successful) {
+    showValidationFailure(normaliseErrorDetails(job.errorDetails), job.message);
+    return;
+  }
+
+  const contents = job.returnValue as PackageContentsSummary | null;
+  if (!contents?.files || !Array.isArray(contents.targetLocales)) {
+    showValidationFailure(null, t('io.import.validation.unexpected', { message: 'missing package summary' }));
+    return;
+  }
+
+  summary.value = contents;
+  applyDefaultOptions(contents);
+  stage.value = 'ready';
+}
+
+async function uploadAndValidate() {
+  const selected = file.value;
+  if (stage.value !== 'file-selected' || !selected || !canUpload.value)
     return;
 
-  importState.value = 'importing';
-  importError.value = null;
-  isImportComplete.value = false;
+  const current = ++run;
+  notice.value = null;
+  stage.value = 'uploading';
+
+  let uploadedFileId: string;
+  try {
+    uploadedFileId = await upload.start(selected);
+  }
+  catch (err) {
+    if (current !== run)
+      return;
+
+    stage.value = 'file-selected';
+    notice.value = uploadFailureNotice(err);
+    return;
+  }
+
+  if (current !== run)
+    return;
+
+  fileId.value = uploadedFileId;
+  uploadedSize.value = selected.size;
+  stage.value = 'verifying';
 
   try {
-    const activeStrategies: Record<string, string> = {};
+    const request: PackageVerificationRequest = { fileId: uploadedFileId, packageFormat: packageFormat.value };
+    const { data } = await http.post<{ jobId: string }>('admin/packages/verify', request);
+    if (current !== run)
+      return;
 
-    selectedFiles.value.forEach((file) => {
-      if (conflictStrategies.value[file]) {
-        activeStrategies[file] = conflictStrategies.value[file];
-      }
-    });
+    const job = await polling.poll(data.jobId);
+    if (current !== run)
+      return;
 
-    // Queue package import job
-    const { data: jobResponse } = await http.post<{ jobId: string }>('/admin/packages/import', {
-      fileId: uploadedFileId.value,
-      verificationJobId: verificationJobStatus.value.id,
-      options: {
-        conflictStrategies: activeStrategies,
-        include: selectedFiles.value,
-        localeFilter: selectedLocales.value,
-        foodFilter: foodCodeFilter.value.split(',').map(s => s.trim()).filter(s => s.length > 0),
-        categoryFilter: categoryCodeFilter.value.split(',').map(s => s.trim()).filter(s => s.length > 0),
-      },
-    });
-
-    // Poll until the job completes
-    while (true) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const response = await http.get<JobAttributes>(`/admin/user/jobs/${jobResponse.jobId}`);
-
-      if (response.status !== 200) {
-        importError.value = t('io.import.import.error.unexpected');
-        return;
-      }
-
-      const jobStatus = response.data;
-
-      if (jobStatus.completedAt) {
-        if (!jobStatus.successful) {
-          throw new Error(jobStatus.message || t('io.import.import.error.unexpected'));
-        }
-        break;
-      }
-    }
-
-    importError.value = null;
-    isImportComplete.value = true;
+    applyVerificationResult(job);
   }
-  catch (error: any) {
-    importError.value = error.response?.data?.message || error.message || t('io.import.import.error.unexpected');
-  }
-  finally {
-    importState.value = 'selecting-file';
+  catch (err) {
+    if (current !== run || err instanceof PollingStopped)
+      return;
+
+    showValidationFailure(null, t('io.import.validation.unexpected', { message: getErrorMessage(err) }));
   }
 }
 
 function cancelUpload() {
-  if (tusUpload) {
-    tusUpload.abort(true).catch((err) => {
-      console.error('Error aborting upload:', err);
-    });
-    uploadError.value = t('io.import.upload.status.cancelled');
-    resetState();
+  // uploadAndValidate() receives the cancellation and returns to file-selected with a notice
+  if (stage.value === 'uploading')
+    upload.abort();
+}
+
+// There's no endpoint to cancel a job: stop polling and ignore the job, which runs to completion
+function cancelValidation() {
+  if (stage.value !== 'verifying')
+    return;
+
+  invalidateRun();
+  clearPackageState();
+  notice.value = { type: 'info', key: 'io.import.notice.validationCancelled' };
+  stage.value = 'file-selected';
+}
+
+const currentProblems = computed(() =>
+  problems.value?.find(group => group.file === selectedProblemFile.value)?.messages ?? []);
+
+async function copyProblems() {
+  const groups = problems.value;
+  if (!groups)
+    return;
+
+  const lines: string[] = [];
+  for (const group of groups) {
+    lines.push(`${fileLabel(group.file)} (${group.messages.length})`);
+    for (const message of group.messages)
+      lines.push(`- ${t(message.key, message.params ?? {})}`);
+    lines.push('');
+  }
+
+  try {
+    await navigator.clipboard.writeText(lines.join('\n').trimEnd());
+    messages.success(t('io.import.validation.copied'));
+  }
+  catch (err) {
+    console.error(err);
+    messages.error(t('io.import.validation.copyFailed'));
   }
 }
 
-function resetState() {
-  importState.value = 'selecting-file';
-  uploadProgress.value = 0;
-  selectedFile.value = null;
-  uploadedFileId.value = null;
-  fileInputModel.value = null;
+const targetLocales = computed(() => summary.value?.targetLocales ?? []);
 
-  uploadError.value = null;
-  verifyError.value = null;
-  importError.value = null;
-  verificationJobStatus.value = null;
-  showDebugInfo.value = false;
+const presentTypes = computed(() => {
+  const contents = summary.value;
+  return contents ? packageFileTypes.filter(type => contents.files[type]) : [];
+});
 
-  tusUpload = null;
-  isImportComplete.value = false;
-  panel.value = '0';
-  if (fileInput.value) {
-    fileInput.value.value = '';
+// Position of the sliding thumb: 0, 1 or 2; -1 when nothing is selected
+function thumbIndex(value: ConflictStrategy | undefined) {
+  return value ? conflictStrategies.indexOf(value) : -1;
+}
+
+const activeFilterCount = computed(() =>
+  [form.foodCodes, form.categoryCodes].filter(value => parseCodeList(value).length > 0).length);
+
+// A package without target locales has nothing to choose from; its import isn't restricted by locale
+const canStartImport = computed(() =>
+  form.include.length > 0 && (targetLocales.value.length === 0 || form.locales.length > 0));
+
+function showImportFailure(errorDetails: unknown, message: string | null) {
+  const failureMessages = normaliseErrorDetails(errorDetails, '')?.flatMap(group => group.messages) ?? [];
+
+  // The uploaded files (or the validation result) are gone: go back to uploading the same file
+  if (failureMessages.some(({ key }) => reuploadErrorKeys.includes(key))) {
+    clearPackageState();
+    notice.value = { type: 'error', key: 'io.import.notice.filesExpired' };
+    stage.value = 'file-selected';
+    return;
   }
 
-  packageContentsSummary.value = null;
-  selectedLocales.value = [];
-  selectedFiles.value = [];
-  foodCodeFilter.value = '';
+  importFailure.value = { messages: failureMessages, message };
+  stage.value = 'import-failed';
 }
+
+async function startImport() {
+  const job = verificationJob.value;
+  if (stage.value !== 'ready' || !canStartImport.value || !fileId.value || !job)
+    return;
+
+  const current = ++run;
+  importFailure.value = null;
+  stage.value = 'importing';
+
+  try {
+    const request = buildImportRequest(fileId.value, job.id, form);
+    const { data } = await http.post<{ jobId: string }>('admin/packages/import', request);
+    if (current !== run)
+      return;
+
+    const importJob = await polling.poll(data.jobId);
+    if (current !== run)
+      return;
+
+    if (importJob.successful) {
+      // The file is cleared for the next package, but the stepper keeps showing the completed
+      // steps until a new file is picked
+      file.value = null;
+      stage.value = 'done';
+    }
+    else {
+      showImportFailure(importJob.errorDetails, importJob.message);
+    }
+  }
+  catch (err) {
+    if (current !== run || err instanceof PollingStopped)
+      return;
+
+    const errorDetails = (err as any)?.response?.data?.details ?? null;
+    showImportFailure(errorDetails, getErrorMessage(err));
+  }
+}
+
+const importFailureLines = computed(() => {
+  const failure = importFailure.value;
+  if (!failure)
+    return [];
+
+  if (failure.messages.length)
+    return failure.messages.map(message => t(message.key, message.params ?? {}));
+
+  return [failure.message || t('io.import.result.unexpected')];
+});
+
+function backToOptions() {
+  if (stage.value === 'import-failed')
+    stage.value = 'ready';
+}
+
+function formatEta(seconds: number) {
+  if (seconds < 60) {
+    const count = seconds < 10 ? Math.max(1, Math.ceil(seconds)) : Math.ceil(seconds / 5) * 5;
+    return t('io.import.progress.upload.secondsRemaining', count);
+  }
+
+  return t('io.import.progress.upload.minutesRemaining', Math.round(seconds / 60));
+}
+
+// value: null means indeterminate; cancel: null means the job can't be cancelled
+const progressPanel = computed<{
+  heading: string;
+  icon: string;
+  title: string;
+  subtitle: string | null;
+  value: number | null;
+  cancel: { label: string; action: () => void } | null;
+} | null>(() => {
+  switch (stage.value) {
+    case 'uploading': {
+      const transferred = t('io.import.progress.upload.transferred', {
+        uploaded: formatSize(upload.bytesUploaded.value),
+        total: formatSize(upload.bytesTotal.value),
+      });
+      const remaining = upload.secondsRemaining.value;
+
+      return {
+        heading: t('io.import.progress.upload.heading'),
+        icon: '$upload',
+        title: t('io.import.progress.upload.title', { percent: upload.percent.value }),
+        subtitle: remaining === null ? transferred : `${transferred} · ${formatEta(remaining)}`,
+        value: upload.percent.value,
+        cancel: { label: t('io.import.progress.upload.cancel'), action: cancelUpload },
+      };
+    }
+    case 'verifying':
+      return {
+        heading: t('io.import.progress.validation.heading'),
+        icon: 'fas fa-file-circle-check',
+        title: t('io.import.progress.validation.title'),
+        subtitle: null,
+        value: null,
+        cancel: { label: t('io.import.progress.validation.cancel'), action: cancelValidation },
+      };
+    case 'importing':
+      return {
+        heading: t('io.import.progress.import.heading'),
+        icon: 'fas fa-database',
+        title: t('io.import.progress.import.title'),
+        // The import job reports no intermediate progress or step names
+        subtitle: t('io.import.progress.import.subtitle'),
+        value: null,
+        // Jobs can't be cancelled
+        cancel: null,
+      };
+    default:
+      return null;
+  }
+});
+
+const steps = computed<{ key: string; title: string; detail: string; icon: string; state: StepState; emphasis: StepEmphasis }[]>(() => {
+  const s = stage.value;
+
+  const uploadStep: StepState = ['select', 'file-selected'].includes(s)
+    ? 'pending'
+    : s === 'uploading' ? 'active' : 'done';
+  const verifyStep: StepState = ['select', 'file-selected', 'uploading'].includes(s)
+    ? 'pending'
+    : s === 'verifying'
+      ? 'active'
+      : s === 'verify-failed' ? 'failed' : 'done';
+  const importStep: StepState = s === 'importing'
+    ? 'active'
+    : s === 'done'
+      ? 'done'
+      : s === 'import-failed' ? 'failed' : 'pending';
+
+  const detail = (state: StepState, map: Partial<Record<StepState, string>>) => map[state] ?? '';
+  const inProgress = t('io.import.steps.inProgress');
+
+  const list = [
+    {
+      key: 'upload',
+      title: t('io.import.steps.upload._'),
+      icon: 'fas fa-cloud-arrow-up',
+      detail: detail(uploadStep, {
+        pending: s === 'file-selected' ? t('io.import.steps.upload.ready') : t('io.import.steps.upload.waiting'),
+        active: inProgress,
+        done: t('io.import.steps.upload.done', { size: formatSize(uploadedSize.value) }),
+      }),
+      state: uploadStep,
+    },
+    {
+      key: 'verify',
+      title: t('io.import.steps.validation._'),
+      icon: 'fas fa-file-circle-check',
+      detail: detail(verifyStep, {
+        pending: t('io.import.steps.validation.pending'),
+        active: inProgress,
+        done: t('io.import.steps.validation.done'),
+        failed: problemCount.value
+          ? t('io.import.steps.validation.problems', problemCount.value)
+          : t('io.import.steps.validation.failed'),
+      }),
+      state: verifyStep,
+    },
+    {
+      key: 'import',
+      title: t('io.import.steps.import._'),
+      icon: 'fas fa-database',
+      detail: detail(importStep, {
+        pending: verifyStep === 'failed' ? t('io.import.steps.import.blocked') : t('io.import.steps.import.pending'),
+        active: inProgress,
+        done: t('io.import.steps.import.done'),
+        failed: t('io.import.steps.import.failed'),
+      }),
+      state: importStep,
+    },
+  ];
+
+  const focus = list.findIndex(step => step.state !== 'done');
+
+  return list.map((step, i) => ({
+    ...step,
+    emphasis: step.state === 'done'
+      ? 'done'
+      : i === focus
+        ? (step.state === 'failed' ? 'failed' : 'current')
+        : 'pending',
+  }));
+});
 </script>
 
 <style scoped>
-.drop-zone {
-  padding: 3rem;
-  border: 2px dashed #666;
-  min-height: 150px;
+.min-width-0 {
+  min-width: 0;
 }
 
-.drop-message {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+/* Vuetify 4's reset only zeroes html/body margins, and the app has no global reset,
+   so headings and paragraphs would keep browser-default margins (about 1em each side).
+   Zero them so spacing comes only from the utility classes.
+   Note: Vuetify's spacing utilities live in a CSS layer and are not !important, so this
+   unlayered rule would cancel m*-* classes on these elements — use p*-* padding on them instead. */
+h2,
+h3,
+h4,
+p {
+  margin: 0;
 }
 
-.drag-over {
-  background-color: #e8f5e9;
-  border: 2px dashed #4caf50;
+@media (min-width: 960px) {
+  .status-panel {
+    position: sticky;
+    top: 88px;
+  }
 }
 
-.drag-over .drop-message {
-  color: #4caf50;
+.dropzone {
+  border: 2px dashed rgba(var(--v-theme-primary), 0.45);
+  border-radius: 8px;
+  background-color: rgba(var(--v-theme-primary), 0.04);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
-.greyed-out {
-  opacity: 0.5;
-  background-color: #f5f5f5;
-  border: 2px dashed #999;
+.dropzone--selected {
+  border-color: rgba(var(--v-theme-success), 0.5);
+  background-color: rgba(var(--v-theme-success), 0.05);
 }
 
-.greyed-out .drop-message {
-  color: #666;
+.dropzone--dragover {
+  border-style: solid;
+  border-color: rgb(var(--v-theme-primary));
+  background-color: rgba(var(--v-theme-primary), 0.1);
 }
 
-.file-input {
-  margin-top: 0;
+.dropzone--disabled {
+  cursor: not-allowed;
+  border-color: rgba(var(--v-border-color), 0.24);
+  background-color: rgba(var(--v-theme-on-surface), 0.02);
 }
 
-.mt-2 {
-  margin-top: 0.5rem;
+.dropzone-hint {
+  max-width: 100%;
 }
 
-.import-files-table :deep(tbody tr:nth-of-type(even)) {
-  background-color: rgba(0, 0, 0, 0.03); /* Very light grey */
+.stepper {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }
 
-.import-files-table :deep(th),
-.import-files-table :deep(td) {
-  border-bottom: none !important;
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.step-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 32px;
+  align-self: stretch;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  background-color: rgba(var(--v-border-color), 0.06);
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+
+.step--current .step-number {
+  background-color: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+}
+
+.step--failed .step-number {
+  background-color: rgb(var(--v-theme-error));
+  color: rgb(var(--v-theme-on-error));
+}
+
+.step--done .step-number {
+  background-color: rgba(var(--v-theme-success), 0.14);
+  color: rgb(var(--v-theme-success));
+}
+
+.step-connector {
+  width: 2px;
+  flex-grow: 1;
+  margin-top: 8px;
+  border-radius: 1px;
+  background-color: rgba(var(--v-border-color), 0.12);
+}
+
+.step-connector--done {
+  background-color: rgba(var(--v-theme-success), 0.5);
+}
+
+.step-avatar {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-spinner {
+  position: absolute;
+  inset: 0;
+}
+
+.step-title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.step--current .step-title,
+.step--failed .step-title,
+.step--done .step-title {
+  font-weight: 700;
+}
+
+.step--pending .step-title {
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+
+/* Desktop: vertical stepper. Each row's content box is the 56px avatar;
+   the 32px number sits 12px down so it is level with the avatar's centre.
+   The connector starts 8px below the number and, via a negative margin,
+   runs through the row's 20px bottom padding to stop 8px above the next number
+   (56 − 44 content left + 24 overflow = 8px gaps at both ends). */
+@media (min-width: 960px) {
+  .stepper {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .step:not(:last-child) {
+    padding-bottom: 20px;
+  }
+
+  .step-rail {
+    padding-top: 12px;
+  }
+
+  .step-connector {
+    margin-bottom: -24px;
+  }
+
+  .step-text {
+    align-self: center;
+  }
+
+  .step-title {
+    font-size: 1.0625rem;
+  }
+}
+
+.empty-main {
+  min-height: 280px;
+}
+
+.panel-subheader {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.problems {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.problems-files {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.problems-messages {
+  border-top: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+/* Rows are wrapped by the virtual scroller, so the separators go on its item wrappers */
+.problems-messages :deep(.v-virtual-scroll__item + .v-virtual-scroll__item) {
+  border-top: thin solid rgba(var(--v-border-color), 0.08);
+}
+
+@media (min-width: 960px) {
+  .problems {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
+
+  .problems-files {
+    max-height: 360px;
+  }
+
+  .problems-messages {
+    border-top: none;
+    border-left: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+  }
+}
+
+/* Server messages can contain line breaks; long codes and paths must wrap */
+.error-text {
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.error-row + .error-row {
+  border-top: thin solid rgba(var(--v-border-color), 0.08);
+}
+
+/* Vuetify's v-card-title (22px, the same as the panel heading) and single-line 14px v-card-subtitle
+   don't fit nested section cards. Card styles sit in a late CSS layer that size utility classes
+   don't beat, so these unlayered rules set the sizes instead. */
+.config-card-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.config-card-subtitle {
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.config-info {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.config-checkbox :deep(.v-label) {
+  padding-inline-start: 4px;
+}
+
+/* One grid for the whole list; each row is a subgrid, so the switch column lines up across rows.
+   The spare 1fr column keeps the switches next to the names instead of pushed right. */
+.contents-list {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) auto 1fr;
+}
+
+.contents-row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  min-height: 44px;
+}
+
+.contents-row + .contents-row {
+  border-top: thin solid rgba(var(--v-border-color), 0.06);
+}
+
+/* Inset to line up with the checkbox icons below it */
+.contents-head-title {
+  padding-left: 8px;
+}
+
+.contents-col-switch {
+  margin-left: 40px;
+}
+
+/* The thumb is a third of the track wide, so translating it by --thumb-index × 100% of its own width
+   moves it onto the selected option; this relies on equal-width segments.
+   Vuetify styles are in CSS layers, so these unlayered overrides need no !important. */
+.conflict-slider {
+  position: relative;
+  height: auto;
+  padding: 3px;
+  border-radius: 999px;
+  background-color: rgba(var(--v-theme-on-surface), 0.06);
+}
+
+.conflict-slider-thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / 3);
+  border-radius: 999px;
+  background-color: rgba(var(--v-theme-primary), 0.14);
+  transform: translateX(calc(var(--thumb-index, 0) * 100%));
+  transition:
+    transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.conflict-slider--disabled .conflict-slider-thumb {
+  background-color: rgba(var(--v-theme-on-surface), 0.08);
+}
+
+.conflict-slider :deep(.v-btn) {
+  /* Above the thumb; fixed width keeps the bolder active label from shifting anything */
+  position: relative;
+  z-index: 1;
+  width: 96px;
+  min-height: 28px;
+  min-width: 0;
+  padding: 0 12px;
+  border-radius: 999px;
+  background-color: transparent;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+  font-weight: 400;
+  letter-spacing: normal;
+  transition: color 0.22s ease;
+}
+
+.conflict-slider :deep(.v-btn--active) {
+  color: rgb(var(--v-theme-primary));
+  font-weight: 500;
+}
+
+.conflict-slider--disabled :deep(.v-btn) {
+  color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
+}
+
+/* The thumb is the selection indicator; hide Vuetify's own active overlay */
+.conflict-slider :deep(.v-btn--active > .v-btn__overlay) {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conflict-slider-thumb,
+  .conflict-slider :deep(.v-btn),
+  .dropzone {
+    transition: none;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .contents-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* 3 × 96px doesn't fit a phone row: the switch spans the row and the options share its width */
+  .contents-row > .conflict-slider {
+    /* Starts under the label text (past the 40px checkbox + 4px label gap), full remaining width */
+    width: calc(100% - 44px);
+    margin: 0 0 8px 44px;
+  }
+
+  .conflict-slider :deep(.v-btn) {
+    flex: 1 1 0;
+    width: auto;
+    padding: 0 4px;
+  }
 }
 </style>
