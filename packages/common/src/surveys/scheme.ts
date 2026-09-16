@@ -52,6 +52,20 @@ export type FoodSection = (typeof foodSections)[number];
 export const promptSections = [...surveySections, ...mealSections] as const;
 export type PromptSection = (typeof promptSections)[number];
 
+export const promptSubsection = z.object({
+  id: z.string(),
+  size: z.coerce.number().int().min(0),
+  expanded: z.boolean(),
+  name: z.string(),
+});
+export type PromptSubsection = z.infer<typeof promptSubsection>;
+
+export const promptSubsections = z.partialRecord(
+  z.enum(promptSections),
+  promptSubsection.array(),
+);
+export type PromptSubsections = z.infer<typeof promptSubsections>;
+
 export const promptWithSection = basePrompt.extend({
   section: z.enum(promptSections),
 });
@@ -77,6 +91,9 @@ export const recallPrompts = z.object({
   }),
   postMeals: singlePrompt.array(),
   submission: singlePrompt.array(),
+  ui: z.object({
+    subsections: promptSubsections,
+  }).optional(),
 });
 export type RecallPrompts = z.infer<typeof recallPrompts>;
 
@@ -94,7 +111,9 @@ export const groupedRecallPrompts = z.object({
 export type GroupedRecallPrompts = z.infer<typeof groupedRecallPrompts>;
 
 export function flattenScheme(scheme: RecallPrompts): SinglePrompt[] {
-  return Object.values(scheme).reduce<SinglePrompt[]>((acc, prompts) => {
+  const { ui, ...promptSections } = scheme;
+
+  return Object.values(promptSections).reduce<SinglePrompt[]>((acc, prompts) => {
     // @ts-expect-error fix
     acc.push(...(Array.isArray(prompts) ? prompts : flattenScheme(prompts)));
     return acc;
@@ -102,7 +121,9 @@ export function flattenScheme(scheme: RecallPrompts): SinglePrompt[] {
 }
 
 export function flattenSchemeWithSection(scheme: RecallPrompts): PromptWithSection[] {
-  return Object.entries(scheme).reduce<PromptWithSection[]>((acc, [section, prompts]) => {
+  const { ui, ...promptSections } = scheme;
+
+  return Object.entries(promptSections).reduce<PromptWithSection[]>((acc, [section, prompts]) => {
     const items = Array.isArray(prompts)
       ? prompts.map(prompt => ({ ...prompt, section }))
       // @ts-expect-error fix

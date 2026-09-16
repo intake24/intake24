@@ -35,10 +35,12 @@
           step: index + 1,
           promptIds,
           templates,
+          subsections: promptSubsections(section),
           modelValue: isMealSection(section) ? data.prompts.meals[section] : data.prompts[section],
         }"
         @move="move"
         @update:model-value="updateItems(section, $event)"
+        @update:subsection-layouts="updateSubsectionLayouts(section, $event)"
       />
     </v-expansion-panels>
   </entry-layout>
@@ -48,7 +50,7 @@
 import type { SurveySchemeForm } from '../form.vue';
 import type { PromptMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import type { SinglePrompt } from '@intake24/common/prompts';
-import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
+import type { PromptSection, PromptSubsection, RecallPrompts } from '@intake24/common/surveys';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 
 import { defineComponent, ref } from 'vue';
@@ -123,6 +125,17 @@ export default defineComponent({
 
     load(prompts: RecallPrompts) {
       this.data.prompts = { ...prompts };
+    },
+
+    promptSubsections(section: PromptSection): PromptSubsection[] {
+      return this.data.prompts.ui?.subsections?.[section]
+        ?? [];
+    },
+
+    updateSubsectionLayouts(section: PromptSection, subsections: PromptSubsection[]) {
+      this.data.prompts.ui = this.data.prompts.ui || { subsections: {} };
+      this.data.prompts.ui.subsections = this.data.prompts.ui.subsections || {};
+      this.data.prompts.ui.subsections[section] = subsections;
     },
 
     move(event: PromptMoveEvent) {
