@@ -1,4 +1,4 @@
-import type { AuthenticatorTransportFuture, CredentialDeviceType } from '@simplewebauthn/server';
+import type { CredentialDeviceType } from '@simplewebauthn/server';
 import type {
   Attributes,
   CreationAttributes,
@@ -70,7 +70,7 @@ export default class MFAAuthenticator extends BaseModel<
     allowNull: false,
     type: DataType.JSONB,
   })
-  declare transports: AuthenticatorTransportFuture[];
+  declare transports: string[];
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

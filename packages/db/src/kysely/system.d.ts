@@ -3,7 +3,7 @@
  * Please do not edit it manually.
  */
 
-import type { AuthenticatorTransportFuture, CredentialDeviceType } from '@simplewebauthn/server';
+import type { CredentialDeviceType } from '@simplewebauthn/server';
 import type { ColumnType } from 'kysely';
 
 import type { Card, DemographicGroup, FeedbackMeals, FeedbackOutput, FeedbackPhysicalDataField, FeedbackSection, FeedbackType, HenryCoefficient, TopFoods } from '@intake24/common/feedback';
@@ -178,7 +178,7 @@ export interface MfaAuthenticators {
   deviceType: CredentialDeviceType;
   id: string;
   publicKey: Uint8Array<ArrayBuffer>;
-  transports: AuthenticatorTransportFuture[];
+  transports: string[];
   updatedAt: Timestamp;
 }
 

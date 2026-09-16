@@ -78,8 +78,8 @@ export const fidoRegistrationChallenge = z.object({
     .array(
       z.object({
         id: z.string(),
-        type: z.literal('public-key'),
-        transports: z.enum(['ble', 'cable', 'hybrid', 'internal', 'nfc', 'smart-card', 'usb']).array().optional(),
+        type: z.string(),
+        transports: z.string().array().optional(),
       }),
     )
     .optional(),

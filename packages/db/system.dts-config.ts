@@ -27,7 +27,6 @@ export default defineConfig({
     // i18n related types
     LocaleMessageDictionary: '@intake24/i18n#LocaleMessageDictionary',
     // MFA related types
-    AuthenticatorTransportFuture: '@simplewebauthn/server#AuthenticatorTransportFuture',
     CredentialDeviceType: '@simplewebauthn/server#CredentialDeviceType',
     // Survey related types
     SchemeOverrides: '@intake24/common/surveys#SchemeOverrides',
@@ -79,7 +78,7 @@ export default defineConfig({
       'mfa_devices.provider': 'MFAProvider',
       'mfa_authenticators.public_key': 'Uint8Array<ArrayBuffer>',
       'mfa_authenticators.device_type': 'CredentialDeviceType',
-      'mfa_authenticators.transports': 'AuthenticatorTransportFuture[]',
+      'mfa_authenticators.transports': 'string[]',
       'personal_access_tokens.scopes': 'string[] | null',
       'surveys.auth_modes': 'Generated<SurveyAuthMode[]>',
       'surveys.notifications': 'Generated<Notification[]>',
