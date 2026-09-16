@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { randomBytes } from 'node:crypto';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -19,7 +19,7 @@ export interface TestPackageOptions {
 }
 
 export async function createTestPackage(options: TestPackageOptions = {}): Promise<string> {
-  const fileId = randomUUID();
+  const fileId = randomBytes(16).toString('hex');
   const uploadDir = path.resolve(ioc.cradle.fsConfig.local.uploads);
   const filePath = path.join(uploadDir, fileId);
 

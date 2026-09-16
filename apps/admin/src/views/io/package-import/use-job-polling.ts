@@ -5,7 +5,7 @@ import { onBeforeUnmount } from 'vue';
 
 import { useHttp } from '@intake24/admin/services';
 
-export class PollingStopped extends Error {
+export class PollingCancelled extends Error {
   constructor() {
     super('Job polling stopped');
     this.name = 'PollingStopped';
@@ -22,7 +22,7 @@ export type JobPollingOptions = {
 function wait(ms: number, signal: AbortSignal) {
   return new Promise<void>((resolve, reject) => {
     if (signal.aborted) {
-      reject(new PollingStopped());
+      reject(new PollingCancelled());
       return;
     }
 
@@ -33,7 +33,7 @@ function wait(ms: number, signal: AbortSignal) {
 
     function onAbort() {
       clearTimeout(timer);
-      reject(new PollingStopped());
+      reject(new PollingCancelled());
     }
 
     signal.addEventListener('abort', onAbort, { once: true });
@@ -42,7 +42,7 @@ function wait(ms: number, signal: AbortSignal) {
 
 /**
  * Polls one user job at a time until it completes. Starting a new poll, calling `stop()`
- * or unmounting the component stops the current poll, which then rejects with PollingStopped.
+ * or unmounting the component stops the current poll, which then rejects with PollingCancelled.
  */
 export function useJobPolling(options: JobPollingOptions = {}) {
   const { initialDelay = 1000, maxDelay = 5000, backoffFactor = 1.5, maxConsecutiveErrors = 3 } = options;
@@ -73,7 +73,7 @@ export function useJobPolling(options: JobPollingOptions = {}) {
         }
         catch (err) {
           if (current.signal.aborted)
-            throw new PollingStopped();
+            throw new PollingCancelled();
 
           // Asking again won't fix a client error; anything else gets a few more attempts
           const status = axios.isAxiosError(err) ? err.response?.status : undefined;

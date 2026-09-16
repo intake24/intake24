@@ -305,7 +305,7 @@ export default () => {
 
   describe('missing uploaded file', () => {
     let dbJob: DbJob;
-    const nonExistentFileId = 'non-existent-file-id-12345';
+    const nonExistentFileId = '00000000000000000000000000000000';
 
     beforeEach(async () => {
       dbJob = await createDbJob(testUser.id, { fileId: nonExistentFileId, packageFormat: 'intake24' });
