@@ -15,6 +15,7 @@ import { LocalisableError, NotFoundError } from '@intake24/api/http/errors';
 import { Job as DbJob } from '@intake24/db';
 
 import BaseJob from '../job';
+import { safeResolveUploadedFilePath } from './import/utils';
 import {
   AlbanePackageHandler,
   Intake24PackageHandler,
@@ -78,15 +79,7 @@ export default class PackageVerification extends BaseJob<'PackageVerification', 
 
   private async verifyPackage(): Promise<PackageContentsSummary> {
     const { fileId } = this.params;
-
-    const uploadedPath = path.join(path.resolve(this.fsConfig.local.uploads), fileId);
-
-    try {
-      await fs.stat(uploadedPath);
-    }
-    catch (err) {
-      throw new LocalisableError('io.verification.uploadedFileNotAccessible', undefined, { cause: err });
-    }
+    const uploadedPath = await safeResolveUploadedFilePath(this.fsConfig.local.uploads, fileId);
 
     const context: PackageHandlerContext = {
       fileId,

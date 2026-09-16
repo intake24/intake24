@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { searchSortingAlgorithms } from '../surveys/search-settings';
 import { bigIntString } from './common';
-import { packageExportOptions, packageFileTypes } from './http/admin/io';
+import { packageExportOptions, packageFileTypes, uploadFileId } from './http/admin/io';
 
 export const localisableMessage = z.object({
   key: z.string(),
@@ -201,14 +201,14 @@ export const UserPasswordResetNotification = z.object({
   userAgent: z.string().optional(),
 });
 export const PackageVerification = z.object({
-  fileId: z.string(),
+  fileId: uploadFileId,
   packageFormat: z.string(),
 });
 
 export const PackageExport = packageExportOptions;
 
 export const PackageImport = z.object({
-  fileId: z.string(),
+  fileId: uploadFileId,
   verificationJobId: z.string(),
   options: z.object({
     conflictStrategies: z.partialRecord(z.enum(packageFileTypes), z.enum(['overwrite', 'skip', 'abort'])),

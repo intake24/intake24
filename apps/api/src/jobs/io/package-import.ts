@@ -232,6 +232,7 @@ export default class PackageImport extends BaseJob<'PackageImport'> {
       });
     });
 
+    // KNOWN ISSUE: Failures below occur after the import commits, so they must not be reported as a rolled-back import.
     if (this.packageIoConfig.instantIndexRebuild) {
       await this.scheduler.jobs.addJob({
         type: 'LocaleIndexBuild',

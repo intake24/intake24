@@ -550,7 +550,7 @@ import {
   isZipFile,
   normaliseErrorDetails,
   parseCodeList,
-  PollingStopped,
+  PollingCancelled,
   UPLOADED_FILE,
   UploadFailure,
   useJobPolling,
@@ -861,7 +861,7 @@ async function uploadAndValidate() {
     applyVerificationResult(job);
   }
   catch (err) {
-    if (current !== run || err instanceof PollingStopped)
+    if (current !== run || err instanceof PollingCancelled)
       return;
 
     showValidationFailure(null, t('io.import.validation.unexpected', { message: getErrorMessage(err) }));
@@ -975,9 +975,10 @@ async function startImport() {
     }
   }
   catch (err) {
-    if (current !== run || err instanceof PollingStopped)
+    if (current !== run || err instanceof PollingCancelled)
       return;
 
+    // FIXME: A lost enqueue response or polling failure leaves the job outcome unknown; retrying may duplicate an import.
     const errorDetails = (err as any)?.response?.data?.details ?? null;
     showImportFailure(errorDetails, getErrorMessage(err));
   }

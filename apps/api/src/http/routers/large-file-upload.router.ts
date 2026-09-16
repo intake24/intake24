@@ -1,5 +1,6 @@
 import type { RequestHandler } from 'express';
 
+import { randomBytes } from 'node:crypto';
 import fsp from 'node:fs/promises';
 
 import { FileStore } from '@tus/file-store';
@@ -21,6 +22,10 @@ export function createLargeFileUploadRouter(authMiddleware: RequestHandler[]): R
 
   const tusServer = new TusServer({
     path: '/admin/large-file-upload',
+    // 32-character hex string: this is the same as TUS default, but explicitly
+    // configured here to ensure validation doesn't break in case the default
+    // changes
+    namingFunction: () => randomBytes(16).toString('hex'),
     relativeLocation: true,
     allowedOrigins,
     allowedCredentials: true,

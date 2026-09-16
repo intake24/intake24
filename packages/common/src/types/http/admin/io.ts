@@ -51,15 +51,19 @@ export type PackageContentsSummary = {
   files: Record<PackageFileType, boolean>;
 };
 
+// @tus/server's default naming function uses 16 random bytes encoded as hex.
+// This validation ensures there are no path traversal symbols such as .. or /
+export const uploadFileId = z.string().regex(/^[0-9a-f]{32}$/);
+
 export const packageVerificationRequest = z.object({
-  fileId: z.string().nonempty(),
+  fileId: uploadFileId,
   packageFormat: z.enum(importPackageFormats),
 });
 
 export type PackageVerificationRequest = z.infer<typeof packageVerificationRequest>;
 
 export const packageImportRequest = z.object({
-  fileId: z.string().nonempty(),
+  fileId: uploadFileId,
   verificationJobId: z.string().nonempty(),
   options: z.object({
     conflictStrategies: z.record(z.string(), z.string()),
