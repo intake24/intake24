@@ -526,7 +526,7 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "captcha": {
                     "description": "Captcha token if enabled",
@@ -599,7 +599,7 @@
                   "__schema1": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "__schema2": {
                     "type": "string"
@@ -3831,12 +3831,12 @@
                   "__schema3": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "__schema4": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   }
                 }
               }
@@ -18358,7 +18358,7 @@
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "emailNotifications": {
                     "type": "boolean"
@@ -18721,7 +18721,7 @@
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "emailNotifications": {
                     "type": "boolean"
@@ -19512,24 +19512,12 @@
                                             "type": "string"
                                           },
                                           "type": {
-                                            "type": "string",
-                                            "enum": [
-                                              "public-key"
-                                            ]
+                                            "type": "string"
                                           },
                                           "transports": {
                                             "type": "array",
                                             "items": {
-                                              "type": "string",
-                                              "enum": [
-                                                "ble",
-                                                "cable",
-                                                "hybrid",
-                                                "internal",
-                                                "nfc",
-                                                "smart-card",
-                                                "usb"
-                                              ]
+                                              "type": "string"
                                             }
                                           }
                                         },
@@ -19814,24 +19802,12 @@
                                         "type": "string"
                                       },
                                       "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "public-key"
-                                        ]
+                                        "type": "string"
                                       },
                                       "transports": {
                                         "type": "array",
                                         "items": {
-                                          "type": "string",
-                                          "enum": [
-                                            "ble",
-                                            "cable",
-                                            "hybrid",
-                                            "internal",
-                                            "nfc",
-                                            "smart-card",
-                                            "usb"
-                                          ]
+                                          "type": "string"
                                         }
                                       }
                                     },
@@ -22434,7 +22410,7 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "name": {
                     "nullable": true,
@@ -31477,7 +31453,7 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "name": {
                     "nullable": true,
@@ -45943,7 +45919,7 @@
                                   "email": {
                                     "type": "string",
                                     "format": "email",
-                                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "userAgent": {
                                     "type": "string"
@@ -45973,7 +45949,7 @@
                                 "type": "object",
                                 "properties": {
                                   "fileId": {
-                                    "type": "string"
+                                    "$ref": "#/definitions/__schema2"
                                   },
                                   "packageFormat": {
                                     "type": "string"
@@ -45989,7 +45965,7 @@
                                 "type": "object",
                                 "properties": {
                                   "fileId": {
-                                    "type": "string"
+                                    "$ref": "#/definitions/__schema2"
                                   },
                                   "verificationJobId": {
                                     "type": "string"
@@ -46072,7 +46048,7 @@
                                     "minItems": 1,
                                     "type": "array",
                                     "items": {
-                                      "$ref": "#/definitions/__schema2"
+                                      "$ref": "#/definitions/__schema3"
                                     }
                                   },
                                   "options": {
@@ -46082,7 +46058,7 @@
                                         "minItems": 1,
                                         "type": "array",
                                         "items": {
-                                          "$ref": "#/definitions/__schema3"
+                                          "$ref": "#/definitions/__schema4"
                                         }
                                       },
                                       "xlsx": {
@@ -46256,9 +46232,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -46983,7 +46963,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -47013,7 +46993,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -47029,7 +47009,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -47112,7 +47092,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -47122,7 +47102,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -47252,9 +47232,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -47352,18 +47336,10 @@
                 "type": "object",
                 "properties": {
                   "type": {
-                    "allOf": [
-                      {
-                        "$ref": "#/definitions/__schema0"
-                      }
-                    ]
+                    "$ref": "#/definitions/__schema0"
                   },
                   "params": {
-                    "allOf": [
-                      {
-                        "$ref": "#/definitions/__schema1"
-                      }
-                    ]
+                    "$ref": "#/definitions/__schema1"
                   }
                 },
                 "additionalProperties": false,
@@ -48101,7 +48077,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -48131,7 +48107,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -48147,7 +48123,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -48230,7 +48206,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -48240,7 +48216,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -48370,9 +48346,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -49696,7 +49676,7 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "name": {
                     "nullable": true,
@@ -52761,7 +52741,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -52791,7 +52771,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -52807,7 +52787,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -52890,7 +52870,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -52900,7 +52880,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -53030,9 +53010,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -53179,11 +53163,7 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "allOf": [
-                        {
-                          "$ref": "#/definitions/__schema0"
-                        }
-                      ]
+                      "$ref": "#/definitions/__schema0"
                     },
                     "localeId": {
                       "$ref": "#/definitions/__schema1"
@@ -53991,7 +53971,7 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "name": {
                     "nullable": true,
@@ -56717,7 +56697,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -56747,7 +56727,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -56763,7 +56743,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -56846,7 +56826,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -56856,7 +56836,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -56986,9 +56966,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -61376,6 +61360,47 @@
                                 "items": {
                                   "$ref": "#/definitions/__schema0"
                                 }
+                              },
+                              "ui": {
+                                "type": "object",
+                                "properties": {
+                                  "subsections": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "size": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 9007199254740991
+                                          },
+                                          "expanded": {
+                                            "type": "boolean"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "size",
+                                          "expanded",
+                                          "name"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "subsections"
+                                ],
+                                "additionalProperties": false
                               }
                             },
                             "required": [
@@ -69681,7 +69706,7 @@
                 "properties": {
                   "fileId": {
                     "type": "string",
-                    "minLength": 1
+                    "pattern": "^[0-9a-f]{32}$"
                   },
                   "packageFormat": {
                     "type": "string",
@@ -69780,7 +69805,7 @@
                 "properties": {
                   "fileId": {
                     "type": "string",
-                    "minLength": 1
+                    "pattern": "^[0-9a-f]{32}$"
                   },
                   "verificationJobId": {
                     "type": "string",
@@ -70222,12 +70247,12 @@
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "__schema2": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "__schema3": {
                     "type": "string",
@@ -71517,7 +71542,7 @@
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "originatingUrl": {
                     "nullable": true,
@@ -71561,7 +71586,7 @@
                             "to": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             }
                           },
                           "required": [
@@ -79915,7 +79940,7 @@
                       "type": "string",
                       "maxLength": 512,
                       "format": "email",
-                      "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                      "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                     },
                     "originatingUrl": {
                       "nullable": true,
@@ -79959,7 +79984,7 @@
                               "to": {
                                 "type": "string",
                                 "format": "email",
-                                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                                "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                               }
                             },
                             "required": [
@@ -81145,6 +81170,47 @@
                               "items": {
                                 "$ref": "#/definitions/__schema2"
                               }
+                            },
+                            "ui": {
+                              "type": "object",
+                              "properties": {
+                                "subsections": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "size": {
+                                          "type": "integer",
+                                          "minimum": 0,
+                                          "maximum": 9007199254740991
+                                        },
+                                        "expanded": {
+                                          "type": "boolean"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "size",
+                                        "expanded",
+                                        "name"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "subsections"
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "required": [
@@ -89604,7 +89670,7 @@
                       "type": "string",
                       "maxLength": 512,
                       "format": "email",
-                      "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                      "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                     },
                     "originatingUrl": {
                       "nullable": true,
@@ -89648,7 +89714,7 @@
                               "to": {
                                 "type": "string",
                                 "format": "email",
-                                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                                "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                               }
                             },
                             "required": [
@@ -90834,6 +90900,47 @@
                               "items": {
                                 "$ref": "#/definitions/__schema2"
                               }
+                            },
+                            "ui": {
+                              "type": "object",
+                              "properties": {
+                                "subsections": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "size": {
+                                          "type": "integer",
+                                          "minimum": 0,
+                                          "maximum": 9007199254740991
+                                        },
+                                        "expanded": {
+                                          "type": "boolean"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "size",
+                                        "expanded",
+                                        "name"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "subsections"
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "required": [
@@ -99283,7 +99390,7 @@
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "originatingUrl": {
                     "nullable": true,
@@ -99327,7 +99434,7 @@
                             "to": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             }
                           },
                           "required": [
@@ -107670,7 +107777,7 @@
                       "type": "string",
                       "maxLength": 512,
                       "format": "email",
-                      "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                      "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                     },
                     "originatingUrl": {
                       "nullable": true,
@@ -107714,7 +107821,7 @@
                               "to": {
                                 "type": "string",
                                 "format": "email",
-                                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                                "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                               }
                             },
                             "required": [
@@ -108900,6 +109007,47 @@
                               "items": {
                                 "$ref": "#/definitions/__schema2"
                               }
+                            },
+                            "ui": {
+                              "type": "object",
+                              "properties": {
+                                "subsections": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "size": {
+                                          "type": "integer",
+                                          "minimum": 0,
+                                          "maximum": 9007199254740991
+                                        },
+                                        "expanded": {
+                                          "type": "boolean"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "size",
+                                        "expanded",
+                                        "name"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "subsections"
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "required": [
@@ -117349,7 +117497,7 @@
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "originatingUrl": {
                     "nullable": true,
@@ -117393,7 +117541,7 @@
                             "to": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             }
                           },
                           "required": [
@@ -125768,7 +125916,7 @@
                       "type": "string",
                       "maxLength": 512,
                       "format": "email",
-                      "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                      "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                     },
                     "originatingUrl": {
                       "nullable": true,
@@ -125812,7 +125960,7 @@
                               "to": {
                                 "type": "string",
                                 "format": "email",
-                                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                                "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                               }
                             },
                             "required": [
@@ -126998,6 +127146,47 @@
                               "items": {
                                 "$ref": "#/definitions/__schema2"
                               }
+                            },
+                            "ui": {
+                              "type": "object",
+                              "properties": {
+                                "subsections": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "size": {
+                                          "type": "integer",
+                                          "minimum": 0,
+                                          "maximum": 9007199254740991
+                                        },
+                                        "expanded": {
+                                          "type": "boolean"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "size",
+                                        "expanded",
+                                        "name"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "subsections"
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "required": [
@@ -136306,7 +136495,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -136336,7 +136525,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -136352,7 +136541,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -136435,7 +136624,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -136445,7 +136634,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -136575,9 +136764,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -136781,7 +136974,7 @@
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "phone": {
                     "nullable": true,
@@ -137119,7 +137312,7 @@
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "phone": {
                     "nullable": true,
@@ -137416,7 +137609,7 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "copy": {
                     "type": "string",
@@ -138861,7 +139054,7 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "name": {
                     "nullable": true,
@@ -139427,6 +139620,47 @@
                                 "items": {
                                   "$ref": "#/definitions/__schema0"
                                 }
+                              },
+                              "ui": {
+                                "type": "object",
+                                "properties": {
+                                  "subsections": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "size": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 9007199254740991
+                                          },
+                                          "expanded": {
+                                            "type": "boolean"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "size",
+                                          "expanded",
+                                          "name"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "subsections"
+                                ],
+                                "additionalProperties": false
                               }
                             },
                             "required": [
@@ -147718,6 +147952,47 @@
                         "items": {
                           "$ref": "#/definitions/__schema0"
                         }
+                      },
+                      "ui": {
+                        "type": "object",
+                        "properties": {
+                          "subsections": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "size": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 9007199254740991
+                                  },
+                                  "expanded": {
+                                    "type": "boolean"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "size",
+                                  "expanded",
+                                  "name"
+                                ],
+                                "additionalProperties": false
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "subsections"
+                        ],
+                        "additionalProperties": false
                       }
                     },
                     "required": [
@@ -155883,6 +156158,47 @@
                           "items": {
                             "$ref": "#/definitions/__schema0"
                           }
+                        },
+                        "ui": {
+                          "type": "object",
+                          "properties": {
+                            "subsections": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "size": {
+                                      "type": "integer",
+                                      "minimum": 0,
+                                      "maximum": 9007199254740991
+                                    },
+                                    "expanded": {
+                                      "type": "boolean"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "size",
+                                    "expanded",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "subsections"
+                          ],
+                          "additionalProperties": false
                         }
                       },
                       "required": [
@@ -172070,6 +172386,47 @@
                           "items": {
                             "$ref": "#/definitions/__schema0"
                           }
+                        },
+                        "ui": {
+                          "type": "object",
+                          "properties": {
+                            "subsections": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "size": {
+                                      "type": "integer",
+                                      "minimum": 0,
+                                      "maximum": 9007199254740991
+                                    },
+                                    "expanded": {
+                                      "type": "boolean"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "size",
+                                    "expanded",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "subsections"
+                          ],
+                          "additionalProperties": false
                         }
                       },
                       "required": [
@@ -180326,6 +180683,47 @@
                         "items": {
                           "$ref": "#/definitions/__schema0"
                         }
+                      },
+                      "ui": {
+                        "type": "object",
+                        "properties": {
+                          "subsections": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "size": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 9007199254740991
+                                  },
+                                  "expanded": {
+                                    "type": "boolean"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "size",
+                                  "expanded",
+                                  "name"
+                                ],
+                                "additionalProperties": false
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "subsections"
+                        ],
+                        "additionalProperties": false
                       }
                     },
                     "required": [
@@ -188488,6 +188886,47 @@
                           "items": {
                             "$ref": "#/definitions/__schema0"
                           }
+                        },
+                        "ui": {
+                          "type": "object",
+                          "properties": {
+                            "subsections": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "size": {
+                                      "type": "integer",
+                                      "minimum": 0,
+                                      "maximum": 9007199254740991
+                                    },
+                                    "expanded": {
+                                      "type": "boolean"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "size",
+                                    "expanded",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "subsections"
+                          ],
+                          "additionalProperties": false
                         }
                       },
                       "required": [
@@ -196744,6 +197183,47 @@
                         "items": {
                           "$ref": "#/definitions/__schema0"
                         }
+                      },
+                      "ui": {
+                        "type": "object",
+                        "properties": {
+                          "subsections": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "size": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 9007199254740991
+                                  },
+                                  "expanded": {
+                                    "type": "boolean"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "size",
+                                  "expanded",
+                                  "name"
+                                ],
+                                "additionalProperties": false
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "subsections"
+                        ],
+                        "additionalProperties": false
                       }
                     },
                     "required": [
@@ -204914,6 +205394,47 @@
                           "items": {
                             "$ref": "#/definitions/__schema0"
                           }
+                        },
+                        "ui": {
+                          "type": "object",
+                          "properties": {
+                            "subsections": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "size": {
+                                      "type": "integer",
+                                      "minimum": 0,
+                                      "maximum": 9007199254740991
+                                    },
+                                    "expanded": {
+                                      "type": "boolean"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "size",
+                                    "expanded",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "subsections"
+                          ],
+                          "additionalProperties": false
                         }
                       },
                       "required": [
@@ -213220,6 +213741,47 @@
                           "items": {
                             "$ref": "#/definitions/__schema0"
                           }
+                        },
+                        "ui": {
+                          "type": "object",
+                          "properties": {
+                            "subsections": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "size": {
+                                      "type": "integer",
+                                      "minimum": 0,
+                                      "maximum": 9007199254740991
+                                    },
+                                    "expanded": {
+                                      "type": "boolean"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "size",
+                                    "expanded",
+                                    "name"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "subsections"
+                          ],
+                          "additionalProperties": false
                         }
                       },
                       "required": [
@@ -253418,6 +253980,47 @@
                                 "items": {
                                   "$ref": "#/definitions/__schema0"
                                 }
+                              },
+                              "ui": {
+                                "type": "object",
+                                "properties": {
+                                  "subsections": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "size": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 9007199254740991
+                                          },
+                                          "expanded": {
+                                            "type": "boolean"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "size",
+                                          "expanded",
+                                          "name"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "subsections"
+                                ],
+                                "additionalProperties": false
                               }
                             },
                             "required": [
@@ -294049,7 +294652,7 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "name": {
                     "nullable": true,
@@ -295141,7 +295744,7 @@
                                   "email": {
                                     "type": "string",
                                     "format": "email",
-                                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "userAgent": {
                                     "type": "string"
@@ -295171,7 +295774,7 @@
                                 "type": "object",
                                 "properties": {
                                   "fileId": {
-                                    "type": "string"
+                                    "$ref": "#/definitions/__schema2"
                                   },
                                   "packageFormat": {
                                     "type": "string"
@@ -295187,7 +295790,7 @@
                                 "type": "object",
                                 "properties": {
                                   "fileId": {
-                                    "type": "string"
+                                    "$ref": "#/definitions/__schema2"
                                   },
                                   "verificationJobId": {
                                     "type": "string"
@@ -295270,7 +295873,7 @@
                                     "minItems": 1,
                                     "type": "array",
                                     "items": {
-                                      "$ref": "#/definitions/__schema2"
+                                      "$ref": "#/definitions/__schema3"
                                     }
                                   },
                                   "options": {
@@ -295280,7 +295883,7 @@
                                         "minItems": 1,
                                         "type": "array",
                                         "items": {
-                                          "$ref": "#/definitions/__schema3"
+                                          "$ref": "#/definitions/__schema4"
                                         }
                                       },
                                       "xlsx": {
@@ -295376,9 +295979,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -296172,7 +296779,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -296202,7 +296809,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -296218,7 +296825,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -296301,7 +296908,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -296311,7 +296918,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -296363,9 +296970,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -297075,7 +297686,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -297105,7 +297716,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -297121,7 +297732,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -297204,7 +297815,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -297214,7 +297825,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -297304,9 +297915,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -298109,7 +298724,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -298139,7 +298754,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -298155,7 +298770,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -298238,7 +298853,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -298248,7 +298863,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -298338,9 +298953,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -299088,7 +299707,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -299118,7 +299737,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -299134,7 +299753,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -299217,7 +299836,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -299227,7 +299846,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -299357,9 +299976,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -300233,7 +300856,7 @@
                                   "email": {
                                     "type": "string",
                                     "format": "email",
-                                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "userAgent": {
                                     "type": "string"
@@ -300263,7 +300886,7 @@
                                 "type": "object",
                                 "properties": {
                                   "fileId": {
-                                    "type": "string"
+                                    "$ref": "#/definitions/__schema2"
                                   },
                                   "packageFormat": {
                                     "type": "string"
@@ -300279,7 +300902,7 @@
                                 "type": "object",
                                 "properties": {
                                   "fileId": {
-                                    "type": "string"
+                                    "$ref": "#/definitions/__schema2"
                                   },
                                   "verificationJobId": {
                                     "type": "string"
@@ -300362,7 +300985,7 @@
                                     "minItems": 1,
                                     "type": "array",
                                     "items": {
-                                      "$ref": "#/definitions/__schema2"
+                                      "$ref": "#/definitions/__schema3"
                                     }
                                   },
                                   "options": {
@@ -300372,7 +300995,7 @@
                                         "minItems": 1,
                                         "type": "array",
                                         "items": {
-                                          "$ref": "#/definitions/__schema3"
+                                          "$ref": "#/definitions/__schema4"
                                         }
                                       },
                                       "xlsx": {
@@ -300546,9 +301169,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -300644,7 +301271,7 @@
                         "type": "object",
                         "properties": {
                           "fileId": {
-                            "type": "string"
+                            "$ref": "#/definitions/__schema0"
                           },
                           "packageFormat": {
                             "type": "string"
@@ -300676,7 +301303,7 @@
                         "type": "object",
                         "properties": {
                           "fileId": {
-                            "type": "string"
+                            "$ref": "#/definitions/__schema0"
                           },
                           "verificationJobId": {
                             "type": "string"
@@ -300775,7 +301402,7 @@
                             "minItems": 1,
                             "type": "array",
                             "items": {
-                              "$ref": "#/definitions/__schema0"
+                              "$ref": "#/definitions/__schema1"
                             }
                           },
                           "options": {
@@ -300785,7 +301412,7 @@
                                 "minItems": 1,
                                 "type": "array",
                                 "items": {
-                                  "$ref": "#/definitions/__schema1"
+                                  "$ref": "#/definitions/__schema2"
                                 }
                               },
                               "xlsx": {
@@ -300821,9 +301448,13 @@
                 ],
                 "definitions": {
                   "__schema0": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{32}$"
                   },
                   "__schema1": {
+                    "type": "string"
+                  },
+                  "__schema2": {
                     "type": "string",
                     "enum": [
                       "locales",
@@ -301527,7 +302158,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -301557,7 +302188,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -301573,7 +302204,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -301656,7 +302287,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -301666,7 +302297,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -301796,9 +302427,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -302524,7 +303159,7 @@
                             "email": {
                               "type": "string",
                               "format": "email",
-                              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -302554,7 +303189,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "packageFormat": {
                               "type": "string"
@@ -302570,7 +303205,7 @@
                           "type": "object",
                           "properties": {
                             "fileId": {
-                              "type": "string"
+                              "$ref": "#/definitions/__schema2"
                             },
                             "verificationJobId": {
                               "type": "string"
@@ -302653,7 +303288,7 @@
                               "minItems": 1,
                               "type": "array",
                               "items": {
-                                "$ref": "#/definitions/__schema2"
+                                "$ref": "#/definitions/__schema3"
                               }
                             },
                             "options": {
@@ -302663,7 +303298,7 @@
                                   "minItems": 1,
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/definitions/__schema3"
+                                    "$ref": "#/definitions/__schema4"
                                   }
                                 },
                                 "xlsx": {
@@ -302793,9 +303428,13 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "__schema2": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{32}$"
                     },
                     "__schema3": {
+                      "type": "string"
+                    },
+                    "__schema4": {
                       "type": "string",
                       "enum": [
                         "locales",
@@ -303359,24 +303998,12 @@
                             "type": "string"
                           },
                           "type": {
-                            "type": "string",
-                            "enum": [
-                              "public-key"
-                            ]
+                            "type": "string"
                           },
                           "transports": {
                             "type": "array",
                             "items": {
-                              "type": "string",
-                              "enum": [
-                                "ble",
-                                "cable",
-                                "hybrid",
-                                "internal",
-                                "nfc",
-                                "smart-card",
-                                "usb"
-                              ]
+                              "type": "string"
                             }
                           }
                         },
@@ -304212,7 +304839,7 @@
                         "email": {
                           "type": "string",
                           "format": "email",
-                          "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                          "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                         },
                         "phone": {
                           "nullable": true,
