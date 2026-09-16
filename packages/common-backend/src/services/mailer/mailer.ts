@@ -1,3 +1,4 @@
+import type { ReadStream } from 'node:fs';
 import type { SendMailOptions, Transporter } from 'nodemailer';
 
 import type { MailConfig } from './config';
@@ -78,7 +79,7 @@ export class Mailer {
 
       // TODO: pipe it to winston logger
       if (this.mailConfig.mailer === 'log')
-        info.message.pipe(process.stdout);
+        (info.message as ReadStream).pipe(process.stdout);
     }
     catch (err) {
       if (err instanceof Error) {

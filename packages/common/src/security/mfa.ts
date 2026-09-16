@@ -30,8 +30,8 @@ export const publicKeyCredentialDescriptorJSON = z.object({
   allowCredentials:
     z.object({
       id: z.string(),
-      type: z.literal('public-key'),
-      transports: z.enum(['ble', 'cable', 'hybrid', 'internal', 'nfc', 'smart-card', 'usb']).array().optional(),
+      type: z.string(),
+      transports: z.string().array().optional(),
     })
       .array()
       .optional(),
