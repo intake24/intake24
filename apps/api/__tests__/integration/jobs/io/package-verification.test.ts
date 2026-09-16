@@ -59,7 +59,7 @@ export default () => {
   const createMockBullJob = (dbJobId: string, params: { fileId: string; packageFormat: string }): BullJob => {
     return {
       id: `db-${dbJobId}`,
-      data: { params },
+      data: { params, userId: testUser.id },
       updateProgress: vi.fn(),
       returnvalue: null,
     } as unknown as BullJob;

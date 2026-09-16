@@ -61,7 +61,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
   }
 
   const create = async (localeId: string, request: CreateCategoryRequest): Promise<void> => {
-    await kyselyDb.foods.transaction().execute(async (t) => {
+    await kyselyDb.foods.contextTransaction(async (t) => {
       try {
         const { id: categoryId } = await t
           .insertInto('categories')
@@ -108,7 +108,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
     version: string,
     request: UpdateCategoryRequest,
   ): Promise<void> => {
-    await kyselyDb.foods.transaction().execute(async (t) => {
+    await kyselyDb.foods.contextTransaction(async (t) => {
       const result = await t
         .updateTable('categories')
         .set({
@@ -155,7 +155,7 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
   };
 
   const read = async (localeId: string, categoryCode: string): Promise<SimpleCategoryEntry> => {
-    return await kyselyDb.foods.transaction().execute(async (t) => {
+    return await kyselyDb.foods.contextTransaction(async (t) => {
       const categoryRow = await t
         .selectFrom('categories')
         .select(['id', 'code', 'englishName', 'name', 'version'])

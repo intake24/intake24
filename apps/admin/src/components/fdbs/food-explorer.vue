@@ -21,7 +21,7 @@
         </v-list>
       </v-menu>
     </div>
-    <v-divider class="mt-3" />
+    <v-divider class="mt-2" />
   </div>
   <v-treeview
     v-model:activated="activated"
