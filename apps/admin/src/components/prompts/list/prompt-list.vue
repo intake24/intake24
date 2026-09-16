@@ -174,7 +174,7 @@ import type { SinglePrompt } from '@intake24/common/prompts';
 import type {
   MealSection,
   PromptSection,
-  PromptSubsectionLayout,
+  PromptSubsection,
   SurveyPromptSection,
 } from '@intake24/common/surveys';
 
@@ -201,7 +201,7 @@ export type PromptEvent = {
   prompt: SinglePrompt;
 };
 
-type PromptSubsection = {
+type InternalPromptSubsection = {
   name: string;
   expanded: boolean;
   prompts: SinglePrompt[];
@@ -241,8 +241,8 @@ const props = defineProps({
     type: Array as PropType<SinglePrompt[]>,
     default: () => [],
   },
-  subsectionLayouts: {
-    type: Array as PropType<PromptSubsectionLayout[]>,
+  subsections: {
+    type: Array as PropType<PromptSubsection[]>,
     default: () => [],
   },
   modelValue: {
@@ -251,7 +251,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'update:subsectionLayouts', 'move']);
+const emit = defineEmits(['update:modelValue', 'update:subsections', 'move']);
 
 const { i18n } = useI18n();
 
@@ -271,11 +271,11 @@ const subtitle = computed(() => i18n.t(
     : `survey-schemes.prompts.${props.section}.subtitle`,
 ));
 const fullSection = computed(() => isMealSection(props.section) ? `meals.${props.section}` : props.section);
-const subsectionsState = ref<PromptSubsection[]>(buildSubsections(copyObject(props.modelValue), copyObject(props.subsectionLayouts)));
+const subsectionsState = ref<InternalPromptSubsection[]>(buildSubsections(copyObject(props.modelValue), copyObject(props.subsections)));
 const prompts = computed<SinglePrompt[]>({
   get: () => flattenSubsections(subsectionsState.value),
   set: (value) => {
-    subsectionsState.value = buildSubsections(copyObject(value), copyObject(props.subsectionLayouts));
+    subsectionsState.value = buildSubsections(copyObject(value), copyObject(props.subsections));
   },
 });
 const subsectionOptions = computed<MoveSubsection[]>(() => subsectionsState.value.map((subsection, index) => ({
@@ -297,7 +297,7 @@ function subsectionKey(index: number) {
   return `${props.section}:${index}`;
 }
 
-function buildSubsections(prompts: SinglePrompt[], subsections: PromptSubsectionLayout[]): PromptSubsection[] {
+function buildSubsections(prompts: SinglePrompt[], subsections: PromptSubsection[]): InternalPromptSubsection[] {
   if (isOverrideMode.value)
     return [{ name: defaultSubsectionName(0), expanded: true, prompts: [...prompts] }];
 
@@ -323,11 +323,11 @@ function buildSubsections(prompts: SinglePrompt[], subsections: PromptSubsection
   return items.length ? items : [{ name: defaultSubsectionName(0), expanded: true, prompts: [...prompts] }];
 }
 
-function flattenSubsections(subsections: PromptSubsection[]) {
+function flattenSubsections(subsections: InternalPromptSubsection[]) {
   return subsections.flatMap(subsection => subsection.prompts);
 }
 
-function serializedSubsections(subsections: PromptSubsection[]): PromptSubsectionLayout[] {
+function serializedSubsections(subsections: InternalPromptSubsection[]): PromptSubsection[] {
   return subsections.map((subsection, index) => ({
     id: subsectionKey(index),
     size: subsection.prompts.length,
@@ -356,7 +356,7 @@ function globalIndex(subsectionIndex: number, index: number) {
   return index;
 }
 
-function ensureSubsectionExists(targetSubsectionIndex?: number | null): PromptSubsection {
+function ensureSubsectionExists(targetSubsectionIndex?: number | null): InternalPromptSubsection {
   if (typeof targetSubsectionIndex === 'number') {
     const item = subsectionsState.value[targetSubsectionIndex];
     if (item)
@@ -527,20 +527,20 @@ function update() {
   if (!deepEqual(prompts, props.modelValue))
     emit('update:modelValue', prompts);
 
-  const subsectionLayouts = serializedSubsections(subsectionsState.value);
-  if (!deepEqual(subsectionLayouts, props.subsectionLayouts))
-    emit('update:subsectionLayouts', subsectionLayouts);
+  const subsections = serializedSubsections(subsectionsState.value);
+  if (!deepEqual(subsections, props.subsections))
+    emit('update:subsections', subsections);
 };
 
 function syncFromProps() {
-  if (deepEqual(props.modelValue, flattenSubsections(subsectionsState.value)) && deepEqual(props.subsectionLayouts, serializedSubsections(subsectionsState.value)))
+  if (deepEqual(props.modelValue, flattenSubsections(subsectionsState.value)) && deepEqual(props.subsections, serializedSubsections(subsectionsState.value)))
     return;
 
-  subsectionsState.value = buildSubsections(copyObject(props.modelValue), copyObject(props.subsectionLayouts));
+  subsectionsState.value = buildSubsections(copyObject(props.modelValue), copyObject(props.subsections));
 }
 
 watch(() => props.modelValue, syncFromProps, { deep: true });
-watch(() => props.subsectionLayouts, syncFromProps, { deep: true });
+watch(() => props.subsections, syncFromProps, { deep: true });
 
 watch(subsectionsState, () => {
   update();
