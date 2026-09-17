@@ -11,6 +11,7 @@ import { languages } from './languages';
 import { locales } from './locales';
 import { nutrientTypes } from './nutrient-types';
 import { standardUnits } from './standard-units';
+import { surveys } from './surveys';
 
 export default {
   'as-served-sets.images': asServedImages,
@@ -26,4 +27,5 @@ export default {
   locales,
   'nutrient-types': nutrientTypes,
   'standard-units': standardUnits,
+  surveys,
 };
