@@ -203,7 +203,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
         nutrientTableId,
         nutrientTableRecordId: record[idColumnOffset],
         name: record[descriptionColumnOffset],
-        localName: localDescriptionColumnOffset ? record[localDescriptionColumnOffset] : null,
+        localName: localDescriptionColumnOffset !== null ? record[localDescriptionColumnOffset] : null,
       };
 
       const [{ id: nutrientTableRecordId }] = await NutrientTableRecord.upsert(nutrientRecordInput);

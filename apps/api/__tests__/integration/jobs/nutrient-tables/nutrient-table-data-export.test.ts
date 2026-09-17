@@ -72,11 +72,11 @@ export default () => {
     await NutrientTableCsvMapping.create({
       nutrientTableId,
       rowOffset: 5,
-      idColumnOffset: 0,
-      descriptionColumnOffset: 2,
-      localDescriptionColumnOffset: 3,
+      idColumnOffset: 1,
+      descriptionColumnOffset: 3,
+      localDescriptionColumnOffset: 0,
     });
-    await NutrientTableCsvMappingField.create({ nutrientTableId, fieldName: 'Food group', columnOffset: 1 });
+    await NutrientTableCsvMappingField.create({ nutrientTableId, fieldName: 'Food group', columnOffset: 2 });
 
     const nutrientTypes = await FoodsNutrientType.findAll({
       where: { id: ['1', '2'] },
@@ -116,7 +116,7 @@ export default () => {
     expect(exportDbJob.downloadUrl).toBeTruthy();
     expect(exportDbJob.message).toBe('Nutrient table data export: exported 1 record with 6 CSV columns. No headers were included because rowOffset is 0.');
     const headerlessFile = path.resolve(ioc.cradle.fsConfig.local.downloads, exportDbJob.downloadUrl!);
-    await expect(fs.readFile(headerlessFile, 'utf8')).resolves.toBe('source-1,Vegetables,Source food,Local food,12.3,4.5');
+    await expect(fs.readFile(headerlessFile, 'utf8')).resolves.toBe('Local food,source-1,Vegetables,Source food,12.3,4.5');
     await fs.rm(headerlessFile);
 
     await NutrientTableCsvMapping.update({ rowOffset: 5 }, { where: { nutrientTableId } });
@@ -126,7 +126,7 @@ export default () => {
     exportedFile = path.resolve(ioc.cradle.fsConfig.local.downloads, exportDbJob.downloadUrl!);
     expect(exportDbJob.message).toBe('Nutrient table data export: exported 1 record with 6 CSV columns.');
     await expect(fs.readFile(exportedFile, 'utf8')).resolves.toBe(
-      `NDB food ID (FCT record ID),Food group,NDB food description,NDB local food description,${nutrientTypes[0].description},${nutrientTypes[1].description}\n\n\n\n\nsource-1,Vegetables,Source food,Local food,12.3,4.5`,
+      `NDB local food description,NDB food ID (FCT record ID),Food group,NDB food description,${nutrientTypes[0].description},${nutrientTypes[1].description}\n\n\n\n\nLocal food,source-1,Vegetables,Source food,12.3,4.5`,
     );
 
     await record.update({ name: 'Changed food', localName: 'Changed local food' });
