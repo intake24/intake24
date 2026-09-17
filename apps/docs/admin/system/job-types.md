@@ -89,6 +89,7 @@ This needs to be run if object structure changes, so all database records are sy
 - Locales
 - Nutrient types
 - Standard units
+- Surveys
 
 ## SurveySchemesSync
 
