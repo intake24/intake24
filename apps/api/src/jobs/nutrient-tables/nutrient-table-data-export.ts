@@ -79,7 +79,7 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
     const header = Array.from<string>({ length: maxOffset + 1 }).fill('');
     header[csvMapping.idColumnOffset] = 'NDB food ID (FCT record ID)';
     header[csvMapping.descriptionColumnOffset] = 'NDB food description';
-    if (csvMapping.localDescriptionColumnOffset)
+    if (csvMapping.localDescriptionColumnOffset !== null)
       header[csvMapping.localDescriptionColumnOffset] = 'NDB local food description';
     for (const mapping of csvMappingFields)
       header[mapping.columnOffset] = mapping.fieldName;
@@ -96,21 +96,50 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
     const fields = new Map(csvMappingFields.map(mapping => [mapping.fieldName, mapping.columnOffset]));
     const nutrients = new Map(csvMappingNutrients.map(mapping => [mapping.nutrientTypeId, mapping.columnOffset]));
     const cursor = this.kyselyDb.foods
-      .selectFrom('nutrientTableRecords')
-      .leftJoin('nutrientTableRecordFields', 'nutrientTableRecordFields.nutrientTableRecordId', 'nutrientTableRecords.id')
-      .leftJoin('nutrientTableRecordNutrients', 'nutrientTableRecordNutrients.nutrientTableRecordId', 'nutrientTableRecords.id')
+      .selectFrom('nutrientTableRecordNutrients')
+      .innerJoin('nutrientTableRecords', 'nutrientTableRecords.id', 'nutrientTableRecordNutrients.nutrientTableRecordId')
       .select([
         'nutrientTableRecords.id',
         'nutrientTableRecords.nutrientTableRecordId',
         'nutrientTableRecords.name',
         'nutrientTableRecords.localName',
-        'nutrientTableRecordFields.name as fieldName',
-        'nutrientTableRecordFields.value as fieldValue',
+        sql.lit<string | null>(null).as('fieldName'),
+        sql.lit<string | null>(null).as('fieldValue'),
         'nutrientTableRecordNutrients.nutrientTypeId',
         sql<number | null>`nutrient_table_record_nutrients.units_per_100g`.as('unitsPer100g'),
       ])
       .where('nutrientTableRecords.nutrientTableId', '=', nutrientTableId)
-      .orderBy('nutrientTableRecords.nutrientTableRecordId')
+      .unionAll(qb =>
+        qb.selectFrom('nutrientTableRecords')
+          .select([
+            'nutrientTableRecords.id',
+            'nutrientTableRecords.nutrientTableRecordId',
+            'nutrientTableRecords.name',
+            'nutrientTableRecords.localName',
+            sql.lit<string | null>(null).as('fieldName'),
+            sql.lit<string | null>(null).as('fieldValue'),
+            sql.lit<string | null>(null).as('nutrientTypeId'),
+            sql.lit<number | null>(null).as('unitsPer100g'),
+          ])
+          .where('nutrientTableRecords.nutrientTableId', '=', nutrientTableId),
+      )
+      .unionAll(qb =>
+        qb.selectFrom('nutrientTableRecordFields')
+          .innerJoin('nutrientTableRecords', 'nutrientTableRecords.id', 'nutrientTableRecordFields.nutrientTableRecordId')
+          .select([
+            'nutrientTableRecords.id',
+            'nutrientTableRecords.nutrientTableRecordId',
+            'nutrientTableRecords.name',
+            'nutrientTableRecords.localName',
+            'nutrientTableRecordFields.name as fieldName',
+            'nutrientTableRecordFields.value as fieldValue',
+            sql.lit<string | null>(null).as('nutrientTypeId'),
+            sql.lit<number | null>(null).as('unitsPer100g'),
+          ])
+          .where('nutrientTableRecords.nutrientTableId', '=', nutrientTableId),
+      )
+      .orderBy('nutrientTableRecordId')
+      .orderBy('id')
       .stream();
     let recordCount = 0;
     const rows = (async function* () {
@@ -135,7 +164,7 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
           row = Array.from<string>({ length: maxOffset + 1 }).fill('');
           row[csvMapping.idColumnOffset] = record.nutrientTableRecordId;
           row[csvMapping.descriptionColumnOffset] = record.name;
-          if (csvMapping.localDescriptionColumnOffset)
+          if (csvMapping.localDescriptionColumnOffset !== null)
             row[csvMapping.localDescriptionColumnOffset] = record.localName ?? '';
         }
 
