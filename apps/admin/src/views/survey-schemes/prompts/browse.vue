@@ -40,7 +40,7 @@
         }"
         @move="move"
         @update:model-value="updateItems(section, $event)"
-        @update:subsection-layouts="updateSubsectionLayouts(section, $event)"
+        @update:subsections="updateSubsectionLayouts(section, $event)"
       />
     </v-expansion-panels>
   </entry-layout>
