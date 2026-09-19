@@ -104,7 +104,7 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
 
     if (systemTasks.length) {
       await this.kyselyDb.system.transaction().execute(async (trx) => {
-        Promise.all(systemTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
+        await Promise.all(systemTasks.map(subTask => this[subTask]({ trx, code, sourceCode })));
       });
     }
 
