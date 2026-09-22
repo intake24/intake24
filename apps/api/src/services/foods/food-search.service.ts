@@ -2,12 +2,11 @@ import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/sea
 import type { IoC } from '@intake24/api/ioc';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 
-import foodIndex from '@intake24/api/food-index';
 import { applyDefaultSearchQueryParameters } from '@intake24/api/food-index/search-query';
 
 import { acceptForQuery } from './common';
 
-function foodSearchService({ foodThumbnailImageService, cachedParentCategoriesService }: Pick<IoC, 'foodThumbnailImageService' | 'cachedParentCategoriesService'>) {
+function foodSearchService({ foodIndex, foodThumbnailImageService, cachedParentCategoriesService }: Pick<IoC, 'foodIndex' | 'foodThumbnailImageService' | 'cachedParentCategoriesService'>) {
   const search = async (localeId: string, description: string, isRecipe: boolean, options: OptionalSearchQueryParameters): Promise<FoodSearchResponse> => {
     const queryParameters = applyDefaultSearchQueryParameters(localeId, description, options);
     const results = await foodIndex.search(queryParameters);

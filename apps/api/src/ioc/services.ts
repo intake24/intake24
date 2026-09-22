@@ -4,7 +4,7 @@ import type { RequestIoC } from './ioc';
 
 import { asClass, asFunction, asValue } from 'awilix';
 
-import foodIndex from '@intake24/api/food-index';
+import FoodIndex from '@intake24/api/food-index';
 import {
   aclCache,
   aclService,
@@ -105,7 +105,7 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     feedbackService: asFunction(feedbackService).singleton(),
     foodDataService: asFunction(foodDataService).singleton(),
     foodSearchService: asFunction(foodSearchService).singleton(),
-    foodIndex: asValue(foodIndex),
+    foodIndex: asClass(FoodIndex).singleton(),
     portionSizeMethodsService: asFunction(portionSizeMethodsService).singleton(),
     portionSizeService: asFunction(portionSizeService).singleton(),
     categoryContentsService: asFunction(categoryContentsService).singleton(),

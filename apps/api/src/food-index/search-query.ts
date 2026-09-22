@@ -46,9 +46,9 @@ export interface SearchQueryParameters {
   relevantCategoryDepth: number;
 }
 
-export interface SearchQuery {
-  type: 'query';
-  queryId: number;
+export interface SearchRequest {
+  type: 'search';
+  id: number;
   parameters: SearchQueryParameters;
 }
 
