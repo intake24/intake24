@@ -43,6 +43,6 @@ export class Subscriber extends HasRedisClient {
   private async onLocaleIndex(message: string) {
     const locales = JSON.parse(message);
     this.logger.info('Rebuilding food index for locales:', locales);
-    await this.foodIndex.rebuild(locales.includes('all') ? undefined : locales);
+    await this.foodIndex.queueRebuild(locales.includes('all') ? undefined : locales);
   }
 }
