@@ -7,7 +7,6 @@ import { DatabaseError } from 'sequelize';
 import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
-import { IndexNotReadyError } from '@intake24/api/food-index';
 import { InvalidIdError } from '@intake24/api/services';
 
 import {
@@ -18,6 +17,8 @@ import {
   InternalServerError,
   mapZodIssues,
   NotFoundError,
+  ServiceTimeoutError,
+  ServiceUnavailableError,
   UnauthorizedError,
   ValidationError,
 } from '../errors';
@@ -110,6 +111,16 @@ export default (app: Express, { logger }: Ops): void => {
   });
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof ServiceTimeoutError) {
+      const { message, name, stack } = err;
+      logger.error(`${name}: ${message}`, { stack });
+      res.status(504).json({ message: 'Service Timeout' });
+      return;
+    }
+    next(err);
+  });
+
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof InsufficientStorageError) {
       const { message, name, stack } = err;
       logger.error(`${name}: ${message}`, { stack });
@@ -120,17 +131,17 @@ export default (app: Express, { logger }: Ops): void => {
   });
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof ServiceUnavailableError) {
+      const { message, name, stack } = err;
+      logger.error(`${name}: ${message}`, { stack });
+      res.status(503).json({ message: 'Service Unavailable' });
+      return;
+    }
+
     if (err instanceof DatabaseError) {
       const { message, name, stack } = err.original;
       logger.error(`${name}: ${message}`, { stack });
       res.status(503).json({ message: 'Internal Database Error' });
-      return;
-    }
-
-    if (err instanceof IndexNotReadyError) {
-      const { message, name, stack } = err;
-      logger.error(`${name}: ${message}`, { stack });
-      res.status(503).json({ message: 'Internal Server Error' });
       return;
     }
     next(err);
