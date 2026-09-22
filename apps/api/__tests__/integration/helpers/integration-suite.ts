@@ -9,7 +9,6 @@ import type { KyselyDatabases } from '@intake24/db';
 import fs from 'fs-extra';
 
 import app from '@intake24/api/app';
-import foodIndex from '@intake24/api/food-index';
 import ioc from '@intake24/api/ioc';
 
 import { initDatabase, initFiles, wipeRedis } from '.';
@@ -27,6 +26,7 @@ const {
   rateLimiter,
   scheduler,
   session,
+  foodIndex,
 } = ioc.cradle;
 
 class IntegrationSuite {

@@ -1,4 +1,4 @@
-/* eslint-disable perfectionist/sort-imports */
+/* eslint-disable antfu/no-top-level-await, perfectionist/sort-imports */
 import '@intake24/api/bootstrap';
 
 import type InterpretedPhrase from '../interpreted-phrase';
@@ -7,8 +7,10 @@ import LanguageBackends from '@intake24/api/food-index/language-backends';
 import type { PhraseMatchResult, PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
-import type { SearchQuery } from '@intake24/api/food-index/search-query';
+import type { SearchRequest } from '@intake24/api/food-index/search-query';
+import type { LocaleBuildResult, WorkerRequest } from '@intake24/api/food-index/worker-protocol';
 import { ParentCategoryIndex } from '@intake24/api/food-index/workers/parent-category-index';
+import { planRebuild } from '@intake24/api/food-index/workers/rebuild-plan';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import { logger as servicesLogger } from '@intake24/common-backend';
@@ -38,14 +40,6 @@ interface LocalFoodIndex {
 interface FoodIndex {
   [key: string]: LocalFoodIndex;
 }
-
-type IndexCommand = {
-  locales?: string[];
-  buildId: any;
-  type: 'command';
-  exit?: boolean;
-  rebuild?: boolean;
-};
 
 const index: FoodIndex = {};
 
@@ -83,11 +77,6 @@ async function getLanguageBackendId(localeId: string): Promise<string> {
 
 // Building index for each locale
 async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
-  if (index[localeId]) {
-    logger.debug(`Cleaning previous index for locale: ${localeId}`);
-    delete index[localeId];
-  }
-
   const [
     foods,
     allCategories,
@@ -161,16 +150,46 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
   };
 }
 
+function toError(error: unknown): Error {
+  return error instanceof Error ? error : new Error(String(error));
+}
+
+async function buildIndexesForLocales(locales: Iterable<string>): Promise<LocaleBuildResult[]> {
+  const results = new Array<LocaleBuildResult>();
+
+  for (const localeId of locales) {
+    try {
+      const rebuiltIndex = await buildIndexForLocale(localeId);
+      index[localeId] = rebuiltIndex;
+      results.push({ localeId, success: true });
+    }
+    catch (error) {
+      results.push({ localeId, success: false, error: toError(error) });
+    }
+  }
+
+  return results;
+}
+
+async function getEnabledLocales(): Promise<string[]> {
+  const locales = await FoodsLocale.findAll({
+    attributes: ['id'],
+    where: { foodIndexEnabled: true },
+  });
+
+  return locales.map(({ id }) => id);
+}
+
 /**
  * Function for checking interpreted query against the Special Foods Set and returning the result
  * @param interpretedQuery {InterpretedPhrase} - interpreted query
- * @param query {SearchQuery} - search query
+ * @param query {SearchRequest} - search query
  * @returns FoodHeader[] - array of FoodHeaders of special foods
  */
 
 async function matchFoodBuilders(
   interpretedQuery: InterpretedPhrase,
-  query: SearchQuery,
+  query: SearchRequest,
 ): Promise<FoodHeader[]> {
   const localeIndex = index[query.parameters.localeId];
   if (!localeIndex)
@@ -228,7 +247,7 @@ function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchRe
   }));
 }
 
-async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
+async function queryIndex(query: SearchRequest): Promise<FoodSearchResponse> {
   const localeIndex = index[query.parameters.localeId];
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
@@ -304,94 +323,92 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
 
 const cleanUpIndexBuilder = async () => databases.close();
 
-async function buildIndex() {
-  const locales = await FoodsLocale.findAll({
-    attributes: ['id'],
-    where: { foodIndexEnabled: true },
-  });
-  const enabledLocales = locales.map(({ id }) => id);
+async function initialiseIndex() {
+  const enabledLocales = await getEnabledLocales();
 
   logger.debug(`Enabled locales: ${JSON.stringify(enabledLocales)}`);
+  parentPort.postMessage({ type: 'initialising', locales: enabledLocales });
 
   // Ideally this needs to be done on parallel threads, not sure if worth it in node.js
-  for (const localeId of enabledLocales) {
-    logger.debug(`Indexing ${localeId}`);
-    index[localeId] = await buildIndexForLocale(localeId);
-  }
+  const results = await buildIndexesForLocales(enabledLocales);
+  parentPort.postMessage({ type: 'ready', results });
+}
 
-  parentPort.postMessage('ready');
+parentPort.on('message', async (msg: WorkerRequest) => {
+  switch (msg.type) {
+    case 'exit':
+      await cleanUpIndexBuilder();
+      logger.debug('Closing index builder');
+      process.exit(0);
+      return; // Linter doesn't know process.exit() terminates the branch
 
-  parentPort.on('message', async (msg: SearchQuery | IndexCommand) => {
-    if (msg.type === 'command') {
-      if (msg.exit) {
-        await cleanUpIndexBuilder();
-        logger.debug('Closing index builder');
-        process.exit(0);
-      }
+    case 'rebuild': {
+      try {
+        // Refreshed on every rebuild so that locales enabled or disabled since the last one are picked up.
+        const enabledLocales = await getEnabledLocales();
 
-      // rebuild index
-      if (msg.rebuild) {
-        try {
-          if (msg.locales?.length) {
-            const setLocales = new Set(msg.locales);
-            logger.debug(`Rebuilding index for ${msg.locales.length} locales`);
-            for (const localeId of setLocales)
-              index[localeId] = await buildIndexForLocale(localeId);
-          }
-          else {
-            logger.debug('Rebuilding All indexes');
-            for (const localeId of enabledLocales) {
-              logger.debug(`Rebuilding All Indexes including: ${localeId}`);
-              index[localeId] = await buildIndexForLocale(localeId);
-            }
-          }
-          parentPort.postMessage({
-            type: 'command',
-            buildId: msg.buildId,
-            success: true,
-            rebuild: false,
-          });
+        const { build, drop, ignored } = planRebuild(msg.locales, enabledLocales, Object.keys(index));
+
+        for (const localeId of drop) {
+          delete index[localeId];
+          logger.warn(`Discarded food index for locale "${localeId}" because food indexing is no longer enabled for it.`);
         }
-        catch (err) {
-          parentPort.postMessage({
-            type: 'command',
-            queryId: msg.buildId,
-            success: false,
-            error: err,
-            rebuild: false,
-          });
-        }
+
+        for (const localeId of ignored)
+          logger.warn(`Ignoring food index rebuild request for locale "${localeId}" because food indexing is not enabled for it.`);
+
+        logger.debug(`Rebuilding index for ${build.size} locales`);
+
+        const results = await buildIndexesForLocales(build);
+
+        parentPort.postMessage({
+          type: 'rebuild',
+          id: msg.id,
+          success: true,
+          results,
+          enabledLocales,
+        });
       }
+      catch (error) {
+        // buildIndexesForLocales reports per-locale failures in its results, so this only catches a failure
+        // to read the enabled locale list.
+        parentPort.postMessage({
+          type: 'rebuild',
+          id: msg.id,
+          success: false,
+          error: toError(error),
+        });
+      }
+      return;
     }
-    else if (msg.type === 'query') {
+
+    case 'search':
       try {
         const results = await queryIndex(msg);
 
         parentPort.postMessage({
-          type: 'query',
-          queryId: msg.queryId,
+          type: 'search',
+          id: msg.id,
           success: true,
           results,
         });
       }
-      catch (err) {
+      catch (error) {
         parentPort.postMessage({
-          type: 'query',
-          queryId: msg.queryId,
+          type: 'search',
+          id: msg.id,
           success: false,
-          error: err,
+          // A missing index means the locale is unknown or no longer enabled, which the API reports as 404.
+          errorType: error instanceof NotFoundError ? 'locale-not-indexed' : 'internal',
+          error: toError(error),
         });
       }
-    }
-    else {
-      logger.error(`Unknown message type: ${JSON.stringify(msg)}`);
-    }
-  });
-}
+      return;
 
-(async () => {
-  await databases.init();
-  await buildIndex();
-})().catch((err) => {
-  logger.error(err);
+    default:
+      logger.error(`Unknown worker request: ${JSON.stringify(msg)}`);
+  }
 });
+
+await databases.init();
+await initialiseIndex();
