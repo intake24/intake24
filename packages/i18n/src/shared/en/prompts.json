@@ -392,6 +392,7 @@
     "accessible": {
       "food": "food",
       "none": "None",
+      "total": "Enter how many {food} you had:",
       "whole": "Enter how many whole {food} you had:",
       "fraction": "Enter how many fractions of {food} you had (if any):",
       "currentSelection": "Current selection is {selection}"

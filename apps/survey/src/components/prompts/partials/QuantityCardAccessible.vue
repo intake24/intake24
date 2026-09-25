@@ -7,42 +7,52 @@
             {{ $t('prompts.linkedAmount.all') }}
           </v-btn>
         </div>
-        <v-card class="pa-4" variant="outlined">
-          <div v-if="whole" class="d-flex flex-column ga-2">
-            <label
-              :id="wholeInputLabelId"
-              class="mb-0 text-body-1"
-              :for="wholeInputId"
-            >
-              {{ $t('prompts.quantity.accessible.whole', { food: foodText }) }}
-            </label>
-            <v-number-input
-              :id="wholeInputId"
-              v-model="currentWhole"
-              :aria-labelledby="wholeInputLabelId"
-              :max="maxWhole"
-              :min="minWhole"
-              variant="outlined"
-            />
-          </div>
 
-          <div v-if="fraction" class="d-flex flex-column ga-2" :class="{ 'mt-4': whole }">
-            <label
-              :id="fractionInputLabelId"
-              class="mb-0 text-body-1"
-              :for="fractionInputId"
-            >
-              {{ $t('prompts.quantity.accessible.fraction', { food: foodText }) }}
-            </label>
-            <v-select
-              :id="fractionInputId"
-              v-model="currentFraction"
-              :aria-labelledby="fractionInputLabelId"
-              :items="fractionOptions"
-              variant="outlined"
+        <label
+          :id="wholeInputLabelId"
+          class="mb-2 text-body-1"
+          :for="wholeInputId"
+        >
+          {{ $t('prompts.quantity.accessible.total', { food: foodText }) }}
+        </label>
+
+        <v-number-input
+          :id="wholeInputId"
+          v-model="currentWhole"
+          :aria-labelledby="wholeInputLabelId"
+          class="quantity-field mx-auto"
+          control-variant="hidden"
+          hide-details="auto"
+          :max="maxWhole"
+          :min="0"
+          variant="outlined"
+          width="160"
+          @blur="setMin"
+        >
+          <template #prepend-inner>
+            <v-icon-btn
+              :disabled="minDisabled"
+              icon="$decrement"
+              :title="$t('prompts.quantity.less')"
+              @click="decrementFraction"
             />
-          </div>
-        </v-card>
+          </template>
+          <template #append-inner>
+            <span
+              v-if="fractionLabel"
+              aria-hidden="true"
+              class="fraction-symbol"
+            >
+              {{ fractionLabel }}
+            </span>
+            <v-icon-btn
+              :disabled="maxDisabled"
+              icon="$increment"
+              :title="$t('prompts.quantity.more')"
+              @click="incrementFraction"
+            />
+          </template>
+        </v-number-input>
 
         <p aria-atomic="true" aria-live="polite" class="sr-only" role="status">
           {{ $t('prompts.quantity.accessible.currentSelection', { selection: quantitySummary }) }}
@@ -112,22 +122,18 @@ const currentValue = defineModel('modelValue', { type: Number, default: 1 });
 
 const wholeInputId = useId();
 const wholeInputLabelId = `${wholeInputId}-label`;
-const fractionInputId = useId();
-const fractionInputLabelId = `${fractionInputId}-label`;
 
 const currentWhole = computed<number>({
   get: () => Math.floor(currentValue.value),
   set: (value) => {
-    currentValue.value = value + currentFraction.value;
+    currentValue.value = clamp(value + currentFraction.value);
   },
 });
 
-const currentFraction = computed<number>({
-  get: () => normalizeFraction(currentValue.value - Math.floor(currentValue.value)),
-  set: (value) => {
-    currentValue.value = currentWhole.value + value;
-  },
-});
+const currentFraction = computed(() => normalizeFraction(currentValue.value - Math.floor(currentValue.value)));
+
+const maxDisabled = computed(() => currentValue.value === props.max);
+const minDisabled = computed(() => currentValue.value === props.min);
 
 const fractionLabel = computed(() => {
   if (!currentFraction.value)
@@ -156,15 +162,6 @@ const foodText = computed(() => props.foodLabel.trim() || t('prompts.quantity.ac
 const minWhole = computed(() => Math.floor(props.min));
 const maxWhole = computed(() => Math.floor(props.max));
 
-const fractionOptions = computed(() => [
-  { title: '0', value: 0 },
-  { title: '¼', value: 0.25 },
-  { title: '⅓', value: 0.33 },
-  { title: '½', value: 0.5 },
-  { title: '⅔', value: 0.67 },
-  { title: '¾', value: 0.75 },
-]);
-
 const quantitySummary = computed(() => {
   const wholeValue = currentWhole.value;
   const fractionValue = currentFraction.value;
@@ -181,6 +178,23 @@ const quantitySummary = computed(() => {
 function setAll() {
   currentValue.value = props.max;
   updateConfirmed(true);
+};
+
+function clamp(value: number) {
+  return Math.min(props.max, Math.max(props.min, value));
+};
+
+function incrementFraction() {
+  currentValue.value = clamp(normalizeFraction(currentValue.value + 0.25));
+};
+
+function decrementFraction() {
+  currentValue.value = clamp(normalizeFraction(currentValue.value - 0.25));
+};
+
+function setMin() {
+  if (currentWhole.value < minWhole.value)
+    currentWhole.value = minWhole.value;
 };
 
 function normalizeFraction(value: number) {
@@ -209,5 +223,15 @@ watch(currentValue, () => {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+.quantity-field {
+  max-width: 220px;
+}
+
+.fraction-symbol {
+  font-size: 1.5rem;
+  margin-right: 4px;
+  user-select: none;
 }
 </style>
