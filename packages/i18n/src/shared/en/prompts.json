@@ -488,6 +488,9 @@
       },
       "less": "of the smallest portion",
       "more": "of the largest portion"
+    },
+    "accessible": {
+      "total": "I had {whole} and {fraction} of the selected portion"
     }
   },
   "cereal": {

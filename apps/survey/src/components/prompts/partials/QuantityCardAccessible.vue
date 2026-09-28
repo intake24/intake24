@@ -13,7 +13,7 @@
           class="mb-2 text-body-1"
           :for="wholeInputId"
         >
-          {{ $t('prompts.quantity.accessible.total', { food: foodText }) }}
+          {{ $t(labelKey, { food: foodText, whole: currentWhole, fraction: fractionLabel }) }}
         </label>
 
         <v-number-input
@@ -112,6 +112,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  labelKey: {
+    type: String,
+    default: 'prompts.quantity.accessible.total',
+  },
 });
 
 const emit = defineEmits(['update:modelValue', 'update:confirmed']);
@@ -126,6 +130,8 @@ const wholeInputLabelId = `${wholeInputId}-label`;
 const currentWhole = computed<number>({
   get: () => Math.floor(currentValue.value),
   set: (value) => {
+    if (value === null || isNaN(value))
+      return;
     currentValue.value = clamp(value + currentFraction.value);
   },
 });
@@ -196,6 +202,12 @@ function setMin() {
   if (currentWhole.value < minWhole.value)
     currentWhole.value = minWhole.value;
 };
+
+// function setMin() {
+//   if (currentValue.value < props.min || isNaN(currentValue.value)) {
+//     currentValue.value = props.min;
+//   }
+// }
 
 function normalizeFraction(value: number) {
   const normalized = Number(value.toFixed(2));

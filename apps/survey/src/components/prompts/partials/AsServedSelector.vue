@@ -16,10 +16,10 @@
         {{ label }}
       </v-chip>
     </div>
-    <as-served-weight-factor
+    <!-- <as-served-weight-factor
       v-bind="weightFactorProps"
       @update:model-value="updateWeightFactor"
-    />
+    /> -->
   </v-img>
   <v-container class="px-0">
     <v-row v-if="asServedData" class="ga-1">
@@ -91,6 +91,13 @@
         </v-card>
       </v-col>
     </v-row>
+    <quantity-card-accessible
+      v-model="portionQuantity"
+      :confirm="false"
+      label-key="prompts.asServed.accessible.total"
+      :max="maxPortionQuantity"
+      :min="0.25"
+    />
     <v-row>
       <v-col class="px-1" cols="12" sm="auto">
         <v-btn :block="$vuetify.display.mobile" color="primary" @click="confirm">
@@ -114,7 +121,8 @@ import { computed, ref } from 'vue';
 
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
-import AsServedWeightFactor from './AsServedWeightFactor.vue';
+// import AsServedWeightFactor from './AsServedWeightFactor.vue';
+import QuantityCardAccessible from './QuantityCardAccessible.vue';
 import { useFetchImageData } from './use-fetch-image-data';
 import { useLabels } from './use-labels';
 
@@ -257,6 +265,19 @@ const showMoreWeightFactor = computed(() => {
   return ((denominator + 1) / denominator) * lastImage.weight < props.maxWeight;
 });
 const weightFactor = computed(() => weightFactorProps.value.modelValue / weightFactorProps.value.denominator);
+const portionQuantity = computed<number>({
+  get: () => weightFactor.value,
+  set: value => updateWeightFactor(Math.round(value * denominator)),
+});
+const maxPortionQuantity = computed(() => {
+  if (objectIdx.value === undefined || !asServedData.value)
+    return 1;
+
+  const weight = asServedData.value.images[objectIdx.value].weight;
+  const max = props.maxWeight === undefined ? 5 : props.maxWeight / weight;
+
+  return Math.max(0.25, Math.floor(max * denominator) / denominator);
+});
 
 function initSelection() {
   if (!asServedData.value || objectIdx.value !== undefined)
