@@ -45268,7 +45268,9 @@
                               "LocaleFoodNutrientMapping",
                               "LocaleFoodRankingUpload",
                               "NutrientTableMappingImport",
+                              "NutrientTableMappingExport",
                               "NutrientTableDataImport",
+                              "NutrientTableDataExport",
                               "SurveyAuthUrlsExport",
                               "SurveyDataExport",
                               "SurveyNutrientsRecalculation",
@@ -45532,6 +45534,18 @@
                                 "properties": {
                                   "nutrientTableId": {
                                     "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
                                   },
                                   "file": {
                                     "type": "string",
@@ -45541,6 +45555,18 @@
                                 "required": [
                                   "nutrientTableId",
                                   "file"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId"
                                 ],
                                 "additionalProperties": false
                               },
@@ -46312,7 +46338,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -46576,6 +46604,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -46585,6 +46625,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -47370,7 +47422,9 @@
                       "LocaleFoodNutrientMapping",
                       "LocaleFoodRankingUpload",
                       "NutrientTableMappingImport",
+                      "NutrientTableMappingExport",
                       "NutrientTableDataImport",
+                      "NutrientTableDataExport",
                       "SurveyAuthUrlsExport",
                       "SurveyDataExport",
                       "SurveyNutrientsRecalculation",
@@ -47426,7 +47480,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -47690,6 +47746,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -47699,6 +47767,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -52090,7 +52170,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -52354,6 +52436,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -52363,6 +52457,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -55982,7 +56088,63 @@
                       "type": {
                         "type": "string",
                         "enum": [
+                          "NutrientTableDataExport"
+                        ]
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "nutrientTableId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "nutrientTableId"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
                           "NutrientTableMappingImport"
+                        ]
+                      },
+                      "params": {
+                        "type": "object",
+                        "properties": {
+                          "nutrientTableId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "nutrientTableId"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "params"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "NutrientTableMappingExport"
                         ]
                       },
                       "params": {
@@ -56046,7 +56208,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -56310,6 +56474,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -56319,6 +56495,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -135844,7 +136032,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -136108,6 +136298,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -136117,6 +136319,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -295119,7 +295333,9 @@
                               "LocaleFoodNutrientMapping",
                               "LocaleFoodRankingUpload",
                               "NutrientTableMappingImport",
+                              "NutrientTableMappingExport",
                               "NutrientTableDataImport",
+                              "NutrientTableDataExport",
                               "SurveyAuthUrlsExport",
                               "SurveyDataExport",
                               "SurveyNutrientsRecalculation",
@@ -295357,6 +295573,18 @@
                                 "properties": {
                                   "nutrientTableId": {
                                     "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
                                   },
                                   "file": {
                                     "type": "string",
@@ -295366,6 +295594,18 @@
                                 "required": [
                                   "nutrientTableId",
                                   "file"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId"
                                 ],
                                 "additionalProperties": false
                               },
@@ -296077,7 +296317,9 @@
                       "LocaleFoodNutrientMapping",
                       "LocaleFoodRankingUpload",
                       "NutrientTableMappingImport",
+                      "NutrientTableMappingExport",
                       "NutrientTableDataImport",
+                      "NutrientTableDataExport",
                       "SurveyAuthUrlsExport",
                       "SurveyDataExport",
                       "SurveyNutrientsRecalculation",
@@ -296154,7 +296396,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -296392,6 +296636,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -296401,6 +296657,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -297061,7 +297329,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -297299,6 +297569,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -297308,6 +297590,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -298022,7 +298316,9 @@
                       "LocaleFoodNutrientMapping",
                       "LocaleFoodRankingUpload",
                       "NutrientTableMappingImport",
+                      "NutrientTableMappingExport",
                       "NutrientTableDataImport",
+                      "NutrientTableDataExport",
                       "SurveyAuthUrlsExport",
                       "SurveyDataExport",
                       "SurveyNutrientsRecalculation",
@@ -298099,7 +298395,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -298337,6 +298635,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -298346,6 +298656,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -299056,7 +299378,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -299320,6 +299644,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -299329,6 +299665,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -300074,7 +300422,9 @@
                     "LocaleFoodNutrientMapping",
                     "LocaleFoodRankingUpload",
                     "NutrientTableMappingImport",
+                    "NutrientTableMappingExport",
                     "NutrientTableDataImport",
+                    "NutrientTableDataExport",
                     "SurveyAuthUrlsExport",
                     "SurveyDataExport",
                     "SurveyNutrientsRecalculation",
@@ -300115,7 +300465,9 @@
                       "LocaleFoodNutrientMapping",
                       "LocaleFoodRankingUpload",
                       "NutrientTableMappingImport",
+                      "NutrientTableMappingExport",
                       "NutrientTableDataImport",
+                      "NutrientTableDataExport",
                       "SurveyAuthUrlsExport",
                       "SurveyDataExport",
                       "SurveyNutrientsRecalculation",
@@ -300205,7 +300557,9 @@
                               "LocaleFoodNutrientMapping",
                               "LocaleFoodRankingUpload",
                               "NutrientTableMappingImport",
+                              "NutrientTableMappingExport",
                               "NutrientTableDataImport",
+                              "NutrientTableDataExport",
                               "SurveyAuthUrlsExport",
                               "SurveyDataExport",
                               "SurveyNutrientsRecalculation",
@@ -300469,6 +300823,18 @@
                                 "properties": {
                                   "nutrientTableId": {
                                     "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
                                   },
                                   "file": {
                                     "type": "string",
@@ -300478,6 +300844,18 @@
                                 "required": [
                                   "nutrientTableId",
                                   "file"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "nutrientTableId": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "nutrientTableId"
                                 ],
                                 "additionalProperties": false
                               },
@@ -301507,7 +301885,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -301771,6 +302151,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -301780,6 +302172,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
@@ -302508,7 +302912,9 @@
                         "LocaleFoodNutrientMapping",
                         "LocaleFoodRankingUpload",
                         "NutrientTableMappingImport",
+                        "NutrientTableMappingExport",
                         "NutrientTableDataImport",
+                        "NutrientTableDataExport",
                         "SurveyAuthUrlsExport",
                         "SurveyDataExport",
                         "SurveyNutrientsRecalculation",
@@ -302772,6 +303178,18 @@
                           "properties": {
                             "nutrientTableId": {
                               "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
                             },
                             "file": {
                               "type": "string",
@@ -302781,6 +303199,18 @@
                           "required": [
                             "nutrientTableId",
                             "file"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "nutrientTableId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "nutrientTableId"
                           ],
                           "additionalProperties": false
                         },
