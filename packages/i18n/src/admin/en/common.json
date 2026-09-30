@@ -241,6 +241,22 @@
     "required": "{item} must be filled in"
   },
 
+  "audit": {
+    "_": "History",
+    "title": "Record history",
+    "empty": "No history found for this record.",
+    "table": {
+      "id": "ID",
+      "recordId": "Record ID",
+      "operation": "Operation",
+      "tableName": "Table name",
+      "oldValue": "Old value",
+      "newValue": "New value",
+      "changedAt": "Changed at",
+      "user": "User"
+    }
+  },
+
   "file": {
     "csv": "CSV file to upload"
   }

@@ -6,7 +6,7 @@
 import type { ColumnType } from 'kysely';
 
 import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/surveys';
-import type { LocaleTranslation, LocaleTranslations, RequiredLocaleTranslation, UseInRecipeType } from '@intake24/common/types';
+import type { AuditContextType, AuditJsonValue, AuditOperation, LocaleTranslation, LocaleTranslations, RequiredLocaleTranslation, UseInRecipeType } from '@intake24/common/types';
 
 export type ArrayType<T> = ArrayTypeImpl<T> extends (infer U)[]
   ? U[]
@@ -76,6 +76,19 @@ export interface AttributeDefaults {
   reasonableAmount: number | null;
   sameAsBeforeOption: boolean | null;
   useInRecipes: number | null;
+}
+
+export interface AuditLog {
+  changedAt: Generated<Timestamp>;
+  ctxId: string | null;
+  ctxType: AuditContextType | null;
+  ctxUserId: Int8 | null;
+  id: Generated<string>;
+  newValue: AuditJsonValue | null;
+  oldValue: AuditJsonValue | null;
+  operation: AuditOperation;
+  recordId: string | null;
+  tableName: string;
 }
 
 export interface Brands {
@@ -440,6 +453,7 @@ export interface DB {
   asServedSets: AsServedSets;
   associatedFoods: AssociatedFoods;
   attributeDefaults: AttributeDefaults;
+  auditLog: AuditLog;
   brands: Brands;
   categories: Categories;
   categoriesCategories: CategoriesCategories;
