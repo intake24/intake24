@@ -20,6 +20,8 @@ import {
 
 import BaseJob from '../job';
 
+const BATCH_SIZE = 200;
+
 export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataExport'> {
   readonly name = 'NutrientTableDataExport';
 
@@ -86,122 +88,94 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
     for (const mapping of csvMappingNutrients)
       header[mapping.columnOffset] = mapping.nutrientType?.description ?? '';
 
-    const { total } = await this.kyselyDb.foods
-      .selectFrom('nutrientTableRecords')
-      .select(({ fn }) => [fn.count<number>('id').as('total')])
-      .where('nutrientTableId', '=', nutrientTableId)
-      .executeTakeFirstOrThrow();
-    this.initProgress(Number(total));
-
     const fields = new Map(csvMappingFields.map(mapping => [mapping.fieldName, mapping.columnOffset]));
     const nutrients = new Map(csvMappingNutrients.map(mapping => [mapping.nutrientTypeId, mapping.columnOffset]));
-    const cursor = this.kyselyDb.foods
-      .selectFrom('nutrientTableRecordNutrients')
-      .innerJoin('nutrientTableRecords', 'nutrientTableRecords.id', 'nutrientTableRecordNutrients.nutrientTableRecordId')
-      .select([
-        'nutrientTableRecords.id',
-        'nutrientTableRecords.nutrientTableRecordId',
-        'nutrientTableRecords.name',
-        'nutrientTableRecords.localName',
-        sql.lit<string | null>(null).as('fieldName'),
-        sql.lit<string | null>(null).as('fieldValue'),
-        'nutrientTableRecordNutrients.nutrientTypeId',
-        sql<number | null>`nutrient_table_record_nutrients.units_per_100g`.as('unitsPer100g'),
-      ])
-      .where('nutrientTableRecords.nutrientTableId', '=', nutrientTableId)
-      .unionAll(qb =>
-        qb.selectFrom('nutrientTableRecords')
-          .select([
-            'nutrientTableRecords.id',
-            'nutrientTableRecords.nutrientTableRecordId',
-            'nutrientTableRecords.name',
-            'nutrientTableRecords.localName',
-            sql.lit<string | null>(null).as('fieldName'),
-            sql.lit<string | null>(null).as('fieldValue'),
-            sql.lit<string | null>(null).as('nutrientTypeId'),
-            sql.lit<number | null>(null).as('unitsPer100g'),
-          ])
-          .where('nutrientTableRecords.nutrientTableId', '=', nutrientTableId),
-      )
-      .unionAll(qb =>
-        qb.selectFrom('nutrientTableRecordFields')
-          .innerJoin('nutrientTableRecords', 'nutrientTableRecords.id', 'nutrientTableRecordFields.nutrientTableRecordId')
-          .select([
-            'nutrientTableRecords.id',
-            'nutrientTableRecords.nutrientTableRecordId',
-            'nutrientTableRecords.name',
-            'nutrientTableRecords.localName',
-            'nutrientTableRecordFields.name as fieldName',
-            'nutrientTableRecordFields.value as fieldValue',
-            sql.lit<string | null>(null).as('nutrientTypeId'),
-            sql.lit<number | null>(null).as('unitsPer100g'),
-          ])
-          .where('nutrientTableRecords.nutrientTableId', '=', nutrientTableId),
-      )
-      .orderBy('nutrientTableRecordId')
-      .orderBy('id')
-      .stream();
     let recordCount = 0;
-    const rows = (async function* () {
-      if (csvMapping.rowOffset)
-        yield header;
-      for (let index = 1; index < csvMapping.rowOffset; index++)
-        yield [];
-
-      let currentId: string | null = null;
-      let row: string[] | null = null;
-
-      for await (const record of cursor) {
-        if (currentId !== null && currentId !== record.id) {
-          if (row)
-            yield row;
-          row = null;
-        }
-
-        if (!row) {
-          currentId = record.id;
-          recordCount++;
-          row = Array.from<string>({ length: maxOffset + 1 }).fill('');
-          row[csvMapping.idColumnOffset] = record.nutrientTableRecordId;
-          row[csvMapping.descriptionColumnOffset] = record.name;
-          if (csvMapping.localDescriptionColumnOffset !== null)
-            row[csvMapping.localDescriptionColumnOffset] = record.localName ?? '';
-        }
-
-        if (record.fieldName) {
-          const columnOffset = fields.get(record.fieldName);
-          if (columnOffset !== undefined)
-            row[columnOffset] = record.fieldValue ?? '';
-        }
-
-        if (record.nutrientTypeId !== null) {
-          const columnOffset = nutrients.get(record.nutrientTypeId.toString());
-          if (columnOffset !== undefined)
-            row[columnOffset] = String(record.unitsPer100g ?? 0);
-        }
-      }
-
-      if (row)
-        yield row;
-    })();
-
     const timestamp = format(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-${this.name}-${nutrientTableId}-${timestamp}.csv`;
     const output = createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), { encoding: 'utf-8', flags: 'w+' });
-    const progressInterval = setInterval(async () => {
-      await this.setProgress(recordCount);
-    }, 2000);
-    try {
+    const setProgress = this.setProgress.bind(this);
+
+    await this.kyselyDb.foods.transaction().setIsolationLevel('repeatable read').execute(async (transaction) => {
+      const { total } = await transaction
+        .selectFrom('nutrientTableRecords')
+        .select(({ fn }) => [fn.count<number>('id').as('total')])
+        .where('nutrientTableId', '=', nutrientTableId)
+        .executeTakeFirstOrThrow();
+      this.initProgress(Number(total));
+
+      const rows = async function* () {
+        if (csvMapping.rowOffset)
+          yield header;
+        for (let index = 1; index < csvMapping.rowOffset; index++)
+          yield [];
+
+        let lastRecordId: string | null = null;
+        while (true) {
+          let recordsQuery = transaction
+            .selectFrom('nutrientTableRecords')
+            .select(['id', 'nutrientTableRecordId', 'name', 'localName'])
+            .where('nutrientTableId', '=', nutrientTableId);
+          if (lastRecordId !== null)
+            recordsQuery = recordsQuery.where('nutrientTableRecordId', '>', lastRecordId);
+          const records = await recordsQuery
+            .orderBy('nutrientTableRecordId')
+            .limit(BATCH_SIZE)
+            .execute();
+          if (!records.length)
+            return;
+
+          const recordIds = records.map(({ id }) => id);
+          const recordFields = await transaction
+            .selectFrom('nutrientTableRecordFields')
+            .select(['nutrientTableRecordId', 'name', 'value'])
+            .where('nutrientTableRecordId', 'in', recordIds)
+            .execute();
+          const recordNutrients = await transaction
+            .selectFrom('nutrientTableRecordNutrients')
+            .select([
+              'nutrientTableRecordId',
+              'nutrientTypeId',
+              sql<number>`nutrient_table_record_nutrients.units_per_100g`.as('unitsPer100g'),
+            ])
+            .where('nutrientTableRecordId', 'in', recordIds)
+            .execute();
+
+          const rowsByRecordId = new Map(records.map((record) => {
+            const row = Array.from<string>({ length: maxOffset + 1 }).fill('');
+            row[csvMapping.idColumnOffset] = record.nutrientTableRecordId;
+            row[csvMapping.descriptionColumnOffset] = record.name;
+            if (csvMapping.localDescriptionColumnOffset !== null)
+              row[csvMapping.localDescriptionColumnOffset] = record.localName ?? '';
+            return [record.id, row];
+          }));
+          for (const recordField of recordFields) {
+            const columnOffset = fields.get(recordField.name);
+            if (columnOffset !== undefined)
+              rowsByRecordId.get(recordField.nutrientTableRecordId)![columnOffset] = recordField.value;
+          }
+          for (const recordNutrient of recordNutrients) {
+            if (recordNutrient.nutrientTypeId !== null) {
+              const columnOffset = nutrients.get(recordNutrient.nutrientTypeId.toString());
+              if (columnOffset !== undefined)
+                rowsByRecordId.get(recordNutrient.nutrientTableRecordId)![columnOffset] = String(recordNutrient.unitsPer100g);
+            }
+          }
+
+          for (const record of records)
+            yield rowsByRecordId.get(record.id)!;
+
+          recordCount += records.length;
+          await setProgress(recordCount);
+          lastRecordId = records.at(-1)!.nutrientTableRecordId;
+        }
+      };
       await pipeline(
-        Readable.from(rows),
+        Readable.from(rows()),
         formatCsv({ headers: false }),
         output,
       );
-      await this.setProgress(recordCount);
-    }
-    finally {
-      clearInterval(progressInterval);
-    }
+    });
     await this.dbJob.update({
       downloadUrl: filename,
       downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),

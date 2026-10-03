@@ -47,11 +47,7 @@ export default (type: MediaModel) => () => {
   it('missing authentication', async () => {
     const { status } = await request(suite.app)
       .post(url)
-      .set('Accept', 'application/json')
-      .field('name', output.name)
-      .field('disk', output.disk)
-      .field('collection', output.collection)
-      .attach('file', createReadStream(filePath), output.filename);
+      .set('Accept', 'application/json');
 
     expect(status).toBe(401);
   });
