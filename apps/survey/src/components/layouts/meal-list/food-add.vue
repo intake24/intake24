@@ -35,7 +35,7 @@
               :rules="[inputTooLog(64)]"
             >
               <template #item="{ item, props }">
-                <v-list-item v-bind="props" :title="item.name.en">
+                <v-list-item v-bind="props" :title="translate(item.name)">
                   <template #append>
                     <v-chip
                       v-if="item.time"
@@ -49,7 +49,7 @@
               </template>
               <template #selection="{ item }">
                 <v-chip class="font-weight-medium" color="primary">
-                  {{ typeof item === 'string' ? item : item.name.en }}
+                  {{ typeof item === 'string' ? item : translate(item.name) }}
                 </v-chip>
               </template>
             </v-combobox>
@@ -163,7 +163,7 @@ const props = defineProps({
 
 const emit = defineEmits(['action']);
 
-const { i18n: { locale } } = useI18n();
+const { i18n: { locale }, translate } = useI18n();
 const survey = useSurvey();
 const { form, inputTooLog } = useForm();
 
