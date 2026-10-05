@@ -243,7 +243,7 @@ function checkMealStandardConditions(surveyStore: SurveyStore, mealState: MealSt
 
   switch (prompt.component) {
     case 'edit-meal-prompt':
-      return mealState.foods.length === 0;
+      return mealState.foods.length === 0 || !mealFreeEntryComplete(mealState);
     case 'info-prompt':
       return !mealState.flags.includes(`${prompt.id}-acknowledged`);
     case 'meal-duration-prompt':
