@@ -1,10 +1,10 @@
 import type { Insertable, Kysely } from 'kysely';
-import type { FindOptions, Transaction } from 'sequelize';
+import type { FindOptions } from 'sequelize';
 
 import type { CacheKey } from '../core/redis/cache';
 import type { IoC } from '@intake24/api/ioc';
 import type { BulkCategoryInput, CategoryCopyInput, CategoryInput } from '@intake24/common/types/http/admin';
-import type { CategoryAttributes, FoodsDB, OnConflictOption, PaginateQuery } from '@intake24/db';
+import type { CategoryAttributes, CategoryPortionSizeMethod, FoodsDB, OnConflictOption, PaginateQuery } from '@intake24/db';
 
 import { randomUUID } from 'node:crypto';
 
@@ -14,9 +14,9 @@ import { Op } from 'sequelize';
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
 import { toSimpleName } from '@intake24/api/util';
-import { Category, CategoryAttribute, CategoryPortionSizeMethod } from '@intake24/db';
+import { Category } from '@intake24/db';
 
-function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' | 'kyselyDb'>) {
+function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
   function getCategoryCacheKeys(categoryId: string): CacheKey[] {
     return [
       `category-parent-cache:${categoryId}`,
@@ -141,22 +141,21 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     categoryId: string,
     methods: CategoryPortionSizeMethod[],
     inputs: CategoryInput['portionSizeMethods'],
-    { transaction }: { transaction: Transaction },
+    { transaction }: { transaction: Kysely<FoodsDB> },
   ): Promise<void> => {
     if (!inputs)
       return;
 
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
 
-    await CategoryPortionSizeMethod.destroy({
-      where: { categoryId, id: { [Op.notIn]: ids } },
-      transaction,
-    });
+    await transaction
+      .deleteFrom('categoryPortionSizeMethods')
+      .where('categoryId', '=', categoryId)
+      .$if(!!ids.length, qb => qb.where('id', 'not in', ids))
+      .execute();
 
     if (!inputs.length)
       return;
-
-    const newMethods: CategoryPortionSizeMethod[] = [];
 
     for (const input of inputs) {
       const { id, ...rest } = input;
@@ -164,35 +163,23 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
       if (id) {
         const match = methods.find(method => method.id === id);
         if (match) {
-          await match.update(rest, { transaction });
+          await transaction.updateTable('categoryPortionSizeMethods').set(rest).where('id', '=', id).execute();
           continue;
         }
       }
 
-      const newMethod = await CategoryPortionSizeMethod.create(
-        { ...rest, categoryId },
-        { transaction },
-      );
-      newMethods.push(newMethod);
+      await transaction.insertInto('categoryPortionSizeMethods').values({ ...rest, categoryId }).execute();
     }
   };
 
   const createCategory = async (localeId: string, input: CategoryInput) => {
-    const category = await db.foods.transaction(async (transaction) => {
-      const category = await Category.create(
-        {
-          code: input.code,
-          localeId,
-          englishName: input.englishName,
-          name: input.name,
-          simpleName: toSimpleName(input.name)!,
-          hidden: input.hidden,
-          tags: input.tags,
-          icon: input.icon,
-          version: randomUUID(),
-        },
-        { transaction },
-      );
+    const category = await kyselyDb.foods.contextTransaction(async (transaction) => {
+      const category = await transaction.insertInto('categories').values({
+        ...pick(input, ['code', 'englishName', 'name', 'hidden', 'tags', 'icon']),
+        localeId,
+        simpleName: toSimpleName(input.name)!,
+        version: randomUUID(),
+      }).returningAll().executeTakeFirstOrThrow();
 
       const promises: Promise<any>[] = [
         cache.setAdd('locales-index', localeId),
@@ -201,13 +188,21 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
 
       if (input.parentCategories?.length) {
         const categories = input.parentCategories.map(({ id }) => id);
-        promises.push(category.$add('parentCategories', categories, { transaction }));
+        promises.push(
+          transaction.insertInto('categoriesCategories')
+            .values(categories.map(categoryId => ({ categoryId, subCategoryId: category.id })))
+            .execute(),
+        );
       }
 
       if (input.attributes) {
         const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
         if (Object.values(attributesInput).some(item => item !== null)) {
-          promises.push(CategoryAttribute.create({ categoryId: category.id, ...attributesInput }, { transaction }));
+          promises.push(transaction
+            .insertInto('categoryAttributes')
+            .values({ categoryId: category.id, ...attributesInput })
+            .execute(),
+          );
         }
       }
 
@@ -228,34 +223,49 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     if (!portionSizeMethods)
       throw new NotFoundError();
 
-    await db.foods.transaction(async (transaction) => {
+    await kyselyDb.foods.contextTransaction(async (transaction) => {
       const promises: Promise<any>[] = [
         cache.forget(getCategoryCacheKeys(categoryId)),
         cache.setAdd('locales-index', localeId),
-        category.update({
+        transaction.updateTable('categories').set({
           ...pick(input, ['code', 'englishName', 'name', 'simpleName', 'hidden', 'tags', 'icon']),
           simpleName: toSimpleName(input.name)!,
           version: randomUUID(),
-        }, { transaction }),
+        }).where('id', '=', categoryId).execute(),
         updatePortionSizeMethods(categoryId, portionSizeMethods, input.portionSizeMethods, { transaction }),
       ];
 
       if (input.parentCategories) {
+        const currentCategories = category.parentCategories?.map(({ id }) => id) ?? [];
         const categories = (input.parentCategories).map(({ id }) => id);
-        promises.push(category.$set('parentCategories', categories, { transaction }));
+        const inserts = categories.filter(id => !currentCategories.includes(id));
+        promises.push(
+          transaction.deleteFrom('categoriesCategories')
+            .where('subCategoryId', '=', categoryId)
+            .$if(!!categories.length, qb => qb.where('categoryId', 'not in', categories))
+            .execute(),
+        );
+
+        if (inserts.length) {
+          promises.push(
+            transaction.insertInto('categoriesCategories')
+              .values(inserts.map(parentId => ({ categoryId: parentId, subCategoryId: categoryId })))
+              .execute(),
+          );
+        }
       }
 
       if (input.attributes) {
         const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
         if (Object.values(attributesInput).every(item => item === null)) {
           if (attributes)
-            promises.push(attributes.destroy({ transaction }));
+            promises.push(transaction.deleteFrom('categoryAttributes').where('categoryId', '=', categoryId).execute());
         }
         else {
           promises.push(
             attributes
-              ? attributes.update(attributesInput, { transaction })
-              : CategoryAttribute.create({ categoryId, ...attributesInput }, { transaction }),
+              ? transaction.updateTable('categoryAttributes').set(attributesInput).where('categoryId', '=', categoryId).execute()
+              : transaction.insertInto('categoryAttributes').values({ categoryId, ...attributesInput }).execute(),
           );
         }
       }
@@ -271,16 +281,14 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
     if (!sourceCategory)
       throw new NotFoundError();
 
-    const category = await db.foods.transaction(async (transaction) => {
-      const category = await Category.create(
-        {
-          ...pick(sourceCategory, ['code', 'localeId', 'englishName', 'name', 'simpleName', 'hidden', 'tags', 'icon']),
-          ...input,
-          simpleName: toSimpleName(input.name)!,
-          version: randomUUID(),
-        },
-        { transaction },
-      );
+    const category = await kyselyDb.foods.contextTransaction(async (transaction) => {
+      const category = await transaction.insertInto('categories').values({
+        ...pick(sourceCategory, ['hidden', 'tags', 'icon']),
+        ...input,
+        localeId: sourceCategory.localeId,
+        simpleName: toSimpleName(input.name)!,
+        version: randomUUID(),
+      }).returningAll().executeTakeFirstOrThrow();
 
       const promises: Promise<any>[] = [
         cache.setAdd('locales-index', category.localeId),
@@ -288,39 +296,37 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
 
       if (sourceCategory?.attributes) {
         promises.push(
-          CategoryAttribute.create(
-            {
-              ...pick(sourceCategory.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
-              categoryId: category.id,
-            },
-            { transaction },
-          ),
+          transaction.insertInto('categoryAttributes').values({
+            ...pick(sourceCategory.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
+            categoryId: category.id,
+          }).execute(),
         );
       }
 
       if (sourceCategory?.parentCategories?.length) {
         const categories = sourceCategory.parentCategories.map(({ id }) => id);
-        promises.push(category.$set('parentCategories', categories, { transaction }));
+        promises.push(
+          transaction.insertInto('categoriesCategories')
+            .values(categories.map(parentId => ({ categoryId: parentId, subCategoryId: category.id })))
+            .execute(),
+        );
       }
 
       if (sourceCategory.portionSizeMethods?.length) {
         promises.push(
-          ...sourceCategory.portionSizeMethods.map(psm =>
-            CategoryPortionSizeMethod.create(
-              {
-                ...pick(psm, [
-                  'method',
-                  'description',
-                  'pathways',
-                  'conversionFactor',
-                  'orderBy',
-                  'parameters',
-                ]),
-                categoryId: category.id,
-              },
-              { transaction },
-            ),
-          ),
+          transaction.insertInto('categoryPortionSizeMethods').values(
+            sourceCategory.portionSizeMethods.map(psm => ({
+              ...pick(psm, [
+                'method',
+                'description',
+                'pathways',
+                'conversionFactor',
+                'orderBy',
+                'parameters',
+              ]),
+              categoryId: category.id,
+            })),
+          ).execute(),
         );
       }
 
@@ -333,12 +339,19 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
   };
 
   const deleteCategory = async (localeId: string, categoryId: string) => {
-    const category = await Category.findOne({ attributes: ['id', 'code'], where: { id: categoryId, localeId } });
+    const category = await kyselyDb.foods
+      .selectFrom('categories')
+      .select(['id', 'code'])
+      .where('id', '=', categoryId)
+      .where('localeId', '=', localeId)
+      .executeTakeFirst();
     if (!category)
       throw new NotFoundError();
 
     await Promise.all([
-      category.destroy(),
+      kyselyDb.foods.contextTransaction(async (transaction) => {
+        await transaction.deleteFrom('categories').where('id', '=', categoryId).execute();
+      }),
       cache.forget(getCategoryCacheKeys(categoryId)),
       cache.setAdd('locales-index', localeId),
     ]);
@@ -578,7 +591,7 @@ function adminCategoryService({ cache, db, kyselyDb }: Pick<IoC, 'cache' | 'db' 
       await impl(transaction);
     }
     else {
-      await kyselyDb.foods.transaction().execute(impl);
+      await kyselyDb.foods.contextTransaction(impl);
     }
   };
 

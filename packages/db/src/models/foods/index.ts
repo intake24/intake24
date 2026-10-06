@@ -2,6 +2,8 @@ import AsServedImage from './as-served-image';
 import AsServedSet from './as-served-set';
 import AssociatedFood from './associated-foods';
 import AttributeDefaults from './attribute-defaults';
+import FoodsAuditLog from './audit-log';
+import FoodsAuditTable from './audit-table';
 import Brand from './brand';
 import Category from './category';
 import CategoryAttribute from './category-attributes';
@@ -50,6 +52,10 @@ export { default as AssociatedFood } from './associated-foods';
 export * from './associated-foods';
 export { default as AttributeDefaults } from './attribute-defaults';
 export * from './attribute-defaults';
+export { default as FoodsAuditLog } from './audit-log';
+export * from './audit-log';
+export { default as FoodsAuditTable } from './audit-table';
+export * from './audit-table';
 export { default as Brand } from './brand';
 export * from './brand';
 export { default as Category } from './category';
@@ -154,7 +160,6 @@ export const foods = {
   GuideImageObject,
   ImageMap,
   ImageMapObject,
-  FoodsLocale,
   NutrientTable,
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
@@ -162,9 +167,7 @@ export const foods = {
   NutrientTableRecord,
   NutrientTableRecordField,
   NutrientTableRecordNutrient,
-  FoodsNutrientType,
   NutrientTypeInKcal,
-  FoodsNutrientUnit,
   PhysicalActivityLevel,
   ProcessedImage,
   SourceImage,
@@ -173,4 +176,10 @@ export const foods = {
   SplitWord,
   StandardUnit,
   SynonymSet,
+  // Foods & System common
+  FoodsAuditLog,
+  FoodsAuditTable,
+  FoodsLocale,
+  FoodsNutrientType,
+  FoodsNutrientUnit,
 };

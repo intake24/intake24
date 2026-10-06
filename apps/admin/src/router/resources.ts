@@ -223,6 +223,14 @@ export const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes],
   },
+  {
+    group: 'system',
+    name: 'audit',
+    icon: 'fas fa-timeline',
+    api: 'admin/audit/tables',
+    generateRoutes: false,
+    routes: ['browse'],
+  },
   // ACL
   {
     group: 'acl',

@@ -1,5 +1,6 @@
 import type { Dictionary } from '@intake24/common/types';
 
+import audit from './audit';
 import authentication from './authentication';
 import dashboard from './dashboard.vue';
 import faqs from './faqs';
@@ -26,6 +27,7 @@ import user from './user';
 import users from './users';
 
 const views: Dictionary = {
+  audit,
   authentication,
   dashboard,
   faqs,

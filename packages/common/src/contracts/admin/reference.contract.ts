@@ -2,7 +2,7 @@ import { initContract } from '@ts-rest/core';
 import validator from 'validator';
 import { z } from 'zod';
 
-import { bigIntString } from '@intake24/common/types';
+import { bigIntString, databaseTypes } from '@intake24/common/types';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   asServedSetListEntry,
@@ -36,6 +36,15 @@ const bigIntQueryWithCode = bigIntQuery.extend({
 });
 
 export const reference = initContract().router({
+  audit: {
+    method: 'GET',
+    path: '/admin/references/audit',
+    responses: {
+      200: z.record(z.enum(databaseTypes), z.string().array()),
+    },
+    summary: 'Audit tables',
+    description: 'Audit tables',
+  },
   asServedSets: {
     method: 'GET',
     path: '/admin/references/as-served-sets',
