@@ -291,7 +291,7 @@ function authenticationService({
     const { email, password } = credentials;
 
     const user = await User.findOne({
-      where: { email: { [Op.iLike]: email } },
+      where: { email },
       include: [{ association: 'password', required: true }],
     });
 
@@ -315,7 +315,7 @@ function authenticationService({
 
     const [user, survey] = await Promise.all([
       User.findOne({
-        where: { email: { [Op.iLike]: email } },
+        where: { email },
         include: [
           { association: 'password', required: true },
           {

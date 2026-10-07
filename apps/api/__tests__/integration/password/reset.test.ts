@@ -20,7 +20,7 @@ export default () => {
 
   beforeAll(async () => {
     const user = await ioc.cradle.adminUserService.create({
-      email: 'testUserReset@example.com',
+      email: 'test-user-reset@example.com',
       password: 'testUserResetPassword',
       permissions: [],
       roles: [],

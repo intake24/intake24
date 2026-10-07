@@ -209,7 +209,7 @@ export async function initDatabase(): Promise<MockData> {
   await adminRole.$set('permissions', permissions);
 
   const admin = await ioc.cradle.adminUserService.create({
-    email: 'testAdmin@example.com',
+    email: 'test-admin@example.com',
     password: 'testAdminPassword',
     verifiedAt: new Date(),
     permissions: [],
@@ -225,7 +225,7 @@ export async function initDatabase(): Promise<MockData> {
 
   const permission = await ioc.cradle.adminSurveyService.getSurveyRespondentPermission(survey.slug);
   const user = await ioc.cradle.adminUserService.create({
-    email: 'testUser@example.com',
+    email: 'test-user@example.com',
     password: 'testUserPassword',
     verifiedAt: new Date(),
     permissions: [permission.id],

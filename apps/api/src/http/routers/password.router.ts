@@ -45,7 +45,7 @@ export function password() {
       const passwordReset = await UserPasswordReset.findOne({
         attributes: ['id', 'userId'],
         where: { token, createdAt: { [Op.gt]: expiredAt } },
-        include: [{ association: 'user', where: { email: { [Op.iLike]: email } } }],
+        include: [{ association: 'user', where: { email } }],
       });
 
       if (!passwordReset) {

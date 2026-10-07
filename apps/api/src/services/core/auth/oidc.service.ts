@@ -3,7 +3,6 @@ import type { Tokens } from './jwt.service';
 import type { IoC } from '@intake24/api/ioc';
 
 import * as oidc from 'openid-client';
-import { Op } from 'sequelize';
 
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { btoa } from '@intake24/api/util';
@@ -100,7 +99,7 @@ function oidcService({
 
       const { email, email_verified, name } = claims;
 
-      let user = await User.findOne({ attributes: ['id', 'verifiedAt'], where: { email: { [Op.iLike]: email.toString() } } });
+      let user = await User.findOne({ attributes: ['id', 'verifiedAt'], where: { email: email.toString() } });
       if (!user && aclConfig.signup.enabled) {
         user = await adminSignupService.signUp(
           {

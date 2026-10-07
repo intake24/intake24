@@ -4,7 +4,6 @@ import type { IoC } from '@intake24/api/ioc';
 
 import ms from 'ms';
 import nunjucks from 'nunjucks';
-import { Op } from 'sequelize';
 
 import { getFrontEndUrl, getUAInfo } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
@@ -46,31 +45,20 @@ export default class UserPasswordResetNotification extends BaseJob<'UserPassword
 
     this.logger.debug('Job started.');
 
-    const { email } = this.params;
-
-    const user = await this.getUser();
-    if (!user) {
-      this.logger.warn(`User with email ${email} not found in database.`);
-      return;
-    }
-
-    await this.sendEmail(user);
+    await this.sendEmail();
 
     this.logger.debug('Job finished.');
   }
 
-  private async getUser(): Promise<User | null> {
-    const { email } = this.params;
+  private async sendEmail() {
+    const user = await User.findOne({ attributes: ['id', 'name', 'email'], where: { email: this.params.email } });
+    if (!user?.email) {
+      this.logger.warn(`User with email ${this.params.email} not found in database.`);
+      return;
+    }
 
-    return User.findOne({ attributes: ['id', 'name'], where: { email: { [Op.iLike]: email } } });
-  }
-
-  private async sendEmail(user: User) {
-    const { email, userAgent } = this.params;
-    const { id: userId, name } = user;
-
-    const uaInfo = getUAInfo(userAgent);
-
+    const { id: userId, name, email } = user;
+    const uaInfo = getUAInfo(this.params.userAgent);
     const token = randomString(128);
     const { base, admin } = this.appConfig.urls;
     const domain = getFrontEndUrl(base, admin);

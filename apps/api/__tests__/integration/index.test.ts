@@ -26,11 +26,11 @@ describe('api', () => {
       request(suite.app)
         .post('/api/admin/auth/login')
         .set('Accept', 'application/json')
-        .send({ email: 'testAdmin@example.com', password: 'testAdminPassword' }),
+        .send({ email: 'test-admin@example.com', password: 'testAdminPassword' }),
       request(suite.app)
         .post('/api/admin/auth/login')
         .set('Accept', 'application/json')
-        .send({ email: 'testUser@example.com', password: 'testUserPassword' }),
+        .send({ email: 'test-user@example.com', password: 'testUserPassword' }),
       request(suite.app).post('/api/auth/login/alias').set('Accept', 'application/json').send({
         survey: 'test-survey',
         username: 'testRespondent',

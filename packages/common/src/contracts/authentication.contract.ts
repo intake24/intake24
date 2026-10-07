@@ -13,7 +13,7 @@ export const authentication = contract.router({
       'user-agent': z.string().optional(),
     },
     body: z.object({
-      email: z.string().toLowerCase(),
+      email: z.email().toLowerCase(),
       password: z.string(),
       survey: z.string(),
       captcha,

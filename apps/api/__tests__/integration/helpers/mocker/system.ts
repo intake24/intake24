@@ -63,7 +63,7 @@ function role(): RoleRequest {
 
 function user(): UserRequest {
   const name = faker.person.firstName();
-  const email = faker.internet.email();
+  const email = faker.internet.email().toLowerCase();
   const password = 'sUpErStRoNgPaSwOrD-123467890';
   const passwordConfirm = password;
   const phone = faker.phone.number();

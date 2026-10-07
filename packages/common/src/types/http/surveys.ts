@@ -41,7 +41,7 @@ export const publicSurveyEntry = z.object({
   name: z.string(),
   localeId: z.string(),
   originatingUrl: z.string().nullable(),
-  supportEmail: z.string(),
+  supportEmail: z.email().toLowerCase(),
   openAccess: z.boolean(),
   authCaptcha: z.boolean(),
   authModes: z.enum(surveyAuthModes).array(),

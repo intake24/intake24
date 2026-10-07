@@ -22,16 +22,16 @@ export default () => {
     const { status } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', password: 'invalidPassword' });
+      .send({ email: 'test-user@example.com', password: 'invalidPassword' });
 
     expect(status).toBe(401);
   });
 
-  it('valid credentials should return 200, access token & refresh cookie', async () => {
+  it('valid credentials should return 200, access token & refresh cookie (case-insensitive)', async () => {
     const res = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', password: 'testUserPassword' });
+      .send({ email: 'tesT-User@example.com', password: 'testUserPassword' });
 
     expect(res.status).toBe(200);
     expect(res.body).toContainAllKeys(['accessToken']);
@@ -46,20 +46,20 @@ export default () => {
 
   describe('user disabled', () => {
     beforeAll(async () => {
-      await User.update({ disabledAt: new Date() }, { where: { email: 'testUser@example.com' } });
+      await User.update({ disabledAt: new Date() }, { where: { email: 'test-user@example.com' } });
     });
 
     it('should return 401 when user disabled', async () => {
       const { status } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
-        .send({ email: 'testUser@example.com', password: 'testUserPassword' });
+        .send({ email: 'test-user@example.com', password: 'testUserPassword' });
 
       expect(status).toBe(401);
     });
 
     afterAll(async () => {
-      await User.update({ disabledAt: null }, { where: { email: 'testUser@example.com' } });
+      await User.update({ disabledAt: null }, { where: { email: 'test-user@example.com' } });
     });
   });
 };

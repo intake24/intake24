@@ -25,7 +25,7 @@ export default () => {
     const loginRes = await request(suite.app)
       .post('/api/admin/auth/login')
       .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', password: 'testUserPassword' });
+      .send({ email: 'test-user@example.com', password: 'testUserPassword' });
 
     const refreshToken = loginRes
       .get('Set-Cookie')

@@ -21,7 +21,7 @@ export default () => {
 
   it('invalid credentials should return 401', async () => {
     const { status } = await request(suite.app).post(url).set('Accept', 'application/json').send({
-      email: 'testUser@example.com',
+      email: 'test-user@example.com',
       password: 'invalidPassword',
       survey: 'test-survey',
       captcha: 'test-captcha',
@@ -32,7 +32,7 @@ export default () => {
 
   it('valid credentials should return 200, access token & refresh cookie', async () => {
     const res = await request(suite.app).post(url).set('Accept', 'application/json').send({
-      email: 'testUser@example.com',
+      email: 'test-user@example.com',
       password: 'testUserPassword',
       survey: 'test-survey',
       captcha: 'test-captcha',
@@ -51,7 +51,7 @@ export default () => {
 
   it('valid credentials should return 200, access token & refresh cookie (case-insensitive)', async () => {
     const res = await request(suite.app).post(url).set('Accept', 'application/json').send({
-      email: 'testUser@example.com',
+      email: 'tEst-usEr@example.com',
       password: 'testUserPassword',
       survey: 'tEst-sUrvey',
       captcha: 'test-captcha',

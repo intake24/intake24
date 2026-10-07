@@ -26,7 +26,7 @@ export default () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', captcha: 'captchaToken' });
+      .send({ email: 'test-user@example.com', captcha: 'captchaToken' });
 
     expect(status).toBe(200);
     expect(body).toBeEmpty();
