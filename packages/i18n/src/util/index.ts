@@ -84,7 +84,7 @@ export type I18nParams = Record<
  */
 export function replaceParams(message: string, params: I18nParams = {}) {
   return Object.entries(params).reduce((acc, [key, value]) => {
-    acc = acc.replace(`{${key}}`, value.toString());
+    acc = acc.replaceAll(`{${key}}`, value.toString());
     return acc;
   }, message);
 }
