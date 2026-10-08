@@ -264,6 +264,13 @@
     "exists": "Entered meal already exists, select another meal.",
     "noMeal": "No meals remaining, add at least one"
   },
+  "mealDescription": {
+    "name": "Meal description",
+    "text": "",
+    "description": "<p>Please describe everything you had to eat and drink for <strong>{mealName}</strong>, in your own words.</p>",
+    "label": "What did you have?",
+    "rejected": "That doesn't look like a description of food or drinks. Please tell us what you had to eat and drink, for example: \"toast with butter and a cup of tea\"."
+  },
   "mealDuration": {
     "name": "Meal duration",
     "text": "",

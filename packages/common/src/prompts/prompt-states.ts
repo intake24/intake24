@@ -221,6 +221,7 @@ export type PromptStates = {
   };
   'food-search-prompt': string | null;
   'food-selection-prompt': string[];
+  'meal-description-prompt': string;
   'meal-duration-prompt': number;
   'meal-time-prompt': Time;
   'ready-meal-prompt': { id: string; name: string; value: boolean | undefined }[];

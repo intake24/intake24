@@ -264,6 +264,13 @@
     "exists": "A refeição introduzida já existe, selecione outra refeição.",
     "noMeal": "Não restam refeições, adicione pelo menos uma"
   },
+  "mealDescription": {
+    "name": "Descrição da refeição",
+    "text": "",
+    "description": "<p>Descreva, por palavras suas, tudo o que comeu e bebeu no seu <strong>{mealName}</strong>.</p>",
+    "label": "O que comeu e bebeu?",
+    "rejected": "Isto não parece ser uma descrição de alimentos ou bebidas. Diga-nos o que comeu e bebeu, por exemplo: «torrada com manteiga e uma chávena de chá»."
+  },
   "mealDuration": {
     "name": "Duração da refeição",
     "text": "",

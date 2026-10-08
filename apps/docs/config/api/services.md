@@ -113,6 +113,46 @@ Support list ID for support-related communications.
 - type: `string`
 - default: `''`
 
+## OpenRouter
+
+LLM access via [OpenRouter](https://openrouter.ai), used by LLM-based services such as [meal description](#meal-description). These services are disabled if the API key is left empty.
+
+### API key
+
+- object-path: `openRouter.apiKey`
+- dotenv var: `OPENROUTER_API_KEY`
+- type: `string`
+- default: `''`
+
+### Base URL
+
+- object-path: `openRouter.baseUrl`
+- dotenv var: `OPENROUTER_BASE_URL`
+- type: `string`
+- default: `'https://openrouter.ai/api/v1'`
+
+## Meal description
+
+Used by the meal description prompt to split free-text meal descriptions into individual foods via [OpenRouter](#openrouter). The service is disabled if the model is left empty.
+
+### Model
+
+OpenRouter model identifier, e.g. `provider/model-name`. The model must support structured outputs (`response_format` with JSON schema).
+
+- object-path: `mealDescription.model`
+- dotenv var: `MEAL_DESCRIPTION_MODEL`
+- type: `string`
+- default: `''`
+
+### Timeout
+
+Maximum time to wait for the model response.
+
+- object-path: `mealDescription.timeout`
+- dotenv var: `MEAL_DESCRIPTION_TIMEOUT`
+- type: `string` ([ms](https://github.com/vercel/ms) format)
+- default: `'30s'`
+
 ## Web-push
 
 Provides web-push functionality for supported browsers.

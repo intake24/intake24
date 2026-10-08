@@ -600,6 +600,14 @@
       "custom": "Autoriser la personnalisation des noms de repas",
       "unique": "Allow only unique meal names"
     },
+    "meal-description-prompt": {
+      "title": "Description du repas",
+      "subtitle": "Décrire le repas en texte libre, découpé en aliments et boissons par un LLM (prototype). À placer avant l'invite « Liste d'aliments ».",
+      "reviewFoods": "Vérifier la liste d'aliments",
+      "reviewFoodsHint": "Afficher la liste d'aliments obtenue dans l'invite « Liste d'aliments » pour confirmation. Si désactivé, le rappel passe directement à la recherche d'aliments.",
+      "timeout": "Délai d'analyse (secondes)",
+      "timeoutHint": "Si l'analyse prend plus de temps ou échoue, le répondant passe à l'éditeur habituel de la liste d'aliments."
+    },
     "meal-duration-prompt": {
       "title": "Durée du repas",
       "subtitle": "Demander la durée du repas"

@@ -43,6 +43,7 @@ import {
   localCategoriesService,
   localeService,
   localFoodsService,
+  mealDescriptionService,
   mediaService,
   mediaStores,
   nutrientTableService,
@@ -136,6 +137,7 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     adminSurveyService: asFunction(adminSurveyService).singleton(),
     adminUserService: asFunction(adminUserService).singleton(),
 
+    mealDescriptionService: asFunction(mealDescriptionService).singleton(),
     surveyService: asFunction(surveyService).singleton(),
     surveySubmissionService: asFunction(surveySubmissionService).singleton(),
     popularityCountersService: asClass(PopularityCountersService).singleton(),

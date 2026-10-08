@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { surveyState } from '../surveys';
 import {
   foodSearchResponse,
+  mealDescriptionParseRequest,
+  mealDescriptionParseResponse,
   surveyEntryResponse,
   surveyFAQs,
   surveyFoodSearchQuery,
@@ -136,5 +138,15 @@ export const surveyRespondent = contract.router({
     },
     summary: 'Food search',
     description: 'Returns a list of foods from the food database that match the description using the study search settings.',
+  },
+  mealDescription: {
+    method: 'POST',
+    path: '/surveys/:slug/meal-description',
+    body: mealDescriptionParseRequest,
+    responses: {
+      200: mealDescriptionParseResponse,
+    },
+    summary: 'Parse meal description',
+    description: 'Splits a free-text meal description into individual foods and drinks using an LLM.',
   },
 });

@@ -264,6 +264,13 @@
     "exists": "Le repas renseigné exsite déjà, veuillez en sélectionner un autre.",
     "noMeal": "Plus de repas restants, en ajouter au moins un."
   },
+  "mealDescription": {
+    "name": "Description du repas",
+    "text": "",
+    "description": "<p>Décrivez avec vos propres mots tout ce que vous avez mangé et bu pour votre <strong>{mealName}</strong>.</p>",
+    "label": "Qu'avez-vous consommé ?",
+    "rejected": "Cela ne ressemble pas à une description d'aliments ou de boissons. Veuillez indiquer ce que vous avez mangé et bu, par exemple : « pain grillé avec du beurre et une tasse de thé »."
+  },
   "mealDuration": {
     "name": "Durée du repas",
     "text": "",

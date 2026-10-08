@@ -604,6 +604,14 @@
       "custom": "Allow custom meal names",
       "unique": "Allow only unique meal names"
     },
+    "meal-description-prompt": {
+      "title": "Meal description",
+      "subtitle": "Describe the meal in free text, split into foods and drinks by an LLM (prototype). Place before the edit meal prompt.",
+      "reviewFoods": "Review food list",
+      "reviewFoodsHint": "Show the parsed food list in the edit meal prompt for confirmation. If disabled, the recall proceeds straight to food search.",
+      "timeout": "Parsing timeout (seconds)",
+      "timeoutHint": "If parsing takes longer or fails, the respondent continues to the regular food list editor."
+    },
     "meal-duration-prompt": {
       "title": "Meal duration",
       "subtitle": "Ask about meal duration"

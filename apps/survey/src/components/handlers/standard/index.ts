@@ -6,6 +6,7 @@ import FinalPromptHandler from './FinalPromptHandler.vue';
 import FoodSearchPromptHandler from './FoodSearchPromptHandler.vue';
 import GeneralAssociatedFoodsPromptHandler from './GeneralAssociatedFoodsPromptHandler.vue';
 import MealAddPromptHandler from './MealAddPromptHandler.vue';
+import MealDescriptionPromptHandler from './MealDescriptionPromptHandler.vue';
 import MealDurationPromptHandler from './MealDurationPromptHandler.vue';
 import MealGapPromptHandler from './MealGapPromptHandler.vue';
 import MealTimePromptHandler from './MealTimePromptHandler.vue';
@@ -27,6 +28,7 @@ export default {
   FinalPromptHandler,
   FoodSearchPromptHandler,
   MealAddPromptHandler,
+  MealDescriptionPromptHandler,
   MealDurationPromptHandler,
   MealGapPromptHandler,
   MealTimePromptHandler,

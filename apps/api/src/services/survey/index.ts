@@ -1,3 +1,5 @@
+export * from './meal-description.service';
+export { default as mealDescriptionService } from './meal-description.service';
 export { default as PopularityCountersService } from './popularity-counters.service';
 export * from './survey-submission.service';
 export { default as surveySubmissionService } from './survey-submission.service';

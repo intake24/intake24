@@ -264,6 +264,13 @@
     "exists": "Entered meal already exists, select another meal.",
     "noMeal": "Tiada hidangan yang tinggal, tambah sekurang-kurangnya satu hidangan"
   },
+  "mealDescription": {
+    "name": "Penerangan hidangan",
+    "text": "",
+    "description": "<p>Sila terangkan dengan perkataan anda sendiri semua yang anda makan dan minum untuk hidangan <strong>{mealName}</strong>.</p>",
+    "label": "Apakah yang anda makan dan minum?",
+    "rejected": "Itu tidak kelihatan seperti penerangan makanan atau minuman. Sila beritahu kami apa yang anda makan dan minum, contohnya: \"roti bakar dengan mentega dan secawan teh\"."
+  },
   "mealDuration": {
     "name": "Masa hidangan",
     "text": "",

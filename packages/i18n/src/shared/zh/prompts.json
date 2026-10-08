@@ -264,6 +264,13 @@
     "exists": "Entered meal already exists, select another meal.",
     "noMeal": "没有剩余餐食，至少添加一个"
   },
+  "mealDescription": {
+    "name": "餐食描述",
+    "text": "",
+    "description": "<p>请用您自己的话描述您在<strong>{mealName}</strong>吃过和喝过的所有东西。</p>",
+    "label": "您吃了和喝了什么？",
+    "rejected": "这看起来不像是对食物或饮料的描述。请告诉我们您吃了和喝了什么，例如：“黄油吐司和一杯茶”。"
+  },
   "mealDuration": {
     "name": "编辑时间",
     "text": "",

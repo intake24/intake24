@@ -291,5 +291,10 @@ export function surveyRespondent() {
 
       return { status: 200, body: searchResults };
     },
+    mealDescription: async ({ body: { description }, req }) => {
+      const result = await req.scope.cradle.mealDescriptionService.parse(description);
+
+      return { status: 200, body: result };
+    },
   });
 }

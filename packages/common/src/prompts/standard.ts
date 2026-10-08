@@ -85,6 +85,16 @@ export const mealAddPrompt: Prompts['meal-add-prompt'] = copy({
   unique: false,
 });
 
+export const mealDescriptionPrompt: Prompts['meal-description-prompt'] = copy({
+  ...basePrompt,
+  component: 'meal-description-prompt',
+  type: 'standard',
+  id: 'meal-description-prompt',
+  name: 'Meal description prompt',
+  timeout: 20,
+  reviewFoods: true,
+});
+
 export const mealDurationPrompt: Prompts['meal-duration-prompt'] = copy({
   ...basePrompt,
   component: 'meal-duration-prompt',
@@ -234,6 +244,7 @@ export const standardPrompts = [
   finalPrompt,
   foodSearchPrompt,
   mealAddPrompt,
+  mealDescriptionPrompt,
   mealDurationPrompt,
   mealGapPrompt,
   mealTimePrompt,

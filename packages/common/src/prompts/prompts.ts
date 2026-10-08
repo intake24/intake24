@@ -43,6 +43,7 @@ export const standardComponentTypes = [
   'final-prompt',
   'food-search-prompt',
   'meal-add-prompt',
+  'meal-description-prompt',
   'meal-gap-prompt',
   'meal-duration-prompt',
   'meal-time-prompt',
@@ -437,6 +438,13 @@ const mealAddPrompt = z.object({
   unique: z.boolean(),
 });
 
+const mealDescriptionPrompt = z.object({
+  ...baseStandardPrompt.shape,
+  component: z.literal('meal-description-prompt'),
+  timeout: z.number().int().min(1),
+  reviewFoods: z.boolean(),
+});
+
 const mealDurationPrompt = z.object({
   ...baseStandardPrompt.shape,
   component: z.literal('meal-duration-prompt'),
@@ -548,6 +556,7 @@ export const singlePrompt = z.discriminatedUnion('component', [
   finalPrompt,
   foodSearchPrompt,
   mealAddPrompt,
+  mealDescriptionPrompt,
   mealDurationPrompt,
   mealGapPrompt,
   mealTimePrompt,
@@ -611,6 +620,7 @@ export const prompts = z.object({
   'final-prompt': finalPrompt,
   'food-search-prompt': foodSearchPrompt,
   'meal-add-prompt': mealAddPrompt,
+  'meal-description-prompt': mealDescriptionPrompt,
   'meal-duration-prompt': mealDurationPrompt,
   'meal-gap-prompt': mealGapPrompt,
   'meal-time-prompt': mealTimePrompt,

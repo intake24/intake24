@@ -48,6 +48,7 @@ import type {
   LocalCategoriesService,
   LocaleService,
   LocalFoodsService,
+  MealDescriptionService,
   MediaService,
   MediaStore,
   NutrientTableService,
@@ -210,6 +211,7 @@ export interface IoC extends PackageWritersAndJobs {
   adminSurveyService: AdminSurveyService;
   adminUserService: AdminUserService;
 
+  mealDescriptionService: MealDescriptionService;
   surveyService: SurveyService;
   surveySubmissionService: SurveySubmissionService;
   popularityCountersService: PopularityCountersService;

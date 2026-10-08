@@ -2,6 +2,7 @@ import type { SurveyState } from '@intake24/common/surveys';
 import type {
   CreateUserResponse,
   GenerateUserResponse,
+  MealDescriptionParseResponse,
   PublicSurveyEntry,
   SurveyEntryResponse,
   SurveyFAQs,
@@ -109,4 +110,14 @@ export default {
 
   storeRating: async (surveyId: string, payload: SurveyRatingRequest) =>
     http.post(`surveys/${surveyId}/rating`, payload),
+
+  parseMealDescription: async (surveyId: string, description: string, timeout: number): Promise<MealDescriptionParseResponse> => {
+    const { data } = await http.post<MealDescriptionParseResponse>(
+      `surveys/${surveyId}/meal-description`,
+      { description },
+      { timeout },
+    );
+
+    return data;
+  },
 };

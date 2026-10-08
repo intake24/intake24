@@ -162,3 +162,23 @@ export const surveyRatingRequest = z.object({
 });
 
 export type SurveyRatingRequest = z.infer<typeof surveyRatingRequest>;
+
+export const mealDescriptionParseRequest = z.object({
+  description: z.string().trim().min(1).max(2000),
+});
+
+export type MealDescriptionParseRequest = z.infer<typeof mealDescriptionParseRequest>;
+
+export const mealDescriptionFood = z.object({
+  description: z.string().min(1),
+  isDrink: z.boolean(),
+});
+
+export type MealDescriptionFood = z.infer<typeof mealDescriptionFood>;
+
+export const mealDescriptionParseResponse = z.discriminatedUnion('status', [
+  z.object({ status: z.literal('parsed'), foods: mealDescriptionFood.array() }),
+  z.object({ status: z.literal('rejected') }),
+]);
+
+export type MealDescriptionParseResponse = z.infer<typeof mealDescriptionParseResponse>;

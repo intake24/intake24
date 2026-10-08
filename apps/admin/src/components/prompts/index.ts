@@ -124,6 +124,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['preMeals'],
   },
+  'meal-description-prompt': {
+    tabs: [...tabs],
+    sections: ['preFoods'],
+  },
   'meal-duration-prompt': {
     tabs: [...tabs],
     sections: ['preFoods', 'postFoods'],

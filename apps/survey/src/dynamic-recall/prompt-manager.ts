@@ -246,6 +246,14 @@ function checkMealStandardConditions(surveyStore: SurveyStore, mealState: MealSt
       return mealState.foods.length === 0 || !mealFreeEntryComplete(mealState);
     case 'info-prompt':
       return !mealState.flags.includes(`${prompt.id}-acknowledged`);
+    case 'meal-description-prompt':
+      if (mealState.foods.length === 0 && !mealState.flags.includes('meal-description-complete')) {
+        recallLog().promptCheck('meal-description-prompt', true, 'meal has no foods and description not yet entered');
+        return true;
+      }
+
+      recallLog().promptCheck('meal-description-prompt', false, 'meal has foods or description already entered');
+      return false;
     case 'meal-duration-prompt':
       if (mealState.duration === null) {
         recallLog().promptCheck('meal-duration-prompt', true, 'duration is null');

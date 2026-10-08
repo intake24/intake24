@@ -264,6 +264,13 @@
     "exists": "Chakudya mwasankhachi chilipo kale, sankhani chakudya china.",
     "noMeal": "Palibe chakudya chotsala, ikani chosachepera chimodzi"
   },
+  "mealDescription": {
+    "name": "Kufotokoza za chakudya",
+    "text": "",
+    "description": "<p>Chonde fotokozani m'mawu anuanu zonse zomwe munadya ndi kumwa pa <strong>{mealName}</strong>.</p>",
+    "label": "Munadya ndi kumwa chiyani?",
+    "rejected": "Izi sizikuoneka ngati kufotokoza za chakudya kapena zakumwa. Chonde tiuzeni zomwe munadya ndi kumwa, mwachitsanzo: \"buledi wopaka bata ndi kapu ya tiyi\"."
+  },
   "mealDuration": {
     "name": "Munadya kwa nthawi yayitali bwanji",
     "text": "",

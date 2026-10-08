@@ -86,6 +86,23 @@ Prompt to add new meals. Multi-select list of options predefined in the scheme m
 - `custom` - allow adding custom meal names
 - `unique` - allow adding only unique meal names
 
+### Meal description prompt
+
+Prototype prompt to collect a meal's foods as a free-text description. The description is sent to an LLM (see [meal description](/config/api/services#meal-description) configuration), which cleans it up and splits it into individual foods and drinks. By default, the resulting list is then shown in the [edit meal prompt](#edit-meal-prompt) for review and further editing (see the `reviewFoods` option).
+
+The LLM also replaces colloquial food names with standard ones (e.g. "spag bol" becomes "spaghetti bolognaise"). It doesn't judge what was reported (unusual items are let through), and rejects only nonsense unrelated to eating or drinking, such as random characters. In that case the respondent stays on the prompt and is asked to describe what they had.
+
+The prompt is shown only when the meal has no foods yet. If the LLM is not configured, fails or doesn't respond within the timeout, the respondent continues to the edit meal prompt with an empty list.
+
+:::tip
+Place the prompt in the `preFoods` section **before** the edit meal prompt, otherwise it is never shown.
+:::
+
+#### Options
+
+- `reviewFoods` - show the parsed food list in the edit meal prompt for confirmation. If disabled, the recall proceeds straight to food search. The edit meal prompt is always shown if no foods were parsed.
+- `timeout` - maximum time in seconds to wait for the LLM response
+
 ### Meal duration prompt
 
 Prompt to collect meal duration in minutes.

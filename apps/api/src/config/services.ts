@@ -1,6 +1,6 @@
 import z from 'zod';
 
-import { validateConfig } from '@intake24/common-backend';
+import { parsedMsStringValue, validateConfig } from '@intake24/common-backend';
 import { captchaProviders } from '@intake24/common/security';
 
 export const baseEMProvider = z.object({
@@ -99,12 +99,22 @@ export const servicesConfig = z.object({
     },
   ),
   oidc: z.record(z.string(), oidcConfigSchema),
+  openRouter: z.object({
+    apiKey: z.string().default(''),
+    baseUrl: z.url().default('https://openrouter.ai/api/v1'),
+  }),
+  mealDescription: z.object({
+    model: z.string().default(''),
+    timeout: parsedMsStringValue,
+  }),
 });
 export type ServicesConfig = z.infer<typeof servicesConfig>;
 export type CaptchaConfig = ServicesConfig['captcha'];
 export type DeepLConfig = ServicesConfig['deepl'];
 export type WebPushConfig = ServicesConfig['webPush'];
 export type CommsConfig = ServicesConfig['comms'];
+export type OpenRouterConfig = ServicesConfig['openRouter'];
+export type MealDescriptionConfig = ServicesConfig['mealDescription'];
 
 const rawServicesConfig = {
   captcha: {
@@ -132,6 +142,14 @@ const rawServicesConfig = {
     },
   },
   oidc: parseOidcConfig(process.env),
+  openRouter: {
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseUrl: process.env.OPENROUTER_BASE_URL,
+  },
+  mealDescription: {
+    model: process.env.MEAL_DESCRIPTION_MODEL,
+    timeout: process.env.MEAL_DESCRIPTION_TIMEOUT || '5s',
+  },
 };
 
 const parsedServicesConfig = validateConfig('Services configuration', servicesConfig, rawServicesConfig);
