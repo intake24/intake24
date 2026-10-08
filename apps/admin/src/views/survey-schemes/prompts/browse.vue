@@ -60,8 +60,10 @@ import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { promptSections } from '@intake24/admin/components/prompts';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import { withDefaultSubsections } from '@intake24/admin/components/prompts/list/subsections';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultPrompts, flattenScheme, isMealSection } from '@intake24/common/surveys';
+import { useI18n } from '@intake24/ui';
 
 export type SurveySchemePromptsForm = Pick<SurveySchemeForm, 'prompts'>;
 
@@ -73,9 +75,16 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const { i18n } = useI18n();
+
+    // V4-1842: Default subsections are created before the form snapshot is taken, so they don't
+    // count as unsaved changes but are persisted as regular subsections on the next save
     const loadCallback = (data: SurveySchemeEntry) => {
       const { prompts, ...rest } = data;
-      return { ...rest, prompts: { ...defaultPrompts, ...prompts } };
+      return {
+        ...rest,
+        prompts: withDefaultSubsections({ ...defaultPrompts, ...prompts }, promptSections, key => i18n.t(key)),
+      };
     };
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveySchemeEntry, SurveySchemeRefs>(
