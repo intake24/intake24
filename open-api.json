@@ -26,7 +26,9 @@
                 "type": "object",
                 "properties": {
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "password": {
                     "type": "string"
@@ -652,7 +654,9 @@
                         "type": "string"
                       },
                       "supportEmail": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "email",
+                        "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                       },
                       "openAccess": {
                         "type": "boolean"
@@ -741,7 +745,9 @@
                       "type": "string"
                     },
                     "supportEmail": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "email",
+                      "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                     },
                     "openAccess": {
                       "type": "boolean"
@@ -19409,7 +19415,9 @@
                 "type": "object",
                 "properties": {
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
                   "password": {
                     "type": "string"
@@ -45820,7 +45828,9 @@
                                   },
                                   "email": {
                                     "nullable": true,
-                                    "type": "string"
+                                    "type": "string",
+                                    "format": "email",
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "phone": {
                                     "nullable": true,
@@ -45960,7 +45970,9 @@
                                 "type": "object",
                                 "properties": {
                                   "email": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "format": "email",
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "userAgent": {
                                     "type": "string"
@@ -46890,7 +46902,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -47030,7 +47044,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -48032,7 +48048,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -48172,7 +48190,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -52722,7 +52742,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -52862,7 +52884,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -56760,7 +56784,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -56900,7 +56926,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -136584,7 +136612,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -136724,7 +136754,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -295859,7 +295891,9 @@
                                   },
                                   "email": {
                                     "nullable": true,
-                                    "type": "string"
+                                    "type": "string",
+                                    "format": "email",
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "phone": {
                                     "nullable": true,
@@ -295999,7 +296033,9 @@
                                 "type": "object",
                                 "properties": {
                                   "email": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "format": "email",
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "userAgent": {
                                     "type": "string"
@@ -296922,7 +296958,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -297062,7 +297100,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -297855,7 +297895,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -297995,7 +298037,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -298921,7 +298965,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -299061,7 +299107,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -299930,7 +299978,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -300070,7 +300120,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -301109,7 +301161,9 @@
                                   },
                                   "email": {
                                     "nullable": true,
-                                    "type": "string"
+                                    "type": "string",
+                                    "format": "email",
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "phone": {
                                     "nullable": true,
@@ -301249,7 +301303,9 @@
                                 "type": "object",
                                 "properties": {
                                   "email": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "format": "email",
+                                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                                   },
                                   "userAgent": {
                                     "type": "string"
@@ -302437,7 +302493,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -302577,7 +302635,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
@@ -303464,7 +303524,9 @@
                             },
                             "email": {
                               "nullable": true,
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "phone": {
                               "nullable": true,
@@ -303604,7 +303666,9 @@
                           "type": "object",
                           "properties": {
                             "email": {
-                              "type": "string"
+                              "type": "string",
+                              "format": "email",
+                              "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                             },
                             "userAgent": {
                               "type": "string"
