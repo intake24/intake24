@@ -192,6 +192,7 @@ import { ConfirmDialog, useI18n } from '@intake24/ui';
 import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';
 import PromptListItem from './prompt-list-item.vue';
+import { defaultSubsectionName as sectionDefaultSubsectionName } from './subsections';
 
 export type MoveSection = { value: string; title: string };
 export type MoveSubsection = { value: number; title: string };
@@ -287,10 +288,11 @@ function defaultSubsectionName(index: number) {
   if (isOverrideMode.value) {
     return i18n.t(`survey-schemes.overrides.prompts.subsectionName`);
   }
-  const sectionTitle = i18n.t(`survey-schemes.prompts.${props.section}.title`);
-  const sectionBase = sectionTitle.replace('/\s+prompts$/i', '');
 
-  return `${sectionBase} ${index + 1}`;
+  if (!props.section)
+    throw new Error('Prompt list section is required outside of override mode');
+
+  return sectionDefaultSubsectionName(key => i18n.t(key), props.section, index);
 }
 
 function subsectionKey(index: number) {
