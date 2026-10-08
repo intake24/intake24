@@ -76,6 +76,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
       },
       postMeals: scheme.prompts.postMeals.map(prompt => this.migratePrompt(prompt, 'postMeals') as unknown as SinglePrompt),
       submission: scheme.prompts.submission.map(prompt => this.migratePrompt(prompt, 'submission') as unknown as SinglePrompt),
+      ui: scheme.prompts.ui,
     };
 
     scheme.prompts = prompts;
@@ -146,6 +147,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
         },
         postMeals: scheme.prompts.postMeals.map(promptMergeCallback),
         submission: scheme.prompts.submission.map(promptMergeCallback),
+        ui: scheme.prompts.ui,
       };
       const settings = merge(defaultSchemeSettings, scheme.settings);
 
