@@ -28,7 +28,7 @@
     "db:system:dts": "pnpm kysely-codegen --config-file ./system.dts-config.ts && eslint ./src/kysely/system.d.ts --fix"
   },
   "dependencies": {
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.7",
     "kysely": "^0.29.5",
     "lodash-es": "^4.18.1",
     "nanoid": "^6.0.1",
