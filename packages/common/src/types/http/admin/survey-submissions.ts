@@ -14,6 +14,7 @@ export const surveySubmissionFood = z.object({
   locale: z.string().max(64),
   readyMeal: z.boolean(),
   searchTerm: z.string().max(256),
+  selectedAltName: z.string().nullable(),
   portionSizeId: z.enum(portionSizeMethodIds),
   reasonableAmount: z.boolean(),
   brand: z.string().max(128).nullable(),
