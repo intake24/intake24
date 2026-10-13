@@ -44,6 +44,7 @@ export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
 };
 
 export type CollectFoodsOps = {
+  submissionId: string;
   foods: FoodMap;
   mealId: string;
   parentId?: string;
@@ -192,7 +193,7 @@ function surveySubmissionService({
   const collectFoods
     = (ops: CollectFoodsOps) =>
       (collectedFoods: CollectedFoods, foodState: FoodState): CollectedFoods => {
-        const { foods, mealId, parentId, foodCustomPrompts } = ops;
+        const { submissionId, foods, mealId, parentId, foodCustomPrompts } = ops;
 
         if (foodState.type === 'free-text') {
           logger.warn(`Submission: ${foodState.type} food record present in submission, skipping...`);
@@ -239,6 +240,7 @@ function surveySubmissionService({
             locale: localeId,
             readyMeal: false,
             searchTerm: (searchTerm ?? '').slice(0, 256),
+            selectedAltName: null,
             portionSizeMethodId: 'recipe-builder',
             reasonableAmount: true,
             brand: null,
@@ -251,6 +253,7 @@ function surveySubmissionService({
 
           return linkedFoods.reduce(
             collectFoods({
+              submissionId,
               foods,
               mealId,
               parentId: id,
@@ -261,7 +264,7 @@ function surveySubmissionService({
         }
 
         const {
-          data: { code, reasonableAmount },
+          data: { code, localName: submittedName, reasonableAmount },
           flags,
           linkedFoods,
           searchTerm,
@@ -277,9 +280,18 @@ function surveySubmissionService({
         const {
           nutrientRecords,
           name,
+          altNames,
           englishName,
           localeId,
         } = foodRecord;
+
+        let selectedAltName: string | null = null;
+        if (submittedName !== name) {
+          if (Object.values(altNames).some(names => names.includes(submittedName)))
+            selectedAltName = submittedName;
+          else
+            logger.warn(`Submission: submitted food name does not match main or alternative names (submission: ${submissionId}, food code: ${code})`);
+        }
 
         const { fields, nutrients, portionSize } = collectFoodCompositionData(foodState, foods);
 
@@ -302,6 +314,7 @@ function surveySubmissionService({
           locale: localeId,
           readyMeal: flags.includes('ready-meal'),
           searchTerm: (searchTerm ?? '').slice(0, 256),
+          selectedAltName,
           portionSizeMethodId: portionSize.method,
           reasonableAmount: reasonableAmount >= portionSizeWeight,
           brand: null,
@@ -317,6 +330,7 @@ function surveySubmissionService({
 
         return linkedFoods.reduce(
           collectFoods({
+            submissionId,
             foods,
             mealId,
             parentId: id,
@@ -571,7 +585,7 @@ function surveySubmissionService({
 
         // Collect meal foods
         const collectedFoods = mealState.foods.reduce(
-          collectFoods({ foods: foodMap, mealId, foodCustomPrompts }),
+          collectFoods({ submissionId: surveySubmissionId, foods: foodMap, mealId, foodCustomPrompts }),
           {
             inputs: [],
             states: [],
