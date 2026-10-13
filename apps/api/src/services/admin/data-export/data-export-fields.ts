@@ -298,6 +298,12 @@ function dataExportFields() {
     { id: 'locale', label: 'Locale code', value: 'food.locale' },
     { id: 'readyMeal', label: 'Ready meal', value: 'food.readyMeal' },
     { id: 'searchTerm', label: 'Search term', value: 'food.searchTerm' },
+    {
+      id: 'selectedAltName',
+      label: 'Alt. name (if selected)',
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionFood ? food.selectedAltName : undefined,
+    },
     { id: 'reasonableAmount', label: 'Reasonable amount', value: 'food.reasonableAmount' },
     {
       id: 'barcode',

@@ -91,6 +91,12 @@ export default class SurveySubmissionFood extends BaseModel<
   declare searchTerm: string;
 
   @Column({
+    allowNull: true,
+    type: DataType.TEXT,
+  })
+  declare selectedAltName: CreationOptional<string | null>;
+
+  @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
