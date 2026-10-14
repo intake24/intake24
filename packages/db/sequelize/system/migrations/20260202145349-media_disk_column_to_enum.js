@@ -5,7 +5,11 @@ export default {
     // and it appears there is no way to change it in the Sequelize model
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
-        `CREATE TYPE enum_media_disk AS ENUM ('public', 'private')`,
+        `DO $$ BEGIN
+          CREATE TYPE enum_media_disk AS ENUM ('public', 'private');
+        EXCEPTION
+          WHEN duplicate_object THEN null;
+        END $$;`,
         { transaction },
       );
 

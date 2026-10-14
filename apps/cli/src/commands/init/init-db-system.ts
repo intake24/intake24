@@ -392,8 +392,8 @@ export default async (): Promise<void> => {
       }),
       container: () => text({
         message: 'Enter the Docker container name:',
-        initialValue: 'intake24-db',
-        placeholder: 'intake24-db',
+        initialValue: 'db',
+        placeholder: 'db',
       }),
       postgresUser: () => text({
         message: 'Enter the Postgres user name:',
@@ -429,8 +429,8 @@ export default async (): Promise<void> => {
       }),
       container: () => text({
         message: 'Enter the Docker container name:',
-        initialValue: 'intake24-db',
-        placeholder: 'intake24-db',
+        initialValue: 'db',
+        placeholder: 'db',
       }),
       postgresUser: () => text({
         message: 'Enter the Postgres user name:',
