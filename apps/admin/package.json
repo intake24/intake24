@@ -24,7 +24,7 @@
     "@iconify/vue": "^5.0.1",
     "@simplewebauthn/browser": "^14.0.0",
     "@tinymce/tinymce-vue": "^6.3.0",
-    "@vueuse/core": "^14.4.0",
+    "@vueuse/core": "^15.0.0",
     "axios": "^1.18.1",
     "cronstrue": "^3.26.0",
     "date-fns": "^4.4.0",
