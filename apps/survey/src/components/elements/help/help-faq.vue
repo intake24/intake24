@@ -45,7 +45,7 @@
           />
         </template>
         <template #extension>
-          <div class="px-4 d-flex justify-center items-center flex-column mx-auto">
+          <div class="px-4 d-flex justify-center align-center flex-column mx-auto">
             <v-card class="px-4 py-4 py-md-6 faqs-hero__card rounded-lg d-flex flex-column gr-2" flat>
               <h1 class="text-headline-large font-weight-medium text-center px-4">
                 {{ $t('common.help.faqs.title') }}
