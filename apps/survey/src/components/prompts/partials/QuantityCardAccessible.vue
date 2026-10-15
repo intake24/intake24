@@ -8,51 +8,61 @@
           </v-btn>
         </div>
 
-        <label
-          :id="wholeInputLabelId"
-          class="mb-2 text-body-1"
-          :for="wholeInputId"
-        >
-          {{ $t(labelKey, { food: foodText, whole: currentWhole, fraction: fractionLabel }) }}
-        </label>
+        <p v-if="description" class="mb-2 pb-1 text-body-1">
+          {{ description }}
+        </p>
 
         <v-number-input
-          :id="wholeInputId"
+          :id="inputId"
           v-model="currentWhole"
-          :aria-labelledby="wholeInputLabelId"
+          :aria-labelledby="inputLabelId"
           class="quantity-field mx-auto"
+          :class="{ 'quantity-field--fraction-only': !whole }"
           control-variant="hidden"
           hide-details="auto"
+          :label="whole && showInputLabel ? $t('prompts.quantity.accessible.enterWholeNumber') : undefined"
           :max="maxWhole"
           :min="0"
+          :readonly="!whole"
           variant="outlined"
-          width="160"
-          @blur="setMin"
+          @blur="setLimits"
         >
-          <template #prepend-inner>
-            <v-icon-btn
-              :disabled="minDisabled"
-              icon="$decrement"
-              :title="$t('prompts.quantity.less')"
-              @click="decrementFraction"
-            />
-          </template>
           <template #append-inner>
             <span
-              v-if="fractionLabel"
               aria-hidden="true"
               class="fraction-symbol"
             >
               {{ fractionLabel }}
             </span>
-            <v-icon-btn
-              :disabled="maxDisabled"
-              icon="$increment"
-              :title="$t('prompts.quantity.more')"
-              @click="incrementFraction"
-            />
+            <div class="fraction-controls">
+              <v-icon-btn
+                :disabled="maxDisabled"
+                icon="$upArrow"
+                rounded="0"
+                :title="$t('prompts.quantity.more')"
+                @click.stop="changeValue(stepSize)"
+                @mousedown.stop
+              />
+              <v-icon-btn
+                :disabled="minDisabled"
+                icon="$downArrow"
+                rounded="0"
+                :title="$t('prompts.quantity.less')"
+                @click.stop="changeValue(-stepSize)"
+                @mousedown.stop
+              />
+            </div>
           </template>
         </v-number-input>
+
+        <label
+          v-if="labelKey"
+          :id="inputLabelId"
+          class="mt-2 text-body-1"
+          :for="inputId"
+        >
+          {{ $t(labelKey, { quantity: quantitySummary }) }}
+        </label>
 
         <p aria-atomic="true" aria-live="polite" class="sr-only" role="status">
           {{ $t('prompts.quantity.accessible.currentSelection', { selection: quantitySummary }) }}
@@ -69,7 +79,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, useId, watch } from 'vue';
+import { computed, ref, useId, watch } from 'vue';
 
 import { useI18n } from '@intake24/ui';
 
@@ -108,13 +118,17 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  foodLabel: {
-    type: String,
-    default: '',
+  showInputLabel: {
+    type: Boolean,
+    default: true,
   },
   labelKey: {
     type: String,
-    default: 'prompts.quantity.accessible.total',
+    default: '',
+  },
+  description: {
+    type: String,
+    default: '',
   },
 });
 
@@ -124,38 +138,44 @@ const { i18n: { t } } = useI18n();
 
 const currentValue = defineModel('modelValue', { type: Number, default: 1 });
 
-const wholeInputId = useId();
-const wholeInputLabelId = `${wholeInputId}-label`;
+const stepSize = computed(() => props.fraction ? 0.25 : 1);
 
-const currentWhole = computed<number>({
-  get: () => Math.floor(currentValue.value),
-  set: (value) => {
-    if (value === null || isNaN(value))
-      return;
-    currentValue.value = clamp(value + currentFraction.value);
-  },
-});
+const inputId = useId();
+const inputLabelId = `${inputId}-label`;
+
+const wholeInputValue = ref<number | null>(Math.floor(currentValue.value));
 
 const currentFraction = computed(() => normalizeFraction(currentValue.value - Math.floor(currentValue.value)));
 
-const maxDisabled = computed(() => currentValue.value === props.max);
-const minDisabled = computed(() => currentValue.value === props.min);
+const currentWhole = computed<number | null>({
+  get: () => props.whole ? wholeInputValue.value : null,
+  set: (value) => {
+    if (!props.whole)
+      return;
+
+    if (value === null || Number.isNaN(value)) {
+      wholeInputValue.value = value;
+      return;
+    }
+    currentValue.value = clamp(value + currentFraction.value);
+    wholeInputValue.value = Math.floor(currentValue.value);
+  },
+});
+
+const maxDisabled = computed(() => currentValue.value >= props.max);
+const minDisabled = computed(() => currentValue.value <= props.min);
 
 const fractionLabel = computed(() => {
   if (!currentFraction.value)
-    return currentFraction.value;
+    return '';
 
   const fraction = currentFraction.value.toFixed(2);
 
   switch (fraction) {
     case '0.25':
       return '¼';
-    case '0.33':
-      return '⅓';
     case '0.50':
       return '½';
-    case '0.67':
-      return '⅔';
     case '0.75':
       return '¾';
     default:
@@ -163,13 +183,11 @@ const fractionLabel = computed(() => {
   }
 });
 
-const foodText = computed(() => props.foodLabel.trim() || t('prompts.quantity.accessible.food'));
-
 const minWhole = computed(() => Math.floor(props.min));
 const maxWhole = computed(() => Math.floor(props.max));
 
 const quantitySummary = computed(() => {
-  const wholeValue = currentWhole.value;
+  const wholeValue = currentWhole.value ?? 0;
   const fractionValue = currentFraction.value;
 
   if (!fractionValue)
@@ -190,24 +208,18 @@ function clamp(value: number) {
   return Math.min(props.max, Math.max(props.min, value));
 };
 
-function incrementFraction() {
-  currentValue.value = clamp(normalizeFraction(currentValue.value + 0.25));
+function changeValue(step: number) {
+  currentValue.value = clamp(normalizeFraction(currentValue.value + step));
 };
 
-function decrementFraction() {
-  currentValue.value = clamp(normalizeFraction(currentValue.value - 0.25));
-};
+function setLimits() {
+  if (!props.whole)
+    return;
 
-function setMin() {
-  if (currentWhole.value < minWhole.value)
+  if (currentWhole.value === null || Number.isNaN(currentWhole.value)) {
     currentWhole.value = minWhole.value;
+  }
 };
-
-// function setMin() {
-//   if (currentValue.value < props.min || isNaN(currentValue.value)) {
-//     currentValue.value = props.min;
-//   }
-// }
 
 function normalizeFraction(value: number) {
   const normalized = Number(value.toFixed(2));
@@ -218,7 +230,9 @@ function updateConfirmed(value: boolean) {
   emit('update:confirmed', value);
 };
 
-watch(currentValue, () => {
+watch(currentValue, (value) => {
+  wholeInputValue.value = Math.floor(value);
+
   if (props.confirmed)
     updateConfirmed(false);
 });
@@ -238,12 +252,48 @@ watch(currentValue, () => {
 }
 
 .quantity-field {
-  max-width: 220px;
+  width: 260px;
+  max-width: 100%;
+}
+
+.quantity-field--fraction-only {
+  width: 130px;
+}
+
+.quantity-field--fraction-only :deep(input) {
+  pointer-events: none;
+}
+
+.quantity-field .v-field--appended {
+  padding-inline-end: 0;
+}
+
+.quantity-field input {
+  font-size: 2.5rem;
+  text-align: center;
 }
 
 .fraction-symbol {
-  font-size: 1.5rem;
-  margin-right: 4px;
-  user-select: none;
+  padding-right: 1.5rem;
+  flex: 0 0 3.5rem;
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.fraction-controls {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  width: 3rem;
+  border-left: thin solid rgba(var(--v-border-color), 0.2);
+}
+
+.fraction-controls > * {
+  flex: 1 1 0;
+  width: 100%;
+}
+
+.fraction-controls > :first-child {
+  border-bottom: thin solid rgba(var(--v-border-color), 0.2);
 }
 </style>

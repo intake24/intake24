@@ -506,6 +506,11 @@
       "classic": "Classic",
       "accessible": "Accessible"
     },
+    "asServed": {
+      "_": "As Served UI",
+      "classic": "Classic",
+      "accessible": "Accessible"
+    },
     "validation": {
       "required": "Prompt is required to be filled in",
       "message": "Error message to be displayed",

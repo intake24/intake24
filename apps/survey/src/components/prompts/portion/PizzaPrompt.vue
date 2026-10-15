@@ -111,7 +111,6 @@
         <v-expansion-panel-text>
           <component
             :is="quantityCardComponent"
-            v-bind="quantityCardProps"
             v-model="state.portionSize.slice.quantity"
             v-model:confirmed="state.confirmed.quantity"
             @update:confirmed="confirmType('quantity', $event)"
@@ -229,9 +228,6 @@ const quantityCardComponent = computed(() => {
 
   return QuantityCard;
 });
-const quantityCardProps = computed(() => (
-  props.prompt.quantityCard === 'accessible' ? { foodLabel: foodName.value } : {}
-));
 
 const typeValid = computed(() => (
   state.value.portionSize.type.id !== undefined

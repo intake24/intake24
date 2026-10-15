@@ -145,7 +145,6 @@
               <v-col cols="12" sm="6">
                 <component
                   :is="quantityCardComponent"
-                  v-bind="quantityCardProps"
                   v-model="state.portionSize.quantity"
                   @update:confirmed="confirmType('quantity', $event)"
                 />
@@ -216,9 +215,6 @@ const quantityCardComponent = computed(() => {
 
   return QuantityCard;
 });
-const quantityCardProps = computed(() => (
-  props.prompt.quantityCard === 'accessible' ? { foodLabel: foodName.value } : {}
-));
 const validConditions = computed(() => [
   psmValid.value,
   sizeValid.value,

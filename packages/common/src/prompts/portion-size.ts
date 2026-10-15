@@ -21,6 +21,7 @@ export const asServedPrompt: Prompts['as-served-prompt'] = copy({
     source: [],
   },
   multiple: false,
+  asServedStyle: 'classic',
 });
 
 export const cerealPrompt: Prompts['cereal-prompt'] = copy({

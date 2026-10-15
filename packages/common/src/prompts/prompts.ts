@@ -187,6 +187,9 @@ export type LinkedQuantity = z.infer<typeof linkedQuantity>;
 export const quantityCards = ['classic', 'accessible'] as const;
 export type QuantityCard = (typeof quantityCards)[number];
 
+export const asServedStyles = ['classic', 'accessible'] as const;
+export type AsServedStyle = (typeof asServedStyles)[number];
+
 export const reviewOptions = [
   false,
   'scroll',
@@ -296,6 +299,7 @@ const asServedPrompt = z.object({
   imageMap,
   leftovers: z.boolean(),
   linkedQuantity,
+  asServedStyle: z.enum(asServedStyles).default('classic'),
 });
 
 const cerealPrompt = z.object({

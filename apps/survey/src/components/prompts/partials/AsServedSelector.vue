@@ -16,14 +16,18 @@
         {{ label }}
       </v-chip>
     </div>
-    <!-- <as-served-weight-factor
+    <as-served-weight-factor
+      v-if="selectorStyle === 'classic'"
       v-bind="weightFactorProps"
       @update:model-value="updateWeightFactor"
-    /> -->
+    />
   </v-img>
   <v-container class="px-0">
+    <p aria-atomic="true" aria-live="polite" class="sr-only" role="status">
+      {{ accessibleActiveWeightFactor }}
+    </p>
     <v-row v-if="asServedData" class="ga-1">
-      <v-col class="pa-1 rounded-lg" :class="{ 'border-primary-2': isLessWeightFactorActive }" cols="3" lg sm="2">
+      <v-col v-if="selectorStyle === 'classic'" class="pa-1 rounded-lg" :class="{ 'border-primary-2': isLessWeightFactorActive }" cols="3" lg sm="2">
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           <v-img cover :src="firstThumbnail" />
           <v-overlay
@@ -57,7 +61,7 @@
         sm="2"
       >
         <v-card
-          :aria-label="labels.objects?.[idx]"
+          :aria-label="imageAriaLabel(idx)"
           tabindex="0"
           @click="setSelection(idx)"
           @keydown="onKeydown($event, idx)"
@@ -65,7 +69,7 @@
           <v-img cover :src="images.thumbnailUrl" />
         </v-card>
       </v-col>
-      <v-col v-if="showMoreWeightFactor" class="pa-1 rounded-lg" :class="{ 'border-primary-2': isMoreWeightFactorActive }" cols="3" lg sm="2">
+      <v-col v-if="selectorStyle === 'classic' && showMoreWeightFactor" class="pa-1 rounded-lg" :class="{ 'border-primary-2': isMoreWeightFactorActive }" cols="3" lg sm="2">
         <v-card :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
           <v-img cover :src="lastThumbnail" />
           <v-overlay
@@ -91,13 +95,17 @@
         </v-card>
       </v-col>
     </v-row>
-    <quantity-card-accessible
-      v-model="portionQuantity"
-      :confirm="false"
-      label-key="prompts.asServed.accessible.total"
-      :max="maxPortionQuantity"
-      :min="0.25"
-    />
+    <v-row v-if="accessibleActiveWeightFactor">
+      <quantity-card-accessible
+        v-model="portionQuantity"
+        :confirm="false"
+        :description="accessibleActiveWeightFactor"
+        label-key="prompts.asServed.accessible.total"
+        :max="isMinPortionSelected ? 1 : maxPortionQuantity"
+        :min="isMinPortionSelected ? 0.25 : 1"
+        :show-input-label="!isMinPortionSelected"
+      />
+    </v-row>
     <v-row>
       <v-col class="px-1" cols="12" sm="auto">
         <v-btn :block="$vuetify.display.mobile" color="primary" @click="confirm">
@@ -120,8 +128,9 @@ import { deepEqual } from 'fast-equals';
 import { computed, ref } from 'vue';
 
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
+import { useI18n } from '@intake24/ui';
 
-// import AsServedWeightFactor from './AsServedWeightFactor.vue';
+import AsServedWeightFactor from './AsServedWeightFactor.vue';
 import QuantityCardAccessible from './QuantityCardAccessible.vue';
 import { useFetchImageData } from './use-fetch-image-data';
 import { useLabels } from './use-labels';
@@ -146,6 +155,10 @@ const props = defineProps({
     type: String as PropType<'serving' | 'leftovers'>,
     default: 'serving',
   },
+  selectorStyle: {
+    type: String as PropType<Prompts['as-served-prompt']['asServedStyle']>,
+    default: 'classic',
+  },
   modelValue: {
     type: Object as PropType<SelectedAsServedImage | null>,
     default: null,
@@ -153,6 +166,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['confirm', 'update:modelValue']);
+
+const { i18n: { t } } = useI18n();
 
 const denominator = 4;
 const objectIdx = ref<number | undefined>(undefined);
@@ -241,6 +256,24 @@ const image = computed(() => {
 });
 const isLessWeightFactorActive = computed(() => weightFactorProps.value.show && weightFactorProps.value.subType === 'less');
 const isMoreWeightFactorActive = computed(() => weightFactorProps.value.show && weightFactorProps.value.subType === 'more');
+
+const isMinPortionSelected = computed(() => objectIdx.value === 0);
+const isMaxPortionSelected = computed(() => {
+  const totalImages = asServedData.value?.images?.length ?? 0;
+  return totalImages > 0 && (objectIdx.value === totalImages - 1);
+});
+
+const accessibleActiveWeightFactor = computed(() => {
+  if (props.selectorStyle === 'accessible') {
+    if (isMinPortionSelected.value)
+      return t('prompts.asServed.accessible.description.min');
+
+    if (isMaxPortionSelected.value)
+      return t('prompts.asServed.accessible.description.max');
+  }
+  return '';
+});
+
 const firstThumbnail = computed(() => {
   if (objectIdx.value === undefined)
     return '';
@@ -374,6 +407,12 @@ function isSelected(idx: number) {
 
   return idx === objectIdx.value;
 };
+
+function imageAriaLabel(idx: number) {
+  const portion = labels.value.objects?.[idx];
+
+  return portion && isSelected(idx) ? t('prompts.asServed.accessible.selectedPortion', { portion }) : portion;
+}
 
 function update() {
   if (objectIdx.value === undefined || !asServedData.value)

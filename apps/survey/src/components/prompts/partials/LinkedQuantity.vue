@@ -19,7 +19,6 @@
     <v-expansion-panel-text>
       <component
         :is="quantityCardComponent"
-        v-bind="quantityCardProps"
         :confirmed="confirmed"
         :max="parentQuantity"
         :model-value="modelValue"
@@ -103,15 +102,6 @@ const quantityCardComponent = computed(() => {
 
   return QuantityCard;
 });
-
-const quantityCardProps = computed(() => (
-  (
-    props.prompt.component === 'guide-image-prompt'
-    || props.prompt.component === 'standard-portion-prompt'
-  ) && props.prompt.quantityCard === 'accessible'
-    ? { foodLabel: foodName.value }
-    : {}
-));
 
 function updateQuantity(value: number) {
   emit('update:modelValue', value);
