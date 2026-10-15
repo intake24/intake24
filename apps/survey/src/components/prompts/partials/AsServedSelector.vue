@@ -306,7 +306,9 @@ const maxPortionQuantity = computed(() => {
   if (objectIdx.value === undefined || !asServedData.value)
     return 1;
 
-  const weight = asServedData.value.images[objectIdx.value].weight;
+  const weight = asServedData.value?.images.at(objectIdx.value)?.weight;
+  if (!weight)
+    return 1;
   const max = props.maxWeight === undefined ? 5 : props.maxWeight / weight;
 
   return Math.max(0.25, Math.floor(max * denominator) / denominator);
