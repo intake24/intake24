@@ -210,6 +210,7 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         conditions,
         multiple: false,
         linkedQuantity: { auto: false, parent: [], source: [] },
+        asServedStyle: 'classic',
       };
     }
     case 'drink-scale-prompt': {

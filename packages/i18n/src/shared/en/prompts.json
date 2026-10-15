@@ -388,7 +388,11 @@
     "and": "and",
     "confirm": "I had that many",
     "more": "More",
-    "less": "Less"
+    "less": "Less",
+    "accessible": {
+      "enterWholeNumber": "Enter a whole number",
+      "currentSelection": "Current selection is {selection}"
+    }
   },
   "portionSizeOption": {
     "name": "Portion method",
@@ -480,6 +484,14 @@
       },
       "less": "of the smallest portion",
       "more": "of the largest portion"
+    },
+    "accessible": {
+      "description": {
+        "min": "If you had less than the portion, please select the amount below",
+        "max": "If you had more than the portion, please select the amount below"
+      },
+      "selectedPortion": "Selected portion {portion}",
+      "total": "I had {quantity} of the selected portion"
     }
   },
   "cereal": {

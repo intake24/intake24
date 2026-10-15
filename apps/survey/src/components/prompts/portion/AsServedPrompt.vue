@@ -43,6 +43,7 @@
               food,
               prompt,
               asServedSetId: parameters.servingImageSet,
+              selectorStyle: prompt.asServedStyle,
             }"
             @confirm="confirmServing"
             @update:model-value="updateServing"
@@ -84,6 +85,7 @@
                 prompt,
                 asServedSetId: parameters.leftoversImageSet,
                 maxWeight: state.portionSize.serving?.weight,
+                selectorStyle: prompt.asServedStyle,
                 type: 'leftovers',
               }"
               @confirm="confirmLeftovers"
@@ -112,8 +114,8 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <component
-            :is="prompt.multiple.type"
-            v-if="prompt.multiple"
+            :is="multipleComponentName"
+            v-if="multipleComponentName"
             v-model="state.portionSize.quantity"
             v-model:confirmed="state.quantityConfirmed"
             v-bind="multipleProps"
@@ -161,6 +163,7 @@ import {
   Next,
   QuantityBadge,
   QuantityCard,
+  QuantityCardAccessible,
   QuantitySlider,
   useMultiple,
   usePanel,
@@ -173,6 +176,7 @@ defineOptions({
   components: {
     Slider: QuantitySlider,
     Counter: QuantityCard,
+    Accessible: QuantityCardAccessible,
   },
 });
 
@@ -191,6 +195,18 @@ const { multipleProps, multipleEnabled } = useMultiple(props);
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
+
+const multipleComponentName = computed(() => {
+  const { multiple, asServedStyle } = props.prompt;
+
+  if (!multiple)
+    return undefined;
+
+  if (multiple.type === 'counter' && asServedStyle === 'accessible')
+    return 'accessible';
+
+  return multiple.type;
+});
 
 const leftoversEnabled = computed(() => props.prompt.leftovers && !!parameters.value.leftoversImageSet);
 const servingValid = computed(() => !!(state.value.portionSize.serving && state.value.servingImageConfirmed));

@@ -75,7 +75,8 @@
           </template>
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <quantity-card
+          <component
+            :is="quantityCardComponent"
             v-model="state.portionSize.quantity"
             v-model:confirmed="state.quantityConfirmed"
             @update:confirmed="confirmQuantity"
@@ -111,7 +112,7 @@ import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { pushPromptHistoryEntry, registerPromptHistoryHandler, unregisterPromptHistoryHandler } from '@intake24/survey/stores';
 
 import { BaseLayout } from '../layouts';
-import { LinkedQuantity, Next, QuantityBadge, QuantityCard, usePanel, usePortionSizeMethod, useStandardUnits } from '../partials';
+import { LinkedQuantity, Next, QuantityBadge, QuantityCard, QuantityCardAccessible, usePanel, usePortionSizeMethod, useStandardUnits } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
@@ -136,6 +137,12 @@ const {
 const state = ref(copy(props.modelValue));
 
 const unitValid = computed(() => !!state.value.portionSize.unit);
+const quantityCardComponent = computed(() => {
+  if (props.prompt.quantityCard === 'accessible')
+    return QuantityCardAccessible;
+
+  return QuantityCard;
+});
 const quantityValid = computed(() => state.value.quantityConfirmed);
 const validConditions = computed(() => {
   const conditions = [psmValid.value, unitValid.value, quantityValid.value];

@@ -21,6 +21,7 @@ export const asServedPrompt: Prompts['as-served-prompt'] = copy({
     source: [],
   },
   multiple: false,
+  asServedStyle: 'classic',
 });
 
 export const cerealPrompt: Prompts['cereal-prompt'] = copy({
@@ -73,6 +74,7 @@ export const guideImagePrompt: Prompts['guide-image-prompt'] = copy({
     parent: [{ code: 'BRED' }],
     source: ['BTTR'],
   },
+  quantityCard: 'classic',
 });
 
 export const milkInAHotDrinkPrompt: Prompts['milk-in-a-hot-drink-prompt'] = copy({
@@ -124,6 +126,7 @@ export const pizzaPrompt: Prompts['pizza-prompt'] = copy({
     labels: false,
     pinchZoom: false,
   },
+  quantityCard: 'classic',
 });
 
 export const pizzaV2Prompt: Prompts['pizza-v2-prompt'] = copy({
@@ -136,6 +139,7 @@ export const pizzaV2Prompt: Prompts['pizza-v2-prompt'] = copy({
     labels: false,
     pinchZoom: false,
   },
+  quantityCard: 'classic',
 });
 
 export const genericBuilderPrompt: Prompts['generic-builder-prompt'] = copy({
@@ -177,6 +181,7 @@ export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({
     parent: [],
     source: [],
   },
+  quantityCard: 'classic',
 });
 
 export const unknownPrompt: Prompts['unknown-prompt'] = copy({
