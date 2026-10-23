@@ -106,6 +106,7 @@ import type { Prompts } from '@intake24/common/prompts';
 import { ref, watch } from 'vue';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
+import { updateFoodCodePlaceholder } from '@intake24/common/prompts';
 
 import { useBasePrompt } from '../partials';
 
@@ -149,7 +150,7 @@ function changeToggle(type: boolean, enable: boolean | null) {
     currentTrueAction.value = enable
       ? {
           type: 'updateFood',
-          params: { code: 'FOOD_CODE' },
+          params: { code: updateFoodCodePlaceholder },
         }
       : undefined;
   }
@@ -157,7 +158,7 @@ function changeToggle(type: boolean, enable: boolean | null) {
     currentFalseAction.value = enable
       ? {
           type: 'updateFood',
-          params: { code: 'FOOD_CODE' },
+          params: { code: updateFoodCodePlaceholder },
         }
       : undefined;
   }
