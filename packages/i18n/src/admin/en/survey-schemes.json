@@ -720,7 +720,8 @@
       "subtitle": "Ask to choose any number of items from a list",
       "refreshSubsets": "Refresh Update Food subsets",
       "disableUpdateFoodActions": "Disable Update Food actions",
-      "disableUpdateFoodActionsWarning": "Disabling Update Food actions will permanently remove every configured subset action. Are you sure?"
+      "disableUpdateFoodActionsWarning": "Disabling Update Food actions will permanently remove every configured subset action. Are you sure?",
+      "toggleUpdateFood": "Update food based on selection"
     },
     "radio-list-prompt": {
       "title": "Single choice",

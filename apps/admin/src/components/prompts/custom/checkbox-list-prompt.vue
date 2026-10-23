@@ -30,7 +30,7 @@
           class="mt-3"
           density="compact"
           hide-details="auto"
-          :label="$t('common.options.action.updateFood')"
+          :label="$t('survey-schemes.prompts.checkbox-list-prompt.toggleUpdateFood')"
           :model-value="showUpdateFoodActions"
           @update:model-value="toggleUpdateFoodActions"
         />
