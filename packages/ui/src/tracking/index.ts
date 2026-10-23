@@ -9,6 +9,7 @@ export const gtmEvents = [
   'surveyHome',
   'surveyLogout',
   'foodSearch',
+  'foodSearchScroll',
   'recallSubmitted',
   'startRecall',
   'cancelRecall',
