@@ -8,7 +8,7 @@ Nutrient type is nutrient record definition within food composition table.
 
 - `Description` - Nutrient type description
 
-- `Nutrient unit` - Select existing [nutrient unit](/admin/foods/nutrient-units) record
+- `Nutrient unit` - Select existing [nutrient unit](/admin/nutrients/nutrient-units) record
 
 - `KCal per unit` - KCal per unit
 

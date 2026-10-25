@@ -4,32 +4,29 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { StandardUnit } from '@intake24/db';
 
 export default () => {
-  const baseUrl = '/api/admin/standard-units';
-  const permissions = ['standard-units', 'standard-units:edit'];
+  const baseUrl = '/api/admin/locales';
+  const permissions = ['locales', 'locales:standard-units'];
 
   let url: string;
   let invalidUrl: string;
 
   let input: StandardUnitCreationAttributes;
   let updateInput: StandardUnitCreationAttributes;
-  let output: StandardUnitCreationAttributes;
   let standardUnit: StandardUnit;
 
   beforeAll(async () => {
-    input = mocker.foods.standardUnit();
-    updateInput = mocker.foods.standardUnit();
-
-    const { id } = input;
-    output = { ...updateInput, id };
+    const { id, code: localeId } = suite.data.system.Locale;
+    input = mocker.foods.standardUnit(localeId);
+    updateInput = mocker.foods.standardUnit(localeId);
 
     standardUnit = await StandardUnit.create(input);
 
-    url = `${baseUrl}/${standardUnit.id}`;
-    invalidUrl = `${baseUrl}/999999`;
+    url = `${baseUrl}/${id}/standard-units/${standardUnit.id}`;
+    invalidUrl = `${baseUrl}/${id}/standard-units/999999`;
   });
 
   it('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('put', url, { permissions });
+    await suite.sharedTests.assert401and403('put', url, { input, permissions });
   });
 
   describe('authenticated / resource authorized', () => {
@@ -38,12 +35,12 @@ export default () => {
     });
 
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['name', 'estimateIn', 'howMany', 'icon']);
+      await suite.sharedTests.assertInvalidInput('put', url, ['code', 'name', 'estimateIn', 'howMany']);
     });
 
     it('should return 400 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['name', 'estimateIn.en', 'howMany', 'icon'], {
-        input: { name: null, estimateIn: { en: ['text'] }, howMany: 10, icon: true },
+      await suite.sharedTests.assertInvalidInput('put', url, ['code', 'name', 'estimateIn.en', 'howMany', 'icon'], {
+        input: { code: false, name: null, estimateIn: { en: ['text'] }, howMany: 10, icon: true },
       });
     });
 
@@ -52,7 +49,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      await suite.sharedTests.assertRecordUpdated('put', url, output, { input: updateInput });
+      await suite.sharedTests.assertRecordUpdated('put', url, updateInput);
     });
   });
 };

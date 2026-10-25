@@ -9,14 +9,14 @@ export function foodBuilder() {
     get: {
       middleware: [permission('locales')],
       handler: async ({ params: { localeId }, req }) => {
-        const { aclService, localeService } = req.scope.cradle;
+        const { aclService, adminLocaleService } = req.scope.cradle;
 
         const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-builders', {
           attributes: ['id', 'code'],
           where: { id: localeId },
         });
 
-        const foodBuilders = await localeService.getFoodBuilders(locale);
+        const foodBuilders = await adminLocaleService.getFoodBuilders(locale);
 
         return { status: 200, body: foodBuilders };
       },
@@ -24,13 +24,13 @@ export function foodBuilder() {
     set: {
       middleware: [permission('locales')],
       handler: async ({ body, params: { localeId }, req }) => {
-        const { aclService, localeService } = req.scope.cradle;
+        const { aclService, adminLocaleService } = req.scope.cradle;
 
         const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-builders', {
           attributes: ['id', 'code'],
           where: { id: localeId },
         });
-        const foodBuilders = await localeService.setFoodBuilders(locale, body);
+        const foodBuilders = await adminLocaleService.setFoodBuilders(locale, body);
 
         return { status: 200, body: foodBuilders };
       },

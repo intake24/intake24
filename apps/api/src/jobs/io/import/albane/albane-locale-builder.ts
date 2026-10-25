@@ -20,7 +20,7 @@ import type {
   PkgV2PortionSizeMethod,
   PkgV2PortionSizeMethodPathways,
   PkgV2StandardPortionPsm,
-  PkgV2StandardUnit,
+  PkgV2StandardUnitItem,
 } from '@intake24/common/types/package';
 import type { PkgV2AsServedSet } from '@intake24/common/types/package/as-served';
 import type { PkgV2Category } from '@intake24/common/types/package/categories';
@@ -773,7 +773,7 @@ export class AlbaneLocaleBuilder {
   }
 
   private async readStandardUnits(): Promise<Dictionary<PkgV2StandardPortionPsm>> {
-    const getStandardUnits = (rows: AlbaneStandardUnitRow[]): PkgV2StandardUnit[] => {
+    const getStandardUnits = (rows: AlbaneStandardUnitRow[]): PkgV2StandardUnitItem[] => {
       return sortBy(rows, row => Number.parseInt(row.US_NUM)).map((row) => {
         const description = row.US_LIBELLE.replace(/^1\s+/, '');
 

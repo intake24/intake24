@@ -9,14 +9,14 @@ export function synonymSet() {
     get: {
       middleware: [permission('locales')],
       handler: async ({ params: { localeId }, req }) => {
-        const { aclService, localeService } = req.scope.cradle;
+        const { aclService, adminLocaleService } = req.scope.cradle;
 
         const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'synonym-sets', {
           attributes: ['id', 'code'],
           where: { id: localeId },
         });
 
-        const synonymSets = await localeService.getSynonymSets(locale);
+        const synonymSets = await adminLocaleService.getSynonymSets(locale);
 
         return { status: 200, body: synonymSets };
       },
@@ -24,14 +24,14 @@ export function synonymSet() {
     set: {
       middleware: [permission('locales')],
       handler: async ({ body, params: { localeId }, req }) => {
-        const { aclService, localeService } = req.scope.cradle;
+        const { aclService, adminLocaleService } = req.scope.cradle;
 
         const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'synonym-sets', {
           attributes: ['id', 'code'],
           where: { id: localeId },
         });
 
-        const synonymSets = await localeService.setSynonymSets(locale, body);
+        const synonymSets = await adminLocaleService.setSynonymSets(locale, body);
 
         return { status: 200, body: synonymSets };
       },

@@ -5,11 +5,11 @@
       class="mb-4 align-self-end"
       color="primary"
       rounded
-      :title="$t('standard-units.add')"
+      :title="$t('locales.standard-units.add')"
       @click="add"
     >
       <v-icon icon="$add" start />
-      {{ $t('standard-units.add') }}
+      {{ $t('locales.standard-units.add') }}
     </v-btn>
     <v-table>
       <thead>
@@ -33,9 +33,16 @@
             <v-drag-and-drop-handle />
           </td>
           <td>
-            <select-resource v-model="unit.name" :readonly resource="standard-units">
+            <select-resource
+              v-model="unit.name"
+              item-id="code"
+              :query="{ localeId: localeCode }"
+              :readonly
+              resource="standard-units"
+              :title="$t('locales.standard-units.title')"
+            >
               <template #activator="{ props }">
-                <v-btn v-bind="props" :readonly :title="$t('standard-units.add')" variant="text">
+                <v-btn v-bind="props" :readonly :title="$t('locales.standard-units.add')" variant="text">
                   <v-icon icon="$standard-units" start />
                   {{ unit.name }}
                 </v-btn>
@@ -62,7 +69,7 @@
               color="error"
               icon
               icon-left="$delete"
-              :label="$t('standard-units.remove')"
+              :label="$t('locales.standard-units.remove')"
               size="small"
               variant="text"
               @confirm="remove(idx)"
@@ -81,6 +88,7 @@ import type { PropType } from 'vue';
 
 import type { PortionSizeParameters } from '@intake24/common/surveys';
 
+import { inject } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
@@ -102,6 +110,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue']);
+
+const localeCode = inject<string>('localeCode');
 
 const { parameters } = useParameters<'standard-portion'>(props, { emit });
 

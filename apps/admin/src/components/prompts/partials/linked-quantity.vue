@@ -45,17 +45,19 @@
           {{ $t('fdbs.categories._') }}: {{ item.code }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          {{ $t('standard-units._') }}: {{ item.unit ?? $t('common.not.assigned') }}
+          {{ $t('locales.standard-units._') }}: {{ item.unit ?? $t('common.not.assigned') }}
         </v-list-item-subtitle>
       </template>
       <template #[`item.action`]="{ item }">
         <select-resource
-          item-name="id"
+          item-id="code"
+          item-name="code"
           resource="standard-units"
+          :title="$t('locales.standard-units.title')"
           @update:model-value="updateLQUnit(item.code, $event)"
         >
           <template #activator="{ props }">
-            <v-btn icon="$standard-units" v-bind="props" :title="$t('standard-units.add')" />
+            <v-btn icon="$standard-units" v-bind="props" :title="$t('locales.standard-units.add')" />
           </template>
         </select-resource>
       </template>
@@ -98,7 +100,7 @@ function updateLQUnit(code: string, unit: string) {
   if (idx === -1)
     return;
 
-  parent.splice(idx, 1, { code, unit });
+  linkedQuantity.value.parent.splice(idx, 1, { code, unit });
 }
 </script>
 

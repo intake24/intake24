@@ -8,7 +8,7 @@ import type {
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
 
-import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
+import { Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 
@@ -16,7 +16,7 @@ import BaseModel from '../model';
   modelName: 'StandardUnit',
   tableName: 'standard_units',
   freezeTableName: true,
-  timestamps: true,
+  timestamps: false,
   underscored: true,
 })
 export default class StandardUnit extends BaseModel<
@@ -24,17 +24,37 @@ export default class StandardUnit extends BaseModel<
   InferCreationAttributes<StandardUnit>
 > {
   @Column({
-    allowNull: false,
+    autoIncrement: true,
     primaryKey: true,
-    type: DataType.STRING(64),
+    type: DataType.BIGINT,
   })
   declare id: CreationOptional<string>;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(64),
+    unique: 'standard_units_unique',
+  })
+  declare code: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(64),
+    unique: 'standard_units_unique',
+  })
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
   declare name: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(64),
+  })
+  declare icon: string | null;
 
   @Column({
     allowNull: false,
@@ -47,18 +67,6 @@ export default class StandardUnit extends BaseModel<
     type: DataType.JSONB,
   })
   declare howMany: RequiredLocaleTranslation;
-
-  @Column({
-    allowNull: true,
-    type: DataType.STRING(64),
-  })
-  declare icon: string | null;
-
-  @CreatedAt
-  declare createdAt: CreationOptional<Date>;
-
-  @UpdatedAt
-  declare updatedAt: CreationOptional<Date>;
 }
 
 export type StandardUnitAttributes = Attributes<StandardUnit>;

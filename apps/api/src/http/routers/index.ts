@@ -10,12 +10,11 @@ import { requestValidationErrorHandler } from '../errors';
 import { isAalSatisfied, isAccountVerified, isSurveyRespondent, registerACLScope } from '../middleware';
 import admin from './admin';
 import { authentication } from './authentication.router';
-import { category } from './category.router';
 import { feedback } from './feedback.router';
-import { food } from './food.router';
 import { health } from './health.router';
 import { i18n } from './i18n.router';
 import { createLargeFileUploadRouter } from './large-file-upload.router';
+import locale from './locale';
 import { password } from './password.router';
 import { portionSize } from './portion-size.router';
 import { subscription } from './subscription.router';
@@ -42,9 +41,12 @@ export function registerRouters(express: Router) {
   );
   // Authenticated endpoints
   const authContract = {
-    category: contract.category,
+    locale: {
+      category: contract.locale.category,
+      food: contract.locale.food,
+      standardUnit: contract.locale.standardUnit,
+    },
     feedback: contract.feedback,
-    food: contract.food,
     portionSize: contract.portionSize,
     subscription: contract.subscription,
     user: contract.user,
@@ -52,9 +54,12 @@ export function registerRouters(express: Router) {
   createExpressEndpoints(
     authContract,
     server.router(authContract, {
-      category: category(),
+      locale: {
+        category: locale.category(),
+        food: locale.food(),
+        standardUnit: locale.standardUnit(),
+      },
       feedback: feedback(),
-      food: food(),
       portionSize: portionSize(),
       subscription: subscription(),
       user: {
@@ -180,6 +185,7 @@ export function registerRouters(express: Router) {
     localeFoodBuilder: contract.admin.locale.foodBuilder,
     localeSplitList: contract.admin.locale.splitList,
     localeSplitWord: contract.admin.locale.splitWord,
+    localeStandardUnit: contract.admin.locale.standardUnit,
     localeSynonymSet: contract.admin.locale.synonymSet,
     localeSecurable: contract.admin.localeSecurable,
     media: contract.admin.media,
@@ -190,7 +196,6 @@ export function registerRouters(express: Router) {
     packages: contract.admin.packages,
     reference: contract.admin.reference,
     signInLog: contract.admin.signInLog,
-    standardUnit: contract.admin.standardUnit,
     surveyScheme: contract.admin.surveyScheme,
     surveySchemeMedia: contract.admin.surveySchemeMedia,
     surveySchemePrompt: contract.admin.surveySchemePrompt,
@@ -243,6 +248,7 @@ export function registerRouters(express: Router) {
       localeFoodBuilder: admin.locale.foodBuilder(),
       localeSplitList: admin.locale.splitList(),
       localeSplitWord: admin.locale.splitWord(),
+      localeStandardUnit: admin.locale.standardUnit(),
       localeSynonymSet: admin.locale.synonymSet(),
       localeSecurable: admin.securable(SystemLocale, contract.admin.localeSecurable),
       media: admin.media(),
@@ -253,7 +259,6 @@ export function registerRouters(express: Router) {
       packages: admin.packages(),
       reference: admin.reference(),
       signInLog: admin.signInLog(),
-      standardUnit: admin.standardUnit(),
       survey: admin.survey.survey(),
       surveyRespondent: admin.survey.respondent(),
       surveyRespondentCustomField: admin.survey.respondentCustomField(),

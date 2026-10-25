@@ -318,7 +318,7 @@ There is no leftovers option for this estimation method.
 
 ### Parameters
 
-- `units` - list of [standard units](/admin/foods/standard-units) for the portion size estimation to choose from.
+- `units` - list of [standard units](/admin/locales/standard-units) for the portion size estimation to choose from.
 
 ## Unknown
 

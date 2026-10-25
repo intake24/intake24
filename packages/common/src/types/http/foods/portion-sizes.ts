@@ -78,13 +78,12 @@ export const drinkwareSetResponse = drinkwareSetEntry
 export type DrinkwareSetResponse = z.infer<typeof drinkwareSetResponse>;
 
 export const standardUnitResponse = z.object({
-  id: z.string(),
+  code: z.string(),
   name: z.string(),
   icon: z.string().nullable(),
   estimateIn: requiredLocaleTranslation,
   howMany: requiredLocaleTranslation,
 });
-
 export type StandardUnitResponse = z.infer<typeof standardUnitResponse>;
 
 export const weightResponse = z.object({

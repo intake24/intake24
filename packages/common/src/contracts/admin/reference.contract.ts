@@ -61,8 +61,7 @@ export const reference = initContract().router({
   categories: {
     method: 'GET',
     path: '/admin/references/categories',
-    query: bigIntQuery.extend({
-      code: z.union([z.string().min(1), z.string().min(1).array()]).optional(),
+    query: bigIntQueryWithCode.extend({
       localeId: z.string().min(1).optional(),
     }),
     responses: {
@@ -224,7 +223,9 @@ export const reference = initContract().router({
   standardUnits: {
     method: 'GET',
     path: '/admin/references/standard-units',
-    query,
+    query: bigIntQueryWithCode.extend({
+      localeId: z.string().min(1).optional(),
+    }),
     responses: {
       200: z.object({
         data: standardUnitReference.array(),

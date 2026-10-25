@@ -22,7 +22,7 @@ export default () => {
       { localeId, firstWord: 'second word', words: 'second1 second2 second3' },
     ];
 
-    await ioc.cradle.localeService.setSplitLists(id, splitLists);
+    await ioc.cradle.adminLocaleService.setSplitLists(id, splitLists);
 
     url = `${baseUrl}/${id}/split-lists`;
     invalidUrl = `${baseUrl}/999999/split-lists`;

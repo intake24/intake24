@@ -309,13 +309,14 @@ export function reference() {
     },
     standardUnits: {
       middleware: [anyPermission('locales', 'survey-schemes')],
-      handler: async ({ query: { id, ...query } }) => {
+      handler: async ({ query: { id, code, localeId, ...query } }) => {
         const standardUnits = await StandardUnit.paginate({
-          where: id ? { id } : undefined,
+          where: filterUndefined({ id, code, localeId }),
           query,
-          attributes: ['id', 'name', 'icon', 'estimateIn', 'howMany'],
-          columns: ['id', 'name'],
-          order: [[fn('lower', col('id')), 'ASC']],
+          attributes: localeId ? ['id', 'code', 'name'] : ['code', 'name'],
+          columns: ['code', 'name'],
+          order: [[fn('lower', col('code')), 'ASC']],
+          group: localeId ? undefined : ['code', 'name'],
         });
 
         return { status: 200, body: standardUnits };

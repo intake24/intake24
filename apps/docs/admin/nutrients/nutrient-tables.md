@@ -44,10 +44,10 @@ The export places values at the configured CSV mapping column indexes. If the ma
 
 **Expected file type** - `text/csv`
 
-| Column                       | Description                                              |
-| ---------------------------- | -------------------------------------------------------- |
-| Intake24 nutrient ID         | [Intake24 nutrient type ID](/admin/foods/nutrient-types) |
-| NDB spreadsheet column index | Excel-based column name                                  |
+| Column                       | Description                                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| Intake24 nutrient ID         | [Intake24 nutrient type ID](/admin/nutrients/nutrient-types) |
+| NDB spreadsheet column index | Excel-based column name                                      |
 
 ### NutrientTableMappingExport
 
@@ -59,8 +59,8 @@ The export places values at the configured CSV mapping column indexes. If the ma
 }
 ```
 
-| Column                       | Description                                                |
-| ---------------------------- | ---------------------------------------------------------- |
-| Intake24 nutrient ID         | [Intake24 nutrient type ID](/admin/foods/nutrient-types)   |
-| NDB spreadsheet column index | Excel-based column name                                    |
-| Nutrient name                | Informational nutrient type description; ignored on import |
+| Column                       | Description                                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| Intake24 nutrient ID         | [Intake24 nutrient type ID](/admin/nutrients/nutrient-types) |
+| NDB spreadsheet column index | Excel-based column name                                      |
+| Nutrient name                | Informational nutrient type description; ignored on import   |

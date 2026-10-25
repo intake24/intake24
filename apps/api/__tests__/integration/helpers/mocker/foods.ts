@@ -127,9 +127,10 @@ function nutrientUnit(): NutrientUnitRequest {
   };
 }
 
-function standardUnit(): StandardUnitCreationAttributes {
+function standardUnit(localeId: string): StandardUnitCreationAttributes {
   return {
-    id: toStandardUnitId(faker.word.words(3)),
+    code: toStandardUnitId(faker.word.words(3)),
+    localeId,
     name: faker.word.words(2),
     estimateIn: { en: faker.word.words(5), es: faker.word.words(5) },
     howMany: { en: faker.word.words(5), es: faker.word.words(5) },

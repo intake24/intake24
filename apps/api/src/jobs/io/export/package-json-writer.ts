@@ -7,6 +7,7 @@ import type { PkgV2Food } from '@intake24/common/types/package/foods';
 import type { PkgV2GuideImage } from '@intake24/common/types/package/guide-image';
 import type { PkgV2ImageMap } from '@intake24/common/types/package/image-map';
 import type { PkgV2Locale } from '@intake24/common/types/package/locale';
+import type { PkgV2StandardUnit } from '@intake24/common/types/package/standard-units';
 import type { PkgV2SynonymSet } from '@intake24/common/types/package/synonym-sets';
 
 import fs from 'node:fs/promises';
@@ -16,6 +17,7 @@ const PORTION_SIZE_DIRECTORY_NAME = 'portion-size';
 const FOODS_FILE_NAME = 'foods.json';
 const CATEGORIES_FILE_NAME = 'categories.json';
 const SYNONYM_SETS_FILE_NAME = 'synonym-sets.json';
+const STANDARD_UNITS_FILE_NAME = 'standard-units.json';
 const AS_SERVED_FILE_NAME = 'as-served.json';
 const IMAGE_MAPS_FILE_NAME = 'image-maps.json';
 const GUIDE_IMAGES_FILE_NAME = 'guide-images.json';
@@ -26,6 +28,7 @@ export class PackageJsonWriter implements PackageWriter {
   private foodsByLocale: Map<string, PkgV2Food[]> = new Map();
   private categoriesByLocale: Map<string, PkgV2Category[]> = new Map();
   private synonymSetsByLocale: Map<string, PkgV2SynonymSet[]> = new Map();
+  private standardUnitsByLocale: Map<string, PkgV2StandardUnit[]> = new Map();
   private asServedSets: PkgV2AsServedSet[] = [];
   private imageMaps: PkgV2ImageMap[] = [];
   private guideImages: PkgV2GuideImage[] = [];
@@ -52,6 +55,15 @@ export class PackageJsonWriter implements PackageWriter {
       this.categoriesByLocale.set(localeId, categories);
     }
     categories.push(category);
+  }
+
+  public async writeStandardUnit(localeId: string, standardUnit: PkgV2StandardUnit): Promise<void> {
+    let standardUnits = this.standardUnitsByLocale.get(localeId);
+    if (standardUnits === undefined) {
+      standardUnits = [];
+      this.standardUnitsByLocale.set(localeId, standardUnits);
+    }
+    standardUnits.push(standardUnit);
   }
 
   public async writeSynonymSet(localeId: string, synonymSet: PkgV2SynonymSet): Promise<void> {
@@ -99,6 +111,12 @@ export class PackageJsonWriter implements PackageWriter {
       const categories: Record<string, PkgV2Category[]> = Object.fromEntries(this.categoriesByLocale);
       const filePath = path.join(this.outputPath, CATEGORIES_FILE_NAME);
       await fs.writeFile(filePath, JSON.stringify(categories, null, 2), 'utf-8');
+    }
+
+    if (this.standardUnitsByLocale.size > 0) {
+      const standardUnits: Record<string, PkgV2StandardUnit[]> = Object.fromEntries(this.standardUnitsByLocale);
+      const filePath = path.join(this.outputPath, STANDARD_UNITS_FILE_NAME);
+      await fs.writeFile(filePath, JSON.stringify(standardUnits, null, 2), 'utf-8');
     }
 
     if (this.synonymSetsByLocale.size > 0) {

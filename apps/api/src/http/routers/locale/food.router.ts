@@ -5,7 +5,7 @@ import { initServer } from '@ts-rest/express';
 import { contract } from '@intake24/common/contracts';
 
 export function food() {
-  return initServer().router(contract.food, {
+  return initServer().router(contract.locale.food, {
     entry: async ({ params, req }) => {
       const { foodId } = params;
 

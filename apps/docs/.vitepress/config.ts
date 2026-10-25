@@ -1,13 +1,13 @@
 import { defineConfig } from 'vitepress';
 
-import { description } from '../package.json';
-import { links } from './links';
-import { nav } from './nav';
-import { sidebar } from './sidebar';
+import pkg from '../package.json' with { type: 'json' };
+import { links } from './links.ts';
+import { nav } from './nav.ts';
+import { sidebar } from './sidebar.ts';
 
 export default defineConfig({
   title: 'Intake24',
-  description,
+  description: pkg.description,
   lang: 'en',
 
   head: [

@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import type { LocaleEntry } from '@intake24/common/types/http/admin';
 
-import { computed } from 'vue';
+import { computed, provide } from 'vue';
 
 import { FoodExplorer } from '@intake24/admin/components/fdbs';
 import { EntryLayout } from '@intake24/admin/components/layouts';
@@ -41,4 +41,6 @@ const { entry, entryLoaded, canHandleEntry } = useEntry<LocaleEntry>(props);
 
 const code = computed(() => entry.value.code);
 const readonly = computed(() => !canHandleEntry('food-list:edit'));
+
+provide('localeCode', code);
 </script>

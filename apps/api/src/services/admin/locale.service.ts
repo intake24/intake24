@@ -7,6 +7,7 @@ import type {
   LocaleRequest,
   SplitListRequest,
   SplitWordRequest,
+  StandardUnitRequest,
   SynonymSetRequest,
 } from '@intake24/common/types/http/admin';
 import type { FoodsDB, OnConflictOption, SystemDB } from '@intake24/db';
@@ -17,7 +18,7 @@ import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { addDollarSign } from '@intake24/api/util';
 import { FoodBuilder, SplitList, SplitWord, SynonymSet, SystemLocale } from '@intake24/db';
 
-function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | 'cache' | 'kyselyDb'>) {
+function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | 'cache' | 'kyselyDb'>) {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
     const locale
       = typeof localeId === 'string'
@@ -368,6 +369,63 @@ function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | '
     }
   };
 
+  const bulkUpdateStandardUnits = async (
+    localeId: string,
+    input: StandardUnitRequest[],
+    onConflict: OnConflictOption,
+    transaction?: Kysely<FoodsDB>,
+  ) => {
+    const impl = async (transaction: Kysely<FoodsDB>) => {
+      const existingRows = await transaction
+        .selectFrom('standardUnits')
+        .select('id')
+        .where('localeId', '=', localeId)
+        .execute();
+
+      switch (onConflict) {
+        case 'overwrite': {
+          if (existingRows.length) {
+            await transaction
+              .insertInto('standardUnits')
+              .values(input.map(item => ({ ...item, localeId })))
+              .onConflict(oc => oc
+                .columns(['code', 'localeId'])
+                .doUpdateSet({
+                  name: eb => eb.ref('excluded.name'),
+                  icon: eb => eb.ref('excluded.icon'),
+                  estimateIn: eb => eb.ref('excluded.estimateIn'),
+                  howMany: eb => eb.ref('excluded.howMany'),
+                }),
+              )
+              .execute();
+          }
+          break;
+        }
+
+        case 'skip': {
+          if (existingRows.length)
+            return;
+          break;
+        }
+
+        case 'abort': {
+          if (existingRows.length)
+            throw new ConflictError(`Standard units already exist for locale: ${localeId}`);
+          break;
+        }
+      }
+
+      await cache.setAdd('locales-index', localeId);
+    };
+
+    if (transaction) {
+      await impl(transaction);
+    }
+    else {
+      await kyselyDb.foods.transaction().execute(impl);
+    }
+  };
+
   const bulkUpdateSynonymSets = async (
     localeId: string,
     input: { synonyms: string }[],
@@ -442,10 +500,11 @@ function localeService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler' | '
     setSynonymSets,
     queueTask,
     bulkUpdateLocales,
+    bulkUpdateStandardUnits,
     bulkUpdateSynonymSets,
   };
 }
 
-export default localeService;
+export default adminLocaleService;
 
-export type LocaleService = ReturnType<typeof localeService>;
+export type AdminLocaleService = ReturnType<typeof adminLocaleService>;

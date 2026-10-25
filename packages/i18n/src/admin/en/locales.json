@@ -46,6 +46,34 @@
     }
   },
 
+  "standard-units": {
+    "_": "Standard unit",
+    "title": "Standard units",
+    "tab": "Standard units",
+    "add": "Add unit",
+    "create": "Add unit",
+    "edit": "Edit unit",
+    "remove": "Remove unit",
+
+    "code": "Standard unit code",
+    "estimateIn": "Estimate in",
+    "howMany": "How many",
+
+    "categories": {
+      "_": "Category",
+      "tab": "Categories",
+      "title": "Categories",
+      "subtitle": "Categories using the standard unit"
+    },
+
+    "foods": {
+      "_": "Food",
+      "tab": "Foods",
+      "title": "Foods",
+      "subtitle": "Foods using the standard unit"
+    }
+  },
+
   "synonym-sets": {
     "_": "Synonym set",
     "title": "Synonym sets",

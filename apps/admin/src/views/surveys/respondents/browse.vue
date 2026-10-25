@@ -6,7 +6,7 @@
       :headers="headers"
       track-by="userId"
     >
-      <template #header-add>
+      <template #header-append>
         <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
           <template #activator="{ props }">
             <v-btn class="font-weight-bold" variant="text" v-bind="props">

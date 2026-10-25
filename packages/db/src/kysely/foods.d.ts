@@ -416,13 +416,13 @@ export interface SplitWords {
 }
 
 export interface StandardUnits {
-  createdAt: Timestamp;
+  code: string;
   estimateIn: RequiredLocaleTranslation;
   howMany: RequiredLocaleTranslation;
   icon: string | null;
-  id: string;
+  id: Generated<Int8>;
+  localeId: string;
   name: string;
-  updatedAt: Timestamp;
 }
 
 export interface SynonymSets {

@@ -1,10 +1,15 @@
 import type ExcelJS from 'exceljs';
+import type z from 'zod';
 
 import type { Dictionary } from '@intake24/common/types';
 
 import path from 'node:path';
+import { pipeline } from 'node:stream/promises';
 
 import ExcelJSWorkbook from 'exceljs';
+import { parseString } from 'fast-csv';
+
+import { getFileValidationErrorMessages } from './validate-json-files';
 
 export type XlsxHeaderSpec = {
   key?: string;
@@ -172,6 +177,38 @@ export class XlsxWorkbookReader {
       this.addValidationError({ ...this.fileContext, sheetName }, 'missingSheet');
 
     return worksheet;
+  }
+
+  async worksheetToJson<T extends z.ZodType>(sheetName: string, schema: T): Promise<z.infer<T>[] | undefined> {
+    const worksheet = this.getWorksheet(sheetName);
+    if (!worksheet)
+      return undefined;
+
+    const data: z.infer<T>[] = [];
+
+    const buffer = await this.excelWorkbook.csv.writeBuffer({ sheetId: worksheet.id });
+    const csvStream = parseString(buffer.toString(), { headers: true, trim: true })
+      .transform((row: any): z.infer<T> | undefined => {
+        const { data, success, error } = schema.safeParse(row);
+
+        if (!success) {
+          const items = getFileValidationErrorMessages(error);
+          this.addValidationError({ ...this.fileContext, sheetName }, 'cellInvalidValue', { errors: items });
+        }
+
+        return data;
+      });
+
+    await pipeline(
+      csvStream,
+      async (source: AsyncIterable<z.infer<T>>) => {
+        for await (const row of source) {
+          data.push(row);
+        }
+      },
+    );
+
+    return data;
   }
 
   getWorksheetReader(

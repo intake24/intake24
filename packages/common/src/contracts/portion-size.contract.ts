@@ -6,7 +6,6 @@ import {
   drinkwareSetResponse,
   guideImageResponse,
   imageMapResponse,
-  standardUnitResponse,
   weightResponse,
 } from '../types/http';
 
@@ -94,25 +93,6 @@ export const portionSize = initContract().router({
     summary: 'Single image map',
     description:
       'Returns an image map definition similar to guide images, but without the associated weights. Used for selecting objects from images where the object is not directly associated with a weight, e.g. selecting pizza slice sizes whose final weight also depends on pizza thickness and type.',
-  },
-  standardUnits: {
-    method: 'GET',
-    path: '/portion-sizes/standard-units',
-    query: z.object({ id }),
-    responses: {
-      200: standardUnitResponse.array(),
-    },
-    summary: 'Multiple standard units',
-    description: 'Get definitions for the given standard units.',
-  },
-  standardUnit: {
-    method: 'GET',
-    path: '/portion-sizes/standard-units/:id',
-    responses: {
-      200: standardUnitResponse,
-    },
-    summary: 'Single standard unit',
-    description: 'Get definitions for the given standard units.',
   },
   weight: {
     method: 'GET',

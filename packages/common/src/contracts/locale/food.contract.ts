@@ -6,7 +6,7 @@ import {
   foodSearchQuery,
   foodSearchResponse,
   userFoodData,
-} from '../types/http';
+} from '../../types/http';
 
 export const food = initContract().router({
   entry: {

@@ -16,6 +16,7 @@ import type {
   ACLService,
   AdminCategoryService,
   AdminFoodService,
+  AdminLocaleService,
   AdminSignupService,
   AdminSurveyService,
   AdminUserService,
@@ -170,7 +171,7 @@ export interface IoC extends PackageWritersAndJobs {
   localFoodsService: LocalFoodsService;
   localCategoriesService: LocalCategoriesService;
   languageService: LanguageService;
-  localeService: LocaleService;
+  adminLocaleService: AdminLocaleService;
   nutrientTableService: NutrientTableService;
   nutrientTypeService: NutrientTypeService;
   nutrientUnitService: NutrientUnitService;
@@ -184,6 +185,7 @@ export interface IoC extends PackageWritersAndJobs {
   portionSizeService: PortionSizeService;
   foodSearchService: FoodSearchService;
   cachedParentCategoriesService: CachedParentCategoriesService;
+  localeService: LocaleService;
 
   // Categories
   categoryContentsService: CategoryContentsService;

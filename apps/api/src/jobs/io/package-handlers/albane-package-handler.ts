@@ -91,6 +91,7 @@ export class AlbanePackageHandler implements PackageHandler {
           locales: !!packageContents.locales,
           foods: !!packageContents.foods,
           categories: !!packageContents.categories,
+          standardUnits: !!packageContents.standardUnits,
           synonymSets: !!packageContents.synonymSets,
           asServedSets: !!packageContents.asServedSets,
           imageMaps: !!packageContents.imageMaps,

@@ -2,16 +2,19 @@ import type { StandardUnit } from '@intake24/common/surveys';
 import type { StandardUnitResponse } from '@intake24/common/types/http';
 
 import { pick } from 'lodash-es';
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
 import { useHttp, useI18n } from '@intake24/ui';
+
+import { useSurvey } from './survey';
 
 export type StandardUnitDef = Pick<StandardUnit, 'name' | 'inlineEstimateIn' | 'inlineHowMany'>;
 
 export const useStandardUnits = defineStore('standard-units', () => {
   const http = useHttp();
   const { translate } = useI18n();
+  const { localeId } = storeToRefs(useSurvey());
 
   const units = ref<Record<string, StandardUnitResponse>>({});
 
@@ -75,12 +78,12 @@ export const useStandardUnits = defineStore('standard-units', () => {
     if (!names.length)
       return;
 
-    const { data } = await http.get<StandardUnitResponse[]>('portion-sizes/standard-units', {
-      params: { id: names },
+    const { data } = await http.get<StandardUnitResponse[]>(`locales/${localeId.value}/standard-units`, {
+      params: { code: names },
     });
 
     data.forEach((item) => {
-      units.value[item.id] = item;
+      units.value[item.code] = item;
     });
   };
 

@@ -21,7 +21,7 @@
           <v-btn color="primary" icon="$add" size="small" :title="$t('fdbs.categories.add')" v-bind="props" />
         </template>
         <template #title>
-          {{ $t(`fdbs.categories.title`) }}
+          {{ $t('fdbs.categories.title') }}
         </template>
         <template #item="{ item }">
           <v-list-item-title>{{ item.code }}</v-list-item-title>

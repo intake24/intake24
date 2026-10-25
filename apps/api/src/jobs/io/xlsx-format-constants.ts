@@ -1,6 +1,7 @@
 export const XLSX_FILE_NAMES = {
   locales: 'locales.xlsx',
   portionSize: 'portion-size.xlsx',
+  standardUnits: 'standard-units.xlsx',
   synonymSets: 'synonym-sets.xlsx',
 } as const;
 
@@ -37,6 +38,7 @@ export const XLSX_SHEET_NAMES = {
   parentFoodPortion: 'Parent food portion',
   portionSize: 'Portion size',
   standardUnits: 'Standard units',
+  standardUnitRefs: 'Standard unit refs',
   synonymSets: 'Synonym sets',
   tags: 'Tags',
 } as const;
@@ -226,6 +228,14 @@ export const XLSX_COLUMN_NAMES = {
     portionSizeOption: 'Portion size option',
     standardUnitId: 'Standard unit ID',
     unitWeight: 'Unit weight',
+  },
+  standardUnitRefs: {
+    locale: 'Locale',
+    code: 'Code',
+    name: 'Name',
+    icon: 'Icon',
+    estimateIn: 'Estimate in',
+    howMany: 'How many',
   },
   synonymSets: {
     locale: 'Locale',

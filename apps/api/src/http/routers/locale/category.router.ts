@@ -4,7 +4,7 @@ import { pick } from 'lodash-es';
 import { contract } from '@intake24/common/contracts';
 
 export function category() {
-  return initServer().router(contract.category, {
+  return initServer().router(contract.locale.category, {
     entry: async ({ params, req }) => {
       const { categoryId } = params;
 

@@ -505,6 +505,30 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of split words created: ${insResult.numInsertedOrUpdatedRows}`);
   }
 
+  private async standardUnits({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
+    const delResult = await trx.deleteFrom('standardUnits').where('localeId', '=', code).executeTakeFirst();
+    this.logger.debug(`Number of standard units cleared: ${delResult.numDeletedRows}`);
+
+    const insResult = await trx.insertInto('standardUnits')
+      .columns(['code', 'localeId', 'name', 'icon', 'estimateIn', 'howMany'])
+      .expression(eb => eb
+        .selectFrom('standardUnits')
+        .select(eb => [
+          'code',
+          eb.val(code).as('localeId'),
+          'name',
+          'icon',
+          'estimateIn',
+          'howMany',
+        ])
+        .where('localeId', '=', sourceCode)
+        .orderBy('id'),
+      )
+      .executeTakeFirst();
+
+    this.logger.debug(`Number of standard units created: ${insResult.numInsertedOrUpdatedRows}`);
+  }
+
   private async synonymSets({ trx, code, sourceCode }: TransactionOps<FoodsDB>) {
     const delResult = await trx.deleteFrom('synonymSets').where('localeId', '=', code).executeTakeFirst();
     this.logger.debug(`Number of synonym sets cleared: ${delResult.numDeletedRows}`);

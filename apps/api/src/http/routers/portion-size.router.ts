@@ -106,22 +106,6 @@ export function portionSize() {
         body: imageMapsResponse(imagesBaseUrl).imageResponse(record),
       };
     },
-    standardUnits: async ({ query: { id }, req }) => {
-      const records = await req.scope.cradle.portionSizeService.getStandardUnits(id);
-
-      return {
-        status: 200,
-        body: records,
-      };
-    },
-    standardUnit: async ({ params: { id }, req }) => {
-      const record = await req.scope.cradle.portionSizeService.getStandardUnit(id);
-
-      return {
-        status: 200,
-        body: record,
-      };
-    },
     weight: async ({ req }) => {
       const { imagesBaseUrl } = req.scope.cradle;
 

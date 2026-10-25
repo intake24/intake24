@@ -3,10 +3,13 @@
     v-model="step.unit"
     clearable
     :error-messages="errors.get(`${index}.steps.${stepIndex}.unit*`)"
-    :label="$t('standard-units._')"
+    item-id="code"
+    :label="$t('locales.standard-units._')"
     multiple
     :name="`${index}.steps.${stepIndex}.unit`"
+    :query="{ localeId }"
     resource="standard-units"
+    :title="$t('locales.standard-units.title')"
   />
 </template>
 

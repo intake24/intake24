@@ -21,6 +21,7 @@ package.json                  ← format metadata
 locales.json                  ← locale definitions
 foods.json                    ← foods, grouped by locale
 categories.json               ← categories, grouped by locale
+standard-units.json           ← standard units, grouped by locale
 portion-size/                 ← portion size estimation methods
   as-served.json
   guide-images.json
@@ -216,6 +217,43 @@ Field notes:
 - `hidden` categories are excluded from both the search index and the browsing interface. They are intended as utility categories for use in associated food prompts, sandwich builders, and other prompts that reference a category directly rather than presenting it through the food browsing UI.
 - `parentCategories` contains parent category codes. A category may have any number of parent categories, provided there are no cycles in the structure.
 - `portionSize` on a category is inherited by child foods and categories that do not define their own methods. Inheritance is transitive — methods propagate down through the full category hierarchy — and can be overridden at any child category or individual food level.
+-
+
+## standard-units.json {#format-standard-units}
+
+`standard-units.json` contains standard unit records grouped by locale. Standard unit is a reference record that can be re-used with [`standard-unit` portion size method](/admin/locales/package-format#standard-portion).
+
+The file is a JSON object where each key is a locale ID and each value is an array of standard unit records for that locale. Each standard unit contains:
+
+```ts
+{
+  code: string
+  name: string
+  icon?: string | null
+  estimateIn: LocaleTranslation
+  howMany: LocaleTranslation
+}
+```
+
+Field notes:
+
+- `code` unique within locale, not globally, it is the key referenced in `name` column of portion size method standard unit record with `snake_case` conversion enforcement
+- `name` user friendly description
+- `icon` optional icon
+- `estimateIn` language-keyed object with translation strings
+- `howMany` language-keyed object with translation strings
+
+Example:
+
+```json
+{
+  "code": "cans_330ml",
+  "name": "Cans (330ml)",
+  "icon": null,
+  "estimateIn": {"en": "cans 330ml"},
+  "howMany": {"en": "How many 330ml cans"},
+}
+```
 
 ## Portion size methods
 
@@ -316,7 +354,7 @@ Named standard units with fixed weight in grams, for example `slice` or `tablesp
 
 Field notes:
 
-- `name` is a predefined unit key that is translated automatically into the study locale's language.
+- `name` is a predefined unit key (`code` field in [standard-units.json](/admin/locales/package-format#format-standard-units) ) that is translated automatically into the study locale's language.
 - `weight` is the weight of one unit in grams.
 - `omitFoodDescription` removes the food name from the prompt text for this unit, to avoid awkward constructions where the unit name echoes the food name — for example, "how many fillets of salmon fillet" or "how many rolls of white bread roll".
 - `inlineEstimateIn` and `inlineHowMany` override the predefined unit translation key with food-specific custom strings. Both must be provided together or both omitted.
