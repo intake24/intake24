@@ -48,14 +48,6 @@ export const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes],
   },
-  {
-    group: 'fdb',
-    name: 'standard-units',
-    icon: 'fas fa-cubes-stacked',
-    api: 'admin/standard-units',
-    generateRoutes: true,
-    routes: [...routes, 'categories', 'foods'],
-  },
   // Localization
   {
     group: 'local',
@@ -78,6 +70,7 @@ export const resources: Resource[] = [
       'split-lists',
       'split-words',
       'synonym-sets',
+      'standard-units',
       'food-builders',
       'tasks',
       'securables',

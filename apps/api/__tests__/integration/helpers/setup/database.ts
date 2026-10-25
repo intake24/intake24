@@ -107,8 +107,8 @@ export async function initDatabase(): Promise<MockData> {
   ];
 
   const standardUnits = [
-    { id: 'bags', name: 'Bags', estimateIn: { en: 'bags' }, howMany: { en: 'How many bags' } },
-    { id: 'bars', name: 'Bars', estimateIn: { en: 'bars' }, howMany: { en: 'How many bars' } },
+    { code: 'bags', localeId: 'en_GB', name: 'Bags', estimateIn: { en: 'bags' }, howMany: { en: 'How many bags' } },
+    { code: 'bars', localeId: 'en_GB', name: 'Bars', estimateIn: { en: 'bars' }, howMany: { en: 'How many bars' } },
   ];
 
   await Promise.all([

@@ -7,6 +7,8 @@ export { default as foodDataService } from './food-data.service';
 export * from './food-search.service';
 export { default as foodSearchService } from './food-search.service';
 export { default as InvalidIdError } from './invalid-id-error';
+export * from './locale.service';
+export { default as localeService } from './locale.service';
 export { default as portionSizeMethodsService } from './portion-size-methods.service';
 export * from './portion-size-methods.service';
 export * from './portion-size.service';

@@ -8,4 +8,5 @@ export * from './image-map';
 export * from './locale';
 export * from './nutrient-tables';
 export * from './portion-size-image-labels';
+export * from './standard-units';
 export * from './synonym-sets';

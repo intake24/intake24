@@ -213,7 +213,7 @@ export function locale() {
       handler: async ({ file, params: { localeId }, body, req }) => {
         const {
           aclService,
-          localeService,
+          adminLocaleService,
           user: { userId },
         } = req.scope.cradle;
 
@@ -230,7 +230,7 @@ export function locale() {
           where: { id: localeId },
         });
 
-        const job = await localeService.queueTask({
+        const job = await adminLocaleService.queueTask({
           userId,
           type,
           params,

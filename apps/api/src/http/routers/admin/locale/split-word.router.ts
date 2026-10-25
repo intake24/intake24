@@ -9,14 +9,14 @@ export function splitWord() {
     get: {
       middleware: [permission('locales')],
       handler: async ({ params: { localeId }, req }) => {
-        const { aclService, localeService } = req.scope.cradle;
+        const { aclService, adminLocaleService } = req.scope.cradle;
 
         const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'split-words', {
           attributes: ['id', 'code'],
           where: { id: localeId },
         });
 
-        const splitWords = await localeService.getSplitWords(locale);
+        const splitWords = await adminLocaleService.getSplitWords(locale);
 
         return { status: 200, body: splitWords };
       },
@@ -24,13 +24,13 @@ export function splitWord() {
     set: {
       middleware: [permission('locales')],
       handler: async ({ body, params: { localeId }, req }) => {
-        const { aclService, localeService } = req.scope.cradle;
+        const { aclService, adminLocaleService } = req.scope.cradle;
 
         const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'split-words', {
           attributes: ['id', 'code'],
           where: { id: localeId },
         });
-        const splitWords = await localeService.setSplitWords(locale, body);
+        const splitWords = await adminLocaleService.setSplitWords(locale, body);
 
         return { status: 200, body: splitWords };
       },

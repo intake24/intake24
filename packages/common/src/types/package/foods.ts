@@ -2,6 +2,7 @@
 import { z } from 'zod';
 
 import { autoPsmModes, pathways } from '@intake24/common/surveys';
+import { toStandardUnitId } from '@intake24/common/util';
 
 import { categoryLocaleOptionList, localeOptionList, localeTranslationStrict } from '../common';
 
@@ -81,8 +82,8 @@ export const pkgV2DrinkScalePsm = pkgV2PortionSizeMethodBase.extend({
   multiple: z.boolean().optional(),
 });
 
-export const pkgV2StandardUnit = z.object({
-  name: z.string(),
+export const pkgV2StandardUnitItem = z.object({
+  name: z.string().transform(val => toStandardUnitId(val)),
   weight: z.number(),
   omitFoodDescription: z.boolean(),
   inlineEstimateIn: z.string().optional(),
@@ -91,7 +92,7 @@ export const pkgV2StandardUnit = z.object({
 
 export const pkgV2StandardPortionPsm = pkgV2PortionSizeMethodBase.extend({
   method: z.literal('standard-portion'),
-  units: z.array(pkgV2StandardUnit),
+  units: z.array(pkgV2StandardUnitItem),
 });
 
 export const cerealTypes = ['hoop', 'flake', 'rkris'] as const;
@@ -186,7 +187,7 @@ export type PkgV2AsServedPsm = z.infer<typeof pkgV2AsServedPsm>;
 export type PkgV2AutoPsm = z.infer<typeof pkgV2AutoPsm>;
 export type PkgV2GuideImagePsm = z.infer<typeof pkgV2GuideImagePsm>;
 export type PkgV2DrinkScalePsm = z.infer<typeof pkgV2DrinkScalePsm>;
-export type PkgV2StandardUnit = z.infer<typeof pkgV2StandardUnit>;
+export type PkgV2StandardUnitItem = z.infer<typeof pkgV2StandardUnitItem>;
 export type PkgV2StandardPortionPsm = z.infer<typeof pkgV2StandardPortionPsm>;
 export type PkgV2CerealPsm = z.infer<typeof pkgV2CerealPsm>;
 export type PkgV2PizzaPsm = z.infer<typeof pkgV2PizzaPsm>;

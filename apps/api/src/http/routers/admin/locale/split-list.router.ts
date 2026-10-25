@@ -9,14 +9,14 @@ export function splitList() {
     get: {
       middleware: [permission('locales')],
       handler: async ({ params: { localeId }, req }) => {
-        const { aclService, localeService } = req.scope.cradle;
+        const { aclService, adminLocaleService } = req.scope.cradle;
 
         const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'split-lists', {
           attributes: ['id', 'code'],
           where: { id: localeId },
         });
 
-        const splitLists = await localeService.getSplitLists(locale);
+        const splitLists = await adminLocaleService.getSplitLists(locale);
 
         return { status: 200, body: splitLists };
       },
@@ -24,14 +24,14 @@ export function splitList() {
     set: {
       middleware: [permission('locales')],
       handler: async ({ body, params: { localeId }, req }) => {
-        const { aclService, localeService } = req.scope.cradle;
+        const { aclService, adminLocaleService } = req.scope.cradle;
 
         const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'split-lists', {
           attributes: ['id', 'code'],
           where: { id: localeId },
         });
 
-        const splitLists = await localeService.setSplitLists(locale, body);
+        const splitLists = await adminLocaleService.setSplitLists(locale, body);
 
         return { status: 200, body: splitLists };
       },

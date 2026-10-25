@@ -1,6 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
+import { bigIntString } from '@intake24/common/types';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   standardUnitAttributes,
@@ -11,10 +12,14 @@ import {
 
 const contract = initContract();
 
+const localePath = z.object({ localeId: bigIntString });
+const unitPath = z.object({ localeId: bigIntString, standardUnitId: bigIntString });
+
 export const standardUnit = contract.router({
   browse: {
     method: 'GET',
-    path: '/admin/standard-units',
+    path: '/admin/locales/:localeId/standard-units',
+    pathParams: localePath,
     query: paginationRequest,
     responses: {
       200: z.object({
@@ -27,7 +32,8 @@ export const standardUnit = contract.router({
   },
   store: {
     method: 'POST',
-    path: '/admin/standard-units',
+    path: '/admin/locales/:localeId/standard-units',
+    pathParams: localePath,
     body: standardUnitRequest,
     responses: {
       201: standardUnitAttributes,
@@ -37,7 +43,8 @@ export const standardUnit = contract.router({
   },
   read: {
     method: 'GET',
-    path: '/admin/standard-units/:standardUnitId',
+    path: '/admin/locales/:localeId/standard-units/:standardUnitId',
+    pathParams: unitPath,
     responses: {
       200: standardUnitAttributes,
     },
@@ -46,8 +53,9 @@ export const standardUnit = contract.router({
   },
   update: {
     method: 'PUT',
-    path: '/admin/standard-units/:standardUnitId',
-    body: standardUnitRequest.omit({ id: true }),
+    path: '/admin/locales/:localeId/standard-units/:standardUnitId',
+    pathParams: unitPath,
+    body: standardUnitRequest,
     responses: {
       200: standardUnitAttributes,
     },
@@ -56,7 +64,8 @@ export const standardUnit = contract.router({
   },
   destroy: {
     method: 'DELETE',
-    path: '/admin/standard-units/:standardUnitId',
+    path: '/admin/locales/:localeId/standard-units/:standardUnitId',
+    pathParams: unitPath,
     body: null,
     responses: {
       204: contract.noBody(),
@@ -66,7 +75,8 @@ export const standardUnit = contract.router({
   },
   categories: {
     method: 'GET',
-    path: '/admin/standard-units/:standardUnitId/categories',
+    path: '/admin/locales/:localeId/standard-units/:standardUnitId/categories',
+    pathParams: unitPath,
     query: paginationRequest,
     responses: {
       200: z.object({
@@ -79,7 +89,8 @@ export const standardUnit = contract.router({
   },
   foods: {
     method: 'GET',
-    path: '/admin/standard-units/:standardUnitId/foods',
+    path: '/admin/locales/:localeId/standard-units/:standardUnitId/foods',
+    pathParams: unitPath,
     query: paginationRequest,
     responses: {
       200: z.object({

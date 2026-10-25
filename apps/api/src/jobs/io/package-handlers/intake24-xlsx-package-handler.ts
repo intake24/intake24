@@ -11,6 +11,7 @@ import type {
   XlsxValidationErrorKey,
 } from './xlsx-worksheet-reader';
 import type { Dictionary } from '@intake24/common/types';
+import type { PkgV2StandardUnit } from '@intake24/common/types/package';
 import type { PkgV2AsServedSet } from '@intake24/common/types/package/as-served';
 import type { PkgV2Category } from '@intake24/common/types/package/categories';
 import type { PkgV2DrinkScaleV2, PkgV2DrinkwareSet } from '@intake24/common/types/package/drinkware';
@@ -323,6 +324,10 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
       Object.keys(packageContents.categories).forEach(locale => targetLocales.add(locale));
     }
 
+    if (packageContents.standardUnits) {
+      Object.keys(packageContents.standardUnits).forEach(locale => targetLocales.add(locale));
+    }
+
     if (packageContents.synonymSets) {
       Object.keys(packageContents.synonymSets).forEach(locale => targetLocales.add(locale));
     }
@@ -335,6 +340,7 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
           locales: !!packageContents.locales,
           foods: !!packageContents.foods,
           categories: !!packageContents.categories,
+          standardUnits: !!packageContents.standardUnits,
           synonymSets: !!packageContents.synonymSets,
           asServedSets: !!packageContents.asServedSets,
           imageMaps: !!packageContents.imageMaps,
@@ -446,6 +452,9 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
 
       writes.push(writeJson('categories.json', categories));
     }
+
+    if (files.includes(XLSX_FILE_NAMES.standardUnits))
+      writes.push(writeJson('standard-units.json', await this.readStandardUnits(sourcePath)));
 
     if (files.includes(XLSX_FILE_NAMES.synonymSets))
       writes.push(writeJson('synonym-sets.json', await this.readSynonymSets(sourcePath)));
@@ -1327,6 +1336,49 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
         (categoryOptions[language] ??= []).push(optionValue);
       }
     });
+  }
+
+  private async readStandardUnits(sourcePath: string): Promise<Record<string, PkgV2StandardUnit[]>> {
+    const fileName = XLSX_FILE_NAMES.standardUnits;
+    const workbookReader = await XlsxWorkbookReader.fromFile(sourcePath, fileName, this.addValidationError.bind(this));
+    const standardUnits: Record<string, PkgV2StandardUnit[]> = {};
+    const reader = workbookReader.getWorksheetReader(XLSX_SHEET_NAMES.standardUnitRefs, [
+      requiredHeader(XLSX_COLUMN_NAMES.standardUnitRefs.locale),
+      requiredHeader(XLSX_COLUMN_NAMES.standardUnitRefs.code),
+      requiredHeader(XLSX_COLUMN_NAMES.standardUnitRefs.name),
+      requiredHeader(XLSX_COLUMN_NAMES.standardUnitRefs.icon),
+      requiredHeader(XLSX_COLUMN_NAMES.standardUnitRefs.estimateIn),
+      requiredHeader(XLSX_COLUMN_NAMES.standardUnitRefs.howMany),
+    ]);
+
+    if (!reader)
+      return standardUnits;
+
+    const columns = reader.getColumnIndices(XLSX_COLUMN_NAMES.standardUnitRefs);
+
+    reader.forEachRow((row, rowNumber) => {
+      if (rowNumber === 1 || isRowEmpty(row))
+        return;
+
+      const locale = reader.cellAsNonEmptyString(rowNumber, columns.locale);
+      const code = reader.cellAsNonEmptyString(rowNumber, columns.code);
+      const name = reader.cellAsNonEmptyString(rowNumber, columns.name);
+      const icon = reader.cellAsOptionalString(rowNumber, columns.icon);
+      const estimateIn = reader.cellAsJson<PkgV2StandardUnit['estimateIn']>(rowNumber, columns.estimateIn, { en: '' });
+      const howMany = reader.cellAsJson<PkgV2StandardUnit['howMany']>(rowNumber, columns.howMany, { en: '' });
+
+      if (!locale || !code || !name || !estimateIn || !howMany)
+        return;
+
+      const unit: PkgV2StandardUnit = { code, name, icon, estimateIn, howMany };
+
+      if (!standardUnits[locale])
+        standardUnits[locale] = [];
+
+      standardUnits[locale].push(unit);
+    });
+
+    return standardUnits;
   }
 
   private async readSynonymSets(sourcePath: string): Promise<Record<string, PkgV2SynonymSet[]>> {

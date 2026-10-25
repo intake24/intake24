@@ -6,6 +6,7 @@ import read from './read.vue';
 import securables from './securables';
 import splitLists from './split-lists';
 import splitWords from './split-words';
+import standardUnits from './standard-units';
 import synonymSets from './synonym-sets';
 import tasks from './tasks';
 
@@ -18,6 +19,7 @@ export default {
   'split-lists': splitLists,
   'split-words': splitWords,
   'synonym-sets': synonymSets,
+  'standard-units': standardUnits,
   'food-ranking': foodRanking,
   'food-builders': foodBuilders,
   tasks,

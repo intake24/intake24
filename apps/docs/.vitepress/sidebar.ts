@@ -1,4 +1,4 @@
-import { links } from './links';
+import { links } from './links.ts';
 
 export const sidebar = {
   '/guide/': [
@@ -227,31 +227,6 @@ export const sidebar = {
       ],
     },
     {
-      text: 'Foods',
-      items: [
-        {
-          text: 'Nutrient tables',
-          link: '/admin/foods/nutrient-tables',
-        },
-        {
-          text: 'Nutrient data model',
-          link: '/admin/foods/nutrient-data-model',
-        },
-        {
-          text: 'Nutrient types',
-          link: '/admin/foods/nutrient-types',
-        },
-        {
-          text: 'Nutrient units',
-          link: '/admin/foods/nutrient-units',
-        },
-        {
-          text: 'Standard units',
-          link: '/admin/foods/standard-units',
-        },
-      ],
-    },
-    {
       text: 'Locales',
       items: [
         {
@@ -261,6 +236,10 @@ export const sidebar = {
         {
           text: 'Food databases',
           link: '/admin/locales/fdbs',
+        },
+        {
+          text: 'Standard units',
+          link: '/admin/locales/standard-units',
         },
         {
           text: 'Portion size methods',
@@ -277,6 +256,27 @@ export const sidebar = {
         {
           text: 'Food database package format',
           link: '/admin/locales/package-format',
+        },
+      ],
+    },
+    {
+      text: 'Nutrients',
+      items: [
+        {
+          text: 'Nutrient data model',
+          link: '/admin/nutrients/nutrient-data-model',
+        },
+        {
+          text: 'Nutrient tables',
+          link: '/admin/nutrients/nutrient-tables',
+        },
+        {
+          text: 'Nutrient types',
+          link: '/admin/nutrients/nutrient-types',
+        },
+        {
+          text: 'Nutrient units',
+          link: '/admin/nutrients/nutrient-units',
         },
       ],
     },

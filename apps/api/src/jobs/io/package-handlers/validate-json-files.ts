@@ -2,16 +2,7 @@ import type {
   FileValidationErrorMessage,
 } from './types';
 import type { Dictionary } from '@intake24/common/types';
-import type {
-  PkgV2AsServedSetsFile,
-  PkgV2CategoriesFile,
-  PkgV2DrinkwareSetsFile,
-  PkgV2FoodsFile,
-  PkgV2GuideImagesFile,
-  PkgV2ImageMapsFile,
-  PkgV2LocalesFile,
-  PkgV2SynonymSetsFile,
-} from '@intake24/common/types/package/file-schemas';
+import type { PackageContentsSchema, ValidatedPackageContents } from '@intake24/common/types/package/file-schemas';
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -19,30 +10,10 @@ import path from 'node:path';
 import { z } from 'zod';
 
 import { AggregateLocalisableError, LocalisableError } from '@intake24/api/http/errors';
-import {
-  pkgV2AsServedSetsFileSchema,
-  pkgV2CategoriesFileSchema,
-  pkgV2DrinkwareSetsFileSchema,
-  pkgV2FoodsFileSchema,
-  pkgV2GuideImagesFileSchema,
-  pkgV2ImageMapsFileSchema,
-  pkgV2LocalesFileSchema,
-  pkgV2SynonymSetsFileSchema,
-} from '@intake24/common/types/package/file-schemas';
+import { packageContentsSchema } from '@intake24/common/types/package/file-schemas';
 import { formatZodError } from '@intake24/common/util';
 
 import { PackageValidationFileErrors } from './types';
-
-export type ValidatedPackageContents = {
-  locales?: PkgV2LocalesFile;
-  foods?: PkgV2FoodsFile;
-  categories?: PkgV2CategoriesFile;
-  asServedSets?: PkgV2AsServedSetsFile;
-  imageMaps?: PkgV2ImageMapsFile;
-  guideImages?: PkgV2GuideImagesFile;
-  drinkwareSets?: PkgV2DrinkwareSetsFile;
-  synonymSets?: PkgV2SynonymSetsFile;
-};
 
 function getZodValidationErrorMessages(error: z.ZodError): FileValidationErrorMessage[] {
   const groupedIssues = new Map<string, string[]>();
@@ -110,11 +81,11 @@ export function getFileValidationErrorMessages(error: unknown): FileValidationEr
   }
 }
 
-async function validateJsonFile<T>(
+async function validateJsonFile<T extends keyof PackageContentsSchema>(
   filePath: string,
-  schema: z.ZodType<T>,
+  schema: PackageContentsSchema[T]['schema'],
   pathRemapper?: (pathElements: (string | number)[]) => string,
-): Promise<T | undefined> {
+): Promise<ValidatedPackageContents[T] | undefined> {
   try {
     await fs.access(filePath);
   }
@@ -144,7 +115,7 @@ async function validateJsonFile<T>(
     );
   }
 
-  return result.data;
+  return result.data as ValidatedPackageContents[T];
 }
 
 function createCodePathRemapper(json: unknown): ((pathElements: (string | number)[]) => string) | undefined {
@@ -176,12 +147,8 @@ export async function validateJsonFiles(extractedPath: string): Promise<Validate
   const validatedContents: ValidatedPackageContents = {};
   const errors: Dictionary<FileValidationErrorMessage[]> = {};
 
-  const validateFile = async <K extends keyof ValidatedPackageContents>(
-    file: string,
-    schema: z.ZodType<NonNullable<ValidatedPackageContents[K]>>,
-    key: K,
-    useCodeRemapper: boolean = false,
-  ): Promise<void> => {
+  const validateFile = async <K extends keyof ValidatedPackageContents>(key: K, useCodeRemapper: boolean = false): Promise<void> => {
+    const { file, schema } = packageContentsSchema[key];
     const filePath = path.join(extractedPath, file);
     try {
       let pathRemapper: ((pathElements: (string | number)[]) => string) | undefined;
@@ -197,7 +164,7 @@ export async function validateJsonFiles(extractedPath: string): Promise<Validate
         }
       }
 
-      const data = await validateJsonFile(filePath, schema, pathRemapper);
+      const data = await validateJsonFile<K>(filePath, schema, pathRemapper);
       if (data !== undefined)
         validatedContents[key] = data;
     }
@@ -207,14 +174,15 @@ export async function validateJsonFiles(extractedPath: string): Promise<Validate
   };
 
   await Promise.allSettled([
-    validateFile('locales.json', pkgV2LocalesFileSchema, 'locales'),
-    validateFile('foods.json', pkgV2FoodsFileSchema, 'foods', true),
-    validateFile('categories.json', pkgV2CategoriesFileSchema, 'categories', true),
-    validateFile('synonym-sets.json', pkgV2SynonymSetsFileSchema, 'synonymSets'),
-    validateFile('as-served-sets.json', pkgV2AsServedSetsFileSchema, 'asServedSets'),
-    validateFile('image-maps.json', pkgV2ImageMapsFileSchema, 'imageMaps'),
-    validateFile('guide-images.json', pkgV2GuideImagesFileSchema, 'guideImages'),
-    validateFile('drinkware-sets.json', pkgV2DrinkwareSetsFileSchema, 'drinkwareSets'),
+    validateFile('locales'),
+    validateFile('foods', true),
+    validateFile('categories', true),
+    validateFile('standardUnits'),
+    validateFile('synonymSets'),
+    validateFile('asServedSets'),
+    validateFile('imageMaps'),
+    validateFile('guideImages'),
+    validateFile('drinkwareSets'),
   ]);
 
   if (Object.keys(errors).length > 0) {

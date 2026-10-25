@@ -2,9 +2,6 @@
   <div>
     <v-container fluid>
       <v-row class="justify-center">
-        <v-col class="align-self-center" cols="12" sm="auto">
-          <slot name="header-add" />
-        </v-col>
         <v-col cols="12" sm>
           <v-text-field
             v-model="filter.search"
@@ -18,6 +15,9 @@
             @click:clear="resetFilter"
             @keyup.enter="setFilter"
           />
+        </v-col>
+        <v-col class="align-self-center" cols="12" sm="auto">
+          <slot name="header-append" />
         </v-col>
       </v-row>
     </v-container>
@@ -39,63 +39,57 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { DataTableHeader } from './use-data-table';
 
 import { watchDebounced } from '@vueuse/core';
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 
 import { useDataTable } from './use-data-table';
 
-export default defineComponent({
-  name: 'EmbeddedDataTable',
-
-  props: {
-    apiUrl: {
-      type: String,
-      required: true,
-    },
-    headers: {
-      type: Array as PropType<DataTableHeader[]>,
-      required: true,
-    },
-    showSelect: {
-      type: Boolean,
-      default: false,
-    },
-    trackBy: {
-      type: String,
-      default: 'id',
-    },
+const props = defineProps({
+  apiUrl: {
+    type: String,
+    required: true,
   },
-
-  setup(props) {
-    const filter = ref({ search: '' });
-
-    const { api, fetch, items, meta, options, selected, tracked } = useDataTable(props, filter);
-
-    const setFilter = async () => {
-      await fetch();
-    };
-
-    const resetFilter = async () => {
-      filter.value.search = '';
-      await fetch();
-    };
-
-    watchDebounced(
-      () => filter.value.search,
-      async () => {
-        await setFilter();
-      },
-      { debounce: 500, maxWait: 2000 },
-    );
-
-    return { api, fetch, items, meta, options, selected, tracked, filter, setFilter, resetFilter };
+  headers: {
+    type: Array as PropType<DataTableHeader[]>,
+    required: true,
+  },
+  showSelect: {
+    type: Boolean,
+    default: false,
+  },
+  trackBy: {
+    type: String,
+    default: 'id',
   },
 });
+
+const filter = ref({ search: '' });
+
+const { fetch, items, meta, options, selected } = useDataTable(props, filter);
+
+async function setFilter() {
+  await fetch();
+}
+
+async function resetFilter() {
+  filter.value.search = '';
+  await fetch();
+}
+
+watchDebounced(
+  () => filter.value.search,
+  async () => {
+    await setFilter();
+  },
+  { debounce: 500, maxWait: 2000 },
+);
+
+defineExpose({ fetch });
 </script>
 
 <style lang="scss" scoped></style>

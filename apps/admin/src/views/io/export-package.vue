@@ -154,46 +154,28 @@
                 <v-label>
                   {{ $t('io.export.includeOptions._') }}
                 </v-label>
-                <v-checkbox
-                  v-model="includeFlags.locales"
+                <v-list
+                  v-model:selected="includeFlags"
                   density="compact"
-                  hide-details
-                  :label="$t('io.export.includeOptions.locales')"
-                />
-                <v-checkbox
-                  v-model="includeFlags.foods"
-                  density="compact"
-                  hide-details
-                  :label="$t('io.export.includeOptions.foods')"
-                />
-                <v-checkbox
-                  v-model="includeFlags.categories"
-                  density="compact"
-                  hide-details
-                  :label="$t('io.export.includeOptions.categories')"
-                />
-                <v-checkbox
-                  v-model="includeFlags.synonymSets"
-                  density="compact"
-                  hide-details
-                  :label="$t('io.export.includeOptions.synonymSets')"
-                />
-                <v-checkbox
-                  v-model="includeFlags.portionSizeMethods"
-                  density="compact"
-                  hide-details
-                  :label="$t('io.export.includeOptions.portionSizeMethods')"
-                />
-                <v-checkbox
-                  v-model="includeFlags.portionSizeImages"
-                  density="compact"
-                  hide-details
-                  :label="$t('io.export.includeOptions.portionSizeImages')"
-                />
+                  multiple
+                  select-strategy="leaf"
+                >
+                  <v-list-item v-for="item in packageIncludeOptions" :key="item" :value="item">
+                    <template #prepend="{ isSelected, select }">
+                      <v-list-item-action class="mr-2">
+                        <v-checkbox-btn
+                          :model-value="isSelected"
+                          @update:model-value="select"
+                        />
+                      </v-list-item-action>
+                    </template>
+                    <v-list-item-title>{{ t(`io.export.includeOptions.${item}`) }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
                 <v-alert
                   class="mt-2"
                   density="compact"
-                  :style="{ opacity: includeFlags.portionSizeImages ? 1 : 0 }"
+                  :style="{ opacity: includeFlags.includes('portionSizeImages') ? 1 : 0 }"
                   type="warning"
                   variant="tonal"
                 >
@@ -229,11 +211,14 @@ import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
 
 import { useDownloadJob, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useErrors } from '@intake24/admin/composables';
-import { http } from '@intake24/ui';
+import { packageIncludeOptions } from '@intake24/common/types/http/admin';
+import { http, useI18n } from '@intake24/ui';
 
 import SelectResourceMultiple from '../../components/dialogs/select-resource-multiple.vue';
 
 type ExportFormat = 'json' | 'xlsx';
+
+const { i18n: { t } } = useI18n();
 
 const DAYS_TO_SHOW = 3;
 
@@ -290,39 +275,24 @@ const queuedJobId = ref<string | null>(null);
 const exportErrorMessage = ref<string | null>(null);
 const highlightJobId = ref<string | null>(null);
 
-const includeFlags = reactive({
-  locales: true,
-  foods: true,
-  categories: true,
-  synonymSets: true,
-  portionSizeMethods: true,
-  portionSizeImages: false,
-});
+const includeFlags = ref<PackageIncludeOption[]>([
+  'locales',
+  'foods',
+  'categories',
+  'standardUnits',
+  'synonymSets',
+  'portionSizeMethods',
+]);
 
 const xlsxOptions = reactive({
   includeActionColumn: false,
 });
 
-const includeOptions = computed(() => {
-  const options: PackageIncludeOption[] = [];
-
-  if (includeFlags.locales)
-    options.push('locales');
-  if (includeFlags.foods)
-    options.push('foods');
-  if (includeFlags.categories)
-    options.push('categories');
-  if (includeFlags.synonymSets)
-    options.push('synonymSets');
-  if (includeFlags.portionSizeMethods)
-    options.push('portionSizeMethods');
-  if (includeFlags.portionSizeImages)
-    options.push('portionSizeImages');
-  return options;
-});
-
 const canExport = computed(() => {
-  return exportLocales.value.length > 0 && (includeFlags.foods || includeFlags.categories || includeFlags.synonymSets);
+  return exportLocales.value.length > 0
+    && (
+      includeFlags.value.includes('foods')
+      || includeFlags.value.includes('categories') || includeFlags.value.includes('synonymSets'));
 });
 
 watch(exportLocales, () => errors.clear('localeId'));
@@ -362,7 +332,7 @@ async function startExport() {
       format: exportFormat.value,
       locales: exportLocales.value.map(i => i.code),
       options: {
-        include: includeOptions.value,
+        include: includeFlags.value,
         ...(exportFormat.value === 'xlsx' ? { xlsx: { includeActionColumn: xlsxOptions.includeActionColumn } } : {}),
       },
     });

@@ -44,7 +44,7 @@ export default () => {
       },
     ];
 
-    await ioc.cradle.localeService.setFoodBuilders(localeId, foodBuilders);
+    await ioc.cradle.adminLocaleService.setFoodBuilders(localeId, foodBuilders);
 
     url = `${baseUrl}/${id}/food-builders`;
     // invalidUrl = `${baseUrl}/999999/food-builders`;

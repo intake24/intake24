@@ -22,7 +22,7 @@ export default () => {
       { localeId, synonyms: 'synonym11 synonym22 synonym33' },
     ];
 
-    await ioc.cradle.localeService.setSynonymSets(id, synonymSets);
+    await ioc.cradle.adminLocaleService.setSynonymSets(id, synonymSets);
 
     url = `${baseUrl}/${id}/synonym-sets`;
     invalidUrl = `${baseUrl}/999999/synonym-sets`;

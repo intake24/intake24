@@ -148,8 +148,10 @@ export default createVuetify({
       otp: 'fas fa-stopwatch',
       // Resource icons
       ...resourceIcons,
+      // Sub-resource icons
       categories: 'fas fa-list',
       foods: 'fas fa-drumstick-bite',
+      'standard-units': 'fas fa-cubes-stacked',
     },
     sets: {
       fa,

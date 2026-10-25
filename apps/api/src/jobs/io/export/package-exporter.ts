@@ -113,6 +113,7 @@ const SYNONYM_WORD_SEPARATOR = /\s+/;
 const progressWeights: Record<PackageIncludeOption, number> = {
   foods: 0.35,
   categories: 0.10,
+  standardUnits: 0.05,
   synonymSets: 0.05,
   locales: 0.05,
   portionSizeMethods: 0.10,
@@ -450,6 +451,47 @@ export class PackageExporter {
       }
 
       await this.updateProgress(localeId, 'categories', categoriesProcessed / categoryRecordCount);
+    }
+  }
+
+  async processStandardUnits(localeId: string): Promise<void> {
+    const { count } = await this.db
+      .selectFrom('standardUnits')
+      .select(({ fn }) => fn.countAll().as('count'))
+      .where('standardUnits.localeId', '=', localeId)
+      .executeTakeFirstOrThrow();
+
+    const standardUnitsCount = Number(count);
+    let standardUnitsProcessed = 0;
+
+    if (standardUnitsCount === 0) {
+      await this.updateProgress(localeId, 'standardUnits', 1);
+      return;
+    }
+
+    const standardUnitsStream = this.db
+      .selectFrom('standardUnits')
+      .select([
+        'standardUnits.code',
+        'standardUnits.name',
+        'standardUnits.icon',
+        'standardUnits.estimateIn',
+        'standardUnits.howMany',
+      ])
+      .where('standardUnits.localeId', '=', localeId)
+      .orderBy('standardUnits.id', 'asc')
+      .stream(this.dbBatchSize);
+
+    const batchedStream = batchStream(standardUnitsStream, this.dbBatchSize);
+
+    for await (const batch of batchedStream) {
+      for (const row of batch) {
+        ++standardUnitsProcessed;
+
+        await this.packageWriter.writeStandardUnit(localeId, row);
+      }
+
+      await this.updateProgress(localeId, 'synonymSets', standardUnitsProcessed / standardUnitsCount);
     }
   }
 
@@ -897,6 +939,8 @@ export class PackageExporter {
         await this.processFoods(localeId);
       if (this.include('categories'))
         await this.processCategories(localeId);
+      if (this.include('standardUnits'))
+        await this.processStandardUnits(localeId);
       if (this.include('synonymSets'))
         await this.processSynonymSets(localeId);
     }

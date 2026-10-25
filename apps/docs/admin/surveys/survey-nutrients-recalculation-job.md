@@ -2,7 +2,7 @@
 
 `SurveyNutrientsRecalculation` updates nutrient snapshots already stored with submitted recalls. It does not change locale foods, food mappings, or food composition records in the foods database.
 
-Read [How Intake24 stores and calculates nutrient data](/admin/foods/nutrient-data-model) first if the distinction between current source data and submitted snapshots is unfamiliar.
+Read [How Intake24 stores and calculates nutrient data](/admin/nutrients/nutrient-data-model) first if the distinction between current source data and submitted snapshots is unfamiliar.
 
 ## Choose what should remain historical
 

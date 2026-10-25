@@ -4,8 +4,8 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { StandardUnit } from '@intake24/db';
 
 export default () => {
-  const baseUrl = '/api/admin/standard-units';
-  const permissions = ['standard-units', 'standard-units:foods'];
+  const baseUrl = '/api/admin/locales';
+  const permissions = ['locales', 'locales:standard-units'];
 
   let url: string;
   let invalidUrl: string;
@@ -14,11 +14,13 @@ export default () => {
   let standardUnit: StandardUnit;
 
   beforeAll(async () => {
-    input = mocker.foods.standardUnit();
+    const { id, code: localeId } = suite.data.system.Locale;
+
+    input = mocker.foods.standardUnit(localeId);
     standardUnit = await StandardUnit.create(input);
 
-    url = `${baseUrl}/${standardUnit.id}/foods`;
-    invalidUrl = `${baseUrl}/999999/foods`;
+    url = `${baseUrl}/${id}/standard-units/${standardUnit.id}/categories`;
+    invalidUrl = `${baseUrl}/${id}/standard-units/999999/categories`;
   });
 
   it('missing authentication / authorization', async () => {

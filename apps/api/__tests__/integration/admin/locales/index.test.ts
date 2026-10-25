@@ -6,6 +6,7 @@ import read from './read.test';
 import refs from './refs.test';
 import splitLists from './split-lists/index.test';
 import splitWords from './split-words/index.test';
+import standardUnits from './standard-units/index.test';
 import store from './store.test';
 import synonymSets from './synonym-sets/index.test';
 import tasks from './tasks.test';
@@ -28,6 +29,8 @@ export default () => {
   describe('post /api/admin/locales/:localeId/split-words', splitWords.set);
   describe('get /api/admin/locales/:localeId/synonym-sets', synonymSets.get);
   describe('post /api/admin/locales/:localeId/synonym-sets', synonymSets.set);
+
+  describe('/api/admin/locales/:localeId/standard-units', standardUnits);
 
   securable('/api/admin/locales/:localeId', 'Locale');
 };

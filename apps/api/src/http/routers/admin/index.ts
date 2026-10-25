@@ -20,7 +20,6 @@ import { reference } from './reference.router';
 import { securable } from './securable.router';
 import { signInLog } from './sign-in-log.router';
 import { signUp } from './sign-up.router';
-import { standardUnit } from './standard-unit.router';
 import survey from './survey';
 import { surveySchemePrompt } from './survey-scheme-prompt.router';
 import { surveyScheme } from './survey-scheme.router';
@@ -50,7 +49,6 @@ export default {
   securable,
   signInLog,
   signUp,
-  standardUnit,
   survey,
   surveyScheme,
   surveySchemePrompt,

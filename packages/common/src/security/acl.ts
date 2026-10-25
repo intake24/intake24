@@ -42,6 +42,7 @@ export const securableDefs = {
     'split-lists',
     'food-builders',
     'split-words',
+    'standard-units',
     'synonym-sets',
     'tasks',
     'use',

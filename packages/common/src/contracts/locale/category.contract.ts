@@ -6,7 +6,7 @@ import {
   categorySearch,
   paginationRequest,
   userCategoryData,
-} from '../types/http';
+} from '../../types/http';
 
 export const category = initContract().router({
   entry: {

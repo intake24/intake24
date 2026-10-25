@@ -40,6 +40,30 @@
       "force": "Mark colon-delimited word pair with '!' to always split (e.g. '!burger:chips!')"
     }
   },
+  "standard-units": {
+    "_": "Unité standard",
+    "title": "Unités standards",
+    "tab": "Unités standards",
+    "add": "Ajouter une unité",
+    "create": "Ajouter une unité",
+    "edit": "Modifier l'unité",
+    "remove": "Enlever l'unité",
+    "code": "Identifiant de l'unité",
+    "estimateIn": "Estimer en",
+    "howMany": "Combien",
+    "categories": {
+      "_": "Catégorie",
+      "tab": "Catégories",
+      "title": "Catégories",
+      "subtitle": "Catégories quantifiées en unités standards"
+    },
+    "foods": {
+      "_": "Aliment",
+      "tab": "Aliments",
+      "title": "Aliments",
+      "subtitle": "Aliments quantifiés en unités standards"
+    }
+  },
   "synonym-sets": {
     "_": "Série de synonymes",
     "title": "Séries de synonymes",

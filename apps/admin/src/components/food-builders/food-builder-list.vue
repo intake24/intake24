@@ -338,6 +338,7 @@ function newItem(): FoodBuilderRequest {
     localeId: props.localeId,
     code: '',
     icon: null,
+    variant: 'flat',
     type: 'recipe',
     name: '',
     label: {},

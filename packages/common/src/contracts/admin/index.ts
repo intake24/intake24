@@ -20,7 +20,6 @@ import { reference } from './reference.contract';
 import { securable } from './securable.contract';
 import { signInLog } from './sign-in-log.contract';
 import { signUp } from './sign-up.contract';
-import { standardUnit } from './standard-unit.contract';
 import survey from './survey';
 import { surveySchemePrompt } from './survey-scheme-prompt.contract';
 import { surveyScheme } from './survey-scheme.contract';
@@ -54,7 +53,6 @@ export default {
   packages,
   signInLog,
   signUp,
-  standardUnit,
   survey,
   surveySecurable: securable('Survey', '/admin/surveys/:surveyId'),
   surveyScheme,

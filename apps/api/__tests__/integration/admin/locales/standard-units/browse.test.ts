@@ -1,8 +1,16 @@
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/standard-units';
-  const permissions = ['standard-units', 'standard-units:browse'];
+  const baseUrl = '/api/admin/locales';
+  const permissions = ['locales', 'locales:standard-units'];
+
+  let url: string;
+
+  beforeAll(async () => {
+    const { id } = suite.data.system.Locale;
+
+    url = `${baseUrl}/${id}/standard-units`;
+  });
 
   it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url, { permissions });

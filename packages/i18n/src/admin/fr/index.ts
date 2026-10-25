@@ -18,7 +18,6 @@ import permissions from './permissions.json';
 import roles from './roles.json';
 import securables from './securables.json';
 import signInLogs from './sign-in-logs.json';
-import standardUnits from './standard-units.json';
 import surveySchemePrompts from './survey-scheme-prompts.json';
 import surveySchemes from './survey-schemes.json';
 import surveys from './surveys.json';
@@ -47,7 +46,6 @@ const messages = {
   roles,
   securables,
   'sign-in-logs': signInLogs,
-  'standard-units': standardUnits,
   'survey-schemes': surveySchemes,
   'survey-scheme-prompts': surveySchemePrompts,
   surveys,

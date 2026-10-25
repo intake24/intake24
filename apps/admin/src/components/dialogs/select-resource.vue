@@ -26,7 +26,7 @@
         <v-btn icon="$cancel" :title="$t('common.action.cancel')" variant="plain" @click.stop="close" />
         <v-toolbar-title>
           <slot name="title">
-            {{ $t(`${resource}.title`) }}
+            {{ title ?? $t(`${resource}.title`) }}
           </slot>
         </v-toolbar-title>
       </v-toolbar>
@@ -163,6 +163,9 @@ const props = defineProps({
   },
   modelValue: {
     type: [Array, Object, String] as PropType<ModelValue>,
+  },
+  title: {
+    type: String,
   },
 });
 

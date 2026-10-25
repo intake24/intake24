@@ -4,7 +4,7 @@ Standard unit defines a unit that is used by `standard` portion size method esti
 
 ## Properties
 
-- `ID` - unique string ID (historically [snake_case](https://en.wikipedia.org/wiki/Snake_case) naming convention was used
+- `Code` - unique string key (historically [snake_case](https://en.wikipedia.org/wiki/Snake_case) naming convention is enforced
 
 - `Name` - Standard unit name
 

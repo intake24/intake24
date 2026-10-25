@@ -1,6 +1,7 @@
 import type { PackageWriter, PackageWriterFactory } from '../types';
 import type { PortionSizeNameLookupReference } from './portion-size-sheet';
 import type { PackageExportOptions } from '@intake24/common/types/http/admin';
+import type { PkgV2StandardUnit } from '@intake24/common/types/package';
 import type { PkgV2AsServedSet } from '@intake24/common/types/package/as-served';
 import type { PkgV2Category } from '@intake24/common/types/package/categories';
 import type { PkgV2DrinkwareSet } from '@intake24/common/types/package/drinkware';
@@ -83,6 +84,7 @@ export class PackageXlsxWriter implements PackageWriter {
   private usedWorkbookPaths: Set<string> = new Set();
   private portionWorkbook?: ExcelJS.stream.xlsx.WorkbookWriter;
   private localesWorkbook?: ExcelJS.stream.xlsx.WorkbookWriter;
+  private standardUnitsWorkbook?: ExcelJS.stream.xlsx.WorkbookWriter;
   private synonymSetsWorkbook?: ExcelJS.stream.xlsx.WorkbookWriter;
 
   constructor(outputPath: string, exportOptions: PackageExportOptions) {
@@ -728,6 +730,45 @@ export class PackageXlsxWriter implements PackageWriter {
     ]).commit();
   }
 
+  private getOrCreateStandardUnitsWorkbook(): ExcelJS.stream.xlsx.WorkbookWriter {
+    if (this.standardUnitsWorkbook !== undefined)
+      return this.standardUnitsWorkbook;
+
+    const filename = path.join(this.outputPath, XLSX_FILE_NAMES.standardUnits);
+    const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({ filename, useStyles: true });
+    const sheet = workbook.addWorksheet(XLSX_SHEET_NAMES.standardUnitRefs);
+    sheet.columns = [
+      { header: XLSX_COLUMN_NAMES.standardUnitRefs.locale, width: 16 },
+      { header: XLSX_COLUMN_NAMES.standardUnitRefs.code, width: 64 },
+      { header: XLSX_COLUMN_NAMES.standardUnitRefs.name, width: 64 },
+      { header: XLSX_COLUMN_NAMES.standardUnitRefs.icon, width: 64 },
+      { header: XLSX_COLUMN_NAMES.standardUnitRefs.estimateIn, width: 120 },
+      { header: XLSX_COLUMN_NAMES.standardUnitRefs.howMany, width: 120 },
+    ];
+    sheet.getRow(1).font = { bold: true };
+    sheet.getRow(1).border = { bottom: { style: 'thin' } };
+
+    this.standardUnitsWorkbook = workbook;
+
+    return workbook;
+  }
+
+  public async writeStandardUnit(localeId: string, standardUnit: PkgV2StandardUnit) {
+    const workbook = this.getOrCreateStandardUnitsWorkbook();
+    const sheet = workbook.getWorksheet(XLSX_SHEET_NAMES.standardUnitRefs)!;
+
+    const row = [
+      localeId,
+      standardUnit.code,
+      standardUnit.name,
+      standardUnit.icon,
+      JSON.stringify(standardUnit.estimateIn),
+      JSON.stringify(standardUnit.howMany),
+    ];
+
+    sheet.addRow(row).commit();
+  }
+
   private getOrCreateSynonymSetsWorkbook(): ExcelJS.stream.xlsx.WorkbookWriter {
     if (this.synonymSetsWorkbook !== undefined)
       return this.synonymSetsWorkbook;
@@ -998,6 +1039,9 @@ export class PackageXlsxWriter implements PackageWriter {
     }
     if (this.localesWorkbook) {
       await this.localesWorkbook.commit();
+    }
+    if (this.standardUnitsWorkbook) {
+      await this.standardUnitsWorkbook.commit();
     }
     if (this.synonymSetsWorkbook) {
       await this.synonymSetsWorkbook.commit();

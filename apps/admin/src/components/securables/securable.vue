@@ -11,7 +11,7 @@
     </div>
   </v-toolbar>
   <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">
-    <template #header-add>
+    <template #header-append>
       <user-dialog
         v-bind="{ api, actions, resource }"
         ref="dialog"

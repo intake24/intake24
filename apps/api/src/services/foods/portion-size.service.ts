@@ -7,7 +7,6 @@ import {
   DrinkwareSet,
   GuideImage,
   ImageMap,
-  StandardUnit,
 } from '@intake24/db';
 
 function portionSizeService() {
@@ -182,35 +181,6 @@ function portionSizeService() {
 
     return drinkwareSet;
   };
-
-  /**
-   * Get multiple records of standard unit
-   *
-   * @param {(string | string[])} id
-   * @returns {Promise<StandardUnit[]>}
-   */
-  const getStandardUnits = async (id: string | string[]): Promise<StandardUnit[]> =>
-    StandardUnit.findAll({
-      where: { id },
-      attributes: ['id', 'name', 'icon', 'estimateIn', 'howMany'],
-      order: [['id', 'ASC']],
-    });
-
-  /**
-   * Get single record of standard unit
-   *
-   * @param {string} id
-   * @returns {Promise<StandardUnit>}
-   */
-  const getStandardUnit = async (id: string): Promise<StandardUnit> => {
-    const [standardUnit] = await getStandardUnits(id);
-
-    if (!standardUnit)
-      throw new NotFoundError('Standard unit not found.');
-
-    return standardUnit;
-  };
-
   return {
     getAsServedImage,
     getAsServedImages,
@@ -222,8 +192,6 @@ function portionSizeService() {
     getImageMaps,
     getDrinkwareSet,
     getDrinkwareSets,
-    getStandardUnit,
-    getStandardUnits,
   };
 }
 

@@ -95,11 +95,9 @@ export function excelColumnToOffset(column: string): number {
 }
 
 /**
- * Convention helper for standard unit id
- *
- * @param {string} name
- * @returns {string}
+ * Convention helper for standard unit code
+ * - historically snake_case was used
  */
-export function toStandardUnitId(name: string): string {
-  return slugify(name, { replacement: '_', lower: true, strict: true });
+export function toStandardUnitId(value: string): string {
+  return slugify(value, { replacement: '_', lower: true, strict: true });
 }
