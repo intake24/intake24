@@ -1,4 +1,5 @@
 import type { Job } from 'bullmq';
+import type { Transaction } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 
@@ -29,8 +30,12 @@ export default class NutrientTableMappingImport extends BaseJob<'NutrientTableMa
 
   private file!: string;
 
-  constructor({ logger }: Pick<IoC, 'logger'>) {
+  private readonly db;
+
+  constructor({ logger, db }: Pick<IoC, 'logger' | 'db'>) {
     super({ logger });
+
+    this.db = db;
   }
 
   /**
@@ -100,24 +105,26 @@ export default class NutrientTableMappingImport extends BaseJob<'NutrientTableMa
   private async import(chunk = 100): Promise<void> {
     const { nutrientTableId } = this.params;
 
-    // Clean old data
-    await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId } });
+    return await this.db.foods.contextTransaction(async (transaction) => {
+      // Clean old data
+      await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId }, transaction });
 
-    const readStream = createReadStream(this.file);
-    const csvStream = parse({ headers: true, trim: true });
+      const readStream = createReadStream(this.file);
+      const csvStream = parse({ headers: true, trim: true });
 
-    await pipeline(
-      readStream,
-      csvStream,
-      async (source: AsyncIterable<CSVRow>) => {
-        for await (const batch of batchGenerator(source, chunk)) {
-          await this.importChunk(batch);
-        }
-      },
-    );
+      await pipeline(
+        readStream,
+        csvStream,
+        async (source: AsyncIterable<CSVRow>) => {
+          for await (const batch of batchGenerator(source, chunk)) {
+            await this.importChunk(batch, transaction);
+          }
+        },
+      );
+    });
   }
 
-  private async importChunk(data: CSVRow[]): Promise<void> {
+  private async importChunk(data: CSVRow[], transaction: Transaction): Promise<void> {
     const { nutrientTableId } = this.params;
 
     const records = data.map((item) => {
@@ -133,7 +140,7 @@ export default class NutrientTableMappingImport extends BaseJob<'NutrientTableMa
       };
     });
 
-    await NutrientTableCsvMappingNutrient.bulkCreate(records);
+    await NutrientTableCsvMappingNutrient.bulkCreate(records, { transaction });
     await this.incrementProgress(data.length);
   }
 }

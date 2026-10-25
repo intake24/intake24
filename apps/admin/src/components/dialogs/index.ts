@@ -1,3 +1,4 @@
+export { default as AuditDialog } from './audit-dialog.vue';
 export { default as ConfirmLeaveDialog } from './confirm-leave-dialog.vue';
 export { default as CopyRecordDialog } from './copy-record-dialog.vue';
 export { default as EventNotifications } from './event-notifications.vue';

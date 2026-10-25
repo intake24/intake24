@@ -1,4 +1,5 @@
 import asServedSets from './as-served-sets.json';
+import audit from './audit.json';
 import common from './common.json';
 import dashboard from './dashboard.json';
 import drinkwareSets from './drinkware-sets.json';
@@ -31,6 +32,7 @@ import users from './users.json';
 const messages = {
   common,
   dashboard,
+  audit,
   'drinkware-sets': drinkwareSets,
   faqs,
   fdbs,
