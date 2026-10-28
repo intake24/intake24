@@ -33,6 +33,7 @@ function createMockBullJob(dbJobId: string, params: DataJobParams): BullJob {
 export default () => {
   let nutrientTable: NutrientTable | null = null;
   let record: NutrientTableRecord | null = null;
+  let batchRecords: NutrientTableRecord[] = [];
   let exportDbJob: DbJob | null = null;
   let importDbJob: DbJob | null = null;
   let exportedFile: string | null = null;
@@ -49,6 +50,8 @@ export default () => {
       await NutrientTableRecordNutrient.destroy({ where: { nutrientTableRecordId: record.id } });
       await record.destroy();
     }
+    if (batchRecords.length)
+      await NutrientTableRecord.destroy({ where: { id: batchRecords.map(({ id }) => id) } });
     if (nutrientTable) {
       await NutrientTableCsvMappingField.destroy({ where: { nutrientTableId: nutrientTable.id } });
       await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId: nutrientTable.id } });
@@ -58,6 +61,7 @@ export default () => {
 
     nutrientTable = null;
     record = null;
+    batchRecords = [];
     exportDbJob = null;
     importDbJob = null;
     exportedFile = null;
@@ -153,5 +157,41 @@ export default () => {
         expect.objectContaining({ nutrientTypeId: nutrientTypes[1].id, unitsPer100g: 4.5 }),
       ]),
     });
+  });
+
+  it('updates progress after each 200-record batch', async () => {
+    const nutrientTableId = `data-batch-${Date.now()}`;
+    nutrientTable = await NutrientTable.create({ id: nutrientTableId, description: 'Data export batch test' });
+    await NutrientTableCsvMapping.create({
+      nutrientTableId,
+      rowOffset: 0,
+      idColumnOffset: 0,
+      descriptionColumnOffset: 1,
+    });
+    batchRecords = await NutrientTableRecord.bulkCreate(
+      Array.from({ length: 201 }, (_, index) => ({
+        nutrientTableId,
+        nutrientTableRecordId: `source-${index.toString().padStart(3, '0')}`,
+        name: `Source food ${index}`,
+      })),
+    );
+    exportDbJob = await DbJob.create({
+      type: 'NutrientTableDataExport',
+      userId: suite.data.system.user.id,
+      params: { nutrientTableId },
+    });
+
+    const exportJob = createMockBullJob(exportDbJob.id, { nutrientTableId });
+    await ioc.resolve('NutrientTableDataExport').run(exportJob);
+    await exportDbJob.reload();
+
+    expect(exportJob.updateProgress).toHaveBeenCalledWith(0.995);
+    expect(exportJob.updateProgress).toHaveBeenLastCalledWith(1);
+    expect(exportDbJob.message).toBe('Nutrient table data export: exported 201 records with 2 CSV columns. No headers were included because rowOffset is 0.');
+    exportedFile = path.resolve(ioc.cradle.fsConfig.local.downloads, exportDbJob.downloadUrl!);
+    const rows = (await fs.readFile(exportedFile, 'utf8')).trim().split('\n');
+    expect(rows).toHaveLength(201);
+    expect(rows[0]).toBe('source-000,Source food 0');
+    expect(rows.at(-1)).toBe('source-200,Source food 200');
   });
 };

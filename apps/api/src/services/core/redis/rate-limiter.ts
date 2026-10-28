@@ -10,6 +10,8 @@ import RedisStore from 'rate-limit-redis';
 
 import HasRedisClient from './redis-store';
 
+export const isLoopbackRequest = (req: Request) => req.ip !== undefined && ['127.0.0.1', '::1'].includes(ipKeyGenerator(req.ip));
+
 export default class RateLimiter extends HasRedisClient {
   readonly rateLimiters;
 
@@ -28,7 +30,7 @@ export default class RateLimiter extends HasRedisClient {
           .json({ message: typeof message === 'function' ? message(req, res) : message });
       },
       keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? (req.ip ? ipKeyGenerator(req.ip) : 'missing-ip')}`,
-      skip: req => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
+      skip: isLoopbackRequest,
       message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.generic'),
       legacyHeaders: false,
       standardHeaders: 'draft-7',
@@ -48,7 +50,7 @@ export default class RateLimiter extends HasRedisClient {
         res.status(statusCode).json({ message });
       },
       keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? (req.ip ? ipKeyGenerator(req.ip) : 'missing-ip')}`,
-      skip: req => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
+      skip: isLoopbackRequest,
       legacyHeaders: false,
       standardHeaders: 'draft-7',
       ...options,
