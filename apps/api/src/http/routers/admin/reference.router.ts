@@ -263,7 +263,7 @@ export function reference() {
                     FROM nutrient_table_records ntr
                     JOIN foods_nutrients fn ON fn.nutrient_table_record_id = ntr.id
                     JOIN foods f ON f.id = fn.food_id
-                    WHERE f.locale_id = '${localeCode}')`),
+                    WHERE f.locale_id = :localeCode)`),
                 },
               }
             : undefined,
@@ -271,6 +271,7 @@ export function reference() {
 
         const nutrientTables = await NutrientTable.paginate({
           where: conditions.length ? { [Op.and]: conditions } : undefined,
+          replacements: { localeCode },
           query,
           attributes: ['id', 'description'],
           columns: ['id', 'description'],

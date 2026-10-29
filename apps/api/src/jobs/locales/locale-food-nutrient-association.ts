@@ -5,14 +5,14 @@ import type { IoC } from '@intake24/api/ioc';
 import { once } from 'node:events';
 import { createReadStream, createWriteStream } from 'node:fs';
 import path from 'node:path';
-import { Transform } from 'node:stream';
+import { Readable } from 'node:stream';
 import { finished } from 'node:stream/promises';
 
 import { format, parse } from 'fast-csv';
 import fs from 'fs-extra';
 
 import { NotFoundError } from '@intake24/api/http/errors';
-import { addTime } from '@intake24/api/util';
+import { addTime, batchGenerator } from '@intake24/api/util';
 import { Job as DbJob, FoodNutrient, NutrientTable, NutrientTableRecord, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
@@ -82,31 +82,19 @@ export default class LocaleFoodNutrientAssociation extends BaseJob<'LocaleFoodNu
 
     const stats: Stats = { created: 0, skipped: 0, failed: 0 };
     const plannedPairs = new Set<string>();
-    let batch: AssociationRow[] = [];
     let completedBatches = 0;
-    const processBatch = async () => {
-      const batchStats = await this.associateBatch(batch, locale.code, plannedPairs, report);
-      stats.created += batchStats.created;
-      stats.skipped += batchStats.skipped;
-      stats.failed += batchStats.failed;
-      completedBatches++;
-      batch = [];
-    };
     const progressInterval = setInterval(async () => {
       await this.setProgress(completedBatches);
     }, 2000);
 
     try {
-      for await (const row of this.rows(file)) {
-        batch.push(row as AssociationRow);
-        if (batch.length < associationBatchSize)
-          continue;
-
-        await processBatch();
+      for await (const batch of batchGenerator(this.rows(file), associationBatchSize)) {
+        const batchStats = await this.associateBatch(batch, locale.code, plannedPairs, report);
+        stats.created += batchStats.created;
+        stats.skipped += batchStats.skipped;
+        stats.failed += batchStats.failed;
+        completedBatches++;
       }
-
-      if (batch.length)
-        await processBatch();
 
       report.end();
       await finished(output);
@@ -123,7 +111,8 @@ export default class LocaleFoodNutrientAssociation extends BaseJob<'LocaleFoodNu
     }
   }
 
-  private rows(file: string) {
+  private async* rows(file: string): AsyncGenerator<AssociationRow> {
+    let headersFound = false;
     const decoder = new TextDecoder('utf-8', { fatal: true });
     const decode = (chunk?: Buffer, stream = false) => {
       try {
@@ -133,34 +122,31 @@ export default class LocaleFoodNutrientAssociation extends BaseJob<'LocaleFoodNu
         throw new Error('CSV file is not valid UTF-8.', { cause: error });
       }
     };
-    const decoded = createReadStream(file).pipe(new Transform({
-      transform: (chunk: Buffer, _encoding, callback) => callback(null, decode(chunk, true)),
-      flush: callback => callback(null, decode()),
-    }));
-    const parser = decoded.pipe(parse({
+    const rows = Readable.from((async function* () {
+      for await (const chunk of createReadStream(file))
+        yield decode(chunk, true);
+      yield decode();
+    })()).compose(parse({
       headers: (headers) => {
         this.validateHeaders(headers);
+        headersFound = true;
         return headers;
       },
       trim: true,
       ignoreEmpty: true,
     }));
-    return parser;
+
+    for await (const row of rows)
+      yield row as AssociationRow;
+
+    if (!headersFound)
+      this.validateHeaders([]);
   }
 
   private async countRows(file: string): Promise<number> {
     let count = 0;
-    let headersFound = false;
-    const rows = this.rows(file);
-    rows.on('headers', () => {
-      headersFound = true;
-    });
-
-    for await (const _ of rows)
+    for await (const _ of this.rows(file))
       count++;
-
-    if (!headersFound)
-      throw new Error(`Missing required CSV headers (${csvHeaders.join(', ')}).`);
 
     return count;
   }

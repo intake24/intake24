@@ -236,9 +236,30 @@ export default () => {
     expect(auditCsv).toContain(`${locale().code},ARRW,${nutrientTableId},0030041,failed,FCT record ID not found in the specified nutrient table.`);
   });
 
-  it('rejects a malformed association CSV without escaping the job', async () => {
+  it.each([
+    {
+      name: 'an empty file',
+      content: '',
+      error: 'Missing required CSV headers (Locale, Food code, FCT, FCT record ID).',
+    },
+    {
+      name: 'missing headers',
+      content: 'Wrong header\n'.repeat(262144),
+      error: 'Missing required CSV headers (Locale, Food code, FCT, FCT record ID).',
+    },
+    {
+      name: 'invalid UTF-8',
+      content: Buffer.concat([Buffer.from('Locale,Food code,FCT,FCT record ID\nen_GB,ARRW,NDB,'), Buffer.from([0xFF])]),
+      error: 'CSV file is not valid UTF-8.',
+    },
+    {
+      name: 'truncated UTF-8',
+      content: Buffer.concat([Buffer.from('Locale,Food code,FCT,FCT record ID\nen_GB,ARRW,NDB,'), Buffer.from([0xC3])]),
+      error: 'CSV file is not valid UTF-8.',
+    },
+  ])('rejects $name without escaping the job', async ({ content, error }) => {
     inputFile = path.resolve(fsConfig.local.downloads, `locale-food-nutrient-association-${randomUUID()}.csv`);
-    await writeFile(inputFile, 'Wrong header\n'.repeat(262144));
+    await writeFile(inputFile, content);
 
     dbJob = await DbJob.create({
       type: 'LocaleFoodNutrientAssociation',
@@ -254,7 +275,7 @@ export default () => {
 
     await expect(ioc.resolve('LocaleFoodNutrientAssociation').run(bullJob))
       .rejects
-      .toThrow('Missing required CSV headers (Locale, Food code, FCT, FCT record ID).');
+      .toThrow(error);
   });
 
   it('rejects association rows with the wrong number of columns', async () => {
