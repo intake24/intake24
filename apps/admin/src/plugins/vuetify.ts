@@ -58,6 +58,9 @@ export default createVuetify({
     },
     VFileInput: {
       hideDetails: 'auto',
+    },
+    VFileUpload: {
+      hideDetails: 'auto',
       variant: 'outlined',
     },
     VListItemAction: {

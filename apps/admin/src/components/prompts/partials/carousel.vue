@@ -87,20 +87,16 @@
                 </v-card-title>
                 <v-container>
                   <v-row>
-                    <v-col cols="12">
-                      <v-text-field
+                    <v-col cols="6">
+                      <media-picker
                         v-model="slide.image.desktop"
-                        append-inner-icon="$desktop"
-                        :label="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('common.theme.layouts.desktop')})`"
-                        prepend-inner-icon="fas fa-image"
+                        :title="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('common.theme.layouts.desktop')})`"
                       />
                     </v-col>
-                    <v-col cols="12">
-                      <v-text-field
+                    <v-col cols="6">
+                      <media-picker
                         v-model="slide.image.mobile"
-                        append-inner-icon="$mobile"
-                        :label="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('common.theme.layouts.mobile')})`"
-                        prepend-inner-icon="fas fa-image"
+                        :title="`${$t('survey-schemes.prompts.carousel.slides.image')} (${$t('common.theme.layouts.mobile')})`"
                       />
                     </v-col>
                     <v-col cols="12">
@@ -147,6 +143,8 @@ import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useSelects } from '@intake24/admin/composables';
 import { carouselDefaults } from '@intake24/common/prompts';
 import { randomString } from '@intake24/common/util';
+
+import MediaPicker from './media-picker.vue';
 
 defineOptions({ name: 'Carousel' });
 

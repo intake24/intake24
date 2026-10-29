@@ -15,11 +15,9 @@ import type { PropType } from 'vue';
 
 import Editor from '@tinymce/tinymce-vue';
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
 import { useLocale } from 'vuetify';
 
-import { useHttp } from '@intake24/admin/services';
-import { useResource } from '@intake24/admin/stores';
+import { useMedia } from '../media';
 
 import 'tinymce/tinymce';
 import 'tinymce/icons/default/icons.min.js';
@@ -51,12 +49,9 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const http = useHttp();
 const vLocale = useLocale();
-const route = useRoute();
-const resource = useResource();
 
-const mediaUploadUrl = computed(() => `admin/${resource.name}${route.params.id ? `/${route.params.id}` : ''}/media`);
+const { uploadMedia } = useMedia();
 
 const init = computed<Partial<EditorOptions>>(() => ({
   license_key: 'gpl',
@@ -68,21 +63,9 @@ const init = computed<Partial<EditorOptions>>(() => ({
   paste_as_text: true,
   paste_data_images: true,
   images_upload_handler: async (blobInfo) => {
-    const formData = new FormData();
-    formData.append('file', new File([blobInfo.blob()], blobInfo.filename(), { type: blobInfo.blob().type }));
-    formData.append('collection', 'tinymce');
-    formData.append('disk', 'public');
-
-    return new Promise((resolve, reject) => {
-      http.post(mediaUploadUrl.value, formData)
-        .then((response) => {
-          resolve(response.data.sizes.md);
-        })
-        .catch((error) => {
-          console.error('Image upload error:', error);
-          reject(error);
-        });
-    });
+    const file = new File([blobInfo.blob()], blobInfo.filename(), { type: blobInfo.blob().type });
+    const media = await uploadMedia(file, 'tinymce', 'public');
+    return media.sizes.md;
   },
   plugins: [
     'advlist',
