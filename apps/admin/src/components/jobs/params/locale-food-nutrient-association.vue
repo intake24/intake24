@@ -46,7 +46,11 @@
         :label="$t('jobs.types.LocaleFoodNutrientAssociation.targetNutrientTableId')"
         name="targetNutrientTableId"
         resource="nutrient-tables"
+        :rules="[() => !sameNutrientTable]"
       />
+      <v-alert v-if="sameNutrientTable" type="warning" variant="tonal">
+        {{ $t('jobs.types.LocaleFoodNutrientAssociation.sameNutrientTable') }}
+      </v-alert>
     </template>
     <v-switch
       v-model="params.dryRun"
@@ -71,6 +75,9 @@ const emit = defineEmits(['update:modelValue']);
 
 const { params } = useJobParams<'LocaleFoodNutrientAssociation'>(props, { emit });
 const { i18n } = useI18n();
+const sameNutrientTable = computed(() => params.value.mode === 'replace'
+  && !!params.value.sourceNutrientTableId
+  && params.value.sourceNutrientTableId === params.value.targetNutrientTableId);
 const selectedFile = computed<File | File[] | null>({
   get: () => params.value.mode === 'associate' ? params.value.file as unknown as File | File[] | null : null,
   set: (file) => {

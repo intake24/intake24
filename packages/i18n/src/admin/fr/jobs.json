@@ -104,6 +104,7 @@
       },
       "sourceNutrientTableId": "Table nutritionnelle source",
       "targetNutrientTableId": "Table nutritionnelle cible",
+      "sameNutrientTable": "Les tables de nutriments source et cible doivent être différentes. Sélectionnez une cible différente avant de soumettre.",
       "dryRun": "Simulation (ne modifie pas les données)",
       "alert": {
         "1": "Le mode « Associer » crée en lot des associations à partir d'un CSV pour les aliments spécifiés, en plus des associations existantes.",
