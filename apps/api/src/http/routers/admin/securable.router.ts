@@ -217,7 +217,7 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       // @ts-expect-error dynamic contract type issue
       handler: async ({ body: { userId }, params: { [paramId]: securableId }, req }) => {
         if (userId) {
-          const user = User.findOne({ attributes: ['id'], where: { id: userId, email: { [Op.ne]: null } } });
+          const user = await User.findOne({ attributes: ['id'], where: { id: userId, email: { [Op.ne]: null } } });
           if (!user) {
             throw ValidationError.from({ path: 'userId', i18n: { type: 'exists._' } });
           }
