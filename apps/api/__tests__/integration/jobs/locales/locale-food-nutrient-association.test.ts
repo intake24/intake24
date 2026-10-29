@@ -102,7 +102,7 @@ export default () => {
 
     const completedJob = await DbJob.findByPk(dbJob.id);
     auditFile = path.resolve(fsConfig.local.downloads, completedJob?.downloadUrl ?? '');
-    expect(completedJob?.message).toBe('Locale food nutrient association: created 1, skipped 500, failed 0.');
+    expect(completedJob?.message).toBe('Locale food nutrient association: created 1, skipped 500, failed 0. Click download icon to see details.');
 
     const auditCsv = await readFile(auditFile, 'utf-8');
     expect(auditCsv).toContain('Outcome,Reason');
@@ -177,7 +177,10 @@ export default () => {
     expect(auditCsv).toContain(`${locale().code},ARRW,${sourceId},40400,${targetId},failed,FCT record ID not found in target nutrient table.`);
   });
 
-  it('dry-runs CSV associations and reports unresolved nutrient-table references', async () => {
+  it.each([
+    { existing: false, summary: 'would create 1, skipped 0, failed 3', outcome: 'would create,' },
+    { existing: true, summary: 'would create 0, skipped 1, failed 3', outcome: 'skipped,Association already exists.' },
+  ])('dry-runs CSV associations with an existing association: $existing and reports unresolved references', async ({ existing, summary, outcome }) => {
     const nutrientTableId = `NDB_DRY_${Date.now()}`;
     nutrientTable = await NutrientTable.create({ id: nutrientTableId, description: 'Dry-run table' });
     nutrientTableRecord = await NutrientTableRecord.create({
@@ -192,6 +195,9 @@ export default () => {
       name: 'Association test food',
       version: randomUUID(),
     });
+
+    if (existing)
+      await FoodNutrient.create({ foodId: food.id, nutrientTableRecordId: nutrientTableRecord.id });
 
     inputFile = path.resolve(fsConfig.local.downloads, `locale-food-nutrient-association-${randomUUID()}.csv`);
     await writeFile(inputFile, [
@@ -216,15 +222,15 @@ export default () => {
 
     await ioc.resolve('LocaleFoodNutrientAssociation').run(bullJob);
 
-    expect(await FoodNutrient.findOne({
+    expect(await FoodNutrient.count({
       where: { foodId: food.id, nutrientTableRecordId: nutrientTableRecord.id },
-    })).toBeNull();
-    expect((await DbJob.findByPk(dbJob.id))?.message).toBe('Locale food nutrient association: would create 1, skipped 0, failed 3.');
+    })).toBe(existing ? 1 : 0);
+    expect((await DbJob.findByPk(dbJob.id))?.message).toBe(`Locale food nutrient association: ${summary}. Click download icon to see details.`);
 
     const completedJob = await DbJob.findByPk(dbJob.id);
     auditFile = path.resolve(fsConfig.local.downloads, completedJob?.downloadUrl ?? '');
     const auditCsv = await readFile(auditFile, 'utf-8');
-    expect(auditCsv).toContain(`${locale().code},ARRW,${nutrientTableId},0030040,would create,`);
+    expect(auditCsv).toContain(`${locale().code},ARRW,${nutrientTableId},0030040,${outcome}`);
     expect(auditCsv).toContain(`${locale().code},,${nutrientTableId},0030040,failed,Missing value for Food code.`);
     expect(auditCsv).toContain(`${locale().code},ARRW,NDB_DOES_NOT_EXIST,0030040,failed,Nutrient table not found.`);
     expect(auditCsv).toContain(`${locale().code},ARRW,${nutrientTableId},0030041,failed,FCT record ID not found in the specified nutrient table.`);

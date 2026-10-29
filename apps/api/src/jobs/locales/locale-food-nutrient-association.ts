@@ -255,7 +255,7 @@ export default class LocaleFoodNutrientAssociation extends BaseJob<'LocaleFoodNu
       candidates.push({ row, foodId: food.id, nutrientTableRecordId: record.id, pair });
     }
 
-    const existingPairs = this.params.dryRun || !candidates.length
+    const existingPairs = !candidates.length
       ? new Set<string>()
       : new Set((await this.kyselyDb.foods
           .selectFrom('foodsNutrients')
