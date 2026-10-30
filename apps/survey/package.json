@@ -57,7 +57,7 @@
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.19.2",
     "@vite-pwa/assets-generator": "^2.0.0",
-    "@vitejs/plugin-legacy": "^7.2.1",
+    "@vitejs/plugin-legacy": "^8.2.3",
     "@vitejs/plugin-vue": "^6.0.10",
     "@vue/test-utils": "^2.5.1",
     "@vue/tsconfig": "^0.9.1",
