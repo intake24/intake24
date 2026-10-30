@@ -36,6 +36,6 @@
     "@types/ms": "^2.1.0",
     "@types/node": "^24.19.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.12"
+    "vitest": "^5.0.5"
   }
 }
