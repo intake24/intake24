@@ -1069,6 +1069,7 @@
         "description": "Get related data for a category from the database.",
         "summary": "Category entry",
         "tags": [
+          "locale",
           "category"
         ],
         "parameters": [
@@ -1151,6 +1152,7 @@
         "description": "Get related data for a category from the database.",
         "summary": "Category entry",
         "tags": [
+          "locale",
           "category"
         ],
         "parameters": [
@@ -1241,6 +1243,7 @@
         "description": "Browse and search category contents for foods and subcategories listed under the given category.",
         "summary": "Browse category contents",
         "tags": [
+          "locale",
           "category"
         ],
         "parameters": [
@@ -1389,6 +1392,7 @@
         "description": "Get the list of root categories & foods for the \"browse all foods\" options.",
         "summary": "Root category contents",
         "tags": [
+          "locale",
           "category"
         ],
         "parameters": [
@@ -1497,6 +1501,7 @@
         "description": "Get the category contents, i.e. foods and subcategories listed under the given category.",
         "summary": "Category contents",
         "tags": [
+          "locale",
           "category"
         ],
         "parameters": [
@@ -1613,6 +1618,7 @@
         "description": "Get the category header, useful if only the local name is required",
         "summary": "Category header",
         "tags": [
+          "locale",
           "category"
         ],
         "parameters": [
@@ -1673,6 +1679,7 @@
         "description": "Get portion size estimation options, associated foods and related data for a food from the database.",
         "summary": "Food entry",
         "tags": [
+          "locale",
           "food"
         ],
         "parameters": [
@@ -2431,6 +2438,7 @@
         "description": "Returns a list of foods from the food database that match the description.",
         "summary": "Food search",
         "tags": [
+          "locale",
           "food"
         ],
         "parameters": [
@@ -2600,6 +2608,7 @@
         "description": "Get portion size estimation options, associated foods and related data for a food from the database.",
         "summary": "Food entry",
         "tags": [
+          "locale",
           "food"
         ],
         "parameters": [
@@ -3366,6 +3375,7 @@
         "description": "Get the list of categories for a food.",
         "summary": "Food categories",
         "tags": [
+          "locale",
           "food"
         ],
         "parameters": [
@@ -3408,6 +3418,7 @@
         "description": "Get the food builders.",
         "summary": "Food builders",
         "tags": [
+          "locale",
           "food"
         ],
         "parameters": [
@@ -3541,6 +3552,7 @@
         "description": "Get the food builder data for a specific food code.",
         "summary": "Food builder",
         "tags": [
+          "locale",
           "food"
         ],
         "parameters": [
@@ -3648,6 +3660,203 @@
                     "steps"
                   ],
                   "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locales/{localeId}/standard-units": {
+      "get": {
+        "description": "Get definitions for the given standard units.",
+        "summary": "Multiple standard units",
+        "tags": [
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/__schema0"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "icon": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "estimateIn": {
+                        "$ref": "#/definitions/__schema0"
+                      },
+                      "howMany": {
+                        "$ref": "#/definitions/__schema0"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "name",
+                      "icon",
+                      "estimateIn",
+                      "howMany"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "definitions": {
+                    "__schema0": {
+                      "type": "object",
+                      "properties": {
+                        "en": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "en"
+                      ],
+                      "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locales/{localeId}/standard-units/{code}": {
+      "get": {
+        "description": "Get definitions for the given standard units.",
+        "summary": "Single standard unit",
+        "tags": [
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "estimateIn": {
+                      "$ref": "#/definitions/__schema0"
+                    },
+                    "howMany": {
+                      "$ref": "#/definitions/__schema0"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "name",
+                    "icon",
+                    "estimateIn",
+                    "howMany"
+                  ],
+                  "additionalProperties": false,
+                  "definitions": {
+                    "__schema0": {
+                      "type": "object",
+                      "properties": {
+                        "en": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "en"
+                      ],
+                      "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -5797,185 +6006,6 @@
                   "definitions": {
                     "__schema0": {
                       "type": "object",
-                      "additionalProperties": {
-                        "nullable": true,
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/portion-sizes/standard-units": {
-      "get": {
-        "description": "Get definitions for the given standard units.",
-        "summary": "Multiple standard units",
-        "tags": [
-          "portionSize"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "minLength": 1
-                },
-                {
-                  "minItems": 1,
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/__schema0"
-                  }
-                }
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "icon": {
-                        "nullable": true,
-                        "type": "string"
-                      },
-                      "estimateIn": {
-                        "$ref": "#/definitions/__schema0"
-                      },
-                      "howMany": {
-                        "$ref": "#/definitions/__schema0"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "name",
-                      "icon",
-                      "estimateIn",
-                      "howMany"
-                    ],
-                    "additionalProperties": false
-                  },
-                  "definitions": {
-                    "__schema0": {
-                      "type": "object",
-                      "properties": {
-                        "en": {
-                          "allOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "nullable": true,
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "en"
-                      ],
-                      "additionalProperties": {
-                        "nullable": true,
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/portion-sizes/standard-units/{id}": {
-      "get": {
-        "description": "Get definitions for the given standard units.",
-        "summary": "Single standard unit",
-        "tags": [
-          "portionSize"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "icon": {
-                      "nullable": true,
-                      "type": "string"
-                    },
-                    "estimateIn": {
-                      "$ref": "#/definitions/__schema0"
-                    },
-                    "howMany": {
-                      "$ref": "#/definitions/__schema0"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "icon",
-                    "estimateIn",
-                    "howMany"
-                  ],
-                  "additionalProperties": false,
-                  "definitions": {
-                    "__schema0": {
-                      "type": "object",
-                      "properties": {
-                        "en": {
-                          "allOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "nullable": true,
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "en"
-                      ],
                       "additionalProperties": {
                         "nullable": true,
                         "type": "string"
@@ -19407,6 +19437,598 @@
                     "meta"
                   ],
                   "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/audit/tables": {
+      "get": {
+        "description": "Get the audit settings for the specified database",
+        "summary": "Audit settings",
+        "tags": [
+          "admin",
+          "audit"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "exclude": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "exclude"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "foods",
+                    "system"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Save the audit settings for the specified database",
+        "summary": "Save audit settings",
+        "tags": [
+          "admin",
+          "audit"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "foods": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/__schema0"
+                    }
+                  },
+                  "system": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/__schema0"
+                    }
+                  }
+                },
+                "required": [
+                  "foods",
+                  "system"
+                ],
+                "additionalProperties": false,
+                "definitions": {
+                  "__schema0": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "exclude": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "exclude"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "exclude": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "exclude"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "foods",
+                    "system"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/audit/log/{resource}/{resourceId}": {
+      "get": {
+        "description": "Audit the specified resource",
+        "summary": "Resource audit",
+        "tags": [
+          "admin",
+          "audit"
+        ],
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "resourceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$"
+                        },
+                        "tableName": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "recordId": {
+                          "nullable": true,
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "operation": {
+                          "type": "string",
+                          "enum": [
+                            "INSERT",
+                            "UPDATE",
+                            "DELETE"
+                          ]
+                        },
+                        "ctxType": {
+                          "nullable": true,
+                          "type": "string",
+                          "enum": [
+                            "request",
+                            "job"
+                          ]
+                        },
+                        "ctxId": {
+                          "nullable": true,
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$"
+                        },
+                        "ctxUserId": {
+                          "nullable": true,
+                          "allOf": [
+                            {
+                              "$ref": "#/definitions/__schema0"
+                            }
+                          ]
+                        },
+                        "oldValue": {
+                          "nullable": true,
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/definitions/__schema1"
+                          }
+                        },
+                        "newValue": {
+                          "nullable": true,
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/definitions/__schema2"
+                          }
+                        },
+                        "createdAt": {},
+                        "user": {
+                          "nullable": true,
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "$ref": "#/definitions/__schema0"
+                            },
+                            "name": {
+                              "nullable": true,
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "tableName",
+                        "recordId",
+                        "operation",
+                        "ctxType",
+                        "ctxId",
+                        "ctxUserId",
+                        "oldValue",
+                        "newValue",
+                        "createdAt",
+                        "user"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "definitions": {
+                    "__schema0": {
+                      "type": "string"
+                    },
+                    "__schema1": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            null
+                          ]
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/__schema1"
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/definitions/__schema1"
+                          }
+                        }
+                      ]
+                    },
+                    "__schema2": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            null
+                          ]
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/__schema2"
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/definitions/__schema2"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/audit/log/{resource}/{resourceId}/{subResource}/{subResourceId}": {
+      "get": {
+        "description": "Audit the specified sub-resource",
+        "summary": "Sub-resource audit",
+        "tags": [
+          "admin",
+          "audit"
+        ],
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "resourceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "subResource",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "subResourceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$"
+                        },
+                        "tableName": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "recordId": {
+                          "nullable": true,
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "operation": {
+                          "type": "string",
+                          "enum": [
+                            "INSERT",
+                            "UPDATE",
+                            "DELETE"
+                          ]
+                        },
+                        "ctxType": {
+                          "nullable": true,
+                          "type": "string",
+                          "enum": [
+                            "request",
+                            "job"
+                          ]
+                        },
+                        "ctxId": {
+                          "nullable": true,
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$"
+                        },
+                        "ctxUserId": {
+                          "nullable": true,
+                          "allOf": [
+                            {
+                              "$ref": "#/definitions/__schema0"
+                            }
+                          ]
+                        },
+                        "oldValue": {
+                          "nullable": true,
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/definitions/__schema1"
+                          }
+                        },
+                        "newValue": {
+                          "nullable": true,
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/definitions/__schema2"
+                          }
+                        },
+                        "createdAt": {},
+                        "user": {
+                          "nullable": true,
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "$ref": "#/definitions/__schema0"
+                            },
+                            "name": {
+                              "nullable": true,
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "tableName",
+                        "recordId",
+                        "operation",
+                        "ctxType",
+                        "ctxId",
+                        "ctxUserId",
+                        "oldValue",
+                        "newValue",
+                        "createdAt",
+                        "user"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "definitions": {
+                    "__schema0": {
+                      "type": "string"
+                    },
+                    "__schema1": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            null
+                          ]
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/__schema1"
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/definitions/__schema1"
+                          }
+                        }
+                      ]
+                    },
+                    "__schema2": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "string",
+                          "nullable": true,
+                          "enum": [
+                            null
+                          ]
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/__schema2"
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/definitions/__schema2"
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -45417,6 +46039,7 @@
                                         "foodBuilders",
                                         "splitLists",
                                         "splitWords",
+                                        "standardUnits",
                                         "synonymSets",
                                         "searchPopularity",
                                         "searchFixedRanking"
@@ -46055,6 +46678,7 @@
                                             "locales",
                                             "foods",
                                             "categories",
+                                            "standardUnits",
                                             "synonymSets",
                                             "asServedSets",
                                             "imageMaps",
@@ -46307,6 +46931,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -46492,6 +47117,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -47130,6 +47756,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -47338,6 +47965,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -47639,6 +48267,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -48277,6 +48906,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -48485,6 +49115,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -51980,6 +52611,7 @@
                                 "foodBuilders",
                                 "splitLists",
                                 "splitWords",
+                                "standardUnits",
                                 "synonymSets",
                                 "searchPopularity",
                                 "searchFixedRanking"
@@ -52334,6 +52966,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -52972,6 +53605,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -53180,6 +53814,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -53834,6 +54469,977 @@
         }
       }
     },
+    "/admin/locales/{localeId}/standard-units": {
+      "get": {
+        "description": "Browse standard units (paginated list)",
+        "summary": "Browse standard units",
+        "tags": [
+          "admin",
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "code": {},
+                          "localeId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 64
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
+                          },
+                          "estimateIn": {
+                            "$ref": "#/definitions/__schema0"
+                          },
+                          "howMany": {
+                            "$ref": "#/definitions/__schema0"
+                          },
+                          "icon": {
+                            "nullable": true,
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 64
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "code",
+                          "localeId",
+                          "name",
+                          "estimateIn",
+                          "howMany",
+                          "icon"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ],
+                  "additionalProperties": false,
+                  "definitions": {
+                    "__schema0": {
+                      "type": "object",
+                      "properties": {
+                        "en": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "en"
+                      ],
+                      "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create new standard unit",
+        "summary": "Create standard unit",
+        "tags": [
+          "admin",
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {},
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "estimateIn": {
+                    "$ref": "#/definitions/__schema0"
+                  },
+                  "howMany": {
+                    "$ref": "#/definitions/__schema0"
+                  },
+                  "icon": {
+                    "nullable": true,
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64
+                  }
+                },
+                "required": [
+                  "code",
+                  "name",
+                  "estimateIn",
+                  "howMany"
+                ],
+                "additionalProperties": false,
+                "definitions": {
+                  "__schema0": {
+                    "type": "object",
+                    "properties": {
+                      "en": {
+                        "allOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "en"
+                    ],
+                    "additionalProperties": {
+                      "nullable": true,
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "code": {},
+                    "localeId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "estimateIn": {
+                      "$ref": "#/definitions/__schema0"
+                    },
+                    "howMany": {
+                      "$ref": "#/definitions/__schema0"
+                    },
+                    "icon": {
+                      "nullable": true,
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "code",
+                    "localeId",
+                    "name",
+                    "estimateIn",
+                    "howMany",
+                    "icon"
+                  ],
+                  "additionalProperties": false,
+                  "definitions": {
+                    "__schema0": {
+                      "type": "object",
+                      "properties": {
+                        "en": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "en"
+                      ],
+                      "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/locales/{localeId}/standard-units/{standardUnitId}": {
+      "get": {
+        "description": "Get standard unit by id",
+        "summary": "Get standard unit",
+        "tags": [
+          "admin",
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          },
+          {
+            "name": "standardUnitId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "code": {},
+                    "localeId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "estimateIn": {
+                      "$ref": "#/definitions/__schema0"
+                    },
+                    "howMany": {
+                      "$ref": "#/definitions/__schema0"
+                    },
+                    "icon": {
+                      "nullable": true,
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "code",
+                    "localeId",
+                    "name",
+                    "estimateIn",
+                    "howMany",
+                    "icon"
+                  ],
+                  "additionalProperties": false,
+                  "definitions": {
+                    "__schema0": {
+                      "type": "object",
+                      "properties": {
+                        "en": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "en"
+                      ],
+                      "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update standard unit by id",
+        "summary": "Update standard unit",
+        "tags": [
+          "admin",
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          },
+          {
+            "name": "standardUnitId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {},
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "estimateIn": {
+                    "$ref": "#/definitions/__schema0"
+                  },
+                  "howMany": {
+                    "$ref": "#/definitions/__schema0"
+                  },
+                  "icon": {
+                    "nullable": true,
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64
+                  }
+                },
+                "required": [
+                  "code",
+                  "name",
+                  "estimateIn",
+                  "howMany"
+                ],
+                "additionalProperties": false,
+                "definitions": {
+                  "__schema0": {
+                    "type": "object",
+                    "properties": {
+                      "en": {
+                        "allOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "en"
+                    ],
+                    "additionalProperties": {
+                      "nullable": true,
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "code": {},
+                    "localeId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "estimateIn": {
+                      "$ref": "#/definitions/__schema0"
+                    },
+                    "howMany": {
+                      "$ref": "#/definitions/__schema0"
+                    },
+                    "icon": {
+                      "nullable": true,
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "code",
+                    "localeId",
+                    "name",
+                    "estimateIn",
+                    "howMany",
+                    "icon"
+                  ],
+                  "additionalProperties": false,
+                  "definitions": {
+                    "__schema0": {
+                      "type": "object",
+                      "properties": {
+                        "en": {
+                          "allOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "en"
+                      ],
+                      "additionalProperties": {
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete standard unit by id",
+        "summary": "Delete standard unit",
+        "tags": [
+          "admin",
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          },
+          {
+            "name": "standardUnitId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          }
+        }
+      }
+    },
+    "/admin/locales/{localeId}/standard-units/{standardUnitId}/categories": {
+      "get": {
+        "description": "Get categories associated with standard unit",
+        "summary": "Standard unit categories",
+        "tags": [
+          "admin",
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          },
+          {
+            "name": "standardUnitId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "categoryCode": {
+                            "type": "string"
+                          },
+                          "localeId": {
+                            "type": "string"
+                          },
+                          "localeCode": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "simpleName": {
+                            "type": "string"
+                          },
+                          "altNames": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          },
+                          "version": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "code",
+                          "categoryCode",
+                          "localeId",
+                          "localeCode",
+                          "name",
+                          "simpleName",
+                          "altNames",
+                          "version"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/locales/{localeId}/standard-units/{standardUnitId}/foods": {
+      "get": {
+        "description": "Get foods associated with standard unit",
+        "summary": "Standard unit foods",
+        "tags": [
+          "admin",
+          "locale",
+          "standardUnit"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          },
+          {
+            "name": "standardUnitId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/__schema0"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^.+\\|(asc|desc)$"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "foodCode": {
+                            "type": "string"
+                          },
+                          "localeId": {
+                            "type": "string"
+                          },
+                          "localeCode": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "simpleName": {
+                            "type": "string"
+                          },
+                          "altNames": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          },
+                          "version": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "code",
+                          "foodCode",
+                          "localeId",
+                          "localeCode",
+                          "name",
+                          "simpleName",
+                          "altNames",
+                          "version"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/locales/{localeId}/synonym-sets": {
       "get": {
         "description": "Browse locale synonym sets",
@@ -54207,6 +55813,7 @@
                       "split-lists",
                       "food-builders",
                       "split-words",
+                      "standard-units",
                       "synonym-sets",
                       "tasks",
                       "use"
@@ -54500,6 +56107,7 @@
                       "split-lists",
                       "food-builders",
                       "split-words",
+                      "standard-units",
                       "synonym-sets",
                       "tasks",
                       "use"
@@ -56416,6 +58024,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -57054,6 +58663,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -57262,6 +58872,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -58168,6 +59779,39 @@
         "responses": {
           "204": {
             "description": "204"
+          }
+        }
+      }
+    },
+    "/admin/references/audit": {
+      "get": {
+        "description": "Audit tables",
+        "summary": "Audit tables",
+        "tags": [
+          "admin",
+          "reference"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "foods",
+                    "system"
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -61162,6 +62806,23 @@
             "schema": {
               "anyOf": [
                 {
+                  "$ref": "#/definitions/__schema0"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/__schema0"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
                   "type": "string",
                   "minLength": 1
                 },
@@ -61173,6 +62834,14 @@
                   }
                 }
               ]
+            }
+          },
+          {
+            "name": "localeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1
             }
           }
         ],
@@ -61190,9 +62859,7 @@
                         "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 64
+                            "type": "string"
                           },
                           "name": {
                             "type": "string",
@@ -69900,6 +71567,7 @@
                       "locales",
                       "foods",
                       "categories",
+                      "standardUnits",
                       "synonymSets",
                       "portionSizeMethods",
                       "portionSizeImages"
@@ -70112,6 +71780,7 @@
                             "locales",
                             "foods",
                             "categories",
+                            "standardUnits",
                             "synonymSets",
                             "asServedSets",
                             "imageMaps",
@@ -70628,897 +72297,6 @@
         "responses": {
           "200": {
             "description": "200"
-          }
-        }
-      }
-    },
-    "/admin/standard-units": {
-      "get": {
-        "description": "Browse standard units (paginated list)",
-        "summary": "Browse standard units",
-        "tags": [
-          "admin",
-          "standardUnit"
-        ],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": true,
-            "schema": {}
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 64
-                          },
-                          "name": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 128
-                          },
-                          "estimateIn": {
-                            "$ref": "#/definitions/__schema0"
-                          },
-                          "howMany": {
-                            "$ref": "#/definitions/__schema0"
-                          },
-                          "icon": {
-                            "nullable": true,
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 64
-                          },
-                          "createdAt": {},
-                          "updatedAt": {}
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "estimateIn",
-                          "howMany",
-                          "icon",
-                          "createdAt",
-                          "updatedAt"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false,
-                  "definitions": {
-                    "__schema0": {
-                      "type": "object",
-                      "properties": {
-                        "en": {
-                          "allOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "nullable": true,
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "en"
-                      ],
-                      "additionalProperties": {
-                        "nullable": true,
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Create new standard unit",
-        "summary": "Create standard unit",
-        "tags": [
-          "admin",
-          "standardUnit"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "description": "Body",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 128
-                  },
-                  "estimateIn": {
-                    "$ref": "#/definitions/__schema0"
-                  },
-                  "howMany": {
-                    "$ref": "#/definitions/__schema0"
-                  },
-                  "icon": {
-                    "nullable": true,
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 64
-                  },
-                  "id": {}
-                },
-                "required": [
-                  "name",
-                  "estimateIn",
-                  "howMany",
-                  "icon",
-                  "id"
-                ],
-                "additionalProperties": false,
-                "definitions": {
-                  "__schema0": {
-                    "type": "object",
-                    "properties": {
-                      "en": {
-                        "allOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "nullable": true,
-                            "type": "string"
-                          }
-                        ]
-                      }
-                    },
-                    "required": [
-                      "en"
-                    ],
-                    "additionalProperties": {
-                      "nullable": true,
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "201",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 64
-                    },
-                    "name": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 128
-                    },
-                    "estimateIn": {
-                      "$ref": "#/definitions/__schema0"
-                    },
-                    "howMany": {
-                      "$ref": "#/definitions/__schema0"
-                    },
-                    "icon": {
-                      "nullable": true,
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 64
-                    },
-                    "createdAt": {},
-                    "updatedAt": {}
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "estimateIn",
-                    "howMany",
-                    "icon",
-                    "createdAt",
-                    "updatedAt"
-                  ],
-                  "additionalProperties": false,
-                  "definitions": {
-                    "__schema0": {
-                      "type": "object",
-                      "properties": {
-                        "en": {
-                          "allOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "nullable": true,
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "en"
-                      ],
-                      "additionalProperties": {
-                        "nullable": true,
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/admin/standard-units/{standardUnitId}": {
-      "get": {
-        "description": "Get standard unit by id",
-        "summary": "Get standard unit",
-        "tags": [
-          "admin",
-          "standardUnit"
-        ],
-        "parameters": [
-          {
-            "name": "standardUnitId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 64
-                    },
-                    "name": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 128
-                    },
-                    "estimateIn": {
-                      "$ref": "#/definitions/__schema0"
-                    },
-                    "howMany": {
-                      "$ref": "#/definitions/__schema0"
-                    },
-                    "icon": {
-                      "nullable": true,
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 64
-                    },
-                    "createdAt": {},
-                    "updatedAt": {}
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "estimateIn",
-                    "howMany",
-                    "icon",
-                    "createdAt",
-                    "updatedAt"
-                  ],
-                  "additionalProperties": false,
-                  "definitions": {
-                    "__schema0": {
-                      "type": "object",
-                      "properties": {
-                        "en": {
-                          "allOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "nullable": true,
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "en"
-                      ],
-                      "additionalProperties": {
-                        "nullable": true,
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "description": "Update standard unit by id",
-        "summary": "Update standard unit",
-        "tags": [
-          "admin",
-          "standardUnit"
-        ],
-        "parameters": [
-          {
-            "name": "standardUnitId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Body",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 128
-                  },
-                  "estimateIn": {
-                    "$ref": "#/definitions/__schema0"
-                  },
-                  "howMany": {
-                    "$ref": "#/definitions/__schema0"
-                  },
-                  "icon": {
-                    "nullable": true,
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 64
-                  }
-                },
-                "required": [
-                  "name",
-                  "estimateIn",
-                  "howMany",
-                  "icon"
-                ],
-                "additionalProperties": false,
-                "definitions": {
-                  "__schema0": {
-                    "type": "object",
-                    "properties": {
-                      "en": {
-                        "allOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "nullable": true,
-                            "type": "string"
-                          }
-                        ]
-                      }
-                    },
-                    "required": [
-                      "en"
-                    ],
-                    "additionalProperties": {
-                      "nullable": true,
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 64
-                    },
-                    "name": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 128
-                    },
-                    "estimateIn": {
-                      "$ref": "#/definitions/__schema0"
-                    },
-                    "howMany": {
-                      "$ref": "#/definitions/__schema0"
-                    },
-                    "icon": {
-                      "nullable": true,
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 64
-                    },
-                    "createdAt": {},
-                    "updatedAt": {}
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "estimateIn",
-                    "howMany",
-                    "icon",
-                    "createdAt",
-                    "updatedAt"
-                  ],
-                  "additionalProperties": false,
-                  "definitions": {
-                    "__schema0": {
-                      "type": "object",
-                      "properties": {
-                        "en": {
-                          "allOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "nullable": true,
-                              "type": "string"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "en"
-                      ],
-                      "additionalProperties": {
-                        "nullable": true,
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "description": "Delete standard unit by id",
-        "summary": "Delete standard unit",
-        "tags": [
-          "admin",
-          "standardUnit"
-        ],
-        "parameters": [
-          {
-            "name": "standardUnitId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "204"
-          }
-        }
-      }
-    },
-    "/admin/standard-units/{standardUnitId}/categories": {
-      "get": {
-        "description": "Get categories associated with standard unit",
-        "summary": "Standard unit categories",
-        "tags": [
-          "admin",
-          "standardUnit"
-        ],
-        "parameters": [
-          {
-            "name": "standardUnitId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": true,
-            "schema": {}
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "categoryCode": {
-                            "type": "string"
-                          },
-                          "localeId": {
-                            "type": "string"
-                          },
-                          "localeCode": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "simpleName": {
-                            "type": "string"
-                          },
-                          "altNames": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "nullable": true,
-                              "type": "string"
-                            }
-                          },
-                          "version": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "categoryCode",
-                          "localeId",
-                          "localeCode",
-                          "name",
-                          "simpleName",
-                          "altNames",
-                          "version"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/admin/standard-units/{standardUnitId}/foods": {
-      "get": {
-        "description": "Get foods associated with standard unit",
-        "summary": "Standard unit foods",
-        "tags": [
-          "admin",
-          "standardUnit"
-        ],
-        "parameters": [
-          {
-            "name": "standardUnitId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": true,
-            "schema": {}
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "foodCode": {
-                            "type": "string"
-                          },
-                          "localeId": {
-                            "type": "string"
-                          },
-                          "localeCode": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "simpleName": {
-                            "type": "string"
-                          },
-                          "altNames": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "nullable": true,
-                              "type": "string"
-                            }
-                          },
-                          "version": {
-                            "type": "string",
-                            "format": "uuid",
-                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "foodCode",
-                          "localeId",
-                          "localeCode",
-                          "name",
-                          "simpleName",
-                          "altNames",
-                          "version"
-                        ],
-                        "additionalProperties": false
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false
-                }
-              }
-            }
           }
         }
       }
@@ -136245,6 +137023,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -136883,6 +137662,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -137091,6 +137871,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -295525,6 +296306,7 @@
                                         "foodBuilders",
                                         "splitLists",
                                         "splitWords",
+                                        "standardUnits",
                                         "synonymSets",
                                         "searchPopularity",
                                         "searchFixedRanking"
@@ -296163,6 +296945,7 @@
                                             "locales",
                                             "foods",
                                             "categories",
+                                            "standardUnits",
                                             "synonymSets",
                                             "asServedSets",
                                             "imageMaps",
@@ -296337,6 +297120,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -296593,6 +297377,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -297231,6 +298016,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -297361,6 +298147,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -297531,6 +298318,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -298169,6 +298957,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -298337,6 +299126,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -298602,6 +299392,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -299240,6 +300031,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -299408,6 +300200,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -299616,6 +300409,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -300254,6 +301048,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -300462,6 +301257,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -300800,6 +301596,7 @@
                                         "foodBuilders",
                                         "splitLists",
                                         "splitWords",
+                                        "standardUnits",
                                         "synonymSets",
                                         "searchPopularity",
                                         "searchFixedRanking"
@@ -301438,6 +302235,7 @@
                                             "locales",
                                             "foods",
                                             "categories",
+                                            "standardUnits",
                                             "synonymSets",
                                             "asServedSets",
                                             "imageMaps",
@@ -301690,6 +302488,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -301840,6 +302639,7 @@
                                     "locales",
                                     "foods",
                                     "categories",
+                                    "standardUnits",
                                     "synonymSets",
                                     "asServedSets",
                                     "imageMaps",
@@ -301970,6 +302770,7 @@
                       "locales",
                       "foods",
                       "categories",
+                      "standardUnits",
                       "synonymSets",
                       "portionSizeMethods",
                       "portionSizeImages"
@@ -302134,6 +302935,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -302772,6 +303574,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -302980,6 +303783,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
@@ -303166,6 +303970,7 @@
                                   "foodBuilders",
                                   "splitLists",
                                   "splitWords",
+                                  "standardUnits",
                                   "synonymSets",
                                   "searchPopularity",
                                   "searchFixedRanking"
@@ -303804,6 +304609,7 @@
                                       "locales",
                                       "foods",
                                       "categories",
+                                      "standardUnits",
                                       "synonymSets",
                                       "asServedSets",
                                       "imageMaps",
@@ -304012,6 +304818,7 @@
                         "locales",
                         "foods",
                         "categories",
+                        "standardUnits",
                         "synonymSets",
                         "portionSizeMethods",
                         "portionSizeImages"
