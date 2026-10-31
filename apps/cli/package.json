@@ -25,12 +25,12 @@
   },
   "dependencies": {
     "@clack/prompts": "^1.8.1",
-    "@css-inline/css-inline": "^0.23.1",
+    "@css-inline/css-inline": "^0.23.2",
     "@json2csv/node": "^7.0.8",
     "commander": "^15.0.0",
     "csv-parser": "^3.2.1",
     "decompress": "^4.2.1",
-    "dotenv": "^18.0.8",
+    "dotenv": "^18.0.9",
     "dotenv-expand": "^1000.0.0",
     "fs-extra": "^11.4.1",
     "ky": "^2.2.0",
@@ -54,7 +54,7 @@
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
-    "tsdown": "^0.23.1",
+    "tsdown": "^0.23.4",
     "typescript": "^6.0.3"
   }
 }
