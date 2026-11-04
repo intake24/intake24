@@ -501,6 +501,16 @@
         "md-clock": "Material Design Clock"
       }
     },
+    "quantityCard": {
+      "_": "Quantity card UI",
+      "classic": "Classic",
+      "accessible": "Accessible"
+    },
+    "asServed": {
+      "_": "As served UI",
+      "classic": "Classic",
+      "accessible": "Accessible"
+    },
     "validation": {
       "required": "Prompt is required to be filled in",
       "message": "Error message to be displayed",

@@ -44,6 +44,15 @@
           :model-value="multiple"
           @update:model-value="update('multiple', $event)"
         />
+        <v-select
+          class="mt-4"
+          hide-details="auto"
+          :items="asServedStyles"
+          :label="$t('survey-schemes.prompts.asServed._')"
+          :model-value="asServedStyle"
+          variant="outlined"
+          @update:model-value="update('asServedStyle', $event)"
+        />
       </v-col>
     </v-row>
   </v-tabs-window-item>
@@ -57,6 +66,7 @@ import type { Prompts } from '@intake24/common/prompts';
 import { defineComponent } from 'vue';
 
 import { drinkScalePrompt } from '@intake24/common/prompts';
+import { useI18n } from '@intake24/ui';
 
 import { CounterSettings, ImageMapSettings, LinkedQuantity, SliderSettings, useBasePrompt, useMultiple } from '../partials';
 
@@ -91,13 +101,22 @@ export default defineComponent({
       type: [Boolean, Object] as PropType<Prompts['as-served-prompt']['multiple']>,
       required: true,
     },
+    asServedStyle: {
+      type: String as PropType<Prompts['as-served-prompt']['asServedStyle']>,
+      required: true,
+    },
   },
 
   setup(props, ctx) {
     const { update } = useBasePrompt(props, ctx);
     const { multipleItems, updateMultiple } = useMultiple(props, ctx);
+    const { i18n } = useI18n();
+    const asServedStyles = (['classic', 'accessible'] as const).map(item => ({
+      title: i18n.t(`survey-schemes.prompts.asServed.${item}`),
+      value: item,
+    }));
 
-    return { drinkScalePrompt, multipleItems, update, updateMultiple };
+    return { asServedStyles, drinkScalePrompt, multipleItems, update, updateMultiple };
   },
 });
 </script>
