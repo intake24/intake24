@@ -51,7 +51,7 @@
           </slot>
           <v-expand-transition>
             <select-resource
-              v-if="!!option.action"
+              v-if="showUpdateFoodAction && !!option.action"
               v-model="option.action.params.code"
               item-id="code"
               :label="$t('common.options.action.foodCode')"
@@ -81,6 +81,7 @@
               :label="$t('common.options.exclusive')"
             />
             <v-switch
+              v-if="showUpdateFoodAction"
               density="compact"
               hide-details="auto"
               :label="$t('common.options.action.updateFood')"
@@ -112,6 +113,7 @@ import { VueDraggable } from 'vue-draggable-plus';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { toIndexedList } from '@intake24/admin/util';
+import { updateFoodCodePlaceholder } from '@intake24/common/prompts';
 
 defineOptions({ name: 'OptionsList' });
 
@@ -136,6 +138,10 @@ const props = defineProps({
   rules: {
     type: Array as PropType<RuleCallback[]>,
     default: () => [],
+  },
+  showUpdateFoodAction: {
+    type: Boolean,
+    default: true,
   },
 });
 
@@ -164,7 +170,7 @@ function remove(index: number) {
 
 function changeActionToggle(option: ListOption<ZodType>, enable: boolean | null) {
   if (enable) {
-    option.action = { type: 'updateFood', params: { code: 'FOOD_CODE' } };
+    option.action = { type: 'updateFood', params: { code: updateFoodCodePlaceholder } };
   }
   else {
     option.action = undefined;

@@ -189,6 +189,7 @@ const checkboxListPrompt = z.object({
   ...baseCustomPrompt.shape,
   component: z.literal('checkbox-list-prompt'),
   options: localeOptionList({ limit: 2048 }),
+  updateFoodActions: z.record(z.string(), z.record(z.string(), actionItem)).default({}),
   other: z.boolean(),
   validation: promptValidationWithLimits,
 });

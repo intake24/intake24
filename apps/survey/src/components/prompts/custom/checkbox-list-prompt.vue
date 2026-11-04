@@ -42,7 +42,7 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')" />
+      <next :disabled="!isValid" @click="customAction" />
     </template>
   </component>
 </template>
@@ -50,10 +50,12 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
+import type { ActionItem } from '@intake24/common/prompts';
 import type { ListOption } from '@intake24/common/types';
 
 import { computed, ref, watch } from 'vue';
 
+import { updateFoodCodePlaceholder, updateFoodSubsetKey } from '@intake24/common/prompts';
 import { useForm, usePromptUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
 
@@ -85,12 +87,15 @@ const otherValue = ref('');
 const otherOutput = computed(() => otherValue.value.length ? `Other: ${otherValue.value}` : '');
 const otherRules = computed(() => [inputTooLog(256)]);
 
-const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
+const selected = ref<string[]>(Array.isArray(props.modelValue) ? props.modelValue : []);
 const state = computed(() => [...selected.value, otherOutput.value].filter(Boolean));
 
 const localeOptions = computed(
   () => props.prompt.options[locale.value] ?? props.prompt.options.en,
 );
+const localeUpdateFoodActions = computed<Record<string, ActionItem>>(() => {
+  return props.prompt.updateFoodActions[locale.value] ?? props.prompt.updateFoodActions.en ?? {};
+});
 const isExclusiveSelected = computed(() => localeOptions.value.some(option => option.exclusive && props.modelValue.includes(option.value)));
 const isMinSatisfied = computed(() => !props.prompt.validation.min || props.modelValue.length >= props.prompt.validation.min);
 const isMaxSatisfied = computed(() => !props.prompt.validation.max || props.modelValue.length <= props.prompt.validation.max);
@@ -112,6 +117,27 @@ function update(option?: ListOption) {
   }
 
   emit('update:modelValue', [...state.value]);
+}
+
+function selectedSubsetKey() {
+  const knownValues = selected.value.filter(value =>
+    localeOptions.value.some(option => option.value === value),
+  );
+
+  return updateFoodSubsetKey(knownValues);
+}
+
+function customAction() {
+  const selectedAction = localeUpdateFoodActions.value[selectedSubsetKey()];
+  const tracking = { selectedOption: state.value.join(', ') };
+
+  if (selectedAction && selectedAction.params.code !== updateFoodCodePlaceholder) {
+    const foodOrMealId = props.food?.id ?? props.meal?.id;
+    action(selectedAction.type, foodOrMealId, selectedAction.params, tracking);
+  }
+  else {
+    action('next', undefined, undefined, tracking);
+  }
 }
 
 watch(otherEnabled, (val) => {

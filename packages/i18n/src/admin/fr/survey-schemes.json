@@ -713,7 +713,11 @@
     },
     "checkbox-list-prompt": {
       "title": "Choix multiple",
-      "subtitle": "Demander de choisir n'importe quel nombre d'éléments d'une liste"
+      "subtitle": "Demander de choisir n'importe quel nombre d'éléments d'une liste",
+      "refreshSubsets": "Actualiser les sous-ensembles de mise à jour des aliments",
+      "disableUpdateFoodActions": "Désactiver les actions de mise à jour des aliments",
+      "disableUpdateFoodActionsWarning": "La désactivation supprimera définitivement toutes les actions configurées pour les sous-ensembles. Voulez-vous continuer ?",
+      "toggleUpdateFood": "Update food based on selection"
     },
     "radio-list-prompt": {
       "title": "Choix unique",
