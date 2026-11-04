@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
-    "@types/node": "^24.19.2",
+    "@types/node": "^26.6.6",
     "@types/prompts": "^2.4.9",
     "calver": "^24.1.0",
     "conventional-changelog": "^8.1.3",
