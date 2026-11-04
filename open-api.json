@@ -22472,7 +22472,7 @@
         "requestBody": {
           "description": "Body",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -31515,7 +31515,7 @@
         "requestBody": {
           "description": "Body",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -295156,7 +295156,7 @@
         "requestBody": {
           "description": "Body",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -305512,16 +305512,7 @@
                           "transports": {
                             "type": "array",
                             "items": {
-                              "type": "string",
-                              "enum": [
-                                "ble",
-                                "cable",
-                                "hybrid",
-                                "internal",
-                                "nfc",
-                                "smart-card",
-                                "usb"
-                              ]
+                              "type": "string"
                             }
                           },
                           "publicKeyAlgorithm": {
