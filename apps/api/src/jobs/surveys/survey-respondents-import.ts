@@ -13,21 +13,26 @@ import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
 
 import { batchGenerator } from '@intake24/api/util';
-import { strongPasswordOptional } from '@intake24/common/security';
+import { strongPasswordOptional, usernameSchema } from '@intake24/common/security';
 import { User, UserSurveyAlias } from '@intake24/db';
 
 import BaseJob from '../job';
 
-const csvRow = z.intersection(
-  z.object({
-    username: z.string().min(1).max(256),
-    password: strongPasswordOptional.transform(val => val || undefined),
-    name: z.string().max(512).optional().transform(val => val || undefined),
-    email: z.email().max(512).toLowerCase().optional().transform(val => val || undefined),
-    phone: z.string().max(32).optional().transform(val => val || undefined),
-  }),
-  z.record(z.string(), z.string().transform(val => val || undefined)),
-);
+const csvRow = z
+  .intersection(
+    z.object({
+      username: usernameSchema,
+      password: strongPasswordOptional.transform(val => val || undefined),
+      name: z.string().max(512).optional().transform(val => val || undefined),
+      email: z.email().max(512).toLowerCase().optional().transform(val => val || undefined),
+      phone: z.string().max(32).optional().transform(val => val || undefined),
+    }),
+    z.record(z.string(), z.string().transform(val => val || undefined)),
+  )
+  .refine(data => data.username !== data.password, {
+    message: 'Username and password must not be the same',
+    path: ['password'],
+  });
 export type CSVRow = z.infer<typeof csvRow>;
 
 export default class SurveyRespondentsImport extends BaseJob<'SurveyRespondentsImport'> {

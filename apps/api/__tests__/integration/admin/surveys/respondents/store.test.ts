@@ -102,6 +102,17 @@ export default () => {
       );
     });
 
+    it('should return 400 for same username and password', async () => {
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        ['password'],
+        {
+          input: { ...input, username: input.password },
+        },
+      );
+    });
+
     it('should return 201 and new resource', async () => {
       await assertRespondentResponse(url, input, output);
     });

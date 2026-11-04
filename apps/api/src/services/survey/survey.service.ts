@@ -16,7 +16,7 @@ import { z, ZodError } from 'zod';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
-import { strongPassword } from '@intake24/common/security';
+import { strongPassword, usernameSchema } from '@intake24/common/security';
 import { userCustomField } from '@intake24/common/types';
 import { isSessionAgeValid, isSessionFixedPeriodValid, randomString } from '@intake24/common/util';
 import {
@@ -115,11 +115,15 @@ function surveyService({
       const decoded = await jwt.verify(token, genUserKey, { algorithms: ['HS256', 'HS512'] });
       const { name, password, username, redirectUrl, customFields } = z
         .object({
-          username: z.string().min(1).max(256),
+          username: usernameSchema,
           password: strongPassword.optional(),
           redirectUrl: z.url().optional(),
           name: z.string().min(1).max(512).nullish(),
           customFields: userCustomField.array().optional(),
+        })
+        .refine(data => data.username !== data.password, {
+          message: 'Username and password must not be the same',
+          path: ['password'],
         })
         .parse(decoded);
 

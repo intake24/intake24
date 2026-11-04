@@ -113,6 +113,25 @@ export default () => {
       });
     });
 
+    it(`should return 400 for email as username`, async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['username'], {
+        input: {
+          token: jwt.sign({ username: 'email@example.com' }, secret, { expiresIn: '5m' }),
+        },
+      });
+    });
+
+    it(`should return 400 same username and password`, async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['password'], {
+        input: {
+          token: jwt.sign({
+            username: 'ndfkj38hdkjlsSDJNLNdlawnk',
+            password: 'ndfkj38hdkjlsSDJNLNdlawnk',
+          }, secret, { expiresIn: '5m' }),
+        },
+      });
+    });
+
     it('should return 200 and respondent record', async () => {
       const { status, body } = await request(suite.app)
         .post(url)

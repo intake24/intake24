@@ -1,5 +1,6 @@
-import validator from 'validator';
 import { z } from 'zod';
+
+import { usernameSchema } from '@intake24/common/security';
 
 import { userAttributes, userCustomFieldAttributes, userRequest, userSurveyAliasAttributes } from './users';
 
@@ -41,7 +42,10 @@ export const respondentRequest = userRequest.pick({
 export type RespondentRequest = z.infer<typeof respondentRequest>;
 
 export const createRespondentRequest = respondentRequest.extend({
-  username: z.string().min(1).max(256).refine(val => !validator.isEmail(val)),
+  username: usernameSchema,
+}).refine(data => data.username !== data.password, {
+  message: 'Username and password must not be the same',
+  path: ['password'],
 });
 
 export type CreateRespondentRequest = z.infer<typeof createRespondentRequest>;

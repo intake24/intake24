@@ -32,3 +32,7 @@ export const strongPasswordWithConfirmOptional = z.object({
   password: strongPasswordOptional,
   passwordConfirm: strongPasswordOptional,
 });
+
+export const usernameSchema = z.string().min(1).max(256).refine(val => !validator.isEmail(val), {
+  message: 'Username cannot be an email address',
+});
