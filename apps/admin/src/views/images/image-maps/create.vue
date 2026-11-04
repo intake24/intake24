@@ -94,7 +94,6 @@ export default defineComponent({
         baseImage: null,
         objects: [],
       },
-      config: { multipart: true },
     });
 
     return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };

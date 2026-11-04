@@ -86,7 +86,6 @@ export default defineComponent({
       AsServedSetEntry
     >(props, {
       data: { id: null, description: null, label: {}, selectionImage: null },
-      config: { multipart: true },
     });
 
     return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };

@@ -91,7 +91,6 @@ export default defineComponent({
           type: jobType,
           params: { file: null, surveyId: props.surveyId },
         },
-        config: { multipart: true },
       },
     );
 

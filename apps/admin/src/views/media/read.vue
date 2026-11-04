@@ -74,7 +74,7 @@ import { computed, defineComponent } from 'vue';
 
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
-import { commonCollections } from '@intake24/common/types/http/admin';
+import { commonMediaCollections } from '@intake24/common/types/http/admin';
 import { modelToResource } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 
@@ -92,7 +92,7 @@ export default defineComponent({
     const collection = computed(() => {
       const { collection } = entry.value;
 
-      return commonCollections.includes(collection)
+      return commonMediaCollections.includes(collection)
         ? t(`media.collections.${collection}`)
         : t(`media.collections.${resource.value}.${collection}`);
     });

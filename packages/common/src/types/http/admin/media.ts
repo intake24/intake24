@@ -8,11 +8,11 @@ export type MediaModel = (typeof mediaModels)[number];
 export const mediaDisks = ['public', 'private'] as const;
 export type MediaDisk = (typeof mediaDisks)[number];
 
-export const commonCollections = ['default', 'tinymce'];
-export const modelCollections: Record<MediaModel, string[]> = {
-  FAQ: [],
-  FeedbackScheme: ['card'],
-  SurveyScheme: ['carousel'],
+export const commonMediaCollections = ['default', 'tinymce'];
+export const resourceMediaCollections: Record<string, string[]> = {
+  faqs: [],
+  'feedback-schemes': ['card'],
+  'survey-schemes': ['carousel'],
 };
 
 export const withModel = z.object({

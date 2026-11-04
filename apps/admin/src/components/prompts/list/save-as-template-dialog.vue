@@ -93,7 +93,6 @@ export default defineComponent({
     const { data, errors, post, nonInputErrors } = useForm<SchemePromptForm>({
       data: { prompt: props.prompt },
       nonInputErrorKeys: ['prompt'],
-      config: { multipart: true },
     });
 
     const dialog = ref(false);

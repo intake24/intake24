@@ -25,6 +25,7 @@ export function mediable(mediable: MediaModel, prefix: string) {
     },
     store: {
       method: 'POST',
+      contentType: 'multipart/form-data',
       path: `${prefix}/media`,
       body: createMediaRequest,
       responses: {

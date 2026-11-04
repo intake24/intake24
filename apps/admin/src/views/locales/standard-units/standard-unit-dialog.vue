@@ -100,7 +100,6 @@ import { shallowRef } from 'vue';
 
 import { LanguageSelector, SubmitFooter } from '@intake24/admin/components/forms';
 import { useForm } from '@intake24/admin/composables';
-import { copy } from '@intake24/common/util';
 import { SelectIcon, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -116,19 +115,15 @@ const props = defineProps({
 });
 const emit = defineEmits(['changed']);
 
-function newItem(): StandardUnitRequest {
-  return {
-    code: '',
-    name: '',
-    icon: null,
-    estimateIn: { en: '' },
-    howMany: { en: '' },
-  };
-}
-
 const { i18n: { t } } = useI18n();
 
-const { clearError, data, errors, post, put } = useForm<StandardUnitRequest>({ data: newItem() });
+const { clearError, data, errors, load, post, put, reset } = useForm<StandardUnitRequest>({ data: {
+  code: '',
+  name: '',
+  icon: null,
+  estimateIn: { en: '' },
+  howMany: { en: '' },
+} });
 
 const dialog = shallowRef(false);
 const itemId = shallowRef<string | undefined>();
@@ -151,26 +146,19 @@ function close() {
   dialog.value = false;
 }
 
-function add() {
+function open(item?: StandardUnitAttributes) {
+  reset();
   itemId.value = undefined;
-  data.value = newItem();
   dialog.value = true;
-}
 
-function edit(item?: StandardUnitAttributes) {
-  dialog.value = true;
   if (item) {
     const { id, ...rest } = item;
     itemId.value = id;
-    data.value = copy(rest);
-  }
-  else {
-    itemId.value = undefined;
-    data.value = newItem();
+    load(rest);
   }
 }
 
-defineExpose({ add, edit });
+defineExpose({ open });
 </script>
 
 <style lang="scss">

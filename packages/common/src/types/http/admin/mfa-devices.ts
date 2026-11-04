@@ -109,7 +109,7 @@ export const registrationResponseJSON = z.object({
     clientDataJSON: z.string(),
     attestationObject: z.string(),
     authenticatorData: z.string().optional(),
-    transports: z.enum(['ble', 'cable', 'hybrid', 'internal', 'nfc', 'smart-card', 'usb']).array().optional(),
+    transports: z.string().array().optional(),
     publicKeyAlgorithm: z.number().optional(),
     publicKey: z.string().optional(),
   }),

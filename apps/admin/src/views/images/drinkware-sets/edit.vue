@@ -228,7 +228,6 @@ export default defineComponent({
       routeLeave,
       submit: formSubmit,
     } = useEntryForm<EditDrinkwareSetForm, DrinkwareSetEntry>(props, {
-      config: { multipart: true },
       data: { id: null, imageMapId: null, description: null, scales: [], baseImage: {}, label: {} },
     });
     const { data, errors } = form;

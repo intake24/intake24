@@ -1,6 +1,6 @@
 <template>
   <entry-layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <media media-model="FAQ" :resource-id="id" />
+    <media :resource-id="id" />
   </entry-layout>
 </template>
 

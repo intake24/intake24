@@ -176,7 +176,7 @@ const query = computed(() => resourceParameter.value && props.id ? { [resourcePa
 
 const { clearError, data, errors, post } = useForm<TaskForm>({
   data: { type: props.types[0], params: props.defaultParams[props.types[0]] as JobParams },
-  config: { multipart: true, resetOnSubmit: false },
+  config: { resetOnSubmit: false },
 });
 const { jobs, jobInProgress, startPolling } = usePollsForJobs(props.types, query);
 

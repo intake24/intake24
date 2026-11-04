@@ -3,7 +3,7 @@ import type { Ref } from 'vue';
 import type { HttpRequestConfig } from '@intake24/ui/services';
 
 import axios, { HttpStatusCode } from 'axios';
-import { pick } from 'lodash-es';
+import { isPlainObject, pick } from 'lodash-es';
 import { computed, ref } from 'vue';
 
 import { copy, getObjectNestedKeys, merge } from '@intake24/common/util';
@@ -93,14 +93,37 @@ export function useForm<T extends object>(props: UseFormProps<T>) {
       errors.record(data.errors);
   };
 
+  function hasFile(): boolean {
+    const { multipart } = formConfig.value;
+
+    if (multipart)
+      return true;
+
+    const needMultiPart = (val: unknown): boolean => {
+      if (Array.isArray(val) && val.some(v => needMultiPart(v)))
+        return true;
+
+      if (isPlainObject(val))
+        return Object.values(val as Record<string, unknown>).some(v => needMultiPart(v));
+
+      if (val instanceof File || val instanceof Blob) {
+        return true;
+      }
+
+      return false;
+    };
+
+    return Object.values(data.value).some(v => needMultiPart(v));
+  };
+
   async function submit<R>(config: HttpRequestConfig): Promise<R> {
-    const { transform, multipart } = formConfig.value;
+    const { transform } = formConfig.value;
 
     try {
       const { data } = await http.request<R>({
         data: transform ? transform(getData() as T) : getData(),
         withLoading: true,
-        headers: multipart ? { 'Content-Type': 'multipart/form-data' } : undefined,
+        headers: hasFile() ? { 'Content-Type': 'multipart/form-data' } : undefined,
         ...config,
       });
 

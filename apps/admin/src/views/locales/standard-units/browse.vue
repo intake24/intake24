@@ -10,7 +10,7 @@
           color="primary"
           rounded
           :title="$t('fdbs.associatedFoods.add')"
-          @click.stop="dialog?.edit()"
+          @click.stop="dialog?.open()"
         >
           <v-icon icon="$add" start />
           {{ $t('locales.standard-units.add') }}
@@ -26,7 +26,7 @@
         <v-btn
           icon
           :title="$t('common.action.edit')"
-          @click.stop="dialog?.edit(item)"
+          @click.stop="dialog?.open(item)"
         >
           <v-icon icon="$edit" />
         </v-btn>
@@ -106,6 +106,7 @@ const headers: DataTableHeader[] = [
 
 async function remove({ id, name }: StandardUnitAttributes) {
   await http.delete(`${url.value}/${id}`);
+  await table.value?.fetch();
   useMessages().success(t('common.msg.deleted', { name: name ?? id }));
 }
 </script>

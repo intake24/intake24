@@ -128,7 +128,6 @@ const { data, post } = useForm<AsServedImageForm>({
     label: {},
     weight: 0,
   },
-  config: { multipart: true },
 });
 
 function updateImages() {

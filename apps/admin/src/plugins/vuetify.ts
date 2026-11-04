@@ -60,6 +60,10 @@ export default createVuetify({
       hideDetails: 'auto',
       variant: 'outlined',
     },
+    VFileUpload: {
+      hideDetails: 'auto',
+      variant: 'outlined',
+    },
     VListItemAction: {
       VBtn: {
         variant: 'text',
