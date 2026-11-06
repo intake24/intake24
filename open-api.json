@@ -138061,23 +138061,52 @@
                 "type": "object",
                 "properties": {
                   "name": {
+                    "$ref": "#/definitions/__schema0"
+                  },
+                  "email": {
+                    "$ref": "#/definitions/__schema1"
+                  },
+                  "phone": {
+                    "$ref": "#/definitions/__schema2"
+                  },
+                  "customFields": {
+                    "$ref": "#/definitions/__schema3"
+                  },
+                  "password": {
+                    "$ref": "#/definitions/__schema4"
+                  },
+                  "passwordConfirm": {
+                    "$ref": "#/definitions/__schema4"
+                  },
+                  "username": {
+                    "$ref": "#/definitions/__schema6"
+                  }
+                },
+                "required": [
+                  "password",
+                  "passwordConfirm",
+                  "username"
+                ],
+                "additionalProperties": false,
+                "definitions": {
+                  "__schema0": {
                     "nullable": true,
                     "type": "string",
                     "maxLength": 512
                   },
-                  "email": {
+                  "__schema1": {
                     "nullable": true,
                     "type": "string",
                     "maxLength": 512,
                     "format": "email",
                     "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
                   },
-                  "phone": {
+                  "__schema2": {
                     "nullable": true,
                     "type": "string",
                     "maxLength": 32
                   },
-                  "customFields": {
+                  "__schema3": {
                     "type": "array",
                     "items": {
                       "type": "object",
@@ -138103,33 +138132,19 @@
                       "additionalProperties": false
                     }
                   },
-                  "password": {
-                    "$ref": "#/definitions/__schema0"
+                  "__schema4": {
+                    "allOf": [
+                      {
+                        "$ref": "#/definitions/__schema5"
+                      }
+                    ]
                   },
-                  "passwordConfirm": {
-                    "$ref": "#/definitions/__schema0"
-                  },
-                  "username": {
+                  "__schema5": {},
+                  "__schema6": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 256
                   }
-                },
-                "required": [
-                  "password",
-                  "passwordConfirm",
-                  "username"
-                ],
-                "additionalProperties": false,
-                "definitions": {
-                  "__schema0": {
-                    "allOf": [
-                      {
-                        "$ref": "#/definitions/__schema1"
-                      }
-                    ]
-                  },
-                  "__schema1": {}
                 }
               }
             }

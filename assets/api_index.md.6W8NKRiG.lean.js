@@ -1,0 +1,1 @@
+import{G as e,K as t,at as n,n as r}from"./chunks/framework.Cv3A6T7g.js";var i=JSON.parse(`{"title":"Introduction","description":"","frontmatter":{},"headers":[],"relativePath":"api/index.md","filePath":"api/index.md"}`),a={name:`api/index.md`};function o(r,i,a,o,s,c){return n(),e(`div`,null,[...i[0]||=[t("",9)]])}var s=r(a,[[`render`,o]]);export{i as __pageData,s as default};
