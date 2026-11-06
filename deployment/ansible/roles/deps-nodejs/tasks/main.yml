@@ -1,8 +1,6 @@
 ---
 - name: Add Node.js signing key
   shell: 'curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor --yes -o /etc/apt/keyrings/nodesource.gpg'
-  args:
-    warn: no
 
 - name: Add Node.js repository
   apt_repository:
@@ -17,5 +15,8 @@
     state: latest
     update_cache: yes
 
-- name: Enable corepack
-  command: corepack enable
+- name: Install pnpm
+  community.general.npm:
+    name: pnpm
+    global: true
+    state: present

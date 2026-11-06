@@ -2,7 +2,7 @@ minimumReleaseAgeExcludePrune: true
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 10080
 shellEmulator: true
-pmOnFail: warn
+pmOnFail: download
 
 packages:
   - apps/*

@@ -40,12 +40,6 @@
     force: yes
     accept_hostkey: true
 
-- name: '{{ app|upper }} | Install pnpm'
-  become_user: '{{ env.user }}'
-  command: corepack install
-  args:
-    chdir: '{{ env.directory }}'
-
 - name: '{{ app|upper }} | Install dependencies'
   become_user: '{{ env.user }}'
   command: pnpm install
