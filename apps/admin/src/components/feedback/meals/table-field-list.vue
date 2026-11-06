@@ -249,7 +249,9 @@ export default defineComponent({
       resetList,
       save,
       update,
-    } = useListWithDialog(props, context, { newItem: () => getTableFieldDefaults('standard') });
+    } = useListWithDialog(props, context, {
+      newItem: () => getTableFieldDefaults('standard'),
+    });
 
     const tab = ref(0);
 
@@ -276,7 +278,9 @@ export default defineComponent({
           (item, idx) => item.type === type && item.fieldId === fieldId && index !== idx,
         );
 
-        return match ? i18n.t('feedback-schemes.meals.fields.validation.unique') : true;
+        return match
+          ? i18n.t('feedback-schemes.meals.fields.validation.unique')
+          : true;
       },
     ]);
 
@@ -293,7 +297,9 @@ export default defineComponent({
             && index !== idx,
         );
 
-        return match ? i18n.t('nutrient-types.validation.unique') : true;
+        return match
+          ? i18n.t('nutrient-types.validation.unique')
+          : true;
       },
     ]);
 
@@ -327,7 +333,11 @@ export default defineComponent({
         item: { type },
       } = dialog.value;
 
-      dialog.value = { show, index, item: getTableFieldDefaults(type) };
+      dialog.value = {
+        show,
+        index,
+        item: getTableFieldDefaults(type),
+      };
     };
 
     return {

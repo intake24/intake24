@@ -245,8 +245,14 @@ export default defineComponent({
 
   computed: {
     foodIndexLanguageBackends() {
-      if (!this.refs.foodIndexLanguageBackends)
-        return [{ value: 'en', title: this.$t('common.none') }];
+      if (!this.refs.foodIndexLanguageBackends) {
+        return [
+          {
+            value: 'en',
+            title: this.$t('common.none'),
+          },
+        ];
+      }
 
       return this.refs.foodIndexLanguageBackends.map(backend => ({
         value: backend.id,

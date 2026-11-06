@@ -162,12 +162,18 @@ defineOptions({
 const props = defineProps({
   clearable: { type: Boolean, default: true },
   disabled: { type: Boolean, default: false },
-  errorMessages: { type: Array as PropType<string[]>, default: () => [] },
+  errorMessages: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
   itemId: { type: String, default: 'id' },
   itemName: { type: String, default: 'name' },
   label: { type: String },
   name: { type: String },
-  query: { type: Object as PropType<Dictionary>, default: () => ({}) },
+  query: {
+    type: Object as PropType<Dictionary>,
+    default: () => ({}),
+  },
   readonly: { type: Boolean, default: false },
   resource: { type: String, required: true },
   modelValue: {

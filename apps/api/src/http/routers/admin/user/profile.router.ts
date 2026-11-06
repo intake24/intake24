@@ -21,7 +21,15 @@ export function profile() {
         user: { userId },
       } = req.scope.cradle;
 
-      const user = await User.findByPk(userId, { attributes: ['id', 'name', 'email', 'phone', 'multiFactorAuthentication'] });
+      const user = await User.findByPk(userId, {
+        attributes: [
+          'id',
+          'name',
+          'email',
+          'phone',
+          'multiFactorAuthentication',
+        ],
+      });
       if (!user)
         throw new NotFoundError();
 
@@ -34,7 +42,13 @@ export function profile() {
       return {
         status: 200,
         body: {
-          profile: { id, name, email: email as string, phone, mfa },
+          profile: {
+            id,
+            name,
+            email: email as string,
+            phone,
+            mfa,
+          },
           aal: !!req.aal,
           permissions,
           roles,
@@ -44,11 +58,17 @@ export function profile() {
     update: async ({ body: { name, phone }, req }) => {
       const { user: { userId } } = req.scope.cradle;
 
-      const user = await User.findByPk(userId, { attributes: ['id', 'name', 'phone'] });
+      const user = await User.findByPk(userId, {
+        attributes: ['id', 'name', 'phone'],
+      });
       if (!user)
         throw new NotFoundError();
 
-      await user.update({ name, simpleName: toSimpleName(name), phone });
+      await user.update({
+        name,
+        simpleName: toSimpleName(name),
+        phone,
+      });
 
       return { status: 200, body: undefined };
     },
@@ -57,7 +77,9 @@ export function profile() {
       handler: async ({ req, headers: { 'user-agent': userAgent } }) => {
         const { userId } = req.scope.cradle.user;
 
-        const user = await User.findByPk(userId, { attributes: ['id', 'email', 'verifiedAt'] });
+        const user = await User.findByPk(userId, {
+          attributes: ['id', 'email', 'verifiedAt'],
+        });
 
         if (!user?.email || user.isVerified())
           return { status: 200, body: undefined };

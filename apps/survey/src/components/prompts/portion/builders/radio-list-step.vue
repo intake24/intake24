@@ -33,12 +33,17 @@ const { i18n: { locale }, translate } = useI18n();
 const { update } = useStep(props, { emit });
 
 const tags = computed(() =>
-  [...new Set([...props.entities.categories, ...props.entities.foods]
-    .reduce<string[]>((acc, entity) => {
-      acc.push(...entity.tags);
-      return acc;
-    }, []),
-  )],
+  [
+    ...new Set([
+      ...props.entities.categories,
+      ...props.entities.foods,
+    ]
+      .reduce<string[]>((acc, entity) => {
+        acc.push(...entity.tags);
+        return acc;
+      }, []),
+    ),
+  ],
 );
 
 const options = computed(() => {

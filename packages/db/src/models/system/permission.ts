@@ -31,18 +31,51 @@ import User from './user';
 
 export async function addPermissionsToAdmin(permissions: Permission[], options: { transaction?: Transaction } = {}): Promise<void> {
   const { transaction } = options;
-  const admin = await Role.findOne({ where: { name: aclConfig.roles.superuser }, transaction });
+  const admin = await Role.findOne({
+    where: { name: aclConfig.roles.superuser },
+    transaction,
+  });
   if (admin) {
-    const ids = [...new Set(permissions.map(({ id }) => id))];
+    const ids = [
+      ...new Set(permissions.map(({ id }) => id)),
+    ];
     await admin.$add('permissions', ids, { transaction });
   }
 }
 
 @Scopes(() => ({
-  list: { attributes: ['id', 'name', 'displayName'], order: [['name', 'ASC']] },
-  roles: { include: [{ model: Role, through: { attributes: [] } }] },
-  rolesUsers: { include: [{ model: Role, include: [{ model: User }] }] },
-  users: { include: [{ model: User, through: { attributes: [] } }] },
+  list: {
+    attributes: ['id', 'name', 'displayName'],
+    order: [
+      ['name', 'ASC'],
+    ],
+  },
+  roles: {
+    include: [
+      {
+        model: Role,
+        through: { attributes: [] },
+      },
+    ],
+  },
+  rolesUsers: {
+    include: [
+      {
+        model: Role,
+        include: [
+          { model: User },
+        ],
+      },
+    ],
+  },
+  users: {
+    include: [
+      {
+        model: User,
+        through: { attributes: [] },
+      },
+    ],
+  },
 }))
 @Table({
   modelName: 'Permission',

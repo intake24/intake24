@@ -50,7 +50,10 @@ export default () => {
     }
 
     updateInput = { ...updateInput, images };
-    output = { ...body, ...updateInput };
+    output = {
+      ...body,
+      ...updateInput,
+    };
   });
 
   it('missing authentication / authorization', async () => {

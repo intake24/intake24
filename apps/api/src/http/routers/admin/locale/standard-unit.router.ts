@@ -20,7 +20,10 @@ async function getLocaleMap(code: string[]) {
   if (!code.length)
     return {};
 
-  const locales = await SystemLocale.findAll({ attributes: ['id', 'code'], where: { code } });
+  const locales = await SystemLocale.findAll({
+    attributes: ['id', 'code'],
+    where: { code },
+  });
   return locales.reduce<Record<string, string>>((acc, locale) => {
     acc[locale.code] = locale.id;
     return acc;
@@ -28,17 +31,31 @@ async function getLocaleMap(code: string[]) {
 }
 
 async function uniqueMiddleware(value: any, { localeId, standardUnitId }: { localeId: string; standardUnitId?: string }) {
-  const where: WhereOptions = standardUnitId ? { localeId, id: { [Op.ne]: standardUnitId } } : { localeId };
+  const where: WhereOptions = standardUnitId
+    ? {
+        localeId,
+        id: { [Op.ne]: standardUnitId },
+      }
+    : { localeId };
 
-  if (!(await unique({ model: StandardUnit, condition: { field: 'code', value }, options: { where } }))) {
-    throw ValidationError.from({ path: 'code', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: StandardUnit,
+    condition: { field: 'code', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      path: 'code',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function standardUnit() {
   return initServer().router(contract.admin.locale.standardUnit, {
     browse: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ query, params: { localeId }, req }) => {
         const { aclService } = req.scope.cradle;
 
@@ -51,14 +68,21 @@ export function standardUnit() {
           query,
           where: { localeId: locale.code },
           columns: ['code', 'name'],
-          order: [[fn('lower', col('code')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('code')),
+              'ASC',
+            ],
+          ],
         });
 
         return { status: 200, body: standardUnits };
       },
     },
     store: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { localeId }, req }) => {
         const { aclService } = req.scope.cradle;
 
@@ -75,7 +99,9 @@ export function standardUnit() {
       },
     },
     read: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId, standardUnitId }, req }) => {
         const { aclService } = req.scope.cradle;
 
@@ -84,7 +110,9 @@ export function standardUnit() {
           where: { id: localeId },
         });
 
-        const standardUnit = await StandardUnit.findOne({ where: { id: standardUnitId, localeId: locale.code } });
+        const standardUnit = await StandardUnit.findOne({
+          where: { id: standardUnitId, localeId: locale.code },
+        });
         if (!standardUnit)
           throw new NotFoundError();
 
@@ -92,7 +120,9 @@ export function standardUnit() {
       },
     },
     update: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { localeId, standardUnitId }, req }) => {
         const { aclService } = req.scope.cradle;
 
@@ -103,7 +133,9 @@ export function standardUnit() {
 
         await uniqueMiddleware(body.code, { localeId: locale.code, standardUnitId });
 
-        const standardUnit = await StandardUnit.findOne({ where: { id: standardUnitId, localeId: locale.code } });
+        const standardUnit = await StandardUnit.findOne({
+          where: { id: standardUnitId, localeId: locale.code },
+        });
         if (!standardUnit)
           throw new NotFoundError();
 
@@ -113,7 +145,9 @@ export function standardUnit() {
       },
     },
     destroy: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId, standardUnitId }, req }) => {
         const { aclService } = req.scope.cradle;
 
@@ -122,14 +156,21 @@ export function standardUnit() {
           where: { id: localeId },
         });
 
-        const standardUnit = await StandardUnit.findOne({ where: { id: standardUnitId, localeId: locale.code } });
+        const standardUnit = await StandardUnit.findOne({
+          where: { id: standardUnitId, localeId: locale.code },
+        });
         if (!standardUnit)
           throw new NotFoundError();
 
         const [categoryPsm, foodPsm] = await Promise.all([
           CategoryPortionSizeMethod.findOne({
             attributes: ['id'],
-            include: [{ association: 'category', where: { localeId } }],
+            include: [
+              {
+                association: 'category',
+                where: { localeId },
+              },
+            ],
             where: where(
               literal(`parameters`),
               '@>',
@@ -138,7 +179,12 @@ export function standardUnit() {
           }),
           FoodPortionSizeMethod.findOne({
             attributes: ['id'],
-            include: [{ association: 'food', where: { localeId } }],
+            include: [
+              {
+                association: 'food',
+                where: { localeId },
+              },
+            ],
             where: where(
               literal(`parameters`),
               '@>',
@@ -159,7 +205,9 @@ export function standardUnit() {
       },
     },
     categories: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId, standardUnitId }, query, req }) => {
         const { aclService } = req.scope.cradle;
 
@@ -168,7 +216,9 @@ export function standardUnit() {
           where: { id: localeId },
         });
 
-        const standardUnit = await StandardUnit.findOne({ where: { id: standardUnitId, localeId: locale.code } });
+        const standardUnit = await StandardUnit.findOne({
+          where: { id: standardUnitId, localeId: locale.code },
+        });
         if (!standardUnit)
           throw new NotFoundError();
 
@@ -188,7 +238,9 @@ export function standardUnit() {
               required: true,
             },
           ],
-          order: [['code', 'ASC']],
+          order: [
+            ['code', 'ASC'],
+          ],
         });
 
         const localeMap = await getLocaleMap([
@@ -205,7 +257,9 @@ export function standardUnit() {
       },
     },
     foods: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId, standardUnitId }, query, req }) => {
         const { aclService } = req.scope.cradle;
 
@@ -214,7 +268,9 @@ export function standardUnit() {
           where: { id: localeId },
         });
 
-        const standardUnit = await StandardUnit.findOne({ where: { id: standardUnitId, localeId: locale.code } });
+        const standardUnit = await StandardUnit.findOne({
+          where: { id: standardUnitId, localeId: locale.code },
+        });
         if (!standardUnit)
           throw new NotFoundError();
 
@@ -234,7 +290,9 @@ export function standardUnit() {
               required: true,
             },
           ],
-          order: [['code', 'ASC']],
+          order: [
+            ['code', 'ASC'],
+          ],
         });
 
         const localeMap = await getLocaleMap([

@@ -29,10 +29,26 @@ export enum ProcessedImagePurposes {
 export type ProcessedImagePurpose = ProcessedImagePurposes;
 
 @Scopes(() => ({
-  asServedSets: { include: [{ model: AsServedSet }] },
-  asServedImages: { include: [{ model: AsServedImage, as: 'asServedImages' }] },
-  asServedThumbnailImages: { include: [{ model: AsServedImage, as: 'asServedThumbnailImages' }] },
-  imageMaps: { include: [{ model: ImageMap }] },
+  asServedSets: {
+    include: [
+      { model: AsServedSet },
+    ],
+  },
+  asServedImages: {
+    include: [
+      { model: AsServedImage, as: 'asServedImages' },
+    ],
+  },
+  asServedThumbnailImages: {
+    include: [
+      { model: AsServedImage, as: 'asServedThumbnailImages' },
+    ],
+  },
+  imageMaps: {
+    include: [
+      { model: ImageMap },
+    ],
+  },
 }))
 @Table({
   modelName: 'ProcessedImage',

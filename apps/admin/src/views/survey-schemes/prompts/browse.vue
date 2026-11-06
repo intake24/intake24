@@ -70,7 +70,12 @@ export type SurveySchemePromptsForm = Pick<SurveySchemeForm, 'prompts'>;
 export default defineComponent({
   name: 'SurveySchemePrompts',
 
-  components: { JsonEditorDialog, OptionsMenu, PromptList, SelectResource },
+  components: {
+    JsonEditorDialog,
+    OptionsMenu,
+    PromptList,
+    SelectResource,
+  },
 
   mixins: [formMixin],
 
@@ -83,7 +88,10 @@ export default defineComponent({
       const { prompts, ...rest } = data;
       return {
         ...rest,
-        prompts: withDefaultSubsections({ ...defaultPrompts, ...prompts }, promptSections, key => i18n.t(key)),
+        prompts: withDefaultSubsections({
+          ...defaultPrompts,
+          ...prompts,
+        }, promptSections, key => i18n.t(key)),
       };
     };
 

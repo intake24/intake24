@@ -14,7 +14,14 @@ describe('getObjectNestedKeys', () => {
 
     const keys = getObjectNestedKeys(obj);
 
-    expect(keys).toEqual(['a', 'b', 'c.a', 'c.b', 'c.c.a', 'c.c.b']);
+    expect(keys).toEqual([
+      'a',
+      'b',
+      'c.a',
+      'c.b',
+      'c.c.a',
+      'c.c.b',
+    ]);
   });
 
   it('it should keep key of empty object', () => {

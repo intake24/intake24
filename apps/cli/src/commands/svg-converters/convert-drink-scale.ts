@@ -66,7 +66,10 @@ function parseDrinkScaleCsv(path: string): Promise<DrinkScaleDef[]> {
           description: rows[0].description,
           baseImagePath: rows[0].baseImagePath,
           scaleOutlinePath: rows[0].scaleOutlinePath,
-          volumeSamples: rows.map(row => [Number.parseFloat(row.fillLevel), Number.parseFloat(row.volume)]),
+          volumeSamples: rows.map(row => [
+            Number.parseFloat(row.fillLevel),
+            Number.parseFloat(row.volume),
+          ]),
         }));
 
         resolve(defs);

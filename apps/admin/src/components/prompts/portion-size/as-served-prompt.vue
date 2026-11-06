@@ -97,7 +97,12 @@ export default defineComponent({
     const { update } = useBasePrompt(props, ctx);
     const { multipleItems, updateMultiple } = useMultiple(props, ctx);
 
-    return { drinkScalePrompt, multipleItems, update, updateMultiple };
+    return {
+      drinkScalePrompt,
+      multipleItems,
+      update,
+      updateMultiple,
+    };
   },
 });
 </script>

@@ -171,7 +171,19 @@ export class PackageExporter {
       .leftJoin('foodAttributes', 'foodAttributes.foodId', 'foods.id')
       .leftJoin('foodThumbnailImages', 'foodThumbnailImages.foodId', 'foods.id')
       .leftJoin('processedImages', 'processedImages.id', 'foodThumbnailImages.imageId')
-      .select(['foods.id', 'foods.code', 'foods.name', 'foods.altNames', 'foods.englishName', 'foods.tags', 'foodAttributes.readyMealOption', 'foodAttributes.reasonableAmount', 'foodAttributes.sameAsBeforeOption', 'foodAttributes.useInRecipes', 'processedImages.path as thumbnailPath'])
+      .select([
+        'foods.id',
+        'foods.code',
+        'foods.name',
+        'foods.altNames',
+        'foods.englishName',
+        'foods.tags',
+        'foodAttributes.readyMealOption',
+        'foodAttributes.reasonableAmount',
+        'foodAttributes.sameAsBeforeOption',
+        'foodAttributes.useInRecipes',
+        'processedImages.path as thumbnailPath',
+      ])
       .where('foods.localeId', '=', localeId)
       .orderBy('foods.code', 'asc')
       .stream(this.dbBatchSize);
@@ -211,7 +223,16 @@ export class PackageExporter {
 
       const portionSizeMethods = await this.db
         .selectFrom('foodPortionSizeMethods')
-        .select(['foodPortionSizeMethods.id', 'foodPortionSizeMethods.foodId', 'foodPortionSizeMethods.method', 'foodPortionSizeMethods.description', 'foodPortionSizeMethods.parameters', 'foodPortionSizeMethods.conversionFactor', 'foodPortionSizeMethods.pathways', 'foodPortionSizeMethods.orderBy'])
+        .select([
+          'foodPortionSizeMethods.id',
+          'foodPortionSizeMethods.foodId',
+          'foodPortionSizeMethods.method',
+          'foodPortionSizeMethods.description',
+          'foodPortionSizeMethods.parameters',
+          'foodPortionSizeMethods.conversionFactor',
+          'foodPortionSizeMethods.pathways',
+          'foodPortionSizeMethods.orderBy',
+        ])
         .where('foodPortionSizeMethods.foodId', 'in', foodIds)
         .orderBy('foodPortionSizeMethods.orderBy', 'asc')
         .execute();
@@ -226,7 +247,9 @@ export class PackageExporter {
         }
         catch (err: unknown) {
           const food = foodById.get(row.foodId);
-          const foodStr = food ? `[${food.code}] ${food.name ?? food.englishName}` : row.foodId;
+          const foodStr = food
+            ? `[${food.code}] ${food.name ?? food.englishName}`
+            : row.foodId;
           const paramsStr = JSON.stringify(row.parameters);
 
           if (err instanceof ZodError) {
@@ -242,7 +265,17 @@ export class PackageExporter {
 
       const associatedFoods = await this.db
         .selectFrom('associatedFoods')
-        .select(['associatedFoods.foodId', 'associatedFoods.associatedFoodCode', 'associatedFoods.associatedCategoryCode', 'associatedFoods.text', 'associatedFoods.genericName', 'associatedFoods.linkAsMain', 'associatedFoods.genericName', 'associatedFoods.multiple', 'associatedFoods.orderBy'])
+        .select([
+          'associatedFoods.foodId',
+          'associatedFoods.associatedFoodCode',
+          'associatedFoods.associatedCategoryCode',
+          'associatedFoods.text',
+          'associatedFoods.genericName',
+          'associatedFoods.linkAsMain',
+          'associatedFoods.genericName',
+          'associatedFoods.multiple',
+          'associatedFoods.orderBy',
+        ])
         .where('associatedFoods.foodId', 'in', foodIds)
         .orderBy('associatedFoods.orderBy', 'asc')
         .execute();
@@ -356,7 +389,17 @@ export class PackageExporter {
     const categoriesStream = this.db
       .selectFrom('categories')
       .leftJoin('categoryAttributes', 'categoryAttributes.categoryId', 'categories.id')
-      .select(['categories.id', 'categories.code', 'categories.name', 'categories.englishName', 'categories.hidden', 'categoryAttributes.readyMealOption', 'categoryAttributes.reasonableAmount', 'categoryAttributes.sameAsBeforeOption', 'categoryAttributes.useInRecipes'])
+      .select([
+        'categories.id',
+        'categories.code',
+        'categories.name',
+        'categories.englishName',
+        'categories.hidden',
+        'categoryAttributes.readyMealOption',
+        'categoryAttributes.reasonableAmount',
+        'categoryAttributes.sameAsBeforeOption',
+        'categoryAttributes.useInRecipes',
+      ])
       .where('categories.localeId', '=', localeId)
       .orderBy('categories.code', 'asc')
       .stream(this.dbBatchSize);
@@ -382,7 +425,16 @@ export class PackageExporter {
 
       const portionSizeMethods = await this.db
         .selectFrom('categoryPortionSizeMethods')
-        .select(['categoryPortionSizeMethods.id', 'categoryPortionSizeMethods.categoryId', 'categoryPortionSizeMethods.method', 'categoryPortionSizeMethods.description', 'categoryPortionSizeMethods.parameters', 'categoryPortionSizeMethods.conversionFactor', 'categoryPortionSizeMethods.pathways', 'orderBy'])
+        .select([
+          'categoryPortionSizeMethods.id',
+          'categoryPortionSizeMethods.categoryId',
+          'categoryPortionSizeMethods.method',
+          'categoryPortionSizeMethods.description',
+          'categoryPortionSizeMethods.parameters',
+          'categoryPortionSizeMethods.conversionFactor',
+          'categoryPortionSizeMethods.pathways',
+          'orderBy',
+        ])
         .where('categoryPortionSizeMethods.categoryId', 'in', categoryIds)
         .orderBy('categoryPortionSizeMethods.orderBy', 'asc')
         .execute();
@@ -397,7 +449,9 @@ export class PackageExporter {
         }
         catch (err: unknown) {
           const category = categoryById.get(row.categoryId);
-          const catStr = category ? `[${category.code}] ${category.name ?? category.englishName}` : row.categoryId;
+          const catStr = category
+            ? `[${category.code}] ${category.name ?? category.englishName}`
+            : row.categoryId;
           const paramsStr = JSON.stringify(row.parameters);
 
           if (err instanceof ZodError) {
@@ -868,7 +922,12 @@ export class PackageExporter {
     if (this.exportOptions.locales.length === 0 || this.exportOptions.options.include.length === 0)
       return 1;
 
-    const localeDependentOptions: PackageIncludeOption[] = ['foods', 'categories', 'synonymSets', 'locales'];
+    const localeDependentOptions: PackageIncludeOption[] = [
+      'foods',
+      'categories',
+      'synonymSets',
+      'locales',
+    ];
     const globalOptions: PackageIncludeOption[] = ['portionSizeMethods', 'portionSizeImages'];
 
     const includedLocaleOptions = this.exportOptions.options.include.filter(opt => localeDependentOptions.includes(opt));
@@ -953,19 +1012,25 @@ export class PackageExporter {
       if (this.asServedSetIds.size > 0) {
         await this.processAsServedSets();
         processedPortionSizeItems += this.asServedSetIds.size;
-        await this.updateGlobalProgress('portionSizeMethods', totalPortionSizeItems > 0 ? processedPortionSizeItems / totalPortionSizeItems : 1);
+        await this.updateGlobalProgress('portionSizeMethods', totalPortionSizeItems > 0
+          ? processedPortionSizeItems / totalPortionSizeItems
+          : 1);
       }
 
       if (this.guideImageIds.size > 0) {
         await this.processGuideImages();
         processedPortionSizeItems += this.guideImageIds.size;
-        await this.updateGlobalProgress('portionSizeMethods', totalPortionSizeItems > 0 ? processedPortionSizeItems / totalPortionSizeItems : 1);
+        await this.updateGlobalProgress('portionSizeMethods', totalPortionSizeItems > 0
+          ? processedPortionSizeItems / totalPortionSizeItems
+          : 1);
       }
 
       if (this.drinkwareSetIds.size > 0) {
         await this.processDrinkwareSets();
         processedPortionSizeItems += this.drinkwareSetIds.size;
-        await this.updateGlobalProgress('portionSizeMethods', totalPortionSizeItems > 0 ? processedPortionSizeItems / totalPortionSizeItems : 1);
+        await this.updateGlobalProgress('portionSizeMethods', totalPortionSizeItems > 0
+          ? processedPortionSizeItems / totalPortionSizeItems
+          : 1);
       }
 
       // Process image maps last (collected from guide images and drinkware)

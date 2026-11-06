@@ -47,7 +47,9 @@ const props = defineProps({
 
 const { backgroundImage, detail, formatOutput } = useCard(props);
 
-const textColor = computed(() => getContrastYIQ(detail.value.color) < 128 ? 'text-white' : undefined);
+const textColor = computed(() => getContrastYIQ(detail.value.color) < 128
+  ? 'text-white'
+  : undefined);
 </script>
 
 <style lang="scss">

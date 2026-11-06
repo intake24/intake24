@@ -46,7 +46,9 @@ const state = computed({
 
     if (typeof value === 'boolean') {
       const foodOrMealId = props.food?.id ?? props.meal?.id;
-      const tracking = { selectedOption: value ? 'yes' : 'no' };
+      const tracking = {
+        selectedOption: value ? 'yes' : 'no',
+      };
       if (value && props.prompt.trueAction) {
         action(props.prompt.trueAction.type, foodOrMealId, props.prompt.trueAction.params, tracking);
       }

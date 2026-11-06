@@ -73,7 +73,9 @@ const http = useHttp();
 
 const url = 'admin/user/mfa/providers/duo';
 const progress = ref(1);
-const { data, errors, post, reset } = useForm({ data: { challengeId: '', name: 'Duo Device', token: '' } });
+const { data, errors, post, reset } = useForm({
+  data: { challengeId: '', name: 'Duo Device', token: '' },
+});
 
 async function loadDuoRegistration() {
   const { state: challengeId, code: token } = route.query;

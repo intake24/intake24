@@ -135,7 +135,9 @@ async function fetchLocally(search: string | null, page: number, limit = 5) {
   const currentPage = page - 1;
 
   const filtered = (props.items ?? []).filter(currentItem =>
-    search ? currentItem.name.match(new RegExp(search, 'i')) : true,
+    search
+      ? currentItem.name.match(new RegExp(search, 'i'))
+      : true,
   );
 
   const items = filtered.slice(currentPage * limit, currentPage * limit + limit);
@@ -152,7 +154,9 @@ async function fetchFromApi(search: string | null, page: number, limit = 5) {
     },
   } = await http.get<SurveySchemeTemplates>(
     `admin/survey-schemes/${props.schemeId}/templates`,
-    { params: { search, page, limit } },
+    {
+      params: { search, page, limit },
+    },
   );
 
   return { items, lastPage };

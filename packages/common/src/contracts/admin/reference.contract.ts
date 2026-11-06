@@ -24,15 +24,24 @@ import {
 } from '@intake24/common/types/http/admin';
 
 const query = paginationRequest.extend({
-  id: z.union([z.string().min(1), z.string().min(1).array()]).optional(),
+  id: z.union([
+    z.string().min(1),
+    z.string().min(1).array(),
+  ]).optional(),
 });
 
 const bigIntQuery = paginationRequest.extend({
-  id: z.union([bigIntString, bigIntString.array()]).optional(),
+  id: z.union([
+    bigIntString,
+    bigIntString.array(),
+  ]).optional(),
 });
 
 const bigIntQueryWithCode = bigIntQuery.extend({
-  code: z.union([z.string().min(1), z.string().min(1).array()]).optional(),
+  code: z.union([
+    z.string().min(1),
+    z.string().min(1).array(),
+  ]).optional(),
 });
 
 export const reference = initContract().router({

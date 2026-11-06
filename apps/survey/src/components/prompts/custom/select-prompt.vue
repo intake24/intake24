@@ -85,8 +85,14 @@ const localeOptions = computed(
 );
 
 function submit() {
-  const selected = Array.isArray(state.value) ? undefined : state.value;
-  const tracking = selected === undefined ? undefined : { selectedOption: String(selected) };
+  const selected = Array.isArray(state.value)
+    ? undefined
+    : state.value;
+  const tracking = selected === undefined
+    ? undefined
+    : {
+        selectedOption: String(selected),
+      };
 
   if (selected !== undefined) {
     const option = localeOptions.value.find(o => o.value === String(selected));

@@ -49,7 +49,9 @@ const props = defineProps({
 });
 
 const units = computed(() => {
-  return ('units' in props.method.parameters ? props.method.parameters.units : []).slice(
+  return ('units' in props.method.parameters
+    ? props.method.parameters.units
+    : []).slice(
     0,
     props.max,
   );

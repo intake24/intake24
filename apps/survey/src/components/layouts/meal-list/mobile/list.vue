@@ -119,7 +119,9 @@ function toggleDrawer() {
 }
 
 function updateContextId(id: string) {
-  contextId.value = id === contextId.value ? undefined : id;
+  contextId.value = id === contextId.value
+    ? undefined
+    : id;
 }
 
 watch(drawer, (val) => {

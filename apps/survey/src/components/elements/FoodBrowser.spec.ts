@@ -33,7 +33,13 @@ vi.mock('@intake24/survey/services', () => ({
 }));
 
 vi.mock('@intake24/survey/util', () => ({ sendGtmEvent }));
-vi.mock('@intake24/ui', () => ({ useI18n: () => ({ i18n: { t: (key: string) => key } }) }));
+vi.mock('@intake24/ui', () => ({
+  useI18n: () => ({
+    i18n: {
+      t: (key: string) => key,
+    },
+  }),
+}));
 vi.mock('./use-food-builders.ts', () => ({
   useFoodBuilders: () => ({
     builders: ref([]),

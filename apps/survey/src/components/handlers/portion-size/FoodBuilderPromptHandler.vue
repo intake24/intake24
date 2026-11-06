@@ -28,7 +28,9 @@ import { createHandlerProps, useFoodPromptUtils, useMealPromptUtils, usePromptHa
 
 type FoodBuilderPromptType = 'generic-builder-prompt' | 'recipe-builder-prompt';
 
-defineOptions({ components: { RecipeBuilderPrompt, GenericBuilderPrompt } });
+defineOptions({
+  components: { RecipeBuilderPrompt, GenericBuilderPrompt },
+});
 
 const props = defineProps(createHandlerProps<FoodBuilderPromptType>());
 
@@ -165,7 +167,12 @@ function commitAnswer() {
       type: 'encoded-food',
       data: state.value.food,
       searchTerm: `food-builder:${food.value.template.type}:${food.value.template.code}`,
-      flags: ['associated-foods-complete', 'food-builder-complete', 'portion-size-option-complete', 'portion-size-method-complete'],
+      flags: [
+        'associated-foods-complete',
+        'food-builder-complete',
+        'portion-size-option-complete',
+        'portion-size-method-complete',
+      ],
       portionSizeMethodIndex: 0,
       portionSize: state.value.portionSize,
       customPromptAnswers: {},
@@ -177,8 +184,21 @@ function commitAnswer() {
   }
   else {
     const ingredients = resolveIngredients(food.value);
-    survey.updateFood({ foodId, update: { linkedFoods: [...food.value.linkedFoods, ...ingredients] } });
-    survey.addFoodFlag(foodId, ['associated-foods-complete', 'food-builder-complete', 'portion-size-option-complete', 'portion-size-method-complete']);
+    survey.updateFood({
+      foodId,
+      update: {
+        linkedFoods: [
+          ...food.value.linkedFoods,
+          ...ingredients,
+        ],
+      },
+    });
+    survey.addFoodFlag(foodId, [
+      'associated-foods-complete',
+      'food-builder-complete',
+      'portion-size-option-complete',
+      'portion-size-method-complete',
+    ]);
   }
 
   clearStoredState();

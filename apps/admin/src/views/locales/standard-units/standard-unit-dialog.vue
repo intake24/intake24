@@ -117,13 +117,15 @@ const emit = defineEmits(['changed']);
 
 const { i18n: { t } } = useI18n();
 
-const { clearError, data, errors, load, post, put, reset } = useForm<StandardUnitRequest>({ data: {
-  code: '',
-  name: '',
-  icon: null,
-  estimateIn: { en: '' },
-  howMany: { en: '' },
-} });
+const { clearError, data, errors, load, post, put, reset } = useForm<StandardUnitRequest>({
+  data: {
+    code: '',
+    name: '',
+    icon: null,
+    estimateIn: { en: '' },
+    howMany: { en: '' },
+  },
+});
 
 const dialog = shallowRef(false);
 const itemId = shallowRef<string | undefined>();

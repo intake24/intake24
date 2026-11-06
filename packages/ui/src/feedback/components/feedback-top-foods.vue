@@ -48,7 +48,12 @@ const props = defineProps({
   },
 });
 
-use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
+use([
+  SVGRenderer,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+]);
 
 const { i18n: { t }, translate } = useI18n();
 
@@ -110,7 +115,9 @@ const charts = computed(() => {
             alignTo: 'edge',
             formatter: ({ name: itemName, value, percent }) =>
               `${itemName} \n {times|${round(
-                typeof value === 'number' ? value : 0,
+                typeof value === 'number'
+                  ? value
+                  : 0,
               )} ${unit} (${Math.round(percent ?? 0)}%)}`,
             minMargin: 5,
             edgeDistance: 10,

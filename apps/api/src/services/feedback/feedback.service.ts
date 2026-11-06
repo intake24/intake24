@@ -39,10 +39,18 @@ function feedbackService({
   const getNutrientTypes = async (): Promise<NutrientType[]> => {
     const nutrients = await FoodsNutrientType.findAll({
       include: [
-        { association: 'unit', attributes: ['symbol'] },
-        { association: 'inKcal', attributes: ['kcalPerUnit'] },
+        {
+          association: 'unit',
+          attributes: ['symbol'],
+        },
+        {
+          association: 'inKcal',
+          attributes: ['kcalPerUnit'],
+        },
       ],
-      order: [['id', 'ASC']],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
 
     return nutrients.map((nutrient) => {
@@ -50,19 +58,34 @@ function feedbackService({
       if (!unit)
         throw new NotFoundError();
 
-      return { id, description, unit: unit.symbol, kcalPerUnit: inKcal?.kcalPerUnit ?? null };
+      return {
+        id,
+        description,
+        unit: unit.symbol,
+        kcalPerUnit: inKcal?.kcalPerUnit ?? null,
+      };
     });
   };
 
   const getPhysicalActivityLevels = async (): Promise<PhysicalActivityLevelAttributes[]> =>
-    PhysicalActivityLevel.findAll({ order: [['id', 'ASC']], raw: true });
+    PhysicalActivityLevel.findAll({
+      order: [
+        ['id', 'ASC'],
+      ],
+      raw: true,
+    });
 
   const getWeightTargets = async (): Promise<WeightTargetCoefficient[]> => weightTargetsData;
 
   const getFeedbackLinks = async ({ surveyId, submissions = [], username }: Omit<FeedbackOptions, 'lang'>) => {
     const alias = await UserSurveyAlias.findOne({
       where: { surveyId, username },
-      include: [{ association: 'survey', attributes: ['id', 'slug'] }],
+      include: [
+        {
+          association: 'survey',
+          attributes: ['id', 'slug'],
+        },
+      ],
     });
     if (!alias || !alias.survey)
       throw new NotFoundError();

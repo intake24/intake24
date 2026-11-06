@@ -39,10 +39,21 @@ const actionToFieldsMap: Record<'overrides', readonly string[]> = {
 };
 
 async function uniqueMiddleware(value: any, { surveyId, field = 'name' }: { surveyId?: string; field?: string } = {}) {
-  const where: WhereOptions = surveyId ? { id: { [Op.ne]: surveyId } } : {};
+  const where: WhereOptions = surveyId
+    ? {
+        id: { [Op.ne]: surveyId },
+      }
+    : {};
 
-  if (!(await unique({ model: Survey, condition: { field, value }, options: { where } }))) {
-    throw ValidationError.from({ path: field, i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: Survey,
+    condition: { field, value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      path: field,
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
@@ -65,11 +76,18 @@ async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<R
       await req.scope.cradle.aclService.findAndCheckVisibility(
         model,
         'use',
-        { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } },
+        {
+          attributes: ['id', 'ownerId', 'visibility'],
+          where: { id: value },
+        },
       );
     }
     catch {
-      throw ValidationError.from({ code: '$restricted', path: key, i18n: { type: 'restricted._' } });
+      throw ValidationError.from({
+        code: '$restricted',
+        path: key,
+        i18n: { type: 'restricted._' },
+      });
     }
   }
 }
@@ -79,7 +97,9 @@ export function survey() {
 
   return initServer().router(contract.admin.survey.survey, {
     browse: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ query, req }) => {
         const {
           aclService,
@@ -89,11 +109,29 @@ export function survey() {
         const paginateOptions: PaginateOptions = {
           query,
           columns: ['slug', 'name'],
-          order: [[fn('lower', col('Survey.name')), 'ASC']],
-          attributes: ['id', 'localeId', 'name', 'slug', 'state', 'surveySchemeId'],
+          order: [
+            [
+              fn('lower', col('Survey.name')),
+              'ASC',
+            ],
+          ],
+          attributes: [
+            'id',
+            'localeId',
+            'name',
+            'slug',
+            'state',
+            'surveySchemeId',
+          ],
           include: [
-            { association: 'locale', attributes: ['code'] },
-            { association: 'surveyScheme', attributes: ['name'] },
+            {
+              association: 'locale',
+              attributes: ['code'],
+            },
+            {
+              association: 'surveyScheme',
+              attributes: ['name'],
+            },
           ],
           transform: surveyListResponse,
         };
@@ -105,10 +143,21 @@ export function survey() {
 
         const surveys = await Survey.paginate({
           ...paginateOptions,
-          where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+          where: {
+            [Op.or]: {
+              ownerId: userId,
+              '$securables.action$': ['read', 'edit', 'delete'],
+            },
+          },
           include: [
-            { association: 'locale', attributes: ['code'] },
-            { association: 'surveyScheme', attributes: ['name'] },
+            {
+              association: 'locale',
+              attributes: ['code'],
+            },
+            {
+              association: 'surveyScheme',
+              attributes: ['name'],
+            },
             ...securableIncludes(userId),
           ],
           subQuery: false,
@@ -118,12 +167,19 @@ export function survey() {
       },
     },
     store: {
-      middleware: [permission('surveys', 'surveys:create')],
+      middleware: [
+        permission('surveys', 'surveys:create'),
+      ],
       handler: async ({ body, req }) => {
         await Promise.all([
           uniqueMiddleware(body.name),
           uniqueMiddleware(body.slug, { field: 'slug' }),
-          checkVisibility(pick(body, ['faqId', 'feedbackSchemeId', 'localeId', 'surveySchemeId']), req),
+          checkVisibility(pick(body, [
+            'faqId',
+            'feedbackSchemeId',
+            'localeId',
+            'surveySchemeId',
+          ]), req),
         ]);
 
         const { userId } = req.scope.cradle.user;
@@ -150,27 +206,40 @@ export function survey() {
         if (!survey)
           throw new NotFoundError();
 
-        return { status: 201, body: surveyResponse(survey) };
+        return {
+          status: 201,
+          body: surveyResponse(survey),
+        };
       },
     },
     read: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId }, req }) => {
         const survey = await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'read', {
           where: { id: surveyId },
           include: [
-            { association: 'faq', attributes: ['id', 'name'] },
+            {
+              association: 'faq',
+              attributes: ['id', 'name'],
+            },
             { association: 'locale' },
             { association: 'feedbackScheme' },
             { association: 'surveyScheme' },
           ],
         });
 
-        return { status: 200, body: surveyResponse(survey) };
+        return {
+          status: 200,
+          body: surveyResponse(survey),
+        };
       },
     },
     patch: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ body, params: { surveyId }, req }) => {
         const {
           aclService,
@@ -188,7 +257,12 @@ export function survey() {
           ],
         });
 
-        await checkVisibility(pick(body, ['faqId', 'feedbackSchemeId', 'localeId', 'surveySchemeId']), req, survey);
+        await checkVisibility(pick(body, [
+          'faqId',
+          'feedbackSchemeId',
+          'localeId',
+          'surveySchemeId',
+        ]), req, survey);
 
         const keysToUpdate: string[] = [];
         const [resourceActions, securableActions] = await Promise.all([
@@ -219,34 +293,54 @@ export function survey() {
         await survey.update(updateInput);
         await survey.reload({
           include: [
-            { association: 'faq', attributes: ['id', 'name'] },
+            {
+              association: 'faq',
+              attributes: ['id', 'name'],
+            },
             { association: 'locale' },
             { association: 'feedbackScheme' },
             { association: 'surveyScheme' },
           ],
         });
 
-        return { status: 200, body: surveyResponse(survey) };
+        return {
+          status: 200,
+          body: surveyResponse(survey),
+        };
       },
     },
     put: {
-      middleware: [permission('surveys', 'surveys:edit')],
+      middleware: [
+        permission('surveys', 'surveys:edit'),
+      ],
       handler: async ({ body, params: { surveyId }, req }) => {
         await uniqueMiddleware(body.name, { surveyId });
 
         const survey = await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'edit', {
           where: { id: surveyId },
           include: [
-            { association: 'faq', attributes: ['id', 'name'] },
+            {
+              association: 'faq',
+              attributes: ['id', 'name'],
+            },
             { association: 'locale' },
             { association: 'feedbackScheme' },
             { association: 'surveyScheme' },
           ],
         });
-        await checkVisibility(pick(body, ['faqId', 'feedbackSchemeId', 'localeId', 'surveySchemeId']), req, survey);
+        await checkVisibility(pick(body, [
+          'faqId',
+          'feedbackSchemeId',
+          'localeId',
+          'surveySchemeId',
+        ]), req, survey);
 
         await survey.update(
-          pick(body, [...updateSurveyFields, ...overridesFields, ...guardedSurveyFields]),
+          pick(body, [
+            ...updateSurveyFields,
+            ...overridesFields,
+            ...guardedSurveyFields,
+          ]),
         );
 
         await survey.reload({
@@ -257,16 +351,26 @@ export function survey() {
           ],
         });
 
-        return { status: 200, body: surveyResponse(survey) };
+        return {
+          status: 200,
+          body: surveyResponse(survey),
+        };
       },
     },
     destroy: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId }, req }) => {
         const survey = await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'delete', {
           attributes: ['id', 'slug'],
           where: { id: surveyId },
-          include: [{ association: 'submissions', attributes: ['id'] }],
+          include: [
+            {
+              association: 'submissions',
+              attributes: ['id'],
+            },
+          ],
         });
         const { id: securableId, submissions } = survey;
 
@@ -274,7 +378,9 @@ export function survey() {
           throw new ForbiddenError('Survey cannot be deleted. It already contains submission data.');
 
         await Promise.all([
-          UserSecurable.destroy({ where: { securableId, securableType: 'Survey' } }),
+          UserSecurable.destroy({
+            where: { securableId, securableType: 'Survey' },
+          }),
           survey.destroy(),
         ]);
 
@@ -282,7 +388,10 @@ export function survey() {
       },
     },
     tasks: {
-      middleware: [permission('surveys'), upload.single('params[file]')],
+      middleware: [
+        permission('surveys'),
+        upload.single('params[file]'),
+      ],
       handler: async ({ file, params: { surveyId }, body, req }) => {
         const {
           aclService,

@@ -9,7 +9,14 @@ import { foodsResponse } from './foods';
 export function categoryResponse(category: Category): CategoryListEntry {
   const { id, code, localeId, englishName, name, hidden } = category;
 
-  return { id, code, localeId, englishName, name, hidden };
+  return {
+    id,
+    code,
+    localeId,
+    englishName,
+    name,
+    hidden,
+  };
 }
 
 export function categoryContentsResponse({

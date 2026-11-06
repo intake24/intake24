@@ -38,11 +38,19 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
     const nutrientTable = await NutrientTable.findByPk(nutrientTableId, {
       include: [
         { association: 'csvMapping', required: true },
-        { association: 'csvMappingFields', separate: true, order: [['columnOffset', 'ASC']] },
+        {
+          association: 'csvMappingFields',
+          separate: true,
+          order: [
+            ['columnOffset', 'ASC'],
+          ],
+        },
         {
           association: 'csvMappingNutrients',
           separate: true,
-          order: [['columnOffset', 'ASC']],
+          order: [
+            ['columnOffset', 'ASC'],
+          ],
         },
       ],
     });
@@ -107,7 +115,10 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   ): Promise<NutrientTableCsvMappingField[]> => {
     const fieldNames = fields.map(field => field.fieldName);
     await NutrientTableCsvMappingField.destroy({
-      where: { nutrientTableId, fieldName: { [Op.notIn]: fieldNames } },
+      where: {
+        nutrientTableId,
+        fieldName: { [Op.notIn]: fieldNames },
+      },
       transaction,
     });
 
@@ -116,7 +127,9 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
 
     const csvMappingFields = await NutrientTableCsvMappingField.findAll({
       where: { nutrientTableId },
-      order: [['columnOffset', 'ASC']],
+      order: [
+        ['columnOffset', 'ASC'],
+      ],
       transaction,
     });
 
@@ -151,7 +164,10 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   ): Promise<NutrientTableCsvMappingNutrient[]> => {
     const nutrientTypes = nutrients.map(nutrient => nutrient.nutrientTypeId);
     await NutrientTableCsvMappingNutrient.destroy({
-      where: { nutrientTableId, nutrientTypeId: { [Op.notIn]: nutrientTypes } },
+      where: {
+        nutrientTableId,
+        nutrientTypeId: { [Op.notIn]: nutrientTypes },
+      },
       transaction,
     });
 
@@ -160,7 +176,9 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
 
     const csvMappingNutrients = await NutrientTableCsvMappingNutrient.findAll({
       where: { nutrientTableId },
-      order: [['columnOffset', 'ASC']],
+      order: [
+        ['columnOffset', 'ASC'],
+      ],
       transaction,
     });
 
@@ -204,7 +222,9 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
     const { description } = input;
 
     const nutrientTable = await NutrientTable.findByPk(nutrientTableId, {
-      include: [{ association: 'csvMapping', required: true }],
+      include: [
+        { association: 'csvMapping', required: true },
+      ],
     });
     if (!nutrientTable || !nutrientTable.csvMapping)
       throw new NotFoundError();
@@ -243,7 +263,9 @@ function nutrientTableService({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
    * @returns {Promise<void>}
    */
   const deleteTable = async (nutrientTableId: string): Promise<void> => {
-    const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });
+    const nutrientTable = await NutrientTable.findByPk(nutrientTableId, {
+      attributes: ['id'],
+    });
     if (!nutrientTable)
       throw new NotFoundError();
 

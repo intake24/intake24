@@ -173,11 +173,15 @@ function drinkwareSetService({
               );
             }
 
-            const volumeSamples = scaleInput.volumeSamples ?? (v1 ? v1.volumeSamples : []);
+            const volumeSamples = scaleInput.volumeSamples ?? (v1
+              ? v1.volumeSamples
+              : []);
 
             const volumeMethod = scaleInput.volumeMethod ?? 'lookUpTable';
 
-            const label = scaleInput.label ?? (v1 ? v1.label : {});
+            const label = scaleInput.label ?? (v1
+              ? v1.label
+              : {});
 
             await createDrinkScaleV2(
               drinkwareSetId,
@@ -198,7 +202,9 @@ function drinkwareSetService({
   };
 
   const destroy = async (drinkwareSetId: string): Promise<void> => {
-    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, { attributes: ['id'] });
+    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, {
+      attributes: ['id'],
+    });
     if (!drinkwareSet)
       throw new NotFoundError();
 
@@ -314,8 +320,12 @@ function drinkwareSetService({
       fullLevel: record.fullLevel,
       emptyLevel: record.emptyLevel,
       volumeSamples: volumeSamples[record.id],
-      baseImageUrl: getRelativePaths ? record.baseImageUrl : getImageUrl(record.baseImageUrl),
-      overlayImageUrl: getRelativePaths ? record.baseImageUrl : getImageUrl(record.overlayImageUrl),
+      baseImageUrl: getRelativePaths
+        ? record.baseImageUrl
+        : getImageUrl(record.baseImageUrl),
+      overlayImageUrl: getRelativePaths
+        ? record.baseImageUrl
+        : getImageUrl(record.overlayImageUrl),
     }));
   };
 
@@ -465,7 +475,10 @@ function drinkwareSetService({
     const recordsV2 = await getDrinkScalesV2(drinkwareSetId);
     const recordsV1 = await getDrinkScalesV1(drinkwareSetId);
 
-    return [...recordsV2, ...recordsV1];
+    return [
+      ...recordsV2,
+      ...recordsV1,
+    ];
   };
 
   const processDrinkScaleImage = async (
@@ -704,7 +717,12 @@ function drinkwareSetService({
 
     const sets = await kyselyDb.foods
       .selectFrom('drinkwareSets')
-      .select(['id', 'description', 'imageMapId', 'label'])
+      .select([
+        'id',
+        'description',
+        'imageMapId',
+        'label',
+      ])
       .where('drinkwareSets.id', '=', drinkwareSetId)
       .execute();
 

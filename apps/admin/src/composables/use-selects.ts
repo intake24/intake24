@@ -62,13 +62,17 @@ export function useSelects() {
   const textDirections = textDirectionRefs.map(value => ({
     value,
     title: t(`languages.textDirections.${value}`),
-    icon: value === 'ltr' ? 'fas fa-right-long' : 'fas fa-left-long',
+    icon: value === 'ltr'
+      ? 'fas fa-right-long'
+      : 'fas fa-left-long',
   }));
 
   const visibilities = recordVisibilities.map(value => ({
     value,
     title: t(`securables.visibility.${value}`),
-    icon: value === 'restricted' ? 'fas fa-eye-slash' : 'fas fa-eye',
+    icon: value === 'restricted'
+      ? 'fas fa-eye-slash'
+      : 'fas fa-eye',
   }));
 
   const schemeTypes = schemeTypeRefs.map(value => ({

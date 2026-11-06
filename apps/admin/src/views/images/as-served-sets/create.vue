@@ -85,10 +85,23 @@ export default defineComponent({
       CreateAsServedSetForm,
       AsServedSetEntry
     >(props, {
-      data: { id: null, description: null, label: {}, selectionImage: null },
+      data: {
+        id: null,
+        description: null,
+        label: {},
+        selectionImage: null,
+      },
     });
 
-    return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };
+    return {
+      entry,
+      entryLoaded,
+      clearError,
+      data,
+      errors,
+      routeLeave,
+      submit,
+    };
   },
 });
 </script>

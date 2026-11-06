@@ -85,7 +85,10 @@ async function tryLoggingIn() {
   if (!surveyId)
     return;
 
-  await router.push({ name: 'survey-home', params: { surveyId } });
+  await router.push({
+    name: 'survey-home',
+    params: { surveyId },
+  });
 }
 
 onMounted(async () => {

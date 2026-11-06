@@ -25,7 +25,9 @@ export default {
             {
               type: Sequelize.ARRAY(Sequelize[type]),
               allowNull: column !== 'tags',
-              defaultValue: column === 'tags' ? [] : undefined,
+              defaultValue: column === 'tags'
+                ? []
+                : undefined,
             },
             { transaction },
           )),

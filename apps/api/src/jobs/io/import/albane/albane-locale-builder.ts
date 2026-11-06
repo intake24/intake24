@@ -72,21 +72,372 @@ const DUMMY_NUTRIENT_TABLE: PkgV2NutrientTable = {
     {
       name: 'Placeholder record 1',
       recordId: 'FRPH1',
-      nutrients: [['1', 100]] as [string, number][],
+      nutrients: [
+        ['1', 100],
+      ] as [string, number][],
       fields: [],
     },
   ],
 };
 
 // This is to differentiate references to guide images and as served images in FDQUANT file
-const GUIDE_IMAGE_IDS = new Set(['Gdk_herring', 'Gdk_french_pastry', 'Gdk_crispbread', 'Gdk_sweets', 'Gchocbites', 'Gcbar_unwrapped', 'Gcbar_wrapped', 'Gbhaji', 'Gdk_wienerbroed', 'Gdk_toerkager', 'AUSalccans', 'Gbeerbot', 'Gmusselpipi', 'Gmuffscone', 'Gapl', 'Gaero', 'AUSchocobar', 'AUSsauce', 'AUSsoftdrink', 'AUSallcans', 'AUSbeerbot', 'AUSbonti', 'AUScanfish', 'Gtwix', 'gpie', 'Gmkyb', 'Gmnst', 'Gmlky', 'Gskps', 'Gwalk', 'Gpopcans', 'Gswts', 'Gmeatcan', 'Gcdmc', 'Ggalx', 'Gcanfish', 'Gmnms', 'Gkbar', 'Gciderbot', 'Gsqrs', 'Gmco', 'Gmars', 'Gumrs', 'Gkitk', 'Gprin', 'Gdori', 'Galccans', 'Gdekr', 'Gmbut', 'Gpopbottle', 'Ghula', 'Gcbar', 'Gwcho', 'Gmmcp', 'Gquav', 'Gwinebottle', 'Gban', 'Gbcn', 'Gbisc', 'Gbur', 'Gcake', 'Gcbisc1', 'Gcbisc2', 'Gchckbrst', 'Gchckleg', 'Gchoc', 'Gchoc1', 'Gchoc2', 'GchocPre', 'Gchse', 'Gcri', 'Gcri1', 'Gcri2', 'Gdes', 'Gdou', 'Gdrnk', 'Gfjta', 'Gflap', 'Gfrk', 'Gham', 'Gice1', 'Gice2', 'Gmlk01', 'Gmlk02', 'Gmlk03', 'Gmlk04', 'Gmug', 'Gorg', 'Gpiesaus', 'Gpik', 'Gpiz', 'Gprs', 'Groll', 'Gshk1', 'Gshk2', 'Gsli', 'Gsquash1', 'AUSsweets', 'AUScbar2', 'AUScbar4', 'Old_Gwatbottle', 'Old_Gspn', 'Old_Gspns', 'ABS_Slices', 'Gsquash2', 'Gsquash4', 'Gswb', 'Gswt1', 'Gswt2', 'Gtom', 'Gtur', 'Gwaf', 'Gwrp', 'Gyog', 'Gyog2', 'Gyor', 'Gbeans', 'Gmalt', 'Gcdmb', 'Gtwfk', 'Gskit', 'Gsnck', 'Gpopcarton', 'Gbonti', 'Gcans', 'Gcra', 'Gfrazz', 'Gsaus', 'Gsquash3', 'AUSaero', 'AUSbisc', 'AUScandrink', 'AUScadmilk', 'AUScbar3', 'AUScblock', 'NDNS_painauchoc', 'NDNS_croissant', 'NDNS_chicken_thighs', 'NDNS_chicken_legs', 'NDNS_cream_cake', 'NDNS_choux_pastries', 'Cocospns', 'NDNS_current_Gcake_iced', 'NDNS_Gsli_toast', 'NewGyog', 'Gwatbottle', 'SAB_Guava', 'Gallcans', 'Old_Gallcans', 'NDNS_burgers', 'Gspns', 'NDNS_Gshk1', 'SAB_chapatti', 'SAB_fritter', 'NZ23_Hashbrowns', 'Gspn', 'NDNS_gspn', 'NDNS_gtom', 'NDNS_Gmuffin', 'NDNS_gbeerbot', 'NDNS_gbut', 'NDNS_gccans', 'NDNS_gorg', 'NDNS_gpopcan', 'NDNS_gwine', 'NDNS_gmalt', 'NDNS_Gwalk', 'NDNS_Ghula', 'NDNS_Gdori', 'NDNS_gsaus', 'NZ23_Inst_noodles', 'NZ23_Tkway_bowl_sm', 'NZ23_Tkway_bowl_med', 'NZ23_Tkway_bowl_poke', 'NZ23_Tkway_noodle', 'NZ23_Choc blocks', 'NZ23_Choc pieces', 'NZ23_Choc bars', 'NZ23_Toddler cans', 'NZ23_Toddler pouches', 'NZ23_Juice bottles', 'NZ23_Soft drink cans', 'NZ23_Soft drink bottles', 'NZ23_Energy drinks', 'NZ23_Yoghurt pouch', 'NZ23_Yoghurt pots', 'NZ23_Banana loaf', 'NZ23_Fritters', 'NZ23_Crisps', 'NZ23_Beer bottles', 'NZ23_Beer cans', 'NZ23_Quiche', 'NZ23_Pies', 'NZ23_Meatballs', 'NZ23_Soft cheese', 'ABS_Beef Steak', 'ABS_Chicken Breasts', 'ABS_Lamb Chops', 'ABS_Chocolate Bars', 'ABS_Potato', 'ABS_Sweet Biscuits', 'ABS_Flavoured Milks Small', 'ABS_Yoghurt Tub Large', 'ABS_Yoghurt Pouch', 'ABS_Canned Fish', 'ABS_Canned Food Small', 'ABS_Canned Food Large', 'ABS_Mixed Drinks Cans', 'ABS_Mixed Drinks Bottles', 'ABS_Cider', 'ABS_Wine', 'ABS_Soft Drinks Large', 'ABS_Water Small', 'ABS_Water Large', 'ABS_Chocolate Bags', 'ABS_Lolly Bags', 'ABS_Extruded Snacks', 'ABS_Schnitzels', 'ABS_Breads', 'ABS_Takeaway Containers Square', 'ABS_Takeaway Containers Rect', 'ABS_Vege Chips', 'ABS_Flavoured Milks Large', 'ABS_Bananas', 'ABS_Apples', 'ABS_Pears', 'ABS_Fruit Juice_Drinks Small', 'ABS_Bread_Baguettes', 'ALBANE_Charcuterie', 'ALBANE_French_Breads', 'ALBANE_Sliced_Breads', 'ALBANE_Cakes_Brioches', 'ALBANE_Crispbreads', 'ALBANE_Inst_noodles', 'ALBANE_SWICH_baguettes', 'ALBANE_SWICH_viennois', 'ALBANE_SWICH_Sliced_breads', 'ALBANE_SWICH_Sliced_breads_half', 'ALBANE_SWICH_wraps', 'ALBANE_Yoghurts', 'ALBANE_White_Cheeses', 'ALBANE_Desserts', 'ALBANE_Desserts_Creams', 'ALBANE_Mms']);
+const GUIDE_IMAGE_IDS = new Set([
+  'Gdk_herring',
+  'Gdk_french_pastry',
+  'Gdk_crispbread',
+  'Gdk_sweets',
+  'Gchocbites',
+  'Gcbar_unwrapped',
+  'Gcbar_wrapped',
+  'Gbhaji',
+  'Gdk_wienerbroed',
+  'Gdk_toerkager',
+  'AUSalccans',
+  'Gbeerbot',
+  'Gmusselpipi',
+  'Gmuffscone',
+  'Gapl',
+  'Gaero',
+  'AUSchocobar',
+  'AUSsauce',
+  'AUSsoftdrink',
+  'AUSallcans',
+  'AUSbeerbot',
+  'AUSbonti',
+  'AUScanfish',
+  'Gtwix',
+  'gpie',
+  'Gmkyb',
+  'Gmnst',
+  'Gmlky',
+  'Gskps',
+  'Gwalk',
+  'Gpopcans',
+  'Gswts',
+  'Gmeatcan',
+  'Gcdmc',
+  'Ggalx',
+  'Gcanfish',
+  'Gmnms',
+  'Gkbar',
+  'Gciderbot',
+  'Gsqrs',
+  'Gmco',
+  'Gmars',
+  'Gumrs',
+  'Gkitk',
+  'Gprin',
+  'Gdori',
+  'Galccans',
+  'Gdekr',
+  'Gmbut',
+  'Gpopbottle',
+  'Ghula',
+  'Gcbar',
+  'Gwcho',
+  'Gmmcp',
+  'Gquav',
+  'Gwinebottle',
+  'Gban',
+  'Gbcn',
+  'Gbisc',
+  'Gbur',
+  'Gcake',
+  'Gcbisc1',
+  'Gcbisc2',
+  'Gchckbrst',
+  'Gchckleg',
+  'Gchoc',
+  'Gchoc1',
+  'Gchoc2',
+  'GchocPre',
+  'Gchse',
+  'Gcri',
+  'Gcri1',
+  'Gcri2',
+  'Gdes',
+  'Gdou',
+  'Gdrnk',
+  'Gfjta',
+  'Gflap',
+  'Gfrk',
+  'Gham',
+  'Gice1',
+  'Gice2',
+  'Gmlk01',
+  'Gmlk02',
+  'Gmlk03',
+  'Gmlk04',
+  'Gmug',
+  'Gorg',
+  'Gpiesaus',
+  'Gpik',
+  'Gpiz',
+  'Gprs',
+  'Groll',
+  'Gshk1',
+  'Gshk2',
+  'Gsli',
+  'Gsquash1',
+  'AUSsweets',
+  'AUScbar2',
+  'AUScbar4',
+  'Old_Gwatbottle',
+  'Old_Gspn',
+  'Old_Gspns',
+  'ABS_Slices',
+  'Gsquash2',
+  'Gsquash4',
+  'Gswb',
+  'Gswt1',
+  'Gswt2',
+  'Gtom',
+  'Gtur',
+  'Gwaf',
+  'Gwrp',
+  'Gyog',
+  'Gyog2',
+  'Gyor',
+  'Gbeans',
+  'Gmalt',
+  'Gcdmb',
+  'Gtwfk',
+  'Gskit',
+  'Gsnck',
+  'Gpopcarton',
+  'Gbonti',
+  'Gcans',
+  'Gcra',
+  'Gfrazz',
+  'Gsaus',
+  'Gsquash3',
+  'AUSaero',
+  'AUSbisc',
+  'AUScandrink',
+  'AUScadmilk',
+  'AUScbar3',
+  'AUScblock',
+  'NDNS_painauchoc',
+  'NDNS_croissant',
+  'NDNS_chicken_thighs',
+  'NDNS_chicken_legs',
+  'NDNS_cream_cake',
+  'NDNS_choux_pastries',
+  'Cocospns',
+  'NDNS_current_Gcake_iced',
+  'NDNS_Gsli_toast',
+  'NewGyog',
+  'Gwatbottle',
+  'SAB_Guava',
+  'Gallcans',
+  'Old_Gallcans',
+  'NDNS_burgers',
+  'Gspns',
+  'NDNS_Gshk1',
+  'SAB_chapatti',
+  'SAB_fritter',
+  'NZ23_Hashbrowns',
+  'Gspn',
+  'NDNS_gspn',
+  'NDNS_gtom',
+  'NDNS_Gmuffin',
+  'NDNS_gbeerbot',
+  'NDNS_gbut',
+  'NDNS_gccans',
+  'NDNS_gorg',
+  'NDNS_gpopcan',
+  'NDNS_gwine',
+  'NDNS_gmalt',
+  'NDNS_Gwalk',
+  'NDNS_Ghula',
+  'NDNS_Gdori',
+  'NDNS_gsaus',
+  'NZ23_Inst_noodles',
+  'NZ23_Tkway_bowl_sm',
+  'NZ23_Tkway_bowl_med',
+  'NZ23_Tkway_bowl_poke',
+  'NZ23_Tkway_noodle',
+  'NZ23_Choc blocks',
+  'NZ23_Choc pieces',
+  'NZ23_Choc bars',
+  'NZ23_Toddler cans',
+  'NZ23_Toddler pouches',
+  'NZ23_Juice bottles',
+  'NZ23_Soft drink cans',
+  'NZ23_Soft drink bottles',
+  'NZ23_Energy drinks',
+  'NZ23_Yoghurt pouch',
+  'NZ23_Yoghurt pots',
+  'NZ23_Banana loaf',
+  'NZ23_Fritters',
+  'NZ23_Crisps',
+  'NZ23_Beer bottles',
+  'NZ23_Beer cans',
+  'NZ23_Quiche',
+  'NZ23_Pies',
+  'NZ23_Meatballs',
+  'NZ23_Soft cheese',
+  'ABS_Beef Steak',
+  'ABS_Chicken Breasts',
+  'ABS_Lamb Chops',
+  'ABS_Chocolate Bars',
+  'ABS_Potato',
+  'ABS_Sweet Biscuits',
+  'ABS_Flavoured Milks Small',
+  'ABS_Yoghurt Tub Large',
+  'ABS_Yoghurt Pouch',
+  'ABS_Canned Fish',
+  'ABS_Canned Food Small',
+  'ABS_Canned Food Large',
+  'ABS_Mixed Drinks Cans',
+  'ABS_Mixed Drinks Bottles',
+  'ABS_Cider',
+  'ABS_Wine',
+  'ABS_Soft Drinks Large',
+  'ABS_Water Small',
+  'ABS_Water Large',
+  'ABS_Chocolate Bags',
+  'ABS_Lolly Bags',
+  'ABS_Extruded Snacks',
+  'ABS_Schnitzels',
+  'ABS_Breads',
+  'ABS_Takeaway Containers Square',
+  'ABS_Takeaway Containers Rect',
+  'ABS_Vege Chips',
+  'ABS_Flavoured Milks Large',
+  'ABS_Bananas',
+  'ABS_Apples',
+  'ABS_Pears',
+  'ABS_Fruit Juice_Drinks Small',
+  'ABS_Bread_Baguettes',
+  'ALBANE_Charcuterie',
+  'ALBANE_French_Breads',
+  'ALBANE_Sliced_Breads',
+  'ALBANE_Cakes_Brioches',
+  'ALBANE_Crispbreads',
+  'ALBANE_Inst_noodles',
+  'ALBANE_SWICH_baguettes',
+  'ALBANE_SWICH_viennois',
+  'ALBANE_SWICH_Sliced_breads',
+  'ALBANE_SWICH_Sliced_breads_half',
+  'ALBANE_SWICH_wraps',
+  'ALBANE_Yoghurts',
+  'ALBANE_White_Cheeses',
+  'ALBANE_Desserts',
+  'ALBANE_Desserts_Creams',
+  'ALBANE_Mms',
+]);
 
-const DRINKWARE_IDS = new Set(['takeaway_cups_cold', 'glasses_spirits', 'takeaway_cups_hot', 'glasses_soft', 'glasses_beer', 'NZ_cocktail_glasses', 'ABS_Glasses', 'ABS_Beer_Glasses', 'ABS_Wine_Glasses', 'ABS_Mugs', 'ABS_Plastic_Cups', 'NZ_Bowl', 'drinkwareSet_001', 'mugs', 'glasses_wine', 'gobelets', 'FR_Gobelet', 'FR_Vierres_Pied', 'FR_Baby_Bottles', 'FR_Mazagran', 'FR_Mugs', 'FR_Glasses', 'FR_Baby_Cups', 'FR_Ice_Cream_Glass', 'FR_Beer_Glasses', 'FR_Cocktail_Glasses', 'FR_Glasses_2', 'FR_Bowls', 'FR_Stemmed_Glasses', 'FR_Mugs_2', 'FR_Ramekins', 'FR_Plastic_Cups', 'FR_Verrines', 'FR_Shot_Glasses', 'FR_Stemmed_Glasses_Round', 'FR_Stemmed_Glasses_2', 'ALBANE_Small_bowl_1', 'ALBANE_Big_bowl_1', 'ALBANE_Big_bowl_2', 'ABS_Drink Bottles', 'ABS_DrinkBottles_Albanecopy']);
+const DRINKWARE_IDS = new Set([
+  'takeaway_cups_cold',
+  'glasses_spirits',
+  'takeaway_cups_hot',
+  'glasses_soft',
+  'glasses_beer',
+  'NZ_cocktail_glasses',
+  'ABS_Glasses',
+  'ABS_Beer_Glasses',
+  'ABS_Wine_Glasses',
+  'ABS_Mugs',
+  'ABS_Plastic_Cups',
+  'NZ_Bowl',
+  'drinkwareSet_001',
+  'mugs',
+  'glasses_wine',
+  'gobelets',
+  'FR_Gobelet',
+  'FR_Vierres_Pied',
+  'FR_Baby_Bottles',
+  'FR_Mazagran',
+  'FR_Mugs',
+  'FR_Glasses',
+  'FR_Baby_Cups',
+  'FR_Ice_Cream_Glass',
+  'FR_Beer_Glasses',
+  'FR_Cocktail_Glasses',
+  'FR_Glasses_2',
+  'FR_Bowls',
+  'FR_Stemmed_Glasses',
+  'FR_Mugs_2',
+  'FR_Ramekins',
+  'FR_Plastic_Cups',
+  'FR_Verrines',
+  'FR_Shot_Glasses',
+  'FR_Stemmed_Glasses_Round',
+  'FR_Stemmed_Glasses_2',
+  'ALBANE_Small_bowl_1',
+  'ALBANE_Big_bowl_1',
+  'ALBANE_Big_bowl_2',
+  'ABS_Drink Bottles',
+  'ABS_DrinkBottles_Albanecopy',
+]);
 
 // Images to ignore to avoid creating duplicates
-const IGNORE_AS_SERVED = new Set(['ABS_Extruded_Cereal', 'popcorn', 'mixed_nuts', 'flaked_almonds', 'raisins', 'puffed_cereals', 'ABS_Vegemite', 'ABS_Nutella', 'butk', 'butter_spread', 'cream_cheese_spread', 'ABS_Peanut_Butter', 'ABS_Vegemite_2', 'jam', 'carrot_raw', 'mixed_peppers', 'cucumber', 'pumpkin', 'cabbage', 'peas', 'broccoli', 'NZ23_Bok_choy_cut', 'mix_veg_boiled', 'NDNS_bolognese_sauce', 'tomato_sauce', 'ABS_Gravy', 'sauce_dollop', 'NZ23_boilupsoup', 'potatoes_boiled', 'potatoes_mashed', 'rice', 'SAB_newvegrice1', 'NDNS_stirfry_noodles', 'paella', 'NDNS_lentil_curry', 'canned_fish', 'ABS_Fish_Fillets', 'chicken_sauce', 'NDNS_meat_stew', 'SAB_newvegcurry1', 'chicken_breast_slices', 'NZ23_Tofu_Cubes', 'ABS_White_Sauce', 'milk_pudding', 'NDNS_berries', 'apps', 'bans', 'NDNS_cheesecake', 'ice_cream']);
+const IGNORE_AS_SERVED = new Set([
+  'ABS_Extruded_Cereal',
+  'popcorn',
+  'mixed_nuts',
+  'flaked_almonds',
+  'raisins',
+  'puffed_cereals',
+  'ABS_Vegemite',
+  'ABS_Nutella',
+  'butk',
+  'butter_spread',
+  'cream_cheese_spread',
+  'ABS_Peanut_Butter',
+  'ABS_Vegemite_2',
+  'jam',
+  'carrot_raw',
+  'mixed_peppers',
+  'cucumber',
+  'pumpkin',
+  'cabbage',
+  'peas',
+  'broccoli',
+  'NZ23_Bok_choy_cut',
+  'mix_veg_boiled',
+  'NDNS_bolognese_sauce',
+  'tomato_sauce',
+  'ABS_Gravy',
+  'sauce_dollop',
+  'NZ23_boilupsoup',
+  'potatoes_boiled',
+  'potatoes_mashed',
+  'rice',
+  'SAB_newvegrice1',
+  'NDNS_stirfry_noodles',
+  'paella',
+  'NDNS_lentil_curry',
+  'canned_fish',
+  'ABS_Fish_Fillets',
+  'chicken_sauce',
+  'NDNS_meat_stew',
+  'SAB_newvegcurry1',
+  'chicken_breast_slices',
+  'NZ23_Tofu_Cubes',
+  'ABS_White_Sauce',
+  'milk_pudding',
+  'NDNS_berries',
+  'apps',
+  'bans',
+  'NDNS_cheesecake',
+  'ice_cream',
+]);
 
-const ALBANE_SALT_CODES = ['41033', '41150', '41151', '41152', '41153', '41154', '41155', '41156', '41157', '41174', '41191'];
+const ALBANE_SALT_CODES = [
+  '41033',
+  '41150',
+  '41151',
+  '41152',
+  '41153',
+  '41154',
+  '41155',
+  '41156',
+  '41157',
+  '41174',
+  '41191',
+];
 
 function getIntake24FoodCode(foodCode: string): string {
   return `24F${foodCode}`;
@@ -165,7 +516,10 @@ export class AlbaneLocaleBuilder {
       [Symbol.asyncIterator]() {
         const it = iterable[Symbol.asyncIterator]();
         return {
-          next: () => Promise.race([it.next(), streamError]),
+          next: () => Promise.race([
+            it.next(),
+            streamError,
+          ]),
           return: (value?: any) => it.return?.(value) ?? Promise.resolve({ done: true as const, value: undefined }),
         };
       },
@@ -222,13 +576,15 @@ export class AlbaneLocaleBuilder {
           if (totalRowsProcessed > MAX_XLSX_ROWS) {
             throw new PackageValidationFileErrors(
               {
-                [relativePath]: [{
-                  key: 'io.verification.excelRowsExceded',
-                  params: {
-                    worksheetName: options?.sheetName ?? 'Sheet1',
-                    maxRows: MAX_XLSX_ROWS,
+                [relativePath]: [
+                  {
+                    key: 'io.verification.excelRowsExceded',
+                    params: {
+                      worksheetName: options?.sheetName ?? 'Sheet1',
+                      maxRows: MAX_XLSX_ROWS,
+                    },
                   },
-                }],
+                ],
               },
             );
           }
@@ -297,7 +653,13 @@ export class AlbaneLocaleBuilder {
     for (const row of categoryRecords) {
       const categoryCodes: string[] = [];
 
-      for (const code of [row.code1, row.code2, row.code3, row.code4, row.code5]) {
+      for (const code of [
+        row.code1,
+        row.code2,
+        row.code3,
+        row.code4,
+        row.code5,
+      ]) {
         if (code === undefined)
           continue;
         const trimmed = trim(code);
@@ -361,13 +723,17 @@ export class AlbaneLocaleBuilder {
         else if (trCol2) {
           translatedName = trCol2;
           englishName = row[2];
-          parentCategories = lastLevel0 ? [lastLevel0] : [];
+          parentCategories = lastLevel0
+            ? [lastLevel0]
+            : [];
           lastLevel1 = catCode;
         }
         else {
           translatedName = trCol3;
           englishName = row[4];
-          parentCategories = lastLevel1 ? [lastLevel1] : [];
+          parentCategories = lastLevel1
+            ? [lastLevel1]
+            : [];
         }
 
         if (translatedName)
@@ -379,7 +745,12 @@ export class AlbaneLocaleBuilder {
           this.categoryEnglishNames![catCode] = englishName;
 
         const existingParents = this.categoryParents![catCode] ?? [];
-        this.categoryParents![catCode] = [...new Set([...existingParents, ...parentCategories])];
+        this.categoryParents![catCode] = [
+          ...new Set([
+            ...existingParents,
+            ...parentCategories,
+          ]),
+        ];
         this.categoryTags![catCode] = readTags(row[8], this.categoryTags![catCode]);
       }
     }
@@ -512,7 +883,10 @@ export class AlbaneLocaleBuilder {
     const foodSynonymRecords = await this.readXLSX<AlbaneAlternativeDescriptionRow>('ALTERNATIVE_FOOD_DESCRIPTION.xlsx');
 
     this.foodSynonyms = Object.fromEntries(
-      foodSynonymRecords.map(r => ([r.A_CODE, getSynonyms(r, 'A_')]) as [string, string[]]).filter(a => a[1].length > 0),
+      foodSynonymRecords.map(r => ([
+        r.A_CODE,
+        getSynonyms(r, 'A_'),
+      ]) as [string, string[]]).filter(a => a[1].length > 0),
     );
   }
 
@@ -577,7 +951,10 @@ export class AlbaneLocaleBuilder {
         englishName: capitalize((this.translatedEnglishNames![row.A_CODE] ?? row.A_LIBELLE).substring(0, 128)),
         attributes: { sameAsBeforeOption: true, reasonableAmount: this.reasonableAmount![row.A_CODE] },
         alternativeNames,
-        tags: [...facetFlags, ...categoryTags],
+        tags: [
+          ...facetFlags,
+          ...categoryTags,
+        ],
         nutrientTableCodes: {
           FR_ALBANE: row.A_CODE,
         },
@@ -632,7 +1009,17 @@ export class AlbaneLocaleBuilder {
     this.associatedFoodPrompts = {};
 
     const afpRows = await this.readXLSX<AlbaneAfpRow>('ASSOCIATED_FOOD_PROMPTS.xlsx', {
-      header: ['code', 'label', 'categoryCode1', 'promptText1', 'categoryCode2', 'promptText2', 'categoryCode3', 'promptText3', 'genericName'],
+      header: [
+        'code',
+        'label',
+        'categoryCode1',
+        'promptText1',
+        'categoryCode2',
+        'promptText2',
+        'categoryCode3',
+        'promptText3',
+        'genericName',
+      ],
       range: 1,
     });
 
@@ -786,7 +1173,7 @@ export class AlbaneLocaleBuilder {
         const weight = Number.parseFloat(row.US_POIDS_FINAL);
 
         if (Number.isNaN(weight))
-          throw new Error(`Failed to parse weight value: "${row.US_POIDS_FINAL}" for food id ${row.A_CODE}, standard unit number ${row.US_NUM} `);
+          throw new TypeError(`Failed to parse weight value: "${row.US_POIDS_FINAL}" for food id ${row.A_CODE}, standard unit number ${row.US_NUM} `);
 
         if (ALBANE_SALT_CODES.includes(row.A_CODE) && row.US_LIBELLE.trim().toLowerCase() === 'quantité inconnue') {
           return {
@@ -950,7 +1337,10 @@ export class AlbaneLocaleBuilder {
 
       const [endIds, startIds] = partition([...drinkwareSetIds].toSorted(), id => pushToEndIds.includes(id));
 
-      for (const drinkwareId of [...startIds, ...endIds]) {
+      for (const drinkwareId of [
+        ...startIds,
+        ...endIds,
+      ]) {
         foodPortionSizeMethods.push({
           method: 'drink-scale',
           drinkwareId,
@@ -978,7 +1368,9 @@ export class AlbaneLocaleBuilder {
           conversionFactor: 1.0,
           description: 'unknown',
           pathways: portionSizePathwayDefaults,
-          weight: Number.isNaN(defaultWeight) ? undefined : defaultWeight,
+          weight: Number.isNaN(defaultWeight)
+            ? undefined
+            : defaultWeight,
           orderBy: String(foodPortionSizeMethods.length),
         });
       }
@@ -996,9 +1388,13 @@ export class AlbaneLocaleBuilder {
   private buildAsServed(): PkgV2AsServedSet[] {
     const imagesById = groupBy(this.portionSizeImages!.filter(row => !IGNORE_AS_SERVED.has(row.pictureId)), record => record.pictureId);
     return Object.entries(imagesById).map(([imageId, images]) => {
-      const label = images[0].intake24Instructions ? { fr: images[0].intake24Instructions } : null;
+      const label = images[0].intake24Instructions
+        ? { fr: images[0].intake24Instructions }
+        : null;
       return {
-        id: imageId.startsWith('ALBANE_') ? imageId : `ALBANE_${imageId}`,
+        id: imageId.startsWith('ALBANE_')
+          ? imageId
+          : `ALBANE_${imageId}`,
         description: images[0].name,
         label,
         selectionImagePath: '',
@@ -1023,7 +1419,9 @@ export class AlbaneLocaleBuilder {
       if (!images[0].intake24Instructions)
         continue;
 
-      const prefixedId = /^\d+$/.test(id) ? `ALBANE_${id}` : id;
+      const prefixedId = /^\d+$/.test(id)
+        ? `ALBANE_${id}`
+        : id;
 
       asServed[prefixedId] = {
         fr: images[0].intake24Instructions,

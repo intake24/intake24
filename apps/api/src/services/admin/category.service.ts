@@ -25,11 +25,15 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
   }
 
   const browseCategories = async (localeId: string, query: PaginateQuery) => {
-    const options: FindOptions<CategoryAttributes> = { where: { localeId } };
+    const options: FindOptions<CategoryAttributes> = {
+      where: { localeId },
+    };
     const { search } = query;
 
     if (search) {
-      const ops = ['code', 'englishName', 'name'].map(column => ({ [column]: { [Op.iLike]: `%${search}%` } }));
+      const ops = ['code', 'englishName', 'name'].map(column => ({
+        [column]: { [Op.iLike]: `%${search}%` },
+      }));
       options.where = { ...options.where, [Op.or]: ops };
     }
 
@@ -131,7 +135,9 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
         {
           association: 'portionSizeMethods',
           separate: true,
-          order: [['orderBy', 'ASC']],
+          order: [
+            ['orderBy', 'ASC'],
+          ],
         },
       ],
     });
@@ -175,7 +181,14 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
   const createCategory = async (localeId: string, input: CategoryInput) => {
     const category = await kyselyDb.foods.contextTransaction(async (transaction) => {
       const category = await transaction.insertInto('categories').values({
-        ...pick(input, ['code', 'englishName', 'name', 'hidden', 'tags', 'icon']),
+        ...pick(input, [
+          'code',
+          'englishName',
+          'name',
+          'hidden',
+          'tags',
+          'icon',
+        ]),
         localeId,
         simpleName: toSimpleName(input.name)!,
         version: randomUUID(),
@@ -196,7 +209,12 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
       }
 
       if (input.attributes) {
-        const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+        const attributesInput = pick(input.attributes, [
+          'sameAsBeforeOption',
+          'readyMealOption',
+          'reasonableAmount',
+          'useInRecipes',
+        ]);
         if (Object.values(attributesInput).some(item => item !== null)) {
           promises.push(transaction
             .insertInto('categoryAttributes')
@@ -228,7 +246,15 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
         cache.forget(getCategoryCacheKeys(categoryId)),
         cache.setAdd('locales-index', localeId),
         transaction.updateTable('categories').set({
-          ...pick(input, ['code', 'englishName', 'name', 'simpleName', 'hidden', 'tags', 'icon']),
+          ...pick(input, [
+            'code',
+            'englishName',
+            'name',
+            'simpleName',
+            'hidden',
+            'tags',
+            'icon',
+          ]),
           simpleName: toSimpleName(input.name)!,
           version: randomUUID(),
         }).where('id', '=', categoryId).execute(),
@@ -256,7 +282,12 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
       }
 
       if (input.attributes) {
-        const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+        const attributesInput = pick(input.attributes, [
+          'sameAsBeforeOption',
+          'readyMealOption',
+          'reasonableAmount',
+          'useInRecipes',
+        ]);
         if (Object.values(attributesInput).every(item => item === null)) {
           if (attributes)
             promises.push(transaction.deleteFrom('categoryAttributes').where('categoryId', '=', categoryId).execute());
@@ -297,7 +328,12 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
       if (sourceCategory?.attributes) {
         promises.push(
           transaction.insertInto('categoryAttributes').values({
-            ...pick(sourceCategory.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
+            ...pick(sourceCategory.attributes, [
+              'sameAsBeforeOption',
+              'readyMealOption',
+              'reasonableAmount',
+              'useInRecipes',
+            ]),
             categoryId: category.id,
           }).execute(),
         );
@@ -405,7 +441,9 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('categoriesCategories')
-        .where('subCategoryId', 'in', [...idMap.values()])
+        .where('subCategoryId', 'in', [
+          ...idMap.values(),
+        ])
         .execute();
     }
 
@@ -431,7 +469,12 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
       if (!categoryId)
         continue;
 
-      const attrs = pick(item.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+      const attrs = pick(item.attributes, [
+        'sameAsBeforeOption',
+        'readyMealOption',
+        'reasonableAmount',
+        'useInRecipes',
+      ]);
 
       if (Object.values(attrs).some(v => v !== null && v !== undefined)) {
         records.push({ categoryId, ...attrs });
@@ -440,7 +483,9 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('categoryAttributes')
-        .where('categoryId', 'in', [...idMap.values()])
+        .where('categoryId', 'in', [
+          ...idMap.values(),
+        ])
         .execute();
     }
 
@@ -481,7 +526,9 @@ function adminCategoryService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('categoryPortionSizeMethods')
-        .where('categoryId', 'in', [...idMap.values()])
+        .where('categoryId', 'in', [
+          ...idMap.values(),
+        ])
         .execute();
     }
 

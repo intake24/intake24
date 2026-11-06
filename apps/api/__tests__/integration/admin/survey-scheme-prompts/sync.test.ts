@@ -98,7 +98,10 @@ export default () => {
 
     it(`should return 404 when prompt ID is not found in scheme prompts set`, async () => {
       await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
-        input: { ...syncInput, prompt: { ...syncInput.prompt, id: 'invalidPromptId' } },
+        input: {
+          ...syncInput,
+          prompt: { ...syncInput.prompt, id: 'invalidPromptId' },
+        },
       });
     });
 

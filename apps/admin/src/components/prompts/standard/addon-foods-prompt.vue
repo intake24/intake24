@@ -151,7 +151,9 @@ function add() {
 function remove(index: number) {
   addons.value?.splice(index, 1);
 
-  selected.value = addons.value.length ? addons.value.length - 1 : undefined;
+  selected.value = addons.value.length
+    ? addons.value.length - 1
+    : undefined;
 };
 </script>
 

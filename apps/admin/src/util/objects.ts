@@ -5,10 +5,18 @@ export function toIndexedList<T extends object>(items: T[]): (T & { id: number }
 }
 
 export function withIdList<T extends object>(items: T[]): (T & { id: string })[] {
-  return items.map(item => copy({ ...item, id: randomString(6) }));
+  return items.map(item => copy({
+    ...item,
+    id: randomString(6),
+  }));
 }
 
-export const withId = <T>(item: T): T & { _id: string } => ({ ...item, _id: randomString(6) });
+export function withId<T>(item: T): T & { _id: string } {
+  return {
+    ...item,
+    _id: randomString(6),
+  };
+}
 
 export const withoutId = <T extends { _id: string }>({ _id, ...rest }: T): Omit<T, '_id'> => rest;
 
@@ -21,5 +29,8 @@ export function withIdAndOrder<T>(item: T, index: number): T & { _id: string; or
 }
 
 export function withoutIdAndOrder<T extends { _id: string; orderBy: string }>({ _id, ...rest }: T, index: number): Omit<T, '_id'> {
-  return { ...rest, orderBy: index.toString() };
+  return {
+    ...rest,
+    orderBy: index.toString(),
+  };
 }

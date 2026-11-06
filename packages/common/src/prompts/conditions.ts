@@ -4,20 +4,36 @@ import { z } from 'zod';
 import { foodTypes } from '../types/foods';
 import { externalSources } from './external-sources';
 
-export const conditionOpCodes = ['eq', 'ne', 'setEq', 'in', 'notIn', 'gte', 'gt', 'lte', 'lt'] as const;
+export const conditionOpCodes = [
+  'eq',
+  'ne',
+  'setEq',
+  'in',
+  'notIn',
+  'gte',
+  'gt',
+  'lte',
+  'lt',
+] as const;
 export type ConditionOpCode = typeof conditionOpCodes[number];
 
 export type ConditionValue = z.infer<typeof valueCheck.shape.value>;
 export type ConditionValueOps = { value: ConditionValue; answer: ConditionValue };
 
 function toNumber(values: ConditionValue) {
-  return (Array.isArray(values) ? values : [values])
-    .map(value => (typeof value === 'string' ? Number.parseFloat(value) : value))
+  return (Array.isArray(values)
+    ? values
+    : [values])
+    .map(value => (typeof value === 'string'
+      ? Number.parseFloat(value)
+      : value))
     .filter((value): value is number => !Number.isNaN(value));
 }
 
 function toString(values: ConditionValue) {
-  return (Array.isArray(values) ? values : [values])
+  return (Array.isArray(values)
+    ? values
+    : [values])
     .map(value => value?.toString().trim().toLowerCase() || '')
     .filter(Boolean);
 }
@@ -76,12 +92,20 @@ export const conditionOps = {
   },
 };
 
-export const foodCompletionStateOptions = ['freeEntryComplete', 'searchComplete', 'portionSizeComplete', 'complete'] as const;
+export const foodCompletionStateOptions = [
+  'freeEntryComplete',
+  'searchComplete',
+  'portionSizeComplete',
+  'complete',
+] as const;
 export type FoodCompletionState = typeof foodCompletionStateOptions[number];
 
 const valueCheck = z.object({
   op: z.enum(conditionOpCodes),
-  value: z.union([z.string().or(z.number()).or(z.boolean()), z.string().or(z.number()).or(z.boolean()).array()]).nullable(),
+  value: z.union([
+    z.string().or(z.number()).or(z.boolean()),
+    z.string().or(z.number()).or(z.boolean()).array(),
+  ]).nullable(),
 });
 
 const valueProperty = z.object({
@@ -247,11 +271,23 @@ export const foodProperties = z.discriminatedUnion('id', [
   externalSourceProperty,
 ]);
 
-const surveyCondition = z.object({ object: z.literal('survey'), orPrevious: z.boolean(), property: surveyProperties });
+const surveyCondition = z.object({
+  object: z.literal('survey'),
+  orPrevious: z.boolean(),
+  property: surveyProperties,
+});
 
-const mealCondition = z.object({ object: z.literal('meal'), orPrevious: z.boolean(), property: mealProperties });
+const mealCondition = z.object({
+  object: z.literal('meal'),
+  orPrevious: z.boolean(),
+  property: mealProperties,
+});
 
-const foodCondition = z.object({ object: z.literal('food'), orPrevious: z.boolean(), property: foodProperties });
+const foodCondition = z.object({
+  object: z.literal('food'),
+  orPrevious: z.boolean(),
+  property: foodProperties,
+});
 
 export const condition = z.discriminatedUnion('object', [
   surveyCondition,

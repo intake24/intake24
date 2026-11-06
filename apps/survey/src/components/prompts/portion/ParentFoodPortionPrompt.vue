@@ -109,7 +109,10 @@ const localeOptions = computed(() =>
     parameters.value.options[category.value][locale.value]
     ?? parameters.value.options[category.value].en
   )
-    .map(item => ({ ...item, value: Number(item.value) }))
+    .map(item => ({
+      ...item,
+      value: Number(item.value),
+    }))
     .filter(({ value }) => !Number.isNaN(value)),
 );
 const parentServing = computed(() => props.parentFood.portionSize?.servingWeight ?? 0);

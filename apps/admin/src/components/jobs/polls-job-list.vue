@@ -84,7 +84,9 @@ export default defineComponent({
 
     const getJobMessages = (job: JobAttributes): string[] => {
       if (job.errorType === 'LocalisableError' && job.errorDetails) {
-        return [i18n.t((job.errorDetails as any).key, (job.errorDetails as any).params || {})];
+        return [
+          i18n.t((job.errorDetails as any).key, (job.errorDetails as any).params || {}),
+        ];
       }
 
       if (job.errorType === 'AggregateLocalisableError' && Array.isArray(job.errorDetails)) {
@@ -92,7 +94,9 @@ export default defineComponent({
           .map(error => i18n.t((error as any).key, (error as any).params || {}));
       }
 
-      return job.message ? [job.message] : [];
+      return job.message
+        ? [job.message]
+        : [];
     };
 
     return { download, downloadUrlAvailable, getJobMessages };

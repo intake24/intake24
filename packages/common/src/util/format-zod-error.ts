@@ -165,19 +165,25 @@ function handleDiscriminatorLikeUnion(
       .filter((e: any) => e.path?.[0] !== discriminatorField)
       .map((e: any) => {
         const p = (e.path ?? []).join('.');
-        return p ? `${p}: ${e.message}` : e.message;
+        return p
+          ? `${p}: ${e.message}`
+          : e.message;
       });
 
     if (fieldErrors.length > 0) {
       const message = `'${inputValue}' is not valid because: ${fieldErrors.join('; ')}`;
-      return [{ path: issuePath, message }];
+      return [
+        { path: issuePath, message },
+      ];
     }
   }
 
   // No match — report invalid discriminator value
   const validValues = getDiscriminatorValues(unionSchema, discriminatorField);
   const message = `Invalid value '${inputValue}'. Expected one of: ${validValues.map(v => `'${v}'`).join(', ')}`;
-  return [{ path: issuePath, message }];
+  return [
+    { path: issuePath, message },
+  ];
 }
 
 function handlePlainUnion(issue: any, issuePath: (string | number)[]): CollectedError[] {
@@ -193,13 +199,19 @@ function handlePlainUnion(issue: any, issuePath: (string | number)[]): Collected
   if (bestVariant.length > 0) {
     const fieldErrors = bestVariant.map((e: any) => {
       const p = (e.path ?? []).join('.');
-      return p ? `${p}: ${e.message}` : e.message;
+      return p
+        ? `${p}: ${e.message}`
+        : e.message;
     });
     const message = `Union validation failed. Closest match errors: ${fieldErrors.join('; ')}`;
-    return [{ path: issuePath, message }];
+    return [
+      { path: issuePath, message },
+    ];
   }
 
-  return [{ path: issuePath, message: issue.message }];
+  return [
+    { path: issuePath, message: issue.message },
+  ];
 }
 
 // --- Main issue processing ---
@@ -221,16 +233,22 @@ function handleUnionIssue(
       const validValues = getDiscriminatorValues(unionSchema, discriminator);
       const inputValue = getValueAtPath(input, [...unionPath, discriminator]);
       const message = `Invalid value '${inputValue}'. Expected one of: ${validValues.map(v => `'${v}'`).join(', ')}`;
-      return [{ path: issuePath, message }];
+      return [
+        { path: issuePath, message },
+      ];
     }
 
-    return [{ path: issuePath, message: issue.message }];
+    return [
+      { path: issuePath, message: issue.message },
+    ];
   }
 
   // Case 2: Union with an errors array
   if (Array.isArray(issue.errors) && issue.errors.length > 0) {
     const unionSchema = resolveSchemaAtPath(rootSchema, issuePath);
-    const discriminatorField = unionSchema ? detectDiscriminatorField(unionSchema) : null;
+    const discriminatorField = unionSchema
+      ? detectDiscriminatorField(unionSchema)
+      : null;
 
     if (discriminatorField)
       return handleDiscriminatorLikeUnion(issue, discriminatorField, unionSchema, input, issuePath);
@@ -239,12 +257,16 @@ function handleUnionIssue(
   }
 
   // Fallback
-  return [{ path: issuePath, message: issue.message }];
+  return [
+    { path: issuePath, message: issue.message },
+  ];
 }
 
 function normalizePath(path: PropertyKey[]): (string | number)[] {
   return (path ?? []).map(p =>
-    typeof p === 'symbol' ? String(p) : p,
+    typeof p === 'symbol'
+      ? String(p)
+      : p,
   ) as (string | number)[];
 }
 
@@ -280,10 +302,16 @@ export function formatZodError(
   const groups = new Map<string, { pathElements: (string | number)[]; messages: string[] }>();
 
   for (const { path, message } of collected) {
-    const groupPath = path.length <= groupingDepth ? path : path.slice(0, groupingDepth);
-    const remainingPath = path.length <= groupingDepth ? [] : path.slice(groupingDepth);
+    const groupPath = path.length <= groupingDepth
+      ? path
+      : path.slice(0, groupingDepth);
+    const remainingPath = path.length <= groupingDepth
+      ? []
+      : path.slice(groupingDepth);
 
-    const groupKey = groupPath.length === 0 ? '(root)' : groupPath.join('.');
+    const groupKey = groupPath.length === 0
+      ? '(root)'
+      : groupPath.join('.');
 
     const fullMessage = remainingPath.length > 0
       ? `${remainingPath.join('.')}: ${message}`
@@ -295,7 +323,10 @@ export function formatZodError(
         existing.messages.push(fullMessage);
     }
     else {
-      groups.set(groupKey, { pathElements: groupPath, messages: [fullMessage] });
+      groups.set(groupKey, {
+        pathElements: groupPath,
+        messages: [fullMessage],
+      });
     }
   }
 

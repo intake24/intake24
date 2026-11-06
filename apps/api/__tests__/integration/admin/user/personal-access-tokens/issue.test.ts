@@ -30,7 +30,10 @@ export default () => {
 
     it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['name', 'expiresAt'], {
-        input: { name: ['should be a string'], expiresAt: 'not a date' },
+        input: {
+          name: ['should be a string'],
+          expiresAt: 'not a date',
+        },
       });
     });
 

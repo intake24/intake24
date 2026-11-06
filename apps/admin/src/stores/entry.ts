@@ -76,16 +76,24 @@ export const useEntry = defineStore('entry', {
     },
 
     initEntry() {
-      this.data = { ...{ id: null } };
+      this.data = {
+        ...{ id: null },
+      };
     },
 
     setEntry(data?: Dictionary) {
-      if (data)
-        this.data = { ...(data ?? { id: null }) };
+      if (data) {
+        this.data = {
+          ...(data ?? { id: null }),
+        };
+      }
     },
 
     updateEntry(data: Partial<Dictionary>) {
-      this.data = { ...this.data, ...data };
+      this.data = {
+        ...this.data,
+        ...data,
+      };
     },
 
     clearRefs() {

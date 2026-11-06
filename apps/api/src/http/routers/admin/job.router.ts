@@ -15,24 +15,55 @@ import { Job } from '@intake24/db';
 export function job() {
   return initServer().router(contract.admin.job, {
     browse: {
-      middleware: [permission('jobs', 'jobs:browse')],
+      middleware: [
+        permission('jobs', 'jobs:browse'),
+      ],
       handler: async ({ query }) => {
         const jobs = await Job.paginate<() => JobAttributes>({
           query,
           columns: ['type'],
-          order: [['startedAt', 'DESC']],
-          attributes: ['id', 'type', 'userId', 'startedAt', 'completedAt', 'successful', 'message', 'errorDetails', 'errorType', 'returnValue', 'downloadUrl', 'downloadUrlExpiresAt'],
-          include: [{ association: 'user', attributes: ['name', 'email'], required: false }],
+          order: [
+            ['startedAt', 'DESC'],
+          ],
+          attributes: [
+            'id',
+            'type',
+            'userId',
+            'startedAt',
+            'completedAt',
+            'successful',
+            'message',
+            'errorDetails',
+            'errorType',
+            'returnValue',
+            'downloadUrl',
+            'downloadUrlExpiresAt',
+          ],
+          include: [
+            {
+              association: 'user',
+              attributes: ['name', 'email'],
+              required: false,
+            },
+          ],
         });
 
         return { status: 200, body: jobs };
       },
     },
     read: {
-      middleware: [permission('jobs', 'jobs:read')],
+      middleware: [
+        permission('jobs', 'jobs:read'),
+      ],
       handler: async ({ params: { jobId } }) => {
         const job = await Job.findByPk(jobId, {
-          include: [{ association: 'user', attributes: ['name', 'email'], required: false }],
+          include: [
+            {
+              association: 'user',
+              attributes: ['name', 'email'],
+              required: false,
+            },
+          ],
         });
         if (!job)
           throw new NotFoundError();
@@ -41,9 +72,13 @@ export function job() {
       },
     },
     destroy: {
-      middleware: [permission('jobs', 'jobs:delete')],
+      middleware: [
+        permission('jobs', 'jobs:delete'),
+      ],
       handler: async ({ params: { jobId } }) => {
-        const job = await Job.findByPk(jobId, { attributes: ['id'] });
+        const job = await Job.findByPk(jobId, {
+          attributes: ['id'],
+        });
         if (!job)
           throw new NotFoundError();
 
@@ -53,14 +88,18 @@ export function job() {
       },
     },
     download: {
-      middleware: [permission('jobs', 'jobs:read')],
+      middleware: [
+        permission('jobs', 'jobs:read'),
+      ],
       handler: async ({ params: { jobId: id }, req, res }) => {
         const job = await Job.findOne({
           attributes: ['id', 'downloadUrl'],
           where: {
             id,
             downloadUrl: { [Op.ne]: null },
-            downloadUrlExpiresAt: { [Op.gt]: new Date() },
+            downloadUrlExpiresAt: {
+              [Op.gt]: new Date(),
+            },
           },
         });
 
@@ -85,9 +124,13 @@ export function job() {
       },
     },
     repeat: {
-      middleware: [permission('jobs', 'jobs:edit')],
+      middleware: [
+        permission('jobs', 'jobs:edit'),
+      ],
       handler: async ({ params: { jobId }, body, req }) => {
-        const job = await Job.findByPk(jobId, { attributes: ['id', 'type', 'userId', 'params'] });
+        const job = await Job.findByPk(jobId, {
+          attributes: ['id', 'type', 'userId', 'params'],
+        });
         if (!job || (body?.type && body.type !== job.type))
           throw new NotFoundError();
 

@@ -25,9 +25,28 @@ import RoleUser from './role-user';
 import User from './user';
 
 @Scopes(() => ({
-  list: { attributes: ['id', 'name', 'displayName'], order: [['name', 'ASC']] },
-  permissions: { include: [{ model: Permission, through: { attributes: [] } }] },
-  users: { include: [{ model: User, through: { attributes: [] } }] },
+  list: {
+    attributes: ['id', 'name', 'displayName'],
+    order: [
+      ['name', 'ASC'],
+    ],
+  },
+  permissions: {
+    include: [
+      {
+        model: Permission,
+        through: { attributes: [] },
+      },
+    ],
+  },
+  users: {
+    include: [
+      {
+        model: User,
+        through: { attributes: [] },
+      },
+    ],
+  },
 }))
 @Table({
   modelName: 'Role',

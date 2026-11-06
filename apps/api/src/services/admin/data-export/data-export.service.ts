@@ -55,8 +55,12 @@ function dataExportService({
     if (startDate || endDate) {
       const submissionTime = {
         [Op.and]: [
-          startDate ? { [Op.gte]: startDate } : null,
-          endDate ? { [Op.lte]: endDate } : null,
+          startDate
+            ? { [Op.gte]: startDate }
+            : null,
+          endDate
+            ? { [Op.lte]: endDate }
+            : null,
         ].filter(Boolean),
       };
 
@@ -78,7 +82,11 @@ function dataExportService({
                 association: 'user',
                 required: true,
                 include: [
-                  { association: 'aliases', where: { surveyId }, separate: true },
+                  {
+                    association: 'aliases',
+                    where: { surveyId },
+                    separate: true,
+                  },
                   { association: 'customFields', separate: true },
                 ],
               },
@@ -97,9 +105,14 @@ function dataExportService({
         'minutes',
         'name',
         'duration',
-        [literal(`CASE WHEN submission.wake_up_time is not null and CONCAT(hours, ':', minutes)::time < submission.wake_up_time THEN CONCAT(hours,':',minutes)::interval  + '1440m'::interval ELSE CONCAT(hours,':',minutes)::interval end`), 'interval'],
+        [
+          literal(`CASE WHEN submission.wake_up_time is not null and CONCAT(hours, ':', minutes)::time < submission.wake_up_time THEN CONCAT(hours,':',minutes)::interval  + '1440m'::interval ELSE CONCAT(hours,':',minutes)::interval end`),
+          'interval',
+        ],
       ],
-      include: [{ association: 'submission', required: true, where: surveySubmissionConditions }],
+      include: [
+        { association: 'submission', required: true, where: surveySubmissionConditions },
+      ],
       order: [
         ['submission', 'submissionTime', 'ASC'],
         ['submission', 'id', 'ASC'],
@@ -115,7 +128,12 @@ function dataExportService({
     };
 
     const order: Order = [
-      ['meal', 'submission', 'submissionTime', 'ASC'],
+      [
+        'meal',
+        'submission',
+        'submissionTime',
+        'ASC',
+      ],
       ['meal', 'submission', 'id', 'ASC'],
       ['meal', 'hours', 'ASC'],
       ['meal', 'minutes', 'ASC'],
@@ -170,7 +188,9 @@ function dataExportService({
           ...params,
           attributes,
           offset,
-          limit: difference > 0 ? batchSize - difference : batchSize,
+          limit: difference > 0
+            ? batchSize - difference
+            : batchSize,
         });
 
         const mealId: string[] = [];
@@ -188,24 +208,38 @@ function dataExportService({
         });
 
         const [foods, missingFoods] = await Promise.all([
-          SurveySubmissionFood.findAll({ ...options.foods, where: { mealId } }),
-          SurveySubmissionMissingFood.findAll({ ...options.missingFoods, where: { mealId } }),
+          SurveySubmissionFood.findAll({
+            ...options.foods,
+            where: { mealId },
+          }),
+          SurveySubmissionMissingFood.findAll({
+            ...options.missingFoods,
+            where: { mealId },
+          }),
         ]);
 
         const groupedFoods = groupBy(foods, 'mealId');
         const groupedMissingFoods = groupBy(missingFoods, 'mealId');
 
         for (const id of mealId) {
-          [...(groupedFoods[id] ?? []), ...(groupedMissingFoods[id] ?? [])]
+          [
+            ...(groupedFoods[id] ?? []),
+            ...(groupedMissingFoods[id] ?? []),
+          ]
             .sort(({ index: a }, { index: b }) => a - b)
-            .forEach(food => inputStream.push({ food, custom: { mealIndex: mealIndex[id] } }));
+            .forEach(food => inputStream.push({
+              food,
+              custom: { mealIndex: mealIndex[id] },
+            }));
         }
       }
 
       inputStream.push(null);
     }
     catch (err) {
-      inputStream.destroy(err instanceof Error ? err : undefined);
+      inputStream.destroy(err instanceof Error
+        ? err
+        : undefined);
     }
   };
 
@@ -250,7 +284,13 @@ function dataExportService({
 
     const survey = await Survey.findByPk(surveyId, {
       attributes: ['id', 'slug'],
-      include: [{ association: 'surveyScheme', attributes: ['dataExport'], required: true }],
+      include: [
+        {
+          association: 'surveyScheme',
+          attributes: ['dataExport'],
+          required: true,
+        },
+      ],
     });
     if (!survey || !survey.surveyScheme)
       throw new NotFoundError();
@@ -266,7 +306,12 @@ function dataExportService({
       SurveySubmissionMissingFood.count(options.missingFoods),
     ]);
 
-    return { options, fields, filename, total: totalFoods + totalMissingFoods };
+    return {
+      options,
+      fields,
+      filename,
+      total: totalFoods + totalMissingFoods,
+    };
   };
 
   /**

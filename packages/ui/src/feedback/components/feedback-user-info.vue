@@ -76,7 +76,9 @@ const ageAndSex = computed(() => {
 
   if (birthdate !== null) {
     items.push(
-      t('feedback.physicalData.age', { age: props.userDemographic.getAge() }),
+      t('feedback.physicalData.age', {
+        age: props.userDemographic.getAge(),
+      }),
     );
   }
 

@@ -32,14 +32,20 @@ function util(suite: typeof Suite) {
    * @returns {Promise<void>}
    */
   const setPermission = async (perm: string | string[], roleName = 'test-role'): Promise<void> => {
-    const role = await Role.findOne({ where: { name: roleName } });
+    const role = await Role.findOne({
+      where: { name: roleName },
+    });
 
     if (!role)
       throw new Error('Missing mock role.');
 
-    const name = Array.isArray(perm) ? perm : [perm];
+    const name = Array.isArray(perm)
+      ? perm
+      : [perm];
 
-    const permissions = await Permission.findAll({ where: { name } });
+    const permissions = await Permission.findAll({
+      where: { name },
+    });
 
     if (name.length && name.length !== permissions.length)
       throw new Error('Missing mock permissions.');
@@ -60,9 +66,13 @@ function util(suite: typeof Suite) {
     if (!user)
       throw new Error('Missing mock user.');
 
-    const name = Array.isArray(perm) ? perm : [perm];
+    const name = Array.isArray(perm)
+      ? perm
+      : [perm];
 
-    const permissions = await Permission.findAll({ where: { name } });
+    const permissions = await Permission.findAll({
+      where: { name },
+    });
 
     if (name.length && name.length !== permissions.length)
       throw new Error('Missing mock permissions.');
@@ -75,7 +85,9 @@ function util(suite: typeof Suite) {
 
     const { action, ...rest } = options;
 
-    await UserSecurable.destroy({ where: { ...rest } });
+    await UserSecurable.destroy({
+      where: { ...rest },
+    });
 
     if (action?.length) {
       const securables = action.map(item => ({ userId, ...rest, action: item }));
@@ -112,7 +124,13 @@ export async function downloadImage(url: string, filename: string): Promise<stri
 export async function generateCSV(filename: string): Promise<string> {
   const filePath = path.resolve(fsConfig.local.downloads, filename);
 
-  const fields = ['username', 'password', 'email', 'name', 'phone'];
+  const fields = [
+    'username',
+    'password',
+    'email',
+    'name',
+    'phone',
+  ];
 
   const data = times(10, () => ({
     username: faker.internet.username(),

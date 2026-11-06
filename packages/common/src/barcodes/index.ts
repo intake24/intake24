@@ -52,7 +52,12 @@ export const defaultBarcodeScannerOptions: Record<BarcodeScanner, BarcodeScanner
   },
   quagga: {
     type: 'quagga',
-    readers: ['ean_reader', 'ean_8_reader', 'ean_5_reader', 'ean_2_reader'],
+    readers: [
+      'ean_reader',
+      'ean_8_reader',
+      'ean_5_reader',
+      'ean_2_reader',
+    ],
     feedback: { audio: false, vibration: true },
   },
   strich: {

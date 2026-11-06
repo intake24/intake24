@@ -93,7 +93,9 @@ const http = useHttp();
 
 const url = 'admin/user/mfa/providers/otp';
 const progress = ref(1);
-const { data, errors, post, reset } = useForm({ data: { challengeId: '', name: 'OTP device', token: '' } });
+const { data, errors, post, reset } = useForm({
+  data: { challengeId: '', name: 'OTP device', token: '' },
+});
 
 const regChallenge = ref<OTPRegistrationChallenge | null>(null);
 

@@ -77,7 +77,9 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-${this.name}-${slug}-${timestamp}.csv`;
 
-    const total = await UserSurveyAlias.count({ where: { surveyId } });
+    const total = await UserSurveyAlias.count({
+      where: { surveyId },
+    });
     this.initProgress(total);
 
     let counter = 0;
@@ -85,13 +87,18 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
       await this.setProgress(counter);
     }, 2000);
 
-    const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
+    const aliases = UserSurveyAlias.findAllWithStream({
+      where: { surveyId },
+    });
     const transform = new Transform(
       {
         fields: [
           { label: 'UserID', value: 'userId' },
           { label: 'Username', value: 'username' },
-          { label: 'AuthenticationToken', value: (row: UserSurveyAlias) => row.urlAuthToken },
+          {
+            label: 'AuthenticationToken',
+            value: (row: UserSurveyAlias) => row.urlAuthToken,
+          },
           {
             label: 'ShortSurveyAuthenticationURL',
             value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken),

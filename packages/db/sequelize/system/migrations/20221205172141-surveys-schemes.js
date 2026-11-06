@@ -5,7 +5,11 @@ function mapper(items) {
 
     const i18n = { name, text, description, label, hint };
 
-    return { ...rest, ...restProps, i18n };
+    return {
+      ...rest,
+      ...restProps,
+      i18n,
+    };
   });
 }
 
@@ -35,7 +39,11 @@ export default {
 
         const newQuestions = {
           preMeals: mapper(preMeals),
-          meals: { preFoods: mapper(preFoods), foods: mapper(foods), postFoods: mapper(postFoods) },
+          meals: {
+            preFoods: mapper(preFoods),
+            foods: mapper(foods),
+            postFoods: mapper(postFoods),
+          },
           postMeals: mapper(postMeals),
           submission: mapper(submission),
         };
@@ -44,7 +52,10 @@ export default {
           `UPDATE survey_schemes SET questions = :questions WHERE id = :id;`,
           {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
-            replacements: { id, questions: JSON.stringify(newQuestions) },
+            replacements: {
+              id,
+              questions: JSON.stringify(newQuestions),
+            },
             transaction,
           },
         );

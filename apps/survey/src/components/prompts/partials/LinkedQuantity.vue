@@ -79,7 +79,9 @@ const { getStandardUnitHowMany } = useStandardUnits({ units });
 
 const linkedQuantityUnit = computed(() => {
   const unit = props.linkedParent.categories.at(0)?.unit;
-  return unit ? getStandardUnitHowMany(unit) : t('prompts.linkedAmount.unit');
+  return unit
+    ? getStandardUnitHowMany(unit)
+    : t('prompts.linkedAmount.unit');
 });
 
 const parentQuantity = computed(() => props.linkedParent.quantity ?? 1);

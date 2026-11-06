@@ -5,5 +5,11 @@ export const useInRecipeTypes = {
 } as const;
 export type UseInRecipeType = (typeof useInRecipeTypes)[keyof typeof useInRecipeTypes];
 
-export const foodTypes = ['free-text', 'encoded-food', 'missing-food', 'recipe-builder', 'generic-builder'] as const;
+export const foodTypes = [
+  'free-text',
+  'encoded-food',
+  'missing-food',
+  'recipe-builder',
+  'generic-builder',
+] as const;
 export type FoodType = (typeof foodTypes)[number];

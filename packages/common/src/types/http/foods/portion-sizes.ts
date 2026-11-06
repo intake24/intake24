@@ -53,7 +53,10 @@ export const guideImageResponse = z.object({
   description: z.string(),
   label: localeTranslation,
   imageMap: imageMapResponse,
-  objects: z.record(z.string(), z.object({ label: localeTranslation, weight: z.number() })),
+  objects: z.record(z.string(), z.object({
+    label: localeTranslation,
+    weight: z.number(),
+  })),
 });
 
 export type GuideImageResponse = z.infer<typeof guideImageResponse>;

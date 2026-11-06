@@ -21,7 +21,13 @@ export function i18n() {
     },
     getLanguage: async ({ params: { languageId }, query: { app } }) => {
       const include: Includeable[] = [
-        { association: 'translations', where: { application: [app, 'shared'] }, required: false },
+        {
+          association: 'translations',
+          where: {
+            application: [app, 'shared'],
+          },
+          required: false,
+        },
       ];
 
       let language = await Language.scope('public').findOne({
@@ -31,7 +37,10 @@ export function i18n() {
 
       if (!language && languageId.includes('-')) {
         const [fallback] = languageId.split('-');
-        language = await Language.scope('public').findOne({ where: { code: fallback }, include });
+        language = await Language.scope('public').findOne({
+          where: { code: fallback },
+          include,
+        });
       }
 
       if (!language)

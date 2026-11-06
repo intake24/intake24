@@ -93,7 +93,10 @@ export default {
           from category_portion_size_methods psm
           join source_target_map stm
               on psm.category_local_id = stm.source_local_id;`,
-          { replacements: { prototypeLocaleId, targetLocaleId }, transaction },
+          {
+            replacements: { prototypeLocaleId, targetLocaleId },
+            transaction,
+          },
         );
       }
 
@@ -203,7 +206,10 @@ export default {
           from food_portion_size_methods psm
           join source_target_map stm
               on psm.food_local_id = stm.source_local_id;`,
-          { replacements: { prototypeLocaleId, targetLocaleId }, transaction },
+          {
+            replacements: { prototypeLocaleId, targetLocaleId },
+            transaction,
+          },
         );
 
         // Copy AFPs
@@ -233,7 +239,10 @@ export default {
           from associated_foods af
           where af.locale_id = :prototypeLocaleId
           and not exists (select 1 from associated_foods af_check where af_check.food_code = af.food_code and af_check.locale_id = :targetLocaleId);`,
-            { replacements: { prototypeLocaleId, targetLocaleId }, transaction },
+            {
+              replacements: { prototypeLocaleId, targetLocaleId },
+              transaction,
+            },
           );
         }
       }

@@ -21,7 +21,12 @@ export enum NutrientTypeIdEnum {
   AOACFibre = '242',
 }
 
-export const characterSentimentTypes = ['danger', 'warning', 'happy', 'exciting'] as const;
+export const characterSentimentTypes = [
+  'danger',
+  'warning',
+  'happy',
+  'exciting',
+] as const;
 export type CharacterSentimentType = (typeof characterSentimentTypes)[number];
 
 export const characterSentiment = z.object({

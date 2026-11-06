@@ -15,5 +15,8 @@ export type MediaStore = {
  * @returns {string[]}
  */
 export function baseObjectPath(id: string): string[] {
-  return [id.slice(0, 2), id];
+  return [
+    id.slice(0, 2),
+    id,
+  ];
 };

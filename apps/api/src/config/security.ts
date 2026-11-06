@@ -21,9 +21,16 @@ export type JwtFrontEndSettings = z.infer<typeof jwtFrontEndSettings>;
 
 export const securityConfigSchema = z.object({
   cors: z.object({
-    origin: z.union([z.boolean(), z.string(), z.array(z.string())]).default(false),
+    origin: z.union([
+      z.boolean(),
+      z.string(),
+      z.array(z.string()),
+    ]).default(false),
   }),
-  proxy: z.union([z.array(z.string()), z.boolean()]).default(false),
+  proxy: z.union([
+    z.array(z.string()),
+    z.boolean(),
+  ]).default(false),
   jwt: z.object({
     issuer: z.string().min(1).default('intake24'),
     secret: z.string().min(32),
@@ -63,9 +70,13 @@ export type SecurityConfig = z.infer<typeof securityConfigSchema>;
 
 const rawSecurityConfig = {
   cors: {
-    origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : false,
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(',')
+      : false,
   },
-  proxy: process.env.PROXY ? process.env.PROXY.split(',') : false,
+  proxy: process.env.PROXY
+    ? process.env.PROXY.split(',')
+    : false,
   jwt: {
     issuer: process.env.JWT_ISSUER,
     secret: process.env.JWT_ACCESS_SECRET,

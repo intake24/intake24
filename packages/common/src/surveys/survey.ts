@@ -14,7 +14,12 @@ export type SurveyAuthMode = (typeof surveyAuthModes)[number];
 export const surveyRatings = ['recall', 'feedback'] as const;
 export type SurveyRating = (typeof surveyRatings)[number];
 
-export const surveyStatuses = ['notStarted', 'active', 'suspended', 'completed'] as const;
+export const surveyStatuses = [
+  'notStarted',
+  'active',
+  'suspended',
+  'completed',
+] as const;
 export type SurveyStatus = (typeof surveyStatuses)[number];
 
 export const schemeOverrides = z.object({

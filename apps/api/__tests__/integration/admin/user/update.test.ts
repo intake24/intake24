@@ -10,7 +10,9 @@ export default () => {
   });
 
   it('should return 400 for invalid input data', async () => {
-    await suite.sharedTests.assertInvalidInput('patch', url, ['name', 'phone'], { input: { name: false, phone: 123456 } });
+    await suite.sharedTests.assertInvalidInput('patch', url, ['name', 'phone'], {
+      input: { name: false, phone: 123456 },
+    });
   });
 
   it('should return 200 and profile data', async () => {

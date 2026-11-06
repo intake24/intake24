@@ -94,7 +94,10 @@ export const surveyUserInfoResponse = z.object({
     description: 'Whether the user has reached the maximum number of submissions per day',
   }),
   followUpUrl: z
-    .union([z.string(), z.record(z.string(), z.string())])
+    .union([
+      z.string(),
+      z.record(z.string(), z.string()),
+    ])
     .nullish()
     .meta({ description: 'Optional follow-up URL for user redirect' }),
 });
@@ -102,7 +105,10 @@ export const surveyUserInfoResponse = z.object({
 export type SurveyUserInfoResponse = z.infer<typeof surveyUserInfoResponse>;
 
 export const surveySubmissionResponse = surveyUserInfoResponse.extend({
-  submission: z.object({ id: z.string(), submissionTime: z.date() }),
+  submission: z.object({
+    id: z.string(),
+    submissionTime: z.date(),
+  }),
 });
 
 export type SurveySubmissionResponse = z.infer<typeof surveySubmissionResponse>;
@@ -126,7 +132,9 @@ export const surveyHelpRequest = z
     phoneCountry: z
       .string()
       .nullish()
-      .refine(value => (value ? validator.isIn(value, getSupportedRegionCodes()) : true)),
+      .refine(value => (value
+        ? validator.isIn(value, getSupportedRegionCodes())
+        : true)),
     message: z.string().max(500).nullish(),
   })
   .refine(

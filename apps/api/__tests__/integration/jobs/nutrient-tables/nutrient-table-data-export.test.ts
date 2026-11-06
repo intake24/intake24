@@ -45,14 +45,24 @@ export default () => {
     if (exportDbJob)
       await exportDbJob.destroy();
     if (record) {
-      await NutrientTableRecordField.destroy({ where: { nutrientTableRecordId: record.id } });
-      await NutrientTableRecordNutrient.destroy({ where: { nutrientTableRecordId: record.id } });
+      await NutrientTableRecordField.destroy({
+        where: { nutrientTableRecordId: record.id },
+      });
+      await NutrientTableRecordNutrient.destroy({
+        where: { nutrientTableRecordId: record.id },
+      });
       await record.destroy();
     }
     if (nutrientTable) {
-      await NutrientTableCsvMappingField.destroy({ where: { nutrientTableId: nutrientTable.id } });
-      await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId: nutrientTable.id } });
-      await NutrientTableCsvMapping.destroy({ where: { nutrientTableId: nutrientTable.id } });
+      await NutrientTableCsvMappingField.destroy({
+        where: { nutrientTableId: nutrientTable.id },
+      });
+      await NutrientTableCsvMappingNutrient.destroy({
+        where: { nutrientTableId: nutrientTable.id },
+      });
+      await NutrientTableCsvMapping.destroy({
+        where: { nutrientTableId: nutrientTable.id },
+      });
       await nutrientTable.destroy();
     }
 
@@ -79,9 +89,13 @@ export default () => {
     await NutrientTableCsvMappingField.create({ nutrientTableId, fieldName: 'Food group', columnOffset: 2 });
 
     const nutrientTypes = await FoodsNutrientType.findAll({
-      where: { id: ['1', '2'] },
+      where: {
+        id: ['1', '2'],
+      },
       attributes: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
     expect(nutrientTypes).toHaveLength(2);
     await NutrientTableCsvMappingNutrient.bulkCreate([
@@ -107,7 +121,9 @@ export default () => {
       params: { nutrientTableId },
     });
 
-    await NutrientTableCsvMapping.update({ rowOffset: 0 }, { where: { nutrientTableId } });
+    await NutrientTableCsvMapping.update({ rowOffset: 0 }, {
+      where: { nutrientTableId },
+    });
     const headerlessExportJob = createMockBullJob(exportDbJob.id, { nutrientTableId });
     await ioc.resolve('NutrientTableDataExport').run(headerlessExportJob);
     await exportDbJob.reload();
@@ -119,7 +135,9 @@ export default () => {
     await expect(fs.readFile(headerlessFile, 'utf8')).resolves.toBe('Local food,source-1,Vegetables,Source food,12.3,4.5');
     await fs.rm(headerlessFile);
 
-    await NutrientTableCsvMapping.update({ rowOffset: 5 }, { where: { nutrientTableId } });
+    await NutrientTableCsvMapping.update({ rowOffset: 5 }, {
+      where: { nutrientTableId },
+    });
     await ioc.resolve('NutrientTableDataExport').run(createMockBullJob(exportDbJob.id, { nutrientTableId }));
     await exportDbJob.reload();
 
@@ -130,8 +148,12 @@ export default () => {
     );
 
     await record.update({ name: 'Changed food', localName: 'Changed local food' });
-    await NutrientTableRecordField.update({ value: 'Changed' }, { where: { nutrientTableRecordId: record.id } });
-    await NutrientTableRecordNutrient.update({ unitsPer100g: 99 }, { where: { nutrientTableRecordId: record.id } });
+    await NutrientTableRecordField.update({ value: 'Changed' }, {
+      where: { nutrientTableRecordId: record.id },
+    });
+    await NutrientTableRecordNutrient.update({ unitsPer100g: 99 }, {
+      where: { nutrientTableRecordId: record.id },
+    });
 
     importDbJob = await DbJob.create({
       type: 'NutrientTableDataImport',
@@ -143,11 +165,18 @@ export default () => {
       file: exportedFile,
     }));
 
-    await record.reload({ include: [{ association: 'fields' }, { association: 'nutrients' }] });
+    await record.reload({
+      include: [
+        { association: 'fields' },
+        { association: 'nutrients' },
+      ],
+    });
     expect(record.get({ plain: true })).toMatchObject({
       name: 'Source food',
       localName: 'Local food',
-      fields: [{ name: 'Food group', value: 'Vegetables' }],
+      fields: [
+        { name: 'Food group', value: 'Vegetables' },
+      ],
       nutrients: expect.arrayContaining([
         expect.objectContaining({ nutrientTypeId: nutrientTypes[0].id, unitsPer100g: 12.3 }),
         expect.objectContaining({ nutrientTypeId: nutrientTypes[1].id, unitsPer100g: 4.5 }),

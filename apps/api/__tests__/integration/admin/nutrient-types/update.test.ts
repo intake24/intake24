@@ -48,7 +48,15 @@ export default () => {
         'put',
         url,
         ['description', 'unitId', 'kcalPerUnit'],
-        { input: { description: { name: 'text' }, unitId: null, kcalPerUnit: { value: [10] } } },
+        {
+          input: {
+            description: { name: 'text' },
+            unitId: null,
+            kcalPerUnit: {
+              value: [10],
+            },
+          },
+        },
       );
     });
 

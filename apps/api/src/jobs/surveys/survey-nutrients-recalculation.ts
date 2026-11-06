@@ -206,7 +206,10 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
         {
           association: 'nutrientRecords',
           through: { attributes: [] },
-          include: [{ association: 'fields' }, { association: 'nutrients' }],
+          include: [
+            { association: 'fields' },
+            { association: 'nutrients' },
+          ],
         },
       ],
     });
@@ -435,7 +438,9 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     // Build fields object
     let fieldsAdded = 0;
     let fieldsRemoved = 0;
-    const fieldsObj: Dictionary = { ...(food.fields ?? {}) };
+    const fieldsObj: Dictionary = {
+      ...(food.fields ?? {}),
+    };
 
     if (flags.shouldSyncFields && currentMapping) {
       for (const field of nutrientData.fields) {
@@ -481,9 +486,14 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
     }
     else {
       const sourceNutrientMap = new Map(
-        nutrientData.nutrients.map(n => [n.nutrientTypeId.toString(), n.unitsPer100g]),
+        nutrientData.nutrients.map(n => [
+          n.nutrientTypeId.toString(),
+          n.unitsPer100g,
+        ]),
       );
-      nutrientsObj = { ...(food.nutrients ?? {}) };
+      nutrientsObj = {
+        ...(food.nutrients ?? {}),
+      };
       for (const nutrientId of Object.keys(nutrientsObj)) {
         const unitsPer100g = sourceNutrientMap.get(nutrientId);
         if (unitsPer100g !== undefined) {
@@ -509,7 +519,13 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       nutrientCodeUpdated = changeSet.nutrientCodeChanged;
     }
 
-    return { type: 'updated', record, nutrientCodeUpdated, fieldsAdded, fieldsRemoved };
+    return {
+      type: 'updated',
+      record,
+      nutrientCodeUpdated,
+      fieldsAdded,
+      fieldsRemoved,
+    };
   }
 
   private async recalculate(batchSize = BATCH_SIZE): Promise<SkippedErrorEntry[]> {
@@ -520,11 +536,19 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       this.logger.info('Recalculation mode is "none" (dry run) - processing foods without writing to database.');
 
     const total = await SurveySubmissionFood.count({
-      include: [{
-        association: 'meal',
-        required: true,
-        include: [{ association: 'submission', where: { surveyId }, required: true }],
-      }],
+      include: [
+        {
+          association: 'meal',
+          required: true,
+          include: [
+            {
+              association: 'submission',
+              where: { surveyId },
+              required: true,
+            },
+          ],
+        },
+      ],
     });
 
     if (total === 0) {
@@ -534,7 +558,9 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
     this.initProgress(total);
 
-    const offsets = Array.from({ length: Math.ceil(total / batchSize) }, (_, i) => i * batchSize);
+    const offsets = Array.from({
+      length: Math.ceil(total / batchSize),
+    }, (_, i) => i * batchSize);
 
     // Persist across batches to avoid re-fetching the same food codes
     const currentMappings = new Map<string, FoodMapping | null>();
@@ -573,7 +599,12 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
           },
         ],
         order: [
-          ['meal', 'submission', 'submissionTime', 'ASC'],
+          [
+            'meal',
+            'submission',
+            'submissionTime',
+            'ASC',
+          ],
           ['meal', 'submission', 'id', 'ASC'],
           ['meal', 'hours', 'ASC'],
           ['meal', 'minutes', 'ASC'],
@@ -589,7 +620,9 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
       // Fetch current food mappings if needed (skip codes already cached from previous batches)
       if (flags.shouldUpdateNutrientCodes || flags.shouldSyncFields) {
         for (const [locale, localeFoods] of localeGroups) {
-          const foodCodes = [...new Set(localeFoods.map(f => f.code))]
+          const foodCodes = [
+            ...new Set(localeFoods.map(f => f.code)),
+          ]
             .filter(code => !currentMappings.has(`${locale}:${code}`));
           if (foodCodes.length === 0)
             continue;
@@ -627,14 +660,22 @@ export default class SurveyNutrientsRecalculation extends BaseJob<'SurveyNutrien
 
       // Fetch nutrient records
       const conditions = Object.entries(nutrientTableRecordIds).map(
-        ([nutrientTableId, codes]) => ({ nutrientTableId, nutrientTableRecordId: [...codes] }),
+        ([nutrientTableId, codes]) => ({
+          nutrientTableId,
+          nutrientTableRecordId: [...codes],
+        }),
       );
 
       const nutrientRecords = conditions.length > 0
         ? await NutrientTableRecord.findAll({
             attributes: ['nutrientTableId', 'nutrientTableRecordId'],
-            include: [{ association: 'fields' }, { association: 'nutrients' }],
-            where: conditions.length > 1 ? { [Op.or]: conditions } : conditions[0],
+            include: [
+              { association: 'fields' },
+              { association: 'nutrients' },
+            ],
+            where: conditions.length > 1
+              ? { [Op.or]: conditions }
+              : conditions[0],
           })
         : [];
 

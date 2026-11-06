@@ -46,7 +46,11 @@ export default () => {
 
   describe('user disabled', () => {
     beforeAll(async () => {
-      await User.update({ disabledAt: new Date() }, { where: { email: 'test-user@example.com' } });
+      await User.update({
+        disabledAt: new Date(),
+      }, {
+        where: { email: 'test-user@example.com' },
+      });
     });
 
     it('should return 401 when user disabled', async () => {
@@ -59,7 +63,9 @@ export default () => {
     });
 
     afterAll(async () => {
-      await User.update({ disabledAt: null }, { where: { email: 'test-user@example.com' } });
+      await User.update({ disabledAt: null }, {
+        where: { email: 'test-user@example.com' },
+      });
     });
   });
 };

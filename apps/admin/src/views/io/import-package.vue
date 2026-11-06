@@ -680,7 +680,9 @@ const dropzoneHint = computed(() => {
   if (replaceBlocked.value)
     return t('io.import.package.replaceBlocked');
 
-  return hasFile.value ? t('io.import.package.replace') : t('io.import.package.browse');
+  return hasFile.value
+    ? t('io.import.package.replace')
+    : t('io.import.package.browse');
 });
 
 function formatSize(bytes: number) {
@@ -688,7 +690,9 @@ function formatSize(bytes: number) {
 }
 
 function fileLabel(name: string) {
-  return name === UPLOADED_FILE ? t('io.verification.uploadedFile') : name;
+  return name === UPLOADED_FILE
+    ? t('io.verification.uploadedFile')
+    : name;
 }
 
 const dragDepth = ref(0);
@@ -764,8 +768,15 @@ function onDrop(event: DragEvent) {
 }
 
 function uploadFailureNotice(err: unknown): Notice {
-  if (!(err instanceof UploadFailure))
-    return { type: 'error', key: 'io.import.uploadError.unexpected', params: { message: getErrorMessage(err) } };
+  if (!(err instanceof UploadFailure)) {
+    return {
+      type: 'error',
+      key: 'io.import.uploadError.unexpected',
+      params: {
+        message: getErrorMessage(err),
+      },
+    };
+  }
 
   switch (err.reason) {
     case 'cancelled':
@@ -777,7 +788,11 @@ function uploadFailureNotice(err: unknown): Notice {
     case 'storage':
       return { type: 'error', key: 'io.import.uploadError.storage' };
     default:
-      return { type: 'error', key: 'io.import.uploadError.unexpected', params: { message: err.message } };
+      return {
+        type: 'error',
+        key: 'io.import.uploadError.unexpected',
+        params: { message: err.message },
+      };
   }
 }
 
@@ -864,7 +879,9 @@ async function uploadAndValidate() {
     if (current !== run || err instanceof PollingCancelled)
       return;
 
-    showValidationFailure(null, t('io.import.validation.unexpected', { message: getErrorMessage(err) }));
+    showValidationFailure(null, t('io.import.validation.unexpected', {
+      message: getErrorMessage(err),
+    }));
   }
 }
 
@@ -915,12 +932,16 @@ const targetLocales = computed(() => summary.value?.targetLocales ?? []);
 
 const presentTypes = computed(() => {
   const contents = summary.value;
-  return contents ? packageFileTypes.filter(type => contents.files[type]) : [];
+  return contents
+    ? packageFileTypes.filter(type => contents.files[type])
+    : [];
 });
 
 // Position of the sliding thumb: 0, 1 or 2; -1 when nothing is selected
 function thumbIndex(value: ConflictStrategy | undefined) {
-  return value ? conflictStrategies.indexOf(value) : -1;
+  return value
+    ? conflictStrategies.indexOf(value)
+    : -1;
 }
 
 const activeFilterCount = computed(() =>
@@ -1002,7 +1023,9 @@ function backToOptions() {
 
 function formatEta(seconds: number) {
   if (seconds < 60) {
-    const count = seconds < 10 ? Math.max(1, Math.ceil(seconds)) : Math.ceil(seconds / 5) * 5;
+    const count = seconds < 10
+      ? Math.max(1, Math.ceil(seconds))
+      : Math.ceil(seconds / 5) * 5;
     return t('io.import.progress.upload.secondsRemaining', count);
   }
 
@@ -1030,9 +1053,14 @@ const progressPanel = computed<{
         heading: t('io.import.progress.upload.heading'),
         icon: '$upload',
         title: t('io.import.progress.upload.title', { percent: upload.percent.value }),
-        subtitle: remaining === null ? transferred : `${transferred} · ${formatEta(remaining)}`,
+        subtitle: remaining === null
+          ? transferred
+          : `${transferred} · ${formatEta(remaining)}`,
         value: upload.percent.value,
-        cancel: { label: t('io.import.progress.upload.cancel'), action: cancelUpload },
+        cancel: {
+          label: t('io.import.progress.upload.cancel'),
+          action: cancelUpload,
+        },
       };
     }
     case 'verifying':
@@ -1042,7 +1070,10 @@ const progressPanel = computed<{
         title: t('io.import.progress.validation.title'),
         subtitle: null,
         value: null,
-        cancel: { label: t('io.import.progress.validation.cancel'), action: cancelValidation },
+        cancel: {
+          label: t('io.import.progress.validation.cancel'),
+          action: cancelValidation,
+        },
       };
     case 'importing':
       return {
@@ -1065,17 +1096,23 @@ const steps = computed<{ key: string; title: string; detail: string; icon: strin
 
   const uploadStep: StepState = ['select', 'file-selected'].includes(s)
     ? 'pending'
-    : s === 'uploading' ? 'active' : 'done';
+    : s === 'uploading'
+      ? 'active'
+      : 'done';
   const verifyStep: StepState = ['select', 'file-selected', 'uploading'].includes(s)
     ? 'pending'
     : s === 'verifying'
       ? 'active'
-      : s === 'verify-failed' ? 'failed' : 'done';
+      : s === 'verify-failed'
+        ? 'failed'
+        : 'done';
   const importStep: StepState = s === 'importing'
     ? 'active'
     : s === 'done'
       ? 'done'
-      : s === 'import-failed' ? 'failed' : 'pending';
+      : s === 'import-failed'
+        ? 'failed'
+        : 'pending';
 
   const detail = (state: StepState, map: Partial<Record<StepState, string>>) => map[state] ?? '';
   const inProgress = t('io.import.steps.inProgress');
@@ -1086,9 +1123,13 @@ const steps = computed<{ key: string; title: string; detail: string; icon: strin
       title: t('io.import.steps.upload._'),
       icon: 'fas fa-cloud-arrow-up',
       detail: detail(uploadStep, {
-        pending: s === 'file-selected' ? t('io.import.steps.upload.ready') : t('io.import.steps.upload.waiting'),
+        pending: s === 'file-selected'
+          ? t('io.import.steps.upload.ready')
+          : t('io.import.steps.upload.waiting'),
         active: inProgress,
-        done: t('io.import.steps.upload.done', { size: formatSize(uploadedSize.value) }),
+        done: t('io.import.steps.upload.done', {
+          size: formatSize(uploadedSize.value),
+        }),
       }),
       state: uploadStep,
     },
@@ -1111,7 +1152,9 @@ const steps = computed<{ key: string; title: string; detail: string; icon: strin
       title: t('io.import.steps.import._'),
       icon: 'fas fa-database',
       detail: detail(importStep, {
-        pending: verifyStep === 'failed' ? t('io.import.steps.import.blocked') : t('io.import.steps.import.pending'),
+        pending: verifyStep === 'failed'
+          ? t('io.import.steps.import.blocked')
+          : t('io.import.steps.import.pending'),
         active: inProgress,
         done: t('io.import.steps.import.done'),
         failed: t('io.import.steps.import.failed'),
@@ -1127,7 +1170,9 @@ const steps = computed<{ key: string; title: string; detail: string; icon: strin
     emphasis: step.state === 'done'
       ? 'done'
       : i === focus
-        ? (step.state === 'failed' ? 'failed' : 'current')
+        ? (step.state === 'failed'
+            ? 'failed'
+            : 'current')
         : 'pending',
   }));
 });

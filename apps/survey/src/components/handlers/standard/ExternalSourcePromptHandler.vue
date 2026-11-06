@@ -25,7 +25,9 @@ const { food } = useFoodPromptUtils();
 const { meal } = useMealPromptUtils();
 
 const getInitialState = computed<PromptStates['external-source-prompt']>(() => ({
-  searchTerm: props.prompt.initialSearch === 'searchTerm' ? getSearchTerm(food.value) : null,
+  searchTerm: props.prompt.initialSearch === 'searchTerm'
+    ? getSearchTerm(food.value)
+    : null,
   type: undefined,
   data: undefined,
 }));
@@ -34,9 +36,12 @@ function commitAnswer() {
   const survey = useSurvey();
   const foodEntry = food.value;
 
-  survey.updateFood({ foodId: foodEntry.id, update: {
-    external: { ...foodEntry.external, [props.prompt.source.type]: state.value },
-  } });
+  survey.updateFood({
+    foodId: foodEntry.id,
+    update: {
+      external: { ...foodEntry.external, [props.prompt.source.type]: state.value },
+    },
+  });
 }
 
 const { state, action: composableAction } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);

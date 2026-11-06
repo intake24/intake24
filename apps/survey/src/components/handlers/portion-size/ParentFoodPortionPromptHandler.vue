@@ -45,7 +45,9 @@ function getInitialState(): PromptStates['parent-food-portion-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null
+      ? 1
+      : 0,
   };
 }
 
@@ -80,7 +82,10 @@ function commitAnswer() {
 
   const survey = useSurvey();
 
-  survey.updateFood({ foodId: food.value.id, update: { portionSize } });
+  survey.updateFood({
+    foodId: food.value.id,
+    update: { portionSize },
+  });
   survey.addFoodFlag(food.value.id, 'portion-size-method-complete');
 
   clearStoredState();

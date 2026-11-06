@@ -109,7 +109,13 @@ async function fetchIetfLanguageTags(): Promise<IetfLanguageTag[]> {
 async function initDefaultData(db: KyselyDatabases) {
   log.step('Initializing default data...');
   await Promise.all(
-    (['languages', 'locales', 'nutrientUnits', 'nutrientTypes', 'surveySchemes'] as const)
+    ([
+      'languages',
+      'locales',
+      'nutrientUnits',
+      'nutrientTypes',
+      'surveySchemes',
+    ] as const)
       .map(table => db.system.deleteFrom(table).execute()),
   );
   log.success('Cleared existing default data.');
@@ -172,7 +178,12 @@ async function initDefaultData(db: KyselyDatabases) {
         locales.map((locale) => {
           const { id: code, ...rest } = locale;
 
-          return { code, ...rest, createdAt: now, updatedAt: now };
+          return {
+            code,
+            ...rest,
+            createdAt: now,
+            updatedAt: now,
+          };
         }),
       )
       .execute();
@@ -268,7 +279,13 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
   */
   const { id: userId } = await db.system
     .insertInto('users')
-    .values({ name: superuser.name, email: superuser.email, verifiedAt: now, createdAt: now, updatedAt: now })
+    .values({
+      name: superuser.name,
+      email: superuser.email,
+      verifiedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    })
     .returningAll()
     .executeTakeFirstOrThrow();
   log.success('Created superuser account.');
@@ -276,7 +293,12 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
   const { hash, salt } = await defaultAlgorithm.hash(superuser.password);
   await db.system
     .insertInto('userPasswords')
-    .values({ userId, hash, salt, hasher: defaultAlgorithm.id })
+    .values({
+      userId,
+      hash,
+      salt,
+      hasher: defaultAlgorithm.id,
+    })
     .executeTakeFirstOrThrow();
   log.success('Set password for superuser account.');
 
@@ -301,7 +323,12 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
   */
   await db.system
     .insertInto('roleUser')
-    .values({ roleId, userId, createdAt: now, updatedAt: now })
+    .values({
+      roleId,
+      userId,
+      createdAt: now,
+      updatedAt: now,
+    })
     .execute();
   log.success('Assigned superuser role to superuser account.');
   /*

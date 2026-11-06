@@ -238,7 +238,13 @@ const sliceValid = computed(() => (
   && state.value.confirmed.slice
 ));
 const quantityValid = computed(() => state.value.confirmed.quantity);
-const validConditions = computed(() => [psmValid.value, typeValid.value, thicknessValid.value, sliceValid.value, quantityValid.value]);
+const validConditions = computed(() => [
+  psmValid.value,
+  typeValid.value,
+  thicknessValid.value,
+  sliceValid.value,
+  quantityValid.value,
+]);
 const isValid = computed(() => validConditions.value.every(condition => condition));
 
 const { updatePanel } = usePanel(state, validConditions);

@@ -37,7 +37,9 @@ export function mediable(mediable: MediaModel, prefix: string) {
     read: {
       method: 'GET',
       path: `${prefix}/media/:mediaId`,
-      pathParams: z.object({ mediaId: z.uuid() }),
+      pathParams: z.object({
+        mediaId: z.uuid(),
+      }),
       responses: {
         200: mediaEntry,
       },
@@ -47,7 +49,9 @@ export function mediable(mediable: MediaModel, prefix: string) {
     update: {
       method: 'PATCH',
       path: `${prefix}/media/:mediaId`,
-      pathParams: z.object({ mediaId: z.uuid() }),
+      pathParams: z.object({
+        mediaId: z.uuid(),
+      }),
       body: updateMediaRequest,
       responses: {
         200: mediaEntry,
@@ -58,7 +62,9 @@ export function mediable(mediable: MediaModel, prefix: string) {
     destroy: {
       method: 'DELETE',
       path: `${prefix}/media/:mediaId`,
-      pathParams: z.object({ mediaId: z.uuid() }),
+      pathParams: z.object({
+        mediaId: z.uuid(),
+      }),
       body: null,
       responses: {
         204: contract.noBody(),

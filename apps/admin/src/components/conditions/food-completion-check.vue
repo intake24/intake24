@@ -35,7 +35,10 @@ const { i18n } = useI18n();
 
 const { currentValue } = useCheck(props, { emit });
 
-const completionStateSelectList = foodCompletionStateOptions.map(state => ({ state, title: i18n.t(`survey-schemes.conditions.foodCompletion.${state}`) }));
+const completionStateSelectList = foodCompletionStateOptions.map(state => ({
+  state,
+  title: i18n.t(`survey-schemes.conditions.foodCompletion.${state}`),
+}));
 </script>
 
 <style lang="scss" scoped></style>

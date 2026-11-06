@@ -358,7 +358,10 @@ export default defineComponent({
 
     async function startRecall() {
       await survey.startRecall(true);
-      await router.push({ name: 'survey-recall', params: { surveyId: props.surveyId } });
+      await router.push({
+        name: 'survey-recall',
+        params: { surveyId: props.surveyId },
+      });
     };
 
     async function cancelRecall() {

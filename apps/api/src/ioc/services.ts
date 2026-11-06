@@ -146,7 +146,9 @@ export default (container: AwilixContainer<RequestIoC>): void => {
     userService: asFunction(userService).singleton(),
 
     commsService: asFunction(commsService).singleton(),
-    commsProvider: commsProvider ? asFunction(commsProviders[commsProvider]).singleton() : asValue(null),
+    commsProvider: commsProvider
+      ? asFunction(commsProviders[commsProvider]).singleton()
+      : asValue(null),
 
     cache: asClass(Cache).singleton(),
     filesystem: asClass(Filesystem).singleton(),

@@ -4,4 +4,11 @@ import read from './read.vue';
 import securables from './securables';
 import translations from './translations';
 
-export default { browse, create: form, read, edit: form, securables, translations };
+export default {
+  browse,
+  create: form,
+  read,
+  edit: form,
+  securables,
+  translations,
+};

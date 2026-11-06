@@ -322,7 +322,9 @@ watch(
 
 watch(scale, (newValue) => {
   outlineCoordinates.value
-    = newValue.version === 2 ? (chunk(newValue.outlineCoordinates, 2) as [number, number][]) : [];
+    = newValue.version === 2
+      ? (chunk(newValue.outlineCoordinates, 2) as [number, number][])
+      : [];
 });
 </script>
 

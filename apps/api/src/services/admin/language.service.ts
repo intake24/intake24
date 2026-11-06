@@ -28,7 +28,9 @@ function languageService({
   const languageForInitialization = async (
     languageId: string,
   ) => {
-    const language = await Language.findByPk(languageId, { attributes: ['id', 'code'] });
+    const language = await Language.findByPk(languageId, {
+      attributes: ['id', 'code'],
+    });
     if (!language)
       return getDefaultI18nMessages();
 
@@ -153,7 +155,9 @@ function languageService({
     input: UpdateLanguageRequest,
   ): Promise<Language> => {
     const language
-      = typeof languageId === 'string' ? await Language.findByPk(languageId) : languageId;
+      = typeof languageId === 'string'
+        ? await Language.findByPk(languageId)
+        : languageId;
 
     if (!language)
       throw new NotFoundError();
@@ -238,7 +242,9 @@ function languageService({
    * @returns {Promise<void>}
    */
   const deleteLanguageTranslations = async (languageId: string): Promise<void> => {
-    await LanguageTranslation.destroy({ where: { languageId } });
+    await LanguageTranslation.destroy({
+      where: { languageId },
+    });
     await i18nStore.reload();
   };
 
@@ -255,7 +261,12 @@ function languageService({
     if (id)
       where.id = id;
 
-    const languages = await Language.findAll({ where, include: [{ association: 'translations' }] });
+    const languages = await Language.findAll({
+      where,
+      include: [
+        { association: 'translations' },
+      ],
+    });
     if (!languages.length)
       return;
 
@@ -284,7 +295,12 @@ function languageService({
           );
 
           if (!translation) {
-            inserts.push({ languageId, application, section, messages });
+            inserts.push({
+              languageId,
+              application,
+              section,
+              messages,
+            });
 
             logger.debug(`Creating language messages for '${application}:${section}'.`);
             continue;
@@ -294,7 +310,9 @@ function languageService({
             continue;
 
           promises.push(
-            translation.update({ messages: mergeTranslations(messages, translation.messages) }),
+            translation.update({
+              messages: mergeTranslations(messages, translation.messages),
+            }),
           );
           logger.debug(`Updating language messages for '${application}:${section}'.`);
         }

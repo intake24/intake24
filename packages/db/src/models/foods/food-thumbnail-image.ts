@@ -15,7 +15,11 @@ import Food from './food';
 import ProcessedImage from './processed-image';
 
 @Scopes(() => ({
-  image: { include: [{ model: ProcessedImage, as: 'image' }] },
+  image: {
+    include: [
+      { model: ProcessedImage, as: 'image' },
+    ],
+  },
 }))
 @Table({
   modelName: 'FoodThumbnailImage',

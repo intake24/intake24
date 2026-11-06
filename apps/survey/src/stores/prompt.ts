@@ -52,7 +52,9 @@ export function getOrCreatePromptStateStore<T>(
           };
         },
         clearState(foodOrMealId: string | string[], promptId?: string) {
-          const ids = Array.isArray(foodOrMealId) ? foodOrMealId : [foodOrMealId];
+          const ids = Array.isArray(foodOrMealId)
+            ? foodOrMealId
+            : [foodOrMealId];
           if (!promptId) {
             ids.forEach((id) => {
               delete this.prompts[id];

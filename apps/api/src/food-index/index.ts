@@ -172,7 +172,9 @@ export class FoodIndex {
       return;
 
     // A pending "rebuild everything" request supersedes any individual locale requests.
-    const locales = this.rebuildAllRequested ? undefined : [...this.dirtyLocales];
+    const locales = this.rebuildAllRequested
+      ? undefined
+      : [...this.dirtyLocales];
 
     this.dirtyLocales.clear();
     this.rebuildAllRequested = false;
@@ -292,7 +294,9 @@ export class FoodIndex {
 
     this.indexWorker.on('message', msg => this.dispatchWorkerResponse(msg));
     this.indexWorker.on('error', (error) => {
-      this.failWorker(error);
+      this.failWorker(error instanceof Error
+        ? error
+        : new Error(`Food index worker threw a non-Error value: ${String(error)}`));
     });
     this.indexWorker.on('exit', (code) => {
       if (!this.closeRequested)
@@ -314,7 +318,10 @@ export class FoodIndex {
     let locales: string[] | undefined;
 
     if (localeId) {
-      locales = (await FoodsLocale.findAll({ attributes: ['id'], where: { id: localeId } }))
+      locales = (await FoodsLocale.findAll({
+        attributes: ['id'],
+        where: { id: localeId },
+      }))
         .map(locale => locale.id);
 
       if (locales.length === 0) {

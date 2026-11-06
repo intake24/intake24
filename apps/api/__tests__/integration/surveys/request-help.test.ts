@@ -40,7 +40,12 @@ export default () => {
   it('should return 400 when both email and phone empty', async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['email', 'phone'], {
       bearer: 'respondent',
-      input: { name: 'John', message: 'Hello', email: null, phone: null },
+      input: {
+        name: 'John',
+        message: 'Hello',
+        email: null,
+        phone: null,
+      },
     });
   });
 
@@ -92,7 +97,12 @@ export default () => {
   it('should return 200 | phone only', async () => {
     await suite.sharedTests.assertAcknowledged('post', url, {
       bearer: 'respondent',
-      input: { name: 'John', phone: '+44 1234 567 890', phoneCountry: 'GB', message: 'Help me!' },
+      input: {
+        name: 'John',
+        phone: '+44 1234 567 890',
+        phoneCountry: 'GB',
+        message: 'Help me!',
+      },
     });
   });
 };

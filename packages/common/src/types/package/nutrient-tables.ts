@@ -27,8 +27,14 @@ export const pkgV2NutrientTableRecord = z.object({
   recordId: z.string(),
   name: z.string(),
   localName: z.string().optional(),
-  nutrients: z.array(z.tuple([z.string(), z.number()])),
-  fields: z.array(z.tuple([z.string(), z.string()])),
+  nutrients: z.array(z.tuple([
+    z.string(),
+    z.number(),
+  ])),
+  fields: z.array(z.tuple([
+    z.string(),
+    z.string(),
+  ])),
 });
 
 export type PkgV2NutrientTableRecord = z.infer<typeof pkgV2NutrientTableRecord>;

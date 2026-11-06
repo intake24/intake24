@@ -120,11 +120,13 @@ const { i18n: { t } } = useI18n();
 
 const dialog = ref(false);
 const loading = ref(false);
-const { data, errors, post, reset } = useForm({ data: {
-  passwordCurrent: null,
-  password: null,
-  passwordConfirm: null,
-} });
+const { data, errors, post, reset } = useForm({
+  data: {
+    passwordCurrent: null,
+    password: null,
+    passwordConfirm: null,
+  },
+});
 const showPassword = reactive({
   current: false,
   password: false,

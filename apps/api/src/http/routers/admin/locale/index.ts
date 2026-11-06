@@ -5,4 +5,11 @@ import { splitWord } from './split-word.router';
 import { standardUnit } from './standard-unit.router';
 import { synonymSet } from './synonym-set.router';
 
-export default { locale, foodBuilder, splitList, splitWord, standardUnit, synonymSet };
+export default {
+  locale,
+  foodBuilder,
+  splitList,
+  splitWord,
+  standardUnit,
+  synonymSet,
+};

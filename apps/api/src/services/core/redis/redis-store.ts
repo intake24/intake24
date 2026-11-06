@@ -28,7 +28,9 @@ export default abstract class RedisStore {
    */
   init(): Redis {
     const { url, ...options } = this.config;
-    this.redis = url ? new Redis(url, options) : new Redis(options);
+    this.redis = url
+      ? new Redis(url, options)
+      : new Redis(options);
 
     this.logger.info(`Redis connection (${this.constructor.name}) has been initialized.`);
 
@@ -60,7 +62,9 @@ export default abstract class RedisStore {
     if (!fullKeys.length)
       return false;
 
-    const keys = keyPrefix ? fullKeys.map(key => key.replace(keyPrefix, '')) : fullKeys;
+    const keys = keyPrefix
+      ? fullKeys.map(key => key.replace(keyPrefix, ''))
+      : fullKeys;
 
     const result = await this.redis.del(keys);
 

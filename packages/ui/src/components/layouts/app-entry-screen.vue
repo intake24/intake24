@@ -61,7 +61,9 @@ export default defineComponent({
 
   setup(props) {
     const hasIcon = computed(() => typeof props.icon === 'string' || props.icon);
-    const iconFile = computed(() => (typeof props.icon === 'string' ? props.icon : iconPrimary));
+    const iconFile = computed(() => (typeof props.icon === 'string'
+      ? props.icon
+      : iconPrimary));
 
     return {
       hasIcon,

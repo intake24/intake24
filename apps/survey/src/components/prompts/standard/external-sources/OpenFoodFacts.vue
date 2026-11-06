@@ -222,7 +222,9 @@ export type SearchResponse = {
 const app = useApp();
 const userAgent = computed(() => {
   const surveyId = useSurvey().slug;
-  return surveyId ? `intake24:${surveyId}` : 'intake24';
+  return surveyId
+    ? `intake24:${surveyId}`
+    : 'intake24';
 });
 
 const { translatePrompt } = usePromptUtils(props, { emit });
@@ -307,7 +309,9 @@ function getProductName(product: OOFProduct, withQuantity = false) {
   const genericName = product[`generic_name_${lang.value}`] || product.generic_name_en || product.generic_name;
   const finalName = name || genericName;
 
-  return withQuantity && product.quantity ? `${finalName} (${product.quantity})` : finalName;
+  return withQuantity && product.quantity
+    ? `${finalName} (${product.quantity})`
+    : finalName;
 }
 
 const selectedProductDetails = computed(() => {
@@ -352,7 +356,9 @@ async function fetchProduct(barcode: string) {
   try {
     const { data: { product } } = await client.get<OOFProductResponse>(`${productBaseUrl.value}/${barcode}`, {
       params: {
-        fields: productFields.value.length ? productFields.value.join(',') : undefined,
+        fields: productFields.value.length
+          ? productFields.value.join(',')
+          : undefined,
       },
       signal: clientCtrl.signal,
     });
@@ -384,10 +390,16 @@ async function fetchProducts(search: string) {
       params: {
         ...searchParams,
         ...props.prompt.source.query,
-        categories_tags: categoriesTags.value.length ? categoriesTags.value.join('|') : undefined,
+        categories_tags: categoriesTags.value.length
+          ? categoriesTags.value.join('|')
+          : undefined,
         search_terms: search,
-        fields: searchFields.value.length ? searchFields.value.join(',') : undefined,
-        page: (response.value.searchTerm === search ? response.value.data?.page : 1) ?? 1,
+        fields: searchFields.value.length
+          ? searchFields.value.join(',')
+          : undefined,
+        page: (response.value.searchTerm === search
+          ? response.value.data?.page
+          : 1) ?? 1,
       },
       signal: clientCtrl.signal,
     });

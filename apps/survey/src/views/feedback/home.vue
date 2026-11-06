@@ -150,7 +150,9 @@ export default defineComponent({
   },
 
   beforeRouteEnter({ params }) {
-    return useSurvey().feedbackAllowed ? true : { name: 'survey-home', params };
+    return useSurvey().feedbackAllowed
+      ? true
+      : { name: 'survey-home', params };
   },
 
   props: {
@@ -218,7 +220,10 @@ export default defineComponent({
     const { feedbackScheme, surveyId } = this;
 
     if (!feedbackScheme) {
-      this.$router.push({ name: 'feedback-error', params: { surveyId } });
+      this.$router.push({
+        name: 'feedback-error',
+        params: { surveyId },
+      });
       return;
     }
 
@@ -231,7 +236,10 @@ export default defineComponent({
       const { physicalData, submissions } = await this.getUserData(surveyId);
 
       if (feedbackScheme.physicalDataFields.some(item => physicalData[item] === null)) {
-        this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
+        this.$router.push({
+          name: 'feedback-physical-data',
+          params: { surveyId },
+        });
         return;
       }
 
@@ -250,7 +258,10 @@ export default defineComponent({
       this.buildFeedback();
     }
     catch (err) {
-      await this.$router.push({ name: 'feedback-error', params: { surveyId } });
+      await this.$router.push({
+        name: 'feedback-error',
+        params: { surveyId },
+      });
 
       throw err;
     }
@@ -282,7 +293,9 @@ export default defineComponent({
     async fetchSubmissions(survey: string): Promise<FeedbackSubmissionEntry[]> {
       const { data: { data, meta } } = await this.$http.get<Pagination<FeedbackSubmissionEntry>>(
         'user/feedback/submissions',
-        { params: { survey } },
+        {
+          params: { survey },
+        },
       );
 
       if (meta.page >= meta.lastPage)
@@ -291,7 +304,9 @@ export default defineComponent({
       for (let page = meta.page + 1; page <= meta.lastPage; page++) {
         const { data: { data: pageData } } = await this.$http.get<Pagination<FeedbackSubmissionEntry>>(
           'user/feedback/submissions',
-          { params: { survey, page } },
+          {
+            params: { survey, page },
+          },
         );
 
         data.push(...pageData);
@@ -320,7 +335,10 @@ export default defineComponent({
       } = this;
 
       if (!feedbackDicts || !feedbackScheme || !userDemographic) {
-        this.$router.push({ name: 'feedback-error', params: { surveyId } });
+        this.$router.push({
+          name: 'feedback-error',
+          params: { surveyId },
+        });
         return;
       }
 
@@ -332,7 +350,10 @@ export default defineComponent({
 
       const submissionsCount = surveyStats.submissions.length;
       if (!submissionsCount) {
-        this.$router.push({ name: 'survey-home', params: { surveyId } });
+        this.$router.push({
+          name: 'survey-home',
+          params: { surveyId },
+        });
         return;
       }
 

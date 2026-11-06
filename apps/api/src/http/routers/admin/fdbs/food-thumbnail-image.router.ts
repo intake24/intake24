@@ -29,10 +29,15 @@ export function foodThumbnailImage() {
 
         if (!res.success) {
           // i18n helper functions expect Express req while req here is TsRestRequest
-          throw ValidationError.from({ path: 'image', i18n: { type: 'file._' } });
+          throw ValidationError.from({
+            path: 'image',
+            i18n: { type: 'file._' },
+          });
         }
 
-        const food = await Food.findOne({ where: { localeId, code: foodCode } });
+        const food = await Food.findOne({
+          where: { localeId, code: foodCode },
+        });
 
         if (!food)
           return { status: 404 as const, body: undefined };

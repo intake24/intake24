@@ -21,10 +21,22 @@ import { jobRequiresFile } from '@intake24/common/types';
 import { FoodsLocale, Language, securableScope, SystemLocale } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { localeId, field }: { localeId?: string; field: string }) {
-  const where: WhereOptions = localeId ? { id: { [Op.ne]: localeId } } : {};
+  const where: WhereOptions = localeId
+    ? {
+        id: { [Op.ne]: localeId },
+      }
+    : {};
 
-  if (!(await unique({ model: SystemLocale, condition: { field, value }, options: { where } }))) {
-    throw ValidationError.from({ code: '$unique', path: field, i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: SystemLocale,
+    condition: { field, value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      code: '$unique',
+      path: field,
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
@@ -45,11 +57,18 @@ async function checkVisibility<T extends AppRoute | AppRouter>(values: Partial<R
       await req.scope.cradle.aclService.findAndCheckVisibility(
         model,
         'use',
-        { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } },
+        {
+          attributes: ['id', 'ownerId', 'visibility'],
+          where: { code: value },
+        },
       );
     }
     catch {
-      throw ValidationError.from({ code: '$restricted', path: key, i18n: { type: 'restricted._' } });
+      throw ValidationError.from({
+        code: '$restricted',
+        path: key,
+        i18n: { type: 'restricted._' },
+      });
     }
   }
 }
@@ -59,7 +78,9 @@ export function locale() {
 
   return initServer().router(contract.admin.locale.locale, {
     browse: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ query, req }) => {
         const {
           aclService,
@@ -69,7 +90,12 @@ export function locale() {
         const paginateOptions: PaginateOptions = {
           query,
           columns: ['code', 'englishName', 'localName'],
-          order: [[fn('lower', col('Locale.code')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('Locale.code')),
+              'ASC',
+            ],
+          ],
         };
 
         if (await aclService.hasPermission('locales:browse')) {
@@ -79,7 +105,12 @@ export function locale() {
 
         const locales = await SystemLocale.paginate({
           ...paginateOptions,
-          where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+          where: {
+            [Op.or]: {
+              ownerId: userId,
+              '$securables.action$': ['read', 'edit', 'delete'],
+            },
+          },
           ...securableScope(userId),
           subQuery: false,
         });
@@ -88,7 +119,9 @@ export function locale() {
       },
     },
     store: {
-      middleware: [permission('locales', 'locales:create')],
+      middleware: [
+        permission('locales', 'locales:create'),
+      ],
       handler: async ({ body, req }) => {
         await Promise.all([
           uniqueMiddleware(body.code, { field: 'code' }),
@@ -110,22 +143,32 @@ export function locale() {
         if (body.foodIndexEnabled)
           await req.scope.cradle.cache.setAdd('locales-index', locale.code);
 
-        return { status: 201, body: localeResponse(locale) };
+        return {
+          status: 201,
+          body: localeResponse(locale),
+        };
       },
     },
     refs: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async () => {
         const foodIndexLanguageBackends = Object.entries(languageBackends).map(([id, { name }]) => ({
           id,
           name,
         }));
 
-        return { status: 200, body: { foodIndexLanguageBackends } };
+        return {
+          status: 200,
+          body: { foodIndexLanguageBackends },
+        };
       },
     },
     read: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId }, req }) => {
         const locale = await req.scope.cradle.aclService.findAndCheckRecordAccess(SystemLocale, 'read', {
           where: { id: localeId },
@@ -135,21 +178,31 @@ export function locale() {
           ],
         });
 
-        return { status: 200, body: localeResponse(locale) };
+        return {
+          status: 200,
+          body: localeResponse(locale),
+        };
       },
     },
     getByCode: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { code }, req }) => {
         const locale = await req.scope.cradle.aclService.findAndCheckRecordAccess(SystemLocale, 'read', {
           where: { code },
         });
 
-        return { status: 200, body: localeResponse(locale) };
+        return {
+          status: 200,
+          body: localeResponse(locale),
+        };
       },
     },
     update: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { localeId }, req }) => {
         await Promise.all([
           uniqueMiddleware(body.englishName, { field: 'englishName', localeId }),
@@ -173,7 +226,10 @@ export function locale() {
         if (body.foodIndexEnabled && !systemLocale.foodIndexEnabled)
           await req.scope.cradle.cache.setAdd('locales-index', systemLocale.code);
 
-        await Promise.all([systemLocale.update(body), foodsLocale.update(body)]);
+        await Promise.all([
+          systemLocale.update(body),
+          foodsLocale.update(body),
+        ]);
 
         await systemLocale.reload({
           include: [
@@ -182,16 +238,26 @@ export function locale() {
           ],
         });
 
-        return { status: 200, body: localeResponse(systemLocale) };
+        return {
+          status: 200,
+          body: localeResponse(systemLocale),
+        };
       },
     },
     destroy: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId }, req }) => {
         const systemLocale = await req.scope.cradle.aclService.findAndCheckRecordAccess(SystemLocale, 'delete', {
           attributes: ['id', 'code'],
           where: { id: localeId },
-          include: [{ association: 'surveys', attributes: ['id'] }],
+          include: [
+            {
+              association: 'surveys',
+              attributes: ['id'],
+            },
+          ],
         });
         const foodsLocale = await FoodsLocale.findByPk(systemLocale.code);
         if (!systemLocale.surveys || !foodsLocale)
@@ -209,7 +275,10 @@ export function locale() {
       },
     },
     tasks: {
-      middleware: [permission('locales'), upload.single('params[file]')],
+      middleware: [
+        permission('locales'),
+        upload.single('params[file]'),
+      ],
       handler: async ({ file, params: { localeId }, body, req }) => {
         const {
           aclService,

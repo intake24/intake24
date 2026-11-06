@@ -76,7 +76,9 @@ export function useJobPolling(options: JobPollingOptions = {}) {
             throw new PollingCancelled();
 
           // Asking again won't fix a client error; anything else gets a few more attempts
-          const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+          const status = axios.isAxiosError(err)
+            ? err.response?.status
+            : undefined;
           if ((status && status < 500) || ++errors >= maxConsecutiveErrors)
             throw err;
         }

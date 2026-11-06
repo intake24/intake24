@@ -20,7 +20,9 @@ export function useFetchList<T = any>(props: UseFetchListProps) {
   const query = toRef(props.query);
 
   const http = useHttp();
-  const apiUrl = computed(() => (id.value ? url.value.replace(':id', id.value) : url.value));
+  const apiUrl = computed(() => (id.value
+    ? url.value.replace(':id', id.value)
+    : url.value));
 
   const dialog = ref(false);
   const loading = ref(false);
@@ -38,7 +40,12 @@ export function useFetchList<T = any>(props: UseFetchListProps) {
       const {
         data: { data, meta },
       } = await http.get<Pagination<T>>(apiUrl.value, {
-        params: { ...(query?.value ?? {}), search: search.value, page: page.value, limit: 6 },
+        params: {
+          ...(query?.value ?? {}),
+          search: search.value,
+          page: page.value,
+          limit: 6,
+        },
       });
 
       items.value = data;
@@ -53,7 +60,14 @@ export function useFetchList<T = any>(props: UseFetchListProps) {
     loading.value = true;
 
     try {
-      const { data: { data } } = await http.get<Pagination<T>>(apiUrl.value, { params: { ...query.value, [key]: value, page: 1, limit: 6 } });
+      const { data: { data } } = await http.get<Pagination<T>>(apiUrl.value, {
+        params: {
+          ...query.value,
+          [key]: value,
+          page: 1,
+          limit: 6,
+        },
+      });
 
       return data;
     }

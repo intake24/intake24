@@ -92,7 +92,9 @@ const state = computed({
     return props.modelValue;
   },
   set(value) {
-    emit('update:modelValue', typeof value === 'undefined' || value === null ? undefined : value);
+    emit('update:modelValue', typeof value === 'undefined' || value === null
+      ? undefined
+      : value);
   },
 });
 

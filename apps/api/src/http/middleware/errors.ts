@@ -72,7 +72,10 @@ export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ValidationError) {
       const { message, code } = err;
-      res.status(code).json({ errors: err.getErrors(req.scope.cradle.i18nService), message });
+      res.status(code).json({
+        errors: err.getErrors(req.scope.cradle.i18nService),
+        message,
+      });
       return;
     }
     next(err);
@@ -81,7 +84,10 @@ export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ZodError) {
       const { details, message } = fromZodError(err);
-      res.status(400).json({ errors: mapZodIssues(details), message });
+      res.status(400).json({
+        errors: mapZodIssues(details),
+        message,
+      });
       return;
     }
     next(err);
@@ -92,7 +98,14 @@ export default (app: Express, { logger }: Ops): void => {
       const { field = 'file', message } = err;
 
       res.status(400).json({
-        errors: { [field]: { param: field, msg: message, location: 'body', value: null } },
+        errors: {
+          [field]: {
+            param: field,
+            msg: message,
+            location: 'body',
+            value: null,
+          },
+        },
         message,
       });
       return;

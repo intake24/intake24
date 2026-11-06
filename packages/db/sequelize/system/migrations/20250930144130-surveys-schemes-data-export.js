@@ -83,7 +83,10 @@ export default {
           `UPDATE survey_schemes SET data_export = :dataExport WHERE id = :id;`,
           {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
-            replacements: { id, dataExport: JSON.stringify(dataExport) },
+            replacements: {
+              id,
+              dataExport: JSON.stringify(dataExport),
+            },
             transaction,
           },
         );

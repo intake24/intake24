@@ -50,7 +50,9 @@ export function portionSize() {
     },
     drinkwareSets: async ({ query: { id }, req }) => {
       const lookupResults = await Promise.all(
-        (Array.isArray(id) ? id : [id]).map(setId => req.scope.cradle.drinkwareSetService.getDrinkwareSet(setId)),
+        (Array.isArray(id)
+          ? id
+          : [id]).map(setId => req.scope.cradle.drinkwareSetService.getDrinkwareSet(setId)),
       );
       const successfulResults = lookupResults.filter(
         (entry): entry is DrinkwareSetEntry => entry !== undefined,

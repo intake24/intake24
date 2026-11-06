@@ -5,7 +5,9 @@ import { Readable } from 'node:stream';
 import { Transform } from '@json2csv/node';
 
 export async function locales({ kyselyDb }: ResourceOps) {
-  const { total } = await kyselyDb.system.selectFrom('locales').select(({ fn }) => [fn.count<number>('id').as('total')]).executeTakeFirstOrThrow();
+  const { total } = await kyselyDb.system.selectFrom('locales').select(({ fn }) => [
+    fn.count<number>('id').as('total'),
+  ]).executeTakeFirstOrThrow();
   const cursor = kyselyDb.system.selectFrom('locales').selectAll().orderBy('id').stream();
   const records = Readable.from(cursor);
 

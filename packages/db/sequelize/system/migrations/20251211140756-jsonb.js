@@ -18,7 +18,9 @@ export default {
             `UPDATE feedback_schemes SET ${column} = :def WHERE ${column} IS NULL;`,
             {
               type: queryInterface.sequelize.QueryTypes.UPDATE,
-              replacements: { def: JSON.stringify([]) },
+              replacements: {
+                def: JSON.stringify([]),
+              },
               transaction,
             },
           ),
@@ -72,7 +74,9 @@ export default {
         `UPDATE jobs SET params = :def WHERE params IS NULL;`,
         {
           type: queryInterface.sequelize.QueryTypes.UPDATE,
-          replacements: { def: JSON.stringify({}) },
+          replacements: {
+            def: JSON.stringify({}),
+          },
           transaction,
         },
       );
@@ -113,7 +117,9 @@ export default {
             `UPDATE survey_schemes SET ${column} = :def WHERE ${column} IS NULL;`,
             {
               type: queryInterface.sequelize.QueryTypes.UPDATE,
-              replacements: { def: JSON.stringify([]) },
+              replacements: {
+                def: JSON.stringify([]),
+              },
               transaction,
             },
           ),
@@ -124,7 +130,9 @@ export default {
         `UPDATE survey_schemes SET prompts = :def WHERE prompts IS NULL;`,
         {
           type: queryInterface.sequelize.QueryTypes.UPDATE,
-          replacements: { def: JSON.stringify({}) },
+          replacements: {
+            def: JSON.stringify({}),
+          },
           transaction,
         },
       );
@@ -139,7 +147,12 @@ export default {
       );
 
       await Promise.all(
-        ['settings', 'prompts', 'meals', 'data_export'].map(column =>
+        [
+          'settings',
+          'prompts',
+          'meals',
+          'data_export',
+        ].map(column =>
           queryInterface.sequelize.query(
             `ALTER TABLE survey_schemes ALTER COLUMN ${column} TYPE jsonb USING ${column}::jsonb;`,
             { transaction },
@@ -171,7 +184,9 @@ export default {
         `UPDATE surveys SET survey_scheme_overrides = :defaultOverrides WHERE survey_scheme_overrides IS NULL;`,
         {
           type: queryInterface.sequelize.QueryTypes.UPDATE,
-          replacements: { defaultOverrides: JSON.stringify(defaultOverrides) },
+          replacements: {
+            defaultOverrides: JSON.stringify(defaultOverrides),
+          },
           transaction,
         },
       );
@@ -199,7 +214,9 @@ export default {
         `UPDATE surveys SET search_settings = :defaultSearchSettings WHERE search_settings IS NULL;`,
         {
           type: queryInterface.sequelize.QueryTypes.UPDATE,
-          replacements: { defaultSearchSettings: JSON.stringify(defaultSearchSettings) },
+          replacements: {
+            defaultSearchSettings: JSON.stringify(defaultSearchSettings),
+          },
           transaction,
         },
       );
@@ -214,7 +231,9 @@ export default {
         `UPDATE surveys SET session = :defaultSessionSettings WHERE session IS NULL;`,
         {
           type: queryInterface.sequelize.QueryTypes.UPDATE,
-          replacements: { defaultSessionSettings: JSON.stringify(defaultSessionSettings) },
+          replacements: {
+            defaultSessionSettings: JSON.stringify(defaultSessionSettings),
+          },
           transaction,
         },
       );
@@ -256,7 +275,9 @@ export default {
         `UPDATE tasks SET params = :def WHERE params IS NULL;`,
         {
           type: queryInterface.sequelize.QueryTypes.UPDATE,
-          replacements: { def: JSON.stringify({}) },
+          replacements: {
+            def: JSON.stringify({}),
+          },
           transaction,
         },
       );

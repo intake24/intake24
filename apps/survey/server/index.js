@@ -2,7 +2,6 @@
 import './bootstrap.js';
 import fs from 'node:fs';
 import path from 'node:path';
-import { cspHashes } from '@vitejs/plugin-legacy';
 import express from 'express';
 import helmet from 'helmet';
 import config from './config.js';
@@ -52,7 +51,6 @@ async function startApp() {
             'https://www.gstatic.com/recaptcha/',
             'https://storage.googleapis.com',
             'https://*.googletagmanager.com',
-            ...cspHashes.map(hash => `'sha256-${hash}'`),
           ],
           styleSrc: [
             '\'self\'',

@@ -13,7 +13,9 @@ export const profile = contract.router({
     method: 'POST',
     path: '/user/password',
     body: strongPasswordWithConfirm
-      .extend({ passwordCurrent: z.string() })
+      .extend({
+        passwordCurrent: z.string(),
+      })
       .refine(data => data.password === data.passwordConfirm, {
         message: 'Passwords don\'t match',
         path: ['passwordConfirm'],
@@ -53,7 +55,10 @@ export const profile = contract.router({
     method: 'GET',
     path: '/user/submissions',
     query: z.object({
-      survey: z.union([z.string().max(128), z.array(z.string().max(128))]),
+      survey: z.union([
+        z.string().max(128),
+        z.array(z.string().max(128)),
+      ]),
     }),
     responses: {
       200: surveySubmissionAttributes.array(),

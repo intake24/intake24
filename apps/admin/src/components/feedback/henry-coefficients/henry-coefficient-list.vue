@@ -228,7 +228,9 @@ const { dialog, errors, form, items, add, edit, load, remove, reset, save, updat
 const sexes = sexesRef.map(value => ({
   title: t(`feedback-schemes.sexes.${value}`),
   value,
-  icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
+  icon: value === 'm'
+    ? 'fas fa-mars'
+    : 'fas fa-venus',
 }));
 
 function getGenderIcon(gender: Sex): string {

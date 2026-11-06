@@ -7,7 +7,9 @@ import { Language } from '@intake24/db';
 export function languageTranslation() {
   return initServer().router(contract.admin.languageTranslation, {
     browse: {
-      middleware: [permission('languages')],
+      middleware: [
+        permission('languages'),
+      ],
       handler: async ({ params: { languageId }, req }) => {
         const { aclService, languageService } = req.scope.cradle;
 
@@ -22,7 +24,9 @@ export function languageTranslation() {
       },
     },
     store: {
-      middleware: [permission('languages')],
+      middleware: [
+        permission('languages'),
+      ],
       handler: async ({ params: { languageId }, req }) => {
         const { aclService, languageService } = req.scope.cradle;
 
@@ -37,7 +41,9 @@ export function languageTranslation() {
       },
     },
     update: {
-      middleware: [permission('languages')],
+      middleware: [
+        permission('languages'),
+      ],
       handler: async ({ body, params: { languageId }, req }) => {
         const { aclService, languageService } = req.scope.cradle;
 
@@ -52,7 +58,9 @@ export function languageTranslation() {
       },
     },
     destroy: {
-      middleware: [permission('languages')],
+      middleware: [
+        permission('languages'),
+      ],
       handler: async ({ params: { languageId }, req }) => {
         const { aclService, languageService } = req.scope.cradle;
 
@@ -67,7 +75,9 @@ export function languageTranslation() {
       },
     },
     sync: {
-      middleware: [permission('languages')],
+      middleware: [
+        permission('languages'),
+      ],
       handler: async ({ params: { languageId }, req }) => {
         const { aclService, languageService } = req.scope.cradle;
 

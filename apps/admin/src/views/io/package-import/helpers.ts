@@ -49,7 +49,9 @@ export function normaliseErrorDetails(details: unknown, fallbackFile = UPLOADED_
     const groups = Object.entries(details.fileErrors as Record<string, unknown>)
       .map(([file, messages]) => ({
         file,
-        messages: Array.isArray(messages) ? messages.filter(isLocalisableMessage) : [],
+        messages: Array.isArray(messages)
+          ? messages.filter(isLocalisableMessage)
+          : [],
       }))
       .filter(group => group.messages.length > 0);
 
@@ -58,10 +60,21 @@ export function normaliseErrorDetails(details: unknown, fallbackFile = UPLOADED_
 
   if (Array.isArray(details)) {
     const messages = details.filter(isLocalisableMessage);
-    return messages.length ? [{ file: fallbackFile, messages }] : null;
+    return messages.length
+      ? [
+          { file: fallbackFile, messages },
+        ]
+      : null;
   }
 
-  return isLocalisableMessage(details) ? [{ file: fallbackFile, messages: [details] }] : null;
+  return isLocalisableMessage(details)
+    ? [
+        {
+          file: fallbackFile,
+          messages: [details],
+        },
+      ]
+    : null;
 }
 
 /** Comma-separated codes: trimmed, empty entries dropped */
@@ -98,7 +111,12 @@ export function isZipFile(file: File) {
   return zipExtension.test(file.name) || zipMimeTypes.includes(file.type);
 }
 
-const byteUnits = ['byte', 'kilobyte', 'megabyte', 'gigabyte'] as const;
+const byteUnits = [
+  'byte',
+  'kilobyte',
+  'megabyte',
+  'gigabyte',
+] as const;
 
 /** Human-readable size in binary units, matching how the server parses its size limit */
 export function formatBytes(bytes: number, locale?: string) {
@@ -114,7 +132,9 @@ export function formatBytes(bytes: number, locale?: string) {
     style: 'unit',
     unit: byteUnits[unit],
     unitDisplay: 'short',
-    maximumFractionDigits: unit === 0 ? 0 : 1,
+    maximumFractionDigits: unit === 0
+      ? 0
+      : 1,
   }).format(value);
 }
 
@@ -126,5 +146,7 @@ export function getErrorMessage(err: unknown): string {
       return data.message;
   }
 
-  return err instanceof Error ? err.message : String(err);
+  return err instanceof Error
+    ? err.message
+    : String(err);
 }

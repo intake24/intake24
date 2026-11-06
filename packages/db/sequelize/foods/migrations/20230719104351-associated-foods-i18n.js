@@ -66,14 +66,20 @@ export default {
       await queryInterface.changeColumn(
         'associated_foods',
         'generic_name',
-        { type: Sequelize.STRING(128), allowNull: false },
+        {
+          type: Sequelize.STRING(128),
+          allowNull: false,
+        },
         { transaction },
       );
 
       await queryInterface.changeColumn(
         'associated_foods',
         'text',
-        { type: Sequelize.STRING(1024), allowNull: false },
+        {
+          type: Sequelize.STRING(1024),
+          allowNull: false,
+        },
         { transaction },
       );
     }),

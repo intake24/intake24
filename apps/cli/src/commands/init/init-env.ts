@@ -94,10 +94,22 @@ async function initEnv(args: InitEnvArgs): Promise<void> {
       path: '../api',
       replacements: {
         secrets: [
-          { key: 'APP_SECRET', value: nanoid(64) },
-          { key: 'JWT_ACCESS_SECRET', value: nanoid(64) },
-          { key: 'JWT_ADMIN_REFRESH_SECRET', value: nanoid(64) },
-          { key: 'JWT_SURVEY_REFRESH_SECRET', value: nanoid(64) },
+          {
+            key: 'APP_SECRET',
+            value: nanoid(64),
+          },
+          {
+            key: 'JWT_ACCESS_SECRET',
+            value: nanoid(64),
+          },
+          {
+            key: 'JWT_ADMIN_REFRESH_SECRET',
+            value: nanoid(64),
+          },
+          {
+            key: 'JWT_SURVEY_REFRESH_SECRET',
+            value: nanoid(64),
+          },
         ],
         vapid: [
           { key: 'WEBPUSH_PUBLIC_KEY', value: vapidKeys.publicKey },

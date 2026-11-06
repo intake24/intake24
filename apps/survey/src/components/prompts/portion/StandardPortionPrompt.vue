@@ -131,7 +131,9 @@ const {
   getStandardUnitEstimateIn,
   getStandardUnitHowMany,
   standardUnitsLoaded,
-} = useStandardUnits({ units: computed(() => parameters.value.units) });
+} = useStandardUnits({
+  units: computed(() => parameters.value.units),
+});
 
 const state = ref(copy(props.modelValue));
 

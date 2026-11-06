@@ -37,8 +37,20 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['name', 'displayName', 'description', 'permissions.1'],
-        { input: { name: '', displayName: '', description: {}, permissions: [1, 'invalidId', '2'] } },
+        [
+          'name',
+          'displayName',
+          'description',
+          'permissions.1',
+        ],
+        {
+          input: {
+            name: '',
+            displayName: '',
+            description: {},
+            permissions: [1, 'invalidId', '2'],
+          },
+        },
       );
     });
 

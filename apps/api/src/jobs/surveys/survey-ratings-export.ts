@@ -61,7 +61,9 @@ export default class SurveyRatingsExport extends BaseJob<'SurveyRatingsExport'> 
   private async download(): Promise<void> {
     const { surveyId } = this.params;
 
-    const survey = await Survey.findByPk(surveyId, { attributes: ['id', 'slug'] });
+    const survey = await Survey.findByPk(surveyId, {
+      attributes: ['id', 'slug'],
+    });
     if (!survey)
       throw new NotFoundError(`Job ${this.name}: Survey record not found (${surveyId}).`);
 
@@ -69,7 +71,9 @@ export default class SurveyRatingsExport extends BaseJob<'SurveyRatingsExport'> 
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-${this.name}-${slug}-${timestamp}.csv`;
 
-    const total = await UserSurveyRating.count({ where: { surveyId } });
+    const total = await UserSurveyRating.count({
+      where: { surveyId },
+    });
     this.initProgress(total);
 
     let counter = 0;
@@ -84,7 +88,13 @@ export default class SurveyRatingsExport extends BaseJob<'SurveyRatingsExport'> 
           association: 'user',
           attributes: ['id'],
           required: true,
-          include: [{ association: 'aliases', attributes: ['username'], where: { surveyId } }],
+          include: [
+            {
+              association: 'aliases',
+              attributes: ['username'],
+              where: { surveyId },
+            },
+          ],
         },
       ],
     });
@@ -97,7 +107,10 @@ export default class SurveyRatingsExport extends BaseJob<'SurveyRatingsExport'> 
             value: (row: UserSurveyRating) => row.user?.aliases?.at(0)?.username,
           },
           { label: 'SurveyID', value: 'surveyId' },
-          { label: 'SurveySlug', value: () => slug },
+          {
+            label: 'SurveySlug',
+            value: () => slug,
+          },
           { label: 'SubmissionID', value: 'submissionId' },
           { label: 'Type', value: 'type' },
           { label: 'Rating', value: 'rating' },

@@ -87,7 +87,13 @@ export default defineComponent({
       this.$emit(`update`, { field, value });
     },
     updateCategoriesFirst(field: keyof FoodBrowser['categoriesFirst'], value: boolean | null) {
-      this.$emit(`update`, { field: 'categoriesFirst', value: { ...this.categoriesFirst, [field]: Boolean(value) } });
+      this.$emit(`update`, {
+        field: 'categoriesFirst',
+        value: {
+          ...this.categoriesFirst,
+          [field]: Boolean(value),
+        },
+      });
     },
   },
 });

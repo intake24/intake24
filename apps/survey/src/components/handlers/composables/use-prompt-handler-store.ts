@@ -32,13 +32,17 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
     return mealId;
   };
 
-  const getFoodOrMealId = props.prompt.component === 'edit-meal-prompt' ? getMealId : getFoodId;
+  const getFoodOrMealId = props.prompt.component === 'edit-meal-prompt'
+    ? getMealId
+    : getFoodId;
 
   const storedState: S | undefined
     = promptStore.prompts[getFoodOrMealId()]?.[props.prompt.component];
 
   const state = ref(
-    storedState ? merge<S>(getInitialState(), storedState) : getInitialState(),
+    storedState
+      ? merge<S>(getInitialState(), storedState)
+      : getInitialState(),
   ) as Ref<S>;
 
   const update = (data: S) => {
@@ -61,7 +65,10 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
 
     const foodId = getFoodId();
 
-    survey.updateFood({ foodId, update: { portionSizeMethodIndex: idx, portionSize: null } });
+    survey.updateFood({
+      foodId,
+      update: { portionSizeMethodIndex: idx, portionSize: null },
+    });
     survey.addFoodFlag(foodId, 'portion-size-option-complete');
     survey.removeFoodFlag(foodId, 'portion-size-method-complete');
     clearStoredState();
@@ -77,7 +84,10 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
 
     const portionSizeCompleteBefore = mealPortionSizeComplete(meal);
 
-    survey.updateFood({ foodId, update: { portionSize } });
+    survey.updateFood({
+      foodId,
+      update: { portionSize },
+    });
     survey.addFoodFlag(foodId, 'portion-size-method-complete');
 
     const portionSizeCompleteAfter = mealPortionSizeComplete(meal);
@@ -85,8 +95,12 @@ export function usePromptHandlerStore<P extends keyof PromptStates, S extends Pr
     // If this was the last remaining portion size, reset the selection to
     // the first food of the meal for the associated food prompts second pass
 
-    if (portionSizeCompleteAfter && !portionSizeCompleteBefore)
-      survey.setSelection({ mode: 'auto', element: { type: 'food', foodId: meal.foods[0].id } });
+    if (portionSizeCompleteAfter && !portionSizeCompleteBefore) {
+      survey.setSelection({
+        mode: 'auto',
+        element: { type: 'food', foodId: meal.foods[0].id },
+      });
+    }
   };
 
   const action = (type: string, ...args: [id?: string, params?: object]) => {

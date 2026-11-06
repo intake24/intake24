@@ -1,6 +1,8 @@
 import { createPermissions } from '../../utils.js';
 
-const permissions = [{ name: 'locales|recipe-foods', display_name: 'Locale recipe foods' }];
+const permissions = [
+  { name: 'locales|recipe-foods', display_name: 'Locale recipe foods' },
+];
 
 export default {
   up: async queryInterface =>

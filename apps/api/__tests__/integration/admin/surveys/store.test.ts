@@ -148,13 +148,19 @@ export default () => {
 
     it('should return 400 for duplicate slug', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['slug'], {
-        input: { ...mocker.system.survey(), slug: input.slug },
+        input: {
+          ...mocker.system.survey(),
+          slug: input.slug,
+        },
       });
     });
 
     it('should return 400 for duplicate name', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
-        input: { ...mocker.system.survey(), name: input.name },
+        input: {
+          ...mocker.system.survey(),
+          name: input.name,
+        },
       });
     });
   });

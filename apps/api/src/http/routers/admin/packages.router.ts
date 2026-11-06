@@ -6,7 +6,9 @@ import { contract } from '@intake24/common/contracts';
 export function packages() {
   return initServer().router(contract.admin.packages, {
     queueExport: {
-      middleware: [permission('packages:export')],
+      middleware: [
+        permission('packages:export'),
+      ],
       handler: async ({ req }) => {
         const jobScheduler = req.scope.cradle.scheduler.jobs;
 
@@ -16,11 +18,16 @@ export function packages() {
           { userId, type: 'PackageExport', params: req.body },
         );
 
-        return { status: 202, body: { jobId: job.id } };
+        return {
+          status: 202,
+          body: { jobId: job.id },
+        };
       },
     },
     queueVerification: {
-      middleware: [permission('packages:import')],
+      middleware: [
+        permission('packages:import'),
+      ],
       handler: async ({ req }) => {
         const jobScheduler = req.scope.cradle.scheduler.jobs;
 
@@ -30,11 +37,16 @@ export function packages() {
           { userId, type: 'PackageVerification', params: req.body },
         );
 
-        return { status: 202, body: { jobId: job.id } };
+        return {
+          status: 202,
+          body: { jobId: job.id },
+        };
       },
     },
     queueImport: {
-      middleware: [permission('packages:import')],
+      middleware: [
+        permission('packages:import'),
+      ],
       handler: async ({ req }) => {
         const jobScheduler = req.scope.cradle.scheduler.jobs;
 
@@ -44,7 +56,10 @@ export function packages() {
           { userId, type: 'PackageImport', params: req.body },
         );
 
-        return { status: 202, body: { jobId: job.id } };
+        return {
+          status: 202,
+          body: { jobId: job.id },
+        };
       },
     },
   });

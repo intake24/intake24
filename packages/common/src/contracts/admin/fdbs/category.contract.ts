@@ -107,7 +107,10 @@ export const category = contract.router({
   contents: {
     method: 'GET',
     path: '/admin/fdbs/:localeId/categories/:categoryId/contents',
-    pathParams: z.object({ localeId, categoryId: z.literal('no-category').or(categoryId) }),
+    pathParams: z.object({
+      localeId,
+      categoryId: z.literal('no-category').or(categoryId),
+    }),
     responses: {
       200: categoryContentsResponse,
     },

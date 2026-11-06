@@ -5,9 +5,19 @@ export { default as customPrompts } from './custom';
 export { default as portionSizePrompts } from './portion-size';
 export { default as standardPrompts } from './standard';
 
-const baseTabs = ['general', 'content', 'actions', 'conditions'];
+const baseTabs = [
+  'general',
+  'content',
+  'actions',
+  'conditions',
+];
 const tabs = [...baseTabs, 'options', 'json'];
-const tabsWithValidation = [...baseTabs, 'validation', 'options', 'json'];
+const tabsWithValidation = [
+  ...baseTabs,
+  'validation',
+  'options',
+  'json',
+];
 
 export const promptSections: PromptSection[] = [
   'preMeals',
@@ -28,7 +38,12 @@ export const promptSectionsExceptSubmission: PromptSection[] = [
   'postMeals',
 ];
 
-export const foodsAndMeals: MealSection[] = ['foods', 'preFoods', 'postFoods', 'foodsDeferred'];
+export const foodsAndMeals: MealSection[] = [
+  'foods',
+  'preFoods',
+  'postFoods',
+  'foodsDeferred',
+];
 
 export type PromptSettingsRecord = {
   tabs: string[];
@@ -94,7 +109,12 @@ export const promptSettings: PromptSettings = {
   // Standard
   'addon-foods-prompt': {
     tabs: [...tabs],
-    sections: ['foods', 'postFoods', 'postMeals', 'foodsDeferred'],
+    sections: [
+      'foods',
+      'postFoods',
+      'postMeals',
+      'foodsDeferred',
+    ],
   },
   'associated-foods-prompt': {
     tabs: [...tabs],

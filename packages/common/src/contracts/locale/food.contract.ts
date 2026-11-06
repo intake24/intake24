@@ -52,7 +52,10 @@ export const food = initContract().router({
     method: 'GET',
     path: '/locales/:localeId/food-builders',
     query: z.object({
-      code: z.union([z.string(), z.string().array().nonempty()]),
+      code: z.union([
+        z.string(),
+        z.string().array().nonempty(),
+      ]),
     }),
     responses: {
       200: foodBuilderResponse.array(),

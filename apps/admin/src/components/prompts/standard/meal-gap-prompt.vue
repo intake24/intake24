@@ -75,7 +75,9 @@ export default defineComponent({
   methods: {
     updateGapValue(value: any) {
       const gapValue = Number.parseInt(value, 10);
-      this.update('gap', Number.isNaN(gapValue) ? 180 : gapValue);
+      this.update('gap', Number.isNaN(gapValue)
+        ? 180
+        : gapValue);
     },
   },
 });

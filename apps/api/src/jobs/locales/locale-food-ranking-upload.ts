@@ -24,7 +24,9 @@ const requiredFields = ['foodCode', 'sortingPriority'];
 
 function camelCaseHeaders(headers: (string | undefined | null)[]): string[] {
   return headers.map((header) => {
-    return header ? camelCase(header) : '';
+    return header
+      ? camelCase(header)
+      : '';
   });
 }
 
@@ -54,7 +56,9 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
     if (!fileExists)
       throw new Error(`Missing file (${this.file}).`);
 
-    const locale = await SystemLocale.findByPk(this.params.localeId, { attributes: ['code'] });
+    const locale = await SystemLocale.findByPk(this.params.localeId, {
+      attributes: ['code'],
+    });
     if (!locale)
       throw new NotFoundError(`Job ${this.name}: Locale not found (${this.params.localeId}).`);
 
@@ -76,10 +80,16 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
   private async deleteRows(targetAlgorithm: Exclude<SearchSortingAlgorithm, 'globalPop'>, transaction: Transaction) {
     switch (targetAlgorithm) {
       case 'popularity':
-        await PAOccurrence.destroy({ where: { localeId: this.localeCode }, transaction });
+        await PAOccurrence.destroy({
+          where: { localeId: this.localeCode },
+          transaction,
+        });
         break;
       case 'fixed':
-        await FixedFoodRanking.destroy({ where: { localeId: this.localeCode }, transaction });
+        await FixedFoodRanking.destroy({
+          where: { localeId: this.localeCode },
+          transaction,
+        });
         break;
     }
   }

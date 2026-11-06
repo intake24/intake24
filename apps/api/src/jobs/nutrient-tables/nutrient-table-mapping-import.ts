@@ -91,12 +91,19 @@ export default class NutrientTableMappingImport extends BaseJob<'NutrientTableMa
       throw fromError({
         ...result.error,
         issues: result.error.issues.map(issue =>
-          ({ ...issue, path: issue.path.map(p => typeof p === 'number' ? p + offset : p) })),
+          ({
+            ...issue,
+            path: issue.path.map(p => typeof p === 'number'
+              ? p + offset
+              : p),
+          })),
       });
     }
 
     const nutrientIds = data.map(item => item['Intake24 nutrient ID']);
-    const count = await FoodsNutrientType.count({ where: { id: nutrientIds } });
+    const count = await FoodsNutrientType.count({
+      where: { id: nutrientIds },
+    });
 
     if (nutrientIds.length !== count)
       throw new Error(`Spreadsheet contains some invalid nutrient IDs.`);
@@ -107,7 +114,10 @@ export default class NutrientTableMappingImport extends BaseJob<'NutrientTableMa
 
     return await this.db.foods.contextTransaction(async (transaction) => {
       // Clean old data
-      await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId }, transaction });
+      await NutrientTableCsvMappingNutrient.destroy({
+        where: { nutrientTableId },
+        transaction,
+      });
 
       const readStream = createReadStream(this.file);
       const csvStream = parse({ headers: true, trim: true });

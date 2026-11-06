@@ -61,7 +61,12 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
         {
           association: 'csvMappingNutrients',
           separate: true,
-          include: [{ association: 'nutrientType', attributes: ['description'] }],
+          include: [
+            {
+              association: 'nutrientType',
+              attributes: ['description'],
+            },
+          ],
         },
       ],
     });
@@ -88,7 +93,9 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
 
     const { total } = await this.kyselyDb.foods
       .selectFrom('nutrientTableRecords')
-      .select(({ fn }) => [fn.count<number>('id').as('total')])
+      .select(({ fn }) => [
+        fn.count<number>('id').as('total'),
+      ])
       .where('nutrientTableId', '=', nutrientTableId)
       .executeTakeFirstOrThrow();
     this.initProgress(Number(total));
@@ -205,7 +212,9 @@ export default class NutrientTableDataExport extends BaseJob<'NutrientTableDataE
     await this.dbJob.update({
       downloadUrl: filename,
       downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-      message: `Nutrient table data export: exported ${recordCount} record${recordCount === 1 ? '' : 's'} with ${maxOffset + 1} CSV columns.${csvMapping.rowOffset ? '' : ' No headers were included because rowOffset is 0.'}`,
+      message: `Nutrient table data export: exported ${recordCount} record${recordCount === 1
+        ? ''
+        : 's'} with ${maxOffset + 1} CSV columns.${csvMapping.rowOffset ? '' : ' No headers were included because rowOffset is 0.'}`,
     });
   }
 }

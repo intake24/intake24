@@ -22,7 +22,9 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
     const locale
       = typeof localeId === 'string'
-        ? await SystemLocale.findByPk(localeId, { attributes: ['id', 'code'] })
+        ? await SystemLocale.findByPk(localeId, {
+            attributes: ['id', 'code'],
+          })
         : localeId;
     if (!locale)
       throw new NotFoundError();
@@ -32,7 +34,12 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
   const getSplitLists = async (localeId: string | SystemLocale) => {
     const { code } = await resolveLocale(localeId);
 
-    return SplitList.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
+    return SplitList.findAll({
+      where: { localeId: code },
+      order: [
+        ['id', 'ASC'],
+      ],
+    });
   };
 
   const setSplitLists = async (
@@ -42,12 +49,22 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
     const { code } = await resolveLocale(localeId);
 
     const ids = splitLists.map(({ id }) => id) as string[];
-    await SplitList.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
+    await SplitList.destroy({
+      where: {
+        localeId: code,
+        id: { [Op.notIn]: ids },
+      },
+    });
 
     if (!splitLists.length)
       return [];
 
-    const records = await SplitList.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
+    const records = await SplitList.findAll({
+      where: { localeId: code },
+      order: [
+        ['id', 'ASC'],
+      ],
+    });
     const newRecords: SplitList[] = [];
 
     for (const splitList of splitLists) {
@@ -65,13 +82,21 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
       newRecords.push(newRecord);
     }
 
-    return [...records, ...newRecords];
+    return [
+      ...records,
+      ...newRecords,
+    ];
   };
 
   const getSplitWords = async (localeId: string | SystemLocale) => {
     const { code } = await resolveLocale(localeId);
 
-    return SplitWord.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
+    return SplitWord.findAll({
+      where: { localeId: code },
+      order: [
+        ['id', 'ASC'],
+      ],
+    });
   };
 
   const setSplitWords = async (
@@ -81,12 +106,22 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
     const { code } = await resolveLocale(localeId);
 
     const ids = splitWords.map(({ id }) => id) as string[];
-    await SplitWord.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
+    await SplitWord.destroy({
+      where: {
+        localeId: code,
+        id: { [Op.notIn]: ids },
+      },
+    });
 
     if (!splitWords.length)
       return [];
 
-    const records = await SplitWord.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
+    const records = await SplitWord.findAll({
+      where: { localeId: code },
+      order: [
+        ['id', 'ASC'],
+      ],
+    });
     const newRecords: SplitWord[] = [];
 
     for (const splitWord of splitWords) {
@@ -104,13 +139,21 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
       newRecords.push(newRecord);
     }
 
-    return [...records, ...newRecords];
+    return [
+      ...records,
+      ...newRecords,
+    ];
   };
 
   const getSynonymSets = async (localeId: string | SystemLocale) => {
     const { code } = await resolveLocale(localeId);
 
-    return SynonymSet.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
+    return SynonymSet.findAll({
+      where: { localeId: code },
+      order: [
+        ['id', 'ASC'],
+      ],
+    });
   };
 
   const setSynonymSets = async (
@@ -120,12 +163,22 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
     const { code } = await resolveLocale(localeId);
 
     const ids = synonymSets.map(({ id }) => id) as string[];
-    await SynonymSet.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
+    await SynonymSet.destroy({
+      where: {
+        localeId: code,
+        id: { [Op.notIn]: ids },
+      },
+    });
 
     if (!synonymSets.length)
       return [];
 
-    const records = await SynonymSet.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
+    const records = await SynonymSet.findAll({
+      where: { localeId: code },
+      order: [
+        ['id', 'ASC'],
+      ],
+    });
     const newRecords: SynonymSet[] = [];
 
     for (const synonymSet of synonymSets) {
@@ -145,7 +198,10 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
 
     await cache.setAdd('locales-index', code);
 
-    return [...records, ...newRecords];
+    return [
+      ...records,
+      ...newRecords,
+    ];
   };
 
   // Get existing food builders for the specified Locale ID
@@ -154,8 +210,12 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
 
     return FoodBuilder.findAll({
       where: { localeId: code },
-      include: [{ association: 'synonymSet' }],
-      order: [['id', 'ASC']],
+      include: [
+        { association: 'synonymSet' },
+      ],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
   };
 
@@ -164,14 +224,21 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
     const { code: localeCode } = await resolveLocale(localeId);
 
     const ids = foodBuilders.map(({ id }) => id) as string[];
-    await FoodBuilder.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
+    await FoodBuilder.destroy({
+      where: {
+        localeId: localeCode,
+        id: { [Op.notIn]: ids },
+      },
+    });
 
     if (!foodBuilders.length)
       return [];
 
     const records = await FoodBuilder.findAll({
       where: { localeId: localeCode },
-      order: [['id', 'ASC']],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
     const newRecords: FoodBuilder[] = [];
 
@@ -193,7 +260,10 @@ function adminLocaleService({ scheduler, cache, kyselyDb }: Pick<IoC, 'scheduler
     }
     await cache.setAdd('locales-index', localeCode);
 
-    return [...records, ...newRecords];
+    return [
+      ...records,
+      ...newRecords,
+    ];
   };
 
   const bulkUpdateLocales = async (

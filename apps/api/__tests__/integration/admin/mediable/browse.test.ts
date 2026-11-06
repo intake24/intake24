@@ -58,7 +58,10 @@ export default (type: MediaModel) => () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['media'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['media'],
+      });
 
       await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
     });

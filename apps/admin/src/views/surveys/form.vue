@@ -696,7 +696,13 @@ export const surveyForm: SurveyForm = {
 export default defineComponent({
   name: 'SurveyForm',
 
-  components: { ConfirmDialog, InformationPopup, DatePicker, EventNotifications, SelectResource },
+  components: {
+    ConfirmDialog,
+    InformationPopup,
+    DatePicker,
+    EventNotifications,
+    SelectResource,
+  },
 
   mixins: [formMixin],
 

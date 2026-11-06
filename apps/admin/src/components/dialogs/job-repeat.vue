@@ -68,7 +68,9 @@ function close() {
 
 async function repeat() {
   const { id } = props.modelValue;
-  const payload = override.value ? { type: job.value.type, params: job.value.params } : undefined;
+  const payload = override.value
+    ? { type: job.value.type, params: job.value.params }
+    : undefined;
 
   await http.post(`admin/jobs/${id}/repeat`, payload);
   useMessages().success(i18n.t('jobs.repeat.confirmed', { name: id }));

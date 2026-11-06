@@ -66,11 +66,27 @@ export default {
             type: 'default',
             top_foods: JSON.stringify({
               max: 5,
-              colors: ['#FF6384', '#36A2EB', '#FFCE56', '#9c27b0', '#8bc34a', '#999999'],
+              colors: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+                '#9c27b0',
+                '#8bc34a',
+                '#999999',
+              ],
               nutrientTypes: [
-                { id: '1', name: { en: 'Energy' } },
-                { id: '23', name: { en: 'Sugar' } },
-                { id: '50', name: { en: 'Saturated fat' } },
+                {
+                  id: '1',
+                  name: { en: 'Energy' },
+                },
+                {
+                  id: '23',
+                  name: { en: 'Sugar' },
+                },
+                {
+                  id: '50',
+                  name: { en: 'Saturated fat' },
+                },
               ],
             }),
             food_groups: JSON.stringify([]),
@@ -138,7 +154,11 @@ export default {
       await queryInterface.addColumn(
         'surveys',
         'feedback_style',
-        { type: Sequelize.STRING(50), allowNull: false, defaultValue: 'default' },
+        {
+          type: Sequelize.STRING(50),
+          allowNull: false,
+          defaultValue: 'default',
+        },
         { transaction },
       );
 

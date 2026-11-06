@@ -11,7 +11,9 @@ const subResourceMap: Record<string, string> = {
 export function audit() {
   return initServer().router(contract.admin.audit, {
     getSettings: {
-      middleware: [permission('audit')],
+      middleware: [
+        permission('audit'),
+      ],
       handler: async ({ req }) => {
         const tables = await req.scope.cradle.auditService.getAuditTables();
 
@@ -19,7 +21,9 @@ export function audit() {
       },
     },
     saveSettings: {
-      middleware: [permission('audit')],
+      middleware: [
+        permission('audit'),
+      ],
       handler: async ({ body, req }) => {
         const tables = await req.scope.cradle.auditService.saveAuditTables(body);
 
@@ -31,7 +35,9 @@ export function audit() {
         const { resource, resourceId } = params;
         const { aclService, auditService } = req.scope.cradle;
 
-        await aclService.checkAccess(resource, 'audit', { where: { id: resourceId } });
+        await aclService.checkAccess(resource, 'audit', {
+          where: { id: resourceId },
+        });
 
         const log = await auditService.getAuditLog(resource, resourceId);
 
@@ -43,7 +49,9 @@ export function audit() {
         const { resource, resourceId, subResource, subResourceId } = params;
         const { aclService, auditService } = req.scope.cradle;
 
-        await aclService.checkAccess(resource, subResourceMap[subResource] ?? 'audit', { where: { id: resourceId } });
+        await aclService.checkAccess(resource, subResourceMap[subResource] ?? 'audit', {
+          where: { id: resourceId },
+        });
 
         const log = await auditService.getAuditLog(subResource, subResourceId);
 

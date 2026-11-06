@@ -46,8 +46,15 @@ function getInitialState(): PromptStates['pizza-v2-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
-    confirmed: { size: false, crust: false, unit: false, quantity: false },
+    panel: food.value.portionSizeMethodIndex !== null
+      ? 1
+      : 0,
+    confirmed: {
+      size: false,
+      crust: false,
+      unit: false,
+      quantity: false,
+    },
   };
 }
 

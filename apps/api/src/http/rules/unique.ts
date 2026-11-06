@@ -18,7 +18,9 @@ export type UniqueOptions<TAttributes = any> = {
   options?: FindOptions<TAttributes>;
 };
 
-export default async ({ model, condition, options = { attributes: ['id'] } }: UniqueOptions): Promise<boolean> => {
+export default async ({ model, condition, options = {
+  attributes: ['id'],
+} }: UniqueOptions): Promise<boolean> => {
   const mergedCondition = { ci: true, ...condition };
 
   const cModel = model as BaseModelCtor<BaseModel>;
@@ -26,7 +28,11 @@ export default async ({ model, condition, options = { attributes: ['id'] } }: Un
   const { field, value, ci } = mergedCondition;
   const op = ci ? Op.iLike : Op.eq;
 
-  const findOptions: FindOptions = merge(options, { where: { [field]: { [op]: value } } });
+  const findOptions: FindOptions = merge(options, {
+    where: {
+      [field]: { [op]: value },
+    },
+  });
 
   return !(await cModel.findOne(findOptions));
 };

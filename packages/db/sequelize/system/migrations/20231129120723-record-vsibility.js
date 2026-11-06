@@ -1,6 +1,11 @@
 import { createPermissions } from '../../utils.js';
 
-const tables = ['languages', 'locales', 'feedback_schemes', 'survey_schemes'];
+const tables = [
+  'languages',
+  'locales',
+  'feedback_schemes',
+  'survey_schemes',
+];
 
 const permissions = [
   { name: 'languages|use', display_name: 'Languages use' },

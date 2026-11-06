@@ -36,7 +36,12 @@ export default defineComponent({
         route,
       } = this;
 
-      return { name: `${route}-${action}`, params: id ? { id } : undefined };
+      return {
+        name: `${route}-${action}`,
+        params: id
+          ? { id }
+          : undefined,
+      };
     },
   },
 

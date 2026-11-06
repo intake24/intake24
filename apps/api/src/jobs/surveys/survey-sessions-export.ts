@@ -61,7 +61,9 @@ export default class SurveySessionsExport extends BaseJob<'SurveySessionsExport'
   private async download(): Promise<void> {
     const { surveyId } = this.params;
 
-    const survey = await Survey.findByPk(surveyId, { attributes: ['id', 'slug'] });
+    const survey = await Survey.findByPk(surveyId, {
+      attributes: ['id', 'slug'],
+    });
     if (!survey)
       throw new NotFoundError(`Job ${this.name}: Survey record not found (${surveyId}).`);
 
@@ -69,10 +71,18 @@ export default class SurveySessionsExport extends BaseJob<'SurveySessionsExport'
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-${this.name}-${slug}-${timestamp}.csv`;
 
-    const total = await UserSurveySession.count({ where: { surveyId } });
+    const total = await UserSurveySession.count({
+      where: { surveyId },
+    });
     const sessions = UserSurveySession.findAllWithStream({
       where: { surveyId },
-      include: [{ association: 'alias', attributes: ['username'], where: { surveyId } }],
+      include: [
+        {
+          association: 'alias',
+          attributes: ['username'],
+          where: { surveyId },
+        },
+      ],
     });
 
     this.initProgress(total);

@@ -22,7 +22,9 @@ export default class ValidationError extends Error {
     if (!error)
       return;
 
-    (Array.isArray(error) ? error : [error]).forEach((item) => {
+    (Array.isArray(error)
+      ? error
+      : [error]).forEach((item) => {
       const { code, path } = item;
       if (!path)
         return;

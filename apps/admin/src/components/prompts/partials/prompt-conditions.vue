@@ -153,11 +153,17 @@ export default defineComponent({
           allowedObjects.push('food');
       }
 
-      return allowedObjects.map(object => ({ object, title: t(`survey-schemes.conditions.object.${object}`) }));
+      return allowedObjects.map(object => ({
+        object,
+        title: t(`survey-schemes.conditions.object.${object}`),
+      }));
     });
 
     const propertySelectList = computed(() => {
-      return mapValues(promptConditionDefaults, properties => Object.keys(properties).map(id => ({ type: id, title: t(`survey-schemes.conditions.property.${id}`) })));
+      return mapValues(promptConditionDefaults, properties => Object.keys(properties).map(id => ({
+        type: id,
+        title: t(`survey-schemes.conditions.property.${id}`),
+      })));
     });
 
     const outputConditions = computed(() => currentConditions.value.map(({ id, ...rest }) => copy(rest)));
@@ -229,7 +235,10 @@ export default defineComponent({
         this.currentConditions.splice(
           idx,
           1,
-          copy({ ...getConditionDefaults(newObjectId, getDefaultConditionProperty(newObjectId)), id: currentCondition.id }),
+          copy({
+            ...getConditionDefaults(newObjectId, getDefaultConditionProperty(newObjectId)),
+            id: currentCondition.id,
+          }),
         );
       }
     },
@@ -243,7 +252,10 @@ export default defineComponent({
       this.currentConditions.splice(
         idx,
         1,
-        copy({ ...getConditionDefaults(currentCondition.object, newPropertyId as ObjectPropertyId<ConditionObjectId>), id: currentCondition.id }),
+        copy({
+          ...getConditionDefaults(currentCondition.object, newPropertyId as ObjectPropertyId<ConditionObjectId>),
+          id: currentCondition.id,
+        }),
       );
     },
   },

@@ -48,7 +48,9 @@ const state = defineModel('modelValue', { type: String });
 const isValid = computed(() => !!form.value?.isValid && (!props.prompt.validation.required || !!state.value));
 
 const rules = computed(() => {
-  const items = [inputTooLog(512)];
+  const items = [
+    inputTooLog(512),
+  ];
 
   if (props.prompt.validation.required) {
     items.push((v: string | null) =>

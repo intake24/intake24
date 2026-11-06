@@ -42,7 +42,16 @@ export default defineComponent({
       ...data.value,
     }));
 
-    return { currentFeedbackScheme, entry, entryLoaded, errors, refs, data, routeLeave, submit };
+    return {
+      currentFeedbackScheme,
+      entry,
+      entryLoaded,
+      errors,
+      refs,
+      data,
+      routeLeave,
+      submit,
+    };
   },
 });
 </script>

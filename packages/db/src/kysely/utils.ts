@@ -27,7 +27,9 @@ export async function executeWithPagination<DB, TB extends keyof DB, O>(query: S
   if (sort && typeof sort === 'string') {
     const [sColumn, sOrder] = sort.split('|');
     sortColumn = sortColumns.find(refExpr => refExpr === sColumn);
-    order = sOrder === 'desc' ? 'desc' : 'asc';
+    order = sOrder === 'desc'
+      ? 'desc'
+      : 'asc';
   }
 
   if (sortColumn !== undefined)

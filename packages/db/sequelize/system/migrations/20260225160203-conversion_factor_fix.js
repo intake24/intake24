@@ -7,7 +7,12 @@ function mapFoods(path, parentId) {
       return acc;
 
     const index = Object.keys(acc).length;
-    acc[index] = { ...food, parentId, index, path: `${path}[${idx}]` };
+    acc[index] = {
+      ...food,
+      parentId,
+      index,
+      path: `${path}[${idx}]`,
+    };
 
     if (food.linkedFoods.length)
       food.linkedFoods.reduce(mapFoods(`${path}[${idx}].linkedFoods`, id), acc);
@@ -74,7 +79,9 @@ export default {
         `, {
           type: Sequelize.QueryTypes.SELECT,
           replacements: {
-            limit: difference > 0 ? userSessionBatchSize - difference : userSessionBatchSize,
+            limit: difference > 0
+              ? userSessionBatchSize - difference
+              : userSessionBatchSize,
             offset: userSessionOffset,
           },
           transaction,
@@ -98,9 +105,19 @@ export default {
 
               set(newSession, `${psmPath}.conversionFactor`, conversionFactor);
 
-              if (conversionFactor !== 1 && ['as-served', 'cereal', 'drink-scale', 'milk-on-cereal', 'pizza'].includes(method)) {
-                const newServingWeight = typeof servingWeight === 'number' ? (servingWeight * conversionFactor) : servingWeight;
-                const newLeftoversWeight = typeof leftoversWeight === 'number' ? (leftoversWeight * conversionFactor) : leftoversWeight;
+              if (conversionFactor !== 1 && [
+                'as-served',
+                'cereal',
+                'drink-scale',
+                'milk-on-cereal',
+                'pizza',
+              ].includes(method)) {
+                const newServingWeight = typeof servingWeight === 'number'
+                  ? (servingWeight * conversionFactor)
+                  : servingWeight;
+                const newLeftoversWeight = typeof leftoversWeight === 'number'
+                  ? (leftoversWeight * conversionFactor)
+                  : leftoversWeight;
 
                 // patch the session object with new weights
                 set(newSession, `${psmPath}.servingWeight`, newServingWeight);
@@ -191,7 +208,9 @@ export default {
         `, {
           type: Sequelize.QueryTypes.SELECT,
           replacements: {
-            limit: difference > 0 ? batchSize - difference : batchSize,
+            limit: difference > 0
+              ? batchSize - difference
+              : batchSize,
             offset,
           },
           transaction,
@@ -307,7 +326,13 @@ export default {
               throw new Error(`Original portion size weights mismatch for food: ${dbFood.id}`);
 
             const path = `${sessionFood.path}.portionSize`;
-            const updateConversionFactor = conversionFactor !== 1 && ['as-served', 'cereal', 'drink-scale', 'milk-on-cereal', 'pizza'].includes(dbFood.portion_size_method_id);
+            const updateConversionFactor = conversionFactor !== 1 && [
+              'as-served',
+              'cereal',
+              'drink-scale',
+              'milk-on-cereal',
+              'pizza',
+            ].includes(dbFood.portion_size_method_id);
 
             let newPsm;
 
@@ -315,14 +340,22 @@ export default {
               const servingWeight = foodPsm.servingWeight * conversionFactor;
               const leftoversWeight = foodPsm.leftoversWeight * conversionFactor;
 
-              newPsm = { ...cloneDeep(foodPsm), conversionFactor, servingWeight, leftoversWeight };
+              newPsm = {
+                ...cloneDeep(foodPsm),
+                conversionFactor,
+                servingWeight,
+                leftoversWeight,
+              };
 
               // patch the session object with new weights
               set(newSession, `${path}.servingWeight`, servingWeight);
               set(newSession, `${path}.leftoversWeight`, leftoversWeight);
             }
             else {
-              newPsm = { ...cloneDeep(foodPsm), conversionFactor };
+              newPsm = {
+                ...cloneDeep(foodPsm),
+                conversionFactor,
+              };
             }
 
             // patch the session object with added conversion factor

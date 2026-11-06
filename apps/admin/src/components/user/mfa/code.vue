@@ -104,7 +104,9 @@ const http = useHttp();
 
 const url = 'admin/user/mfa/providers/code';
 const progress = ref(1);
-const { data, errors, post, reset } = useForm({ data: { challengeId: '', name: 'Backup codes', password: '' } });
+const { data, errors, post, reset } = useForm({
+  data: { challengeId: '', name: 'Backup codes', password: '' },
+});
 const codes = ref<string[]>([]);
 
 const regChallenge = ref<CodeRegistrationChallenge | null>(null);

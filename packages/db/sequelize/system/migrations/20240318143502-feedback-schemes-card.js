@@ -33,11 +33,22 @@ export default {
             physicalActivityLevelId: null,
             sex: null,
             scaleSectors: [
-              { name, summary, description, range: { start: 0, end: 1000000 }, sentiment: 'good' },
+              {
+                name,
+                summary,
+                description,
+                range: { start: 0, end: 1000000 },
+                sentiment: 'good',
+              },
             ],
           });
 
-          return { image: rest.type === 'nutrient-group' ? 'beef' : 'fruitVeg', ...rest2 };
+          return {
+            image: rest.type === 'nutrient-group'
+              ? 'beef'
+              : 'fruitVeg',
+            ...rest2,
+          };
         });
 
         await queryInterface.sequelize.query(

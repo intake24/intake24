@@ -28,7 +28,11 @@ export default () => {
 
     input = {
       type: 'LocaleCopy',
-      params: { localeId: locale.id, sourceLocaleId, subTasks: ['brands'] },
+      params: {
+        localeId: locale.id,
+        sourceLocaleId,
+        subTasks: ['brands'],
+      },
     };
 
     url = `${baseUrl}/${locale.id}/tasks`;
@@ -50,13 +54,19 @@ export default () => {
 
     it('should return 400 for invalid input data #1', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['type'], {
-        input: { type: 'invalidJobType', params: { surveyId: 'demo', nonValidKey: false } },
+        input: {
+          type: 'invalidJobType',
+          params: { surveyId: 'demo', nonValidKey: false },
+        },
       });
     });
 
     it('should return 400 for invalid input data #2', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['params.localeId', 'params.sourceLocaleId', 'params.subTasks'], {
-        input: { type: 'LocaleCopy', params: { localeId: false, sourceLocaleId: false, subTasks: {} } },
+        input: {
+          type: 'LocaleCopy',
+          params: { localeId: false, sourceLocaleId: false, subTasks: {} },
+        },
       });
     });
 

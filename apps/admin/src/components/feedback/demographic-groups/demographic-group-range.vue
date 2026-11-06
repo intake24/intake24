@@ -79,7 +79,10 @@ export default defineComponent({
     },
 
     updateRange(field: keyof Range, value: string) {
-      const range = { ...(this.modelValue ?? this.defaultRange), [field]: Number.parseFloat(value) };
+      const range = {
+        ...(this.modelValue ?? this.defaultRange),
+        [field]: Number.parseFloat(value),
+      };
 
       this.$emit('update:modelValue', range);
     },

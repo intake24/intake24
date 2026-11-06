@@ -21,10 +21,18 @@ export type RecallLogEntry = {
 export const recallLog = defineStore('recall-log', () => {
   const survey = useSurvey();
 
-  const entries = shallowRef<RecallLogEntry[]>([{ selection: copy(survey.selection), prompts: [] }]);
+  const entries = shallowRef<RecallLogEntry[]>([
+    {
+      selection: copy(survey.selection),
+      prompts: [],
+    },
+  ]);
 
   function selectionChanged(selection: Selection) {
-    entries.value.push({ selection: copy(selection), prompts: [] });
+    entries.value.push({
+      selection: copy(selection),
+      prompts: [],
+    });
   };
 
   function promptCheck(type: ComponentType, applicable: boolean, reason: string) {

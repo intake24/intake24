@@ -104,7 +104,10 @@ const rules = [
 ];
 
 function addCategory(category: string) {
-  parameters.value.options = { ...parameters.value.options, [category]: { en: [] } };
+  parameters.value.options = {
+    ...parameters.value.options,
+    [category]: { en: [] },
+  };
 }
 
 function removeCategory(category: string) {

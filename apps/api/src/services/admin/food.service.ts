@@ -27,11 +27,15 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
   }
 
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
-    const options: FindOptions<FoodAttributes> = { where: { localeId } };
+    const options: FindOptions<FoodAttributes> = {
+      where: { localeId },
+    };
     const { search } = query;
 
     if (search) {
-      const ops = ['code', 'englishName', 'name'].map(column => ({ [column]: { [Op.iLike]: `%${search}%` } }));
+      const ops = ['code', 'englishName', 'name'].map(column => ({
+        [column]: { [Op.iLike]: `%${search}%` },
+      }));
       options.where = { ...options.where, [Op.or]: ops };
     }
 
@@ -51,14 +55,21 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
         {
           association: 'associatedFoods',
           separate: true,
-          order: [['orderBy', 'ASC']],
+          order: [
+            ['orderBy', 'ASC'],
+          ],
         },
         {
           association: 'portionSizeMethods',
           separate: true,
-          order: [['orderBy', 'ASC']],
+          order: [
+            ['orderBy', 'ASC'],
+          ],
         },
-        { association: 'nutrientRecords', through: { attributes: [] } },
+        {
+          association: 'nutrientRecords',
+          through: { attributes: [] },
+        },
       ],
     });
   };
@@ -137,7 +148,14 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
   const createFood = async (localeId: string, input: FoodInput) => {
     const food = await kyselyDb.foods.contextTransaction(async (transaction) => {
       const food = await transaction.insertInto('foods').values({
-        ...pick(input, ['code', 'englishName', 'name', 'altNames', 'tags', 'icon']),
+        ...pick(input, [
+          'code',
+          'englishName',
+          'name',
+          'altNames',
+          'tags',
+          'icon',
+        ]),
         localeId,
         simpleName: toSimpleName(input.name),
         version: randomUUID(),
@@ -160,7 +178,12 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
       }
 
       if (input.attributes) {
-        const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+        const attributesInput = pick(input.attributes, [
+          'sameAsBeforeOption',
+          'readyMealOption',
+          'reasonableAmount',
+          'useInRecipes',
+        ]);
         if (Object.values(attributesInput).some(item => item !== null)) {
           promises.push(transaction
             .insertInto('foodAttributes')
@@ -202,7 +225,14 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
         cache.forget(getFoodCacheKeys(localeId, foodId, food.code)),
         cache.setAdd('locales-index', localeId),
         transaction.updateTable('foods').set({
-          ...pick(input, ['code', 'englishName', 'name', 'altNames', 'tags', 'icon']),
+          ...pick(input, [
+            'code',
+            'englishName',
+            'name',
+            'altNames',
+            'tags',
+            'icon',
+          ]),
           simpleName: toSimpleName(input.name),
           version: randomUUID(),
         }).where('id', '=', foodId).execute(),
@@ -231,7 +261,12 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
       }
 
       if (input.attributes) {
-        const attributesInput = pick(input.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+        const attributesInput = pick(input.attributes, [
+          'sameAsBeforeOption',
+          'readyMealOption',
+          'reasonableAmount',
+          'useInRecipes',
+        ]);
         if (Object.values(attributesInput).every(item => item === null)) {
           if (attributes)
             promises.push(transaction.deleteFrom('foodAttributes').where('foodId', '=', foodId).execute());
@@ -278,7 +313,15 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
 
     const food = await kyselyDb.foods.contextTransaction(async (transaction) => {
       const food = await transaction.insertInto('foods').values({
-        ...pick(sourceFood, ['code', 'localeId', 'englishName', 'name', 'altNames', 'tags', 'icon']),
+        ...pick(sourceFood, [
+          'code',
+          'localeId',
+          'englishName',
+          'name',
+          'altNames',
+          'tags',
+          'icon',
+        ]),
         ...input,
         simpleName: toSimpleName(input.name),
         version: randomUUID(),
@@ -291,7 +334,12 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
       if (sourceFood.attributes) {
         promises.push(
           transaction.insertInto('foodAttributes').values({
-            ...pick(sourceFood.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']),
+            ...pick(sourceFood.attributes, [
+              'sameAsBeforeOption',
+              'readyMealOption',
+              'reasonableAmount',
+              'useInRecipes',
+            ]),
             foodId: food.id,
           }).execute(),
         );
@@ -446,7 +494,9 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('foodsCategories')
-        .where('foodId', 'in', [...idMap.values()])
+        .where('foodId', 'in', [
+          ...idMap.values(),
+        ])
         .execute();
     }
 
@@ -472,7 +522,12 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
       if (!foodId)
         throw new Error(`Food id missing for code: ${item.code}`);
 
-      const attrs = pick(item.attributes, ['sameAsBeforeOption', 'readyMealOption', 'reasonableAmount', 'useInRecipes']);
+      const attrs = pick(item.attributes, [
+        'sameAsBeforeOption',
+        'readyMealOption',
+        'reasonableAmount',
+        'useInRecipes',
+      ]);
 
       if (Object.values(attrs).some(v => v !== null && v !== undefined)) {
         records.push({ foodId, ...attrs });
@@ -481,7 +536,9 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('foodAttributes')
-        .where('foodId', 'in', [...idMap.values()])
+        .where('foodId', 'in', [
+          ...idMap.values(),
+        ])
         .execute();
     }
 
@@ -570,7 +627,9 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('associatedFoods')
-        .where('foodId', 'in', [...idMap.values()])
+        .where('foodId', 'in', [
+          ...idMap.values(),
+        ])
         .execute();
     }
 
@@ -611,7 +670,9 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('foodPortionSizeMethods')
-        .where('foodId', 'in', [...idMap.values()])
+        .where('foodId', 'in', [
+          ...idMap.values(),
+        ])
         .execute();
     }
 
@@ -692,7 +753,9 @@ function adminFoodService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) 
 
     if (idMap.size > 0) {
       await transaction.deleteFrom('foodsNutrients')
-        .where('foodId', 'in', [...idMap.values()])
+        .where('foodId', 'in', [
+          ...idMap.values(),
+        ])
         .execute();
     }
 

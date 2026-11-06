@@ -31,12 +31,32 @@ import UserSecurable from './user-securable';
 
 @Scopes(() => ({
   list: {
-    attributes: ['id', 'code', 'englishName', 'localName', 'countryFlagCode'],
-    order: [['englishName', 'ASC']],
+    attributes: [
+      'id',
+      'code',
+      'englishName',
+      'localName',
+      'countryFlagCode',
+    ],
+    order: [
+      ['englishName', 'ASC'],
+    ],
   },
-  adminLanguage: { include: [{ association: 'adminLanguage' }] },
-  respondentLanguage: { include: [{ association: 'respondentLanguage' }] },
-  surveys: { include: [{ model: Survey }] },
+  adminLanguage: {
+    include: [
+      { association: 'adminLanguage' },
+    ],
+  },
+  respondentLanguage: {
+    include: [
+      { association: 'respondentLanguage' },
+    ],
+  },
+  surveys: {
+    include: [
+      { model: Survey },
+    ],
+  },
 }))
 @Table({
   modelName: 'Locale',

@@ -14,13 +14,17 @@ export const foodBuilderStepBase = z.object({
 
 export const coefficientStep = foodBuilderStepBase.extend({
   type: z.literal('coefficient'),
-  options: localeOptionList({ valueSchema: z.coerce.number().nonnegative() }),
+  options: localeOptionList({
+    valueSchema: z.coerce.number().nonnegative(),
+  }),
 });
 export type CoefficientStep = z.infer<typeof coefficientStep>;
 
 export const conditionStep = foodBuilderStepBase.extend({
   type: z.literal('condition'),
-  options: localeOptionList({ valueSchema: condition.array() }),
+  options: localeOptionList({
+    valueSchema: condition.array(),
+  }),
 });
 export type ConditionStep = z.infer<typeof conditionStep>;
 
@@ -39,7 +43,9 @@ export type Resource = typeof resources[number];
 export const lookupEntityStep = foodBuilderStepBase.extend({
   type: z.literal('lookup-entity'),
   resource: z.enum(resources),
-  options: localeOptionList({ valueSchema: z.string().min(1).max(64) }),
+  options: localeOptionList({
+    valueSchema: z.string().min(1).max(64),
+  }),
 });
 export type LookupEntityStep = z.infer<typeof lookupEntityStep>;
 
@@ -87,7 +93,12 @@ export const foodBuilderTypes = ['generic', 'recipe'] as const;
 export type FoodBuilderType = typeof foodBuilderTypes[number];
 
 const order: FoodBuilderStepType[][] = [
-  ['ingredient', 'coefficient', 'condition', 'lookup-entity'],
+  [
+    'ingredient',
+    'coefficient',
+    'condition',
+    'lookup-entity',
+  ],
   ['ingredient', 'select-entity'],
   ['ingredient', 'lookup-unit'],
   ['ingredient', 'quantity'],

@@ -60,22 +60,32 @@ export default () => {
   });
 
   it(`should return 200 & not save session when server user session disabled`, async () => {
-    await suite.data.system.Survey.update({ session: { store: false, age: '12h', fixed: '1d+0h' } });
+    await suite.data.system.Survey.update({
+      session: { store: false, age: '12h', fixed: '1d+0h' },
+    });
 
     await suite.sharedTests.assertAcknowledged('post', url, { bearer: 'respondent', input });
-    const session = await UserSurveySession.findOne({ where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId } });
+    const session = await UserSurveySession.findOne({
+      where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId },
+    });
 
     expect(session).toBeNull();
   });
 
   it('should return 200 & save session when server user session disabled', async () => {
     await Promise.all([
-      suite.data.system.Survey.update({ session: { store: true, age: '12h', fixed: '1d+0h' } }),
-      UserSurveySession.destroy({ where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId } }),
+      suite.data.system.Survey.update({
+        session: { store: true, age: '12h', fixed: '1d+0h' },
+      }),
+      UserSurveySession.destroy({
+        where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId },
+      }),
     ]);
 
     await suite.sharedTests.assertAcknowledged('post', url, { bearer: 'respondent', input });
-    const session = await UserSurveySession.findOne({ where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId } });
+    const session = await UserSurveySession.findOne({
+      where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId },
+    });
 
     expect(session).not.toBeNull();
   });

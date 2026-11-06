@@ -52,7 +52,9 @@ export default class NutrientTableMappingExport extends BaseJob<'NutrientTableMa
     const { nutrientTableId } = this.params;
     const { total } = await this.kyselyDb.foods
       .selectFrom('nutrientTableCsvMappingNutrients')
-      .select(({ fn }) => [fn.count<number>('id').as('total')])
+      .select(({ fn }) => [
+        fn.count<number>('id').as('total'),
+      ])
       .where('nutrientTableId', '=', nutrientTableId)
       .executeTakeFirstOrThrow();
     const recordCount = Number(total);
@@ -77,7 +79,10 @@ export default class NutrientTableMappingExport extends BaseJob<'NutrientTableMa
       {
         fields: [
           { label: 'Intake24 nutrient ID', value: 'nutrientTypeId' },
-          { label: 'NDB spreadsheet column index', value: (row: { columnOffset: number }) => offsetToExcelColumn(row.columnOffset) },
+          {
+            label: 'NDB spreadsheet column index',
+            value: (row: { columnOffset: number }) => offsetToExcelColumn(row.columnOffset),
+          },
           { label: 'Nutrient name', value: 'nutrientName' },
         ],
         withBOM: true,
@@ -90,7 +95,9 @@ export default class NutrientTableMappingExport extends BaseJob<'NutrientTableMa
     await this.dbJob.update({
       downloadUrl: filename,
       downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
-      message: `Nutrient table mapping export: exported ${recordCount} record${recordCount === 1 ? '' : 's'} with 3 CSV columns.`,
+      message: `Nutrient table mapping export: exported ${recordCount} record${recordCount === 1
+        ? ''
+        : 's'} with 3 CSV columns.`,
     });
   }
 }

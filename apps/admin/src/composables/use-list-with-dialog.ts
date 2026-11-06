@@ -29,12 +29,18 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
   const { newItem, transformIn, transformOut } = ops;
   const form = useTemplateRef<InstanceType<typeof VForm>>('form');
 
-  const items = ref(copy(transformIn ? modelValue.value.map(transformIn) : modelValue.value)) as Ref<
+  const items = ref(copy(transformIn
+    ? modelValue.value.map(transformIn)
+    : modelValue.value)) as Ref<
     UnwrapRef<I>[]
   >;
-  const errors = computed(() => items.value.map((_, index) => props.errors?.get(ops.errorPrefix ? `${ops.errorPrefix}.${index}.*` : `${index}.*`)));
+  const errors = computed(() => items.value.map((_, index) => props.errors?.get(ops.errorPrefix
+    ? `${ops.errorPrefix}.${index}.*`
+    : `${index}.*`)));
 
-  const outputItems = computed(() => (transformOut ? items.value.map(transformOut) : items.value));
+  const outputItems = computed(() => (transformOut
+    ? items.value.map(transformOut)
+    : items.value));
 
   const newDialog = (show = false) => ({
     show,
@@ -52,7 +58,9 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
     if (deepEqual(val, outputItems.value))
       return;
 
-    items.value = copy(transformIn ? val.map(transformIn) : val) as any;
+    items.value = copy(transformIn
+      ? val.map(transformIn)
+      : val) as any;
   });
 
   if (ops.watch) {
@@ -82,7 +90,11 @@ export function useListWithDialog<I, O = I>(props: ListProps<O>, { emit }: Pick<
   };
 
   const edit = (index: number, item: UnwrapRef<I>) => {
-    dialog.value = { show: true, index, item: copy(item) };
+    dialog.value = {
+      show: true,
+      index,
+      item: copy(item),
+    };
   };
 
   const update = () => {

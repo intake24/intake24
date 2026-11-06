@@ -89,5 +89,12 @@ export function useFoodItem(props: UseFoodItemProps, { emit }: Pick<SetupContext
     return answers.join(', ');
   });
 
-  return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels };
+  return {
+    action,
+    foodName,
+    isPortionSizeComplete,
+    isCustomPromptComplete,
+    menu,
+    customPromptAnswerLabels,
+  };
 }

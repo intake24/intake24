@@ -147,7 +147,9 @@ function isInherited(attribute: AttributeType) {
 };
 
 function title(attribute: AttributeType): string {
-  const key = attributes.value[attribute] === null ? 'override' : 'inherit';
+  const key = attributes.value[attribute] === null
+    ? 'override'
+    : 'inherit';
   return i18n.t(`fdbs.attributes.${key}`);
 };
 

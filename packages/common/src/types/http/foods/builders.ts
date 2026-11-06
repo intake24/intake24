@@ -14,7 +14,9 @@ export const foodBuilder = foodBuilderAttributes.pick({
   triggerWord: true,
   steps: true,
 }).extend({
-  synonyms: z.object({ synonyms: z.string() }).optional(),
+  synonyms: z.object({
+    synonyms: z.string(),
+  }).optional(),
 });
 export type FoodBuilder = z.infer<typeof foodBuilder>;
 

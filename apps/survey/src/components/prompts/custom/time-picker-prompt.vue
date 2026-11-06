@@ -31,7 +31,12 @@ import { createBasePromptProps } from '../prompt-props';
 
 defineOptions({
   name: 'TimePickerPrompt',
-  components: { BaseLayout, CardLayout, PanelLayout, ...timePickers },
+  components: {
+    BaseLayout,
+    CardLayout,
+    PanelLayout,
+    ...timePickers,
+  },
 });
 
 const props = defineProps({

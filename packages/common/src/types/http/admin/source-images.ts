@@ -8,7 +8,12 @@ export const imageMulterFile = multerFile.extend({
 });
 export type ImageMulterFile = z.infer<typeof imageMulterFile>;
 
-export const sourceImageTypes = ['image_maps', 'as_served', 'drink_scale', 'food_thumbnail'] as const;
+export const sourceImageTypes = [
+  'image_maps',
+  'as_served',
+  'drink_scale',
+  'food_thumbnail',
+] as const;
 export type SourceImageType = typeof sourceImageTypes[number];
 
 export const sourceFileInput = z.object({

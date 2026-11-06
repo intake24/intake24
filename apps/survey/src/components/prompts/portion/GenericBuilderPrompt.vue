@@ -57,7 +57,9 @@ import { Next } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { steps, useFoodBuilder } from './builders';
 
-defineOptions({ components: { ...steps } });
+defineOptions({
+  components: { ...steps },
+});
 
 const props = defineProps({
   ...createPortionPromptProps<'generic-builder-prompt', GenericBuilder>(),
@@ -101,20 +103,28 @@ function getEntities(upto?: number) {
 
       acc.categories = acc.categories.filter(
         data => step.option?.some(
-          condition => evaluateCondition(condition, { food: { ...foodState, data: data as EncodedFood['data'] } }),
+          condition => evaluateCondition(condition, {
+            food: { ...foodState, data: data as EncodedFood['data'] },
+          }),
         ),
       );
       acc.foods = acc.foods.filter(
         data => step.option?.some(
-          condition => evaluateCondition(condition, { food: { ...foodState, data } }),
+          condition => evaluateCondition(condition, {
+            food: { ...foodState, data },
+          }),
         ),
       );
     }
 
     if (step.type === 'select-entity' && step.option && props.food.template.steps[idx].type === 'select-entity') {
       const { resource } = props.food.template.steps[idx];
-      acc.categories = acc.categories.filter(food => resource === 'categories' ? food.categories.includes(step.option!) : food.code === step.option);
-      acc.foods = acc.foods.filter(food => resource === 'categories' ? food.categories.includes(step.option!) : food.code === step.option);
+      acc.categories = acc.categories.filter(food => resource === 'categories'
+        ? food.categories.includes(step.option!)
+        : food.code === step.option);
+      acc.foods = acc.foods.filter(food => resource === 'categories'
+        ? food.categories.includes(step.option!)
+        : food.code === step.option);
     }
 
     return acc;
@@ -122,7 +132,9 @@ function getEntities(upto?: number) {
 }
 
 const entities = computed(() => getEntities());
-const selectedFood = computed(() => entities.value.foods.length === 1 ? entities.value.foods.at(0) : undefined);
+const selectedFood = computed(() => entities.value.foods.length === 1
+  ? entities.value.foods.at(0)
+  : undefined);
 
 const coefficient = computed(() => state.value.steps.reduce((acc, step) => {
   if (step.type !== 'coefficient' || !step.option)

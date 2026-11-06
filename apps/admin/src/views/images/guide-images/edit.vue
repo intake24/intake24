@@ -95,7 +95,13 @@ export default defineComponent({
       EditGuideImageForm,
       GuideImageEntry
     >(props, {
-      data: { id: null, imageMapId: null, description: null, label: {}, objects: [] },
+      data: {
+        id: null,
+        imageMapId: null,
+        description: null,
+        label: {},
+        objects: [],
+      },
       nonInputErrorKeys: ['objects'],
     });
 
@@ -105,7 +111,17 @@ export default defineComponent({
       data.value.objects = [...objects];
     };
 
-    return { entry, entryLoaded, clearError, data, errors, nonInputErrors, routeLeave, submit, updateObjects };
+    return {
+      entry,
+      entryLoaded,
+      clearError,
+      data,
+      errors,
+      nonInputErrors,
+      routeLeave,
+      submit,
+      updateObjects,
+    };
   },
 });
 </script>

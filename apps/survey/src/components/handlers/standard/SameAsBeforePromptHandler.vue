@@ -35,11 +35,19 @@ const updatedSabFood: SameAsBeforeItem | undefined = sabFood
       ...(sabFood ?? {}),
       food: {
         ...(sabFood?.food ?? {}),
-        portionSize: sabFood?.food?.portionSize ? { ...sabFood.food.portionSize } : null,
+        portionSize: sabFood?.food?.portionSize
+          ? { ...sabFood.food.portionSize }
+          : null,
         portionSizeMethodIndex: sabFood?.food?.portionSizeMethodIndex ?? null,
-        linkedFoods: sabFood?.food?.linkedFoods ? [...sabFood.food.linkedFoods] : [],
-        customPromptAnswers: sabFood?.food?.customPromptAnswers ? { ...sabFood.food.customPromptAnswers } : {},
-        flags: sabFood?.food?.flags ? [...sabFood.food.flags] : [],
+        linkedFoods: sabFood?.food?.linkedFoods
+          ? [...sabFood.food.linkedFoods]
+          : [],
+        customPromptAnswers: sabFood?.food?.customPromptAnswers
+          ? { ...sabFood.food.customPromptAnswers }
+          : {},
+        flags: sabFood?.food?.flags
+          ? [...sabFood.food.flags]
+          : [],
       },
     }
   : undefined;

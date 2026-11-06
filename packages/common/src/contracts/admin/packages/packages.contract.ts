@@ -12,8 +12,12 @@ export const packages = initContract().router({
       202: z.object({
         jobId: z.string().nonempty(),
       }),
-      400: z.object({ error: z.string() }),
-      401: z.object({ error: z.string() }),
+      400: z.object({
+        error: z.string(),
+      }),
+      401: z.object({
+        error: z.string(),
+      }),
     },
     summary: 'Queue food database package export',
     description: 'Queue a job to export food data from internal database into a portable food database package format',
@@ -26,8 +30,12 @@ export const packages = initContract().router({
       202: z.object({
         jobId: z.string().nonempty(),
       }),
-      400: z.object({ error: z.string() }),
-      401: z.object({ error: z.string() }),
+      400: z.object({
+        error: z.string(),
+      }),
+      401: z.object({
+        error: z.string(),
+      }),
     },
     summary: 'Queue package verification',
     description: 'Queue a job to verify and validate an uploaded food database package file',
@@ -40,8 +48,12 @@ export const packages = initContract().router({
       202: z.object({
         jobId: z.string().nonempty(),
       }),
-      400: z.object({ error: z.string() }),
-      401: z.object({ error: z.string() }),
+      400: z.object({
+        error: z.string(),
+      }),
+      401: z.object({
+        error: z.string(),
+      }),
     },
     summary: 'Queue food database package import',
     description: 'Queue a job to import food data from a verified package into the internal database',

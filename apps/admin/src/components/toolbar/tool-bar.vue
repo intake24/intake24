@@ -82,7 +82,10 @@ export default defineComponent({
       if (!id)
         return;
 
-      await this.$router.push({ name: `${this.route}-read`, params: { id } });
+      await this.$router.push({
+        name: `${this.route}-read`,
+        params: { id },
+      });
     },
 
     async onEdit() {
@@ -90,7 +93,10 @@ export default defineComponent({
       if (!id)
         return;
 
-      await this.$router.push({ name: `${this.route}-edit`, params: { id } });
+      await this.$router.push({
+        name: `${this.route}-edit`,
+        params: { id },
+      });
     },
 
     async onDelete() {
@@ -98,7 +104,9 @@ export default defineComponent({
       if (!id)
         return;
 
-      await this.$http.delete(this.api, { params: { id } });
+      await this.$http.delete(this.api, {
+        params: { id },
+      });
       useMessages().success(this.$t('common.msg.multi.deleted'));
       this.onDraw();
     },

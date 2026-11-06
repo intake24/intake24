@@ -135,7 +135,9 @@ export default defineComponent({
 
     const apiUrl = computed(() => `admin/surveys/${props.surveyId}/respondents/${props.user.username}/feedback`);
     const dialog = ref(false);
-    const { data, errors, post, reset } = useForm<RespondentFeedback>({ data: { email: null, copy: 'none' } });
+    const { data, errors, post, reset } = useForm<RespondentFeedback>({
+      data: { email: null, copy: 'none' },
+    });
 
     function close() {
       reset();

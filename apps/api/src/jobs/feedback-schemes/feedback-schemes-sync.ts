@@ -56,8 +56,15 @@ export default class FeedbackSchemesSync extends BaseJob<'FeedbackSchemesSync'> 
     const cardMap = this.getCardMap();
 
     const schemes = await this.models.system.FeedbackScheme.findAll({
-      attributes: ['id', 'name', 'cards', 'demographicGroups'],
-      order: [['id', 'ASC']],
+      attributes: [
+        'id',
+        'name',
+        'cards',
+        'demographicGroups',
+      ],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
 
     for (const scheme of schemes) {

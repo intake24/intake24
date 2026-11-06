@@ -13,7 +13,9 @@ const consoleSilent = (process.env.NODE_ENV || 'development') === 'test';
 const dirname = path.resolve(config.dir);
 
 const logFormat = format.printf(({ level, message, timestamp, service, ...rest }) => {
-  let msg = `${timestamp} ${level} ${service ? `${service}` : ''}: ${message}`;
+  let msg = `${timestamp} ${level} ${service
+    ? `${service}`
+    : ''}: ${message}`;
 
   if (Object.keys(rest).length)
     msg = `${msg} ${JSON.stringify(rest)}`;

@@ -11,7 +11,10 @@ export default {
 
       await queryInterface.sequelize.query(`ALTER SEQUENCE category_locals_id_seq RENAME TO categories_id_seq;`, { transaction });
 
-      await queryInterface.addColumn('categories', 'english_name', { allowNull: true, type: Sequelize.STRING(256) }, { transaction });
+      await queryInterface.addColumn('categories', 'english_name', {
+        allowNull: true,
+        type: Sequelize.STRING(256),
+      }, { transaction });
       await queryInterface.addColumn('categories', 'hidden', { allowNull: true, type: Sequelize.BOOLEAN }, { transaction });
       await queryInterface.renameColumn('categories', 'category_code', 'code', { transaction });
 
@@ -20,9 +23,18 @@ export default {
         { transaction },
       );
 
-      await queryInterface.changeColumn('categories', 'code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction });
-      await queryInterface.changeColumn('categories', 'locale_id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction });
-      await queryInterface.changeColumn('categories', 'english_name', { allowNull: false, type: Sequelize.STRING(256) }, { transaction });
+      await queryInterface.changeColumn('categories', 'code', {
+        allowNull: false,
+        type: Sequelize.STRING(64),
+      }, { transaction });
+      await queryInterface.changeColumn('categories', 'locale_id', {
+        allowNull: false,
+        type: Sequelize.STRING(64),
+      }, { transaction });
+      await queryInterface.changeColumn('categories', 'english_name', {
+        allowNull: false,
+        type: Sequelize.STRING(256),
+      }, { transaction });
       await queryInterface.changeColumn('categories', 'hidden', { allowNull: false, type: Sequelize.BOOLEAN }, { transaction });
       await queryInterface.removeConstraint('categories', 'category_locals_category_code_fk', { transaction });
 
@@ -179,7 +191,10 @@ export default {
 
       await queryInterface.sequelize.query(`ALTER SEQUENCE food_locals_id_seq RENAME TO foods_id_seq;`, { transaction });
 
-      await queryInterface.addColumn('foods', 'english_name', { allowNull: true, type: Sequelize.STRING(256) }, { transaction });
+      await queryInterface.addColumn('foods', 'english_name', {
+        allowNull: true,
+        type: Sequelize.STRING(256),
+      }, { transaction });
       await queryInterface.renameColumn('foods', 'food_code', 'code', { transaction });
 
       await queryInterface.sequelize.query(
@@ -187,9 +202,18 @@ export default {
         { transaction },
       );
 
-      await queryInterface.changeColumn('foods', 'code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction });
-      await queryInterface.changeColumn('foods', 'locale_id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction });
-      await queryInterface.changeColumn('foods', 'english_name', { allowNull: false, type: Sequelize.STRING(256) }, { transaction });
+      await queryInterface.changeColumn('foods', 'code', {
+        allowNull: false,
+        type: Sequelize.STRING(64),
+      }, { transaction });
+      await queryInterface.changeColumn('foods', 'locale_id', {
+        allowNull: false,
+        type: Sequelize.STRING(64),
+      }, { transaction });
+      await queryInterface.changeColumn('foods', 'english_name', {
+        allowNull: false,
+        type: Sequelize.STRING(256),
+      }, { transaction });
       await queryInterface.removeConstraint('foods', 'food_locals_food_code_fk', { transaction });
 
       await Promise.all([
@@ -356,8 +380,14 @@ export default {
       await queryInterface.removeConstraint('associated_foods', 'associated_foods_associated_category_code_fk', { transaction });
       await queryInterface.removeConstraint('associated_foods', 'associated_foods_associated_food_code_fk', { transaction });
 
-      await queryInterface.changeColumn('associated_foods', 'associated_category_code', { allowNull: true, type: Sequelize.STRING(64) }, { transaction });
-      await queryInterface.changeColumn('associated_foods', 'associated_food_code', { allowNull: true, type: Sequelize.STRING(64) }, { transaction });
+      await queryInterface.changeColumn('associated_foods', 'associated_category_code', {
+        allowNull: true,
+        type: Sequelize.STRING(64),
+      }, { transaction });
+      await queryInterface.changeColumn('associated_foods', 'associated_food_code', {
+        allowNull: true,
+        type: Sequelize.STRING(64),
+      }, { transaction });
 
       await queryInterface.removeConstraint('associated_foods', 'associated_foods_food_code_fk', { transaction });
       await queryInterface.removeConstraint('associated_foods', 'associated_foods_locale_id_fk', { transaction });
@@ -482,11 +512,23 @@ export default {
       });
 
       // recipe_foods
-      await queryInterface.changeColumn('recipe_foods', 'code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction });
-      await queryInterface.changeColumn('recipe_foods', 'locale_id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction });
+      await queryInterface.changeColumn('recipe_foods', 'code', {
+        allowNull: false,
+        type: Sequelize.STRING(64),
+      }, { transaction });
+      await queryInterface.changeColumn('recipe_foods', 'locale_id', {
+        allowNull: false,
+        type: Sequelize.STRING(64),
+      }, { transaction });
       await queryInterface.removeConstraint('recipe_foods_steps', 'category_foods_code_fk', { transaction });
-      await queryInterface.changeColumn('recipe_foods_steps', 'category_code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction });
-      await queryInterface.changeColumn('recipe_foods_steps', 'locale_id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction });
+      await queryInterface.changeColumn('recipe_foods_steps', 'category_code', {
+        allowNull: false,
+        type: Sequelize.STRING(64),
+      }, { transaction });
+      await queryInterface.changeColumn('recipe_foods_steps', 'locale_id', {
+        allowNull: false,
+        type: Sequelize.STRING(64),
+      }, { transaction });
 
       await Promise.all([
         queryInterface.dropTable('foods_local_lists', { transaction }),
@@ -500,10 +542,22 @@ export default {
       ]);
 
       await Promise.all([
-        queryInterface.changeColumn('locales', 'id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('split_lists', 'locale_id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('split_words', 'locale_id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('synonym_sets', 'locale_id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
+        queryInterface.changeColumn('locales', 'id', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('split_lists', 'locale_id', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('split_words', 'locale_id', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('synonym_sets', 'locale_id', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
       ]);
     });
   },

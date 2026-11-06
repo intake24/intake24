@@ -91,7 +91,9 @@ describe('food service', () => {
         },
       ];
 
-      const idMap = new Map([[food.code, food.id]]);
+      const idMap = new Map([
+        [food.code, food.id],
+      ]);
 
       await service.bulkUpdateParentCategories(kyselyDb.foods, 'en_GB', input, idMap);
 
@@ -139,7 +141,9 @@ describe('food service', () => {
         },
       ];
 
-      const idMap = new Map([[food.code, food.id]]);
+      const idMap = new Map([
+        [food.code, food.id],
+      ]);
 
       await service.bulkUpdateFoodAttributes(kyselyDb.foods, input, idMap);
 
@@ -194,7 +198,9 @@ describe('food service', () => {
         },
       ];
 
-      const idMap = new Map([[food.code, food.id]]);
+      const idMap = new Map([
+        [food.code, food.id],
+      ]);
 
       await service.bulkUpdateFoodPortionSizeMethods(kyselyDb.foods, input, idMap);
 
@@ -279,7 +285,9 @@ describe('food service', () => {
         },
       ];
 
-      const idMap = new Map([[food.code, food.id]]);
+      const idMap = new Map([
+        [food.code, food.id],
+      ]);
 
       await service.bulkUpdateAssociatedFoods(kyselyDb.foods, input, idMap);
 
@@ -331,13 +339,17 @@ describe('food service', () => {
           tags: [],
           portionSizeMethods: [],
           associatedFoods: [],
-          nutrientRecords: [{ nutrientTableId: 'NDNS', nutrientTableRecordId: 'REC1' }],
+          nutrientRecords: [
+            { nutrientTableId: 'NDNS', nutrientTableRecordId: 'REC1' },
+          ],
           parentCategories: [],
           attributes: {},
         },
       ];
 
-      const idMap = new Map([[food.code, food.id]]);
+      const idMap = new Map([
+        [food.code, food.id],
+      ]);
 
       await service.bulkUpdateFoodNutrientRecords(kyselyDb.foods, input, idMap);
 

@@ -29,7 +29,9 @@ export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guid
   const { foodName } = useFoodUtils(props);
   const { parameters } = usePortionSizeMethod<Replace<P, '-prompt', ''>>(props);
 
-  const labelsEnabled = computed(() => typeof props.prompt.imageMap.labels === 'boolean' ? props.prompt.imageMap.labels : !!parameters.value.labels);
+  const labelsEnabled = computed(() => typeof props.prompt.imageMap.labels === 'boolean'
+    ? props.prompt.imageMap.labels
+    : !!parameters.value.labels);
 
   function resolveAsServedLabels(data: AsServedSetResponse | null) {
     if (!data)
@@ -37,8 +39,12 @@ export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guid
 
     const food = foodName.value;
 
-    const image = translate(data.label, { params: { food } });
-    const objects = data.images.map(({ label, weight }) => translate(label, { params: { food, weight } }) || `${Math.round(weight)}g`);
+    const image = translate(data.label, {
+      params: { food },
+    });
+    const objects = data.images.map(({ label, weight }) => translate(label, {
+      params: { food, weight },
+    }) || `${Math.round(weight)}g`);
 
     return { image, objects };
   }
@@ -49,11 +55,19 @@ export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guid
 
     const food = foodName.value;
 
-    const image = translate(data.label, { params: { food } }) || translate(data.imageMap.label, { params: { food } });
+    const image = translate(data.label, {
+      params: { food },
+    }) || translate(data.imageMap.label, {
+      params: { food },
+    });
     const objects = data.imageMap.objects.map((object) => {
       const { label, weight } = data.objects[object.id];
 
-      return translate(label, { params: { food, weight } }) || translate(object.label, { params: { food, weight } });
+      return translate(label, {
+        params: { food, weight },
+      }) || translate(object.label, {
+        params: { food, weight },
+      });
     });
 
     return { image, objects };
@@ -65,8 +79,12 @@ export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guid
 
     const food = foodName.value;
 
-    const image = translate(data.label, { params: { food } });
-    const objects = data.objects.map(({ label }) => translate(label, { params: { food } }));
+    const image = translate(data.label, {
+      params: { food },
+    });
+    const objects = data.objects.map(({ label }) => translate(label, {
+      params: { food },
+    }));
 
     return { image, objects };
   }
@@ -77,7 +95,11 @@ export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guid
 
     const food = foodName.value;
 
-    const image = translate(drinkwareSet.label, { params: { food } }) || translate(imageMap.label, { params: { food } });
+    const image = translate(drinkwareSet.label, {
+      params: { food },
+    }) || translate(imageMap.label, {
+      params: { food },
+    });
 
     const objects = imageMap.objects.map((object) => {
       const scale = drinkwareSet.scales.find(({ choiceId }) => choiceId.toString() === object.id);
@@ -88,7 +110,11 @@ export function useLabels<P extends 'as-served-prompt' | 'cereal-prompt' | 'guid
         ? scale.volumeSamples.at(-1)
         : scale.volumeSamplesNormalised.at(-1)) ?? 0;
 
-      return translate(scale.label, { params: { food, volume } }) || translate(object.label, { params: { food, volume } });
+      return translate(scale.label, {
+        params: { food, volume },
+      }) || translate(object.label, {
+        params: { food, volume },
+      });
     });
 
     return { image, objects };

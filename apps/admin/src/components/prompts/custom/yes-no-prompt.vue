@@ -140,15 +140,33 @@ export default defineComponent({
   emits: ['update:options'],
 
   setup(props, { emit }) {
-    const availableActions = [{ value: 'updateFood', title: 'Update Food' }];
-    const currentTrueAction = ref(props.trueAction ? { ...props.trueAction } : undefined);
-    const currentFalseAction = ref(props.falseAction ? { ...props.falseAction } : undefined);
+    const availableActions = [
+      { value: 'updateFood', title: 'Update Food' },
+    ];
+    const currentTrueAction = ref(props.trueAction
+      ? { ...props.trueAction }
+      : undefined);
+    const currentFalseAction = ref(props.falseAction
+      ? { ...props.falseAction }
+      : undefined);
 
     function changeToggle(type: boolean, enable: boolean | null) {
-      if (type)
-        currentTrueAction.value = enable ? { type: 'updateFood', params: { code: 'FOOD_CODE' } } : undefined;
-      else
-        currentFalseAction.value = enable ? { type: 'updateFood', params: { code: 'FOOD_CODE' } } : undefined;
+      if (type) {
+        currentTrueAction.value = enable
+          ? {
+              type: 'updateFood',
+              params: { code: 'FOOD_CODE' },
+            }
+          : undefined;
+      }
+      else {
+        currentFalseAction.value = enable
+          ? {
+              type: 'updateFood',
+              params: { code: 'FOOD_CODE' },
+            }
+          : undefined;
+      }
     };
 
     watch(

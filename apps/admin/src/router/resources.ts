@@ -117,7 +117,13 @@ export const resources: Resource[] = [
     api: 'admin/survey-schemes',
     securable: true,
     generateRoutes: true,
-    routes: [...routes, 'prompts', 'data-export', 'media', 'securables'],
+    routes: [
+      ...routes,
+      'prompts',
+      'data-export',
+      'media',
+      'securables',
+    ],
     refs: true,
   },
   {
@@ -231,7 +237,12 @@ export const resources: Resource[] = [
     icon: 'fas fa-fw fa-users',
     api: 'admin/users',
     generateRoutes: true,
-    routes: [...routes, 'permissions', 'roles', 'securables'],
+    routes: [
+      ...routes,
+      'permissions',
+      'roles',
+      'securables',
+    ],
     refs: true,
   },
   {

@@ -14,9 +14,21 @@ import NutrientTypeInKcal from './nutrient-type-in-kcal';
 import FoodsNutrientUnit from './nutrient-unit';
 
 @Scopes(() => ({
-  unit: { include: [{ model: FoodsNutrientUnit }] },
-  inKcal: { include: [{ model: NutrientTypeInKcal }] },
-  list: { order: [['id', 'ASC']] },
+  unit: {
+    include: [
+      { model: FoodsNutrientUnit },
+    ],
+  },
+  inKcal: {
+    include: [
+      { model: NutrientTypeInKcal },
+    ],
+  },
+  list: {
+    order: [
+      ['id', 'ASC'],
+    ],
+  },
 }))
 @Table({
   modelName: 'NutrientType',

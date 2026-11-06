@@ -56,13 +56,21 @@ function imageMapService({
     if (!imageMap.objects)
       throw new NotFoundError();
 
-    const guideImages = await GuideImage.findAll({ attributes: ['id'], where: { imageMapId } });
+    const guideImages = await GuideImage.findAll({
+      attributes: ['id'],
+      where: { imageMapId },
+    });
     const guideImageIds = guideImages.map(({ id }) => id);
 
     await imageMap.update({ description, label });
 
     const objectIds = objects.map(object => object.id);
-    await ImageMapObject.destroy({ where: { imageMapId, id: { [Op.notIn]: objectIds } } });
+    await ImageMapObject.destroy({
+      where: {
+        imageMapId,
+        id: { [Op.notIn]: objectIds },
+      },
+    });
 
     for (const object of objects) {
       const match = imageMap.objects.find(imageMapObject => imageMapObject.id === object.id);
@@ -105,7 +113,12 @@ function imageMapService({
   const destroy = async (imageMapId: string): Promise<void> => {
     const imageMap = await ImageMap.findByPk(imageMapId, {
       attributes: ['id', 'baseImageId'],
-      include: [{ association: 'guideImages', attributes: ['id'] }],
+      include: [
+        {
+          association: 'guideImages',
+          attributes: ['id'],
+        },
+      ],
     });
     if (!imageMap || !imageMap.guideImages)
       throw new NotFoundError();
@@ -136,7 +149,9 @@ function imageMapService({
       {
         baseImageId: processedBaseImage.id,
       },
-      { where: { id } },
+      {
+        where: { id },
+      },
     );
 
     if (affected[0] !== 1)

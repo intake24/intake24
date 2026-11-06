@@ -64,7 +64,9 @@ const conditions = useVModel(props, 'modelValue', emit, { passive: true, deep: t
 
 function add() {
   conditions.value.push(
-    copy({ ...getConditionDefaults('food', getDefaultConditionProperty('food')) }),
+    copy({
+      ...getConditionDefaults('food', getDefaultConditionProperty('food')),
+    }),
   );
 }
 function remove(idx: number) {

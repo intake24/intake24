@@ -10,8 +10,14 @@ import { captchaCheck } from '../../rules';
 import { attachRefreshToken } from '../util';
 
 async function uniqueMiddleware(value: any) {
-  if (!(await unique({ model: User, condition: { field: 'email', value } }))) {
-    throw ValidationError.from({ path: 'email', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: User,
+    condition: { field: 'email', value },
+  }))) {
+    throw ValidationError.from({
+      path: 'email',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
@@ -43,7 +49,10 @@ export function signUp() {
         res,
         req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
-      return { status: 200, body: { accessToken: result.accessToken } };
+      return {
+        status: 200,
+        body: { accessToken: result.accessToken },
+      };
     },
     verify: async ({ body, req }) => {
       const { token } = body;

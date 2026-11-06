@@ -54,7 +54,9 @@ export default () => {
   it('should return null when no physical data for user', async () => {
     await Promise.all([
       survey.update({ feedbackSchemeId: feedbackScheme.id }),
-      feedbackScheme.update({ physicalDataFields: [...feedbackPhysicalDataFields] }),
+      feedbackScheme.update({
+        physicalDataFields: [...feedbackPhysicalDataFields],
+      }),
     ]);
 
     const { status, body } = await request(suite.app)

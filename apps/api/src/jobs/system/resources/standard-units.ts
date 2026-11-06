@@ -7,7 +7,9 @@ import { Transform } from '@json2csv/node';
 import { sql } from 'kysely';
 
 export async function standardUnits({ kyselyDb, params: { language = ['en'] } }: ResourceOps) {
-  const { total } = await kyselyDb.foods.selectFrom('standardUnits').select(({ fn }) => [fn.count<number>('id').as('total')]).executeTakeFirstOrThrow();
+  const { total } = await kyselyDb.foods.selectFrom('standardUnits').select(({ fn }) => [
+    fn.count<number>('id').as('total'),
+  ]).executeTakeFirstOrThrow();
   const cursor = kyselyDb.foods.selectFrom('standardUnits').selectAll().orderBy(sql`lower(id) asc`).stream();
   const records = Readable.from(cursor);
 

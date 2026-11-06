@@ -65,12 +65,19 @@ export function useRecall() {
 
     switch (prompt.type) {
       case 'custom':
-        return ['multi-prompt', 'aggregate-choice-prompt', 'food-selection-prompt', 'yes-no-prompt'].includes(prompt.component)
+        return [
+          'multi-prompt',
+          'aggregate-choice-prompt',
+          'food-selection-prompt',
+          'yes-no-prompt',
+        ].includes(prompt.component)
           ? `${prompt.component}-handler`
           : 'custom-prompt-handler';
       case 'standard':
       case 'portion-size':
-        return prompt.component.endsWith('builder-prompt') ? `food-builder-prompt-handler` : `${prompt.component}-handler`;
+        return prompt.component.endsWith('builder-prompt')
+          ? `food-builder-prompt-handler`
+          : `${prompt.component}-handler`;
       default:
         throw new Error(`Unexpected prompt type: ${(prompt as any).type}`);
     }
@@ -113,7 +120,9 @@ export function useRecall() {
 
     if (result?.entryType === 'full') {
       hideCurrentPrompt.value = true;
-      setPromptTransitionAction(result.direction === 'back' ? 'popstateBack' : 'popstateForward');
+      setPromptTransitionAction(result.direction === 'back'
+        ? 'popstateBack'
+        : 'popstateForward');
       setCurrentPrompt(recallController.value?.getNextPrompt() ?? null);
       hideCurrentPrompt.value = false;
     }
@@ -129,7 +138,10 @@ export function useRecall() {
   };
 
   function showMealPrompt(mealId: string, promptSection: MealSection, promptType: ComponentType) {
-    setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
+    setSelection({
+      element: { type: 'meal', mealId },
+      mode: 'manual',
+    });
 
     const prompt = recallController.value?.promptManager.findMealPromptOfType(
       promptType,
@@ -147,7 +159,10 @@ export function useRecall() {
   };
 
   function showFoodPrompt(foodId: string, promptSection: MealSection, promptType: ComponentType) {
-    setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
+    setSelection({
+      element: { type: 'food', foodId },
+      mode: 'manual',
+    });
 
     const prompt = recallController.value?.promptManager.findFoodPromptOfType(promptType, foodId);
 
@@ -184,7 +199,11 @@ export function useRecall() {
 
     if (event === 'deleteMeal') {
       const meal = meals.value.find(meal => meal.id === id);
-      return meal ? { meal: getMealName(meal) } : {};
+      return meal
+        ? {
+            meal: getMealName(meal),
+          }
+        : {};
     }
 
     const foodIndex = getFoodIndex(meals.value, id);
@@ -193,7 +212,10 @@ export function useRecall() {
 
     const meal = meals.value[foodIndex.mealIndex];
     const food = getFoodDescription(getFoodByIndex(meals.value, foodIndex));
-    return { ...(food && { food }), meal: getMealName(meal) };
+    return {
+      ...(food && { food }),
+      meal: getMealName(meal),
+    };
   }
 
   async function action(type: string, id?: string, params?: object, tracking?: TrackingContext) {
@@ -270,7 +292,10 @@ export function useRecall() {
         break;
       case 'selectMeal':
         invalidateForward();
-        setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
+        setSelection({
+          element: { type: 'meal', mealId },
+          mode: 'manual',
+        });
         await nextPrompt();
         break;
       default:
@@ -287,7 +312,10 @@ export function useRecall() {
       case 'editFood':
         pushFullHistoryEntry('Edit food');
         survey.editFood(foodId);
-        setSelection({ element: { type: 'food', foodId }, mode: 'auto' });
+        setSelection({
+          element: { type: 'food', foodId },
+          mode: 'auto',
+        });
         await nextPrompt();
         break;
       case 'deleteFood':
@@ -297,7 +325,10 @@ export function useRecall() {
         break;
       case 'selectFood':
         invalidateForward();
-        setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
+        setSelection({
+          element: { type: 'food', foodId },
+          mode: 'manual',
+        });
         await nextPrompt();
         break;
       case 'updateFood':
@@ -371,7 +402,9 @@ export function useRecall() {
   };
 
   async function nextPrompt() {
-    const nextPrompt = recallController.value ? recallController.value.getNextPrompt() : undefined;
+    const nextPrompt = recallController.value
+      ? recallController.value.getNextPrompt()
+      : undefined;
 
     if (nextPrompt === undefined) {
       // TODO: handle completion
@@ -464,7 +497,9 @@ export function useRecall() {
         prompt_id: promptInstance.prompt.id,
         section: promptInstance.section,
         prompt_component: promptInstance.prompt.component,
-      }, option === undefined ? undefined : { previous_selected_option: option });
+      }, option === undefined
+        ? undefined
+        : { previous_selected_option: option });
     }
 
     function clearPromptTransition() {

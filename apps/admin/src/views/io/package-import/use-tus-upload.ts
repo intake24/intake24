@@ -22,7 +22,9 @@ export class UploadFailure extends Error {
 }
 
 function toUploadFailure(err: Error | DetailedError) {
-  const status = err instanceof DetailedError ? err.originalResponse?.getStatus() : undefined;
+  const status = err instanceof DetailedError
+    ? err.originalResponse?.getStatus()
+    : undefined;
 
   switch (status) {
     case 403:
@@ -53,7 +55,9 @@ export function useTusUpload() {
   const bytesTotal = ref(0);
   const bytesPerSecond = ref<number | null>(null);
 
-  const percent = computed(() => bytesTotal.value ? Math.floor((bytesUploaded.value / bytesTotal.value) * 100) : 0);
+  const percent = computed(() => bytesTotal.value
+    ? Math.floor((bytesUploaded.value / bytesTotal.value) * 100)
+    : 0);
   const secondsRemaining = computed(() => bytesPerSecond.value
     ? Math.max(0, (bytesTotal.value - bytesUploaded.value) / bytesPerSecond.value)
     : null);

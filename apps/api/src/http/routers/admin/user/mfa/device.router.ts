@@ -11,7 +11,13 @@ export function device() {
       const { userId } = req.scope.cradle.user;
 
       const user = await User.findByPk(userId, {
-        include: [{ association: 'mfaDevices', where: { userId }, required: false }],
+        include: [
+          {
+            association: 'mfaDevices',
+            where: { userId },
+            required: false,
+          },
+        ],
         order: [
           ['mfaDevices', 'preferred', 'DESC'],
           ['mfaDevices', 'id', 'ASC'],
@@ -34,18 +40,25 @@ export function device() {
       if (!status && mfa.mode === 'required')
         throw new ForbiddenError('Multi-factor authentication is required for your account.');
 
-      const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
+      const devices = await MFADevice.findAll({
+        attributes: ['id'],
+        where: { userId },
+      });
       if (status && devices.length < 2)
         throw new ForbiddenError('At least two authentication methods are required to enable multi-factor authentication.');
 
-      await User.update({ multiFactorAuthentication: status }, { where: { id: userId } });
+      await User.update({ multiFactorAuthentication: status }, {
+        where: { id: userId },
+      });
 
       return { status: 200, body: undefined };
     },
     read: async ({ params: { deviceId }, req }) => {
       const { userId } = req.scope.cradle.user;
 
-      const device = await MFADevice.findOne({ where: { id: deviceId, userId } });
+      const device = await MFADevice.findOne({
+        where: { id: deviceId, userId },
+      });
       if (!device)
         throw new NotFoundError();
 
@@ -54,7 +67,9 @@ export function device() {
     update: async ({ body: { preferred }, params: { deviceId }, req }) => {
       const { userId } = req.scope.cradle.user;
 
-      const device = await MFADevice.findOne({ where: { id: deviceId, userId } });
+      const device = await MFADevice.findOne({
+        where: { id: deviceId, userId },
+      });
       if (!device)
         throw new NotFoundError();
 
@@ -63,7 +78,12 @@ export function device() {
       if (preferred === true) {
         await MFADevice.update(
           { preferred: false },
-          { where: { id: { [Op.ne]: deviceId }, userId } },
+          {
+            where: {
+              id: { [Op.ne]: deviceId },
+              userId,
+            },
+          },
         );
       }
 
@@ -81,9 +101,15 @@ export function device() {
 
       await device.destroy();
 
-      const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
-      if (!devices.length)
-        await User.update({ multiFactorAuthentication: false }, { where: { id: userId } });
+      const devices = await MFADevice.findAll({
+        attributes: ['id'],
+        where: { userId },
+      });
+      if (!devices.length) {
+        await User.update({ multiFactorAuthentication: false }, {
+          where: { id: userId },
+        });
+      }
 
       return { status: 204, body: undefined };
     },

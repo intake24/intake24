@@ -17,11 +17,17 @@ export function mergeTranslations(defaults: any, source: any) {
   if (typeof source === 'undefined')
     return defaults;
 
-  if (typeof defaults === 'string')
-    return typeof source === 'string' ? source : defaults;
+  if (typeof defaults === 'string') {
+    return typeof source === 'string'
+      ? source
+      : defaults;
+  }
 
-  if (Array.isArray(defaults))
-    return Array.isArray(source) ? source : defaults;
+  if (Array.isArray(defaults)) {
+    return Array.isArray(source)
+      ? source
+      : defaults;
+  }
 
   if (Object.prototype.toString.call(defaults) === '[object Object]') {
     return Object.keys(defaults).reduce<Record<string, any>>((acc, key) => {
@@ -46,8 +52,12 @@ export function compareMessageKeys<
   T1 extends LocaleMessageValue = LocaleMessageValue,
   T2 extends LocaleMessageValue = T1,
 >(x: T1, y: T2): boolean {
-  const xKeys = typeof x === 'string' ? [x] : getObjectNestedKeys(x);
-  const yKeys = typeof y === 'string' ? [y] : getObjectNestedKeys(y);
+  const xKeys = typeof x === 'string'
+    ? [x]
+    : getObjectNestedKeys(x);
+  const yKeys = typeof y === 'string'
+    ? [y]
+    : getObjectNestedKeys(y);
 
   return xKeys.length === yKeys.length && xKeys.every(key => yKeys.includes(key));
 }

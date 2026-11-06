@@ -109,12 +109,16 @@ export default class Job extends BaseModel<InferAttributes<Job>, InferCreationAt
   })
   get stackTrace(): CreationOptional<string[] | null> {
     const val = this.getDataValue('stackTrace') as unknown;
-    return val ? (val as string).split('\n') : null;
+    return val
+      ? (val as string).split('\n')
+      : null;
   }
 
   set stackTrace(value: string[] | null) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('stackTrace', value ? value.join('\n') : null);
+    this.setDataValue('stackTrace', value
+      ? value.join('\n')
+      : null);
   }
 
   @Column({

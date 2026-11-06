@@ -52,7 +52,10 @@ function nutrientUnitService() {
     if (!foodsNutrientUnit || !systemNutrientUnit)
       throw new NotFoundError();
 
-    await Promise.all([foodsNutrientUnit.update(input), systemNutrientUnit.update(input)]);
+    await Promise.all([
+      foodsNutrientUnit.update(input),
+      systemNutrientUnit.update(input),
+    ]);
 
     return foodsNutrientUnit;
   };
@@ -66,11 +69,15 @@ function nutrientUnitService() {
     const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
       FoodsNutrientUnit.findByPk(nutrientUnitId, {
         attributes: ['id'],
-        include: [{ association: 'nutrientTypes' }],
+        include: [
+          { association: 'nutrientTypes' },
+        ],
       }),
       SystemNutrientUnit.findByPk(nutrientUnitId, {
         attributes: ['id'],
-        include: [{ association: 'nutrientTypes' }],
+        include: [
+          { association: 'nutrientTypes' },
+        ],
       }),
     ]);
 
@@ -89,7 +96,10 @@ function nutrientUnitService() {
       );
     }
 
-    await Promise.all([foodsNutrientUnit.destroy(), systemNutrientUnit.destroy()]);
+    await Promise.all([
+      foodsNutrientUnit.destroy(),
+      systemNutrientUnit.destroy(),
+    ]);
   };
 
   return {

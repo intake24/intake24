@@ -11,7 +11,11 @@ import { Column, DataType, Scopes, Table } from 'sequelize-typescript';
 import BaseModel from '../model';
 
 @Scopes(() => ({
-  list: { order: [['id', 'ASC']] },
+  list: {
+    order: [
+      ['id', 'ASC'],
+    ],
+  },
 }))
 @Table({
   modelName: 'PhysicalActivityLevel',

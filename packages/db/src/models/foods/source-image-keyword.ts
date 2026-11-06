@@ -12,7 +12,11 @@ import BaseModel from '../model';
 import SourceImage from './source-image';
 
 @Scopes(() => ({
-  sourceImage: { include: [{ model: SourceImage }] },
+  sourceImage: {
+    include: [
+      { model: SourceImage },
+    ],
+  },
 }))
 @Table({
   modelName: 'SourceImageKeyword',

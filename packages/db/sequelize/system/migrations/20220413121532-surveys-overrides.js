@@ -11,7 +11,11 @@ export default {
       for (const survey of surveys) {
         const { id, description, final_page_html, overrides } = survey;
 
-        const surveySchemeOverrides = { meals: [], questions: [], ...JSON.parse(overrides) };
+        const surveySchemeOverrides = {
+          meals: [],
+          questions: [],
+          ...JSON.parse(overrides),
+        };
 
         if (description) {
           surveySchemeOverrides.questions.push({
@@ -49,7 +53,10 @@ export default {
           `UPDATE surveys SET overrides = :overrides WHERE id = :id;`,
           {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
-            replacements: { id, overrides: JSON.stringify(surveySchemeOverrides) },
+            replacements: {
+              id,
+              overrides: JSON.stringify(surveySchemeOverrides),
+            },
             transaction,
           },
         );

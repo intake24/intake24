@@ -128,7 +128,12 @@ export function requestValidationErrorHandler(err: RequestValidationError, req: 
   const { i18nService } = req.scope.cradle;
   let firstError: StandardSchemaError;
 
-  const errors = ['pathParams', 'headers', 'query', 'body'].reduce<Record<string, ExtendedValidationError>>((acc, key) => {
+  const errors = [
+    'pathParams',
+    'headers',
+    'query',
+    'body',
+  ].reduce<Record<string, ExtendedValidationError>>((acc, key) => {
     const zKey = key as keyof typeof err;
     const error = err[zKey];
 
@@ -138,7 +143,12 @@ export function requestValidationErrorHandler(err: RequestValidationError, req: 
     if (!firstError)
       firstError = error;
 
-    acc = { ...acc, ...mapZodIssues(error.issues as ZodIssue[], i18nService, (key === 'pathParams' ? 'params' : key) as Location) };
+    acc = {
+      ...acc,
+      ...mapZodIssues(error.issues as ZodIssue[], i18nService, (key === 'pathParams'
+        ? 'params'
+        : key) as Location),
+    };
 
     return acc;
   }, {});

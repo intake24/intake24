@@ -49,7 +49,9 @@ function getInitialState(): PromptStates['cereal-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null
+      ? 1
+      : 0,
     bowlConfirmed: false,
     servingImageConfirmed: false,
     leftoversPrompt: undefined,

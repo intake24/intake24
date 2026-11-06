@@ -104,7 +104,9 @@ export const promptValidationWithLimits = promptValidation.extend({
       return true;
 
     return data.max >= data.min;
-  }, { path: ['validation.max'] });
+  }, {
+    path: ['validation.max'],
+  });
 export type PromptValidationWithLimits = z.infer<typeof promptValidationWithLimits>;
 
 export const CurrentPromptVersion = 4;
@@ -125,11 +127,19 @@ export type BasePrompt = z.infer<typeof basePrompt>;
 export const validatedPrompt = basePrompt.extend({ validation: promptValidation });
 export type ValidatedPrompt = z.infer<typeof validatedPrompt>;
 
-export const baseCustomPrompt = basePrompt.extend({ type: z.literal('custom'), group: z.string().nullish() });
+export const baseCustomPrompt = basePrompt.extend({
+  type: z.literal('custom'),
+  group: z.string().nullish(),
+});
 export type BaseCustomPrompt = z.infer<typeof baseCustomPrompt>;
-export const basePortionPrompt = basePrompt.extend({ type: z.literal('portion-size'), badges: z.boolean() });
+export const basePortionPrompt = basePrompt.extend({
+  type: z.literal('portion-size'),
+  badges: z.boolean(),
+});
 export type BasePortionPrompt = z.infer<typeof basePortionPrompt>;
-export const baseStandardPrompt = basePrompt.extend({ type: z.literal('standard') });
+export const baseStandardPrompt = basePrompt.extend({
+  type: z.literal('standard'),
+});
 export type BaseStandardPrompt = z.infer<typeof baseStandardPrompt>;
 
 const addonFood = z.object({
@@ -174,7 +184,12 @@ export const linkedQuantity = z.object({
 });
 export type LinkedQuantity = z.infer<typeof linkedQuantity>;
 
-export const reviewOptions = [false, 'scroll', 'checkbox', 'onecheckbox'] as const;
+export const reviewOptions = [
+  false,
+  'scroll',
+  'checkbox',
+  'onecheckbox',
+] as const;
 export type ReviewOptions = (typeof reviewOptions)[number];
 
 // Custom
@@ -266,7 +281,9 @@ const yesNoPrompt = z.object({
 });
 
 // Portion size
-export const hasMultiple = z.object({ multiple: z.discriminatedUnion('type', [counter, slider]).or(z.literal(false)) });
+export const hasMultiple = z.object({
+  multiple: z.discriminatedUnion('type', [counter, slider]).or(z.literal(false)),
+});
 export type HasMultiple = z.infer<typeof hasMultiple>;
 
 const asServedPrompt = z.object({
@@ -412,7 +429,10 @@ const externalSourcePrompt = z.object({
   component: z.literal('external-source-prompt'),
   source: externalSourceOptions,
   barcode: barcodeScannerOptions,
-  initialSearch: z.union([z.literal(false), z.literal('searchTerm')]),
+  initialSearch: z.union([
+    z.literal(false),
+    z.literal('searchTerm'),
+  ]),
 });
 
 const finalPrompt = z.object({
@@ -473,9 +493,18 @@ const redirectPrompt = z.object({
   component: z.literal('redirect-prompt'),
   rating: z.boolean(),
   url: z.string().nullable(),
-  identifier: z.union([z.literal('userId'), z.literal('username'), z.literal('urlAuthToken'), z.string(), z.null()]),
+  identifier: z.union([
+    z.literal('userId'),
+    z.literal('username'),
+    z.literal('urlAuthToken'),
+    z.string(),
+    z.null(),
+  ]),
   timer: z.number(),
-  target: z.union([z.literal('_self'), z.literal('_blank')]),
+  target: z.union([
+    z.literal('_self'),
+    z.literal('_blank'),
+  ]),
 });
 
 const reviewConfirmPrompt = z.object({
@@ -505,7 +534,12 @@ const splitFoodPrompt = z.object({
 const submitPrompt = z.object({
   ...baseStandardPrompt.shape,
   component: z.literal('submit-prompt'),
-  review: z.record(z.enum(layoutTypes), z.literal([false, 'scroll', 'checkbox', 'onecheckbox'])),
+  review: z.record(z.enum(layoutTypes), z.literal([
+    false,
+    'scroll',
+    'checkbox',
+    'onecheckbox',
+  ])),
 });
 
 export const singlePrompt = z.discriminatedUnion('component', [

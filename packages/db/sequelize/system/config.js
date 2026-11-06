@@ -2,7 +2,9 @@ import { resolve } from 'node:path';
 
 import dotenv from 'dotenv';
 
-dotenv.config({ path: resolve('../../apps/api/.env') });
+dotenv.config({
+  path: resolve('../../apps/api/.env'),
+});
 
 export default {
   development: {

@@ -30,7 +30,9 @@ export function summarizeOtherFood(nutrientTypeId: string[], foods: AggregateFoo
     );
   });
 
-  return [new AggregateFoodStats('Other food', nutrients)];
+  return [
+    new AggregateFoodStats('Other food', nutrients),
+  ];
 }
 
 export function buildTopFoods(topFoods: TopFoods, foods: AggregateFoodStats[], nutrientTypes: NutrientType[] = []): TopFoodData {
@@ -46,7 +48,10 @@ export function buildTopFoods(topFoods: TopFoods, foods: AggregateFoodStats[], n
     const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(id, foods);
     const other = foodHighInNutrient.slice(max);
 
-    const list = [...foodHighInNutrient.slice(0, max), ...summarizeOtherFood(id, other)];
+    const list = [
+      ...foodHighInNutrient.slice(0, max),
+      ...summarizeOtherFood(id, other),
+    ];
 
     const data = list.map(food => ({
       name: food.name,

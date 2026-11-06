@@ -157,7 +157,12 @@ const tabs = computed(() => {
   return routes.filter(
     item =>
       item !== 'create'
-      && can({ resource: module ?? name, action: item, securables, ownerId }),
+      && can({
+        resource: module ?? name,
+        action: item,
+        securables,
+        ownerId,
+      }),
   );
 });
 
@@ -173,7 +178,9 @@ function canHandleEntry(action: string | string[]) {
 
 function tabTitle(tab: string) {
   const check = has(messages.value[locale.value], `${resource.name}.${tab}.tab`);
-  return t(check ? `${resource.name}.${tab}.tab` : `common.action.${tab}`);
+  return t(check
+    ? `${resource.name}.${tab}.tab`
+    : `common.action.${tab}`);
 };
 
 async function remove() {

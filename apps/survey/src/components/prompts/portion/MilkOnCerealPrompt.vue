@@ -118,12 +118,40 @@ const bowls = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
 type Bowl = (typeof bowls)[number];
 const milkDensity = 1.032;
 const volumeDefs: Record<Bowl, number[]> = {
-  A: [52.3, 100.0, 172.0, 267.7, 389.3, 522.3],
+  A: [
+    52.3,
+    100.0,
+    172.0,
+    267.7,
+    389.3,
+    522.3,
+  ],
   B: [62.7, 138.0, 249.0, 385.7],
-  C: [49.0, 121.3, 233.3, 358.7, 481.0, 622.3],
+  C: [
+    49.0,
+    121.3,
+    233.3,
+    358.7,
+    481.0,
+    622.3,
+  ],
   D: [18.3, 36.0, 70.3, 126.7, 195.3, 287.3],
-  E: [38.0, 103.7, 197.0, 305.7, 428.0, 559.3],
-  F: [49.3, 104.7, 187.7, 295.3, 420.0, 570.3],
+  E: [
+    38.0,
+    103.7,
+    197.0,
+    305.7,
+    428.0,
+    559.3,
+  ],
+  F: [
+    49.3,
+    104.7,
+    187.7,
+    295.3,
+    420.0,
+    570.3,
+  ],
 };
 const milkLevelImageMapPrefix = 'milkbowl';
 
@@ -159,7 +187,9 @@ const milkLevelImageMapId = computed(() => {
 
   return `${milkLevelImageMapPrefix}${bowl.value}`;
 });
-const imageMapUrl = computed(() => milkLevelImageMapId.value ? `portion-sizes/image-maps/${milkLevelImageMapId.value}` : undefined);
+const imageMapUrl = computed(() => milkLevelImageMapId.value
+  ? `portion-sizes/image-maps/${milkLevelImageMapId.value}`
+  : undefined);
 const { imageData: milkLevelImageMap } = useFetchImageData<ImageMapResponse>({
   url: imageMapUrl,
   onFetch: (data) => {

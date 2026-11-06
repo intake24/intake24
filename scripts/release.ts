@@ -56,7 +56,11 @@ async function main() {
 
   // Update versions in package.json files
   step('\nUpdating versions in package.json files...');
-  ['package.json', ...resolvePackages('apps'), ...resolvePackages('packages')]
+  [
+    'package.json',
+    ...resolvePackages('apps'),
+    ...resolvePackages('packages'),
+  ]
     .filter(path => existsSync(path))
     .forEach(path => updatePackageVersion(path, targetVersion));
 

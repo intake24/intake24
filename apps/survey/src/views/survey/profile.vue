@@ -129,7 +129,12 @@ export default defineComponent({
       await useAuth().logout(true);
       const { surveyId } = props;
       await router.push(
-        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' },
+        surveyId
+          ? {
+              name: 'survey-login',
+              params: { surveyId },
+            }
+          : { name: 'home' },
       );
     };
 

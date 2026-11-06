@@ -97,7 +97,14 @@ export default defineComponent({
 
   setup(props, ctx) {
     const { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels } = useFoodItem(props, ctx);
-    return { action, foodName, isPortionSizeComplete, isCustomPromptComplete, menu, customPromptAnswerLabels };
+    return {
+      action,
+      foodName,
+      isPortionSizeComplete,
+      isCustomPromptComplete,
+      menu,
+      customPromptAnswerLabels,
+    };
   },
 });
 </script>

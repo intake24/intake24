@@ -42,7 +42,15 @@ class CategoryExtract {
     this.apiClient = apiClient;
 
     this.writer = new Transform(
-      { fields: ['Main category', 'Subcategory 1', 'Subcategory 2', 'Subcategory 3', 'Category code'] },
+      {
+        fields: [
+          'Main category',
+          'Subcategory 1',
+          'Subcategory 2',
+          'Subcategory 3',
+          'Category code',
+        ],
+      },
       { },
       { objectMode: true },
     );

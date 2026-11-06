@@ -22,5 +22,12 @@ export const colors = {
   'info-5': '#FFDB59',
 };
 
-export const variants = ['flat', 'text', 'elevated', 'tonal', 'outlined', 'plain'] as const;
+export const variants = [
+  'flat',
+  'text',
+  'elevated',
+  'tonal',
+  'outlined',
+  'plain',
+] as const;
 export type Variant = typeof variants[number];

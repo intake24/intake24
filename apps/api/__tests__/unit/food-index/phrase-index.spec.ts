@@ -47,8 +47,12 @@ describe('phrase index', () => {
 
     it('cut combinations', () => {
       const t = new InterpretedPhrase('bleh', [
-        new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
-        new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
+        new InterpretedWord('bleh', [
+          { dictionaryWord: 'bleh', kind: 'synonym' },
+        ]),
+        new InterpretedWord('bleh', [
+          { dictionaryWord: 'bleh', kind: 'synonym' },
+        ]),
         new InterpretedWord('bleh', [
           {
             dictionaryWord: 'bleh',
@@ -66,8 +70,12 @@ describe('phrase index', () => {
 
     it('generate combinations', () => {
       const t1 = new InterpretedPhrase('bleh', [
-        new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
-        new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
+        new InterpretedWord('bleh', [
+          { dictionaryWord: 'bleh', kind: 'synonym' },
+        ]),
+        new InterpretedWord('bleh', [
+          { dictionaryWord: 'bleh', kind: 'synonym' },
+        ]),
         new InterpretedWord('bleh', [
           {
             dictionaryWord: 'bleh',
@@ -78,7 +86,9 @@ describe('phrase index', () => {
       ]);
 
       const t2 = new InterpretedPhrase('bleh', [
-        new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
+        new InterpretedWord('bleh', [
+          { dictionaryWord: 'bleh', kind: 'synonym' },
+        ]),
         new InterpretedWord('bleh', [
           {
             dictionaryWord: 'bleh',
@@ -96,7 +106,9 @@ describe('phrase index', () => {
       ]);
 
       const t3 = new InterpretedPhrase('bleh', [
-        new InterpretedWord('bleh', [{ dictionaryWord: 'bleh', kind: 'synonym' }]),
+        new InterpretedWord('bleh', [
+          { dictionaryWord: 'bleh', kind: 'synonym' },
+        ]),
         new InterpretedWord('bleh', [
           {
             dictionaryWord: 'bleh',
@@ -125,7 +137,9 @@ describe('phrase index', () => {
         [0, 1, 1],
       ]);
 
-      expect(t2.generateCombinations(1)).toEqual([[0, 0, 0]]);
+      expect(t2.generateCombinations(1)).toEqual([
+        [0, 0, 0],
+      ]);
 
       expect(t3.generateCombinations(2)).toEqual([
         [0, 0, 0],

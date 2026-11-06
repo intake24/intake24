@@ -133,7 +133,9 @@ const headers: DataTableHeader[] = [
 ];
 
 function getMediaCollectionTitle(collection: string) {
-  return commonMediaCollections.includes(collection) ? t(`media.collections.${collection}`) : t(`media.collections.${resource.value}.${collection}`);
+  return commonMediaCollections.includes(collection)
+    ? t(`media.collections.${collection}`)
+    : t(`media.collections.${resource.value}.${collection}`);
 }
 
 async function remove({ id, name }: MediaEntry) {

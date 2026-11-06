@@ -91,10 +91,22 @@ function cachedParentCategoriesService({
   const processCacheRecords = async (records: CacheRecord[]): Promise<Record<string, ResolvedParentData | null>> => {
     const groupedRecords = records.reduce<Record<string, ParentData>>(
       (acc, { source, id, code, readyMealOption, reasonableAmount, sameAsBeforeOption, useInRecipes, tags, icon }) => {
-        if (!acc[source])
-          acc[source] = { ids: new Set(), codes: new Set(), attributes: [], tags: [], icon: null };
+        if (!acc[source]) {
+          acc[source] = {
+            ids: new Set(),
+            codes: new Set(),
+            attributes: [],
+            tags: [],
+            icon: null,
+          };
+        }
 
-        acc[source].attributes.push({ readyMealOption, reasonableAmount, sameAsBeforeOption, useInRecipes });
+        acc[source].attributes.push({
+          readyMealOption,
+          reasonableAmount,
+          sameAsBeforeOption,
+          useInRecipes,
+        });
         acc[source].tags.push(...tags);
         acc[source].icon = acc[source].icon ?? icon;
 
@@ -124,7 +136,9 @@ function cachedParentCategoriesService({
         ids: [...ids].toSorted((a, b) => Number(a) - Number(b)),
         codes: [...codes].toSorted(),
         attributes: completeAttributes(maybeAttributes) ?? await completeAttributesWithDefaults(maybeAttributes),
-        tags: [...new Set(tags)].toSorted(),
+        tags: [
+          ...new Set(tags),
+        ].toSorted(),
         icon,
       };
     };
@@ -155,7 +169,9 @@ function cachedParentCategoriesService({
   }
 
   async function getCategoriesCache(id: string | string[]): Promise<Record<string, ResolvedParentData | null>> {
-    return cache.rememberMany(Array.isArray(id) ? id : [id], 'category-parent-cache', cacheConfig.ttl, async (categoryId) => {
+    return cache.rememberMany(Array.isArray(id)
+      ? id
+      : [id], 'category-parent-cache', cacheConfig.ttl, async (categoryId) => {
       const records = await kyselyDb.foods.withRecursive('rows', qb =>
       // The first query gets the food attributes
         qb.selectFrom('categories as c')
@@ -244,7 +260,9 @@ function cachedParentCategoriesService({
   }
 
   async function getFoodsCache(id: string | string[]): Promise<Record<string, ResolvedParentData | null>> {
-    return cache.rememberMany(Array.isArray(id) ? id : [id], 'food-parent-cache', cacheConfig.ttl, async (foodId) => {
+    return cache.rememberMany(Array.isArray(id)
+      ? id
+      : [id], 'food-parent-cache', cacheConfig.ttl, async (foodId) => {
       const records = await kyselyDb.foods.withRecursive('rows', qb =>
       // The first query gets the food attributes
         qb.selectFrom('foods as f')

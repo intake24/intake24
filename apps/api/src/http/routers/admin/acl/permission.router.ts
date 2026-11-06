@@ -10,29 +10,49 @@ import { contract } from '@intake24/common/contracts';
 import { Permission, Role, User } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { permissionId }: { permissionId?: string } = {}) {
-  const where: WhereOptions = permissionId ? { id: { [Op.ne]: permissionId } } : {};
+  const where: WhereOptions = permissionId
+    ? {
+        id: { [Op.ne]: permissionId },
+      }
+    : {};
 
-  if (!(await unique({ model: Permission, condition: { field: 'name', value }, options: { where } }))) {
-    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: Permission,
+    condition: { field: 'name', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      path: 'name',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function permission() {
   return initServer().router(contract.admin.acl.permission, {
     browse: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:browse')],
+      middleware: [
+        permissionMiddleware('acl', 'permissions', 'permissions:browse'),
+      ],
       handler: async ({ query }) => {
         const permissions = await Permission.paginate({
           query,
           columns: ['name', 'displayName'],
-          order: [[fn('lower', col('name')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('name')),
+              'ASC',
+            ],
+          ],
         });
 
         return { status: 200, body: permissions };
       },
     },
     store: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:create')],
+      middleware: [
+        permissionMiddleware('acl', 'permissions', 'permissions:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
 
@@ -45,7 +65,9 @@ export function permission() {
       },
     },
     read: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:read')],
+      middleware: [
+        permissionMiddleware('acl', 'permissions', 'permissions:read'),
+      ],
       handler: async ({ params: { permissionId } }) => {
         const permission = await Permission.findByPk(permissionId);
         if (!permission)
@@ -55,7 +77,9 @@ export function permission() {
       },
     },
     update: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:edit')],
+      middleware: [
+        permissionMiddleware('acl', 'permissions', 'permissions:edit'),
+      ],
       handler: async ({ body, params: { permissionId } }) => {
         const permission = await Permission.findByPk(permissionId);
         if (!permission)
@@ -67,9 +91,13 @@ export function permission() {
       },
     },
     destroy: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:delete')],
+      middleware: [
+        permissionMiddleware('acl', 'permissions', 'permissions:delete'),
+      ],
       handler: async ({ params: { permissionId } }) => {
-        const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
+        const permission = await Permission.findByPk(permissionId, {
+          attributes: ['id'],
+        });
         if (!permission)
           throw new NotFoundError();
 
@@ -79,9 +107,13 @@ export function permission() {
       },
     },
     roles: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:roles')],
+      middleware: [
+        permissionMiddleware('acl', 'permissions', 'permissions:roles'),
+      ],
       handler: async ({ params: { permissionId }, query }) => {
-        const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
+        const permission = await Permission.findByPk(permissionId, {
+          attributes: ['id'],
+        });
         if (!permission)
           throw new NotFoundError();
 
@@ -89,18 +121,28 @@ export function permission() {
           query,
           columns: ['name', 'displayName'],
           include: [
-            { association: 'permissionLinks', attributes: ['permissionId'], where: { permissionId } },
+            {
+              association: 'permissionLinks',
+              attributes: ['permissionId'],
+              where: { permissionId },
+            },
           ],
-          order: [['name', 'ASC']],
+          order: [
+            ['name', 'ASC'],
+          ],
         });
 
         return { status: 200, body: roles };
       },
     },
     users: {
-      middleware: [permissionMiddleware('acl', 'permissions', 'permissions:users')],
+      middleware: [
+        permissionMiddleware('acl', 'permissions', 'permissions:users'),
+      ],
       handler: async ({ params: { permissionId }, query }) => {
-        const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
+        const permission = await Permission.findByPk(permissionId, {
+          attributes: ['id'],
+        });
         if (!permission)
           throw new NotFoundError();
 
@@ -108,9 +150,15 @@ export function permission() {
           query,
           columns: ['name', 'email', 'simpleName'],
           include: [
-            { association: 'permissionLinks', attributes: ['permissionId'], where: { permissionId } },
+            {
+              association: 'permissionLinks',
+              attributes: ['permissionId'],
+              where: { permissionId },
+            },
           ],
-          order: [['name', 'ASC']],
+          order: [
+            ['name', 'ASC'],
+          ],
         });
 
         return { status: 200, body: users };

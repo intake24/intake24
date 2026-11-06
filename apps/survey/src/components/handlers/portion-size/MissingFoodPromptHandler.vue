@@ -45,7 +45,10 @@ function getInitialState(): PromptStates['missing-food-prompt'] {
 function commitAnswer() {
   const { info } = state.value;
 
-  survey.updateFood({ foodId: food.value.id, update: { info } });
+  survey.updateFood({
+    foodId: food.value.id,
+    update: { info },
+  });
   survey.addFoodFlag(food.value.id, 'missing-food-complete');
 
   clearStoredState();

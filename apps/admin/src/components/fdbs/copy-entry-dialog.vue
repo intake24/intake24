@@ -128,10 +128,20 @@ export default defineComponent({
       if (props.localeId !== localeId)
         return;
 
-      await router.push({ name: `fdbs-${props.type}`, params: { id: localeId, entryId: id } });
+      await router.push({
+        name: `fdbs-${props.type}`,
+        params: { id: localeId, entryId: id },
+      });
     };
 
-    return { clearError, close, confirm, data, errors, dialog };
+    return {
+      clearError,
+      close,
+      confirm,
+      data,
+      errors,
+      dialog,
+    };
   },
 });
 </script>

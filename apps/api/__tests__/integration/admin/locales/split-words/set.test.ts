@@ -41,7 +41,9 @@ export default () => {
 
     it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['0.localeId', '0.words'], {
-        input: [{ firstWord: 19, words: false }],
+        input: [
+          { firstWord: 19, words: false },
+        ],
       });
     });
 

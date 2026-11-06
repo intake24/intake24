@@ -58,8 +58,12 @@ const messages = useMessages();
 const { i18n: { t } } = useI18n();
 const { extractMediaId, getFullURL, getRelativeURL, uploadMedia, deleteMedia } = useMedia();
 
-const mediaUrl = computed(() => props.modelValue ? getFullURL(props.modelValue) : null);
-const mediaId = computed(() => props.modelValue ? extractMediaId(props.modelValue) : null);
+const mediaUrl = computed(() => props.modelValue
+  ? getFullURL(props.modelValue)
+  : null);
+const mediaId = computed(() => props.modelValue
+  ? extractMediaId(props.modelValue)
+  : null);
 
 const files = ref<File[]>([]);
 

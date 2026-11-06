@@ -119,7 +119,12 @@ export class AppMetricsService {
   }
 
   private initDatabaseMetrics() {
-    const databaseLabelNames = ['db', 'interface', 'instance_id', 'pm2_instance_id'];
+    const databaseLabelNames = [
+      'db',
+      'interface',
+      'instance_id',
+      'pm2_instance_id',
+    ];
 
     if (this.metricsConfig.app.db.collectConnectionPoolStats) {
       this.dbConnectionPoolTotal = new prom.Gauge({

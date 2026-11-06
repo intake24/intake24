@@ -186,7 +186,13 @@ const emit = defineEmits(['update:modelValue']);
 useTinymce();
 const { translate } = useI18n();
 
-const newItem = () => ({ id: randomString(6), title: { en: '' }, content: { en: '' } });
+function newItem() {
+  return {
+    id: randomString(6),
+    title: { en: '' },
+    content: { en: '' },
+  };
+}
 
 const { dialog, form, items, add, edit, remove, reset: resetItem, save: saveItem, update }
   = useListWithDialog<FAQItem>(props, { emit }, { newItem });
@@ -204,7 +210,9 @@ function reset() {
 }
 
 function save(index?: number) {
-  props.errors.clear(typeof index === 'undefined' ? `content.${props.index}.items.*` : `content.${props.index}.items.${index}.*`);
+  props.errors.clear(typeof index === 'undefined'
+    ? `content.${props.index}.items.*`
+    : `content.${props.index}.items.${index}.*`);
 
   saveItem();
 }

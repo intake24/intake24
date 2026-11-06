@@ -85,14 +85,19 @@ export default defineComponent({
   setup(props, { emit }) {
     const toInteger = (value: string): number | null => {
       const val = Number.parseInt(value);
-      return Number.isNaN(val) ? null : val;
+      return Number.isNaN(val)
+        ? null
+        : val;
     };
 
     const update = (field: string, value: any) => {
       emit('update:validation', { ...props.validation, [field]: value });
     };
     const updateLanguage = (field: LocaleTranslationKeys, locale: string, value: any) => {
-      emit('update:validation', { ...props.validation, [field]: { ...props.validation[field], [locale]: value } });
+      emit('update:validation', {
+        ...props.validation,
+        [field]: { ...props.validation[field], [locale]: value },
+      });
     };
 
     return { toInteger, update, updateLanguage };

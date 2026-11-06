@@ -65,11 +65,15 @@ const videoDefaults = {
 const videoTypes = [null, 'youtube'] as const;
 const videoItems = videoTypes.map(value => ({
   value,
-  title: value ? i18n.t(`survey-schemes.prompts.video.${value}._`) : i18n.t('common.disabled'),
+  title: value
+    ? i18n.t(`survey-schemes.prompts.video.${value}._`)
+    : i18n.t('common.disabled'),
 }));
 
 function updateVideo(value: typeof videoTypes[number]) {
-  update('video', typeof value === 'string' ? videoDefaults[value] : undefined);
+  update('video', typeof value === 'string'
+    ? videoDefaults[value]
+    : undefined);
 }
 </script>
 

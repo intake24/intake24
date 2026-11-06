@@ -333,7 +333,11 @@ async function startExport() {
       locales: exportLocales.value.map(i => i.code),
       options: {
         include: includeFlags.value,
-        ...(exportFormat.value === 'xlsx' ? { xlsx: { includeActionColumn: xlsxOptions.includeActionColumn } } : {}),
+        ...(exportFormat.value === 'xlsx'
+          ? {
+              xlsx: { includeActionColumn: xlsxOptions.includeActionColumn },
+            }
+          : {}),
       },
     });
 

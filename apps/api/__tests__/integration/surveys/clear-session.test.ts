@@ -41,7 +41,9 @@ export default () => {
       sessionData,
     };
 
-    await UserSurveySession.destroy({ where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId } });
+    await UserSurveySession.destroy({
+      where: { surveyId: suite.data.system.Survey.id, userId: suite.data.system.respondent.userId },
+    });
   });
 
   it('should return 401 when no / invalid token', async () => {

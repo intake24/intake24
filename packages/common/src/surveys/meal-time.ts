@@ -5,7 +5,9 @@ import type { MealState } from './recall';
 import { minutesWrapAround, toMinutes, toTime } from '../util';
 
 export function sortMeals(wakeUpTime: string | null) {
-  const wakeUpTimeInMinutes = wakeUpTime ? toMinutes(toTime(wakeUpTime)) : null;
+  const wakeUpTimeInMinutes = wakeUpTime
+    ? toMinutes(toTime(wakeUpTime))
+    : null;
 
   return function (a: MealState, b: MealState) {
     if (!a.time || !b.time)
@@ -27,7 +29,9 @@ export function sortMeals(wakeUpTime: string | null) {
 };
 
 export function isMealAfter(time: Time, after: Time) {
-  return time.hours === after.hours ? time.minutes >= after.minutes : time.hours >= after.hours;
+  return time.hours === after.hours
+    ? time.minutes >= after.minutes
+    : time.hours >= after.hours;
 }
 
 export function minutesAfterMeal(time: Time, after: Time) {
@@ -43,7 +47,9 @@ export function mealWithStartGap(meal: MealState, startTime: string, gap: number
 }
 
 export function isMealBefore(time: Time, before: Time) {
-  return time.hours === before.hours ? time.minutes <= before.minutes : time.hours <= before.hours;
+  return time.hours === before.hours
+    ? time.minutes <= before.minutes
+    : time.hours <= before.hours;
 }
 
 export function minutesBeforeMeal(time: Time, before: Time) {

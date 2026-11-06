@@ -100,7 +100,9 @@ const isValid = computed(() => validConditions.value.every(condition => conditio
 function update() {
   const { portionSize: { quantity } } = state.value;
 
-  state.value.portionSize.servingWeight = isNumber(quantity) ? quantity * conversionFactor.value : null;
+  state.value.portionSize.servingWeight = isNumber(quantity)
+    ? quantity * conversionFactor.value
+    : null;
 
   emit('update:modelValue', state.value);
 };

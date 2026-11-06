@@ -126,7 +126,9 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     method: 'milk-in-a-hot-drink',
     ...psmDefaultAttributes,
     description: 'use_a_standard_portion',
-    parameters: { options: { en: [] } },
+    parameters: {
+      options: { en: [] },
+    },
   },
   {
     method: 'milk-on-cereal',
@@ -138,7 +140,11 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     method: 'parent-food-portion',
     ...psmDefaultAttributes,
     description: 'use_a_standard_portion',
-    parameters: { options: { _default: { en: [] } } },
+    parameters: {
+      options: {
+        _default: { en: [] },
+      },
+    },
   },
   {
     method: 'pizza',

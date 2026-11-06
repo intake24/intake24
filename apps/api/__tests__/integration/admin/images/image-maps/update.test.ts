@@ -51,7 +51,10 @@ export default () => {
       .field('label[en]', label.en)
       .attach('baseImage', createReadStream(suite.files.images.jpg), fileName);
 
-    output = { ...body, ...updateInput };
+    output = {
+      ...body,
+      ...updateInput,
+    };
   });
 
   it('missing authentication / authorization', async () => {

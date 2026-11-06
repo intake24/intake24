@@ -57,7 +57,9 @@ export const authentication = contract.router({
     path: '/admin/auth/refresh',
     body: null,
     responses: {
-      200: z.object({ accessToken: z.string() }),
+      200: z.object({
+        accessToken: z.string(),
+      }),
     },
     summary: 'Refresh access token',
     description:
@@ -76,9 +78,13 @@ export const authentication = contract.router({
   oidcRedirect: {
     method: 'GET',
     path: '/admin/auth/oidc/:provider',
-    pathParams: z.object({ provider: z.string().min(1) }),
+    pathParams: z.object({
+      provider: z.string().min(1),
+    }),
     responses: {
-      200: z.object({ url: z.url() }),
+      200: z.object({
+        url: z.url(),
+      }),
     },
     summary: 'OpenID Connect authentication',
     description: 'Initiate OpenID Connect authentication flow.',
@@ -86,10 +92,16 @@ export const authentication = contract.router({
   oidcCallback: {
     method: 'POST',
     path: '/admin/auth/oidc/:provider',
-    pathParams: z.object({ provider: z.string().min(1) }),
-    body: z.object({ url: z.url() }),
+    pathParams: z.object({
+      provider: z.string().min(1),
+    }),
+    body: z.object({
+      url: z.url(),
+    }),
     responses: {
-      200: z.object({ accessToken: z.string() }),
+      200: z.object({
+        accessToken: z.string(),
+      }),
     },
     summary: 'OpenID Connect callback',
     description: 'Handle OpenID Connect callback.',

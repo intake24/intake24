@@ -61,7 +61,9 @@ export default (/* type: MediaModel */) => () => {
         const url = getUrl();
         console.log(`Testing URL: ${url}`);
         console.log(permList);
-        await suite.sharedTests.assert401and403('get', getUrl(), { permissions: [resource, `${resource}:audit`] });
+        await suite.sharedTests.assert401and403('get', getUrl(), {
+          permissions: [resource, `${resource}:audit`],
+        });
       });
 
       describe('authenticated / resource authorized', () => {

@@ -158,9 +158,25 @@ export class PortionSizeWriter {
 
     function sectionColumns(section: PortionSizeSection): Partial<ExcelJS.Column>[] {
       return [
-        { header: section.overallHeader, width: section.columns[0].width, style: { border: { left: { style: 'thin' } } } },
+        {
+          header: section.overallHeader,
+          width: section.columns[0].width,
+          style: {
+            border: {
+              left: { style: 'thin' },
+            },
+          },
+        },
         ...section.columns.slice(1, -1).map(col => ({ header: '', width: col.width })),
-        { header: '', width: section.columns.at(-1)!.width, style: { border: { right: { style: 'thin' } } } },
+        {
+          header: '',
+          width: section.columns.at(-1)!.width,
+          style: {
+            border: {
+              right: { style: 'thin' },
+            },
+          },
+        },
       ];
     }
 
@@ -171,9 +187,15 @@ export class PortionSizeWriter {
     ];
 
     const firstHeaderRow = worksheet.getRow(1);
-    const secondHeaderRow = worksheet.addRow([...this.fixedColumns.map(col => col.header), ...portionSizeSections.flatMap(section => section.columns.map(col => col.header)), XLSX_COLUMN_NAMES.portionSize.colorGroup]);
+    const secondHeaderRow = worksheet.addRow([
+      ...this.fixedColumns.map(col => col.header),
+      ...portionSizeSections.flatMap(section => section.columns.map(col => col.header)),
+      XLSX_COLUMN_NAMES.portionSize.colorGroup,
+    ]);
     secondHeaderRow.font = { bold: true };
-    secondHeaderRow.border = { bottom: { style: 'thin' } };
+    secondHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     let currentPortionSizeSectionOffset = this.fixedColumns.length + 1;
 
@@ -185,18 +207,31 @@ export class PortionSizeWriter {
       sectionHeaderCell.alignment = { horizontal: 'center' };
 
       // Merged cell's style is copied from the first cell which doesn't have a right border, restore it
-      sectionHeaderCell.border = { left: { style: 'thin' }, right: { style: 'thin' } };
+      sectionHeaderCell.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+      };
 
       // Assigning a border to a row (after addRow above this loop) overrides all cell styles, fix the border for the first and last cells
       const firstParamHeaderCell = worksheet.getCell(2, currentPortionSizeSectionOffset);
 
       if (section.columns.length === 1) {
-        firstParamHeaderCell.border = { left: { style: 'thin' }, right: { style: 'thin' }, bottom: { style: 'thin' } };
+        firstParamHeaderCell.border = {
+          left: { style: 'thin' },
+          right: { style: 'thin' },
+          bottom: { style: 'thin' },
+        };
       }
       else {
-        firstParamHeaderCell.border = { left: { style: 'thin' }, bottom: { style: 'thin' } };
+        firstParamHeaderCell.border = {
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+        };
         const lastParamHeaderCell = worksheet.getCell(2, currentPortionSizeSectionOffset + section.columns.length - 1);
-        lastParamHeaderCell.border = { right: { style: 'thin' }, bottom: { style: 'thin' } };
+        lastParamHeaderCell.border = {
+          right: { style: 'thin' },
+          bottom: { style: 'thin' },
+        };
       }
 
       currentPortionSizeSectionOffset += section.columns.length;
@@ -215,7 +250,14 @@ export class PortionSizeWriter {
           type: 'expression',
           priority: 1,
           formulae: [`=\$${this.colourGroupColumn}3=1`],
-          style: { fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF0F0F0' }, bgColor: { argb: 'FFF0F0F0' } } },
+          style: {
+            fill: {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFF0F0F0' },
+              bgColor: { argb: 'FFF0F0F0' },
+            },
+          },
         },
       ],
     });
@@ -335,9 +377,13 @@ export class PortionSizeWriter {
           item.code,
           '',
           xlsxBoolean(directWeightPsm !== undefined),
-          directWeightPsm ? Number(directWeightPsm.orderBy) : '',
+          directWeightPsm
+            ? Number(directWeightPsm.orderBy)
+            : '',
           xlsxBoolean(unknownPsm !== undefined),
-          unknownPsm ? Number(unknownPsm.orderBy) : '',
+          unknownPsm
+            ? Number(unknownPsm.orderBy)
+            : '',
           ...this.getParameterCellValues(groupedPsm, i),
           '',
         ];

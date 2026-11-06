@@ -1,7 +1,16 @@
 import { isEqual } from 'lodash-es';
 import { z } from 'zod';
 
-export const ops = ['eq', 'ne', 'in', 'notIn', 'gte', 'gt', 'lte', 'lt'] as const;
+export const ops = [
+  'eq',
+  'ne',
+  'in',
+  'notIn',
+  'gte',
+  'gt',
+  'lte',
+  'lt',
+] as const;
 
 export const conditionTypes = [
   'drinks',
@@ -22,7 +31,10 @@ export type ConditionSection = (typeof conditionSections)[number];
 const baseCondition = z.object({
   type: z.enum(conditionTypes),
   op: z.enum(ops),
-  value: z.union([z.string().or(z.number()), z.string().or(z.number()).array()]).nullable(),
+  value: z.union([
+    z.string().or(z.number()),
+    z.string().or(z.number()).array(),
+  ]).nullable(),
 });
 
 export type BaseCondition = z.infer<typeof baseCondition>;
@@ -108,13 +120,19 @@ export type ConditionValue = z.infer<typeof baseCondition.shape.value>;
 export type ConditionValueOps = { value: ConditionValue; answer: ConditionValue };
 
 function toNumber(values: ConditionValue) {
-  return (Array.isArray(values) ? values : [values])
-    .map(value => (typeof value === 'string' ? Number.parseFloat(value) : value))
+  return (Array.isArray(values)
+    ? values
+    : [values])
+    .map(value => (typeof value === 'string'
+      ? Number.parseFloat(value)
+      : value))
     .filter((value): value is number => !Number.isNaN(value));
 }
 
 function toString(values: ConditionValue) {
-  return (Array.isArray(values) ? values : [values])
+  return (Array.isArray(values)
+    ? values
+    : [values])
     .map(value => value?.toString().trim().toLowerCase() || '')
     .filter(Boolean);
 }

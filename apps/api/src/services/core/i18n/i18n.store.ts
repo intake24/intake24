@@ -22,7 +22,13 @@ function i18nStore({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
    */
   const reload = async () => {
     const translations = await models.system.LanguageTranslation.findAll({
-      include: [{ association: 'language', attributes: ['code'], required: true }],
+      include: [
+        {
+          association: 'language',
+          attributes: ['code'],
+          required: true,
+        },
+      ],
       where: { application: 'api' },
     });
 
@@ -43,8 +49,16 @@ function i18nStore({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
       return acc;
     }, {});
 
-    store = { ...store, ...dbStore };
-    availableLanguages = [...new Set([...Object.keys(dbStore), ...Object.keys(shared)])];
+    store = {
+      ...store,
+      ...dbStore,
+    };
+    availableLanguages = [
+      ...new Set([
+        ...Object.keys(dbStore),
+        ...Object.keys(shared),
+      ]),
+    ];
   };
 
   /**
@@ -88,7 +102,9 @@ function i18nStore({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
   const translate = (key: string, locale: string, params?: I18nParams) => {
     const message = resolvePath(key, locale);
 
-    return params ? replaceParams(message, params) : message;
+    return params
+      ? replaceParams(message, params)
+      : message;
   };
 
   return {

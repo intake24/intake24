@@ -89,10 +89,23 @@ export default defineComponent({
       CreateGuideImageForm,
       GuideImageEntry
     >(props, {
-      data: { id: null, description: null, imageMapId: null, label: {} },
+      data: {
+        id: null,
+        description: null,
+        imageMapId: null,
+        label: {},
+      },
     });
 
-    return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };
+    return {
+      entry,
+      entryLoaded,
+      clearError,
+      data,
+      errors,
+      routeLeave,
+      submit,
+    };
   },
 });
 </script>

@@ -24,7 +24,9 @@ export function subscription() {
     unsubscribe: async ({ req }) => {
       const { userId } = req.scope.cradle.user;
 
-      await UserSubscription.destroy({ where: { userId, type: 'web-push' } });
+      await UserSubscription.destroy({
+        where: { userId, type: 'web-push' },
+      });
 
       return { status: 204, body: undefined };
     },

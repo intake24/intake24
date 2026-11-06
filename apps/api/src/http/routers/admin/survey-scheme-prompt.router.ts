@@ -13,7 +13,11 @@ import {
 } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { surveySchemePromptId }: { surveySchemePromptId?: string } = {}) {
-  const where: WhereOptions = surveySchemePromptId ? { id: { [Op.ne]: surveySchemePromptId } } : {};
+  const where: WhereOptions = surveySchemePromptId
+    ? {
+        id: { [Op.ne]: surveySchemePromptId },
+      }
+    : {};
 
   const prompts = await SurveySchemePrompt.findAll({
     attributes: ['id', 'prompt'],
@@ -21,26 +25,38 @@ async function uniqueMiddleware(value: any, { surveySchemePromptId }: { surveySc
   });
   const match = prompts.find(p => p.prompt.id === value.id);
   if (match) {
-    throw ValidationError.from({ path: 'prompt', i18n: { type: 'unique._' } });
+    throw ValidationError.from({
+      path: 'prompt',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function surveySchemePrompt() {
   return initServer().router(contract.admin.surveySchemePrompt, {
     browse: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:browse')],
+      middleware: [
+        permission('survey-scheme-prompts', 'survey-scheme-prompts:browse'),
+      ],
       handler: async ({ query }) => {
         const schemePrompts = await SurveySchemePrompt.paginate({
           query,
           columns: ['promptId', 'name'],
-          order: [[fn('lower', col('prompt_id')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('prompt_id')),
+              'ASC',
+            ],
+          ],
         });
 
         return { status: 200, body: schemePrompts };
       },
     },
     store: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:create')],
+      middleware: [
+        permission('survey-scheme-prompts', 'survey-scheme-prompts:create'),
+      ],
       handler: async ({ body }) => {
         const { prompt } = body;
 
@@ -53,20 +69,29 @@ export function surveySchemePrompt() {
       },
     },
     refs: {
-      middleware: [permission('survey-scheme-prompts')],
+      middleware: [
+        permission('survey-scheme-prompts'),
+      ],
       handler: async () => {
         const [schemes, prompts] = await Promise.all([
           SurveyScheme.findAll(),
-          SurveySchemePrompt.findAll({ attributes: ['prompt'] }),
+          SurveySchemePrompt.findAll({
+            attributes: ['prompt'],
+          }),
         ]);
 
         const promptIds = prompts.map(p => p.prompt.id);
 
-        return { status: 200, body: { promptIds, schemes } };
+        return {
+          status: 200,
+          body: { promptIds, schemes },
+        };
       },
     },
     read: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:read')],
+      middleware: [
+        permission('survey-scheme-prompts', 'survey-scheme-prompts:read'),
+      ],
       handler: async ({ params: { surveySchemePromptId } }) => {
         const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);
         if (!schemePrompt)
@@ -76,7 +101,9 @@ export function surveySchemePrompt() {
       },
     },
     update: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:edit')],
+      middleware: [
+        permission('survey-scheme-prompts', 'survey-scheme-prompts:edit'),
+      ],
       handler: async ({ body, params: { surveySchemePromptId } }) => {
         const { prompt } = body;
 
@@ -93,7 +120,9 @@ export function surveySchemePrompt() {
       },
     },
     destroy: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:delete')],
+      middleware: [
+        permission('survey-scheme-prompts', 'survey-scheme-prompts:delete'),
+      ],
       handler: async ({ params: { surveySchemePromptId } }) => {
         const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId, {
           attributes: ['id'],
@@ -107,7 +136,9 @@ export function surveySchemePrompt() {
       },
     },
     sync: {
-      middleware: [permission('survey-scheme-prompts', 'survey-scheme-prompts:sync')],
+      middleware: [
+        permission('survey-scheme-prompts', 'survey-scheme-prompts:sync'),
+      ],
       handler: async ({ body, params: { surveySchemePromptId } }) => {
         const { prompt, section, surveySchemeId } = body;
 
@@ -117,12 +148,16 @@ export function surveySchemePrompt() {
         if (!schemePrompt)
           throw new NotFoundError();
 
-        const scheme = await SurveyScheme.findByPk(surveySchemeId, { attributes: ['id', 'prompts'] });
+        const scheme = await SurveyScheme.findByPk(surveySchemeId, {
+          attributes: ['id', 'prompts'],
+        });
         if (!scheme)
           throw new NotFoundError();
 
         const { prompts } = scheme;
-        const sectionPrompts = isMealSection(section) ? prompts.meals[section] : prompts[section];
+        const sectionPrompts = isMealSection(section)
+          ? prompts.meals[section]
+          : prompts[section];
 
         const match = sectionPrompts.findIndex(p => p.id === prompt.id);
         if (match === -1)

@@ -38,7 +38,9 @@ const emit = defineEmits(['update:modelValue']);
 const { getStepState, update } = useStep(props, { emit });
 
 const unit = computed(() => getStepState('lookup-unit')?.option);
-const units = computed(() => unit.value ? [unit.value] : []);
+const units = computed(() => unit.value
+  ? [unit.value]
+  : []);
 const { getStandardUnit, getStandardUnitHowMany } = useStandardUnits({ units });
 </script>
 

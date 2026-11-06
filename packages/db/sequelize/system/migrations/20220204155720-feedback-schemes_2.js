@@ -437,13 +437,21 @@ const characters = [
         sentimentType: 'danger',
         title: '',
       },
-      { sentiment: ['bit_low'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_low'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
         title: '',
       },
-      { sentiment: ['bit_high'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_high'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['high', 'too_high'],
         sentimentType: 'danger',
@@ -463,13 +471,21 @@ const characters = [
         sentimentType: 'danger',
         title: '',
       },
-      { sentiment: ['bit_low'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_low'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
         title: '',
       },
-      { sentiment: ['bit_high'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_high'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['high', 'too_high'],
         sentimentType: 'danger',
@@ -489,13 +505,21 @@ const characters = [
         sentimentType: 'danger',
         title: '',
       },
-      { sentiment: ['bit_low'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_low'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
         title: '',
       },
-      { sentiment: ['bit_high'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_high'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['high', 'too_high'],
         sentimentType: 'danger',
@@ -514,13 +538,21 @@ const characters = [
         sentimentType: 'danger',
         title: '',
       },
-      { sentiment: ['bit_low'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_low'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
         title: '',
       },
-      { sentiment: ['bit_high'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_high'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['high', 'too_high'],
         sentimentType: 'danger',
@@ -539,13 +571,21 @@ const characters = [
         sentimentType: 'danger',
         title: '',
       },
-      { sentiment: ['bit_low'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_low'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['good', 'excellent'],
         sentimentType: 'exciting',
         title: '',
       },
-      { sentiment: ['bit_high'], sentimentType: 'warning', title: '' },
+      {
+        sentiment: ['bit_high'],
+        sentimentType: 'warning',
+        title: '',
+      },
       {
         sentiment: ['high', 'too_high'],
         sentimentType: 'danger',
@@ -578,7 +618,9 @@ export default {
 
       const env = process.env.NODE_ENV;
       const { url, ...config } = foodDbConfig[env];
-      const foods = url ? new Sequelize(url, foodDbConfig[env]) : new Sequelize(config);
+      const foods = url
+        ? new Sequelize(url, foodDbConfig[env])
+        : new Sequelize(config);
 
       const dgExists = await queryInterface.tableExists('demographic_groups');
       const dgTable = dgExists ? 'demographic_groups' : 'demographic_group';
@@ -663,7 +705,9 @@ export default {
         const scaleSectors = dbDemographicGroupScaleSectors
           .filter(dgScaleSector => dgScaleSector.demographic_group_id === id)
           .map(({ name, description, sentiment, min_range, max_range }) => ({
-            name: { en: formatSectorName(name) },
+            name: {
+              en: formatSectorName(name),
+            },
             description: { en: description || null },
             range: formatRange(min_range, max_range),
             sentiment,
@@ -706,15 +750,27 @@ export default {
           high:
             too_high_threshold === null
               ? null
-              : { threshold: too_high_threshold, message: { en: too_high_message || null } },
+              : {
+                  threshold: too_high_threshold,
+                  message: { en: too_high_message || null },
+                },
           low:
             too_low_threshold === null
               ? null
-              : { threshold: too_low_threshold, message: { en: too_low_message || null } },
+              : {
+                  threshold: too_low_threshold,
+                  message: { en: too_low_message || null },
+                },
           unit:
             name === 'red and processed meat'
-              ? { name: { en: 'g' }, description: { en: null } }
-              : { name: { en: '' }, description: { en: null } },
+              ? {
+                  name: { en: 'g' },
+                  description: { en: null },
+                }
+              : {
+                  name: { en: '' },
+                  description: { en: null },
+                },
           nutrientTypes,
           showRecommendations: false,
         });
@@ -728,8 +784,14 @@ export default {
           type: 'five-a-day',
           name: { en: 'Fruit and vegetable intake' },
           description: { en: tell_me_more_text || null },
-          high: { threshold: 5, message: { en: null } },
-          low: { threshold: 5, message: { en: too_low_message || null } },
+          high: {
+            threshold: 5,
+            message: { en: null },
+          },
+          low: {
+            threshold: 5,
+            message: { en: too_low_message || null },
+          },
           unit: {
             name: { en: 'portions' },
             description: {
@@ -742,7 +804,11 @@ export default {
 
       const feedbackSchemes = await queryInterface.sequelize.query(
         `SELECT * FROM feedback_schemes WHERE type = :types;`,
-        { type: QueryTypes.SELECT, replacements: { types: 'default' }, transaction },
+        {
+          type: QueryTypes.SELECT,
+          replacements: { types: 'default' },
+          transaction,
+        },
       );
 
       for (const feedbackScheme of feedbackSchemes) {
@@ -755,7 +821,10 @@ export default {
               cards: JSON.stringify(cards),
               demographicGroups: JSON.stringify(demographicGroups),
               henryCoefficients: JSON.stringify(
-                henryCoefficients.map(coefficient => ({ ...coefficient, id: nanoid(6) })),
+                henryCoefficients.map(coefficient => ({
+                  ...coefficient,
+                  id: nanoid(6),
+                })),
               ),
             },
             transaction,

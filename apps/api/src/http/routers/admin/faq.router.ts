@@ -13,17 +13,30 @@ import { contract } from '@intake24/common/contracts';
 import { FAQ, securableScope, UserSecurable } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { faqId }: { faqId?: string } = {}) {
-  const where: WhereOptions = faqId ? { id: { [Op.ne]: faqId } } : {};
+  const where: WhereOptions = faqId
+    ? {
+        id: { [Op.ne]: faqId },
+      }
+    : {};
 
-  if (!(await unique({ model: FAQ, condition: { field: 'name', value }, options: { where } }))) {
-    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: FAQ,
+    condition: { field: 'name', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      path: 'name',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function faq() {
   return initServer().router(contract.admin.faq, {
     browse: {
-      middleware: [permission('faqs')],
+      middleware: [
+        permission('faqs'),
+      ],
       handler: async ({ query, req }) => {
         const {
           aclService,
@@ -33,7 +46,12 @@ export function faq() {
         const paginateOptions: PaginateOptions = {
           query,
           columns: ['name'],
-          order: [[fn('lower', col('FAQ.name')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('FAQ.name')),
+              'ASC',
+            ],
+          ],
         };
 
         if (await aclService.hasPermission('faqs:browse')) {
@@ -43,7 +61,12 @@ export function faq() {
 
         const faqs = await FAQ.paginate({
           ...paginateOptions,
-          where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+          where: {
+            [Op.or]: {
+              ownerId: userId,
+              '$securables.action$': ['read', 'edit', 'delete'],
+            },
+          },
           ...securableScope(userId),
           subQuery: false,
         });
@@ -52,42 +75,68 @@ export function faq() {
       },
     },
     store: {
-      middleware: [permission('faqs', 'faqs:create')],
+      middleware: [
+        permission('faqs', 'faqs:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
 
         const faq = await FAQ.create({ ...body, ownerId: req.scope.cradle.user.userId });
 
-        return { status: 201, body: faqResponse(faq) };
+        return {
+          status: 201,
+          body: faqResponse(faq),
+        };
       },
     },
     read: {
-      middleware: [permission('faqs')],
+      middleware: [
+        permission('faqs'),
+      ],
       handler: async ({ params: { faqId }, req }) => {
-        const faq = await req.scope.cradle.aclService.findAndCheckRecordAccess(FAQ, 'read', { where: { id: faqId } });
+        const faq = await req.scope.cradle.aclService.findAndCheckRecordAccess(FAQ, 'read', {
+          where: { id: faqId },
+        });
 
-        return { status: 200, body: faqResponse(faq) };
+        return {
+          status: 200,
+          body: faqResponse(faq),
+        };
       },
     },
     put: {
-      middleware: [permission('faqs')],
+      middleware: [
+        permission('faqs'),
+      ],
       handler: async ({ body, params: { faqId }, req }) => {
         await uniqueMiddleware(body.name, { faqId });
 
-        const faq = await req.scope.cradle.aclService.findAndCheckRecordAccess(FAQ, 'edit', { where: { id: faqId } });
+        const faq = await req.scope.cradle.aclService.findAndCheckRecordAccess(FAQ, 'edit', {
+          where: { id: faqId },
+        });
 
         await faq.update(body);
 
-        return { status: 200, body: faqResponse(faq) };
+        return {
+          status: 200,
+          body: faqResponse(faq),
+        };
       },
     },
     destroy: {
-      middleware: [permission('faqs')],
+      middleware: [
+        permission('faqs'),
+      ],
       handler: async ({ params: { faqId }, req }) => {
         const faq = await req.scope.cradle.aclService.findAndCheckRecordAccess(FAQ, 'delete', {
           attributes: ['id'],
           where: { id: faqId },
-          include: [{ association: 'surveys', attributes: ['id'] }],
+          include: [
+            {
+              association: 'surveys',
+              attributes: ['id'],
+            },
+          ],
         });
 
         const { id: securableId, surveys } = faq;
@@ -96,7 +145,9 @@ export function faq() {
           throw new ForbiddenError('FAQ cannot be deleted. There are surveys using this FAQ.');
 
         await Promise.all([
-          UserSecurable.destroy({ where: { securableId, securableType: 'FAQ' } }),
+          UserSecurable.destroy({
+            where: { securableId, securableType: 'FAQ' },
+          }),
           faq.destroy(),
         ]);
 
@@ -104,7 +155,9 @@ export function faq() {
       },
     },
     copy: {
-      middleware: [permission('faqs')],
+      middleware: [
+        permission('faqs'),
+      ],
       handler: async ({ body, params: { faqId }, req }) => {
         await uniqueMiddleware(body.name);
 
@@ -113,14 +166,19 @@ export function faq() {
           user: { userId },
         } = req.scope.cradle;
 
-        const faq = await aclService.findAndCheckRecordAccess(FAQ, 'copy', { where: { id: faqId } });
+        const faq = await aclService.findAndCheckRecordAccess(FAQ, 'copy', {
+          where: { id: faqId },
+        });
 
         const { name } = body;
         const { content } = faq;
 
         const faqCopy = await FAQ.create({ name, content, ownerId: userId });
 
-        return { status: 200, body: faqResponse(faqCopy) };
+        return {
+          status: 200,
+          body: faqResponse(faqCopy),
+        };
       },
     },
   });

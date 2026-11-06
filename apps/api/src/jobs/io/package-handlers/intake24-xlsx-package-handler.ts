@@ -195,7 +195,9 @@ function splitList(value: string | undefined): string[] {
 
 function splitPathways(value: string | undefined): PsmPathway[] {
   const pathways = splitList(value).filter((item): item is PsmPathway => VALID_PATHWAYS.has(item as PsmPathway));
-  return pathways.length ? pathways : [...DEFAULT_PATHWAYS];
+  return pathways.length
+    ? pathways
+    : [...DEFAULT_PATHWAYS];
 }
 
 function isRowEmpty(row: ExcelJS.Row): boolean {
@@ -264,8 +266,12 @@ function portionOrder(item: FoodOrCategory): number {
 // size array. Fall back to the insertion order when it is missing or invalid.
 function readDisplayOrder(reader: XlsxWorksheetReader, rowNumber: number, column: number, item: FoodOrCategory): number {
   const raw = reader.cellAsOptionalString(rowNumber, column);
-  const parsed = raw === undefined ? Number.NaN : Number(raw);
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : portionOrder(item);
+  const parsed = raw === undefined
+    ? Number.NaN
+    : Number(raw);
+  return Number.isInteger(parsed) && parsed > 0
+    ? parsed
+    : portionOrder(item);
 }
 
 // Portion size methods are read across several sheets, so the array reflects read order. Re-sort
@@ -293,7 +299,9 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
       this.sourcePath = await this.extractArchive(uploadedPath, uploadDir, fileId);
     }
     catch (err) {
-      throw new PackageValidationFileErrors({ _uploadedFile: getFileValidationErrorMessages(err) });
+      throw new PackageValidationFileErrors({
+        _uploadedFile: getFileValidationErrorMessages(err),
+      });
     }
 
     try {
@@ -303,7 +311,9 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
       if (err instanceof PackageValidationFileErrors)
         throw err;
 
-      throw new PackageValidationFileErrors({ package: getFileValidationErrorMessages(err) });
+      throw new PackageValidationFileErrors({
+        package: getFileValidationErrorMessages(err),
+      });
     }
     finally {
       if (this.sourcePath) {
@@ -354,8 +364,12 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
 
   async cleanup(): Promise<void> {
     await Promise.all([
-      this.sourcePath ? fs.rm(this.sourcePath, { recursive: true, force: true }) : Promise.resolve(),
-      this.convertedPackagePath ? fs.rm(this.convertedPackagePath, { recursive: true, force: true }) : Promise.resolve(),
+      this.sourcePath
+        ? fs.rm(this.sourcePath, { recursive: true, force: true })
+        : Promise.resolve(),
+      this.convertedPackagePath
+        ? fs.rm(this.convertedPackagePath, { recursive: true, force: true })
+        : Promise.resolve(),
     ]);
   }
 
@@ -371,9 +385,15 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
 
   private validationPath(context: XlsxValidationContext): string {
     return [
-      'sheetName' in context ? context.sheetName : undefined,
-      'rowNumber' in context ? `row ${context.rowNumber}` : undefined,
-      'columnIndex' in context ? context.columnIndex : undefined,
+      'sheetName' in context
+        ? context.sheetName
+        : undefined,
+      'rowNumber' in context
+        ? `row ${context.rowNumber}`
+        : undefined,
+      'columnIndex' in context
+        ? context.columnIndex
+        : undefined,
     ].filter(Boolean).join('.');
   }
 
@@ -893,7 +913,9 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
       const linkAsMain = reader.cellAsBool(rowNumber, columns.linkAsMain) ?? false;
       const genericName = reader.cellAsNonEmptyString(rowNumber, columns.genericName);
       const promptText = reader.cellAsNonEmptyString(rowNumber, columns.promptText);
-      const foodRecord = code ? foodsByCode.get(code) : undefined;
+      const foodRecord = code
+        ? foodsByCode.get(code)
+        : undefined;
 
       if (code && !foodRecord) {
         this.addValidationError(
@@ -1312,7 +1334,9 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
           draft = {
             ...makeBasePsm('parent-food-portion', order, conversionFactor),
             description: reader.cellAsString(rowNumber, columns.description),
-            options: { _default: { en: [] as ParentFoodPortionDraft['options']['_default']['en'] } },
+            options: {
+              _default: { en: [] as ParentFoodPortionDraft['options']['_default']['en'] },
+            },
           };
         }
 
@@ -1370,7 +1394,13 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
       if (!locale || !code || !name || !estimateIn || !howMany)
         return;
 
-      const unit: PkgV2StandardUnit = { code, name, icon, estimateIn, howMany };
+      const unit: PkgV2StandardUnit = {
+        code,
+        name,
+        icon,
+        estimateIn,
+        howMany,
+      };
 
       if (!standardUnits[locale])
         standardUnits[locale] = [];
@@ -1410,7 +1440,10 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
       if (!locale || !synonyms.length)
         return;
 
-      synonymSets[locale] = [...(synonymSets[locale] ?? []), synonyms] as PkgV2SynonymSet[];
+      synonymSets[locale] = [
+        ...(synonymSets[locale] ?? []),
+        synonyms,
+      ] as PkgV2SynonymSet[];
     });
 
     return synonymSets;

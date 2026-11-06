@@ -24,7 +24,9 @@ function processedImageService({
   const logger = globalLogger.child({ service: 'ProcessedImageService' });
 
   const resolveSourceImage = async (sourceImageId: string): Promise<SourceImage> => {
-    const sourceImage = await SourceImage.findByPk(sourceImageId, { attributes: ['id', 'path'] });
+    const sourceImage = await SourceImage.findByPk(sourceImageId, {
+      attributes: ['id', 'path'],
+    });
     if (!sourceImage) {
       logger.warn(
         `resolveSourceImage: Source image (${sourceImageId}) for selection image not found.`,
@@ -55,7 +57,9 @@ function processedImageService({
     sourceImage: SourceImage | string,
   ): Promise<[ProcessedImage, ProcessedImage]> => {
     const image
-      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+      = typeof sourceImage === 'string'
+        ? await resolveSourceImage(sourceImage)
+        : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('as_served', id);
@@ -100,7 +104,9 @@ function processedImageService({
     sourceImage: SourceImage | string,
   ): Promise<ProcessedImage> => {
     const image
-      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+      = typeof sourceImage === 'string'
+        ? await resolveSourceImage(sourceImage)
+        : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('image_maps', id);
@@ -126,7 +132,9 @@ function processedImageService({
     type: SelectionImageType,
   ): Promise<ProcessedImage> => {
     const image
-      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+      = typeof sourceImage === 'string'
+        ? await resolveSourceImage(sourceImage)
+        : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join(type, id, 'selection');
@@ -154,7 +162,9 @@ function processedImageService({
     sourceImage: SourceImage | string,
   ): Promise<ProcessedImage> => {
     const image
-      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+      = typeof sourceImage === 'string'
+        ? await resolveSourceImage(sourceImage)
+        : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('drinkware', drinkwareSetId);
@@ -179,7 +189,9 @@ function processedImageService({
     sourceImage: SourceImage | string,
   ): Promise<ProcessedImage> => {
     const image
-      = typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+      = typeof sourceImage === 'string'
+        ? await resolveSourceImage(sourceImage)
+        : sourceImage;
 
     const fileName = `${randomUUID()}${path.extname(image.path)}`;
     const fileDir = path.posix.join('food_thumbnails', foodId);

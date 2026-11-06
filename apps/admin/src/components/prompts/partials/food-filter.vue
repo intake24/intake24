@@ -50,7 +50,9 @@ function toggle(enabled?: boolean | null) {
     return;
   }
 
-  condition.value = copy({ ...getConditionDefaults('food', getDefaultConditionProperty('food')) });
+  condition.value = copy({
+    ...getConditionDefaults('food', getDefaultConditionProperty('food')),
+  });
 }
 </script>
 

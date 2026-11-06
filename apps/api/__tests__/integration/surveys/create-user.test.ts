@@ -4,7 +4,13 @@ import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 
-const keys = (payload: object, omitFields: string[] = []) => ['userId', 'authToken', ...Object.keys(omit(payload, ['password', ...omitFields]))];
+function keys(payload: object, omitFields: string[] = []) {
+  return [
+    'userId',
+    'authToken',
+    ...Object.keys(omit(payload, ['password', ...omitFields])),
+  ];
+}
 
 export default () => {
   let url: string;
@@ -100,7 +106,13 @@ export default () => {
     });
 
     it(`should return 400 for invalid input data`, async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['username', 'password', 'name', 'customFields', 'redirectUrl'], {
+      await suite.sharedTests.assertInvalidInput('post', url, [
+        'username',
+        'password',
+        'name',
+        'customFields',
+        'redirectUrl',
+      ], {
         input: {
           token: jwt.sign({
             username: false,
@@ -198,7 +210,9 @@ export default () => {
       const payload = {
         username: 'userIdentifier004',
         name: 'myName',
-        customFields: [{ name: 'field01', value: 'value01' }],
+        customFields: [
+          { name: 'field01', value: 'value01' },
+        ],
       };
       const token = jwt.sign(payload, secret, { expiresIn: '15m' });
 
@@ -218,7 +232,9 @@ export default () => {
       const payload = {
         username: 'userIdentifier005',
         name: 'myName',
-        customFields: [{ name: 'field01', value: 'value01' }],
+        customFields: [
+          { name: 'field01', value: 'value01' },
+        ],
       };
       const token = jwt.sign(payload, secret, { expiresIn: '15m' });
 

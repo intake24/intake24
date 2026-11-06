@@ -46,10 +46,15 @@ export function useCustomPromptHandler<P extends keyof Prompts>(props: UseCustom
     if (!values.length)
       return undefined;
 
-    if ('multiple' in prompt)
-      return prompt.multiple ? values : values.at(0);
+    if ('multiple' in prompt) {
+      return prompt.multiple
+        ? values
+        : values.at(0);
+    }
 
-    return ['checkbox-list-prompt'].includes(prompt.component) ? values : values.at(0);
+    return ['checkbox-list-prompt'].includes(prompt.component)
+      ? values
+      : values.at(0);
   };
 
   function commitPromptAnswer(prompt: Prompt, promptAnswer?: CustomPromptAnswer) {

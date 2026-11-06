@@ -37,21 +37,29 @@ export function getApiClientV4EnvOptions(): ApiClientOptionsV4 {
   const apiBaseUrl = getRequiredEnv('V4_API_BASE_URL');
   const cookieName = process.env.V4_API_COOKIE_NAME;
   const authResponseUrl
-    = process.env.V4_API_AUTH_TYPE === 'survey' ? '/api/auth' : '/api/admin/auth';
+    = process.env.V4_API_AUTH_TYPE === 'survey'
+      ? '/api/auth'
+      : '/api/admin/auth';
   const accessToken = process.env.V4_API_ACCESS_TOKEN;
   const refreshToken = process.env.V4_API_REFRESH_TOKEN;
 
   const maxConcurrentRequestsEnv = process.env.V4_API_MAX_CONCURRENT_REQUESTS;
   const maxConcurrentRequests
-    = maxConcurrentRequestsEnv !== undefined ? Number.parseInt(maxConcurrentRequestsEnv) : undefined;
+    = maxConcurrentRequestsEnv !== undefined
+      ? Number.parseInt(maxConcurrentRequestsEnv)
+      : undefined;
 
   const requestRateLimitEnv = process.env.V4_API_REQUEST_RATE_LIMIT;
   const requestRateLimit
-    = requestRateLimitEnv !== undefined ? Number.parseInt(requestRateLimitEnv) : undefined;
+    = requestRateLimitEnv !== undefined
+      ? Number.parseInt(requestRateLimitEnv)
+      : undefined;
 
   const requestRateLimitWindowEnv = process.env.V4_API_REQUEST_RATE_LIMIT_WINDOW;
   const requestRateLimitWindow
-    = requestRateLimitWindowEnv !== undefined ? Number.parseInt(requestRateLimitWindowEnv) : undefined;
+    = requestRateLimitWindowEnv !== undefined
+      ? Number.parseInt(requestRateLimitWindowEnv)
+      : undefined;
 
   return {
     apiBaseUrl,

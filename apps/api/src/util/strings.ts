@@ -15,7 +15,9 @@ export function atob<T>(object: string): T {
  * @returns {(string | null)}
  */
 export function toSimpleName(name?: string | null): string | null {
-  return name ? slugify(name, { replacement: ' ', lower: true }) : null;
+  return name
+    ? slugify(name, { replacement: ' ', lower: true })
+    : null;
 }
 
 /**
@@ -71,7 +73,9 @@ export function getFrontEndUrl(base: string, frontend: string, override?: string
 }
 
 export function getAgentInfo(agent: { name?: string; version?: string }): string | undefined {
-  return agent.name && agent.version ? `${agent.name} (${agent.version})` : undefined;
+  return agent.name && agent.version
+    ? `${agent.name} (${agent.version})`
+    : undefined;
 }
 
 export function getUAInfo(userAgent?: string): string | undefined {
@@ -80,5 +84,7 @@ export function getUAInfo(userAgent?: string): string | undefined {
 }
 
 export function addDollarSign(str: string): string {
-  return str.charAt(0) !== '$' ? `$${str}` : str;
+  return str.charAt(0) !== '$'
+    ? `$${str}`
+    : str;
 }

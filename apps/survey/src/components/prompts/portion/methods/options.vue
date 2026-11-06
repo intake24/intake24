@@ -72,7 +72,9 @@ export default defineComponent({
       if (typeof selected.value === 'undefined')
         return;
 
-      selected.value = selected.value === localeOptions.value.length - 1 ? 0 : selected.value + 1;
+      selected.value = selected.value === localeOptions.value.length - 1
+        ? 0
+        : selected.value + 1;
     };
 
     const startTimer = () => {

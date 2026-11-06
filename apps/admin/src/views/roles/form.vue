@@ -126,13 +126,22 @@ export default defineComponent({
   setup(props) {
     const loadCallback = (data: Partial<RoleEntry>) => {
       const { permissions = [], ...rest } = data;
-      return { ...rest, permissions: permissions.map(item => item.id) };
+      return {
+        ...rest,
+        permissions: permissions.map(item => item.id),
+      };
     };
 
     const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<RoleEntry, RoleRefs>(props);
     useEntryFetch(props);
     const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<RoleForm, RoleEntry>(props, {
-      data: { id: null, name: null, displayName: null, description: null, permissions: [] },
+      data: {
+        id: null,
+        name: null,
+        displayName: null,
+        description: null,
+        permissions: [],
+      },
       loadCallback,
     });
 

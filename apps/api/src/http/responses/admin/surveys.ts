@@ -19,7 +19,17 @@ export function surveyListResponse(survey: Survey): SurveyListEntry {
   if (!locale || !surveyScheme)
     throw new InternalServerError('surveyListResponse: not loaded relationships.');
 
-  return { id, slug, name, localeId, surveySchemeId, state, securables, locale, surveyScheme };
+  return {
+    id,
+    slug,
+    name,
+    localeId,
+    surveySchemeId,
+    state,
+    securables,
+    locale,
+    surveyScheme,
+  };
 }
 
 export function surveyResponse(survey: Survey): SurveyEntry {
@@ -35,6 +45,8 @@ export function surveyResponse(survey: Survey): SurveyEntry {
     locale,
     feedbackScheme,
     surveyScheme,
-    owner: owner ? { id: owner.id, name: owner.name, email: owner.email } : undefined,
+    owner: owner
+      ? { id: owner.id, name: owner.name, email: owner.email }
+      : undefined,
   };
 }

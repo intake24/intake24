@@ -30,7 +30,10 @@ export default {
           `UPDATE surveys SET session = :session WHERE id = :id;`,
           {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
-            replacements: { id, session: JSON.stringify(session) },
+            replacements: {
+              id,
+              session: JSON.stringify(session),
+            },
             transaction,
           },
         );

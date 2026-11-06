@@ -228,7 +228,14 @@ export default defineComponent({
       routeLeave,
       submit: formSubmit,
     } = useEntryForm<EditDrinkwareSetForm, DrinkwareSetEntry>(props, {
-      data: { id: null, imageMapId: null, description: null, scales: [], baseImage: {}, label: {} },
+      data: {
+        id: null,
+        imageMapId: null,
+        description: null,
+        scales: [],
+        baseImage: {},
+        label: {},
+      },
     });
     const { data, errors } = form;
 
@@ -354,13 +361,16 @@ export default defineComponent({
     };
 
     const volumeMethodSelectList
-      = [{
-        method: 'lookUpTable',
-        title: t('drinkware-sets.volumeMethod.lookUpTable'),
-      }, {
-        method: 'cylindrical',
-        title: t('drinkware-sets.volumeMethod.cylindrical'),
-      }];
+      = [
+        {
+          method: 'lookUpTable',
+          title: t('drinkware-sets.volumeMethod.lookUpTable'),
+        },
+        {
+          method: 'cylindrical',
+          title: t('drinkware-sets.volumeMethod.cylindrical'),
+        },
+      ];
 
     return {
       entry,

@@ -58,7 +58,12 @@ function role(): RoleRequest {
   const description = faker.lorem.words(10);
   const permissions: string[] = [];
 
-  return { name, displayName, description, permissions };
+  return {
+    name,
+    displayName,
+    description,
+    permissions,
+  };
 }
 
 function user(): UserRequest {
@@ -121,15 +126,23 @@ function respondent(): CreateRespondentRequest {
 function faq(): FAQRequest {
   return {
     name: faker.word.words(3),
-    content: [{
-      id: faker.string.nanoid(6),
-      title: { en: faker.word.words(3) },
-      items: times(3, () => ({
+    content: [
+      {
         id: faker.string.nanoid(6),
-        title: { en: faker.word.words(3) },
-        content: { en: faker.lorem.paragraph() },
-      })),
-    }],
+        title: {
+          en: faker.word.words(3),
+        },
+        items: times(3, () => ({
+          id: faker.string.nanoid(6),
+          title: {
+            en: faker.word.words(3),
+          },
+          content: {
+            en: faker.lorem.paragraph(),
+          },
+        })),
+      },
+    ],
     visibility: 'public',
   };
 }
@@ -235,7 +248,9 @@ function personalAccessToken() {
   const expiresAt = faker.date.future({ years: 1 });
   const verified = true;
   const aal = 'aal1' as const;
-  const amr = [createAmrMethod('pwd')];
+  const amr = [
+    createAmrMethod('pwd'),
+  ];
 
   return {
     name,
@@ -324,7 +339,15 @@ function survey(surveySchemeId = '1', localeId = '1', feedbackSchemeId = null): 
   };
 
   const surveySchemeOverrides = {
-    meals: [{ name: { en: faker.word.words(3) }, time: '8:00', flags: [] }],
+    meals: [
+      {
+        name: {
+          en: faker.word.words(3),
+        },
+        time: '8:00',
+        flags: [],
+      },
+    ],
     prompts: [],
     settings: {},
   };

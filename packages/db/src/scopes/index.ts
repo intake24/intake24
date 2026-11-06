@@ -51,7 +51,10 @@ export function submissionScope(scopeOps: SubmissionScope = {}, ops: FindOptions
           },
         ],
       },
-      { association: 'survey', attributes: ['id', 'slug'] },
+      {
+        association: 'survey',
+        attributes: ['id', 'slug'],
+      },
     ],
     order: [
       ['submissionTime', 'ASC'],

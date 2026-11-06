@@ -44,7 +44,12 @@ export default class SurveyFeedbackNotification extends BaseJob<'SurveyFeedbackN
     const { surveyId, username, submissions, lang, to, cc, bcc } = this.params;
     const subject = `${this.appConfig.fullName}: My dietary feedback`;
     const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
-    const { path, url } = await this.feedbackService.getFeedbackFile({ surveyId, username, submissions, lang });
+    const { path, url } = await this.feedbackService.getFeedbackFile({
+      surveyId,
+      username,
+      submissions,
+      lang,
+    });
     const html = nunjucks.render('mail/surveys/feedback.njk', {
       title: subject,
       action: { url, text: 'Download feedback' },
@@ -57,7 +62,12 @@ export default class SurveyFeedbackNotification extends BaseJob<'SurveyFeedbackN
       subject,
       html,
       attachments: [
-        { contentDisposition: 'attachment', contentType: 'application/pdf', path, filename },
+        {
+          contentDisposition: 'attachment',
+          contentType: 'application/pdf',
+          path,
+          filename,
+        },
       ],
     });
 

@@ -60,7 +60,9 @@ function surveyService({
         'userCustomFields',
         'userPersonalIdentifiers',
       ],
-      include: [{ association: 'counter' }],
+      include: [
+        { association: 'counter' },
+      ],
     });
     if (!survey)
       throw new NotFoundError();
@@ -112,7 +114,9 @@ function surveyService({
       throw new ForbiddenError(`Survey doesn't support user generation`);
 
     try {
-      const decoded = await jwt.verify(token, genUserKey, { algorithms: ['HS256', 'HS512'] });
+      const decoded = await jwt.verify(token, genUserKey, {
+        algorithms: ['HS256', 'HS512'],
+      });
       const { name, password, username, redirectUrl, customFields } = z
         .object({
           username: usernameSchema,
@@ -129,12 +133,16 @@ function surveyService({
 
       const alias = await UserSurveyAlias.findOne(
         {
-          include: [{
-            association: 'user',
-            attributes: ['id', 'name'],
-            required: true,
-            include: [{ association: 'customFields' }],
-          }],
+          include: [
+            {
+              association: 'user',
+              attributes: ['id', 'name'],
+              required: true,
+              include: [
+                { association: 'customFields' },
+              ],
+            },
+          ],
           where: { surveyId, username },
         },
       );
@@ -142,7 +150,12 @@ function surveyService({
       if (alias?.user) {
         const { userId, urlAuthToken: authToken, user } = alias;
 
-        const payload: CreateUserResponse = { userId, username, authToken, redirectUrl };
+        const payload: CreateUserResponse = {
+          userId,
+          username,
+          authToken,
+          redirectUrl,
+        };
 
         if (survey.userPersonalIdentifiers) {
           await user.update({ name });
@@ -161,10 +174,20 @@ function surveyService({
 
       const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(
         survey,
-        { username, password, name, customFields },
+        {
+          username,
+          password,
+          name,
+          customFields,
+        },
       );
 
-      const payload: CreateUserResponse = { userId, username, authToken, redirectUrl };
+      const payload: CreateUserResponse = {
+        userId,
+        username,
+        authToken,
+        redirectUrl,
+      };
       if (survey.userPersonalIdentifiers)
         payload.name = name;
 
@@ -177,7 +200,9 @@ function surveyService({
       if (err instanceof ZodError)
         throw err;
 
-      throw new ForbiddenError(err instanceof Error ? err.message : undefined);
+      throw new ForbiddenError(err instanceof Error
+        ? err.message
+        : undefined);
     }
   };
 
@@ -221,10 +246,12 @@ function surveyService({
 
     const user = await User.findByPk(userId, {
       attributes: ['id', 'name'],
-      include: [{
-        association: 'customFields',
-        attributes: ['name', 'value', 'public'],
-      }],
+      include: [
+        {
+          association: 'customFields',
+          attributes: ['name', 'value', 'public'],
+        },
+      ],
     });
     if (!user)
       throw new NotFoundError();
@@ -241,7 +268,9 @@ function surveyService({
     const clientEndOfDay = addDays(clientStartOfDay, 1);
 
     let [totalSubmissions, daySubmissions] = await Promise.all([
-      SurveySubmission.count({ where: { surveyId, userId } }),
+      SurveySubmission.count({
+        where: { surveyId, userId },
+      }),
       SurveySubmission.count({
         where: {
           surveyId,
@@ -288,7 +317,9 @@ function surveyService({
     if (!session.store)
       throw new ForbiddenError();
 
-    const userSession = await UserSurveySession.findOne({ where: { userId, surveyId } });
+    const userSession = await UserSurveySession.findOne({
+      where: { userId, surveyId },
+    });
     if (!userSession?.sessionData.startTime) {
       await userSession?.destroy();
       throw new NotFoundError();
@@ -312,17 +343,26 @@ function surveyService({
    * @param {SurveyState} sessionData
    */
   const startSession = async (slug: string, userId: string, sessionData: SurveyState) => {
-    const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications', 'session'] });
+    const survey = await Survey.findBySlug(slug, {
+      attributes: ['id', 'notifications', 'session'],
+    });
     if (!survey)
       throw new NotFoundError();
 
     const { id: surveyId, notifications, session } = survey;
     const { uxSessionId } = sessionData;
 
-    await UserSurveySession.destroy({ where: { userId, surveyId } });
+    await UserSurveySession.destroy({
+      where: { userId, surveyId },
+    });
 
     if (session.store) {
-      await UserSurveySession.create({ id: uxSessionId, userId, surveyId, sessionData });
+      await UserSurveySession.create({
+        id: uxSessionId,
+        userId,
+        surveyId,
+        sessionData,
+      });
     }
 
     if (!notifications.some(({ type }) => type === 'survey.session.started'))
@@ -331,7 +371,12 @@ function surveyService({
     await scheduler.jobs.addJob({
       type: 'SurveyEventNotification',
       userId,
-      params: { type: 'survey.session.started', sessionId: uxSessionId, surveyId, userId },
+      params: {
+        type: 'survey.session.started',
+        sessionId: uxSessionId,
+        surveyId,
+        userId,
+      },
     });
   };
 
@@ -345,7 +390,9 @@ function surveyService({
   const saveSession = async (slug: string | Survey, userId: string, sessionData: SurveyState) => {
     const survey
       = typeof slug === 'string'
-        ? await Survey.findBySlug(slug, { attributes: ['id', 'notifications', 'session'] })
+        ? await Survey.findBySlug(slug, {
+            attributes: ['id', 'notifications', 'session'],
+          })
         : slug;
     if (!survey)
       throw new NotFoundError();
@@ -356,7 +403,12 @@ function surveyService({
       throw new ForbiddenError();
 
     await UserSurveySession.upsert(
-      { id: sessionData.uxSessionId, userId, surveyId, sessionData },
+      {
+        id: sessionData.uxSessionId,
+        userId,
+        surveyId,
+        sessionData,
+      },
       {
         fields: ['id', 'sessionData'],
         // @ts-expect-error sequelize incorrectly handles camelCase vs snake_case
@@ -374,11 +426,15 @@ function surveyService({
    * @returns
    */
   const clearSession = async (slug: string, userId: string, clientSessionId?: string) => {
-    const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications'] });
+    const survey = await Survey.findBySlug(slug, {
+      attributes: ['id', 'notifications'],
+    });
     if (!survey)
       throw new NotFoundError();
 
-    const session = await UserSurveySession.findOne({ where: { userId, surveyId: survey.id } });
+    const session = await UserSurveySession.findOne({
+      where: { userId, surveyId: survey.id },
+    });
 
     const hasNotifications = survey.notifications.some(({ type }) => type === 'survey.session.cancelled');
     const sessionId = session?.id ?? clientSessionId;
@@ -390,7 +446,12 @@ function surveyService({
     await scheduler.jobs.addJob({
       type: 'SurveyEventNotification',
       userId,
-      params: { type: 'survey.session.cancelled', sessionId, surveyId: survey.id, userId },
+      params: {
+        type: 'survey.session.cancelled',
+        sessionId,
+        surveyId: survey.id,
+        userId,
+      },
     });
   };
 
@@ -437,8 +498,16 @@ function surveyService({
     const user = await User.findByPk(userId, {
       attributes: ['id'],
       include: [
-        { association: 'aliases', where: { surveyId }, required: false },
-        { association: 'customFields', where: { name: identifiers }, required: false },
+        {
+          association: 'aliases',
+          where: { surveyId },
+          required: false,
+        },
+        {
+          association: 'customFields',
+          where: { name: identifiers },
+          required: false,
+        },
       ],
     });
     if (!user)
@@ -484,7 +553,9 @@ function surveyService({
           }
         }
       },
-      size === 1 ? null : {},
+      size === 1
+        ? null
+        : {},
     );
 
     return urls;
@@ -499,7 +570,13 @@ function surveyService({
         'maximumDailySubmissions',
         'numberOfSubmissionsForFeedback',
       ],
-      include: [{ association: 'surveyScheme', attributes: ['prompts'], required: true }],
+      include: [
+        {
+          association: 'surveyScheme',
+          attributes: ['prompts'],
+          required: true,
+        },
+      ],
     });
     if (!survey)
       throw new NotFoundError();
@@ -519,7 +596,9 @@ function surveyService({
   };
 
   const storeRating = async (slug: string, userId: string, payload: SurveyRatingRequest) => {
-    const survey = await Survey.findBySlug(slug, { attributes: ['id'] });
+    const survey = await Survey.findBySlug(slug, {
+      attributes: ['id'],
+    });
     if (!survey)
       throw new NotFoundError();
 
@@ -529,10 +608,12 @@ function surveyService({
   const getSearchSettings = async (slug: string) => {
     const survey = await Survey.findBySlug(slug, {
       attributes: ['searchSettings'],
-      include: [{
-        association: 'locale',
-        attributes: ['code'],
-      }],
+      include: [
+        {
+          association: 'locale',
+          attributes: ['code'],
+        },
+      ],
     });
     if (!survey?.locale)
       throw new NotFoundError();

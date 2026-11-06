@@ -49,7 +49,12 @@ export default () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       url,
-      ['type', 'rating', 'submissionId', 'comment'],
+      [
+        'type',
+        'rating',
+        'submissionId',
+        'comment',
+      ],
       {
         bearer: 'respondent',
         input: {
@@ -67,6 +72,12 @@ export default () => {
   });
 
   it('should return 200 (job delayed submission)', async () => {
-    await suite.sharedTests.assertAcknowledged('post', url, { bearer: 'respondent', input: { ...input, submissionId: randomUUID() } });
+    await suite.sharedTests.assertAcknowledged('post', url, {
+      bearer: 'respondent',
+      input: {
+        ...input,
+        submissionId: randomUUID(),
+      },
+    });
   });
 };

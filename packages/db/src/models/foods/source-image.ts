@@ -14,8 +14,16 @@ import ProcessedImage from './processed-image';
 import SourceImageKeyword from './source-image-keyword';
 
 @Scopes(() => ({
-  keywords: { include: [{ model: SourceImageKeyword }] },
-  processedImages: { include: [{ model: ProcessedImage }] },
+  keywords: {
+    include: [
+      { model: SourceImageKeyword },
+    ],
+  },
+  processedImages: {
+    include: [
+      { model: ProcessedImage },
+    ],
+  },
 }))
 @Table({
   modelName: 'SourceImage',

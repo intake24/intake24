@@ -36,7 +36,13 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'foodMissing', 'foodSelected', 'update:modelValue', 'foodBuilder']);
+const emit = defineEmits([
+  'action',
+  'foodMissing',
+  'foodSelected',
+  'update:modelValue',
+  'foodBuilder',
+]);
 
 const { action } = usePromptUtils(props, { emit });
 
@@ -52,7 +58,9 @@ const rootCategory = computed(() => {
 
   const [foodsCategory, drinksCategory] = category.split('|');
 
-  return props.food?.flags.includes('is-drink') ? drinksCategory : foodsCategory;
+  return props.food?.flags.includes('is-drink')
+    ? drinksCategory
+    : foodsCategory;
 });
 
 const rootCategoryToggleable = computed(() => !!props.food?.flags?.find(flag => flag.startsWith('search-category-toggle:')));

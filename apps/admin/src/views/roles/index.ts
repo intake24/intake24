@@ -4,4 +4,11 @@ import permissions from './permissions';
 import read from './read.vue';
 import users from './users';
 
-export default { browse, create: form, read, edit: form, permissions, users };
+export default {
+  browse,
+  create: form,
+  read,
+  edit: form,
+  permissions,
+  users,
+};

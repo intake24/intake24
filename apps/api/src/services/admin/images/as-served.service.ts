@@ -31,7 +31,9 @@ function asServedService({
   const destroyImage = async (asServedSetId: string, id?: string): Promise<boolean> => {
     const asServedImages = await AsServedImage.findAll({
       attributes: ['id', 'imageId', 'thumbnailImageId'],
-      where: id ? { asServedSetId, id } : { asServedSetId },
+      where: id
+        ? { asServedSetId, id }
+        : { asServedSetId },
     });
 
     for (const asServedImage of asServedImages) {
@@ -51,7 +53,12 @@ function asServedService({
     const sourceImage = await sourceImageService.uploadSourceImage(input, 'as_served');
     const selectionImage = await processedImageService.createSelectionImage(id, sourceImage, 'as_served');
 
-    return AsServedSet.create({ id, description, label, selectionImageId: selectionImage.id });
+    return AsServedSet.create({
+      id,
+      description,
+      label,
+      selectionImageId: selectionImage.id,
+    });
   };
 
   const updateSet = async (

@@ -82,7 +82,9 @@ export const guideImagePortionSizeParameters = z.object({
 });
 
 export const milkInHotDrinkPortionSizeParameters = z.object({
-  options: localeOptionList({ valueSchema: z.coerce.number() }),
+  options: localeOptionList({
+    valueSchema: z.coerce.number(),
+  }),
 });
 
 export const milkOnCerealPortionSizeParameters = z.object({
@@ -277,7 +279,13 @@ export const portionSizeMethods = z.object({
 });
 export type PortionSizeMethods = z.infer<typeof portionSizeMethods>;
 
-export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
+export const pizzaSizes = [
+  'personal',
+  'small',
+  'medium',
+  'large',
+  'xxl',
+] as const;
 export type PizzaSize = (typeof pizzaSizes)[number];
 export const pizzaCrusts = ['classic', 'italian-thin', 'stuffed'] as const;
 export type PizzaCrust = (typeof pizzaCrusts)[number];

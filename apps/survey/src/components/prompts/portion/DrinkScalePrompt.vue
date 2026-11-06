@@ -241,7 +241,9 @@ if (!state.value.portionSize.fillLevel)
 
 const drinkwareSetUrl = computed(() => `portion-sizes/drinkware-sets/${parameters.value.drinkwareId}`);
 const { imageData: drinkwareSetData } = useFetchImageData<DrinkwareSetResponse>({ url: drinkwareSetUrl });
-const imageMapUrl = computed(() => drinkwareSetData.value ? `portion-sizes/image-maps/${drinkwareSetData.value.imageMapId}` : undefined);
+const imageMapUrl = computed(() => drinkwareSetData.value
+  ? `portion-sizes/image-maps/${drinkwareSetData.value.imageMapId}`
+  : undefined);
 const { imageData: imageMapData } = useFetchImageData<ImageMapResponse>({ url: imageMapUrl });
 
 const labelData = computed(() => ({ drinkwareSet: drinkwareSetData.value, imageMap: imageMapData.value }));

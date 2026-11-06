@@ -22,7 +22,9 @@ function foodThumbnailImageService({
     const [instance, _] = await FoodThumbnailImage.upsert({
       foodId,
       imageId: thumbnailImage.id,
-    }, { conflictFields: ['food_id' as any] });
+    }, {
+      conflictFields: ['food_id' as any],
+    });
 
     return instance;
   };
@@ -51,7 +53,10 @@ function foodThumbnailImageService({
       return `${imagesBaseUrl}/${path}`;
     }
 
-    return foodHeaders.map(header => ({ ...header, thumbnailImageUrl: getUrl(header.code) }));
+    return foodHeaders.map(header => ({
+      ...header,
+      thumbnailImageUrl: getUrl(header.code),
+    }));
   };
 
   return {

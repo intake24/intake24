@@ -24,7 +24,10 @@ export default class Scheduler {
    * @memberof Scheduler
    */
   public async init() {
-    await Promise.all([this.jobs.init(), this.tasks.init()]);
+    await Promise.all([
+      this.jobs.init(),
+      this.tasks.init(),
+    ]);
 
     this.logger.info('Scheduler has been loaded.');
   }
@@ -35,7 +38,10 @@ export default class Scheduler {
    * @memberof Scheduler
    */
   public async close() {
-    await Promise.all([this.jobs.close(), this.tasks.close()]);
+    await Promise.all([
+      this.jobs.close(),
+      this.tasks.close(),
+    ]);
 
     this.logger.info('Scheduler has closed all connections.');
   }
@@ -46,7 +52,10 @@ export default class Scheduler {
    * @memberof Scheduler
    */
   public async closeWorkers() {
-    await Promise.all([this.jobs.closeWorkers(), this.tasks.closeWorkers()]);
+    await Promise.all([
+      this.jobs.closeWorkers(),
+      this.tasks.closeWorkers(),
+    ]);
 
     this.logger.info('Scheduler workers were shutdown.');
   }

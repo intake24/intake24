@@ -20,7 +20,12 @@ export const isApplication = (app: any): app is Application => applications.incl
 
 export const customField = z.object({
   name: z.string().min(1).max(128),
-  value: z.union([z.string(), z.number(), z.boolean(), z.date()]).pipe(z.coerce.string<string>().min(1).max(512)),
+  value: z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.date(),
+  ]).pipe(z.coerce.string<string>().min(1).max(512)),
 });
 export type CustomField = z.infer<typeof customField>;
 
@@ -71,7 +76,9 @@ export const localeTranslations = z.record(z.string(), z.string().array());
 export type LocaleTranslations = z.infer<typeof localeTranslations>;
 
 export const requiredLocaleTranslation = z.intersection(
-  z.object({ en: z.string() }),
+  z.object({
+    en: z.string(),
+  }),
   z.record(z.string(), z.string().nullable()),
 );
 export const sanitizedRequiredLocaleTranslation = requiredLocaleTranslation.transform(val =>
@@ -81,7 +88,9 @@ export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation
 export function requiredLocaleTranslationWithLimit(options: { min?: number; max: number }) {
   const { min = 1, max } = options;
   return z.intersection(
-    z.object({ en: z.string().min(min).max(max) }),
+    z.object({
+      en: z.string().min(min).max(max),
+    }),
     z.record(z.string(), z.string().min(min).max(max).nullable()),
   );
 }
@@ -146,15 +155,27 @@ export type CategoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber> = z.i
 export const textDirections = ['ltr', 'rtl'] as const;
 export type TextDirection = (typeof textDirections)[number];
 
-export const bigIntString = z.union([z.coerce.bigint().positive(), z.coerce.number().int().positive()]).pipe(z.coerce.string());
+export const bigIntString = z.union([
+  z.coerce.bigint().positive(),
+  z.coerce.number().int().positive(),
+]).pipe(z.coerce.string());
 export const safeIdentifier = z.string().min(1).regex(/^[\w-]*$/);
 
-const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
+const literalSchema = z.union([
+  z.string(),
+  z.number(),
+  z.boolean(),
+  z.null(),
+]);
 type Literal = z.infer<typeof literalSchema>;
 type Json = Literal | { [key: string]: Json } | Json[];
 
 export const jsonSchema: z.ZodType<Json> = z.lazy(() =>
-  z.union([literalSchema, z.array(jsonSchema), z.record(z.string(), jsonSchema)]),
+  z.union([
+    literalSchema,
+    z.array(jsonSchema),
+    z.record(z.string(), jsonSchema),
+  ]),
 );
 
 export const jsonObjectSchema: z.ZodType<Json> = z.lazy(() => z.record(z.string(), jsonSchema));

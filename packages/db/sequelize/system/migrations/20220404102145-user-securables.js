@@ -70,7 +70,12 @@ export default {
 
       await queryInterface.addIndex(
         'user_securables',
-        ['user_id', 'securable_id', 'securable_type', 'action'],
+        [
+          'user_id',
+          'securable_id',
+          'securable_type',
+          'action',
+        ],
         {
           name: 'user_securables_search_idx',
           indexType: 'btree',

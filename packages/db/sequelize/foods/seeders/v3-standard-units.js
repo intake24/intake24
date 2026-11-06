@@ -9,7 +9,14 @@ const baseUrl
   = 'https://raw.githubusercontent.com/intake24/survey-frontend/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize';
 const baseFilename = 'StandardUnits_{locale}.properties';
 
-const locales = ['en', 'en_AU', 'en_NZ', 'ar', 'da', 'pt'];
+const locales = [
+  'en',
+  'en_AU',
+  'en_NZ',
+  'ar',
+  'da',
+  'pt',
+];
 const addonLocales = locales.filter(locale => locale !== 'en');
 
 async function fetchAdminStandardUnits() {
@@ -123,7 +130,10 @@ export default {
 
       await queryInterface.bulkInsert(
         'standard_units',
-        standardUnits.map(standardUnit => ({ ...standardUnit, ...timestamps })),
+        standardUnits.map(standardUnit => ({
+          ...standardUnit,
+          ...timestamps,
+        })),
         { transaction },
       );
     }),

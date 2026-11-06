@@ -8,31 +8,46 @@ import { FoodsNutrientUnit, SystemNutrientUnit } from '@intake24/db';
 
 async function uniqueMiddleware(value: string) {
   const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
-    unique({ model: FoodsNutrientUnit, condition: { field: 'id', value, ci: false } }),
-    unique({ model: SystemNutrientUnit, condition: { field: 'id', value, ci: false } }),
+    unique({
+      model: FoodsNutrientUnit,
+      condition: { field: 'id', value, ci: false },
+    }),
+    unique({
+      model: SystemNutrientUnit,
+      condition: { field: 'id', value, ci: false },
+    }),
   ]);
 
   if (!foodsNutrientUnit || !systemNutrientUnit) {
-    throw ValidationError.from({ path: 'id', i18n: { type: 'unique._' } });
+    throw ValidationError.from({
+      path: 'id',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function nutrientUnit() {
   return initServer().router(contract.admin.nutrientUnit, {
     browse: {
-      middleware: [permission('nutrient-units', 'nutrient-units:browse')],
+      middleware: [
+        permission('nutrient-units', 'nutrient-units:browse'),
+      ],
       handler: async ({ query }) => {
         const nutrientUnits = await FoodsNutrientUnit.paginate({
           query,
           columns: ['description'],
-          order: [['id', 'ASC']],
+          order: [
+            ['id', 'ASC'],
+          ],
         });
 
         return { status: 200, body: nutrientUnits };
       },
     },
     store: {
-      middleware: [permission('nutrient-units', 'nutrient-units:create')],
+      middleware: [
+        permission('nutrient-units', 'nutrient-units:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id);
 
@@ -42,7 +57,9 @@ export function nutrientUnit() {
       },
     },
     read: {
-      middleware: [permission('nutrient-units', 'nutrient-units:read')],
+      middleware: [
+        permission('nutrient-units', 'nutrient-units:read'),
+      ],
       handler: async ({ params: { nutrientUnitId }, req }) => {
         const nutrientUnit
           = await req.scope.cradle.nutrientUnitService.getNutrientUnit(nutrientUnitId);
@@ -51,7 +68,9 @@ export function nutrientUnit() {
       },
     },
     update: {
-      middleware: [permission('nutrient-units', 'nutrient-units:edit')],
+      middleware: [
+        permission('nutrient-units', 'nutrient-units:edit'),
+      ],
       handler: async ({ body, params: { nutrientUnitId }, req }) => {
         const nutrientUnit = await req.scope.cradle.nutrientUnitService.updateNutrientUnit(
           nutrientUnitId,
@@ -62,7 +81,9 @@ export function nutrientUnit() {
       },
     },
     destroy: {
-      middleware: [permission('nutrient-units', 'nutrient-units:delete')],
+      middleware: [
+        permission('nutrient-units', 'nutrient-units:delete'),
+      ],
       handler: async ({ params: { nutrientUnitId }, req }) => {
         await req.scope.cradle.nutrientUnitService.deleteNutrientUnit(nutrientUnitId);
 

@@ -73,7 +73,12 @@ export class Mailer {
         });
       }
 
-      const info = await this.transporter.sendMail({ ...defaults, ...options, html, text });
+      const info = await this.transporter.sendMail({
+        ...defaults,
+        ...options,
+        html,
+        text,
+      });
 
       this.logger.info(info.messageId);
 

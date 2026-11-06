@@ -79,7 +79,9 @@ export default defineComponent({
       LocaleEntry
     >(props, {
       data: { items: [] },
-      config: { transform: ({ items }) => items },
+      config: {
+        transform: ({ items }) => items,
+      },
     });
 
     function add() {

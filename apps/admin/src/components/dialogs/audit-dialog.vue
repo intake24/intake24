@@ -106,7 +106,15 @@ const { i18n } = useI18n();
 
 const url = computed(() => {
   const { resource, resourceId, subResource, subResourceId } = props;
-  return ['admin', 'audit', 'log', resource, resourceId, subResource, subResourceId]
+  return [
+    'admin',
+    'audit',
+    'log',
+    resource,
+    resourceId,
+    subResource,
+    subResourceId,
+  ]
     .filter(Boolean)
     .join('/');
 });
@@ -119,10 +127,22 @@ const tab = shallowRef(Object.keys(log.value).at(0));
 const view = shallowRef<'table' | 'json'>('table');
 
 const headers: DataTableHeader<AuditEntry>[] = [
-  { title: i18n.t('audit.record.id'), key: 'id' },
-  { title: i18n.t('audit.record.tableName'), key: 'tableName' },
-  { title: i18n.t('audit.record.recordId'), key: 'recordId' },
-  { title: i18n.t('audit.record.operation'), key: 'operation' },
+  {
+    title: i18n.t('audit.record.id'),
+    key: 'id',
+  },
+  {
+    title: i18n.t('audit.record.tableName'),
+    key: 'tableName',
+  },
+  {
+    title: i18n.t('audit.record.recordId'),
+    key: 'recordId',
+  },
+  {
+    title: i18n.t('audit.record.operation'),
+    key: 'operation',
+  },
   {
     title: i18n.t('audit.record.createdAt'),
     key: 'createdAt',
@@ -133,8 +153,14 @@ const headers: DataTableHeader<AuditEntry>[] = [
     key: 'user',
     value: item => item.user?.name ?? item.user?.id,
   },
-  { title: i18n.t('audit.record.oldValue'), key: 'oldValue' },
-  { title: i18n.t('audit.record.newValue'), key: 'newValue' },
+  {
+    title: i18n.t('audit.record.oldValue'),
+    key: 'oldValue',
+  },
+  {
+    title: i18n.t('audit.record.newValue'),
+    key: 'newValue',
+  },
 ];
 
 function close() {

@@ -18,7 +18,9 @@ export function createLargeFileUploadRouter(authMiddleware: RequestHandler[]): R
 
   const allowedOrigins = Array.isArray(corsOrigins)
     ? corsOrigins
-    : typeof corsOrigins === 'string' ? [corsOrigins] : [];
+    : typeof corsOrigins === 'string'
+      ? [corsOrigins]
+      : [];
 
   const tusServer = new TusServer({
     path: '/admin/large-file-upload',

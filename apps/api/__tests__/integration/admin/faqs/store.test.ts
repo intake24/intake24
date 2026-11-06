@@ -34,9 +34,11 @@ export default () => {
       const invalidInput = {
         name: [],
         visibility: 1,
-        content: [{
-          test: [],
-        }],
+        content: [
+          {
+            test: [],
+          },
+        ],
       };
 
       const fields = [
@@ -64,7 +66,10 @@ export default () => {
 
     it('should return 400 for duplicate name', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
-        input: { ...mocker.system.faq(), name: input.name },
+        input: {
+          ...mocker.system.faq(),
+          name: input.name,
+        },
       });
     });
   });

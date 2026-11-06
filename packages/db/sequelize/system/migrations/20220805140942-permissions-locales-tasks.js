@@ -3,7 +3,9 @@ import { createPermissions } from '../../utils.js';
 export default {
   up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      const permissions = [{ name: 'locales|tasks', display_name: 'Locale tasks' }];
+      const permissions = [
+        { name: 'locales|tasks', display_name: 'Locale tasks' },
+      ];
       await createPermissions(permissions, { queryInterface, transaction });
     }),
 

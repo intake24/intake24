@@ -34,20 +34,27 @@ export function job() {
       };
       if (type)
         whereOp.type = type;
-      if (startedAfter)
-        whereOp.startedAt = { [Op.gte]: new Date(startedAfter) };
+      if (startedAfter) {
+        whereOp.startedAt = {
+          [Op.gte]: new Date(startedAfter),
+        };
+      }
 
       const jobs = await Job.paginate<() => JobAttributes>({
         query: pick(req.query, ['page', 'limit', 'sort', 'search']),
         columns: ['type'],
         where: whereOp,
-        order: [['startedAt', 'DESC']],
+        order: [
+          ['startedAt', 'DESC'],
+        ],
       });
 
       return { status: 200, body: jobs };
     },
     submit: {
-      middleware: [upload.single('params[file]')],
+      middleware: [
+        upload.single('params[file]'),
+      ],
       handler: async ({ body: { type, params }, req }) => {
         const { userId } = req.scope.cradle.user;
 
@@ -85,7 +92,9 @@ export function job() {
     read: async ({ params: { jobId: id }, req }) => {
       const { userId } = req.scope.cradle.user;
 
-      const job = await Job.findOne({ where: { id, userId } });
+      const job = await Job.findOne({
+        where: { id, userId },
+      });
       if (!job)
         throw new NotFoundError();
 
@@ -100,7 +109,9 @@ export function job() {
           id,
           userId,
           downloadUrl: { [Op.ne]: null },
-          downloadUrlExpiresAt: { [Op.gt]: new Date() },
+          downloadUrlExpiresAt: {
+            [Op.gt]: new Date(),
+          },
         },
       });
 

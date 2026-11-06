@@ -43,7 +43,10 @@ export const food = contract.router({
   getByCode: {
     method: 'GET',
     path: '/admin/fdbs/:localeId/foods/by-code/:code',
-    pathParams: z.object({ localeId, code: z.string().min(1).max(64) }),
+    pathParams: z.object({
+      localeId,
+      code: z.string().min(1).max(64),
+    }),
     responses: {
       200: foodEntry,
     },

@@ -242,7 +242,9 @@ export default defineComponent({
     });
 
     const toggle = (field: 'verifiedAt' | 'disabledAt') => {
-      data.value[field] = toggles.value[field] ? new Date() : null;
+      data.value[field] = toggles.value[field]
+        ? new Date()
+        : null;
       errors.clear(field);
     };
 

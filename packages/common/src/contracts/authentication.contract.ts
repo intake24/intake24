@@ -63,7 +63,9 @@ export const authentication = contract.router({
     path: '/auth/refresh',
     body: null,
     responses: {
-      200: z.object({ accessToken: z.string() }),
+      200: z.object({
+        accessToken: z.string(),
+      }),
     },
     summary: 'Refresh access token',
     description:

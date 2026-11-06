@@ -74,7 +74,9 @@ describe('category service', () => {
         },
       ];
 
-      const idMap = new Map([[child.code, child.id]]);
+      const idMap = new Map([
+        [child.code, child.id],
+      ]);
 
       await service.bulkUpdateCategoryParents(kyselyDb.foods, 'en_GB', input, idMap);
 
@@ -111,7 +113,9 @@ describe('category service', () => {
         englishName: 'Child 1',
         hidden: false,
         portionSizeMethods: [],
-        parentCategories: [{ id: parent1.id }],
+        parentCategories: [
+          { id: parent1.id },
+        ],
       });
 
       const input: BulkCategoryInput[] = [
@@ -125,7 +129,9 @@ describe('category service', () => {
         },
       ];
 
-      const idMap = new Map([[child.code, child.id]]);
+      const idMap = new Map([
+        [child.code, child.id],
+      ]);
 
       await service.bulkUpdateCategoryParents(kyselyDb.foods, 'en_GB', input, idMap);
 
@@ -166,7 +172,9 @@ describe('category service', () => {
         },
       ];
 
-      const idMap = new Map([[category.code, category.id]]);
+      const idMap = new Map([
+        [category.code, category.id],
+      ]);
 
       await service.bulkUpdateCategoryAttributes(kyselyDb.foods, input, idMap);
 
@@ -213,7 +221,9 @@ describe('category service', () => {
         },
       ];
 
-      const idMap = new Map([[category.code, category.id]]);
+      const idMap = new Map([
+        [category.code, category.id],
+      ]);
 
       await service.bulkUpdateCategoryPortionSizeMethods(kyselyDb.foods, input, idMap);
 

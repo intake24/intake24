@@ -12,7 +12,10 @@ function nutrientTypeService() {
   const getNutrientType = async (nutrientTypeId: string) => {
     const [foodsNutrientType, systemNutrientType] = await Promise.all([
       FoodsNutrientType.findByPk(nutrientTypeId, {
-        include: [{ association: 'unit' }, { association: 'inKcal' }],
+        include: [
+          { association: 'unit' },
+          { association: 'inKcal' },
+        ],
       }),
       SystemNutrientType.findByPk(nutrientTypeId),
     ]);
@@ -39,7 +42,10 @@ function nutrientTypeService() {
       await NutrientTypeInKcal.create({ nutrientTypeId: foodsNutrientType.id, kcalPerUnit });
 
     return foodsNutrientType.reload({
-      include: [{ association: 'unit' }, { association: 'inKcal' }],
+      include: [
+        { association: 'unit' },
+        { association: 'inKcal' },
+      ],
     });
   };
 
@@ -58,14 +64,24 @@ function nutrientTypeService() {
 
     const [foodsNutrientType, systemNutrientType] = await Promise.all([
       FoodsNutrientType.findByPk(nutrientTypeId, {
-        include: [{ association: 'unit' }, { association: 'inKcal' }],
+        include: [
+          { association: 'unit' },
+          { association: 'inKcal' },
+        ],
       }),
-      SystemNutrientType.findByPk(nutrientTypeId, { include: [{ association: 'unit' }] }),
+      SystemNutrientType.findByPk(nutrientTypeId, {
+        include: [
+          { association: 'unit' },
+        ],
+      }),
     ]);
     if (!foodsNutrientType || !systemNutrientType)
       throw new NotFoundError();
 
-    await Promise.all([foodsNutrientType.update(rest), systemNutrientType.update(rest)]);
+    await Promise.all([
+      foodsNutrientType.update(rest),
+      systemNutrientType.update(rest),
+    ]);
 
     if (kcalPerUnit) {
       if (foodsNutrientType.inKcal)
@@ -73,11 +89,16 @@ function nutrientTypeService() {
       else await NutrientTypeInKcal.create({ nutrientTypeId: foodsNutrientType.id, kcalPerUnit });
     }
     else if (kcalPerUnit === null) {
-      await NutrientTypeInKcal.destroy({ where: { nutrientTypeId: foodsNutrientType.id } });
+      await NutrientTypeInKcal.destroy({
+        where: { nutrientTypeId: foodsNutrientType.id },
+      });
     }
 
     return foodsNutrientType.reload({
-      include: [{ association: 'unit' }, { association: 'inKcal' }],
+      include: [
+        { association: 'unit' },
+        { association: 'inKcal' },
+      ],
     });
   };
 
@@ -88,8 +109,12 @@ function nutrientTypeService() {
    */
   const deleteNutrientType = async (nutrientTypeId: string) => {
     const [foodsNutrientType, systemNutrientType] = await Promise.all([
-      FoodsNutrientType.findByPk(nutrientTypeId, { attributes: ['id'] }),
-      SystemNutrientType.findByPk(nutrientTypeId, { attributes: ['id'] }),
+      FoodsNutrientType.findByPk(nutrientTypeId, {
+        attributes: ['id'],
+      }),
+      SystemNutrientType.findByPk(nutrientTypeId, {
+        attributes: ['id'],
+      }),
     ]);
     if (!foodsNutrientType || !systemNutrientType)
       throw new NotFoundError();

@@ -11,7 +11,10 @@ export type Amr = 'pwd' | 'oidc' | MFAProvider;
 export type AmrMethod = { method: Amr; timestamp: number };
 
 export function createAmrMethod(amr: Amr): AmrMethod {
-  return { method: amr, timestamp: Math.round(Date.now() / 1000) };
+  return {
+    method: amr,
+    timestamp: Math.round(Date.now() / 1000),
+  };
 }
 
 export type BaseSignPayload = {

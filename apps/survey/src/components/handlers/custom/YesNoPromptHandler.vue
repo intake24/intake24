@@ -51,7 +51,9 @@ const { foodOptional, mealOptional }
 const survey = useSurvey();
 
 function getFlagInitialState(flag: string, flags: string[]): boolean | null {
-  return flags.includes(flagPromptCompletionFlag(flag)) ? flags.includes(flag) : null;
+  return flags.includes(flagPromptCompletionFlag(flag))
+    ? flags.includes(flag)
+    : null;
 }
 
 const getInitialState = computed(() => {

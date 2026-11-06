@@ -110,7 +110,13 @@ export default defineComponent({
     const { formatDateTime } = useDateTime();
     const { download, downloadUrlAvailable } = useDownloadJob();
 
-    return { download, downloadUrlAvailable, entry, entryLoaded, formatDateTime };
+    return {
+      download,
+      downloadUrlAvailable,
+      entry,
+      entryLoaded,
+      formatDateTime,
+    };
   },
 });
 </script>

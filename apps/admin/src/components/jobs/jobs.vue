@@ -119,7 +119,9 @@ type TaskForm = {
   params: JobParams;
 };
 
-defineOptions({ components: { ...jobParams } });
+defineOptions({
+  components: { ...jobParams },
+});
 
 const props = defineProps({
   id: {
@@ -166,13 +168,21 @@ const jobTypes = computed(() => {
     }));
 });
 
-const resourceParameter = computed(() => props.resource ? resourceToRequestParam(props.resource) : undefined);
+const resourceParameter = computed(() => props.resource
+  ? resourceToRequestParam(props.resource)
+  : undefined);
 const disabledJobParams = computed(() => Object.keys(props.defaultParams).reduce((acc, jobType) => {
-  acc[jobType as JobType] = resourceParameter.value ? { [resourceParameter.value]: true } : {};
+  acc[jobType as JobType] = resourceParameter.value
+    ? { [resourceParameter.value]: true }
+    : {};
   return acc;
 }, {} as Partial<Record<JobType, Record<string, boolean>>>));
-const url = computed(() => props.resource && props.id ? `admin/${props.resource}/${props.id}/tasks` : `admin/user/jobs`);
-const query = computed(() => resourceParameter.value && props.id ? { [resourceParameter.value]: props.id } : {});
+const url = computed(() => props.resource && props.id
+  ? `admin/${props.resource}/${props.id}/tasks`
+  : `admin/user/jobs`);
+const query = computed(() => resourceParameter.value && props.id
+  ? { [resourceParameter.value]: props.id }
+  : {});
 
 const { clearError, data, errors, post } = useForm<TaskForm>({
   data: { type: props.types[0], params: props.defaultParams[props.types[0]] as JobParams },

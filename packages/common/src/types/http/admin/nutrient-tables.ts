@@ -58,7 +58,9 @@ export const nutrientTableRequest = nutrientTableAttributes.extend({
     .refine((value) => {
       const fieldNames = value.map(field => field.fieldName);
 
-      const noDups = [...new Set(fieldNames)];
+      const noDups = [
+        ...new Set(fieldNames),
+      ];
       return fieldNames.length === noDups.length;
     }),
   csvMappingNutrients: nutrientTableCsvMappingNutrientAttributes
@@ -67,7 +69,9 @@ export const nutrientTableRequest = nutrientTableAttributes.extend({
     .refine((value) => {
       const nutrientTypeIds = value.map(nutrient => nutrient.nutrientTypeId);
 
-      const noDups = [...new Set(nutrientTypeIds)];
+      const noDups = [
+        ...new Set(nutrientTypeIds),
+      ];
       return nutrientTypeIds.length === noDups.length;
     }),
 });
@@ -90,8 +94,14 @@ export const nutrientTableRecordRequest = z.object({
   recordId: z.string(),
   name: z.string(),
   localName: z.string().optional(),
-  nutrients: z.array(z.tuple([z.string(), z.number()])),
-  fields: z.array(z.tuple([z.string(), z.string()])),
+  nutrients: z.array(z.tuple([
+    z.string(),
+    z.number(),
+  ])),
+  fields: z.array(z.tuple([
+    z.string(),
+    z.string(),
+  ])),
 });
 export type NutrientTableRecordRequest = z.infer<typeof nutrientTableRecordRequest>;
 

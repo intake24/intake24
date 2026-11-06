@@ -80,8 +80,13 @@ describe('conduct SurveyNutrientsRecalculation stress test', () => {
     ids: string[],
     field: string,
   ) => {
-    for (let offset = 0; offset < ids.length; offset += DESTROY_CHUNK)
-      await Model.destroy({ where: { [field]: ids.slice(offset, offset + DESTROY_CHUNK) } });
+    for (let offset = 0; offset < ids.length; offset += DESTROY_CHUNK) {
+      await Model.destroy({
+        where: {
+          [field]: ids.slice(offset, offset + DESTROY_CHUNK),
+        },
+      });
+    }
   };
 
   beforeAll(async () => {
@@ -197,8 +202,11 @@ describe('conduct SurveyNutrientsRecalculation stress test', () => {
   }, STRESS_TIMEOUT);
 
   afterAll(async () => {
-    if (stressDbJobIds.length)
-      await DbJob.destroy({ where: { id: stressDbJobIds } });
+    if (stressDbJobIds.length) {
+      await DbJob.destroy({
+        where: { id: stressDbJobIds },
+      });
+    }
     if (stressMealIds.length)
       await bulkDestroy(SurveySubmissionFood as any, stressMealIds, 'mealId');
     if (stressMealIds.length)
@@ -276,7 +284,10 @@ describe('conduct SurveyNutrientsRecalculation stress test', () => {
   it('values-only: constant memory, no currentMappings growth', async () => {
     const { peakHeapDeltaMB } = await measureScenario(
       'values-only | 25,000 unique food codes',
-      { surveyId: surveyId(), mode: 'values-only' },
+      {
+        surveyId: surveyId(),
+        mode: 'values-only',
+      },
     );
     expect(peakHeapDeltaMB).toBeLessThan(100);
   }, STRESS_TIMEOUT);
@@ -284,7 +295,10 @@ describe('conduct SurveyNutrientsRecalculation stress test', () => {
   it('values-and-codes: currentMappings grows O(unique food codes)', async () => {
     const { peakHeapDeltaMB } = await measureScenario(
       'values-and-codes | 25,000 unique food codes',
-      { surveyId: surveyId(), mode: 'values-and-codes' },
+      {
+        surveyId: surveyId(),
+        mode: 'values-and-codes',
+      },
     );
     expect(peakHeapDeltaMB).toBeLessThan(500);
   }, STRESS_TIMEOUT);
@@ -292,7 +306,11 @@ describe('conduct SurveyNutrientsRecalculation stress test', () => {
   it('values-and-codes + syncFields: full structural sync', async () => {
     const { peakHeapDeltaMB } = await measureScenario(
       'values-and-codes + syncFields | 25,000 unique food codes',
-      { surveyId: surveyId(), mode: 'values-and-codes', syncFields: true },
+      {
+        surveyId: surveyId(),
+        mode: 'values-and-codes',
+        syncFields: true,
+      },
     );
     expect(peakHeapDeltaMB).toBeLessThan(500);
   }, STRESS_TIMEOUT);

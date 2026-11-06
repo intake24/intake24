@@ -67,7 +67,9 @@ export function useForm<T extends object>(props: UseFormProps<T>) {
   };
 
   function toForm(data: any) {
-    const input = loadCallback ? loadCallback(data) : data;
+    const input = loadCallback
+      ? loadCallback(data)
+      : data;
 
     load(input);
   };
@@ -121,9 +123,13 @@ export function useForm<T extends object>(props: UseFormProps<T>) {
 
     try {
       const { data } = await http.request<R>({
-        data: transform ? transform(getData() as T) : getData(),
+        data: transform
+          ? transform(getData() as T)
+          : getData(),
         withLoading: true,
-        headers: hasFile() ? { 'Content-Type': 'multipart/form-data' } : undefined,
+        headers: hasFile()
+          ? { 'Content-Type': 'multipart/form-data' }
+          : undefined,
         ...config,
       });
 

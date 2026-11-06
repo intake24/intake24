@@ -11,29 +11,49 @@ import { contract } from '@intake24/common/contracts';
 import { Permission, Role, User } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { roleId }: { roleId?: string } = {}) {
-  const where: WhereOptions = roleId ? { id: { [Op.ne]: roleId } } : {};
+  const where: WhereOptions = roleId
+    ? {
+        id: { [Op.ne]: roleId },
+      }
+    : {};
 
-  if (!(await unique({ model: Role, condition: { field: 'name', value }, options: { where } }))) {
-    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: Role,
+    condition: { field: 'name', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      path: 'name',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function role() {
   return initServer().router(contract.admin.acl.role, {
     browse: {
-      middleware: [permission('acl', 'roles', 'roles:browse')],
+      middleware: [
+        permission('acl', 'roles', 'roles:browse'),
+      ],
       handler: async ({ query }) => {
         const roles = await Role.paginate({
           query,
           columns: ['name', 'displayName'],
-          order: [[fn('lower', col('name')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('name')),
+              'ASC',
+            ],
+          ],
         });
 
         return { status: 200, body: roles };
       },
     },
     store: {
-      middleware: [permission('acl', 'roles', 'roles:create')],
+      middleware: [
+        permission('acl', 'roles', 'roles:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
 
@@ -42,23 +62,37 @@ export function role() {
         await role.$set('permissions', permissions);
 
         await Promise.all([
-          role.reload({ include: [{ association: 'permissions' }] }),
+          role.reload({
+            include: [
+              { association: 'permissions' },
+            ],
+          }),
           req.scope.cradle.adminUserService.flushACLCacheByRoleId(role.id),
         ]);
 
-        return { status: 201, body: roleEntryResponse(role) };
+        return {
+          status: 201,
+          body: roleEntryResponse(role),
+        };
       },
     },
     refs: {
-      middleware: [permission('acl', 'roles')],
+      middleware: [
+        permission('acl', 'roles'),
+      ],
       handler: async () => {
         const permissions = await Permission.scope('list').findAll();
 
-        return { status: 200, body: { permissions } };
+        return {
+          status: 200,
+          body: { permissions },
+        };
       },
     },
     read: {
-      middleware: [permission('acl', 'roles', 'roles:read')],
+      middleware: [
+        permission('acl', 'roles', 'roles:read'),
+      ],
       handler: async ({ params: { roleId } }) => {
         const role = await Role.scope('permissions').findByPk(roleId);
         if (!role)
@@ -68,7 +102,9 @@ export function role() {
       },
     },
     update: {
-      middleware: [permission('acl', 'roles', 'roles:edit')],
+      middleware: [
+        permission('acl', 'roles', 'roles:edit'),
+      ],
       handler: async ({ body, params: { roleId }, req }) => {
         const role = await Role.scope('permissions').findByPk(roleId);
         if (!role)
@@ -81,21 +117,34 @@ export function role() {
 
         await role.$set(
           'permissions',
-          role.name === req.scope.cradle.aclConfig.roles.superuser ? permissions : body.permissions,
+          role.name === req.scope.cradle.aclConfig.roles.superuser
+            ? permissions
+            : body.permissions,
         );
 
         await Promise.all([
-          role.reload({ include: [{ association: 'permissions' }] }),
+          role.reload({
+            include: [
+              { association: 'permissions' },
+            ],
+          }),
           req.scope.cradle.adminUserService.flushACLCacheByRoleId(role.id),
         ]);
 
-        return { status: 200, body: roleEntryResponse(role) };
+        return {
+          status: 200,
+          body: roleEntryResponse(role),
+        };
       },
     },
     destroy: {
-      middleware: [permission('acl', 'roles', 'roles:delete')],
+      middleware: [
+        permission('acl', 'roles', 'roles:delete'),
+      ],
       handler: async ({ params: { roleId } }) => {
-        const role = await Role.findByPk(roleId, { attributes: ['id'] });
+        const role = await Role.findByPk(roleId, {
+          attributes: ['id'],
+        });
         if (!role)
           throw new NotFoundError();
 
@@ -105,34 +154,58 @@ export function role() {
       },
     },
     permissions: {
-      middleware: [permission('acl', 'roles', 'roles:permissions')],
+      middleware: [
+        permission('acl', 'roles', 'roles:permissions'),
+      ],
       handler: async ({ params: { roleId }, query }) => {
-        const role = await Role.findByPk(roleId, { attributes: ['id'] });
+        const role = await Role.findByPk(roleId, {
+          attributes: ['id'],
+        });
         if (!role)
           throw new NotFoundError();
 
         const permissions = await Permission.paginate({
           query,
           columns: ['name', 'displayName'],
-          include: [{ association: 'roleLinks', attributes: ['roleId'], where: { roleId } }],
-          order: [['name', 'ASC']],
+          include: [
+            {
+              association: 'roleLinks',
+              attributes: ['roleId'],
+              where: { roleId },
+            },
+          ],
+          order: [
+            ['name', 'ASC'],
+          ],
         });
 
         return { status: 200, body: permissions };
       },
     },
     users: {
-      middleware: [permission('acl', 'roles', 'roles:users')],
+      middleware: [
+        permission('acl', 'roles', 'roles:users'),
+      ],
       handler: async ({ params: { roleId }, query }) => {
-        const role = await Role.findByPk(roleId, { attributes: ['id'] });
+        const role = await Role.findByPk(roleId, {
+          attributes: ['id'],
+        });
         if (!role)
           throw new NotFoundError();
 
         const users = await User.paginate({
           query,
           columns: ['name', 'email', 'simpleName'],
-          include: [{ association: 'roleLinks', attributes: ['roleId'], where: { roleId } }],
-          order: [['name', 'ASC']],
+          include: [
+            {
+              association: 'roleLinks',
+              attributes: ['roleId'],
+              where: { roleId },
+            },
+          ],
+          order: [
+            ['name', 'ASC'],
+          ],
         });
 
         return { status: 200, body: users };

@@ -14,7 +14,9 @@ function guideImageService({
   const create = async (input: CreateGuideImageInput): Promise<GuideImage> => {
     const { id, description, label, imageMapId } = input;
 
-    const imageMap = await ImageMap.findByPk(imageMapId, { include: ['baseImage'] });
+    const imageMap = await ImageMap.findByPk(imageMapId, {
+      include: ['baseImage'],
+    });
     if (!imageMap || !imageMap.baseImage)
       throw new NotFoundError();
 
@@ -34,7 +36,9 @@ function guideImageService({
 
     const imageMapObjects = await ImageMapObject.findAll({
       where: { imageMapId },
-      order: [['id', 'ASC']],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
 
     const guideImageObjects = imageMapObjects.map(object => ({
@@ -66,7 +70,12 @@ function guideImageService({
       const match = guideImage.objects.find(guideObject => guideObject.imageMapObjectId === id);
 
       if (!match) {
-        await GuideImageObject.create({ guideImageId, imageMapObjectId: id, label, weight });
+        await GuideImageObject.create({
+          guideImageId,
+          imageMapObjectId: id,
+          label,
+          weight,
+        });
         continue;
       }
 

@@ -18,9 +18,21 @@ import ImageMapObject from './image-map-object';
 import ProcessedImage from './processed-image';
 
 @Scopes(() => ({
-  guideImages: { include: [{ model: GuideImage }] },
-  baseImage: { include: [{ model: ProcessedImage }] },
-  objects: { include: [{ model: ImageMapObject }] },
+  guideImages: {
+    include: [
+      { model: GuideImage },
+    ],
+  },
+  baseImage: {
+    include: [
+      { model: ProcessedImage },
+    ],
+  },
+  objects: {
+    include: [
+      { model: ImageMapObject },
+    ],
+  },
 }))
 @Table({
   modelName: 'ImageMap',
@@ -62,7 +74,9 @@ export default class ImageMap extends BaseModel<
 
   set label(value: CreationOptional<LocaleTranslation>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('label', value && Object.keys(value).length ? value : null);
+    this.setDataValue('label', value && Object.keys(value).length
+      ? value
+      : null);
   }
 
   @BelongsTo(() => ProcessedImage, 'baseImageId')

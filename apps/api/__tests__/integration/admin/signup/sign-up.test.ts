@@ -43,7 +43,15 @@ export default () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       url,
-      ['name', 'phone', 'email', 'emailConfirm', 'password', 'passwordConfirm', 'terms'],
+      [
+        'name',
+        'phone',
+        'email',
+        'emailConfirm',
+        'password',
+        'passwordConfirm',
+        'terms',
+      ],
       { input: invalidInput },
     );
   });

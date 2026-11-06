@@ -13,7 +13,9 @@ export function fromTime(time: Time, doubleDigit = true): string {
     return `${hours}:${minutes}`;
 
   return [hours, minutes]
-    .map(item => (item.toString().length === 1 ? `0${item}` : item.toString()))
+    .map(item => (item.toString().length === 1
+      ? `0${item}`
+      : item.toString()))
     .join(':');
 }
 
@@ -24,9 +26,15 @@ export function toTime(time: string): Time {
 }
 
 export function toMinutes(time: Time | string) {
-  const { hours, minutes } = typeof time === 'string' ? toTime(time) : time;
+  const { hours, minutes } = typeof time === 'string'
+    ? toTime(time)
+    : time;
 
   return hours * 60 + minutes;
 }
 
-export const minutesWrapAround = (minutes: number) => (minutes < 0 ? 1440 + minutes : minutes);
+export function minutesWrapAround(minutes: number) {
+  return minutes < 0
+    ? 1440 + minutes
+    : minutes;
+}

@@ -21,11 +21,15 @@ export function useContextMenu(props: UseContextMenuProps, { emit }: Pick<SetupC
 
   const isFood = computed(() => !!(props.meal && props.food));
   const isMeal = computed(() => props.meal && !props.food);
-  const entity = computed(() => (isFood.value && props.food ? props.food : props.meal));
+  const entity = computed(() => (isFood.value && props.food
+    ? props.food
+    : props.meal));
   const entityName = computed(() => (isFood.value ? foodName.value : mealName.value));
 
   const action = (type: FoodActionType | MealActionType) => {
-    emit('action', type, mealActionTypes.includes(type as any) ? props.meal.id : props.food?.id);
+    emit('action', type, mealActionTypes.includes(type as any)
+      ? props.meal.id
+      : props.food?.id);
   };
 
   const openDialog = (type: FoodActionType | MealActionType) => {

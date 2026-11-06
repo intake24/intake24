@@ -19,11 +19,23 @@ export default createVuetify({
       hideDetails: 'auto',
     },
     PromptActions: {
-      class: ['d-flex', 'flex-row', 'align-stretch', 'flex-wrap', 'ga-3'],
+      class: [
+        'd-flex',
+        'flex-row',
+        'align-stretch',
+        'flex-wrap',
+        'ga-3',
+      ],
       VBtn: {
         variant: 'tonal',
         color: 'primary',
-        class: ['px-4', 'flex-grow-1', 'flex-md-grow-0', 'flex-shrink-1', 'text-uppercase'],
+        class: [
+          'px-4',
+          'flex-grow-1',
+          'flex-md-grow-0',
+          'flex-shrink-1',
+          'text-uppercase',
+        ],
         size: 'large',
       },
     },

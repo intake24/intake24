@@ -57,7 +57,10 @@ export const useSameAsBefore = defineStore('same-as-before', {
         return undefined;
 
       const { [foodCode]: _remove, ...rest } = this.items[userId] ?? {};
-      this.items = { ...this.items, [userId]: { ...rest } };
+      this.items = {
+        ...this.items,
+        [userId]: { ...rest },
+      };
     },
 
     saveItem(localeId: string, food: EncodedFood) {
@@ -68,7 +71,14 @@ export const useSameAsBefore = defineStore('same-as-before', {
       if (!food.data.sameAsBeforeOption)
         return;
 
-      this.items[userId] = { ...(this.items[userId] ?? {}), [food.data.code]: { food, localeId, createdAt: Date.now() } };
+      this.items[userId] = {
+        ...(this.items[userId] ?? {}),
+        [food.data.code]: {
+          food,
+          localeId,
+          createdAt: Date.now(),
+        },
+      };
       // TODO: Deep-object does not seem to trigger storage save, thought pinia state is updated!
       this.$persist();
     },

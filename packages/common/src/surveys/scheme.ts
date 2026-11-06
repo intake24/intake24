@@ -43,13 +43,21 @@ export const defaultSchemeSettings: SchemeSettings = {
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;
 export type SurveyPromptSection = (typeof surveySections)[number];
 
-export const mealSections = ['preFoods', 'foods', 'postFoods', 'foodsDeferred'] as const;
+export const mealSections = [
+  'preFoods',
+  'foods',
+  'postFoods',
+  'foodsDeferred',
+] as const;
 export type MealSection = (typeof mealSections)[number];
 
 export const foodSections = ['foods', 'foodsDeferred'] as const;
 export type FoodSection = (typeof foodSections)[number];
 
-export const promptSections = [...surveySections, ...mealSections] as const;
+export const promptSections = [
+  ...surveySections,
+  ...mealSections,
+] as const;
 export type PromptSection = (typeof promptSections)[number];
 
 export const promptSubsection = z.object({
@@ -114,8 +122,10 @@ export function flattenScheme(scheme: RecallPrompts): SinglePrompt[] {
   const { ui, ...promptSections } = scheme;
 
   return Object.values(promptSections).reduce<SinglePrompt[]>((acc, prompts) => {
-    // @ts-expect-error fix
-    acc.push(...(Array.isArray(prompts) ? prompts : flattenScheme(prompts)));
+    acc.push(...(Array.isArray(prompts)
+      ? prompts
+      // @ts-expect-error fix
+      : flattenScheme(prompts)));
     return acc;
   }, []);
 }
@@ -142,8 +152,14 @@ export function groupMultiPrompts(prompts: SinglePrompt[]) {
     if (item.type !== 'custom' || !item.group)
       return acc;
 
-    if (!acc[item.group])
-      acc[item.group] = { idx, prompts: [], conditions: [], inserted: false };
+    if (!acc[item.group]) {
+      acc[item.group] = {
+        idx,
+        prompts: [],
+        conditions: [],
+        inserted: false,
+      };
+    }
 
     acc[item.group]?.prompts.push(item);
     acc[item.group]?.conditions.push(...item.conditions);
@@ -192,15 +208,43 @@ export function groupSchemeMultiPrompts(scheme: RecallPrompts): GroupedRecallPro
   };
 }
 
-export const defaultMeal: Meal = { name: { en: 'Meal name' }, time: '8:00', flags: [] };
+export const defaultMeal: Meal = {
+  name: { en: 'Meal name' },
+  time: '8:00',
+  flags: [],
+};
 
 export const defaultMeals: Meal[] = [
-  { name: { en: 'Breakfast' }, time: '8:00', flags: [] },
-  { name: { en: 'Morning snack' }, time: '10:00', flags: [] },
-  { name: { en: 'Lunch' }, time: '13:00', flags: [] },
-  { name: { en: 'Afternoon snack' }, time: '16:00', flags: [] },
-  { name: { en: 'Dinner' }, time: '18:00', flags: [] },
-  { name: { en: 'Evening snack' }, time: '20:00', flags: [] },
+  {
+    name: { en: 'Breakfast' },
+    time: '8:00',
+    flags: [],
+  },
+  {
+    name: { en: 'Morning snack' },
+    time: '10:00',
+    flags: [],
+  },
+  {
+    name: { en: 'Lunch' },
+    time: '13:00',
+    flags: [],
+  },
+  {
+    name: { en: 'Afternoon snack' },
+    time: '16:00',
+    flags: [],
+  },
+  {
+    name: { en: 'Dinner' },
+    time: '18:00',
+    flags: [],
+  },
+  {
+    name: { en: 'Evening snack' },
+    time: '20:00',
+    flags: [],
+  },
 ];
 
 export const exportSectionIds = [

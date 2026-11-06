@@ -12,12 +12,17 @@ import { Survey, UserSurveyAlias } from '@intake24/db';
 export function respondent() {
   return initServer().router(contract.admin.survey.respondent, {
     browse: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId }, query, req }) => {
         const { slug, authUrlDomainOverride } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
-          { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } },
+          {
+            attributes: ['id', 'slug', 'authUrlDomainOverride'],
+            where: { id: surveyId },
+          },
         );
 
         const respondentRes = respondentResponse(req.scope.cradle.appConfig.urls, slug, authUrlDomainOverride);
@@ -26,7 +31,9 @@ export function respondent() {
           query,
           columns: ['username'],
           where: { surveyId },
-          order: [['username', 'ASC']],
+          order: [
+            ['username', 'ASC'],
+          ],
           transform: respondentRes.list,
         });
 
@@ -34,72 +41,126 @@ export function respondent() {
       },
     },
     store: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ body, params: { surveyId }, req }) => {
         const { slug, authUrlDomainOverride } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
-          { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } },
+          {
+            attributes: ['id', 'slug', 'authUrlDomainOverride'],
+            where: { id: surveyId },
+          },
         );
 
-        const entry = await UserSurveyAlias.findOne({ attributes: ['id'], where: { surveyId, username: body.username } });
-        if (entry)
-          throw ValidationError.from({ path: 'username', i18n: { type: 'unique._' } });
+        const entry = await UserSurveyAlias.findOne({
+          attributes: ['id'],
+          where: { surveyId, username: body.username },
+        });
+        if (entry) {
+          throw ValidationError.from({
+            path: 'username',
+            i18n: { type: 'unique._' },
+          });
+        }
 
         const respondent = await req.scope.cradle.adminSurveyService.createRespondent(surveyId, body);
 
         await respondent.reload({
-          include: [{ association: 'user', include: [{ association: 'customFields' }] }],
+          include: [
+            {
+              association: 'user',
+              include: [
+                { association: 'customFields' },
+              ],
+            },
+          ],
         });
 
         const respondentRes = respondentResponse(req.scope.cradle.appConfig.urls, slug, authUrlDomainOverride);
 
-        return { status: 201, body: respondentRes.entry(respondent) };
+        return {
+          status: 201,
+          body: respondentRes.entry(respondent),
+        };
       },
     },
     read: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId, username }, req }) => {
         const { slug, authUrlDomainOverride } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
-          { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } },
+          {
+            attributes: ['id', 'slug', 'authUrlDomainOverride'],
+            where: { id: surveyId },
+          },
         );
 
         const respondent = await UserSurveyAlias.findOne({
           where: { surveyId, username },
-          include: [{ association: 'user', include: [{ association: 'customFields' }] }],
+          include: [
+            {
+              association: 'user',
+              include: [
+                { association: 'customFields' },
+              ],
+            },
+          ],
         });
         if (!respondent)
           throw new NotFoundError();
 
         const respondentRes = respondentResponse(req.scope.cradle.appConfig.urls, slug, authUrlDomainOverride);
 
-        return { status: 200, body: respondentRes.entry(respondent) };
+        return {
+          status: 200,
+          body: respondentRes.entry(respondent),
+        };
       },
     },
     update: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ body, params: { surveyId, username }, req }) => {
         const { slug, authUrlDomainOverride } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
-          { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } },
+          {
+            attributes: ['id', 'slug', 'authUrlDomainOverride'],
+            where: { id: surveyId },
+          },
         );
 
         const respondent = await req.scope.cradle.adminSurveyService.updateRespondent(surveyId, username, body);
 
         await respondent.reload({
-          include: [{ association: 'user', include: [{ association: 'customFields' }] }],
+          include: [
+            {
+              association: 'user',
+              include: [
+                { association: 'customFields' },
+              ],
+            },
+          ],
         });
 
         const respondentRes = respondentResponse(req.scope.cradle.appConfig.urls, slug, authUrlDomainOverride);
 
-        return { status: 200, body: respondentRes.entry(respondent) };
+        return {
+          status: 200,
+          body: respondentRes.entry(respondent),
+        };
       },
     },
     destroy: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId, username }, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'respondents', {
           attributes: ['id'],
@@ -112,7 +173,9 @@ export function respondent() {
       },
     },
     downloadFeedback: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId, username }, query: { submissions }, req, res }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'respondents', {
           attributes: ['id'],
@@ -127,7 +190,9 @@ export function respondent() {
       },
     },
     emailFeedback: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ body: { email, copy }, params: { surveyId, username }, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'respondents', {
           attributes: ['id'],
@@ -136,7 +201,9 @@ export function respondent() {
 
         const subject = atob<Subject>(req.scope.cradle.user.sub);
         const { userId } = req.scope.cradle.user;
-        const userEmail = subject.provider === 'email' ? subject.providerKey : undefined;
+        const userEmail = subject.provider === 'email'
+          ? subject.providerKey
+          : undefined;
 
         await req.scope.cradle.scheduler.jobs.addJob({
           type: 'SurveyFeedbackNotification',
@@ -145,8 +212,12 @@ export function respondent() {
             surveyId,
             username,
             to: email,
-            cc: copy === 'cc' && userEmail ? userEmail : undefined,
-            bcc: copy === 'bcc' && userEmail ? userEmail : undefined,
+            cc: copy === 'cc' && userEmail
+              ? userEmail
+              : undefined,
+            bcc: copy === 'bcc' && userEmail
+              ? userEmail
+              : undefined,
           },
         });
 

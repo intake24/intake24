@@ -15,7 +15,11 @@ import BaseModel from '../model';
 import Category from './category';
 
 @Scopes(() => ({
-  category: { include: [{ model: Category }] },
+  category: {
+    include: [
+      { model: Category },
+    ],
+  },
 }))
 @Table({
   modelName: 'CategoryAttribute',

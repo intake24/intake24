@@ -173,8 +173,12 @@ const outlinePoints = computed(() => {
   const originalImageAspect = originalImageWidth.value / originalImageHeight.value;
   const imgContainerAspect = imgContainerWidth.value / imgContainerHeight.value;
 
-  const scaleWidth = originalImageAspect >= imgContainerAspect ? imgContainerWidth.value : imgContainerHeight.value * originalImageAspect;
-  const scaleHeight = originalImageAspect > imgContainerAspect ? imgContainerWidth.value / originalImageAspect : imgContainerHeight.value;
+  const scaleWidth = originalImageAspect >= imgContainerAspect
+    ? imgContainerWidth.value
+    : imgContainerHeight.value * originalImageAspect;
+  const scaleHeight = originalImageAspect > imgContainerAspect
+    ? imgContainerWidth.value / originalImageAspect
+    : imgContainerHeight.value;
 
   // The scale offset calculations are correct, but they are not applied to the slider,
   // and the slider will not be drawn correctly in case if the original image is wider than

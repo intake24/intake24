@@ -42,12 +42,20 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['code', 'name', 'estimateIn.en', 'howMany', 'icon'],
+        [
+          'code',
+          'name',
+          'estimateIn.en',
+          'howMany',
+          'icon',
+        ],
         {
           input: {
             code: { value: 'should be string' },
             name: ['should be string'],
-            estimateIn: { en: { value: 'test' } },
+            estimateIn: {
+              en: { value: 'test' },
+            },
             howMany: 'ten',
             icon: { value: 'should be string' },
           },

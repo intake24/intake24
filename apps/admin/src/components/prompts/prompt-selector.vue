@@ -237,7 +237,11 @@ export default defineComponent({
   },
 
   data() {
-    const prompts = [...customPromptDefaults, ...standardPromptDefaults, ...portionSizeDefaults];
+    const prompts = [
+      ...customPromptDefaults,
+      ...standardPromptDefaults,
+      ...portionSizeDefaults,
+    ];
 
     const groupedPrompts: Record<PromptType, Prompt[]> = {
       custom: customPromptDefaults,
@@ -347,7 +351,10 @@ export default defineComponent({
       this.dialog = {
         show: true,
         index,
-        prompt: { origId: prompt.id, ...merge<Prompt>(promptDefaults, prompt) },
+        prompt: {
+          origId: prompt.id,
+          ...merge<Prompt>(promptDefaults, prompt),
+        },
       };
       this.errors = [...errors];
     },
@@ -367,7 +374,10 @@ export default defineComponent({
           delete i18n[key];
       }
 
-      this.$emit('save', { prompt: { i18n, ...rest }, index });
+      this.$emit('save', {
+        prompt: { i18n, ...rest },
+        index,
+      });
 
       this.reset();
     },

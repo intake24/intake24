@@ -75,7 +75,12 @@ export default class Model<
 
       const operations = columns.map(column => where(cast(col(`${model.name}.${snakeCase(column)}`), 'text'), operation));
       // @ts-expect-error where merge types (watch out what is being merged, might not cover all permutations)
-      options.where = { [Op.and]: [options.where, { [Op.or]: operations }] };
+      options.where = {
+        [Op.and]: [
+          options.where,
+          { [Op.or]: operations },
+        ],
+      };
     }
 
     const countOptions = Object.keys(options).reduce<BaseCountOptions>((acc, key) => {
@@ -83,8 +88,14 @@ export default class Model<
       if (topCount && key === 'include')
         return acc;
 
-      if (!['order', 'attributes', 'limit', 'offset'].includes(key))
+      if (![
+        'order',
+        'attributes',
+        'limit',
+        'offset',
+      ].includes(key)) {
         acc[key] = options[key];
+      }
 
       return acc;
     }, {});
@@ -98,14 +109,26 @@ export default class Model<
         options.order = [DataTypes.STRING.key, DataTypes.TEXT.key].includes(
           (attributes[column]?.type as AbstractDataType).key,
         )
-          ? [[fn('lower', col(`${model.name}.${snakeCase(column)}`)), order]]
-          : [[snakeCase(column), order]];
+          ? [
+              [
+                fn('lower', col(`${model.name}.${snakeCase(column)}`)),
+                order,
+              ],
+            ]
+          : [
+              [
+                snakeCase(column),
+                order,
+              ],
+            ];
       }
     }
 
     const records = await model.findAll(options);
 
-    const data = transform ? records.map(transform) : records;
+    const data = transform
+      ? records.map(transform)
+      : records;
 
     const meta: PaginationMeta = {
       from: offset + 1,
@@ -170,7 +193,9 @@ export default class Model<
           attributes,
           include,
           offset,
-          limit: difference > 0 ? batchSize - difference : batchSize,
+          limit: difference > 0
+            ? batchSize - difference
+            : batchSize,
         });
 
         if (transform) {
@@ -187,7 +212,9 @@ export default class Model<
       inputStream.push(null);
     }
     catch (err) {
-      inputStream.destroy(err instanceof Error ? err : undefined);
+      inputStream.destroy(err instanceof Error
+        ? err
+        : undefined);
     }
   }
 

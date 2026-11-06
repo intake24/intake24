@@ -47,14 +47,22 @@ import { permission } from '../../middleware/acl';
 export function metrics() {
   return initServer().router(contract.admin.metrics, {
     appMetrics: {
-      middleware: [permission('metrics:app')],
+      middleware: [
+        permission('metrics:app'),
+      ],
       handler: async ({ req }) => {
         const metrics = await req.scope.cradle.appMetricsService.getMetrics();
-        return { status: 200, headers: { 'Content-Type': 'text/plain; version=0.0.4;' }, body: metrics };
+        return {
+          status: 200,
+          headers: { 'Content-Type': 'text/plain; version=0.0.4;' },
+          body: metrics,
+        };
       },
     },
     nodeMetrics: {
-      middleware: [permission('metrics:node')],
+      middleware: [
+        permission('metrics:node'),
+      ],
       handler: async ({ req }) => {
         const { metricsConfig } = req.scope.cradle;
         if (!metricsConfig.prometheusNodeExporter.enabled)
@@ -83,14 +91,21 @@ export function metrics() {
       },
     },
     writeHeapSnapshot: {
-      middleware: [permission('metrics:heap-snapshots')],
+      middleware: [
+        permission('metrics:heap-snapshots'),
+      ],
       handler: async ({ req }) => {
         const filename = await req.scope.cradle.appMetricsService.writeHeapSnapshot();
-        return { status: 200, body: { filename } };
+        return {
+          status: 200,
+          body: { filename },
+        };
       },
     },
     getHeapSnapshot: {
-      middleware: [permission('metrics:heap-snapshots')],
+      middleware: [
+        permission('metrics:heap-snapshots'),
+      ],
       handler: async ({ req, res, params: { heapSnapshot } }) => {
         const { filename, filePath, size } = await req.scope.cradle.appMetricsService.getHeapSnapshot(heapSnapshot);
 

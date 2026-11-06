@@ -13,7 +13,11 @@ import BaseModel from '../model';
 import DrinkwareScale from './drinkware-scale';
 
 @Scopes(() => ({
-  scale: { include: [{ model: DrinkwareScale }] },
+  scale: {
+    include: [
+      { model: DrinkwareScale },
+    ],
+  },
 }))
 @Table({
   modelName: 'DrinkwareVolumeSample',

@@ -148,14 +148,18 @@ export default {
       });
 
       await queryInterface.addIndex('audit_log', {
-        fields: [{ name: 'old_value', operator: 'jsonb_path_ops' }],
+        fields: [
+          { name: 'old_value', operator: 'jsonb_path_ops' },
+        ],
         using: 'GIN',
         name: 'audit_log_old_value_gin',
         transaction,
       });
 
       await queryInterface.addIndex('audit_log', {
-        fields: [{ name: 'new_value', operator: 'jsonb_path_ops' }],
+        fields: [
+          { name: 'new_value', operator: 'jsonb_path_ops' },
+        ],
         using: 'GIN',
         name: 'audit_log_new_value_gin',
         transaction,

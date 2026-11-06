@@ -18,16 +18,32 @@ export interface HasVisibility extends Securable {
 export function securableScope(userId: string): FindOptions {
   return {
     include: [
-      { association: 'securables', required: false, where: { userId } },
-      { association: 'owner', required: false, attributes: ['id', 'name', 'email'] },
+      {
+        association: 'securables',
+        required: false,
+        where: { userId },
+      },
+      {
+        association: 'owner',
+        required: false,
+        attributes: ['id', 'name', 'email'],
+      },
     ],
   };
 }
 
 export function securableIncludes(userId: string): Includeable[] {
   return [
-    { association: 'securables', required: false, where: { userId } },
-    { association: 'owner', required: false, attributes: ['id', 'name', 'email'] },
+    {
+      association: 'securables',
+      required: false,
+      where: { userId },
+    },
+    {
+      association: 'owner',
+      required: false,
+      attributes: ['id', 'name', 'email'],
+    },
   ];
 }
 
@@ -35,7 +51,11 @@ export function visibilityScope<T>(userId: string, where: WhereOptions<T> = {}):
   return {
     where: {
       ...where,
-      [Op.or]: { visibility: 'public', ownerId: userId, '$securables.action$': ['use'] },
+      [Op.or]: {
+        visibility: 'public',
+        ownerId: userId,
+        '$securables.action$': ['use'],
+      },
     },
     ...securableScope(userId),
   };

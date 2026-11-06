@@ -7,7 +7,10 @@ export const pkgV2Locale = z.object({
   respondentLanguage: z.string(),
   adminLanguage: z.string(),
   flagCode: z.string(),
-  textDirection: z.union([z.literal('ltr'), z.literal('rtl')]),
+  textDirection: z.union([
+    z.literal('ltr'),
+    z.literal('rtl'),
+  ]),
   foodIndexLanguageBackendId: z.string().optional(),
 });
 

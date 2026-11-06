@@ -10,7 +10,10 @@ export const metrics = contract.router({
     method: 'GET',
     path: '/admin/metrics/app',
     responses: {
-      200: contract.otherResponse({ contentType: 'text/plain; version=0.0.4; charset=utf-8', body: z.string() }),
+      200: contract.otherResponse({
+        contentType: 'text/plain; version=0.0.4; charset=utf-8',
+        body: z.string(),
+      }),
     },
     summary: 'Get metrics (app)',
     description: 'Returns internal app metrics for scraping by Prometheus',
@@ -19,7 +22,10 @@ export const metrics = contract.router({
     method: 'GET',
     path: '/admin/metrics/node',
     responses: {
-      200: contract.otherResponse({ contentType: 'text/plain; version=0.0.4; charset=utf-8', body: z.string().optional() }),
+      200: contract.otherResponse({
+        contentType: 'text/plain; version=0.0.4; charset=utf-8',
+        body: z.string().optional(),
+      }),
     },
     summary: 'Get metrics (node)',
     description: 'Returns prometheus-node-exporter metrics for the underlying machine',
@@ -29,7 +35,9 @@ export const metrics = contract.router({
     path: '/admin/metrics/heap-snapshots',
     body: null,
     responses: {
-      200: z.object({ filename: z.string() }),
+      200: z.object({
+        filename: z.string(),
+      }),
     },
     summary: 'Generate heap snapshot',
     description: 'Generates a heap snapshot',

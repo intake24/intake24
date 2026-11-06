@@ -29,7 +29,12 @@ import { useRecall } from './use-recall';
 defineOptions({
   name: 'RecallMobile',
 
-  components: { FoodAdd, ...customHandlers, ...standardHandlers, ...portionSizeHandlers },
+  components: {
+    FoodAdd,
+    ...customHandlers,
+    ...standardHandlers,
+    ...portionSizeHandlers,
+  },
 });
 
 const {

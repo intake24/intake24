@@ -33,7 +33,9 @@ function getZodValidationErrorMessages(error: z.ZodError): FileValidationErrorMe
     }
   }
 
-  return [...groupedIssues.entries()].map(([path, errors]) => ({
+  return [
+    ...groupedIssues.entries(),
+  ].map(([path, errors]) => ({
     key: 'io.verification.schemaError',
     params: {
       path,
@@ -47,12 +49,14 @@ export function getFileValidationErrorMessages(error: unknown): FileValidationEr
     return getZodValidationErrorMessages(error);
   }
   else if (error instanceof SyntaxError) {
-    return [{
-      key: 'io.verification.invalidJsonSyntax',
-      params: {
-        message: error.message,
+    return [
+      {
+        key: 'io.verification.invalidJsonSyntax',
+        params: {
+          message: error.message,
+        },
       },
-    }];
+    ];
   }
   else if (error instanceof LocalisableError) {
     return [error.details];
@@ -64,20 +68,24 @@ export function getFileValidationErrorMessages(error: unknown): FileValidationEr
     return error.errors.flatMap(getFileValidationErrorMessages);
   }
   else if (error instanceof Error) {
-    return [{
-      key: 'io.verification.unexpectedError',
-      params: {
-        message: error.message,
+    return [
+      {
+        key: 'io.verification.unexpectedError',
+        params: {
+          message: error.message,
+        },
       },
-    }];
+    ];
   }
   else {
-    return [{
-      key: 'io.verification.unexpectedError',
-      params: {
-        message: String(error),
+    return [
+      {
+        key: 'io.verification.unexpectedError',
+        params: {
+          message: String(error),
+        },
       },
-    }];
+    ];
   }
 }
 

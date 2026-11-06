@@ -49,8 +49,14 @@ function adminSignupService({
       throw new ForbiddenError();
 
     const [permissionRecords, roleRecords] = await Promise.all([
-      Permission.findAll({ attributes: ['id'], where: { name: permissionNames } }),
-      Role.findAll({ attributes: ['id'], where: { name: roleNames } }),
+      Permission.findAll({
+        attributes: ['id'],
+        where: { name: permissionNames },
+      }),
+      Role.findAll({
+        attributes: ['id'],
+        where: { name: roleNames },
+      }),
     ]);
 
     const permissions = permissionRecords.map(({ id }) => id);
@@ -62,12 +68,17 @@ function adminSignupService({
   const verify = async (token: string) => {
     try {
       const { userId } = await jwtService.verify(token, appConfig.secret);
-      const user = await User.findOne({ where: { id: userId } });
+      const user = await User.findOne({
+        where: { id: userId },
+      });
       if (!user)
         throw new Error(`User not found: ${userId}.`);
 
-      if (!user.isVerified())
-        await user.update({ verifiedAt: new Date() });
+      if (!user.isVerified()) {
+        await user.update({
+          verifiedAt: new Date(),
+        });
+      }
     }
     catch (err) {
       if (err instanceof Error) {

@@ -29,7 +29,11 @@ export const useUser = defineStore('user', {
         'survey',
       );
 
-      this.profile = { surveyId, userId, subject: JSON.parse(atob(sub)) };
+      this.profile = {
+        surveyId,
+        userId,
+        subject: JSON.parse(atob(sub)),
+      };
 
       const survey = useSurvey();
       if (userId !== survey.user?.userId)

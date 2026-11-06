@@ -55,7 +55,12 @@ import { computed, defineComponent, ref, watch } from 'vue';
 
 import { useApp } from '@intake24/admin/stores';
 
-const english = { code: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' };
+const english = {
+  code: 'en',
+  englishName: 'English',
+  localName: 'English',
+  countryFlagCode: 'gb',
+};
 
 export default defineComponent({
   name: 'LanguageSelector',
@@ -94,7 +99,9 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const selected = ref<number | undefined>(undefined);
-    const doNotRemove = computed(() => (props.required ? [english.code] : []));
+    const doNotRemove = computed(() => (props.required
+      ? [english.code]
+      : []));
 
     const languages = computed(() => Object.keys(props.modelValue));
 

@@ -89,7 +89,12 @@ export default defineComponent({
       NutrientTypeForm,
       NutrientTypeResponse
     >(props, {
-      data: { id: null, description: null, unitId: null, kcalPerUnit: null },
+      data: {
+        id: null,
+        description: null,
+        unitId: null,
+        kcalPerUnit: null,
+      },
     });
 
     return {
@@ -108,12 +113,20 @@ export default defineComponent({
 
   computed: {
     nutrientUnits() {
-      const nutrientUnits = [{ id: null, description: this.$t('common.none') }];
+      const nutrientUnits = [
+        {
+          id: null,
+          description: this.$t('common.none'),
+        },
+      ];
 
       if (!this.refs.units)
         return nutrientUnits;
 
-      return [...nutrientUnits, ...this.refs.units];
+      return [
+        ...nutrientUnits,
+        ...this.refs.units,
+      ];
     },
   },
 });

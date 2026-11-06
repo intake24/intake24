@@ -12,8 +12,16 @@ import BaseModel from '../model';
 import SystemNutrientUnit from './nutrient-unit';
 
 @Scopes(() => ({
-  unit: { include: [{ model: SystemNutrientUnit }] },
-  list: { order: [['id', 'ASC']] },
+  unit: {
+    include: [
+      { model: SystemNutrientUnit },
+    ],
+  },
+  list: {
+    order: [
+      ['id', 'ASC'],
+    ],
+  },
 }))
 @Table({
   modelName: 'NutrientType',

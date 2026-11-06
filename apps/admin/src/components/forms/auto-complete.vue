@@ -123,7 +123,9 @@ export default defineComponent({
       isLoading.value = true;
 
       try {
-        const { data } = await http.get(props.api, { params: { search: search.value } });
+        const { data } = await http.get(props.api, {
+          params: { search: search.value },
+        });
 
         items.value = resolveResponseObject(data);
       }

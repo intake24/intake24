@@ -101,7 +101,12 @@ const props = defineProps({
   },
 });
 
-use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
+use([
+  SVGRenderer,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+]);
 
 const { i18n: { t }, translate } = useI18n();
 
@@ -109,7 +114,9 @@ const selected = ref(props.submissions.length ? props.submissions[0].id : null);
 
 const mealStats = computed<FeedbackMealsData>(() => {
   const { chart, table } = props.config;
-  const meals = selected.value ? props.surveyStats.getMealStats(selected.value) : [];
+  const meals = selected.value
+    ? props.surveyStats.getMealStats(selected.value)
+    : [];
 
   const chartData = chart.nutrients.map((nutrient) => {
     const { id, name } = nutrient;
@@ -142,13 +149,18 @@ const mealStats = computed<FeedbackMealsData>(() => {
       }
 
       acc[field.fieldId]
-        = value && resolvedValue ? value.replace('{value}', resolvedValue.toString()) : resolvedValue;
+        = value && resolvedValue
+          ? value.replace('{value}', resolvedValue.toString())
+          : resolvedValue;
 
       return acc;
     }, {});
   });
 
-  return { chart: { ...chart, chartData }, table: { ...table, tableData } };
+  return {
+    chart: { ...chart, chartData },
+    table: { ...table, tableData },
+  };
 });
 
 const submissionItems = computed(() =>
@@ -227,7 +239,9 @@ const charts = computed(() => {
             alignTo: 'edge',
             formatter: ({ name: itemName, value, percent }) =>
               `${itemName} \n {times|${round(
-                typeof value === 'number' ? value : 0,
+                typeof value === 'number'
+                  ? value
+                  : 0,
               )} ${unit} (${Math.round(percent ?? 0)}%)}`,
             minMargin: 5,
             edgeDistance: 10,

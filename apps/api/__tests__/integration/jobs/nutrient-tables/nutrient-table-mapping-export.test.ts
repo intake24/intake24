@@ -39,7 +39,9 @@ export default () => {
     if (exportDbJob)
       await exportDbJob.destroy();
     if (nutrientTable) {
-      await NutrientTableCsvMappingNutrient.destroy({ where: { nutrientTableId: nutrientTable.id } });
+      await NutrientTableCsvMappingNutrient.destroy({
+        where: { nutrientTableId: nutrientTable.id },
+      });
       await nutrientTable.destroy();
     }
 
@@ -57,9 +59,13 @@ export default () => {
     });
 
     const nutrientTypes = await FoodsNutrientType.findAll({
-      where: { id: ['1', '2'] },
+      where: {
+        id: ['1', '2'],
+      },
       attributes: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
     expect(nutrientTypes).toHaveLength(2);
 
@@ -95,7 +101,9 @@ export default () => {
     const importedMappings = await NutrientTableCsvMappingNutrient.findAll({
       where: { nutrientTableId },
       attributes: ['nutrientTypeId', 'columnOffset'],
-      order: [['columnOffset', 'ASC']],
+      order: [
+        ['columnOffset', 'ASC'],
+      ],
     });
     expect(importedMappings.map(({ nutrientTypeId, columnOffset }) => ({ nutrientTypeId, columnOffset }))).toEqual([
       { nutrientTypeId: nutrientTypes[0].id, columnOffset: 0 },

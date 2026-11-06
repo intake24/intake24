@@ -143,7 +143,9 @@ const screenWidth = ref(0);
 const { hoverIndex, label, objects } = useImageMap(props, width);
 
 const isDisabled = computed(() =>
-  typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled,
+  typeof props.disabled === 'undefined'
+    ? props.index === undefined
+    : props.disabled,
 );
 
 function getScreenDimensions() {

@@ -3,7 +3,13 @@ export default {
   up: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all([
-        ['as_served_sets', 'as_served_images', 'drinkware_sets', 'guide_images', 'image_maps'].map(table =>
+        [
+          'as_served_sets',
+          'as_served_images',
+          'drinkware_sets',
+          'guide_images',
+          'image_maps',
+        ].map(table =>
           queryInterface.addColumn(
             table,
             'label',
@@ -41,7 +47,13 @@ export default {
   down: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all([
-        ['as_served_sets', 'as_served_images', 'drinkware_sets', 'guide_images', 'image_maps'].map(table =>
+        [
+          'as_served_sets',
+          'as_served_images',
+          'drinkware_sets',
+          'guide_images',
+          'image_maps',
+        ].map(table =>
           queryInterface.removeColumn(table, 'label', { transaction })),
       ]);
 

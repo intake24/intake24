@@ -9,7 +9,9 @@ export default {
   },
   contents: async (localeId: string, code?: string) => {
     const { data } = await http.get<CategoryContents>(
-      code ? `locales/${localeId}/category-contents/${code}` : `locales/${localeId}/category-contents`,
+      code
+        ? `locales/${localeId}/category-contents/${code}`
+        : `locales/${localeId}/category-contents`,
     );
     return data;
   },

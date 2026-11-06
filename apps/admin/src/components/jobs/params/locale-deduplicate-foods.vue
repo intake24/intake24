@@ -51,7 +51,9 @@ const { i18n } = useI18n();
 const selectedFile = ref<File | null>(null);
 const parseError = ref('');
 const fileErrors = computed(() => {
-  const errors = [...props.errors.get('params.primaryCodes')];
+  const errors = [
+    ...props.errors.get('params.primaryCodes'),
+  ];
 
   if (parseError.value)
     errors.unshift(parseError.value);
@@ -60,7 +62,9 @@ const fileErrors = computed(() => {
 });
 
 async function loadCodesFromFile(file: File | File[] | null) {
-  const uploadedFile = Array.isArray(file) ? (file[0] ?? null) : file;
+  const uploadedFile = Array.isArray(file)
+    ? (file[0] ?? null)
+    : file;
   selectedFile.value = uploadedFile;
   parseError.value = '';
 
@@ -71,10 +75,12 @@ async function loadCodesFromFile(file: File | File[] | null) {
 
   try {
     const text = await uploadedFile.text();
-    const primaryCodes = [...new Set(text
-      .split(newLineRegExp)
-      .map(line => line.replace(bomRegExp, '').trim())
-      .filter(Boolean))];
+    const primaryCodes = [
+      ...new Set(text
+        .split(newLineRegExp)
+        .map(line => line.replace(bomRegExp, '').trim())
+        .filter(Boolean)),
+    ];
 
     params.value.primaryCodes = primaryCodes;
     props.errors.clear('params.primaryCodes');

@@ -270,7 +270,9 @@ function packageAssociatedFoodPrompt(language: string, assocFood: AssociatedFood
 }
 
 function packageFood(code: string, language: string, food: FoodEntry): PkgFood {
-  const parentCategories = food.parentCategories ? food.parentCategories.map(category => category.code) : [];
+  const parentCategories = food.parentCategories
+    ? food.parentCategories.map(category => category.code)
+    : [];
 
   const attributes: PkgInheritableAttributes = {
     readyMealOption: food.attributes?.readyMealOption ?? undefined,

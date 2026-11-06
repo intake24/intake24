@@ -34,7 +34,12 @@ export default {
                                                          FROM locales;`);
 
     const fdbPerms = fdbIds[0].reduce((acc, fdb) => {
-      acc.push({ name: `fdbm/${fdb.id}`, display_name: `fdbm/${fdb.id}`, created_at, updated_at });
+      acc.push({
+        name: `fdbm/${fdb.id}`,
+        display_name: `fdbm/${fdb.id}`,
+        created_at,
+        updated_at,
+      });
       return acc;
     }, []);
 
@@ -89,7 +94,11 @@ export default {
       { name: 'tasks-delete', display_name: 'Delete tasks' },
     ].map(permission => ({ ...permission, created_at, updated_at }));
 
-    await queryInterface.bulkInsert('permissions', [...resourcePerms, ...surveyPerms, ...fdbPerms]);
+    await queryInterface.bulkInsert('permissions', [
+      ...resourcePerms,
+      ...surveyPerms,
+      ...fdbPerms,
+    ]);
 
     const roles = await queryInterface.sequelize.query(`SELECT id, name
                                                         FROM roles;`);
@@ -99,7 +108,12 @@ export default {
     const records = [];
     roles[0].forEach((role) => {
       permissions[0].reduce((acc, perm) => {
-        acc.push({ permission_id: perm.id, role_id: role.id, created_at, updated_at });
+        acc.push({
+          permission_id: perm.id,
+          role_id: role.id,
+          created_at,
+          updated_at,
+        });
         return acc;
       }, records);
     });

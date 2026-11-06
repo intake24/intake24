@@ -12,5 +12,8 @@ export const henryCoefficientDefaults: HenryCoefficient = {
 };
 
 export function getHenryCoefficientDefaults(): HenryCoefficient {
-  return copy({ ...henryCoefficientDefaults, id: randomString(6) });
+  return copy({
+    ...henryCoefficientDefaults,
+    id: randomString(6),
+  });
 }

@@ -74,7 +74,9 @@ function toDate(val: string | Date | null | undefined): Date | null {
 
 const dialog = ref(false);
 const internalValue = ref(toDate(props.modelValue));
-const formattedValue = computed(() => props.modelValue ? formatDate(props.modelValue, 'dd/MM/yyyy') : '');
+const formattedValue = computed(() => props.modelValue
+  ? formatDate(props.modelValue, 'dd/MM/yyyy')
+  : '');
 
 watch(() => props.modelValue, (val) => {
   if (toDate(val) === internalValue.value)
@@ -84,7 +86,9 @@ watch(() => props.modelValue, (val) => {
 });
 
 function update() {
-  emit('update:modelValue', internalValue.value ? adapter.toISO(internalValue.value).substring(0, 10) : null);
+  emit('update:modelValue', internalValue.value
+    ? adapter.toISO(internalValue.value).substring(0, 10)
+    : null);
   dialog.value = false;
 }
 </script>

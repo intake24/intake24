@@ -64,7 +64,9 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
   const nonInputErrors = computed(() => Object.values(pick(form.errors.all, nonInputErrorKeys)));
 
   const toForm = (data: any) => {
-    const input = loadCallback ? loadCallback(data) : data;
+    const input = loadCallback
+      ? loadCallback(data)
+      : data;
     setOriginalEntry(input);
 
     form.load(input);
@@ -85,7 +87,10 @@ export function useEntryForm<F extends object, E extends object>(props: UseStore
 
     setEntry(data);
     routeLeave.value = { dialog: false, to: null, confirmed: true };
-    await router.push({ name: `${resource.name}-edit`, params: { id } });
+    await router.push({
+      name: `${resource.name}-edit`,
+      params: { id },
+    });
     useMessages().success(i18n.t('common.msg.created', { name: name ?? id }));
   };
 

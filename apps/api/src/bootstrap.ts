@@ -14,12 +14,16 @@ function checkEnvFileExists(path: string): void {
 }
 
 const envFilePath
-  = process.env.NODE_ENV === 'test' ? resolve(import.meta.dirname, '../__tests__/.env-test') : resolve(import.meta.dirname, '../.env');
+  = process.env.NODE_ENV === 'test'
+    ? resolve(import.meta.dirname, '../__tests__/.env-test')
+    : resolve(import.meta.dirname, '../.env');
 
 checkEnvFileExists(envFilePath);
 
 const options
-  = process.env.NODE_ENV === 'test' ? { path: envFilePath } : undefined;
+  = process.env.NODE_ENV === 'test'
+    ? { path: envFilePath }
+    : undefined;
 
 const dotEnv = dotenv.config(options);
 dotenvExpand.expand(dotEnv);

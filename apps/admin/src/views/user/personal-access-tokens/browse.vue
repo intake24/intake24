@@ -156,7 +156,10 @@ const dialog = ref(false);
 const datePicker = ref(false);
 
 const { clearError, data, errors, post, reset } = useForm({
-  data: { name: '', expiresAt: addYears(new Date(), 1) },
+  data: {
+    name: '',
+    expiresAt: addYears(new Date(), 1),
+  },
 });
 
 function close() {

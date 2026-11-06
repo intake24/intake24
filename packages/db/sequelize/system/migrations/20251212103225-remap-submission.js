@@ -3,7 +3,9 @@ import { isEqual, pick } from 'lodash-es';
 function mapCustomPromptAnswers(sessionAnswers, dbAnswers) {
   return Object.entries(pick(sessionAnswers ?? {}, Object.keys(dbAnswers ?? {})))
     .reduce((acc, [k, v]) => {
-      acc[k] = Array.isArray(v) ? v.join(', ') : v?.toString() ?? 'N/A';
+      acc[k] = Array.isArray(v)
+        ? v.join(', ')
+        : v?.toString() ?? 'N/A';
       return acc;
     }, {});
 }
@@ -15,7 +17,13 @@ function mapFoods(parentId) {
       return acc;
 
     const index = Object.keys(acc).length;
-    const record = { id, type, parentId, index, customPromptAnswers };
+    const record = {
+      id,
+      type,
+      parentId,
+      index,
+      customPromptAnswers,
+    };
 
     if (type === 'recipe-builder') {
       acc[index] = { ...record, code: food.template.code };
@@ -137,7 +145,9 @@ export default {
         `, {
           type: Sequelize.QueryTypes.SELECT,
           replacements: {
-            limit: difference > 0 ? batchSize - difference : batchSize,
+            limit: difference > 0
+              ? batchSize - difference
+              : batchSize,
             offset,
           },
           transaction,
@@ -161,7 +171,9 @@ export default {
           const cSubmissionKeys = Object.keys(submission.custom_data ?? {});
           submissionsToUpdate.push({
             id: submission.id,
-            custom: cSubmissionKeys.length ? pick(session.customPromptAnswers, cSubmissionKeys) : null,
+            custom: cSubmissionKeys.length
+              ? pick(session.customPromptAnswers, cSubmissionKeys)
+              : null,
           });
 
           // MEALS
@@ -201,14 +213,18 @@ export default {
             const cMealKeys = Object.keys(meal.custom_data ?? {});
             return {
               id: meal.id,
-              custom: cMealKeys.length ? pick(matchMeal.customPromptAnswers, cMealKeys) : null,
+              custom: cMealKeys.length
+                ? pick(matchMeal.customPromptAnswers, cMealKeys)
+                : null,
             };
           });
 
           if (mealsToUpdate.length) {
             const values = mealsToUpdate.map((m) => {
               const id = queryInterface.sequelize.escape(m.id);
-              const custom = m.custom && Object.keys(m.custom).length ? `${queryInterface.sequelize.escape(JSON.stringify(m.custom))}::jsonb` : 'null';
+              const custom = m.custom && Object.keys(m.custom).length
+                ? `${queryInterface.sequelize.escape(JSON.stringify(m.custom))}::jsonb`
+                : 'null';
               return `(${id}, ${custom})`;
             }).join(',');
 
@@ -275,7 +291,9 @@ export default {
               throw new Error(`Food index not found for food: ${food.id}, session: ${session.uxSessionId}`);
 
             const cFoodKeys = Object.keys(food.custom_data ?? {});
-            const custom = cFoodKeys.length ? pick(matchedFood.customPromptAnswers, cFoodKeys) : null;
+            const custom = cFoodKeys.length
+              ? pick(matchedFood.customPromptAnswers, cFoodKeys)
+              : null;
             if (cFoodKeys.length !== Object.keys(custom ?? {}).length)
               throw new Error(`Custom prompt answers keys mismatch for food: ${food.id}, session: ${session.uxSessionId}`);
 
@@ -304,8 +322,12 @@ export default {
           if (foodsToUpdate.length) {
             const values = foodsToUpdate.map((f) => {
               const id = queryInterface.sequelize.escape(f.id);
-              const custom = f.custom && Object.keys(f.custom).length ? `${queryInterface.sequelize.escape(JSON.stringify(f.custom))}::jsonb` : 'null';
-              const psm = f.psm ? `${queryInterface.sequelize.escape(JSON.stringify(f.psm))}::jsonb` : 'null';
+              const custom = f.custom && Object.keys(f.custom).length
+                ? `${queryInterface.sequelize.escape(JSON.stringify(f.custom))}::jsonb`
+                : 'null';
+              const psm = f.psm
+                ? `${queryInterface.sequelize.escape(JSON.stringify(f.psm))}::jsonb`
+                : 'null';
               return `(${id}, ${custom}, ${psm})`;
             }).join(',');
 
@@ -321,7 +343,9 @@ export default {
         if (submissionsToUpdate.length) {
           const values = submissionsToUpdate.map((s) => {
             const id = queryInterface.sequelize.escape(s.id);
-            const custom = s.custom && Object.keys(s.custom).length ? `${queryInterface.sequelize.escape(JSON.stringify(s.custom))}::jsonb` : 'null';
+            const custom = s.custom && Object.keys(s.custom).length
+              ? `${queryInterface.sequelize.escape(JSON.stringify(s.custom))}::jsonb`
+              : 'null';
             return `(${id}, ${custom})`;
           }).join(',');
 

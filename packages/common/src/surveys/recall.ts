@@ -18,7 +18,10 @@ export const dynamicSurveyFlag = z.custom<`${string}-acknowledged` | `${string}-
 });
 export type DynamicSurveyFlag = z.infer<typeof dynamicSurveyFlag>;
 // export const surveyFlag = z.union([z.enum(staticSurveyFlag), dynamicSurveyFlag]);
-export const surveyFlag = z.union([dynamicSurveyFlag, z.string()]);
+export const surveyFlag = z.union([
+  dynamicSurveyFlag,
+  z.string(),
+]);
 export type SurveyFlag = z.infer<typeof surveyFlag>;
 
 export const staticMealFlags = [
@@ -36,7 +39,11 @@ export const dynamicMealFlag = z.custom<`food-search:${string}` | `${string}-ack
   return typeof val === 'string' && (val.startsWith('food-search:') || /-(?:acknowledged|complete)$/.test(val));
 });
 export type DynamicMealFlag = z.infer<typeof dynamicMealFlag>;
-export const mealFlag = z.union([z.enum(staticMealFlags), dynamicMealFlag, z.string()]);
+export const mealFlag = z.union([
+  z.enum(staticMealFlags),
+  dynamicMealFlag,
+  z.string(),
+]);
 export type MealFlag = z.infer<typeof mealFlag>;
 
 export const staticFoodFlags = [
@@ -60,7 +67,11 @@ export const dynamicFoodFlag = z.custom<`${string}-acknowledged`
   return typeof val === 'string' && (val.startsWith('search-category') || val.startsWith('search-category-toggle') || /-(?:acknowledged|complete)$/.test(val));
 });
 export type DynamicFoodFlag = z.infer<typeof dynamicFoodFlag>;
-export const foodFlags = z.union([z.enum(staticFoodFlags), dynamicFoodFlag, z.string()]);
+export const foodFlags = z.union([
+  z.enum(staticFoodFlags),
+  dynamicFoodFlag,
+  z.string(),
+]);
 export type FoodFlag = z.infer<typeof foodFlags>;
 
 export const customPromptAnswer = z.union([
@@ -181,7 +192,11 @@ export const selectionMode = z.enum(selectionModes);
 export type SelectionMode = (typeof selectionModes)[number];
 
 export const selection = z.object({
-  element: z.union([z.null(), selectedMeal, selectedFood]),
+  element: z.union([
+    z.null(),
+    selectedMeal,
+    selectedFood,
+  ]),
   mode: selectionMode,
 });
 

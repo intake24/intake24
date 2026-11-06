@@ -10,17 +10,32 @@ import { contract } from '@intake24/common/contracts';
 import { Category, SystemLocale } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { categoryId, field, localeId }: { categoryId?: string; field: string; localeId: string }) {
-  const where: WhereOptions = categoryId ? { localeId, id: { [Op.ne]: categoryId } } : { localeId };
+  const where: WhereOptions = categoryId
+    ? {
+        localeId,
+        id: { [Op.ne]: categoryId },
+      }
+    : { localeId };
 
-  if (!(await unique({ model: Category, condition: { field, value }, options: { where } }))) {
-    throw ValidationError.from({ code: '$unique', path: field, i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: Category,
+    condition: { field, value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      code: '$unique',
+      path: field,
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function category() {
   return initServer().router(contract.admin.fdbs.category, {
     browse: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId }, query, req }) => {
         const { aclService, adminCategoryService } = req.scope.cradle;
 
@@ -35,7 +50,9 @@ export function category() {
       },
     },
     store: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { localeId }, req }) => {
         const { aclService, adminCategoryService } = req.scope.cradle;
 
@@ -51,7 +68,9 @@ export function category() {
       },
     },
     root: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId }, req }) => {
         const { aclService, adminCategoryService } = req.scope.cradle;
 
@@ -66,7 +85,9 @@ export function category() {
       },
     },
     read: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { categoryId, localeId }, req }) => {
         const { aclService, adminCategoryService } = req.scope.cradle;
 
@@ -83,7 +104,9 @@ export function category() {
       },
     },
     update: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { categoryId, localeId }, req }) => {
         const { aclService, adminCategoryService } = req.scope.cradle;
 
@@ -99,7 +122,9 @@ export function category() {
       },
     },
     destroy: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { categoryId, localeId }, req }) => {
         const { aclService, adminCategoryService } = req.scope.cradle;
 
@@ -114,7 +139,9 @@ export function category() {
       },
     },
     copy: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { categoryId, localeId }, req }) => {
         const { aclService, adminCategoryService } = req.scope.cradle;
 
@@ -130,7 +157,9 @@ export function category() {
       },
     },
     categories: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { categoryId, localeId }, req }) => {
         const { aclService, cachedParentCategoriesService } = req.scope.cradle;
 
@@ -145,7 +174,9 @@ export function category() {
       },
     },
     contents: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { categoryId, localeId }, req }) => {
         const { aclService, adminCategoryService } = req.scope.cradle;
 
@@ -156,7 +187,10 @@ export function category() {
 
         if (categoryId === 'no-category') {
           const foods = await adminCategoryService.getNoCategoryContents(code);
-          return { status: 200, body: { categories: [], foods } };
+          return {
+            status: 200,
+            body: { categories: [], foods },
+          };
         }
 
         const data = await adminCategoryService.getCategoryContents(code, categoryId);

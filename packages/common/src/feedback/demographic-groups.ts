@@ -52,5 +52,7 @@ export const demographicGroupDefaults: DemographicGroup = {
   nutrientTypeId: null,
   physicalActivityLevelId: null,
   sex: null,
-  scaleSectors: [{ ...demographicGroupScaleSectorDefaults }],
+  scaleSectors: [
+    { ...demographicGroupScaleSectorDefaults },
+  ],
 };

@@ -97,7 +97,9 @@ export default class NutrientTableDataImport extends BaseJob<'NutrientTableDataI
       const maxOffset = [
         ...this.mappings.fields.map(({ columnOffset }) => columnOffset),
         ...this.mappings.nutrients.map(({ columnOffset }) => columnOffset),
-      ].reduce((acc, value) => (value > acc ? value : acc), 0);
+      ].reduce((acc, value) => (value > acc
+        ? value
+        : acc), 0);
 
       let checkColumnOffsets = false;
 
@@ -160,14 +162,20 @@ export default class NutrientTableDataImport extends BaseJob<'NutrientTableDataI
         nutrientTableId,
         nutrientTableRecordId: record[idColumnOffset],
         name: record[descriptionColumnOffset],
-        localName: localDescriptionColumnOffset !== null ? record[localDescriptionColumnOffset] : null,
+        localName: localDescriptionColumnOffset !== null
+          ? record[localDescriptionColumnOffset]
+          : null,
       };
 
       const [{ id: nutrientTableRecordId }] = await NutrientTableRecord.upsert(nutrientRecordInput);
 
       await Promise.all([
-        NutrientTableRecordField.destroy({ where: { nutrientTableRecordId } }),
-        NutrientTableRecordNutrient.destroy({ where: { nutrientTableRecordId } }),
+        NutrientTableRecordField.destroy({
+          where: { nutrientTableRecordId },
+        }),
+        NutrientTableRecordNutrient.destroy({
+          where: { nutrientTableRecordId },
+        }),
       ]);
 
       if (fields.length) {
@@ -187,7 +195,9 @@ export default class NutrientTableDataImport extends BaseJob<'NutrientTableDataI
           return {
             nutrientTableRecordId,
             nutrientTypeId: nutrient.nutrientTypeId,
-            unitsPer100g: Number.isNaN(units) ? 0 : units,
+            unitsPer100g: Number.isNaN(units)
+              ? 0
+              : units,
           };
         });
 

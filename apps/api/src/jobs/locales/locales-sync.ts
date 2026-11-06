@@ -63,7 +63,12 @@ export default class LocalesSync extends BaseJob<'LocalesSync'> {
       .values(missingSystemLocales
         .map((locale) => {
           const { id, ...rest } = locale;
-          return { code: id, ...rest, createdAt: new Date(), updatedAt: new Date() };
+          return {
+            code: id,
+            ...rest,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          };
         }))
       .executeTakeFirst();
 
@@ -73,7 +78,9 @@ export default class LocalesSync extends BaseJob<'LocalesSync'> {
   private async foodBuilders(): Promise<void> {
     const builders = await this.models.foods.FoodBuilder.findAll({
       attributes: ['id', 'steps'],
-      order: [['id', 'ASC']],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
 
     for (const builder of builders) {

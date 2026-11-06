@@ -215,7 +215,10 @@ export default defineComponent({
     const dialog = (show = false): CardDialog => ({
       show,
       index: -1,
-      card: copy({ ...cardDefaults[0], id: randomString(6) }),
+      card: copy({
+        ...cardDefaults[0],
+        id: randomString(6),
+      }),
     });
 
     return {
@@ -230,7 +233,9 @@ export default defineComponent({
   computed: {
     textRules(): RuleCallback[] {
       return this.textRequired
-        ? [(value: string | null): boolean | string => !!value || 'Card name is required.']
+        ? [
+            (value: string | null): boolean | string => !!value || 'Card name is required.',
+          ]
         : [];
     },
   },
@@ -247,7 +252,14 @@ export default defineComponent({
       if (!card)
         return;
 
-      this.dialog = { show, index, card: copy({ ...card, id: randomString(6) }) };
+      this.dialog = {
+        show,
+        index,
+        card: copy({
+          ...card,
+          id: randomString(6),
+        }),
+      };
     },
 
     add() {

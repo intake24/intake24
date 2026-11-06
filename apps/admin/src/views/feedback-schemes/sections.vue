@@ -212,7 +212,11 @@ export default defineComponent({
     useTinymce();
     const { i18n, translate } = useI18n();
 
-    const newCustomSection = () => ({ id: randomString(6), title: { en: null }, content: { en: null } });
+    const newCustomSection = () => ({
+      id: randomString(6),
+      title: { en: null },
+      content: { en: null },
+    });
 
     const { dialog, form, items, add: addCustomSection, edit: editCustomSection, load, remove, reset: resetItem, save, update }
       = useListWithDialog<FeedbackSection>(props, ctx, { newItem: newCustomSection });
@@ -240,7 +244,10 @@ export default defineComponent({
       }
 
       const { id } = route.params;
-      router.push({ name: `feedback-schemes-${kebabCase(section)}`, params: { id } });
+      router.push({
+        name: `feedback-schemes-${kebabCase(section)}`,
+        params: { id },
+      });
     };
 
     const reset = () => {
@@ -250,7 +257,10 @@ export default defineComponent({
 
     const availableSections = computed(() => {
       const usedSections = props.modelValue.filter(section => typeof section === 'string');
-      return ['custom', ...feedbackStandardSections.filter(section => !usedSections.includes(section))].map(id => ({
+      return [
+        'custom',
+        ...feedbackStandardSections.filter(section => !usedSections.includes(section)),
+      ].map(id => ({
         id,
         title: i18n.t(`feedback-schemes.${kebabCase(id)}.title`),
       }) as { id: FeedbackStandardSection | 'custom'; title: string });
@@ -258,7 +268,10 @@ export default defineComponent({
 
     const sections = computed(() => items.value.map(section =>
       typeof section == 'string'
-        ? { id: section, title: i18n.t(`feedback-schemes.${kebabCase(section)}.title`) }
+        ? {
+            id: section,
+            title: i18n.t(`feedback-schemes.${kebabCase(section)}.title`),
+          }
         : { id: section.id, title: translate(section.title) || i18n.t(`feedback-schemes.custom.title`) }));
 
     return {

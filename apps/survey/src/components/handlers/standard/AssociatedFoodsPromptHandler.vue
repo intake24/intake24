@@ -168,7 +168,9 @@ async function commitAnswer() {
               info: null,
               searchTerm: capitalize(translate(promptDef.genericName)),
               customPromptAnswers: {},
-              flags: promptDef.linkAsMain ? ['link-as-main'] : [],
+              flags: promptDef.linkAsMain
+                ? ['link-as-main']
+                : [],
               linkedFoods: [],
             });
             break;
@@ -232,10 +234,17 @@ async function commitAnswer() {
 
   survey.updateFood({
     foodId,
-    update: { linkedFoods: foodIndex.linkedFoodIndex.length
+    update: {
+      linkedFoods: foodIndex.linkedFoodIndex.length
       // Associated foods prompts for the new linked foods need to be disabled to prevent potential circular associations.
-      ? linkedFoods.map(food => ({ ...food, flags: [...new Set([...food.flags, 'associated-foods-complete'])] }))
-      : linkedFoods },
+        ? linkedFoods.map(food => ({
+            ...food,
+            flags: [
+              ...new Set([...food.flags, 'associated-foods-complete']),
+            ],
+          }))
+        : linkedFoods,
+    },
   });
 
   survey.addFoodFlag(foodId, 'associated-foods-complete');

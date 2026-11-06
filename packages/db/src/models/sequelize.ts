@@ -13,7 +13,10 @@ export class Sequelize extends Base {
     return await this.transaction(async (transaction) => {
       const ctx = getTransactionContext(context);
       for (const [key, value] of Object.entries(ctx)) {
-        await this.query('SELECT set_config(:key, :value, true)', { replacements: { key, value }, transaction });
+        await this.query('SELECT set_config(:key, :value, true)', {
+          replacements: { key, value },
+          transaction,
+        });
       }
       return await callback(transaction);
     });

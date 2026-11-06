@@ -19,7 +19,10 @@ export function code() {
 
       req.session.codeRegChallenge = { challengeId };
 
-      return { status: 200, body: { challengeId } };
+      return {
+        status: 200,
+        body: { challengeId },
+      };
     },
     verify: async ({ body, req }) => {
       const { sub, userId } = req.scope.cradle.user;
@@ -39,11 +42,18 @@ export function code() {
         throw new ValidationError('Enter your current valid password.', { path: 'password' });
 
       const { codes, hashes } = await req.scope.cradle.codeProvider.generateCodes();
-      const device = await req.scope.cradle.codeProvider.registrationVerification({ userId, name, secret: JSON.stringify(hashes) });
+      const device = await req.scope.cradle.codeProvider.registrationVerification({
+        userId,
+        name,
+        secret: JSON.stringify(hashes),
+      });
 
       delete req.session.codeRegChallenge;
 
-      return { status: 200, body: { codes, device } };
+      return {
+        status: 200,
+        body: { codes, device },
+      };
     },
   });
 }

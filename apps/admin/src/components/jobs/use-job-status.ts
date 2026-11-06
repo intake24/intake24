@@ -11,8 +11,12 @@ export function useJobStatus(jobId: string) {
   const polling = ref<number | null>(null);
 
   const complete = computed(() => status.value !== null && status.value.successful !== null);
-  const progress = computed(() => status.value === null ? null : status.value.progress);
-  const message = computed(() => status.value === null ? null : status.value.message);
+  const progress = computed(() => status.value === null
+    ? null
+    : status.value.progress);
+  const message = computed(() => status.value === null
+    ? null
+    : status.value.message);
 
   const getStatus = async () => {
     const response = await http.get(`admin/user/jobs/${jobId}`);

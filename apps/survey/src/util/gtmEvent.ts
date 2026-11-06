@@ -63,7 +63,9 @@ const clearedEventFields = Object.fromEntries(eventFieldNames.map(field => [fiel
 function mealName() {
   const name = useSurvey().selectedMealOptional?.name;
 
-  return name ? name.en ?? Object.values(name)[0] : undefined;
+  return name
+    ? name.en ?? Object.values(name)[0]
+    : undefined;
 }
 
 function currentFields(prompt: PromptTransition | null): GtmPromptTrackingParams {

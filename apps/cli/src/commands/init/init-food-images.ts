@@ -66,7 +66,11 @@ export default async (cmd: InitFoodImagesArgs): Promise<void> => {
       num /= 1024;
       i++;
     }
-    return `${num.toFixed(num >= 100 ? 0 : num >= 10 ? 1 : 2)} ${units[i]}`;
+    return `${num.toFixed(num >= 100
+      ? 0
+      : num >= 10
+        ? 1
+        : 2)} ${units[i]}`;
   };
 
   let downloaded = 0;
@@ -80,7 +84,9 @@ export default async (cmd: InitFoodImagesArgs): Promise<void> => {
       if (now - lastLogged >= 200) {
         const elapsed = Math.max(1, now - start) / 1000; // seconds
         const speed = downloaded / elapsed; // B/s average
-        const percent = totalBytes ? (downloaded / totalBytes) * 100 : 0;
+        const percent = totalBytes
+          ? (downloaded / totalBytes) * 100
+          : 0;
         const line = totalBytes
           ? `Downloading: ${formatBytes(downloaded)} / ${formatBytes(totalBytes)} (${percent.toFixed(1)}%) at ${formatBytes(speed)}/s`
           : `Downloading: ${formatBytes(downloaded)} at ${formatBytes(speed)}/s`;

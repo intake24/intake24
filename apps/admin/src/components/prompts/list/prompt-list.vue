@@ -271,7 +271,9 @@ const subtitle = computed(() => i18n.t(
     ? `survey-schemes.overrides.prompts.subtitle`
     : `survey-schemes.prompts.${props.section}.subtitle`,
 ));
-const fullSection = computed(() => isMealSection(props.section) ? `meals.${props.section}` : props.section);
+const fullSection = computed(() => isMealSection(props.section)
+  ? `meals.${props.section}`
+  : props.section);
 const subsectionsState = ref<InternalPromptSubsection[]>(buildSubsections(copyObject(props.modelValue), copyObject(props.subsections)));
 const prompts = computed<SinglePrompt[]>({
   get: () => flattenSubsections(subsectionsState.value),
@@ -300,11 +302,25 @@ function subsectionKey(index: number) {
 }
 
 function buildSubsections(prompts: SinglePrompt[], subsections: PromptSubsection[]): InternalPromptSubsection[] {
-  if (isOverrideMode.value)
-    return [{ name: defaultSubsectionName(0), expanded: true, prompts: [...prompts] }];
+  if (isOverrideMode.value) {
+    return [
+      {
+        name: defaultSubsectionName(0),
+        expanded: true,
+        prompts: [...prompts],
+      },
+    ];
+  }
 
-  if (!subsections.length)
-    return [{ name: defaultSubsectionName(0), expanded: true, prompts: [...prompts] }];
+  if (!subsections.length) {
+    return [
+      {
+        name: defaultSubsectionName(0),
+        expanded: true,
+        prompts: [...prompts],
+      },
+    ];
+  }
 
   let offset = 0;
   const items = subsections.map((item, index) => {
@@ -319,10 +335,23 @@ function buildSubsections(prompts: SinglePrompt[], subsections: PromptSubsection
     };
   });
 
-  if (offset < prompts.length)
-    items.push({ name: defaultSubsectionName(items.length), expanded: true, prompts: prompts.slice(offset) });
+  if (offset < prompts.length) {
+    items.push({
+      name: defaultSubsectionName(items.length),
+      expanded: true,
+      prompts: prompts.slice(offset),
+    });
+  }
 
-  return items.length ? items : [{ name: defaultSubsectionName(0), expanded: true, prompts: [...prompts] }];
+  return items.length
+    ? items
+    : [
+        {
+          name: defaultSubsectionName(0),
+          expanded: true,
+          prompts: [...prompts],
+        },
+      ];
 }
 
 function flattenSubsections(subsections: InternalPromptSubsection[]) {
@@ -365,21 +394,30 @@ function ensureSubsectionExists(targetSubsectionIndex?: number | null): Internal
       return item;
   }
 
-  if (!subsectionsState.value.length)
-    subsectionsState.value.push({ name: defaultSubsectionName(0), expanded: true, prompts: [] });
+  if (!subsectionsState.value.length) {
+    subsectionsState.value.push({
+      name: defaultSubsectionName(0),
+      expanded: true,
+      prompts: [],
+    });
+  }
 
   return subsectionsState.value.at(-1)!;
 };
 
 function clearErrors(index?: number) {
-  props.errors.clear(typeof index === 'undefined' ? `prompts.${fullSection.value}.*` : `prompts.${fullSection.value}.${index}.*`);
+  props.errors.clear(typeof index === 'undefined'
+    ? `prompts.${fullSection.value}.*`
+    : `prompts.${fullSection.value}.${index}.*`);
 }
 
 function create(subsectionIndex?: number) {
   if (isOverrideMode.value)
     return;
 
-  pendingSubsectionIndex.value = typeof subsectionIndex === 'number' ? subsectionIndex : null;
+  pendingSubsectionIndex.value = typeof subsectionIndex === 'number'
+    ? subsectionIndex
+    : null;
   selector.value?.create?.();
 };
 
@@ -393,7 +431,11 @@ function copy(subsectionIndex: number, { prompt, index }: PromptEvent) {
   if (!target)
     return;
 
-  target.subsection.prompts.splice(index + 1, 0, { ...copyObject(prompt), id: `${prompt.id}-copy`, name: `${prompt.name} (copy)` });
+  target.subsection.prompts.splice(index + 1, 0, {
+    ...copyObject(prompt),
+    id: `${prompt.id}-copy`,
+    name: `${prompt.name} (copy)`,
+  });
 };
 
 function edit(subsectionIndex: number, { prompt, index }: PromptEvent) {
@@ -439,7 +481,10 @@ function move(subsectionIndex: number, event: PromptMoveEvent) {
   if (!target)
     return;
 
-  emit('move', { ...event, index: globalIndex(subsectionIndex, event.index) });
+  emit('move', {
+    ...event,
+    index: globalIndex(subsectionIndex, event.index),
+  });
   target.subsection.prompts.splice(event.index, 1);
 };
 
@@ -480,7 +525,11 @@ function sync(subsectionIndex: number, { prompt, index }: PromptEvent) {
 };
 
 function addSubsection() {
-  subsectionsState.value.push({ name: defaultSubsectionName(subsectionsState.value.length), expanded: true, prompts: [] });
+  subsectionsState.value.push({
+    name: defaultSubsectionName(subsectionsState.value.length),
+    expanded: true,
+    prompts: [],
+  });
 }
 
 function removeSubsection(subsectionIndex: number) {

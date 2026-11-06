@@ -38,7 +38,9 @@ import { Next, usePanel, usePortionSizeMethod } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 import { PortionSizeMethods } from './methods';
 
-const props = defineProps({ ...createPortionPromptProps<'unknown-prompt'>() });
+const props = defineProps({
+  ...createPortionPromptProps<'unknown-prompt'>(),
+});
 
 const emit = defineEmits(['action', 'update:modelValue']);
 

@@ -54,7 +54,9 @@ export const guideImagePrompt: Prompts['guide-image-prompt'] = copy({
   imageMap,
   linkedQuantity: {
     auto: false,
-    parent: [{ code: 'BRED' }],
+    parent: [
+      { code: 'BRED' },
+    ],
     source: ['BTTR'],
   },
 });

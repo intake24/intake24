@@ -73,14 +73,24 @@ export default defineComponent({
 
       const { data } = await http.post(
         `admin/surveys/${props.surveyId}/tasks`,
-        { type: jobType, params: { surveyId: props.surveyId } },
+        {
+          type: jobType,
+          params: { surveyId: props.surveyId },
+        },
       );
 
       jobs.value.unshift(data);
       await startPolling();
     };
 
-    return { close, dialog, jobs, jobInProgress, startPolling, submit };
+    return {
+      close,
+      dialog,
+      jobs,
+      jobInProgress,
+      startPolling,
+      submit,
+    };
   },
 });
 </script>

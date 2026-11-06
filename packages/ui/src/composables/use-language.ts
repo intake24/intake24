@@ -44,7 +44,9 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: Re
     if (typeof i18n.fallbackLocale.value === 'string')
       return [i18n.fallbackLocale.value];
 
-    return Array.isArray(i18n.fallbackLocale.value) ? i18n.fallbackLocale.value : Object.keys(i18n.fallbackLocale.value);
+    return Array.isArray(i18n.fallbackLocale.value)
+      ? i18n.fallbackLocale.value
+      : Object.keys(i18n.fallbackLocale.value);
   });
 
   const getLanguages = (languageId: string): string[] => [
@@ -73,7 +75,9 @@ export function useLanguage(app: 'admin' | 'survey', http: HttpClient, vI18n: Re
     try {
       const {
         data: { code, messages, textDirection },
-      } = await http.get<I18nLanguageEntry>(`i18n/${language}`, { params: { app } });
+      } = await http.get<I18nLanguageEntry>(`i18n/${language}`, {
+        params: { app },
+      });
 
       if (Object.keys(messages).length) {
         i18n.setLocaleMessage(code, messages);

@@ -33,7 +33,9 @@ function getErrorType(error: unknown): string | null {
     ? error.constructor.name
     : null;
 
-  return constructorName && constructorName !== 'Object' ? constructorName : null;
+  return constructorName && constructorName !== 'Object'
+    ? constructorName
+    : null;
 }
 
 export default class JobsQueueHandler extends QueueHandler<JobData> {
@@ -91,7 +93,12 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
             try {
               await DbJob.update(
                 { progress },
-                { where: { id: dbId, progress: { [Op.lt]: progress } } },
+                {
+                  where: {
+                    id: dbId,
+                    progress: { [Op.lt]: progress },
+                  },
+                },
               );
             }
             catch (err) {
@@ -131,7 +138,9 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
         })
         .on('failed', async (job, err) => {
           const { message, name, stack } = err;
-          const jobInfo = job ? `${job.name} | ${job.id}` : `"Removed job"`;
+          const jobInfo = job
+            ? `${job.name} | ${job.id}`
+            : `"Removed job"`;
 
           this.logger.error(`${this.name}: ${jobInfo} has failed with: ${err.message}`, {
             message,
@@ -160,7 +169,9 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
                 progress: 1,
                 successful: false,
                 message: job.failedReason,
-                errorDetails: 'details' in err ? (err as any).details : null,
+                errorDetails: 'details' in err
+                  ? (err as any).details
+                  : null,
                 errorType,
                 returnValue: job.returnvalue as any,
                 stackTrace: job.stacktrace,
@@ -220,7 +231,11 @@ export default class JobsQueueHandler extends QueueHandler<JobData> {
       stackTrace: null,
     });
 
-    return await requestContextStorage.run({ type: 'request', id: v7(), userId }, async () => {
+    return await requestContextStorage.run({
+      type: 'request',
+      id: v7(),
+      userId,
+    }, async () => {
       this.logger.debug(`Job initialized with user ID: ${userId}.`);
       const newJob = this.resolveDynamic(type);
       return await newJob.run(job);

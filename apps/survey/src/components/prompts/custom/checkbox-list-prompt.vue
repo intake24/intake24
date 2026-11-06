@@ -82,10 +82,16 @@ const { form, inputTooLog } = useForm({ action });
 
 const otherEnabled = ref(false);
 const otherValue = ref('');
-const otherOutput = computed(() => otherValue.value.length ? `Other: ${otherValue.value}` : '');
-const otherRules = computed(() => [inputTooLog(256)]);
+const otherOutput = computed(() => otherValue.value.length
+  ? `Other: ${otherValue.value}`
+  : '');
+const otherRules = computed(() => [
+  inputTooLog(256),
+]);
 
-const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
+const selected = ref(Array.isArray(props.modelValue)
+  ? props.modelValue
+  : []);
 const state = computed(() => [...selected.value, otherOutput.value].filter(Boolean));
 
 const localeOptions = computed(

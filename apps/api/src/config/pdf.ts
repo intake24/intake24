@@ -4,7 +4,11 @@ import { validateConfig } from '@intake24/common-backend';
 
 export const pdfConfig = z.object({
   puppeteer: z.object({
-    headless: z.union([z.literal('shell'), z.boolean(), z.stringbool()]).default(true),
+    headless: z.union([
+      z.literal('shell'),
+      z.boolean(),
+      z.stringbool(),
+    ]).default(true),
     lang: z.string().optional(),
   }),
 });

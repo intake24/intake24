@@ -89,7 +89,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
     if (!dbJob)
       throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
 
-    const locale = await SystemLocale.findByPk(this.params.localeId, { attributes: ['id', 'code'] });
+    const locale = await SystemLocale.findByPk(this.params.localeId, {
+      attributes: ['id', 'code'],
+    });
     if (!locale)
       throw new NotFoundError(`Job ${this.name}: Locale not found (${this.params.localeId}).`);
 
@@ -120,10 +122,12 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
       cacheKeysInvalidated: 0,
     };
 
-    const cacheKeys = [...new Set(duplicateSets.flatMap(duplicateSet => [
-      ...getFoodCacheKeys(localeCode, duplicateSet.primary.id, duplicateSet.primary.code),
-      ...duplicateSet.duplicates.flatMap(food => getFoodCacheKeys(localeCode, food.id, food.code)),
-    ]))];
+    const cacheKeys = [
+      ...new Set(duplicateSets.flatMap(duplicateSet => [
+        ...getFoodCacheKeys(localeCode, duplicateSet.primary.id, duplicateSet.primary.code),
+        ...duplicateSet.duplicates.flatMap(food => getFoodCacheKeys(localeCode, food.id, food.code)),
+      ])),
+    ];
 
     if (dryRun) {
       for (const duplicateSetBatch of duplicateSetBatches) {
@@ -162,7 +166,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
       });
 
       await Promise.all([
-        cacheKeys.length ? this.cache.forget(cacheKeys) : Promise.resolve(true),
+        cacheKeys.length
+          ? this.cache.forget(cacheKeys)
+          : Promise.resolve(true),
         this.cache.setAdd('locales-index', localeCode),
       ]);
     }
@@ -217,7 +223,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
       .selectFrom('foodsCategories')
       .innerJoin('categories', 'categories.id', 'foodsCategories.categoryId')
       .select(['foodsCategories.foodId', 'categories.code'])
-      .where('foodsCategories.foodId', 'in', [...foods.keys()])
+      .where('foodsCategories.foodId', 'in', [
+        ...foods.keys(),
+      ])
       .execute();
 
     for (const row of parentCategoryRows) {
@@ -230,7 +238,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
     const duplicateFoods = new Map<string, FoodRow[]>();
 
     for (const food of foods.values()) {
-      food.parentCategoryCodes = [...new Set(food.parentCategoryCodes)].toSorted();
+      food.parentCategoryCodes = [
+        ...new Set(food.parentCategoryCodes),
+      ].toSorted();
 
       const inMhdk = food.parentCategoryCodes.includes('MHDK');
       if (inMhdk && food.parentCategoryCodes.length > 1) {
@@ -247,7 +257,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
       duplicateFoods.set(key, group);
     }
 
-    return [...duplicateFoods.values()].filter(group => group.length > 1);
+    return [
+      ...duplicateFoods.values(),
+    ].filter(group => group.length > 1);
   }
 
   private batchDuplicateSets(duplicateSets: DuplicateFoodSet[]): DuplicateFoodSet[][] {
@@ -322,11 +334,15 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
   }
 
   private getDuplicateCodes(duplicateSets: DuplicateFoodSet[]): string[] {
-    return [...new Set(this.createDuplicateCodeMappings(duplicateSets).map(mapping => mapping.duplicateCode))];
+    return [
+      ...new Set(this.createDuplicateCodeMappings(duplicateSets).map(mapping => mapping.duplicateCode)),
+    ];
   }
 
   private getDuplicateFoodIds(duplicateSets: DuplicateFoodSet[]): string[] {
-    return [...new Set(duplicateSets.flatMap(duplicateSet => duplicateSet.duplicates.map(duplicate => duplicate.id)))];
+    return [
+      ...new Set(duplicateSets.flatMap(duplicateSet => duplicateSet.duplicates.map(duplicate => duplicate.id))),
+    ];
   }
 
   private async replaceSurveySubmissionFoods(trx: Transaction<SystemDB>, localeCode: string, duplicateSets: DuplicateFoodSet[]): Promise<number> {
@@ -353,7 +369,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
 
     const { count } = await this.kyselyDb.system
       .selectFrom('surveySubmissionFoods')
-      .select(({ fn }) => [fn.count<number>('code').as('count')])
+      .select(({ fn }) => [
+        fn.count<number>('code').as('count'),
+      ])
       .where('locale', '=', localeCode)
       .where('code', 'in', duplicateCodes)
       .executeTakeFirstOrThrow();
@@ -362,7 +380,12 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
   }
 
   private async mergePopularityCounters(trx: Transaction<SystemDB>, duplicateSets: DuplicateFoodSet[]): Promise<number> {
-    const relevantCodes = [...new Set(duplicateSets.flatMap(duplicateSet => [duplicateSet.primary.code, ...duplicateSet.duplicates.map(duplicate => duplicate.code)]))];
+    const relevantCodes = [
+      ...new Set(duplicateSets.flatMap(duplicateSet => [
+        duplicateSet.primary.code,
+        ...duplicateSet.duplicates.map(duplicate => duplicate.code),
+      ])),
+    ];
     const rows = await trx
       .selectFrom('popularityCounters')
       .select(['foodCode', 'counter'])
@@ -430,7 +453,12 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
   }
 
   private async countPopularityCounterChanges(duplicateSets: DuplicateFoodSet[]): Promise<number> {
-    const relevantCodes = [...new Set(duplicateSets.flatMap(duplicateSet => [duplicateSet.primary.code, ...duplicateSet.duplicates.map(duplicate => duplicate.code)]))];
+    const relevantCodes = [
+      ...new Set(duplicateSets.flatMap(duplicateSet => [
+        duplicateSet.primary.code,
+        ...duplicateSet.duplicates.map(duplicate => duplicate.code),
+      ])),
+    ];
     const rows = await this.kyselyDb.system
       .selectFrom('popularityCounters')
       .select(['foodCode', 'counter'])
@@ -485,7 +513,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
 
     const { count } = await this.kyselyDb.system
       .selectFrom('pairwiseAssociationsOccurrences')
-      .select(({ fn }) => [fn.count<number>('foodCode').as('count')])
+      .select(({ fn }) => [
+        fn.count<number>('foodCode').as('count'),
+      ])
       .where('localeId', '=', localeCode)
       .where('foodCode', 'in', duplicateCodes)
       .executeTakeFirstOrThrow();
@@ -520,7 +550,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
     const { count } = await this.kyselyDb.foods
       .selectFrom('associatedFoods')
       .innerJoin('foods', 'foods.id', 'associatedFoods.foodId')
-      .select(({ fn }) => [fn.count<number>('associatedFoods.foodId').as('count')])
+      .select(({ fn }) => [
+        fn.count<number>('associatedFoods.foodId').as('count'),
+      ])
       .where('foods.localeId', '=', localeCode)
       .where('associatedFoods.associatedFoodCode', 'in', duplicateCodes)
       .executeTakeFirstOrThrow();
@@ -549,7 +581,9 @@ export default class LocaleDeduplicateFoods extends BaseJob<'LocaleDeduplicateFo
 
     const { count } = await this.kyselyDb.foods
       .selectFrom('foods')
-      .select(({ fn }) => [fn.count<number>('id').as('count')])
+      .select(({ fn }) => [
+        fn.count<number>('id').as('count'),
+      ])
       .where('localeId', '=', localeCode)
       .where('id', 'in', duplicateFoodIds)
       .executeTakeFirstOrThrow();

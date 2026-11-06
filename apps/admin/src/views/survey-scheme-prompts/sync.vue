@@ -95,7 +95,13 @@ export default defineComponent({
     >(props);
     const { fetch } = useEntryFetch(props);
 
-    return { entry, entryLoaded, fetch, refs, refsLoaded };
+    return {
+      entry,
+      entryLoaded,
+      fetch,
+      refs,
+      refsLoaded,
+    };
   },
 
   computed: {

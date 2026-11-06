@@ -30,7 +30,12 @@ function optProvider({ securityConfig }: Pick<IoC, 'securityConfig'>) {
   const registrationChallenge = async (email: string) => {
     const secret = randomString(20, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567');
 
-    const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
+    const totp = new TOTP({
+      issuer,
+      label: `${issuer}:${email}`,
+      algorithm,
+      secret,
+    });
     const url = totp.toString();
     const qrCode = await QRCode.toDataURL(url);
 
@@ -40,7 +45,12 @@ function optProvider({ securityConfig }: Pick<IoC, 'securityConfig'>) {
   const registrationVerification = async (ops: OTPRegistrationVerificationOps) => {
     const { userId, email, name, token, secret } = ops;
 
-    const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
+    const totp = new TOTP({
+      issuer,
+      label: `${issuer}:${email}`,
+      algorithm,
+      secret,
+    });
 
     const delta = totp.validate({ token });
     if (delta === null)
@@ -70,7 +80,12 @@ function optProvider({ securityConfig }: Pick<IoC, 'securityConfig'>) {
   const authenticationVerification = async (ops: OTPAuthenticationVerificationOps) => {
     const { email, secret, token } = ops;
 
-    const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
+    const totp = new TOTP({
+      issuer,
+      label: `${issuer}:${email}`,
+      algorithm,
+      secret,
+    });
 
     const delta = totp.validate({ token });
     if (delta === null)

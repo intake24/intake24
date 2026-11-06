@@ -15,7 +15,11 @@ export const foodActionTypes = [
   'changeFood',
   'updateFood',
 ] as const;
-export const actionTypes = [...genericActionTypes, ...mealActionTypes, ...foodActionTypes] as const;
+export const actionTypes = [
+  ...genericActionTypes,
+  ...mealActionTypes,
+  ...foodActionTypes,
+] as const;
 
 export type GenericActionType = (typeof genericActionTypes)[number];
 export type MealActionType = (typeof mealActionTypes)[number];

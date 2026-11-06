@@ -58,14 +58,19 @@ export type DatePicker = z.infer<typeof datePicker>;
 
 export const sliderValue = z.object({
   value: z.number().nullable(),
-  label: z.union([z.literal(false), localeTranslation]),
+  label: z.union([
+    z.literal(false),
+    localeTranslation,
+  ]),
 });
 export type SliderValue = z.infer<typeof sliderValue>;
 
 export const slider = z.object({
   type: z.literal('slider'),
   strategy: z.literal(true).nullish(),
-  current: sliderValue.extend({ size: z.number() }),
+  current: sliderValue.extend({
+    size: z.number(),
+  }),
   min: sliderValue,
   max: sliderValue,
   step: z.number(),
@@ -86,7 +91,14 @@ export const sliderDefaults: Slider = {
 export const timePicker = z.object({
   format: z.enum(['ampm', '24hr']),
   amPmToggle: z.boolean(),
-  allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
+  allowedMinutes: z.union([
+    z.literal(1),
+    z.literal(5),
+    z.literal(10),
+    z.literal(15),
+    z.literal(20),
+    z.literal(30),
+  ]),
   ui: z.enum(['digital', 'md-clock']),
 });
 export type TimePicker = z.infer<typeof timePicker>;
@@ -107,7 +119,9 @@ export const youtubeVideo = z.object({
   required: z.boolean(),
 });
 export type YoutubeVideo = z.infer<typeof youtubeVideo>;
-export const hasVideo = z.object({ video: z.discriminatedUnion('type', [youtubeVideo]).optional() });
+export const hasVideo = z.object({
+  video: z.discriminatedUnion('type', [youtubeVideo]).optional(),
+});
 export type HasVideo = z.infer<typeof hasVideo>;
 
 export const ytVideoDefaults: YoutubeVideo = {

@@ -10,7 +10,10 @@ import { packageExportOptions, packageFileTypes, uploadFileId } from './http/adm
 
 export const localisableMessage = z.object({
   key: z.string(),
-  params: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
+  params: z.record(z.string(), z.union([
+    z.string(),
+    z.number(),
+  ])).optional(),
 });
 export type LocalisableMessage = z.infer<typeof localisableMessage>;
 
@@ -62,7 +65,10 @@ export const localeCopyFoodsSubTasks = [
 export type LocaleCopyFoodsSubTasks = (typeof localeCopyFoodsSubTasks)[number];
 export const localeCopySystemSubTasks = ['searchPopularity', 'searchFixedRanking'] as const;
 export type LocaleCopySystemSubTasks = (typeof localeCopySystemSubTasks)[number];
-export const localeCopySubTasks = [...localeCopyFoodsSubTasks, ...localeCopySystemSubTasks] as const;
+export const localeCopySubTasks = [
+  ...localeCopyFoodsSubTasks,
+  ...localeCopySystemSubTasks,
+] as const;
 export type LocaleCopySubTasks = (typeof localeCopySubTasks)[number];
 export const localesSyncSubTasks = ['foodBuilders'] as const;
 export type LocaleSyncSubTasks = (typeof localesSyncSubTasks)[number];
@@ -139,17 +145,24 @@ export const SurveyAuthUrlsExport = z.object({
   surveyId: bigIntString,
 });
 export const SurveyDataExport = z.object({
-  id: z.union([z.string(), z.array(z.string())]).optional(),
+  id: z.union([
+    z.string(),
+    z.array(z.string()),
+  ]).optional(),
   surveyId: bigIntString,
   // TODO: Fix this - multiform data are not cleaned of empty strings
   startDate: z.union([
     z.string().length(0).transform(val => val || undefined),
     z.coerce.date(),
-  ]).nullish().transform(val => val ? startOfDay(val) : undefined),
+  ]).nullish().transform(val => val
+    ? startOfDay(val)
+    : undefined),
   endDate: z.union([
     z.string().length(0).transform(val => val || undefined),
     z.coerce.date(),
-  ]).nullish().transform(val => val ? endOfDay(val) : undefined),
+  ]).nullish().transform(val => val
+    ? endOfDay(val)
+    : undefined),
   userId: bigIntString.optional(),
 });
 
@@ -380,7 +393,12 @@ export const nutrientTableTasks = z.discriminatedUnion('type', [
 ]);
 export type NutrientTableTask = z.infer<typeof nutrientTableTasks>;
 
-export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableMappingExport', 'NutrientTableDataImport', 'NutrientTableDataExport'] as const;
+export const nutrientTableJobs = [
+  'NutrientTableMappingImport',
+  'NutrientTableMappingExport',
+  'NutrientTableDataImport',
+  'NutrientTableDataExport',
+] as const;
 export type NutrientTableJob = (typeof nutrientTableJobs)[number];
 
 export const surveyJobs = [
@@ -490,7 +508,9 @@ export type QueueJob<T extends JobType = JobType> = {
 };
 
 export const defaultJobsParams: JobParams = {
-  CleanRedisStore: { store: ['cache'] },
+  CleanRedisStore: {
+    store: ['cache'],
+  },
   CleanStorageFiles: {},
   FeedbackSchemesSync: {},
   LanguageTranslationsSync: {},

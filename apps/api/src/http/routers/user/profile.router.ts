@@ -30,7 +30,12 @@ export function profile() {
       if (slug) {
         const survey = await Survey.findBySlug(slug, {
           attributes: ['id'],
-          include: [{ association: 'feedbackScheme', attributes: ['id'] }],
+          include: [
+            {
+              association: 'feedbackScheme',
+              attributes: ['id'],
+            },
+          ],
         });
         if (!survey)
           throw new NotFoundError();
@@ -50,7 +55,12 @@ export function profile() {
       if (slug) {
         const survey = await Survey.findBySlug(slug, {
           attributes: ['id'],
-          include: [{ association: 'feedbackScheme', attributes: ['id', 'physicalDataFields'] }],
+          include: [
+            {
+              association: 'feedbackScheme',
+              attributes: ['id', 'physicalDataFields'],
+            },
+          ],
         });
         if (!survey)
           throw new NotFoundError();

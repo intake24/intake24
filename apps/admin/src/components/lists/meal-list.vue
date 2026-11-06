@@ -234,7 +234,11 @@ function newDialog(show = false): MealDialog {
   return {
     show,
     index: -1,
-    meal: { name: { en: '' }, time: '8:00', flags: [] },
+    meal: {
+      name: { en: '' },
+      time: '8:00',
+      flags: [],
+    },
   };
 }
 
@@ -247,7 +251,9 @@ const isOverrideMode = computed(() => props.mode === 'override');
 const title = computed(() => t(
   isOverrideMode.value ? 'survey-schemes.overrides.meals.title' : 'survey-schemes.meals.title',
 ));
-const subtitle = computed(() => isOverrideMode.value ? t('survey-schemes.overrides.meals.subtitle') : undefined);
+const subtitle = computed(() => isOverrideMode.value
+  ? t('survey-schemes.overrides.meals.subtitle')
+  : undefined);
 
 function rules(langId: string) {
   return [
@@ -260,13 +266,17 @@ function rules(langId: string) {
         (meal, idx) => value === meal.name[langId] && index !== idx,
       );
 
-      return match ? t('survey-schemes.meals.validation.unique') : true;
+      return match
+        ? t('survey-schemes.meals.validation.unique')
+        : true;
     },
   ];
 };
 
 function clearErrors(index?: number) {
-  props.errors.clear(typeof index === 'undefined' ? 'meals.*' : `meals.${index}.*`);
+  props.errors.clear(typeof index === 'undefined'
+    ? 'meals.*'
+    : `meals.${index}.*`);
 }
 
 function add() {
@@ -274,7 +284,11 @@ function add() {
 };
 
 function edit(index: number, meal: Meal) {
-  dialog.value = { show: true, index, meal: copy(meal) };
+  dialog.value = {
+    show: true,
+    index,
+    meal: copy(meal),
+  };
 };
 
 async function save() {

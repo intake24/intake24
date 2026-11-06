@@ -22,7 +22,11 @@ export default () => {
     input = mocker.system.survey();
     survey = await Survey.create(input);
     input = { ...input };
-    output = { ...input, startDate: input.startDate.toISOString(), endDate: input.endDate.toISOString() };
+    output = {
+      ...input,
+      startDate: input.startDate.toISOString(),
+      endDate: input.endDate.toISOString(),
+    };
 
     securable = { securableId: survey.id, securableType: 'Survey' };
 
@@ -58,7 +62,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['read'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['read'],
+      });
 
       await suite.sharedTests.assertRecord('get', url, output);
     });

@@ -125,7 +125,9 @@ function foodDrinks(count: number, food: FoodState): number {
   if (food.linkedFoods.length)
     count += food.linkedFoods.reduce(foodDrinks, count);
 
-  return food.type === 'encoded-food' && food.data.categories.includes('DRNK') ? count + 1 : count;
+  return food.type === 'encoded-food' && food.data.categories.includes('DRNK')
+    ? count + 1
+    : count;
 }
 
 function mealDrinks(count: number, meal: MealState): number {
@@ -1020,7 +1022,9 @@ export function evaluateCondition(condition: Condition, ops: EvaluateConditionOp
       const { provider, state, value } = condition.property.check;
       const extSourceState = (food.external ?? {})[provider];
 
-      const currentValue = typeof state === 'boolean' ? !!extSourceState : extSourceState?.type === state;
+      const currentValue = typeof state === 'boolean'
+        ? !!extSourceState
+        : extSourceState?.type === state;
 
       return currentValue === value;
     }
@@ -1062,17 +1066,32 @@ export function checkPromptCustomConditions(survey: SurveyStore, meal: MealState
     for (let i = 0; i < prompt.conditions.length; ++i) {
       const condition = prompt.conditions[i];
       if (i === 0) {
-        currentValue = evaluateCondition(condition, { survey, meal, food, debugContext: `prompt conditions (${prompt.id})` });
+        currentValue = evaluateCondition(condition, {
+          survey,
+          meal,
+          food,
+          debugContext: `prompt conditions (${prompt.id})`,
+        });
       }
       else {
         if (condition.orPrevious) {
-          currentValue ||= evaluateCondition(condition, { survey, meal, food, debugContext: `prompt conditions (${prompt.id})` });
+          currentValue ||= evaluateCondition(condition, {
+            survey,
+            meal,
+            food,
+            debugContext: `prompt conditions (${prompt.id})`,
+          });
         }
         else {
           if (currentValue === false)
             return false;
 
-          currentValue = evaluateCondition(condition, { survey, meal, food, debugContext: `prompt conditions (${prompt.id})` });
+          currentValue = evaluateCondition(condition, {
+            survey,
+            meal,
+            food,
+            debugContext: `prompt conditions (${prompt.id})`,
+          });
         }
       }
     }
@@ -1148,7 +1167,10 @@ export function autoCompleteFoodPrompt(
         });
       });
 
-      surveyStore.updateFood({ foodId: foodState.id, update: { description: first } });
+      surveyStore.updateFood({
+        foodId: foodState.id,
+        update: { description: first },
+      });
       surveyStore.addFoodFlag(foodState.id, 'split-food-complete');
       return true;
     }

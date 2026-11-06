@@ -112,7 +112,12 @@ export default defineComponent({
       return table?.description ?? i18n.t('common.not.found');
     };
 
-    return { add, getNutrientTableName, items, remove };
+    return {
+      add,
+      getNutrientTableName,
+      items,
+      remove,
+    };
   },
 });
 </script>

@@ -48,7 +48,9 @@ function getInitialState(): PromptStates['standard-portion-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null
+      ? 1
+      : 0,
     quantityConfirmed: false,
     linkedQuantityConfirmed: false,
   };

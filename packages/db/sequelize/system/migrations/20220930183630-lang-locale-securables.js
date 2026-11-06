@@ -114,7 +114,10 @@ export default {
       await queryInterface.addColumn(
         'language_translations',
         'old_language_id',
-        { allowNull: true, type: Sequelize.STRING(8) },
+        {
+          allowNull: true,
+          type: Sequelize.STRING(8),
+        },
         { transaction },
       );
 
@@ -126,7 +129,10 @@ export default {
       await queryInterface.changeColumn(
         'language_translations',
         'language_id',
-        { type: Sequelize.STRING(8), allowNull: true },
+        {
+          type: Sequelize.STRING(8),
+          allowNull: true,
+        },
         { transaction },
       );
 
@@ -305,7 +311,10 @@ export default {
       await queryInterface.addColumn(
         'surveys',
         'old_locale_id',
-        { allowNull: true, type: Sequelize.STRING(16) },
+        {
+          allowNull: true,
+          type: Sequelize.STRING(16),
+        },
         { transaction },
       );
 
@@ -316,7 +325,10 @@ export default {
       await queryInterface.changeColumn(
         'surveys',
         'locale_id',
-        { type: Sequelize.STRING(16), allowNull: true },
+        {
+          type: Sequelize.STRING(16),
+          allowNull: true,
+        },
         { transaction },
       );
 

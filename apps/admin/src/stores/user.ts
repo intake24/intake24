@@ -90,7 +90,10 @@ export const useUser = defineStore('user', {
 
       await useHttp().patch<UpdateUserProfile>('admin/user', payload, { withLoading: true });
 
-      this.profile = { ...this.profile, ...payload };
+      this.profile = {
+        ...this.profile,
+        ...payload,
+      };
     },
 
     loadPayload(accessToken: string) {

@@ -13,7 +13,9 @@ export function useDownloadJob(user = false) {
 
   const download = async (job: JobAttributes) => {
     const res = await http.get(
-      user ? `admin/user/jobs/${job.id}/download` : `admin/jobs/${job.id}/download`,
+      user
+        ? `admin/user/jobs/${job.id}/download`
+        : `admin/jobs/${job.id}/download`,
       { responseType: 'blob' },
     );
     downloadFile(res, job.downloadUrl);

@@ -37,9 +37,21 @@ export default defineComponent({
       editMethod: 'patch',
     });
 
-    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...data.value }));
+    const currentFeedbackScheme = computed(() => ({
+      ...entry.value,
+      ...data.value,
+    }));
 
-    return { currentFeedbackScheme, entry, entryLoaded, errors, data, refs, routeLeave, submit };
+    return {
+      currentFeedbackScheme,
+      entry,
+      entryLoaded,
+      errors,
+      data,
+      refs,
+      routeLeave,
+      submit,
+    };
   },
 });
 </script>

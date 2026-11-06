@@ -33,7 +33,10 @@ export default () => {
 
     const respondentInput = mocker.system.respondent();
     respondent = await ioc.cradle.adminSurveyService.createRespondent(survey.id, respondentInput);
-    input = { ...mocker.system.customField(), name: respondentInput.customFields!.at(0)!.name };
+    input = {
+      ...mocker.system.customField(),
+      name: respondentInput.customFields!.at(0)!.name,
+    };
 
     url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields/${input.name}`;
     invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}/custom-fields/${input.name}`;
@@ -69,7 +72,9 @@ export default () => {
         ['value', 'public'],
         {
           input: {
-            value: [new Date()],
+            value: [
+              new Date(),
+            ],
             public: 'false',
           },
         },
@@ -97,7 +102,10 @@ export default () => {
     });
 
     it('should return 200 and no content when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['respondents'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['respondents'],
+      });
 
       const input2 = mocker.system.customField();
       await suite.sharedTests.assertRecordUpdated('patch', url, { ...input2, name: input.name }, { input: input2 });

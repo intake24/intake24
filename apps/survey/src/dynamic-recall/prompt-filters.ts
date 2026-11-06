@@ -11,10 +11,17 @@ export function filterMealsForAggregateChoicePrompt(survey: SurveyStore, prompt:
     foods: flattenFoods(meal.foods).filter((food) => {
       if (food.type !== 'encoded-food')
         return false;
-      if (prompt.foodFilter !== undefined)
-        return evaluateCondition(prompt.foodFilter, { survey, meal, food, debugContext: `aggregate food choice filter (${prompt.id})` });
-      else
+      if (prompt.foodFilter !== undefined) {
+        return evaluateCondition(prompt.foodFilter, {
+          survey,
+          meal,
+          food,
+          debugContext: `aggregate food choice filter (${prompt.id})`,
+        });
+      }
+      else {
         return true;
+      }
     }),
   })).filter(meal => meal.foods.length > 0);
 }
@@ -22,7 +29,12 @@ export function filterMealsForAggregateChoicePrompt(survey: SurveyStore, prompt:
 export function filterFoodsForFoodSelectionPrompt(survey: SurveyStore, meal: MealState, prompt: Prompts['food-selection-prompt']): FoodState[] {
   return meal.foods.filter(food =>
     prompt.foodFilter
-      ? evaluateCondition(prompt.foodFilter, { survey, meal, food, debugContext: `food selection filter (${prompt.id})` })
+      ? evaluateCondition(prompt.foodFilter, {
+          survey,
+          meal,
+          food,
+          debugContext: `food selection filter (${prompt.id})`,
+        })
       : true,
   );
 }
@@ -30,7 +42,9 @@ export function filterFoodsForFoodSelectionPrompt(survey: SurveyStore, meal: Mea
 export type AddonFoods = Record<string, Record<string, AddonFood[]>>;
 
 export function filterForAddonFoods(survey: SurveyStore, prompt: Prompts['addon-foods-prompt'], meal?: MealState): AddonFoods {
-  const meals = meal ? [meal] : survey.data.meals;
+  const meals = meal
+    ? [meal]
+    : survey.data.meals;
 
   return meals.reduce<AddonFoods>((acc, meal) => {
     if (!acc[meal.id])
@@ -44,8 +58,14 @@ export function filterForAddonFoods(survey: SurveyStore, prompt: Prompts['addon-
         if (food.flags.includes(`${prompt.id}-complete`))
           continue;
 
-        if (addon.filter.every(condition => evaluateCondition(condition, { survey, meal, food, debugContext: `addon food filter (${prompt.id})` })))
+        if (addon.filter.every(condition => evaluateCondition(condition, {
+          survey,
+          meal,
+          food,
+          debugContext: `addon food filter (${prompt.id})`,
+        }))) {
           acc[meal.id][food.id].push(addon);
+        }
       }
       return acc;
     }, acc);

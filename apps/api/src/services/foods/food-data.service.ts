@@ -123,8 +123,15 @@ function foodDataService({ cachedParentCategoriesService, imagesBaseUrl }: Pick<
         'exclusive',
         'steps',
       ],
-      include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
-      order: [['code', 'ASC']],
+      include: [
+        {
+          association: 'synonymSet',
+          attributes: ['synonyms'],
+        },
+      ],
+      order: [
+        ['code', 'ASC'],
+      ],
     });
   }
 

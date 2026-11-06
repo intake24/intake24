@@ -62,7 +62,9 @@ async function verify(token: string) {
     useMessages().info(t('common.verify.verified'));
 
     await auth.refresh(false);
-    await router.push({ name: auth.loggedIn ? 'dashboard' : 'login' });
+    await router.push({
+      name: auth.loggedIn ? 'dashboard' : 'login',
+    });
   }
   catch (err) {
     if (axios.isAxiosError(err)) {

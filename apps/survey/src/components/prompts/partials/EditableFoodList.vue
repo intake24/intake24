@@ -168,7 +168,9 @@ function createFood(): FreeTextFood {
     id: getEntityId(),
     type: 'free-text',
     description: '',
-    flags: props.mode === 'drinksOnly' ? ['is-drink'] : [],
+    flags: props.mode === 'drinksOnly'
+      ? ['is-drink']
+      : [],
     customPromptAnswers: {},
     linkedFoods: [],
   };
@@ -179,7 +181,9 @@ const newFood = ref(createFood());
 function updateFoods() {
   emit(
     'update:modelValue',
-    newFood.value.description.length ? [...foods.value, newFood.value] : foods.value,
+    newFood.value.description.length
+      ? [...foods.value, newFood.value]
+      : foods.value,
   );
 }
 

@@ -172,7 +172,14 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['promptCopy', 'promptEdit', 'promptMove', 'promptChangeSubsection', 'promptRemove', 'promptSync']);
+const emit = defineEmits([
+  'promptCopy',
+  'promptEdit',
+  'promptMove',
+  'promptChangeSubsection',
+  'promptRemove',
+  'promptSync',
+]);
 
 const contextMenu = ref(false);
 const moveToSection = ref<string | null>(null);

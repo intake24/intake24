@@ -1,6 +1,8 @@
 import { createPermissions, updateSequence } from '../../utils.js';
 
-const permissions = [{ name: 'surveys|securables', display_name: 'Surveys security' }];
+const permissions = [
+  { name: 'surveys|securables', display_name: 'Surveys security' },
+];
 
 const permissionToDelete = ['surveyadmin', 'surveys|mgmt'];
 

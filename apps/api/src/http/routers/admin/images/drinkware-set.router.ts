@@ -15,18 +15,36 @@ import { imageMulterFile } from '@intake24/common/types/http/admin';
 import { DrinkwareSet, ImageMap } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { drinkwareSetId }: { drinkwareSetId?: string } = {}) {
-  const where: WhereOptions = drinkwareSetId ? { id: { [Op.ne]: drinkwareSetId } } : {};
+  const where: WhereOptions = drinkwareSetId
+    ? {
+        id: { [Op.ne]: drinkwareSetId },
+      }
+    : {};
 
-  if (!(await unique({ model: DrinkwareSet, condition: { field: 'id', value }, options: { where } }))) {
-    throw ValidationError.from({ code: '$unique', path: 'id', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: DrinkwareSet,
+    condition: { field: 'id', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      code: '$unique',
+      path: 'id',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 async function dataCheck(imageMapId: string) {
-  const imageMap = await ImageMap.findByPk(imageMapId, { attributes: ['id'] });
+  const imageMap = await ImageMap.findByPk(imageMapId, {
+    attributes: ['id'],
+  });
 
-  if (!imageMap)
-    throw ValidationError.from({ path: 'imageMapId', i18n: { type: 'exists._' } });
+  if (!imageMap) {
+    throw ValidationError.from({
+      path: 'imageMapId',
+      i18n: { type: 'exists._' },
+    });
+  }
 }
 
 export function drinkwareSet() {
@@ -34,7 +52,9 @@ export function drinkwareSet() {
 
   return initServer().router(contract.admin.images.drinkwareSet, {
     browse: {
-      middleware: [permission('drinkware-sets', 'drinkware-sets:browse')],
+      middleware: [
+        permission('drinkware-sets', 'drinkware-sets:browse'),
+      ],
       handler: async ({ query, req }) => {
         const drinkwareSets = await req.scope.cradle.drinkwareSetService.getDrinkwareSets(query);
 
@@ -42,7 +62,9 @@ export function drinkwareSet() {
       },
     },
     store: {
-      middleware: [permission('drinkware-sets', 'drinkware-sets:create')],
+      middleware: [
+        permission('drinkware-sets', 'drinkware-sets:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id);
         await dataCheck(body.imageMapId);
@@ -55,7 +77,9 @@ export function drinkwareSet() {
       },
     },
     read: {
-      middleware: [permission('drinkware-sets', 'drinkware-sets:read')],
+      middleware: [
+        permission('drinkware-sets', 'drinkware-sets:read'),
+      ],
       handler: async ({ params: { drinkwareSetId }, req }) => {
         const drinkwareSet = await req.scope.cradle.drinkwareSetService.getDrinkwareSet(drinkwareSetId);
         if (!drinkwareSet)
@@ -73,8 +97,12 @@ export function drinkwareSet() {
         const { userId } = req.scope.cradle.user;
 
         const res = imageMulterFile.array().safeParse(files);
-        if (!res.success)
-          throw ValidationError.from({ path: 'baseImage', i18n: { type: 'file._' } });
+        if (!res.success) {
+          throw ValidationError.from({
+            path: 'baseImage',
+            i18n: { type: 'file._' },
+          });
+        }
 
         const fileKeyRegex = /^baseImage\[choiceId-(?<choiceId>\d)+\]$/i;
         const baseImageFiles: Record<string, ImageMulterFile> = {};
@@ -83,11 +111,19 @@ export function drinkwareSet() {
           const { fieldname } = file;
           const { choiceId } = fieldname.match(fileKeyRegex)?.groups || {};
 
-          if (!choiceId)
-            throw ValidationError.from({ path: fieldname, i18n: { type: 'regEx._' } });
+          if (!choiceId) {
+            throw ValidationError.from({
+              path: fieldname,
+              i18n: { type: 'regEx._' },
+            });
+          }
 
-          if (baseImageFiles[choiceId] !== undefined)
-            throw ValidationError.from({ path: fieldname, i18n: { type: 'duplicate._' } });
+          if (baseImageFiles[choiceId] !== undefined) {
+            throw ValidationError.from({
+              path: fieldname,
+              i18n: { type: 'duplicate._' },
+            });
+          }
 
           baseImageFiles[choiceId] = file;
         }
@@ -100,9 +136,13 @@ export function drinkwareSet() {
       },
     },
     destroy: {
-      middleware: [permission('drinkware-sets', 'drinkware-sets:delete')],
+      middleware: [
+        permission('drinkware-sets', 'drinkware-sets:delete'),
+      ],
       handler: async ({ params: { drinkwareSetId } }) => {
-        const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, { attributes: ['id'] });
+        const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, {
+          attributes: ['id'],
+        });
         if (!drinkwareSet)
           throw new NotFoundError();
 

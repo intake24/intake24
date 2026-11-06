@@ -4,7 +4,9 @@ import { createPermissions } from '../../utils.js';
 export default {
   async up(queryInterface) {
     await queryInterface.sequelize.transaction(async (transaction) => {
-      const permissions = [{ name: 'locales:food-list:edit', display_name: 'Locale - edit food list' }];
+      const permissions = [
+        { name: 'locales:food-list:edit', display_name: 'Locale - edit food list' },
+      ];
       await createPermissions(permissions, { queryInterface, transaction });
 
       await queryInterface.sequelize.query(`update permissions set display_name = 'Locale - view food list' where name = 'locales:food-list';`, { transaction });

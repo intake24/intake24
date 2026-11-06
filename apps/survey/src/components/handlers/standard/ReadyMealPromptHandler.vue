@@ -34,7 +34,9 @@ const getInitialState = computed(() =>
   ).map(food => ({
     id: food.id,
     name: food.data.localName,
-    value: alreadyAnswered.value ? food.flags.includes('ready-meal') : undefined,
+    value: alreadyAnswered.value
+      ? food.flags.includes('ready-meal')
+      : undefined,
   })),
 );
 

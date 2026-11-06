@@ -32,15 +32,25 @@ function generateResourceRoutes(resourceName: string, pathSegments: string[], vi
   const routerRoutes: RouteRecordRaw[] = [];
 
   const resourceRoutes = Object.keys(viewsPath);
-  const name = parent ? `${parent}-${resourceName}` : resourceName;
+  const name = parent
+    ? `${parent}-${resourceName}`
+    : resourceName;
   const title
-    = parent && !['media', 'securables'].includes(resourceName) ? `${parent}.${resourceName}` : resourceName;
-  const identifier = parent ? `${singular(resourceName)}Id` : 'id';
+    = parent && !['media', 'securables'].includes(resourceName)
+      ? `${parent}.${resourceName}`
+      : resourceName;
+  const identifier = parent
+    ? `${singular(resourceName)}Id`
+    : 'id';
 
-  const meta = { module: { current: resourceName, parent } };
+  const meta = {
+    module: { current: resourceName, parent },
+  };
 
   resourceRoutes.forEach((action) => {
-    let perm = parent ? `${parent}:${resourceName}` : `${resourceName}:${action}`;
+    let perm = parent
+      ? `${parent}:${resourceName}`
+      : `${resourceName}:${action}`;
     if (securable)
       perm = options.name;
 
@@ -49,7 +59,12 @@ function generateResourceRoutes(resourceName: string, pathSegments: string[], vi
         path: pathSegments.join('/'),
         name,
         component: viewsPath[action],
-        meta: { ...meta, action, title: `${title}.title`, perm },
+        meta: {
+          ...meta,
+          action,
+          title: `${title}.title`,
+          perm,
+        },
         props: true,
       });
       return;
@@ -60,7 +75,12 @@ function generateResourceRoutes(resourceName: string, pathSegments: string[], vi
         path: [...pathSegments, action].join('/'),
         name: `${name}-${action}`,
         component: viewsPath[action],
-        meta: { ...meta, action, title: `${title}.${action}`, perm: `${name}:create` },
+        meta: {
+          ...meta,
+          action,
+          title: `${title}.${action}`,
+          perm: `${name}:create`,
+        },
         props: true,
       });
       return;
@@ -68,12 +88,23 @@ function generateResourceRoutes(resourceName: string, pathSegments: string[], vi
 
     if (isVueComponent(viewsPath[action])) {
       routerRoutes.push({
-        path: [...pathSegments, `:${identifier}`, action === 'read' ? undefined : action]
+        path: [
+          ...pathSegments,
+          `:${identifier}`,
+          action === 'read'
+            ? undefined
+            : action,
+        ]
           .filter(Boolean)
           .join('/'),
         name: `${name}-${action}`,
         component: viewsPath[action],
-        meta: { ...meta, action, title: `${title}.${action}`, perm },
+        meta: {
+          ...meta,
+          action,
+          title: `${title}.${action}`,
+          perm,
+        },
         props: true,
       });
       return;
@@ -99,88 +130,137 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'login',
     component: authentication.login,
-    meta: { module: { current: 'login' }, public: true, title: 'common.login._' },
+    meta: {
+      module: { current: 'login' },
+      public: true,
+      title: 'common.login._',
+    },
   },
   {
     path: '/oidc/:provider',
     name: 'oidc',
     component: authentication.login,
     beforeEnter: oidcGuard,
-    meta: { module: { current: 'login' }, public: true },
+    meta: {
+      module: { current: 'login' },
+      public: true,
+    },
   },
   {
     path: '/password',
     name: 'password-request',
     component: authentication.passwordRequest,
-    meta: { module: { current: 'password' }, public: true, title: 'common.password.reset._' },
+    meta: {
+      module: { current: 'password' },
+      public: true,
+      title: 'common.password.reset._',
+    },
   },
   {
     path: '/password/reset/:token',
     name: 'password-reset',
     component: authentication.passwordReset,
-    meta: { module: { current: 'password' }, public: true, title: 'common.password.reset._' },
+    meta: {
+      module: { current: 'password' },
+      public: true,
+      title: 'common.password.reset._',
+    },
   },
   {
     path: '/verify',
     name: 'verify',
     component: authentication.verify,
-    meta: { module: { current: 'verify' }, public: true, title: 'common.login._' },
+    meta: {
+      module: { current: 'verify' },
+      public: true,
+      title: 'common.login._',
+    },
   },
   {
     path: '/dashboard',
     name: 'dashboard',
     component: views.dashboard,
-    meta: { module: { current: 'dashboard' }, action: 'browse', title: 'dashboard._' },
+    meta: {
+      module: { current: 'dashboard' },
+      action: 'browse',
+      title: 'dashboard._',
+    },
   },
   {
     path: '/packages/import',
     name: 'packages.import',
     component: views.importPackage,
-    meta: { module: { current: 'packages.import' }, title: 'io.import._', perm: 'packages:import' },
+    meta: {
+      module: { current: 'packages.import' },
+      title: 'io.import._',
+      perm: 'packages:import',
+    },
   },
   {
     path: '/packages/export',
     name: 'packages.export',
     component: views.exportPackage,
-    meta: { module: { current: 'packages.export' }, title: 'io.export._', perm: 'packages:export' },
+    meta: {
+      module: { current: 'packages.export' },
+      title: 'io.export._',
+      perm: 'packages:export',
+    },
   },
   {
     path: '/user',
     name: 'user',
     component: views.user.profile,
-    meta: { module: { current: 'user' }, title: 'user.profile' },
+    meta: {
+      module: { current: 'user' },
+      title: 'user.profile',
+    },
   },
   {
     path: '/user/jobs',
     name: 'user.jobs',
     component: views.user.jobs.browse,
-    meta: { module: { current: 'user.jobs' }, title: 'user.jobs._' },
+    meta: {
+      module: { current: 'user.jobs' },
+      title: 'user.jobs._',
+    },
   },
   {
     path: '/user/jobs/create',
     name: 'user.jobs-create',
     component: views.user.jobs.create,
-    meta: { module: { current: 'user.jobs' }, title: 'user.jobs._' },
+    meta: {
+      module: { current: 'user.jobs' },
+      title: 'user.jobs._',
+    },
     props: true,
   },
   {
     path: '/user/jobs/:id',
     name: 'user.jobs-read',
     component: views.user.jobs.read,
-    meta: { module: { current: 'user.jobs' }, title: 'user.jobs._' },
+    meta: {
+      module: { current: 'user.jobs' },
+      title: 'user.jobs._',
+    },
     props: true,
   },
   {
     path: '/user/personal-access-tokens',
     name: 'user.personal-access-tokens',
     component: views.user.personalAccessTokens.browse,
-    meta: { module: { current: 'user.personal-access-tokens' }, title: 'user.personalAccessTokens._' },
+    meta: {
+      module: { current: 'user.personal-access-tokens' },
+      title: 'user.personalAccessTokens._',
+    },
   },
   {
     path: '/audit',
     name: 'audit',
     component: views.audit.tables,
-    meta: { module: { current: 'audit' }, title: 'audit._' },
+    meta: {
+      module: { current: 'audit' },
+      title: 'audit._',
+    },
   },
   // Food databases explorer
   {
@@ -239,7 +319,11 @@ if (import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true') {
     path: '/signup',
     name: 'signup',
     component: authentication.signup,
-    meta: { module: { current: 'signup' }, public: true, title: 'common.signup._' },
+    meta: {
+      module: { current: 'signup' },
+      public: true,
+      title: 'common.signup._',
+    },
   });
 }
 

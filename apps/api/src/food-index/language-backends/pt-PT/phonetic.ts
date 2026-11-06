@@ -10,6 +10,8 @@ export default class PortuguesePhoneticEncoder implements PhoneticEncoder {
     // disables the default Brazilian company-suffix stripping (e.g. SA, LTDA),
     // which is irrelevant for food descriptions.
     const encoded = metaphone(input, []);
-    return encoded ? [encoded] : [];
+    return encoded
+      ? [encoded]
+      : [];
   }
 }

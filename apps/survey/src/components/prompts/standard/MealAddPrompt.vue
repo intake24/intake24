@@ -57,7 +57,9 @@ import { useI18n } from '@intake24/ui';
 import { CardLayout } from '../layouts';
 import { createBasePromptProps } from '../prompt-props';
 
-defineOptions({ components: { VCombobox, VSelect } });
+defineOptions({
+  components: { VCombobox, VSelect },
+});
 
 const props = defineProps({
   ...createBasePromptProps<'meal-add-prompt'>(),

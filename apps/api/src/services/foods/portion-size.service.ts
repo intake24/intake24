@@ -23,7 +23,9 @@ function portionSizeService() {
   ): Promise<AsServedImage[]> =>
     AsServedImage.findAll({
       where: { asServedSetId, id },
-      order: [['weight', 'ASC']],
+      order: [
+        ['weight', 'ASC'],
+      ],
       include: [
         { association: 'image', required: true },
         { association: 'thumbnailImage', required: true },
@@ -65,7 +67,9 @@ function portionSizeService() {
           ],
         },
       ],
-      order: [['asServedImages', 'weight', 'ASC']],
+      order: [
+        ['asServedImages', 'weight', 'ASC'],
+      ],
     });
 
   /**
@@ -102,7 +106,14 @@ function portionSizeService() {
         { association: 'imageMap', required: true, include: imageMapScope },
         { association: 'objects' },
       ],
-      order: [['imageMap', 'objects', 'navigationIndex', 'ASC']],
+      order: [
+        [
+          'imageMap',
+          'objects',
+          'navigationIndex',
+          'ASC',
+        ],
+      ],
     });
 
   /**
@@ -130,7 +141,9 @@ function portionSizeService() {
     ImageMap.findAll({
       where: { id },
       include: imageMapScope,
-      order: [['objects', 'navigationIndex', 'ASC']],
+      order: [
+        ['objects', 'navigationIndex', 'ASC'],
+      ],
     });
 
   /**
@@ -158,12 +171,27 @@ function portionSizeService() {
     DrinkwareSet.findAll({
       where: { id },
       include: [
-        { association: 'scales', include: [{ association: 'volumeSamples' }] },
-        { association: 'imageMap', include: [{ association: 'baseImage' }] },
+        {
+          association: 'scales',
+          include: [
+            { association: 'volumeSamples' },
+          ],
+        },
+        {
+          association: 'imageMap',
+          include: [
+            { association: 'baseImage' },
+          ],
+        },
       ],
       order: [
         ['scales', 'id', 'ASC'],
-        ['scales', 'volumeSamples', 'fill', 'ASC'],
+        [
+          'scales',
+          'volumeSamples',
+          'fill',
+          'ASC',
+        ],
       ],
     });
 

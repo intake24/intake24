@@ -175,17 +175,26 @@ function initValue(value?: ModelValue): string[] {
   if (!value)
     return [];
 
-  if (Array.isArray(value))
-    return value.map(val => typeof val === 'string' ? val : val[props.itemId]);
+  if (Array.isArray(value)) {
+    return value.map(val => typeof val === 'string'
+      ? val
+      : val[props.itemId]);
+  }
 
-  return [typeof value === 'string' ? value : value[props.itemId]];
+  return [
+    typeof value === 'string'
+      ? value
+      : value[props.itemId],
+  ];
 }
 
 const { query } = toRefs(props);
 const url = computed(() => `/admin/references/${props.resource}`);
 const { dialog, get, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>({ query, url });
 
-const selectedItemId = ref<string[]>(props.initialItem ? [props.initialItem[props.itemId]] : initValue(props.modelValue));
+const selectedItemId = ref<string[]>(props.initialItem
+  ? [props.initialItem[props.itemId]]
+  : initValue(props.modelValue));
 const selectedItems = ref<Dictionary[]>([]);
 const confirmedItems = ref<Dictionary[]>([]);
 
@@ -202,7 +211,11 @@ function onSelection({ id, value }: { id: unknown; value: boolean; path: unknown
   const index = selectedItems.value.findIndex(item => item[props.itemId] === id);
 
   if (!props.multiple) {
-    selectedItems.value = value ? [copy(item)] : [];
+    selectedItems.value = value
+      ? [
+          copy(item),
+        ]
+      : [];
     return;
   }
 
@@ -249,7 +262,9 @@ function update() {
     return;
   }
 
-  emit('update:modelValue', multiple ? selectedItems.value.map(item => item[returnObject]) : selectedItems.value[0][returnObject]);
+  emit('update:modelValue', multiple
+    ? selectedItems.value.map(item => item[returnObject])
+    : selectedItems.value[0][returnObject]);
 };
 
 function clearSelection() {

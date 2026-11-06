@@ -3,7 +3,10 @@ import { z } from 'zod';
 
 import { standardUnitResponse } from '../../types/http';
 
-const code = z.union([z.string().nonempty(), z.string().array().nonempty()]);
+const code = z.union([
+  z.string().nonempty(),
+  z.string().array().nonempty(),
+]);
 
 export const standardUnit = initContract().router({
   standardUnits: {

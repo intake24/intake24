@@ -1,19 +1,12 @@
 minimumReleaseAgeExcludePrune: true
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 10080
-
-trustPolicyExclude:
-  - xlsx@0.20.3
-
 shellEmulator: true
 pmOnFail: warn
 
 packages:
   - apps/*
   - packages/*
-
-overrides:
-  axios: ~1.18.1
 
 patchedDependencies:
   '@ts-rest/core': patches/@ts-rest__core.patch

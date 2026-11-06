@@ -50,7 +50,9 @@ export function useDataTable(props: DataTableProps, filter: ComputedRef<Dictiona
       sortBy: [sortItem],
     } = options.value;
 
-    const sort = sortItem ? `${sortItem.key}|${sortItem.order}` : undefined;
+    const sort = sortItem
+      ? `${sortItem.key}|${sortItem.order}`
+      : undefined;
 
     const { data } = await http.get<Pagination>(api.value, {
       params: { limit, page, sort, ...filter.value },
@@ -70,5 +72,13 @@ export function useDataTable(props: DataTableProps, filter: ComputedRef<Dictiona
     meta.value = { total: 0 };
   });
 
-  return { api, fetch, items, meta, options, selected, tracked };
+  return {
+    api,
+    fetch,
+    items,
+    meta,
+    options,
+    selected,
+    tracked,
+  };
 }

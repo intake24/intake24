@@ -162,7 +162,10 @@ onMounted(async () => {
   if (!auth.loggedIn) {
     try {
       await auth.refresh();
-      await router.push({ name: 'survey-home', params: { surveyId: props.surveyId } });
+      await router.push({
+        name: 'survey-home',
+        params: { surveyId: props.surveyId },
+      });
     }
     catch {
       // continue

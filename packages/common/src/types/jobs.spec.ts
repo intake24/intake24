@@ -20,7 +20,13 @@ describe('jobExists rule', () => {
 
   it('should pick correct job parameters', () => {
     const params = pickJobParams(
-      { a: 1, b: 2, c: 3, sourceLocaleId: 'locale1', localeId: 'locale2' },
+      {
+        a: 1,
+        b: 2,
+        c: 3,
+        sourceLocaleId: 'locale1',
+        localeId: 'locale2',
+      },
       'LocaleCopy',
     );
     expect(params).toStrictEqual({ sourceLocaleId: 'locale1', localeId: 'locale2' });

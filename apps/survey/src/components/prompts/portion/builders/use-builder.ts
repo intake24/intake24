@@ -43,10 +43,14 @@ export function useFoodBuilder<
         if (state.type !== step.type)
           return false;
 
-        if (step.required || state.confirmed)
-          return step.multiple ? foodSelected && state.anotherFoodConfirmed === false : foodSelected;
-        else
+        if (step.required || state.confirmed) {
+          return step.multiple
+            ? foodSelected && state.anotherFoodConfirmed === false
+            : foodSelected;
+        }
+        else {
           return state.confirmed === false;
+        }
       }
       case 'quantity':
         return state.confirmed;

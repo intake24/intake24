@@ -13,7 +13,9 @@ import { Survey, UserSurveySession } from '@intake24/db';
 export function session() {
   return initServer().router(contract.admin.survey.session, {
     browse: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId }, query, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'sessions', {
           attributes: ['id'],
@@ -27,7 +29,9 @@ export function session() {
                 surveyId,
                 [Op.or]: [
                   where(cast(col('UserSurveySession.id'), 'text'), Op.iLike, `%${search}%`),
-                  { '$alias.username$': { [Op.iLike]: `%${search}%` } },
+                  {
+                    '$alias.username$': { [Op.iLike]: `%${search}%` },
+                  },
                 ],
               },
             }
@@ -36,8 +40,16 @@ export function session() {
         const sessions = await UserSurveySession.paginate({
           query,
           where: whereClause,
-          include: [{ association: 'alias', attributes: ['username'], where: { surveyId } }],
-          order: [['createdAt', 'ASC']],
+          include: [
+            {
+              association: 'alias',
+              attributes: ['username'],
+              where: { surveyId },
+            },
+          ],
+          order: [
+            ['createdAt', 'ASC'],
+          ],
           subQuery: false,
           transform: (session) => {
             const { alias, ...rest } = session.get();
@@ -50,14 +62,18 @@ export function session() {
       },
     },
     read: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId, sessionId }, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'sessions', {
           attributes: ['id'],
           where: { id: surveyId },
         });
 
-        const session = await UserSurveySession.findOne({ where: { id: sessionId, surveyId } });
+        const session = await UserSurveySession.findOne({
+          where: { id: sessionId, surveyId },
+        });
         if (!session)
           throw new NotFoundError();
 
@@ -65,14 +81,18 @@ export function session() {
       },
     },
     destroy: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId, sessionId }, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'sessions', {
           attributes: ['id'],
           where: { id: surveyId },
         });
 
-        const session = await UserSurveySession.findOne({ where: { id: sessionId, surveyId } });
+        const session = await UserSurveySession.findOne({
+          where: { id: sessionId, surveyId },
+        });
         if (!session)
           throw new NotFoundError();
 

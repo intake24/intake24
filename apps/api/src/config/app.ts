@@ -42,7 +42,9 @@ export const appConfigSchema = z.object({
 export type AppConfig = z.infer<typeof appConfigSchema>;
 
 const host = process.env.APP_HOST || 'localhost';
-const port = process.env.APP_PORT ? Number.parseInt(process.env.APP_PORT, 10) : 3100;
+const port = process.env.APP_PORT
+  ? Number.parseInt(process.env.APP_PORT, 10)
+  : 3100;
 const https = !!(process.env.DEV_HTTPS === 'true');
 const certPath = process.env.DEV_MKCERT_PATH;
 const domain = `${https ? 'https' : 'http'}://${host}:${port}`;

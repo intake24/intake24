@@ -74,7 +74,10 @@ export default class PopularityCountersService {
         occurrences,
       }));
 
-      await PAOccurrence.bulkCreate(updates, { updateOnDuplicate: ['occurrences'], transaction });
+      await PAOccurrence.bulkCreate(updates, {
+        updateOnDuplicate: ['occurrences'],
+        transaction,
+      });
     });
   }
 }

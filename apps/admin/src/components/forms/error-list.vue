@@ -31,7 +31,9 @@ export default defineComponent({
   },
 
   setup(props) {
-    const items = computed(() => props.errors.map(error => typeof error === 'string' ? error : error.msg));
+    const items = computed(() => props.errors.map(error => typeof error === 'string'
+      ? error
+      : error.msg));
 
     return { items };
   },

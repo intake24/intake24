@@ -18,7 +18,11 @@ import NutrientTableCsvMappingNutrient from './nutrient-table-csv-mapping-nutrie
 import NutrientTableRecord from './nutrient-table-record';
 
 @Scopes(() => ({
-  list: { order: [['id', 'ASC']] },
+  list: {
+    order: [
+      ['id', 'ASC'],
+    ],
+  },
 }))
 @Table({
   modelName: 'NutrientTable',

@@ -51,7 +51,9 @@ export default class TasksQueueHandler extends QueueHandler<JobData> {
       })
       .on('failed', (job, err) => {
         const { message, name, stack } = err;
-        const jobInfo = job ? `${job.name} | ${job.id}` : `"Removed job"`;
+        const jobInfo = job
+          ? `${job.name} | ${job.id}`
+          : `"Removed job"`;
 
         this.logger.error(`${this.name}: ${jobInfo} has failed with: ${err.message}`, {
           message,
@@ -102,7 +104,9 @@ export default class TasksQueueHandler extends QueueHandler<JobData> {
   }
 
   private async loadScheduledJobs() {
-    const tasks = await Task.findAll({ where: { active: true } });
+    const tasks = await Task.findAll({
+      where: { active: true },
+    });
 
     for (const task of tasks) {
       const { name, data, opts } = this.createJobParams(task);

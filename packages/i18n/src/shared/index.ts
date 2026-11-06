@@ -6,6 +6,14 @@ import pt_PT from './pt-PT';
 import ta from './ta';
 import zh from './zh';
 
-const messages = { 'ar-AE': ar_AE, en, zh, ta, ms, fr, 'pt-PT': pt_PT };
+const messages = {
+  'ar-AE': ar_AE,
+  en,
+  zh,
+  ta,
+  ms,
+  fr,
+  'pt-PT': pt_PT,
+};
 
 export default messages;

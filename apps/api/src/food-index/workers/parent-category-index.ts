@@ -142,10 +142,22 @@ export class ParentCategoryIndex {
   constructor(foods: FoodData[], categories: CategoryData[], logger: typeof Logger) {
     this.logger = logger;
     this.categoryData = new Map(categories.map(data => [data.code, data]));
-    this.foodParentCategories = new Map(foods.map(food => [food.code, this.attachCategoryData(food.parentCategories)]));
-    this.categoryParentCategories = new Map(categories.map(category => [category.code, this.attachCategoryData(category.parentCategories)]));
-    this.foodTransitiveParentCategories = new Map(foods.map(food => [food.code, this.addTransitiveParentCategories(this.foodParentCategories.get(food.code)!)]));
-    this.categoryTransitiveParentCategories = new Map(categories.map(category => [category.code, this.addTransitiveParentCategories(this.categoryParentCategories.get(category.code)!)]));
+    this.foodParentCategories = new Map(foods.map(food => [
+      food.code,
+      this.attachCategoryData(food.parentCategories),
+    ]));
+    this.categoryParentCategories = new Map(categories.map(category => [
+      category.code,
+      this.attachCategoryData(category.parentCategories),
+    ]));
+    this.foodTransitiveParentCategories = new Map(foods.map(food => [
+      food.code,
+      this.addTransitiveParentCategories(this.foodParentCategories.get(food.code)!),
+    ]));
+    this.categoryTransitiveParentCategories = new Map(categories.map(category => [
+      category.code,
+      this.addTransitiveParentCategories(this.categoryParentCategories.get(category.code)!),
+    ]));
     this.nonEmptyCategories = this.getNonEmptyCategories(foods);
   }
 }

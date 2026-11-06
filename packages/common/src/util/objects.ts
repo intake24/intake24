@@ -36,5 +36,8 @@ export function mapKeys<T>(
   fn: (value: string) => string,
 ): { [k: string]: T } {
   const entries = Object.entries(obj);
-  return Object.fromEntries(entries.map(entry => [fn(entry[0]), entry[1]]));
+  return Object.fromEntries(entries.map(entry => [
+    fn(entry[0]),
+    entry[1],
+  ]));
 }

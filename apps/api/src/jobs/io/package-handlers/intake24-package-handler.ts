@@ -31,7 +31,9 @@ export class Intake24PackageHandler implements PackageHandler {
       if (err instanceof PackageValidationFileErrors)
         throw err;
 
-      throw new PackageValidationFileErrors({ _uploadedFile: getFileValidationErrorMessages(err) });
+      throw new PackageValidationFileErrors({
+        _uploadedFile: getFileValidationErrorMessages(err),
+      });
     }
   }
 

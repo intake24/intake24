@@ -10,17 +10,32 @@ import { contract } from '@intake24/common/contracts';
 import { Food, SystemLocale } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { foodId, field, localeId }: { foodId?: string; field: string; localeId: string }) {
-  const where: WhereOptions = foodId ? { localeId, id: { [Op.ne]: foodId } } : { localeId };
+  const where: WhereOptions = foodId
+    ? {
+        localeId,
+        id: { [Op.ne]: foodId },
+      }
+    : { localeId };
 
-  if (!(await unique({ model: Food, condition: { field, value }, options: { where } }))) {
-    throw ValidationError.from({ code: '$unique', path: field, i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: Food,
+    condition: { field, value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      code: '$unique',
+      path: field,
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function food() {
   return initServer().router(contract.admin.fdbs.food, {
     browse: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId }, query, req }) => {
         const { aclService, adminFoodService } = req.scope.cradle;
 
@@ -35,7 +50,9 @@ export function food() {
       },
     },
     store: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { localeId }, req }) => {
         const { aclService, adminFoodService } = req.scope.cradle;
 
@@ -51,7 +68,9 @@ export function food() {
       },
     },
     getByCode: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { code, localeId }, req }) => {
         const { aclService, adminFoodService } = req.scope.cradle;
 
@@ -68,7 +87,9 @@ export function food() {
       },
     },
     read: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { foodId, localeId }, req }) => {
         const { aclService, adminFoodService } = req.scope.cradle;
 
@@ -85,7 +106,9 @@ export function food() {
       },
     },
     update: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { foodId, localeId }, req }) => {
         const { aclService, adminFoodService } = req.scope.cradle;
 
@@ -101,7 +124,9 @@ export function food() {
       },
     },
     destroy: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { foodId, localeId }, req }) => {
         const { aclService, adminFoodService } = req.scope.cradle;
 
@@ -116,7 +141,9 @@ export function food() {
       },
     },
     copy: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { foodId, localeId }, req }) => {
         const { aclService, adminFoodService } = req.scope.cradle;
         const input = body;
@@ -145,7 +172,9 @@ export function food() {
       },
     },
     categories: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { foodId, localeId }, req }) => {
         const { aclService, cachedParentCategoriesService } = req.scope.cradle;
 

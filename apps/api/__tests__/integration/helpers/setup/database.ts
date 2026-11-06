@@ -57,7 +57,9 @@ export type MockData = {
 
 export async function wipeRedis() {
   const { path, ...rest } = ioc.cradle.config.queue.redis;
-  const redis = path ? new Redis(path, rest) : new Redis(rest);
+  const redis = path
+    ? new Redis(path, rest)
+    : new Redis(rest);
   await redis.flushdb();
   redis.disconnect();
 }
@@ -107,8 +109,20 @@ export async function initDatabase(): Promise<MockData> {
   ];
 
   const standardUnits = [
-    { code: 'bags', localeId: 'en_GB', name: 'Bags', estimateIn: { en: 'bags' }, howMany: { en: 'How many bags' } },
-    { code: 'bars', localeId: 'en_GB', name: 'Bars', estimateIn: { en: 'bars' }, howMany: { en: 'How many bars' } },
+    {
+      code: 'bags',
+      localeId: 'en_GB',
+      name: 'Bags',
+      estimateIn: { en: 'bags' },
+      howMany: { en: 'How many bags' },
+    },
+    {
+      code: 'bars',
+      localeId: 'en_GB',
+      name: 'Bars',
+      estimateIn: { en: 'bars' },
+      howMany: { en: 'How many bars' },
+    },
   ];
 
   await Promise.all([

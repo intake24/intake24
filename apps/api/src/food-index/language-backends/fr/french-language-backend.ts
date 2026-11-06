@@ -9,7 +9,25 @@ const sanitiseRegexp = /[.`,/\\\-+)(]|e\.g\.|e\.g|n\.s\.|à partir de|à base de
 export default {
   name: 'French',
   languageCode: 'fr',
-  indexIgnore: ['et', 'ou', 'en', 'l\'', 'le', 'la', 'les', 'avec', 'pour', 'd\'', 'de', 'des', 'à', 'au', 'aux', 'dans', 'type'],
+  indexIgnore: [
+    'et',
+    'ou',
+    'en',
+    'l\'',
+    'le',
+    'la',
+    'les',
+    'avec',
+    'pour',
+    'd\'',
+    'de',
+    'des',
+    'à',
+    'au',
+    'aux',
+    'dans',
+    'type',
+  ],
 
   phoneticEncoder: new FrenchPhoneticEncoder(),
 

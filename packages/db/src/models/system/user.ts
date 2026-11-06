@@ -45,26 +45,81 @@ import UserSurveyAlias from './user-survey-alias';
 import UserSurveySession from './user-survey-session';
 
 @Scopes(() => ({
-  aliases: { include: [{ model: UserSurveyAlias, separate: true }] },
-  clientErrors: { include: [{ model: ClientErrorReport, separate: true }] },
-  customFields: { include: [{ model: UserCustomField, separate: true }] },
-  jobs: { include: [{ model: Job }] },
-  password: { include: [{ model: UserPassword }] },
-  passwordResets: { include: [{ model: UserPasswordReset }] },
-  permissions: { include: [{ model: Permission, through: { attributes: [] } }] },
-  roles: { include: [{ model: Role, through: { attributes: [] } }] },
+  aliases: {
+    include: [
+      { model: UserSurveyAlias, separate: true },
+    ],
+  },
+  clientErrors: {
+    include: [
+      { model: ClientErrorReport, separate: true },
+    ],
+  },
+  customFields: {
+    include: [
+      { model: UserCustomField, separate: true },
+    ],
+  },
+  jobs: {
+    include: [
+      { model: Job },
+    ],
+  },
+  password: {
+    include: [
+      { model: UserPassword },
+    ],
+  },
+  passwordResets: {
+    include: [
+      { model: UserPasswordReset },
+    ],
+  },
+  permissions: {
+    include: [
+      {
+        model: Permission,
+        through: { attributes: [] },
+      },
+    ],
+  },
+  roles: {
+    include: [
+      {
+        model: Role,
+        through: { attributes: [] },
+      },
+    ],
+  },
   rolesPerms: {
     include: [
       {
         model: Role,
         through: { attributes: [] },
-        include: [{ model: Permission, through: { attributes: [] } }],
+        include: [
+          {
+            model: Permission,
+            through: { attributes: [] },
+          },
+        ],
       },
     ],
   },
-  signInLog: { include: [{ model: SignInLog }] },
-  submissions: { include: [{ model: SurveySubmission }] },
-  tokens: { include: [{ model: RefreshToken }] },
+  signInLog: {
+    include: [
+      { model: SignInLog },
+    ],
+  },
+  submissions: {
+    include: [
+      { model: SurveySubmission },
+    ],
+  },
+  tokens: {
+    include: [
+      { model: RefreshToken },
+    ],
+  },
 }))
 @Table({
   modelName: 'User',

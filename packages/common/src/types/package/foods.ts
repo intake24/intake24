@@ -120,7 +120,9 @@ export const pkgV2MilkOnCerealPsm = pkgV2PortionSizeMethodBase.extend({
 
 export const pkgV2MilkInHotDrinkPsm = pkgV2PortionSizeMethodBase.extend({
   method: z.literal('milk-in-a-hot-drink'),
-  options: localeOptionList({ valueSchema: z.coerce.number() }),
+  options: localeOptionList({
+    valueSchema: z.coerce.number(),
+  }),
 });
 
 export const pkgV2ParentFoodPortionPsm = pkgV2PortionSizeMethodBase.extend({

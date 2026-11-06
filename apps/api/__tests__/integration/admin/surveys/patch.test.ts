@@ -72,7 +72,9 @@ export default () => {
         session: 'not-a-session-settings',
         maximumDailySubmissions: 'NaN',
         minimumSubmissionInterval: { nan: 5 },
-        notifications: [{ type: 'invalid' }],
+        notifications: [
+          { type: 'invalid' },
+        ],
         authCaptcha: 'yes',
         authModes: ['invalidMode'],
         authUrlTokenCharset: ['an array charset'],
@@ -176,7 +178,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set (except guarded fields)', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['edit'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['edit'],
+      });
 
       const updateInput2 = refreshSurveyRecord();
       const guarded = pick(survey, guardedSurveyFields);
@@ -184,7 +189,10 @@ export default () => {
       await suite.sharedTests.assertRecordUpdated(
         'patch',
         url,
-        { ...updateInput2, ...guarded },
+        {
+          ...updateInput2,
+          ...guarded,
+        },
         { input: updateInput2 },
       );
     });
@@ -199,7 +207,10 @@ export default () => {
       await suite.sharedTests.assertRecordUpdated(
         'patch',
         url,
-        { ...updateInput3, ...guarded },
+        {
+          ...updateInput3,
+          ...guarded,
+        },
         { input: updateInput3 },
       );
     });

@@ -61,7 +61,9 @@ export default () => {
             ],
           },
         ],
-        henryCoefficients: [{ weightCoefficient: 28.2, heightCoefficient: 859 }],
+        henryCoefficients: [
+          { weightCoefficient: 28.2, heightCoefficient: 859 },
+        ],
       };
 
       const fields = [
@@ -106,7 +108,10 @@ export default () => {
 
     it('should return 400 for duplicate name', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
-        input: { ...mocker.system.feedbackScheme(), name: input.name },
+        input: {
+          ...mocker.system.feedbackScheme(),
+          name: input.name,
+        },
       });
     });
   });

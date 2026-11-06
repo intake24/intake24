@@ -17,8 +17,16 @@ import AsServedImage from './as-served-image';
 import ProcessedImage from './processed-image';
 
 @Scopes(() => ({
-  selectionImage: { include: [{ model: ProcessedImage }] },
-  asServedImages: { include: [{ model: AsServedImage }] },
+  selectionImage: {
+    include: [
+      { model: ProcessedImage },
+    ],
+  },
+  asServedImages: {
+    include: [
+      { model: AsServedImage },
+    ],
+  },
 }))
 @Table({
   modelName: 'AsServedSet',
@@ -60,7 +68,9 @@ export default class AsServedSet extends BaseModel<
 
   set label(value: CreationOptional<LocaleTranslation>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('label', value && Object.keys(value).length ? value : null);
+    this.setDataValue('label', value && Object.keys(value).length
+      ? value
+      : null);
   }
 
   @BelongsTo(() => ProcessedImage, 'selectionImageId')

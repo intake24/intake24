@@ -72,7 +72,9 @@ export default () => {
             multiFactorAuthentication: 10,
             emailNotifications: 'string',
             smsNotifications: [100],
-            customFields: [{ name: 'fieldName', missingValueKey: false }],
+            customFields: [
+              { name: 'fieldName', missingValueKey: false },
+            ],
             permissions: [1, 'invalidId', 2],
             roles: [1, 'invalidId', 2],
             disabledAt: 'invalidDate',

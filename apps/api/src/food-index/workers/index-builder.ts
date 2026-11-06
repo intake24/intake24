@@ -50,7 +50,10 @@ function parseSynonymSet(value: string): Set<string> {
 }
 
 async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
-  const synSets = await SynonymSet.findAll({ attributes: ['synonyms'], where: { localeId } });
+  const synSets = await SynonymSet.findAll({
+    attributes: ['synonyms'],
+    where: { localeId },
+  });
   return synSets.map(s => parseSynonymSet(s.synonyms));
 }
 
@@ -58,7 +61,12 @@ async function getFoodBuildersSynonymSets(localeId: string): Promise<Set<string>
   const foodBuilders = await FoodBuilder.findAll({
     attributes: ['triggerWord'],
     where: { localeId },
-    include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
+    include: [
+      {
+        association: 'synonymSet',
+        attributes: ['synonyms'],
+      },
+    ],
   });
   return foodBuilders.map(entry => parseSynonymSet(`${entry.triggerWord} ${entry.synonymSet?.synonyms ?? ''}`));
 }
@@ -151,7 +159,9 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
 }
 
 function toError(error: unknown): Error {
-  return error instanceof Error ? error : new Error(String(error));
+  return error instanceof Error
+    ? error
+    : new Error(String(error));
 }
 
 async function buildIndexesForLocales(locales: Iterable<string>): Promise<LocaleBuildResult[]> {
@@ -164,7 +174,11 @@ async function buildIndexesForLocales(locales: Iterable<string>): Promise<Locale
       results.push({ localeId, success: true });
     }
     catch (error) {
-      results.push({ localeId, success: false, error: toError(error) });
+      results.push({
+        localeId,
+        success: false,
+        error: toError(error),
+      });
     }
   }
 
@@ -216,10 +230,15 @@ async function matchFoodBuilders(
 
   const foodBuilderHeadersFiltered: FoodHeader[] = foodBuilderHeaders.reduce((acc, current) => {
     const temp = acc.find(item => item.code === current.code);
-    if (!temp)
-      return [...acc, ...[current]];
-    else
+    if (!temp) {
+      return [
+        ...acc,
+        ...[current],
+      ];
+    }
+    else {
       return acc;
+    }
   }, [] as FoodHeader[]);
   return foodBuilderHeadersFiltered;
 }
@@ -399,7 +418,9 @@ parentPort.on('message', async (msg: WorkerRequest) => {
           id: msg.id,
           success: false,
           // A missing index means the locale is unknown or no longer enabled, which the API reports as 404.
-          errorType: error instanceof NotFoundError ? 'locale-not-indexed' : 'internal',
+          errorType: error instanceof NotFoundError
+            ? 'locale-not-indexed'
+            : 'internal',
           error: toError(error),
         });
       }

@@ -101,10 +101,14 @@ export default defineComponent({
 
   setup(props) {
     const dialog = ref(false);
-    const internalOwner = ref(props.owner ? { ...props.owner } : undefined);
+    const internalOwner = ref(props.owner
+      ? { ...props.owner }
+      : undefined);
     const isLoading = ref(false);
 
-    const { data, errors, post } = useForm<OwnerDialogForm>({ data: { userId: null } });
+    const { data, errors, post } = useForm<OwnerDialogForm>({
+      data: { userId: null },
+    });
 
     function reset() {
       dialog.value = false;

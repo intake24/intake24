@@ -13,21 +13,38 @@ import { FoodsLocale } from '@intake24/db';
 export type ValidationMiddleware = RequestHandler | ValidationChain;
 
 export function requireCsvUploadPath(file: unknown): string {
-  if (!file)
-    throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
+  if (!file) {
+    throw ValidationError.from({
+      path: 'params.file',
+      i18n: { type: 'file._' },
+    });
+  }
 
   const result = multerFile.safeParse(file);
-  if (!result.success)
-    throw ValidationError.from({ path: 'params.file', i18n: { type: 'file._' } });
+  if (!result.success) {
+    throw ValidationError.from({
+      path: 'params.file',
+      i18n: { type: 'file._' },
+    });
+  }
 
-  if (path.extname(result.data.originalname).toLowerCase() !== '.csv')
-    throw ValidationError.from({ path: 'params.file', i18n: { type: 'file.ext', params: { ext: 'CSV (comma-delimited)' } } });
+  if (path.extname(result.data.originalname).toLowerCase() !== '.csv') {
+    throw ValidationError.from({
+      path: 'params.file',
+      i18n: {
+        type: 'file.ext',
+        params: { ext: 'CSV (comma-delimited)' },
+      },
+    });
+  }
 
   return result.data.path;
 }
 
 export function validate(rules: ValidationMiddleware | ValidationMiddleware[]): ValidationMiddleware[] {
-  const items = Array.isArray(rules) ? rules : [rules];
+  const items = Array.isArray(rules)
+    ? rules
+    : [rules];
 
   items.push(validation);
   return items;
@@ -78,7 +95,10 @@ export function customTypeErrorMessage(type: string, { path, req }: Meta, params
 }
 
 export const localeIdValidator: CustomValidator = async (localeId: string, meta: Meta) => {
-  const row = await FoodsLocale.findOne({ attributes: ['id'], where: { id: localeId } });
+  const row = await FoodsLocale.findOne({
+    attributes: ['id'],
+    where: { id: localeId },
+  });
   if (!row)
     return Promise.reject(typeErrorMessage('locale._')(localeId, meta));
 };

@@ -75,7 +75,9 @@ export default class UserPhysicalData extends BaseModel<
     }
 
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('birthdate', typeof value === 'number' ? value.toString() : value);
+    this.setDataValue('birthdate', typeof value === 'number'
+      ? value.toString()
+      : value);
   }
 
   @Column({

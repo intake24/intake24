@@ -56,7 +56,13 @@ export default () => {
         'put',
         url,
         ['displayName', 'description', 'permissions.1'],
-        { input: { displayName: '', description: [], permissions: [1, 'invalidId', 2] } },
+        {
+          input: {
+            displayName: '',
+            description: [],
+            permissions: [1, 'invalidId', 2],
+          },
+        },
       );
     });
 

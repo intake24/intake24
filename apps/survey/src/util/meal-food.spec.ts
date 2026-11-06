@@ -16,7 +16,12 @@ describe('getFoodByIndex', () => {
               id: 'linkedFood2',
               linkedFoods: [
                 { id: 'nestedLinkedFood1', linkedFoods: [] },
-                { id: 'nestedLinkedFood2', linkedFoods: [{ id: 'deepLinkedFood', linkedFoods: [] }] },
+                {
+                  id: 'nestedLinkedFood2',
+                  linkedFoods: [
+                    { id: 'deepLinkedFood', linkedFoods: [] },
+                  ],
+                },
               ],
             },
           ],
@@ -52,7 +57,12 @@ describe('getFoodByIndex', () => {
         foodIndex: 1,
         linkedFoodIndex: [1, 1],
       }),
-    ).toEqual({ id: 'nestedLinkedFood2', linkedFoods: [{ id: 'deepLinkedFood', linkedFoods: [] }] });
+    ).toEqual({
+      id: 'nestedLinkedFood2',
+      linkedFoods: [
+        { id: 'deepLinkedFood', linkedFoods: [] },
+      ],
+    });
   });
 
   it('returns deep nested linked food for full linked path', () => {
@@ -79,7 +89,12 @@ describe('getFoodIndexInMeal', () => {
             id: 'linkedFood2',
             linkedFoods: [
               { id: 'nestedLinkedFood1', linkedFoods: [] },
-              { id: 'nestedLinkedFood2', linkedFoods: [{ id: 'deepLinkedFood', linkedFoods: [] }] },
+              {
+                id: 'nestedLinkedFood2',
+                linkedFoods: [
+                  { id: 'deepLinkedFood', linkedFoods: [] },
+                ],
+              },
             ],
           },
         ],

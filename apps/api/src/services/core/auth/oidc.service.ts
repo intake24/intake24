@@ -99,14 +99,21 @@ function oidcService({
 
       const { email, email_verified, name } = claims;
 
-      let user = await User.findOne({ attributes: ['id', 'verifiedAt'], where: { email: email.toString() } });
+      let user = await User.findOne({
+        attributes: ['id', 'verifiedAt'],
+        where: {
+          email: email.toString(),
+        },
+      });
       if (!user && aclConfig.signup.enabled) {
         user = await adminSignupService.signUp(
           {
             name: name?.toString(),
             email: email.toString(),
             password: undefined,
-            verifiedAt: email_verified === true ? new Date() : null,
+            verifiedAt: email_verified === true
+              ? new Date()
+              : null,
           },
           { notify: email_verified !== true, userAgent },
         );
@@ -115,8 +122,11 @@ function oidcService({
       if (!user)
         throw new Error('User not found');
 
-      if (!user.verifiedAt && email_verified === true)
-        await user.update({ verifiedAt: new Date() });
+      if (!user.verifiedAt && email_verified === true) {
+        await user.update({
+          verifiedAt: new Date(),
+        });
+      }
 
       const [tokens] = await Promise.all([
         jwtService.issueTokens(
@@ -124,10 +134,14 @@ function oidcService({
             userId: user.id,
             verified: email_verified === true,
             aal: 'aal2',
-            amr: [createAmrMethod('oidc')],
+            amr: [
+              createAmrMethod('oidc'),
+            ],
           },
           'admin',
-          { subject: btoa({ provider: 'oidc', providerKey: email }) },
+          {
+            subject: btoa({ provider: 'oidc', providerKey: email }),
+          },
         ),
         signInService.log({ ...signInAttempt, successful: true }),
       ]);

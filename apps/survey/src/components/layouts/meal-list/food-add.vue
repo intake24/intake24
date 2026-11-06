@@ -178,7 +178,10 @@ const foodInput = ref('');
 const panel = ref<number | undefined>();
 
 const mealStepComplete = computed(() => !!(form.value === null || form.value.isValid) && !!meal.value);
-const foods = computed(() => [...foodItems.value, foodInput.value.trim()].filter(Boolean));
+const foods = computed(() => [
+  ...foodItems.value,
+  foodInput.value.trim(),
+].filter(Boolean));
 const foodStepComplete = computed(() => !!foods.value.length);
 
 const isComplete = computed(() => mealStepComplete.value && foodStepComplete.value);
@@ -195,9 +198,16 @@ function confirm() {
   if (!isComplete.value)
     return;
 
-  const id = typeof meal.value === 'string' ? undefined : meal.value!.id;
+  const id = typeof meal.value === 'string'
+    ? undefined
+    : meal.value!.id;
   const foodCreationState: FoodCreationState = {
-    name: typeof meal.value === 'string' ? { en: meal.value.trim(), [locale.value]: meal.value.trim() } : meal.value!.name,
+    name: typeof meal.value === 'string'
+      ? {
+          en: meal.value.trim(),
+          [locale.value]: meal.value.trim(),
+        }
+      : meal.value!.name,
     time: toTime(time.value),
     foods: foods.value,
   };

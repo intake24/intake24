@@ -39,7 +39,9 @@ export type MailConfig = z.infer<typeof mailConfigSchema>;
 
 const user = process.env.MAIL_USERNAME || null;
 const pass = process.env.MAIL_PASSWORD || null;
-const auth = user && pass ? { user, pass } : undefined;
+const auth = user && pass
+  ? { user, pass }
+  : undefined;
 
 const rawMailConfig = {
   mailer: process.env.MAIL_MAILER,

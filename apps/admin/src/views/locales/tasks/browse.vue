@@ -36,7 +36,11 @@ export default defineComponent({
     useEntryFetch(props);
 
     const defaultParams = computed<Pick<JobParams, LocaleJob>>(() => ({
-      LocaleCopy: { localeId: props.id, sourceLocaleId: '', subTasks: [...localeCopySubTasks] },
+      LocaleCopy: {
+        localeId: props.id,
+        sourceLocaleId: '',
+        subTasks: [...localeCopySubTasks],
+      },
       LocaleCategories: { localeId: props.id },
       LocaleFoods: { localeId: props.id },
       LocaleDeduplicateFoods: { localeId: props.id, primaryCodes: [], dryRun: false },

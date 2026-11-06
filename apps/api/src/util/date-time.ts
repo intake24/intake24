@@ -11,7 +11,9 @@ import ms from 'ms';
  * @returns {Date}
  */
 export function addTime(offset: StringValue | number, since: Date = new Date()): Date {
-  return new Date(since.getTime() + (typeof offset === 'string' ? ms(offset) : offset));
+  return new Date(since.getTime() + (typeof offset === 'string'
+    ? ms(offset)
+    : offset));
 }
 
 /**
@@ -22,7 +24,9 @@ export function addTime(offset: StringValue | number, since: Date = new Date()):
  * @returns {Date}
  */
 export function subtractTime(offset: StringValue | number, since: Date = new Date()): Date {
-  return new Date(since.getTime() - (typeof offset === 'string' ? ms(offset) : offset));
+  return new Date(since.getTime() - (typeof offset === 'string'
+    ? ms(offset)
+    : offset));
 }
 
 /**

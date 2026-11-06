@@ -96,7 +96,15 @@ export default defineComponent({
       },
     });
 
-    return { entry, entryLoaded, clearError, data, errors, routeLeave, submit };
+    return {
+      entry,
+      entryLoaded,
+      clearError,
+      data,
+      errors,
+      routeLeave,
+      submit,
+    };
   },
 });
 </script>

@@ -14,7 +14,9 @@ export const imageFile: ParamSchema = {
 
       if (file.mimetype.toLowerCase() in allowedImageTypes) {
         throw new Error(
-          customTypeErrorMessage('file.mime', meta, { mime: allowedImageTypes.join(', ') }),
+          customTypeErrorMessage('file.mime', meta, {
+            mime: allowedImageTypes.join(', '),
+          }),
         );
       }
     },

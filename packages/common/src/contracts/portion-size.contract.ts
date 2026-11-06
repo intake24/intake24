@@ -9,7 +9,10 @@ import {
   weightResponse,
 } from '../types/http';
 
-const id = z.union([z.string().nonempty(), z.string().array().nonempty()]);
+const id = z.union([
+  z.string().nonempty(),
+  z.string().array().nonempty(),
+]);
 
 export const portionSize = initContract().router({
   asServedSets: {

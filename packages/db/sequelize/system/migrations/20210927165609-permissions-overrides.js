@@ -3,7 +3,9 @@ import { createPermissions } from '../../utils.js';
 export default {
   up: async queryInterface =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      const permissions = [{ name: 'surveys-overrides', display_name: 'Survey scheme overrides' }];
+      const permissions = [
+        { name: 'surveys-overrides', display_name: 'Survey scheme overrides' },
+      ];
       await createPermissions(permissions, { queryInterface, transaction });
     }),
 

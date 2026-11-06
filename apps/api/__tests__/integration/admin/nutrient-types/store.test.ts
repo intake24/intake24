@@ -31,7 +31,12 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['id', 'description', 'unitId', 'kcalPerUnit'],
+        [
+          'id',
+          'description',
+          'unitId',
+          'kcalPerUnit',
+        ],
         {
           input: {
             id: 'not-a-number',

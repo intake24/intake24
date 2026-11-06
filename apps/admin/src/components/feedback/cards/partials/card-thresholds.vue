@@ -69,8 +69,12 @@ export default defineComponent({
     const { high, low } = this.thresholds;
 
     return {
-      high: high ? { ...high } : null,
-      low: low ? { ...low } : null,
+      high: high
+        ? { ...high }
+        : null,
+      low: low
+        ? { ...low }
+        : null,
     };
   },
 
@@ -80,8 +84,12 @@ export default defineComponent({
       if (deepEqual(val, { high, low }))
         return;
 
-      this.high = val.high === null ? null : { ...val.high };
-      this.low = val.low === null ? null : { ...val.low };
+      this.high = val.high === null
+        ? null
+        : { ...val.high };
+      this.low = val.low === null
+        ? null
+        : { ...val.low };
     },
     high() {
       this.$emit('update:high', this.high);
@@ -93,7 +101,12 @@ export default defineComponent({
 
   methods: {
     toggleThreshold(key: 'high' | 'low', value: boolean) {
-      this[key] = value ? { threshold: 0, message: { en: '' } } : null;
+      this[key] = value
+        ? {
+            threshold: 0,
+            message: { en: '' },
+          }
+        : null;
     },
   },
 });

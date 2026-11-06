@@ -18,7 +18,9 @@ export default {
 
       const env = process.env.NODE_ENV;
       const { url, ...config } = systemDbConfig[env];
-      const system = url ? new Sequelize(url, systemDbConfig[env]) : new Sequelize(config);
+      const system = url
+        ? new Sequelize(url, systemDbConfig[env])
+        : new Sequelize(config);
 
       const locales = await system.query(
         `SELECT l.code FROM locales l JOIN surveys s ON l.id = s.locale_id WHERE s.state = 'active';`,

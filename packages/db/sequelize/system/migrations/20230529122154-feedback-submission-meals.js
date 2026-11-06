@@ -1,9 +1,14 @@
 import { createPermissions } from '../../utils.js';
 
-const defaultMeals = { chart: { colors: [], nutrients: [] }, table: { fields: [] } };
+const defaultMeals = {
+  chart: { colors: [], nutrients: [] },
+  table: { fields: [] },
+};
 const defaultSections = ['cards', 'topFoods'];
 
-const permissions = [{ name: 'feedback-schemes|meals', display_name: 'Feedback scheme meals' }];
+const permissions = [
+  { name: 'feedback-schemes|meals', display_name: 'Feedback scheme meals' },
+];
 
 export default {
   up: (queryInterface, Sequelize) =>

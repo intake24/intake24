@@ -76,7 +76,13 @@ export default defineComponent({
       await table.value?.fetch();
     };
 
-    return { headers, entry, entryLoaded, table, updateTable };
+    return {
+      headers,
+      entry,
+      entryLoaded,
+      table,
+      updateTable,
+    };
   },
 
 });

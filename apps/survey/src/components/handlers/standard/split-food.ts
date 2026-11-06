@@ -1,6 +1,10 @@
 export function getSplitSuggestions(description: string, splitWords: string[]): { suggestions: string[]; force: boolean } {
-  if (!splitWords.length)
-    return { suggestions: [description], force: false };
+  if (!splitWords.length) {
+    return {
+      suggestions: [description],
+      force: false,
+    };
+  }
 
   const suggestionTokens: string[] = [];
   const forceTokens: string[] = [];

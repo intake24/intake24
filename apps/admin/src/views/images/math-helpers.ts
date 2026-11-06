@@ -4,7 +4,9 @@ function distanceToSegment(p: [number, number], s0: [number, number], s1: [numbe
 
   const dot = v0[0] * v1[0] + v0[1] * v1[1];
   const mag = v1[0] * v1[0] + v1[1] * v1[1];
-  const proj = mag === 0 ? -1 : dot / mag;
+  const proj = mag === 0
+    ? -1
+    : dot / mag;
 
   let x, y;
 
@@ -59,7 +61,9 @@ function closestSegmentIndex(vertices: [number, number][], p: [number, number]):
 
   for (let i = 1; i < vertices.length; ++i) {
     const s0 = vertices[i];
-    const i2 = i === vertices.length - 1 ? 0 : i + 1;
+    const i2 = i === vertices.length - 1
+      ? 0
+      : i + 1;
     const s1 = vertices[i2];
 
     const d = distanceToSegment(p, s0, s1);

@@ -112,12 +112,19 @@ export default defineComponent({
       const templates = copy(entry.refs.templates);
       templates.push(prompt);
 
-      entry.setRefs({ ...copy(entry.refs), templates });
+      entry.setRefs({
+        ...copy(entry.refs),
+        templates,
+      });
 
       close();
 
-      if (redirect.value)
-        await router.push({ name: 'survey-scheme-prompts-read', params: { id } });
+      if (redirect.value) {
+        await router.push({
+          name: 'survey-scheme-prompts-read',
+          params: { id },
+        });
+      }
     };
 
     return {

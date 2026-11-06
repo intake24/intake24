@@ -50,5 +50,11 @@ export function useMealItem(props: UseMealItemProps, { emit }: Pick<SetupContext
     emit('action', type, id);
   };
 
-  return { action, isSelected, menu, mealName, mealTime };
+  return {
+    action,
+    isSelected,
+    menu,
+    mealName,
+    mealTime,
+  };
 }

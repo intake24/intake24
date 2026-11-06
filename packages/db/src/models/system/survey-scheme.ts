@@ -29,8 +29,17 @@ import User from './user';
 import UserSecurable from './user-securable';
 
 @Scopes(() => ({
-  list: { attributes: ['id', 'name'], order: [['name', 'ASC']] },
-  surveys: { include: [{ model: Survey }] },
+  list: {
+    attributes: ['id', 'name'],
+    order: [
+      ['name', 'ASC'],
+    ],
+  },
+  surveys: {
+    include: [
+      { model: Survey },
+    ],
+  },
 }))
 @Table({
   modelName: 'SurveyScheme',
@@ -131,7 +140,12 @@ export default class SurveyScheme
 export type SurveySchemeAttributes = Attributes<SurveyScheme>;
 export type SurveySchemeCreationAttributes = CreationAttributes<SurveyScheme>;
 
-export const updateSurveySchemeFields = ['name', 'settings', 'meals', 'visibility'] as const;
+export const updateSurveySchemeFields = [
+  'name',
+  'settings',
+  'meals',
+  'visibility',
+] as const;
 
 export type UpdateSurveySchemeField = (typeof updateSurveySchemeFields)[number];
 

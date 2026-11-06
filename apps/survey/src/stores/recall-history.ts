@@ -422,14 +422,18 @@ export function handlePopState(event: PopStateEvent): HandlePopStateResult {
     log(`popstate: going BACK (${currentStateId} -> ${targetStateId})`);
     currentStateId = targetStateId;
     const entryType = goBack();
-    return entryType === 'none' ? null : { direction: 'back', entryType };
+    return entryType === 'none'
+      ? null
+      : { direction: 'back', entryType };
   }
 
   if (targetStateId > currentStateId) {
     log(`popstate: going FORWARD (${currentStateId} -> ${targetStateId})`);
     currentStateId = targetStateId;
     const entryType = goForward();
-    return entryType === 'none' ? null : { direction: 'forward', entryType };
+    return entryType === 'none'
+      ? null
+      : { direction: 'forward', entryType };
   }
 
   log(`popstate: same stateId (${targetStateId}), ignoring`);

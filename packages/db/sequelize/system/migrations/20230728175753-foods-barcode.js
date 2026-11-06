@@ -4,21 +4,30 @@ export default {
       await queryInterface.changeColumn(
         'survey_submission_foods',
         'brand',
-        { allowNull: true, type: Sequelize.STRING(128) },
+        {
+          allowNull: true,
+          type: Sequelize.STRING(128),
+        },
         { transaction },
       );
 
       await queryInterface.addColumn(
         'survey_submission_foods',
         'barcode',
-        { allowNull: true, type: Sequelize.STRING(128) },
+        {
+          allowNull: true,
+          type: Sequelize.STRING(128),
+        },
         { transaction },
       );
 
       await queryInterface.addColumn(
         'survey_submission_missing_foods',
         'barcode',
-        { allowNull: true, type: Sequelize.STRING(128) },
+        {
+          allowNull: true,
+          type: Sequelize.STRING(128),
+        },
         { transaction },
       );
     }),
@@ -33,7 +42,10 @@ export default {
       await queryInterface.changeColumn(
         'survey_submission_foods',
         'brand',
-        { allowNull: false, type: Sequelize.STRING(128) },
+        {
+          allowNull: false,
+          type: Sequelize.STRING(128),
+        },
         { transaction },
       );
 

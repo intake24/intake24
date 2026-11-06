@@ -59,7 +59,9 @@ export default {
           const { id, method } = record;
           const parameters = JSON.parse(record.parameters);
 
-          const newParameters = method === 'standard-portion' ? { units: [] } : {};
+          const newParameters = method === 'standard-portion'
+            ? { units: [] }
+            : {};
 
           const suCount = Object.keys(parameters).filter(item => item.endsWith('-name')).length;
           if (method === 'standard-portion' && suCount) {
@@ -79,7 +81,9 @@ export default {
               return;
 
             const key = camelCase(oldKey);
-            const value = oldKey === 'options' ? JSON.parse(oldValue) : parseValue(oldValue);
+            const value = oldKey === 'options'
+              ? JSON.parse(oldValue)
+              : parseValue(oldValue);
 
             newParameters[key] = value;
           });
@@ -88,7 +92,10 @@ export default {
             `UPDATE ${table} SET parameters = :parameters WHERE id = :id;`,
             {
               type: queryInterface.sequelize.QueryTypes.UPDATE,
-              replacements: { id, parameters: JSON.stringify(newParameters) },
+              replacements: {
+                id,
+                parameters: JSON.stringify(newParameters),
+              },
               transaction,
             },
           );

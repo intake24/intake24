@@ -48,11 +48,18 @@ export default () => {
         visibility: 'invalidVisibility',
         outputs: 'not an array of outputs',
         physicalDataFields: true,
-        sections: [{ id: 'invalidId' }],
+        sections: [
+          { id: 'invalidId' },
+        ],
         topFoods: {
           max: false,
           colors: 10,
-          nutrientTypes: [{ id: '49', name: { en: 'Fat' } }],
+          nutrientTypes: [
+            {
+              id: '49',
+              name: { en: 'Fat' },
+            },
+          ],
         },
         // cards: 'notAnArray',
         demographicGroups: [
@@ -62,7 +69,12 @@ export default () => {
             physicalActivityLevelId: null,
           },
         ],
-        henryCoefficients: [{ age: { start: 0, end: 3 }, constant: -371 }],
+        henryCoefficients: [
+          {
+            age: { start: 0, end: 3 },
+            constant: -371,
+          },
+        ],
       };
 
       const fields = [
@@ -106,7 +118,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['edit'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['edit'],
+      });
       const updateInput2 = mocker.system.feedbackScheme();
 
       await suite.sharedTests.assertRecordUpdated('patch', url, updateInput2);

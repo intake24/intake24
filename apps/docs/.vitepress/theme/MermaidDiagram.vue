@@ -26,7 +26,9 @@ async function renderDiagram() {
   }
   catch (err) {
     svg.value = '';
-    error.value = err instanceof Error ? err.message : String(err);
+    error.value = err instanceof Error
+      ? err.message
+      : String(err);
   }
 }
 

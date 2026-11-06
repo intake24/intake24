@@ -19,7 +19,10 @@ function noAlgorithmRanking(results: PhraseMatchResult<string>[]): FoodHeader[] 
 
 function mapValues<T1, T2>(obj: { [s: string]: T1 }, fn: (value: T1) => T2): { [s: string]: T2 } {
   const entries = Object.entries(obj);
-  return Object.fromEntries(entries.map(entry => [entry[0], fn(entry[1])]));
+  return Object.fromEntries(entries.map(entry => [
+    entry[0],
+    fn(entry[1]),
+  ]));
 }
 
 function normaliseRankingData(ranking: RankingData): RankingData {
@@ -64,7 +67,12 @@ function normaliseMatchCost(results: PhraseMatchResult<string>[]): PhraseMatchRe
 
   // Convert match cost to score, i.e. higher is better
   if (Math.abs(range) < 1e-6) {
-    return results.map(r => ({ id: r.id, key: r.key, phrase: r.phrase, quality: 1 }));
+    return results.map(r => ({
+      id: r.id,
+      key: r.key,
+      phrase: r.phrase,
+      quality: 1,
+    }));
   }
   else {
     return results.map(r => ({
@@ -140,10 +148,16 @@ export async function rankFoodResults(
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
   if (rankingData !== null) {
-    return [...foodBuilderHeaders, ...applyRankingData(rankingData, results, matchScoreWeight, logger)];
+    return [
+      ...foodBuilderHeaders,
+      ...applyRankingData(rankingData, results, matchScoreWeight, logger),
+    ];
   }
   else {
-    return [...foodBuilderHeaders, ...noAlgorithmRanking(results)];
+    return [
+      ...foodBuilderHeaders,
+      ...noAlgorithmRanking(results),
+    ];
   }
 }
 

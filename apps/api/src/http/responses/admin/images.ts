@@ -127,7 +127,13 @@ export function imageResponseCollection(baseUrl: string) {
     objects.map((object) => {
       const { id, description, label, outlineCoordinates, navigationIndex } = object;
 
-      return { id, description, label, outlineCoordinates, navigationIndex };
+      return {
+        id,
+        description,
+        label,
+        outlineCoordinates,
+        navigationIndex,
+      };
     });
 
   /**
@@ -145,7 +151,14 @@ export function imageResponseCollection(baseUrl: string) {
       const { id, description, outlineCoordinates, navigationIndex } = object;
       const { label, weight } = guideObjects[id];
 
-      return { id, description, outlineCoordinates, label, weight, navigationIndex };
+      return {
+        id,
+        description,
+        outlineCoordinates,
+        label,
+        weight,
+        navigationIndex,
+      };
     });
 
   /**

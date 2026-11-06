@@ -24,7 +24,9 @@ const hCaptcha: CaptchaCallback = async (secret: string, response: string) => {
     const { data: { success } = {} } = await axios.post<CaptchaResponse>(
       'https://hcaptcha.com/siteverify',
       new URLSearchParams({ secret, response }),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      },
     );
     if (!success)
       throw new Error('Invalid hCaptcha challenge.');
@@ -39,7 +41,9 @@ const reCaptcha: CaptchaCallback = async (secret: string, response: string) => {
     const { data: { success } = {} } = await axios.post<CaptchaResponse>(
       'https://www.google.com/recaptcha/api/siteverify',
       new URLSearchParams({ secret, response }),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      },
     );
     if (!success)
       throw new Error('Invalid reCAPTCHA challenge.');
@@ -72,7 +76,9 @@ export async function captchaCheck(token: string | undefined, options: CaptchaCo
     await captcha(token, options);
   }
   catch (err) {
-    throw new ValidationError(err instanceof Error ? err.message : 'Invalid reCAPTCHA', {
+    throw new ValidationError(err instanceof Error
+      ? err.message
+      : 'Invalid reCAPTCHA', {
       path: 'captcha',
     });
   }

@@ -199,7 +199,9 @@ const filteredFields = ref<ExportField[]>([]);
 const visibleFields = ref<ExportField[]>([]);
 const fetchedRefFields = ref<ExportField[]>([]);
 
-const currentFields = computed(() => props.section?.id === 'foodNutrients' ? fetchedRefFields.value : props.refFields);
+const currentFields = computed(() => props.section?.id === 'foodNutrients'
+  ? fetchedRefFields.value
+  : props.refFields);
 
 const availableFields = computed(() => {
   const fieldIds = fields.value.map(field => field.id);
@@ -253,7 +255,11 @@ function addCustom() {
 };
 
 function edit(index: number, field: ExportField) {
-  editDialog.value = { ...newEditDialog(true, isCustomField(field.id)), index, field: { ...field } };
+  editDialog.value = {
+    ...newEditDialog(true, isCustomField(field.id)),
+    index,
+    field: { ...field },
+  };
 };
 
 function editConfirm() {

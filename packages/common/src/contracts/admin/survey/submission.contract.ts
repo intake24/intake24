@@ -28,7 +28,10 @@ export const submission = contract.router({
   read: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/submissions/:submissionId',
-    pathParams: z.object({ surveyId, submissionId: z.uuid() }),
+    pathParams: z.object({
+      surveyId,
+      submissionId: z.uuid(),
+    }),
     responses: {
       200: surveySubmissionAttributes,
     },
@@ -38,7 +41,10 @@ export const submission = contract.router({
   destroy: {
     method: 'DELETE',
     path: '/admin/surveys/:surveyId/submissions/:submissionId',
-    pathParams: z.object({ surveyId, submissionId: z.uuid() }),
+    pathParams: z.object({
+      surveyId,
+      submissionId: z.uuid(),
+    }),
     body: null,
     responses: {
       204: contract.noBody(),

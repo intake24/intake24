@@ -41,9 +41,22 @@ export default defineComponent({
     const actions = ['read', 'edit'].filter(action => user.can(`users|${action}`));
 
     const headers: DataTableHeader[] = [
-      { title: i18n.t('users.name'), sortable: true, key: 'name' },
-      { title: i18n.t('common.email'), sortable: true, key: 'email' },
-      { title: i18n.t('common.action._'), sortable: false, key: 'action', align: 'end' },
+      {
+        title: i18n.t('users.name'),
+        sortable: true,
+        key: 'name',
+      },
+      {
+        title: i18n.t('common.email'),
+        sortable: true,
+        key: 'email',
+      },
+      {
+        title: i18n.t('common.action._'),
+        sortable: false,
+        key: 'action',
+        align: 'end',
+      },
     ];
 
     const { entry, entryLoaded } = useEntry<RoleEntry>(props);

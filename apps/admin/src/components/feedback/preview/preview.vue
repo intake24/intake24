@@ -67,7 +67,12 @@ import * as previewData from './preview-data';
 export default defineComponent({
   name: 'FeedbackPreview',
 
-  components: { FeedbackCards, FeedbackCustomSection, FeedbackMeals, FeedbackTopFoods },
+  components: {
+    FeedbackCards,
+    FeedbackCustomSection,
+    FeedbackMeals,
+    FeedbackTopFoods,
+  },
 
   props: {
     feedbackScheme: {

@@ -6,6 +6,8 @@ import { lookup as mimeLookup } from 'mime-types';
 export async function fileFromPathWithType(filePath: string): Promise<File> {
   const mimeType = mimeLookup(filePath);
   return fileFromPath(filePath, {
-    type: mimeType === false ? undefined : mimeType,
+    type: mimeType === false
+      ? undefined
+      : mimeType,
   });
 }

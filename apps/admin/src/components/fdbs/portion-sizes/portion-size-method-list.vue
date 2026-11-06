@@ -77,7 +77,12 @@ import PortionSizeMethodSelector from './portion-size-method-selector.vue';
 export default defineComponent({
   name: 'PortionSizeMethodList',
 
-  components: { ConfirmDialog, ListItemError, PortionSizeMethodSelector, VueDraggable },
+  components: {
+    ConfirmDialog,
+    ListItemError,
+    PortionSizeMethodSelector,
+    VueDraggable,
+  },
 
   props: {
     errors: {

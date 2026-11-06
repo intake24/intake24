@@ -75,7 +75,10 @@ export default () => {
       .set('Authorization', suite.bearer.superuser)
       .send(input);
 
-    output = { ...body, ...updateInput };
+    output = {
+      ...body,
+      ...updateInput,
+    };
   });
 
   it('missing authentication / authorization', async () => {

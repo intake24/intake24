@@ -37,7 +37,9 @@ export default class SelectionManager {
 
   private selectMealIfPromptsAvailable(mealId: string): Selection | undefined {
     const selection = makeMealSelection(mealId);
-    return this.mealPromptsAvailable(mealId, selection) ? selection : undefined;
+    return this.mealPromptsAvailable(mealId, selection)
+      ? selection
+      : undefined;
   }
 
   private foodPromptsAvailable(foodId: string, forSelection: Selection): boolean {
@@ -46,7 +48,9 @@ export default class SelectionManager {
 
   private selectFoodIfPromptsAvailable(foodId: string): Selection | undefined {
     const selection = makeFoodSelection(foodId);
-    return this.foodPromptsAvailable(foodId, selection) ? selection : undefined;
+    return this.foodPromptsAvailable(foodId, selection)
+      ? selection
+      : undefined;
   }
 
   private selectNestedLinkedFood(foods: FoodState[]): Selection | undefined {

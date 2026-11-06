@@ -88,9 +88,18 @@ const items = ref<FoodSearchItem[]>([]);
 
 const headers: DataTableHeader[] = [
   { title: '', key: 'resource', sortable: false },
-  { title: i18n.t('fdbs.foods.code'), key: 'code' },
-  { title: i18n.t('fdbs.foods.englishName'), key: 'englishName' },
-  { title: i18n.t('fdbs.foods.name'), key: 'name' },
+  {
+    title: i18n.t('fdbs.foods.code'),
+    key: 'code',
+  },
+  {
+    title: i18n.t('fdbs.foods.englishName'),
+    key: 'englishName',
+  },
+  {
+    title: i18n.t('fdbs.foods.name'),
+    key: 'name',
+  },
 ];
 
 async function clear() {
@@ -129,7 +138,10 @@ async function fetchItems() {
   loading.value = true;
 
   try {
-    const [categories, foods] = await Promise.all([fetchCategories(), fetchFoods()]);
+    const [categories, foods] = await Promise.all([
+      fetchCategories(),
+      fetchFoods(),
+    ]);
 
     // @ts-expect-error volar issue ?
     items.value = [

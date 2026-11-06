@@ -6,7 +6,9 @@ import { checkImportLocalePermissions } from '@intake24/api/jobs/io/permission-c
 import { SystemLocale } from '@intake24/db';
 
 vi.mock('@intake24/db', () => ({
-  SystemLocale: { findAll: vi.fn() },
+  SystemLocale: {
+    findAll: vi.fn(),
+  },
 }));
 
 describe('import locale validation', () => {
@@ -23,18 +25,28 @@ describe('import locale validation', () => {
 
   it.each([
     ['missing or deselected locales file', []],
-    ['locale definition for a different locale', ['other']],
+    [
+      'locale definition for a different locale',
+      ['other'],
+    ],
   ])('rejects a nonexistent target with %s even with create permission', async (_description, definitions) => {
     await expect(checkImportLocalePermissions(acl, 'user', new Set(['missing']), new Set(definitions)))
       .rejects
       .toMatchObject({
-        details: [{ key: 'io.importJob.missingLocale', params: { locale: 'missing' } }],
+        details: [
+          {
+            key: 'io.importJob.missingLocale',
+            params: { locale: 'missing' },
+          },
+        ],
       });
     expect(hasPermission).not.toHaveBeenCalled();
   });
 
   it('allows an existing locale without a package definition', async () => {
-    vi.mocked(SystemLocale.findAll).mockResolvedValue([{ code: 'existing' }] as SystemLocale[]);
+    vi.mocked(SystemLocale.findAll).mockResolvedValue([
+      { code: 'existing' },
+    ] as SystemLocale[]);
 
     await expect(checkImportLocalePermissions(acl, 'user', new Set(['existing']), new Set()))
       .resolves
@@ -58,6 +70,8 @@ describe('import locale validation', () => {
 
     await expect(checkImportLocalePermissions(acl, 'user', new Set(['new']), new Set(['new'])))
       .rejects
-      .toMatchObject({ details: { key: 'io.permissions.localePermission' } });
+      .toMatchObject({
+        details: { key: 'io.permissions.localePermission' },
+      });
   });
 });

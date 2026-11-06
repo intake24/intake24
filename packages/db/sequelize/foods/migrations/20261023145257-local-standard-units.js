@@ -80,16 +80,18 @@ export default {
         { type: Sequelize.QueryTypes.SELECT, transaction },
       );
 
-      const langs = [...languages.reduce((acc, { id }) => {
-        acc.add(id);
+      const langs = [
+        ...languages.reduce((acc, { id }) => {
+          acc.add(id);
 
-        const item = id.split('-').at(0);
+          const item = id.split('-').at(0);
 
-        if (item)
-          acc.add(item);
+          if (item)
+            acc.add(item);
 
-        return acc;
-      }, new Set())];
+          return acc;
+        }, new Set()),
+      ];
 
       const locales = await queryInterface.sequelize.query(
         `SELECT id, respondent_language_id FROM locales;`,
@@ -97,7 +99,13 @@ export default {
       );
 
       for (const locale of locales) {
-        const localeLangs = [...new Set(['en', locale.respondent_language_id, locale.respondent_language_id.split('-').at(0)])];
+        const localeLangs = [
+          ...new Set([
+            'en',
+            locale.respondent_language_id,
+            locale.respondent_language_id.split('-').at(0),
+          ]),
+        ];
         const remove = langs.filter(l => !localeLangs.includes(l));
 
         await queryInterface.sequelize.query(

@@ -89,7 +89,9 @@ export default defineComponent({
 
     const panels = ref(['override']);
     const promptIds = computed(() => data.value.surveySchemeOverrides.prompts.map(({ id }) => id));
-    const prompts = computed(() => entryLoaded.value ? flattenScheme(entry.value.surveyScheme.prompts) : []);
+    const prompts = computed(() => entryLoaded.value
+      ? flattenScheme(entry.value.surveyScheme.prompts)
+      : []);
 
     return {
       entry,

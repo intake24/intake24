@@ -30,20 +30,32 @@ export function useBreadcrumbs() {
 
     if (parent) {
       items.push(
-        ...buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams),
+        ...buildBreadCrumb(parent, parent === 'fdbs'
+          ? action
+          : 'read', currentParams),
       );
     }
 
-    const name = parent ? `${parent}-${module}` : module;
-    const title = parent && !['media', 'securables'].includes(module) ? `${parent}.${module}` : module;
-    const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
+    const name = parent
+      ? `${parent}-${module}`
+      : module;
+    const title = parent && !['media', 'securables'].includes(module)
+      ? `${parent}.${module}`
+      : module;
+    const identifier = parent
+      ? `${pluralize.singular(module)}Id`
+      : 'id';
     const { [identifier]: currentId, id } = currentParams;
 
     const params: Dictionary<string> = { [identifier]: currentId };
     if (parent)
       params.id = id;
 
-    items.push({ ...defaults, title: t(`${title}.title`), to: { name } });
+    items.push({
+      ...defaults,
+      title: t(`${title}.title`),
+      to: { name },
+    });
 
     if (!currentId)
       return items;
@@ -63,8 +75,12 @@ export function useBreadcrumbs() {
 
     items.push({
       ...defaults,
-      title: parent ? t(`${title}.${action}`) : text,
-      to: { name: `${name}-${action === 'edit' ? 'read' : action}`, params },
+      title: parent
+        ? t(`${title}.${action}`)
+        : text,
+      to: { name: `${name}-${action === 'edit'
+        ? 'read'
+        : action}`, params },
     });
 
     if (['edit'].includes(action)) {

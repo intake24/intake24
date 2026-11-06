@@ -91,7 +91,12 @@ export const fidoRegistrationChallenge = z.object({
       userVerification: z.enum(['discouraged', 'preferred', 'required']).optional(),
     })
     .optional(),
-  attestation: z.enum(['none', 'indirect', 'direct', 'enterprise']).optional(),
+  attestation: z.enum([
+    'none',
+    'indirect',
+    'direct',
+    'enterprise',
+  ]).optional(),
   extensions: z
     .object({
       appid: z.string().optional(),

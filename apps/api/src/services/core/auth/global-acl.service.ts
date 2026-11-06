@@ -132,7 +132,9 @@ function globalAclService({ aclCache, models }: Pick<IoC, 'aclCache' | 'db' | 'm
   };
 
   function resolveSecurable(securableType: string) {
-    return isSecurableType(securableType) ? securableModels[securableType] : undefined;
+    return isSecurableType(securableType)
+      ? securableModels[securableType]
+      : undefined;
   }
 
   const findAndCheckRecordAccess = async <T extends Securable>(
@@ -148,7 +150,12 @@ function globalAclService({ aclCache, models }: Pick<IoC, 'aclCache' | 'db' | 'm
     const record = await securable.findOne({
       ...rest,
       attributes,
-      include: [...(Array.isArray(include) ? include : []), ...securableIncludes(userId)],
+      include: [
+        ...(Array.isArray(include)
+          ? include
+          : []),
+        ...securableIncludes(userId),
+      ],
     });
 
     if (await hasResourceAccess(userId, securable.name, action)) {
@@ -191,7 +198,12 @@ function globalAclService({ aclCache, models }: Pick<IoC, 'aclCache' | 'db' | 'm
     const record = await securable.findOne({
       ...rest,
       attributes,
-      include: [...(Array.isArray(include) ? include : []), ...securableIncludes(userId)],
+      include: [
+        ...(Array.isArray(include)
+          ? include
+          : []),
+        ...securableIncludes(userId),
+      ],
     });
 
     if (await hasResourceAccess(userId, securable.name, action)) {
@@ -268,7 +280,12 @@ function globalAclService({ aclCache, models }: Pick<IoC, 'aclCache' | 'db' | 'm
       getSecurableAccessActions(record),
     ]);
 
-    return [...new Set([...resourceActions, ...securableActions])];
+    return [
+      ...new Set([
+        ...resourceActions,
+        ...securableActions,
+      ]),
+    ];
   };
 
   return {

@@ -53,7 +53,10 @@ export default (type: SecurableType) => () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['securables'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['securables'],
+      });
 
       await suite.sharedTests.assertPaginatedResult('get', url);
     });

@@ -237,7 +237,11 @@ const showSABcard = ref(survey.foodPrompts.find(item => item.component === 'same
 const isDrink = computed(() => props.sabFood.food.data.categories.includes('DRNK'));
 const isValid = true;
 
-const getQuantity = (food: EncodedFood) => food.portionSize && 'quantity' in food.portionSize ? (food.portionSize.quantity ?? 1) : 1;
+function getQuantity(food: EncodedFood) {
+  return food.portionSize && 'quantity' in food.portionSize
+    ? (food.portionSize.quantity ?? 1)
+    : 1;
+}
 
 function getPortionWeight(food: EncodedFood) {
   if (food.portionSize?.method === 'milk-in-a-hot-drink')
@@ -319,8 +323,16 @@ const customPromptAnswers = computed(() => {
         };
 
         return Array.isArray(options)
-          ? [prompt_id, (options as string[]).map(getLabel)]
-          : [prompt_id, [getLabel(options as string)]];
+          ? [
+              prompt_id,
+              (options as string[]).map(getLabel),
+            ]
+          : [
+              prompt_id,
+              [
+                getLabel(options as string),
+              ],
+            ];
       }),
   );
 });
@@ -331,7 +343,9 @@ const serving = computed(() => {
   const unit = getUnit(props.sabFood.food);
   return t(`prompts.${type.value}.serving`, { amount: `${amount} ${unit}` });
 });
-const servingQuantity = computed(() => t(`prompts.${type.value}.quantity`, { quantity: getQuantity(props.sabFood.food) }));
+const servingQuantity = computed(() => t(`prompts.${type.value}.quantity`, {
+  quantity: getQuantity(props.sabFood.food),
+}));
 
 const leftovers = computed(() => {
   const { leftoversWeight, servingWeight } = props.sabFood.food.portionSize ?? {};
@@ -354,7 +368,16 @@ const promptI18n = computed(() => ({
   serving: serving.value,
   quantity: servingQuantity.value,
   leftovers: leftovers.value,
-  ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame', 'details', 'hadQuantity', 'characteristics', 'none']),
+  ...translatePrompt([
+    'hadWith',
+    'noAddedFoods',
+    'same',
+    'notSame',
+    'details',
+    'hadQuantity',
+    'characteristics',
+    'none',
+  ]),
 }));
 
 onMounted(async () => {

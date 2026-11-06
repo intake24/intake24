@@ -45,13 +45,41 @@ import UserSurveyAlias from './user-survey-alias';
 import UserSurveySession from './user-survey-session';
 
 @Scopes(() => ({
-  counter: { include: [{ model: GenUserCounter }] },
-  locale: { include: [{ model: SystemLocale }] },
-  feedbackScheme: { include: [{ model: FeedbackScheme }] },
-  surveyScheme: { include: [{ model: SurveyScheme }] },
-  respondents: { include: [{ model: UserSurveyAlias }] },
-  submissions: { include: [{ model: SurveySubmission }] },
-  clientErrors: { include: [{ model: ClientErrorReport }] },
+  counter: {
+    include: [
+      { model: GenUserCounter },
+    ],
+  },
+  locale: {
+    include: [
+      { model: SystemLocale },
+    ],
+  },
+  feedbackScheme: {
+    include: [
+      { model: FeedbackScheme },
+    ],
+  },
+  surveyScheme: {
+    include: [
+      { model: SurveyScheme },
+    ],
+  },
+  respondents: {
+    include: [
+      { model: UserSurveyAlias },
+    ],
+  },
+  submissions: {
+    include: [
+      { model: SurveySubmission },
+    ],
+  },
+  clientErrors: {
+    include: [
+      { model: ClientErrorReport },
+    ],
+  },
 }))
 @Table({
   modelName: 'Survey',
@@ -341,7 +369,11 @@ export default class Survey extends BaseModel<
 
   @AfterDestroy
   static async destroySurveyPermissions(instance: Survey): Promise<void> {
-    await Permission.destroy({ where: { name: surveyPermissions(instance.slug) } });
+    await Permission.destroy({
+      where: {
+        name: surveyPermissions(instance.slug),
+      },
+    });
   }
 
   public static async findBySlug(
@@ -350,7 +382,13 @@ export default class Survey extends BaseModel<
   ): Promise<Survey | null> {
     const { where, ...rest } = options;
 
-    return Survey.findOne({ where: { ...where, slug: { [Op.iLike]: slug } }, ...rest });
+    return Survey.findOne({
+      where: {
+        ...where,
+        slug: { [Op.iLike]: slug },
+      },
+      ...rest,
+    });
   }
 
   // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system

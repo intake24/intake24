@@ -250,7 +250,12 @@ function surveySubmissionService({
           collectedFoods.states.push(foodState);
 
           return linkedFoods.reduce(
-            collectFoods({ foods, mealId, parentId: id, foodCustomPrompts }),
+            collectFoods({
+              foods,
+              mealId,
+              parentId: id,
+              foodCustomPrompts,
+            }),
             collectedFoods,
           );
         }
@@ -311,7 +316,12 @@ function surveySubmissionService({
         collectedFoods.states.push(foodState);
 
         return linkedFoods.reduce(
-          collectFoods({ foods, mealId, parentId: id, foodCustomPrompts }),
+          collectFoods({
+            foods,
+            mealId,
+            parentId: id,
+            foodCustomPrompts,
+          }),
           collectedFoods,
         );
       };
@@ -364,20 +374,38 @@ function surveySubmissionService({
         'numberOfSubmissionsForFeedback',
         'session',
       ],
-      include: [{ association: 'surveyScheme', attributes: ['prompts'], required: true }],
+      include: [
+        {
+          association: 'surveyScheme',
+          attributes: ['prompts'],
+          required: true,
+        },
+      ],
     });
     if (!survey)
       throw new NotFoundError();
 
     const { id: surveyId } = survey;
-    const submission = { id: randomUUID(), submissionTime: new Date() };
-    const state = { ...surveyState, ...submission };
+    const submission = {
+      id: randomUUID(),
+      submissionTime: new Date(),
+    };
+    const state = {
+      ...surveyState,
+      ...submission,
+    };
 
     const [userInfo, followUpUrl] = await Promise.all([
       surveyService.userInfo(survey, userId, tzOffset, 1),
       surveyService.getFollowUpUrl(survey, userId),
-      scheduler.jobs.addJob({ type: 'SurveySubmission', userId, params: { surveyId, userId, state } }),
-      survey.session.store ? surveyService.saveSession(survey, userId, state) : () => Promise.resolve(),
+      scheduler.jobs.addJob({
+        type: 'SurveySubmission',
+        userId,
+        params: { surveyId, userId, state },
+      }),
+      survey.session.store
+        ? surveyService.saveSession(survey, userId, state)
+        : () => Promise.resolve(),
     ]);
 
     return { ...userInfo, followUpUrl, submission };
@@ -403,11 +431,22 @@ function surveySubmissionService({
         attributes: ['id', 'notifications', 'searchSettings'],
         where: { id: surveyId },
         include: [
-          { association: 'locale', attributes: ['id', 'code'], required: true },
-          { association: 'surveyScheme', attributes: ['id', 'prompts'], required: true },
+          {
+            association: 'locale',
+            attributes: ['id', 'code'],
+            required: true,
+          },
+          {
+            association: 'surveyScheme',
+            attributes: ['id', 'prompts'],
+            required: true,
+          },
         ],
       }),
-      SurveySubmission.findOne({ attributes: ['id'], where: { surveyId, userId, sessionId } }),
+      SurveySubmission.findOne({
+        attributes: ['id'],
+        where: { surveyId, userId, sessionId },
+      }),
     ]);
     if (!survey || !survey.locale || !survey.surveyScheme)
       throw new NotFoundError();
@@ -433,17 +472,26 @@ function surveySubmissionService({
       },
     } = survey;
 
-    const submissionCustomPrompts = [...preMeals, ...postMeals]
+    const submissionCustomPrompts = [
+      ...preMeals,
+      ...postMeals,
+    ]
       .filter(({ type }) => type === 'custom')
       .map(({ id }) => id);
 
-    const mealCustomPrompts = [...preFoods, ...postFoods]
+    const mealCustomPrompts = [
+      ...preFoods,
+      ...postFoods,
+    ]
       .filter(({ type }) => type === 'custom')
       .map(({ id }) => id);
 
     const foodCustomPrompts = [
       ...foods.filter(({ type }) => type === 'custom').map(({ id }) => id),
-      ...[...preMeals, ...postMeals].filter(({ component, type }) => type === 'custom' && component === 'aggregate-choice-prompt').map(({ id }) => id),
+      ...[
+        ...preMeals,
+        ...postMeals,
+      ].filter(({ component, type }) => type === 'custom' && component === 'aggregate-choice-prompt').map(({ id }) => id),
     ];
 
     await db.system.transaction(async (transaction) => {
@@ -500,7 +548,10 @@ function surveySubmissionService({
           {
             association: 'nutrientRecords',
             through: { attributes: [] },
-            include: [{ association: 'fields' }, { association: 'nutrients' }],
+            include: [
+              { association: 'fields' },
+              { association: 'nutrients' },
+            ],
           },
         ],
       });

@@ -72,7 +72,9 @@ export function createMeal(data: MealCreationState, flow: RecallFlow = '2-pass')
     id: getEntityId(),
     name,
     defaultTime,
-    time: flags.includes('meal-time:confirmed') ? (time ?? defaultTime) : time,
+    time: flags.includes('meal-time:confirmed')
+      ? (time ?? defaultTime)
+      : time,
     duration,
     flags,
     foods,
@@ -273,7 +275,9 @@ export const useSurvey = defineStore('survey', {
         this.setParameters(surveyInfo);
         this.setUserInfo(userInfo);
 
-        const userSession = !this.isSubmitted && surveyInfo.session.store ? await surveyService.getUserSession(surveyId) : undefined;
+        const userSession = !this.isSubmitted && surveyInfo.session.store
+          ? await surveyService.getUserSession(surveyId)
+          : undefined;
         this.loadUserSession(userSession?.sessionData);
       }
       finally {
@@ -298,7 +302,11 @@ export const useSurvey = defineStore('survey', {
         schemeId: this.parameters.surveyScheme.id,
         startTime: new Date(),
         meals: this.parameters.surveyScheme.meals.map(({ name, time, flags }) =>
-          createMeal({ name, defaultTime: toTime(time), flags }, this.parameters?.surveyScheme.settings.flow)),
+          createMeal({
+            name,
+            defaultTime: toTime(time),
+            flags,
+          }, this.parameters?.surveyScheme.settings.flow)),
       });
       sendGtmEvent({
         event: 'startRecall',
@@ -342,7 +350,12 @@ export const useSurvey = defineStore('survey', {
     },
 
     setUserInfo(user: SurveyUserInfoResponse) {
-      this.user = this.user?.userId === user.userId ? { ...this.user, ...user } : user;
+      this.user = this.user?.userId === user.userId
+        ? {
+            ...this.user,
+            ...user,
+          }
+        : user;
     },
 
     reCreateStoreAfterDeserialization() {
@@ -482,7 +495,9 @@ export const useSurvey = defineStore('survey', {
     },
 
     addFlag(flag: SurveyFlag | SurveyFlag[]) {
-      let flags = Array.isArray(flag) ? flag : [flag];
+      let flags = Array.isArray(flag)
+        ? flag
+        : [flag];
 
       flags = flags.filter(flag => !this.data.flags.includes(flag));
       if (!flags.length)
@@ -492,7 +507,9 @@ export const useSurvey = defineStore('survey', {
     },
 
     removeFlag(flag: SurveyFlag | SurveyFlag[]) {
-      const flags = Array.isArray(flag) ? flag : [flag];
+      const flags = Array.isArray(flag)
+        ? flag
+        : [flag];
       if (!flags.length)
         return;
 
@@ -576,18 +593,28 @@ export const useSurvey = defineStore('survey', {
       const { time: defaultMealTime, ...defaultMealRest } = this.defaultSchemeMeals?.find(item => item.name[locale] === data.name[locale]) ?? {};
       const defaultTime = time ?? toTime(defaultMealTime ?? '8:00');
 
-      const meal = createMeal({ ...defaultMealRest, ...mealRest, defaultTime, time }, this.parameters?.surveyScheme.settings.flow);
+      const meal = createMeal({
+        ...defaultMealRest,
+        ...mealRest,
+        defaultTime,
+        time,
+      }, this.parameters?.surveyScheme.settings.flow);
       this.data.meals.push(meal);
 
       this.sortMeals();
-      this.setSelection({ element: { type: 'meal', mealId: meal.id }, mode: 'manual' });
+      this.setSelection({
+        element: { type: 'meal', mealId: meal.id },
+        mode: 'manual',
+      });
 
       return id;
     },
 
     addMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
       const meal = findMeal(this.data.meals, mealId);
-      let flags = Array.isArray(flag) ? flag : [flag];
+      let flags = Array.isArray(flag)
+        ? flag
+        : [flag];
 
       flags = flags.filter(flag => !meal.flags.includes(flag));
       if (!flags.length)
@@ -597,7 +624,9 @@ export const useSurvey = defineStore('survey', {
     },
 
     removeMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
-      const flags = Array.isArray(flag) ? flag : [flag];
+      const flags = Array.isArray(flag)
+        ? flag
+        : [flag];
       if (!flags.length)
         return;
 
@@ -629,7 +658,9 @@ export const useSurvey = defineStore('survey', {
 
     addFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
       const food = findFood(this.data.meals, foodId);
-      let flags = Array.isArray(flag) ? flag : [flag];
+      let flags = Array.isArray(flag)
+        ? flag
+        : [flag];
 
       flags = flags.filter(flag => !food.flags.includes(flag));
       if (!flags.length)
@@ -646,7 +677,9 @@ export const useSurvey = defineStore('survey', {
     },
 
     removeFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
-      const flags = Array.isArray(flag) ? flag : [flag];
+      const flags = Array.isArray(flag)
+        ? flag
+        : [flag];
       if (!flags.length)
         return;
 
@@ -769,7 +802,9 @@ export const useSurvey = defineStore('survey', {
         id: foodId,
         type: 'encoded-food',
         data: newFoodData,
-        searchTerm: 'searchTerm' in existingFood ? existingFood.searchTerm ?? '' : '',
+        searchTerm: 'searchTerm' in existingFood
+          ? existingFood.searchTerm ?? ''
+          : '',
         portionSizeMethodIndex: null,
         portionSize: null,
         customPromptAnswers: { ...existingFood.customPromptAnswers },
@@ -789,7 +824,13 @@ export const useSurvey = defineStore('survey', {
         | Partial<Omit<RecipeBuilder, 'type'>>;
     }) {
       const foodState = findFood(this.meals, data.foodId);
-      this.replaceFood({ foodId: data.foodId, food: { ...foodState, ...data.update } });
+      this.replaceFood({
+        foodId: data.foodId,
+        food: {
+          ...foodState,
+          ...data.update,
+        },
+      });
     },
 
     addLinkedFoods(foodId: string, linkedFoods: FoodState[]) {
@@ -853,7 +894,9 @@ export const useSurvey = defineStore('survey', {
 
     addFood({ mealId, food, at }: { mealId: string; food: FoodState | FoodState[]; at?: number }) {
       const mealIndex = getMealIndexRequired(this.data.meals, mealId);
-      const foods = Array.isArray(food) ? food : [food];
+      const foods = Array.isArray(food)
+        ? food
+        : [food];
 
       if (at !== undefined)
         this.data.meals[mealIndex].foods.splice(at, 0, ...foods);

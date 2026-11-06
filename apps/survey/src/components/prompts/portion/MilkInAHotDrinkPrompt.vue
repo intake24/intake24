@@ -98,7 +98,10 @@ const state = ref(copy(props.modelValue));
 
 const localeOptions = computed(() =>
   (parameters.value.options[locale.value] ?? parameters.value.options.en)
-    .map(item => ({ ...item, value: Number(item.value) }))
+    .map(item => ({
+      ...item,
+      value: Number(item.value),
+    }))
     .filter(({ value }) => !Number.isNaN(value)),
 );
 

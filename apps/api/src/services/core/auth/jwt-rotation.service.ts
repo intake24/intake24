@@ -39,7 +39,9 @@ function jwtRotationService(ops: Pick<IoC, 'logger'>) {
   const revoke = async (token: string): Promise<number> => {
     const { jti: id } = decode(token);
 
-    const [rows] = await RefreshToken.update({ revoked: true }, { where: { id } });
+    const [rows] = await RefreshToken.update({ revoked: true }, {
+      where: { id },
+    });
 
     return rows;
   };
@@ -51,7 +53,9 @@ function jwtRotationService(ops: Pick<IoC, 'logger'>) {
    * @returns {Promise<number>}
    */
   const revokeByUser = async (userId: string): Promise<number> => {
-    const [rows] = await RefreshToken.update({ revoked: true }, { where: { userId } });
+    const [rows] = await RefreshToken.update({ revoked: true }, {
+      where: { userId },
+    });
 
     return rows;
   };
@@ -107,7 +111,11 @@ function jwtRotationService(ops: Pick<IoC, 'logger'>) {
    */
   const purgeRefreshTokens = async (): Promise<number> => {
     const rows = await RefreshToken.destroy({
-      where: { expiresAt: { [Op.lte]: subDays(new Date(), 1) } },
+      where: {
+        expiresAt: {
+          [Op.lte]: subDays(new Date(), 1),
+        },
+      },
     });
     logger.debug(`Expired refresh tokens (${rows}) have been purged.`);
 
@@ -121,7 +129,11 @@ function jwtRotationService(ops: Pick<IoC, 'logger'>) {
    */
   const purgePersonalAccessTokens = async (): Promise<number> => {
     const rows = await PersonalAccessToken.destroy({
-      where: { expiresAt: { [Op.lte]: subDays(new Date(), 1) } },
+      where: {
+        expiresAt: {
+          [Op.lte]: subDays(new Date(), 1),
+        },
+      },
     });
     logger.debug(`Expired personal access tokens (${rows}) have been purged.`);
 

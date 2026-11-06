@@ -158,7 +158,13 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
     return await kyselyDb.foods.contextTransaction(async (t) => {
       const categoryRow = await t
         .selectFrom('categories')
-        .select(['id', 'code', 'englishName', 'name', 'version'])
+        .select([
+          'id',
+          'code',
+          'englishName',
+          'name',
+          'version',
+        ])
         .where('localeId', '=', localeId)
         .where('code', '=', categoryCode)
         .executeTakeFirst();
@@ -175,7 +181,14 @@ function localCategoriesService({ kyselyDb }: Pick<IoC, 'kyselyDb'>) {
 
       const portionSizeRows = await t
         .selectFrom('categoryPortionSizeMethods')
-        .select(['method', 'description', 'pathways', 'conversionFactor', 'orderBy', 'parameters'])
+        .select([
+          'method',
+          'description',
+          'pathways',
+          'conversionFactor',
+          'orderBy',
+          'parameters',
+        ])
         .where('categoryId', '=', categoryRow.id)
         .execute();
 

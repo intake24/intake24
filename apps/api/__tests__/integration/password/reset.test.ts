@@ -33,7 +33,9 @@ export default () => {
     userId = id;
     email = userEmail;
 
-    await UserPasswordReset.destroy({ where: { userId } });
+    await UserPasswordReset.destroy({
+      where: { userId },
+    });
 
     await request(suite.app)
       .post('/api/password')
@@ -41,7 +43,9 @@ export default () => {
       .send({ email, captcha: 'captchaToken' });
 
     await sleep(2000); // TODO: this should wait until the job is done
-    const reset = await UserPasswordReset.findOne({ where: { userId } });
+    const reset = await UserPasswordReset.findOne({
+      where: { userId },
+    });
     if (!reset)
       throw new Error('Password reset not created.');
 
@@ -52,7 +56,12 @@ export default () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       url,
-      ['email', 'token', 'password', 'passwordConfirm'],
+      [
+        'email',
+        'token',
+        'password',
+        'passwordConfirm',
+      ],
       { bearer: undefined },
     );
   });
@@ -70,7 +79,12 @@ export default () => {
 
     expect(status).toBe(400);
     expect(body).toContainAllKeys(['errors', 'message']);
-    expect(body.errors).toContainAllKeys(['email', 'token', 'password', 'passwordConfirm']);
+    expect(body.errors).toContainAllKeys([
+      'email',
+      'token',
+      'password',
+      'passwordConfirm',
+    ]);
   });
 
   it('should return 400 for invalid token', async () => {

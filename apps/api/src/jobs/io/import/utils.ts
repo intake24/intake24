@@ -12,7 +12,9 @@ function uploadedFileNotAccessible(cause?: unknown): LocalisableError {
   return new LocalisableError(
     'io.verification.uploadedFileNotAccessible',
     undefined,
-    cause === undefined ? undefined : { cause },
+    cause === undefined
+      ? undefined
+      : { cause },
   );
 }
 

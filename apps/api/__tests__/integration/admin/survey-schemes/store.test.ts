@@ -83,7 +83,10 @@ export default () => {
 
     it('should return 400 for duplicate name', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
-        input: { ...mocker.system.surveyScheme(), name: input.name },
+        input: {
+          ...mocker.system.surveyScheme(),
+          name: input.name,
+        },
       });
     });
   });

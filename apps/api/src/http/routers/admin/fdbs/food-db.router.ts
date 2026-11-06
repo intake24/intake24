@@ -11,7 +11,9 @@ import { NutrientTable, securableScope, SystemLocale } from '@intake24/db';
 export function foodDb() {
   return initServer().router(contract.admin.fdbs.foodDb, {
     browse: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ query, req }) => {
         const {
           aclService,
@@ -21,7 +23,12 @@ export function foodDb() {
         const paginateOptions: PaginateOptions = {
           query,
           columns: ['code', 'englishName', 'localName'],
-          order: [[fn('lower', col('code')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('code')),
+              'ASC',
+            ],
+          ],
         };
 
         if (await aclService.hasPermission('locales:food-list')) {
@@ -31,7 +38,12 @@ export function foodDb() {
 
         const locales = await SystemLocale.paginate({
           ...paginateOptions,
-          where: { [Op.or]: { ownerId: userId, '$securables.action$': ['food-list'] } },
+          where: {
+            [Op.or]: {
+              ownerId: userId,
+              '$securables.action$': ['food-list'],
+            },
+          },
           ...securableScope(userId),
           subQuery: false,
         });
@@ -40,15 +52,22 @@ export function foodDb() {
       },
     },
     refs: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async () => {
         const nutrientTables = await NutrientTable.scope('list').findAll();
 
-        return { status: 200, body: { nutrientTables } };
+        return {
+          status: 200,
+          body: { nutrientTables },
+        };
       },
     },
     read: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId }, req }) => {
         const { aclService } = req.scope.cradle;
 
@@ -56,7 +75,10 @@ export function foodDb() {
           where: { id: localeId },
         });
 
-        return { status: 200, body: localeResponse(locale) };
+        return {
+          status: 200,
+          body: localeResponse(locale),
+        };
       },
     },
   });

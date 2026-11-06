@@ -69,7 +69,9 @@ async function translateObject(obj, sourceLang, destLang) {
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === 'string') {
       console.debug(`${key}: ${value}`);
-      const tr = await deepLTranslate([replaceMessageTags(value)], sourceLang, destLang);
+      const tr = await deepLTranslate([
+        replaceMessageTags(value),
+      ], sourceLang, destLang);
       console.debug(restoreMessageTags(tr[0].text));
       result[key] = restoreMessageTags(tr[0].text);
     }
@@ -88,7 +90,7 @@ async function translateFile(sourcePath, destPath, sourceLang, destLang) {
   const json = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
 
   if (typeof json !== 'object')
-    throw new Error(`Expected a single object in file ${sourcePath}`);
+    throw new TypeError(`Expected a single object in file ${sourcePath}`);
 
   const translated = await translateObject(json, sourceLang, destLang);
 

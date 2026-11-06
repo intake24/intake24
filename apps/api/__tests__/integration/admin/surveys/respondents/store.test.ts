@@ -62,7 +62,9 @@ export default () => {
     const { email, password, passwordConfirm, ...rest } = input;
     output = {
       ...rest,
-      email: email ? email.toLowerCase() : undefined,
+      email: email
+        ? email.toLowerCase()
+        : undefined,
     };
   });
 
@@ -87,7 +89,15 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['username', 'password', 'passwordConfirm', 'name', 'email', 'phone', 'customFields'],
+        [
+          'username',
+          'password',
+          'passwordConfirm',
+          'name',
+          'email',
+          'phone',
+          'customFields',
+        ],
         {
           input: {
             username: 'test-respondent@example.com',
@@ -95,7 +105,9 @@ export default () => {
             passwordConfirm: 'notMatchingPassword',
             name: ['test respondent'],
             email: false,
-            phone: [new Date()],
+            phone: [
+              new Date(),
+            ],
             customFields: 'not-a-custom-field',
           },
         },
@@ -119,7 +131,10 @@ export default () => {
 
     it('should return 400 for duplicate username', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['username'], {
-        input: { ...mocker.system.respondent(), username: input.username },
+        input: {
+          ...mocker.system.respondent(),
+          username: input.username,
+        },
       });
     });
   });
@@ -134,11 +149,19 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['respondents'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['respondents'],
+      });
 
       const input2 = mocker.system.respondent();
       const { email, password, passwordConfirm, ...rest } = input2;
-      const output2 = { ...rest, email: email ? email.toLowerCase() : undefined };
+      const output2 = {
+        ...rest,
+        email: email
+          ? email.toLowerCase()
+          : undefined,
+      };
 
       await assertRespondentResponse(url, input2, output2);
     });
@@ -149,7 +172,12 @@ export default () => {
 
       const input3 = mocker.system.respondent();
       const { email, password, passwordConfirm, ...rest } = input3;
-      const output3 = { ...rest, email: email ? email.toLowerCase() : undefined };
+      const output3 = {
+        ...rest,
+        email: email
+          ? email.toLowerCase()
+          : undefined,
+      };
 
       await assertRespondentResponse(url, input3, output3);
     });

@@ -86,8 +86,10 @@ const drinksOnly = computed({
     return state.value.filter(food => food.flags.includes('is-drink'));
   },
   set(val) {
-    // eslint-disable-next-line ts/no-use-before-define
-    state.value = [...foodsOnly.value, ...val];
+    state.value = [
+      ...foodsOnly.value,
+      ...val,
+    ];
   },
 });
 const foodsOnly = computed({
@@ -95,7 +97,10 @@ const foodsOnly = computed({
     return state.value.filter(food => !food.flags.includes('is-drink'));
   },
   set(val) {
-    state.value = [...drinksOnly.value, ...val];
+    state.value = [
+      ...drinksOnly.value,
+      ...val,
+    ];
   },
 });
 

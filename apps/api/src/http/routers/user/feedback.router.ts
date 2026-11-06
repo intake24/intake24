@@ -29,7 +29,12 @@ export function feedback() {
               association: 'survey',
               where: { slug },
               attributes: ['id', 'slug'],
-              include: [{ association: 'feedbackScheme', attributes: ['outputs'] }],
+              include: [
+                {
+                  association: 'feedbackScheme',
+                  attributes: ['outputs'],
+                },
+              ],
             },
           ],
         });
@@ -40,7 +45,12 @@ export function feedback() {
         if (!survey.feedbackScheme?.outputs.includes('download'))
           throw new ForbiddenError();
 
-        const { pdfStream } = await req.scope.cradle.feedbackService.getFeedbackStream({ surveyId: survey.id, username, submissions, lang });
+        const { pdfStream } = await req.scope.cradle.feedbackService.getFeedbackStream({
+          surveyId: survey.id,
+          username,
+          submissions,
+          lang,
+        });
         const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
 
         res.set('content-disposition', `attachment; filename=${filename}`);
@@ -59,9 +69,16 @@ export function feedback() {
           include: [
             {
               association: 'survey',
-              where: { slug: { [Op.iLike]: slug } },
+              where: {
+                slug: { [Op.iLike]: slug },
+              },
               attributes: ['id', 'slug'],
-              include: [{ association: 'feedbackScheme', attributes: ['outputs'] }],
+              include: [
+                {
+                  association: 'feedbackScheme',
+                  attributes: ['outputs'],
+                },
+              ],
             },
           ],
         });
@@ -75,7 +92,13 @@ export function feedback() {
         await req.scope.cradle.scheduler.jobs.addJob({
           type: 'SurveyFeedbackNotification',
           userId,
-          params: { surveyId: survey.id, username, to, lang, submissions },
+          params: {
+            surveyId: survey.id,
+            username,
+            to,
+            lang,
+            submissions,
+          },
         });
 
         return { status: 200, body: undefined };
@@ -85,7 +108,10 @@ export function feedback() {
       const { survey: slug, limit = 10, page } = query;
       const { userId } = req.scope.cradle.user;
 
-      const survey = await Survey.findOne({ attributes: ['id'], where: { slug } });
+      const survey = await Survey.findOne({
+        attributes: ['id'],
+        where: { slug },
+      });
       if (!survey)
         throw new NotFoundError();
 

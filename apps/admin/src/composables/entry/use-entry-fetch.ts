@@ -9,7 +9,9 @@ export function useEntryFetch(props: UseStoreEntryProps) {
   const { requestEntry } = useEntry();
 
   const fetch = async (id?: string, module?: string) => {
-    const api = module ? resources.find(({ name }) => name === module)?.api : undefined;
+    const api = module
+      ? resources.find(({ name }) => name === module)?.api
+      : undefined;
 
     await requestEntry({ id: id ?? props.id, api });
   };

@@ -32,7 +32,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [26.x]
 
     steps:
       - name: Repository checkout
@@ -69,7 +69,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [26.x]
         postgres-version: [18]
         redis-version: [8]
 
@@ -147,7 +147,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [26.x]
 
     steps:
       - name: Repository checkout
@@ -179,7 +179,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [26.x]
 
     steps:
       - name: Repository checkout
@@ -199,7 +199,7 @@ jobs:
 
       - name: Survey client - type check
         working-directory: apps/survey
-        run: pnpm type-check
+        run: pnpm typecheck
 
       - name: Survey client - build
         working-directory: apps/survey
@@ -215,7 +215,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [26.x]
 
     steps:
       - name: Repository checkout

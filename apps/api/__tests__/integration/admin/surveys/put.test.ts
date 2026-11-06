@@ -19,7 +19,11 @@ export default () => {
     updateInput = mocker.system.survey();
 
     const { slug } = input;
-    output = { ...updateInput, slug, supportEmail: updateInput.supportEmail.toLowerCase() };
+    output = {
+      ...updateInput,
+      slug,
+      supportEmail: updateInput.supportEmail.toLowerCase(),
+    };
 
     survey = await Survey.create(input);
 

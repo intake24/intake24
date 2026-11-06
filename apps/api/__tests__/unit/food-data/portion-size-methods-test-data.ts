@@ -209,7 +209,9 @@ async function createCategories() {
       portionSizeMethods: generatedPortionSizeMethods[0],
     },
     {
-      include: [{ association: 'portionSizeMethods' }],
+      include: [
+        { association: 'portionSizeMethods' },
+      ],
     },
   );
   testData.FOOD1 = food1.id;

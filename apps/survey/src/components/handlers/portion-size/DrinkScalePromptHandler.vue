@@ -39,7 +39,9 @@ const currentValue = computed(() => {
   if (!props.prompt.multiple)
     return 1;
 
-  return (props.prompt.multiple.type === 'counter' ? props.prompt.multiple.current : props.prompt.multiple.current.value) ?? 1;
+  return (props.prompt.multiple.type === 'counter'
+    ? props.prompt.multiple.current
+    : props.prompt.multiple.current.value) ?? 1;
 });
 
 function getInitialState(): PromptStates['drink-scale-prompt'] {
@@ -62,7 +64,9 @@ function getInitialState(): PromptStates['drink-scale-prompt'] {
       leftovers: false,
       quantity: currentValue.value,
     },
-    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null
+      ? 1
+      : 0,
     objectConfirmed: false,
     volumeConfirmed: false,
     leftoversConfirmed: false,

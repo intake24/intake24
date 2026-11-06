@@ -273,7 +273,9 @@ async function run() {
 
 run()
   .catch((err) => {
-    console.error(err instanceof Error ? err.stack : err);
+    console.error(err instanceof Error
+      ? err.stack
+      : err);
     process.exit(process.exitCode ?? 1);
   })
   .finally(() => {

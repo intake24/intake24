@@ -46,10 +46,27 @@ export default defineComponent({
     const user = useUser();
 
     const headers: DataTableHeader[] = [
-      { title: i18n.t('securables.securableType'), sortable: true, key: 'securableType' },
-      { title: i18n.t('securables.securableId'), sortable: true, key: 'securableId' },
-      { title: i18n.t('securables.actions._'), sortable: true, key: 'action' },
-      { title: i18n.t('common.action._'), sortable: false, key: 'actions', align: 'end' },
+      {
+        title: i18n.t('securables.securableType'),
+        sortable: true,
+        key: 'securableType',
+      },
+      {
+        title: i18n.t('securables.securableId'),
+        sortable: true,
+        key: 'securableId',
+      },
+      {
+        title: i18n.t('securables.actions._'),
+        sortable: true,
+        key: 'action',
+      },
+      {
+        title: i18n.t('common.action._'),
+        sortable: false,
+        key: 'actions',
+        align: 'end',
+      },
     ];
 
     const { entry, entryLoaded } = useEntry<UserEntry>(props);
@@ -59,7 +76,13 @@ export default defineComponent({
       return ['read', 'edit'].filter(action => user.can(`${modelToResource(securableType)}:${action}`));
     }
 
-    return { actions, entry, entryLoaded, headers, modelToResource };
+    return {
+      actions,
+      entry,
+      entryLoaded,
+      headers,
+      modelToResource,
+    };
   },
 });
 </script>

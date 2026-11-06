@@ -50,14 +50,18 @@ export default () => {
 
     it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
-        input: { name: { name: 'objectName' } },
+        input: {
+          name: { name: 'objectName' },
+        },
       });
     });
 
     it('should return 400 for same id/name provided', async () => {
       const { name } = feedbackScheme;
 
-      await suite.sharedTests.assertInvalidInput('post', url, ['name'], { input: { name } });
+      await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
+        input: { name },
+      });
     });
 
     it(`should return 404 when record doesn't exist`, async () => {
@@ -85,7 +89,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['copy'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['copy'],
+      });
       const { name } = mocker.system.feedbackScheme();
 
       await suite.sharedTests.assertRecordUpdated('post', url, { name });

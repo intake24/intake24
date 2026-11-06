@@ -42,7 +42,10 @@ export const signUp = contract.router({
         }
       }),
     responses: {
-      200: z.union([loginResponse, z.any()]),
+      200: z.union([
+        loginResponse,
+        z.any(),
+      ]),
     },
     summary: 'Admin sign-up',
     description: 'Register account for admin interface',

@@ -97,7 +97,12 @@ export default class SurveyRespondentsImport extends BaseJob<'SurveyRespondentsI
       throw fromError({
         ...result.error,
         issues: result.error.issues.map(issue =>
-          ({ ...issue, path: issue.path.map(p => typeof p === 'number' ? p + offset : p) })),
+          ({
+            ...issue,
+            path: issue.path.map(p => typeof p === 'number'
+              ? p + offset
+              : p),
+          })),
       });
     }
 
@@ -117,7 +122,10 @@ export default class SurveyRespondentsImport extends BaseJob<'SurveyRespondentsI
     // Check for unique emails within system
     const email = result.data.filter(item => item.email).map(item => item.email) as string[];
     if (email.length) {
-      const users = await User.findAll({ attributes: ['email'], where: { email } });
+      const users = await User.findAll({
+        attributes: ['email'],
+        where: { email },
+      });
 
       if (users.length) {
         const existingUsers = users.map(user => user.email);

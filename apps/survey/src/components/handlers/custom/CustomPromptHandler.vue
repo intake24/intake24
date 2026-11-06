@@ -26,7 +26,9 @@ import { pushFullHistoryEntry } from '@intake24/survey/stores/recall-history';
 
 import { createHandlerProps, useCustomPromptHandler } from '../composables';
 
-defineOptions({ components: { ...customPrompts } });
+defineOptions({
+  components: { ...customPrompts },
+});
 
 const props = defineProps(createHandlerProps());
 
@@ -59,7 +61,9 @@ const storedState: CustomPromptAnswer | undefined = promptStore.prompts[entityId
 
 const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));
 const state = ref<CustomPromptAnswer | undefined>(
-  isInfoPrompt.value ? 'next' : (storedState ?? resolvePromptAnswer(props.prompt)),
+  isInfoPrompt.value
+    ? 'next'
+    : (storedState ?? resolvePromptAnswer(props.prompt)),
 );
 
 if (!isInfoPrompt.value) {

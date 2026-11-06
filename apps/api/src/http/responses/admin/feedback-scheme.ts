@@ -6,6 +6,8 @@ export function feedbackSchemeResponse(feedbackScheme: FeedbackScheme): Feedback
 
   return {
     ...feedbackScheme.get(),
-    owner: owner ? { id: owner.id, name: owner.name, email: owner.email } : undefined,
+    owner: owner
+      ? { id: owner.id, name: owner.name, email: owner.email }
+      : undefined,
   };
 }

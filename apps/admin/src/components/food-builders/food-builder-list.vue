@@ -381,7 +381,10 @@ function reset() {
 }
 
 function addStep() {
-  dialog.value.item.steps.push({ ...copy(foodStepDefaults.ingredient), id: randomString(6) });
+  dialog.value.item.steps.push({
+    ...copy(foodStepDefaults.ingredient),
+    id: randomString(6),
+  });
 }
 
 function removeStep(index: number) {
@@ -393,7 +396,10 @@ function updateStepType(stepIndex: number) {
   if (!step)
     return;
 
-  dialog.value.item.steps[stepIndex] = ({ ...copy(step), id: randomString(6) });
+  dialog.value.item.steps[stepIndex] = ({
+    ...copy(step),
+    id: randomString(6),
+  });
 };
 </script>
 

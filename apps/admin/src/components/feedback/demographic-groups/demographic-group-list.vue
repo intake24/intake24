@@ -272,26 +272,41 @@ const { dialog, errors, form, items, add, edit, load, remove, reset: resetItem, 
 
 const tab = ref('general');
 
-const cardTypes = cardTypesRef.map(value => ({ title: i18n.t(`feedback-schemes.cards.${value}.title`), value }));
+const cardTypes = cardTypesRef.map(value => ({
+  title: i18n.t(`feedback-schemes.cards.${value}.title`),
+  value,
+}));
 
 function reset() {
   tab.value = 'general';
   resetItem();
 }
 
-const nutrientRuleTypes = nutrientRuleTypesRef.map(value => ({ title: i18n.t(`feedback-schemes.nutrientRuleTypes.${value}`), value }));
+const nutrientRuleTypes = nutrientRuleTypesRef.map(value => ({
+  title: i18n.t(`feedback-schemes.nutrientRuleTypes.${value}`),
+  value,
+}));
 
 const sexes = [
-  { title: i18n.t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
+  {
+    title: i18n.t('common.not.selected'),
+    value: null,
+    icon: 'fas fa-genderless',
+  },
   ...sexesRef.map(value => ({
     title: i18n.t(`feedback-schemes.sexes.${value}`),
     value,
-    icon: value === 'm' ? 'fas fa-mars' : 'fas fa-venus',
+    icon: value === 'm'
+      ? 'fas fa-mars'
+      : 'fas fa-venus',
   })),
 ];
 
 const physicalActivityLevels = computed<PhysicalActivityLevelAttributes[]>(() => [
-  { name: i18n.t('common.not.selected'), id: null },
+  {
+    name: i18n.t('common.not.selected'),
+    id: null,
+  },
   ...(useEntry().refs.physicalActivityLevels ?? []),
 ]);
 

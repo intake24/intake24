@@ -117,7 +117,10 @@ export default defineComponent({
       const scales = [...entry.scales];
 
       scales[props.scaleIndex].volumeSamples = flatten(
-        volumeSampleRows.value.map(([height, volume]) => [Number.parseFloat(height), Number.parseFloat(volume)]),
+        volumeSampleRows.value.map(([height, volume]) => [
+          Number.parseFloat(height),
+          Number.parseFloat(volume),
+        ]),
       );
 
       entryStore.updateEntry({
@@ -130,7 +133,9 @@ export default defineComponent({
       const rowIndex = volumeSampleRows.value.length;
 
       volumeSampleRows.value.push(
-        rowIndex < entrySamples.value.length ? entrySamples.value[rowIndex] : ['0', '0'],
+        rowIndex < entrySamples.value.length
+          ? entrySamples.value[rowIndex]
+          : ['0', '0'],
       );
       onDataChanged();
     };

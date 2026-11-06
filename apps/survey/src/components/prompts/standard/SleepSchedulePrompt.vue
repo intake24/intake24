@@ -68,7 +68,9 @@ function nextPanel() {
     return;
   }
 
-  state.value.panel = state.value.panel < panels - 1 ? state.value.panel + 1 : 0;
+  state.value.panel = state.value.panel < panels - 1
+    ? state.value.panel + 1
+    : 0;
 };
 </script>
 

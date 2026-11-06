@@ -11,11 +11,14 @@ const defaultRecall = {
   type: 'object',
   properties: {
     preMeals: { type: 'array', items: [] },
-    meals: { type: 'object', properties: {
-      preFoods: { type: 'array', items: [] },
-      foods: { type: 'array', items: [] },
-      postFoods: { type: 'array', items: [] },
-    } },
+    meals: {
+      type: 'object',
+      properties: {
+        preFoods: { type: 'array', items: [] },
+        foods: { type: 'array', items: [] },
+        postFoods: { type: 'array', items: [] },
+      },
+    },
     postMeals: { type: 'array', items: [] },
     submission: { type: 'array', items: [] },
   },

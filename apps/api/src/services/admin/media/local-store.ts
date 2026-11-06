@@ -12,7 +12,10 @@ function localMediaStore({ logger: globalLogger, mediaConfig }: Pick<IoC, 'media
   const logger = globalLogger.child({ service: 'LocalMediaStore' });
 
   const getBasePath = (disk: MediaDisk, id: string): string[] => {
-    return [mediaConfig.storage.local[disk], ...baseObjectPath(id)];
+    return [
+      mediaConfig.storage.local[disk],
+      ...baseObjectPath(id),
+    ];
   };
 
   const storeObject = async (disk: MediaDisk, id: string, path: string) => {

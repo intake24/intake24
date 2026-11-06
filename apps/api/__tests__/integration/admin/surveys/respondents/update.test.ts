@@ -99,14 +99,23 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'patch',
         url,
-        ['password', 'passwordConfirm', 'name', 'email', 'phone', 'customFields'],
+        [
+          'password',
+          'passwordConfirm',
+          'name',
+          'email',
+          'phone',
+          'customFields',
+        ],
         {
           input: {
             password: 'notacomplexpassword',
             passwordConfirm: 'notMatchingPassword',
             name: ['test respondent'],
             email: false,
-            phone: [new Date()],
+            phone: [
+              new Date(),
+            ],
             customFields: 'not-a-custom-field',
           },
         },
@@ -134,7 +143,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['respondents'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['respondents'],
+      });
 
       const updateRespondent2 = omit(mocker.system.respondent(), ['username']);
       const updateInput2 = {

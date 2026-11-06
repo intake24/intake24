@@ -64,7 +64,10 @@ describe('input sanitation middleware', () => {
             that best describes your diet (you can tick more than one e.g. vegetarian and gluten free).</p>`,
         },
         conditions: [],
-        validation: { required: true, message: { en: 'Invalid answer<iframe></iframe>' } },
+        validation: {
+          required: true,
+          message: { en: 'Invalid answer<iframe></iframe>' },
+        },
         label: {
           en: '<iframe allowfullscreen="allowfullscreen" frameborder="0" height="360" width="640" src="https://www.youtube.com/embed/gdsgdf"></iframe>',
         },
@@ -124,7 +127,10 @@ describe('input sanitation middleware', () => {
           en: '<p>If yes, please tick the options below that best describes your diet (you can tick more than one e.g. vegetarian and gluten free).</p>',
         },
         conditions: [],
-        validation: { required: true, message: { en: 'Invalid answer<iframe></iframe>' } },
+        validation: {
+          required: true,
+          message: { en: 'Invalid answer<iframe></iframe>' },
+        },
         label: { en: '<iframe>Tick some</iframe>' },
         options: {
           en: [

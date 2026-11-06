@@ -4,5 +4,11 @@ import type { Food } from '@intake24/db';
 export function foodsResponse(food: Food): FoodListEntry {
   const { id, code, localeId, englishName, name } = food;
 
-  return { id, code, localeId, name: name ?? englishName, englishName };
+  return {
+    id,
+    code,
+    localeId,
+    name: name ?? englishName,
+    englishName,
+  };
 }

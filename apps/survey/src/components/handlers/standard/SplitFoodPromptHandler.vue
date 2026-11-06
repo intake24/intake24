@@ -55,7 +55,10 @@ function separate() {
     });
   });
 
-  survey.updateFood({ foodId, update: { description: first } });
+  survey.updateFood({
+    foodId,
+    update: { description: first },
+  });
   survey.addFoodFlag(foodId, 'split-food-complete');
   emit('action', 'next');
 }

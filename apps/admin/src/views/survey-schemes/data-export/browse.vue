@@ -156,7 +156,10 @@ export default defineComponent({
 
       return exportSectionIds
         .filter(id => !used.includes(id))
-        .map(id => ({ id, title: i18n.t(`survey-schemes.data-export.sections.${id}`) }));
+        .map(id => ({
+          id,
+          title: i18n.t(`survey-schemes.data-export.sections.${id}`),
+        }));
     });
 
     const add = (section: ExportSectionId) => {

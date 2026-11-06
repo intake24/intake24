@@ -27,7 +27,9 @@ app.use(router);
 app.use(pinia);
 app.use(i18n);
 app.use(vuetify);
-app.use(createManager({ deferLoading: { enabled: true, autoLoad: true } }));
+app.use(createManager({
+  deferLoading: { enabled: true, autoLoad: true },
+}));
 app.use(cookieConsentPlugin, cookieConsentConfig());
 bootstrapAnalytics(app, router);
 app.mount('#app');

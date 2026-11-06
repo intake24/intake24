@@ -63,7 +63,9 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
 
   private async prepareExportInfo() {
     const { localeId } = this.params;
-    const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
+    const locale = await SystemLocale.findByPk(localeId, {
+      attributes: ['code'],
+    });
     if (!locale)
       throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
 
@@ -72,7 +74,9 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
     const timestamp = format(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-${this.name}-${localeCode}-${timestamp}.csv`;
 
-    const total = await Food.count({ where: { localeId: localeCode } });
+    const total = await Food.count({
+      where: { localeId: localeCode },
+    });
 
     const fields = [
       { label: 'Locale', value: 'localeId' },
@@ -125,7 +129,9 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
         { association: 'nutrientRecords' },
         { association: 'portionSizeMethods' },
       ],
-      order: [['code', 'asc']],
+      order: [
+        ['code', 'asc'],
+      ],
       transform: async (food: Food) => {
         const cache = await this.cachedParentCategoriesService.getFoodCache(food.id);
 
@@ -171,7 +177,9 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
               readyMealOption: attributes?.readyMealOption ?? 'Inherited',
               sameAsBeforeOption: attributes?.sameAsBeforeOption ?? 'Inherited',
               reasonableAmount: attributes?.reasonableAmount ?? 'Inherited',
-              useInRecipes: attributes?.useInRecipes != null ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes] : 'Inherited',
+              useInRecipes: attributes?.useInRecipes != null
+                ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes]
+                : 'Inherited',
               readyMealOptionEffective: cache.attributes.readyMealOption ?? 'N/A',
               sameAsBeforeOptionEffective: cache.attributes.sameAsBeforeOption ?? 'N/A',
               reasonableAmountEffective: cache.attributes.reasonableAmount ?? 'N/A',
@@ -189,7 +197,13 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
               portionSizeMethods: portionSizeMethods
                 .toSorted((a, b) => Number(a.orderBy) - Number(b.orderBy))
                 .map((psm) => {
-                  const attr = Object.entries(pick(psm, ['method', 'description', 'pathways', 'conversionFactor', 'orderBy'])).map(
+                  const attr = Object.entries(pick(psm, [
+                    'method',
+                    'description',
+                    'pathways',
+                    'conversionFactor',
+                    'orderBy',
+                  ])).map(
                     ([key, value]) => `${key}: ${value?.toString()}`,
                   ).join('; ');
                   return `${attr}, parameters: ${JSON.stringify(psm.parameters)}`;

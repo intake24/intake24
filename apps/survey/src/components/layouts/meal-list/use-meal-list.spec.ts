@@ -16,7 +16,13 @@ describe('useMealList', async () => {
     emit.mockClear();
   });
 
-  it.each(['addFood', 'changeFood', 'mealTime', 'deleteFood', 'deleteMeal'] as const)(
+  it.each([
+    'addFood',
+    'changeFood',
+    'mealTime',
+    'deleteFood',
+    'deleteMeal',
+  ] as const)(
     'marks %s as originating from MealList',
     (type) => {
       const { action } = useMealList({ meals: [] }, { emit }, { fromPersistentMealList: true });

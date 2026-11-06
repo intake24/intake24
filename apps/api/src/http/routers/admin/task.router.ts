@@ -10,29 +10,49 @@ import { contract } from '@intake24/common/contracts';
 import { Task } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { taskId }: { taskId?: string } = {}) {
-  const where: WhereOptions = taskId ? { id: { [Op.ne]: taskId } } : {};
+  const where: WhereOptions = taskId
+    ? {
+        id: { [Op.ne]: taskId },
+      }
+    : {};
 
-  if (!(await unique({ model: Task, condition: { field: 'name', value }, options: { where } }))) {
-    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: Task,
+    condition: { field: 'name', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      path: 'name',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function task() {
   return initServer().router(contract.admin.task, {
     browse: {
-      middleware: [permission('tasks', 'tasks:browse')],
+      middleware: [
+        permission('tasks', 'tasks:browse'),
+      ],
       handler: async ({ query }) => {
         const tasks = await Task.paginate({
           query,
           columns: ['name', 'job'],
-          order: [[fn('lower', col('name')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('name')),
+              'ASC',
+            ],
+          ],
         });
 
         return { status: 200, body: tasks };
       },
     },
     store: {
-      middleware: [permission('tasks', 'tasks:create')],
+      middleware: [
+        permission('tasks', 'tasks:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
 
@@ -43,7 +63,9 @@ export function task() {
       },
     },
     read: {
-      middleware: [permission('tasks', 'tasks:read')],
+      middleware: [
+        permission('tasks', 'tasks:read'),
+      ],
       handler: async ({ params: { taskId }, req }) => {
         const task = await Task.findByPk(taskId);
         if (!task)
@@ -51,11 +73,19 @@ export function task() {
 
         const bullJob = await req.scope.cradle.scheduler.tasks.getScheduledJobById(taskId);
 
-        return { status: 200, body: { ...task.get(), bullJob } };
+        return {
+          status: 200,
+          body: {
+            ...task.get(),
+            bullJob,
+          },
+        };
       },
     },
     update: {
-      middleware: [permission('tasks', 'tasks:edit')],
+      middleware: [
+        permission('tasks', 'tasks:edit'),
+      ],
       handler: async ({ body, params: { taskId }, req }) => {
         await uniqueMiddleware(body.name, { taskId });
 
@@ -67,13 +97,23 @@ export function task() {
         await req.scope.cradle.scheduler.tasks.updateTaskInQueue(task);
         const bullJob = await req.scope.cradle.scheduler.tasks.getScheduledJobById(taskId);
 
-        return { status: 200, body: { ...task.get(), bullJob } };
+        return {
+          status: 200,
+          body: {
+            ...task.get(),
+            bullJob,
+          },
+        };
       },
     },
     destroy: {
-      middleware: [permission('tasks', 'tasks:delete')],
+      middleware: [
+        permission('tasks', 'tasks:delete'),
+      ],
       handler: async ({ params: { taskId }, req }) => {
-        const task = await Task.findByPk(taskId, { attributes: ['id'] });
+        const task = await Task.findByPk(taskId, {
+          attributes: ['id'],
+        });
         if (!task)
           throw new NotFoundError();
 
@@ -84,11 +124,15 @@ export function task() {
       },
     },
     run: {
-      middleware: [permission('tasks', 'tasks:edit')],
+      middleware: [
+        permission('tasks', 'tasks:edit'),
+      ],
       handler: async ({ params: { taskId }, req }) => {
         const { userId } = req.scope.cradle.user;
 
-        const task = await Task.findByPk(taskId, { attributes: ['id', 'job', 'params'] });
+        const task = await Task.findByPk(taskId, {
+          attributes: ['id', 'job', 'params'],
+        });
         if (!task)
           throw new NotFoundError();
 

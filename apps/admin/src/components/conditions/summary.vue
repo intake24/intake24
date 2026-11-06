@@ -48,7 +48,9 @@ function getSummaryHtml(condition: Condition): string {
         : t(`survey-schemes.conditions.summary.tag.absent`, { id: condition.property.check.tagId || '?', object });
     }
     case 'boolean': {
-      const value = (condition.property.check.value ? t(`common.yes`) : t(`common.no`)).toLocaleLowerCase();
+      const value = (condition.property.check.value
+        ? t(`common.yes`)
+        : t(`common.no`)).toLocaleLowerCase();
       return t(`survey-schemes.conditions.summary.boolean`, { object, property, value });
     }
     case 'value':
@@ -103,7 +105,9 @@ const info = computed(() => {
     showOp: getShowOp(props.condition),
     showNotRequired: getShowNotRequired(props.condition),
     check,
-    icon: 'op' in check ? opToIconMap[check.op] : undefined,
+    icon: 'op' in check
+      ? opToIconMap[check.op]
+      : undefined,
   };
 });
 </script>

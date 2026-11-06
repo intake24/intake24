@@ -68,7 +68,12 @@ export default defineComponent({
     const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<PermissionForm, PermissionEntry>(
       props,
       {
-        data: { id: null, name: null, displayName: null, description: null },
+        data: {
+          id: null,
+          name: null,
+          displayName: null,
+          description: null,
+        },
       },
     );
 

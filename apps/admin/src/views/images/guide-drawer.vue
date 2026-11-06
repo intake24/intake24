@@ -175,18 +175,26 @@ const selectedNodeIdx = ref<number | null>(null);
 
 props.entry.objects.forEach(({ id, outlineCoordinates, ...rest }) => {
   coords.value.push(chunk(outlineCoordinates, 2));
-  objects.value.push({ weight: 0, id: Number.parseInt(id, 10), ...rest });
+  objects.value.push({
+    weight: 0,
+    id: Number.parseInt(id, 10),
+    ...rest,
+  });
 });
 
 const isImageMap = computed(() => props.resource === 'image-maps');
 const isGuideImage = computed(() => props.resource === 'guide-images');
 
 const svgCursor = computed(
-  () => `cursor: ${props.readonly || selectedObjectIdx.value === null ? 'no-drop' : 'pointer'}`,
+  () => `cursor: ${props.readonly || selectedObjectIdx.value === null
+    ? 'no-drop'
+    : 'pointer'}`,
 );
 
 const nodeCursor = computed(
-  () => `cursor: ${selectedNodeIdx.value === null ? 'grab' : 'grabbing'}`,
+  () => `cursor: ${selectedNodeIdx.value === null
+    ? 'grab'
+    : 'grabbing'}`,
 );
 
 const scaled = computed(() => {
@@ -232,7 +240,9 @@ function selectObject(idx: number) {
 };
 
 function addObject() {
-  const nextId = objects.value.reduce((acc, { id }) => (acc < id ? id : acc), -1);
+  const nextId = objects.value.reduce((acc, { id }) => (acc < id
+    ? id
+    : acc), -1);
   coords.value.push([]);
   const objectsLength = objects.value.push({
     id: nextId + 1,

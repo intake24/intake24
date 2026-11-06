@@ -72,7 +72,9 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
         preFoods: scheme.prompts.meals.preFoods.map(prompt => this.migratePrompt(prompt, 'preFoods') as unknown as SinglePrompt),
         foods: scheme.prompts.meals.foods.map(prompt => this.migratePrompt(prompt, 'foods') as unknown as SinglePrompt),
         postFoods: scheme.prompts.meals.postFoods.map(prompt => this.migratePrompt(prompt, 'postFoods') as unknown as SinglePrompt),
-        foodsDeferred: scheme.prompts.meals.foodsDeferred ? scheme.prompts.meals.foodsDeferred.map(prompt => this.migratePrompt(prompt, 'foodsDeferred') as unknown as SinglePrompt) : [],
+        foodsDeferred: scheme.prompts.meals.foodsDeferred
+          ? scheme.prompts.meals.foodsDeferred.map(prompt => this.migratePrompt(prompt, 'foodsDeferred') as unknown as SinglePrompt)
+          : [],
       },
       postMeals: scheme.prompts.postMeals.map(prompt => this.migratePrompt(prompt, 'postMeals') as unknown as SinglePrompt),
       submission: scheme.prompts.submission.map(prompt => this.migratePrompt(prompt, 'submission') as unknown as SinglePrompt),
@@ -81,7 +83,9 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
     scheme.prompts = prompts;
 
-    await scheme.save({ fields: ['prompts'] });
+    await scheme.save({
+      fields: ['prompts'],
+    });
   }
 
   private async migrateSchemeOverridePrompts(survey: Survey): Promise<void> {
@@ -93,11 +97,17 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
       prompts,
     };
 
-    await survey.save({ fields: ['surveySchemeOverrides'] });
+    await survey.save({
+      fields: ['surveySchemeOverrides'],
+    });
   }
 
   private getPromptMap() {
-    return [...customPrompts, ...standardPrompts, ...portionSizePrompts].reduce<
+    return [
+      ...customPrompts,
+      ...standardPrompts,
+      ...portionSizePrompts,
+    ].reduce<
       Record<string, SinglePrompt>
     >((acc, prompt) => {
       acc[prompt.component] = prompt;
@@ -129,7 +139,9 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
     const schemes = await this.models.system.SurveyScheme.findAll({
       attributes: ['id', 'meals', 'prompts', 'settings'],
-      order: [['id', 'ASC']],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
 
     for (const scheme of schemes) {
@@ -143,7 +155,9 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
           preFoods: scheme.prompts.meals.preFoods.map(promptMergeCallback),
           foods: scheme.prompts.meals.foods.map(promptMergeCallback),
           postFoods: scheme.prompts.meals.postFoods.map(promptMergeCallback),
-          foodsDeferred: scheme.prompts.meals.foodsDeferred ? scheme.prompts.meals.foodsDeferred.map(promptMergeCallback) : [],
+          foodsDeferred: scheme.prompts.meals.foodsDeferred
+            ? scheme.prompts.meals.foodsDeferred.map(promptMergeCallback)
+            : [],
         },
         postMeals: scheme.prompts.postMeals.map(promptMergeCallback),
         submission: scheme.prompts.submission.map(promptMergeCallback),
@@ -156,7 +170,9 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
     const surveys = await this.models.system.Survey.findAll({
       attributes: ['id', 'surveySchemeOverrides'],
-      order: [['id', 'ASC']],
+      order: [
+        ['id', 'ASC'],
+      ],
     });
 
     for (const survey of surveys) {

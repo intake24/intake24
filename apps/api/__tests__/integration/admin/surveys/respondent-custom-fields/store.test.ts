@@ -87,7 +87,10 @@ export default () => {
 
     it('should return 400 for duplicate field name', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
-        input: { ...mocker.system.customField(), name: input.name },
+        input: {
+          ...mocker.system.customField(),
+          name: input.name,
+        },
       });
     });
   });
@@ -102,7 +105,10 @@ export default () => {
     });
 
     it('should return 201 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['respondents'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['respondents'],
+      });
 
       const output2 = mocker.system.customField();
       await suite.sharedTests.assertRecordInserted('post', url, output2, { input: output2 });

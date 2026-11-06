@@ -30,11 +30,15 @@ export function useFoodUtils<
 
   const foodName = computed(
     () =>
-      (props.food ? getFoodName(props.food) : undefined) as F extends undefined ? undefined : string,
+      (props.food
+        ? getFoodName(props.food)
+        : undefined) as F extends undefined ? undefined : string,
   );
   const parentFoodName = computed(
     () =>
-      (props.parentFood ? getFoodName(props.parentFood) : undefined) as FP extends undefined
+      (props.parentFood
+        ? getFoodName(props.parentFood)
+        : undefined) as FP extends undefined
         ? undefined
         : string,
   );

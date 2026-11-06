@@ -245,9 +245,11 @@ function update() {
   if ([size, crust, unit, quantity].every(item => item)) {
     state.value.portionSize.servingWeight
       = ((baseWeight * pizzaDefs[size!].multiplier * crustDefs[crust!])
-        / (unit === 'slice' ? pizzaDefs[size!].slices : 1))
-      * quantity
-      * conversionFactor.value;
+        / (unit === 'slice'
+          ? pizzaDefs[size!].slices
+          : 1))
+        * quantity
+        * conversionFactor.value;
   }
 
   emit('update:modelValue', state.value);

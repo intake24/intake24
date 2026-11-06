@@ -41,7 +41,9 @@ const filteredFoods = computed(() => filterFoodsForFoodSelectionPrompt(surveySto
 
 function isFoodSelected(food: FoodState): boolean {
   if (props.prompt.useFlag) {
-    return parsedFlag.value ? food.flags.includes(parsedFlag.value) : false;
+    return parsedFlag.value
+      ? food.flags.includes(parsedFlag.value)
+      : false;
   }
   else {
     return food.customPromptAnswers[props.prompt.id] !== undefined;

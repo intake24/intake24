@@ -37,8 +37,16 @@ function mediaService({ mediaStore, appConfig, kyselyDb, mediaConfig }: Pick<IoC
   const getUrl = ({ id, filename }: MediaStoreObject, conversion?: MediaConversion) => {
     const ext = extname(filename);
 
-    const segments = [appConfig.urls.media, ...baseObjectPath(id)];
-    segments.push(...(conversion ? ['conversions', filename.replace(ext, `-${conversion}${ext}`)] : [filename]));
+    const segments = [
+      appConfig.urls.media,
+      ...baseObjectPath(id),
+    ];
+    segments.push(...(conversion
+      ? [
+          'conversions',
+          filename.replace(ext, `-${conversion}${ext}`),
+        ]
+      : [filename]));
 
     return segments.join('/');
   };
@@ -49,7 +57,10 @@ function mediaService({ mediaStore, appConfig, kyselyDb, mediaConfig }: Pick<IoC
       return acc;
     }, {} as Record<MediaStoreObjectUrls, string>);
 
-    return { sizes, url: getUrl(object) };
+    return {
+      sizes,
+      url: getUrl(object),
+    };
   };
 
   const browseMedia = async (query: PaginateQuery, model?: Mediable) => {
@@ -57,8 +68,13 @@ function mediaService({ mediaStore, appConfig, kyselyDb, mediaConfig }: Pick<IoC
       query,
       columns: ['name', 'filename'],
       where: model,
-      order: [['createdAt', 'ASC']],
-      transform: media => ({ ...media.get(), ...getUrls(media) }),
+      order: [
+        ['createdAt', 'ASC'],
+      ],
+      transform: media => ({
+        ...media.get(),
+        ...getUrls(media),
+      }),
     });
 
     return media;
@@ -74,8 +90,13 @@ function mediaService({ mediaStore, appConfig, kyselyDb, mediaConfig }: Pick<IoC
   };
 
   const resolveMediaWithUrls = async (media: string | MediaAttributes): Promise<MediaEntry> => {
-    const mediaEntry = typeof media === 'string' ? await getMediaById(media) : media;
-    return { ...mediaEntry, ...getUrls(mediaEntry) };
+    const mediaEntry = typeof media === 'string'
+      ? await getMediaById(media)
+      : media;
+    return {
+      ...mediaEntry,
+      ...getUrls(mediaEntry),
+    };
   };
 
   const generateConversions = async (objectPath: string, filename: string) => {
@@ -162,7 +183,10 @@ function mediaService({ mediaStore, appConfig, kyselyDb, mediaConfig }: Pick<IoC
   };
 
   const updateMedia = async (id: MediaId, input: UpdateMediaWithModelRequest): Promise<MediaEntry> => {
-    let query = kyselyDb.system.updateTable('media').set({ ...input, updatedAt: new Date() });
+    let query = kyselyDb.system.updateTable('media').set({
+      ...input,
+      updatedAt: new Date(),
+    });
 
     if (typeof id === 'string') {
       query = query.where('id', '=', id);

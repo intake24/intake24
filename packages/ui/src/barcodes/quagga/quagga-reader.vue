@@ -194,7 +194,14 @@ async function start() {
           height: { min: 480, ideal: 720 },
           width: { min: 640, ideal: 1280 },
         },
-        area: locate.value ? undefined : { top: '45%', right: '0%', left: '0%', bottom: '45%' },
+        area: locate.value
+          ? undefined
+          : {
+              top: '45%',
+              right: '0%',
+              left: '0%',
+              bottom: '45%',
+            },
         willReadFrequently: true,
       },
       locate: locate.value,

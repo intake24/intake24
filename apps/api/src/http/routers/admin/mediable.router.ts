@@ -25,34 +25,54 @@ export function mediable(securable: ModelStatic<FAQ | FeedbackScheme | SurveySch
 
   return initServer().router(contract, {
     browse: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       handler: async ({ query, req }) => {
         const { [paramId]: modelId } = req.params as Record<typeof paramId, string>;
         const { aclService, mediaService } = req.scope.cradle;
 
-        await aclService.findAndCheckRecordAccess(securable, 'media', { attributes: ['id'], where: { id: modelId } });
+        await aclService.findAndCheckRecordAccess(securable, 'media', {
+          attributes: ['id'],
+          where: { id: modelId },
+        });
         const media = await mediaService.browseMedia(query, { modelType, modelId });
 
         return { status: 200, body: media };
       },
     },
     store: {
-      middleware: [permission(resource), upload.single('file')],
+      middleware: [
+        permission(resource),
+        upload.single('file'),
+      ],
       handler: async ({ body, file, req }) => {
         const { [paramId]: modelId } = req.params as Record<typeof paramId, string>;
         const { aclService, kyselyDb, mediaService } = req.scope.cradle;
 
         if (body.id) {
           const dup = await kyselyDb.system.selectFrom('media').select('id').where('id', '=', body.id).executeTakeFirst();
-          if (dup)
-            throw ValidationError.from({ code: '$unique', path: 'id', i18n: { type: 'unique._' } });
+          if (dup) {
+            throw ValidationError.from({
+              code: '$unique',
+              path: 'id',
+              i18n: { type: 'unique._' },
+            });
+          }
         }
 
-        await aclService.findAndCheckRecordAccess(securable, 'media', { attributes: ['id'], where: { id: modelId } });
+        await aclService.findAndCheckRecordAccess(securable, 'media', {
+          attributes: ['id'],
+          where: { id: modelId },
+        });
 
         const { data, success } = imageMulterFile.safeParse(file);
-        if (!success)
-          throw ValidationError.from({ path: 'file', i18n: { type: 'file._' } });
+        if (!success) {
+          throw ValidationError.from({
+            path: 'file',
+            i18n: { type: 'file._' },
+          });
+        }
 
         const media = await mediaService.createMedia({ ...body, modelType, modelId }, data);
 
@@ -60,39 +80,54 @@ export function mediable(securable: ModelStatic<FAQ | FeedbackScheme | SurveySch
       },
     },
     read: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       handler: async ({ params, req }) => {
         // @ts-expect-error dynamic contract type issue
         const { [paramId]: modelId, mediaId } = params;
         const { aclService, mediaService } = req.scope.cradle;
 
-        await aclService.findAndCheckRecordAccess(securable, 'media', { attributes: ['id'], where: { id: modelId } });
+        await aclService.findAndCheckRecordAccess(securable, 'media', {
+          attributes: ['id'],
+          where: { id: modelId },
+        });
         const media = await mediaService.getMedia({ id: mediaId, modelType, modelId });
 
         return { status: 200, body: media };
       },
     },
     update: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       handler: async ({ body, params, req }) => {
         // @ts-expect-error dynamic contract type issue
         const { [paramId]: modelId, mediaId } = params;
         const { aclService, mediaService } = req.scope.cradle;
 
-        await aclService.findAndCheckRecordAccess(securable, 'media', { attributes: ['id'], where: { id: modelId } });
+        await aclService.findAndCheckRecordAccess(securable, 'media', {
+          attributes: ['id'],
+          where: { id: modelId },
+        });
         const media = await mediaService.updateMedia({ id: mediaId, modelType, modelId }, { ...body, modelType, modelId });
 
         return { status: 200, body: media };
       },
     },
     destroy: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       handler: async ({ params, req }) => {
         // @ts-expect-error dynamic contract type issue
         const { [paramId]: modelId, mediaId } = params;
         const { aclService, mediaService } = req.scope.cradle;
 
-        await aclService.findAndCheckRecordAccess(securable, 'media', { attributes: ['id'], where: { id: modelId } });
+        await aclService.findAndCheckRecordAccess(securable, 'media', {
+          attributes: ['id'],
+          where: { id: modelId },
+        });
         await mediaService.destroyMedia({ id: mediaId, modelType, modelId });
 
         return { status: 204, body: undefined };

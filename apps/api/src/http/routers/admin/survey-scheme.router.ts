@@ -26,17 +26,30 @@ import {
 } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { surveySchemeId }: { surveySchemeId?: string } = {}) {
-  const where: WhereOptions = surveySchemeId ? { id: { [Op.ne]: surveySchemeId } } : {};
+  const where: WhereOptions = surveySchemeId
+    ? {
+        id: { [Op.ne]: surveySchemeId },
+      }
+    : {};
 
-  if (!(await unique({ model: SurveyScheme, condition: { field: 'name', value }, options: { where } }))) {
-    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: SurveyScheme,
+    condition: { field: 'name', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      path: 'name',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function surveyScheme() {
   return initServer().router(contract.admin.surveyScheme, {
     browse: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async ({ query, req }) => {
         const {
           aclService,
@@ -46,7 +59,12 @@ export function surveyScheme() {
         const paginateOptions: PaginateOptions = {
           query,
           columns: ['name'],
-          order: [[fn('lower', col('SurveyScheme.name')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('SurveyScheme.name')),
+              'ASC',
+            ],
+          ],
         };
 
         if (await aclService.hasPermission('survey-schemes:browse')) {
@@ -56,7 +74,12 @@ export function surveyScheme() {
 
         const surveySchemes = await SurveyScheme.paginate({
           ...paginateOptions,
-          where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+          where: {
+            [Op.or]: {
+              ownerId: userId,
+              '$securables.action$': ['read', 'edit', 'delete'],
+            },
+          },
           ...securableScope(userId),
           subQuery: false,
         });
@@ -65,7 +88,9 @@ export function surveyScheme() {
       },
     },
     store: {
-      middleware: [permission('survey-schemes', 'survey-schemes:create')],
+      middleware: [
+        permission('survey-schemes', 'survey-schemes:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
 
@@ -86,31 +111,48 @@ export function surveyScheme() {
           ownerId: req.scope.cradle.user.userId,
         });
 
-        return { status: 201, body: surveySchemeResponse(surveyScheme) };
+        return {
+          status: 201,
+          body: surveySchemeResponse(surveyScheme),
+        };
       },
     },
     refs: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async () => {
-        const prompts = await SurveySchemePrompt.findAll({ attributes: ['prompt'] });
+        const prompts = await SurveySchemePrompt.findAll({
+          attributes: ['prompt'],
+        });
 
         const templates = prompts.map(({ prompt }) => prompt);
 
-        return { status: 200, body: { templates } };
+        return {
+          status: 200,
+          body: { templates },
+        };
       },
     },
     read: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async ({ params: { surveySchemeId }, req }) => {
         const surveyScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(SurveyScheme, 'read', {
           where: { id: surveySchemeId },
         });
 
-        return { status: 200, body: surveySchemeResponse(surveyScheme) };
+        return {
+          status: 200,
+          body: surveySchemeResponse(surveyScheme),
+        };
       },
     },
     patch: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async ({ body, params: { surveySchemeId }, req }) => {
         await uniqueMiddleware(body.name, { surveySchemeId });
 
@@ -148,11 +190,16 @@ export function surveyScheme() {
 
         await surveyScheme.update(updateInput);
 
-        return { status: 200, body: surveySchemeResponse(surveyScheme) };
+        return {
+          status: 200,
+          body: surveySchemeResponse(surveyScheme),
+        };
       },
     },
     put: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async ({ body, params: { surveySchemeId }, req }) => {
         await uniqueMiddleware(body.name, { surveySchemeId });
 
@@ -162,16 +209,26 @@ export function surveyScheme() {
 
         await surveyScheme.update(body);
 
-        return { status: 200, body: surveySchemeResponse(surveyScheme) };
+        return {
+          status: 200,
+          body: surveySchemeResponse(surveyScheme),
+        };
       },
     },
     destroy: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async ({ params: { surveySchemeId }, req }) => {
         const surveyScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(SurveyScheme, 'delete', {
           attributes: ['id'],
           where: { id: surveySchemeId },
-          include: [{ association: 'surveys', attributes: ['id'] }],
+          include: [
+            {
+              association: 'surveys',
+              attributes: ['id'],
+            },
+          ],
         });
         const { id: securableId, surveys } = surveyScheme;
 
@@ -179,7 +236,9 @@ export function surveyScheme() {
           throw new ForbiddenError('Scheme cannot be deleted. There are surveys using this scheme.');
 
         await Promise.all([
-          UserSecurable.destroy({ where: { securableId, securableType: 'SurveyScheme' } }),
+          UserSecurable.destroy({
+            where: { securableId, securableType: 'SurveyScheme' },
+          }),
           surveyScheme.destroy(),
         ]);
 
@@ -187,7 +246,9 @@ export function surveyScheme() {
       },
     },
     copy: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async ({ body, params: { surveySchemeId }, req }) => {
         await uniqueMiddleware(body.name);
 
@@ -213,11 +274,16 @@ export function surveyScheme() {
           ownerId: userId,
         });
 
-        return { status: 200, body: surveySchemeResponse(surveySchemeCopy) };
+        return {
+          status: 200,
+          body: surveySchemeResponse(surveySchemeCopy),
+        };
       },
     },
     templates: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async ({ params: { surveySchemeId }, query, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(SurveyScheme, 'prompts', {
           attributes: ['id'],
@@ -227,7 +293,9 @@ export function surveyScheme() {
         const surveySchemePrompts = await SurveySchemePrompt.paginate({
           query,
           columns: ['name', 'promptId'],
-          order: [['promptId', 'ASC']],
+          order: [
+            ['promptId', 'ASC'],
+          ],
           transform: ({ prompt }) => prompt,
         });
 
@@ -235,7 +303,9 @@ export function surveyScheme() {
       },
     },
     dataExportRefs: {
-      middleware: [permission('survey-schemes')],
+      middleware: [
+        permission('survey-schemes'),
+      ],
       handler: async ({ params: { surveySchemeId }, req }) => {
         const { aclService, dataExportFields } = req.scope.cradle;
 

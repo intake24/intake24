@@ -24,7 +24,9 @@ export function withDefaultSubsections(prompts: RecallPrompts, sections: PromptS
     if (subsections[section]?.length)
       continue;
 
-    const sectionPrompts: SinglePrompt[] = isMealSection(section) ? prompts.meals[section] : prompts[section];
+    const sectionPrompts: SinglePrompt[] = isMealSection(section)
+      ? prompts.meals[section]
+      : prompts[section];
     const defaultSubsection: PromptSubsection = {
       id: subsectionKey(section, 0),
       size: sectionPrompts.length,
@@ -35,5 +37,8 @@ export function withDefaultSubsections(prompts: RecallPrompts, sections: PromptS
     subsections[section] = [defaultSubsection];
   }
 
-  return { ...prompts, ui: { ...prompts.ui, subsections } };
+  return {
+    ...prompts,
+    ui: { ...prompts.ui, subsections },
+  };
 }

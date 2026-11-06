@@ -86,7 +86,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['submissions'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['submissions'],
+      });
 
       await suite.sharedTests.assertRecord('get', url, output);
     });

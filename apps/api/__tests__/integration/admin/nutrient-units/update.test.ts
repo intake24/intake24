@@ -44,7 +44,10 @@ export default () => {
 
     it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('put', url, ['description', 'symbol'], {
-        input: { description: { name: 'text' }, symbol: null },
+        input: {
+          description: { name: 'text' },
+          symbol: null,
+        },
       });
     });
 

@@ -21,14 +21,20 @@ export default {
       await queryInterface.changeColumn(
         'category_portion_size_method_params',
         'value',
-        { type: Sequelize.STRING(128), allowNull: false },
+        {
+          type: Sequelize.STRING(128),
+          allowNull: false,
+        },
         { transaction },
       );
 
       await queryInterface.changeColumn(
         'food_portion_size_method_params',
         'value',
-        { type: Sequelize.STRING(128), allowNull: false },
+        {
+          type: Sequelize.STRING(128),
+          allowNull: false,
+        },
         { transaction },
       );
     }),

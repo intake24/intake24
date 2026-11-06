@@ -73,14 +73,16 @@ const associatedFoodsPromptProps = computed<Prompts['associated-foods-prompt']>(
   component: 'associated-foods-prompt',
 }));
 
-const associatedFoodPrompts = computed(() => ([{
-  id: props.prompt.id,
-  categoryCode: props.prompt.categoryCode,
-  promptText: props.prompt.promptText,
-  linkAsMain: false,
-  genericName: props.prompt.genericName,
-  multiple: props.prompt.multiple,
-}]));
+const associatedFoodPrompts = computed(() => ([
+  {
+    id: props.prompt.id,
+    categoryCode: props.prompt.categoryCode,
+    promptText: props.prompt.promptText,
+    linkAsMain: false,
+    genericName: props.prompt.genericName,
+    multiple: props.prompt.multiple,
+  },
+]));
 
 async function fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
   // TODO: Show loading
@@ -189,10 +191,17 @@ async function commitAnswer() {
 
   survey.updateFood({
     foodId,
-    update: { linkedFoods: foodIndex.linkedFoodIndex.length
+    update: {
+      linkedFoods: foodIndex.linkedFoodIndex.length
       // Associated foods prompts for the new linked foods need to be disabled to prevent potential circular associations.
-      ? linkedFoods.map(food => ({ ...food, flags: [...new Set([...food.flags, 'associated-foods-complete', 'disable-general-associated-foods'])] }))
-      : linkedFoods },
+        ? linkedFoods.map(food => ({
+            ...food,
+            flags: [
+              ...new Set([...food.flags, 'associated-foods-complete', 'disable-general-associated-foods']),
+            ],
+          }))
+        : linkedFoods,
+    },
   });
 
   survey.addFoodFlag(foodId, `${props.prompt.id}-complete`);

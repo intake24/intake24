@@ -18,5 +18,8 @@ export default (req: Request, res: Response, next: NextFunction): void => {
   const firstError = errors.array()[0];
   const status = getValidationHttpStatus(firstError);
 
-  res.status(status).json({ errors: errors.mapped(), message: firstError.msg });
+  res.status(status).json({
+    errors: errors.mapped(),
+    message: firstError.msg,
+  });
 };

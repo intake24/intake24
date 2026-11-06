@@ -74,7 +74,10 @@ export default defineComponent({
           : startIndex + chunk;
 
       const items = allKeys.value.slice(startIndex, endIndex);
-      loadedMessages.value = { ...loadedMessages.value, ...pick(allMessages.value, items) };
+      loadedMessages.value = {
+        ...loadedMessages.value,
+        ...pick(allMessages.value, items),
+      };
     };
 
     function close() {
@@ -95,7 +98,13 @@ export default defineComponent({
 
       const { translation: { id } } = props;
 
-      emit('update', { id, messages: { ...allMessages.value, ...loadedMessages.value } });
+      emit('update', {
+        id,
+        messages: {
+          ...allMessages.value,
+          ...loadedMessages.value,
+        },
+      });
       close();
     };
 

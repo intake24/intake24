@@ -62,12 +62,18 @@ export function useLogin(props: UseLoginProps) {
       });
       username.value = '';
       password.value = '';
-      await router.push({ name: 'survey-home', params: { survey: props.surveyId } });
+      await router.push({
+        name: 'survey-home',
+        params: { survey: props.surveyId },
+      });
     },
     token: async () => {
       await auth.token({ token: token.value, captcha: captchaToken.value });
       token.value = '';
-      await router.push({ name: 'survey-home', params: { survey: props.surveyId } });
+      await router.push({
+        name: 'survey-home',
+        params: { survey: props.surveyId },
+      });
     },
   };
 

@@ -14,12 +14,24 @@ export default () => {
   beforeAll(async () => {
     input = {
       foods: [
-        { id: 'categories', exclude: ['id'] },
-        { id: 'standard_units', exclude: ['id'] },
+        {
+          id: 'categories',
+          exclude: ['id'],
+        },
+        {
+          id: 'standard_units',
+          exclude: ['id'],
+        },
       ],
       system: [
-        { id: 'permissions', exclude: ['id'] },
-        { id: 'users', exclude: ['id'] },
+        {
+          id: 'permissions',
+          exclude: ['id'],
+        },
+        {
+          id: 'users',
+          exclude: ['id'],
+        },
       ],
     };
     output = input;
@@ -44,11 +56,23 @@ export default () => {
         ],
         {
           input: {
-            foods: { id: 'categories', exclude: ['id'] },
+            foods: {
+              id: 'categories',
+              exclude: ['id'],
+            },
             system: [
-              { id: 'permissions', exclude: ['id'] },
-              { id: 'users', exclude: ['id'] },
-              { id: 'users', exclude: ['id'] },
+              {
+                id: 'permissions',
+                exclude: ['id'],
+              },
+              {
+                id: 'users',
+                exclude: ['id'],
+              },
+              {
+                id: 'users',
+                exclude: ['id'],
+              },
             ],
           },
         },

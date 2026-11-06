@@ -2,7 +2,6 @@ import childProcess from 'node:child_process';
 import { fileURLToPath, URL } from 'node:url';
 
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
-import viteLegacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
@@ -38,7 +37,6 @@ export default defineConfig(({ mode }) => {
     EMPTY_OUT_DIR = 'true',
     DEV_HTTPS,
     DEV_MKCERT_PATH,
-    LEGACY,
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
     VUE_DEV_TOOLS,
@@ -48,7 +46,6 @@ export default defineConfig(({ mode }) => {
   const disablePwa = !!(DISABLE_PWA === 'true');
   const emptyOutDir = !!(EMPTY_OUT_DIR === 'true');
   const https = !!(DEV_HTTPS === 'true');
-  const legacy = !!(LEGACY === 'true');
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
   const vueDevTools = !!(VUE_DEV_TOOLS === 'true');
   const analyzeBundle = !!(ANALYZE_BUNDLE === 'true');
@@ -109,16 +106,21 @@ export default defineConfig(({ mode }) => {
       }),
       VueI18nPlugin(),
       Components({
-        resolvers: [IconsResolver()],
+        resolvers: [
+          IconsResolver(),
+        ],
         directoryAsNamespace: true,
       }),
       Icons(),
       webfontDownload([
         'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
       ]),
-      legacy ? viteLegacy() : undefined,
-      https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
-      vueDevTools ? vueDevToolsPlugin() : undefined,
+      https
+        ? mkcert({ savePath: DEV_MKCERT_PATH })
+        : undefined,
+      vueDevTools
+        ? vueDevToolsPlugin()
+        : undefined,
       createHtmlPlugin({
         inject: {
           data: {

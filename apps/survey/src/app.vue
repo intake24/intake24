@@ -198,7 +198,12 @@ async function logout() {
     event: 'surveyLogout',
   });
   await router.push(
-    surveyId.value ? { name: 'survey-login', params: { surveyId: surveyId.value } } : { name: 'home' },
+    surveyId.value
+      ? {
+          name: 'survey-login',
+          params: { surveyId: surveyId.value },
+        }
+      : { name: 'home' },
   );
 };
 

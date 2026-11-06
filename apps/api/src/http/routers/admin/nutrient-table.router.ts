@@ -12,8 +12,14 @@ import { jobRequiresFile } from '@intake24/common/types';
 import { FoodsNutrientType, NutrientTable } from '@intake24/db';
 
 async function uniqueMiddleware(value: string) {
-  if (!(await unique({ model: NutrientTable, condition: { field: 'id', value } }))) {
-    throw ValidationError.from({ path: 'id', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: NutrientTable,
+    condition: { field: 'id', value },
+  }))) {
+    throw ValidationError.from({
+      path: 'id',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
@@ -22,19 +28,28 @@ export function nutrientTable() {
 
   return initServer().router(contract.admin.nutrientTable, {
     browse: {
-      middleware: [permission('nutrient-tables', 'nutrient-tables:browse')],
+      middleware: [
+        permission('nutrient-tables', 'nutrient-tables:browse'),
+      ],
       handler: async ({ query }) => {
         const nutrientTables = await NutrientTable.paginate({
           query,
           columns: ['id', 'description'],
-          order: [[fn('lower', col('id')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('id')),
+              'ASC',
+            ],
+          ],
         });
 
         return { status: 200, body: nutrientTables };
       },
     },
     store: {
-      middleware: [permission('nutrient-tables', 'nutrient-tables:create')],
+      middleware: [
+        permission('nutrient-tables', 'nutrient-tables:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id);
 
@@ -44,15 +59,22 @@ export function nutrientTable() {
       },
     },
     refs: {
-      middleware: [permission('nutrient-tables')],
+      middleware: [
+        permission('nutrient-tables'),
+      ],
       handler: async () => {
         const nutrientTypes = await FoodsNutrientType.scope('list').findAll();
 
-        return { status: 200, body: { nutrientTypes } };
+        return {
+          status: 200,
+          body: { nutrientTypes },
+        };
       },
     },
     read: {
-      middleware: [permission('nutrient-tables', 'nutrient-tables:read')],
+      middleware: [
+        permission('nutrient-tables', 'nutrient-tables:read'),
+      ],
       handler: async ({ params: { nutrientTableId }, req }) => {
         const nutrientTable = await req.scope.cradle.nutrientTableService.getTable(nutrientTableId);
 
@@ -60,7 +82,9 @@ export function nutrientTable() {
       },
     },
     update: {
-      middleware: [permission('nutrient-tables', 'nutrient-tables:edit')],
+      middleware: [
+        permission('nutrient-tables', 'nutrient-tables:edit'),
+      ],
       handler: async ({ body, params: { nutrientTableId }, req }) => {
         const nutrientTable = await req.scope.cradle.nutrientTableService.updateTable(
           nutrientTableId,
@@ -71,7 +95,9 @@ export function nutrientTable() {
       },
     },
     destroy: {
-      middleware: [permission('nutrient-tables', 'nutrient-tables:delete')],
+      middleware: [
+        permission('nutrient-tables', 'nutrient-tables:delete'),
+      ],
       handler: async ({ params: { nutrientTableId }, req }) => {
         await req.scope.cradle.nutrientTableService.deleteTable(nutrientTableId);
 
@@ -92,7 +118,9 @@ export function nutrientTable() {
           taskParams.file = requireCsvUploadPath(file);
         }
 
-        const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });
+        const nutrientTable = await NutrientTable.findByPk(nutrientTableId, {
+          attributes: ['id'],
+        });
         if (!nutrientTable)
           throw new NotFoundError();
 
@@ -106,7 +134,9 @@ export function nutrientTable() {
       },
     },
     records: {
-      middleware: [permission('nutrient-tables', 'nutrient-tables:edit')],
+      middleware: [
+        permission('nutrient-tables', 'nutrient-tables:edit'),
+      ],
       handler: async ({ body: { records }, params: { nutrientTableId }, req }) => {
         await req.scope.cradle.nutrientTableService.updateRecords(nutrientTableId, records);
 

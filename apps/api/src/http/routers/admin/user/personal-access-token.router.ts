@@ -11,9 +11,19 @@ export function personalAccessToken() {
       const tokens = await PersonalAccessToken.paginate({
         query,
         columns: ['name'],
-        attributes: ['id', 'userId', 'name', 'createdAt', 'revoked', 'usedAt', 'expiresAt'],
+        attributes: [
+          'id',
+          'userId',
+          'name',
+          'createdAt',
+          'revoked',
+          'usedAt',
+          'expiresAt',
+        ],
         where: { userId },
-        order: [['name', 'ASC']],
+        order: [
+          ['name', 'ASC'],
+        ],
       });
 
       return { status: 200, body: tokens };
@@ -28,7 +38,10 @@ export function personalAccessToken() {
         expiresAt,
       );
 
-      return { status: 201, body: { jwt, token } };
+      return {
+        status: 201,
+        body: { jwt, token },
+      };
     },
     revoke: async ({ params: { tokenId }, req }) => {
       const { userId } = req.scope.cradle.user;

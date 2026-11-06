@@ -175,7 +175,9 @@ const rules = [
 
     const match = items.value.includes(value) || props.standardItems.includes(value);
 
-    return match ? t('common.list.exists', { item: `"${value}""` }) : true;
+    return match
+      ? t('common.list.exists', { item: `"${value}""` })
+      : true;
   },
 ];
 
@@ -184,7 +186,11 @@ function add() {
 };
 
 function edit(index: number, item: string) {
-  editDialog.value = { ...newEditDialog(true), index, item };
+  editDialog.value = {
+    ...newEditDialog(true),
+    index,
+    item,
+  };
 };
 
 async function save() {

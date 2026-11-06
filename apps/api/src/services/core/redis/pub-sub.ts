@@ -11,7 +11,10 @@ export class Subscriber extends HasRedisClient {
     logger,
     subscriberConfig: { channels, redis },
   }: Pick<IoC, 'foodIndex' | 'logger' | 'subscriberConfig'>) {
-    super({ config: redis, logger: logger.child({ service: 'Redis-Publisher' }) });
+    super({
+      config: redis,
+      logger: logger.child({ service: 'Redis-Publisher' }),
+    });
     this.channels = channels;
     this.foodIndex = foodIndex;
   }
@@ -43,6 +46,8 @@ export class Subscriber extends HasRedisClient {
   private async onLocaleIndex(message: string) {
     const locales = JSON.parse(message);
     this.logger.info('Rebuilding food index for locales:', locales);
-    await this.foodIndex.queueRebuild(locales.includes('all') ? undefined : locales);
+    await this.foodIndex.queueRebuild(locales.includes('all')
+      ? undefined
+      : locales);
   }
 }

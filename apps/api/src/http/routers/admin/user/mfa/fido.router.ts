@@ -8,7 +8,9 @@ export function fido() {
   return initServer().router(contract.admin.user.mfa.fido, {
     challenge: async ({ req }) => {
       const { userId } = req.scope.cradle.user;
-      const user = await User.findByPk(userId, { attributes: ['email', 'name'] });
+      const user = await User.findByPk(userId, {
+        attributes: ['email', 'name'],
+      });
       if (!user?.email)
         throw new ApplicationError('Invalid user - missing email.');
 

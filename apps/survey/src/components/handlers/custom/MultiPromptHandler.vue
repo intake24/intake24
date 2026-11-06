@@ -69,7 +69,9 @@ const storedState = promptStore.prompts[entityId]?.[props.prompt.id];
 const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
 const state = ref<(CustomPromptAnswer | undefined)[]>(
   storedState?.answers ?? props.prompt.prompts.map(prompt =>
-    isInfoPrompt(prompt) ? 'next' : resolvePromptAnswer(prompt),
+    isInfoPrompt(prompt)
+      ? 'next'
+      : resolvePromptAnswer(prompt),
   ),
 );
 const panel = ref<number | undefined>(storedState ? storedState.panel : 0);

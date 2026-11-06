@@ -151,11 +151,21 @@ const defaultValueRules = [
 ];
 
 const outputOptions = computed<ListOption<ZodAny>[]>(() => currentOptions.value.map(({ id, ...rest }) => (rest)));
-const optionValueRules = computed<RuleCallback[]>(() => [...defaultValueRules, ...props.rules]);
+const optionValueRules = computed<RuleCallback[]>(() => [
+  ...defaultValueRules,
+  ...props.rules,
+]);
 
 function add() {
   const size = currentOptions.value.length + 1;
-  currentOptions.value.push({ id: size, label: `label-${size}`, shortLabel: `shortLabel-${size}`, value: props.default ?? (props.numeric ? size : `value-${size}`) });
+  currentOptions.value.push({
+    id: size,
+    label: `label-${size}`,
+    shortLabel: `shortLabel-${size}`,
+    value: props.default ?? (props.numeric
+      ? size
+      : `value-${size}`),
+  });
 };
 
 function remove(index: number) {
@@ -164,7 +174,10 @@ function remove(index: number) {
 
 function changeActionToggle(option: ListOption<ZodType>, enable: boolean | null) {
   if (enable) {
-    option.action = { type: 'updateFood', params: { code: 'FOOD_CODE' } };
+    option.action = {
+      type: 'updateFood',
+      params: { code: 'FOOD_CODE' },
+    };
   }
   else {
     option.action = undefined;

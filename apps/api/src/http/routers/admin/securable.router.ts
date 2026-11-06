@@ -45,20 +45,28 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
     const { userId, securableType, securableId } = securable;
     const otherSecurables = await UserSecurable.findAll({
       attributes: ['userId'],
-      where: { userId, securableType, securableId: { [Op.ne]: securableId } },
+      where: {
+        userId,
+        securableType,
+        securableId: { [Op.ne]: securableId },
+      },
     });
 
     await Promise.all(
       [
         UserSecurable.destroy({ where: securable }),
-        otherSecurables.length ? null : ioc.cradle.adminUserService.removePermissionByName(user, resource),
+        otherSecurables.length
+          ? null
+          : ioc.cradle.adminUserService.removePermissionByName(user, resource),
       ].filter(Boolean),
     );
   };
 
   return initServer().router(contract, {
     browse: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       handler: async ({ query, req }) => {
         const { [paramId]: securableId } = req.params;
 
@@ -71,8 +79,15 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
           query,
           columns: ['name', 'email', 'simpleName'],
           attributes: ['id', 'email', 'name'],
-          order: [['email', 'ASC']],
-          include: [{ association: 'securables', where: { securableType, securableId } }],
+          order: [
+            ['email', 'ASC'],
+          ],
+          include: [
+            {
+              association: 'securables',
+              where: { securableType, securableId },
+            },
+          ],
           transform: userSecurablesResponse,
         });
 
@@ -80,7 +95,9 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       },
     },
     store: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       handler: async ({ body: { email, name, phone, actions }, req }) => {
         const { [paramId]: securableId } = req.params as Record<typeof paramId, string>;
         const { aclService, adminUserService } = req.scope.cradle;
@@ -113,7 +130,9 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       },
     },
     update: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       handler: async ({ body: { actions }, params, req }) => {
         // @ts-expect-error dynamic contract type issue
         const { [paramId]: securableId, userId } = params;
@@ -125,9 +144,16 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
           }),
           User.findOne({
             attributes: ['id'],
-            where: { id: userId, email: { [Op.ne]: null } },
+            where: {
+              id: userId,
+              email: { [Op.ne]: null },
+            },
             include: [
-              { association: 'securables', required: false, where: { securableType, securableId } },
+              {
+                association: 'securables',
+                required: false,
+                where: { securableType, securableId },
+              },
             ],
           }),
         ]);
@@ -155,7 +181,9 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       },
     },
     destroy: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       handler: async ({ params, req }) => {
         // @ts-expect-error dynamic contract type issue
         const { [paramId]: securableId, userId } = params;
@@ -167,7 +195,13 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
             attributes: ['id'],
             where: { id: securableId },
           }),
-          User.findOne({ attributes: ['id'], where: { id: userId, email: { [Op.ne]: null } } }),
+          User.findOne({
+            attributes: ['id'],
+            where: {
+              id: userId,
+              email: { [Op.ne]: null },
+            },
+          }),
         ]);
         if (!user)
           throw new NotFoundError();
@@ -178,7 +212,9 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       },
     },
     availableUsers: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       // @ts-expect-error dynamic contract type issue
       handler: async ({ params: { [paramId]: securableId }, query: { search }, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(securable, 'securables', {
@@ -194,9 +230,14 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
           where: {
             email: { [Op.ne]: null },
             '$securables.user_id$': { [Op.eq]: null },
-            [Op.or]: { name: { [Op.iLike]: `%${search}%` }, email: { [Op.iLike]: `%${search}%` } },
+            [Op.or]: {
+              name: { [Op.iLike]: `%${search}%` },
+              email: { [Op.iLike]: `%${search}%` },
+            },
           },
-          order: [['email', 'ASC']],
+          order: [
+            ['email', 'ASC'],
+          ],
           limit: 10,
           subQuery: false,
           include: [
@@ -213,13 +254,24 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       },
     },
     owner: {
-      middleware: [permission(resource)],
+      middleware: [
+        permission(resource),
+      ],
       // @ts-expect-error dynamic contract type issue
       handler: async ({ body: { userId }, params: { [paramId]: securableId }, req }) => {
         if (userId) {
-          const user = await User.findOne({ attributes: ['id'], where: { id: userId, email: { [Op.ne]: null } } });
+          const user = await User.findOne({
+            attributes: ['id'],
+            where: {
+              id: userId,
+              email: { [Op.ne]: null },
+            },
+          });
           if (!user) {
-            throw ValidationError.from({ path: 'userId', i18n: { type: 'exists._' } });
+            throw ValidationError.from({
+              path: 'userId',
+              i18n: { type: 'exists._' },
+            });
           }
         }
 

@@ -23,7 +23,11 @@ import Survey from './survey';
 import User from './user';
 
 @Scopes(() => ({
-  user: { include: [{ model: User }] },
+  user: {
+    include: [
+      { model: User },
+    ],
+  },
 }))
 @Table({
   modelName: 'UserSurveyRating',

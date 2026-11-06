@@ -44,7 +44,14 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['code', 'englishName', 'localName', 'countryFlagCode', 'textDirection', 'visibility'],
+        [
+          'code',
+          'englishName',
+          'localName',
+          'countryFlagCode',
+          'textDirection',
+          'visibility',
+        ],
         {
           input: {
             id: null,

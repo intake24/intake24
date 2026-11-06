@@ -58,7 +58,9 @@ const emit = defineEmits(['action', 'update:modelValue']);
 
 const { action, getFoodName, customPromptLayout } = usePromptUtils(props, { emit });
 
-const selected = ref(Array.isArray(props.modelValue) ? props.modelValue : []);
+const selected = ref(Array.isArray(props.modelValue)
+  ? props.modelValue
+  : []);
 const isValid = computed(() => props.modelValue?.length > 0);
 
 function update() {

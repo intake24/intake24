@@ -62,7 +62,9 @@ export function usePromptUtils<
     const build: Record<string, string | number> = {
       recallNumber: survey.recallNumber,
       userName: survey.user?.name ?? '',
-      recallDate: survey.recallDate ? d(survey.recallDate, 'recallDate') : '',
+      recallDate: survey.recallDate
+        ? d(survey.recallDate, 'recallDate')
+        : '',
     };
 
     if (foodName.value) {

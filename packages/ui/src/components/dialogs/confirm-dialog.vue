@@ -171,7 +171,12 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['cancel', 'close', 'confirm', 'update:modelValue']);
+const emit = defineEmits([
+  'cancel',
+  'close',
+  'confirm',
+  'update:modelValue',
+]);
 
 const dialog = ref(props.modelValue);
 

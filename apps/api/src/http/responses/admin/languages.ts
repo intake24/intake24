@@ -6,6 +6,8 @@ export function languageResponse(language: Language): LanguageEntry {
 
   return {
     ...language.get(),
-    owner: owner ? { id: owner.id, name: owner.name, email: owner.email } : undefined,
+    owner: owner
+      ? { id: owner.id, name: owner.name, email: owner.email }
+      : undefined,
   };
 }

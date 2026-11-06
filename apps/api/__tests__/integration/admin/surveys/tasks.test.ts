@@ -84,7 +84,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['tasks'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['tasks'],
+      });
 
       const { status, body } = await request(suite.app)
         .post(url)

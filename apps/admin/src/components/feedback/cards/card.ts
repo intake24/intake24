@@ -11,9 +11,20 @@ export const cardSettings: CardSettings = {
     tabs: ['general', 'content', 'json'],
   },
   'nutrient-group': {
-    tabs: ['general', 'unit', 'thresholds', 'nutrients', 'json'],
+    tabs: [
+      'general',
+      'unit',
+      'thresholds',
+      'nutrients',
+      'json',
+    ],
   },
   'five-a-day': {
-    tabs: ['general', 'unit', 'thresholds', 'json'],
+    tabs: [
+      'general',
+      'unit',
+      'thresholds',
+      'json',
+    ],
   },
 };

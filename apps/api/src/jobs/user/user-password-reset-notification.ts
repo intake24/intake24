@@ -51,7 +51,10 @@ export default class UserPasswordResetNotification extends BaseJob<'UserPassword
   }
 
   private async sendEmail() {
-    const user = await User.findOne({ attributes: ['id', 'name', 'email'], where: { email: this.params.email } });
+    const user = await User.findOne({
+      attributes: ['id', 'name', 'email'],
+      where: { email: this.params.email },
+    });
     if (!user?.email) {
       this.logger.warn(`User with email ${this.params.email} not found in database.`);
       return;

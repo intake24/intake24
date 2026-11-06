@@ -49,7 +49,9 @@ function adminUserService({
    * @returns {Promise<void>}
    */
   const flushACLCacheByRoleId = async (roleId: string): Promise<void> => {
-    const roleUsers = await RoleUser.findAll({ where: { roleId } });
+    const roleUsers = await RoleUser.findAll({
+      where: { roleId },
+    });
 
     await Promise.all(roleUsers.map(({ userId }) => flushACLCacheByUserId(userId)));
   };
@@ -62,7 +64,13 @@ function adminUserService({
    */
   const flushACLCacheByRoleName = async (name: string): Promise<void> => {
     const roleUsers = await RoleUser.findAll({
-      include: [{ association: 'role', where: { name }, required: true }],
+      include: [
+        {
+          association: 'role',
+          where: { name },
+          required: true,
+        },
+      ],
     });
 
     await Promise.all(roleUsers.map(({ userId }) => flushACLCacheByUserId(userId)));
@@ -90,7 +98,12 @@ function adminUserService({
     const { hash, salt } = await defaultAlgorithm.hash(password);
 
     return UserPassword.create(
-      { userId, hash, salt, hasher: defaultAlgorithm.id },
+      {
+        userId,
+        hash,
+        salt,
+        hasher: defaultAlgorithm.id,
+      },
       { transaction },
     );
   };
@@ -112,7 +125,12 @@ function adminUserService({
       const { userId, password } = input;
       const { hash, salt } = await defaultAlgorithm.hash(password);
 
-      records.push({ userId, hash, salt, hasher: defaultAlgorithm.id });
+      records.push({
+        userId,
+        hash,
+        salt,
+        hasher: defaultAlgorithm.id,
+      });
     }
 
     return UserPassword.bulkCreate(records, { transaction });
@@ -139,7 +157,10 @@ function adminUserService({
     // 1) remove fields that are not present
     const customFieldNames = customFields.map(field => field.name);
     await UserCustomField.destroy({
-      where: { userId, name: { [Op.notIn]: customFieldNames } },
+      where: {
+        userId,
+        name: { [Op.notIn]: customFieldNames },
+      },
       transaction,
     });
 
@@ -177,7 +198,12 @@ function adminUserService({
   ): Promise<UserPassword> => {
     const { hash, salt } = await defaultAlgorithm.hash(password);
 
-    const [userPassword] = await UserPassword.upsert({ userId, hash, salt, hasher: defaultAlgorithm.id }, { transaction });
+    const [userPassword] = await UserPassword.upsert({
+      userId,
+      hash,
+      salt,
+      hasher: defaultAlgorithm.id,
+    }, { transaction });
 
     return userPassword;
   };
@@ -200,8 +226,14 @@ function adminUserService({
 
     const user = await db.system.transaction(async (transaction) => {
       const user = await User.create(
-        { ...rest, simpleName: toSimpleName(rest.name) },
-        { include: [UserCustomField], transaction },
+        {
+          ...rest,
+          simpleName: toSimpleName(rest.name),
+        },
+        {
+          include: [UserCustomField],
+          transaction,
+        },
       );
 
       await Promise.all([
@@ -219,7 +251,10 @@ function adminUserService({
       promises.push(commsService.subscribe('support', { email, name: user.name ?? undefined }));
 
       if (notify) {
-        promises.push(scheduler.jobs.addJob({ type: 'UserEmailVerificationNotification', params: { email, userAgent } }));
+        promises.push(scheduler.jobs.addJob({
+          type: 'UserEmailVerificationNotification',
+          params: { email, userAgent },
+        }));
       }
     }
 
@@ -252,10 +287,19 @@ function adminUserService({
 
     await db.system.transaction(async (transaction) => {
       await Promise.all([
-        user.update({ ...rest, simpleName: toSimpleName(rest.name) }, { transaction }),
-        permissions ? user.$set('permissions', permissions, { transaction }) : null,
-        roles ? user.$set('roles', roles, { transaction }) : null,
-        customFields && user.customFields ? updateUserCustomFields(userId, user.customFields, customFields, transaction) : null,
+        user.update({
+          ...rest,
+          simpleName: toSimpleName(rest.name),
+        }, { transaction }),
+        permissions
+          ? user.$set('permissions', permissions, { transaction })
+          : null,
+        roles
+          ? user.$set('roles', roles, { transaction })
+          : null,
+        customFields && user.customFields
+          ? updateUserCustomFields(userId, user.customFields, customFields, transaction)
+          : null,
       ].filter(Boolean));
 
       await flushACLCacheByUserId(user.id);
@@ -271,7 +315,9 @@ function adminUserService({
    * @returns {Promise<void>}
    */
   const destroy = async (userId: string): Promise<void> => {
-    const user = await User.scope('submissions').findByPk(userId, { attributes: ['id'] });
+    const user = await User.scope('submissions').findByPk(userId, {
+      attributes: ['id'],
+    });
     if (!user)
       throw new NotFoundError();
 
@@ -289,7 +335,11 @@ function adminUserService({
    */
   const addPermissionByName = async (userId: string | User, permissionName: string | string[]) => {
     const user
-      = typeof userId === 'string' ? await User.findByPk(userId, { attributes: ['id'] }) : userId;
+      = typeof userId === 'string'
+        ? await User.findByPk(userId, {
+            attributes: ['id'],
+          })
+        : userId;
     if (!user)
       throw new NotFoundError();
 
@@ -300,7 +350,10 @@ function adminUserService({
     if (!permission)
       throw new NotFoundError();
 
-    await Promise.all([user.$add('permissions', permission), flushACLCacheByUserId(user.id)]);
+    await Promise.all([
+      user.$add('permissions', permission),
+      flushACLCacheByUserId(user.id),
+    ]);
   };
 
   /**
@@ -314,7 +367,11 @@ function adminUserService({
     permissionName: string | string[],
   ) => {
     const user
-      = typeof userId === 'string' ? await User.findByPk(userId, { attributes: ['id'] }) : userId;
+      = typeof userId === 'string'
+        ? await User.findByPk(userId, {
+            attributes: ['id'],
+          })
+        : userId;
     if (!user)
       throw new NotFoundError();
 
@@ -325,7 +382,10 @@ function adminUserService({
     if (!permission)
       throw new NotFoundError();
 
-    await Promise.all([user.$remove('permissions', permission), flushACLCacheByUserId(user.id)]);
+    await Promise.all([
+      user.$remove('permissions', permission),
+      flushACLCacheByUserId(user.id),
+    ]);
   };
 
   /**
@@ -336,7 +396,9 @@ function adminUserService({
    */
   const getSurveySupportUsers = async (surveyId: string): Promise<User[]> =>
     User.findAll({
-      where: { email: { [Op.ne]: null } },
+      where: {
+        email: { [Op.ne]: null },
+      },
       include: [
         {
           association: 'securables',
@@ -354,7 +416,9 @@ function adminUserService({
   const getGlobalSupportUsers = async (): Promise<User[]> => {
     const users = await Promise.all([
       User.findAll({
-        where: { email: { [Op.ne]: null } },
+        where: {
+          email: { [Op.ne]: null },
+        },
         include: [
           {
             association: 'permissions',
@@ -365,7 +429,9 @@ function adminUserService({
         ],
       }),
       User.findAll({
-        where: { email: { [Op.ne]: null } },
+        where: {
+          email: { [Op.ne]: null },
+        },
         include: [
           {
             association: 'roles',

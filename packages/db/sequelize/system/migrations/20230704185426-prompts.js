@@ -47,7 +47,10 @@ export default {
           `UPDATE surveys SET survey_scheme_overrides = :survey_scheme_overrides WHERE id = :id;`,
           {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
-            replacements: { id, survey_scheme_overrides: JSON.stringify({ meals, prompts }) },
+            replacements: {
+              id,
+              survey_scheme_overrides: JSON.stringify({ meals, prompts }),
+            },
             transaction,
           },
         );
@@ -104,7 +107,10 @@ export default {
           `UPDATE surveys SET survey_scheme_overrides = :survey_scheme_overrides WHERE id = :id;`,
           {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
-            replacements: { id, survey_scheme_overrides: JSON.stringify({ meals, questions }) },
+            replacements: {
+              id,
+              survey_scheme_overrides: JSON.stringify({ meals, questions }),
+            },
             transaction,
           },
         );

@@ -94,14 +94,20 @@ export default {
       await queryInterface.changeColumn(
         'user_survey_aliases',
         'survey_id',
-        { type: Sequelize.STRING(64), allowNull: false },
+        {
+          type: Sequelize.STRING(64),
+          allowNull: false,
+        },
         { transaction },
       );
 
       await queryInterface.changeColumn(
         'user_survey_aliases',
         'url_auth_token',
-        { type: Sequelize.STRING(128), allowNull: false },
+        {
+          type: Sequelize.STRING(128),
+          allowNull: false,
+        },
         { transaction },
       );
 

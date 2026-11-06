@@ -103,9 +103,18 @@ function nutrientTable(): NutrientTableRequest {
       },
     ],
     csvMappingNutrients: [
-      { nutrientTypeId: '1', columnOffset: faker.number.int(200) },
-      { nutrientTypeId: '2', columnOffset: faker.number.int(200) },
-      { nutrientTypeId: '3', columnOffset: faker.number.int(200) },
+      {
+        nutrientTypeId: '1',
+        columnOffset: faker.number.int(200),
+      },
+      {
+        nutrientTypeId: '2',
+        columnOffset: faker.number.int(200),
+      },
+      {
+        nutrientTypeId: '3',
+        columnOffset: faker.number.int(200),
+      },
     ],
   };
 }
@@ -132,8 +141,14 @@ function standardUnit(localeId: string): StandardUnitCreationAttributes {
     code: toStandardUnitId(faker.word.words(3)),
     localeId,
     name: faker.word.words(2),
-    estimateIn: { en: faker.word.words(5), es: faker.word.words(5) },
-    howMany: { en: faker.word.words(5), es: faker.word.words(5) },
+    estimateIn: {
+      en: faker.word.words(5),
+      es: faker.word.words(5),
+    },
+    howMany: {
+      en: faker.word.words(5),
+      es: faker.word.words(5),
+    },
     icon: faker.word.words(1),
   };
 }

@@ -1,6 +1,8 @@
 import { createPermissions } from '../../utils.js';
 
-const permissions = [{ name: 'surveys|sessions', display_name: 'Survey sessions' }];
+const permissions = [
+  { name: 'surveys|sessions', display_name: 'Survey sessions' },
+];
 
 /** @type {import('sequelize-cli').Migration} */
 export default {
@@ -30,7 +32,10 @@ export default {
           `UPDATE surveys SET submission_notification_url = :notifications WHERE id = :id;`,
           {
             type: queryInterface.sequelize.QueryTypes.UPDATE,
-            replacements: { id, notifications: JSON.stringify(notifications) },
+            replacements: {
+              id,
+              notifications: JSON.stringify(notifications),
+            },
             transaction,
           },
         );
@@ -125,7 +130,9 @@ export default {
         {
           transaction,
           uniqueKeys: {
-            user_survey_sessions_unique: { fields: ['survey_id', 'user_id'] },
+            user_survey_sessions_unique: {
+              fields: ['survey_id', 'user_id'],
+            },
           },
         },
       );

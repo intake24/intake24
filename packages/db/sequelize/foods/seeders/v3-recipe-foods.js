@@ -117,7 +117,9 @@ export default {
           return recipeFoodsEntries.push({
             ...recipeFood.recipe_food,
             locale_id: locale.id,
-            synonyms_id: synonymsIndex !== -1 ? synonyms[synonymsIndex].id : null,
+            synonyms_id: synonymsIndex !== -1
+              ? synonyms[synonymsIndex].id
+              : null,
           });
         });
       }
@@ -129,7 +131,10 @@ export default {
       // Creating recipe foods
       await queryInterface.bulkInsert(
         'recipe_foods',
-        recipeFoodsEntries.map(recipeFoodEntry => ({ ...recipeFoodEntry, ...timestamps })),
+        recipeFoodsEntries.map(recipeFoodEntry => ({
+          ...recipeFoodEntry,
+          ...timestamps,
+        })),
         {
           transaction,
         },

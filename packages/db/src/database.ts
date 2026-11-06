@@ -56,22 +56,32 @@ export class Database implements DatabasesInterface {
         models: Object.values(models[database]),
         benchmark: isDebug,
         logging: (sql: string, timing?: number) => {
-          databaseLogQuery(`Query${isDebug ? ` [${timing} ms]` : ''}: ${sql}`, this.logger, debugQueryLimit);
+          databaseLogQuery(`Query${isDebug
+            ? ` [${timing} ms]`
+            : ''}: ${sql}`, this.logger, debugQueryLimit);
         },
       };
 
-      this[database] = url ? new Sequelize(url, config) : new Sequelize(config);
+      this[database] = url
+        ? new Sequelize(url, config)
+        : new Sequelize(config);
 
       await setupEnumArrayParsersSequelize(this[database], ENUM_ARRAY_TYPES[database]);
     }
   }
 
   async sync(force = false) {
-    await Promise.all([this.foods.sync({ force }), this.system.sync({ force })]);
+    await Promise.all([
+      this.foods.sync({ force }),
+      this.system.sync({ force }),
+    ]);
   }
 
   async close() {
-    await Promise.all([this.foods.close(), this.system.close()]);
+    await Promise.all([
+      this.foods.close(),
+      this.system.close(),
+    ]);
   }
 }
 

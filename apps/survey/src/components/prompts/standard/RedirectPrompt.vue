@@ -92,14 +92,18 @@ const isValid = true;
 const timerInterval = ref<undefined | number>(undefined);
 const timerValue = ref(props.prompt.timer ? 100 : 0);
 const timerTick = computed(() =>
-  props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0,
+  props.prompt.timer
+    ? Math.round(100 / props.prompt.timer)
+    : 0,
 );
 const timerSecs = computed(() => {
   if (!props.prompt.timer)
     return 0;
 
   const timer = Math.round((timerValue.value / 100) * props.prompt.timer);
-  return timer > 0 ? timer : 0;
+  return timer > 0
+    ? timer
+    : 0;
 });
 
 const promptI18n = computed(() => translatePrompt(['goTo', 'missingUrl']));

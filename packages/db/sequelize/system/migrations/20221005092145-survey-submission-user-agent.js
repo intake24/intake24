@@ -4,7 +4,10 @@ export default {
       await queryInterface.addColumn(
         'survey_submissions',
         'user_agent',
-        { allowNull: true, type: Sequelize.STRING(512) },
+        {
+          allowNull: true,
+          type: Sequelize.STRING(512),
+        },
         { transaction },
       );
 

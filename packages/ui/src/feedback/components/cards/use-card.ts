@@ -137,7 +137,9 @@ export function useCard(props: UseCardProps) {
       sentiment,
       color,
       iconClass: getIconClass(sentiment),
-      warning: low && portions < low.threshold ? translate(low.message) : undefined,
+      warning: low && portions < low.threshold
+        ? translate(low.message)
+        : undefined,
     };
   }
 

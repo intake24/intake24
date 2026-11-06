@@ -18,7 +18,9 @@ export default () => {
   });
 
   afterAll(async () => {
-    await SurveySubmission.destroy({ where: { userId } });
+    await SurveySubmission.destroy({
+      where: { userId },
+    });
   });
 
   it('should return 401 when no / invalid token', async () => {

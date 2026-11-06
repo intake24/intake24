@@ -8,7 +8,13 @@ export type FeedbackType = (typeof feedbackTypes)[number];
 export const feedbackOutputs = ['download', 'email', 'print'] as const;
 export type FeedbackOutput = (typeof feedbackOutputs)[number];
 
-export const feedbackStandardSections = ['cards', 'meals', 'topFoods', 'rating', 'submissions'] as const;
+export const feedbackStandardSections = [
+  'cards',
+  'meals',
+  'topFoods',
+  'rating',
+  'submissions',
+] as const;
 export type FeedbackStandardSection = (typeof feedbackStandardSections)[number];
 export const feedbackCustomSection = z.object({
   id: z.string(),

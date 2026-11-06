@@ -234,7 +234,11 @@ function dataExportFields() {
    */
   const submissionCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
     const { preMeals, postMeals, submission } = surveyScheme.prompts;
-    return [...preMeals, ...postMeals, ...submission]
+    return [
+      ...preMeals,
+      ...postMeals,
+      ...submission,
+    ]
       .filter(customPromptFilter())
       .map(customPromptMapper);
   };
@@ -245,9 +249,21 @@ function dataExportFields() {
    * @returns {Promise<ExportField[]>}
    */
   const meal = async (): Promise<ExportField[]> => [
-    { id: 'index', label: 'Meal index', value: ({ custom }: ExportRow) => custom.mealIndex },
-    { id: 'id', label: 'Meal ID', value: ({ food }: ExportRow) => food.meal?.id },
-    { id: 'name', label: 'Meal name', value: ({ food }: ExportRow) => food.meal?.name },
+    {
+      id: 'index',
+      label: 'Meal index',
+      value: ({ custom }: ExportRow) => custom.mealIndex,
+    },
+    {
+      id: 'id',
+      label: 'Meal ID',
+      value: ({ food }: ExportRow) => food.meal?.id,
+    },
+    {
+      id: 'name',
+      label: 'Meal name',
+      value: ({ food }: ExportRow) => food.meal?.name,
+    },
     {
       id: 'time',
       label: 'Meal time',
@@ -256,7 +272,11 @@ function dataExportFields() {
           ? fromTime({ hours: food.meal.hours, minutes: food.meal.minutes })
           : undefined,
     },
-    { id: 'duration', label: 'Meal duration', value: ({ food }: ExportRow) => food.meal?.duration },
+    {
+      id: 'duration',
+      label: 'Meal duration',
+      value: ({ food }: ExportRow) => food.meal?.duration,
+    },
   ];
 
   /**
@@ -269,7 +289,10 @@ function dataExportFields() {
       meals: { preFoods, postFoods },
     } = surveyScheme.prompts;
 
-    return [...preFoods, ...postFoods].filter(customPromptFilter()).map(customPromptMapper);
+    return [
+      ...preFoods,
+      ...postFoods,
+    ].filter(customPromptFilter()).map(customPromptMapper);
   };
 
   /**
@@ -290,7 +313,9 @@ function dataExportFields() {
     {
       id: 'id',
       label: 'Food ID',
-      value: ({ food }: ExportRow) => (food instanceof SurveySubmissionFood ? food.id : undefined),
+      value: ({ food }: ExportRow) => (food instanceof SurveySubmissionFood
+        ? food.id
+        : undefined),
     },
     { id: 'code', label: 'Food code', value: 'food.code' },
     { id: 'englishName', label: 'Name (en)', value: 'food.englishName' },
@@ -303,13 +328,17 @@ function dataExportFields() {
       id: 'barcode',
       label: 'Barcode',
       value: ({ food }: ExportRow) =>
-        food instanceof SurveySubmissionFood ? food.barcode : undefined,
+        food instanceof SurveySubmissionFood
+          ? food.barcode
+          : undefined,
     },
     {
       id: 'brand',
       label: 'Brand',
       value: ({ food }: ExportRow) =>
-        food instanceof SurveySubmissionFood ? food.brand : undefined,
+        food instanceof SurveySubmissionFood
+          ? food.brand
+          : undefined,
     },
     { id: 'nutrientTableId', label: 'Nutrient table name', value: 'food.nutrientTableId' },
     { id: 'nutrientTableCode', label: 'Nutrient table code', value: 'food.nutrientTableCode' },
@@ -319,38 +348,50 @@ function dataExportFields() {
       id: 'missingId',
       label: 'Missing ID',
       value: ({ food }: ExportRow) =>
-        food instanceof SurveySubmissionMissingFood ? food.id : undefined,
+        food instanceof SurveySubmissionMissingFood
+          ? food.id
+          : undefined,
     },
     { id: 'missingName', label: 'Missing name', value: 'food.name' },
     {
       id: 'missingBarcode',
       label: 'Missing barcode',
       value: ({ food }: ExportRow) =>
-        food instanceof SurveySubmissionMissingFood ? food.barcode : undefined,
+        food instanceof SurveySubmissionMissingFood
+          ? food.barcode
+          : undefined,
     },
     {
       id: 'missingBrand',
       label: 'Missing brand',
       value: ({ food }: ExportRow) =>
-        food instanceof SurveySubmissionMissingFood ? food.brand : undefined,
+        food instanceof SurveySubmissionMissingFood
+          ? food.brand
+          : undefined,
     },
     {
       id: 'missingDescription',
       label: 'Missing description',
       value: ({ food }: ExportRow) =>
-        food instanceof SurveySubmissionMissingFood ? food.description : undefined,
+        food instanceof SurveySubmissionMissingFood
+          ? food.description
+          : undefined,
     },
     {
       id: 'missingPortionSize',
       label: 'Missing portion size',
       value: ({ food }: ExportRow) =>
-        food instanceof SurveySubmissionMissingFood ? food.portionSize : undefined,
+        food instanceof SurveySubmissionMissingFood
+          ? food.portionSize
+          : undefined,
     },
     {
       id: 'missingLeftovers',
       label: 'Missing leftovers',
       value: ({ food }: ExportRow) =>
-        food instanceof SurveySubmissionMissingFood ? food.leftovers : undefined,
+        food instanceof SurveySubmissionMissingFood
+          ? food.leftovers
+          : undefined,
     },
   ];
 
@@ -363,7 +404,10 @@ function dataExportFields() {
     const { preMeals, postMeals, meals: { foods } } = surveyScheme.prompts;
     return [
       ...foods.filter(customPromptFilter()),
-      ...[...preMeals, ...postMeals].filter(customPromptFilter('aggregate-choice-prompt')),
+      ...[
+        ...preMeals,
+        ...postMeals,
+      ].filter(customPromptFilter('aggregate-choice-prompt')),
     ].map(customPromptMapper);
   };
 
@@ -373,7 +417,9 @@ function dataExportFields() {
    * @returns {Promise<ExportField[]>}
    */
   const foodFields = async (): Promise<ExportField[]> => {
-    const fields = await NutrientTableCsvMappingField.findAll({ attributes: ['fieldName'] });
+    const fields = await NutrientTableCsvMappingField.findAll({
+      attributes: ['fieldName'],
+    });
 
     const fieldNames = fields.map(({ fieldName }) => fieldName);
 
@@ -386,7 +432,9 @@ function dataExportFields() {
    * @returns {Promise<ExportField[]>}
    */
   const foodNutrients = async (): Promise<ExportField[]> => {
-    const types = await SystemNutrientType.findAll({ attributes: ['id', 'description'] });
+    const types = await SystemNutrientType.findAll({
+      attributes: ['id', 'description'],
+    });
 
     return types.map(({ id, description }) => ({ id, label: description }));
   };
@@ -403,7 +451,9 @@ function dataExportFields() {
     {
       id: 'portion',
       label: 'Portion',
-      value: ({ food }: ExportRow) => food instanceof SurveySubmissionFood ? stringify(food.portionSize) : undefined,
+      value: ({ food }: ExportRow) => food instanceof SurveySubmissionFood
+        ? stringify(food.portionSize)
+        : undefined,
     },
     // servingWeight - leftoversWeight
     {
@@ -423,28 +473,31 @@ function dataExportFields() {
   ];
 
   const externalSources = async (): Promise<ExportField[]> => externalSourceProviders.reduce<ExportField[]>((acc, source) => {
-    return [...acc, ...[
-      {
-        id: `${source}:id`,
-        label: `${source}: ID`,
-      },
-      {
-        id: `${source}:source`,
-        label: `${source}: Source`,
-      },
-      {
-        id: `${source}:searchTerm`,
-        label: `${source}: Search term`,
-      },
-      {
-        id: `${source}:type`,
-        label: `${source}: Type`,
-      },
-      {
-        id: `${source}:data`,
-        label: `${source}: Data`,
-      },
-    ]];
+    return [
+      ...acc,
+      ...[
+        {
+          id: `${source}:id`,
+          label: `${source}: ID`,
+        },
+        {
+          id: `${source}:source`,
+          label: `${source}: Source`,
+        },
+        {
+          id: `${source}:searchTerm`,
+          label: `${source}: Search term`,
+        },
+        {
+          id: `${source}:type`,
+          label: `${source}: Type`,
+        },
+        {
+          id: `${source}:data`,
+          label: `${source}: Data`,
+        },
+      ],
+    ];
   }, []);
 
   return {

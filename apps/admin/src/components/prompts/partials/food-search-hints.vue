@@ -84,7 +84,10 @@ const emit = defineEmits(['update:modelValue']);
 const hints = useVModel(props, 'modelValue', emit, { passive: true, deep: true });
 
 function add() {
-  hints.value.push({ keyword: [], text: { en: '' } });
+  hints.value.push({
+    keyword: [],
+    text: { en: '' },
+  });
 }
 
 function remove(idx: number) {

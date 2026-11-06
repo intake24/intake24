@@ -41,7 +41,9 @@ export class AlbanePackageHandler implements PackageHandler {
       if (err instanceof PackageValidationFileErrors)
         throw err;
 
-      throw new PackageValidationFileErrors({ _uploadedFile: getFileValidationErrorMessages(err) });
+      throw new PackageValidationFileErrors({
+        _uploadedFile: getFileValidationErrorMessages(err),
+      });
     }
 
     let convertedPath: string;
@@ -53,7 +55,9 @@ export class AlbanePackageHandler implements PackageHandler {
       if (err instanceof PackageValidationFileErrors) {
         throw err;
       }
-      throw new PackageValidationFileErrors({ package: getFileValidationErrorMessages(err) });
+      throw new PackageValidationFileErrors({
+        package: getFileValidationErrorMessages(err),
+      });
     }
     finally {
       // Clean up Albane source files regardless of outcome
@@ -150,15 +154,19 @@ export class AlbanePackageHandler implements PackageHandler {
       for (const required of AlbanePackageHandler.REQUIRED_FILES) {
         const archivePath = foundPaths.get(required);
         if (archivePath === undefined) {
-          fileErrors[required] = [{
-            key: 'io.verification.albaneRequiredFileMissing',
-          }];
+          fileErrors[required] = [
+            {
+              key: 'io.verification.albaneRequiredFileMissing',
+            },
+          ];
         }
         else if (archivePath !== required) {
-          fileErrors[required] = [{
-            key: 'io.verification.albaneRequiredFileWrongPath',
-            params: { archivePath },
-          }];
+          fileErrors[required] = [
+            {
+              key: 'io.verification.albaneRequiredFileWrongPath',
+              params: { archivePath },
+            },
+          ];
         }
       }
 

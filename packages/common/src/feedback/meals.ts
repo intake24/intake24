@@ -13,7 +13,13 @@ export type FeedbackMealChart = z.infer<typeof feedbackMealChart>;
 
 export const mealTableFieldTypes = ['standard', 'custom', 'nutrient'] as const;
 export type MealTableFieldType = (typeof mealTableFieldTypes)[number];
-export const mealTableFieldStandardIds = ['name', 'hours', 'minutes', 'time', 'duration'] as const;
+export const mealTableFieldStandardIds = [
+  'name',
+  'hours',
+  'minutes',
+  'time',
+  'duration',
+] as const;
 export type MealTableFieldId = (typeof mealTableFieldStandardIds)[number];
 
 export const baseMealTableField = z.object({
@@ -25,7 +31,13 @@ export type BaseMealTableField = z.infer<typeof baseMealTableField>;
 
 export const standardMealTableField = baseMealTableField.extend({
   type: z.literal('standard'),
-  fieldId: z.enum(['name', 'hours', 'minutes', 'time', 'duration']),
+  fieldId: z.enum([
+    'name',
+    'hours',
+    'minutes',
+    'time',
+    'duration',
+  ]),
 });
 
 export const customMealTableField = baseMealTableField.extend({
@@ -63,7 +75,12 @@ export type FeedbackMeals = z.infer<typeof feedbackMeals>;
 export const defaultMeals: FeedbackMeals = {
   chart: {
     colors: Object.values(colors).slice(0, 5),
-    nutrients: [{ id: ['1'], name: { en: 'Energy (kcal)' } }],
+    nutrients: [
+      {
+        id: ['1'],
+        name: { en: 'Energy (kcal)' },
+      },
+    ],
   },
   table: {
     fields: [

@@ -123,21 +123,32 @@ const { i18n: { t } } = useI18n();
 const messages = useMessages();
 
 const collections = computed(() => [
-  ...commonMediaCollections.map(value => ({ title: t(`media.collections.${value}`), value })),
-  ...(resourceMediaCollections[props.resource] ?? []).map(value => ({ title: t(`media.collections.${props.resource}.${value}`), value })),
+  ...commonMediaCollections.map(value => ({
+    title: t(`media.collections.${value}`),
+    value,
+  })),
+  ...(resourceMediaCollections[props.resource] ?? []).map(value => ({
+    title: t(`media.collections.${props.resource}.${value}`),
+    value,
+  })),
 ]);
-const disks = computed(() => mediaDisks.map(value => ({ title: t(`media.disks.${value}`), value })));
+const disks = computed(() => mediaDisks.map(value => ({
+  title: t(`media.disks.${value}`),
+  value,
+})));
 
 const dialog = shallowRef(false);
 const customId = shallowRef(false);
 
-const { clearError, data, errors, load, post, patch, reset } = useForm<UploadForm>({ data: {
-  id: undefined,
-  name: '',
-  file: null,
-  disk: 'public',
-  collection: 'default',
-} });
+const { clearError, data, errors, load, post, patch, reset } = useForm<UploadForm>({
+  data: {
+    id: undefined,
+    name: '',
+    file: null,
+    disk: 'public',
+    collection: 'default',
+  },
+});
 const isEdit = computed(() => !!data.value.id);
 
 function toggleCustomId() {

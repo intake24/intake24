@@ -6,6 +6,8 @@ export function surveySchemeResponse(surveyScheme: SurveyScheme): SurveySchemeEn
 
   return {
     ...surveyScheme.get(),
-    owner: owner ? { id: owner.id, name: owner.name, email: owner.email } : undefined,
+    owner: owner
+      ? { id: owner.id, name: owner.name, email: owner.email }
+      : undefined,
   };
 }

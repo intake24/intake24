@@ -17,9 +17,21 @@ import SurveySubmissionFood from './survey-submission-food';
 import SurveySubmissionMissingFood from './survey-submission-missing-food';
 
 @Scopes(() => ({
-  submission: { include: [{ model: SurveySubmission }] },
-  foods: { include: [{ model: SurveySubmissionFood }] },
-  missingFoods: { include: [{ model: SurveySubmissionMissingFood }] },
+  submission: {
+    include: [
+      { model: SurveySubmission },
+    ],
+  },
+  foods: {
+    include: [
+      { model: SurveySubmissionFood },
+    ],
+  },
+  missingFoods: {
+    include: [
+      { model: SurveySubmissionMissingFood },
+    ],
+  },
 }))
 @Table({
   modelName: 'SurveySubmissionMeal',

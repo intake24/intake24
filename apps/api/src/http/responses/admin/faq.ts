@@ -6,6 +6,8 @@ export function faqResponse(faq: FAQ): FAQEntry {
 
   return {
     ...faq.get(),
-    owner: owner ? { id: owner.id, name: owner.name, email: owner.email } : undefined,
+    owner: owner
+      ? { id: owner.id, name: owner.name, email: owner.email }
+      : undefined,
   };
 }

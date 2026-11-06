@@ -45,7 +45,12 @@ export class DrinkwareApiV4 {
     formData.set('id', update.id);
     formData.set('description', update.description);
     formData.set('imageMapId', update.imageMapId);
-    formData.set('scales', JSON.stringify(mapValues(scales, scale => pick(scale, ['label', 'outlineCoordinates', 'volumeSamples', 'volumeMethod']))));
+    formData.set('scales', JSON.stringify(mapValues(scales, scale => pick(scale, [
+      'label',
+      'outlineCoordinates',
+      'volumeSamples',
+      'volumeMethod',
+    ]))));
 
     for (const [scaleId, scale] of Object.entries(scales)) {
       const file = await fileFromPathWithType(scale.baseImagePath);

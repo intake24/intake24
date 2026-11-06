@@ -32,7 +32,9 @@ export function surveyRespondent() {
           {
             association: 'surveys',
             attributes: ['id'],
-            where: { slug: { [Op.iLike]: slug } },
+            where: {
+              slug: { [Op.iLike]: slug },
+            },
           },
         ],
       });
@@ -48,7 +50,10 @@ export function surveyRespondent() {
 
       const survey = await Survey.findBySlug(slug, {
         include: [
-          { association: 'surveyScheme', attributes: ['id', 'settings', 'meals', 'prompts'] },
+          {
+            association: 'surveyScheme',
+            attributes: ['id', 'settings', 'meals', 'prompts'],
+          },
           {
             association: 'feedbackScheme',
             attributes: [
@@ -64,13 +69,19 @@ export function surveyRespondent() {
               'type',
             ],
           },
-          { association: 'locale', attributes: ['id', 'code'] },
+          {
+            association: 'locale',
+            attributes: ['id', 'code'],
+          },
         ],
       });
       if (!survey || !survey.locale || !survey.surveyScheme)
         throw new NotFoundError();
 
-      const words = await SplitWord.findAll({ where: { localeId: survey.locale.code }, attributes: ['words'] });
+      const words = await SplitWord.findAll({
+        where: { localeId: survey.locale.code },
+        attributes: ['words'],
+      });
 
       const {
         id,
@@ -106,7 +117,10 @@ export function surveyRespondent() {
 
       // Merge survey's scheme overrides
       // Settings - merge
-      const settings = { ...surveyScheme.settings, ...surveySchemeOverrides.settings };
+      const settings = {
+        ...surveyScheme.settings,
+        ...surveySchemeOverrides.settings,
+      };
       // Meals - override whole list
       const meals = surveySchemeOverrides.meals.length ? surveySchemeOverrides.meals : surveyScheme.meals;
 
@@ -154,7 +168,12 @@ export function surveyRespondent() {
             code: locale.code,
             splitWords: words.flatMap(({ words }) => words.split(' ')),
           },
-          surveyScheme: { id: surveyScheme.id, meals, prompts, settings },
+          surveyScheme: {
+            id: surveyScheme.id,
+            meals,
+            prompts,
+            settings,
+          },
           faqs: !!faqId,
           feedbackScheme: feedbackScheme
             ? {
@@ -223,26 +242,43 @@ export function surveyRespondent() {
 
       const survey = await Survey.findBySlug(surveySlug, {
         attributes: ['id', 'surveySchemeOverrides'],
-        include: [{ association: 'surveyScheme', attributes: ['settings'] }],
+        include: [
+          {
+            association: 'surveyScheme',
+            attributes: ['settings'],
+          },
+        ],
       });
       if (!survey?.surveyScheme)
         throw new NotFoundError();
 
-      const settings = { ...survey.surveyScheme.settings, ...survey.surveySchemeOverrides.settings };
+      const settings = {
+        ...survey.surveyScheme.settings,
+        ...survey.surveySchemeOverrides.settings,
+      };
 
       const errors = settings.help.required.reduce<Partial<ExtendedFieldValidationError>[]>((acc, field) => {
         if (field === 'email|phone') {
           if (!body.email && !body.phone) {
             acc.push(
-              { path: 'email', i18n: { type: 'string._', attr: 'email|phone' } },
-              { path: 'phone', i18n: { type: 'string._', attr: 'email|phone' } },
+              {
+                path: 'email',
+                i18n: { type: 'string._', attr: 'email|phone' },
+              },
+              {
+                path: 'phone',
+                i18n: { type: 'string._', attr: 'email|phone' },
+              },
             );
           }
           return acc;
         }
 
         if (!body[field]) {
-          acc.push({ path: field, i18n: { type: 'string._' } });
+          acc.push({
+            path: field,
+            i18n: { type: 'string._' },
+          });
           return acc;
         }
 

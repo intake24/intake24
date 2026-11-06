@@ -28,9 +28,14 @@ export type TokenLoginRequest = {
   captcha?: string;
 };
 
-export const loginResponse = z.object({ accessToken: z.string() });
+export const loginResponse = z.object({
+  accessToken: z.string(),
+});
 export type LoginResponse = z.infer<typeof loginResponse>;
-export const challengeResponse = z.object({ surveyId: z.string(), provider: z.literal('captcha') });
+export const challengeResponse = z.object({
+  surveyId: z.string(),
+  provider: z.literal('captcha'),
+});
 export type ChallengeResponse = z.infer<typeof challengeResponse>;
 
 export const mfaChallengeRequest = z.object({
@@ -89,11 +94,16 @@ export const authenticationResponseJSON = z.object({
     userHandle: z.string().optional(),
   }),
   authenticatorAttachment: z
-    .union([z.literal('cross-platform'), z.literal('platform')])
+    .union([
+      z.literal('cross-platform'),
+      z.literal('platform'),
+    ])
     .optional(),
   clientExtensionResults: z.object({
     appid: z.boolean().optional(),
-    credProps: z.object({ rk: z.boolean().optional() }).optional(),
+    credProps: z.object({
+      rk: z.boolean().optional(),
+    }).optional(),
     hmacCreateSecret: z.boolean().optional(),
   }),
   type: z.literal('public-key'),

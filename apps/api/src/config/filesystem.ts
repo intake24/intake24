@@ -4,7 +4,13 @@ import { msStringValue, validateConfig } from '@intake24/common-backend';
 
 import { parsedBytesStringValue } from './common';
 
-export const localLocation = z.enum(['public', 'downloads', 'uploads', 'images', 'cache']);
+export const localLocation = z.enum([
+  'public',
+  'downloads',
+  'uploads',
+  'images',
+  'cache',
+]);
 export type LocalLocation = z.infer<typeof localLocation>;
 
 export const fileSystemConfigSchema = z.object({

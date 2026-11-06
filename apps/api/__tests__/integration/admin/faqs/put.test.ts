@@ -45,7 +45,9 @@ export default () => {
       const invalidInput = {
         name: [],
         visibility: 'invalidVisibility',
-        content: [{ question: 'What is a food diary?' }],
+        content: [
+          { question: 'What is a food diary?' },
+        ],
       };
 
       const fields = [
@@ -74,7 +76,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['edit'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['edit'],
+      });
       const updateInput2 = mocker.system.faq();
 
       await suite.sharedTests.assertRecordUpdated('put', url, updateInput2);

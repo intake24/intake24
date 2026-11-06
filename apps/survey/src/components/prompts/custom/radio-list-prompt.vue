@@ -72,11 +72,15 @@ const { action, customPromptLayout, type } = usePromptUtils(props, { emit });
 const { form, inputTooLog } = useForm({ action });
 
 const otherValue = ref('');
-const otherRules = computed(() => [inputTooLog(256)]);
+const otherRules = computed(() => [
+  inputTooLog(256),
+]);
 const selected = ref(props.modelValue);
 
 const state = computed(() =>
-  selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value,
+  selected.value === 'other'
+    ? `Other: ${otherValue.value}`
+    : selected.value,
 );
 const isValid = computed(
   () => !!form.value?.isValid
@@ -93,7 +97,11 @@ function update() {
 function submit() {
   const tracking = selected.value === undefined
     ? undefined
-    : { selectedOption: selected.value === 'other' ? 'other' : selected.value };
+    : {
+        selectedOption: selected.value === 'other'
+          ? 'other'
+          : selected.value,
+      };
 
   if (selected.value !== 'other') {
     const option = localeOptions.value.find(o => o.value === selected.value);

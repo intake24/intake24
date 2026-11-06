@@ -61,7 +61,9 @@ export default defineComponent({
     const currentSearch = computed(() => filter.value.search);
 
     const refreshItems = () => {
-      items.value = [...Object.values(filter.value)].filter(item => item);
+      items.value = [
+        ...Object.values(filter.value),
+      ].filter(item => item);
     };
 
     const setFilter = () => {
@@ -75,7 +77,11 @@ export default defineComponent({
     watch(
       () => getFilter.value,
       (val) => {
-        filter.value = { ...(isEmpty(val) ? defaults.value : val) };
+        filter.value = {
+          ...(isEmpty(val)
+            ? defaults.value
+            : val),
+        };
         refreshItems();
       },
     );

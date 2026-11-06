@@ -5,7 +5,18 @@ import { readFile } from 'node:fs/promises';
 import { parse } from 'svg-parser';
 import * as svgpath from 'svgpath';
 
-const supportedSegmentTypes = ['M', 'L', 'H', 'V', 'm', 'l', 'h', 'v', 'z', 'Z'];
+const supportedSegmentTypes = [
+  'M',
+  'L',
+  'H',
+  'V',
+  'm',
+  'l',
+  'h',
+  'v',
+  'z',
+  'Z',
+];
 
 type PathWithTransform = {
   id: string;
@@ -57,7 +68,12 @@ function findOutlinePath(current: Node, transformStack: string[]): PathWithTrans
   if (current.type === 'element' && current.properties !== undefined) {
     const id = current.properties.id;
     const tx = getTransform(current);
-    const elementTxStack = tx !== undefined ? [...transformStack, ...tx] : transformStack;
+    const elementTxStack = tx !== undefined
+      ? [
+          ...transformStack,
+          ...tx,
+        ]
+      : transformStack;
 
     if (current.tagName === 'path' && id === 'outline') {
       const pathData = current.properties.d;
@@ -93,13 +109,18 @@ function findAreaPaths(current: Node, transformStack: string[], paths: PathWithT
   if (current.type === 'element' && current.properties !== undefined) {
     const id = current.properties.id;
     const tx = getTransform(current);
-    const elementTxStack = tx !== undefined ? [...transformStack, ...tx] : transformStack;
+    const elementTxStack = tx !== undefined
+      ? [
+          ...transformStack,
+          ...tx,
+        ]
+      : transformStack;
 
     if (current.tagName === 'path' && typeof id === 'string' && id.startsWith('area_')) {
       const pathData = current.properties.d;
 
       if (typeof pathData !== 'string')
-        throw new Error('Found a path node with the id "area_*" but it has no path data attribute');
+        throw new TypeError('Found a path node with the id "area_*" but it has no path data attribute');
 
       paths.push({
         id,

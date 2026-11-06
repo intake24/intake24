@@ -61,7 +61,10 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
   ) {
     const creationAttributes = associatedFoods.map((af, index) => toAssociatedFoodAttrs(foodId, index, af));
 
-    await AssociatedFood.destroy({ where: { foodId }, transaction });
+    await AssociatedFood.destroy({
+      where: { foodId },
+      transaction,
+    });
 
     await AssociatedFood.bulkCreate(creationAttributes, { transaction });
   }
@@ -75,7 +78,10 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       methods.map(psm => toPortionSizeMethodAttrs(foodId, psm)),
     );
 
-    await FoodPortionSizeMethod.destroy({ where: { foodId }, transaction });
+    await FoodPortionSizeMethod.destroy({
+      where: { foodId },
+      transaction,
+    });
 
     await FoodPortionSizeMethod.bulkCreate(creationAttributes, { transaction });
   }
@@ -124,7 +130,10 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       nutrientTableRecordId,
     }));
 
-    await FoodNutrient.destroy({ where: { foodId }, transaction });
+    await FoodNutrient.destroy({
+      where: { foodId },
+      transaction,
+    });
 
     await FoodNutrient.bulkCreate(creationAttributes, { transaction });
   }
@@ -145,7 +154,10 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     // Manually checking for an existing record is not ideal (database constraints could change and
     // become out of sync with this code) but good enough.
 
-    let instance = await Food.findOne({ where: { localeId, code: request.code }, transaction });
+    let instance = await Food.findOne({
+      where: { localeId, code: request.code },
+      transaction,
+    });
 
     if (instance !== null) {
       if (options.update) {
@@ -186,11 +198,16 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
       updatePortionSizeMethodsImpl(instance.id, request.portionSizeMethods, transaction),
       updateNutrientMappingImpl(instance.id, request.nutrientTableCodes, transaction),
       updateAssociatedFoodsImpl(instance.id, request.associatedFoods, transaction),
-      request.parentCategories ? instance.$set('parentCategories', request.parentCategories, { transaction }) : null,
+      request.parentCategories
+        ? instance.$set('parentCategories', request.parentCategories, { transaction })
+        : null,
     ].filter(Boolean));
 
     // Should be an upsert, but the Sequelize implementation is weird
-    await FoodAttribute.destroy({ where: { foodId: instance.id }, transaction });
+    await FoodAttribute.destroy({
+      where: { foodId: instance.id },
+      transaction,
+    });
     await FoodAttribute.create({ ...request.attributes, foodId: instance.id }, { transaction });
 
     return created;
@@ -232,7 +249,10 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     foodCode: string,
     transaction: Transaction,
   ) => {
-    const food = await Food.findOne({ where: { localeId, code: foodCode }, transaction });
+    const food = await Food.findOne({
+      where: { localeId, code: foodCode },
+      transaction,
+    });
 
     if (food === null)
       throw new NotFoundError();
@@ -240,7 +260,14 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
     const portionSizeRows = await FoodPortionSizeMethod.findAll(
       {
         where: { foodId: food.id },
-        attributes: ['method', 'description', 'pathways', 'conversionFactor', 'orderBy', 'parameters'],
+        attributes: [
+          'method',
+          'description',
+          'pathways',
+          'conversionFactor',
+          'orderBy',
+          'parameters',
+        ],
         transaction,
       },
     );
@@ -277,7 +304,10 @@ function localFoodsService({ db }: Pick<IoC, 'db'>) {
   };
 
   const getFoodCodes = async (localeId: string): Promise<string[]> => {
-    const rows = await Food.findAll({ where: { localeId }, attributes: ['code'] });
+    const rows = await Food.findAll({
+      where: { localeId },
+      attributes: ['code'],
+    });
     return rows.map(row => row.code);
   };
 

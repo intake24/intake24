@@ -198,13 +198,15 @@ export default defineComponent({
     const tab = ref<'create' | 'search'>('search');
     const selected = ref<UserSecurableListEntry | null>(null);
 
-    const form = useForm<UserDialogForm>({ data: {
-      userId: null,
-      email: null,
-      name: null,
-      phone: null,
-      actions: [],
-    } });
+    const form = useForm<UserDialogForm>({
+      data: {
+        userId: null,
+        email: null,
+        name: null,
+        phone: null,
+        actions: [],
+      },
+    });
     const { clearError, data, errors } = form;
 
     const nonInputErrorKeys = ['actions'];
@@ -222,7 +224,10 @@ export default defineComponent({
 
     function edit(item: UserSecurableListEntry) {
       const { id: userId, securables } = item;
-      form.load({ userId, actions: securables.map(({ action }) => action) });
+      form.load({
+        userId,
+        actions: securables.map(({ action }) => action),
+      });
       selected.value = item;
       dialog.value = true;
     };

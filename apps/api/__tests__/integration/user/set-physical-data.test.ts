@@ -51,7 +51,14 @@ export default () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       `${url}?survey=${survey.slug}`,
-      ['sex', 'weightKg', 'heightCm', 'birthdate', 'physicalActivityLevelId', 'weightTarget'],
+      [
+        'sex',
+        'weightKg',
+        'heightCm',
+        'birthdate',
+        'physicalActivityLevelId',
+        'weightTarget',
+      ],
       {
         bearer: 'respondent',
         input: {
@@ -83,13 +90,22 @@ export default () => {
   it('should return 400 when feedback scheme specifies physicalDataFields and they are missing', async () => {
     await Promise.all([
       survey.update({ feedbackSchemeId: feedbackScheme.id }),
-      feedbackScheme.update({ physicalDataFields: [...feedbackPhysicalDataFields] }),
+      feedbackScheme.update({
+        physicalDataFields: [...feedbackPhysicalDataFields],
+      }),
     ]);
 
     await suite.sharedTests.assertInvalidInput(
       'post',
       `${url}?survey=${survey.slug}`,
-      ['sex', 'weightKg', 'heightCm', 'birthdate', 'physicalActivityLevelId', 'weightTarget'],
+      [
+        'sex',
+        'weightKg',
+        'heightCm',
+        'birthdate',
+        'physicalActivityLevelId',
+        'weightTarget',
+      ],
       {
         bearer: 'respondent',
         input: {

@@ -8,14 +8,21 @@ import { Survey, UserCustomField } from '@intake24/db';
 export function respondentCustomField() {
   return initServer().router(contract.admin.survey.respondentCustomField, {
     browse: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { username, surveyId }, query, req }) => {
         const { respondents } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
           {
             attributes: ['id'],
-            include: [{ association: 'respondents', where: { username } }],
+            include: [
+              {
+                association: 'respondents',
+                where: { username },
+              },
+            ],
             where: { id: surveyId },
           },
         );
@@ -28,21 +35,30 @@ export function respondentCustomField() {
           query,
           columns: ['name'],
           where: { userId },
-          order: [['id', 'ASC']],
+          order: [
+            ['id', 'ASC'],
+          ],
         });
 
         return { status: 200, body: fields };
       },
     },
     store: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ body, params: { surveyId, username }, req }) => {
         const { respondents, userCustomFields } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
           {
             attributes: ['id', 'userCustomFields'],
-            include: [{ association: 'respondents', where: { username } }],
+            include: [
+              {
+                association: 'respondents',
+                where: { username },
+              },
+            ],
             where: { id: surveyId },
           },
         );
@@ -54,9 +70,16 @@ export function respondentCustomField() {
         if (!userId)
           throw new NotFoundError();
 
-        const entry = await UserCustomField.findOne({ attributes: ['id'], where: { userId, name: body.name } });
-        if (entry)
-          throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
+        const entry = await UserCustomField.findOne({
+          attributes: ['id'],
+          where: { userId, name: body.name },
+        });
+        if (entry) {
+          throw ValidationError.from({
+            path: 'name',
+            i18n: { type: 'unique._' },
+          });
+        }
 
         const customField = await UserCustomField.create({ ...body, userId });
 
@@ -64,19 +87,32 @@ export function respondentCustomField() {
       },
     },
     read: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { field, surveyId, username }, req }) => {
         const { respondents } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
-          { attributes: ['id'], include: [{ association: 'respondents', where: { username } }], where: { id: surveyId } },
+          {
+            attributes: ['id'],
+            include: [
+              {
+                association: 'respondents',
+                where: { username },
+              },
+            ],
+            where: { id: surveyId },
+          },
         );
 
         const userId = respondents?.at(0)?.userId;
         if (!userId)
           throw new NotFoundError();
 
-        const customField = await UserCustomField.findOne({ where: { userId, name: field } });
+        const customField = await UserCustomField.findOne({
+          where: { userId, name: field },
+        });
         if (!customField)
           throw new NotFoundError();
 
@@ -84,12 +120,23 @@ export function respondentCustomField() {
       },
     },
     update: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ body, params: { field, surveyId, username }, req }) => {
         const { respondents, userCustomFields } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
-          { attributes: ['id', 'userCustomFields'], include: [{ association: 'respondents', where: { username } }], where: { id: surveyId } },
+          {
+            attributes: ['id', 'userCustomFields'],
+            include: [
+              {
+                association: 'respondents',
+                where: { username },
+              },
+            ],
+            where: { id: surveyId },
+          },
         );
 
         if (!userCustomFields)
@@ -99,7 +146,9 @@ export function respondentCustomField() {
         if (!userId)
           throw new NotFoundError();
 
-        const customField = await UserCustomField.findOne({ where: { userId, name: field } });
+        const customField = await UserCustomField.findOne({
+          where: { userId, name: field },
+        });
         if (!customField)
           throw new NotFoundError();
 
@@ -108,12 +157,23 @@ export function respondentCustomField() {
       },
     },
     upsert: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ body, params: { field, surveyId, username }, req }) => {
         const { respondents, userCustomFields } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
-          { attributes: ['id', 'userCustomFields'], include: [{ association: 'respondents', where: { username } }], where: { id: surveyId } },
+          {
+            attributes: ['id', 'userCustomFields'],
+            include: [
+              {
+                association: 'respondents',
+                where: { username },
+              },
+            ],
+            where: { id: surveyId },
+          },
         );
 
         if (!userCustomFields)
@@ -123,7 +183,9 @@ export function respondentCustomField() {
         if (!userId)
           throw new NotFoundError();
 
-        let customField = await UserCustomField.findOne({ where: { userId, name: field } });
+        let customField = await UserCustomField.findOne({
+          where: { userId, name: field },
+        });
         if (customField) {
           await customField.update(body);
           return { status: 200, body: customField };
@@ -135,14 +197,21 @@ export function respondentCustomField() {
       },
     },
     destroy: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { field, surveyId, username }, req }) => {
         const { respondents, userCustomFields } = await req.scope.cradle.aclService.findAndCheckRecordAccess(
           Survey,
           'respondents',
           {
             attributes: ['id', 'userCustomFields'],
-            include: [{ association: 'respondents', where: { username } }],
+            include: [
+              {
+                association: 'respondents',
+                where: { username },
+              },
+            ],
             where: { id: surveyId },
           },
         );
@@ -154,7 +223,9 @@ export function respondentCustomField() {
         if (!userId)
           throw new NotFoundError();
 
-        const result = await UserCustomField.destroy({ where: { userId, name: field } });
+        const result = await UserCustomField.destroy({
+          where: { userId, name: field },
+        });
         if (!result)
           throw new NotFoundError();
 

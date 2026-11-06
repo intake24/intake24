@@ -51,7 +51,12 @@ describe('foodIndex', () => {
       for (let i = 0; i < 3; i++) {
         const search = h.foodIndex.search(searchParams('en_GB'));
         const request = await h.nextRequestOfType('search');
-        h.respond({ type: 'search', id: request.id, success: true, results: searchResults('apple') });
+        h.respond({
+          type: 'search',
+          id: request.id,
+          success: true,
+          results: searchResults('apple'),
+        });
         await search;
       }
 
@@ -75,9 +80,24 @@ describe('foodIndex', () => {
       const third = h.foodIndex.search(searchParams('en_GB', 'three'));
       const thirdRequest = await h.nextRequestOfType('search');
 
-      h.respond({ type: 'search', id: thirdRequest.id, success: true, results: searchResults('three') });
-      h.respond({ type: 'search', id: firstRequest.id, success: true, results: searchResults('one') });
-      h.respond({ type: 'search', id: secondRequest.id, success: true, results: searchResults('two') });
+      h.respond({
+        type: 'search',
+        id: thirdRequest.id,
+        success: true,
+        results: searchResults('three'),
+      });
+      h.respond({
+        type: 'search',
+        id: firstRequest.id,
+        success: true,
+        results: searchResults('one'),
+      });
+      h.respond({
+        type: 'search',
+        id: secondRequest.id,
+        success: true,
+        results: searchResults('two'),
+      });
 
       expect((await first).foods[0].name).toBe('one');
       expect((await second).foods[0].name).toBe('two');
@@ -88,7 +108,12 @@ describe('foodIndex', () => {
       const h = await harness();
       await h.ready(['en_GB']);
 
-      h.respond({ type: 'search', id: 999, success: true, results: searchResults('ghost') });
+      h.respond({
+        type: 'search',
+        id: 999,
+        success: true,
+        results: searchResults('ghost'),
+      });
       await h.awaitDispatched(msg => msg.type === 'search' && msg.id === 999);
 
       expect(h.logMessages('warn').some(message => message.includes('999'))).toBe(true);
@@ -101,14 +126,29 @@ describe('foodIndex', () => {
       const search = h.foodIndex.search(searchParams('en_GB'));
       const request = await h.nextRequestOfType('search');
 
-      h.respond({ type: 'rebuild', id: request.id, success: true, results: [], enabledLocales: ['en_GB'] });
+      h.respond({
+        type: 'rebuild',
+        id: request.id,
+        success: true,
+        results: [],
+        enabledLocales: ['en_GB'],
+      });
       await h.awaitDispatched(msg => msg.type === 'rebuild');
 
       expect(h.logMessages('error').some(message => message.includes('mismatch'))).toBe(true);
 
       // The search was neither resolved nor rejected by the mismatched response.
-      h.respond({ type: 'search', id: request.id, success: true, results: searchResults('apple') });
-      await expect(search).resolves.toMatchObject({ foods: [{ name: 'apple' }] });
+      h.respond({
+        type: 'search',
+        id: request.id,
+        success: true,
+        results: searchResults('apple'),
+      });
+      await expect(search).resolves.toMatchObject({
+        foods: [
+          { name: 'apple' },
+        ],
+      });
     });
 
     it('logs an error for an unrecognised message type', async () => {
@@ -145,7 +185,12 @@ describe('foodIndex', () => {
 
       const search = h.foodIndex.search(searchParams('en_GB'));
       const request = await h.nextRequestOfType('search');
-      h.respond({ type: 'search', id: request.id, success: true, results: searchResults('apple') });
+      h.respond({
+        type: 'search',
+        id: request.id,
+        success: true,
+        results: searchResults('apple'),
+      });
 
       await expect(search).resolves.toBeDefined();
 
@@ -176,7 +221,11 @@ describe('foodIndex', () => {
       const h = await harness();
       await h.ready(['en_GB', 'en_AU'], [
         { localeId: 'en_GB', success: true },
-        { localeId: 'en_AU', success: false, error: new Error('en_AU build failed') },
+        {
+          localeId: 'en_AU',
+          success: false,
+          error: new Error('en_AU build failed'),
+        },
       ]);
 
       const failed = await h.foodIndex.search(searchParams('en_AU')).catch(error => error);
@@ -186,14 +235,25 @@ describe('foodIndex', () => {
 
       const search = h.foodIndex.search(searchParams('en_GB'));
       const request = await h.nextRequestOfType('search');
-      h.respond({ type: 'search', id: request.id, success: true, results: searchResults('apple') });
+      h.respond({
+        type: 'search',
+        id: request.id,
+        success: true,
+        results: searchResults('apple'),
+      });
 
-      await expect(search).resolves.toMatchObject({ foods: [{ name: 'apple' }] });
+      await expect(search).resolves.toMatchObject({
+        foods: [
+          { name: 'apple' },
+        ],
+      });
     });
 
     it('marks a locale that returned no build result as failed', async () => {
       const h = await harness();
-      await h.ready(['en_GB', 'en_AU'], [{ localeId: 'en_GB', success: true }]);
+      await h.ready(['en_GB', 'en_AU'], [
+        { localeId: 'en_GB', success: true },
+      ]);
 
       await expect(h.foodIndex.search(searchParams('en_AU'))).rejects.toThrow('failed state');
       expect(h.logMessages('error').some(message => message.includes('en_AU'))).toBe(true);
@@ -306,7 +366,9 @@ describe('foodIndex', () => {
       await h.ready(['en_GB', 'en_AU']);
 
       const request = await h.nextRequestOfType('rebuild');
-      expect([...(request.locales ?? [])].sort()).toEqual(['en_AU', 'en_GB']);
+      expect([
+        ...(request.locales ?? []),
+      ].sort()).toEqual(['en_AU', 'en_GB']);
 
       await h.completeRebuild(request.id, ['en_GB', 'en_AU']);
       await h.assertNoFurtherRequests();
@@ -363,11 +425,24 @@ describe('foodIndex', () => {
       const rebuildRequest = await h.nextRequestOfType('rebuild');
 
       await h.completeRebuild(rebuildRequest.id, ['en_GB', 'en_AU'], [
-        { localeId: 'en_GB', success: false, error: new Error('rebuild failed') },
+        {
+          localeId: 'en_GB',
+          success: false,
+          error: new Error('rebuild failed'),
+        },
       ]);
 
-      h.respond({ type: 'search', id: searchRequest.id, success: true, results: searchResults('still works') });
-      await expect(pending).resolves.toMatchObject({ foods: [{ name: 'still works' }] });
+      h.respond({
+        type: 'search',
+        id: searchRequest.id,
+        success: true,
+        results: searchResults('still works'),
+      });
+      await expect(pending).resolves.toMatchObject({
+        foods: [
+          { name: 'still works' },
+        ],
+      });
     });
 
     it('keeps serving the previous index when a rebuild fails for a ready locale', async () => {
@@ -378,14 +453,27 @@ describe('foodIndex', () => {
       const request = await h.nextRequestOfType('rebuild');
 
       await h.completeRebuild(request.id, ['en_GB'], [
-        { localeId: 'en_GB', success: false, error: new Error('rebuild failed') },
+        {
+          localeId: 'en_GB',
+          success: false,
+          error: new Error('rebuild failed'),
+        },
       ]);
 
       const search = h.foodIndex.search(searchParams('en_GB'));
       const searchRequest = await h.nextRequestOfType('search');
-      h.respond({ type: 'search', id: searchRequest.id, success: true, results: searchResults('apple') });
+      h.respond({
+        type: 'search',
+        id: searchRequest.id,
+        success: true,
+        results: searchResults('apple'),
+      });
 
-      await expect(search).resolves.toMatchObject({ foods: [{ name: 'apple' }] });
+      await expect(search).resolves.toMatchObject({
+        foods: [
+          { name: 'apple' },
+        ],
+      });
     });
 
     it('recovers from a rebuild that failed before it could read the enabled locales', async () => {
@@ -402,7 +490,12 @@ describe('foodIndex', () => {
       // Locale states are untouched, so the previous index is still searchable...
       const search = h.foodIndex.search(searchParams('en_GB'));
       const searchRequest = await h.nextRequestOfType('search');
-      h.respond({ type: 'search', id: searchRequest.id, success: true, results: searchResults('apple') });
+      h.respond({
+        type: 'search',
+        id: searchRequest.id,
+        success: true,
+        results: searchResults('apple'),
+      });
       await expect(search).resolves.toBeDefined();
 
       // ...and the failure did not wedge the rebuild pipeline.
@@ -421,7 +514,9 @@ describe('foodIndex', () => {
       const request = await h.nextRequestOfType('rebuild');
 
       // en_AU is missing from the authoritative list, so its index is gone.
-      await h.completeRebuild(request.id, ['en_GB'], [{ localeId: 'en_GB', success: true }]);
+      await h.completeRebuild(request.id, ['en_GB'], [
+        { localeId: 'en_GB', success: true },
+      ]);
 
       await expect(h.foodIndex.search(searchParams('en_AU'))).rejects.toBeInstanceOf(NotFoundError);
       expect(h.logMessages('warn').some(message => message.includes('en_AU'))).toBe(true);
@@ -441,9 +536,18 @@ describe('foodIndex', () => {
 
       const search = h.foodIndex.search(searchParams('en_AU'));
       const searchRequest = await h.nextRequestOfType('search');
-      h.respond({ type: 'search', id: searchRequest.id, success: true, results: searchResults('pavlova') });
+      h.respond({
+        type: 'search',
+        id: searchRequest.id,
+        success: true,
+        results: searchResults('pavlova'),
+      });
 
-      await expect(search).resolves.toMatchObject({ foods: [{ name: 'pavlova' }] });
+      await expect(search).resolves.toMatchObject({
+        foods: [
+          { name: 'pavlova' },
+        ],
+      });
     });
   });
 

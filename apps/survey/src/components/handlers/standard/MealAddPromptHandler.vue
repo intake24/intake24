@@ -34,7 +34,9 @@ function commitAnswer() {
     return;
   }
 
-  survey.addMeal({ name: { en: state.value, [locale.value]: state.value } }, locale.value);
+  survey.addMeal({
+    name: { en: state.value, [locale.value]: state.value },
+  }, locale.value);
 }
 
 const { state, action: composableAction } = usePromptHandlerNoStore({ emit }, getInitialState, commitAnswer);

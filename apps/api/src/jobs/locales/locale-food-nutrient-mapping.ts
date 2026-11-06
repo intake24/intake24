@@ -54,7 +54,9 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
 
   private async prepareExportInfo() {
     const { localeId } = this.params;
-    const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
+    const locale = await SystemLocale.findByPk(localeId, {
+      attributes: ['code'],
+    });
     if (!locale)
       throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
 
@@ -66,10 +68,19 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
     const [nutrients, total] = await Promise.all([
       FoodsNutrientType.findAll({
         attributes: ['id', 'description'],
-        include: [{ association: 'unit', attributes: ['symbol'] }],
-        order: [['id', 'asc']],
+        include: [
+          {
+            association: 'unit',
+            attributes: ['symbol'],
+          },
+        ],
+        order: [
+          ['id', 'asc'],
+        ],
       }),
-      Food.count({ where: { localeId: localeCode } }),
+      Food.count({
+        where: { localeId: localeCode },
+      }),
     ]);
 
     const nutrientFields = nutrients.map(nutrient => ({
@@ -86,7 +97,10 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
       { label: 'FCT record ID', value: 'nutrientTableRecordId' },
     ];
 
-    const fields = [...foodFields, ...nutrientFields];
+    const fields = [
+      ...foodFields,
+      ...nutrientFields,
+    ];
 
     return { localeCode, filename, fields, total };
   }
@@ -114,9 +128,16 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
     const foods = Food.findAllWithStream({
       where: { localeId: localeCode },
       include: [
-        { association: 'nutrientRecords', include: [{ association: 'nutrients' }] },
+        {
+          association: 'nutrientRecords',
+          include: [
+            { association: 'nutrients' },
+          ],
+        },
       ],
-      order: [['code', 'asc']],
+      order: [
+        ['code', 'asc'],
+      ],
     });
 
     const transform = new Transform(

@@ -20,6 +20,9 @@ export interface PasswordAlgorithm {
 // FIXME: Should be configurable using dependency injection, not sure how to do that properly
 //        yet -- Ivan
 
-export const supportedAlgorithms = [new PasswordBcrypt(), new PasswordShiro()];
+export const supportedAlgorithms = [
+  new PasswordBcrypt(),
+  new PasswordShiro(),
+];
 
 export const defaultAlgorithm = new PasswordBcrypt();

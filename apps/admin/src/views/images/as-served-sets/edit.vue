@@ -81,7 +81,10 @@ export default defineComponent({
   setup(props) {
     const loadCallback = (data: AsServedSetEntry) => {
       const { images, ...rest } = data;
-      return { ...rest, images: images.map(({ id, weight }) => ({ id, weight })) };
+      return {
+        ...rest,
+        images: images.map(({ id, weight }) => ({ id, weight })),
+      };
     };
 
     const { entry, entryLoaded } = useEntry<AsServedSetEntry>(props);
@@ -90,7 +93,12 @@ export default defineComponent({
       EditAsServedSetForm,
       AsServedSetEntry
     >(props, {
-      data: { id: null, description: null, label: {}, images: [] },
+      data: {
+        id: null,
+        description: null,
+        label: {},
+        images: [],
+      },
       loadCallback,
       nonInputErrorKeys: ['images'],
     });

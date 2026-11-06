@@ -28,17 +28,30 @@ import {
 } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { feedbackSchemeId }: { feedbackSchemeId?: string } = {}) {
-  const where: WhereOptions = feedbackSchemeId ? { id: { [Op.ne]: feedbackSchemeId } } : {};
+  const where: WhereOptions = feedbackSchemeId
+    ? {
+        id: { [Op.ne]: feedbackSchemeId },
+      }
+    : {};
 
-  if (!(await unique({ model: FeedbackScheme, condition: { field: 'name', value }, options: { where } }))) {
-    throw ValidationError.from({ path: 'name', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: FeedbackScheme,
+    condition: { field: 'name', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      path: 'name',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
 export function feedbackScheme() {
   return initServer().router(contract.admin.feedbackScheme, {
     browse: {
-      middleware: [permission('feedback-schemes')],
+      middleware: [
+        permission('feedback-schemes'),
+      ],
       handler: async ({ query, req }) => {
         const {
           aclService,
@@ -48,7 +61,12 @@ export function feedbackScheme() {
         const paginateOptions: PaginateOptions = {
           query,
           columns: ['name'],
-          order: [[fn('lower', col('FeedbackScheme.name')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('FeedbackScheme.name')),
+              'ASC',
+            ],
+          ],
         };
 
         if (await aclService.hasPermission('feedback-schemes:browse')) {
@@ -58,7 +76,12 @@ export function feedbackScheme() {
 
         const feedbackSchemes = await FeedbackScheme.paginate({
           ...paginateOptions,
-          where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+          where: {
+            [Op.or]: {
+              ownerId: userId,
+              '$securables.action$': ['read', 'edit', 'delete'],
+            },
+          },
           ...securableScope(userId),
           subQuery: false,
         });
@@ -67,7 +90,9 @@ export function feedbackScheme() {
       },
     },
     store: {
-      middleware: [permission('feedback-schemes', 'feedback-schemes:create')],
+      middleware: [
+        permission('feedback-schemes', 'feedback-schemes:create'),
+      ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
 
@@ -84,11 +109,16 @@ export function feedbackScheme() {
           ownerId: req.scope.cradle.user.userId,
         });
 
-        return { status: 201, body: feedbackSchemeResponse(feedbackScheme) };
+        return {
+          status: 201,
+          body: feedbackSchemeResponse(feedbackScheme),
+        };
       },
     },
     refs: {
-      middleware: [permission('feedback-schemes')],
+      middleware: [
+        permission('feedback-schemes'),
+      ],
       handler: async ({ req }) => {
         const { fsConfig, imagesBaseUrl } = req.scope.cradle;
 
@@ -108,21 +138,31 @@ export function feedbackScheme() {
           };
         });
 
-        return { status: 200, body: { nutrientTypes, physicalActivityLevels, images } };
+        return {
+          status: 200,
+          body: { nutrientTypes, physicalActivityLevels, images },
+        };
       },
     },
     read: {
-      middleware: [permission('feedback-schemes')],
+      middleware: [
+        permission('feedback-schemes'),
+      ],
       handler: async ({ params: { feedbackSchemeId }, req }) => {
         const feedbackScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(FeedbackScheme, 'read', {
           where: { id: feedbackSchemeId },
         });
 
-        return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
+        return {
+          status: 200,
+          body: feedbackSchemeResponse(feedbackScheme),
+        };
       },
     },
     patch: {
-      middleware: [permission('feedback-schemes')],
+      middleware: [
+        permission('feedback-schemes'),
+      ],
       handler: async ({ body, params: { feedbackSchemeId }, req }) => {
         await uniqueMiddleware(body.name, { feedbackSchemeId });
 
@@ -160,11 +200,16 @@ export function feedbackScheme() {
 
         await feedbackScheme.update(updateInput);
 
-        return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
+        return {
+          status: 200,
+          body: feedbackSchemeResponse(feedbackScheme),
+        };
       },
     },
     put: {
-      middleware: [permission('feedback-schemes')],
+      middleware: [
+        permission('feedback-schemes'),
+      ],
       handler: async ({ body, params: { feedbackSchemeId }, req }) => {
         await uniqueMiddleware(body.name, { feedbackSchemeId });
 
@@ -174,16 +219,26 @@ export function feedbackScheme() {
 
         await feedbackScheme.update(body);
 
-        return { status: 200, body: feedbackSchemeResponse(feedbackScheme) };
+        return {
+          status: 200,
+          body: feedbackSchemeResponse(feedbackScheme),
+        };
       },
     },
     destroy: {
-      middleware: [permission('feedback-schemes')],
+      middleware: [
+        permission('feedback-schemes'),
+      ],
       handler: async ({ params: { feedbackSchemeId }, req }) => {
         const feedbackScheme = await req.scope.cradle.aclService.findAndCheckRecordAccess(FeedbackScheme, 'delete', {
           attributes: ['id'],
           where: { id: feedbackSchemeId },
-          include: [{ association: 'surveys', attributes: ['id'] }],
+          include: [
+            {
+              association: 'surveys',
+              attributes: ['id'],
+            },
+          ],
         });
 
         const { id: securableId, surveys } = feedbackScheme;
@@ -195,7 +250,9 @@ export function feedbackScheme() {
         }
 
         await Promise.all([
-          UserSecurable.destroy({ where: { securableId, securableType: 'FeedbackScheme' } }),
+          UserSecurable.destroy({
+            where: { securableId, securableType: 'FeedbackScheme' },
+          }),
           feedbackScheme.destroy(),
         ]);
 
@@ -203,7 +260,9 @@ export function feedbackScheme() {
       },
     },
     copy: {
-      middleware: [permission('feedback-schemes')],
+      middleware: [
+        permission('feedback-schemes'),
+      ],
       handler: async ({ body, params: { feedbackSchemeId }, req }) => {
         await uniqueMiddleware(body.name);
 
@@ -245,7 +304,10 @@ export function feedbackScheme() {
           ownerId: userId,
         });
 
-        return { status: 200, body: feedbackSchemeResponse(feedbackSchemeCopy) };
+        return {
+          status: 200,
+          body: feedbackSchemeResponse(feedbackSchemeCopy),
+        };
       },
     },
   });

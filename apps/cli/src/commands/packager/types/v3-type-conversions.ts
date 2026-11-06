@@ -178,7 +178,9 @@ function packageAsServed(portionSize: PortionSizeMethodV3): PkgAsServedPsm {
     method: 'as-served',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    pathways: portionSize.useForRecipes
+      ? ['search', 'afp', 'recipe']
+      : ['search', 'afp'],
     servingImageSet: getPsmParameter('serving-image-set', portionSize.parameters),
     leftoversImageSet: getOptionalPsmParameter('leftovers-image-set', portionSize.parameters),
   };
@@ -189,7 +191,9 @@ function packageGuideImage(portionSize: PortionSizeMethodV3): PkgGuideImagePsm {
     method: 'guide-image',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    pathways: portionSize.useForRecipes
+      ? ['search', 'afp', 'recipe']
+      : ['search', 'afp'],
     guideImageId: getPsmParameter('guide-image-id', portionSize.parameters),
   };
 }
@@ -199,7 +203,9 @@ function packageDrinkScale(portionSize: PortionSizeMethodV3): PkgDrinkScalePsm {
     method: 'drink-scale',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    pathways: portionSize.useForRecipes
+      ? ['search', 'afp', 'recipe']
+      : ['search', 'afp'],
     drinkwareId: getPsmParameter('drinkware-id', portionSize.parameters),
     initialFillLevel: Number.parseFloat(getPsmParameter('initial-fill-level', portionSize.parameters)),
     skipFillLevel: getPsmParameter('skip-fill-level', portionSize.parameters) === 'true',
@@ -211,7 +217,9 @@ function packageStandardPortion(portionSize: PortionSizeMethodV3): PkgStandardPo
     method: 'standard-portion',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    pathways: portionSize.useForRecipes
+      ? ['search', 'afp', 'recipe']
+      : ['search', 'afp'],
     units: parseStandardUnits(portionSize.parameters),
   };
 }
@@ -221,7 +229,9 @@ function packageCereal(portionSize: PortionSizeMethodV3): PkgCerealPsm {
     method: 'cereal',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    pathways: portionSize.useForRecipes
+      ? ['search', 'afp', 'recipe']
+      : ['search', 'afp'],
     type: getPsmParameter('type', portionSize.parameters),
   };
 }
@@ -231,7 +241,9 @@ function packageMilkOnCereal(portionSize: PortionSizeMethodV3): PkgMilkOnCerealP
     method: 'milk-on-cereal',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    pathways: portionSize.useForRecipes
+      ? ['search', 'afp', 'recipe']
+      : ['search', 'afp'],
   };
 }
 
@@ -240,7 +252,9 @@ function packagePizza(portionSize: PortionSizeMethodV3): PkgPizzaPsm {
     method: 'pizza',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    pathways: portionSize.useForRecipes
+      ? ['search', 'afp', 'recipe']
+      : ['search', 'afp'],
   };
 }
 
@@ -249,7 +263,9 @@ function packageMilkInHotDrink(portionSize: PortionSizeMethodV3): PkgMilkInHotDr
     method: 'milk-in-a-hot-drink',
     description: portionSize.description,
     conversionFactor: portionSize.conversionFactor,
-    pathways: portionSize.useForRecipes ? ['search', 'afp', 'recipe'] : ['search', 'afp'],
+    pathways: portionSize.useForRecipes
+      ? ['search', 'afp', 'recipe']
+      : ['search', 'afp'],
   };
 }
 
@@ -281,7 +297,9 @@ function packageFood(code: string, language: string, mainFood: MainFoodRecordV3,
     code,
     version: localFood.version ?? undefined,
     name:
-      localFood.localDescription.length === 1 ? localFood.localDescription[0] : 'Missing local name',
+      localFood.localDescription.length === 1
+        ? localFood.localDescription[0]
+        : 'Missing local name',
     englishName: mainFood.englishDescription,
     alternativeNames: {},
     associatedFoods: localFood.associatedFoods.map(af => packageAssociatedFood(language, af)),
@@ -303,7 +321,9 @@ function packageCategory(code: string, mainCategory: MainCategoryRecordV3, local
     code,
     version: localCategory.version ?? undefined,
     name:
-      localCategory.localDescription.length === 1 ? localCategory.localDescription[0] : 'Missing local name',
+      localCategory.localDescription.length === 1
+        ? localCategory.localDescription[0]
+        : 'Missing local name',
     englishName: mainCategory.englishDescription,
     hidden: mainCategory.hidden,
     attributes: {

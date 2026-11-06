@@ -133,11 +133,15 @@ export default defineComponent({
   methods: {
     updateTimerValue(value: any) {
       const timerValue = Number.parseInt(value, 10);
-      this.update('timer', Number.isNaN(timerValue) ? 0 : timerValue);
+      this.update('timer', Number.isNaN(timerValue)
+        ? 0
+        : timerValue);
     },
 
     updateIdentifier(value: string | null | (typeof this.identifiers)[0]) {
-      this.update('identifier', !value || typeof value === 'string' ? value : value.value);
+      this.update('identifier', !value || typeof value === 'string'
+        ? value
+        : value.value);
     },
   },
 });

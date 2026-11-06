@@ -26,7 +26,9 @@ export function useStandardUnits(props: UseStandardUnitsProps) {
       const isInline = typeof unit === 'object' && (unit.inlineEstimateIn !== undefined || unit.inlineHowMany !== undefined);
       if (isInline)
         return true;
-      const name = typeof unit === 'string' ? unit : unit.name;
+      const name = typeof unit === 'string'
+        ? unit
+        : unit.name;
       return !!getStandardUnit(name);
     });
   });

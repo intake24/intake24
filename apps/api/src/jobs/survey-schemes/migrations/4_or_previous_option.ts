@@ -4,7 +4,9 @@ import type { Condition } from '@intake24/common/prompts/conditions';
 function migrateCondition(condition: Condition): Condition {
   return {
     ...condition,
-    orPrevious: condition.orPrevious === undefined ? false : condition.orPrevious,
+    orPrevious: condition.orPrevious === undefined
+      ? false
+      : condition.orPrevious,
   };
 }
 

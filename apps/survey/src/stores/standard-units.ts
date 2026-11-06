@@ -22,7 +22,9 @@ export const useStandardUnits = defineStore('standard-units', () => {
     if (typeof item !== 'string' && item.inlineHowMany !== undefined)
       return item.inlineHowMany;
 
-    const name = typeof item === 'string' ? item : item.name;
+    const name = typeof item === 'string'
+      ? item
+      : item.name;
     return translate(units.value[name]?.howMany ?? name);
   };
 
@@ -30,7 +32,9 @@ export const useStandardUnits = defineStore('standard-units', () => {
     if (typeof item !== 'string' && item.inlineEstimateIn !== undefined)
       return item.inlineEstimateIn;
 
-    const name = typeof item === 'string' ? item : item.name;
+    const name = typeof item === 'string'
+      ? item
+      : item.name;
     return translate(units.value[name]?.estimateIn ?? name);
   };
 
@@ -49,7 +53,9 @@ export const useStandardUnits = defineStore('standard-units', () => {
     const needsFetch: (string | StandardUnitDef)[] = [];
 
     for (const item of items) {
-      const name = typeof item === 'string' ? item : item.name;
+      const name = typeof item === 'string'
+        ? item
+        : item.name;
 
       if (units.value[name])
         continue;
@@ -71,7 +77,9 @@ export const useStandardUnits = defineStore('standard-units', () => {
     if (!needsFetch.length)
       return;
 
-    await fetchStandardUnits(needsFetch.map(item => typeof item === 'string' ? item : item.name));
+    await fetchStandardUnits(needsFetch.map(item => typeof item === 'string'
+      ? item
+      : item.name));
   }
 
   async function fetchStandardUnits(names: string[]) {

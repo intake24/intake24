@@ -11,7 +11,9 @@ import { attachRefreshToken } from '../util';
 
 export function authentication() {
   const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
-    keyGenerator: req => `login:${req.body?.email ?? (req.ip ? ipKeyGenerator(req.ip) : 'missing-ip')}`,
+    keyGenerator: req => `login:${req.body?.email ?? (req.ip
+      ? ipKeyGenerator(req.ip)
+      : 'missing-ip')}`,
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
     skipSuccessfulRequests: true,
   });
@@ -30,7 +32,10 @@ export function authentication() {
           req.scope.cradle.securityConfig.jwt.admin.cookie,
         );
 
-        return { status: 200, body: { accessToken: result.accessToken } };
+        return {
+          status: 200,
+          body: { accessToken: result.accessToken },
+        };
       },
     },
     challenge: async ({ body, req }) => {
@@ -47,7 +52,10 @@ export function authentication() {
         req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
 
-      return { status: 200, body: { accessToken } };
+      return {
+        status: 200,
+        body: { accessToken },
+      };
     },
     refresh: async ({ req, res }) => {
       const { name } = ioc.cradle.securityConfig.jwt.admin.cookie;
@@ -62,7 +70,10 @@ export function authentication() {
         req.scope.cradle.securityConfig.jwt.admin.cookie,
       );
 
-      return { status: 200, body: { accessToken: tokens.accessToken } };
+      return {
+        status: 200,
+        body: { accessToken: tokens.accessToken },
+      };
     },
     logout: async ({ req, res }) => {
       const { name, httpOnly, path, secure, sameSite } = ioc.cradle.securityConfig.jwt.admin.cookie;
@@ -71,21 +82,33 @@ export function authentication() {
       if (refreshToken)
         await req.scope.cradle.jwtRotationService.revoke(refreshToken);
 
-      res.cookie(name, '', { maxAge: -1, httpOnly, path, secure, sameSite }).json();
+      res.cookie(name, '', {
+        maxAge: -1,
+        httpOnly,
+        path,
+        secure,
+        sameSite,
+      }).json();
 
       return { status: 200, body: undefined };
     },
     oidcRedirect: async ({ req, params: { provider } }) => {
       const url = await req.scope.cradle.oidcService.redirect(provider, { req });
 
-      return { status: 200, body: { url } };
+      return {
+        status: 200,
+        body: { url },
+      };
     },
     oidcCallback: async ({ req, res, params: { provider }, body: { url } }) => {
       const { accessToken, refreshToken } = await req.scope.cradle.oidcService.callback(provider, url, { req });
 
       attachRefreshToken(refreshToken, res, req.scope.cradle.securityConfig.jwt.admin.cookie);
 
-      return { status: 200, body: { accessToken } };
+      return {
+        status: 200,
+        body: { accessToken },
+      };
     },
   });
 }

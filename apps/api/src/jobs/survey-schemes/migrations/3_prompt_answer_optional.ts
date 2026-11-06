@@ -14,7 +14,9 @@ function migrateCondition(condition: Condition): Condition {
             promptId: condition.property.check.promptId,
             op: condition.property.check.op,
             value: condition.property.check.value,
-            required: condition.property.check.required === undefined ? true : condition.property.check.required,
+            required: condition.property.check.required === undefined
+              ? true
+              : condition.property.check.required,
           },
         },
       };

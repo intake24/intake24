@@ -38,9 +38,15 @@ export function isAccountVerified(req: Request, res: Response, next: NextFunctio
  */
 export function registerACLScope(req: Request, res: Response, next: NextFunction): void {
   const payload = req.user as TokenPayload;
-  req.scope.register({ user: asValue(payload) });
+  req.scope.register({
+    user: asValue(payload),
+  });
 
-  requestContextStorage.run({ type: 'request', id: v7(), userId: payload.userId }, () => {
+  requestContextStorage.run({
+    type: 'request',
+    id: v7(),
+    userId: payload.userId,
+  }, () => {
     next();
   });
 }
@@ -56,19 +62,25 @@ export function authenticate(app: Router, type: FrontEnd): void {
 
 export function permission(...args: string[]) {
   return (req: Request<any, any, any, any, any>, res: Response, next: NextFunction): void => {
-    req.scope.cradle.aclService.hasPermission(args).then(result => (result ? next() : next(new ForbiddenError()))).catch(err => next(err));
+    req.scope.cradle.aclService.hasPermission(args).then(result => (result
+      ? next()
+      : next(new ForbiddenError()))).catch(err => next(err));
   };
 }
 
 export function anyPermission(...args: string[]) {
   return (req: Request<any, any, any, any, any>, res: Response, next: NextFunction): void => {
-    req.scope.cradle.aclService.hasAnyPermission(args).then(result => (result ? next() : next(new ForbiddenError()))).catch(err => next(err));
+    req.scope.cradle.aclService.hasAnyPermission(args).then(result => (result
+      ? next()
+      : next(new ForbiddenError()))).catch(err => next(err));
   };
 }
 
 export function role(role: string | string[]) {
   return (req: Request, res: Response, next: NextFunction): void => {
-    req.scope.cradle.aclService.hasRole(role).then(result => (result ? next() : next(new ForbiddenError()))).catch(err => next(err));
+    req.scope.cradle.aclService.hasRole(role).then(result => (result
+      ? next()
+      : next(new ForbiddenError()))).catch(err => next(err));
   };
 }
 
@@ -76,6 +88,8 @@ export function isSurveyRespondent() {
   return (req: Request<{ slug: string }>, res: Response, next: NextFunction): void => {
     const { slug } = req.params;
 
-    req.scope.cradle.aclService.hasPermission(surveyRespondent(slug)).then(result => (result ? next() : next(new ForbiddenError()))).catch(err => next(err));
+    req.scope.cradle.aclService.hasPermission(surveyRespondent(slug)).then(result => (result
+      ? next()
+      : next(new ForbiddenError()))).catch(err => next(err));
   };
 }

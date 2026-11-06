@@ -14,7 +14,11 @@ import SurveySubmissionExternalSource from './survey-submission-external-source'
 import SurveySubmissionMeal from './survey-submission-meal';
 
 @Scopes(() => ({
-  meal: { include: [{ model: SurveySubmissionMeal }] },
+  meal: {
+    include: [
+      { model: SurveySubmissionMeal },
+    ],
+  },
 }))
 @Table({
   modelName: 'SurveySubmissionMissingFood',

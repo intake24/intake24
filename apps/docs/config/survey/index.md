@@ -70,10 +70,6 @@ Flag whether to include source maps to production build or not. Defaults to `fal
 
 Flag whether to disable PWA functionality. Defaults to `false`.
 
-### LEGACY
-
-Flag whether to target legacy browsers. Defaults to `false`. See [vite-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) for more details.
-
 ## Vite dev server vars
 
 ### DEV_HTTPS

@@ -4,7 +4,10 @@ export default {
       await queryInterface.addColumn(
         'feedback_schemes',
         'physical_data_fields',
-        { allowNull: true, type: Sequelize.TEXT() },
+        {
+          allowNull: true,
+          type: Sequelize.TEXT(),
+        },
         { transaction },
       );
 
@@ -29,7 +32,10 @@ export default {
       await queryInterface.changeColumn(
         'feedback_schemes',
         'physical_data_fields',
-        { allowNull: false, type: Sequelize.TEXT() },
+        {
+          allowNull: false,
+          type: Sequelize.TEXT(),
+        },
         { transaction },
       );
     }),

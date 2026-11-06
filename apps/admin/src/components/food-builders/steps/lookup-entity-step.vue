@@ -70,7 +70,10 @@ const { i18n: { t } } = useI18n();
 
 const step = useVModel(props, 'modelValue', emit, { passive: true, deep: true });
 
-const resources = computed(() => resourcesList.map(value => ({ title: t(`fdbs.${value}._`), value })));
+const resources = computed(() => resourcesList.map(value => ({
+  title: t(`fdbs.${value}._`),
+  value,
+})));
 </script>
 
 <style lang="scss">

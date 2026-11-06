@@ -40,7 +40,7 @@ function validateJSONPromise(next: (value: any, meta: Meta) => Promise<void>) {
 
 function isArrayOfNumberPairs(value: any, meta: Meta): boolean {
   if (!Array.isArray(value))
-    throw new Error(customTypeErrorMessage('array._', meta));
+    throw new TypeError(customTypeErrorMessage('array._', meta));
   if (value.length % 2 !== 0)
     throw new Error(customTypeErrorMessage('array.even', meta));
   if (value.some(v => typeof v !== 'number'))
@@ -51,7 +51,9 @@ function isArrayOfNumberPairs(value: any, meta: Meta): boolean {
 const scaleCommon: Schema = {
   drinkwareSetId: {
     in: ['params'],
-    isString: { errorMessage: typeErrorMessage('string._') },
+    isString: {
+      errorMessage: typeErrorMessage('string._'),
+    },
     isWhitelisted: {
       options: identifierSafeChars,
       errorMessage: typeErrorMessage('safeChars._'),
@@ -59,21 +61,29 @@ const scaleCommon: Schema = {
   },
   choiceId: {
     in: ['params'],
-    isInt: { errorMessage: typeErrorMessage('_.int') },
+    isInt: {
+      errorMessage: typeErrorMessage('_.int'),
+    },
   },
   updateOnConflict: {
     in: ['query'],
     optional: true,
-    isBoolean: { errorMessage: typeErrorMessage('boolean._') },
+    isBoolean: {
+      errorMessage: typeErrorMessage('boolean._'),
+    },
   },
   return: {
     in: ['query'],
     optional: true,
-    isBoolean: { errorMessage: typeErrorMessage('boolean._') },
+    isBoolean: {
+      errorMessage: typeErrorMessage('boolean._'),
+    },
   },
   label: {
     in: ['body'],
-    custom: { options: validateJSONPromise(isTranslationObject) },
+    custom: {
+      options: validateJSONPromise(isTranslationObject),
+    },
   },
   volumeSamples: {
     in: ['body'],
@@ -88,11 +98,15 @@ export default {
     checkSchema({
       drinkwareSetId: {
         in: ['params'],
-        isString: { errorMessage: typeErrorMessage('string._') },
+        isString: {
+          errorMessage: typeErrorMessage('string._'),
+        },
       },
       choiceId: {
         in: ['params'],
-        isInt: { errorMessage: typeErrorMessage('int._') },
+        isInt: {
+          errorMessage: typeErrorMessage('int._'),
+        },
       },
     }),
   ),
@@ -103,19 +117,27 @@ export default {
       overlayImage: imageFile,
       width: {
         in: ['body'],
-        isInt: { errorMessage: typeErrorMessage('int._') },
+        isInt: {
+          errorMessage: typeErrorMessage('int._'),
+        },
       },
       height: {
         in: ['body'],
-        isInt: { errorMessage: typeErrorMessage('int._') },
+        isInt: {
+          errorMessage: typeErrorMessage('int._'),
+        },
       },
       emptyLevel: {
         in: ['body'],
-        isInt: { errorMessage: typeErrorMessage('int._') },
+        isInt: {
+          errorMessage: typeErrorMessage('int._'),
+        },
       },
       fullLevel: {
         in: ['body'],
-        isInt: { errorMessage: typeErrorMessage('int._') },
+        isInt: {
+          errorMessage: typeErrorMessage('int._'),
+        },
       },
     }),
   ),
@@ -123,7 +145,11 @@ export default {
     checkSchema({
       ...scaleCommon,
       image: imageFile,
-      outlineCoordinates: { custom: { options: validateJSON(isArrayOfNumberPairs) } },
+      outlineCoordinates: {
+        custom: {
+          options: validateJSON(isArrayOfNumberPairs),
+        },
+      },
     }),
   ),
 };

@@ -134,7 +134,13 @@ export default defineComponent({
 
     const loadCallback = (data: TaskResponse) => {
       const { params, ...rest } = data;
-      return { ...rest, params: { ...defaultJobsParams[rest.job], ...params } };
+      return {
+        ...rest,
+        params: {
+          ...defaultJobsParams[rest.job],
+          ...params,
+        },
+      };
     };
 
     const { formatDateTime } = useDateTime();
@@ -143,7 +149,10 @@ export default defineComponent({
     useEntryFetch(props);
 
     const jobs = computed(() =>
-      jobTypes.map(value => ({ value, title: i18n.t(`jobs.types.${value}._`) })),
+      jobTypes.map(value => ({
+        value,
+        title: i18n.t(`jobs.types.${value}._`),
+      })),
     );
 
     const { clearError, form: { data, errors }, routeLeave, submit } = useEntryForm<TaskForm, TaskResponse>(props, {

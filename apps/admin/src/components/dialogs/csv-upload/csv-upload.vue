@@ -93,11 +93,21 @@ export default defineComponent({
   },
 
   setup(props) {
-    const form = useForm<CsvUploadForm>({ data: { file: null } });
+    const form = useForm<CsvUploadForm>({
+      data: { file: null },
+    });
     const { data, errors } = form;
     const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(props.jobType);
 
-    return { data, errors, form, dialog, jobs, jobInProgress, startPolling };
+    return {
+      data,
+      errors,
+      form,
+      dialog,
+      jobs,
+      jobInProgress,
+      startPolling,
+    };
   },
 
   methods: {

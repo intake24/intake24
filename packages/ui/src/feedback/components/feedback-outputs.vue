@@ -277,7 +277,9 @@ export default defineComponent({
     },
 
     feedbackInterval() {
-      this.retry.retryIn -= this.retry.retryIn < 5 ? this.retry.retryIn : 5;
+      this.retry.retryIn -= this.retry.retryIn < 5
+        ? this.retry.retryIn
+        : 5;
 
       if (!this.retry.retryIn)
         this.clearFeedbackInterval();

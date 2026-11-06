@@ -285,10 +285,16 @@ async function remove() {
 
   const parentEntryId = entry.value?.parentCategories?.at(0)?.id;
   if (parentEntryId) {
-    await router.push({ name: `fdbs-categories`, params: { id: props.id, entryId: parentEntryId } });
+    await router.push({
+      name: `fdbs-categories`,
+      params: { id: props.id, entryId: parentEntryId },
+    });
   }
   else {
-    await router.push({ name: 'fdbs-food-list', params: { id: props.id } });
+    await router.push({
+      name: 'fdbs-food-list',
+      params: { id: props.id },
+    });
   }
 }
 

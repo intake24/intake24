@@ -53,8 +53,12 @@ export function mountInterceptors(router: Router, useAuth: AuthStoreDef) {
           await auth.logout();
           const { name, params: { surveyId } = {} } = router.currentRoute.value;
 
-          if (surveyId && name !== 'survey-login')
-            router.push({ name: 'survey-login', params: { surveyId } });
+          if (surveyId && name !== 'survey-login') {
+            router.push({
+              name: 'survey-login',
+              params: { surveyId },
+            });
+          }
 
           return Promise.reject(err);
         }

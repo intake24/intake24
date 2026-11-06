@@ -75,7 +75,13 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'update:modelValue', 'action', 'mealSelected', 'foodSelected']);
+const emit = defineEmits([
+  'action',
+  'update:modelValue',
+  'action',
+  'mealSelected',
+  'foodSelected',
+]);
 
 const { action } = usePromptUtils(props, { emit });
 const isValid = true;

@@ -17,7 +17,10 @@ export function feedback() {
           ]),
       );
 
-      return { status: 200, body: { nutrientTypes, physicalActivityLevels, weightTargets } };
+      return {
+        status: 200,
+        body: { nutrientTypes, physicalActivityLevels, weightTargets },
+      };
     },
   });
 }

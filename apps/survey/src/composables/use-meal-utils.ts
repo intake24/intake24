@@ -14,10 +14,14 @@ export function useMealUtils(props: UseMealUtilsProps = {}) {
 
   const getMealName = (mealState: MealState) => translate(mealState.name);
 
-  const mealName = computed(() => (props.meal ? getMealName(props.meal) : undefined));
+  const mealName = computed(() => (props.meal
+    ? getMealName(props.meal)
+    : undefined));
 
   const getMealTime = (mealState?: MealState) =>
-    mealState?.time ? fromTime(mealState.time) : undefined;
+    mealState?.time
+      ? fromTime(mealState.time)
+      : undefined;
 
   const mealTime = computed(() => getMealTime(props.meal));
 
@@ -25,11 +29,15 @@ export function useMealUtils(props: UseMealUtilsProps = {}) {
     const mealName = getMealName(mealState);
     const mealTime = getMealTime(mealState);
 
-    return mealName && mealTime ? `${mealName} (${mealTime})` : mealName;
+    return mealName && mealTime
+      ? `${mealName} (${mealTime})`
+      : mealName;
   };
 
   const mealNameWithTime = computed(() =>
-    mealName.value && mealTime.value ? `${mealName.value} (${mealTime.value})` : mealName.value,
+    mealName.value && mealTime.value
+      ? `${mealName.value} (${mealTime.value})`
+      : mealName.value,
   );
 
   return {

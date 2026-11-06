@@ -190,7 +190,9 @@ const isValid = computed(() => Object.values(foods.value).every(foods => foods.e
 
 function getAddonFoodsUnits(foodId: string, idx: number) {
   const code = foods.value[foodId][idx].data?.code;
-  return code ? (addonFoodUnits.value[code]?.units ?? []) : [];
+  return code
+    ? (addonFoodUnits.value[code]?.units ?? [])
+    : [];
 }
 
 function isAddonFoodCompatible(food: PromptStates['addon-foods-prompt']['foods'][string][number]) {
@@ -262,14 +264,18 @@ function updateOpened(value: string[]) {
 function updatePortionSize(foodId: string, idx: number) {
   const { portionSize: { unit, quantity, linkedQuantity }, data } = foods.value[foodId][idx];
 
-  const conversionFactor = data?.code ? (addonFoodUnits.value[data.code]?.conversionFactor ?? 1) : 1;
+  const conversionFactor = data?.code
+    ? (addonFoodUnits.value[data.code]?.conversionFactor ?? 1)
+    : 1;
   foods.value[foodId][idx].portionSize.servingWeight = (unit?.weight ?? 0) * quantity * conversionFactor * linkedQuantity;
 
   update();
 };
 
 function updateConfirmed(foodId: string, idx: number, confirmed?: boolean | null) {
-  foods.value[foodId][idx].confirmed = typeof confirmed === 'boolean' ? confirmed : null;
+  foods.value[foodId][idx].confirmed = typeof confirmed === 'boolean'
+    ? confirmed
+    : null;
 
   if (confirmed === false) {
     foods.value[foodId][idx].data = null;

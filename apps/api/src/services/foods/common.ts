@@ -18,7 +18,9 @@ export async function getFoodParentCategories(foodId: string): Promise<string[]>
   const categories = await FoodCategory.findAll({
     where: { foodId },
     attributes: ['categoryId'],
-    order: [['categoryId', 'ASC']],
+    order: [
+      ['categoryId', 'ASC'],
+    ],
   });
 
   return categories.map(row => row.categoryId);
@@ -28,7 +30,9 @@ export async function getCategoryParentCategories(subCategoryId: string[]): Prom
   const categories = await CategoryCategory.findAll({
     where: { subCategoryId },
     attributes: ['categoryId'],
-    order: [['categoryId', 'ASC']],
+    order: [
+      ['categoryId', 'ASC'],
+    ],
   });
 
   return categories.map(row => row.categoryId);

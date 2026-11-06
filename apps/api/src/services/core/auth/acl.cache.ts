@@ -90,14 +90,19 @@ function aclCache({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) {
           userId,
           token,
           revoked: false,
-          expiresAt: { [Op.gt]: new Date() },
+          expiresAt: {
+            [Op.gt]: new Date(),
+          },
         },
         include: [
           {
             association: 'user',
             attributes: [],
             required: true,
-            where: { disabledAt: null, verifiedAt: { [Op.ne]: null } },
+            where: {
+              disabledAt: null,
+              verifiedAt: { [Op.ne]: null },
+            },
           },
         ],
       }));

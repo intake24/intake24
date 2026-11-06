@@ -139,7 +139,9 @@ export default defineComponent({
   name: 'FeedbackPhysicalData',
 
   beforeRouteEnter({ params }) {
-    return useSurvey().parameters?.feedbackScheme?.physicalDataFields.length ? true : { name: 'survey-home', params };
+    return useSurvey().parameters?.feedbackScheme?.physicalDataFields.length
+      ? true
+      : { name: 'survey-home', params };
   },
 
   props: {
@@ -169,7 +171,11 @@ export default defineComponent({
       } as UserPhysicalData,
       errors: new Errors(),
       sexes: [
-        { text: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
+        {
+          text: this.$t('common.not.selected'),
+          value: null,
+          icon: 'fas fa-genderless',
+        },
         ...sexes.map(value => ({
           text: this.$t(`feedback.physicalData.sexes.${value}`),
           value,
@@ -177,10 +183,17 @@ export default defineComponent({
         })),
       ],
       physicalActivityLevels: [
-        { id: null, name: this.$t('common.not.selected'), coefficient: 0 },
+        {
+          id: null,
+          name: this.$t('common.not.selected'),
+          coefficient: 0,
+        },
       ] as NullablePhysicalActivityLevel[],
       weightTargets: [
-        { text: this.$t('common.not.selected'), value: null },
+        {
+          text: this.$t('common.not.selected'),
+          value: null,
+        },
         ...weightTargets.map(value => ({
           text: this.$t(`feedback.physicalData.weightTargets.${value}`),
           value,
@@ -212,12 +225,19 @@ export default defineComponent({
       this.form = { ...physicalData };
 
       this.physicalActivityLevels = [
-        { id: null, name: this.$t('common.not.selected'), coefficient: 0 },
+        {
+          id: null,
+          name: this.$t('common.not.selected'),
+          coefficient: 0,
+        },
         ...feedbackData.physicalActivityLevels,
       ];
     }
     catch {
-      this.$router.push({ name: 'feedback-error', params: { surveyId } });
+      this.$router.push({
+        name: 'feedback-error',
+        params: { surveyId },
+      });
     }
     finally {
       loading.removeItem('feedback-physical-data');
@@ -234,7 +254,10 @@ export default defineComponent({
 
       try {
         await userService.savePhysicalData(surveyId, this.form);
-        this.$router.push({ name: 'feedback-home', params: { surveyId } });
+        this.$router.push({
+          name: 'feedback-home',
+          params: { surveyId },
+        });
       }
       catch (err) {
         if (

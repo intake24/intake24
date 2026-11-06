@@ -64,7 +64,12 @@ export default defineComponent({
     const { canHandleEntry, entry, entryLoaded, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
 
-    return { canHandleEntry, entry, entryLoaded, refs };
+    return {
+      canHandleEntry,
+      entry,
+      entryLoaded,
+      refs,
+    };
   },
 });
 </script>

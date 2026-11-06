@@ -25,7 +25,10 @@ export const session = contract.router({
   read: {
     method: 'GET',
     path: '/admin/surveys/:surveyId/sessions/:sessionId',
-    pathParams: z.object({ surveyId, sessionId: z.uuid() }),
+    pathParams: z.object({
+      surveyId,
+      sessionId: z.uuid(),
+    }),
     responses: {
       200: userSurveySessionAttributes,
     },
@@ -35,7 +38,10 @@ export const session = contract.router({
   destroy: {
     method: 'DELETE',
     path: '/admin/surveys/:surveyId/sessions/:sessionId',
-    pathParams: z.object({ surveyId, sessionId: z.uuid() }),
+    pathParams: z.object({
+      surveyId,
+      sessionId: z.uuid(),
+    }),
     body: null,
     responses: {
       204: contract.noBody(),

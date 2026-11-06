@@ -139,7 +139,9 @@ const isNumber = computed(() => [
 const slider = useVModel(props, 'modelValue', emit, { deep: true, passive: true });
 
 function updateLabel(key: keyof Pick<Slider, 'current' | 'min' | 'max'>, value: boolean) {
-  slider.value[key].label = value ? { en: '' } : false;
+  slider.value[key].label = value
+    ? { en: '' }
+    : false;
 }
 
 const strategies = ([true, null] as const).map(value => ({

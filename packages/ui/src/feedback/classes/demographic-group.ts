@@ -69,9 +69,15 @@ export default class DemographicGroup {
       group.nutrientRuleType,
       group.scaleSectors.map(DemographicScaleSector.fromJson),
       group.sex,
-      age ? DemographicRange.fromJson(age.start, age.end) : null,
-      height ? DemographicRange.fromJson(height.start, height.end) : null,
-      weight ? DemographicRange.fromJson(weight.start, weight.end) : null,
+      age
+        ? DemographicRange.fromJson(age.start, age.end)
+        : null,
+      height
+        ? DemographicRange.fromJson(height.start, height.end)
+        : null,
+      weight
+        ? DemographicRange.fromJson(weight.start, weight.end)
+        : null,
       nutrient,
     );
   }
@@ -149,7 +155,7 @@ export default class DemographicGroup {
       const { weightKg } = userDemographic.physicalData;
 
       if (typeof weightKg !== 'number')
-        throw new Error(`Cannot calculate 'per_unit_of_weight' nutrient rule type without weight.`);
+        throw new TypeError(`Cannot calculate 'per_unit_of_weight' nutrient rule type without weight.`);
 
       return consumption / weightKg;
     }
@@ -179,7 +185,9 @@ export default class DemographicGroup {
       ['good', 2],
       ['neutral', 3],
     ]);
-    const sentimentOrderKeys = [...sentimentOrder.keys()];
+    const sentimentOrderKeys = [
+      ...sentimentOrder.keys(),
+    ];
 
     const bestScaleSectors = this.scaleSectors.filter(ss => sentimentOrderKeys.includes(ss.sentiment))
       .sort((a, b) => (sentimentOrder.get(a.sentiment) ?? 0) - (sentimentOrder.get(b.sentiment) ?? 0));

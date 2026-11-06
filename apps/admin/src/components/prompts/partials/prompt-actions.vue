@@ -218,7 +218,12 @@ const emit = defineEmits(['update:actions']);
 
 const { actions: availableActions, colors, layouts, variants } = useSelects();
 
-const currentActions = ref(props.actions ? { ...props.actions, items: withIdList(props.actions.items) } : undefined);
+const currentActions = ref(props.actions
+  ? {
+      ...props.actions,
+      items: withIdList(props.actions.items),
+    }
+  : undefined);
 const selectedAction = ref(currentActions.value?.items.length ? currentActions.value.items[0].id : undefined);
 const toggle = ref(!!props.actions);
 
@@ -233,7 +238,9 @@ const outputActions = computed(() => {
 });
 
 function changeToggle(enable: boolean | null) {
-  currentActions.value = enable ? { both: false, items: [] } : undefined;
+  currentActions.value = enable
+    ? { both: false, items: [] }
+    : undefined;
 };
 
 function add() {
@@ -256,7 +263,12 @@ watch(() => props.actions, (val) => {
   if (deepEqual(val, outputActions.value))
     return;
 
-  currentActions.value = val ? { ...val, items: withIdList(val.items) } : undefined;
+  currentActions.value = val
+    ? {
+        ...val,
+        items: withIdList(val.items),
+      }
+    : undefined;
   toggle.value = !!val;
 });
 

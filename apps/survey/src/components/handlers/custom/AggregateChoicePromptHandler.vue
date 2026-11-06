@@ -27,7 +27,10 @@ const { resolvePromptAnswer } = useCustomPromptHandler(props);
 const filteredMeals = computed(() => filterMealsForAggregateChoicePrompt(survey, props.prompt));
 
 const getInitialState = computed(() =>
-  Object.fromEntries(filteredMeals.value.flatMap(meal => meal.foods.map(food => [food.id, resolvePromptAnswer(props.prompt, food)]))));
+  Object.fromEntries(filteredMeals.value.flatMap(meal => meal.foods.map(food => [
+    food.id,
+    resolvePromptAnswer(props.prompt, food),
+  ]))));
 
 function commitAnswer() {
   function commitAnswers(food: FoodState) {

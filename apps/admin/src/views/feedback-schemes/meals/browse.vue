@@ -147,18 +147,26 @@ export default defineComponent({
         Number.isInteger(value) || i18n.t('feedback-schemes.colors.max.required'),
     ]);
 
-    const currentFeedbackScheme = computed(() => ({ ...entry.value, ...data.value }));
+    const currentFeedbackScheme = computed(() => ({
+      ...entry.value,
+      ...data.value,
+    }));
 
     const updateColorList = () => {
       if (colorMax.value < data.value.meals.chart.colors.length) {
-        data.value.meals.chart.colors = [...data.value.meals.chart.colors.slice(0, colorMax.value)];
+        data.value.meals.chart.colors = [
+          ...data.value.meals.chart.colors.slice(0, colorMax.value),
+        ];
       }
       else if (colorMax.value > data.value.meals.chart.colors.length) {
         const newColors = Array.from<string>({
           length: colorMax.value - data.value.meals.chart.colors.length,
         }).fill(colors.primary);
 
-        data.value.meals.chart.colors = [...data.value.meals.chart.colors, ...newColors];
+        data.value.meals.chart.colors = [
+          ...data.value.meals.chart.colors,
+          ...newColors,
+        ];
       }
     };
 

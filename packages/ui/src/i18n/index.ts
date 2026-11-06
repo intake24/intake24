@@ -62,9 +62,15 @@ export async function loadAppLanguage(app: Application, lang: string) {
     if (app.status !== 'fulfilled' || shared.status !== 'fulfilled')
       return;
 
-    i18n.global.setLocaleMessage(lang, { ...app.value.default, ...shared.value.default });
+    i18n.global.setLocaleMessage(lang, {
+      ...app.value.default,
+      ...shared.value.default,
+    });
     i18n.global.setDateTimeFormat(lang, dateFormats);
-    defaultMessages.setMessages(lang, { ...app.value.default, ...shared.value.default });
+    defaultMessages.setMessages(lang, {
+      ...app.value.default,
+      ...shared.value.default,
+    });
   });
 }
 

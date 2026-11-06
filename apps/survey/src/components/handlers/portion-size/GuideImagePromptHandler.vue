@@ -52,7 +52,9 @@ function getInitialState(): PromptStates['guide-image-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null
+      ? 1
+      : 0,
     objectConfirmed: false,
     quantityConfirmed: false,
     linkedQuantityConfirmed: false,

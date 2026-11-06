@@ -44,7 +44,9 @@ class AsServedHelper {
       include: [
         {
           model: AsServedImage,
-          include: [{ model: ProcessedImage, as: 'image' }],
+          include: [
+            { model: ProcessedImage, as: 'image' },
+          ],
         },
       ],
     });
@@ -113,7 +115,13 @@ class GuideImageHelper {
       include: [
         {
           model: ImageMap,
-          include: [{ model: ImageMapObject, include: [ProcessedImage] }, ProcessedImage],
+          include: [
+            {
+              model: ImageMapObject,
+              include: [ProcessedImage],
+            },
+            ProcessedImage,
+          ],
         },
         GuideImageObject,
       ],
@@ -227,7 +235,9 @@ async function getNutrientLabels(ids: string[]): Promise<Map<string, string>> {
   const nutrientLabels = new Map<string, string>();
 
   const records = await FoodsNutrientType.findAll({
-    include: [{ model: FoodsNutrientUnit }],
+    include: [
+      { model: FoodsNutrientUnit },
+    ],
     where: { id: ids },
   });
 
@@ -278,7 +288,9 @@ async function findPortionSizeImages(
     const currentBatch = await Food.findAll({
       where: {
         localeId: config.locale,
-        ...(config.foodFilter.length > 0 ? { code: config.foodFilter } : {}),
+        ...(config.foodFilter.length > 0
+          ? { code: config.foodFilter }
+          : {}),
       },
       include: [
         {
@@ -447,7 +459,9 @@ async function main(config: FPIConfig, outputFilePath: string) {
 
   await db.init();
 
-  const nutrientIds = (await FoodsNutrientType.findAll({ order: ['id'] })).map(r => r.id);
+  const nutrientIds = (await FoodsNutrientType.findAll({
+    order: ['id'],
+  })).map(r => r.id);
 
   const [nutrientLabels, portionSizeImages] = await Promise.all([
     getNutrientLabels(nutrientIds),

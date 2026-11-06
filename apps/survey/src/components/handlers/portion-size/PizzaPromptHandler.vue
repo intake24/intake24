@@ -41,12 +41,24 @@ function getInitialState(): PromptStates['pizza-prompt'] {
       conversionFactor: portionSize.value.conversionFactor,
       type: { id: undefined, index: undefined, image: null },
       thickness: { id: undefined, index: undefined, image: null },
-      slice: { id: undefined, index: undefined, image: null, quantity: 1 },
+      slice: {
+        id: undefined,
+        index: undefined,
+        image: null,
+        quantity: 1,
+      },
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
-    confirmed: { type: false, thickness: false, slice: false, quantity: false },
+    panel: food.value.portionSizeMethodIndex !== null
+      ? 1
+      : 0,
+    confirmed: {
+      type: false,
+      thickness: false,
+      slice: false,
+      quantity: false,
+    },
   };
 }
 

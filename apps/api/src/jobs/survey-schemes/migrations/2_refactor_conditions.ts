@@ -60,7 +60,9 @@ function migrateCondition(condition: ConditionV1, section: PromptSection): Condi
           id: 'flag',
           type: 'flag',
           check: {
-            flagId: Array.isArray(condition.value) ? condition.value[0].toString() : condition.toString(),
+            flagId: Array.isArray(condition.value)
+              ? condition.value[0].toString()
+              : condition.toString(),
             value: true,
           },
         },

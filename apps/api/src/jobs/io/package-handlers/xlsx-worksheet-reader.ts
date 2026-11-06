@@ -99,7 +99,9 @@ function cellAsOptionalString(cell: ExcelJS.Cell | undefined): string | undefine
     return undefined;
 
   const value = cellAsString(cell);
-  return value.trim() === '' ? undefined : value;
+  return value.trim() === ''
+    ? undefined
+    : value;
 }
 
 function cellAsBool(cell: ExcelJS.Cell): boolean | undefined {
@@ -258,7 +260,12 @@ export class XlsxWorkbookReader {
         continue;
 
       this.addValidationError(
-        { ...context, rowNumber, columnName: expectedName, columnIndex: excelColumnIndex(colNumber) },
+        {
+          ...context,
+          rowNumber,
+          columnName: expectedName,
+          columnIndex: excelColumnIndex(colNumber),
+        },
         actualName ? 'invalidHeader' : 'missingColumn',
         { actualHeader: actualName },
       );
@@ -266,7 +273,9 @@ export class XlsxWorkbookReader {
       colNumber++;
     }
 
-    return valid ? { headerIndices, headerNamesByIndex } : undefined;
+    return valid
+      ? { headerIndices, headerNamesByIndex }
+      : undefined;
   }
 
   private static normaliseHeader(header: string): string {
@@ -319,7 +328,9 @@ export class XlsxWorksheetReader {
 
   cellAsBool(rowNumber: number, columnIndex: number | undefined): boolean | undefined {
     const cell = this.optionalCell(rowNumber, columnIndex);
-    return cell ? cellAsBool(cell) : undefined;
+    return cell
+      ? cellAsBool(cell)
+      : undefined;
   }
 
   cellAsNonEmptyString(rowNumber: number, columnIndex: number): string | undefined {
@@ -417,7 +428,9 @@ export class XlsxWorksheetReader {
   }
 
   private optionalCell(rowNumber: number, columnIndex: number | undefined): ExcelJS.Cell | undefined {
-    return columnIndex ? this.worksheet.getRow(rowNumber).getCell(columnIndex) : undefined;
+    return columnIndex
+      ? this.worksheet.getRow(rowNumber).getCell(columnIndex)
+      : undefined;
   }
 
   cellContext(rowNumber: number, columnIndex: number): XlsxCellContext {
@@ -425,7 +438,12 @@ export class XlsxWorksheetReader {
   }
 
   private cellContextForColumnIndex(rowNumber: number, columnIndex: number): XlsxCellContext {
-    return { ...this.sheetContext, rowNumber, columnName: this.columnName(columnIndex), columnIndex: excelColumnIndex(columnIndex) };
+    return {
+      ...this.sheetContext,
+      rowNumber,
+      columnName: this.columnName(columnIndex),
+      columnIndex: excelColumnIndex(columnIndex),
+    };
   }
 
   private logValidationError(

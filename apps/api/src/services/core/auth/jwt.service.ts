@@ -42,7 +42,9 @@ function jwtService({
       const { issuer } = securityConfig.jwt;
 
       jwt.sign(payload, secret, { jwtid, issuer, ...options }, (err, encoded) =>
-        err || !encoded ? reject(err ?? new Error('Unable to sign token.')) : resolve(encoded));
+        err || !encoded
+          ? reject(err ?? new Error('Unable to sign token.'))
+          : resolve(encoded));
     });
 
   /**
@@ -149,7 +151,9 @@ function jwtService({
     const { permissions, verified, ...refreshPayload } = payload;
 
     const aal = 'aal1';
-    const amr = [createAmrMethod('pwd')];
+    const amr = [
+      createAmrMethod('pwd'),
+    ];
 
     const [accessToken, refreshToken] = await Promise.all([
       signAccessToken({ aal, amr, ...payload }, frontEnd, options),
@@ -200,7 +204,9 @@ function jwtService({
   };
 
   const revokePersonalAccessToken = async (id: string, userId: string) => {
-    const token = await PersonalAccessToken.findOne({ where: { id, userId } });
+    const token = await PersonalAccessToken.findOne({
+      where: { id, userId },
+    });
     if (!token)
       throw new NotFoundError();
 

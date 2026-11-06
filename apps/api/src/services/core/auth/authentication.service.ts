@@ -131,12 +131,19 @@ function authenticationService({
       ],
     });
 
-    const device = credentials.deviceId ? devices.find(d => d.id === credentials.deviceId) : devices.at(0);
+    const device = credentials.deviceId
+      ? devices.find(d => d.id === credentials.deviceId)
+      : devices.at(0);
     if (!device)
       throw new NotFoundError('No MFA devices found.');
 
     const { id: deviceId, provider } = device;
-    const providers = { code: codeProvider, duo: duoProvider, otp: otpProvider, fido: fidoProvider };
+    const providers = {
+      code: codeProvider,
+      duo: duoProvider,
+      otp: otpProvider,
+      fido: fidoProvider,
+    };
 
     const challenge = await providers[provider].authenticationChallenge(device);
 
@@ -146,7 +153,11 @@ function authenticationService({
       deviceId,
       provider,
       userId,
-      amr: credentials.deviceId && meta.req.session.mfaAuthChallenge?.amr ? meta.req.session.mfaAuthChallenge.amr : [createAmrMethod('pwd')],
+      amr: credentials.deviceId && meta.req.session.mfaAuthChallenge?.amr
+        ? meta.req.session.mfaAuthChallenge.amr
+        : [
+            createAmrMethod('pwd'),
+          ],
     };
 
     return { challenge, devices };
@@ -271,9 +282,16 @@ function authenticationService({
     await signInService.log({ ...signInAttempt, successful: true });
 
     return jwtService.issueTokens(
-      { surveyId, userId, verified: !!verifiedAt, permissions },
+      {
+        surveyId,
+        userId,
+        verified: !!verifiedAt,
+        permissions,
+      },
       frontEnd,
-      { subject: btoa(subject) },
+      {
+        subject: btoa(subject),
+      },
     );
   };
 
@@ -292,12 +310,19 @@ function authenticationService({
 
     const user = await User.findOne({
       where: { email },
-      include: [{ association: 'password', required: true }],
+      include: [
+        { association: 'password', required: true },
+      ],
     });
 
     const subject: Subject = { provider: 'email', providerKey: email };
 
-    return processLogin({ user, password, subject, frontEnd: 'admin' }, meta);
+    return processLogin({
+      user,
+      password,
+      subject,
+      frontEnd: 'admin',
+    }, meta);
   };
 
   /**
@@ -322,17 +347,28 @@ function authenticationService({
             association: 'permissions',
             attributes: ['name'],
             through: { attributes: [] },
-            where: { name: surveyRespondent(slug) },
+            where: {
+              name: surveyRespondent(slug),
+            },
           },
         ],
       }),
-      Survey.findBySlug(slug, { attributes: ['authCaptcha', 'slug'] }),
+      Survey.findBySlug(slug, {
+        attributes: ['authCaptcha', 'slug'],
+      }),
     ]);
 
     const subject: Subject = { provider: 'email', providerKey: email };
 
     return processLogin(
-      { user, password, captcha, subject, frontEnd: 'survey', survey: survey ?? undefined },
+      {
+        user,
+        password,
+        captcha,
+        subject,
+        frontEnd: 'survey',
+        survey: survey ?? undefined,
+      },
       meta,
     );
   };
@@ -360,7 +396,9 @@ function authenticationService({
             {
               association: 'survey',
               attributes: ['authCaptcha', 'slug'],
-              where: { slug: { [Op.iLike]: slug } },
+              where: {
+                slug: { [Op.iLike]: slug },
+              },
             },
           ],
         },
@@ -369,7 +407,9 @@ function authenticationService({
           association: 'permissions',
           attributes: ['name'],
           through: { attributes: [] },
-          where: { name: surveyRespondent(slug) },
+          where: {
+            name: surveyRespondent(slug),
+          },
         },
       ],
     });
@@ -377,7 +417,14 @@ function authenticationService({
     const subject: Subject = { provider: 'surveyAlias', providerKey: `${slug}#${username}` };
 
     return processLogin(
-      { user, password, captcha, subject, frontEnd: 'survey', survey: user?.aliases?.at(0)?.survey },
+      {
+        user,
+        password,
+        captcha,
+        subject,
+        frontEnd: 'survey',
+        survey: user?.aliases?.at(0)?.survey,
+      },
       meta,
     );
   };
@@ -399,7 +446,13 @@ function authenticationService({
         {
           association: 'aliases',
           where: { urlAuthToken: token },
-          include: [{ association: 'survey', attributes: ['authCaptcha', 'slug'], required: true }],
+          include: [
+            {
+              association: 'survey',
+              attributes: ['authCaptcha', 'slug'],
+              required: true,
+            },
+          ],
         },
         { association: 'password' },
         {
@@ -455,10 +508,19 @@ function authenticationService({
         throw new UnauthorizedError();
 
       // Packing only permissions for survey front-end -> extend to admin (consider jwt payload size)
-      const permissions = frontEnd === 'survey' ? await aclCache.getPermissions(userId) : undefined;
+      const permissions = frontEnd === 'survey'
+        ? await aclCache.getPermissions(userId)
+        : undefined;
 
       return await jwtService.issueTokens(
-        { surveyId, userId, verified: !!user.verifiedAt, permissions, aal, amr },
+        {
+          surveyId,
+          userId,
+          verified: !!user.verifiedAt,
+          permissions,
+          aal,
+          amr,
+        },
         frontEnd,
         { subject },
       );
@@ -493,7 +555,9 @@ function authenticationService({
       return await createMFAChallenge({ userId, deviceId }, meta);
     }
     catch (err) {
-      throw new UnauthorizedError(err instanceof Error ? err.message : undefined);
+      throw new UnauthorizedError(err instanceof Error
+        ? err.message
+        : undefined);
     }
   };
 
@@ -509,7 +573,9 @@ function authenticationService({
 
     const signInAttempt: SignInAttempt = {
       provider: mfaAuthChallenge?.provider ?? body.provider,
-      providerKey: body.provider === 'fido' ? body.response.id : body.token,
+      providerKey: body.provider === 'fido'
+        ? body.response.id
+        : body.token,
       userId: mfaAuthChallenge?.userId,
       remoteAddress,
       userAgent,
@@ -539,7 +605,11 @@ function authenticationService({
         attributes: ['id', 'secret'],
         where: { id: deviceId, provider, userId },
         include: [
-          { association: 'user', attributes: ['id', 'email', 'verifiedAt'], required: true },
+          {
+            association: 'user',
+            attributes: ['id', 'email', 'verifiedAt'],
+            required: true,
+          },
           { association: 'authenticator' },
         ],
       });
@@ -586,10 +656,18 @@ function authenticationService({
           throw new UnauthorizedError();
       }
 
-      const amr = [...mfaAuthChallenge.amr, createAmrMethod(provider)];
+      const amr = [
+        ...mfaAuthChallenge.amr,
+        createAmrMethod(provider),
+      ];
 
       const [tokens] = await Promise.all([
-        jwtService.issueTokens({ userId, verified: !!verifiedAt, aal: 'aal2', amr }, 'admin', {
+        jwtService.issueTokens({
+          userId,
+          verified: !!verifiedAt,
+          aal: 'aal2',
+          amr,
+        }, 'admin', {
           subject: btoa({ provider: 'email', providerKey: email }),
         }),
         signInService.log({ ...signInAttempt, successful: true }),

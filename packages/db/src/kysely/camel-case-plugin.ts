@@ -17,7 +17,9 @@ export class ExtendedCamelCasePlugin extends CamelCasePlugin {
       let value = row[key];
 
       if (Array.isArray(value)) {
-        value = value.map(it => (canMap(key, it, this.opt) ? this.mapRow(it) : it));
+        value = value.map(it => (canMap(key, it, this.opt)
+          ? this.mapRow(it)
+          : it));
       }
       else if (canMap(key, value, this.opt)) {
         value = this.mapRow(value);

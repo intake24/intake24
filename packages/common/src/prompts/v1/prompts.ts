@@ -93,7 +93,9 @@ export const promptValidationWithLimits = promptValidation.extend({
       return true;
 
     return data.max >= data.min;
-  }, { path: ['validation.max'] });
+  }, {
+    path: ['validation.max'],
+  });
 export type PromptValidationWithLimits = z.infer<typeof promptValidationWithLimits>;
 
 export const basePrompt = z.object({
@@ -109,11 +111,19 @@ export type BasePrompt = z.infer<typeof basePrompt>;
 export const validatedPrompt = basePrompt.extend({ validation: promptValidation });
 export type ValidatedPrompt = z.infer<typeof validatedPrompt>;
 
-export const baseCustomPrompt = basePrompt.extend({ type: z.literal('custom'), group: z.string().nullish() });
+export const baseCustomPrompt = basePrompt.extend({
+  type: z.literal('custom'),
+  group: z.string().nullish(),
+});
 export type BaseCustomPrompt = z.infer<typeof baseCustomPrompt>;
-export const basePortionPrompt = basePrompt.extend({ type: z.literal('portion-size'), badges: z.boolean() });
+export const basePortionPrompt = basePrompt.extend({
+  type: z.literal('portion-size'),
+  badges: z.boolean(),
+});
 export type BasePortionPrompt = z.infer<typeof basePortionPrompt>;
-export const baseStandardPrompt = basePrompt.extend({ type: z.literal('standard') });
+export const baseStandardPrompt = basePrompt.extend({
+  type: z.literal('standard'),
+});
 export type BaseStandardPrompt = z.infer<typeof baseStandardPrompt>;
 
 export const foodBrowser = z.object({
@@ -140,17 +150,27 @@ export const linkedQuantity = z.object({
 });
 export type LinkedQuantity = z.infer<typeof linkedQuantity>;
 
-export const reviewOptions = [false, 'scroll', 'checkbox', 'onecheckbox'] as const;
+export const reviewOptions = [
+  false,
+  'scroll',
+  'checkbox',
+  'onecheckbox',
+] as const;
 export type ReviewOptions = (typeof reviewOptions)[number];
 
 export const sliderValue = z.object({
   value: z.number().nullable(),
-  label: z.union([z.literal(false), localeTranslation]),
+  label: z.union([
+    z.literal(false),
+    localeTranslation,
+  ]),
 });
 export type SliderValue = z.infer<typeof sliderValue>;
 
 export const slider = z.object({
-  current: sliderValue.extend({ size: z.number() }),
+  current: sliderValue.extend({
+    size: z.number(),
+  }),
   min: sliderValue,
   max: sliderValue,
   step: z.number(),
@@ -159,7 +179,14 @@ export type Slider = z.infer<typeof slider>;
 
 export const timePicker = z.object({
   format: z.enum(['ampm', '24hr']),
-  allowedMinutes: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal(15), z.literal(20), z.literal(30)]),
+  allowedMinutes: z.union([
+    z.literal(1),
+    z.literal(5),
+    z.literal(10),
+    z.literal(15),
+    z.literal(20),
+    z.literal(30),
+  ]),
 });
 export type TimePicker = z.infer<typeof timePicker>;
 
@@ -255,7 +282,10 @@ const drinkScalePrompt = z.object({
   component: z.literal('drink-scale-prompt'),
   imageMap,
   leftovers: z.boolean(),
-  multiple: z.union([z.literal(false), slider]),
+  multiple: z.union([
+    z.literal(false),
+    slider,
+  ]),
 });
 
 const guideImagePrompt = z.object({
@@ -381,9 +411,18 @@ const redirectPrompt = z.object({
   component: z.literal('redirect-prompt'),
   rating: z.boolean(),
   url: z.string().nullable(),
-  identifier: z.union([z.literal('userId'), z.literal('username'), z.literal('urlAuthToken'), z.string(), z.null()]),
+  identifier: z.union([
+    z.literal('userId'),
+    z.literal('username'),
+    z.literal('urlAuthToken'),
+    z.string(),
+    z.null(),
+  ]),
   timer: z.number(),
-  target: z.union([z.literal('_self'), z.literal('_blank')]),
+  target: z.union([
+    z.literal('_self'),
+    z.literal('_blank'),
+  ]),
 });
 
 const reviewConfirmPrompt = z.object({
@@ -404,7 +443,12 @@ const splitFoodPrompt = z.object({
 const submitPrompt = z.object({
   ...baseStandardPrompt.shape,
   component: z.literal('submit-prompt'),
-  review: z.record(z.enum(layoutTypes), z.literal([false, 'scroll', 'checkbox', 'onecheckbox'])),
+  review: z.record(z.enum(layoutTypes), z.literal([
+    false,
+    'scroll',
+    'checkbox',
+    'onecheckbox',
+  ])),
 });
 
 export const singlePrompt = z.discriminatedUnion('component', [

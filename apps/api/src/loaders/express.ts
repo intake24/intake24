@@ -58,13 +58,21 @@ export default (express: Express, { config }: Ops) => {
   express.set('view engine', 'njk');
 
   nunjucks
-    .configure([path.resolve('public'), path.resolve('resources/views')], {
+    .configure([
+      path.resolve('public'),
+      path.resolve('resources/views'),
+    ], {
       autoescape: true,
       express,
       noCache: isDev,
     })
     .addGlobal('app', {
-      ...pick(app, ['name', 'icon', 'fullName', 'poweredBy']),
+      ...pick(app, [
+        'name',
+        'icon',
+        'fullName',
+        'poweredBy',
+      ]),
       year: new Date().getFullYear(),
       replyTo: mail.replyTo,
     })

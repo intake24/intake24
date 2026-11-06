@@ -135,18 +135,24 @@ function buildFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFileNames
       nutrientTableCodes: {
         FR_TEMP: 'FRPH1',
       },
-      parentCategories: [makeCategoryCode(recipeData.primaryProteinSource)],
-      portionSize: [{
-        method: 'standard-portion',
-        conversionFactor: 1,
-        description: 'use_a_standard_portion',
-        units: [{
-          name: 'gousto_standard_portion',
-          weight: 1,
-          omitFoodDescription: false,
-        }],
-        pathways: ['search', 'afp'],
-      }],
+      parentCategories: [
+        makeCategoryCode(recipeData.primaryProteinSource),
+      ],
+      portionSize: [
+        {
+          method: 'standard-portion',
+          conversionFactor: 1,
+          description: 'use_a_standard_portion',
+          units: [
+            {
+              name: 'gousto_standard_portion',
+              weight: 1,
+              omitFoodDescription: false,
+            },
+          ],
+          pathways: ['search', 'afp'],
+        },
+      ],
       alternativeNames: {},
       name: `Gousto ${recipeData.recipeTitle}`,
       englishName: recipeData.recipeTitle,
@@ -160,13 +166,17 @@ function buildFoods(recipeData: Dictionary<GoustoRecipeData>, thumbnailFileNames
 }
 
 function makeCategoryCode(proteinSource: string): string {
-  const source = proteinSource === 'None' ? 'Other' : proteinSource;
+  const source = proteinSource === 'None'
+    ? 'Other'
+    : proteinSource;
   return `G_${source.replace(/\W+/, '').toLocaleUpperCase().substring(0, 6)}`;
 }
 
 function getProteinSources(recipeData: Dictionary<GoustoRecipeData>): string[] {
   const proteinSources = new Set<string>();
-  Object.values(recipeData).forEach(recipe => proteinSources.add(recipe.primaryProteinSource === 'None' ? 'Other' : recipe.primaryProteinSource));
+  Object.values(recipeData).forEach(recipe => proteinSources.add(recipe.primaryProteinSource === 'None'
+    ? 'Other'
+    : recipe.primaryProteinSource));
   const array = [...proteinSources];
   array.sort();
   return array;
@@ -184,16 +194,19 @@ function buildCategories(proteinSources: string[]): PkgCategory[] {
     version: randomUUID(),
   }));
 
-  return [{
-    code: 'GOUSTO',
-    name: 'Gousto recipes',
-    englishName: 'Gousto recipes',
-    hidden: false,
-    attributes: {},
-    parentCategories: [],
-    portionSize: [],
-    version: randomUUID(),
-  }, ...proteinCategories];
+  return [
+    {
+      code: 'GOUSTO',
+      name: 'Gousto recipes',
+      englishName: 'Gousto recipes',
+      hidden: false,
+      attributes: {},
+      parentCategories: [],
+      portionSize: [],
+      version: randomUUID(),
+    },
+    ...proteinCategories,
+  ];
 }
 
 async function getThumbnailFileNames(thumbnailDir: string): Promise<string[]> {

@@ -39,7 +39,11 @@ import User from './user';
 import UserSecurable from './user-securable';
 
 @Scopes(() => ({
-  surveys: { include: [{ model: Survey }] },
+  surveys: {
+    include: [
+      { model: Survey },
+    ],
+  },
 }))
 @Table({
   modelName: 'FeedbackScheme',

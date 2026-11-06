@@ -25,7 +25,13 @@ export type CategoryData = {
 
 export async function fetchFoods(localeId: string): Promise<FoodData[]> {
   const foods = await Food.findAll({
-    attributes: ['id', 'code', 'englishName', 'name', 'altNames'],
+    attributes: [
+      'id',
+      'code',
+      'englishName',
+      'name',
+      'altNames',
+    ],
     where: { localeId },
     include: [
       {
@@ -52,7 +58,13 @@ export async function fetchFoods(localeId: string): Promise<FoodData[]> {
 export async function fetchCategories(localeId: string): Promise<CategoryData[]> {
   const categories = await Category.findAll({
     where: { localeId },
-    attributes: ['id', 'code', 'englishName', 'name', 'hidden'],
+    attributes: [
+      'id',
+      'code',
+      'englishName',
+      'name',
+      'hidden',
+    ],
     include: [
       {
         association: 'parentCategories',
@@ -84,7 +96,12 @@ export async function fetchFoodBuilders(localeId: string): Promise<FoodBuilderTu
   const foodBuilders = await FoodBuilder.findAll({
     attributes: ['id', 'code', 'name', 'triggerWord'],
     where: { localeId },
-    include: [{ association: 'synonymSet', attributes: ['synonyms'] }],
+    include: [
+      {
+        association: 'synonymSet',
+        attributes: ['synonyms'],
+      },
+    ],
   });
 
   return foodBuilders.map((entry: FoodBuilder) =>

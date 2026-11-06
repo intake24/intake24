@@ -22,7 +22,10 @@ function sharedTests(suite: typeof Suite) {
   const defaultOptions: Options = { bearer: 'user' };
 
   const assertMissingAuthentication = async (method: Method, url: string, ops?: Options) => {
-    const { code = 401, input = {} } = { ...defaultOptions, ...ops };
+    const { code = 401, input = {} } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -32,7 +35,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertMissingAuthorization = async (method: Method, url: string, ops?: Options) => {
-    const { bearer, code = 403, input = {} } = { ...defaultOptions, ...ops };
+    const { bearer, code = 403, input = {} } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
     if (bearer)
@@ -59,7 +65,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertConflict = async (method: Method, url: string, ops?: Options) => {
-    const { bearer, code = 409, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 409, input } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -76,7 +85,10 @@ function sharedTests(suite: typeof Suite) {
     fields: string[],
     ops?: Options,
   ) => {
-    const { bearer, code = 400, input = {} } = { ...defaultOptions, ...ops };
+    const { bearer, code = 400, input = {} } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -108,7 +120,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertMissingRecord = async (method: Method, url: string, ops?: Options) => {
-    const { bearer, code = 404, input = {} } = { ...defaultOptions, ...ops };
+    const { bearer, code = 404, input = {} } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -120,7 +135,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertPaginatedResult = async (method: Method, url: string, ops?: PaginatedOptions) => {
-    const { bearer, code = 200, result } = { ...defaultOptions, ...ops };
+    const { bearer, code = 200, result } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
     if (bearer)
@@ -166,7 +184,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertAcknowledged = async (method: Method, url: string, ops?: Options) => {
-    const { bearer, code = 200, input, result = false } = { ...defaultOptions, ...ops };
+    const { bearer, code = 200, input, result = false } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -182,7 +203,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertBuffer = async (method: Method, url: string, ops?: Options) => {
-    const { bearer, code = 200, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 200, input } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -195,7 +219,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertInstanceOf = async (method: Method, url: string, instance: any, ops?: Options) => {
-    const { bearer, code = 200, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 200, input } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -208,7 +235,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertRecord = async (method: Method, url: string, output: any, ops?: Options) => {
-    const { bearer, code = 200, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 200, input } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
@@ -229,7 +259,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assertRecordUpdated = async (method: Method, url: string, output: any, ops?: Options) => {
-    const { bearer, code = 200, input = output } = { ...defaultOptions, ...ops };
+    const { bearer, code = 200, input = output } = {
+      ...defaultOptions,
+      ...ops,
+    };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 

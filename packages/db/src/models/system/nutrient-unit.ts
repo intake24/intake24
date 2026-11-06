@@ -12,7 +12,11 @@ import BaseModel from '../model';
 import SystemNutrientType from './nutrient-type';
 
 @Scopes(() => ({
-  nutrientTypes: { include: [{ model: SystemNutrientType }] },
+  nutrientTypes: {
+    include: [
+      { model: SystemNutrientType },
+    ],
+  },
 }))
 @Table({
   modelName: 'NutrientUnit',

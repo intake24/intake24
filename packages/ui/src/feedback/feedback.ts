@@ -52,9 +52,16 @@ export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefin
     if (typeof item === 'string')
       return acc;
 
-    const colorIdx = hasSubmissionsSection.value ? idx : idx + 1;
+    const colorIdx = hasSubmissionsSection.value
+      ? idx
+      : idx + 1;
 
-    acc.push({ ...item, class: [`order-${idx}`, `${colorIdx % 2 ? 'bg-grey-lighten-4' : 'bg-white'}`] });
+    acc.push({
+      ...item,
+      class: [`order-${idx}`, `${colorIdx % 2
+        ? 'bg-grey-lighten-4'
+        : 'bg-white'}`],
+    });
     return acc;
   }, []) ?? []);
 
@@ -63,9 +70,13 @@ export function useFeedback(scheme: ComputedRef<FeedbackSchemeResponse | undefin
       if (typeof item !== 'string')
         return acc;
 
-      const colorIdx = hasSubmissionsSection.value ? idx : idx + 1;
+      const colorIdx = hasSubmissionsSection.value
+        ? idx
+        : idx + 1;
 
-      acc[item] = [`order-${idx}`, `${colorIdx % 2 ? 'bg-grey-lighten-4' : 'bg-white'}`];
+      acc[item] = [`order-${idx}`, `${colorIdx % 2
+        ? 'bg-grey-lighten-4'
+        : 'bg-white'}`];
 
       return acc;
     }, {} as Record<FeedbackStandardSection, string[]>),

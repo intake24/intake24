@@ -50,7 +50,12 @@ function fidoProvider({
     userDisplayName?: string,
   ) => {
     const authenticators = await MFAAuthenticator.findAll({
-      include: [{ association: 'device', where: { userId: userID } }],
+      include: [
+        {
+          association: 'device',
+          where: { userId: userID },
+        },
+      ],
     });
 
     return generateRegistrationOptions({
@@ -81,7 +86,12 @@ function fidoProvider({
 
     return db.system.transaction(async (transaction) => {
       const device = await MFADevice.create(
-        { userId, provider, name, secret: randomString(32) },
+        {
+          userId,
+          provider,
+          name,
+          secret: randomString(32),
+        },
         { transaction },
       );
 
@@ -124,7 +134,12 @@ function fidoProvider({
       userVerification: 'preferred',
     });
 
-    return { challengeId: options.challenge, deviceId: device.id, provider, options };
+    return {
+      challengeId: options.challenge,
+      deviceId: device.id,
+      provider,
+      options,
+    };
   };
 
   /**

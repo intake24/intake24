@@ -64,5 +64,10 @@ export const codeAuthChallenge = baseChallenge.extend({
 });
 export type CodeAuthChallenge = z.infer<typeof codeAuthChallenge>;
 
-export const mfaAuthChallenge = z.union([duoAuthChallenge, fidoAuthChallenge, otpAuthChallenge, codeAuthChallenge]);
+export const mfaAuthChallenge = z.union([
+  duoAuthChallenge,
+  fidoAuthChallenge,
+  otpAuthChallenge,
+  codeAuthChallenge,
+]);
 export type MFAAuthChallenge = z.infer<typeof mfaAuthChallenge>;

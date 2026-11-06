@@ -26,7 +26,9 @@ import MFAAuthenticator from './mfa-authenticator';
 import User from './user';
 
 @DefaultScope(() => ({
-  attributes: { exclude: ['secret'] },
+  attributes: {
+    exclude: ['secret'],
+  },
 }))
 @Table({
   modelName: 'MFADevice',
@@ -90,7 +92,9 @@ export default class MFADevice extends BaseModel<
 
   @BeforeCreate
   static async handleAdminPermission(device: MFADevice): Promise<void> {
-    const count = await MFADevice.count({ where: { userId: device.userId } });
+    const count = await MFADevice.count({
+      where: { userId: device.userId },
+    });
     if (count === 0)
       device.preferred = true;
   }

@@ -120,7 +120,9 @@ const selector = useTemplateRef('selector');
 
 const itemErrors = computed(() => cards.value.map((_, index) => props.errors.get(`cards.${index}.*`)));
 function clearErrors(index?: number) {
-  props.errors.clear(typeof index === 'undefined' ? 'prompts.*' : `cards.${index}.*`);
+  props.errors.clear(typeof index === 'undefined'
+    ? 'prompts.*'
+    : `cards.${index}.*`);
 }
 
 function getListItemTitle(card: Card): string {

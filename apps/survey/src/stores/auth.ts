@@ -50,7 +50,9 @@ export const useAuth = defineStore('auth', {
 
       try {
         const data
-          = type === 'login' ? await authService.login(payload) : await authService.token(payload);
+          = type === 'login'
+            ? await authService.login(payload)
+            : await authService.token(payload);
 
         if ('accessToken' in data)
           this.successfulLogin(data.accessToken);

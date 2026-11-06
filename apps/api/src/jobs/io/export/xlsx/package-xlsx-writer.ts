@@ -159,7 +159,9 @@ export class PackageXlsxWriter implements PackageWriter {
     ];
     const attributesHeaderRow = attributesSheet.getRow(1);
     attributesHeaderRow.font = { bold: true };
-    attributesHeaderRow.border = { bottom: { style: 'thin' } };
+    attributesHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
     return attributesSheet;
   }
 
@@ -190,7 +192,9 @@ export class PackageXlsxWriter implements PackageWriter {
       { header: XLSX_COLUMN_NAMES.standardUnits.pathways, width: 20 },
     ];
     standardUnitsSheet.getRow(1).font = { bold: true };
-    standardUnitsSheet.getRow(1).border = { bottom: { style: 'thin' } };
+    standardUnitsSheet.getRow(1).border = {
+      bottom: { style: 'thin' },
+    };
     return standardUnitsSheet;
   }
 
@@ -210,7 +214,9 @@ export class PackageXlsxWriter implements PackageWriter {
       { header: XLSX_COLUMN_NAMES.parentFoodPortion.shortLabel, width: 60 },
     ];
     parentPortionSheet.getRow(1).font = { bold: true };
-    parentPortionSheet.getRow(1).border = { bottom: { style: 'thin' } };
+    parentPortionSheet.getRow(1).border = {
+      bottom: { style: 'thin' },
+    };
     return parentPortionSheet;
   }
 
@@ -223,7 +229,9 @@ export class PackageXlsxWriter implements PackageWriter {
       properties: {
         outlineLevelRow: 7,
       },
-      views: [{ state: 'frozen', ySplit: 1 }],
+      views: [
+        { state: 'frozen', ySplit: 1 },
+      ],
     });
 
     return hierarchySheet;
@@ -306,7 +314,9 @@ export class PackageXlsxWriter implements PackageWriter {
 
     const headerRow = workbook.hierarchySheet.getRow(1);
     headerRow.font = { bold: true };
-    headerRow.border = { bottom: { style: 'thin' } };
+    headerRow.border = {
+      bottom: { style: 'thin' },
+    };
     workbook.hierarchySheet.autoFilter = 'A1:D1';
 
     for (const hierarchyRow of hierarchyRows) {
@@ -376,7 +386,9 @@ export class PackageXlsxWriter implements PackageWriter {
 
     const foodsHeaderRow = foodsSheet.getRow(1);
     foodsHeaderRow.font = { bold: true };
-    foodsHeaderRow.border = { bottom: { style: 'thin' } };
+    foodsHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     const altNamesSheet = workbook.addWorksheet(XLSX_SHEET_NAMES.altNames);
     altNamesSheet.columns = [
@@ -386,7 +398,9 @@ export class PackageXlsxWriter implements PackageWriter {
     ];
     const altNamesHeaderRow = altNamesSheet.getRow(1);
     altNamesHeaderRow.font = { bold: true };
-    altNamesHeaderRow.border = { bottom: { style: 'thin' } };
+    altNamesHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     const nutrientSheet = workbook.addWorksheet(XLSX_SHEET_NAMES.nutrientMapping);
     nutrientSheet.columns = [
@@ -396,19 +410,26 @@ export class PackageXlsxWriter implements PackageWriter {
     ];
     const nutrientHeaderRow = nutrientSheet.getRow(1);
     nutrientHeaderRow.font = { bold: true };
-    nutrientHeaderRow.border = { bottom: { style: 'thin' } };
+    nutrientHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     const tagsSheet = workbook.addWorksheet(XLSX_SHEET_NAMES.tags);
     const tagsColumns: Partial<ExcelJS.Column>[] = [
       { header: XLSX_COLUMN_NAMES.tags.code, width: 12 },
     ];
     for (let i = 1; i <= 12; i++) {
-      tagsColumns.push({ header: XLSX_COLUMN_NAMES.tags.tag(i), width: 30 });
+      tagsColumns.push({
+        header: XLSX_COLUMN_NAMES.tags.tag(i),
+        width: 30,
+      });
     }
     tagsSheet.columns = tagsColumns;
     const tagsHeaderRow = tagsSheet.getRow(1);
     tagsHeaderRow.font = { bold: true };
-    tagsHeaderRow.border = { bottom: { style: 'thin' } };
+    tagsHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     const brandsSheet = workbook.addWorksheet(XLSX_SHEET_NAMES.brands);
     brandsSheet.columns = [
@@ -417,7 +438,9 @@ export class PackageXlsxWriter implements PackageWriter {
     ];
     const brandsHeaderRow = brandsSheet.getRow(1);
     brandsHeaderRow.font = { bold: true };
-    brandsHeaderRow.border = { bottom: { style: 'thin' } };
+    brandsHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     const associatedFoodsSheet = workbook.addWorksheet(XLSX_SHEET_NAMES.associatedFoods);
     associatedFoodsSheet.columns = [
@@ -432,7 +455,9 @@ export class PackageXlsxWriter implements PackageWriter {
     ];
     const associatedFoodsHeaderRow = associatedFoodsSheet.getRow(1);
     associatedFoodsHeaderRow.font = { bold: true };
-    associatedFoodsHeaderRow.border = { bottom: { style: 'thin' } };
+    associatedFoodsHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     const attributesSheet = this.createAttributesSheet(workbook, XLSX_COLUMN_NAMES.portionSize.foodCode);
     const { portionSizesSheet, portionSizeWriter } = this.createPortionSizesSheet(
@@ -441,8 +466,12 @@ export class PackageXlsxWriter implements PackageWriter {
       XLSX_COLUMN_NAMES.portionSize.foodName,
       {
         sheetName: XLSX_SHEET_NAMES.foodsMasterList,
-        range: this.includeFoodActionColumn() ? 'A:C' : 'A:B',
-        nameColumnIndex: this.includeFoodActionColumn() ? 3 : 2,
+        range: this.includeFoodActionColumn()
+          ? 'A:C'
+          : 'A:B',
+        nameColumnIndex: this.includeFoodActionColumn()
+          ? 3
+          : 2,
       },
     );
     const standardUnitsSheet = this.createStandardUnitsSheet(workbook, XLSX_COLUMN_NAMES.portionSize.foodCode);
@@ -487,7 +516,9 @@ export class PackageXlsxWriter implements PackageWriter {
     ];
     const categoriesHeaderRow = categoriesSheet.getRow(1);
     categoriesHeaderRow.font = { bold: true };
-    categoriesHeaderRow.border = { bottom: { style: 'thin' } };
+    categoriesHeaderRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     const hierarchySheet = this.createCategoryHierarchySheet(workbook);
     const attributesSheet = this.createAttributesSheet(workbook, XLSX_COLUMN_NAMES.portionSize.categoryCode);
@@ -542,14 +573,22 @@ export class PackageXlsxWriter implements PackageWriter {
     ];
     const headerRow = localesSheet.getRow(1);
     headerRow.font = { bold: true };
-    headerRow.border = { bottom: { style: 'thin' } };
+    headerRow.border = {
+      bottom: { style: 'thin' },
+    };
 
     return this.localesWorkbook;
   }
 
   private writeAttributes(code: string, attributes: any, sheet: ExcelJS.Worksheet) {
     const att = attributes;
-    sheet.addRow([code, xlsxBoolean(att.readyMealOption), att.reasonableAmount ?? '', xlsxBoolean(att.sameAsBeforeOption), this.encodeUseInRecipes(att.useInRecipes)]).commit();
+    sheet.addRow([
+      code,
+      xlsxBoolean(att.readyMealOption),
+      att.reasonableAmount ?? '',
+      xlsxBoolean(att.sameAsBeforeOption),
+      this.encodeUseInRecipes(att.useInRecipes),
+    ]).commit();
   }
 
   private normalisePortionSizeOrder(portionSize: PkgV2PortionSizeMethod[]) {
@@ -564,7 +603,19 @@ export class PackageXlsxWriter implements PackageWriter {
     for (let i = 0; i < standardPortionPsms.length; ++i) {
       const psm = standardPortionPsms[i];
       for (const unit of psm.units) {
-        const row = sheet.addRow([code, i + 1, psm.description, Number(psm.orderBy), psm.conversionFactor, unit.name, unit.weight, xlsxBoolean(unit.omitFoodDescription), unit.inlineEstimateIn, unit.inlineHowMany, psm.pathways.join('; ')]);
+        const row = sheet.addRow([
+          code,
+          i + 1,
+          psm.description,
+          Number(psm.orderBy),
+          psm.conversionFactor,
+          unit.name,
+          unit.weight,
+          xlsxBoolean(unit.omitFoodDescription),
+          unit.inlineEstimateIn,
+          unit.inlineHowMany,
+          psm.pathways.join('; '),
+        ]);
         row.commit();
       }
     }
@@ -579,7 +630,19 @@ export class PackageXlsxWriter implements PackageWriter {
       if (psm.method === 'milk-in-a-hot-drink') {
         for (const [lang, options] of Object.entries(psm.options)) {
           for (const option of options) {
-            const row = sheet.addRow([code, i + 1, psm.method, psm.description, Number(psm.orderBy), psm.conversionFactor, undefined, option.value, lang, option.label, option.shortLabel]);
+            const row = sheet.addRow([
+              code,
+              i + 1,
+              psm.method,
+              psm.description,
+              Number(psm.orderBy),
+              psm.conversionFactor,
+              undefined,
+              option.value,
+              lang,
+              option.label,
+              option.shortLabel,
+            ]);
             row.commit();
           }
         }
@@ -588,7 +651,19 @@ export class PackageXlsxWriter implements PackageWriter {
         for (const [category, categoryOptions] of Object.entries(psm.options)) {
           for (const [language, languageOptions] of Object.entries(categoryOptions)) {
             for (const option of languageOptions) {
-              const row = sheet.addRow([code, i + 1, psm.method, psm.description, Number(psm.orderBy), psm.conversionFactor, category, option.value, language, option.label, option.shortLabel]);
+              const row = sheet.addRow([
+                code,
+                i + 1,
+                psm.method,
+                psm.description,
+                Number(psm.orderBy),
+                psm.conversionFactor,
+                category,
+                option.value,
+                language,
+                option.label,
+                option.shortLabel,
+              ]);
               row.commit();
             }
           }
@@ -616,7 +691,9 @@ export class PackageXlsxWriter implements PackageWriter {
     const parentCategories = food.parentCategories.join('; ');
     const foodRowValues = [
       food.code,
-      ...(this.includeFoodActionColumn() ? ['Retain'] : []),
+      ...(this.includeFoodActionColumn()
+        ? ['Retain']
+        : []),
       food.name,
       food.englishName ?? '',
       parentCategories,
@@ -640,7 +717,10 @@ export class PackageXlsxWriter implements PackageWriter {
     this.writeAttributes(food.code, food.attributes, attributesSheet);
 
     if (food.tags !== undefined && food.tags.length > 0) {
-      tagsSheet.addRow([food.code, ...food.tags.sort()]).commit();
+      tagsSheet.addRow([
+        food.code,
+        ...food.tags.sort(),
+      ]).commit();
     }
 
     for (const brand of food.brandNames) {
@@ -648,7 +728,10 @@ export class PackageXlsxWriter implements PackageWriter {
     }
 
     for (const assoc of food.associatedFoods) {
-      const langs = new Set([...Object.keys(assoc.genericName), ...Object.keys(assoc.promptText)]);
+      const langs = new Set([
+        ...Object.keys(assoc.genericName),
+        ...Object.keys(assoc.promptText),
+      ]);
       for (const lang of langs) {
         const generic = assoc.genericName[lang] ?? '';
         const prompt = assoc.promptText[lang] ?? '';
@@ -746,7 +829,9 @@ export class PackageXlsxWriter implements PackageWriter {
       { header: XLSX_COLUMN_NAMES.standardUnitRefs.howMany, width: 120 },
     ];
     sheet.getRow(1).font = { bold: true };
-    sheet.getRow(1).border = { bottom: { style: 'thin' } };
+    sheet.getRow(1).border = {
+      bottom: { style: 'thin' },
+    };
 
     this.standardUnitsWorkbook = workbook;
 
@@ -781,7 +866,9 @@ export class PackageXlsxWriter implements PackageWriter {
       { header: XLSX_COLUMN_NAMES.synonymSets.synonyms, width: 120 },
     ];
     sheet.getRow(1).font = { bold: true };
-    sheet.getRow(1).border = { bottom: { style: 'thin' } };
+    sheet.getRow(1).border = {
+      bottom: { style: 'thin' },
+    };
 
     this.synonymSetsWorkbook = workbook;
 
@@ -792,7 +879,10 @@ export class PackageXlsxWriter implements PackageWriter {
     const workbook = this.getOrCreateSynonymSetsWorkbook();
     const sheet = workbook.getWorksheet(XLSX_SHEET_NAMES.synonymSets)!;
 
-    sheet.addRow([localeId, synonymSet.join(' ')]).commit();
+    sheet.addRow([
+      localeId,
+      synonymSet.join(' '),
+    ]).commit();
   }
 
   private getPortionWorkbook(): ExcelJS.stream.xlsx.WorkbookWriter {
@@ -809,7 +899,9 @@ export class PackageXlsxWriter implements PackageWriter {
         { header: XLSX_COLUMN_NAMES.common.labelJson, width: 50 },
       ];
       asServedSetsSheet.getRow(1).font = { bold: true };
-      asServedSetsSheet.getRow(1).border = { bottom: { style: 'thin' } };
+      asServedSetsSheet.getRow(1).border = {
+        bottom: { style: 'thin' },
+      };
 
       // As served images sheet
       const asServedImagesSheet = this.portionWorkbook.addWorksheet(XLSX_SHEET_NAMES.asServedImages);
@@ -821,7 +913,9 @@ export class PackageXlsxWriter implements PackageWriter {
         { header: XLSX_COLUMN_NAMES.common.labelJson, width: 50 },
       ];
       asServedImagesSheet.getRow(1).font = { bold: true };
-      asServedImagesSheet.getRow(1).border = { bottom: { style: 'thin' } };
+      asServedImagesSheet.getRow(1).border = {
+        bottom: { style: 'thin' },
+      };
 
       // Image maps sheet
       const imageMapsSheet = this.portionWorkbook.addWorksheet(XLSX_SHEET_NAMES.imageMaps);
@@ -831,7 +925,9 @@ export class PackageXlsxWriter implements PackageWriter {
         { header: XLSX_COLUMN_NAMES.portionSizeReference.baseImagePath, width: 60 },
       ];
       imageMapsSheet.getRow(1).font = { bold: true };
-      imageMapsSheet.getRow(1).border = { bottom: { style: 'thin' } };
+      imageMapsSheet.getRow(1).border = {
+        bottom: { style: 'thin' },
+      };
 
       // Image map objects sheet
       const imageMapObjectsSheet = this.portionWorkbook.addWorksheet(XLSX_SHEET_NAMES.imageMapObjects);
@@ -843,7 +939,9 @@ export class PackageXlsxWriter implements PackageWriter {
         { header: XLSX_COLUMN_NAMES.portionSizeReference.outlineCoordinates, width: 80 },
       ];
       imageMapObjectsSheet.getRow(1).font = { bold: true };
-      imageMapObjectsSheet.getRow(1).border = { bottom: { style: 'thin' } };
+      imageMapObjectsSheet.getRow(1).border = {
+        bottom: { style: 'thin' },
+      };
 
       // Guide images sheet
       const guideImagesSheet = this.portionWorkbook.addWorksheet(XLSX_SHEET_NAMES.guideImages);
@@ -854,7 +952,9 @@ export class PackageXlsxWriter implements PackageWriter {
         { header: XLSX_COLUMN_NAMES.common.labelJson, width: 50 },
       ];
       guideImagesSheet.getRow(1).font = { bold: true };
-      guideImagesSheet.getRow(1).border = { bottom: { style: 'thin' } };
+      guideImagesSheet.getRow(1).border = {
+        bottom: { style: 'thin' },
+      };
 
       // Guide image objects sheet
       const guideImageObjectsSheet = this.portionWorkbook.addWorksheet(XLSX_SHEET_NAMES.guideImageObjects);
@@ -864,7 +964,9 @@ export class PackageXlsxWriter implements PackageWriter {
         { header: XLSX_COLUMN_NAMES.portionSizeReference.weight, width: 15 },
       ];
       guideImageObjectsSheet.getRow(1).font = { bold: true };
-      guideImageObjectsSheet.getRow(1).border = { bottom: { style: 'thin' } };
+      guideImageObjectsSheet.getRow(1).border = {
+        bottom: { style: 'thin' },
+      };
 
       // Drinkware sets sheet
       const drinkwareSetsSheet = this.portionWorkbook.addWorksheet(XLSX_SHEET_NAMES.drinkwareSets);
@@ -875,7 +977,9 @@ export class PackageXlsxWriter implements PackageWriter {
         { header: XLSX_COLUMN_NAMES.common.labelJson, width: 50 },
       ];
       drinkwareSetsSheet.getRow(1).font = { bold: true };
-      drinkwareSetsSheet.getRow(1).border = { bottom: { style: 'thin' } };
+      drinkwareSetsSheet.getRow(1).border = {
+        bottom: { style: 'thin' },
+      };
 
       // Drinkware scales sheet
       const drinkwareScalesSheet = this.portionWorkbook.addWorksheet(XLSX_SHEET_NAMES.drinkwareScales);
@@ -895,7 +999,9 @@ export class PackageXlsxWriter implements PackageWriter {
         { header: XLSX_COLUMN_NAMES.portionSizeReference.volumeSamples, width: 80 },
       ];
       drinkwareScalesSheet.getRow(1).font = { bold: true };
-      drinkwareScalesSheet.getRow(1).border = { bottom: { style: 'thin' } };
+      drinkwareScalesSheet.getRow(1).border = {
+        bottom: { style: 'thin' },
+      };
     }
 
     return this.portionWorkbook;

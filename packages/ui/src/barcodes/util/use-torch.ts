@@ -45,8 +45,16 @@ export function useTorch() {
     if (!track)
       return;
 
-    // @ts-expect-error torch is not in the types ?
-    await track.applyConstraints({ advanced: [{ torch: typeof state === 'boolean' ? state : !track.getSettings().torch }] });
+    await track.applyConstraints({
+      advanced: [
+        {
+          // @ts-expect-error torch is not in the types ?
+          torch: typeof state === 'boolean'
+            ? state
+            : !track.getSettings().torch,
+        },
+      ],
+    });
     track.stop();
   }
 

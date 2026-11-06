@@ -21,7 +21,11 @@ import BaseModel from '../model';
 import Survey from './survey';
 
 @Scopes(() => ({
-  survey: { include: [{ model: Survey }] },
+  survey: {
+    include: [
+      { model: Survey },
+    ],
+  },
 }))
 @Table({
   modelName: 'GenUserCounter',

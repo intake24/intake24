@@ -12,7 +12,11 @@ export function surveyRespondent(surveySlug: string): string {
   return `${surveySlug.toLowerCase()}${respondentSuffix}`;
 }
 
-export const surveyPermissions = (surveySlug: string): string[] => [surveyRespondent(surveySlug)];
+export function surveyPermissions(surveySlug: string): string[] {
+  return [
+    surveyRespondent(surveySlug),
+  ];
+}
 
 export const standardSecurableActions = ['read', 'edit', 'delete', 'securables'] as const;
 

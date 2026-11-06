@@ -45,7 +45,9 @@ function getInitialState(): PromptStates['milk-in-a-hot-drink-prompt'] {
       servingWeight: 0,
       leftoversWeight: 0,
     },
-    panel: food.value.portionSizeMethodIndex !== null ? 1 : 0,
+    panel: food.value.portionSizeMethodIndex !== null
+      ? 1
+      : 0,
   };
 }
 
@@ -86,7 +88,10 @@ function commitAnswer() {
 
   const survey = useSurvey();
 
-  survey.updateFood({ foodId: food.value.id, update: { portionSize: milkPortionSize } });
+  survey.updateFood({
+    foodId: food.value.id,
+    update: { portionSize: milkPortionSize },
+  });
   survey.updateFood({
     foodId: parentFood.value.id,
     update: { portionSize: drinkPortionSize },

@@ -12,8 +12,12 @@ export const aclConfigSchema = z.object({
   }),
   signup: z.object({
     enabled: z.boolean().or(z.stringbool()).default(false),
-    permissions: z.string().default('').transform(val => val ? val.split(',') : []),
-    roles: z.string().default('').transform(val => val ? val.split(',') : []),
+    permissions: z.string().default('').transform(val => val
+      ? val.split(',')
+      : []),
+    roles: z.string().default('').transform(val => val
+      ? val.split(',')
+      : []),
   }),
 });
 export type ACLConfig = z.infer<typeof aclConfigSchema>;

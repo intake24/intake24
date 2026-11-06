@@ -13,7 +13,9 @@ import { submissionScope, Survey, SurveySubmission } from '@intake24/db';
 export function submission() {
   return initServer().router(contract.admin.survey.submission, {
     browse: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId }, query, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'submissions', {
           attributes: ['id'],
@@ -27,7 +29,9 @@ export function submission() {
                 surveyId,
                 [Op.or]: [
                   where(cast(col('SurveySubmission.id'), 'text'), Op.iLike, `%${search}%`),
-                  { '$user.aliases.username$': { [Op.iLike]: `%${search}%` } },
+                  {
+                    '$user.aliases.username$': { [Op.iLike]: `%${search}%` },
+                  },
                 ],
               },
             }
@@ -40,11 +44,19 @@ export function submission() {
             {
               association: 'user',
               attributes: ['id'],
-              include: [{ association: 'aliases', attributes: ['username'], where: { surveyId } }],
+              include: [
+                {
+                  association: 'aliases',
+                  attributes: ['username'],
+                  where: { surveyId },
+                },
+              ],
               required: true,
             },
           ],
-          order: [['submissionTime', 'DESC']],
+          order: [
+            ['submissionTime', 'DESC'],
+          ],
           subQuery: false,
           transform: (submission) => {
             const { user, ...rest } = submission.get();
@@ -57,7 +69,9 @@ export function submission() {
       },
     },
     read: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId, submissionId }, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'submissions', {
           attributes: ['id'],
@@ -76,7 +90,9 @@ export function submission() {
       },
     },
     destroy: {
-      middleware: [permission('surveys')],
+      middleware: [
+        permission('surveys'),
+      ],
       handler: async ({ params: { surveyId, submissionId }, req }) => {
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'submissions', {
           attributes: ['id'],

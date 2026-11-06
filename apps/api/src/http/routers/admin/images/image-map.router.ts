@@ -14,10 +14,22 @@ import { imageMulterFile } from '@intake24/common/types/http/admin';
 import { ImageMap } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { imageMapId }: { imageMapId?: string } = {}) {
-  const where: WhereOptions = imageMapId ? { id: { [Op.ne]: imageMapId } } : {};
+  const where: WhereOptions = imageMapId
+    ? {
+        id: { [Op.ne]: imageMapId },
+      }
+    : {};
 
-  if (!(await unique({ model: ImageMap, condition: { field: 'id', value }, options: { where } }))) {
-    throw ValidationError.from({ code: '$unique', path: 'id', i18n: { type: 'unique._' } });
+  if (!(await unique({
+    model: ImageMap,
+    condition: { field: 'id', value },
+    options: { where },
+  }))) {
+    throw ValidationError.from({
+      code: '$unique',
+      path: 'id',
+      i18n: { type: 'unique._' },
+    });
   }
 }
 
@@ -27,12 +39,19 @@ export function imageMap() {
 
   return initServer().router(contract.admin.images.imageMap, {
     browse: {
-      middleware: [permission('image-maps', 'image-maps:browse')],
+      middleware: [
+        permission('image-maps', 'image-maps:browse'),
+      ],
       handler: async ({ query }) => {
         const images = await ImageMap.paginate({
           query,
           columns: ['id', 'description'],
-          order: [[fn('lower', col('ImageMap.id')), 'ASC']],
+          order: [
+            [
+              fn('lower', col('ImageMap.id')),
+              'ASC',
+            ],
+          ],
           include: ['baseImage'],
           transform: responseCollection.mapListResponse,
         });
@@ -49,8 +68,12 @@ export function imageMap() {
         await uniqueMiddleware(body.id);
 
         const res = imageMulterFile.safeParse(file);
-        if (!res.success)
-          throw ValidationError.from({ path: 'baseImage', i18n: { type: 'file._' } });
+        if (!res.success) {
+          throw ValidationError.from({
+            path: 'baseImage',
+            i18n: { type: 'file._' },
+          });
+        }
 
         const { userId } = req.scope.cradle.user;
 
@@ -62,25 +85,38 @@ export function imageMap() {
 
         imageMap = await req.scope.cradle.portionSizeService.getImageMap(imageMap.id);
 
-        return { status: 201, body: responseCollection.mapEntryResponse(imageMap) };
+        return {
+          status: 201,
+          body: responseCollection.mapEntryResponse(imageMap),
+        };
       },
     },
     read: {
-      middleware: [permission('image-maps', 'image-maps:read')],
+      middleware: [
+        permission('image-maps', 'image-maps:read'),
+      ],
       handler: async ({ params: { imageMapId }, req }) => {
         const image = await req.scope.cradle.portionSizeService.getImageMap(imageMapId);
         if (!image)
           throw new NotFoundError();
 
-        return { status: 200, body: responseCollection.mapEntryResponse(image) };
+        return {
+          status: 200,
+          body: responseCollection.mapEntryResponse(image),
+        };
       },
     },
     update: {
-      middleware: [permission('image-maps', 'image-maps:edit')],
+      middleware: [
+        permission('image-maps', 'image-maps:edit'),
+      ],
       handler: async ({ body, params: { imageMapId }, req }) => {
         const image = await req.scope.cradle.imageMapService.update(imageMapId, body);
 
-        return { status: 200, body: responseCollection.mapEntryResponse(image) };
+        return {
+          status: 200,
+          body: responseCollection.mapEntryResponse(image),
+        };
       },
     },
     updateImage: {
@@ -92,17 +128,26 @@ export function imageMap() {
         const { userId } = req.scope.cradle.user;
 
         const res = imageMulterFile.safeParse(file);
-        if (!res.success)
-          throw ValidationError.from({ path: 'baseImage', i18n: { type: 'file._' } });
+        if (!res.success) {
+          throw ValidationError.from({
+            path: 'baseImage',
+            i18n: { type: 'file._' },
+          });
+        }
 
         await req.scope.cradle.imageMapService.updateImage(imageMapId, res.data, userId);
         const imageMap = await req.scope.cradle.portionSizeService.getImageMap(imageMapId);
 
-        return { status: 200, body: responseCollection.mapEntryResponse(imageMap) };
+        return {
+          status: 200,
+          body: responseCollection.mapEntryResponse(imageMap),
+        };
       },
     },
     destroy: {
-      middleware: [permission('image-maps', 'image-maps:delete')],
+      middleware: [
+        permission('image-maps', 'image-maps:delete'),
+      ],
       handler: async ({ params: { imageMapId }, req }) => {
         await req.scope.cradle.imageMapService.destroy(imageMapId);
 

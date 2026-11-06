@@ -126,7 +126,9 @@ import { BaseLayout } from '../layouts';
 import { Next, usePanel } from '../partials';
 import { createPortionPromptProps } from '../prompt-props';
 
-defineOptions({ components: { ...barcodes } });
+defineOptions({
+  components: { ...barcodes },
+});
 
 const props = defineProps(createPortionPromptProps<'missing-food-prompt', MissingFood>());
 
@@ -138,8 +140,12 @@ const { foodName } = useFoodUtils(props);
 const { form, inputTooLog } = useForm();
 
 const formErrors = computed(() => form.value?.errors ?? []);
-const barcodeRules = computed(() => [inputTooLog(128)]);
-const textFieldRules = computed(() => [inputTooLog(1024)]);
+const barcodeRules = computed(() => [
+  inputTooLog(128),
+]);
+const textFieldRules = computed(() => [
+  inputTooLog(1024),
+]);
 
 const state = ref(copy({
   ...props.modelValue,

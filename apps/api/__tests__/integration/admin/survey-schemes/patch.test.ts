@@ -95,7 +95,10 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['edit'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['edit'],
+      });
       const updateInput2 = mocker.system.surveyScheme();
 
       await suite.sharedTests.assertRecordUpdated('patch', url, updateInput2);

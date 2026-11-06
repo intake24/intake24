@@ -11,7 +11,10 @@ export const foodThumbnailImage = contract.router({
     body: z.object({
       image: z.custom<File>(),
     }),
-    pathParams: z.object({ localeId: z.string(), foodCode: z.string() }),
+    pathParams: z.object({
+      localeId: z.string(),
+      foodCode: z.string(),
+    }),
     responses: {
       200: contract.noBody(),
       404: contract.noBody(),

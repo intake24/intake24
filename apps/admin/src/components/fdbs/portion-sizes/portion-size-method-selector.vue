@@ -116,7 +116,10 @@ function newDialog(show = false): PortionSizeMethodDialog {
   return {
     show,
     index: -1,
-    item: copy({ ...psmDefaults[0], _id: randomString(6) }),
+    item: copy({
+      ...psmDefaults[0],
+      _id: randomString(6),
+    }),
   };
 }
 
@@ -135,7 +138,14 @@ function updateItemProps() {
   if (!item)
     return;
 
-  dialog.value = { show, index, item: copy({ ...item, _id: randomString(6) }) };
+  dialog.value = {
+    show,
+    index,
+    item: copy({
+      ...item,
+      _id: randomString(6),
+    }),
+  };
 };
 
 function add() {
@@ -149,7 +159,11 @@ function edit(index: number, item: InternalPortionSizeMethodItem, errorItems: st
     return;
   }
 
-  dialog.value = { show: true, index, item: copy(merge<InternalPortionSizeMethodItem>(defaults, item)) };
+  dialog.value = {
+    show: true,
+    index,
+    item: copy(merge<InternalPortionSizeMethodItem>(defaults, item)),
+  };
   errors.value = [...errorItems];
 };
 

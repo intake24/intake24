@@ -26,7 +26,9 @@ async function startApp(ops: Ops): Promise<void> {
     const home = homedir();
     const [cert, key, ca] = await Promise.all(
       ['cert.pem', 'dev.pem', 'rootCA.pem'].map((file) => {
-        const path = certPath ? join(certPath, file) : join(home, '.vite-plugin-mkcert', file);
+        const path = certPath
+          ? join(certPath, file)
+          : join(home, '.vite-plugin-mkcert', file);
         return readFile(path);
       }),
     );

@@ -20,7 +20,9 @@ export default defineComponent({
 
     survey.validateState(survey.data, survey.parameters?.session);
 
-    return survey.recallAllowed ? true : { name: 'survey-home', params };
+    return survey.recallAllowed
+      ? true
+      : { name: 'survey-home', params };
   },
 
   computed: {

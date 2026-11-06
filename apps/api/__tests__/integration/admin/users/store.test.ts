@@ -16,7 +16,12 @@ export default () => {
   beforeAll(async () => {
     input = mocker.system.user();
     output = {
-      ...omit(input, ['password', 'passwordConfirm', 'permissions', 'roles']),
+      ...omit(input, [
+        'password',
+        'passwordConfirm',
+        'permissions',
+        'roles',
+      ]),
       email: input.email?.toLocaleLowerCase(),
     };
   });
@@ -58,7 +63,9 @@ export default () => {
             customFields: 'invalidCustomFields',
             permissions: [1, 'invalidId', 2],
             roles: [1, 'invalidId', 2],
-            disabledAt: { invalid: new Date() },
+            disabledAt: {
+              invalid: new Date(),
+            },
             verifiedAt: 'invalidDate',
           },
         },
@@ -90,7 +97,10 @@ export default () => {
 
     it('should return 400 for duplicate email', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['email'], {
-        input: { ...mocker.system.user(), email: input.email },
+        input: {
+          ...mocker.system.user(),
+          email: input.email,
+        },
       });
     });
   });

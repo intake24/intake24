@@ -22,7 +22,9 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
         'orderBy',
         'parameters',
       ],
-      order: [['orderBy', 'ASC']],
+      order: [
+        ['orderBy', 'ASC'],
+      ],
       where: { categoryId },
     });
 
@@ -67,7 +69,9 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
     });
 
   const resolvePortionSizeMethods = async (foodId: string | Food): Promise<(CategoryPortionSizeMethod | FoodPortionSizeMethod)[]> => {
-    const food = typeof foodId === 'string' ? await getFood(foodId) : foodId;
+    const food = typeof foodId === 'string'
+      ? await getFood(foodId)
+      : foodId;
     if (!food)
       return [];
 
@@ -86,7 +90,12 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
       case 'as-served': {
         const set = await AsServedSet.findByPk(psm.parameters.servingImageSet, {
           attributes: ['id'],
-          include: [{ association: 'selectionImage', attributes: ['path'] }],
+          include: [
+            {
+              association: 'selectionImage',
+              attributes: ['path'],
+            },
+          ],
         });
 
         if (!set)
@@ -104,7 +113,12 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
       case 'guide-image': {
         const guideImage = await GuideImage.findByPk(psm.parameters.guideImageId, {
           attributes: ['id'],
-          include: [{ association: 'selectionImage', attributes: ['path'] }],
+          include: [
+            {
+              association: 'selectionImage',
+              attributes: ['path'],
+            },
+          ],
         });
 
         if (!guideImage)
@@ -126,7 +140,12 @@ function portionSizeMethodsService(imagesBaseUrl: string) {
             {
               association: 'imageMap',
               attributes: ['id'],
-              include: [{ association: 'baseImage', attributes: ['path'] }],
+              include: [
+                {
+                  association: 'baseImage',
+                  attributes: ['path'],
+                },
+              ],
             },
           ],
         });

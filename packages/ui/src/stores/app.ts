@@ -46,7 +46,9 @@ export const useApp = defineStore('app', {
   },
   getters: {
     availableLanguages: state =>
-      state.restrictedLangs.length ? state.langs.filter(item => state.restrictedLangs.includes(item.code)) : state.langs,
+      state.restrictedLangs.length
+        ? state.langs.filter(item => state.restrictedLangs.includes(item.code))
+        : state.langs,
   },
   actions: {
     setLanguage(language: string) {
@@ -55,7 +57,9 @@ export const useApp = defineStore('app', {
         return;
       }
 
-      this.lang = this.restrictedLangs.includes(language) ? language : this.restrictedLangs[0];
+      this.lang = this.restrictedLangs.includes(language)
+        ? language
+        : this.restrictedLangs[0];
     },
     setLanguages(languages: I18nLanguageListEntry[]) {
       this.langs = languages;

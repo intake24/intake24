@@ -15,16 +15,22 @@ export function asServedImage() {
 
   return initServer().router(contract.admin.images.asServedImage, {
     browse: {
-      middleware: [permission('as-served-sets', 'as-served-sets:browse')],
+      middleware: [
+        permission('as-served-sets', 'as-served-sets:browse'),
+      ],
       handler: async ({ params: { asServedSetId }, query }) => {
-        const asServedSet = await AsServedSet.findByPk(asServedSetId, { attributes: ['id'] });
+        const asServedSet = await AsServedSet.findByPk(asServedSetId, {
+          attributes: ['id'],
+        });
         if (!asServedSet)
           throw new NotFoundError();
 
         const asServedImages = await AsServedImage.paginate({
           query,
           columns: ['id'],
-          order: [['id', 'ASC']],
+          order: [
+            ['id', 'ASC'],
+          ],
           where: { asServedSetId },
           include: ['image', 'thumbnailImage'],
           transform: responseCollection.asServedImageEntryResponse,
@@ -42,10 +48,16 @@ export function asServedImage() {
         const { userId } = req.scope.cradle.user;
 
         const res = imageMulterFile.safeParse(file);
-        if (!res.success)
-          throw ValidationError.from({ path: 'image', i18n: { type: 'file._' } });
+        if (!res.success) {
+          throw ValidationError.from({
+            path: 'image',
+            i18n: { type: 'file._' },
+          });
+        }
 
-        const asServedSet = await AsServedSet.findByPk(asServedSetId, { attributes: ['id'] });
+        const asServedSet = await AsServedSet.findByPk(asServedSetId, {
+          attributes: ['id'],
+        });
         if (!asServedSet)
           throw new NotFoundError();
 
@@ -58,11 +70,16 @@ export function asServedImage() {
         });
         asServedImage = await req.scope.cradle.portionSizeService.getAsServedImage(asServedSetId, asServedImage.id);
 
-        return { status: 201, body: responseCollection.asServedImageEntryResponse(asServedImage) };
+        return {
+          status: 201,
+          body: responseCollection.asServedImageEntryResponse(asServedImage),
+        };
       },
     },
     destroyAll: {
-      middleware: [permission('as-served-sets', 'as-served-sets:delete')],
+      middleware: [
+        permission('as-served-sets', 'as-served-sets:delete'),
+      ],
       handler: async ({ params: { asServedSetId }, req }) => {
         await req.scope.cradle.asServedService.destroyImage(asServedSetId);
 
@@ -70,17 +87,24 @@ export function asServedImage() {
       },
     },
     read: {
-      middleware: [permission('as-served-sets', 'as-served-sets:read')],
+      middleware: [
+        permission('as-served-sets', 'as-served-sets:read'),
+      ],
       handler: async ({ params: { asServedSetId, asServedImageId }, req }) => {
         const asServedImage = await req.scope.cradle.portionSizeService.getAsServedImage(asServedSetId, asServedImageId);
         if (!asServedImage)
           throw new NotFoundError();
 
-        return { status: 200, body: responseCollection.asServedImageEntryResponse(asServedImage) };
+        return {
+          status: 200,
+          body: responseCollection.asServedImageEntryResponse(asServedImage),
+        };
       },
     },
     destroy: {
-      middleware: [permission('as-served-sets', 'as-served-sets:delete')],
+      middleware: [
+        permission('as-served-sets', 'as-served-sets:delete'),
+      ],
       handler: async ({ params: { asServedSetId, asServedImageId }, req }) => {
         const result = await req.scope.cradle.asServedService.destroyImage(asServedSetId, asServedImageId);
         if (!result)

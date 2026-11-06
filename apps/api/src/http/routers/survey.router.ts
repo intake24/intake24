@@ -33,10 +33,15 @@ export function survey() {
           'authModes',
         ],
         where: { allowGenUsers: true, genUserKey: null },
-        order: [['name', 'ASC']],
+        order: [
+          ['name', 'ASC'],
+        ],
       });
 
-      return { status: 200, body: surveys.map(publicSurveyEntryResponse) };
+      return {
+        status: 200,
+        body: surveys.map(publicSurveyEntryResponse),
+      };
     },
     entry: async ({ params }) => {
       const { slug } = params;
@@ -58,7 +63,10 @@ export function survey() {
       if (!survey)
         throw new NotFoundError();
 
-      return { status: 200, body: publicSurveyEntryResponse(survey) };
+      return {
+        status: 200,
+        body: publicSurveyEntryResponse(survey),
+      };
     },
     generateUser: {
       middleware: [generateUserLimiter],
@@ -70,7 +78,10 @@ export function survey() {
           password,
         } = await req.scope.cradle.surveyService.generateRespondent(slug);
 
-        return { status: 200, body: { username, password } };
+        return {
+          status: 200,
+          body: { username, password },
+        };
       },
     },
     createUser: async ({ body: { token }, params: { slug }, req }) => {

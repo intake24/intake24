@@ -56,8 +56,12 @@ function adminSurveyService({
     scope: string | string[] = [],
   ): Promise<Permission[]> =>
     Permission.scope(scope).findAll({
-      where: { name: { [Op.startsWith]: 'surveys-' } },
-      order: [['name', 'ASC']],
+      where: {
+        name: { [Op.startsWith]: 'surveys-' },
+      },
+      order: [
+        ['name', 'ASC'],
+      ],
     });
 
   /**
@@ -100,7 +104,14 @@ function adminSurveyService({
     return db.system.transaction(async (transaction) => {
       const surveyRespondentPermission = await getSurveyRespondentPermission(slug, { transaction });
       const user = await User.create(
-        userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {},
+        userPersonalIdentifiers
+          ? {
+              name,
+              email,
+              phone,
+              simpleName: toSimpleName(name),
+            }
+          : {},
         { transaction },
       );
 
@@ -122,7 +133,9 @@ function adminSurveyService({
             { transaction },
           ),
           user.$add('permissions', surveyRespondentPermission, { transaction }),
-          password ? adminUserService.createPassword({ userId, password }, transaction) : null,
+          password
+            ? adminUserService.createPassword({ userId, password }, transaction)
+            : null,
           userCustomFields && customFields?.length
             ? UserCustomField.bulkCreate(
                 customFields.map(field => ({ ...field, userId })),
@@ -180,7 +193,14 @@ function adminSurveyService({
         // User records are created one-by-one
         // This is to keep it MySQL+others-like compatible, where bulk operation doesn't return generated IDs
         const { id: userId } = await User.create(
-          userPersonalIdentifiers ? { name, email, phone, simpleName: toSimpleName(name) } : {},
+          userPersonalIdentifiers
+            ? {
+                name,
+                email,
+                phone,
+                simpleName: toSimpleName(name),
+              }
+            : {},
           { transaction },
         );
 
@@ -233,7 +253,13 @@ function adminSurveyService({
       UserSurveyAlias.findOne({
         where: { surveyId, username },
         include: [
-          { association: 'user', required: true, include: [{ association: 'customFields' }] },
+          {
+            association: 'user',
+            required: true,
+            include: [
+              { association: 'customFields' },
+            ],
+          },
         ],
       }),
     ]);
@@ -250,9 +276,16 @@ function adminSurveyService({
       await Promise.all(
         [
           userPersonalIdentifiers
-            ? user.update({ name, email, phone, simpleName: toSimpleName(name) }, { transaction })
+            ? user.update({
+                name,
+                email,
+                phone,
+                simpleName: toSimpleName(name),
+              }, { transaction })
             : null,
-          password ? adminUserService.updatePassword(userId, password, transaction) : null,
+          password
+            ? adminUserService.updatePassword(userId, password, transaction)
+            : null,
           userCustomFields && customFields && user.customFields
             ? adminUserService.updateUserCustomFields(
                 userId,
@@ -278,7 +311,9 @@ function adminSurveyService({
    */
   const deleteRespondent = async (surveyId: string, username: string): Promise<void> => {
     const [survey, alias] = await Promise.all([
-      Survey.findByPk(surveyId, { attributes: ['id', 'slug'] }),
+      Survey.findByPk(surveyId, {
+        attributes: ['id', 'slug'],
+      }),
       UserSurveyAlias.findOne({
         where: { surveyId, username },
         include: [
@@ -286,7 +321,12 @@ function adminSurveyService({
             association: 'user',
             attributes: ['id', 'email'],
             required: true,
-            include: [{ association: 'submissions', attributes: ['id'] }],
+            include: [
+              {
+                association: 'submissions',
+                attributes: ['id'],
+              },
+            ],
           },
         ],
       }),
@@ -304,7 +344,10 @@ function adminSurveyService({
     if (user.email) {
       await db.system.transaction(async (transaction) => {
         await Promise.all([
-          UserSurveyAlias.destroy({ where: { surveyId, userId }, transaction }),
+          UserSurveyAlias.destroy({
+            where: { surveyId, userId },
+            transaction,
+          }),
           user.$remove('permissions', await getSurveyRespondentPermission(survey.slug), {
             transaction,
           }),

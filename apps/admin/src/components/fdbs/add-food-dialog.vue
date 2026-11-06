@@ -111,8 +111,16 @@ const dialog = ref(false);
 const resource = ref<'foods' | 'categories'>('foods');
 
 const resources = [
-  { title: t('fdbs.foods._'), value: 'foods', icon: '$foods' },
-  { title: t('fdbs.categories._'), value: 'categories', icon: '$categories' },
+  {
+    title: t('fdbs.foods._'),
+    value: 'foods',
+    icon: '$foods',
+  },
+  {
+    title: t('fdbs.categories._'),
+    value: 'categories',
+    icon: '$categories',
+  },
 ];
 
 const { clearError, data, errors, post } = useForm<CreateEntityForm>({
@@ -137,6 +145,9 @@ async function confirm() {
 
   close();
   useMessages().success(t('common.msg.created', { name: name ?? englishName }));
-  await router.push({ name: `fdbs-${resource.value}`, params: { id: localeId, entryId: id } });
+  await router.push({
+    name: `fdbs-${resource.value}`,
+    params: { id: localeId, entryId: id },
+  });
 }
 </script>

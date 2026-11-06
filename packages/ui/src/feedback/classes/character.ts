@@ -62,14 +62,25 @@ export class CharacterRules implements Character {
 
     const scaleSectors = results
       .map(dg => dg.resultedDemographicGroup.scaleSectors)
-      .reduce((a, b) => [...a.slice(), ...b], []);
+      .reduce((a, b) => [
+        ...a.slice(),
+        ...b,
+      ], []);
 
     if (!scaleSectors.length)
       return undefined;
 
     const sentiment = this.pickAverageSentiment(scaleSectors);
 
-    return { id, type: 'character', image, results, sentiment, color, showRecommendations };
+    return {
+      id,
+      type: 'character',
+      image,
+      results,
+      sentiment,
+      color,
+      showRecommendations,
+    };
   }
 
   private getDemographicsGroups(

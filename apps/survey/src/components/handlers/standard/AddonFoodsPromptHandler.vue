@@ -47,17 +47,21 @@ const meals = computed(() => {
     // Food-level prompt
     const foodEntry = food.value;
     if (foodEntry?.id) {
-      return [{
-        ...mealEntry,
-        foods: [foodEntry].filter(food => addons.value[mealEntry.id][food.id].length),
-      }].filter(meal => meal.foods.length);
+      return [
+        {
+          ...mealEntry,
+          foods: [foodEntry].filter(food => addons.value[mealEntry.id][food.id].length),
+        },
+      ].filter(meal => meal.foods.length);
     }
 
     // Meal-level prompt
-    return [{
-      ...mealEntry,
-      foods: flattenFoods(mealEntry.foods).filter(food => addons.value[mealEntry.id][food.id].length),
-    }].filter(meal => meal.foods.length);
+    return [
+      {
+        ...mealEntry,
+        foods: flattenFoods(mealEntry.foods).filter(food => addons.value[mealEntry.id][food.id].length),
+      },
+    ].filter(meal => meal.foods.length);
   }
 
   // Survey-level prompt
@@ -168,7 +172,13 @@ function commitAnswer() {
           linkedFoods: [],
           customPromptAnswers: {},
           data,
-          searchTerm: [props.prompt.component, props.prompt.id, entity, code, id].join(':'),
+          searchTerm: [
+            props.prompt.component,
+            props.prompt.id,
+            entity,
+            code,
+            id,
+          ].join(':'),
           portionSizeMethodIndex,
           portionSize,
         },

@@ -54,8 +54,12 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     }
 
     const [locale, sourceLocale] = await Promise.all([
-      SystemLocale.findByPk(localeId, { attributes: ['code'] }),
-      SystemLocale.findByPk(sourceLocaleId, { attributes: ['code'] }),
+      SystemLocale.findByPk(localeId, {
+        attributes: ['code'],
+      }),
+      SystemLocale.findByPk(sourceLocaleId, {
+        attributes: ['code'],
+      }),
     ]);
     if (!locale)
       throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
@@ -142,7 +146,16 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of categories cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('categories')
-      .columns(['code', 'localeId', 'englishName', 'name', 'simpleName', 'hidden', 'tags', 'version'])
+      .columns([
+        'code',
+        'localeId',
+        'englishName',
+        'name',
+        'simpleName',
+        'hidden',
+        'tags',
+        'version',
+      ])
       .expression(eb => eb
         .selectFrom('categories')
         .select(eb => [
@@ -199,7 +212,15 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of category links created: ${insLinksResult.numInsertedOrUpdatedRows}`);
 
     const psmResult = await trx.insertInto('categoryPortionSizeMethods')
-      .columns(['categoryId', 'method', 'description', 'pathways', 'conversionFactor', 'orderBy', 'parameters'])
+      .columns([
+        'categoryId',
+        'method',
+        'description',
+        'pathways',
+        'conversionFactor',
+        'orderBy',
+        'parameters',
+      ])
       .expression(eb => eb
         .selectFrom('categoryPortionSizeMethods as cpsm')
         .innerJoin(
@@ -235,7 +256,16 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of foods cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('foods')
-      .columns(['code', 'localeId', 'englishName', 'name', 'simpleName', 'altNames', 'tags', 'version'])
+      .columns([
+        'code',
+        'localeId',
+        'englishName',
+        'name',
+        'simpleName',
+        'altNames',
+        'tags',
+        'version',
+      ])
       .expression(eb => eb
         .selectFrom('foods')
         .select(eb => [
@@ -292,7 +322,15 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of food links created: ${insLinksResult.numInsertedOrUpdatedRows}`);
 
     const psmResult = await trx.insertInto('foodPortionSizeMethods')
-      .columns(['foodId', 'method', 'description', 'pathways', 'conversionFactor', 'orderBy', 'parameters'])
+      .columns([
+        'foodId',
+        'method',
+        'description',
+        'pathways',
+        'conversionFactor',
+        'orderBy',
+        'parameters',
+      ])
       .expression(eb => eb
         .selectFrom('foodPortionSizeMethods as fpsm')
         .innerJoin(
@@ -356,7 +394,16 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of associated foods cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('associatedFoods')
-      .columns(['foodId', 'associatedFoodCode', 'associatedCategoryCode', 'text', 'linkAsMain', 'genericName', 'orderBy', 'multiple'])
+      .columns([
+        'foodId',
+        'associatedFoodCode',
+        'associatedCategoryCode',
+        'text',
+        'linkAsMain',
+        'genericName',
+        'orderBy',
+        'multiple',
+      ])
       .expression(eb => eb
         .selectFrom('associatedFoods as af')
         .innerJoin(
@@ -398,7 +445,13 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of category attributes cleared: ${categoriesDelResult.numDeletedRows}`);
 
     const categoriesInsResult = await trx.insertInto('categoryAttributes')
-      .columns(['categoryId', 'readyMealOption', 'reasonableAmount', 'sameAsBeforeOption', 'useInRecipes'])
+      .columns([
+        'categoryId',
+        'readyMealOption',
+        'reasonableAmount',
+        'sameAsBeforeOption',
+        'useInRecipes',
+      ])
       .expression(eb => eb
         .selectFrom('categoryAttributes as ca')
         .innerJoin(
@@ -435,7 +488,13 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of food attributes cleared: ${foodsDelResult.numDeletedRows}`);
 
     const foodsInsResult = await trx.insertInto('foodAttributes')
-      .columns(['foodId', 'readyMealOption', 'reasonableAmount', 'sameAsBeforeOption', 'useInRecipes'])
+      .columns([
+        'foodId',
+        'readyMealOption',
+        'reasonableAmount',
+        'sameAsBeforeOption',
+        'useInRecipes',
+      ])
       .expression(eb => eb
         .selectFrom('foodAttributes as fa')
         .innerJoin(
@@ -510,7 +569,14 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of standard units cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('standardUnits')
-      .columns(['code', 'localeId', 'name', 'icon', 'estimateIn', 'howMany'])
+      .columns([
+        'code',
+        'localeId',
+        'name',
+        'icon',
+        'estimateIn',
+        'howMany',
+      ])
       .expression(eb => eb
         .selectFrom('standardUnits')
         .select(eb => [
@@ -554,7 +620,20 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
     this.logger.debug(`Number of food builders cleared: ${delResult.numDeletedRows}`);
 
     const insResult = await trx.insertInto('foodBuilders')
-      .columns(['code', 'localeId', 'type', 'name', 'label', 'icon', 'triggerWord', 'synonymSetId', 'exclusive', 'steps', 'createdAt', 'updatedAt'])
+      .columns([
+        'code',
+        'localeId',
+        'type',
+        'name',
+        'label',
+        'icon',
+        'triggerWord',
+        'synonymSetId',
+        'exclusive',
+        'steps',
+        'createdAt',
+        'updatedAt',
+      ])
       .expression(eb => eb
         .selectFrom('foodBuilders')
         .select(eb => [
@@ -625,7 +704,12 @@ export default class LocaleCopy extends BaseJob<'LocaleCopy'> {
         )
         .executeTakeFirst(),
       trx.insertInto('pairwiseAssociationsCoOccurrences')
-        .columns(['localeId', 'antecedentFoodCode', 'consequentFoodCode', 'occurrences'])
+        .columns([
+          'localeId',
+          'antecedentFoodCode',
+          'consequentFoodCode',
+          'occurrences',
+        ])
         .expression(eb => eb
           .selectFrom('pairwiseAssociationsCoOccurrences')
           .select(eb => [

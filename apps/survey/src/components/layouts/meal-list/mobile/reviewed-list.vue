@@ -115,7 +115,9 @@ export default defineComponent({
     const contextId = ref<string | undefined>(undefined);
 
     const updateContextId = (id: string) => {
-      contextId.value = id === contextId.value ? undefined : id;
+      contextId.value = id === contextId.value
+        ? undefined
+        : id;
     };
 
     return {

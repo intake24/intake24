@@ -17,12 +17,24 @@ export default () => {
   beforeAll(async () => {
     input = {
       foods: [
-        { id: 'foods', exclude: ['id'] },
-        { id: 'standard_units', exclude: ['id'] },
+        {
+          id: 'foods',
+          exclude: ['id'],
+        },
+        {
+          id: 'standard_units',
+          exclude: ['id'],
+        },
       ],
       system: [
-        { id: 'roles', exclude: ['id'] },
-        { id: 'users', exclude: ['id'] },
+        {
+          id: 'roles',
+          exclude: ['id'],
+        },
+        {
+          id: 'users',
+          exclude: ['id'],
+        },
       ],
     };
     input = await ioc.cradle.auditService.saveAuditTables(input);

@@ -151,7 +151,9 @@ export default async (options: UAELocaleOptions): Promise<void> => {
   await Promise.all([
     writer.writeLocales([locale]),
     writer.writeFoods({ [locale.id]: foods }),
-    writer.writeEnabledLocalFoods({ [locale.id]: foods.map(f => f.code) }),
+    writer.writeEnabledLocalFoods({
+      [locale.id]: foods.map(f => f.code),
+    }),
     writer.writePackageInfo(),
   ]);
 };

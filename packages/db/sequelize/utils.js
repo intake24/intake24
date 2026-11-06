@@ -13,7 +13,10 @@ export async function createPermissions(records, { roleNames = ['superuser'], qu
 
   await queryInterface.bulkInsert(
     'permissions',
-    records.map(permission => ({ ...permission, ...timestamps })),
+    records.map(permission => ({
+      ...permission,
+      ...timestamps,
+    })),
     { transaction },
   );
 
@@ -39,7 +42,12 @@ export async function createPermissions(records, { roleNames = ['superuser'], qu
   const mappings = [];
   roles.forEach((role) => {
     permissions.reduce((acc, perm) => {
-      acc.push({ permission_id: perm.id, role_id: role.id, created_at, updated_at });
+      acc.push({
+        permission_id: perm.id,
+        role_id: role.id,
+        created_at,
+        updated_at,
+      });
       return acc;
     }, mappings);
   });

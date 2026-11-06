@@ -256,7 +256,14 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['action', 'foodSelected', 'foodMissing', 'foodBuilder', 'update:modelValue', 'foodSkipped']);
+const emit = defineEmits([
+  'action',
+  'foodSelected',
+  'foodMissing',
+  'foodBuilder',
+  'update:modelValue',
+  'foodSkipped',
+]);
 const goTo = useGoTo();
 
 const { foodBuilderEnabled, translatePrompt, type } = usePromptUtils(props, { emit });
@@ -278,7 +285,10 @@ const searchCount = ref(0);
 const percentScrolled = ref(0);
 const rootCategoryName = ref('...');
 
-const foodBuilders = useFoodBuilders({ localeId: toRef(props, 'localeId'), enabled: foodBuilderEnabled });
+const foodBuilders = useFoodBuilders({
+  localeId: toRef(props, 'localeId'),
+  enabled: foodBuilderEnabled,
+});
 
 function onScroll(event: Event) {
   if (event.target instanceof Document) {
@@ -309,7 +319,9 @@ const backCategoryLabel = computed(() => {
 
   const last = navigationHistory.value.at(-1);
 
-  return last === 'search' ? t(`prompts.${type.value}.results`).toLowerCase() : last?.name ?? '??';
+  return last === 'search'
+    ? t(`prompts.${type.value}.results`).toLowerCase()
+    : last?.name ?? '??';
 });
 
 const promptI18n = computed(() => {
@@ -325,12 +337,16 @@ const promptI18n = computed(() => {
         'back',
         'none',
         'refine',
-        type.value !== 'recipeBuilder' ? 'pizza' : undefined,
+        type.value !== 'recipeBuilder'
+          ? 'pizza'
+          : undefined,
         'missing.label',
         'missing.description',
         'missing.report',
         'missing.tryAgain',
-        type.value === 'recipeBuilder' ? 'missing.irrelevantIngredient' : undefined,
+        type.value === 'recipeBuilder'
+          ? 'missing.irrelevantIngredient'
+          : undefined,
       ].filter(Boolean) as string[],
       {
         back: { category: backCategoryLabel.value },

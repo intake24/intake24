@@ -214,7 +214,9 @@ export default defineComponent({
               value.toSorted().join(':') === nutrientType.id.toSorted().join(':') && index !== idx,
           );
 
-          return match ? this.$t('nutrient-types.validation.unique') : true;
+          return match
+            ? this.$t('nutrient-types.validation.unique')
+            : true;
         },
       ];
     },

@@ -85,7 +85,10 @@ export default () => {
     });
 
     it('should return 200 and updated data', async () => {
-      const updateOutput = { ...mocker.system.customField(), name: input.name };
+      const updateOutput = {
+        ...mocker.system.customField(),
+        name: input.name,
+      };
       await suite.sharedTests.assertRecordUpdated('put', url, updateOutput, { input: updateOutput });
     });
   });
@@ -100,9 +103,15 @@ export default () => {
     });
 
     it('should return 200 and data when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['respondents'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['respondents'],
+      });
 
-      const output2 = { ...mocker.system.customField(), name: input.name };
+      const output2 = {
+        ...mocker.system.customField(),
+        name: input.name,
+      };
       await suite.sharedTests.assertRecordUpdated('put', url, output2, { input: output2 });
     });
 
@@ -110,7 +119,10 @@ export default () => {
       await suite.util.setSecurable(securable);
       await survey.update({ ownerId: suite.data.system.user.id });
 
-      const output3 = { ...mocker.system.customField(), name: input.name };
+      const output3 = {
+        ...mocker.system.customField(),
+        name: input.name,
+      };
       await suite.sharedTests.assertRecordUpdated('put', url, output3, { input: output3 });
     });
   });

@@ -18,7 +18,12 @@ export type LocaleContentOptions = {
 export function sanitizeParams(content: Dictionary<string | number>) {
   return Object.entries(content).reduce((acc, [key, value]) => {
     acc[key] = value = dompurify.sanitize(value.toString(), {
-      USE_PROFILES: { mathMl: false, svg: false, svgFilters: false, html: false },
+      USE_PROFILES: {
+        mathMl: false,
+        svg: false,
+        svgFilters: false,
+        html: false,
+      },
     });
 
     return acc;
@@ -62,7 +67,9 @@ export function createTranslate(i18n: ReturnType<typeof useI18nLib<DefaultLocale
     if (path && has(messages.value.en, path))
       return t(path, params);
 
-    return force ? replaceParams(Object.values(content ?? {}).at(0) || '', params) : '';
+    return force
+      ? replaceParams(Object.values(content ?? {}).at(0) || '', params)
+      : '';
   };
 }
 

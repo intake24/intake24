@@ -40,7 +40,9 @@ export function useScrollToPanel(panel: MaybeRefOrGetter<number | undefined>) {
   const { mobile } = useDisplay();
 
   function scrollToPanel(index: number) {
-    const targetIndex = index === -1 ? -1 : index - 1;
+    const targetIndex = index === -1
+      ? -1
+      : index - 1;
     const element = targetIndex === -1
       ? document.querySelector<HTMLElement>('.v-expansion-panels')
       : document.querySelectorAll<HTMLElement>('.v-expansion-panels > .v-expansion-panel > .v-expansion-panel-title')[targetIndex];

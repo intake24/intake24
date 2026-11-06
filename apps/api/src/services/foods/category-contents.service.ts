@@ -20,7 +20,12 @@ function categoryContentsService({
   const filterUndefined = (
     headers: { id: string; code: string; name?: string | null; icon?: string | null }[],
   ): (CategoryHeader | FoodHeader)[] =>
-    headers.filter(h => h.name).map(h => ({ id: h.id, code: h.code, name: h.name!, icon: h.icon ?? undefined }));
+    headers.filter(h => h.name).map(h => ({
+      id: h.id,
+      code: h.code,
+      name: h.name!,
+      icon: h.icon ?? undefined,
+    }));
 
   const getCategoryData = async (ops: { id: string } | { localeId: string; code: string }): Promise<UserCategoryData> => {
     const category = await Category.findOne({ where: ops });
@@ -68,7 +73,12 @@ function categoryContentsService({
     if (!category)
       throw new NotFoundError(`Category ${code} not found`);
 
-    return { id: category.id, code, name: category.name, icon: category.icon ?? undefined };
+    return {
+      id: category.id,
+      code,
+      name: category.name,
+      icon: category.icon ?? undefined,
+    };
   };
 
   const getCategoryContents = async (localeCode: string, code: string): Promise<CategoryContents> => {
@@ -122,22 +132,33 @@ function categoryContentsService({
         {
           attributes: ['categoryId'],
           association: 'parentCategoryMappings',
-          where: { categoryId: categories.map(({ id }) => id) },
+          where: {
+            categoryId: categories.map(({ id }) => id),
+          },
         },
       ],
-      order: [['name', 'ASC']],
+      order: [
+        ['name', 'ASC'],
+      ],
     };
     const { search } = query;
 
     if (search) {
-      const ops = ['englishName', 'name'].map(column => ({ [column]: { [Op.iLike]: `%${search}%` } }));
+      const ops = ['englishName', 'name'].map(column => ({
+        [column]: { [Op.iLike]: `%${search}%` },
+      }));
       options.where = { ...options.where, [Op.or]: ops };
     }
 
     return Food.paginate({
       query,
       ...options,
-      transform: food => ({ id: food.id, code: food.code, name: food.name, icon: food.icon }),
+      transform: food => ({
+        id: food.id,
+        code: food.code,
+        name: food.name,
+        icon: food.icon,
+      }),
     });
   };
 

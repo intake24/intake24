@@ -3,14 +3,38 @@ export default {
   async up(queryInterface, Sequelize) {
     await queryInterface.sequelize.transaction(async (transaction) => {
       await Promise.all([
-        queryInterface.changeColumn('fixed_food_ranking', 'food_code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('fixed_food_ranking', 'locale_id', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('locales', 'code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('pairwise_associations_co_occurrences', 'antecedent_food_code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('pairwise_associations_co_occurrences', 'consequent_food_code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('pairwise_associations_occurrences', 'food_code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('popularity_counters', 'food_code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
-        queryInterface.changeColumn('survey_submission_foods', 'code', { allowNull: false, type: Sequelize.STRING(64) }, { transaction }),
+        queryInterface.changeColumn('fixed_food_ranking', 'food_code', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('fixed_food_ranking', 'locale_id', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('locales', 'code', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('pairwise_associations_co_occurrences', 'antecedent_food_code', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('pairwise_associations_co_occurrences', 'consequent_food_code', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('pairwise_associations_occurrences', 'food_code', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('popularity_counters', 'food_code', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
+        queryInterface.changeColumn('survey_submission_foods', 'code', {
+          allowNull: false,
+          type: Sequelize.STRING(64),
+        }, { transaction }),
         queryInterface.removeColumn('locales', 'prototype_locale_id', { transaction }),
       ]);
 

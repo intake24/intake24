@@ -92,11 +92,13 @@ const http = useHttp();
 
 const url = 'admin/user/mfa/providers/fido';
 const progress = ref(1);
-const { data, errors, post, reset } = useForm<FIDOForm>({ data: {
-  challengeId: '',
-  name: 'FIDO device',
-  response: null,
-} });
+const { data, errors, post, reset } = useForm<FIDOForm>({
+  data: {
+    challengeId: '',
+    name: 'FIDO device',
+    response: null,
+  },
+});
 
 const regChallenge = ref<FIDORegistrationChallenge | null>(null);
 

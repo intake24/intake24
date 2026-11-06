@@ -31,7 +31,9 @@ export default defineComponent({
     },
 
     amountWithUnit(): string {
-      return this.amount > 0 ? `${Math.round(this.amount)}${this.unit}` : '';
+      return this.amount > 0
+        ? `${Math.round(this.amount)}${this.unit}`
+        : '';
     },
   },
 });

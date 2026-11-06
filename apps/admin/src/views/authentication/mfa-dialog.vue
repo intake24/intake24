@@ -160,9 +160,15 @@ const { i18n: { t } } = useI18n();
 const input = useTemplateRef('input');
 const { height } = useElementSize(input);
 
-const deviceId = ref(props.authData.challenge?.deviceId ? [props.authData.challenge?.deviceId] : []);
-const otp = useForm({ data: { challengeId: '', provider: 'otp', token: '' } });
-const code = useForm({ data: { challengeId: '', provider: 'code', token: '' } });
+const deviceId = ref(props.authData.challenge?.deviceId
+  ? [props.authData.challenge?.deviceId]
+  : []);
+const otp = useForm({
+  data: { challengeId: '', provider: 'otp', token: '' },
+});
+const code = useForm({
+  data: { challengeId: '', provider: 'code', token: '' },
+});
 const duo = ref({
   interval: undefined as undefined | number,
   value: 100,

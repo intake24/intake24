@@ -14,7 +14,9 @@ export function useMedia(url?: string) {
   const route = useRoute();
   const resource = useResource();
 
-  const uploadUrl = computed(() => url ?? `admin/${resource.name}${route.params.id ? `/${route.params.id}` : ''}/media`);
+  const uploadUrl = computed(() => url ?? `admin/${resource.name}${route.params.id
+    ? `/${route.params.id}`
+    : ''}/media`);
 
   function extractMediaId(path: string): string | undefined {
     const [_, prefix, uuid] = path.match(regex) ?? [];
@@ -26,7 +28,9 @@ export function useMedia(url?: string) {
 
   function getFullURL(url: string) {
     const sameOrigin = new URL(document.baseURI).origin === new URL(url, document.baseURI).origin;
-    return sameOrigin && import.meta.env.VITE_API_HOST ? `${import.meta.env.VITE_API_HOST}/${url}` : url;
+    return sameOrigin && import.meta.env.VITE_API_HOST
+      ? `${import.meta.env.VITE_API_HOST}/${url}`
+      : url;
   }
 
   function getRelativeURL(url: string) {
@@ -60,5 +64,12 @@ export function useMedia(url?: string) {
     await http.delete(`${uploadUrl.value}/${mediaId}`);
   }
 
-  return { extractMediaId, getFullURL, getRelativeURL, uploadUrl, uploadMedia, deleteMedia };
+  return {
+    extractMediaId,
+    getFullURL,
+    getRelativeURL,
+    uploadUrl,
+    uploadMedia,
+    deleteMedia,
+  };
 }

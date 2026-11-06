@@ -72,7 +72,10 @@ export default () => {
     });
 
     it('should return 204 and no content when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['submissions'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['submissions'],
+      });
 
       const { id } = await SurveySubmission.create(
         mocker.system.submission(survey.id, respondent.userId),

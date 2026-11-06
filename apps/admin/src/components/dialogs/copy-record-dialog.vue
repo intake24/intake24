@@ -72,7 +72,9 @@ const { i18n } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-const { data, errors, post } = useForm<CopyRecordForm>({ data: { name: null } });
+const { data, errors, post } = useForm<CopyRecordForm>({
+  data: { name: null },
+});
 const dialog = ref(false);
 const redirect = ref(true);
 
@@ -88,7 +90,11 @@ async function confirm() {
   close();
   useMessages().success(i18n.t('common.msg.created', { name }));
 
-  if (redirect.value)
-    await router.push({ name: name ?? `${resource}-read`, params: { id } });
+  if (redirect.value) {
+    await router.push({
+      name: name ?? `${resource}-read`,
+      params: { id },
+    });
+  }
 }
 </script>

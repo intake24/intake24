@@ -161,7 +161,9 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     if (!Object.keys(lQ).length)
       return undefined;
 
-    const foods = parentFood.type === 'encoded-food' ? [parentFood] : parentFood.linkedFoods;
+    const foods = parentFood.type === 'encoded-food'
+      ? [parentFood]
+      : parentFood.linkedFoods;
 
     const food = foods.find(food =>
       food.type === 'encoded-food'
@@ -180,7 +182,9 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
     return {
       auto: !!lQ[prompt].auto,
       categories: lQ[prompt].parent.filter(cat => food.data.categories.includes(cat.code)) ?? [],
-      quantity: 'quantity' in food.portionSize ? (food.portionSize.quantity ?? 1) : 1,
+      quantity: 'quantity' in food.portionSize
+        ? (food.portionSize.quantity ?? 1)
+        : 1,
     };
   }
 
@@ -212,7 +216,9 @@ export function useFoodPromptUtils<T extends PortionSizeMethodId>() {
 
     const portionSizeMethods = getPortionSizeMethods(foodData.portionSizeMethods, pathway, parent);
     const autoPsmIdx = portionSizeMethods.findIndex(psm => psm.method === 'auto');
-    const autoPsm = (autoPsmIdx !== -1 ? portionSizeMethods.at(autoPsmIdx) : undefined) as AutoPsm | undefined;
+    const autoPsm = (autoPsmIdx !== -1
+      ? portionSizeMethods.at(autoPsmIdx)
+      : undefined) as AutoPsm | undefined;
     if (autoPsm) {
       const { conversionFactor, parameters } = autoPsm;
       const linkedQuantity = getLinkedParent(foodData, parent)?.quantity ?? 1;

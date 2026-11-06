@@ -50,14 +50,29 @@ const route = useRoute();
 const surveyId = computed(() => route.params.surveyId.toString());
 
 function getMealLabel(meal: MealState, mealTime = true) {
-  return mealTime && !meal.flags.includes('meal-time:hidden') ? getMealNameWithTime(meal) : getMealName(meal);
+  return mealTime && !meal.flags.includes('meal-time:hidden')
+    ? getMealNameWithTime(meal)
+    : getMealName(meal);
 }
 
-const foodElement = computed(() => props.food ? { title: getFoodName(props.food), disabled: false } : undefined);
-const mealElement = computed(() => props.meal ? { title: getMealLabel(props.meal), disabled: false } : undefined);
+const foodElement = computed(() => props.food
+  ? {
+      title: getFoodName(props.food),
+      disabled: false,
+    }
+  : undefined);
+const mealElement = computed(() => props.meal
+  ? {
+      title: getMealLabel(props.meal),
+      disabled: false,
+    }
+  : undefined);
 const breadCrumbs = computed(() => {
   const elements: BreadcrumbsElement[] = [
-    mealElement.value ?? { title: t('recall._'), disabled: false },
+    mealElement.value ?? {
+      title: t('recall._'),
+      disabled: false,
+    },
   ];
 
   if (foodElement.value)

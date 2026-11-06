@@ -89,7 +89,9 @@ export default {
   },
 
   clearUserSession: async (surveyId: string, sessionId?: string) => {
-    await http.delete(sessionId ? `surveys/${surveyId}/session/${sessionId}` : `surveys/${surveyId}/session`);
+    await http.delete(sessionId
+      ? `surveys/${surveyId}/session/${sessionId}`
+      : `surveys/${surveyId}/session`);
   },
 
   submit: async (surveyId: string, submission: SurveyState): Promise<SurveySubmissionResponse> => {
@@ -98,7 +100,9 @@ export default {
     const { data } = await http.post<SurveySubmissionResponse>(
       `surveys/${surveyId}/submission`,
       { submission },
-      { params: { tzOffset } },
+      {
+        params: { tzOffset },
+      },
     );
 
     return data;

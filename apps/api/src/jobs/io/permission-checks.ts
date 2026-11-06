@@ -37,7 +37,10 @@ async function checkLocalePermissions(
   }
 
   if (unauthorisedLocales.size > 0) {
-    throw new AggregateLocalisableError([...unauthorisedLocales].toSorted().map(locale => ({ key: 'io.permissions.foodListPermission', params: { locale } })));
+    throw new AggregateLocalisableError([...unauthorisedLocales].toSorted().map(locale => ({
+      key: 'io.permissions.foodListPermission',
+      params: { locale },
+    })));
   }
 }
 
@@ -75,7 +78,9 @@ export async function checkImportLocalePermissions(
 
   const existingLocales = await SystemLocale.findAll({
     attributes: ['code'],
-    where: { code: [...localeIds] },
+    where: {
+      code: [...localeIds],
+    },
   });
 
   const existingLocaleIds = new Set(existingLocales.map(locale => locale.code));

@@ -32,7 +32,9 @@ describe('formatZodError', () => {
         }),
       });
 
-      const input = { user: { profile: {} } };
+      const input = {
+        user: { profile: {} },
+      };
       const result = schema.safeParse(input);
       expect(result.success).toBe(false);
 

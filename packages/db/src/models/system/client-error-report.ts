@@ -25,8 +25,16 @@ import Survey from './survey';
 import User from './user';
 
 @Scopes(() => ({
-  survey: { include: [{ model: Survey }] },
-  user: { include: [{ model: User }] },
+  survey: {
+    include: [
+      { model: Survey },
+    ],
+  },
+  user: {
+    include: [
+      { model: User },
+    ],
+  },
 }))
 @Table({
   modelName: 'ClientErrorReport',

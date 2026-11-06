@@ -53,7 +53,9 @@ export default defineComponent({
     currentActions(): string[] {
       const { ownerId, securables } = this.item;
       return this.actions.filter((item) => {
-        const action = item === 'download' ? 'read' : item;
+        const action = item === 'download'
+          ? 'read'
+          : item;
 
         return this.can({ action, ownerId, securables });
       });

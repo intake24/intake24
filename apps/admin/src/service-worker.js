@@ -5,7 +5,9 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('push', async (event) => {
-  const data = event.data ? event.data.json() : { title: 'Notification', body: '' };
+  const data = event.data
+    ? event.data.json()
+    : { title: 'Notification', body: '' };
   const { body, title, ...rest } = data;
 
   const url = self.location.pathname.replace('service-worker.js', '');

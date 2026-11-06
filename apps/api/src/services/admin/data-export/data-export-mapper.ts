@@ -19,7 +19,9 @@ export const userCustomFieldValue: ExportFieldTransformCallback
       food.meal?.submission?.user?.customFields?.find(item => field.id === item.name)?.value;
 
 function mapCustomPromptAnswers(value?: CustomPromptAnswer): string | undefined {
-  return Array.isArray(value) ? value.join(', ') : value?.toString();
+  return Array.isArray(value)
+    ? value.join(', ')
+    : value?.toString();
 }
 
 export const submissionCustomFieldValue: ExportFieldTransformCallback
@@ -41,17 +43,23 @@ export const foodCustomFieldValue: ExportFieldTransformCallback
 
 export function foodFieldValue(field: ExportField): ExportFieldTransform {
   return ({ food }) =>
-    'fields' in food ? food.fields[field.id] : undefined;
+    'fields' in food
+      ? food.fields[field.id]
+      : undefined;
 }
 
 export function foodNutrientValue(field: ExportField): ExportFieldTransform {
   return ({ food }) =>
-    'nutrients' in food ? food.nutrients[field.id] : undefined;
+    'nutrients' in food
+      ? food.nutrients[field.id]
+      : undefined;
 }
 
 export function portionSizeValue(field: ExportField): ExportFieldTransform {
   return ({ food }) =>
-    !food.portionSize || typeof food.portionSize === 'string' ? undefined : get(food.portionSize, field.id);
+    !food.portionSize || typeof food.portionSize === 'string'
+      ? undefined
+      : get(food.portionSize, field.id);
 }
 
 export function externalSourceField(field: ExportField): ExportFieldTransform {
@@ -103,7 +111,10 @@ function dataExportMapper({ dataExportFields }: Pick<IoC, 'dataExportFields'>) {
     fields: ExportField[],
     value: ExportFieldTransformCallback,
   ): Promise<ExportFieldInfo[]> =>
-    fields.map(field => ({ label: field.label ?? `${section}:${field.id}`, value: value(field) }));
+    fields.map(field => ({
+      label: field.label ?? `${section}:${field.id}`,
+      value: value(field),
+    }));
 
   const user = async (section: ExportSectionId, fields: ExportField[]): Promise<ExportFieldInfo[]> =>
     getRecordFields(section, fields, await dataExportFields.user());

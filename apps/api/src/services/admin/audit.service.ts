@@ -131,7 +131,10 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
       return undefined;
 
     return Object.entries(tableInfo)
-      .map(([db, links]) => [db as 'foods' | 'system', { kysely: kyselyDb[db as 'foods' | 'system'], table, links }] as const);
+      .map(([db, links]) => [
+        db as 'foods' | 'system',
+        { kysely: kyselyDb[db as 'foods' | 'system'], table, links },
+      ] as const);
   }
 
   async function mapWithUser(history: AuditLogAttributes[]): Promise<AuditEntry[]> {
@@ -151,7 +154,12 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
       : [];
     const userMap = new Map(users.map(u => [u.id, u]));
 
-    return history.map(item => ({ ...item, user: item.ctxUserId ? userMap.get(item.ctxUserId) ?? null : null }));
+    return history.map(item => ({
+      ...item,
+      user: item.ctxUserId
+        ? userMap.get(item.ctxUserId) ?? null
+        : null,
+    }));
   }
 
   function getLinkAuditLogSql(eb: ExpressionBuilder<AuditDB, 'auditLog'>, { table, fk, pk }: AuditTableLinks, value: string) {

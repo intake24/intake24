@@ -52,7 +52,9 @@ export default {
         {
           transaction,
           uniqueKeys: {
-            drinkware_set_choice_unique: { fields: ['drinkware_set_id', 'choice_id'] },
+            drinkware_set_choice_unique: {
+              fields: ['drinkware_set_id', 'choice_id'],
+            },
           },
         },
       );

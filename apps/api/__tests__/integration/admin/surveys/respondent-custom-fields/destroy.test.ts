@@ -85,7 +85,10 @@ export default () => {
     });
 
     it('should return 204 and no content when securable set', async () => {
-      await suite.util.setSecurable({ ...securable, action: ['respondents'] });
+      await suite.util.setSecurable({
+        ...securable,
+        action: ['respondents'],
+      });
 
       const field2 = respondentInput.customFields!.at(1)!.name;
       const url2 = `${baseUrl}/${survey.id}/respondents/${respondent.username}/custom-fields/${field2}`;

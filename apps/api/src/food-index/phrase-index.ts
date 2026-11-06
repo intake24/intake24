@@ -185,7 +185,9 @@ export class PhraseIndex<K> {
   private evaluateMatchQuality(input: InterpretedPhrase, matchedWords: Array<WordMatch>, parameters: MatchQualityParameters): number {
     const matchedIndices = matchedWords.map(w => w.matched.wordIndex);
 
-    const firstWordPenalty = matchedWords.some(match => match.word.index === 0) ? 0 : parameters.firstWordCost;
+    const firstWordPenalty = matchedWords.some(match => match.word.index === 0)
+      ? 0
+      : parameters.firstWordCost;
     const orderViolations = countOrderViolations(matchedIndices);
     const distanceViolations = countDistanceViolations(matchedIndices);
 
@@ -285,7 +287,9 @@ export class PhraseIndex<K> {
       .generateCombinations(maxCombinations)
       .flatMap(c => this.matchCombination(phrase, c, matchQualityParameters));
 
-    const matchedPhrases = filter ? allMatchedPhrases.filter(m => filter(this.phraseIndex[m.phraseIndex].key)) : allMatchedPhrases;
+    const matchedPhrases = filter
+      ? allMatchedPhrases.filter(m => filter(this.phraseIndex[m.phraseIndex].key))
+      : allMatchedPhrases;
 
     if (matchedPhrases.length === 0)
       return [];
@@ -341,7 +345,12 @@ export class PhraseIndex<K> {
 
     for (let pi = 0; pi < phrases.length; pi += 1) {
       const words = this.getWordList(phrases[pi].phrase);
-      this.phraseIndex[pi] = { asTyped: phrases[pi].phrase, words, key: phrases[pi].key, id: phrases[pi].id };
+      this.phraseIndex[pi] = {
+        asTyped: phrases[pi].phrase,
+        words,
+        key: phrases[pi].key,
+        id: phrases[pi].id,
+      };
 
       for (let wi = 0; wi < words.length; wi += 1) {
         const occurrences = this.wordIndex.get(words[wi]) || new Array<[number, number]>();

@@ -21,7 +21,10 @@ export function otp() {
 
       req.session.otpRegChallenge = { challengeId, secret };
 
-      return { status: 200, body: { challengeId, ...rest } };
+      return {
+        status: 200,
+        body: { challengeId, ...rest },
+      };
     },
     verify: async ({ body, req }) => {
       const { sub, userId } = req.scope.cradle.user;

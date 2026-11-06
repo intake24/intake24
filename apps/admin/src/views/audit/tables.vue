@@ -112,7 +112,9 @@ const http = useHttp();
 
 const tab = shallowRef<DatabaseType>('foods');
 
-const { data, post } = useForm<AuditTablesRequest>({ data: { foods: [], system: [] } });
+const { data, post } = useForm<AuditTablesRequest>({
+  data: { foods: [], system: [] },
+});
 const refs = shallowRef<Record<DatabaseType, string[]>>({ foods: [], system: [] });
 const availableTables = computed(() => ({
   foods: refs.value.foods.filter(table => !data.value.foods.some(t => t.id === table)).toSorted(),
@@ -149,7 +151,9 @@ async function save() {
   const res = await post<AuditTablesRequest>(`admin/audit/tables`);
   data.value = res;
 
-  useMessages().success(t('common.msg.updated', { name: t('audit.tables.title') }));
+  useMessages().success(t('common.msg.updated', {
+    name: t('audit.tables.title'),
+  }));
 }
 onMounted(async () => {
   await fetchData();

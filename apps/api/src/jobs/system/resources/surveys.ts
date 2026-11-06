@@ -7,7 +7,9 @@ import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
 
 export async function surveys({ kyselyDb }: ResourceOps) {
-  const { total } = await kyselyDb.system.selectFrom('surveys').select(({ fn }) => [fn.count<number>('id').as('total')]).executeTakeFirstOrThrow();
+  const { total } = await kyselyDb.system.selectFrom('surveys').select(({ fn }) => [
+    fn.count<number>('id').as('total'),
+  ]).executeTakeFirstOrThrow();
   const cursor = kyselyDb.system
     .selectFrom('surveys')
     .innerJoin('locales', 'locales.id', 'surveys.localeId')
@@ -52,8 +54,14 @@ export async function surveys({ kyselyDb }: ResourceOps) {
         'id',
         'slug',
         'name',
-        { label: 'startDate', value: (item: UnwrapAII<typeof cursor>) => format(item.startDate, 'yyyy-MM-dd HH:mm:ss') },
-        { label: 'endDate', value: (item: UnwrapAII<typeof cursor>) => format(item.endDate, 'yyyy-MM-dd HH:mm:ss') },
+        {
+          label: 'startDate',
+          value: (item: UnwrapAII<typeof cursor>) => format(item.startDate, 'yyyy-MM-dd HH:mm:ss'),
+        },
+        {
+          label: 'endDate',
+          value: (item: UnwrapAII<typeof cursor>) => format(item.endDate, 'yyyy-MM-dd HH:mm:ss'),
+        },
         'state',
         'supportEmail',
         'userPersonalIdentifiers',

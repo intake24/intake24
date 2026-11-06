@@ -75,7 +75,12 @@ export function buildNutrientGroupParams(card: NutrientGroupCardWithDemGroups, {
 
   const recommendedIntake = new DemographicRange(low?.threshold ?? 0, high?.threshold ?? 1000);
 
-  return { ...card, intake, recommendedIntake, scaleSector };
+  return {
+    ...card,
+    intake,
+    recommendedIntake,
+    scaleSector,
+  };
 }
 
 export function buildFiveADayParams(card: FiveADayCardWithDemGroups, { fruitAndVegPortions, userDemographic }: BuildCardOps): FiveADayParameters | undefined {
@@ -87,7 +92,11 @@ export function buildFiveADayParams(card: FiveADayCardWithDemGroups, { fruitAndV
   if (!scaleSector)
     return undefined;
 
-  return { ...card, portions: round(fruitAndVegPortions.total), scaleSector };
+  return {
+    ...card,
+    portions: round(fruitAndVegPortions.total),
+    scaleSector,
+  };
 }
 
 export const mappers: Record<

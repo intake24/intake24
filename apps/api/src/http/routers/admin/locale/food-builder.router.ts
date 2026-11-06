@@ -7,7 +7,9 @@ import { SystemLocale } from '@intake24/db';
 export function foodBuilder() {
   return initServer().router(contract.admin.locale.foodBuilder, {
     get: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ params: { localeId }, req }) => {
         const { aclService, adminLocaleService } = req.scope.cradle;
 
@@ -22,7 +24,9 @@ export function foodBuilder() {
       },
     },
     set: {
-      middleware: [permission('locales')],
+      middleware: [
+        permission('locales'),
+      ],
       handler: async ({ body, params: { localeId }, req }) => {
         const { aclService, adminLocaleService } = req.scope.cradle;
 

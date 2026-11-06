@@ -23,7 +23,10 @@ export type TransactionContext = RequestContext & {
 };
 
 export function getTransactionContext(context: TransactionContext = {}) {
-  return Object.entries({ ...getContext(), ...context }).reduce<Record<string, string>>((acc, [key, value]) => {
+  return Object.entries({
+    ...getContext(),
+    ...context,
+  }).reduce<Record<string, string>>((acc, [key, value]) => {
     if (value !== undefined && value !== null) {
       acc[`ctx.${snakeCase(key)}`] = String(value);
     }

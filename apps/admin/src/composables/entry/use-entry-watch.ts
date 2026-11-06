@@ -41,5 +41,10 @@ export function useEntryWatch(originalEntry: Ref<object>, changed?: ComputedRef<
     return beforeRouteCheck(to);
   });
 
-  return { originalEntry, routeLeave, entryChanged, setOriginalEntry };
+  return {
+    originalEntry,
+    routeLeave,
+    entryChanged,
+    setOriginalEntry,
+  };
 }

@@ -43,7 +43,9 @@ export function createTestLogger() {
     /** Logged messages at the given level, as strings (Error instances become their message). */
     messages: (level: LogLevel) => entries
       .filter(entry => entry.level === level)
-      .map(({ message }) => (message instanceof Error ? message.message : String(message))),
+      .map(({ message }) => (message instanceof Error
+        ? message.message
+        : String(message))),
   };
 }
 
@@ -223,7 +225,12 @@ export async function createHarness(options: HarnessOptions = {}) {
 
     /** Fails an in-flight rebuild and waits for the failure to be applied. */
     async failRebuild(id: number, error: Error) {
-      respond({ type: 'rebuild', id, success: false, error });
+      respond({
+        type: 'rebuild',
+        id,
+        success: false,
+        error,
+      });
 
       await awaitDispatched(msg => msg.type === 'rebuild' && msg.id === id);
     },
@@ -261,5 +268,10 @@ export function searchParams(localeId: string, description = 'apple'): SearchQue
 }
 
 export function searchResults(name: string): FoodSearchResponse {
-  return { foods: [{ name }], categories: [] } as unknown as FoodSearchResponse;
+  return {
+    foods: [
+      { name },
+    ],
+    categories: [],
+  } as unknown as FoodSearchResponse;
 }

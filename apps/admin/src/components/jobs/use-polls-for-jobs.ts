@@ -34,8 +34,12 @@ export function usePollsForJobs(
       params: {
         type: jobType,
         limit: options?.limit ?? 5,
-        startedAfter: options?.startedAfter ? toValue(options.startedAfter) : undefined,
-        ...(query ? query.value : {}),
+        startedAfter: options?.startedAfter
+          ? toValue(options.startedAfter)
+          : undefined,
+        ...(query
+          ? query.value
+          : {}),
       },
     });
 

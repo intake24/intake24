@@ -327,7 +327,9 @@ watch(
       const update = {
         ...prompt,
         foods: prompt.foods.filter(food =>
-          food.type === 'existing' ? newFoods?.some(f => f.id === food.existingFoodId) : true,
+          food.type === 'existing'
+            ? newFoods?.some(f => f.id === food.existingFoodId)
+            : true,
         ),
       };
 
@@ -374,7 +376,9 @@ function associatedFoodDescription(food: AssociatedFoodPromptItem): string {
 
 function existingFoodDescription(foodId: string): string {
   const food = props.meal?.foods.find(food => food.id === foodId);
-  return food ? getFoodDescription(food) : '';
+  return food
+    ? getFoodDescription(food)
+    : '';
 };
 
 function replaceFood(promptIndex: number, foodIndex: number) {
@@ -435,13 +439,24 @@ function onConfirmStateChanged(index: number) {
   const state = promptStates.value[index];
 
   if (state.mainFoodConfirmed === false) {
-    promptStates.value[index] = { ...state, existing: undefined, additionalFoodConfirmed: allowMultiple(prompt) ? undefined : false, foods: [] };
+    promptStates.value[index] = {
+      ...state,
+      existing: undefined,
+      additionalFoodConfirmed: allowMultiple(prompt)
+        ? undefined
+        : false,
+      foods: [],
+    };
     replaceFoodIndex.value[index] = undefined;
   }
 
   if (state.mainFoodConfirmed && prompt.foodCode && !state.foods.length) {
     foodSelected(
-      { id: prompt.id, code: prompt.foodCode, name: translate(prompt.genericName) },
+      {
+        id: prompt.id,
+        code: prompt.foodCode,
+        name: translate(prompt.genericName),
+      },
       index,
     );
   }

@@ -76,8 +76,14 @@ function codeProvider() {
     hashes.splice(index, 1);
 
     await (hashes.length
-      ? MFADevice.update({ secret: JSON.stringify(hashes) }, { where: { id: deviceId } })
-      : MFADevice.destroy({ where: { id: deviceId } }));
+      ? MFADevice.update({
+          secret: JSON.stringify(hashes),
+        }, {
+          where: { id: deviceId },
+        })
+      : MFADevice.destroy({
+          where: { id: deviceId },
+        }));
   };
 
   return {

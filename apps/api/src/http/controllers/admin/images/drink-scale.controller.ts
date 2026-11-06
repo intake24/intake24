@@ -49,7 +49,7 @@ function drinkScaleController({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
       throw new ValidationError('Drink scale image files are missing.', { path: 'baseImage' });
 
     if (Array.isArray(req.files))
-      throw new Error(`Excepted uploaded files to be a record, but got an array`);
+      throw new TypeError(`Excepted uploaded files to be a record, but got an array`);
 
     const { baseImage, overlayImage } = req.files;
     const { label, width, height, emptyLevel, fullLevel, volumeSamples } = req.body;

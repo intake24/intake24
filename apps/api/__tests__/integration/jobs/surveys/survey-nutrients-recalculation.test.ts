@@ -287,7 +287,10 @@ export default () => {
       });
 
       // Run job in `none` mode (dry-run)
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'none' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'none',
+      });
 
       // Verify nothing changed
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
@@ -312,7 +315,10 @@ export default () => {
       const initialNutrients = { ...initial!.nutrients };
       const initialFields = { ...initial!.fields };
 
-      const { dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'none' });
+      const { dbJob: createdDbJob } = await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'none',
+      });
       await createdDbJob.reload();
 
       // Message should carry the dry-run prefix
@@ -331,7 +337,10 @@ export default () => {
     });
 
     it('completes with summary when there are no submission records', async () => {
-      const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+      const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+      });
 
       await createdDbJob.reload();
 
@@ -354,7 +363,10 @@ export default () => {
       });
 
       try {
-        const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+        const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({
+          surveyId: surveyId(),
+          mode: 'values-only',
+        });
 
         await createdDbJob.reload();
 
@@ -374,7 +386,10 @@ export default () => {
       // Switch mapping to record B after submission
       await foodNutrient!.update({ nutrientTableRecordId: recordB!.id });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -393,7 +408,10 @@ export default () => {
       // Update underlying field value - change '62R' -> '62R_v2'
       await recordAField!.update({ value: '62R_v2' });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -433,7 +451,10 @@ export default () => {
       // Simulate dropping nutrient type 2 from the nutrient table
       await recordANutrient2.destroy();
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -459,7 +480,10 @@ export default () => {
       // Delete the nutrient record (simulate dropped variable)
       await recordA!.destroy();
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+      });
 
       // Verify nutrients and fields are cleared
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
@@ -484,7 +508,10 @@ export default () => {
         unitsPer100g: 150,
       });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -513,7 +540,11 @@ export default () => {
         nutrientTableRecordId: recordB!.id,
       });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only', syncFields: true });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+        syncFields: true,
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -544,7 +575,11 @@ export default () => {
       const current = await SurveySubmissionFood.findByPk(submissionFood!.id);
       expect(current?.nutrients).toEqual({ 1: 100 });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only', syncFields: true });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+        syncFields: true,
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -577,7 +612,11 @@ export default () => {
       // Drop nutrient type 2 from record A
       await recordANutrient2.destroy();
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only', syncFields: true });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-only',
+        syncFields: true,
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -598,7 +637,10 @@ export default () => {
       });
       expect(foodNutrient.nutrientTableRecordId === recordB!.id, 'FoodNutrient mapping should be to record B');
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-and-codes',
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -631,7 +673,10 @@ export default () => {
         nutrientTableRecordId: recordB!.id,
       });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-and-codes',
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -665,7 +710,10 @@ export default () => {
         nutrientTableRecordId: recordB!.id,
       });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-and-codes',
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -681,7 +729,10 @@ export default () => {
       // Remove the nutrient mapping (food still exists, but no nutrient association)
       await foodNutrient!.destroy();
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-and-codes',
+      });
 
       // Verify nutrients and fields are cleared
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
@@ -710,7 +761,11 @@ export default () => {
         englishName: 'Renamed Food',
       });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-and-codes',
+        syncFields: true,
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -748,7 +803,11 @@ export default () => {
         englishName: 'Renamed Food',
       });
 
-      await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
+      await runRecalculationJob({
+        surveyId: surveyId(),
+        mode: 'values-and-codes',
+        syncFields: true,
+      });
 
       const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -811,7 +870,9 @@ export default () => {
         const { nutrientTableId1, foodCode } = await setupFoodWithDifferentNutrientTables();
 
         // Submission has nutrient1 and nutrient2; recordA only has nutrient1
-        await submissionFood!.update({ nutrients: { 1: 100, 2: 200 } });
+        await submissionFood!.update({
+          nutrients: { 1: 100, 2: 200 },
+        });
 
         // Scenario 2: food mapping switched to NT2/recordC (different FCT)
         await foodNutrient!.destroy();
@@ -820,7 +881,10 @@ export default () => {
           nutrientTableRecordId: recordC!.id,
         });
 
-        await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+        await runRecalculationJob({
+          surveyId: surveyId(),
+          mode: 'values-only',
+        });
 
         const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -841,7 +905,9 @@ export default () => {
         const { nutrientTableId1, foodCode } = await setupFoodWithDifferentNutrientTables();
 
         // Submission has nutrient1 and nutrient2; recordA only has nutrient1
-        await submissionFood!.update({ nutrients: { 1: 100, 2: 200 } });
+        await submissionFood!.update({
+          nutrients: { 1: 100, 2: 200 },
+        });
 
         // Scenario 2: food mapping switched to NT2/recordC (different FCT)
         await foodNutrient!.destroy();
@@ -850,7 +916,11 @@ export default () => {
           nutrientTableRecordId: recordC!.id,
         });
 
-        await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only', syncFields: true });
+        await runRecalculationJob({
+          surveyId: surveyId(),
+          mode: 'values-only',
+          syncFields: true,
+        });
 
         const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -872,7 +942,9 @@ export default () => {
         const { nutrientTableId2, foodCode } = await setupFoodWithDifferentNutrientTables();
 
         // Submission has nutrient1 and nutrient2; recordC only has nutrient1
-        await submissionFood!.update({ nutrients: { 1: 100, 2: 200 } });
+        await submissionFood!.update({
+          nutrients: { 1: 100, 2: 200 },
+        });
 
         // Scenario 2: food mapping switched to NT2/recordC (different FCT)
         await foodNutrient!.destroy();
@@ -881,7 +953,10 @@ export default () => {
           nutrientTableRecordId: recordC!.id,
         });
 
-        await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes' });
+        await runRecalculationJob({
+          surveyId: surveyId(),
+          mode: 'values-and-codes',
+        });
 
         const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -918,7 +993,11 @@ export default () => {
           nutrientTableRecordId: recordC!.id,
         });
 
-        await runRecalculationJob({ surveyId: surveyId(), mode: 'values-and-codes', syncFields: true });
+        await runRecalculationJob({
+          surveyId: surveyId(),
+          mode: 'values-and-codes',
+          syncFields: true,
+        });
 
         const refreshed = await SurveySubmissionFood.findByPk(submissionFood!.id);
 
@@ -957,7 +1036,10 @@ export default () => {
           extraRecords.push(extra.food, extra.meal, extra.submission);
         }
 
-        const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({ surveyId: surveyId(), mode: 'values-only' });
+        const { mockBullJob, dbJob: createdDbJob } = await runRecalculationJob({
+          surveyId: surveyId(),
+          mode: 'values-only',
+        });
 
         await createdDbJob.reload();
 

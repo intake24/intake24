@@ -8,7 +8,9 @@ function surveyUrlService(urls: Pick<SiteUrls, 'base' | 'survey'>, surveySlug: s
   const getBaseUrl = () => getFrontEndUrl(base, survey, authUrlDomainOverride);
 
   const getSurveyUrl = (authToken: string, long = false) =>
-    long ? `${getBaseUrl()}/${surveySlug}?auth=${authToken}` : `${getBaseUrl()}/a/${authToken}`;
+    long
+      ? `${getBaseUrl()}/${surveySlug}?auth=${authToken}`
+      : `${getBaseUrl()}/a/${authToken}`;
 
   const getFeedbackUrl = (authToken: string) =>
     `${getBaseUrl()}/${surveySlug}/feedback?auth=${authToken}`;

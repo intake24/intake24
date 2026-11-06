@@ -29,7 +29,9 @@ export class Intake24JsonPackageHandler implements PackageHandler {
       await unzipFile(uploadedPath, this.extractedPath);
     }
     catch (err) {
-      throw new PackageValidationFileErrors({ _uploadedFile: getFileValidationErrorMessages(err) });
+      throw new PackageValidationFileErrors({
+        _uploadedFile: getFileValidationErrorMessages(err),
+      });
     }
 
     const packageContents = await validateJsonFiles(this.extractedPath);

@@ -4,7 +4,10 @@ export default {
       await queryInterface.changeColumn(
         'user_physical_data',
         'sex',
-        { type: Sequelize.STRING(64), allowNull: true },
+        {
+          type: Sequelize.STRING(64),
+          allowNull: true,
+        },
         { transaction },
       );
 
@@ -32,7 +35,10 @@ export default {
       await queryInterface.changeColumn(
         'user_physical_data',
         'weight_target',
-        { type: Sequelize.STRING(64), allowNull: true },
+        {
+          type: Sequelize.STRING(64),
+          allowNull: true,
+        },
         { transaction },
       );
 

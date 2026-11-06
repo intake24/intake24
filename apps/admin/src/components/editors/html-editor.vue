@@ -63,7 +63,9 @@ const init = computed<Partial<EditorOptions>>(() => ({
   paste_as_text: true,
   paste_data_images: true,
   images_upload_handler: async (blobInfo) => {
-    const file = new File([blobInfo.blob()], blobInfo.filename(), { type: blobInfo.blob().type });
+    const file = new File([
+      blobInfo.blob(),
+    ], blobInfo.filename(), { type: blobInfo.blob().type });
     const media = await uploadMedia(file, 'tinymce', 'public');
     return media.sizes.md;
   },

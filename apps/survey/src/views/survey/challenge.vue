@@ -69,7 +69,10 @@ async function submit() {
 onMounted(async () => {
   const { auth } = route.query;
   if (!auth || typeof auth !== 'string') {
-    await router.push({ name: 'survey-login', params: { surveyId: props.surveyId } });
+    await router.push({
+      name: 'survey-login',
+      params: { surveyId: props.surveyId },
+    });
     return;
   }
   token.value = auth;

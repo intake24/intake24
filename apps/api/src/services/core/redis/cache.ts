@@ -34,7 +34,10 @@ export type CacheValue = string | number | unknown[] | string[] | null | boolean
 
 export default class Cache extends HasRedisClient {
   constructor({ cacheConfig, logger }: Pick<IoC, 'cacheConfig' | 'logger'>) {
-    super({ config: cacheConfig.redis, logger: logger.child({ service: 'Cache' }) });
+    super({
+      config: cacheConfig.redis,
+      logger: logger.child({ service: 'Cache' }),
+    });
   }
 
   /**
@@ -48,7 +51,9 @@ export default class Cache extends HasRedisClient {
   async get<T>(key: CacheKey): Promise<T | null> {
     const data = await this.redis.get(key);
 
-    return data ? (JSON.parse(data, jsonDateReviver) as T) : null;
+    return data
+      ? (JSON.parse(data, jsonDateReviver) as T)
+      : null;
   }
 
   /**
@@ -65,7 +70,9 @@ export default class Cache extends HasRedisClient {
       return [];
 
     const cached = await this.redis.mget(keys);
-    return cached.map(item => (item ? (JSON.parse(item, jsonDateReviver) as T) : null));
+    return cached.map(item => (item
+      ? (JSON.parse(item, jsonDateReviver) as T)
+      : null));
   }
 
   /**
@@ -98,7 +105,9 @@ export default class Cache extends HasRedisClient {
       key,
       stringify(value),
       'PX',
-      typeof ttl === 'string' ? ms(ttl) : ttl * 1000,
+      typeof ttl === 'string'
+        ? ms(ttl)
+        : ttl * 1000,
     );
 
     return !!result;
@@ -133,8 +142,11 @@ export default class Cache extends HasRedisClient {
 
     const tx = this.redis.multi();
 
-    for (const kv of Object.entries(serialised))
-      tx.set(kv[0], kv[1], 'PX', typeof ttl === 'string' ? ms(ttl) : ttl * 1000);
+    for (const kv of Object.entries(serialised)) {
+      tx.set(kv[0], kv[1], 'PX', typeof ttl === 'string'
+        ? ms(ttl)
+        : ttl * 1000);
+    }
 
     const result = await tx.exec();
 
@@ -148,7 +160,9 @@ export default class Cache extends HasRedisClient {
    * @memberof Cache
    */
   async forget(key: CacheKey | CacheKey[]): Promise<boolean> {
-    const keysToDelete = Array.isArray(key) ? key : [key];
+    const keysToDelete = Array.isArray(key)
+      ? key
+      : [key];
     const result = await this.redis.del(keysToDelete);
 
     return !!result;

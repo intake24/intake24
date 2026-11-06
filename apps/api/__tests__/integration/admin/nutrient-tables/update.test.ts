@@ -73,8 +73,12 @@ export default () => {
           input: {
             description: [],
             csvMapping: { missingProps: false },
-            csvMappingFields: [{ invalidField: 'fieldname' }],
-            csvMappingNutrients: [{ invalidField: 'fieldname' }],
+            csvMappingFields: [
+              { invalidField: 'fieldname' },
+            ],
+            csvMappingNutrients: [
+              { invalidField: 'fieldname' },
+            ],
           },
         },
       );

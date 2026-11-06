@@ -17,7 +17,11 @@ import DrinkwareSet from './drinkware-set';
 import ProcessedImage from './processed-image';
 
 @Scopes(() => ({
-  drinkwareSet: { include: [{ model: DrinkwareSet }] },
+  drinkwareSet: {
+    include: [
+      { model: DrinkwareSet },
+    ],
+  },
 }))
 @Table({
   modelName: 'DrinkwareScaleV2',
@@ -68,7 +72,9 @@ export default class DrinkwareScaleV2 extends BaseModel<
 
   set label(value: CreationOptional<LocaleTranslation>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('label', value && Object.keys(value).length ? value : null);
+    this.setDataValue('label', value && Object.keys(value).length
+      ? value
+      : null);
   }
 
   @Column({

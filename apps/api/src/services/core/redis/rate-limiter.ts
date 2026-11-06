@@ -15,7 +15,10 @@ export default class RateLimiter extends HasRedisClient {
 
   constructor({ rateLimiterConfig, logger }: Pick<IoC, 'rateLimiterConfig' | 'logger'>) {
     const { redis, ...rest } = rateLimiterConfig;
-    super({ config: redis, logger: logger.child({ service: 'RateLimiter' }) });
+    super({
+      config: redis,
+      logger: logger.child({ service: 'RateLimiter' }),
+    });
 
     this.rateLimiters = rest;
   }
@@ -25,9 +28,15 @@ export default class RateLimiter extends HasRedisClient {
       handler: (req, res, next, { message, statusCode }) => {
         res
           .status(statusCode)
-          .json({ message: typeof message === 'function' ? message(req, res) : message });
+          .json({
+            message: typeof message === 'function'
+              ? message(req, res)
+              : message,
+          });
       },
-      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? (req.ip ? ipKeyGenerator(req.ip) : 'missing-ip')}`,
+      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? (req.ip
+        ? ipKeyGenerator(req.ip)
+        : 'missing-ip')}`,
       skip: req => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.generic'),
       legacyHeaders: false,
@@ -47,7 +56,9 @@ export default class RateLimiter extends HasRedisClient {
       handler: (req, res, next, { message, statusCode }) => {
         res.status(statusCode).json({ message });
       },
-      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? (req.ip ? ipKeyGenerator(req.ip) : 'missing-ip')}`,
+      keyGenerator: req => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? (req.ip
+        ? ipKeyGenerator(req.ip)
+        : 'missing-ip')}`,
       skip: req => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       legacyHeaders: false,
       standardHeaders: 'draft-7',

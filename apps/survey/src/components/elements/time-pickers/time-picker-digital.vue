@@ -205,10 +205,17 @@ const selection = computed(() => {
   };
 });
 function hoursToAmPm(hours: number, withAmPm = false) {
-  if (!withAmPm)
-    return `${hours <= 12 ? hours : hours - 12}`;
+  if (!withAmPm) {
+    return `${hours <= 12
+      ? hours
+      : hours - 12}`;
+  }
 
-  return `${hours <= 12 ? hours : hours - 12} ${promptI18n.value[`picker.${hours < 12 ? 'am' : 'pm'}`]}`;
+  return `${hours <= 12
+    ? hours
+    : hours - 12} ${promptI18n.value[`picker.${hours < 12
+    ? 'am'
+    : 'pm'}`]}`;
 }
 const amPmHours = computed(() => selection.value.hours.map(hour => hoursToAmPm(hour, true)));
 

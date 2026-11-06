@@ -141,7 +141,11 @@ export class RichDictionary {
       let editDistanceMatches: WordInterpretation[] = [];
 
       if (parameters.enableEditDistance) {
-        const maxEditDistance = lowerCaseWord.length >= parameters.minWordLength2 ? 2 : lowerCaseWord.length >= parameters.minWordLength1 ? 1 : 0;
+        const maxEditDistance = lowerCaseWord.length >= parameters.minWordLength2
+          ? 2
+          : lowerCaseWord.length >= parameters.minWordLength1
+            ? 1
+            : 0;
         if (maxEditDistance !== 0) {
           editDistanceMatches = this.transducer.match(lowerCaseWord, maxEditDistance).map(match => new AltSpelling(match.word, `lev${maxEditDistance}`));
         }

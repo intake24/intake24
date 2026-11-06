@@ -12,7 +12,10 @@ export const job = initContract().router({
     method: 'GET',
     path: '/admin/user/jobs',
     query: paginationRequest.extend({
-      type: z.union([z.enum(jobTypes), z.enum(jobTypes).array()]).optional(),
+      type: z.union([
+        z.enum(jobTypes),
+        z.enum(jobTypes).array(),
+      ]).optional(),
       localeId: z.string().optional(),
       nutrientTableId: z.string().optional(),
       surveyId: z.string().optional(),

@@ -7,7 +7,9 @@ export default defineConfig({
   preset: {
     transparent: {
       sizes: [64, 192, 512],
-      favicons: [[48, 'icon.ico']],
+      favicons: [
+        [48, 'icon.ico'],
+      ],
     },
     maskable: {
       sizes: [512],

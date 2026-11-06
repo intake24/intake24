@@ -71,7 +71,10 @@ export function registerRouters(express: Router) {
     {
       responseValidation,
       requestValidationErrorHandler,
-      globalMiddleware: [passport.authenticate('survey', { session: false }), registerACLScope],
+      globalMiddleware: [
+        passport.authenticate('survey', { session: false }),
+        registerACLScope,
+      ],
     },
   );
   // Survey respondent endpoints

@@ -5,7 +5,9 @@ import { Readable } from 'node:stream';
 import { Transform } from '@json2csv/node';
 
 export async function nutrientTypes({ kyselyDb }: ResourceOps) {
-  const { total } = await kyselyDb.foods.selectFrom('nutrientTypes').select(({ fn }) => [fn.count<number>('id').as('total')]).executeTakeFirstOrThrow();
+  const { total } = await kyselyDb.foods.selectFrom('nutrientTypes').select(({ fn }) => [
+    fn.count<number>('id').as('total'),
+  ]).executeTakeFirstOrThrow();
   const cursor = kyselyDb.foods
     .selectFrom('nutrientTypes')
     .leftJoin('nutrientUnits', 'nutrientUnits.id', 'nutrientTypes.unitId')
@@ -24,7 +26,14 @@ export async function nutrientTypes({ kyselyDb }: ResourceOps) {
 
   const transform = new Transform(
     {
-      fields: ['id', 'description', 'unitId', 'unitDescription', 'unitSymbol', 'kcalPerUnit'],
+      fields: [
+        'id',
+        'description',
+        'unitId',
+        'unitDescription',
+        'unitSymbol',
+        'kcalPerUnit',
+      ],
       withBOM: true,
     },
     {},

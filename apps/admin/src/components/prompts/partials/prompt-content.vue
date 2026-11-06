@@ -146,7 +146,9 @@ function getAvailableLanguages(key: string, items: BasePrompt['i18n']) {
     return ['en'];
 
   const langs = Object.keys(items[key]);
-  return langs.length ? langs : ['en'];
+  return langs.length
+    ? langs
+    : ['en'];
 }
 </script>
 

@@ -7,7 +7,9 @@ import { Transform } from '@json2csv/node';
 import { sql } from 'kysely';
 
 export async function asServedImages({ config, kyselyDb }: ResourceOps) {
-  const getImageUrl = (url?: string | null) => url ? `${config.app.urls.images}/${url}` : null;
+  const getImageUrl = (url?: string | null) => url
+    ? `${config.app.urls.images}/${url}`
+    : null;
 
   const { total } = await kyselyDb.foods.selectFrom('asServedImages').select(({ fn }) => [
     fn.count<number>('id').as('total'),
@@ -39,9 +41,15 @@ export async function asServedImages({ config, kyselyDb }: ResourceOps) {
         'weight',
         'asServedSetId',
         'asServedSetDescription',
-        { label: 'imagePath', value: (row: UnwrapAII<typeof cursor>) => getImageUrl(row.imagePath) },
+        {
+          label: 'imagePath',
+          value: (row: UnwrapAII<typeof cursor>) => getImageUrl(row.imagePath),
+        },
         'imagePurpose',
-        { label: 'thumbnailImagePath', value: (row: UnwrapAII<typeof cursor>) => getImageUrl(row.thumbnailImagePath) },
+        {
+          label: 'thumbnailImagePath',
+          value: (row: UnwrapAII<typeof cursor>) => getImageUrl(row.thumbnailImagePath),
+        },
         'thumbnailImagePurpose',
       ],
       withBOM: true,

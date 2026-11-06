@@ -30,7 +30,9 @@ import { Next } from '../partials';
 import { createFoodPromptProps } from '../prompt-props';
 import externalSources from './external-sources';
 
-defineOptions({ components: { ...externalSources } });
+defineOptions({
+  components: { ...externalSources },
+});
 
 const props = defineProps(createFoodPromptProps<'external-source-prompt', FoodState>());
 

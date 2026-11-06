@@ -16,8 +16,16 @@ import DrinkwareSet from './drinkware-set';
 import DrinkwareVolumeSample from './drinkware-volume-sample';
 
 @Scopes(() => ({
-  drinkwareSet: { include: [{ model: DrinkwareSet }] },
-  volumeSamples: { include: [{ model: DrinkwareVolumeSample }] },
+  drinkwareSet: {
+    include: [
+      { model: DrinkwareSet },
+    ],
+  },
+  volumeSamples: {
+    include: [
+      { model: DrinkwareVolumeSample },
+    ],
+  },
 }))
 @Table({
   modelName: 'DrinkwareScale',
@@ -95,7 +103,9 @@ export default class DrinkwareScale extends BaseModel<
 
   set label(value: CreationOptional<LocaleTranslation>) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('label', value && Object.keys(value).length ? value : null);
+    this.setDataValue('label', value && Object.keys(value).length
+      ? value
+      : null);
   }
 
   @BelongsTo(() => DrinkwareSet, 'drinkwareSetId')

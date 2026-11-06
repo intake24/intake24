@@ -69,7 +69,9 @@ export default class SurveyEventNotification extends NotificationJob<'SurveyEven
       ...webhooks.map(n =>
         this.getSignatureHeaders(
           n.url,
-          genUserKey ? { payload: this.params, secret: genUserKey } : undefined,
+          genUserKey
+            ? { payload: this.params, secret: genUserKey }
+            : undefined,
         ),
       ),
     ]);
