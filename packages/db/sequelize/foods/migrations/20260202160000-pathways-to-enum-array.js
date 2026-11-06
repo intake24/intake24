@@ -5,22 +5,30 @@ export default {
       // Sequelize's sync will create separate enums following the naming convention: enum_<table>_<column>
       // Match that behaviour here to keep it compatible with Kysely (a single shared enum makes more sense otherwise)
       await queryInterface.sequelize.query(
-        `CREATE TYPE enum_category_portion_size_methods_pathways AS ENUM ('addon', 'afp', 'recipe', 'search');`,
+        `DO $$ BEGIN
+          CREATE TYPE enum_category_portion_size_methods_pathways AS ENUM ('addon', 'afp', 'recipe', 'search');
+        EXCEPTION
+          WHEN duplicate_object THEN null;
+        END $$;`,
         { transaction },
       );
 
       await queryInterface.sequelize.query(
-        `CREATE TYPE enum_food_portion_size_methods_pathways AS ENUM ('addon', 'afp', 'recipe', 'search');`,
+        `DO $$ BEGIN
+          CREATE TYPE enum_food_portion_size_methods_pathways AS ENUM ('addon', 'afp', 'recipe', 'search');
+        EXCEPTION
+          WHEN duplicate_object THEN null;
+        END $$;`,
         { transaction },
       );
 
       await queryInterface.sequelize.query(
-        `ALTER TABLE category_portion_size_methods ADD COLUMN pathways_temp enum_category_portion_size_methods_pathways[];`,
+        `ALTER TABLE category_portion_size_methods ADD COLUMN IF NOT EXISTS pathways_temp enum_category_portion_size_methods_pathways[];`,
         { transaction },
       );
 
       await queryInterface.sequelize.query(
-        `ALTER TABLE food_portion_size_methods ADD COLUMN pathways_temp enum_food_portion_size_methods_pathways[];`,
+        `ALTER TABLE food_portion_size_methods ADD COLUMN IF NOT EXISTS pathways_temp enum_food_portion_size_methods_pathways[];`,
         { transaction },
       );
 
