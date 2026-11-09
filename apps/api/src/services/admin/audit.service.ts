@@ -168,17 +168,13 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
       .selectAll()
       .where('tableName', '=', table)
       .where(eb =>
-        eb.or(
-          [
-            // One-to-one
-            ...pk.map(col => sql<boolean>`record_id IN (SELECT ${sql.ref(col)}::text FROM ${sql.ref(table)} WHERE ${sql.ref(col)}::text = ${value})`),
-            // One-to-many
-            ...fk.map(col => sql<boolean>`record_id IN (SELECT ${sql.ref(col)}::text FROM ${sql.ref(table)} WHERE ${sql.ref(col)}::text = ${value})`),
-            // Many-to-many
-            ...fk.map(col => sql<boolean>`old_value->>${sql.lit(col)} = ${value}`),
-            ...fk.map(col => sql<boolean>`new_value->>${sql.lit(col)} = ${value}`),
-          ],
-        ),
+        eb.or([
+          ...fk.flatMap(fkCol => pk.map(pkCol =>
+            // where not casted for index perf, but this could error if column type is not matched
+            sql<boolean>`record_id IN (SELECT ${sql.ref(pkCol)}::text FROM ${sql.ref(table)} WHERE ${sql.ref(fkCol)} = ${value})`)),
+          ...fk.map(col => sql<boolean>`old_value->>${sql.lit(col)} = ${value}`),
+          ...fk.map(col => sql<boolean>`new_value->>${sql.lit(col)} = ${value}`),
+        ]),
       );
   }
 
@@ -191,7 +187,7 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
       let query = kysely
         .selectFrom('auditLog')
         .selectAll()
-        .where('tableName', '=', snakeCase(table))
+        .where('tableName', '=', table)
         .where('recordId', '=', id);
 
       if (links.length) {
@@ -203,7 +199,7 @@ function auditService({ cache, kyselyDb }: Pick<IoC, 'cache' | 'kyselyDb'>) {
       return [db, await mapWithUser(history)];
     }));
 
-    return Object.fromEntries(queries) as AuditLog;
+    return Object.fromEntries(queries);
   }
 
   return {
