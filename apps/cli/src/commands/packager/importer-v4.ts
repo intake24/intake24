@@ -22,8 +22,8 @@ import fs, { constants } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-import decompress from 'decompress';
 import { omit } from 'lodash-es';
+import unzipper from 'unzipper';
 
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import logger from '@intake24/common-backend/services/logger/logger';
@@ -891,7 +891,8 @@ export class ImporterV4 {
       this.compressedPackage = true;
       logger.info(`Extracting package: ${this.inputFilePath}`);
       logger.debug(`Temporary package directory: ${this.packageDirPath}`);
-      await decompress(this.inputFilePath, this.packageDirPath);
+      const directory = await unzipper.Open.file(this.inputFilePath);
+      await directory.extract({ path: this.packageDirPath });
     }
 
     this.imageDirPath = path.join(this.packageDirPath, PkgConstants.IMAGE_DIRECTORY_NAME);

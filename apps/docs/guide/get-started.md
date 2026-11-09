@@ -34,12 +34,10 @@ git clone https://github.com/intake24/intake24
 
 More details can be found in [Source code](/guide/source-code) for detailed instructions about repository structure.
 
-#### 2. Install pnpm using corepack
+#### 2. Install pnpm
 
 ```sh
-corepack enable
-
-corepack install
+npm install -g pnpm
 ```
 
 More details can be found in [Source code -> Dependencies](/guide/source-code#dependencies).
