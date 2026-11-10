@@ -2,6 +2,7 @@ import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 import securityConfig from '@intake24/api/config/security';
+import { deviceCookieNames } from '@intake24/api/http/rate-limit';
 
 export default () => {
   const url = '/api/auth/login/token';
@@ -41,5 +42,19 @@ export default () => {
         cookie => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name,
       ),
     ).toBe(true);
+  });
+
+  it('valid token should not set device cookie', async () => {
+    const res = await request(suite.app)
+      .post(url)
+      .set('Accept', 'application/json')
+      .send({ token: suite.data.system.respondent.urlAuthToken, captcha: 'test-captcha' });
+
+    expect(res.status).toBe(200);
+    expect(
+      (res.get('Set-Cookie') ?? []).some(
+        cookie => cookie.split('=')[0] === deviceCookieNames.survey,
+      ),
+    ).toBe(false);
   });
 };
