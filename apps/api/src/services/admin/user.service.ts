@@ -30,8 +30,9 @@ function adminUserService({
   cache,
   commsService,
   db,
+  jwtRotationService,
   scheduler,
-}: Pick<IoC, 'aclConfig' | 'cache' | 'commsService' | 'db' | 'scheduler'>) {
+}: Pick<IoC, 'aclConfig' | 'cache' | 'commsService' | 'db' | 'jwtRotationService' | 'scheduler'>) {
   const flushACLCacheByUserId = async (userId: string): Promise<void> => {
     await cache.forget([`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`]);
   };
@@ -216,6 +217,7 @@ function adminUserService({
       salt,
       hasher: defaultAlgorithm.id,
     }, { transaction });
+    await jwtRotationService.revokeByUser(userId, { transaction });
 
     return userPassword;
   };

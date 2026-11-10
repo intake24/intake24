@@ -3,7 +3,7 @@ import type { TokenPayload } from '@intake24/common/security';
 
 import { subDays } from 'date-fns';
 import jwt from 'jsonwebtoken';
-import { Op } from 'sequelize';
+import { Op, Transaction } from 'sequelize';
 
 import { PersonalAccessToken, RefreshToken } from '@intake24/db';
 
@@ -52,43 +52,13 @@ function jwtRotationService(ops: Pick<IoC, 'logger'>) {
    * @param {string} userId
    * @returns {Promise<number>}
    */
-  const revokeByUser = async (userId: string): Promise<number> => {
+  const revokeByUser = async (userId: string, { transaction }: { transaction?: Transaction } = {}): Promise<number> => {
     const [rows] = await RefreshToken.update({ revoked: true }, {
       where: { userId },
+      transaction,
     });
 
     return rows;
-  };
-
-  /**
-   * Verify refresh token against database record
-   *
-   * @param {string} token
-   * @returns {Promise<boolean>}
-   */
-  const verify = async (token: string): Promise<boolean> => {
-    const { jti } = decode(token);
-
-    const refreshToken = await RefreshToken.findByPk(jti, {
-      attributes: ['id', 'expiresAt', 'revoked'],
-    });
-
-    if (!refreshToken) {
-      logger.debug('Refresh token not found.');
-      return false;
-    }
-
-    if (refreshToken.revoked) {
-      logger.debug('Refresh token revoked.');
-      return false;
-    }
-
-    if (refreshToken.expiresAt <= new Date()) {
-      logger.debug('Refresh token expired.');
-      return false;
-    }
-
-    return true;
   };
 
   /**
@@ -99,9 +69,22 @@ function jwtRotationService(ops: Pick<IoC, 'logger'>) {
    * @returns {Promise<boolean>}
    */
   const verifyAndRevoke = async (token: string): Promise<boolean> => {
-    const valid = await verify(token);
-    await revoke(token);
-    return valid;
+    const { jti: id } = decode(token);
+
+    const [rows] = await RefreshToken.update({ revoked: true }, {
+      where: {
+        id,
+        revoked: false,
+        expiresAt: {
+          [Op.gt]: new Date(),
+        },
+      },
+    });
+
+    if (rows !== 1)
+      logger.debug('Refresh token not found, revoked or expired.');
+
+    return rows === 1;
   };
 
   /**
@@ -144,7 +127,6 @@ function jwtRotationService(ops: Pick<IoC, 'logger'>) {
     store,
     revoke,
     revokeByUser,
-    verify,
     verifyAndRevoke,
     purgeRefreshTokens,
     purgePersonalAccessTokens,

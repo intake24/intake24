@@ -1,4 +1,8 @@
+import request from 'supertest';
+
 import { suite } from '@intake24/api-tests/integration/helpers';
+import securityConfig from '@intake24/api/config/security';
+import ioc from '@intake24/api/ioc';
 
 export default () => {
   const url = '/api/user/password';
@@ -58,5 +62,39 @@ export default () => {
         passwordCurrent: 'testRespondentPassword',
       },
     });
+  });
+
+  it('should revoke existing refresh tokens', async () => {
+    const email = 'password-change-revoke@example.com';
+    const password = 'oldPassword123';
+    await ioc.cradle.adminUserService.create({
+      email,
+      password,
+      verifiedAt: new Date(),
+    });
+
+    const loginRes = await request(suite.app)
+      .post('/api/admin/auth/login')
+      .set('Accept', 'application/json')
+      .send({ email, password });
+    expect(loginRes.status).toBe(200);
+
+    const refreshCookie = loginRes.get('Set-Cookie')?.find(
+      cookie => cookie.startsWith(`${securityConfig.jwt.admin.cookie.name}=`),
+    )?.split(';').at(0);
+    expect(refreshCookie).toBeDefined();
+
+    const { status } = await request(suite.app)
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${loginRes.body.accessToken}`)
+      .send({ password: 'newPassword123', passwordConfirm: 'newPassword123', passwordCurrent: password });
+    expect(status).toBe(200);
+
+    const refreshRes = await request(suite.app)
+      .post('/api/admin/auth/refresh')
+      .set('Accept', 'application/json')
+      .set('Cookie', [refreshCookie!]);
+    expect(refreshRes.status).toBe(401);
   });
 };

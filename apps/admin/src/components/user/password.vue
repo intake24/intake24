@@ -102,8 +102,10 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { useForm } from '@intake24/admin/composables';
+import { useAuth } from '@intake24/admin/stores';
 import { useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -117,6 +119,8 @@ defineProps({
 });
 
 const { i18n: { t } } = useI18n();
+const auth = useAuth();
+const router = useRouter();
 
 const dialog = ref(false);
 const loading = ref(false);
@@ -149,6 +153,9 @@ async function submit() {
     await post('user/password');
     close();
     useMessages().success(t('common.password.updated'));
+
+    await auth.logout(true);
+    await router.push({ name: 'login' });
   }
   finally {
     loading.value = false;
