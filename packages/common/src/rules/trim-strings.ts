@@ -1,18 +1,32 @@
-export function trimStrings<T = string>(input: T): T {
+import { DEFAULT_MAX_DEPTH, MaxDepthExceededError } from './max-depth';
+
+export type TrimStringsOptions = {
+  maxDepth?: number;
+};
+
+function trim(input: unknown, depth: number, maxDepth: number): unknown {
   if (typeof input === 'string') {
     const chars = input.trim();
-    return (chars.length ? chars : null) as T;
+    return chars.length ? chars : null;
   }
 
-  if (Array.isArray(input))
-    return input.map(item => trimStrings(item)) as T;
+  const isArray = Array.isArray(input);
+  const isObject = !isArray && Object.prototype.toString.call(input) === '[object Object]';
+  if (!isArray && !isObject)
+    return input;
 
-  if (Object.prototype.toString.call(input) === '[object Object]') {
-    return Object.entries(input as Record<string, unknown>).reduce<any>((acc, [key, value]) => {
-      acc[key] = trimStrings(value);
-      return acc;
-    }, {});
-  }
+  if (depth >= maxDepth)
+    throw new MaxDepthExceededError(maxDepth);
 
-  return input;
+  if (isArray)
+    return input.map(item => trim(item, depth + 1, maxDepth));
+
+  return Object.entries(input as Record<string, unknown>).reduce<any>((acc, [key, value]) => {
+    acc[key] = trim(value, depth + 1, maxDepth);
+    return acc;
+  }, {});
+}
+
+export function trimStrings<T = string>(input: T, options: TrimStringsOptions = {}): T {
+  return trim(input, 0, options.maxDepth ?? DEFAULT_MAX_DEPTH) as T;
 }

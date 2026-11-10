@@ -1,4 +1,14 @@
-import { sanitize } from '@intake24/common/rules';
+import { MaxDepthExceededError, sanitize } from '@intake24/common/rules';
+
+function nest(depth: number): unknown {
+  let value: unknown = 'leaf';
+  for (let i = 0; i < depth; i++) {
+    value = i % 2
+      ? { a: value }
+      : [value];
+  }
+  return value;
+}
 
 describe('input sanitation middleware', () => {
   it('should sanitize/trim input, no HTML by default', () => {
@@ -149,5 +159,22 @@ describe('input sanitation middleware', () => {
   it('should leave other types unchanged', () => {
     expect(sanitize(undefined, { allowHtml: true, emptyStringToNull: true })).toEqual(undefined);
     expect(sanitize(true, { allowHtml: true, emptyStringToNull: true })).toEqual(true);
+  });
+
+  it('should process input up to the default max depth', () => {
+    expect(() => sanitize(nest(64))).not.toThrow();
+  });
+
+  it('should throw when input exceeds the default max depth', () => {
+    expect(() => sanitize(nest(65))).toThrow(MaxDepthExceededError);
+  });
+
+  it('should respect custom max depth', () => {
+    expect(() => sanitize(nest(2), { maxDepth: 2 })).not.toThrow();
+    expect(() => sanitize(nest(3), { maxDepth: 2 })).toThrow(MaxDepthExceededError);
+  });
+
+  it('should not count scalars towards depth', () => {
+    expect(() => sanitize('  x  ', { maxDepth: 0 })).not.toThrow();
   });
 });

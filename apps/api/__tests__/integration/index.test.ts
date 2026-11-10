@@ -10,6 +10,7 @@ import admin from './admin/index.test';
 import authentication from './authentication/index.test';
 import feedback from './feedback/index.test';
 import i18n from './i18n/index.test';
+import inputComplexity from './input-complexity/index.test';
 import jobs from './jobs/index.test';
 import password from './password/index.test';
 import portionSizes from './portion-sizes/index.test';
@@ -48,6 +49,7 @@ describe('api', () => {
 
   // describe('Root', root);
 
+  describe('public endpoint input complexity', inputComplexity);
   describe('/api/auth', authentication);
   describe('/api/password', password);
   describe('/api/i18n', i18n);

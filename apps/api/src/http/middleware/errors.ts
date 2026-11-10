@@ -8,6 +8,7 @@ import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
 import { InvalidIdError } from '@intake24/api/services';
+import { MaxDepthExceededError } from '@intake24/common/rules';
 
 import {
   ApplicationError,
@@ -25,7 +26,7 @@ import {
 
 export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    if (err instanceof ApplicationError || err instanceof SyntaxError) {
+    if (err instanceof ApplicationError || err instanceof SyntaxError || err instanceof MaxDepthExceededError) {
       const { message } = err;
       res.status(400).json({ message });
       return;
