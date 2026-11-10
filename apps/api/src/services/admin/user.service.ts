@@ -11,9 +11,9 @@ import { Op } from 'sequelize';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { defaultAlgorithm } from '@intake24/common-backend';
-import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
+import { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
-import { Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
+import { Permission, PersonalAccessToken, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 
 export type UserPasswordInput = {
   userId: string;
@@ -32,14 +32,26 @@ function adminUserService({
   db,
   scheduler,
 }: Pick<IoC, 'aclConfig' | 'cache' | 'commsService' | 'db' | 'scheduler'>) {
-  /**
-   * Flush user ACL cache by user ID
-   *
-   * @param {string} userId
-   * @returns {Promise<void>}
-   */
   const flushACLCacheByUserId = async (userId: string): Promise<void> => {
     await cache.forget([`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`]);
+  };
+
+  const flushACLCache = async (): Promise<void> => {
+    await Promise.all([
+      cache.flush(`${ACL_PERMISSIONS_KEY}:*`),
+      cache.flush(`${ACL_ROLES_KEY}:*`),
+    ]);
+  };
+
+  const flushPATCache = async (userId: string): Promise<void> => {
+    const tokens = await PersonalAccessToken.findAll({
+      attributes: ['token'],
+      where: { userId },
+    });
+    if (!tokens.length)
+      return;
+
+    await cache.forget(tokens.map(({ token }) => `${ACL_PAT_KEY}:${token}` as const));
   };
 
   /**
@@ -301,9 +313,12 @@ function adminUserService({
           ? updateUserCustomFields(userId, user.customFields, customFields, transaction)
           : null,
       ].filter(Boolean));
-
-      await flushACLCacheByUserId(user.id);
     });
+
+    await flushACLCacheByUserId(user.id);
+
+    if (rest.disabledAt || !rest.verifiedAt)
+      await flushPATCache(user.id);
 
     return user;
   };
@@ -454,6 +469,7 @@ function adminUserService({
   };
 
   return {
+    flushACLCache,
     flushACLCacheByUserId,
     flushACLCacheByRoleId,
     flushACLCacheByRoleName,

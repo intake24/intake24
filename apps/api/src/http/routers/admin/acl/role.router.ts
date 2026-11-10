@@ -141,14 +141,22 @@ export function role() {
       middleware: [
         permission('acl', 'roles', 'roles:delete'),
       ],
-      handler: async ({ params: { roleId } }) => {
+      handler: async ({ params: { roleId }, req }) => {
         const role = await Role.findByPk(roleId, {
           attributes: ['id'],
+          include: [
+            {
+              association: 'userLinks',
+              attributes: ['userId'],
+            },
+          ],
         });
         if (!role)
           throw new NotFoundError();
 
         await role.destroy();
+        await Promise.all(role.userLinks!.map(({ userId }) =>
+          req.scope.cradle.adminUserService.flushACLCacheByUserId(userId)));
 
         return { status: 204, body: undefined };
       },

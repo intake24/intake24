@@ -294,10 +294,11 @@ function adminSurveyService({
                 transaction,
               )
             : null,
-          adminUserService.flushACLCacheByUserId(userId),
         ].filter(Boolean),
       );
     });
+
+    await adminUserService.flushACLCacheByUserId(userId);
 
     return alias;
   };

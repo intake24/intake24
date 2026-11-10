@@ -94,7 +94,7 @@ export function permission() {
       middleware: [
         permissionMiddleware('acl', 'permissions', 'permissions:delete'),
       ],
-      handler: async ({ params: { permissionId } }) => {
+      handler: async ({ params: { permissionId }, req }) => {
         const permission = await Permission.findByPk(permissionId, {
           attributes: ['id'],
         });
@@ -102,6 +102,7 @@ export function permission() {
           throw new NotFoundError();
 
         await permission.destroy();
+        await req.scope.cradle.adminUserService.flushACLCache();
 
         return { status: 204, body: undefined };
       },
