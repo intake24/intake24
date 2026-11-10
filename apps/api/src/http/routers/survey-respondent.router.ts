@@ -1,5 +1,3 @@
-import type { Request } from 'express';
-
 import type { ExtendedFieldValidationError } from '../errors';
 import type { OptionalSearchQueryParameters } from '@intake24/api/food-index/search-query';
 import type { SinglePrompt } from '@intake24/common/prompts';
@@ -9,6 +7,7 @@ import { initServer } from '@ts-rest/express';
 import { Op } from 'sequelize';
 
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import { authenticatedUserKey } from '@intake24/api/http/rate-limit';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { flattenSchemeWithSection, groupSchemeMultiPrompts, isMealSection } from '@intake24/common/surveys';
@@ -16,9 +15,10 @@ import { merge } from '@intake24/common/util';
 import { FAQ, SplitWord, Survey } from '@intake24/db';
 
 export function surveyRespondent() {
-  const ratingRateLimiter = ioc.cradle.rateLimiter.createMiddleware('rating', {
-    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.rating'),
-    skipFailedRequests: true,
+  const ratingRateLimiter = ioc.cradle.rateLimiter.bucket('rating', {
+    key: authenticatedUserKey,
+    count: 'successes',
+    message: 'rating',
   });
   const cache = ioc.cradle.cache;
   const surveyService = ioc.cradle.surveyService;

@@ -568,7 +568,7 @@ function authenticationService({
    * @param {LoginMeta} meta
    * @returns {Promise<Tokens>}
    */
-  const verify = async (body: MFAVerificationRequest, meta: LoginMeta): Promise<Tokens> => {
+  const verify = async (body: MFAVerificationRequest, meta: LoginMeta): Promise<Tokens & { email: string }> => {
     const { req: { ip: remoteAddress, session: { mfaAuthChallenge } }, userAgent } = meta;
 
     const signInAttempt: SignInAttempt = {
@@ -673,7 +673,7 @@ function authenticationService({
         signInService.log({ ...signInAttempt, successful: true }),
       ]);
 
-      return tokens;
+      return { ...tokens, email };
     }
     catch (err) {
       if (err instanceof Error) {
