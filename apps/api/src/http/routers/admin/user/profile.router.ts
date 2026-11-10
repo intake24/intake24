@@ -1,17 +1,17 @@
-import type { Request } from 'express';
-
 import { initServer } from '@ts-rest/express';
 
 import { NotFoundError } from '@intake24/api/http/errors';
+import { authenticatedUserKey } from '@intake24/api/http/rate-limit';
 import ioc from '@intake24/api/ioc';
 import { toSimpleName } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
 import { User } from '@intake24/db';
 
 export function profile() {
-  const verifyRateLimiter = ioc.cradle.rateLimiter.createMiddleware('verify', {
-    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.verify'),
-    skipFailedRequests: true,
+  const verifyRateLimiter = ioc.cradle.rateLimiter.bucket('verify', {
+    key: authenticatedUserKey,
+    count: 'successes',
+    message: 'verify',
   });
 
   return initServer().router(contract.admin.user.profile, {

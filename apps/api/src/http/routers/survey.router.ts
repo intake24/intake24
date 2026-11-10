@@ -1,7 +1,6 @@
-import type { Request } from 'express';
-
 import { initServer } from '@ts-rest/express';
 
+import { ipKey, surveySlugKey } from '@intake24/api/http/rate-limit';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { Survey } from '@intake24/db';
@@ -11,10 +10,21 @@ import { publicSurveyEntryResponse } from '../responses';
 import { captchaCheck } from '../rules';
 
 export function survey() {
-  const generateUserLimiter = ioc.cradle.rateLimiter.createMiddleware('generateUser', {
-    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.generateUser'),
-    skipFailedRequests: true,
-  });
+  const generateUserLimiters = [
+    ioc.cradle.rateLimiter.bucket('generateUserSurveyIp', {
+      key: (req) => {
+        const slug = surveySlugKey(req.params.slug);
+        return slug && `${slug}:${ipKey(req)}`;
+      },
+      count: 'successes',
+      message: 'generateUser',
+    }),
+    ioc.cradle.rateLimiter.bucket('generateUserSurvey', {
+      key: req => surveySlugKey(req.params.slug),
+      count: 'successes',
+      message: 'generateUser',
+    }),
+  ];
   const captchaConfig = ioc.cradle.servicesConfig.captcha;
 
   return initServer().router(contract.public.survey, {
@@ -69,7 +79,7 @@ export function survey() {
       };
     },
     generateUser: {
-      middleware: [generateUserLimiter],
+      middleware: generateUserLimiters,
       handler: async ({ body: { captcha }, params: { slug }, req }) => {
         await captchaCheck(captcha, captchaConfig);
 

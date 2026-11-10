@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import { Router } from 'express';
 
 import { registerI18nScope, registerIoC } from '@intake24/api/http/middleware';
+import { genericRateLimit } from '@intake24/api/http/rate-limit';
 import { registerRouters } from '@intake24/api/http/routers';
 import ioc from '@intake24/api/ioc';
 
@@ -13,7 +14,8 @@ export default () => {
 
   router.use(registerIoC);
   router.use(registerI18nScope);
-  router.use(ioc.cradle.rateLimiter.createMiddleware('generic'));
+  const { rateLimiter, securityConfig: { jwt: { secret, issuer } } } = ioc.cradle;
+  router.use(genericRateLimit(rateLimiter.bucket, { secret, issuer }));
 
   registerRouters(router);
 
