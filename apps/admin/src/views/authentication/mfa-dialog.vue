@@ -210,6 +210,7 @@ async function selectDevice(devices: string[]) {
 };
 
 async function duoTimeoutChallenge() {
+  clearDuoInterval();
   // @ts-expect-error - node types
   duo.value.interval = setInterval(() => {
     duo.value.value -= 20;
@@ -242,10 +243,7 @@ async function fidoChallenge() {
     await finalizeLogin();
   }
   catch (err) {
-    if (
-      err instanceof WebAuthnError
-      && (err.name === 'NotAllowedError' || (err.name === 'AbortError' && err.code === 'ERROR_CEREMONY_ABORTED'))
-    ) {
+    if (err instanceof WebAuthnError && (err.name === 'NotAllowedError' || err.code === 'ERROR_CEREMONY_ABORTED')) {
       return;
     }
 
