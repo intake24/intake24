@@ -29,10 +29,9 @@
             <div
               v-if="provider === 'fido'"
               class="d-flex flex-column align-center"
-              @click="fidoChallenge"
             >
               <v-icon class="mb-6" color="primary" icon="$fido" size="80" />
-              <v-btn block color="primary" rounded @click="fidoChallenge">
+              <v-btn block color="primary" :loading="fidoPending" rounded @click="fidoChallenge">
                 {{ $t('common.action.retry') }}
               </v-btn>
             </div>
@@ -131,10 +130,10 @@ import type { PropType } from 'vue';
 
 import type { LoginResponse, MFAChallengeResponse } from '@intake24/common/types/http';
 
-import { startAuthentication, WebAuthnError } from '@simplewebauthn/browser';
+import { startAuthentication, WebAuthnAbortService, WebAuthnError } from '@simplewebauthn/browser';
 import { useElementSize } from '@vueuse/core';
 import { HttpStatusCode, isAxiosError } from 'axios';
-import { computed, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useForm } from '@intake24/admin/composables';
@@ -173,6 +172,7 @@ const duo = ref({
   interval: undefined as undefined | number,
   value: 100,
 });
+const fidoPending = shallowRef(false);
 
 const provider = computed(() => props.authData.challenge?.provider);
 const challengeId = computed(() => props.authData.challenge?.challengeId);
@@ -193,6 +193,7 @@ function clearDuoInterval() {
 
 async function selectDevice(devices: string[]) {
   clearDuoInterval();
+  WebAuthnAbortService.cancelCeremony();
 
   const deviceId = devices.at(0);
   if (!deviceId || !props.authData.challenge)
@@ -232,6 +233,8 @@ async function fidoChallenge() {
   if (props.authData.challenge?.provider !== 'fido')
     throw new Error('Invalid MFA provider');
 
+  fidoPending.value = true;
+
   try {
     const { challengeId, provider, options } = props.authData.challenge;
     const response = await startAuthentication({ optionsJSON: options });
@@ -248,6 +251,9 @@ async function fidoChallenge() {
 
     console.error(err);
     useMessages().error(t('common.mfa.error'));
+  }
+  finally {
+    fidoPending.value = false;
   }
 };
 
@@ -315,6 +321,7 @@ async function initializeChallenge() {
 
 onBeforeUnmount(() => {
   clearDuoInterval();
+  WebAuthnAbortService.cancelCeremony();
 });
 
 watch(deviceId, async (val, oldVal) => {
