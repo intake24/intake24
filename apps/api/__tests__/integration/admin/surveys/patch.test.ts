@@ -69,7 +69,7 @@ export default () => {
         supportEmail: 'thisIsNotValidEmail',
         allowGenUsers: 'no',
         numberOfSubmissionsForFeedback: 'number',
-        session: 'not-a-session-settings',
+        session: { store: true, age: 'not-a-duration', fixed: '1d' },
         maximumDailySubmissions: 'NaN',
         minimumSubmissionInterval: { nan: 5 },
         notifications: [
@@ -115,7 +115,8 @@ export default () => {
         'supportEmail',
         'allowGenUsers',
         'numberOfSubmissionsForFeedback',
-        'session',
+        'session.age',
+        'session.fixed',
         'maximumDailySubmissions',
         'minimumSubmissionInterval',
         'notifications.0.channel',

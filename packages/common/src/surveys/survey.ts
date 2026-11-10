@@ -3,6 +3,7 @@ import type { StringValue } from 'ms';
 import { z } from 'zod';
 
 import { singlePrompt } from '../prompts';
+import { msRegex, msStringValue } from '../types/common';
 import { meal } from './meals';
 import { schemeSettings } from './scheme';
 
@@ -37,8 +38,14 @@ export const defaultOverrides: SchemeOverrides = {
 
 export const sessionSettings = z.object({
   store: z.boolean(), // TODO: possibly extend to be more configurable to -> z.union([z.boolean(), z.enum(['client', 'server']), z.enum(['client', 'server']).array()]),
-  age: z.custom<StringValue>(() => z.string().regex(/^\d+([mhdwy]|min|mins|minute|minutes|hr|hrs|hour|hours|day|days|week|weeks|yr|yrs|year|years)$/)).nullable(),
-  fixed: z.custom<`${StringValue}+${StringValue}`>(() => z.string().regex(/^\d+([dwy]|day|days|week|weeks|yr|yrs|year|years)\+\d+([smh]|sec|secs|second|seconds|min|mins|minute|minutes|hr|hrs|hour|hours)$/)).nullable(),
+  age: msStringValue.nullable(),
+  fixed: z.custom<`${StringValue}+${StringValue}`>((val) => {
+    if (typeof val !== 'string')
+      return false;
+
+    const parts = val.split('+');
+    return parts.length === 2 && parts.every(part => msRegex.test(part));
+  }).nullable(),
 });
 
 export type SessionSettings = z.infer<typeof sessionSettings>;
