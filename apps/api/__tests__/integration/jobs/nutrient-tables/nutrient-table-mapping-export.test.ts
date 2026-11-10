@@ -1,6 +1,7 @@
 import type { Job as BullJob } from 'bullmq';
 
 import fs from 'node:fs/promises';
+import { EOL } from 'node:os';
 import path from 'node:path';
 
 import { vi } from 'vitest';
@@ -85,7 +86,11 @@ export default () => {
     expect(exportDbJob.downloadUrl).toBeTruthy();
     exportedFile = path.resolve(ioc.cradle.fsConfig.local.downloads, exportDbJob.downloadUrl!);
     await expect(fs.readFile(exportedFile, 'utf8')).resolves.toContain(
-      `\uFEFF"Intake24 nutrient ID","NDB spreadsheet column index","Nutrient name"\n"${nutrientTypes[0].id}","A","${nutrientTypes[0].description}"\n"${nutrientTypes[1].id}","AB","${nutrientTypes[1].description}"`,
+      [
+        '\uFEFF"Intake24 nutrient ID","NDB spreadsheet column index","Nutrient name"',
+        `"${nutrientTypes[0].id}","A","${nutrientTypes[0].description}"`,
+        `"${nutrientTypes[1].id}","AB","${nutrientTypes[1].description}"`,
+      ].join(EOL),
     );
 
     importDbJob = await DbJob.create({

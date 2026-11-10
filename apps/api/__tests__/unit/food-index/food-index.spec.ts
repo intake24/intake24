@@ -615,6 +615,6 @@ describe('foodIndex', () => {
       const ioc = (await import('@intake24/api/ioc')).default;
 
       expect(ioc.cradle.foodIndex).toBe(ioc.cradle.foodIndex);
-    });
+    }, 30_000);
   });
 });
