@@ -1,8 +1,6 @@
-import type { Request } from 'express';
-
 import { initServer } from '@ts-rest/express';
-import { ipKeyGenerator } from 'express-rate-limit';
 
+import { emailAccountKey, loginRateLimiting } from '@intake24/api/http/rate-limit';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 
@@ -10,21 +8,17 @@ import { UnauthorizedError } from '../../errors';
 import { attachRefreshToken } from '../util';
 
 export function authentication() {
-  const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
-    keyGenerator: req => `login:${req.body?.email ?? (req.ip
-      ? ipKeyGenerator(req.ip)
-      : 'missing-ip')}`,
-    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
-    skipSuccessfulRequests: true,
-  });
+  const loginRateLimit = loginRateLimiting('admin', ioc.cradle);
 
   return initServer().router(contract.admin.authentication, {
     login: {
-      middleware: [loginRateLimiter],
+      middleware: loginRateLimit.middleware(req => emailAccountKey(req.body?.email)),
       handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
         const result = await req.scope.cradle.authenticationService.adminLogin(body, { req, userAgent });
         if ('devices' in result)
           return { status: 200, body: result };
+
+        loginRateLimit.issueDeviceCookie(req, res, emailAccountKey(body.email));
 
         attachRefreshToken(
           result.refreshToken,
@@ -44,7 +38,9 @@ export function authentication() {
       return { status: 200, body: result };
     },
     verify: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-      const { accessToken, refreshToken } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
+      const { accessToken, refreshToken, email } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
+
+      loginRateLimit.issueDeviceCookie(req, res, emailAccountKey(email));
 
       attachRefreshToken(
         refreshToken,

@@ -1,8 +1,7 @@
-import type { Request } from 'express';
-
 import { initServer } from '@ts-rest/express';
 import { Op } from 'sequelize';
 
+import { authenticatedUserKey } from '@intake24/api/http/rate-limit';
 import ioc from '@intake24/api/ioc';
 import { abortOnClose } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
@@ -11,8 +10,10 @@ import { Survey, SurveySubmission, UserSurveyAlias } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '../../errors';
 
 export function feedback() {
-  const feedbackRateLimiter = ioc.cradle.rateLimiter.createMiddleware('feedback', {
-    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.feedback'),
+  const feedbackRateLimiter = ioc.cradle.rateLimiter.bucket('feedback', {
+    key: authenticatedUserKey,
+    count: 'all',
+    message: 'feedback',
   });
 
   return initServer().router(contract.user.feedback, {

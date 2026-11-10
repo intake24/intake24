@@ -2,6 +2,7 @@ import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 import securityConfig from '@intake24/api/config/security';
+import { deviceCookieNames } from '@intake24/api/http/rate-limit';
 
 export default () => {
   const url = '/api/auth/login/alias';
@@ -64,5 +65,38 @@ export default () => {
         cookie => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name,
       ),
     ).toBe(true);
+  });
+
+  it('valid credentials should set device cookie', async () => {
+    const res = await request(suite.app).post(url).set('Accept', 'application/json').send({
+      username: 'testRespondent',
+      password: 'testRespondentPassword',
+      survey: 'test-survey',
+      captcha: 'test-captcha',
+    });
+
+    expect(res.status).toBe(200);
+    const cookie = (res.get('Set-Cookie') ?? []).find(
+      value => value.split('=')[0] === deviceCookieNames.survey,
+    );
+    expect(cookie).toBeDefined();
+    expect(cookie).toContain(`Path=${securityConfig.jwt.survey.cookie.path}`);
+    expect(cookie).toContain('HttpOnly');
+  });
+
+  it('invalid credentials should not set device cookie', async () => {
+    const res = await request(suite.app).post(url).set('Accept', 'application/json').send({
+      username: 'testRespondent',
+      password: 'invalidPassword',
+      survey: 'test-survey',
+      captcha: 'test-captcha',
+    });
+
+    expect(res.status).toBe(401);
+    expect(
+      (res.get('Set-Cookie') ?? []).some(
+        cookie => cookie.split('=')[0] === deviceCookieNames.survey,
+      ),
+    ).toBe(false);
   });
 };
