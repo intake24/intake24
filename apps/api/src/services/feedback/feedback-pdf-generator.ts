@@ -17,13 +17,36 @@ export default class FeedbackPdfGenerator {
     this.options = options;
   }
 
-  async loadFeedback() {
+  /**
+   * The browser is closed when `close` is called or `signal` aborts, whichever comes first.
+   */
+  private async launchBrowser(signal?: AbortSignal) {
+    signal?.throwIfAborted();
+
     const args: string[] = [];
 
     if (this.options.lang)
       args.push(`--lang=${this.options.lang}`);
 
     const browser = await puppeteer.launch({ headless: this.options.headless, args });
+
+    let closing: Promise<void> | undefined;
+    const close = () => {
+      closing ??= browser.close();
+      return closing;
+    };
+
+    if (signal?.aborted) {
+      await close();
+      signal.throwIfAborted();
+    }
+    signal?.addEventListener('abort', () => void close(), { once: true });
+
+    return { browser, close };
+  }
+
+  async loadFeedback(signal?: AbortSignal) {
+    const { browser, close } = await this.launchBrowser(signal);
 
     try {
       await browser.setCookie(this.refreshCookie);
@@ -41,59 +64,46 @@ export default class FeedbackPdfGenerator {
 
       await page.goto(this.url, { waitUntil: 'networkidle0' });
 
-      return page;
+      return { page, close };
     }
     catch (error) {
-      await browser.close();
+      await close();
+      signal?.throwIfAborted();
       throw error;
     }
   }
 
   /**
-   * Get PDf buffer
-   *
-   * @returns
-   * @memberof FeedbackPdfGenerator
-   */
-  async getPdf() {
-    const page = await this.loadFeedback();
-
-    const pdfBuffer = await page.pdf({
-      format: 'a4',
-      displayHeaderFooter: true,
-      printBackground: true,
-    });
-
-    await page.browser().close();
-
-    return pdfBuffer;
-  }
-
-  /**
    * Get PDF stream
    *
+   * @param signal aborting closes the browser, e.g. when the client disconnects
    * @returns
    * @memberof FeedbackPdfGenerator
    */
-  async getPdfStream() {
-    const page = await this.loadFeedback();
+  async getPdfStream(signal: AbortSignal) {
+    const { page, close } = await this.loadFeedback(signal);
 
-    const pdfWebStream = await page.createPDFStream({
-      format: 'a4',
-      displayHeaderFooter: true,
-      printBackground: true,
-    });
-    const pdfBuffer = Readable.fromWeb(pdfWebStream);
-
-    pdfBuffer
-      .on('end', async () => {
-        await page.browser().close();
-      })
-      .on('error', async () => {
-        await page.browser().close();
+    let pdfStream;
+    try {
+      const pdfWebStream = await page.createPDFStream({
+        format: 'a4',
+        displayHeaderFooter: true,
+        printBackground: true,
       });
+      pdfStream = Readable.fromWeb(pdfWebStream);
+    }
+    catch (error) {
+      await close();
+      signal.throwIfAborted();
+      throw error;
+    }
 
-    return pdfBuffer;
+    // `pipe()` does not handle source errors, so the 'error' listener also keeps an errored stream from crashing the process.
+    pdfStream
+      .on('error', () => void close())
+      .on('close', () => void close());
+
+    return pdfStream;
   }
 
   /**
@@ -103,16 +113,19 @@ export default class FeedbackPdfGenerator {
    * @memberof FeedbackPdfGenerator
    */
   async getPdfFile(path: string) {
-    const page = await this.loadFeedback();
+    const { page, close } = await this.loadFeedback();
 
-    await page.pdf({
-      path,
-      format: 'a4',
-      displayHeaderFooter: true,
-      printBackground: true,
-    });
-
-    await page.browser().close();
+    try {
+      await page.pdf({
+        path,
+        format: 'a4',
+        displayHeaderFooter: true,
+        printBackground: true,
+      });
+    }
+    finally {
+      await close();
+    }
 
     return path;
   }

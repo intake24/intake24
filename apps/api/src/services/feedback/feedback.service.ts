@@ -133,12 +133,12 @@ function feedbackService({
     };
   };
 
-  const getFeedbackStream = async (options: FeedbackOptions) => {
-    const { lang, surveyId, submissions, username } = options;
+  const getFeedbackStream = async (options: FeedbackOptions & { signal: AbortSignal }) => {
+    const { lang, surveyId, submissions, username, signal } = options;
     const { url, filename, slug, userId } = await getFeedbackLinks({ surveyId, username, submissions });
     const cookie = await createRefreshCookie({ slug, username, userId });
 
-    const pdfStream = await new FeedbackPdfGenerator(url, cookie, { ...pdfConfig.puppeteer, lang }).getPdfStream();
+    const pdfStream = await new FeedbackPdfGenerator(url, cookie, { ...pdfConfig.puppeteer, lang }).getPdfStream(signal);
 
     return { pdfStream, filename, url };
   };

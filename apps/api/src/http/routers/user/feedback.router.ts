@@ -4,6 +4,7 @@ import { initServer } from '@ts-rest/express';
 import { Op } from 'sequelize';
 
 import ioc from '@intake24/api/ioc';
+import { abortOnClose } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
 import { Survey, SurveySubmission, UserSurveyAlias } from '@intake24/db';
 
@@ -12,13 +13,14 @@ import { ForbiddenError, NotFoundError } from '../../errors';
 export function feedback() {
   const feedbackRateLimiter = ioc.cradle.rateLimiter.createMiddleware('feedback', {
     message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.feedback'),
-    skipFailedRequests: true,
   });
 
   return initServer().router(contract.user.feedback, {
     download: {
       middleware: [feedbackRateLimiter],
       handler: async ({ query, req, res }) => {
+        const signal = abortOnClose(req, res);
+
         const { lang, survey: slug, submissions } = query;
         const { userId } = req.scope.cradle.user;
 
@@ -50,6 +52,7 @@ export function feedback() {
           username,
           submissions,
           lang,
+          signal,
         });
         const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
 

@@ -5,7 +5,7 @@ import { initServer } from '@ts-rest/express';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { respondentResponse } from '@intake24/api/http/responses/admin';
-import { atob } from '@intake24/api/util';
+import { abortOnClose, atob } from '@intake24/api/util';
 import { contract } from '@intake24/common/contracts';
 import { Survey, UserSurveyAlias } from '@intake24/db';
 
@@ -177,12 +177,19 @@ export function respondent() {
         permission('surveys'),
       ],
       handler: async ({ params: { surveyId, username }, query: { submissions }, req, res }) => {
+        const signal = abortOnClose(req, res);
+
         await req.scope.cradle.aclService.findAndCheckRecordAccess(Survey, 'respondents', {
           attributes: ['id'],
           where: { id: surveyId },
         });
 
-        const { pdfStream, filename } = await req.scope.cradle.feedbackService.getFeedbackStream({ surveyId, username, submissions });
+        const { pdfStream, filename } = await req.scope.cradle.feedbackService.getFeedbackStream({
+          surveyId,
+          username,
+          submissions,
+          signal,
+        });
 
         res.set('content-disposition', `attachment; filename=${filename}`);
 
