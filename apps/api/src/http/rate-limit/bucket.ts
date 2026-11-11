@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 
 export type BucketCount = 'all' | 'failures' | 'successes';
 
-export type RateLimitMessage = 'generic' | 'login' | 'password' | 'verify' | 'generateUser' | 'feedback' | 'rating';
+export type RateLimitMessage = 'generic' | 'login' | 'password' | 'verify' | 'mfaVerify' | 'generateUser' | 'feedback' | 'rating';
 
 export type BucketOptions = {
   /**
