@@ -8,12 +8,20 @@
   "none": "Pas de mission",
   "cron": "CRON",
   "invalidCron": "Entrée CRON invalide",
+  "cronPresets": {
+    "_": "Préréglages CRON",
+    "hourly": "Toutes les heures",
+    "daily": "Tous les jours (à minuit)",
+    "weekly": "Toutes les semaines (dimanche à minuit)",
+    "monthly": "Tous les mois (le 1er à minuit)"
+  },
   "schedule": "Emploi du temps",
   "job": "Tâche",
   "run": {
     "_": "Lancer la tâche",
     "confirm": "Mettre la tâche dans la file d'attente",
-    "next": "Lancer la tâche suivante"
+    "next": "Lancer la tâche suivante",
+    "confirmed": "La tâche de la mission « {name} » a été mise dans la file d'attente"
   },
   "bullJob": "Faire avancer la tâche (haut de la file d'attente)",
   "file": "Localisation du fichier"

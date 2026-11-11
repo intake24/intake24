@@ -118,6 +118,7 @@ export const PopularitySearchUpdateCounters = z.object({
   localeCode: z.string().nonempty(),
   foodCodes: z.array(z.string().nonempty()),
 });
+export const PortionSizeImageCatalogExport = z.record(z.string(), z.never());
 export const PurgeExpiredTokens = z.record(z.string(), z.never());
 
 export const resources = [
@@ -274,6 +275,7 @@ export const jobParams = z.object({
   NutrientTableMappingImport,
   NutrientTableMappingExport,
   PopularitySearchUpdateCounters,
+  PortionSizeImageCatalogExport,
   PurgeExpiredTokens,
   ResourceExport,
   SurveyAuthUrlsExport,
@@ -314,6 +316,7 @@ export const jobTypeParams = z.union([
   NutrientTableMappingImport,
   NutrientTableMappingExport,
   PopularitySearchUpdateCounters,
+  PortionSizeImageCatalogExport,
   PurgeExpiredTokens,
   ResourceExport,
   SurveyAuthUrlsExport,
@@ -481,6 +484,7 @@ export const jobTypes = [
   'LocaleIndexBuild',
   'LocalesSync',
   'PopularitySearchUpdateCounters',
+  'PortionSizeImageCatalogExport',
   'PurgeExpiredTokens',
   'ResourceExport',
   'SurveyEventNotification',
@@ -562,6 +566,7 @@ export const defaultJobsParams: JobParams = {
     localeCode: '',
     foodCodes: [],
   },
+  PortionSizeImageCatalogExport: {},
   PurgeExpiredTokens: {},
   ResourceExport: {
     resource: 'nutrient-types',

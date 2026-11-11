@@ -5,8 +5,7 @@
         {{ item.user?.email ?? item.userId }}
       </template>
       <template #[`item.successful`]="{ item }">
-        <v-icon v-if="item.successful" color="success" icon="$check" />
-        <v-icon v-else color="error" icon="$times" />
+        <job-status-icon :progress="item.progress" :successful="item.successful" />
       </template>
       <template #[`item.startedAt`]="{ item }">
         {{ formatDateTime(item.startedAt) }}
@@ -19,6 +18,7 @@
 import type { DataTableHeader } from '@intake24/admin/components/data-tables';
 
 import { DataTable } from '@intake24/admin/components/data-tables';
+import { JobStatusIcon } from '@intake24/admin/components/jobs';
 import { BrowseLayout } from '@intake24/admin/components/layouts';
 import { useDateTime } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/ui';

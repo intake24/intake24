@@ -54,13 +54,17 @@
                 <pre>{{ readableCron }}</pre>
               </template>
             </v-text-field>
-          </v-col>
-          <v-col v-if="data.active" cols="12" md="6">
-            <div class="d-flex align-center" style="height: 100%">
-              <span v-if="entry.bullJob?.next" class="text-body-large">
-                {{ $t('tasks.run.next') }}: {{ formatDateTime(new Date(entry.bullJob.next)) }}
-              </span>
-            </div>
+            <v-select
+              class="mt-4"
+              hide-details="auto"
+              :items="cronPresets"
+              :label="$t('tasks.cronPresets._')"
+              :model-value="selectedCronPreset"
+              name="cronPreset"
+              prepend-inner-icon="far fa-calendar"
+              variant="outlined"
+              @update:model-value="selectCronPreset"
+            />
           </v-col>
           <v-col cols="12" md="6">
             <v-switch
@@ -70,6 +74,9 @@
               :label="$t('common.action.active')"
               name="active"
             />
+            <div v-if="data.active && entry.bullJob?.next" class="text-body-large">
+              {{ $t('tasks.run.next') }}: {{ formatDateTime(new Date(entry.bullJob.next)) }}
+            </div>
           </v-col>
           <v-col cols="12">
             <v-textarea
@@ -111,6 +118,13 @@ import { jobParams } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultJobsParams, jobTypes } from '@intake24/common/types';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
+
+const cronPresetValues = {
+  hourly: '0 * * * *',
+  daily: '0 0 * * *',
+  weekly: '0 0 * * 0',
+  monthly: '0 0 1 * *',
+};
 
 type TaskForm = {
   id: string | null;
@@ -170,7 +184,15 @@ export default defineComponent({
 
     const paramErrors = computed(() => Object.keys(data.value.params).map(key => `params.${key}`));
 
+    const cronPresets = Object.entries(cronPresetValues).map(([key, value]) => ({
+      value,
+      title: i18n.t(`tasks.cronPresets.${key}`),
+    }));
+    const selectedCronPreset = computed(() => cronPresets.find(preset => preset.value === data.value.cron)?.value ?? null);
+
     return {
+      cronPresets,
+      selectedCronPreset,
       defaultJobsParams,
       entry,
       entryLoaded,
@@ -205,6 +227,11 @@ export default defineComponent({
     jobChanged() {
       this.errors.clear('job');
       this.updateParams();
+    },
+
+    selectCronPreset(cron: string) {
+      this.data.cron = cron;
+      this.errors.clear('cron');
     },
 
     updateParams() {

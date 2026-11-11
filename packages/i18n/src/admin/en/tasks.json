@@ -8,12 +8,20 @@
   "none": "No task",
   "cron": "CRON",
   "invalidCron": "Invalid CRON entry",
+  "cronPresets": {
+    "_": "CRON presets",
+    "hourly": "Every hour",
+    "daily": "Every day (at midnight)",
+    "weekly": "Every week (Sunday at midnight)",
+    "monthly": "Every month (1st day at midnight)"
+  },
   "schedule": "Schedule",
   "job": "Job",
   "run": {
     "_": "Trigger job",
     "confirm": "Push the job to the queue",
-    "next": "Next job run"
+    "next": "Next job run",
+    "confirmed": "Job for task \"{name}\" has been pushed to the queue"
   },
   "bullJob": "Bull job (Queue entry)",
   "file": "File location"

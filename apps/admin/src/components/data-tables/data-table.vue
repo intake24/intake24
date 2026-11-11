@@ -28,6 +28,7 @@
     </template>
     <template #item.action="{ item }">
       <slot name="action" v-bind="{ item }">
+        <slot name="action-prepend" v-bind="{ item }" />
         <action-bar
           :actions="actions.filter((action) => action !== 'create')"
           :api="api"
