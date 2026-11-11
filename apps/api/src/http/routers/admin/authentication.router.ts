@@ -1,6 +1,6 @@
 import { initServer } from '@ts-rest/express';
 
-import { emailAccountKey, loginRateLimiting } from '@intake24/api/http/rate-limit';
+import { emailAccountKey, loginRateLimiting, mfaVerifyRateLimit } from '@intake24/api/http/rate-limit';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 
@@ -9,6 +9,7 @@ import { attachRefreshToken } from '../util';
 
 export function authentication() {
   const loginRateLimit = loginRateLimiting('admin', ioc.cradle);
+  const mfaVerifyLimit = mfaVerifyRateLimit(ioc.cradle.rateLimiter.bucket);
 
   return initServer().router(contract.admin.authentication, {
     login: {
@@ -37,21 +38,24 @@ export function authentication() {
 
       return { status: 200, body: result };
     },
-    verify: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
-      const { accessToken, refreshToken, email } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
+    verify: {
+      middleware: [mfaVerifyLimit],
+      handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
+        const { accessToken, refreshToken, email } = await req.scope.cradle.authenticationService.verify(body, { req, userAgent });
 
-      loginRateLimit.issueDeviceCookie(req, res, emailAccountKey(email));
+        loginRateLimit.issueDeviceCookie(req, res, emailAccountKey(email));
 
-      attachRefreshToken(
-        refreshToken,
-        res,
-        req.scope.cradle.securityConfig.jwt.admin.cookie,
-      );
+        attachRefreshToken(
+          refreshToken,
+          res,
+          req.scope.cradle.securityConfig.jwt.admin.cookie,
+        );
 
-      return {
-        status: 200,
-        body: { accessToken },
-      };
+        return {
+          status: 200,
+          body: { accessToken },
+        };
+      },
     },
     refresh: async ({ req, res }) => {
       const { name } = ioc.cradle.securityConfig.jwt.admin.cookie;
