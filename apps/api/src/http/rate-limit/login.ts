@@ -26,6 +26,10 @@ export type LoginRateLimitOptions = {
  * A valid device cookie for the account replaces the account and IP buckets with a bucket of its
  * own, so that failures from other clients cannot lock the device out. Once the device bucket is
  * exhausted, the cookie is ignored and the request falls back to the account and IP buckets.
+ *
+ * A rejected request still counts as a failure in every bucket before the one that rejected it.
+ * The IP bucket comes before the account buckets so that, once it is exhausted, new account keys
+ * are no longer created in the store.
  */
 export function loginRateLimit({ bucket, deviceCookie, cookieName, account }: LoginRateLimitOptions): RequestHandler[] {
   const hasDevice = (req: Request) => req.rateLimitDeviceId !== undefined;
@@ -49,6 +53,12 @@ export function loginRateLimit({ bucket, deviceCookie, cookieName, account }: Lo
         next();
       },
     }),
+    bucket('loginIp', {
+      key: req => ipKey(req),
+      skip: hasDevice,
+      count: 'failures',
+      message: 'login',
+    }),
     bucket('loginAccountIp', {
       key: req => req.rateLimitAccount && `${req.rateLimitAccount}:${ipKey(req)}`,
       skip: hasDevice,
@@ -57,12 +67,6 @@ export function loginRateLimit({ bucket, deviceCookie, cookieName, account }: Lo
     }),
     bucket('loginAccount', {
       key: req => req.rateLimitAccount,
-      skip: hasDevice,
-      count: 'failures',
-      message: 'login',
-    }),
-    bucket('loginIp', {
-      key: req => ipKey(req),
       skip: hasDevice,
       count: 'failures',
       message: 'login',
