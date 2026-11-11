@@ -7,7 +7,7 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/feedback-schemes';
-  const permissions = ['feedback-schemes', 'feedback-schemes:create'];
+  const permissions = ['feedback-schemes:create'];
 
   let input: FeedbackSchemeCreationAttributes;
   let output: FeedbackSchemeCreationAttributes;

@@ -33,14 +33,16 @@ export default class RoleUser extends BaseModel<
 > {
   @ForeignKey(() => Role)
   @Column({
-    allowNull: true,
+    allowNull: false,
+    primaryKey: true,
     type: DataType.BIGINT,
   })
   declare roleId: string;
 
   @ForeignKey(() => User)
   @Column({
-    allowNull: true,
+    allowNull: false,
+    primaryKey: true,
     type: DataType.BIGINT,
   })
   declare userId: string;

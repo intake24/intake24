@@ -29,7 +29,7 @@ export function nutrientTable() {
   return initServer().router(contract.admin.nutrientTable, {
     browse: {
       middleware: [
-        permission('nutrient-tables', 'nutrient-tables:browse'),
+        permission('nutrient-tables:browse'),
       ],
       handler: async ({ query }) => {
         const nutrientTables = await NutrientTable.paginate({
@@ -48,7 +48,7 @@ export function nutrientTable() {
     },
     store: {
       middleware: [
-        permission('nutrient-tables', 'nutrient-tables:create'),
+        permission('nutrient-tables:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id);
@@ -73,7 +73,7 @@ export function nutrientTable() {
     },
     read: {
       middleware: [
-        permission('nutrient-tables', 'nutrient-tables:read'),
+        permission('nutrient-tables:read'),
       ],
       handler: async ({ params: { nutrientTableId }, req }) => {
         const nutrientTable = await req.scope.cradle.nutrientTableService.getTable(nutrientTableId);
@@ -83,7 +83,7 @@ export function nutrientTable() {
     },
     update: {
       middleware: [
-        permission('nutrient-tables', 'nutrient-tables:edit'),
+        permission('nutrient-tables:edit'),
       ],
       handler: async ({ body, params: { nutrientTableId }, req }) => {
         const nutrientTable = await req.scope.cradle.nutrientTableService.updateTable(
@@ -96,7 +96,7 @@ export function nutrientTable() {
     },
     destroy: {
       middleware: [
-        permission('nutrient-tables', 'nutrient-tables:delete'),
+        permission('nutrient-tables:delete'),
       ],
       handler: async ({ params: { nutrientTableId }, req }) => {
         await req.scope.cradle.nutrientTableService.deleteTable(nutrientTableId);
@@ -106,7 +106,7 @@ export function nutrientTable() {
     },
     tasks: {
       middleware: [
-        permission('nutrient-tables', 'nutrient-tables:tasks'),
+        permission('nutrient-tables:tasks'),
         upload.single('params[file]'),
       ],
       handler: async ({ file, params: { nutrientTableId }, body: { params, type }, req }) => {
@@ -135,7 +135,7 @@ export function nutrientTable() {
     },
     records: {
       middleware: [
-        permission('nutrient-tables', 'nutrient-tables:edit'),
+        permission('nutrient-tables:edit'),
       ],
       handler: async ({ body: { records }, params: { nutrientTableId }, req }) => {
         await req.scope.cradle.nutrientTableService.updateRecords(nutrientTableId, records);

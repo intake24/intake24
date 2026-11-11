@@ -6,7 +6,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales:synonym-sets'];
+  const permissions = ['locales:synonym-sets'];
 
   let url: string;
   let invalidUrl: string;

@@ -1,7 +1,7 @@
 import type { ModelStatic } from 'sequelize';
 
 import type { SecurableContract } from '@intake24/common/contracts/admin';
-import type { Securable, UserSecurableAttributes, UserSecurableCreationAttributes } from '@intake24/db';
+import type { Securable } from '@intake24/db';
 
 import { initServer } from '@ts-rest/express';
 import { Op } from 'sequelize';
@@ -9,10 +9,9 @@ import { Op } from 'sequelize';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
-import ioc from '@intake24/api/ioc';
 import { isSecurableType } from '@intake24/common/security';
 import { modelToRequestParam, randomString, securableToResource } from '@intake24/common/util';
-import { User, UserSecurable } from '@intake24/db';
+import { User } from '@intake24/db';
 
 export function securable(securable: ModelStatic<Securable>, contract: SecurableContract) {
   const securableType = securable.name;
@@ -21,46 +20,6 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
 
   const resource = securableToResource(securableType);
   const paramId = modelToRequestParam(securableType);
-
-  const addSecurableAccess = async (
-    user: User,
-    resource: string,
-    records: UserSecurableCreationAttributes[],
-    removeSecurable?: Pick<UserSecurableAttributes, 'userId' | 'securableType' | 'securableId'>,
-  ) => {
-    if (removeSecurable)
-      await UserSecurable.destroy({ where: removeSecurable });
-
-    await Promise.all([
-      UserSecurable.bulkCreate(records),
-      ioc.cradle.adminUserService.addPermissionByName(user, resource),
-    ]);
-  };
-
-  const removeSecurableAccess = async (
-    user: User,
-    resource: string,
-    securable: Pick<UserSecurableAttributes, 'userId' | 'securableType' | 'securableId'>,
-  ) => {
-    const { userId, securableType, securableId } = securable;
-    const otherSecurables = await UserSecurable.findAll({
-      attributes: ['userId'],
-      where: {
-        userId,
-        securableType,
-        securableId: { [Op.ne]: securableId },
-      },
-    });
-
-    await Promise.all(
-      [
-        UserSecurable.destroy({ where: securable }),
-        otherSecurables.length
-          ? null
-          : ioc.cradle.adminUserService.removePermissionByName(user, resource),
-      ].filter(Boolean),
-    );
-  };
 
   return initServer().router(contract, {
     browse: {
@@ -107,24 +66,25 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
           where: { id: securableId },
         });
 
-        const user = await adminUserService.create({
+        const existingUser = await adminUserService.findUserByEmailForSecurable(email);
+
+        if (existingUser && !existingUser.assignable) {
+          throw ValidationError.from({
+            code: '$unique',
+            path: 'email',
+            i18n: { type: 'unique._' },
+          });
+        }
+
+        const userId = existingUser?.id ?? (await adminUserService.create({
           email,
           name,
           phone,
           password: randomString(12),
           verifiedAt: new Date(),
-        });
+        })).id;
 
-        if (actions.length) {
-          const records = actions.map(action => ({
-            userId: user.id,
-            securableId,
-            securableType,
-            action,
-          }));
-
-          await addSecurableAccess(user, resource, records);
-        }
+        await adminUserService.setSecurableActions(userId, { securableType, securableId }, actions);
 
         return { status: 201, body: undefined };
       },
@@ -137,45 +97,19 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
         // @ts-expect-error dynamic contract type issue
         const { [paramId]: securableId, userId } = params;
 
+        const { aclService, adminUserService } = req.scope.cradle;
+
         const [, user] = await Promise.all([
-          req.scope.cradle.aclService.findAndCheckRecordAccess(securable, 'securables', {
+          aclService.findAndCheckRecordAccess(securable, 'securables', {
             attributes: ['id'],
             where: { id: securableId },
           }),
-          User.findOne({
-            attributes: ['id'],
-            where: {
-              id: userId,
-              email: { [Op.ne]: null },
-            },
-            include: [
-              {
-                association: 'securables',
-                required: false,
-                where: { securableType, securableId },
-              },
-            ],
-          }),
+          adminUserService.findAssignableUser(userId),
         ]);
         if (!user)
           throw new NotFoundError();
 
-        const securableInput = { userId, securableId, securableType };
-
-        if (actions.length) {
-          const currentActions = user.securables?.map(sec => sec.action).sort() ?? [];
-          const actionsMatch
-            = actions.length === currentActions.length
-              && actions.sort().every((action, idx) => action === currentActions[idx]);
-
-          if (!actionsMatch) {
-            const records = actions.map(action => ({ ...securableInput, action }));
-            await addSecurableAccess(user, resource, records, securableInput);
-          }
-        }
-        else {
-          await removeSecurableAccess(user, resource, securableInput);
-        }
+        await adminUserService.setSecurableActions(userId, { securableType, securableId }, actions);
 
         return { status: 200, body: undefined };
       },
@@ -188,7 +122,7 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
         // @ts-expect-error dynamic contract type issue
         const { [paramId]: securableId, userId } = params;
 
-        const { aclService } = req.scope.cradle;
+        const { aclService, adminUserService } = req.scope.cradle;
 
         const [, user] = await Promise.all([
           aclService.findAndCheckRecordAccess(securable, 'securables', {
@@ -206,7 +140,7 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
         if (!user)
           throw new NotFoundError();
 
-        await removeSecurableAccess(user, resource, { userId, securableId, securableType });
+        await adminUserService.removeSecurableAccess(userId, { securableType, securableId });
 
         return { status: 204, body: undefined };
       },
@@ -217,7 +151,9 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       ],
       // @ts-expect-error dynamic contract type issue
       handler: async ({ params: { [paramId]: securableId }, query: { search }, req }) => {
-        await req.scope.cradle.aclService.findAndCheckRecordAccess(securable, 'securables', {
+        const { aclService, adminUserService } = req.scope.cradle;
+
+        await aclService.findAndCheckRecordAccess(securable, 'securables', {
           attributes: ['id'],
           where: { id: securableId },
         });
@@ -225,30 +161,10 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
         if (!search)
           return { status: 200, body: [] };
 
-        const users = await User.findAll({
-          attributes: ['id', 'name', 'email'],
-          where: {
-            email: { [Op.ne]: null },
-            '$securables.user_id$': { [Op.eq]: null },
-            [Op.or]: {
-              name: { [Op.iLike]: `%${search}%` },
-              email: { [Op.iLike]: `%${search}%` },
-            },
-          },
-          order: [
-            ['email', 'ASC'],
-          ],
-          limit: 10,
-          subQuery: false,
-          include: [
-            {
-              association: 'securables',
-              attributes: [],
-              required: false,
-              where: { securableType, securableId },
-            },
-          ],
-        });
+        const match = await aclService.hasPermission('users:browse')
+          ? 'partial'
+          : 'exact';
+        const users = await adminUserService.searchAssignableUsers({ securableType, securableId }, search, match);
 
         return { status: 200, body: users };
       },
@@ -259,28 +175,21 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       ],
       // @ts-expect-error dynamic contract type issue
       handler: async ({ body: { userId }, params: { [paramId]: securableId }, req }) => {
-        if (userId) {
-          const user = await User.findOne({
-            attributes: ['id'],
-            where: {
-              id: userId,
-              email: { [Op.ne]: null },
-            },
+        const { aclService, adminUserService } = req.scope.cradle;
+
+        if (userId && !await adminUserService.findAssignableUser(userId)) {
+          throw ValidationError.from({
+            path: 'userId',
+            i18n: { type: 'exists._' },
           });
-          if (!user) {
-            throw ValidationError.from({
-              path: 'userId',
-              i18n: { type: 'exists._' },
-            });
-          }
         }
 
-        const securableRecord = await req.scope.cradle.aclService.findAndCheckRecordAccess(securable, 'securables', {
+        const securableRecord = await aclService.findAndCheckRecordAccess(securable, 'securables', {
           attributes: ['id', 'ownerId'],
           where: { id: securableId },
         });
 
-        await securableRecord.update({ ownerId: userId });
+        await adminUserService.setSecurableOwner(securableRecord, userId);
 
         return { status: 200, body: undefined };
       },

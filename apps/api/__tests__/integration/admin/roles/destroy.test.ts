@@ -5,7 +5,7 @@ import { Permission, Role } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/roles';
-  const permissions = ['acl', 'roles', 'roles:delete'];
+  const permissions = ['acl', 'roles:delete'];
 
   let url: string;
   let invalidUrl: string;

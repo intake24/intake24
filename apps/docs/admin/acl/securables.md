@@ -16,6 +16,7 @@ Securable permissions can be granted / revoked for any specific record in `Secur
 <!-- prettier-ignore -->
 - [Securables](#securables)
   - [Securable permissions](#securable-permissions)
+    - [Assigning users](#assigning-users)
   - [Record ownership](#record-ownership)
   - [Record visibility](#record-visibility)
     - [Visibility types](#visibility-types)
@@ -35,6 +36,19 @@ Securable permissions can be granted / revoked for any specific record in `Secur
 | use        | Control record `visibility`     |
 | [action]   | Specific record action          |
 
+Securable access to any record of the resource also gives user the [resource access permission](/admin/acl/resources#resource-access-permission), so the resource section is available in the Admin UI. When last securable access is removed (or the record is deleted) and user doesn't own any other record of the resource, resource access is removed as well.
+
+### Assigning users
+
+User lookup in `Security` tab searches only users, who can be given the access:
+
+- users with `users:browse` permission can search by part of name or email
+- other users need to enter the **exact email address** of the user
+
+Survey respondents (users with respondent access only, without any other permission or securable access) are never listed and cannot be given securable access or record ownership.
+
+Adding user by email, which already belongs to existing user, grants the access to that user instead of creating a new account.
+
 ## Record ownership
 
 `Security` also allows to manage ownership of the record. Ownership can be added / modified / removed.
@@ -44,6 +58,8 @@ If user `creates new record` or `copies existing record`, user automatically bec
 
 Owner of the record has full access to the record, without the need to grant additional permissions from above table.
 :::
+
+Ownership of any record of the resource also gives user the [resource access permission](/admin/acl/resources#resource-access-permission).
 
 ## Record visibility
 

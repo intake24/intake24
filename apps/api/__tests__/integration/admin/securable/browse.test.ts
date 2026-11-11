@@ -8,7 +8,7 @@ import { modelToResource } from '@intake24/common/util';
 export default (type: SecurableType) => () => {
   const resource = modelToResource(type);
   const baseUrl = `/api/admin/${resource}`;
-  const permissions = [resource, `${resource}:securables`];
+  const permissions = [`${resource}:securables`];
 
   let url: string;
   let invalidUrl: string;
@@ -49,7 +49,7 @@ export default (type: SecurableType) => () => {
 
   describe('authenticated / securables authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission([resource]);
+      await suite.util.setPermission([]);
     });
 
     it('should return 200 and data when securable set', async () => {

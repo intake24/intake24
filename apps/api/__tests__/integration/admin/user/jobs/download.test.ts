@@ -24,7 +24,7 @@ export default () => {
       },
     };
 
-    await suite.util.setPermission(['surveys', 'surveys:tasks']);
+    await suite.util.setPermission(['surveys:tasks']);
 
     const { body } = await request(suite.app)
       .post(`/api/admin/surveys/${suite.data.system.Survey.id}/tasks`)

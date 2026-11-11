@@ -7,7 +7,7 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/faqs';
-  const permissions = ['faqs', 'faqs:create'];
+  const permissions = ['faqs:create'];
 
   let input: FAQRequest;
   let output: FAQRequest;

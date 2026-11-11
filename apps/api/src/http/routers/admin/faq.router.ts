@@ -10,7 +10,7 @@ import { permission } from '@intake24/api/http/middleware';
 import { faqResponse } from '@intake24/api/http/responses/admin';
 import { unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
-import { FAQ, securableScope, UserSecurable } from '@intake24/db';
+import { FAQ, securableScope } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { faqId }: { faqId?: string } = {}) {
   const where: WhereOptions = faqId
@@ -76,7 +76,7 @@ export function faq() {
     },
     store: {
       middleware: [
-        permission('faqs', 'faqs:create'),
+        permission('faqs:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
@@ -139,17 +139,12 @@ export function faq() {
           ],
         });
 
-        const { id: securableId, surveys } = faq;
+        const { surveys } = faq;
 
         if (!surveys || surveys.length)
           throw new ForbiddenError('FAQ cannot be deleted. There are surveys using this FAQ.');
 
-        await Promise.all([
-          UserSecurable.destroy({
-            where: { securableId, securableType: 'FAQ' },
-          }),
-          faq.destroy(),
-        ]);
+        await req.scope.cradle.adminUserService.destroySecurable('FAQ', faq);
 
         return { status: 204, body: undefined };
       },

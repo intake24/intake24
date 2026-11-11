@@ -5,7 +5,7 @@ import { FeedbackScheme } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/feedback-schemes';
-  const permissions = ['feedback-schemes', 'feedback-schemes:delete'];
+  const permissions = ['feedback-schemes:delete'];
 
   let url: string;
   let invalidUrl: string;
@@ -41,7 +41,7 @@ export default () => {
 
   describe('authenticated / securables authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(['feedback-schemes']);
+      await suite.util.setPermission([]);
     });
 
     it('should return 204 and no content when securable set', async () => {

@@ -7,7 +7,7 @@ import { sleep } from '@intake24/api/util';
 
 export default () => {
   const baseUrl = '/api/admin/jobs';
-  const permissions = ['jobs', 'jobs:read'];
+  const permissions = ['jobs:read'];
 
   let url: string;
   let invalidUrl: string;

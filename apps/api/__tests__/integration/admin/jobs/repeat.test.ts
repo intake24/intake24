@@ -3,7 +3,7 @@ import { Job } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/jobs';
-  const permissions = ['jobs', 'jobs:edit'];
+  const permissions = ['jobs:edit'];
 
   let url: string;
   let invalidUrl: string;

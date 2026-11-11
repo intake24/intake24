@@ -53,7 +53,7 @@ export function drinkwareSet() {
   return initServer().router(contract.admin.images.drinkwareSet, {
     browse: {
       middleware: [
-        permission('drinkware-sets', 'drinkware-sets:browse'),
+        permission('drinkware-sets:browse'),
       ],
       handler: async ({ query, req }) => {
         const drinkwareSets = await req.scope.cradle.drinkwareSetService.getDrinkwareSets(query);
@@ -63,7 +63,7 @@ export function drinkwareSet() {
     },
     store: {
       middleware: [
-        permission('drinkware-sets', 'drinkware-sets:create'),
+        permission('drinkware-sets:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id);
@@ -78,7 +78,7 @@ export function drinkwareSet() {
     },
     read: {
       middleware: [
-        permission('drinkware-sets', 'drinkware-sets:read'),
+        permission('drinkware-sets:read'),
       ],
       handler: async ({ params: { drinkwareSetId }, req }) => {
         const drinkwareSet = await req.scope.cradle.drinkwareSetService.getDrinkwareSet(drinkwareSetId);
@@ -90,7 +90,7 @@ export function drinkwareSet() {
     },
     update: {
       middleware: [
-        permission('drinkware-sets', 'drinkware-sets:edit'),
+        permission('drinkware-sets:edit'),
         upload.any(),
       ],
       handler: async ({ body, files, params: { drinkwareSetId }, req }) => {
@@ -137,7 +137,7 @@ export function drinkwareSet() {
     },
     destroy: {
       middleware: [
-        permission('drinkware-sets', 'drinkware-sets:delete'),
+        permission('drinkware-sets:delete'),
       ],
       handler: async ({ params: { drinkwareSetId } }) => {
         const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, {

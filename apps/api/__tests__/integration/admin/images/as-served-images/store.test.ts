@@ -10,7 +10,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 export default () => {
   const url = '/api/admin/images/as-served-sets/asServedSetForImages/images';
   const invalidUrl = '/api/admin/images/as-served-sets/invalidAsServedSetForImages/images';
-  const permissions = ['as-served-sets', 'as-served-sets:create'];
+  const permissions = ['as-served-sets:create'];
 
   const fileName = 'asServedImage_001.jpg';
   const label = { en: 'asServedImage_001_label' };

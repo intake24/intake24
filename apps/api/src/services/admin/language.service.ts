@@ -14,9 +14,10 @@ import { Language, LanguageTranslation } from '@intake24/db';
 import { compareMessageKeys, getDefaultI18nMessages, mergeTranslations } from '@intake24/i18n';
 
 function languageService({
+  adminUserService,
   i18nStore,
   logger: globalLogger,
-}: Pick<IoC, 'i18nStore' | 'logger'>) {
+}: Pick<IoC, 'adminUserService' | 'i18nStore' | 'logger'>) {
   const logger = globalLogger.child({ service: 'LanguageService' });
 
   /**
@@ -175,7 +176,7 @@ function languageService({
    */
   const deleteLanguage = async (languageId: string): Promise<void> => {
     const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId, {
-      attributes: ['id'],
+      attributes: ['id', 'ownerId'],
     });
     if (!language || !language.adminLocales || !language.surveyLocales)
       throw new NotFoundError();
@@ -186,7 +187,7 @@ function languageService({
       );
     }
 
-    await language.destroy();
+    await adminUserService.destroySecurable('Language', language);
   };
 
   /**

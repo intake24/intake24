@@ -120,7 +120,7 @@ export function locale() {
     },
     store: {
       middleware: [
-        permission('locales', 'locales:create'),
+        permission('locales:create'),
       ],
       handler: async ({ body, req }) => {
         await Promise.all([

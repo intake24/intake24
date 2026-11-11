@@ -9,7 +9,7 @@ import { Permission, Role } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/users';
-  const permissions = ['acl', 'users', 'users:create'];
+  const permissions = ['acl', 'users:create'];
 
   let input: UserRequest;
   let output: Omit<UserInput, 'password' | 'permissions' | 'roles'>;

@@ -11,7 +11,7 @@ export function signInLog() {
   return initServer().router(contract.admin.signInLog, {
     browse: {
       middleware: [
-        permission('sign-in-logs', 'sign-in-logs:browse'),
+        permission('sign-in-logs:browse'),
       ],
       handler: async ({ query }) => {
         const signInLogs = await SignInLog.paginate<() => SignInLogAttributes>({
@@ -27,7 +27,7 @@ export function signInLog() {
     },
     read: {
       middleware: [
-        permission('sign-in-logs', 'sign-in-logs:read'),
+        permission('sign-in-logs:read'),
       ],
       handler: async ({ params: { signInLogId } }) => {
         const signInLog = await SignInLog.findByPk(signInLogId);
@@ -39,7 +39,7 @@ export function signInLog() {
     },
     destroy: {
       middleware: [
-        permission('sign-in-logs', 'sign-in-logs:delete'),
+        permission('sign-in-logs:delete'),
       ],
       handler: async ({ params: { signInLogId } }) => {
         const signInLog = await SignInLog.findByPk(signInLogId, {

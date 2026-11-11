@@ -16,7 +16,7 @@ export function job() {
   return initServer().router(contract.admin.job, {
     browse: {
       middleware: [
-        permission('jobs', 'jobs:browse'),
+        permission('jobs:browse'),
       ],
       handler: async ({ query }) => {
         const jobs = await Job.paginate<() => JobAttributes>({
@@ -53,7 +53,7 @@ export function job() {
     },
     read: {
       middleware: [
-        permission('jobs', 'jobs:read'),
+        permission('jobs:read'),
       ],
       handler: async ({ params: { jobId } }) => {
         const job = await Job.findByPk(jobId, {
@@ -73,7 +73,7 @@ export function job() {
     },
     destroy: {
       middleware: [
-        permission('jobs', 'jobs:delete'),
+        permission('jobs:delete'),
       ],
       handler: async ({ params: { jobId } }) => {
         const job = await Job.findByPk(jobId, {
@@ -89,7 +89,7 @@ export function job() {
     },
     download: {
       middleware: [
-        permission('jobs', 'jobs:read'),
+        permission('jobs:read'),
       ],
       handler: async ({ params: { jobId: id }, req, res }) => {
         const job = await Job.findOne({
@@ -125,7 +125,7 @@ export function job() {
     },
     repeat: {
       middleware: [
-        permission('jobs', 'jobs:edit'),
+        permission('jobs:edit'),
       ],
       handler: async ({ params: { jobId }, body, req }) => {
         const job = await Job.findByPk(jobId, {

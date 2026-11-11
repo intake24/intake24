@@ -32,7 +32,7 @@ export function task() {
   return initServer().router(contract.admin.task, {
     browse: {
       middleware: [
-        permission('tasks', 'tasks:browse'),
+        permission('tasks:browse'),
       ],
       handler: async ({ query }) => {
         const tasks = await Task.paginate({
@@ -51,7 +51,7 @@ export function task() {
     },
     store: {
       middleware: [
-        permission('tasks', 'tasks:create'),
+        permission('tasks:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
@@ -64,7 +64,7 @@ export function task() {
     },
     read: {
       middleware: [
-        permission('tasks', 'tasks:read'),
+        permission('tasks:read'),
       ],
       handler: async ({ params: { taskId }, req }) => {
         const task = await Task.findByPk(taskId);
@@ -84,7 +84,7 @@ export function task() {
     },
     update: {
       middleware: [
-        permission('tasks', 'tasks:edit'),
+        permission('tasks:edit'),
       ],
       handler: async ({ body, params: { taskId }, req }) => {
         await uniqueMiddleware(body.name, { taskId });
@@ -108,7 +108,7 @@ export function task() {
     },
     destroy: {
       middleware: [
-        permission('tasks', 'tasks:delete'),
+        permission('tasks:delete'),
       ],
       handler: async ({ params: { taskId }, req }) => {
         const task = await Task.findByPk(taskId, {
@@ -125,7 +125,7 @@ export function task() {
     },
     run: {
       middleware: [
-        permission('tasks', 'tasks:edit'),
+        permission('tasks:edit'),
       ],
       handler: async ({ params: { taskId }, req }) => {
         const { userId } = req.scope.cradle.user;

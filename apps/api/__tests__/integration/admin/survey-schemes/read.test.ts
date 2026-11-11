@@ -6,7 +6,7 @@ import { SurveyScheme } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/survey-schemes';
-  const permissions = ['survey-schemes', 'survey-schemes:read'];
+  const permissions = ['survey-schemes:read'];
 
   let url: string;
   let invalidUrl: string;
@@ -48,7 +48,7 @@ export default () => {
 
   describe('authenticated / securables authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(['survey-schemes']);
+      await suite.util.setPermission([]);
     });
 
     it('should return 200 and data when securable set', async () => {

@@ -3,7 +3,7 @@ import request from 'supertest';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const permissions = ['languages', 'languages:translations'];
+  const permissions = ['languages:translations'];
 
   let languageId: string;
   let url: string;

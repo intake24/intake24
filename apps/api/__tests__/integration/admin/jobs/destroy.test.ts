@@ -6,7 +6,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/jobs';
-  const permissions = ['jobs', 'jobs:delete'];
+  const permissions = ['jobs:delete'];
 
   let url: string;
   let invalidUrl: string;

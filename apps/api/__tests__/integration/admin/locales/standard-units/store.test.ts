@@ -4,7 +4,7 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales:standard-units'];
+  const permissions = ['locales:standard-units'];
 
   let url: string;
 

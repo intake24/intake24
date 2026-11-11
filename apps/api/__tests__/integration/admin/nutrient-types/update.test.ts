@@ -6,7 +6,7 @@ import ioc from '@intake24/api/ioc';
 
 export default () => {
   const baseUrl = '/api/admin/nutrient-types';
-  const permissions = ['nutrient-types', 'nutrient-types:edit'];
+  const permissions = ['nutrient-types:edit'];
 
   let url: string;
   let invalidUrl: string;

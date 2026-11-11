@@ -4,7 +4,7 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/permissions';
-  const permissions = ['acl', 'permissions', 'permissions:create'];
+  const permissions = ['acl', 'permissions:create'];
 
   let input: PermissionRequest;
 

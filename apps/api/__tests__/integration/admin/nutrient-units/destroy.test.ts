@@ -6,7 +6,7 @@ import ioc from '@intake24/api/ioc';
 
 export default () => {
   const baseUrl = '/api/admin/nutrient-units';
-  const permissions = ['nutrient-units', 'nutrient-units:delete'];
+  const permissions = ['nutrient-units:delete'];
 
   let url: string;
   let invalidUrl: string;

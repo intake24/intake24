@@ -5,7 +5,7 @@ import ioc from '@intake24/api/ioc';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales:food-builders'];
+  const permissions = ['locales:food-builders'];
 
   let url: string;
   // let invalidUrl: string;

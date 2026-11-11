@@ -3,7 +3,7 @@ import { NutrientTable } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/nutrient-tables';
-  const permissions = ['nutrient-tables', 'nutrient-tables:browse'];
+  const permissions = ['nutrient-tables:browse'];
 
   beforeAll(async () => {
     const input = mocker.foods.nutrientTable();

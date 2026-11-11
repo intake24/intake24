@@ -22,7 +22,6 @@ import {
   SurveyScheme,
   SurveySchemePrompt,
   updateSurveySchemeFields,
-  UserSecurable,
 } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { surveySchemeId }: { surveySchemeId?: string } = {}) {
@@ -89,7 +88,7 @@ export function surveyScheme() {
     },
     store: {
       middleware: [
-        permission('survey-schemes', 'survey-schemes:create'),
+        permission('survey-schemes:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
@@ -230,17 +229,12 @@ export function surveyScheme() {
             },
           ],
         });
-        const { id: securableId, surveys } = surveyScheme;
+        const { surveys } = surveyScheme;
 
         if (!surveys || surveys.length)
           throw new ForbiddenError('Scheme cannot be deleted. There are surveys using this scheme.');
 
-        await Promise.all([
-          UserSecurable.destroy({
-            where: { securableId, securableType: 'SurveyScheme' },
-          }),
-          surveyScheme.destroy(),
-        ]);
+        await req.scope.cradle.adminUserService.destroySecurable('SurveyScheme', surveyScheme);
 
         return { status: 204, body: undefined };
       },

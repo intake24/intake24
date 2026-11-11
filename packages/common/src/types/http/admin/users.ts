@@ -69,7 +69,12 @@ export const userEntry = userAttributes.extend({
 });
 export type UserEntry = z.infer<typeof userEntry>;
 
-export type UserListEntry = Pick<UserAttributes, 'id' | 'name' | 'email'>;
+export const userListEntry = userAttributes.pick({
+  id: true,
+  name: true,
+  email: true,
+});
+export type UserListEntry = z.infer<typeof userListEntry>;
 
 export const owner = userAttributes.pick({
   id: true,

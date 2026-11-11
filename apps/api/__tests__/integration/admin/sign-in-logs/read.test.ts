@@ -2,7 +2,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/sign-in-logs';
-  const permissions = ['sign-in-logs', 'sign-in-logs:read'];
+  const permissions = ['sign-in-logs:read'];
 
   let url: string;
   let invalidUrl: string;

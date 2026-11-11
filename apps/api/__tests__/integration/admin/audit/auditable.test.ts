@@ -44,7 +44,7 @@ export default (/* type: MediaModel */) => () => {
   });
 
   for (const resource of resources) {
-    const permList = [resource, `${resource}:audit`];
+    const permList = [`${resource}:audit`];
     const invalidUrl = `${baseUrl}/${resource}/999999`;
 
     const getUrl = () => `${baseUrl}/${resource}/${recordIds[resource]}`;
@@ -62,7 +62,7 @@ export default (/* type: MediaModel */) => () => {
         console.log(`Testing URL: ${url}`);
         console.log(permList);
         await suite.sharedTests.assert401and403('get', getUrl(), {
-          permissions: [resource, `${resource}:audit`],
+          permissions: [`${resource}:audit`],
         });
       });
 
@@ -78,7 +78,7 @@ export default (/* type: MediaModel */) => () => {
 
       describe(`${resource}: authenticated / securables authorized`, () => {
         beforeAll(async () => {
-          await suite.util.setPermission([resource]);
+          await suite.util.setPermission([]);
         });
 
         it(`${resource}: should return 403 when missing securable`, async () => {

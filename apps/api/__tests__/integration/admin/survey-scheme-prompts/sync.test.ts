@@ -8,7 +8,7 @@ import { SurveyScheme, SurveySchemePrompt } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/survey-scheme-prompts';
-  const permissions = ['survey-scheme-prompts', 'survey-scheme-prompts:sync'];
+  const permissions = ['survey-scheme-prompts:sync'];
 
   let url: string;
   let invalidUrl: string;

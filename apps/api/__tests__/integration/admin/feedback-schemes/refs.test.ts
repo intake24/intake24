@@ -17,7 +17,7 @@ export default () => {
 
   describe('authenticated / resource authorized', () => {
     it('should return 200 and refs', async () => {
-      await suite.util.setPermission('feedback-schemes');
+      await suite.util.setPermission(['feedback-schemes:browse']);
 
       await suite.sharedTests.assertReferencesResult('get', url, [
         'nutrientTypes',

@@ -50,7 +50,7 @@ export function guideImage() {
   return initServer().router(contract.admin.images.guideImage, {
     browse: {
       middleware: [
-        permission('guide-images', 'guide-images:browse'),
+        permission('guide-images:browse'),
       ],
       handler: async ({ query }) => {
         const guideImages = await GuideImage.paginate({
@@ -71,7 +71,7 @@ export function guideImage() {
     },
     store: {
       middleware: [
-        permission('guide-images', 'guide-images:create'),
+        permission('guide-images:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id);
@@ -91,7 +91,7 @@ export function guideImage() {
     },
     read: {
       middleware: [
-        permission('guide-images', 'guide-images:read'),
+        permission('guide-images:read'),
       ],
       handler: async ({ params: { guideImageId }, req }) => {
         const guideImage = await req.scope.cradle.portionSizeService.getGuideImage(guideImageId);
@@ -106,7 +106,7 @@ export function guideImage() {
     },
     update: {
       middleware: [
-        permission('guide-images', 'guide-images:edit'),
+        permission('guide-images:edit'),
       ],
       handler: async ({ body, params: { guideImageId }, req }) => {
         const guideImage = await req.scope.cradle.guideImageService.update(guideImageId, body);
@@ -119,7 +119,7 @@ export function guideImage() {
     },
     destroy: {
       middleware: [
-        permission('guide-images', 'guide-images:delete'),
+        permission('guide-images:delete'),
       ],
       handler: async ({ params: { guideImageId }, req }) => {
         await req.scope.cradle.guideImageService.destroy(guideImageId);

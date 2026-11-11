@@ -59,6 +59,10 @@ Enables / disables user sign-up (account creation) for Admin Tool.
 
 List of permission names, that new account should be assigned with.
 
+:::warning
+Only stored permissions can be assigned (e.g. `surveys:browse`). Plain resource permissions (e.g. `surveys`) are derived, not stored, and are silently ignored. See [resource access permission](/admin/acl/resources#resource-access-permission).
+:::
+
 - object-path: `signup.permissions`
 - dotenv var: `ACL_SIGNUP_PERMISSIONS` (`comma-delimited` string)
 - type: `string[]`

@@ -31,7 +31,6 @@ import {
   SurveyScheme,
   SystemLocale,
   updateSurveyFields,
-  UserSecurable,
 } from '@intake24/db';
 
 const actionToFieldsMap: Record<'overrides', readonly string[]> = {
@@ -168,7 +167,7 @@ export function survey() {
     },
     store: {
       middleware: [
-        permission('surveys', 'surveys:create'),
+        permission('surveys:create'),
       ],
       handler: async ({ body, req }) => {
         await Promise.all([
@@ -311,7 +310,7 @@ export function survey() {
     },
     put: {
       middleware: [
-        permission('surveys', 'surveys:edit'),
+        permission('surveys:edit'),
       ],
       handler: async ({ body, params: { surveyId }, req }) => {
         await uniqueMiddleware(body.name, { surveyId });
@@ -372,17 +371,12 @@ export function survey() {
             },
           ],
         });
-        const { id: securableId, submissions } = survey;
+        const { submissions } = survey;
 
         if (!submissions || submissions.length)
           throw new ForbiddenError('Survey cannot be deleted. It already contains submission data.');
 
-        await Promise.all([
-          UserSecurable.destroy({
-            where: { securableId, securableType: 'Survey' },
-          }),
-          survey.destroy(),
-        ]);
+        await req.scope.cradle.adminUserService.destroySecurable('Survey', survey);
 
         return { status: 204, body: undefined };
       },

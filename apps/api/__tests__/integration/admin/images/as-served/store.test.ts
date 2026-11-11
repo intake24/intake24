@@ -9,7 +9,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/images/as-served-sets';
-  const permissions = ['as-served-sets', 'as-served-sets:create'];
+  const permissions = ['as-served-sets:create'];
 
   const fileName = 'asServedSet_001.jpg';
   const id = 'asServedSet_001';

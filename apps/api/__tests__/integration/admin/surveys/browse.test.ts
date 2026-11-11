@@ -3,7 +3,7 @@ import { Survey } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys:browse'];
+  const permissions = ['surveys:browse'];
 
   let survey: Survey;
 
@@ -23,10 +23,10 @@ export default () => {
       await suite.sharedTests.assertPaginatedResult('get', url, { result: true });
     });
 
-    it('should return 200 and empty paginated results', async () => {
-      await suite.util.setPermission('surveys');
+    it('should return 403 without any record access', async () => {
+      await suite.util.setPermission([]);
 
-      await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
+      await suite.sharedTests.assertMissingAuthorization('get', url);
     });
 
     it('should return 200 and with record access', async () => {

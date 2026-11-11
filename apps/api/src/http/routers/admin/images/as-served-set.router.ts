@@ -40,7 +40,7 @@ export function asServedSet() {
   return initServer().router(contract.admin.images.asServedSet, {
     browse: {
       middleware: [
-        permission('as-served-sets', 'as-served-sets:browse'),
+        permission('as-served-sets:browse'),
       ],
       handler: async ({ query }) => {
         const asServedSets = await AsServedSet.paginate({
@@ -61,7 +61,7 @@ export function asServedSet() {
     },
     store: {
       middleware: [
-        permission('as-served-sets', 'as-served-sets:create'),
+        permission('as-served-sets:create'),
         upload.single('selectionImage'),
       ],
       handler: async ({ body, file, req }) => {
@@ -88,7 +88,7 @@ export function asServedSet() {
     },
     read: {
       middleware: [
-        permission('as-served-sets', 'as-served-sets:read'),
+        permission('as-served-sets:read'),
       ],
       handler: async ({ params: { asServedSetId }, req }) => {
         const asServedSet = await req.scope.cradle.portionSizeService.getAsServedSet(asServedSetId);
@@ -103,7 +103,7 @@ export function asServedSet() {
     },
     update: {
       middleware: [
-        permission('as-served-sets', 'as-served-sets:edit'),
+        permission('as-served-sets:edit'),
       ],
       handler: async ({ body, params: { asServedSetId }, req }) => {
         const asServedSet = await req.scope.cradle.asServedService.updateSet(asServedSetId, body);
@@ -116,7 +116,7 @@ export function asServedSet() {
     },
     destroy: {
       middleware: [
-        permission('as-served-sets', 'as-served-sets:delete'),
+        permission('as-served-sets:delete'),
       ],
       handler: async ({ params: { asServedSetId }, req }) => {
         await req.scope.cradle.asServedService.destroySet(asServedSetId);

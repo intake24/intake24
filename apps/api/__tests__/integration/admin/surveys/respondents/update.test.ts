@@ -39,7 +39,7 @@ async function assertRespondentResponse(url: string, input: RespondentRequest) {
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys:respondents'];
+  const permissions = ['surveys:respondents'];
 
   let url: string;
   let invalidSurveyUrl: string;
@@ -135,7 +135,7 @@ export default () => {
 
   describe('authenticated / securables authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(['surveys']);
+      await suite.util.setPermission([]);
     });
 
     it('should return 403 when missing securable', async () => {

@@ -4,7 +4,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/languages';
-  const permissions = ['languages', 'languages:create'];
+  const permissions = ['languages:create'];
 
   let input: LanguageCreationAttributes;
   let output: LanguageCreationAttributes;

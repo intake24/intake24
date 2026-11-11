@@ -7,7 +7,7 @@ import { FoodsLocale, SystemLocale } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/locales';
-  const permissions = ['locales', 'locales:tasks'];
+  const permissions = ['locales:tasks'];
 
   let url: string;
   let invalidUrl: string;

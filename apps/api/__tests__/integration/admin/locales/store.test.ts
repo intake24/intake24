@@ -4,7 +4,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/locales';
-  const permissions = ['locales', 'locales:create'];
+  const permissions = ['locales:create'];
 
   let input: SystemLocaleCreationAttributes;
   let output: SystemLocaleCreationAttributes;

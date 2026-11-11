@@ -8,7 +8,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/images/guide-images';
-  const permissions = ['guide-images', 'guide-images:create'];
+  const permissions = ['guide-images:create'];
 
   const input = {
     id: 'guideImage_001',

@@ -8,7 +8,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/images/image-maps';
-  const permissions = ['image-maps', 'image-maps:read'];
+  const permissions = ['image-maps:read'];
 
   const fileName = 'imageMap_002.jpg';
   const id = 'imageMap_002';

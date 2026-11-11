@@ -4,7 +4,7 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/survey-scheme-prompts';
-  const permissions = ['survey-scheme-prompts', 'survey-scheme-prompts:create'];
+  const permissions = ['survey-scheme-prompts:create'];
 
   let input: SurveySchemePromptCreationAttributes;
   let output: SurveySchemePromptCreationAttributes;

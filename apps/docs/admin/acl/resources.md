@@ -36,6 +36,18 @@ Permissions formed from resource name and action (with `colon` character separat
 | resource:securables | Control `securable` permissions |
 | resource:[action]   | Specific resource record action |
 
+## Resource access permission
+
+Most resource endpoints are guarded by a plain `resource` permission (e.g. `surveys`, `faqs`), which grants access to the resource section of the Admin UI. This permission is **not stored** in the database and cannot be assigned. It is derived for the user from:
+
+- any held `resource:[action]` permission (directly or through a role), e.g. `surveys:browse` implies `surveys`
+- [securable](/admin/acl/securables) access to at least one record of the resource
+- [ownership](/admin/acl/securables#record-ownership) of at least one record of the resource
+
+:::tip
+To remove user's access to a resource, remove all `resource:[action]` permissions, securables and record ownership for that resource. There is no separate `resource` permission to revoke.
+:::
+
 ## Special purpose permissions
 
 Current Intake24 ACL system also implements couple of V3-based specific permissions.

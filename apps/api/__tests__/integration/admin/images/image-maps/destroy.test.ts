@@ -6,7 +6,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/images/image-maps';
-  const permissions = ['image-maps', 'image-maps:delete'];
+  const permissions = ['image-maps:delete'];
 
   const fileName = 'imageMap_005.jpg';
   const id = 'imageMap_005';

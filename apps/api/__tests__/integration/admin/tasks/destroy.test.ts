@@ -5,7 +5,7 @@ import { Task } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/tasks';
-  const permissions = ['tasks', 'tasks:delete'];
+  const permissions = ['tasks:delete'];
 
   let url: string;
   let invalidUrl: string;

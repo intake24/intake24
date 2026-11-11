@@ -76,7 +76,7 @@ export function language() {
     },
     store: {
       middleware: [
-        permission('languages', 'languages:create'),
+        permission('languages:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.code);

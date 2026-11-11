@@ -6,7 +6,7 @@ import ioc from '@intake24/api/ioc';
 
 export default () => {
   const baseUrl = '/api/admin/users';
-  const permissions = ['acl', 'users', 'users:roles'];
+  const permissions = ['acl', 'users:roles'];
 
   let url: string;
   let invalidUrl: string;

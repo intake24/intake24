@@ -1,9 +1,11 @@
+import type { ExpressionBuilder } from 'kysely';
 import type { Transaction } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { SecurableType } from '@intake24/common/security';
 import type { UserCustomField as UserCustomFieldInput } from '@intake24/common/types';
 import type { UserInput } from '@intake24/common/types/http/admin';
-import type { UserPasswordAttributes } from '@intake24/db';
+import type { Securable, SystemDB, UserPasswordAttributes } from '@intake24/db';
 
 import { uniqBy, xor } from 'lodash-es';
 import { Op } from 'sequelize';
@@ -11,9 +13,22 @@ import { Op } from 'sequelize';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { defaultAlgorithm } from '@intake24/common-backend';
-import { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
+import { ACL_PAT_KEY, ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport, respondentSuffix } from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
-import { Permission, PersonalAccessToken, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
+import {
+  Permission,
+  PersonalAccessToken,
+  RoleUser,
+  User,
+  UserCustomField,
+  UserPassword,
+  UserSecurable,
+} from '@intake24/db';
+
+export type SecurableRecord = {
+  securableType: SecurableType;
+  securableId: string;
+};
 
 export type UserPasswordInput = {
   userId: string;
@@ -25,14 +40,50 @@ export type CreateUserOptions = {
   userAgent?: string;
 };
 
+function escapeLike(value: string) {
+  return value.replace(/[\\%_]/g, '\\$&');
+}
+
+// Respondent = has a respondent permission or a survey alias, and no other permission (direct or via role) or securable access.
+function notRespondent(eb: ExpressionBuilder<SystemDB, 'users'>) {
+  const permissionNames = eb
+    .selectFrom('permissions')
+    .select('permissions.name')
+    .where('permissions.id', 'in', eb
+      .selectFrom('permissionUser')
+      .select('permissionUser.permissionId')
+      .whereRef('permissionUser.userId', '=', 'users.id')
+      .union(eb
+        .selectFrom('permissionRole')
+        .innerJoin('roleUser', 'roleUser.roleId', 'permissionRole.roleId')
+        .select('permissionRole.permissionId')
+        .whereRef('roleUser.userId', '=', 'users.id')));
+
+  return eb.or([
+    eb.exists(permissionNames.where('permissions.name', 'not like', `%${respondentSuffix}`)),
+    eb.exists(eb
+      .selectFrom('userSecurables')
+      .select('userSecurables.userId')
+      .whereRef('userSecurables.userId', '=', 'users.id')),
+    eb.not(eb.or([
+      eb.exists(permissionNames.where('permissions.name', 'like', `%${respondentSuffix}`)),
+      eb.exists(eb
+        .selectFrom('userSurveyAliases')
+        .select('userSurveyAliases.id')
+        .whereRef('userSurveyAliases.userId', '=', 'users.id')),
+    ])),
+  ]);
+}
+
 function adminUserService({
   aclConfig,
   cache,
   commsService,
   db,
   jwtRotationService,
+  kyselyDb,
   scheduler,
-}: Pick<IoC, 'aclConfig' | 'cache' | 'commsService' | 'db' | 'jwtRotationService' | 'scheduler'>) {
+}: Pick<IoC, 'aclConfig' | 'cache' | 'commsService' | 'db' | 'jwtRotationService' | 'kyselyDb' | 'scheduler'>) {
   const flushACLCacheByUserId = async (userId: string): Promise<void> => {
     await cache.forget([`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`]);
   };
@@ -413,64 +464,130 @@ function adminUserService({
   };
 
   /**
-   * Add permission(s) to user record by permission name(s)
-   *
-   * @param {(string | User)} userId
-   * @param {(string | string[])} permissionName
+   * Find user with email who can be given securable access (not a respondent)
    */
-  const addPermissionByName = async (userId: string | User, permissionName: string | string[]) => {
-    const user
-      = typeof userId === 'string'
-        ? await User.findByPk(userId, {
-            attributes: ['id'],
-          })
-        : userId;
-    if (!user)
-      throw new NotFoundError();
+  const findAssignableUser = (userId: string) =>
+    kyselyDb.system
+      .selectFrom('users')
+      .select('users.id')
+      .where('users.id', '=', userId)
+      .where('users.email', 'is not', null)
+      .where(notRespondent)
+      .executeTakeFirst();
 
-    const permission = await Permission.findOne({
-      attributes: ['id'],
-      where: { name: permissionName },
+  /**
+   * Find user by case-insensitive email, flagging whether they can be given securable access
+   */
+  const findUserByEmailForSecurable = (email: string) =>
+    kyselyDb.system
+      .selectFrom('users')
+      .select(eb => [
+        'users.id',
+        notRespondent(eb).as('assignable'),
+      ])
+      .where('users.email', 'ilike', escapeLike(email))
+      .orderBy('users.id')
+      .executeTakeFirst();
+
+  /**
+   * Search users who can be given access to a securable record and don't have it yet (max 10)
+   */
+  const searchAssignableUsers = (securable: SecurableRecord, search: string, match: 'partial' | 'exact') => {
+    const { securableType, securableId } = securable;
+    const pattern = `%${escapeLike(search)}%`;
+
+    return kyselyDb.system
+      .selectFrom('users')
+      .select(['users.id', 'users.name', 'users.email'])
+      .where('users.email', 'is not', null)
+      .where(eb => match === 'partial'
+        ? eb.or([
+            eb('users.name', 'ilike', pattern),
+            eb('users.email', 'ilike', pattern),
+          ])
+        : eb('users.email', 'ilike', escapeLike(search)))
+      .where(eb => eb.not(eb.exists(eb
+        .selectFrom('userSecurables')
+        .select('userSecurables.userId')
+        .whereRef('userSecurables.userId', '=', 'users.id')
+        .where('userSecurables.securableType', '=', securableType)
+        .where('userSecurables.securableId', '=', securableId))))
+      .where(notRespondent)
+      .orderBy('users.email')
+      .limit(10)
+      .execute();
+  };
+
+  // Resource permissions implied by securables are derived in aclCache, so changes here only need an ACL cache flush.
+
+  const setSecurableActions = async (userId: string, securable: SecurableRecord, actions: string[]) => {
+    const { securableType, securableId } = securable;
+
+    await db.system.transaction(async (transaction) => {
+      await UserSecurable.destroy({
+        where: { userId, securableType, securableId },
+        transaction,
+      });
+      await UserSecurable.bulkCreate(
+        actions.map(action => ({
+          userId,
+          securableType,
+          securableId,
+          action,
+        })),
+        { transaction },
+      );
     });
-    if (!permission)
-      throw new NotFoundError();
 
-    await Promise.all([
-      user.$add('permissions', permission),
-      flushACLCacheByUserId(user.id),
-    ]);
+    await flushACLCacheByUserId(userId);
+  };
+
+  const removeSecurableAccess = async (userId: string, securable: SecurableRecord) => {
+    const { securableType, securableId } = securable;
+
+    await UserSecurable.destroy({
+      where: { userId, securableType, securableId },
+    });
+    await flushACLCacheByUserId(userId);
+  };
+
+  const setSecurableOwner = async (record: Securable, ownerId: string | null) => {
+    const previousOwnerId = record.ownerId;
+
+    await record.update({ ownerId });
+    await Promise.all(
+      [previousOwnerId, ownerId]
+        .filter((userId): userId is string => !!userId)
+        .map(flushACLCacheByUserId),
+    );
   };
 
   /**
-   * Remove permission(s) from user record by permission name(s)
-   *
-   * @param {(string | User)} userId
-   * @param {(string | string[])} permissionName
+   * Delete a securable record with all users' securable access to it
    */
-  const removePermissionByName = async (
-    userId: string | User,
-    permissionName: string | string[],
-  ) => {
-    const user
-      = typeof userId === 'string'
-        ? await User.findByPk(userId, {
-            attributes: ['id'],
-          })
-        : userId;
-    if (!user)
-      throw new NotFoundError();
+  const destroySecurable = async (securableType: SecurableType, record: Securable) => {
+    const securableId = record.id;
 
-    const permission = await Permission.findOne({
-      attributes: ['id'],
-      where: { name: permissionName },
+    const userIds = await db.system.transaction(async (transaction) => {
+      const securables = await UserSecurable.findAll({
+        attributes: ['userId'],
+        where: { securableType, securableId },
+        transaction,
+      });
+
+      await UserSecurable.destroy({
+        where: { securableType, securableId },
+        transaction,
+      });
+      await record.destroy({ transaction });
+
+      return securables.map(({ userId }) => userId);
     });
-    if (!permission)
-      throw new NotFoundError();
 
-    await Promise.all([
-      user.$remove('permissions', permission),
-      flushACLCacheByUserId(user.id),
-    ]);
+    const affected = new Set(record.ownerId
+      ? [...userIds, record.ownerId]
+      : userIds);
+    await Promise.all([...affected].map(flushACLCacheByUserId));
   };
 
   /**
@@ -554,8 +671,13 @@ function adminUserService({
     create,
     update,
     destroy,
-    addPermissionByName,
-    removePermissionByName,
+    findAssignableUser,
+    findUserByEmailForSecurable,
+    searchAssignableUsers,
+    setSecurableActions,
+    removeSecurableAccess,
+    setSecurableOwner,
+    destroySecurable,
     getSurveySupportUsers,
     getGlobalSupportUsers,
   };

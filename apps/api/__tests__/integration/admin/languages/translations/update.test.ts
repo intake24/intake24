@@ -6,7 +6,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
 
 export default () => {
-  const permissions = ['languages', 'languages:translations'];
+  const permissions = ['languages:translations'];
 
   let languageId: string;
   let url: string;

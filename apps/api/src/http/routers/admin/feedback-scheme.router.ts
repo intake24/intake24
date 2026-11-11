@@ -24,7 +24,6 @@ import {
   securableScope,
   SystemNutrientType,
   updateFeedbackSchemeFields,
-  UserSecurable,
 } from '@intake24/db';
 
 async function uniqueMiddleware(value: any, { feedbackSchemeId }: { feedbackSchemeId?: string } = {}) {
@@ -91,7 +90,7 @@ export function feedbackScheme() {
     },
     store: {
       middleware: [
-        permission('feedback-schemes', 'feedback-schemes:create'),
+        permission('feedback-schemes:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.name);
@@ -241,7 +240,7 @@ export function feedbackScheme() {
           ],
         });
 
-        const { id: securableId, surveys } = feedbackScheme;
+        const { surveys } = feedbackScheme;
 
         if (!surveys || surveys.length) {
           throw new ForbiddenError(
@@ -249,12 +248,7 @@ export function feedbackScheme() {
           );
         }
 
-        await Promise.all([
-          UserSecurable.destroy({
-            where: { securableId, securableType: 'FeedbackScheme' },
-          }),
-          feedbackScheme.destroy(),
-        ]);
+        await req.scope.cradle.adminUserService.destroySecurable('FeedbackScheme', feedbackScheme);
 
         return { status: 204, body: undefined };
       },

@@ -9,6 +9,7 @@ import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import {
   createUserWithSecurables,
   updateSecurableOwnerRequest,
+  userListEntry,
   userSecurableListEntry,
 } from '@intake24/common/types/http/admin';
 
@@ -44,15 +45,12 @@ export function securable(securable: SecurableType, prefix: string) {
     availableUsers: {
       method: 'GET',
       path: `${prefix}/securables/users`,
-      query: paginationRequest,
+      query: paginationRequest.pick({ search: true }),
       responses: {
-        200: z.object({
-          data: userSecurableListEntry.array(),
-          meta: paginationMeta,
-        }),
+        200: userListEntry.array(),
       },
-      summary: `${securable}: Browse available users`,
-      description: `${securable}: Browse available users (paginated list)`,
+      summary: `${securable}: Search available users`,
+      description: `${securable}: Search users that can be given access (max 10)`,
     },
     owner: {
       method: 'POST',

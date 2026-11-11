@@ -66,7 +66,7 @@ export function nutrientType() {
   return initServer().router(contract.admin.nutrientType, {
     browse: {
       middleware: [
-        permission('nutrient-types', 'nutrient-types:browse'),
+        permission('nutrient-types:browse'),
       ],
       handler: async ({ query }) => {
         const nutrientTypes = await FoodsNutrientType.paginate({
@@ -88,7 +88,7 @@ export function nutrientType() {
     },
     store: {
       middleware: [
-        permission('nutrient-types', 'nutrient-types:create'),
+        permission('nutrient-types:create'),
       ],
       handler: async ({ body, req }) => {
         await uniqueMiddleware(body.id);
@@ -117,7 +117,7 @@ export function nutrientType() {
     },
     read: {
       middleware: [
-        permission('nutrient-types', 'nutrient-types:read'),
+        permission('nutrient-types:read'),
       ],
       handler: async ({ params: { nutrientTypeId }, req }) => {
         const nutrientType
@@ -131,7 +131,7 @@ export function nutrientType() {
     },
     update: {
       middleware: [
-        permission('nutrient-types', 'nutrient-types:edit'),
+        permission('nutrient-types:edit'),
       ],
       handler: async ({ body, params: { nutrientTypeId }, req }) => {
         await unitIdMiddleware(body.unitId);
@@ -149,7 +149,7 @@ export function nutrientType() {
     },
     destroy: {
       middleware: [
-        permission('nutrient-types', 'nutrient-types:delete'),
+        permission('nutrient-types:delete'),
       ],
       handler: async ({ params: { nutrientTypeId }, req }) => {
         await req.scope.cradle.nutrientTypeService.deleteNutrientType(nutrientTypeId);

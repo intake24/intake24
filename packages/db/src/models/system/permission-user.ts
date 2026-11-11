@@ -24,14 +24,16 @@ export default class PermissionUser extends BaseModel<
 > {
   @ForeignKey(() => Permission)
   @Column({
-    allowNull: true,
+    allowNull: false,
+    primaryKey: true,
     type: DataType.BIGINT,
   })
   declare permissionId: string;
 
   @ForeignKey(() => User)
   @Column({
-    allowNull: true,
+    allowNull: false,
+    primaryKey: true,
     type: DataType.BIGINT,
   })
   declare userId: string;

@@ -6,7 +6,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/images/guide-images';
-  const permissions = ['guide-images', 'guide-images:edit'];
+  const permissions = ['guide-images:edit'];
 
   const input = {
     id: 'guideImage_004',

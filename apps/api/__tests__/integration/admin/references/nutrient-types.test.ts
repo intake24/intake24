@@ -2,7 +2,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/references/nutrient-types';
-  const permissions = ['feedback-schemes', 'survey-schemes'];
+  const permissions = ['feedback-schemes:browse', 'survey-schemes:browse'];
 
   it('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url);

@@ -50,7 +50,10 @@ function sharedTests(suite: typeof Suite) {
   };
 
   const assert401and403 = async (method: Method, url: string, ops?: Options) => {
-    await suite.util.setPermission([]);
+    await Promise.all([
+      suite.util.setPermission([]),
+      suite.util.clearSecurableAccess(),
+    ]);
     await assertMissingAuthentication(method, url);
     await assertMissingAuthorization(method, url, ops);
 

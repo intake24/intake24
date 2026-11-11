@@ -13,7 +13,7 @@ export function media() {
   return initServer().router(contract.admin.media, {
     browse: {
       middleware: [
-        permission('media'),
+        permission('media:browse'),
       ],
       handler: async ({ query, req }) => {
         const { mediaService } = req.scope.cradle;
@@ -25,7 +25,7 @@ export function media() {
     },
     store: {
       middleware: [
-        permission('media', 'media:create'),
+        permission('media:create'),
         upload.single('file'),
       ],
       handler: async ({ body, file, req }) => {
@@ -57,7 +57,7 @@ export function media() {
     },
     read: {
       middleware: [
-        permission('media', 'media:read'),
+        permission('media:read'),
       ],
       handler: async ({ params, req }) => {
         const { mediaId } = params;
@@ -70,7 +70,7 @@ export function media() {
     },
     update: {
       middleware: [
-        permission('media', 'media:edit'),
+        permission('media:edit'),
       ],
       handler: async ({ body, params, req }) => {
         const { mediaId } = params;
@@ -83,7 +83,7 @@ export function media() {
     },
     destroy: {
       middleware: [
-        permission('media', 'media:delete'),
+        permission('media:delete'),
       ],
       handler: async ({ params, req }) => {
         const { mediaId } = params;

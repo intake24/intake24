@@ -8,7 +8,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/images/drinkware-sets?return=true';
-  const permissions = ['drinkware-sets', 'drinkware-sets:create'];
+  const permissions = ['drinkware-sets:create'];
 
   const input = {
     id: 'drinkwareSet_001',

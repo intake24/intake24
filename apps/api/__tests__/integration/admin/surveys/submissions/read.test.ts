@@ -16,7 +16,7 @@ interface SurveyOutput
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys:submissions'];
+  const permissions = ['surveys:submissions'];
 
   let url: string;
   let invalidSurveyUrl: string;
@@ -78,7 +78,7 @@ export default () => {
 
   describe('authenticated / securables authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(['surveys']);
+      await suite.util.setPermission([]);
     });
 
     it('should return 403 when missing securable', async () => {

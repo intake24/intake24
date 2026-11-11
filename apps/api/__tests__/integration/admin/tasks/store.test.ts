@@ -4,7 +4,7 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/tasks';
-  const permissions = ['tasks', 'tasks:create'];
+  const permissions = ['tasks:create'];
 
   let input: TaskRequest;
   let output: TaskRequest;

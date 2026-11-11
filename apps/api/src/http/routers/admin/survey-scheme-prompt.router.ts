@@ -36,7 +36,7 @@ export function surveySchemePrompt() {
   return initServer().router(contract.admin.surveySchemePrompt, {
     browse: {
       middleware: [
-        permission('survey-scheme-prompts', 'survey-scheme-prompts:browse'),
+        permission('survey-scheme-prompts:browse'),
       ],
       handler: async ({ query }) => {
         const schemePrompts = await SurveySchemePrompt.paginate({
@@ -55,7 +55,7 @@ export function surveySchemePrompt() {
     },
     store: {
       middleware: [
-        permission('survey-scheme-prompts', 'survey-scheme-prompts:create'),
+        permission('survey-scheme-prompts:create'),
       ],
       handler: async ({ body }) => {
         const { prompt } = body;
@@ -90,7 +90,7 @@ export function surveySchemePrompt() {
     },
     read: {
       middleware: [
-        permission('survey-scheme-prompts', 'survey-scheme-prompts:read'),
+        permission('survey-scheme-prompts:read'),
       ],
       handler: async ({ params: { surveySchemePromptId } }) => {
         const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);
@@ -102,7 +102,7 @@ export function surveySchemePrompt() {
     },
     update: {
       middleware: [
-        permission('survey-scheme-prompts', 'survey-scheme-prompts:edit'),
+        permission('survey-scheme-prompts:edit'),
       ],
       handler: async ({ body, params: { surveySchemePromptId } }) => {
         const { prompt } = body;
@@ -121,7 +121,7 @@ export function surveySchemePrompt() {
     },
     destroy: {
       middleware: [
-        permission('survey-scheme-prompts', 'survey-scheme-prompts:delete'),
+        permission('survey-scheme-prompts:delete'),
       ],
       handler: async ({ params: { surveySchemePromptId } }) => {
         const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId, {
@@ -137,7 +137,7 @@ export function surveySchemePrompt() {
     },
     sync: {
       middleware: [
-        permission('survey-scheme-prompts', 'survey-scheme-prompts:sync'),
+        permission('survey-scheme-prompts:sync'),
       ],
       handler: async ({ body, params: { surveySchemePromptId } }) => {
         const { prompt, section, surveySchemeId } = body;

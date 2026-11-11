@@ -6,7 +6,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const baseUrl = '/api/admin/images/drinkware-sets';
-  const permissions = ['drinkware-sets', 'drinkware-sets:read'];
+  const permissions = ['drinkware-sets:read'];
 
   const input = {
     id: 'drinkwareSet_002',

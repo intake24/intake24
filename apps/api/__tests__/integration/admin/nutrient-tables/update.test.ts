@@ -8,7 +8,7 @@ import { NutrientTable } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/nutrient-tables';
-  const permissions = ['nutrient-tables', 'nutrient-tables:edit'];
+  const permissions = ['nutrient-tables:edit'];
 
   let url: string;
   let invalidUrl: string;

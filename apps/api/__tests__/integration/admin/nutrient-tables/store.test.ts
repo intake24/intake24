@@ -7,7 +7,7 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/nutrient-tables';
-  const permissions = ['nutrient-tables', 'nutrient-tables:create'];
+  const permissions = ['nutrient-tables:create'];
 
   let input: NutrientTableRequest;
   let output: NutrientTableRequest;

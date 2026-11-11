@@ -1,7 +1,9 @@
 import type { ReadStream } from 'node:fs';
+import type { ModelStatic } from 'sequelize';
 
 import type Suite from './integration-suite';
 import type { SecurableType } from '@intake24/common/security';
+import type { Securable } from '@intake24/db';
 
 import { createWriteStream } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
@@ -13,7 +15,7 @@ import axios from 'axios';
 import { times } from 'lodash-es';
 
 import ioc from '@intake24/api/ioc';
-import { Permission, Role, User, UserSecurable } from '@intake24/db';
+import { FAQ, FeedbackScheme, Language, Permission, Role, Survey, SurveyScheme, SystemLocale, User, UserSecurable } from '@intake24/db';
 
 const { fsConfig } = ioc.cradle;
 
@@ -96,10 +98,36 @@ function util(suite: typeof Suite) {
     }
   };
 
+  /**
+   * Remove test user's securables and record ownership, which imply resource permissions
+   */
+  const clearSecurableAccess = async (): Promise<void> => {
+    const userId = suite.data.system.user.id;
+
+    await Promise.all([
+      UserSecurable.destroy({
+        where: { userId },
+      }),
+      ...[
+        FAQ,
+        FeedbackScheme,
+        Language,
+        SystemLocale,
+        Survey,
+        SurveyScheme,
+      ].map(model =>
+        (model as ModelStatic<Securable>).update({ ownerId: null }, {
+          where: { ownerId: userId },
+        })),
+    ]);
+    await ioc.cradle.adminUserService.flushACLCacheByUserId(userId);
+  };
+
   return {
     setPermission,
     setUserPermission,
     setSecurable,
+    clearSecurableAccess,
   };
 }
 

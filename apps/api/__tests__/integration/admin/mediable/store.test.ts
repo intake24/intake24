@@ -14,7 +14,7 @@ import { models } from '@intake24/db';
 export default (type: MediaModel) => () => {
   const resource = modelToResource(type);
   const baseUrl = `/api/admin/${resource}`;
-  const permissions = [resource, `${resource}:media`];
+  const permissions = [`${resource}:media`];
 
   let url: string;
   let model: BaseModel;
@@ -121,7 +121,7 @@ export default (type: MediaModel) => () => {
 
   describe('authenticated / securables authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission([resource]);
+      await suite.util.setPermission([]);
     });
 
     it('should return 403 for missing securable', async () => {

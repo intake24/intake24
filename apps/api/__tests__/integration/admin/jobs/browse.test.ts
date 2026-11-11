@@ -4,7 +4,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/jobs';
-  const permissions = ['jobs', 'jobs:browse'];
+  const permissions = ['jobs:browse'];
 
   beforeAll(async () => {
     const { id, startDate, endDate } = suite.data.system.Survey;

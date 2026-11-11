@@ -8,7 +8,7 @@ import { Survey } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';
-  const permissions = ['surveys', 'surveys:tasks'];
+  const permissions = ['surveys:tasks'];
 
   let input: Omit<QueueJob, 'userId' | 'params'> & {
     params: { surveyId: string; startDate: string; endDate: string };
@@ -76,7 +76,7 @@ export default () => {
 
   describe('authenticated / securables authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(['surveys']);
+      await suite.util.setPermission([]);
     });
 
     it('should return 403 when missing securable', async () => {

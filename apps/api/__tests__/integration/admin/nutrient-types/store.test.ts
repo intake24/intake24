@@ -4,7 +4,7 @@ import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/nutrient-types';
-  const permissions = ['nutrient-types', 'nutrient-types:create'];
+  const permissions = ['nutrient-types:create'];
 
   let input: NutrientTypeRequest;
   let output: NutrientTypeRequest;

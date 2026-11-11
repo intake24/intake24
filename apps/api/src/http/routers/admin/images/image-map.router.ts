@@ -40,7 +40,7 @@ export function imageMap() {
   return initServer().router(contract.admin.images.imageMap, {
     browse: {
       middleware: [
-        permission('image-maps', 'image-maps:browse'),
+        permission('image-maps:browse'),
       ],
       handler: async ({ query }) => {
         const images = await ImageMap.paginate({
@@ -61,7 +61,7 @@ export function imageMap() {
     },
     store: {
       middleware: [
-        permission('image-maps', 'image-maps:create'),
+        permission('image-maps:create'),
         upload.single('baseImage'),
       ],
       handler: async ({ body, file, req }) => {
@@ -93,7 +93,7 @@ export function imageMap() {
     },
     read: {
       middleware: [
-        permission('image-maps', 'image-maps:read'),
+        permission('image-maps:read'),
       ],
       handler: async ({ params: { imageMapId }, req }) => {
         const image = await req.scope.cradle.portionSizeService.getImageMap(imageMapId);
@@ -108,7 +108,7 @@ export function imageMap() {
     },
     update: {
       middleware: [
-        permission('image-maps', 'image-maps:edit'),
+        permission('image-maps:edit'),
       ],
       handler: async ({ body, params: { imageMapId }, req }) => {
         const image = await req.scope.cradle.imageMapService.update(imageMapId, body);
@@ -121,7 +121,7 @@ export function imageMap() {
     },
     updateImage: {
       middleware: [
-        permission('image-maps', 'image-maps:edit'),
+        permission('image-maps:edit'),
         upload.single('baseImage'),
       ],
       handler: async ({ file, params: { imageMapId }, req }) => {
@@ -146,7 +146,7 @@ export function imageMap() {
     },
     destroy: {
       middleware: [
-        permission('image-maps', 'image-maps:delete'),
+        permission('image-maps:delete'),
       ],
       handler: async ({ params: { imageMapId }, req }) => {
         await req.scope.cradle.imageMapService.destroy(imageMapId);
