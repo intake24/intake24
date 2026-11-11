@@ -15,7 +15,7 @@
       <v-spacer />
       <div class="d-flex align-center gc-2">
         <v-menu
-          v-if="slots.actions || canHandleEntry(['audit', 'delete'])"
+          v-if="slots.actions || canHandleEntry('audit') || canDelete"
           :close-on-content-click="true"
           location="bottom end"
           :persistent="false"
@@ -37,7 +37,7 @@
             />
             <v-divider v-if="slots.actions || canHandleEntry('audit')" />
             <confirm-dialog
-              v-if="canHandleEntry('delete')"
+              v-if="canDelete"
               color="error"
               icon-left="$delete"
               :label="$t('common.action.delete')"
@@ -57,7 +57,7 @@
           </v-list>
         </v-menu>
         <v-btn
-          v-if="editsResource"
+          v-if="editsResource && !readonly"
           color="primary"
           rounded="pill"
           :title="$t(`common.action.save`)"
@@ -115,6 +115,10 @@ const props = defineProps({
   },
   entry: {
     type: Object as PropType<Dictionary>,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
   routeLeave: {
     type: Object as PropType<RouteLeave>,
@@ -175,6 +179,8 @@ function canHandleEntry(action: string | string[]) {
     ? action.some(a => can({ action: a, securables, ownerId }))
     : can({ action, securables, ownerId });
 };
+
+const canDelete = computed(() => !props.readonly && canHandleEntry('delete'));
 
 function tabTitle(tab: string) {
   const check = has(messages.value[locale.value], `${resource.name}.${tab}.tab`);

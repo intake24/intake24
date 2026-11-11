@@ -1,7 +1,7 @@
 import type { RoleRequest } from '@intake24/common/types/http/admin';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import { Role } from '@intake24/db';
+import { Permission, Role } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/roles';
@@ -32,6 +32,14 @@ export default () => {
 
     it(`should return 404 when record doesn't exist`, async () => {
       await suite.sharedTests.assertMissingRecord('delete', invalidUrl);
+    });
+
+    it('should return 403 when role carries permissions the caller does not hold', async () => {
+      const unheldPermission = await Permission.create(mocker.system.permission());
+      const privilegedRole = await Role.create(mocker.system.role());
+      await privilegedRole.$set('permissions', [unheldPermission]);
+
+      await suite.sharedTests.assertMissingAuthorization('delete', `${baseUrl}/${privilegedRole.id}`);
     });
 
     it('should return 204 and no content', async () => {

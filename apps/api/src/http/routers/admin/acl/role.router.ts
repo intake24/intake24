@@ -1,12 +1,13 @@
 import type { WhereOptions } from 'sequelize';
 
 import { initServer } from '@ts-rest/express';
+import { xor } from 'lodash-es';
 import { col, fn, Op } from 'sequelize';
 
-import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { roleEntryResponse } from '@intake24/api/http/responses/admin';
-import { unique } from '@intake24/api/http/rules';
+import { aclDataCheck, unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { Permission, Role, User } from '@intake24/db';
 
@@ -55,9 +56,14 @@ export function role() {
         permission('acl', 'roles', 'roles:create'),
       ],
       handler: async ({ body, req }) => {
+        const { aclService, adminUserService } = req.scope.cradle;
+
         await uniqueMiddleware(body.name);
 
         const { name, displayName, description, permissions } = body;
+        await aclDataCheck({ permissions });
+        await adminUserService.assertPermissionsHeld(await aclService.getPermissions(), permissions);
+
         const role = await Role.create({ name, displayName, description });
         await role.$set('permissions', permissions);
 
@@ -106,9 +112,23 @@ export function role() {
         permission('acl', 'roles', 'roles:edit'),
       ],
       handler: async ({ body, params: { roleId }, req }) => {
+        const { aclConfig, aclService, adminUserService } = req.scope.cradle;
+
         const role = await Role.scope('permissions').findByPk(roleId);
         if (!role)
           throw new NotFoundError();
+
+        const isSuperuserRole = role.name === aclConfig.roles.superuser;
+        if (isSuperuserRole && !(await aclService.hasRole(aclConfig.roles.superuser)))
+          throw new ForbiddenError('Only superusers can edit the superuser role.');
+
+        if (!isSuperuserRole) {
+          await aclDataCheck({ permissions: body.permissions });
+          await adminUserService.assertPermissionsHeld(
+            await aclService.getPermissions(),
+            xor(role.permissions!.map(({ id }) => id), body.permissions),
+          );
+        }
 
         const { displayName, description } = body;
         await role.update({ displayName, description });
@@ -117,7 +137,7 @@ export function role() {
 
         await role.$set(
           'permissions',
-          role.name === req.scope.cradle.aclConfig.roles.superuser
+          isSuperuserRole
             ? permissions
             : body.permissions,
         );
@@ -128,7 +148,7 @@ export function role() {
               { association: 'permissions' },
             ],
           }),
-          req.scope.cradle.adminUserService.flushACLCacheByRoleId(role.id),
+          adminUserService.flushACLCacheByRoleId(role.id),
         ]);
 
         return {
@@ -154,9 +174,12 @@ export function role() {
         if (!role)
           throw new NotFoundError();
 
+        const { aclService, adminUserService } = req.scope.cradle;
+        await adminUserService.assertRolesHeld(await aclService.getPermissions(), [role.id]);
+
         await role.destroy();
         await Promise.all(role.userLinks!.map(({ userId }) =>
-          req.scope.cradle.adminUserService.flushACLCacheByUserId(userId)));
+          adminUserService.flushACLCacheByUserId(userId)));
 
         return { status: 204, body: undefined };
       },

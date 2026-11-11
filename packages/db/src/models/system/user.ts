@@ -316,7 +316,10 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
   }
 
   allPermissions(): Permission[] {
-    const { permissions = [], roles = [] } = this;
+    const { roles = [] } = this;
+    const permissions = [
+      ...(this.permissions ?? []),
+    ];
 
     roles.forEach((item) => {
       if (item.permissions)

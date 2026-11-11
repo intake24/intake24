@@ -6,6 +6,7 @@
   "create": "Ajouter un utilisateur",
   "edit": "Modifier l'utilisateur",
   "delete": "Supprimer l'utilisateur",
+  "readonly": "Cet utilisateur dispose de permissions que vous n'avez pas. Vous ne pouvez pas modifier ni supprimer cet utilisateur.",
   "id": "Identifiant de l'utilisateur",
   "name": "Nom",
   "simpleName": "Nom simple",

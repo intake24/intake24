@@ -1,7 +1,10 @@
 <template>
-  <entry-layout v-if="entryLoaded" v-bind="{ id, entry }" v-model:route-leave="routeLeave" @save="submit">
+  <entry-layout v-if="entryLoaded && refsLoaded" v-bind="{ id, entry, readonly }" v-model:route-leave="routeLeave" @save="submit">
     <v-container fluid>
-      <v-form @keydown="clearError" @submit.prevent="submit">
+      <v-alert v-if="readonly && refsLoaded" class="mb-4" type="warning">
+        {{ $t('users.readonly') }}
+      </v-alert>
+      <v-form :disabled="readonly" @keydown="clearError" @submit.prevent="submit">
         <v-row>
           <v-col cols="12">
             <v-text-field
@@ -70,6 +73,7 @@
               v-model="data.roles"
               :error-messages="errors.get('roles')"
               hide-details="auto"
+              :item-props="roleProps"
               item-title="displayName"
               item-value="id"
               :items="refs.roles"
@@ -93,6 +97,7 @@
               v-model="data.permissions"
               :error-messages="errors.get('permissions')"
               hide-details="auto"
+              :item-props="permissionProps"
               item-title="displayName"
               item-value="id"
               :items="refs.permissions"
@@ -166,7 +171,7 @@
             />
           </v-col>
         </v-row>
-        <submit-footer :disabled="errors.any.value" />
+        <submit-footer :disabled="readonly || errors.any.value" />
       </v-form>
     </v-container>
   </entry-layout>
@@ -176,10 +181,11 @@
 import type { CustomField } from '@intake24/common/types';
 import type { UserEntry, UserRefs } from '@intake24/common/types/http/admin';
 
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useUser } from '@intake24/admin/stores';
 
 type UserForm = {
   id: string | null;
@@ -241,6 +247,30 @@ export default defineComponent({
       loadCallback,
     });
 
+    const user = useUser();
+    const permissionProps = (item: UserRefs['permissions'][number]) => ({ disabled: !user.can(item.name) });
+    const roleProps = (item: UserRefs['roles'][number]) => ({
+      disabled: !user.can(item.permissions.map(({ name }) => name), true),
+    });
+
+    // Mirrors the API rule: a user can only be managed by a caller holding all of the user's effective permissions.
+    const readonly = computed(() => {
+      if (isCreate.value)
+        return false;
+      if (!refsLoaded.value)
+        return true;
+
+      const roleIds = entry.value.roles.map(({ id }) => id);
+      const names = [
+        ...entry.value.permissions.map(({ name }) => name),
+        ...refs.value.roles
+          .filter(({ id }) => roleIds.includes(id))
+          .flatMap(({ permissions }) => permissions.map(({ name }) => name)),
+      ];
+
+      return !user.can(names, true);
+    });
+
     const toggle = (field: 'verifiedAt' | 'disabledAt') => {
       data.value[field] = toggles.value[field]
         ? new Date()
@@ -249,6 +279,9 @@ export default defineComponent({
     };
 
     return {
+      permissionProps,
+      readonly,
+      roleProps,
       toggles,
       toggle,
       entry,

@@ -3,6 +3,7 @@ import type { User } from '@intake24/db';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import ioc from '@intake24/api/ioc';
+import { Permission } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/users';
@@ -33,6 +34,16 @@ export default () => {
 
     it(`should return 404 when record doesn't exist`, async () => {
       await suite.sharedTests.assertMissingRecord('delete', invalidUrl);
+    });
+
+    it('should return 403 when target holds permissions the caller does not hold', async () => {
+      const unheldPermission = await Permission.create(mocker.system.permission());
+      const privilegedUser = await ioc.cradle.adminUserService.create({
+        ...mocker.system.user(),
+        permissions: [unheldPermission.id],
+      });
+
+      await suite.sharedTests.assertMissingAuthorization('delete', `${baseUrl}/${privilegedUser.id}`);
     });
 
     it('should return 204 and no content', async () => {

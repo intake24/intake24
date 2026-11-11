@@ -19,6 +19,7 @@ export default () => {
   let input: UserRequest;
   let updateInput: Omit<UserInput, 'password'>;
   let user: User;
+  let grantedPermissions: string[];
 
   beforeAll(async () => {
     input = mocker.system.user();
@@ -31,6 +32,7 @@ export default () => {
     const permissionInput = times(3, () => mocker.system.permission());
     const permissionsRecords = await Permission.bulkCreate(permissionInput);
     updateInput.permissions = permissionsRecords.map(item => item.id);
+    grantedPermissions = permissionsRecords.map(item => item.name);
 
     const roleInput = times(2, () => mocker.system.role());
     const roles = await Role.bulkCreate(roleInput);
@@ -48,7 +50,10 @@ export default () => {
 
   describe('authenticated / resource authorized', () => {
     beforeAll(async () => {
-      await suite.util.setPermission(permissions);
+      await suite.util.setPermission([
+        ...permissions,
+        ...grantedPermissions,
+      ]);
     });
 
     it('should return 400 for invalid input data', async () => {
@@ -136,6 +141,61 @@ export default () => {
 
       expect(resPermissions.map((item: Permission) => item.id)).toEqual(outputPermissions);
       expect(resRoles.map((item: Role) => item.id)).toEqual(outputRoles);
+    });
+
+    describe('privilege escalation', () => {
+      let unheldPermission: Permission;
+      let unheldRole: Role;
+      let privilegedUser: User;
+
+      beforeAll(async () => {
+        unheldPermission = await Permission.create(mocker.system.permission());
+        unheldRole = await Role.create(mocker.system.role());
+        await unheldRole.$set('permissions', [unheldPermission]);
+
+        privilegedUser = await ioc.cradle.adminUserService.create({
+          ...mocker.system.user(),
+          permissions: [unheldPermission.id],
+        });
+      });
+
+      it('should return 403 when granting permission the caller does not hold', async () => {
+        await suite.sharedTests.assertMissingAuthorization('put', url, {
+          input: {
+            email: updateInput.email,
+            permissions: [...updateInput.permissions!, unheldPermission.id],
+          },
+        });
+      });
+
+      it('should return 403 when granting role with permissions the caller does not hold', async () => {
+        await suite.sharedTests.assertMissingAuthorization('put', url, {
+          input: {
+            email: updateInput.email,
+            roles: [...updateInput.roles!, unheldRole.id],
+          },
+        });
+      });
+
+      it('should return 403 when editing user holding permissions the caller does not hold', async () => {
+        await suite.sharedTests.assertMissingAuthorization('put', `${baseUrl}/${privilegedUser.id}`, {
+          input: { email: privilegedUser.email, name: 'changed' },
+        });
+      });
+
+      it('should return 403 when caller grants itself a privileged role', async () => {
+        const { role, user: self } = suite.data.system;
+        const adminRole = await Role.findOne({
+          where: { name: 'admin-role' },
+        });
+
+        await suite.sharedTests.assertMissingAuthorization('put', `${baseUrl}/${self.id}`, {
+          input: {
+            email: self.email,
+            roles: [role.id, adminRole!.id],
+          },
+        });
+      });
     });
   });
 };

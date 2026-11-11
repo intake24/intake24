@@ -106,7 +106,8 @@
   },
   "tabs": {
     "general": "General",
-    "json": "JSON"
+    "json": "JSON",
+    "table": "Table"
   },
   "date": "Date",
   "expiredAt": "Expiré à",

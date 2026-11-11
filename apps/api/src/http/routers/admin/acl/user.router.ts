@@ -6,7 +6,7 @@ import { col, fn, Op } from 'sequelize';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { permission } from '@intake24/api/http/middleware';
 import { userEntryResponse } from '@intake24/api/http/responses/admin';
-import { unique } from '@intake24/api/http/rules';
+import { aclDataCheck, unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { Permission, Role, User, UserSecurable } from '@intake24/db';
 
@@ -26,32 +26,6 @@ async function uniqueMiddleware(value: any, { userId }: { userId?: string } = {}
       path: 'email',
       i18n: { type: 'unique._' },
     });
-  }
-}
-
-async function dataCheck({ permissions, roles }: { permissions?: string[]; roles?: string[] }) {
-  if (permissions) {
-    const availablePermissions = await Permission.count({
-      where: { id: permissions },
-    });
-    if (availablePermissions !== permissions.length) {
-      throw ValidationError.from({
-        path: 'permissions',
-        i18n: { type: 'exists._' },
-      });
-    }
-  }
-
-  if (roles) {
-    const availableRoles = await Role.count({
-      where: { id: roles },
-    });
-    if (availableRoles !== roles.length) {
-      throw ValidationError.from({
-        path: 'roles',
-        i18n: { type: 'exists._' },
-      });
-    }
   }
 }
 
@@ -85,10 +59,13 @@ export function user() {
       ],
       handler: async ({ body, req }) => {
         const { email, permissions, roles } = body;
-        await uniqueMiddleware(email);
-        await dataCheck({ permissions, roles });
+        const { aclService, adminUserService } = req.scope.cradle;
 
-        const user = await req.scope.cradle.adminUserService.create(body);
+        await uniqueMiddleware(email);
+        await aclDataCheck({ permissions, roles });
+        await adminUserService.assertCanManageUser(await aclService.getPermissions(), null, { permissions, roles });
+
+        const user = await adminUserService.create(body);
 
         const data = userEntryResponse(
           (await User.scope([
@@ -116,6 +93,13 @@ export function user() {
             ],
           }),
           Role.scope('list').findAll({
+            include: [
+              {
+                association: 'permissions',
+                attributes: ['name'],
+                through: { attributes: [] },
+              },
+            ],
             order: [
               ['name', 'ASC'],
             ],
@@ -124,7 +108,15 @@ export function user() {
 
         return {
           status: 200,
-          body: { permissions, roles },
+          body: {
+            permissions,
+            roles: roles.map(({ id, name, displayName, permissions }) => ({
+              id,
+              name,
+              displayName,
+              permissions: permissions!.map(({ name }) => ({ name })),
+            })),
+          },
         };
       },
     },
@@ -156,10 +148,13 @@ export function user() {
       ],
       handler: async ({ body, params: { userId }, req }) => {
         const { email, permissions, roles } = body;
-        await uniqueMiddleware(email, { userId });
-        await dataCheck({ permissions, roles });
+        const { aclService, adminUserService } = req.scope.cradle;
 
-        await req.scope.cradle.adminUserService.update(userId, body);
+        await uniqueMiddleware(email, { userId });
+        await aclDataCheck({ permissions, roles });
+        await adminUserService.assertCanManageUser(await aclService.getPermissions(), userId, { permissions, roles });
+
+        await adminUserService.update(userId, body);
 
         const data = userEntryResponse(
           (await User.scope([
@@ -180,7 +175,10 @@ export function user() {
         permission('acl', 'users', 'users:delete'),
       ],
       handler: async ({ params: { userId }, req }) => {
-        await req.scope.cradle.adminUserService.destroy(userId);
+        const { aclService, adminUserService } = req.scope.cradle;
+
+        await adminUserService.assertCanManageUser(await aclService.getPermissions(), userId);
+        await adminUserService.destroy(userId);
 
         return { status: 204, body: undefined };
       },

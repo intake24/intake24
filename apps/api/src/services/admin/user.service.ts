@@ -5,7 +5,7 @@ import type { UserCustomField as UserCustomFieldInput } from '@intake24/common/t
 import type { UserInput } from '@intake24/common/types/http/admin';
 import type { UserPasswordAttributes } from '@intake24/db';
 
-import { uniqBy } from 'lodash-es';
+import { uniqBy, xor } from 'lodash-es';
 import { Op } from 'sequelize';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
@@ -96,6 +96,74 @@ function adminUserService({
    */
   const flushSuperuserACLCache = async (): Promise<void> =>
     flushACLCacheByRoleName(aclConfig.roles.superuser);
+
+  const assertPermissionNamesHeld = (callerPermissions: string[], names: string[]): void => {
+    if (names.some(name => !callerPermissions.includes(name)))
+      throw new ForbiddenError('Insufficient permissions to manage this access.');
+  };
+
+  const assertPermissionsHeld = async (callerPermissions: string[], permissionIds: string[]): Promise<void> => {
+    const permissions = await Permission.findAll({
+      attributes: ['name'],
+      where: { id: permissionIds },
+    });
+
+    assertPermissionNamesHeld(callerPermissions, permissions.map(({ name }) => name));
+  };
+
+  const assertRolesHeld = async (callerPermissions: string[], roleIds: string[]): Promise<void> => {
+    const permissions = await Permission.findAll({
+      attributes: ['name'],
+      include: [
+        {
+          association: 'roleLinks',
+          attributes: [],
+          where: { roleId: roleIds },
+        },
+      ],
+    });
+
+    assertPermissionNamesHeld(callerPermissions, permissions.map(({ name }) => name));
+  };
+
+  /**
+   * Caller may only manage users whose effective permissions they fully hold (null userId = new user),
+   * and may only grant or revoke permissions/roles they fully hold.
+   */
+  const assertCanManageUser = async (
+    callerPermissions: string[],
+    userId: string | null,
+    { permissions, roles }: Pick<UserInput, 'permissions' | 'roles'> = {},
+  ): Promise<void> => {
+    let currentPermissionIds: string[] = [];
+    let currentRoleIds: string[] = [];
+
+    if (userId) {
+      const user = await User.scope(['permissions', 'rolesPerms']).findByPk(userId);
+      if (!user)
+        throw new NotFoundError();
+
+      const userPermissions = user.permissions!;
+      const userRoles = user.roles!;
+
+      assertPermissionNamesHeld(
+        callerPermissions,
+        [
+          ...userPermissions,
+          ...userRoles.flatMap(role => role.permissions!),
+        ].map(({ name }) => name),
+      );
+
+      currentPermissionIds = userPermissions.map(({ id }) => id);
+      currentRoleIds = userRoles.map(({ id }) => id);
+    }
+
+    if (permissions)
+      await assertPermissionsHeld(callerPermissions, xor(currentPermissionIds, permissions));
+
+    if (roles)
+      await assertRolesHeld(callerPermissions, xor(currentRoleIds, roles));
+  };
 
   /**
    * Create password record
@@ -476,6 +544,9 @@ function adminUserService({
     flushACLCacheByRoleId,
     flushACLCacheByRoleName,
     flushSuperuserACLCache,
+    assertPermissionsHeld,
+    assertRolesHeld,
+    assertCanManageUser,
     createPassword,
     createPasswords,
     updateUserCustomFields,

@@ -6,6 +6,7 @@
   "create": "Add user",
   "edit": "Edit user",
   "delete": "Delete user",
+  "readonly": "This user holds permissions you do not have. You cannot edit or delete this user.",
 
   "id": "User ID",
   "name": "Name",

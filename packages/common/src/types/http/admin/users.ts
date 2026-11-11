@@ -80,7 +80,9 @@ export const owner = userAttributes.pick({
 export type Owner = z.infer<typeof owner>;
 
 export const userRefs = z.object({
-  permissions: permissionAttributes.pick({ name: true, displayName: true, description: true }).array(),
-  roles: roleAttributes.pick({ name: true, displayName: true, description: true }).array(),
+  permissions: permissionAttributes.pick({ id: true, name: true, displayName: true }).array(),
+  roles: roleAttributes.pick({ id: true, name: true, displayName: true }).extend({
+    permissions: permissionAttributes.pick({ name: true }).array(),
+  }).array(),
 });
 export type UserRefs = z.infer<typeof userRefs>;

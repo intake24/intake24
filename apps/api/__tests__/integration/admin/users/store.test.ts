@@ -5,6 +5,7 @@ import { omit, pick } from 'lodash-es';
 import request from 'supertest';
 
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { Permission, Role } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/users';
@@ -93,6 +94,30 @@ export default () => {
         const fields: CustomField[] = resCustomFields.map((field: CustomField) => pick(field, ['name', 'value', 'public']));
         expect(fields).toIncludeSameMembers(outputCustomFields);
       }
+    });
+
+    it('should return 403 when granting permission the caller does not hold', async () => {
+      const unheldPermission = await Permission.create(mocker.system.permission());
+
+      await suite.sharedTests.assertMissingAuthorization('post', url, {
+        input: {
+          ...mocker.system.user(),
+          permissions: [unheldPermission.id],
+        },
+      });
+    });
+
+    it('should return 403 when granting role with permissions the caller does not hold', async () => {
+      const adminRole = await Role.findOne({
+        where: { name: 'admin-role' },
+      });
+
+      await suite.sharedTests.assertMissingAuthorization('post', url, {
+        input: {
+          ...mocker.system.user(),
+          roles: [adminRole!.id],
+        },
+      });
     });
 
     it('should return 400 for duplicate email', async () => {
