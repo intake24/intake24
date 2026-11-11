@@ -116,7 +116,7 @@
 <script lang="ts" setup>
 import { groupBy } from 'lodash-es';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, shallowRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay, useLocale, useTheme } from 'vuetify';
 
@@ -145,7 +145,7 @@ const { i18n: { t } } = useI18n();
 
 useLanguage('admin', http, vI18n);
 
-const sidebar = ref(display.lgAndUp);
+const sidebar = shallowRef(display.lgAndUp.value);
 const resources = groupBy(defaultResources, 'group');
 
 const app = computed(() => useApp().app);

@@ -49,9 +49,13 @@ Survey respondents (users with respondent access only, without any other permiss
 
 Adding user by email, which already belongs to existing user, grants the access to that user instead of creating a new account.
 
+Users managing securable permissions can only add or remove actions they hold themselves (resource permissions or securable permissions of the record). Removing user's access completely is only possible if the user doesn't hold any action, which the managing user doesn't hold. Record owner can manage all actions.
+
 ## Record ownership
 
 `Security` also allows to manage ownership of the record. Ownership can be added / modified / removed.
+
+Ownership can only be changed by the current owner of the record or by users with `resource:securables` permission. `securables` securable permission of the record does not allow changing the ownership.
 
 :::tip
 If user `creates new record` or `copies existing record`, user automatically becomes the owner of the record.

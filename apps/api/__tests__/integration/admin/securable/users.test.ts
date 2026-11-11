@@ -11,7 +11,7 @@ import { User, UserSecurable } from '@intake24/db';
 
 export default (type: SecurableType) => () => {
   const resource = modelToResource(type);
-  const permissions = [`${resource}:securables`];
+  const permissions = [`${resource}:securables`, `${resource}:read`, `${resource}:edit`];
   const emailPrefix = `u02-${type.toLowerCase()}-`;
 
   let url: string;
@@ -217,6 +217,142 @@ export default (type: SecurableType) => () => {
       });
       expect(securables).toBe(0);
       expect(await permissionNames(staff)).not.toContain(resource);
+    });
+  });
+
+  describe('grant scope', () => {
+    let holder: User;
+    let other: User;
+
+    const securableRecord = () => ({ securableType: type, securableId: securableModel.id });
+    const setActions = (userId: string, actions: string[]) =>
+      ioc.cradle.adminUserService.setSecurableActions(userId, securableRecord(), actions);
+    const actionsOf = async (userId: string) => {
+      const securables = await UserSecurable.findAll({
+        attributes: ['action'],
+        where: {
+          userId,
+          ...securableRecord(),
+        },
+      });
+
+      return securables.map(({ action }) => action);
+    };
+
+    const patch = (userId: string, actions: string[]) => request(suite.app)
+      .patch(`${url}/${userId}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user)
+      .send({ actions });
+
+    const destroy = (userId: string) => request(suite.app)
+      .delete(`${url}/${userId}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user);
+
+    const setOwner = (userId: string | null) => request(suite.app)
+      .post(`${url}/owner`)
+      .set('Accept', 'application/json')
+      .set('Authorization', suite.bearer.user)
+      .send({ userId });
+
+    beforeAll(async () => {
+      const { adminUserService } = ioc.cradle;
+      [holder, other] = await Promise.all([
+        adminUserService.create({ email: `${emailPrefix}holder@example.com`, password: undefined }),
+        adminUserService.create({ email: `${emailPrefix}other@example.com`, password: undefined }),
+      ]);
+    });
+
+    afterAll(async () => {
+      await suite.util.clearSecurableAccess();
+      await suite.util.setPermission(permissions);
+    });
+
+    describe('record securables holder', () => {
+      beforeAll(async () => {
+        await suite.util.setPermission([]);
+        await securableModel.update({ ownerId: holder.id });
+        await setActions(suite.data.system.user.id, ['securables', 'read']);
+      });
+
+      it('should not change ownership', async () => {
+        expect((await setOwner(suite.data.system.user.id)).status).toBe(403);
+        expect((await setOwner(null)).status).toBe(403);
+
+        await securableModel.reload();
+        expect(securableModel.ownerId).toBe(holder.id);
+      });
+
+      it('should not grant itself actions it does not hold', async () => {
+        expect((await patch(suite.data.system.user.id, ['securables', 'read', 'edit'])).status).toBe(403);
+        expect((await actionsOf(suite.data.system.user.id)).sort()).toEqual(['read', 'securables']);
+      });
+
+      it('should only add actions it holds', async () => {
+        await setActions(other.id, ['read']);
+
+        expect((await patch(other.id, ['read', 'edit'])).status).toBe(403);
+        expect((await patch(other.id, ['read', 'securables'])).status).toBe(200);
+        expect((await actionsOf(other.id)).sort()).toEqual(['read', 'securables']);
+      });
+
+      it('should only remove actions it holds', async () => {
+        await setActions(other.id, ['read', 'delete', 'securables']);
+
+        expect((await patch(other.id, ['read', 'securables'])).status).toBe(403);
+        expect((await patch(other.id, ['read', 'delete'])).status).toBe(200);
+        expect((await actionsOf(other.id)).sort()).toEqual(['delete', 'read']);
+      });
+
+      it('should only revoke users with actions it holds', async () => {
+        await setActions(other.id, ['read', 'delete']);
+        expect((await destroy(other.id)).status).toBe(403);
+
+        await setActions(other.id, ['read', 'securables']);
+        expect((await destroy(other.id)).status).toBe(204);
+        expect(await actionsOf(other.id)).toEqual([]);
+      });
+    });
+
+    describe('resource securables holder', () => {
+      beforeAll(async () => {
+        await suite.util.clearSecurableAccess();
+        await suite.util.setPermission([`${resource}:securables`, `${resource}:read`]);
+      });
+
+      it('should change ownership', async () => {
+        expect((await setOwner(holder.id)).status).toBe(200);
+      });
+
+      it('should only grant resource actions it holds', async () => {
+        await setActions(other.id, ['read']);
+
+        expect((await patch(other.id, ['read', 'edit'])).status).toBe(403);
+        expect((await patch(other.id, ['read', 'securables'])).status).toBe(200);
+      });
+    });
+
+    describe('owner', () => {
+      beforeAll(async () => {
+        await suite.util.setPermission([]);
+        await securableModel.update({ ownerId: suite.data.system.user.id });
+        await ioc.cradle.adminUserService.flushACLCacheByUserId(suite.data.system.user.id);
+      });
+
+      it('should grant any action', async () => {
+        await setActions(other.id, ['read']);
+
+        expect((await patch(other.id, ['edit', 'delete'])).status).toBe(200);
+        expect((await actionsOf(other.id)).sort()).toEqual(['delete', 'edit']);
+      });
+
+      it('should transfer ownership', async () => {
+        expect((await setOwner(holder.id)).status).toBe(200);
+
+        await securableModel.reload();
+        expect(securableModel.ownerId).toBe(holder.id);
+      });
     });
   });
 };

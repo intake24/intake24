@@ -1,6 +1,7 @@
 import type { Attributes, FindOptions, ModelStatic } from 'sequelize';
 
 import type { RequestIoC } from '@intake24/api/ioc';
+import type { SecurableType } from '@intake24/common/security';
 import type { Dictionary } from '@intake24/common/types';
 import type { HasVisibility, Securable } from '@intake24/db';
 
@@ -119,6 +120,32 @@ function aclService({ globalAclService, user }: Pick<RequestIoC, 'globalAclServi
    */
   const getAccessActions = async (record: Securable, resource: string): Promise<string[]> => globalAclService.getAccessActions(userId, record, resource);
 
+  /**
+   * Check authenticated user can change record ownership
+   *
+   * @param {SecurableType} securableType
+   * @param {Securable} record
+   * @returns {Promise<void>}
+   */
+  const checkSecurableOwnerChange = async (securableType: SecurableType, record: Securable): Promise<void> =>
+    globalAclService.checkSecurableOwnerChange(userId, securableType, record);
+
+  /**
+   * Check authenticated user can change other user's securable actions on a record
+   *
+   * @param {SecurableType} securableType
+   * @param {Securable} record
+   * @param {(string | null)} targetUserId
+   * @param {string[]} actions
+   * @returns {Promise<void>}
+   */
+  const checkSecurableActionsChange = async (
+    securableType: SecurableType,
+    record: Securable,
+    targetUserId: string | null,
+    actions: string[],
+  ): Promise<void> => globalAclService.checkSecurableActionsChange(userId, securableType, record, targetUserId, actions);
+
   return {
     getPermissions,
     getRoles,
@@ -132,6 +159,8 @@ function aclService({ globalAclService, user }: Pick<RequestIoC, 'globalAclServi
     getResourceAccessActions,
     getSecurableAccessActions,
     getAccessActions,
+    checkSecurableOwnerChange,
+    checkSecurableActionsChange,
   };
 }
 

@@ -8,9 +8,11 @@
   "create": "Créer un nouvel utilisateur",
   "securableType": "Type de ressource",
   "securableId": "ID de ressource",
+  "restricted": "Vous ne pouvez accorder ou retirer que les actions dont vous disposez vous-même.",
   "owner": {
     "_": "Propriétaire",
-    "title": "Propriété"
+    "title": "Propriété",
+    "restricted": "Seuls le propriétaire ou les utilisateurs disposant de la permission Sécurité de la ressource peuvent modifier la propriété."
   },
   "actions": {
     "_": "Action ressource",

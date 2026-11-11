@@ -9,10 +9,12 @@
   "create": "Create new user",
   "securableType": "Resource type",
   "securableId": "Resource ID",
+  "restricted": "You can only grant or revoke actions you hold yourself.",
 
   "owner": {
     "_": "Owner",
-    "title": "Ownership"
+    "title": "Ownership",
+    "restricted": "Only the owner or users with the resource Security permission can change ownership."
   },
 
   "actions": {

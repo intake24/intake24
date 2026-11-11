@@ -1,10 +1,13 @@
 import type { Attributes, FindOptions, ModelStatic } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { SecurableType } from '@intake24/common/security';
 import type { HasVisibility, Securable } from '@intake24/db';
 
+import { xor } from 'lodash-es';
+
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { isSecurableType } from '@intake24/common/security';
+import { isSecurableType, securableDefs } from '@intake24/common/security';
 import { resourceToModel, securableToResource } from '@intake24/common/util';
 import { securableIncludes } from '@intake24/db';
 
@@ -288,6 +291,59 @@ function globalAclService({ aclCache, models }: Pick<IoC, 'aclCache' | 'db' | 'm
     ];
   };
 
+  /**
+   * Check user can change record ownership - only owner or holder of resource-level `securables` permission
+   *
+   * @param {string} userId
+   * @param {SecurableType} securableType
+   * @param {Securable} record
+   * @returns {Promise<void>}
+   */
+  const checkSecurableOwnerChange = async (userId: string, securableType: SecurableType, record: Securable): Promise<void> => {
+    if (record.ownerId === userId)
+      return;
+
+    if (!await hasResourceAccess(userId, securableType, 'securables'))
+      throw new ForbiddenError();
+  };
+
+  /**
+   * Check user can change other user's securable actions on a record - user can only add or remove actions they hold, owner holds all of them
+   *
+   * `record` must include user's securables. `targetUserId` is null for user yet to be created.
+   *
+   * @param {string} userId
+   * @param {SecurableType} securableType
+   * @param {Securable} record
+   * @param {(string | null)} targetUserId
+   * @param {string[]} actions
+   * @returns {Promise<void>}
+   */
+  const checkSecurableActionsChange = async (
+    userId: string,
+    securableType: SecurableType,
+    record: Securable,
+    targetUserId: string | null,
+    actions: string[],
+  ): Promise<void> => {
+    const actionDefs: readonly string[] = securableDefs[securableType];
+
+    const [held, current] = await Promise.all([
+      record.ownerId === userId
+        ? actionDefs
+        : getAccessActions(userId, record, securableToResource(securableType)),
+      targetUserId
+        ? models.system.UserSecurable.findAll({
+            attributes: ['action'],
+            where: { userId: targetUserId, securableType, securableId: record.id },
+          }).then(securables => securables.map(({ action }) => action))
+        : [],
+    ]);
+
+    if (xor(current, actions).some(action => !actionDefs.includes(action) || !held.includes(action)))
+      throw new ForbiddenError();
+  };
+
   return {
     getPermissions,
     getRoles,
@@ -301,6 +357,8 @@ function globalAclService({ aclCache, models }: Pick<IoC, 'aclCache' | 'db' | 'm
     getResourceAccessActions,
     getSecurableAccessActions,
     getAccessActions,
+    checkSecurableOwnerChange,
+    checkSecurableActionsChange,
   };
 }
 

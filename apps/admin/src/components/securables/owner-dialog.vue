@@ -1,7 +1,21 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.display.smAndDown" max-width="600px">
     <template #activator="{ props }">
-      <v-btn variant="text" v-bind="props">
+      <v-tooltip v-if="readonly" location="bottom" max-width="320">
+        <template #activator="{ props: tooltipProps }">
+          <v-chip
+            append-icon="fas fa-lock"
+            class="ms-2"
+            prepend-icon="fas fa-user-shield"
+            variant="text"
+            v-bind="tooltipProps"
+          >
+            {{ owner ? owner.name : $t('common.none') }}
+          </v-chip>
+        </template>
+        <span>{{ $t('securables.owner.restricted') }}</span>
+      </v-tooltip>
+      <v-btn v-else variant="text" v-bind="props">
         <v-icon icon="fas fa-user-shield" start />
         {{ owner ? owner.name : $t('common.none') }}
       </v-btn>
@@ -96,6 +110,10 @@ export default defineComponent({
     },
     owner: {
       type: Object as PropType<Owner>,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
     },
   },
 

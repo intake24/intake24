@@ -7,24 +7,29 @@
     <v-spacer />
     <div class="d-flex align-center font-weight-medium text-label-large">
       {{ $t('securables.owner._') }}:
-      <owner-dialog v-bind="{ api, owner, resource }" />
+      <owner-dialog v-bind="{ api, owner, resource, readonly: !canChangeOwner }" />
     </div>
   </v-toolbar>
   <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">
     <template #header-append>
       <user-dialog
-        v-bind="{ api, actions, resource }"
+        v-bind="{ api, actions, grantable, resource }"
         ref="dialog"
         @update:table="updateTable"
       />
     </template>
     <template #[`item.securables`]="{ item }">
-      {{
-        item.securables
-          .map(({ action }) => action)
-          .sort()
-          .join(' | ')
-      }}
+      <div class="d-flex flex-wrap ga-1">
+        <v-chip
+          v-for="({ action }) in item.securables"
+          :key="action"
+          :color="grantable.includes(action) ? 'primary' : 'error'"
+          rounded="pill"
+          size="small"
+        >
+          {{ $t(`securables.actions.${action}`) }}
+        </v-chip>
+      </div>
     </template>
     <template #[`item.action`]="{ item }">
       <v-btn
@@ -38,6 +43,7 @@
       </v-btn>
       <confirm-dialog
         color="error"
+        :disabled="!canRevoke(item)"
         icon
         icon-left="$delete"
         :label="$t('common.action.delete')"
@@ -59,6 +65,7 @@ import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 
 import { computed, useTemplateRef } from 'vue';
 
+import { useEntry, useUser } from '@intake24/admin/stores';
 import { securableDefs } from '@intake24/common/security';
 import { securableToResource } from '@intake24/common/util';
 import { ConfirmDialog, useI18n } from '@intake24/ui';
@@ -88,6 +95,27 @@ const dialog = useTemplateRef('dialog');
 
 const resource = computed(() => securableToResource(props.securableType));
 const actions = computed(() => securableDefs[props.securableType]);
+const api = computed(() => `admin/${resource.value}/${props.resourceId}/securables`);
+
+// Mirrors the API rules: only actions the caller holds can be granted / revoked, owner holds all of them.
+const user = useUser();
+const entry = useEntry();
+const grantable = computed(() => actions.value.filter(action => user.can({
+  resource: resource.value,
+  action,
+  securables: entry.data.securables,
+  ownerId: entry.data.ownerId,
+})));
+// Record securables are left out on purpose, ownership can only be changed by owner or with resource-level permission.
+const canChangeOwner = computed(() => user.can({
+  resource: resource.value,
+  action: 'securables',
+  ownerId: entry.data.ownerId,
+}));
+
+function canRevoke(item: UserSecurableListEntry) {
+  return item.securables.every(({ action }) => (grantable.value as readonly string[]).includes(action));
+}
 
 const headers: DataTableHeader[] = [
   {
@@ -115,8 +143,6 @@ const headers: DataTableHeader[] = [
     align: 'end',
   },
 ];
-
-const api = computed(() => `admin/${resource.value}/${props.resourceId}/securables`);
 
 function editUser(item: UserSecurableListEntry) {
   dialog.value?.edit(item);

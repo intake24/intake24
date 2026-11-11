@@ -61,7 +61,7 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
         const { [paramId]: securableId } = req.params as Record<typeof paramId, string>;
         const { aclService, adminUserService } = req.scope.cradle;
 
-        await aclService.findAndCheckRecordAccess(securable, 'securables', {
+        const record = await aclService.findAndCheckRecordAccess(securable, 'securables', {
           attributes: ['id'],
           where: { id: securableId },
         });
@@ -75,6 +75,8 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
             i18n: { type: 'unique._' },
           });
         }
+
+        await aclService.checkSecurableActionsChange(securableType, record, existingUser?.id ?? null, actions);
 
         const userId = existingUser?.id ?? (await adminUserService.create({
           email,
@@ -99,7 +101,7 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
 
         const { aclService, adminUserService } = req.scope.cradle;
 
-        const [, user] = await Promise.all([
+        const [record, user] = await Promise.all([
           aclService.findAndCheckRecordAccess(securable, 'securables', {
             attributes: ['id'],
             where: { id: securableId },
@@ -108,6 +110,8 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
         ]);
         if (!user)
           throw new NotFoundError();
+
+        await aclService.checkSecurableActionsChange(securableType, record, userId, actions);
 
         await adminUserService.setSecurableActions(userId, { securableType, securableId }, actions);
 
@@ -124,7 +128,7 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
 
         const { aclService, adminUserService } = req.scope.cradle;
 
-        const [, user] = await Promise.all([
+        const [record, user] = await Promise.all([
           aclService.findAndCheckRecordAccess(securable, 'securables', {
             attributes: ['id'],
             where: { id: securableId },
@@ -139,6 +143,8 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
         ]);
         if (!user)
           throw new NotFoundError();
+
+        await aclService.checkSecurableActionsChange(securableType, record, userId, []);
 
         await adminUserService.removeSecurableAccess(userId, { securableType, securableId });
 
@@ -177,17 +183,19 @@ export function securable(securable: ModelStatic<Securable>, contract: Securable
       handler: async ({ body: { userId }, params: { [paramId]: securableId }, req }) => {
         const { aclService, adminUserService } = req.scope.cradle;
 
+        const securableRecord = await aclService.findAndCheckRecordAccess(securable, 'securables', {
+          attributes: ['id', 'ownerId'],
+          where: { id: securableId },
+        });
+
+        await aclService.checkSecurableOwnerChange(securableType, securableRecord);
+
         if (userId && !await adminUserService.findAssignableUser(userId)) {
           throw ValidationError.from({
             path: 'userId',
             i18n: { type: 'exists._' },
           });
         }
-
-        const securableRecord = await aclService.findAndCheckRecordAccess(securable, 'securables', {
-          attributes: ['id', 'ownerId'],
-          where: { id: securableId },
-        });
 
         await adminUserService.setSecurableOwner(securableRecord, userId);
 

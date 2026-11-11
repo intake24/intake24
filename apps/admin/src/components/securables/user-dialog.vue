@@ -116,6 +116,7 @@
             <v-col v-for="action in actions" :key="action" cols="12" sm="6">
               <v-checkbox-btn
                 v-model="data.actions"
+                :disabled="!grantable.includes(action)"
                 hide-details="auto"
                 :label="$t(`securables.actions.${action}`)"
                 :prepend-inner-icon="
@@ -126,6 +127,9 @@
               />
             </v-col>
           </v-row>
+          <v-alert v-if="grantable.length < actions.length" class="mt-2" density="compact" type="info">
+            {{ $t('securables.restricted') }}
+          </v-alert>
           <error-list :errors="nonInputErrors" />
         </v-card-text>
         <v-card-actions>
@@ -184,6 +188,10 @@ export default defineComponent({
       required: true,
     },
     actions: {
+      type: Array as PropType<readonly SecurableAction[]>,
+      required: true,
+    },
+    grantable: {
       type: Array as PropType<readonly SecurableAction[]>,
       required: true,
     },
