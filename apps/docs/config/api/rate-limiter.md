@@ -255,6 +255,26 @@ Counted: successful requests.
 - type: `number`
 - default: `1`
 
+### MFA verification
+
+Admin MFA verification (`/api/admin/auth/verify`), counted per user the session's MFA challenge was issued for, regardless of client IP address. Each challenge allows a single attempt, but a successful password login issues a new challenge without counting towards the login limits, so this limit is what restricts MFA code guessing by someone who knows the password. When exceeded, the user cannot complete MFA from any client until the window expires.
+
+Counted: failed requests.
+
+#### Window
+
+- object-path: `limits.mfaVerify.windowMs`
+- dotenv var: `RATE_LIMITER_MFA_VERIFY_WINDOW`
+- type: `string`
+- default: `'15m'`
+
+#### Limit
+
+- object-path: `limits.mfaVerify.limit`
+- dotenv var: `RATE_LIMITER_MFA_VERIFY_LIMIT`
+- type: `number`
+- default: `5`
+
 ### Generate user - survey & IP
 
 User generation (`/api/surveys/:slug/generate-user`), counted per survey and client IP address.

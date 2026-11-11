@@ -30,6 +30,7 @@ export const rateLimiterConfigSchema = z.object({
     generateUserSurveyIp: rateLimitSchema,
     generateUserSurvey: rateLimitSchema,
     verify: rateLimitSchema,
+    mfaVerify: rateLimitSchema,
     feedback: rateLimitSchema,
     rating: rateLimitSchema,
   }),
@@ -133,6 +134,10 @@ const rawRateLimiterConfig = {
     verify: {
       windowMs: process.env.RATE_LIMITER_VERIFY_WINDOW || '5m',
       limit: process.env.RATE_LIMITER_VERIFY_LIMIT || '1',
+    },
+    mfaVerify: {
+      windowMs: process.env.RATE_LIMITER_MFA_VERIFY_WINDOW || '15m',
+      limit: process.env.RATE_LIMITER_MFA_VERIFY_LIMIT || '5',
     },
     feedback: {
       windowMs: process.env.RATE_LIMITER_FEEDBACK_WINDOW || '1m',
