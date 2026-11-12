@@ -18599,23 +18599,20 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "name": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 128,
-                            "pattern": "^[\\w:-]*$"
+                            "$ref": "#/definitions/__schema0"
                           },
                           "displayName": {
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 128
-                          },
-                          "description": {
-                            "nullable": true,
-                            "type": "string"
                           }
                         },
                         "required": [
+                          "id",
                           "name",
                           "displayName"
                         ],
@@ -18627,6 +18624,9 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "string"
+                          },
                           "name": {
                             "type": "string",
                             "minLength": 1,
@@ -18638,14 +18638,27 @@
                             "minLength": 1,
                             "maxLength": 128
                           },
-                          "description": {
-                            "nullable": true,
-                            "type": "string"
+                          "permissions": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "$ref": "#/definitions/__schema0"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "additionalProperties": false
+                            }
                           }
                         },
                         "required": [
+                          "id",
                           "name",
-                          "displayName"
+                          "displayName",
+                          "permissions"
                         ],
                         "additionalProperties": false
                       }
@@ -18655,7 +18668,15 @@
                     "permissions",
                     "roles"
                   ],
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "definitions": {
+                    "__schema0": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128,
+                      "pattern": "^[\\w:-]*$"
+                    }
+                  }
                 }
               }
             }
@@ -23115,8 +23136,8 @@
     },
     "/admin/faqs/{faqId}/securables/users": {
       "get": {
-        "description": "FAQ: Browse available users (paginated list)",
-        "summary": "FAQ: Browse available users",
+        "description": "FAQ: Search users that can be given access (max 10)",
+        "summary": "FAQ: Search available users",
         "tags": [
           "admin",
           "faqSecurable"
@@ -23128,32 +23149,6 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -23169,115 +23164,29 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "email": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "securables": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "userId": {
-                                  "type": "string"
-                                },
-                                "securableId": {
-                                  "type": "string"
-                                },
-                                "securableType": {
-                                  "type": "string"
-                                },
-                                "action": {
-                                  "type": "string"
-                                },
-                                "fields": {
-                                  "nullable": true,
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                },
-                                "createdAt": {},
-                                "updatedAt": {}
-                              },
-                              "required": [
-                                "userId",
-                                "securableId",
-                                "securableType",
-                                "action",
-                                "fields",
-                                "createdAt",
-                                "updatedAt"
-                              ],
-                              "additionalProperties": false
-                            }
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "email",
-                          "securables"
-                        ],
-                        "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "email": {
+                        "nullable": true,
+                        "type": "string"
                       }
                     },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false
+                    "required": [
+                      "id",
+                      "name",
+                      "email"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               }
             }
@@ -32164,8 +32073,8 @@
     },
     "/admin/feedback-schemes/{feedbackSchemeId}/securables/users": {
       "get": {
-        "description": "FeedbackScheme: Browse available users (paginated list)",
-        "summary": "FeedbackScheme: Browse available users",
+        "description": "FeedbackScheme: Search users that can be given access (max 10)",
+        "summary": "FeedbackScheme: Search available users",
         "tags": [
           "admin",
           "feedbackSchemeSecurable"
@@ -32177,32 +32086,6 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -32218,115 +32101,29 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "email": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "securables": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "userId": {
-                                  "type": "string"
-                                },
-                                "securableId": {
-                                  "type": "string"
-                                },
-                                "securableType": {
-                                  "type": "string"
-                                },
-                                "action": {
-                                  "type": "string"
-                                },
-                                "fields": {
-                                  "nullable": true,
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                },
-                                "createdAt": {},
-                                "updatedAt": {}
-                              },
-                              "required": [
-                                "userId",
-                                "securableId",
-                                "securableType",
-                                "action",
-                                "fields",
-                                "createdAt",
-                                "updatedAt"
-                              ],
-                              "additionalProperties": false
-                            }
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "email",
-                          "securables"
-                        ],
-                        "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "email": {
+                        "nullable": true,
+                        "type": "string"
                       }
                     },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false
+                    "required": [
+                      "id",
+                      "name",
+                      "email"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               }
             }
@@ -45906,6 +45703,7 @@
                               "LocaleIndexBuild",
                               "LocalesSync",
                               "PopularitySearchUpdateCounters",
+                              "PortionSizeImageCatalogExport",
                               "PurgeExpiredTokens",
                               "ResourceExport",
                               "SurveyEventNotification",
@@ -46245,6 +46043,12 @@
                                   "foodCodes"
                                 ],
                                 "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "not": {}
+                                }
                               },
                               {
                                 "type": "object",
@@ -46984,6 +46788,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -47323,6 +47128,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -48076,6 +47887,7 @@
                       "LocaleIndexBuild",
                       "LocalesSync",
                       "PopularitySearchUpdateCounters",
+                      "PortionSizeImageCatalogExport",
                       "PurgeExpiredTokens",
                       "ResourceExport",
                       "SurveyEventNotification",
@@ -48134,6 +47946,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -48473,6 +48286,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -50485,8 +50304,8 @@
     },
     "/admin/languages/{languageId}/securables/users": {
       "get": {
-        "description": "Language: Browse available users (paginated list)",
-        "summary": "Language: Browse available users",
+        "description": "Language: Search users that can be given access (max 10)",
+        "summary": "Language: Search available users",
         "tags": [
           "admin",
           "languageSecurable"
@@ -50498,32 +50317,6 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -50539,115 +50332,29 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "email": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "securables": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "userId": {
-                                  "type": "string"
-                                },
-                                "securableId": {
-                                  "type": "string"
-                                },
-                                "securableType": {
-                                  "type": "string"
-                                },
-                                "action": {
-                                  "type": "string"
-                                },
-                                "fields": {
-                                  "nullable": true,
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                },
-                                "createdAt": {},
-                                "updatedAt": {}
-                              },
-                              "required": [
-                                "userId",
-                                "securableId",
-                                "securableType",
-                                "action",
-                                "fields",
-                                "createdAt",
-                                "updatedAt"
-                              ],
-                              "additionalProperties": false
-                            }
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "email",
-                          "securables"
-                        ],
-                        "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "email": {
+                        "nullable": true,
+                        "type": "string"
                       }
                     },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false
+                    "required": [
+                      "id",
+                      "name",
+                      "email"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               }
             }
@@ -52833,6 +52540,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -53172,6 +52880,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -55833,8 +55547,8 @@
     },
     "/admin/locales/{localeId}/securables/users": {
       "get": {
-        "description": "Locale: Browse available users (paginated list)",
-        "summary": "Locale: Browse available users",
+        "description": "Locale: Search users that can be given access (max 10)",
+        "summary": "Locale: Search available users",
         "tags": [
           "admin",
           "localeSecurable"
@@ -55846,32 +55560,6 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -55887,115 +55575,29 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "email": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "securables": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "userId": {
-                                  "type": "string"
-                                },
-                                "securableId": {
-                                  "type": "string"
-                                },
-                                "securableType": {
-                                  "type": "string"
-                                },
-                                "action": {
-                                  "type": "string"
-                                },
-                                "fields": {
-                                  "nullable": true,
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                },
-                                "createdAt": {},
-                                "updatedAt": {}
-                              },
-                              "required": [
-                                "userId",
-                                "securableId",
-                                "securableType",
-                                "action",
-                                "fields",
-                                "createdAt",
-                                "updatedAt"
-                              ],
-                              "additionalProperties": false
-                            }
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "email",
-                          "securables"
-                        ],
-                        "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "email": {
+                        "nullable": true,
+                        "type": "string"
                       }
                     },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false
+                    "required": [
+                      "id",
+                      "name",
+                      "email"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               }
             }
@@ -57891,6 +57493,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -58230,6 +57833,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -136890,6 +136499,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -137229,6 +136839,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -140220,8 +139836,8 @@
     },
     "/admin/surveys/{surveyId}/securables/users": {
       "get": {
-        "description": "Survey: Browse available users (paginated list)",
-        "summary": "Survey: Browse available users",
+        "description": "Survey: Search users that can be given access (max 10)",
+        "summary": "Survey: Search available users",
         "tags": [
           "admin",
           "surveySecurable"
@@ -140233,32 +139849,6 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -140274,115 +139864,29 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "email": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "securables": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "userId": {
-                                  "type": "string"
-                                },
-                                "securableId": {
-                                  "type": "string"
-                                },
-                                "securableType": {
-                                  "type": "string"
-                                },
-                                "action": {
-                                  "type": "string"
-                                },
-                                "fields": {
-                                  "nullable": true,
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                },
-                                "createdAt": {},
-                                "updatedAt": {}
-                              },
-                              "required": [
-                                "userId",
-                                "securableId",
-                                "securableType",
-                                "action",
-                                "fields",
-                                "createdAt",
-                                "updatedAt"
-                              ],
-                              "additionalProperties": false
-                            }
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "email",
-                          "securables"
-                        ],
-                        "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "email": {
+                        "nullable": true,
+                        "type": "string"
                       }
                     },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false
+                    "required": [
+                      "id",
+                      "name",
+                      "email"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               }
             }
@@ -295817,8 +295321,8 @@
     },
     "/admin/survey-schemes/{surveySchemeId}/securables/users": {
       "get": {
-        "description": "SurveyScheme: Browse available users (paginated list)",
-        "summary": "SurveyScheme: Browse available users",
+        "description": "SurveyScheme: Search users that can be given access (max 10)",
+        "summary": "SurveyScheme: Search available users",
         "tags": [
           "admin",
           "surveySchemeSecurable"
@@ -295830,32 +295334,6 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9007199254740991
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^.+\\|(asc|desc)$"
             }
           },
           {
@@ -295871,115 +295349,29 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "email": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "securables": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "userId": {
-                                  "type": "string"
-                                },
-                                "securableId": {
-                                  "type": "string"
-                                },
-                                "securableType": {
-                                  "type": "string"
-                                },
-                                "action": {
-                                  "type": "string"
-                                },
-                                "fields": {
-                                  "nullable": true,
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                },
-                                "createdAt": {},
-                                "updatedAt": {}
-                              },
-                              "required": [
-                                "userId",
-                                "securableId",
-                                "securableType",
-                                "action",
-                                "fields",
-                                "createdAt",
-                                "updatedAt"
-                              ],
-                              "additionalProperties": false
-                            }
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "name",
-                          "email",
-                          "securables"
-                        ],
-                        "additionalProperties": false
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "email": {
+                        "nullable": true,
+                        "type": "string"
                       }
                     },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "from": {
-                          "type": "number"
-                        },
-                        "lastPage": {
-                          "type": "number"
-                        },
-                        "page": {
-                          "type": "number"
-                        },
-                        "path": {
-                          "type": "string"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "to": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "from",
-                        "lastPage",
-                        "page",
-                        "path",
-                        "limit",
-                        "to",
-                        "total"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "meta"
-                  ],
-                  "additionalProperties": false
+                    "required": [
+                      "id",
+                      "name",
+                      "email"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               }
             }
@@ -296214,6 +295606,7 @@
                               "LocaleIndexBuild",
                               "LocalesSync",
                               "PopularitySearchUpdateCounters",
+                              "PortionSizeImageCatalogExport",
                               "PurgeExpiredTokens",
                               "ResourceExport",
                               "SurveyEventNotification",
@@ -296527,6 +295920,12 @@
                                   "foodCodes"
                                 ],
                                 "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "not": {}
+                                }
                               },
                               {
                                 "type": "object",
@@ -297206,6 +296605,7 @@
                       "LocaleIndexBuild",
                       "LocalesSync",
                       "PopularitySearchUpdateCounters",
+                      "PortionSizeImageCatalogExport",
                       "PurgeExpiredTokens",
                       "ResourceExport",
                       "SurveyEventNotification",
@@ -297285,6 +296685,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -297598,6 +296999,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -298226,6 +297633,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -298539,6 +297947,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -299221,6 +298635,7 @@
                       "LocaleIndexBuild",
                       "LocalesSync",
                       "PopularitySearchUpdateCounters",
+                      "PortionSizeImageCatalogExport",
                       "PurgeExpiredTokens",
                       "ResourceExport",
                       "SurveyEventNotification",
@@ -299300,6 +298715,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -299613,6 +299029,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -300291,6 +299713,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -300630,6 +300053,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -301343,6 +300772,7 @@
                     "LocaleIndexBuild",
                     "LocalesSync",
                     "PopularitySearchUpdateCounters",
+                    "PortionSizeImageCatalogExport",
                     "PurgeExpiredTokens",
                     "ResourceExport",
                     "SurveyEventNotification",
@@ -301386,6 +300816,7 @@
                       "LocaleIndexBuild",
                       "LocalesSync",
                       "PopularitySearchUpdateCounters",
+                      "PortionSizeImageCatalogExport",
                       "PurgeExpiredTokens",
                       "ResourceExport",
                       "SurveyEventNotification",
@@ -301478,6 +300909,7 @@
                               "LocaleIndexBuild",
                               "LocalesSync",
                               "PopularitySearchUpdateCounters",
+                              "PortionSizeImageCatalogExport",
                               "PurgeExpiredTokens",
                               "ResourceExport",
                               "SurveyEventNotification",
@@ -301817,6 +301249,12 @@
                                   "foodCodes"
                                 ],
                                 "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "not": {}
+                                }
                               },
                               {
                                 "type": "object",
@@ -302817,6 +302255,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -303156,6 +302595,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
@@ -303852,6 +303297,7 @@
                         "LocaleIndexBuild",
                         "LocalesSync",
                         "PopularitySearchUpdateCounters",
+                        "PortionSizeImageCatalogExport",
                         "PurgeExpiredTokens",
                         "ResourceExport",
                         "SurveyEventNotification",
@@ -304191,6 +303637,12 @@
                             "foodCodes"
                           ],
                           "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "not": {}
+                          }
                         },
                         {
                           "type": "object",
