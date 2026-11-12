@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 import { config } from 'dotenv';
 import { defineConfig } from 'vitest/config';
 
@@ -6,7 +8,9 @@ import configShared from '../../packages/common/vitest.shared.js';
 const sharedTestConfig = {
   globals: true,
   setupFiles: ['../../packages/common/vitest.setup.js'],
-  env: config({ path: './__tests__/.env-test' }).parsed,
+  env: config({
+    path: fileURLToPath(new URL('./__tests__/.env-test', import.meta.url)),
+  }).parsed,
 };
 
 const dbUnitTests = [
@@ -19,7 +23,7 @@ export default defineConfig({
   test: {
     projects: [
       {
-        plugins: configShared.plugins,
+        resolve: configShared.resolve,
         test: {
           ...sharedTestConfig,
           name: 'unit',
@@ -28,7 +32,7 @@ export default defineConfig({
         },
       },
       {
-        plugins: configShared.plugins,
+        resolve: configShared.resolve,
         test: {
           ...sharedTestConfig,
           name: 'db-unit',

@@ -38,11 +38,19 @@ describe('resolveUploadedFilePath', () => {
     await expect(fs.readFile(target, 'utf8')).resolves.toBe('keep');
   });
 
-  it('rejects a symlink even when its name is a valid TUS identifier', async () => {
+  it('rejects a symlink even when its name is a valid TUS identifier', async ({ skip }) => {
     const target = path.join(testRoot, 'outside');
     const fileId = randomBytes(16).toString('hex');
     await fs.writeFile(target, 'keep');
-    await fs.symlink(target, path.join(uploadDir, fileId));
+    try {
+      await fs.symlink(target, path.join(uploadDir, fileId));
+    }
+    catch (err) {
+      // Windows permits file symlinks only with admin rights or Developer Mode enabled.
+      if (process.platform === 'win32' && (err as NodeJS.ErrnoException).code === 'EPERM')
+        skip('symlink creation not permitted on this Windows host');
+      throw err;
+    }
 
     await expect(safeResolveUploadedFilePath(uploadDir, fileId)).rejects.toBeInstanceOf(LocalisableError);
   });

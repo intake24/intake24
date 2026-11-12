@@ -1,5 +1,1 @@
-import { defineConfig } from 'vitest/config';
-
-import configShared from './vitest.shared.js';
-
-export default defineConfig(configShared);
+export { default } from './vitest.shared.js';

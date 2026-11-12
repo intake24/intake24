@@ -1,18 +1,16 @@
-import type { ReadStream } from 'node:fs';
 import type { ModelStatic } from 'sequelize';
 
 import type Suite from './integration-suite';
 import type { SecurableType } from '@intake24/common/security';
 import type { Securable } from '@intake24/db';
 
-import { createWriteStream } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { faker } from '@faker-js/faker';
 import { AsyncParser } from '@json2csv/node';
-import axios from 'axios';
 import { times } from 'lodash-es';
+import sharp from 'sharp';
 
 import ioc from '@intake24/api/ioc';
 import { FAQ, FeedbackScheme, Language, Permission, Role, Survey, SurveyScheme, SystemLocale, User, UserSecurable } from '@intake24/db';
@@ -135,18 +133,19 @@ export default util;
 
 export type Util = ReturnType<typeof util>;
 
-export async function downloadImage(url: string, filename: string): Promise<string> {
+export async function generateImage(filename: string): Promise<string> {
   const filePath = path.resolve(fsConfig.local.downloads, filename);
-  const fileStream = createWriteStream(filePath);
 
-  const { data } = await axios.get<ReadStream>(url, { responseType: 'stream' });
+  await sharp({
+    create: {
+      width: 1200,
+      height: 800,
+      channels: 3,
+      background: faker.color.rgb(),
+    },
+  }).jpeg().toFile(filePath);
 
-  data.pipe(fileStream);
-
-  return new Promise((resolve, reject) => {
-    fileStream.on('finish', () => resolve(filePath));
-    fileStream.on('error', () => reject(new Error('Failed to download image.')));
-  });
+  return filePath;
 }
 
 export async function generateCSV(filename: string): Promise<string> {

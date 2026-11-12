@@ -14,7 +14,7 @@ import slugify from 'slugify';
 
 import { randomString, toStandardUnitId } from '@intake24/common/util';
 
-import { downloadImage } from '../util';
+import { generateImage } from '../util';
 
 function category() {
   return {
@@ -42,7 +42,7 @@ async function asServedSet(asServedSetId?: string): Promise<CreateAsServedSetInp
   const id = asServedSetId ?? randomString(32);
   const originalname = `${id}.jpg`;
 
-  const filePath = await downloadImage('https://picsum.photos/1200/800.jpg', originalname);
+  const filePath = await generateImage(originalname);
 
   return {
     id,
