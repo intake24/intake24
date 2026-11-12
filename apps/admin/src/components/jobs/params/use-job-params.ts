@@ -5,6 +5,12 @@ import type { JobParams } from '@intake24/common/types';
 
 import { useVModel } from '@vueuse/core';
 
+type WithFormFile<P> = {
+  [K in keyof P]: K extends 'file' ? File | null : P[K];
+};
+
+export type JobParamsForm<T extends keyof JobParams> = WithFormFile<JobParams[T]>;
+
 export function createJobParamProps<T extends keyof JobParams>() {
   return {
     errors: {
@@ -12,7 +18,7 @@ export function createJobParamProps<T extends keyof JobParams>() {
       required: true,
     },
     modelValue: {
-      type: Object as PropType<JobParams[T]>,
+      type: Object as PropType<JobParamsForm<T>>,
       required: true,
     },
     disabled: {
@@ -24,7 +30,7 @@ export function createJobParamProps<T extends keyof JobParams>() {
 
 export type UseJobParamsProps<T extends keyof JobParams> = {
   errors: ReturnUseErrors;
-  modelValue: JobParams[T];
+  modelValue: JobParamsForm<T>;
   disabled?: Record<keyof JobParams[T], boolean>;
 };
 

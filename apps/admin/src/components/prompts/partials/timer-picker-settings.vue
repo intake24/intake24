@@ -70,10 +70,10 @@ import { useI18n } from '@intake24/ui';
 
 defineOptions({ name: 'TimerPickerSettings' });
 
-const allowedMinutes = defineModel('allowedMinutes', { type: Number as PropType<TimePicker['allowedMinutes']> });
-const amPmToggle = defineModel('amPmToggle', { type: Boolean as PropType<TimePicker['amPmToggle']> });
-const format = defineModel('format', { type: String as PropType<TimePicker['format']> });
-const ui = defineModel('ui', { type: String as PropType<TimePicker['ui']> });
+const allowedMinutes = defineModel('allowedMinutes', { type: Number as PropType<TimePicker['allowedMinutes']>, required: true });
+const amPmToggle = defineModel('amPmToggle', { type: Boolean as PropType<TimePicker['amPmToggle']>, required: true });
+const format = defineModel('format', { type: String as PropType<TimePicker['format']>, required: true });
+const ui = defineModel('ui', { type: String as PropType<TimePicker['ui']>, required: true });
 
 const { i18n } = useI18n();
 

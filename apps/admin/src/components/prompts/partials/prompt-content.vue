@@ -120,8 +120,8 @@ const promptType = computed(() => getPromptType(props.component));
 
 const keys = computed(() => {
   const messageObject = get(i18n.messages.value.en, `prompts.${promptType.value}`);
-  if (messageObject === undefined)
-    console.error(`Missing translation object: ${`prompts.${promptType.value}`}`);
+  if (typeof messageObject !== 'object' || messageObject === null)
+    throw new Error(`Missing translation object: prompts.${promptType.value}`);
   return getObjectNestedKeys(messageObject);
 });
 const selectedKey = ref(keys.value.length ? keys.value[0] : undefined);

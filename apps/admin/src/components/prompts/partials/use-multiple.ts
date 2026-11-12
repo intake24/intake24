@@ -1,11 +1,13 @@
 import type { SetupContext } from 'vue';
 
+import type { HasMultiple } from '@intake24/common/prompts';
+
 import { counterDefaults, sliderDefaults } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/ui';
 
 import { useBasePrompt } from './use-base-prompt';
 
-export function useMultiple(props: any, ctx: Pick<SetupContext<'update:options'[]>, 'emit'>) {
+export function useMultiple(props: HasMultiple, ctx: Pick<SetupContext<'update:options'[]>, 'emit'>) {
   const { i18n } = useI18n();
   const { update } = useBasePrompt(props, ctx);
 

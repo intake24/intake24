@@ -1,5 +1,3 @@
-import type { CategoryReference } from '@intake24/common/types/http/admin';
+import type { CategoryAttributes } from '@intake24/common/types/http/admin';
 
-export interface CategoryListItem extends CategoryReference {
-  [key: string]: any;
-}
+export type CategoryListItem = Pick<CategoryAttributes, 'id' | 'code' | 'name'>;

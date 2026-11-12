@@ -61,58 +61,32 @@
   </v-card>
 </template>
 
-<script lang="ts" setup>
-import type { PropType } from 'vue';
-
-import type { CategoryListItem } from './categories';
+<script lang="ts" setup generic="T extends CategoryReference">
 import type { ReturnUseErrors } from '@intake24/admin/composables/use-errors';
-
-import { useVModel } from '@vueuse/core';
+import type { CategoryReference } from '@intake24/common/types/http/admin';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmDialog } from '@intake24/ui';
 
 import { ErrorList } from '../../forms';
 
-const props = defineProps({
-  id: {
-    type: String,
-  },
-  code: {
-    type: String,
-  },
-  border: {
-    type: [Boolean, String, Number],
-  },
-  errors: {
-    type: Object as PropType<ReturnUseErrors>,
-  },
-  flat: {
-    type: Boolean,
-    default: true,
-  },
-  tile: {
-    type: Boolean,
-  },
-  modelValue: {
-    type: Array as PropType<CategoryListItem[]>,
-    required: true,
-  },
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
+withDefaults(defineProps<{
+  id?: string;
+  code?: string;
+  border?: boolean | string | number;
+  errors?: ReturnUseErrors;
+  flat?: boolean;
+  tile?: boolean;
+  readonly?: boolean;
+}>(), {
+  flat: true,
+  readonly: false,
 });
 
-const emit = defineEmits(['update:modelValue']);
+const items = defineModel<T[]>({ required: true });
 
-const items = useVModel(props, 'modelValue', emit, {
-  passive: true,
-  deep: true,
-});
-
-function add(categories: CategoryListItem) {
-  items.value.push(categories);
+function add(category: T) {
+  items.value = [...items.value, category];
 }
 
 function remove(code: string) {

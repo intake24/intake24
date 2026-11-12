@@ -6,44 +6,42 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.meal-add-prompt.custom')"
           :model-value="custom"
-          @update:model-value="update('custom', $event)"
+          @update:model-value="update('custom', !!$event)"
         />
         <v-switch
           hide-details="auto"
           :label="$t('survey-schemes.prompts.meal-add-prompt.unique')"
           :model-value="unique"
-          @update:model-value="update('unique', $event)"
+          @update:model-value="update('unique', !!$event)"
         />
       </v-col>
     </v-row>
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { useBasePrompt } from '../partials';
 
-import { basePrompt } from '../partials';
+defineOptions({ name: 'MealAddPrompt' });
 
-export default defineComponent({
-  name: 'MealAddPrompt',
-
-  mixins: [basePrompt],
-
-  props: {
-    custom: {
-      type: Boolean as PropType<Prompts['meal-add-prompt']['custom']>,
-      required: true,
-    },
-    unique: {
-      type: Boolean as PropType<Prompts['meal-add-prompt']['unique']>,
-      required: true,
-    },
+const props = defineProps({
+  custom: {
+    type: Boolean as PropType<Prompts['meal-add-prompt']['custom']>,
+    required: true,
+  },
+  unique: {
+    type: Boolean as PropType<Prompts['meal-add-prompt']['unique']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

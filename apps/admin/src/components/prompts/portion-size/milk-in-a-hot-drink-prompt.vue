@@ -6,7 +6,7 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.badges')"
           :model-value="badges"
-          @update:model-value="update('badges', $event)"
+          @update:model-value="update('badges', !!$event)"
         />
       </v-col>
       <v-col cols="12" md="6">
@@ -23,41 +23,32 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
-
 import { useSelects } from '@intake24/admin/composables';
 
-import { basePrompt } from '../partials';
+import { useBasePrompt } from '../partials';
 
-export default defineComponent({
-  name: 'MilkInAHotDrinkPrompt',
+defineOptions({ name: 'MilkInAHotDrinkPrompt' });
 
-  mixins: [basePrompt],
-
-  props: {
-    badges: {
-      type: Boolean as PropType<Prompts['milk-in-a-hot-drink-prompt']['badges']>,
-      required: true,
-    },
-    orientation: {
-      type: String as PropType<Prompts['milk-in-a-hot-drink-prompt']['orientation']>,
-      required: true,
-    },
+const props = defineProps({
+  badges: {
+    type: Boolean as PropType<Prompts['milk-in-a-hot-drink-prompt']['badges']>,
+    required: true,
   },
-
-  setup() {
-    const { orientations } = useSelects();
-
-    return {
-      orientations,
-    };
+  orientation: {
+    type: String as PropType<Prompts['milk-in-a-hot-drink-prompt']['orientation']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
+const { orientations } = useSelects();
 </script>
 
 <style lang="scss" scoped></style>

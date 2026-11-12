@@ -164,11 +164,13 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
+import type { AssociatedFoodItem, CategoryListItem } from '@intake24/admin/components/fdbs';
 import type {
   FoodDatabaseRefs,
   FoodEntry,
   FoodInput,
   LocaleEntry,
+  NutrientTableRecordAttributes,
 } from '@intake24/common/types/http/admin';
 
 import { computed, onMounted, ref } from 'vue';
@@ -191,6 +193,12 @@ import { ConfirmDialog, SelectIcon, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 import { useOffset } from './use-offset';
+
+type FoodForm = Required<Omit<FoodInput, 'parentCategories' | 'nutrientRecords' | 'associatedFoods'>> & {
+  parentCategories: CategoryListItem[];
+  nutrientRecords: NutrientTableRecordAttributes[];
+  associatedFoods: AssociatedFoodItem[];
+};
 
 defineOptions({ name: 'FoodEntry' });
 
@@ -224,7 +232,7 @@ const isEntryLoaded = computed(() => !!entry.value);
 
 const { refs } = useEntry<LocaleEntry, FoodDatabaseRefs>(props);
 const { clearError, form: { data, errors, put }, routeLeave, toForm } = useEntryForm<
-  Required<FoodInput>,
+  FoodForm,
   LocaleEntry
 >(props, {
   data: {

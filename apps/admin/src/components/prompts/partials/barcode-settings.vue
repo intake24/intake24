@@ -12,7 +12,7 @@
         :label="$t('survey-schemes.prompts.barcodes.providers._')"
         :model-value="barcode.type"
         name="barcode"
-        @update:model-value="update('type', $event)"
+        @update:model-value="updateType"
       />
       <template v-if="barcode.type !== 'none'">
         <v-select
@@ -28,13 +28,13 @@
           <v-switch
             :label="$t('survey-schemes.prompts.barcodes.feedback.vibration')"
             :model-value="barcode.feedback.vibration"
-            @update:model-value="update('feedback', { ...barcode.feedback, vibration: $event })"
+            @update:model-value="update('feedback', { ...barcode.feedback, vibration: !!$event })"
           />
           <v-switch
             disabled
             :label="$t('survey-schemes.prompts.barcodes.feedback.audio')"
             :model-value="barcode.feedback.audio"
-            @update:model-value="update('feedback', { ...barcode.feedback, audio: $event })"
+            @update:model-value="update('feedback', { ...barcode.feedback, audio: !!$event })"
           />
         </div>
       </template>
@@ -77,12 +77,13 @@ const readers = computed(() => {
   return barcodeReaders[props.barcode.type];
 });
 
-function update(field: string, value: any) {
-  if (field === 'type') {
-    emit('update:barcode', copy(defaultBarcodeScannerOptions[value as BarcodeScannerOptions['type']]));
-    return;
-  }
+type ScannerWithReaders = Exclude<BarcodeScannerOptions, { type: 'none' }>;
 
+function updateType(type: BarcodeScannerOptions['type']) {
+  emit('update:barcode', copy(defaultBarcodeScannerOptions[type]));
+}
+
+function update<K extends Exclude<keyof ScannerWithReaders, 'type'>>(field: K, value: ScannerWithReaders[K]) {
   emit('update:barcode', { ...props.barcode, [field]: value });
 }
 </script>

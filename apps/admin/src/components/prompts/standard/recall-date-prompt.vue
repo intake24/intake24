@@ -35,35 +35,33 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { useBasePrompt } from '../partials';
 
-import { basePrompt } from '../partials';
+defineOptions({ name: 'RecallDatePrompt' });
 
-export default defineComponent({
-  name: 'RecallDatePrompt',
-
-  mixins: [basePrompt],
-
-  props: {
-    current: {
-      type: Number as PropType<Prompts['recall-date-prompt']['current']>,
-      default: null,
-    },
-    min: {
-      type: Number as PropType<Prompts['recall-date-prompt']['min']>,
-      default: null,
-    },
-    max: {
-      type: Number as PropType<Prompts['recall-date-prompt']['max']>,
-      default: null,
-    },
+const props = defineProps({
+  current: {
+    type: Number as PropType<Prompts['recall-date-prompt']['current']>,
+    default: null,
+  },
+  min: {
+    type: Number as PropType<Prompts['recall-date-prompt']['min']>,
+    default: null,
+  },
+  max: {
+    type: Number as PropType<Prompts['recall-date-prompt']['max']>,
+    default: null,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { updateNumber } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

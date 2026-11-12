@@ -12,7 +12,7 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.badges')"
           :model-value="badges"
-          @update:model-value="update('badges', $event)"
+          @update:model-value="update('badges', !!$event)"
         />
       </v-col>
     </v-row>

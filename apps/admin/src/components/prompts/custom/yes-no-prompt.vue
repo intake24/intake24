@@ -6,7 +6,7 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.yes-no-prompt.useFlag')"
           :model-value="useFlag"
-          @update:model-value="update('useFlag', $event)"
+          @update:model-value="update('useFlag', !!$event)"
         />
       </v-col>
     </v-row>
@@ -98,101 +98,86 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
 
-import { basePrompt } from '../partials';
+import { useBasePrompt } from '../partials';
 
-export default defineComponent({
-  name: 'YesNoPrompt',
+defineOptions({ name: 'YesNoPrompt' });
 
-  components: {
-    SelectResource,
+const props = defineProps({
+  useFlag: {
+    type: Boolean as PropType<Prompts['yes-no-prompt']['useFlag']>,
+    required: true,
   },
-
-  mixins: [basePrompt],
-
-  props: {
-    useFlag: {
-      type: Boolean as PropType<Prompts['yes-no-prompt']['useFlag']>,
-      required: true,
-    },
-    flag: {
-      type: String as PropType<Prompts['yes-no-prompt']['flag']>,
-      required: false,
-    },
-    trueAction: {
-      type: Object as PropType<Prompts['yes-no-prompt']['trueAction']>,
-      required: false,
-    },
-    falseAction: {
-      type: Object as PropType<Prompts['yes-no-prompt']['falseAction']>,
-      required: false,
-    },
+  flag: {
+    type: String as PropType<Prompts['yes-no-prompt']['flag']>,
+    required: false,
   },
-
-  emits: ['update:options'],
-
-  setup(props, { emit }) {
-    const availableActions = [
-      { value: 'updateFood', title: 'Update Food' },
-    ];
-    const currentTrueAction = ref(props.trueAction
-      ? { ...props.trueAction }
-      : undefined);
-    const currentFalseAction = ref(props.falseAction
-      ? { ...props.falseAction }
-      : undefined);
-
-    function changeToggle(type: boolean, enable: boolean | null) {
-      if (type) {
-        currentTrueAction.value = enable
-          ? {
-              type: 'updateFood',
-              params: { code: 'FOOD_CODE' },
-            }
-          : undefined;
-      }
-      else {
-        currentFalseAction.value = enable
-          ? {
-              type: 'updateFood',
-              params: { code: 'FOOD_CODE' },
-            }
-          : undefined;
-      }
-    };
-
-    watch(
-      currentTrueAction,
-      (value) => {
-        emit('update:options', { trueAction: value });
-      },
-      { deep: true },
-    );
-
-    watch(
-      currentFalseAction,
-      (value) => {
-        emit('update:options', { falseAction: value });
-      },
-      { deep: true },
-    );
-
-    return {
-      availableActions,
-      currentTrueAction,
-      currentFalseAction,
-      changeToggle,
-    };
+  trueAction: {
+    type: Object as PropType<Prompts['yes-no-prompt']['trueAction']>,
+    required: false,
+  },
+  falseAction: {
+    type: Object as PropType<Prompts['yes-no-prompt']['falseAction']>,
+    required: false,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
+
+const availableActions = [
+  { value: 'updateFood', title: 'Update Food' },
+];
+const currentTrueAction = ref(props.trueAction
+  ? { ...props.trueAction }
+  : undefined);
+const currentFalseAction = ref(props.falseAction
+  ? { ...props.falseAction }
+  : undefined);
+
+function changeToggle(type: boolean, enable: boolean | null) {
+  if (type) {
+    currentTrueAction.value = enable
+      ? {
+          type: 'updateFood',
+          params: { code: 'FOOD_CODE' },
+        }
+      : undefined;
+  }
+  else {
+    currentFalseAction.value = enable
+      ? {
+          type: 'updateFood',
+          params: { code: 'FOOD_CODE' },
+        }
+      : undefined;
+  }
+};
+
+watch(
+  currentTrueAction,
+  (value) => {
+    emit('update:options', { trueAction: value });
+  },
+  { deep: true },
+);
+
+watch(
+  currentFalseAction,
+  (value) => {
+    emit('update:options', { falseAction: value });
+  },
+  { deep: true },
+);
 </script>
 
 <style lang="scss" scoped></style>

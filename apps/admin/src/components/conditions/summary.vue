@@ -2,11 +2,11 @@
   <code class="pa-5 d-flex align-baseline">
     <v-label class="mr-2">{{ $t(`survey-schemes.conditions.showIf`) }}</v-label>
     <v-label v-dompurify-html:i18n="info.summaryHtml" />
-    <div v-if="info.showOp">
-      <v-icon end size="small" start>{{ info.icon }}</v-icon>
-      <v-label class="align-baseline">{{ info.check.value || '?' }}</v-label>
+    <div v-if="info.op">
+      <v-icon end size="small" start>{{ info.op.icon }}</v-icon>
+      <v-label class="align-baseline">{{ info.op.value || '?' }}</v-label>
       <v-label
-        v-if="info.showNotRequired" v-dompurify-html:i18n="$t(`survey-schemes.conditions.summary.notRequired`)" class="ml-2 align-baseline"
+        v-if="info.op.notRequired" v-dompurify-html:i18n="$t(`survey-schemes.conditions.summary.notRequired`)" class="ml-2 align-baseline"
       />
     </div>
   </code>
@@ -72,44 +72,37 @@ function getSummaryHtml(condition: Condition): string {
         state: t(`survey-schemes.prompts.externalSources.states.${condition.property.check.state}`),
         value: t(`survey-schemes.conditions.${condition.property.check.value ? 'is' : 'isNot'}`),
       });
-    default:
-      throw new Error(`Unexpected condition property type: ${condition.property.type}`);
+    default: {
+      const unexpected: never = condition.property;
+      throw new Error(`Unexpected condition property: ${JSON.stringify(unexpected)}`);
+    }
   }
 }
 
-function getShowOp(condition: Condition): boolean {
+function getOpInfo(condition: Condition) {
   switch (condition.property.type) {
     case 'value':
-    case 'promptAnswer':
     case 'userField':
-      return true;
-    default:
-      return false;
-  }
-}
-
-function getShowNotRequired(condition: Condition): boolean {
-  switch (condition.property.type) {
+      return {
+        icon: opToIconMap[condition.property.check.op],
+        value: condition.property.check.value,
+        notRequired: false,
+      };
     case 'promptAnswer':
-      return !condition.property.check.required;
+      return {
+        icon: opToIconMap[condition.property.check.op],
+        value: condition.property.check.value,
+        notRequired: !condition.property.check.required,
+      };
     default:
-      return false;
+      return null;
   }
 }
 
-const info = computed(() => {
-  const check = props.condition.property.check;
-
-  return {
-    summaryHtml: getSummaryHtml(props.condition),
-    showOp: getShowOp(props.condition),
-    showNotRequired: getShowNotRequired(props.condition),
-    check,
-    icon: 'op' in check
-      ? opToIconMap[check.op]
-      : undefined,
-  };
-});
+const info = computed(() => ({
+  summaryHtml: getSummaryHtml(props.condition),
+  op: getOpInfo(props.condition),
+}));
 </script>
 
 <style lang="scss" scoped />

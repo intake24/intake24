@@ -2,7 +2,7 @@ import type { PortionSizeMethodId } from '../../surveys';
 
 import { z } from 'zod';
 
-import { localeOptionList, localeTranslation } from '../../types';
+import { listOptionStringValue, localeOptionList, localeTranslation } from '../../types';
 import { promptActions } from '../actions';
 import { layoutTypes } from '../partials';
 import { condition } from './conditions';
@@ -194,7 +194,7 @@ export type TimePicker = z.infer<typeof timePicker>;
 const checkboxListPrompt = z.object({
   ...baseCustomPrompt.shape,
   component: z.literal('checkbox-list-prompt'),
-  options: localeOptionList(),
+  options: localeOptionList({ valueSchema: listOptionStringValue }),
   other: z.boolean(),
   validation: promptValidationWithLimits,
 });
@@ -220,7 +220,7 @@ const radioListPrompt = z.object({
   ...baseCustomPrompt.shape,
   ...validatedPrompt.shape,
   component: z.literal('radio-list-prompt'),
-  options: localeOptionList(),
+  options: localeOptionList({ valueSchema: listOptionStringValue }),
   orientation: z.enum(radioOrientations),
   other: z.boolean(),
 });
@@ -229,7 +229,7 @@ const selectPrompt = z.object({
   ...baseCustomPrompt.shape,
   ...validatedPrompt.shape,
   component: z.literal('select-prompt'),
-  options: localeOptionList(),
+  options: localeOptionList({ valueSchema: listOptionStringValue }),
   multiple: z.boolean(),
 });
 

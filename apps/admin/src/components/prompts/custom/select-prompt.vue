@@ -6,7 +6,7 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.multiple._')"
           :model-value="multiple"
-          @update:model-value="update('multiple', $event)"
+          @update:model-value="update('multiple', !!$event)"
         />
       </v-col>
     </v-row>
@@ -27,36 +27,32 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
-
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { OptionsList } from '@intake24/admin/components/lists';
 
-import { basePrompt } from '../partials';
+import { useBasePrompt } from '../partials';
 
-export default defineComponent({
-  name: 'SelectPrompt',
+defineOptions({ name: 'SelectPrompt' });
 
-  components: { OptionsList, LanguageSelector },
-
-  mixins: [basePrompt],
-
-  props: {
-    multiple: {
-      type: Boolean as PropType<Prompts['select-prompt']['multiple']>,
-      required: true,
-    },
-    options: {
-      type: Object as PropType<Prompts['select-prompt']['options']>,
-      required: true,
-    },
+const props = defineProps({
+  multiple: {
+    type: Boolean as PropType<Prompts['select-prompt']['multiple']>,
+    required: true,
+  },
+  options: {
+    type: Object as PropType<Prompts['select-prompt']['options']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update, updateLanguage } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

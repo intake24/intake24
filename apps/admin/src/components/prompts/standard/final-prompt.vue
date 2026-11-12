@@ -11,7 +11,7 @@
             hide-details="auto"
             :label="$t('survey-schemes.prompts.final-prompt.rating._')"
             :model-value="rating"
-            @update:model-value="update('rating', $event)"
+            @update:model-value="update('rating', !!$event)"
           />
         </v-card-text>
       </v-col>
@@ -19,27 +19,25 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { useBasePrompt } from '../partials';
 
-import { basePrompt } from '../partials';
+defineOptions({ name: 'FinalPrompt' });
 
-export default defineComponent({
-  name: 'FinalPrompt',
-
-  mixins: [basePrompt],
-
-  props: {
-    rating: {
-      type: Boolean as PropType<Prompts['final-prompt']['rating']>,
-      required: true,
-    },
+const props = defineProps({
+  rating: {
+    type: Boolean as PropType<Prompts['final-prompt']['rating']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

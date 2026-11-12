@@ -6,16 +6,8 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-import { basePrompt } from '../partials';
-
-export default defineComponent({
-  name: 'DirectWeightPrompt',
-
-  mixins: [basePrompt],
-});
+<script lang="ts" setup>
+defineOptions({ name: 'DirectWeightPrompt' });
 </script>
 
 <style lang="scss" scoped></style>

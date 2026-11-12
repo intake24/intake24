@@ -11,29 +11,25 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { ImageMapSettings, useBasePrompt } from '../partials';
 
-import { basePrompt, ImageMapSettings } from '../partials';
+defineOptions({ name: 'PizzaV2Prompt' });
 
-export default defineComponent({
-  name: 'PizzaV2Prompt',
-
-  components: { ImageMapSettings },
-
-  mixins: [basePrompt],
-
-  props: {
-    imageMap: {
-      type: Object as PropType<Prompts['pizza-v2-prompt']['imageMap']>,
-      required: true,
-    },
+const props = defineProps({
+  imageMap: {
+    type: Object as PropType<Prompts['pizza-v2-prompt']['imageMap']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

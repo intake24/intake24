@@ -13,29 +13,25 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { SliderSettings, useBasePrompt } from '../partials';
 
-import { basePrompt, SliderSettings } from '../partials';
+defineOptions({ name: 'MealDurationPrompt' });
 
-export default defineComponent({
-  name: 'MealDurationPrompt',
-
-  components: { SliderSettings },
-
-  mixins: [basePrompt],
-
-  props: {
-    slider: {
-      type: Object as PropType<Prompts['meal-duration-prompt']['slider']>,
-      required: true,
-    },
+const props = defineProps({
+  slider: {
+    type: Object as PropType<Prompts['meal-duration-prompt']['slider']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

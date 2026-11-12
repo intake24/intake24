@@ -18,13 +18,13 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.badges')"
           :model-value="badges"
-          @update:model-value="update('badges', $event)"
+          @update:model-value="update('badges', !!$event)"
         />
         <v-switch
           hide-details="auto"
           :label="$t('survey-schemes.prompts.leftovers')"
           :model-value="leftovers"
-          @update:model-value="update('leftovers', $event)"
+          @update:model-value="update('leftovers', !!$event)"
         />
       </v-col>
       <v-col cols="12" md="6">

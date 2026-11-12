@@ -133,13 +133,19 @@ const emit = defineEmits(['update:modelValue']);
 const { comboOps, conditionOps, currentValue } = useCheck(props, { emit });
 
 function updateEntity(property: 'category' | 'tag' | 'flag', value: boolean | null) {
-  if (currentValue.value.entity === 'food' || (currentValue.value.entity === 'meal' && property === 'flag')) {
-    if (value) {
-      currentValue.value[property] = { id: '', value: true };
-    }
-    else {
-      delete currentValue.value[property];
-    }
+  const check = currentValue.value;
+
+  if (check.entity === 'food') {
+    if (value)
+      check[property] = { id: '', value: true };
+    else
+      delete check[property];
+  }
+  else if (property === 'flag') {
+    if (value)
+      check.flag = { id: '', value: true };
+    else
+      delete check.flag;
   }
 }
 </script>

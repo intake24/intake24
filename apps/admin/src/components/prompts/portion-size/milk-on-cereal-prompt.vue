@@ -6,7 +6,7 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.badges')"
           :model-value="badges"
-          @update:model-value="update('badges', $event)"
+          @update:model-value="update('badges', !!$event)"
         />
       </v-col>
       <v-col cols="12" md="6">
@@ -19,33 +19,29 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { ImageMapSettings, useBasePrompt } from '../partials';
 
-import { basePrompt, ImageMapSettings } from '../partials';
+defineOptions({ name: 'MilkOnCerealPrompt' });
 
-export default defineComponent({
-  name: 'MilkOnCerealPrompt',
-
-  components: { ImageMapSettings },
-
-  mixins: [basePrompt],
-
-  props: {
-    badges: {
-      type: Boolean as PropType<Prompts['milk-on-cereal-prompt']['badges']>,
-      required: true,
-    },
-    imageMap: {
-      type: Object as PropType<Prompts['milk-on-cereal-prompt']['imageMap']>,
-      required: true,
-    },
+const props = defineProps({
+  badges: {
+    type: Boolean as PropType<Prompts['milk-on-cereal-prompt']['badges']>,
+    required: true,
+  },
+  imageMap: {
+    type: Object as PropType<Prompts['milk-on-cereal-prompt']['imageMap']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

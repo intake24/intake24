@@ -45,7 +45,7 @@
             hide-details="auto"
             :label="$t('survey-schemes.prompts.general-associated-foods-prompt.multiple')"
             :model-value="multiple"
-            @update:model-value="update('multiple', $event)"
+            @update:model-value="update('multiple', !!$event)"
           />
           <v-switch
             hide-details="auto"
@@ -73,7 +73,10 @@
         <v-col cols="12" md="6">
           <food-browser-settings
             v-bind="{ categoriesFirst, allowThumbnails, enableGrid, gridThreshold }"
-            @update="update($event.field, $event.value)"
+            @update:allow-thumbnails="update('allowThumbnails', $event)"
+            @update:categories-first="update('categoriesFirst', $event)"
+            @update:enable-grid="update('enableGrid', $event)"
+            @update:grid-threshold="update('gridThreshold', $event)"
           />
         </v-col>
         <v-col cols="12">

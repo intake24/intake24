@@ -23,45 +23,40 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { computed, defineComponent } from 'vue';
+import { computed } from 'vue';
 
 import { reviewOptions } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/ui';
 
-import { basePrompt } from '../partials';
+import { useBasePrompt } from '../partials';
 
 type Key = keyof Prompts['submit-prompt']['review'];
 
-export default defineComponent({
-  name: 'SubmitPrompt',
+defineOptions({ name: 'SubmitPrompt' });
 
-  mixins: [basePrompt],
-
-  props: {
-    review: {
-      type: Object as PropType<Prompts['submit-prompt']['review']>,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    const { i18n } = useI18n();
-
-    const options = reviewOptions.map(value => ({
-      title: i18n.t(`survey-schemes.prompts.submit-prompt.review.${value}`),
-      value,
-    }));
-
-    const keys = computed(() => Object.keys(props.review) as Key[]);
-
-    return { keys, options };
+const props = defineProps({
+  review: {
+    type: Object as PropType<Prompts['submit-prompt']['review']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
+const { i18n } = useI18n();
+
+const options = reviewOptions.map(value => ({
+  title: i18n.t(`survey-schemes.prompts.submit-prompt.review.${value}`),
+  value,
+}));
+
+const keys = computed(() => Object.keys(props.review) as Key[]);
 </script>
 
 <style lang="scss" scoped></style>

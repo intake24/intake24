@@ -6,14 +6,14 @@
           <v-time-picker
             :model-value="startTime"
             :title="$t('survey-schemes.prompts.meal-gap-prompt.startTime')"
-            @update:model-value="update('startTime', $event)"
+            @update:model-value="updateTime('startTime', $event)"
           />
         </v-col>
         <v-col cols="12" md="6">
           <v-time-picker
             :model-value="endTime"
             :title="$t('survey-schemes.prompts.meal-gap-prompt.endTime')"
-            @update:model-value="update('endTime', $event)"
+            @update:model-value="updateTime('endTime', $event)"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -33,54 +33,46 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { useBasePrompt } from '../partials';
 
-import { basePrompt } from '../partials';
+defineOptions({ name: 'MealGapPrompt' });
 
-export default defineComponent({
-  name: 'MealGapPrompt',
-
-  mixins: [basePrompt],
-
-  props: {
-    gap: {
-      type: Number as PropType<Prompts['meal-gap-prompt']['gap']>,
-      required: true,
-    },
-    startTime: {
-      type: String as PropType<Prompts['meal-gap-prompt']['startTime']>,
-      required: true,
-    },
-    endTime: {
-      type: String as PropType<Prompts['meal-gap-prompt']['endTime']>,
-      required: true,
-    },
+const props = defineProps({
+  gap: {
+    type: Number as PropType<Prompts['meal-gap-prompt']['gap']>,
+    required: true,
   },
-
-  computed: {
-    gapRules(): RuleCallback[] {
-      return [
-        (value: string | null): boolean | string =>
-          Number.isInteger(value) || 'Time gap value needs to be an integer.',
-      ];
-    },
+  startTime: {
+    type: String as PropType<Prompts['meal-gap-prompt']['startTime']>,
+    required: true,
   },
-
-  methods: {
-    updateGapValue(value: any) {
-      const gapValue = Number.parseInt(value, 10);
-      this.update('gap', Number.isNaN(gapValue)
-        ? 180
-        : gapValue);
-    },
+  endTime: {
+    type: String as PropType<Prompts['meal-gap-prompt']['endTime']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update, updateTime } = useBasePrompt(props, { emit });
+
+const gapRules: RuleCallback[] = [
+  (value: string | null): boolean | string =>
+    Number.isInteger(value) || 'Time gap value needs to be an integer.',
+];
+
+function updateGapValue(value: string) {
+  const gapValue = Number.parseInt(value, 10);
+  update('gap', Number.isNaN(gapValue)
+    ? 180
+    : gapValue);
+}
 </script>
 
 <style lang="scss" scoped></style>

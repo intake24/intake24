@@ -1,5 +1,4 @@
 export { default as BarcodeSettings } from './barcode-settings.vue';
-export { default as basePrompt } from './base-prompt';
 export { default as Carousel } from './carousel.vue';
 export { default as CounterSettings } from './counter-settings.vue';
 export { default as ExternalSourceSettings } from './external-source-settings.vue';
@@ -14,7 +13,7 @@ export { default as PromptConditions } from './prompt-conditions.vue';
 export { default as PromptContent } from './prompt-content.vue';
 export { default as PromptJson } from './prompt-json.vue';
 export { default as PromptValidation } from './prompt-validation.vue';
-export { default as selectListPrompt } from './select-list-prompt';
+export * from './select-list-props';
 export { default as SliderSettings } from './slider-settings.vue';
 export * from './timer-picker-props';
 export { default as TimePickerSettings } from './timer-picker-settings.vue';

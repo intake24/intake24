@@ -121,107 +121,84 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Nutrient } from '@intake24/common/feedback';
 import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 
-import { defineComponent } from 'vue';
+import { computed } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
 import { useListWithDialog } from '@intake24/admin/composables';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useI18n } from '@intake24/ui';
 
 import { LanguageSelector } from '../forms';
 
-export default defineComponent({
-  name: 'NutrientTypeList',
-
-  components: { ConfirmDialog, LanguageSelector, VueDraggable },
-
-  props: {
-    nutrientTypes: {
-      type: Array as PropType<NutrientTypeResponse[]>,
-      required: true,
-    },
-    defaults: {
-      type: Array as PropType<Nutrient[]>,
-      default: () => [],
-    },
-    modelValue: {
-      type: Array as PropType<Nutrient[]>,
-      required: true,
-    },
+const props = defineProps({
+  nutrientTypes: {
+    type: Array as PropType<NutrientTypeResponse[]>,
+    required: true,
   },
-
-  setup(props, context) {
-    const defaultItem = () => ({
-      id: [props.nutrientTypes[0].id],
-      name: { en: props.nutrientTypes[0].description },
-    });
-
-    const {
-      dialog,
-      form,
-      items,
-      newDialog,
-      add,
-      edit,
-      load,
-      remove,
-      reset,
-      resetList,
-      save,
-      update,
-    } = useListWithDialog(props, context, { newItem: defaultItem });
-
-    const updateNutrientLabel = (nutrientTypeId: string) => {
-      const match = props.nutrientTypes.find(nutrient => nutrient.id === nutrientTypeId);
-      if (!match)
-        return;
-
-      dialog.value.item.name.en = match.description;
-    };
-
-    return {
-      dialog,
-      form,
-      items,
-      newDialog,
-      add,
-      edit,
-      load,
-      remove,
-      reset,
-      save,
-      update,
-      resetList,
-      updateNutrientLabel,
-    };
+  defaults: {
+    type: Array as PropType<Nutrient[]>,
+    default: () => [],
   },
-
-  computed: {
-    rules() {
-      return [
-        (value: string[]): boolean | string => {
-          if (!value.length)
-            return this.$t('nutrient-types.validation.required');
-
-          const { index } = this.dialog;
-          const match = this.items.find(
-            (nutrientType, idx) =>
-              value.toSorted().join(':') === nutrientType.id.toSorted().join(':') && index !== idx,
-          );
-
-          return match
-            ? this.$t('nutrient-types.validation.unique')
-            : true;
-        },
-      ];
-    },
+  modelValue: {
+    type: Array as PropType<Nutrient[]>,
+    required: true,
   },
 });
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: Nutrient[]): void;
+}>();
+
+const { i18n: { t } } = useI18n();
+
+const defaultItem: () => Nutrient = () => ({
+  id: [props.nutrientTypes[0].id],
+  name: { en: props.nutrientTypes[0].description },
+});
+
+const {
+  dialog,
+  form,
+  items,
+  add,
+  edit,
+  remove,
+  reset,
+  resetList,
+  save,
+  update,
+} = useListWithDialog(props, { emit }, { newItem: defaultItem });
+
+const rules = computed(() => [
+  (value: string[]): boolean | string => {
+    if (!value.length)
+      return t('nutrient-types.validation.required');
+
+    const { index } = dialog.value;
+    const match = items.value.find(
+      (nutrientType, idx) =>
+        value.toSorted().join(':') === nutrientType.id.toSorted().join(':') && index !== idx,
+    );
+
+    return match
+      ? t('nutrient-types.validation.unique')
+      : true;
+  },
+]);
+
+function updateNutrientLabel(nutrientTypeId: string[]) {
+  const label = props.nutrientTypes
+    .filter(nutrientType => nutrientTypeId.includes(nutrientType.id))
+    .map(nutrientType => nutrientType.description)
+    .join(', ');
+
+  dialog.value.item.name.en = label;
+}
 </script>
 
 <style lang="scss" scoped></style>

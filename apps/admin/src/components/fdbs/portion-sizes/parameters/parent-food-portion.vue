@@ -114,8 +114,9 @@ function removeCategory(category: string) {
   if (category === '_default')
     return;
 
-  const { [category]: _, ...rest } = parameters.value.options;
-  parameters.value.options = rest;
+  const options = { ...parameters.value.options };
+  delete options[category];
+  parameters.value.options = options;
 }
 
 function updateOption(cat: string, lang: string, value: ListOption[]) {

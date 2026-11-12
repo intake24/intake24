@@ -6,14 +6,14 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.badges')"
           :model-value="badges"
-          @update:model-value="update('badges', $event)"
+          @update:model-value="update('badges', !!$event)"
         />
         <v-switch
           class="mt-4"
           hide-details="auto"
           :label="$t('survey-schemes.prompts.leftovers')"
           :model-value="leftovers"
-          @update:model-value="update('leftovers', $event)"
+          @update:model-value="update('leftovers', !!$event)"
         />
         <v-select
           class="mt-4"

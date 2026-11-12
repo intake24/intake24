@@ -149,14 +149,13 @@
                 :scale-index="selectedScaleIndex"
                 @base-image-changed="onBaseImageChanged"
               />
-              <v-card flat>
+              <v-card v-if="selectedScale?.version === 2" flat>
                 <v-card-title>
                   {{ $t('drinkware-sets.volumeMethod.title') }}
                 </v-card-title>
                 <v-card-text>
                   <v-select
-                    v-if="selectedObjectId !== undefined && selectedScaleIndex !== -1"
-                    v-model="entry.scales[selectedScaleIndex].volumeMethod"
+                    v-model="selectedScale.volumeMethod"
                     item-value="method"
                     :items="volumeMethodSelectList"
                     :label="$t('drinkware-sets.volumeMethod.title')"

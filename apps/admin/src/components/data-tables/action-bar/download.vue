@@ -11,9 +11,14 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
+
+import type { JobAttributes } from '@intake24/common/types/http/admin';
+
 import { defineComponent } from 'vue';
 
 import { useDownloadJob } from '@intake24/admin/components/jobs';
+import { useResource } from '@intake24/admin/stores';
 
 import ActionMixin from './action-mixin';
 
@@ -22,8 +27,16 @@ export default defineComponent({
 
   mixins: [ActionMixin],
 
+  props: {
+    item: {
+      type: Object as PropType<JobAttributes>,
+      required: true,
+    },
+  },
+
   setup() {
-    const { download, downloadUrlAvailable } = useDownloadJob();
+    const resource = useResource();
+    const { download, downloadUrlAvailable } = useDownloadJob((resource.module ?? resource.name).startsWith('user.'));
 
     return { download, downloadUrlAvailable };
   },

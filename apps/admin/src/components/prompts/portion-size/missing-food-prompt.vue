@@ -11,29 +11,25 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { BarcodeSettings, useBasePrompt } from '../partials';
 
-import { BarcodeSettings, basePrompt } from '../partials';
+defineOptions({ name: 'MissingFoodPrompt' });
 
-export default defineComponent({
-  name: 'MissingFoodPrompt',
-
-  components: { BarcodeSettings },
-
-  mixins: [basePrompt],
-
-  props: {
-    barcode: {
-      type: Object as PropType<Prompts['external-source-prompt']['barcode']>,
-      required: true,
-    },
+const props = defineProps({
+  barcode: {
+    type: Object as PropType<Prompts['external-source-prompt']['barcode']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

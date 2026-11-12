@@ -21,16 +21,14 @@
         @update:model-value="updateCategoriesFirst('search', $event)"
       />
       <v-switch
+        v-model="allowThumbnails"
         hide-details="auto"
         :label="$t('survey-schemes.prompts.food-search-prompt.allowThumbnails')"
-        :model-value="allowThumbnails"
-        @update:model-value="update('allowThumbnails', $event)"
       />
       <v-switch
+        v-model="enableGrid"
         hide-details="auto"
         :label="$t('survey-schemes.prompts.food-search-prompt.enableGrid')"
-        :model-value="enableGrid"
-        @update:model-value="update('enableGrid', $event)"
       />
       <v-slide-x-transition>
         <div v-show="enableGrid" class="ml-4">
@@ -38,12 +36,11 @@
             {{ $t('survey-schemes.prompts.food-search-prompt.gridThreshold', { percent: Math.round(gridThreshold) }) }}
           </v-label>
           <v-slider
+            v-model="gridThreshold"
             class="ml-0"
             :max-width="600"
             :min="10"
-            :model-value="gridThreshold"
             :step="5"
-            @update:model-value="update('gridThreshold', $event)"
           />
         </div>
       </v-slide-x-transition>
@@ -51,52 +48,24 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { FoodBrowser } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+defineOptions({ name: 'FoodBrowserSettings' });
 
-export default defineComponent({
-  name: 'FoodBrowserSettings',
+const categoriesFirst = defineModel('categoriesFirst', { type: Object as PropType<FoodBrowser['categoriesFirst']>, required: true });
+const allowThumbnails = defineModel('allowThumbnails', { type: Boolean as PropType<FoodBrowser['allowThumbnails']>, required: true });
+const enableGrid = defineModel('enableGrid', { type: Boolean as PropType<FoodBrowser['enableGrid']>, required: true });
+const gridThreshold = defineModel('gridThreshold', { type: Number as PropType<FoodBrowser['gridThreshold']>, required: true });
 
-  props: {
-    categoriesFirst: {
-      type: Object as PropType<FoodBrowser['categoriesFirst']>,
-      required: true,
-    },
-    allowThumbnails: {
-      type: Boolean as PropType<FoodBrowser['allowThumbnails']>,
-      required: true,
-    },
-    enableGrid: {
-      type: Boolean as PropType<FoodBrowser['enableGrid']>,
-      required: true,
-    },
-    gridThreshold: {
-      type: Number as PropType<FoodBrowser['gridThreshold']>,
-      required: true,
-    },
-  },
-
-  emits: ['update'],
-
-  methods: {
-    update(field: keyof FoodBrowser, value: any) {
-      this.$emit(`update`, { field, value });
-    },
-    updateCategoriesFirst(field: keyof FoodBrowser['categoriesFirst'], value: boolean | null) {
-      this.$emit(`update`, {
-        field: 'categoriesFirst',
-        value: {
-          ...this.categoriesFirst,
-          [field]: Boolean(value),
-        },
-      });
-    },
-  },
-});
+function updateCategoriesFirst(field: keyof FoodBrowser['categoriesFirst'], value: boolean | null) {
+  categoriesFirst.value = {
+    ...categoriesFirst.value,
+    [field]: Boolean(value),
+  };
+}
 </script>
 
 <style lang="scss" scoped></style>

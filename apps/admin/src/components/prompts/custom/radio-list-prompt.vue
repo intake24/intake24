@@ -16,7 +16,7 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.other')"
           :model-value="other"
-          @update:model-value="update('other', $event)"
+          @update:model-value="update('other', !!$event)"
         />
       </v-col>
     </v-row>
@@ -38,35 +38,31 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
-
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { OptionsList } from '@intake24/admin/components/lists';
 import { useSelects } from '@intake24/admin/composables';
 
-import { selectListPrompt } from '../partials';
+import { selectListProps, useBasePrompt } from '../partials';
 
-export default defineComponent({
-  name: 'RadioListPrompt',
+defineOptions({ name: 'RadioListPrompt' });
 
-  mixins: [selectListPrompt],
-
-  props: {
-    orientation: {
-      type: String as PropType<Prompts['radio-list-prompt']['orientation']>,
-      required: true,
-    },
-  },
-
-  setup() {
-    const { orientations } = useSelects();
-
-    return { orientations };
+const props = defineProps({
+  ...selectListProps,
+  orientation: {
+    type: String as PropType<Prompts['radio-list-prompt']['orientation']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update, updateLanguage } = useBasePrompt(props, { emit });
+const { orientations } = useSelects();
 </script>
 
 <style lang="scss" scoped></style>

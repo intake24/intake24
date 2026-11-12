@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { barcodeScannerOptions } from '../barcodes';
 import { autoPortionSizeParameters } from '../surveys/portion-size';
-import { localeOptionList, localeTranslation, sanitizedLocaleTranslation } from '../types/common';
+import { listOptionStringValue, localeOptionList, localeTranslation, sanitizedLocaleTranslation } from '../types/common';
 import { actionItem } from './action-item';
 import { promptActions } from './actions';
 import { condition } from './conditions';
@@ -196,14 +196,14 @@ export type ReviewOptions = (typeof reviewOptions)[number];
 const aggregateChoicePrompt = z.object({
   ...baseCustomPrompt.shape,
   component: z.literal('aggregate-choice-prompt'),
-  options: localeOptionList(),
+  options: localeOptionList({ valueSchema: listOptionStringValue }),
   foodFilter: condition.optional(),
 });
 
 const checkboxListPrompt = z.object({
   ...baseCustomPrompt.shape,
   component: z.literal('checkbox-list-prompt'),
-  options: localeOptionList({ limit: 2048 }),
+  options: localeOptionList({ valueSchema: listOptionStringValue, limit: 2048 }),
   other: z.boolean(),
   validation: promptValidationWithLimits,
 });
@@ -239,7 +239,7 @@ const radioListPrompt = z.object({
   ...baseCustomPrompt.shape,
   ...validatedPrompt.shape,
   component: z.literal('radio-list-prompt'),
-  options: localeOptionList(),
+  options: localeOptionList({ valueSchema: listOptionStringValue }),
   orientation: z.enum(radioOrientations),
   other: z.boolean(),
 });
@@ -248,7 +248,7 @@ const selectPrompt = z.object({
   ...baseCustomPrompt.shape,
   ...validatedPrompt.shape,
   component: z.literal('select-prompt'),
-  options: localeOptionList({ limit: 2048 }),
+  options: localeOptionList({ valueSchema: listOptionStringValue, limit: 2048 }),
   multiple: z.boolean(),
 });
 

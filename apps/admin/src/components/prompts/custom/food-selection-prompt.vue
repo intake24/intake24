@@ -7,7 +7,7 @@
             hide-details="auto"
             :label="$t('survey-schemes.prompts.food-selection-prompt.useFlag')"
             :model-value="useFlag"
-            @update:model-value="update('useFlag', $event)"
+            @update:model-value="update('useFlag', !!$event)"
           />
         </v-col>
       </v-row>

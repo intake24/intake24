@@ -108,7 +108,7 @@ export default defineComponent({
     useEntryFetch(props);
     const { entry, entryLoaded } = useEntry<JobAttributes>(props);
     const { formatDateTime } = useDateTime();
-    const { download, downloadUrlAvailable } = useDownloadJob();
+    const { download, downloadUrlAvailable } = useDownloadJob(true);
 
     return {
       download,

@@ -6,7 +6,7 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.other')"
           :model-value="other"
-          @update:model-value="update('other', $event)"
+          @update:model-value="update('other', !!$event)"
         />
       </v-col>
     </v-row>
@@ -29,16 +29,19 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { LanguageSelector } from '@intake24/admin/components/forms';
+import { OptionsList } from '@intake24/admin/components/lists';
 
-import { selectListPrompt } from '../partials';
+import { selectListProps, useBasePrompt } from '../partials';
 
-export default defineComponent({
-  name: 'CheckboxListPrompt',
+defineOptions({ name: 'CheckboxListPrompt' });
 
-  mixins: [selectListPrompt],
-});
+const props = defineProps(selectListProps);
+
+const emit = defineEmits(['update:options']);
+
+const { update, updateLanguage } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

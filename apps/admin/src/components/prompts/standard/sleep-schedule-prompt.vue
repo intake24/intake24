@@ -13,12 +13,12 @@
             <v-time-picker
               :model-value="wakeUpTime"
               :title="$t('survey-schemes.prompts.sleep-schedule-prompt.wakeUpTime')"
-              @update:model-value="update('wakeUpTime', $event)"
+              @update:model-value="updateTime('wakeUpTime', $event)"
             />
             <v-time-picker
               :model-value="sleepTime"
               :title="$t('survey-schemes.prompts.sleep-schedule-prompt.sleepTime')"
-              @update:model-value="update('sleepTime', $event)"
+              @update:model-value="updateTime('sleepTime', $event)"
             />
           </v-card-text>
         </v-card>
@@ -57,7 +57,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:options']);
 
-const { update } = useBasePrompt(props, { emit });
+const { update, updateTime } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

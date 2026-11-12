@@ -6,13 +6,13 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.edit-meal-prompt.separateDrinks')"
           :model-value="separateDrinks"
-          @update:model-value="update('separateDrinks', $event)"
+          @update:model-value="update('separateDrinks', !!$event)"
         />
         <v-switch
           hide-details="auto"
           :label="$t('survey-schemes.prompts.edit-meal-prompt.inputAutoFocus')"
           :model-value="inputAutoFocus"
-          @update:model-value="update('inputAutoFocus', $event)"
+          @update:model-value="update('inputAutoFocus', !!$event)"
         />
       </v-col>
       <v-col cols="12">

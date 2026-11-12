@@ -7,7 +7,7 @@
           :label="$t('survey-schemes.prompts.validation.required')"
           :model-value="validation.required"
           name="validation.required"
-          @update:model-value="update('required', $event)"
+          @update:model-value="update('required', !!$event)"
         />
         <language-selector
           border
@@ -90,10 +90,10 @@ export default defineComponent({
         : val;
     };
 
-    const update = (field: string, value: any) => {
+    const update = <K extends keyof PromptValidationWithLimits>(field: K, value: PromptValidationWithLimits[K]) => {
       emit('update:validation', { ...props.validation, [field]: value });
     };
-    const updateLanguage = (field: LocaleTranslationKeys, locale: string, value: any) => {
+    const updateLanguage = (field: LocaleTranslationKeys, locale: string, value: string | null) => {
       emit('update:validation', {
         ...props.validation,
         [field]: { ...props.validation[field], [locale]: value },

@@ -1,6 +1,6 @@
 <template>
   <browse-layout>
-    <data-table :actions="['read', 'delete']" :headers>
+    <data-table :actions="['read', 'download', 'delete']" :headers>
       <template #[`item.userId`]="{ item }">
         {{ item.user?.email ?? item.userId }}
       </template>

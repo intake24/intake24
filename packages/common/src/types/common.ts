@@ -97,12 +97,14 @@ export function requiredLocaleTranslationWithLimit(options: { min?: number; max:
   );
 }
 
-export function listOption<T extends z.ZodTypeAny = z.ZodString>(valueSchema?: T) {
+export const listOptionStringValue = z.string().min(1).max(256);
+
+export function listOption<T extends z.ZodTypeAny>(valueSchema: T) {
   return z.object({
     id: z.number().optional(),
     label: z.string().min(1).max(256),
     shortLabel: z.string().min(1).max(256).optional(),
-    value: valueSchema ?? z.string().min(1).max(256),
+    value: valueSchema,
     exclusive: z.boolean().optional(),
     selected: z.boolean().optional(),
     action: actionItem.optional(),
@@ -113,7 +115,7 @@ export type ListOption<T extends z.ZodTypeAny = z.ZodString> = z.infer<
   ReturnType<typeof listOption<T>>
 >;
 
-export function localeOptionList<T extends z.ZodTypeAny = z.ZodString>({ valueSchema, limit }: { valueSchema?: T; limit?: number } = {}) {
+export function localeOptionList<T extends z.ZodTypeAny>({ valueSchema, limit }: { valueSchema: T; limit?: number }) {
   const scheme = z.intersection(
     z.object({
       en: z.array(listOption(valueSchema)),

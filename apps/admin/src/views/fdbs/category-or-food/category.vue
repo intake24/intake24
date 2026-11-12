@@ -137,6 +137,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
+import type { CategoryListItem } from '@intake24/admin/components/fdbs';
 import type {
   CategoryEntry,
   CategoryInput,
@@ -161,6 +162,10 @@ import { ConfirmDialog, SelectIcon, useI18n } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 import { useOffset } from './use-offset';
+
+type CategoryForm = Required<Omit<CategoryInput, 'parentCategories'>> & {
+  parentCategories: CategoryListItem[];
+};
 
 defineOptions({ name: 'CategoryEntry' });
 
@@ -194,7 +199,7 @@ const isEntryLoaded = computed(() => !!entry.value);
 
 useEntry<LocaleEntry, FoodDatabaseRefs>(props);
 const { clearError, form: { data, errors, put }, routeLeave, toForm } = useEntryForm<
-  Required<CategoryInput>,
+  CategoryForm,
   LocaleEntry
 >(props, {
   data: {

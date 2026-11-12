@@ -59,7 +59,7 @@
             hide-details="auto"
             :label="$t('survey-schemes.prompts.final-prompt.rating._')"
             :model-value="rating"
-            @update:model-value="update('rating', $event)"
+            @update:model-value="update('rating', !!$event)"
           />
         </v-card-text>
       </v-col>
@@ -67,84 +67,72 @@
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
-
 import { useI18n } from '@intake24/ui';
 
-import { basePrompt } from '../partials';
+import { useBasePrompt } from '../partials';
 
-export default defineComponent({
-  name: 'RedirectPrompt',
+defineOptions({ name: 'RedirectPrompt' });
 
-  mixins: [basePrompt],
-
-  props: {
-    url: {
-      type: String as PropType<Prompts['redirect-prompt']['url']>,
-      required: true,
-    },
-    identifier: {
-      type: String as PropType<Prompts['redirect-prompt']['identifier']>,
-      required: true,
-    },
-    timer: {
-      type: Number as PropType<Prompts['redirect-prompt']['timer']>,
-      required: true,
-    },
-    target: {
-      type: String as PropType<Prompts['redirect-prompt']['target']>,
-      required: true,
-    },
-    rating: {
-      type: Boolean as PropType<Prompts['redirect-prompt']['rating']>,
-      required: true,
-    },
+const props = defineProps({
+  url: {
+    type: String as PropType<Prompts['redirect-prompt']['url']>,
+    required: true,
   },
-
-  setup() {
-    const { i18n } = useI18n();
-    const identifiers = ['userId', 'username', 'urlAuthToken'].map(value => ({
-      title: i18n.t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
-      value,
-    }));
-    const targets = ['_self', '_blank'].map(value => ({
-      title: i18n.t(`survey-schemes.prompts.redirect-prompt.target.${value}`),
-      value,
-    }));
-
-    return { identifiers, targets };
+  identifier: {
+    type: String as PropType<Prompts['redirect-prompt']['identifier']>,
+    required: true,
   },
-
-  computed: {
-    timerRules(): RuleCallback[] {
-      return [
-        (value: string | null): boolean | string =>
-          Number.isInteger(value) || 'Timer value needs to be a number.',
-      ];
-    },
+  timer: {
+    type: Number as PropType<Prompts['redirect-prompt']['timer']>,
+    required: true,
   },
-
-  methods: {
-    updateTimerValue(value: any) {
-      const timerValue = Number.parseInt(value, 10);
-      this.update('timer', Number.isNaN(timerValue)
-        ? 0
-        : timerValue);
-    },
-
-    updateIdentifier(value: string | null | (typeof this.identifiers)[0]) {
-      this.update('identifier', !value || typeof value === 'string'
-        ? value
-        : value.value);
-    },
+  target: {
+    type: String as PropType<Prompts['redirect-prompt']['target']>,
+    required: true,
+  },
+  rating: {
+    type: Boolean as PropType<Prompts['redirect-prompt']['rating']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
+const { i18n } = useI18n();
+
+const identifiers = ['userId', 'username', 'urlAuthToken'].map(value => ({
+  title: i18n.t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
+  value,
+}));
+const targets = ['_self', '_blank'].map(value => ({
+  title: i18n.t(`survey-schemes.prompts.redirect-prompt.target.${value}`),
+  value,
+}));
+
+const timerRules: RuleCallback[] = [
+  (value: string | null): boolean | string =>
+    Number.isInteger(value) || 'Timer value needs to be a number.',
+];
+
+function updateTimerValue(value: string) {
+  const timerValue = Number.parseInt(value, 10);
+  update('timer', Number.isNaN(timerValue)
+    ? 0
+    : timerValue);
+}
+
+function updateIdentifier(value: string | null | (typeof identifiers)[number]) {
+  update('identifier', !value || typeof value === 'string'
+    ? value
+    : value.value);
+}
 </script>
 
 <style lang="scss" scoped></style>

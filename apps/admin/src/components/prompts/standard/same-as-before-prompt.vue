@@ -6,33 +6,32 @@
           hide-details="auto"
           :label="$t('survey-schemes.prompts.same-as-before-prompt.skipToSAB')"
           :model-value="skipToSAB"
-          @update:model-value="update('skipToSAB', $event)"
+          @update:model-value="update('skipToSAB', !!$event)"
         />
       </v-col>
     </v-row>
   </v-tabs-window-item>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { defineComponent } from 'vue';
+import { useBasePrompt } from '../partials';
 
-import { basePrompt } from '../partials';
+defineOptions({ name: 'SameAsBeforePrompt' });
 
-export default defineComponent({
-  name: 'SameAsBeforePrompt',
-
-  mixins: [basePrompt],
-  props: {
-    skipToSAB: {
-      type: Boolean as PropType<Prompts['same-as-before-prompt']['skipToSAB']>,
-      required: true,
-    },
+const props = defineProps({
+  skipToSAB: {
+    type: Boolean as PropType<Prompts['same-as-before-prompt']['skipToSAB']>,
+    required: true,
   },
 });
+
+const emit = defineEmits(['update:options']);
+
+const { update } = useBasePrompt(props, { emit });
 </script>
 
 <style lang="scss" scoped></style>

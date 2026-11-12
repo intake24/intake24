@@ -77,6 +77,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { CategoryListItem } from './categories';
 import type { CategoryEntry, CategoryInput, FoodEntry, FoodInput } from '@intake24/common/types/http/admin';
 
 import { ref } from 'vue';
@@ -89,8 +90,9 @@ import { useMessages } from '@intake24/ui/stores';
 import CategoryList from './categories/category-list.vue';
 
 export type CreateEntityForm
-  = Pick<FoodInput, 'code' | 'name' | 'englishName' | 'parentCategories'>
-    | Pick<CategoryInput, 'code' | 'name' | 'englishName' | 'parentCategories' | 'hidden'>;
+  = (Pick<FoodInput, 'code' | 'name' | 'englishName'>
+    | Pick<CategoryInput, 'code' | 'name' | 'englishName' | 'hidden'>)
+  & { parentCategories: CategoryListItem[] };
 
 const props = defineProps({
   id: {
