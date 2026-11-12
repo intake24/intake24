@@ -227,9 +227,10 @@ function loadMoreFields() {
 }
 
 function loadFilteredFields() {
-  filteredFields.value = search.value
+  const query = search.value?.toLowerCase();
+  filteredFields.value = query
     ? availableFields.value.filter(
-        field => !!field.label?.match(new RegExp(search.value, 'i')),
+        field => !!field.label?.toLowerCase().includes(query),
       )
     : [...availableFields.value];
 

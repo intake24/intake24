@@ -32,7 +32,7 @@
     item-title="name"
     item-value="key"
     :items="items"
-    :load-children="fetchCategoryContent"
+    :load-children="(item) => fetchCategoryContent(item as TreeItem)"
     :style="listStyle"
     transition
   >
@@ -46,6 +46,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { CSSProperties } from 'vue';
+
 import type {
   CategoryContentsResponse,
   CategoryListEntry,
@@ -204,7 +206,7 @@ async function findActiveInTree(entryId: string, type: string) {
 const listViewOffset = shallowRef();
 const listHeader = useTemplateRef('listHeader');
 const listHeaderHeight = useElementBounding(listHeader).height;
-const listStyle = computed(() => {
+const listStyle = computed<CSSProperties>(() => {
   return {
     minHeight: `calc(192px - ${listHeaderHeight.value}px)`,
     height: `calc(100vh - ${listViewOffset.value}px - ${listHeaderHeight.value}px)`,

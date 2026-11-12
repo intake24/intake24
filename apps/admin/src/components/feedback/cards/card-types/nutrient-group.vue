@@ -148,9 +148,10 @@ function loadMoreNutrientTypes() {
 }
 
 function loadFilteredNutrientTypes() {
-  filteredNutrientTypes.value = search.value
+  const query = search.value?.toLowerCase();
+  filteredNutrientTypes.value = query
     ? availableNutrientTypes.value.filter(
-        nutrient => !!nutrient.description.match(new RegExp(search.value, 'i')),
+        nutrient => nutrient.description.toLowerCase().includes(query),
       )
     : [...availableNutrientTypes.value];
 

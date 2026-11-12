@@ -74,7 +74,7 @@ export default defineComponent({
       return icons[type];
     },
 
-    toggleRange(value: boolean) {
+    toggleRange(value: boolean | null) {
       this.$emit('update:modelValue', value ? this.defaultRange : null);
     },
 

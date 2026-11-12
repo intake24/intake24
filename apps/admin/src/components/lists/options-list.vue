@@ -150,7 +150,7 @@ const defaultValueRules = [
   },
 ];
 
-const outputOptions = computed<ListOption<ZodAny>[]>(() => currentOptions.value.map(({ id, ...rest }) => (rest)));
+const outputOptions = computed<ListOption<ZodType>[]>(() => currentOptions.value.map(({ id, ...rest }) => (rest)));
 const optionValueRules = computed<RuleCallback[]>(() => [
   ...defaultValueRules,
   ...props.rules,

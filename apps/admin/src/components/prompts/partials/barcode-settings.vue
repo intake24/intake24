@@ -79,7 +79,7 @@ const readers = computed(() => {
 
 function update(field: string, value: any) {
   if (field === 'type') {
-    emit('update:barcode', copy(defaultBarcodeScannerOptions[value]));
+    emit('update:barcode', copy(defaultBarcodeScannerOptions[value as BarcodeScannerOptions['type']]));
     return;
   }
 

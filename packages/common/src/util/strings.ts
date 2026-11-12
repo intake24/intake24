@@ -63,8 +63,8 @@ export function randomString(size: number, alphabet?: string | null): string {
   return customAlphabet(alphabet, size)();
 }
 
-export function offsetToExcelColumn(offset: number | null): string | null {
-  if (offset === null)
+export function offsetToExcelColumn(offset: number | null | undefined): string | null {
+  if (offset == null)
     return null;
 
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
