@@ -3,11 +3,11 @@ import type { UserListEntry } from './users';
 
 import { z } from 'zod';
 
-import { bigIntString } from '../../common';
+import { bigIntString, normalizedEmail } from '../../common';
 import { userAttributes } from './users';
 
 export const createUserWithSecurables = z.object({
-  email: z.email().toLowerCase(),
+  email: normalizedEmail,
   name: z.string().max(512).nullish(),
   phone: z.string().max(32).nullish(),
   actions: z.string().array().min(1),

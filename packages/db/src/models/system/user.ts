@@ -15,7 +15,6 @@ import {
   DataType,
   HasMany,
   HasOne,
-  Scopes,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
@@ -36,6 +35,7 @@ import Survey from './survey';
 import SurveyScheme from './survey-scheme';
 import SurveySubmission from './survey-submission';
 import UserCustomField from './user-custom-field';
+import UserIdentity from './user-identity';
 import UserPassword from './user-password';
 import UserPasswordReset from './user-password-reset';
 import UserPhysicalData from './user-physical-data';
@@ -44,83 +44,6 @@ import UserSubscription from './user-subscription';
 import UserSurveyAlias from './user-survey-alias';
 import UserSurveySession from './user-survey-session';
 
-@Scopes(() => ({
-  aliases: {
-    include: [
-      { model: UserSurveyAlias, separate: true },
-    ],
-  },
-  clientErrors: {
-    include: [
-      { model: ClientErrorReport, separate: true },
-    ],
-  },
-  customFields: {
-    include: [
-      { model: UserCustomField, separate: true },
-    ],
-  },
-  jobs: {
-    include: [
-      { model: Job },
-    ],
-  },
-  password: {
-    include: [
-      { model: UserPassword },
-    ],
-  },
-  passwordResets: {
-    include: [
-      { model: UserPasswordReset },
-    ],
-  },
-  permissions: {
-    include: [
-      {
-        model: Permission,
-        through: { attributes: [] },
-      },
-    ],
-  },
-  roles: {
-    include: [
-      {
-        model: Role,
-        through: { attributes: [] },
-      },
-    ],
-  },
-  rolesPerms: {
-    include: [
-      {
-        model: Role,
-        through: { attributes: [] },
-        include: [
-          {
-            model: Permission,
-            through: { attributes: [] },
-          },
-        ],
-      },
-    ],
-  },
-  signInLog: {
-    include: [
-      { model: SignInLog },
-    ],
-  },
-  submissions: {
-    include: [
-      { model: SurveySubmission },
-    ],
-  },
-  tokens: {
-    include: [
-      { model: RefreshToken },
-    ],
-  },
-}))
 @Table({
   modelName: 'User',
   tableName: 'users',
@@ -210,6 +133,9 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
 
   @HasMany(() => Job, 'userId')
   declare jobs?: NonAttribute<Job[]>;
+
+  @HasMany(() => UserIdentity, 'userId')
+  declare identities?: NonAttribute<UserIdentity[]>;
 
   @HasMany(() => MFADevice, 'userId')
   declare mfaDevices?: NonAttribute<MFADevice[]>;

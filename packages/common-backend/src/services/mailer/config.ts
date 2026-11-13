@@ -1,5 +1,7 @@
 import z from 'zod';
 
+import { normalizedEmail } from '@intake24/common/types';
+
 import { validateConfig } from '../../util';
 
 export const mailerType = z.enum(['smtp', 'log']);
@@ -33,7 +35,7 @@ export const mailConfigSchema = z.object({
     address: z.string().default('no-reply@domain.com'),
     name: z.string().default('Intake24'),
   }),
-  replyTo: z.email().optional(),
+  replyTo: normalizedEmail.optional(),
 });
 export type MailConfig = z.infer<typeof mailConfigSchema>;
 

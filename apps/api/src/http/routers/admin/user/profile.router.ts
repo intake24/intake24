@@ -29,11 +29,17 @@ export function profile() {
           'phone',
           'multiFactorAuthentication',
         ],
+        include: [
+          {
+            association: 'identities',
+            attributes: ['id', 'issuer', 'subject', 'createdAt'],
+          },
+        ],
       });
       if (!user)
         throw new NotFoundError();
 
-      const { id, name, email, phone, multiFactorAuthentication: mfa } = user;
+      const { id, name, email, phone, multiFactorAuthentication: mfa, identities = [] } = user;
       const [permissions, roles] = await Promise.all([
         aclService.getPermissions(),
         aclService.getRoles(),
@@ -48,6 +54,7 @@ export function profile() {
             email: email as string,
             phone,
             mfa,
+            identities,
           },
           aal: !!req.aal,
           permissions,

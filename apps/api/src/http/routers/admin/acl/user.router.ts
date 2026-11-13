@@ -1,4 +1,4 @@
-import type { WhereOptions } from 'sequelize';
+import type { Includeable, WhereOptions } from 'sequelize';
 
 import { initServer } from '@ts-rest/express';
 import { col, fn, Op } from 'sequelize';
@@ -9,6 +9,20 @@ import { userEntryResponse } from '@intake24/api/http/responses/admin';
 import { aclDataCheck, unique } from '@intake24/api/http/rules';
 import { contract } from '@intake24/common/contracts';
 import { Permission, Role, User, UserSecurable } from '@intake24/db';
+
+const userEntryInclude: Includeable[] = [
+  { association: 'aliases', separate: true },
+  { association: 'customFields', separate: true },
+  { association: 'identities', separate: true },
+  {
+    association: 'permissions',
+    through: { attributes: [] },
+  },
+  {
+    association: 'roles',
+    through: { attributes: [] },
+  },
+];
 
 async function uniqueMiddleware(value: any, { userId }: { userId?: string } = {}) {
   const where: WhereOptions = userId
@@ -68,14 +82,7 @@ export function user() {
         const user = await adminUserService.create(body);
 
         const data = userEntryResponse(
-          (await User.scope([
-            'aliases',
-            'customFields',
-            'permissions',
-            'roles',
-          ]).findByPk(
-            user.id,
-          )) as User,
+          (await User.findByPk(user.id, { include: userEntryInclude })) as User,
         );
 
         return { status: 201, body: data };
@@ -125,14 +132,7 @@ export function user() {
         permission('acl', 'users', 'users:read'),
       ],
       handler: async ({ params: { userId } }) => {
-        const user = await User.scope([
-          'aliases',
-          'customFields',
-          'permissions',
-          'roles',
-        ]).findByPk(
-          userId,
-        );
+        const user = await User.findByPk(userId, { include: userEntryInclude });
         if (!user)
           throw new NotFoundError();
 
@@ -157,14 +157,7 @@ export function user() {
         await adminUserService.update(userId, body);
 
         const data = userEntryResponse(
-          (await User.scope([
-            'aliases',
-            'customFields',
-            'permissions',
-            'roles',
-          ]).findByPk(
-            userId,
-          )) as User,
+          (await User.findByPk(userId, { include: userEntryInclude })) as User,
         );
 
         return { status: 200, body: data };

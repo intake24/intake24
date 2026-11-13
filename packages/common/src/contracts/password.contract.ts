@@ -2,6 +2,7 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import { strongPasswordWithConfirm } from '../security';
+import { normalizedEmail } from '../types';
 import { captcha } from '../types/http';
 
 const contract = initContract();
@@ -14,7 +15,7 @@ export const password = contract.router({
       'user-agent': z.string().optional(),
     },
     body: z.object({
-      email: z.email().toLowerCase(),
+      email: normalizedEmail,
       captcha,
     }),
     responses: {
@@ -29,7 +30,7 @@ export const password = contract.router({
     path: '/password/reset',
     body: strongPasswordWithConfirm
       .extend({
-        email: z.email().toLowerCase(),
+        email: normalizedEmail,
         token: z.string(),
       })
       .refine(data => data.password === data.passwordConfirm, {
