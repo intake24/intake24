@@ -117,7 +117,7 @@ export function fromPackageStandardUnit(standardUnit: PkgV2StandardUnit): Standa
 
 export function fromPackageSynonymSet(synonymSet: PkgV2SynonymSet): { synonyms: string } {
   return {
-    synonyms: synonymSet.join(' '),
+    synonyms: synonymSet.join('; '),
   };
 }
 

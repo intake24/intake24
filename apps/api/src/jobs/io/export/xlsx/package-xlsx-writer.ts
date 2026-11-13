@@ -881,7 +881,7 @@ export class PackageXlsxWriter implements PackageWriter {
 
     sheet.addRow([
       localeId,
-      synonymSet.join(' '),
+      synonymSet.join('; '),
     ]).commit();
   }
 

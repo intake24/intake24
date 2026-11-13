@@ -75,14 +75,29 @@ function product<T>(tuples: Array<Array<T>>, values: Array<T>): Array<Array<T>> 
   return result;
 }
 
+export type RequiredPhrase = {
+  words: string[];
+};
+
 export default class InterpretedPhrase {
   readonly asTyped: string;
 
   readonly words: Array<InterpretedWord>;
 
-  constructor(asTyped: string, words: Array<InterpretedWord>) {
+  readonly requiredPhrases: RequiredPhrase[];
+
+  synonymVariants: InterpretedPhrase[] = [];
+
+  constructor(
+    asTyped: string,
+    words: Array<InterpretedWord>,
+    options: {
+      requiredPhrases?: RequiredPhrase[];
+    } = {},
+  ) {
     this.asTyped = asTyped;
     this.words = words;
+    this.requiredPhrases = options.requiredPhrases ?? [];
   }
 
   generateCombinations(maxCombinations: number): Array<Array<number>> {

@@ -108,8 +108,6 @@ export async function* batchStreamGrouped<T>(
   }
 }
 
-const SYNONYM_WORD_SEPARATOR = /\s+/;
-
 const progressWeights: Record<PackageIncludeOption, number> = {
   foods: 0.35,
   categories: 0.10,
@@ -575,7 +573,12 @@ export class PackageExporter {
 
     for await (const batch of batchedStream) {
       for (const row of batch) {
-        const synonymSetRecord: PkgV2SynonymSet = row.synonyms.trim().split(SYNONYM_WORD_SEPARATOR).filter(Boolean);
+        const synonymSetRecord: PkgV2SynonymSet
+          = (row.synonyms.includes(';')
+            ? row.synonyms.split(';')
+            : row.synonyms.split(WHITESPACE_REGEX))
+            .map(entry => entry.trim())
+            .filter(Boolean);
 
         ++synonymSetsProcessed;
 

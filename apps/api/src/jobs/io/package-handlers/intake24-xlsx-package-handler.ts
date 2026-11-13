@@ -1435,7 +1435,12 @@ export class Intake24XlsxPackageHandler implements PackageHandler {
       if (!locale || !synonymsText)
         return;
 
-      const synonyms = synonymsText.split(WHITESPACE_REGEX).filter(Boolean);
+      const synonyms
+        = (synonymsText.includes(';')
+          ? synonymsText.split(';')
+          : synonymsText.split(WHITESPACE_REGEX))
+          .map(entry => entry.trim())
+          .filter(Boolean);
 
       if (!locale || !synonyms.length)
         return;

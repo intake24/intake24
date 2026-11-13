@@ -39,6 +39,7 @@ export class RichDictionary {
     words: Set<string>,
     phoneticEncoder: PhoneticEncoder | undefined,
     synSets: Array<Set<string>>,
+    phraseSynonymSets: string[][] = [],
   ) {
     this.words = new Set<string>();
 
@@ -47,6 +48,14 @@ export class RichDictionary {
       synSets.forEach((synSet) => {
         for (const synWord of synSet) this.words.add(synWord.toLocaleLowerCase());
       });
+    }
+    if (phraseSynonymSets.length > 0) {
+      for (const phraseSet of phraseSynonymSets) {
+        for (const phrase of phraseSet) {
+          for (const word of phrase.split(/\s+/).filter(Boolean))
+            this.words.add(word.toLocaleLowerCase());
+        }
+      }
     }
 
     this.phoneticEncoder = phoneticEncoder;

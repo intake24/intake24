@@ -45,11 +45,15 @@ const index: FoodIndex = {};
 
 const logger = servicesLogger.child({ service: 'Food index' });
 
-function parseSynonymSet(value: string): Set<string> {
-  return new Set<string>(value.trim().split(/\s+/));
+function parseSynonymSet(value: string): string[] {
+  return (value.includes(';')
+    ? value.split(';')
+    : value.split(/\s+/))
+    .map(entry => entry.trim())
+    .filter(Boolean);
 }
 
-async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
+async function getSynonymSets(localeId: string): Promise<string[][]> {
   const synSets = await SynonymSet.findAll({
     attributes: ['synonyms'],
     where: { localeId },
@@ -68,7 +72,10 @@ async function getFoodBuildersSynonymSets(localeId: string): Promise<Set<string>
       },
     ],
   });
-  return foodBuilders.map(entry => parseSynonymSet(`${entry.triggerWord} ${entry.synonymSet?.synonyms ?? ''}`));
+  return foodBuilders.map((entry) => {
+    const words = parseSynonymSet(entry.synonymSet?.synonyms ?? '').flatMap(phrase => phrase.split(/\s+/));
+    return new Set([entry.triggerWord, ...words].filter(Boolean));
+  });
 }
 
 async function getLanguageBackendId(localeId: string): Promise<string> {
