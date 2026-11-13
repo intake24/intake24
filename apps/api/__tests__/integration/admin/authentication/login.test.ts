@@ -2,6 +2,7 @@ import request from 'supertest';
 
 import { suite } from '@intake24/api-tests/integration/helpers';
 import securityConfig from '@intake24/api/config/security';
+import { deviceCookieNames } from '@intake24/api/http/rate-limit';
 import { User } from '@intake24/db';
 
 export default () => {
@@ -67,5 +68,28 @@ export default () => {
         where: { email: 'test-user@example.com' },
       });
     });
+  });
+
+  it('valid credentials should set device cookie', async () => {
+    const res = await request(suite.app).post(url).set('Accept', 'application/json').send({ email: 'test-user@example.com', password: 'testUserPassword' });
+
+    expect(res.status).toBe(200);
+    const cookie = (res.get('Set-Cookie') ?? []).find(
+      value => value.split('=')[0] === deviceCookieNames.admin,
+    );
+    expect(cookie).toBeDefined();
+    expect(cookie).toContain(`Path=${securityConfig.jwt.admin.cookie.path}`);
+    expect(cookie).toContain('HttpOnly');
+  });
+
+  it('invalid credentials should not set device cookie', async () => {
+    const res = await request(suite.app).post(url).set('Accept', 'application/json').send({ email: 'test-user@example.com', password: 'invalidPassword' });
+
+    expect(res.status).toBe(401);
+    expect(
+      (res.get('Set-Cookie') ?? []).some(
+        cookie => cookie.split('=')[0] === deviceCookieNames.admin,
+      ),
+    ).toBe(false);
   });
 };

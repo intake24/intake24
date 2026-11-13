@@ -1,10 +1,9 @@
-import type { Request } from 'express';
-
 import { initServer } from '@ts-rest/express';
 import ms from 'ms';
 import { Op } from 'sequelize';
 
 import { ValidationError } from '@intake24/api/http/errors';
+import { emailAccountKey, ipKey } from '@intake24/api/http/rate-limit';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 import { UserPasswordReset } from '@intake24/db';
@@ -15,9 +14,15 @@ export function password() {
   return initServer().router(contract.public.password, {
     request: {
       middleware: [
-        ioc.cradle.rateLimiter.createMiddleware('password', {
-          message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.password'),
-          skipFailedRequests: true,
+        ioc.cradle.rateLimiter.bucket('passwordResetAccount', {
+          key: req => emailAccountKey(req.body?.email),
+          count: 'successes',
+          message: 'password',
+        }),
+        ioc.cradle.rateLimiter.bucket('passwordResetIp', {
+          key: req => ipKey(req),
+          count: 'all',
+          message: 'password',
         }),
       ],
       handler: async ({ req }) => {

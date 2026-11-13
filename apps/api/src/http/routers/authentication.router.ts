@@ -1,30 +1,24 @@
-import type { Request } from 'express';
-
 import { initServer } from '@ts-rest/express';
-import { ipKeyGenerator } from 'express-rate-limit';
 
 import { UnauthorizedError } from '@intake24/api/http/errors';
+import { aliasAccountKey, emailAccountKey, loginRateLimiting } from '@intake24/api/http/rate-limit';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 
 import { attachRefreshToken } from './util';
 
 export function authentication() {
-  const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
-    keyGenerator: req => `login:${req.body?.email ?? (req.ip
-      ? ipKeyGenerator(req.ip)
-      : 'missing-ip')}`,
-    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
-    skipSuccessfulRequests: true,
-  });
+  const loginRateLimit = loginRateLimiting('survey', ioc.cradle);
 
   return initServer().router(contract.public.authentication, {
     emailLogin: {
-      middleware: [loginRateLimiter],
+      middleware: loginRateLimit.middleware(req => emailAccountKey(req.body?.email)),
       handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
         const result = await req.scope.cradle.authenticationService.emailLogin(body, { req, userAgent });
         if ('provider' in result)
           return { status: 200, body: result };
+
+        loginRateLimit.issueDeviceCookie(req, res, emailAccountKey(body.email));
 
         attachRefreshToken(
           result.refreshToken,
@@ -38,11 +32,13 @@ export function authentication() {
       },
     },
     aliasLogin: {
-      middleware: [loginRateLimiter],
+      middleware: loginRateLimit.middleware(req => aliasAccountKey(req.body?.survey, req.body?.username)),
       handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
         const result = await req.scope.cradle.authenticationService.aliasLogin(body, { req, userAgent });
         if ('provider' in result)
           return { status: 200, body: result };
+
+        loginRateLimit.issueDeviceCookie(req, res, aliasAccountKey(body.survey, body.username));
 
         attachRefreshToken(
           result.refreshToken,
@@ -56,7 +52,7 @@ export function authentication() {
       },
     },
     tokenLogin: {
-      middleware: [loginRateLimiter],
+      middleware: loginRateLimit.middleware(),
       handler: async ({ body, headers: { 'user-agent': userAgent }, req, res }) => {
         const result = await req.scope.cradle.authenticationService.tokenLogin(body, { req, userAgent });
         if ('provider' in result)
