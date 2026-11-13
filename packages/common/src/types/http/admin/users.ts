@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { strongPasswordWithConfirmOptional } from '@intake24/common/security';
 
-import { bigIntString, customField, userCustomField } from '../../common';
+import { bigIntString, customField, normalizedEmail, userCustomField } from '../../common';
 import { permissionAttributes } from './permissions';
 import { roleAttributes } from './roles';
 
@@ -15,7 +15,7 @@ export type UserCustomFieldAttributes = z.infer<typeof userCustomFieldAttributes
 
 export const userRequest = z.object({
   disabledAt: z.coerce.date().nullish(),
-  email: z.email().max(512).toLowerCase().nullish(),
+  email: normalizedEmail.nullish(),
   emailNotifications: z.boolean().optional(),
   multiFactorAuthentication: z.boolean().optional(),
   name: z.string().max(512).nullish(),
@@ -61,9 +61,20 @@ export const userSurveyAliasAttributes = z.object({
 });
 export type UserSurveyAliasAttributes = z.infer<typeof userSurveyAliasAttributes>;
 
+export const userIdentityAttributes = z.object({
+  id: z.string(),
+  userId: z.string(),
+  issuer: z.string(),
+  subject: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+export type UserIdentityAttributes = z.infer<typeof userIdentityAttributes>;
+
 export const userEntry = userAttributes.extend({
   aliases: userSurveyAliasAttributes.array(),
   customFields: userCustomField.array(),
+  identities: userIdentityAttributes.array(),
   permissions: permissionAttributes.array(),
   roles: roleAttributes.array(),
 });

@@ -14,6 +14,7 @@ import { fromError } from 'zod-validation-error';
 
 import { batchGenerator } from '@intake24/api/util';
 import { strongPasswordOptional, usernameSchema } from '@intake24/common/security';
+import { normalizedEmail } from '@intake24/common/types';
 import { User, UserSurveyAlias } from '@intake24/db';
 
 import BaseJob from '../job';
@@ -24,7 +25,7 @@ const csvRow = z
       username: usernameSchema,
       password: strongPasswordOptional.transform(val => val || undefined),
       name: z.string().max(512).optional().transform(val => val || undefined),
-      email: z.email().max(512).toLowerCase().optional().transform(val => val || undefined),
+      email: normalizedEmail.optional().transform(val => val || undefined),
       phone: z.string().max(32).optional().transform(val => val || undefined),
     }),
     z.record(z.string(), z.string().transform(val => val || undefined)),

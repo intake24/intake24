@@ -62,7 +62,24 @@ function aclCache({ aclConfig, cache, kyselyDb }: Pick<IoC, 'aclConfig' | 'cache
    */
   const fetchPermissions = async (userId: string): Promise<string[]> => {
     const [user, securableResources] = await Promise.all([
-      User.scope(['permissions', 'rolesPerms']).findByPk(userId),
+      User.findByPk(userId, {
+        include: [
+          {
+            association: 'permissions',
+            through: { attributes: [] },
+          },
+          {
+            association: 'roles',
+            through: { attributes: [] },
+            include: [
+              {
+                association: 'permissions',
+                through: { attributes: [] },
+              },
+            ],
+          },
+        ],
+      }),
       fetchSecurableResources(userId),
     ]);
     if (!user)
@@ -88,7 +105,14 @@ function aclCache({ aclConfig, cache, kyselyDb }: Pick<IoC, 'aclConfig' | 'cache
    * @returns {Promise<Role[]>}
    */
   const fetchRoles = async (userId: string): Promise<Role[]> => {
-    const user = await User.scope('roles').findByPk(userId);
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          association: 'roles',
+          through: { attributes: [] },
+        },
+      ],
+    });
     if (!user)
       return [];
 

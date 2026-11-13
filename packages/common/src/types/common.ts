@@ -99,7 +99,7 @@ export function requiredLocaleTranslationWithLimit(options: { min?: number; max:
 
 export const listOptionStringValue = z.string().min(1).max(256);
 
-export function listOption<T extends z.ZodTypeAny>(valueSchema: T) {
+export function listOption<T extends z.ZodType>(valueSchema: T) {
   return z.object({
     id: z.number().optional(),
     label: z.string().min(1).max(256),
@@ -111,11 +111,11 @@ export function listOption<T extends z.ZodTypeAny>(valueSchema: T) {
   });
 }
 
-export type ListOption<T extends z.ZodTypeAny = z.ZodString> = z.infer<
+export type ListOption<T extends z.ZodType = z.ZodString> = z.infer<
   ReturnType<typeof listOption<T>>
 >;
 
-export function localeOptionList<T extends z.ZodTypeAny>({ valueSchema, limit }: { valueSchema: T; limit?: number }) {
+export function localeOptionList<T extends z.ZodType>({ valueSchema, limit }: { valueSchema: T; limit?: number }) {
   const scheme = z.intersection(
     z.object({
       en: z.array(listOption(valueSchema)),
@@ -139,11 +139,11 @@ export function localeOptionList<T extends z.ZodTypeAny>({ valueSchema, limit }:
   });
 }
 
-export type LocaleOptionList<T extends z.ZodTypeAny = z.ZodString> = z.infer<
+export type LocaleOptionList<T extends z.ZodType = z.ZodString> = z.infer<
   ReturnType<typeof localeOptionList<T>>
 >;
 
-export function categoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber>(valueSchema: T) {
+export function categoryLocaleOptionList<T extends z.ZodType = z.ZodNumber>(valueSchema: T) {
   return z.intersection(
     z.object({
       _default: localeOptionList({ valueSchema }),
@@ -152,7 +152,7 @@ export function categoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber>(v
   );
 }
 
-export type CategoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber> = z.infer<
+export type CategoryLocaleOptionList<T extends z.ZodType = z.ZodNumber> = z.infer<
   ReturnType<typeof categoryLocaleOptionList<T>>
 >;
 
@@ -164,6 +164,8 @@ export const bigIntString = z.union([
   z.coerce.number().int().positive(),
 ]).pipe(z.coerce.string());
 export const safeIdentifier = z.string().min(1).regex(/^[\w-]*$/);
+
+export const normalizedEmail = z.email().max(512).toLowerCase();
 
 // Eslint offers incorrect replacement: this regex matches zero or one spaces but eslint wants to change it to " *" which matches any number of spaces.
 // eslint-disable-next-line regexp/no-trivially-nested-quantifier

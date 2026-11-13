@@ -50,10 +50,6 @@
     "title": "Rôles",
     "tab": "Rôles"
   },
-  "mfa": {
-    "_": "Authentification multi-facteurs",
-    "abbr": "2FA"
-  },
   "notifications": {
     "email": "Notifications mail",
     "sms": "Notifications SMS"

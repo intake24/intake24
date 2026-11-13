@@ -4,6 +4,7 @@ import { initContract } from '@ts-rest/core';
 import validator from 'validator';
 import { z } from 'zod';
 
+import { normalizedEmail } from '@intake24/common/types';
 import { feedbackSubmissionEntry, paginationMeta } from '@intake24/common/types/http';
 
 const contract = initContract();
@@ -30,8 +31,8 @@ export const feedback = contract.router({
     path: '/user/feedback',
     body: pdfFeedbackRequest
       .extend({
-        email: z.email().toLowerCase(),
-        emailConfirm: z.email().toLowerCase(),
+        email: normalizedEmail,
+        emailConfirm: normalizedEmail,
       })
       .refine(data => data.email === data.emailConfirm, {
         path: ['emailConfirm'],

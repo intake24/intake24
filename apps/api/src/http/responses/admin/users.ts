@@ -2,12 +2,13 @@ import type { UserEntry, UserSecurableListEntry } from '@intake24/common/types/h
 import type { User } from '@intake24/db';
 
 export function userEntryResponse(user: User): UserEntry {
-  const { aliases = [], customFields = [], permissions = [], roles = [] } = user;
+  const { aliases = [], customFields = [], identities = [], permissions = [], roles = [] } = user;
 
   return {
     ...user.get(),
     aliases,
     customFields,
+    identities,
     permissions,
     roles,
   };

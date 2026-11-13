@@ -5,7 +5,7 @@ import { pick } from 'lodash-es';
 import { z } from 'zod';
 
 import { searchSortingAlgorithms } from '../surveys/search-settings';
-import { bigIntString } from './common';
+import { bigIntString, normalizedEmail } from './common';
 import { packageExportOptions, packageFileTypes, uploadFileId } from './http/admin/io';
 
 export const localisableMessage = z.object({
@@ -198,7 +198,7 @@ export const SurveyHelpRequestNotification = z.object({
   surveySlug: z.string(),
   userId: z.string(),
   name: z.string().nullish(),
-  email: z.email().toLowerCase().nullish(),
+  email: normalizedEmail.nullish(),
   phone: z.string().nullish(),
   phoneCountry: z.string().nullish(),
   message: z.string().nullish(),
@@ -229,11 +229,11 @@ export const SurveySubmission = z.object({
   state: z.any(),
 });
 export const UserEmailVerificationNotification = z.object({
-  email: z.email().toLowerCase(),
+  email: normalizedEmail,
   userAgent: z.string().optional(),
 });
 export const UserPasswordResetNotification = z.object({
-  email: z.email().toLowerCase(),
+  email: normalizedEmail,
   userAgent: z.string().optional(),
 });
 export const PackageVerification = z.object({

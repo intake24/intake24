@@ -1,6 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
+import { normalizedEmail } from '@intake24/common/types';
 import {
   adminAuthResponse,
   loginResponse,
@@ -19,7 +20,7 @@ export const authentication = contract.router({
       'user-agent': z.string().optional(),
     },
     body: z.object({
-      email: z.email().toLowerCase(),
+      email: normalizedEmail,
       password: z.string(),
     }),
     responses: {

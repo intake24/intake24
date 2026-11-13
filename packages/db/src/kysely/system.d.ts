@@ -504,6 +504,15 @@ export interface UserCustomFields {
   value: string;
 }
 
+export interface UserIdentities {
+  createdAt: Timestamp;
+  id: Generated<Int8>;
+  issuer: string;
+  subject: string;
+  updatedAt: Timestamp;
+  userId: Int8;
+}
+
 export interface UserNotificationSchedule {
   datetime: Timestamp;
   id: Generated<Int8>;
@@ -657,6 +666,7 @@ export interface DB {
   surveysUxEventsSettings: SurveysUxEventsSettings;
   tasks: Tasks;
   userCustomFields: UserCustomFields;
+  userIdentities: UserIdentities;
   userNotificationSchedule: UserNotificationSchedule;
   userPasswordResets: UserPasswordResets;
   userPasswords: UserPasswords;

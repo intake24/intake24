@@ -19,6 +19,7 @@ import {
   Permission,
   PersonalAccessToken,
   RoleUser,
+  SurveySubmission,
   User,
   UserCustomField,
   UserPassword,
@@ -190,7 +191,24 @@ function adminUserService({
     let currentRoleIds: string[] = [];
 
     if (userId) {
-      const user = await User.scope(['permissions', 'rolesPerms']).findByPk(userId);
+      const user = await User.findByPk(userId, {
+        include: [
+          {
+            association: 'permissions',
+            through: { attributes: [] },
+          },
+          {
+            association: 'roles',
+            through: { attributes: [] },
+            include: [
+              {
+                association: 'permissions',
+                through: { attributes: [] },
+              },
+            ],
+          },
+        ],
+      });
       if (!user)
         throw new NotFoundError();
 
@@ -408,7 +426,11 @@ function adminUserService({
    * @returns {Promise<User>}
    */
   const update = async (userId: string, input: UserInput): Promise<User> => {
-    const user = await User.scope('customFields').findByPk(userId);
+    const user = await User.findByPk(userId, {
+      include: [
+        { association: 'customFields', separate: true },
+      ],
+    });
 
     if (!user)
       throw new NotFoundError();
@@ -451,14 +473,18 @@ function adminUserService({
    * @returns {Promise<void>}
    */
   const destroy = async (userId: string): Promise<void> => {
-    const user = await User.scope('submissions').findByPk(userId, {
+    const user = await User.findByPk(userId, {
       attributes: ['id'],
     });
     if (!user)
       throw new NotFoundError();
 
-    if (user.submissions?.length)
+    if (await SurveySubmission.findOne({
+      attributes: ['id'],
+      where: { userId },
+    })) {
       throw new ForbiddenError('User cannot be deleted. It already contains submission data.');
+    }
 
     await user.destroy();
   };

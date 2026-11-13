@@ -123,7 +123,7 @@
               v-model="data.multiFactorAuthentication"
               :error-messages="errors.get('multiFactorAuthentication')"
               hide-details="auto"
-              :label="$t('users.mfa._')"
+              :label="$t('user.mfa.title')"
               name="multiFactorAuthentication"
               @update:model-value="errors.clear('multiFactorAuthentication')"
             />

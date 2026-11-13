@@ -27,7 +27,7 @@
           <td>{{ entry.disabledAt ? $t('common.yes') : $t('common.no') }}</td>
         </tr>
         <tr>
-          <th>{{ $t('users.mfa._') }}</th>
+          <th>{{ $t('user.mfa.title') }}</th>
           <td>{{ entry.multiFactorAuthentication ? $t('common.yes') : $t('common.no') }}</td>
         </tr>
         <tr>
@@ -90,6 +90,32 @@
         </tr>
       </tbody>
     </v-table>
+    <v-card-title>
+      {{ $t('user.identities.title') }}
+    </v-card-title>
+    <v-table>
+      <thead>
+        <tr>
+          <th>{{ $t('user.identities.issuer') }}</th>
+          <th>{{ $t('user.identities.subject') }}</th>
+          <th>{{ $t('common.createdAt') }}</th>
+        </tr>
+      </thead>
+      <tbody v-if="entry.identities.length">
+        <tr v-for="identity in entry.identities" :key="identity.id">
+          <th>{{ identity.issuer }}</th>
+          <td>{{ identity.subject }}</td>
+          <td>{{ formatDateTime(identity.createdAt) }}</td>
+        </tr>
+      </tbody>
+      <tbody v-else>
+        <tr>
+          <td colspan="3">
+            {{ $t('user.identities.none') }}
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
   </entry-layout>
 </template>
 
@@ -99,7 +125,7 @@ import type { UserEntry, UserRefs } from '@intake24/common/types/http/admin';
 import { defineComponent } from 'vue';
 
 import { detailMixin } from '@intake24/admin/components/entry';
-import { useEntry, useEntryFetch } from '@intake24/admin/composables';
+import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'UserDetail',
@@ -109,8 +135,15 @@ export default defineComponent({
   setup(props) {
     useEntryFetch(props);
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<UserEntry, UserRefs>(props);
+    const { formatDateTime } = useDateTime();
 
-    return { entry, entryLoaded, refs, refsLoaded };
+    return {
+      entry,
+      entryLoaded,
+      formatDateTime,
+      refs,
+      refsLoaded,
+    };
   },
 });
 </script>

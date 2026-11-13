@@ -2,6 +2,7 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
 import { strongPasswordWithConfirm } from '@intake24/common/security';
+import { normalizedEmail } from '@intake24/common/types';
 import { captcha, loginResponse } from '@intake24/common/types/http';
 
 import { sanitize } from '../../rules';
@@ -17,8 +18,8 @@ export const signUp = contract.router({
     },
     body: strongPasswordWithConfirm
       .extend({
-        email: z.email().max(512).toLowerCase(),
-        emailConfirm: z.email().toLowerCase(),
+        email: normalizedEmail,
+        emailConfirm: normalizedEmail,
         name: z.string().min(3).max(512),
         phone: z.string().max(32).nullish(),
         terms: z.literal(true),

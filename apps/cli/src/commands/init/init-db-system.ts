@@ -281,7 +281,7 @@ async function initAccessControl(db: KyselyDatabases, superuser: Superuser) {
     .insertInto('users')
     .values({
       name: superuser.name,
-      email: superuser.email,
+      email: superuser.email.toLowerCase(),
       verifiedAt: now,
       createdAt: now,
       updatedAt: now,

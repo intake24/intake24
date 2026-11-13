@@ -1,13 +1,22 @@
 import { parsePhoneNumber } from 'awesome-phonenumber';
 import z from 'zod';
 
+import { normalizedEmail } from '../../common';
+import { userIdentityAttributes } from './users';
+
 export const adminUserProfile = z.object({
   profile: z.object({
     id: z.string(),
     name: z.string().nullable(),
-    email: z.email(),
+    email: normalizedEmail,
     phone: z.string().nullable(),
     mfa: z.boolean(),
+    identities: userIdentityAttributes.pick({
+      id: true,
+      issuer: true,
+      subject: true,
+      createdAt: true,
+    }).array(),
   }),
   aal: z.boolean(),
   permissions: z.array(z.string()),

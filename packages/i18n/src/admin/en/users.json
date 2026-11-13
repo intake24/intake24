@@ -52,11 +52,6 @@
     "tab": "Roles"
   },
 
-  "mfa": {
-    "_": "Multi-factor authentication",
-    "abbr": "2FA"
-  },
-
   "notifications": {
     "email": "Email notifications",
     "sms": "SMS notifications"

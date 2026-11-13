@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { normalizedEmail } from './common';
+
 export const eventTypes = [
   'survey.session.started',
   'survey.session.cancelled',
@@ -15,7 +17,7 @@ export type NotificationChannel = (typeof notificationChannels)[number];
 export const emailNotification = z.object({
   type: z.enum(eventTypes),
   channel: z.literal('email'),
-  to: z.email().toLowerCase(),
+  to: normalizedEmail,
 });
 
 export type EmailNotification = z.infer<typeof emailNotification>;

@@ -4,7 +4,7 @@ import { initContract } from '@ts-rest/core';
 import validator from 'validator';
 import { z } from 'zod';
 
-import { emailCopy, bigIntString as surveyId } from '@intake24/common/types';
+import { emailCopy, normalizedEmail, bigIntString as surveyId } from '@intake24/common/types';
 import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
 import { createRespondentRequest, respondentEntry, respondentListEntry, respondentRequest } from '@intake24/common/types/http/admin';
 
@@ -89,7 +89,7 @@ export const respondent = contract.router({
     path: '/admin/surveys/:surveyId/respondents/:username/feedback',
     pathParams: z.object({ surveyId }),
     body: pdfFeedbackRequest.extend({
-      email: z.email().toLowerCase(),
+      email: normalizedEmail,
       copy: z.enum(emailCopy),
     }),
     responses: {
