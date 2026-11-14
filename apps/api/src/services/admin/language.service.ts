@@ -11,7 +11,15 @@ import type { LanguageTranslationCreationAttributes } from '@intake24/db';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';
-import { compareMessageKeys, getDefaultI18nMessages, mergeTranslations } from '@intake24/i18n';
+import { compareMessageKeys, defaultI18nMessages, getDefaultI18nMessages, mergeTranslations } from '@intake24/i18n';
+
+// Built-in locales may lack sections that exist in `en`, so a section is stale only when `en` lacks it too
+function getSectionDefaults(
+  langMessages: ReturnType<typeof getDefaultI18nMessages>,
+  { application, section }: Pick<LanguageTranslation, 'application' | 'section'>,
+) {
+  return langMessages[application]?.[section] ?? (defaultI18nMessages[application] as Record<string, any>)[section];
+}
 
 function languageService({
   adminUserService,
@@ -192,6 +200,7 @@ function languageService({
 
   /**
    * Update language translations set
+   * - deletes sections no longer present in default ones
    *
    * @param {string} languageId
    * @param {LanguageTranslationAttributes[]} inputs
@@ -216,24 +225,42 @@ function languageService({
     if (!language)
       throw new NotFoundError();
 
-    const { translations } = language;
+    const { code, translations } = language;
 
     if (!translations?.length)
       return [];
 
+    const defaultLangMessages = getDefaultI18nMessages(code);
+    const current: LanguageTranslation[] = [];
+    const staleIds: string[] = [];
+
     for (const translation of translations) {
+      const defaults = getSectionDefaults(defaultLangMessages, translation);
+      if (!defaults) {
+        staleIds.push(translation.id);
+        continue;
+      }
+
+      current.push(translation);
+
       const match = inputs.find(input => input.id === translation.id);
       if (!match)
         continue;
 
-      const { messages } = match;
+      await translation.update({
+        messages: mergeTranslations(defaults, match.messages),
+      });
+    }
 
-      await translation.update({ messages });
+    if (staleIds.length) {
+      await LanguageTranslation.destroy({
+        where: { id: staleIds },
+      });
     }
 
     await i18nStore.reload();
 
-    return translations;
+    return current;
   };
 
   /**
@@ -253,6 +280,7 @@ function languageService({
    * Synchronize language translations
    * - inserts missing sections
    * - merges current translations with default ones
+   * - deletes sections no longer present in default ones
    *
    * @param {(string | string[])} [id]
    * @returns {Promise<void>}
@@ -317,6 +345,17 @@ function languageService({
           );
           logger.debug(`Updating language messages for '${application}:${section}'.`);
         }
+      }
+
+      const staleIds = translations
+        .filter(translation => !getSectionDefaults(defaultLangMessages, translation))
+        .map(({ id }) => id);
+
+      if (staleIds.length) {
+        promises.push(LanguageTranslation.destroy({
+          where: { id: staleIds },
+        }));
+        logger.debug(`Deleting ${staleIds.length} stale language message sections for '${code}'.`);
       }
 
       if (inserts.length)

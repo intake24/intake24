@@ -6,8 +6,8 @@
         <slot name="prompt-description">
           <div
             v-if="i18n.description"
+            v-dompurify-html="i18n.description"
             :class="{ 'pb-4': !hasDefaultSlot }"
-            v-html="i18n.description"
           />
         </slot>
         <slot />

@@ -5,7 +5,6 @@ import { z } from 'zod';
 
 import { recordVisibilities } from '@intake24/common/security';
 import { applications, textDirections } from '@intake24/common/types';
-import { compareMessageKeys, defaultI18nMessages, validateTranslations } from '@intake24/i18n';
 
 import { userSecurableAttributes } from './securables';
 import { owner } from './users';
@@ -54,12 +53,20 @@ export type LanguageListEntry = Pick<
   'id' | 'code' | 'englishName' | 'localName' | 'countryFlagCode'
 >;
 
+type LocaleMessageValue = string | LocaleMessageValue[] | { [key: string]: LocaleMessageValue };
+
+const localeMessageValue: z.ZodType<LocaleMessageValue> = z.lazy(() => z.union([
+  z.string(),
+  z.array(localeMessageValue),
+  z.record(z.string(), localeMessageValue),
+]));
+
 export const languageTranslationAttributes = z.object({
   id: z.string(),
   languageId: z.string(),
   application: z.enum(applications),
   section: z.string().min(1).max(64),
-  messages: z.record(z.string(), z.any()), // TODO: fix (messages: jsonObjectSchema,)
+  messages: z.record(z.string(), localeMessageValue),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -67,27 +74,3 @@ export const languageTranslationAttributes = z.object({
 export type LanguageTranslationAttributes = z.infer<typeof languageTranslationAttributes>;
 
 export type LanguageTranslationsResponse = LanguageTranslationAttributes[];
-
-export const languageTranslationRequest = languageTranslationAttributes.omit({
-  createdAt: true,
-  updatedAt: true,
-}).refine((val) => {
-  if (!val)
-    return false;
-
-  if (!validateTranslations(val.messages))
-    return false;
-
-  // @ts-expect-error - i18n types
-  const defMessages = defaultI18nMessages[val.application][val.section];
-  if (!defMessages)
-    return false;
-
-  if (!compareMessageKeys(defMessages, val.messages))
-    return false;
-
-  return true;
-}, {
-  message: 'Invalid translation messages',
-  path: ['messages'],
-});

@@ -32,7 +32,7 @@
                 <template v-if="$t(`prompts.${promptType}.${key}`, lang)">
                   <div
                     v-if="key.includes('description')"
-                    v-html="$t(`prompts.${promptType}.${key}`, lang)"
+                    v-dompurify-html="$t(`prompts.${promptType}.${key}`, lang)"
                   />
                   <div v-else>
                     {{ $t(`prompts.${promptType}.${key}`, lang) }}

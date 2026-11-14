@@ -30,6 +30,23 @@ export function sanitizeParams(content: Dictionary<string | number>) {
   }, {} as Dictionary<string>);
 }
 
+export function sanitizeMessages<T>(value: T): T {
+  if (typeof value === 'string')
+    return dompurify.sanitize(value) as T;
+
+  if (Array.isArray(value))
+    return value.map(item => sanitizeMessages(item)) as T;
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [
+      key,
+      sanitizeMessages(item),
+    ])) as T;
+  }
+
+  return value;
+}
+
 export function createTranslate(i18n: ReturnType<typeof useI18nLib<DefaultLocaleMessageSchema, 'en' | string>>) {
   return (
     content?: LocaleTranslation | RequiredLocaleTranslation | string,

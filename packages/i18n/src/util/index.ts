@@ -62,25 +62,6 @@ export function compareMessageKeys<
   return xKeys.length === yKeys.length && xKeys.every(key => yKeys.includes(key));
 }
 
-/**
- * Check that input is either string | null | object
- *
- * @param {(string | Record<string, any>)} translation
- * @returns {boolean}
- */
-export function validateTranslations(translation: string | Record<string, any>): boolean {
-  if (Object.prototype.toString.call(translation) === '[object Object]') {
-    for (const value of Object.values(translation)) {
-      if (!validateTranslations(value))
-        return false;
-    }
-
-    return true;
-  }
-
-  return typeof translation === 'string' || translation === null;
-}
-
 export type I18nParams = Record<
   string,
   string | string[] | readonly string[] | number | number[] | readonly number[]

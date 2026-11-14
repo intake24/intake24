@@ -6,6 +6,15 @@ import { localeTranslation, sanitizedLocaleTranslation } from '../types/common';
 export const layoutTypes = ['desktop', 'mobile'] as const;
 export type PromptLayout = (typeof layoutTypes)[number];
 
+export const redirectIdentifierPlaceholder = '{identifier}';
+export const httpUrlPrefix = /^https?:\/\//i;
+
+// Validated as a template because `{identifier}` is substituted later; the API re-checks the protocol of the final URL.
+export const redirectUrl = z.string().nullable().refine(
+  url => !url || url === redirectIdentifierPlaceholder || httpUrlPrefix.test(url),
+  { message: `URL must start with http:// or https://, or be exactly ${redirectIdentifierPlaceholder}` },
+);
+
 export const carousel = z.object({
   color: z.string(),
   variant: z.enum(variants),

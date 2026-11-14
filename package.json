@@ -40,7 +40,7 @@
     "test": "pnpm test:unit && test:integration",
     "test:unit": "pnpm test:unit:apps && pnpm test:unit:pkgs",
     "test:unit:apps": "pnpm --filter \"./apps/*\" test:unit",
-    "test:unit:pkgs": "pnpm --filter \"./packages/{common,common-backend,i18n}\" test:unit",
+    "test:unit:pkgs": "pnpm --filter \"./packages/{common,common-backend,i18n,ui}\" test:unit",
     "test:unit:coverage": "pnpm --filter * test:unit:coverage",
     "test:integration": "pnpm --filter ./apps/api test:integration",
     "test:integration:coverage": "pnpm --filter * test:integration:coverage"

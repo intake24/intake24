@@ -47,7 +47,7 @@
             tile
             :variant="prompt.carousel.variant"
           >
-            <div v-html="translate(item.text)" />
+            <div v-dompurify-html="translate(item.text)" />
           </v-card>
           <v-img
             v-if="item.image[$vuetify.display.mobile ? 'mobile' : 'desktop']"
