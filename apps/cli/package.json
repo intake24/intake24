@@ -24,12 +24,12 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@clack/prompts": "^1.8.1",
-    "@css-inline/css-inline": "^0.23.2",
+    "@clack/prompts": "^1.9.0",
+    "@css-inline/css-inline": "^0.24.0",
     "@json2csv/node": "^7.0.8",
     "commander": "^15.1.0",
     "csv-parser": "^3.2.1",
-    "dotenv": "^18.0.9",
+    "dotenv": "^18.0.10",
     "dotenv-expand": "^1000.0.0",
     "fs-extra": "^11.4.1",
     "ky": "^2.2.0",
