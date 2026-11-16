@@ -139,7 +139,7 @@
     "rimraf": "^6.1.4",
     "supertest": "^7.3.2",
     "tsdown": "^0.23.7",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "unrun": "^0.3.1",
     "vitest": "^5.1.0"
   }
