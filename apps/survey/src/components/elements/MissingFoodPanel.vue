@@ -2,7 +2,7 @@
   <v-expand-transition>
     <v-card v-show="modelValue" ref="card" border color="grey-lighten-4">
       <v-card-text>
-        <div v-html="i18n['missing.description']" />
+        <div v-dompurify-html="i18n['missing.description']" />
       </v-card-text>
       <v-card-text class="pt-0 d-flex flex-column flex-md-row ga-3">
         <v-btn

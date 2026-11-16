@@ -10,7 +10,7 @@ export function duo() {
   return initServer().router(contract.admin.user.mfa.duo, {
     challenge: async ({ req }) => {
       const subject = atob<Subject>(req.scope.cradle.user.sub);
-      if (subject.provider !== 'email')
+      if (!['email', 'oidc'].includes(subject.provider))
         throw new ApplicationError('Invalid user - missing email.');
 
       const options = await req.scope.cradle.duoProvider.registrationChallenge(subject.providerKey);
@@ -24,7 +24,7 @@ export function duo() {
       const { challengeId, name, token } = body;
       const subject = atob<Subject>(sub);
 
-      if (subject.provider !== 'email')
+      if (!['email', 'oidc'].includes(subject.provider))
         throw new ApplicationError('Invalid user - missing email.');
 
       if (req.session.duoRegChallenge?.challengeId !== challengeId) {

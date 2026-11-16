@@ -9,7 +9,7 @@ import { actionItem } from './action-item';
 import { promptActions } from './actions';
 import { condition } from './conditions';
 import { externalSourceOptions } from './external-sources';
-import { carousel, counter, datePicker, hasVideo, layoutTypes, slider, timePicker } from './partials';
+import { carousel, counter, datePicker, hasVideo, layoutTypes, redirectUrl, slider, timePicker } from './partials';
 
 export const radioOrientations = ['column', 'row'] as const;
 export type RadioOrientation = (typeof radioOrientations)[number];
@@ -503,7 +503,7 @@ const redirectPrompt = z.object({
   ...baseStandardPrompt.shape,
   component: z.literal('redirect-prompt'),
   rating: z.boolean(),
-  url: z.string().nullable(),
+  url: redirectUrl,
   identifier: z.union([
     z.literal('userId'),
     z.literal('username'),

@@ -5,7 +5,7 @@ import Clarity from '@microsoft/clarity';
 import { get } from 'lodash-es';
 import { useConsent } from 'vue-gtag';
 
-import { defaultMessages } from '../i18n';
+import { defaultMessages, sanitizeMessages } from '../i18n';
 
 export const CC_CAT_NECESSARY = 'necessary';
 export const CC_CAT_FUNCTIONALITY = 'functionality';
@@ -41,11 +41,9 @@ export async function toggleClarity(enabled: boolean) {
 }
 
 export function cookieConsentConfig(translations?: CookieConsentConfig['language']['translations']): CookieConsentConfig {
-  if (!translations) {
-    translations = {
-      en: get(defaultMessages.getMessages('en'), 'legal.cookies.consent') as Translation,
-    };
-  }
+  translations = sanitizeMessages(translations ?? {
+    en: get(defaultMessages.getMessages('en'), 'legal.cookies.consent') as Translation,
+  });
 
   return ({
     cookie: {

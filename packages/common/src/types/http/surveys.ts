@@ -13,7 +13,7 @@ import {
   surveyStatuses,
 } from '@intake24/common/surveys';
 
-import { userCustomField } from '../common';
+import { normalizedEmail, userCustomField } from '../common';
 import { faqSection } from './admin';
 import { feedbackSchemeResponse } from './feedback';
 
@@ -41,7 +41,7 @@ export const publicSurveyEntry = z.object({
   name: z.string(),
   localeId: z.string(),
   originatingUrl: z.string().nullable(),
-  supportEmail: z.email().toLowerCase(),
+  supportEmail: normalizedEmail,
   openAccess: z.boolean(),
   authCaptcha: z.boolean(),
   authModes: z.enum(surveyAuthModes).array(),
@@ -127,7 +127,7 @@ export type SurveyFAQs = z.infer<typeof surveyFAQs>;
 export const surveyHelpRequest = z
   .object({
     name: z.string().nullish(),
-    email: z.email().toLowerCase().nullish(),
+    email: normalizedEmail.nullish(),
     phone: z.string().nullish(),
     phoneCountry: z
       .string()

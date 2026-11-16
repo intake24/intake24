@@ -1,7 +1,7 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #prompt-description>
-      <div class="px-4" v-html="promptI18n.description" />
+      <div v-dompurify-html="promptI18n.description" class="px-4" />
     </template>
     <v-card-text class="pt-2">
       <v-row>

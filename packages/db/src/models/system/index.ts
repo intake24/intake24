@@ -37,6 +37,7 @@ import SurveySubmissionMissingFood from './survey-submission-missing-food';
 import Task from './task';
 import User from './user';
 import UserCustomField from './user-custom-field';
+import UserIdentity from './user-identity';
 import UserPassword from './user-password';
 import UserPasswordReset from './user-password-reset';
 import UserPhysicalData from './user-physical-data';
@@ -124,6 +125,8 @@ export { default as User } from './user';
 export * from './user';
 export { default as UserCustomField } from './user-custom-field';
 export * from './user-custom-field';
+export { default as UserIdentity } from './user-identity';
+export * from './user-identity';
 export { default as UserPassword } from './user-password';
 export * from './user-password';
 export { default as UserPasswordReset } from './user-password-reset';
@@ -176,6 +179,7 @@ export const system = {
   Task,
   User,
   UserCustomField,
+  UserIdentity,
   UserPassword,
   UserPasswordReset,
   UserPhysicalData,

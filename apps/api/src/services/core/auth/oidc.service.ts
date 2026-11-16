@@ -7,19 +7,21 @@ import * as oidc from 'openid-client';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { btoa } from '@intake24/api/util';
 import { createAmrMethod } from '@intake24/common/security';
-import { User } from '@intake24/db';
+import { normalizedEmail } from '@intake24/common/types';
+import { User, UserIdentity } from '@intake24/db';
 
 function oidcService({
   aclConfig,
   appConfig,
   adminSignupService,
+  db,
   jwtService,
   logger: globalLogger,
   signInService,
   servicesConfig,
 }: Pick<
   IoC,
-  'aclConfig' | 'appConfig' | 'adminSignupService' | 'jwtService' | 'logger' | 'signInService' | 'servicesConfig'
+  'aclConfig' | 'appConfig' | 'adminSignupService' | 'db' | 'jwtService' | 'logger' | 'signInService' | 'servicesConfig'
 >) {
   const logger = globalLogger.child({ service: 'OIDCService' });
 
@@ -94,45 +96,90 @@ function oidcService({
       });
 
       const claims = oidcTokens.claims();
-      if (!claims?.email)
+      if (!claims)
         throw new Error('Missing ID token claims');
 
-      const { email, email_verified, name } = claims;
+      const { iss: issuer, sub: subject, email: emailClaim, email_verified, name } = claims;
+      const userAttributes = [
+        'id',
+        'email',
+        'verifiedAt',
+        'disabledAt',
+      ] as const;
 
-      let user = await User.findOne({
-        attributes: ['id', 'verifiedAt'],
-        where: {
-          email: email.toString(),
-        },
-      });
-      if (!user && aclConfig.signup.enabled) {
-        user = await adminSignupService.signUp(
+      const identity = await UserIdentity.findOne({
+        attributes: ['id'],
+        where: { issuer, subject },
+        include: [
           {
-            name: name?.toString(),
-            email: email.toString(),
-            password: undefined,
-            verifiedAt: email_verified === true
-              ? new Date()
-              : null,
+            association: 'user',
+            attributes: [...userAttributes],
+            required: true,
           },
-          { notify: email_verified !== true, userAgent },
-        );
+        ],
+      });
+
+      let user = identity?.user;
+      if (!user) {
+        // Email only proposes the link on first sign-in; afterwards iss + sub identify the user.
+        if (email_verified !== true)
+          throw new Error('Unverified email cannot link an account');
+
+        const email = normalizedEmail.parse(emailClaim);
+
+        user = await User.findOne({
+          attributes: [...userAttributes],
+          where: { email },
+        }) ?? undefined;
+        if (!user && aclConfig.signup.enabled) {
+          user = await adminSignupService.signUp(
+            {
+              name: name?.toString(),
+              email,
+              password: undefined,
+              verifiedAt: new Date(),
+            },
+            { notify: false, userAgent },
+          );
+        }
+
+        if (!user)
+          throw new Error('User not found');
       }
 
-      if (!user)
-        throw new Error('User not found');
+      signInAttempt.userId = user.id;
 
-      if (!user.verifiedAt && email_verified === true) {
-        await user.update({
-          verifiedAt: new Date(),
+      if (user.isDisabled())
+        throw new Error('Account is disabled');
+
+      if (!identity) {
+        // A new subject with a known email is a reassigned address, not the same person.
+        if (await UserIdentity.findOne({
+          attributes: ['id'],
+          where: { userId: user.id, issuer },
+        })) {
+          throw new Error('Account is already linked to another identity from this issuer');
+        }
+
+        await db.system.transaction(async (transaction) => {
+          await UserIdentity.create({ userId: user.id, issuer, subject }, { transaction });
+
+          if (!user.isVerified()) {
+            await user.update({
+              verifiedAt: new Date(),
+            }, { transaction });
+          }
         });
       }
+
+      if (!user.email)
+        throw new Error('Account has no email');
 
       const [tokens] = await Promise.all([
         jwtService.issueTokens(
           {
             userId: user.id,
-            verified: email_verified === true,
+            verified: user.isVerified(),
             aal: 'aal2',
             amr: [
               createAmrMethod('oidc'),
@@ -140,7 +187,7 @@ function oidcService({
           },
           'admin',
           {
-            subject: btoa({ provider: 'oidc', providerKey: email }),
+            subject: btoa({ provider: 'oidc', providerKey: user.email }),
           },
         ),
         signInService.log({ ...signInAttempt, successful: true }),

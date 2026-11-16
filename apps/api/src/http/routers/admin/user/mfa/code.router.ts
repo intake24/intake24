@@ -12,7 +12,7 @@ export function code() {
   return initServer().router(contract.admin.user.mfa.code, {
     challenge: async ({ req }) => {
       const subject = atob<Subject>(req.scope.cradle.user.sub);
-      if (subject.provider !== 'email')
+      if (!['email', 'oidc'].includes(subject.provider))
         throw new ApplicationError('Invalid user - missing email.');
 
       const challengeId = randomString(32);
@@ -27,7 +27,7 @@ export function code() {
     verify: async ({ body, req }) => {
       const { sub, userId } = req.scope.cradle.user;
       const subject = atob<Subject>(sub);
-      if (subject.provider !== 'email')
+      if (!['email', 'oidc'].includes(subject.provider))
         throw new ApplicationError('Invalid user - missing email.');
 
       const { challengeId, name, password } = body;

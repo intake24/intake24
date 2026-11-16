@@ -13,9 +13,9 @@
           {{ $t('survey.participant.subtitle') }}
         </div>
         <v-alert type="info">
-          <div v-html="$t('survey.participant.link')" />
+          <div v-dompurify-html="$t('survey.participant.link')" />
         </v-alert>
-        <div v-html="$t('survey.participant.info')" />
+        <div v-dompurify-html="$t('survey.participant.info')" />
         <image-placeholder v-if="isLoading" />
         <template v-if="hasDemo">
           <v-divider />

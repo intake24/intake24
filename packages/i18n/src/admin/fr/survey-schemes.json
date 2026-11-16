@@ -636,8 +636,8 @@
       "url": {
         "_": "URL de base",
         "title": "Options d'URL",
-        "subtitle": "Utilisez '{identifier}' pour indiquer l'endroit où l'identifiant de l'utlisateur devrait être inséré.",
-        "hint": "https://example.com/?arg={identifier}"
+        "subtitle": "Utilisez '{'{'}identifier{'}'}' pour indiquer l'endroit où l'identifiant de l'utilisateur devrait être inséré. L'URL doit commencer par http:// ou https://, ou être exactement '{'{'}identifier{'}'}' pour utiliser la valeur de l'identifiant comme URL complète.",
+        "hint": "https://example.com/?arg={'{'}identifier{'}'}"
       },
       "identifier": {
         "_": "Identifiant de l'utilisateur à intégrer à l'URL",

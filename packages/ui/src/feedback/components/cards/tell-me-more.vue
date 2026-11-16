@@ -39,12 +39,12 @@
             </div>
           </v-card-text>
           <v-card-text v-if="detail.unitDescription" class="flex-grow-0 flex-shrink-0 pt-4 pb-0">
-            <div v-html="detail.unitDescription" />
+            <div v-dompurify-html="detail.unitDescription" />
           </v-card-text>
           <v-divider class="mx-4 mt-2" />
         </template>
         <v-card-text v-if="detail.description" class="pt-4 overflow-y-auto">
-          <div v-html="detail.description" />
+          <div v-dompurify-html="detail.description" />
         </v-card-text>
         <v-btn
           block

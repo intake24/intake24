@@ -16,7 +16,7 @@ export default () => {
   describe('get /api/admin/languages/:languageId/translations', translations.browse);
   describe('post /api/admin/languages/:languageId/translations', translations.store);
   describe('put /api/admin/languages/:languageId/translations', translations.update);
+  describe('post /api/admin/languages/:languageId/translations/sync', translations.sync);
   describe('delete /api/admin/languages/:languageId/translations', translations.destroy);
-  // describe('POST /api/admin/languages/:languageId/translations/sync', translations.sync);
   securable('/api/admin/languages/:languageId', 'Language');
 };

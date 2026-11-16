@@ -16,6 +16,7 @@ import { z, ZodError } from 'zod';
 
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
+import { redirectIdentifierPlaceholder } from '@intake24/common/prompts';
 import { strongPassword, usernameSchema } from '@intake24/common/security';
 import { userCustomField } from '@intake24/common/types';
 import { isSessionAgeValid, isSessionFixedPeriodValid, randomString } from '@intake24/common/util';
@@ -33,6 +34,17 @@ export type RespondentWithPassword = {
   respondent: UserSurveyAlias;
   password: string;
 };
+
+export function resolveFollowUpUrl(template: string, identifier: string): string | null {
+  const url = template === redirectIdentifierPlaceholder
+    ? identifier
+    : template.replaceAll(redirectIdentifierPlaceholder, () => encodeURIComponent(identifier));
+
+  const { href, protocol } = new URL(url);
+  return ['http:', 'https:'].includes(protocol)
+    ? href
+    : null;
+}
 
 function surveyService({
   adminSurveyService,
@@ -534,24 +546,22 @@ function surveyService({
         if (!identifierValue || !url)
           return acc;
 
+        let followUpUrl: string | null;
+        try {
+          followUpUrl = resolveFollowUpUrl(url, identifierValue);
+        }
+        catch (err) {
+          logger.error('Invalid follow-up URL', { err });
+          followUpUrl = null;
+        }
+
         if (size > 1 && acc && typeof acc !== 'string') {
-          try {
-            acc[id] = new URL(url.replace('{identifier}', identifierValue)).href;
-          }
-          catch (err) {
-            logger.error('Invalid follow-up URL', { err });
-          }
+          if (followUpUrl)
+            acc[id] = followUpUrl;
           return acc;
         }
-        else {
-          try {
-            return new URL(url.replace('{identifier}', identifierValue)).href;
-          }
-          catch (err) {
-            logger.error('Invalid follow-up URL', { err });
-            return null;
-          }
-        }
+
+        return followUpUrl;
       },
       size === 1
         ? null

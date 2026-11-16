@@ -76,7 +76,7 @@
                     {{ translate(items.title) }}
                   </v-expansion-panel-title>
                   <v-expansion-panel-text>
-                    <div v-html="translate(items.content)" />
+                    <div v-dompurify-html="translate(items.content)" />
                   </v-expansion-panel-text>
                 </v-expansion-panel>
               </v-expansion-panels>

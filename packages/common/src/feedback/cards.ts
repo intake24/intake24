@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { localeTranslation, requiredLocaleTranslation, sanitizedLocaleTranslation } from '../types';
+import { requiredLocaleTranslation, sanitizedLocaleTranslation } from '../types';
 import { characterSentiment } from './characters';
 
 export const foodGroupThreshold = z.object({
@@ -44,7 +44,7 @@ export const fiveADayCard = baseCard.extend({
   low: foodGroupThreshold.nullable(),
   unit: z.object({
     name: requiredLocaleTranslation,
-    description: localeTranslation,
+    description: sanitizedLocaleTranslation,
   }),
 });
 

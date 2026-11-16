@@ -92,6 +92,22 @@
       </v-list-item>
     </v-list>
     <v-divider />
+    <v-list lines="two">
+      <v-list-subheader>{{ $t('user.identities.title') }}</v-list-subheader>
+      <v-list-item v-for="identity in profile.identities" :key="identity.id">
+        <template #prepend>
+          <v-avatar color="primary-darken-2" icon="fas fa-id-card" />
+        </template>
+        <v-list-item-title>{{ identity.issuer }}</v-list-item-title>
+        <v-list-item-subtitle>
+          {{ identity.subject }} | {{ formatDateTime(identity.createdAt) }}
+        </v-list-item-subtitle>
+      </v-list-item>
+      <v-list-item v-if="!profile.identities.length">
+        <v-list-item-title>{{ $t('user.identities.none') }}</v-list-item-title>
+      </v-list-item>
+    </v-list>
+    <v-divider />
     <v-row no-gutters>
       <v-col cols="12" md="6">
         <v-list lines="two">
@@ -141,6 +157,7 @@ import { ref } from 'vue';
 
 import { SimpleLayout } from '@intake24/admin/components/layouts';
 import { UserMfa, UserPassword } from '@intake24/admin/components/user';
+import { useDateTime } from '@intake24/admin/composables';
 import { useApp, useMessages, useUser } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
 import { AppInfo, useI18n } from '@intake24/ui';
@@ -154,6 +171,7 @@ const user = useUser();
 
 const { lang, availableLanguages } = storeToRefs(app);
 const { profile, permissions, roles } = storeToRefs(user);
+const { formatDateTime } = useDateTime();
 
 const errors = ref(new Errors());
 

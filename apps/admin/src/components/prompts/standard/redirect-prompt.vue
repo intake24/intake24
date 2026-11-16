@@ -82,11 +82,11 @@ defineOptions({ name: 'RedirectPrompt' });
 const props = defineProps({
   url: {
     type: String as PropType<Prompts['redirect-prompt']['url']>,
-    required: true,
+    default: null,
   },
   identifier: {
     type: String as PropType<Prompts['redirect-prompt']['identifier']>,
-    required: true,
+    default: null,
   },
   timer: {
     type: Number as PropType<Prompts['redirect-prompt']['timer']>,

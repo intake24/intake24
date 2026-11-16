@@ -11,6 +11,13 @@
   "phone": "Téléphone",
   "permissions": "Autorisations attribuées",
   "roles": "Rôles attribués",
+  "identities": {
+    "_": "Identité SSO",
+    "title": "Identités SSO",
+    "issuer": "Émetteur",
+    "subject": "Sujet",
+    "none": "Aucune identité SSO liée"
+  },
   "languages": {
     "_": "Langue",
     "title": "Langues"

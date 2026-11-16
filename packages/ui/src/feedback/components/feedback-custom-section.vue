@@ -6,7 +6,7 @@
     <v-container v-if="section.content">
       <v-row class="justify-center">
         <v-col cols md="10">
-          <div class="px-4" v-html="data.content" />
+          <div v-dompurify-html="data.content" class="px-4" />
         </v-col>
       </v-row>
     </v-container>

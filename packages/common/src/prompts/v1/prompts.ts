@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { listOptionStringValue, localeOptionList, localeTranslation } from '../../types';
 import { promptActions } from '../actions';
-import { layoutTypes } from '../partials';
+import { layoutTypes, redirectUrl } from '../partials';
 import { condition } from './conditions';
 
 export const radioOrientations = ['column', 'row'] as const;
@@ -410,7 +410,7 @@ const redirectPrompt = z.object({
   ...baseStandardPrompt.shape,
   component: z.literal('redirect-prompt'),
   rating: z.boolean(),
-  url: z.string().nullable(),
+  url: redirectUrl,
   identifier: z.union([
     z.literal('userId'),
     z.literal('username'),

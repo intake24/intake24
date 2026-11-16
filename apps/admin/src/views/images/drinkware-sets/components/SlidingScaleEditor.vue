@@ -11,10 +11,10 @@
           {{ $t('drinkware-sets.slidingScale.obsolete') }}
         </v-card-title>
         <v-card-text>
-          <p v-html="$t('drinkware-sets.slidingScale.legacy.p1')" />
-          <p v-html="$t('drinkware-sets.slidingScale.legacy.p2')" />
-          <p v-html="$t('drinkware-sets.slidingScale.legacy.p3')" />
-          <p v-html="$t('drinkware-sets.slidingScale.legacy.p4')" />
+          <p v-dompurify-html="$t('drinkware-sets.slidingScale.legacy.p1')" />
+          <p v-dompurify-html="$t('drinkware-sets.slidingScale.legacy.p2')" />
+          <p v-dompurify-html="$t('drinkware-sets.slidingScale.legacy.p3')" />
+          <p v-dompurify-html="$t('drinkware-sets.slidingScale.legacy.p4')" />
         </v-card-text>
 
         <v-card-actions>
@@ -29,7 +29,7 @@
       <v-card v-if="scale.version === 2" flat>
         <v-card-subtitle class="pa-0">
           <v-alert class="pa-2" color="#ddd" density="compact" icon="fas fa-info-circle">
-            <span v-html="$t('drinkware-sets.slidingScale.editInstructions')" />
+            <span v-dompurify-html="$t('drinkware-sets.slidingScale.editInstructions')" />
           </v-alert>
         </v-card-subtitle>
         <v-switch

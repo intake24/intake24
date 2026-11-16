@@ -650,8 +650,8 @@
       "url": {
         "_": "Base URL",
         "title": "URL Options",
-        "subtitle": "Use '{identifier}' to indicate the place where user identifier should be to inserted.",
-        "hint": "https://example.com/?arg={identifier}"
+        "subtitle": "Use '{'{'}identifier{'}'}' to indicate the place where user identifier should be inserted. URL must start with http:// or https://, or be exactly '{'{'}identifier{'}'}' to use the identifier value as the whole URL.",
+        "hint": "https://example.com/?arg={'{'}identifier{'}'}"
       },
       "identifier": {
         "_": "User identifier to embed into the URL",

@@ -20,7 +20,7 @@
       </div>
     </div>
     <v-card-text v-if="detail.summary" class="flex-grow-1" :class="textColor">
-      <div class="card-screen__summary" v-html="detail.summary" />
+      <div v-dompurify-html="detail.summary" class="card-screen__summary" />
     </v-card-text>
     <tell-me-more v-bind="{ detail, textColor }" />
   </v-card>

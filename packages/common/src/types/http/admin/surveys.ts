@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { schemeOverrides, sessionSettings, surveyAuthModes, surveySearchSettings, surveyStatuses } from '@intake24/common/surveys';
 
-import { safeIdentifier } from '../../common';
+import { normalizedEmail, safeIdentifier } from '../../common';
 import { notification } from '../../notifications';
 import { faqAttributes } from './faqs';
 import { feedbackSchemeAttributes } from './feedback-schemes';
@@ -38,7 +38,7 @@ export const surveyAttributes = z.object({
   authModes: z.enum(surveyAuthModes).array(),
   suspensionReason: z.string().max(512).nullable(),
   surveyMonkeyUrl: z.string().max(512).nullable(),
-  supportEmail: z.email().max(512).toLowerCase(),
+  supportEmail: normalizedEmail,
   originatingUrl: z.string().max(512).nullable(),
   faqId: z.string().nullable(),
   feedbackSchemeId: z.string().nullable(),

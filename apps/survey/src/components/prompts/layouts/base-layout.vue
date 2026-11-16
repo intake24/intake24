@@ -11,7 +11,7 @@
     </v-card>
     <slot name="prompt-description">
       <v-card v-if="!isInMultiPrompt && i18n.description" class="mb-4" :tile="$vuetify.display.mobile">
-        <div class="pa-4" v-html="i18n.description" />
+        <div v-dompurify-html="i18n.description" class="pa-4" />
       </v-card>
     </slot>
     <slot />

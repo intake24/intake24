@@ -9,7 +9,7 @@ import i18n from './i18n';
 import { loading } from './mixins';
 import router from './router';
 import { errorHandler, mountInterceptors, useHttp } from './services';
-import { bootstrapAnalytics, cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui';
+import { bootstrapAnalytics, cookieConsentConfig, cookieConsentPlugin, sanitizeHtmlPlugin } from '@intake24/ui';
 import { createManager } from '@vue-youtube/core';
 import { useAuth } from './stores';
 
@@ -27,6 +27,7 @@ app.use(router);
 app.use(pinia);
 app.use(i18n);
 app.use(vuetify);
+app.use(sanitizeHtmlPlugin);
 app.use(createManager({
   deferLoading: { enabled: true, autoLoad: true },
 }));

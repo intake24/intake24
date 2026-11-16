@@ -3,7 +3,6 @@ import { createApp } from 'vue';
 // Vuetify must be imported before any components that use it to make the css layers work correctly
 import vuetify from './plugins/vuetify';
 
-import VueDOMPurifyHTML from 'vue-dompurify-html';
 import pinia from '@intake24/ui/stores/bootstrap';
 import App from './app.vue';
 import i18n from './i18n';
@@ -14,6 +13,7 @@ import guards from './router/guards';
 import { errorHandler, mountInterceptors, useHttp } from './services';
 import { useAuth } from './stores';
 import { bootstrapAnalytics, cookieConsentConfig, cookieConsentPlugin } from '@intake24/ui/cookie-consent';
+import { sanitizeHtmlPlugin } from '@intake24/ui/util';
 
 guards(router);
 
@@ -35,11 +35,7 @@ app.use(router);
 app.use(pinia);
 app.use(i18n);
 app.use(vuetify);
-app.use(VueDOMPurifyHTML, {
-  i18n: {
-    ALLOWED_TAGS: ['b', 'i', 'strong', 'em', 'p', 'u'],
-  },
-});
+app.use(sanitizeHtmlPlugin);
 app.use(cookieConsentPlugin, cookieConsentConfig());
 
 bootstrapAnalytics(app, router);

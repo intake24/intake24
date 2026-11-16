@@ -11,6 +11,13 @@
   "phone": "Phone",
   "permissions": "Assigned permissions",
   "roles": "Assigned roles",
+  "identities": {
+    "_": "SSO identity",
+    "title": "SSO identities",
+    "issuer": "Issuer",
+    "subject": "Subject",
+    "none": "No SSO identity linked"
+  },
   "languages": {
     "_": "Language",
     "title": "Languages"

@@ -21,14 +21,14 @@
             <v-icon :icon="detail.iconClass" start />
             <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
           </div>
-          <div class="mt-auto" v-html="detail.unitDescription" />
+          <div v-dompurify-html="detail.unitDescription" class="mt-auto" />
         </v-card-text>
       </v-col>
     </v-row>
     <v-row no-gutters>
       <v-col cols="12">
         <v-card-text>
-          <div v-html="detail.description" />
+          <div v-dompurify-html="detail.description" />
         </v-card-text>
       </v-col>
     </v-row>

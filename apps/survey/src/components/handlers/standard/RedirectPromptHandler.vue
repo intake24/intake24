@@ -17,6 +17,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
+import { httpUrlPrefix } from '@intake24/common/prompts';
 import { RedirectPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -33,10 +34,13 @@ const feedbackAvailable = computed(() => survey.feedbackAvailable);
 const feedbackEnabled = computed(() => survey.feedbackEnabled);
 const followUpUrl = computed(() => {
   const followUpUrl = survey.user?.followUpUrl ?? undefined;
-  if (!followUpUrl || typeof followUpUrl === 'string')
-    return followUpUrl;
+  const url = !followUpUrl || typeof followUpUrl === 'string'
+    ? followUpUrl
+    : followUpUrl[props.prompt.id];
 
-  return followUpUrl[props.prompt.id];
+  return url && httpUrlPrefix.test(url)
+    ? url
+    : undefined;
 });
 const submissionId = computed(() => survey.data.id);
 const surveyId = computed(() => route.params.surveyId.toString());

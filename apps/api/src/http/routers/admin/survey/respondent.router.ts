@@ -208,7 +208,7 @@ export function respondent() {
 
         const subject = atob<Subject>(req.scope.cradle.user.sub);
         const { userId } = req.scope.cradle.user;
-        const userEmail = subject.provider === 'email'
+        const userEmail = ['email', 'oidc'].includes(subject.provider)
           ? subject.providerKey
           : undefined;
 
