@@ -246,8 +246,16 @@ export const sidebar = {
           link: '/admin/locales',
         },
         {
+          text: 'Localising a food database',
+          link: '/admin/locales/localisation-guide',
+        },
+        {
           text: 'Food databases',
           link: '/admin/locales/fdbs',
+        },
+        {
+          text: 'Search and alternative names',
+          link: '/admin/locales/search-and-alt-names',
         },
         {
           text: 'Standard units',
