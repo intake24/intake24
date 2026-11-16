@@ -1,5 +1,7 @@
 # PDF
 
+Path: `apps/api/src/config/pdf.ts`
+
 PDF generation is implemented using [puppeteer](https://pptr.dev).
 
 ## Puppeteer
@@ -10,8 +12,8 @@ Puppeteer modes.
 
 - object-path: `puppeteer.headless`
 - dotenv var: `PUPPETEER_HEADLESS`
-- type: `boolean | 'shell' | undefined`
-- default: `undefined`
+- type: `boolean | 'shell'`
+- default: `true`
 
 ### Language
 

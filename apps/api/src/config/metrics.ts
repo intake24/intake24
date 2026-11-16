@@ -12,7 +12,6 @@ const metricsConfigSchema = z.object({
     db: z.object({
       collectConnectionPoolStats: z.boolean().or(z.stringbool()).default(true),
       collectConnectionDuration: z.boolean().or(z.stringbool()).default(true),
-      collectConnectionSource: z.boolean().or(z.stringbool()).default(true),
     }),
     http: z.object({
       enabled: z.boolean().or(z.stringbool()).default(true),
@@ -42,7 +41,6 @@ const parsedMetricsConfig = validateConfig('Performance metrics configuration', 
     db: {
       collectConnectionPoolStats: process.env.METRICS_COLLECT_DB_CONNECTION_POOL_STATS,
       collectConnectionDuration: process.env.METRICS_COLLECT_DB_CONNECTION_DURATION,
-      collectConnectionSource: process.env.METRICS_COLLECT_DB_CONNECTION_SOURCE,
     },
     http: {
       enabled: process.env.METRICS_HTTP_ENABLED,

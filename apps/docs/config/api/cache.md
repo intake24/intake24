@@ -4,7 +4,7 @@ Path: `apps/api/src/config/cache.ts`
 
 [Redis](https://redis.io) is used as cache store driver.
 
-Redis is also used for other parts of system (queue, rate limiter, session), they have separate connection settings, so they can be configured independently if needed.
+Connection settings fall back to [common Redis settings](/config/api/#redis) if not set.
 
 ## Redis instance
 
@@ -43,11 +43,20 @@ Redis is also used for other parts of system (queue, rate limiter, session), the
 - type: `string`
 - default: `'it24:cache:'`
 
-### Time to live (TTL)
+## Time to live (TTL)
 
-Time to live (expiration time) as `ms-formatted` string (see [ms](https://github.com/vercel/ms) for more information) or number in seconds.
+Time to live (expiration time). Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
 
 - object-path: `ttl`
 - dotenv var: `CACHE_TTL`
-- type: `string | number`
+- type: `string`
 - default: `'7d'`
+
+## Survey settings TTL
+
+Time to live (expiration time) of cached survey settings. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
+
+- object-path: `surveySettingsTTL`
+- dotenv var: `CACHE_SURVEY_SETTINGS_TTL`
+- type: `string`
+- default: `'120s'`

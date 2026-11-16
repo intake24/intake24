@@ -18,26 +18,19 @@ export const oidcConfigSchema = z.object({
 });
 export type OidcConfig = z.infer<typeof oidcConfigSchema>;
 
-function parseOidcConfig(env: NodeJS.ProcessEnv) {
+const oidcEnvKey = /^OIDC_(\w+)_(ISSUER|CLIENT_ID|CLIENT_SECRET)$/;
+const oidcEnvField = { ISSUER: 'issuer', CLIENT_ID: 'clientId', CLIENT_SECRET: 'clientSecret' } as const;
+
+export function parseOidcConfig(env: NodeJS.ProcessEnv) {
   const config: Record<string, Partial<OidcConfig>> = {};
 
-  for (const key of Object.keys(env)) {
-    if (!key.startsWith('OIDC_'))
+  for (const [key, value] of Object.entries(env)) {
+    const match = key.match(oidcEnvKey);
+    if (!match || !value)
       continue;
 
-    const envProvider = key.split('_').at(1);
-    if (!envProvider)
-      continue;
-
-    const provider = envProvider.toLowerCase();
-    if (config[envProvider])
-      continue;
-
-    config[provider] = {
-      issuer: env[`OIDC_${envProvider}_ISSUER`],
-      clientId: env[`OIDC_${envProvider}_CLIENT_ID`],
-      clientSecret: env[`OIDC_${envProvider}_CLIENT_SECRET`],
-    };
+    const [, envProvider, envField] = match;
+    (config[envProvider.toLowerCase()] ??= {})[oidcEnvField[envField as keyof typeof oidcEnvField]] = value;
   }
 
   return config;
@@ -49,7 +42,10 @@ export const servicesConfig = z.object({
     secret: z.string().default(''),
   }),
   webPush: z.object({
-    subject: z.string().default(''),
+    subject: z.url({
+      protocol: /^(?:https|mailto)$/,
+      error: 'Expected a mailto: or https: URL. See https://docs.intake24.org/config/api/services#web-push',
+    }),
     publicKey: z.string().nonempty().superRefine((val, ctx) => {
       if (!val) {
         ctx.addIssue({

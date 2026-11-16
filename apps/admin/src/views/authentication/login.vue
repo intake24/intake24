@@ -115,7 +115,7 @@ const showPassword = ref(false);
 const errors = ref(new Errors());
 const signupEnabled = import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true';
 
-const oidcProviders = import.meta.env.VITE_OIDC_PROVIDERS?.split(',') ?? [];
+const oidcProviders = import.meta.env.VITE_OIDC_PROVIDERS?.split(',').filter(Boolean) ?? [];
 
 onMounted(async () => {
   // Check for Duo MFA response

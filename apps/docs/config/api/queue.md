@@ -2,7 +2,9 @@
 
 Path: `apps/api/src/config/queue.ts`
 
-Queueing system is handled by [Redis](https://redis.io) & [bullmq](https://github.com/taskforcesh/bullmq)
+Queueing system is handled by [Redis](https://redis.io) & [bullmq](https://github.com/taskforcesh/bullmq).
+
+Connection settings fall back to [common Redis settings](/config/api/#redis) if not set.
 
 ## Redis instance
 

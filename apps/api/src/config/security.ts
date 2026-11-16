@@ -11,7 +11,7 @@ export const jwtFrontEndSettings = z.object({
     audience: z.custom<[string, ...string[]]>(() => z.array(z.string()).min(1)),
   }),
   refresh: z.object({
-    secret: z.string(),
+    secret: z.string().min(32),
     lifetime: msStringValue,
     audience: z.custom<[string, ...string[]]>(() => z.array(z.string()).min(1)),
   }),
@@ -106,7 +106,7 @@ const rawSecurityConfig = {
       },
       refresh: {
         audience: ['survey', 'refresh'],
-        secret: process.env.JWT_SURVEY_REFRESH_SECRET ?? '',
+        secret: process.env.JWT_SURVEY_REFRESH_SECRET,
         lifetime: process.env.JWT_SURVEY_REFRESH_LIFETIME || '1d',
       },
       cookie: {

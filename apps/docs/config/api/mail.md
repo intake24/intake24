@@ -50,9 +50,11 @@ Selected mailer transport
 
 ### Authentication
 
+Authentication is only used when both username and password are set.
+
 #### Username
 
-- object-path: `mailers.smtp.auth.username`
+- object-path: `mailers.smtp.auth.user`
 - dotenv var: `MAIL_USERNAME`
 - type: `string | null`
 - default: `null`
@@ -80,7 +82,7 @@ Selected mailer transport
 - object-path: `from.name`
 - dotenv var: `MAIL_FROM_NAME`
 - type: `string`
-- default: `$APP_NAME`
+- default: `'Intake24'`
 
 ## Reply-To
 

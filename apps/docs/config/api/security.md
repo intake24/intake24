@@ -10,7 +10,7 @@ Single origin or list of origins to allow cross-origin resource sharing. Define 
 
 - object-path: `cors.origin`
 - dotenv var: `CORS_ORIGIN` (for list of origins, use `comma-delimited` string)
-- type: `string | string[] | boolean`
+- type: `string[] | false` (`false` when not set - CORS disabled)
 - default: `false`
 
 ## Proxy
@@ -43,9 +43,10 @@ Secret to sign JWT access token.
 
 You need to set a secret manually or use the [CLI](/cli/generate-key) to generate a secret.
 
-- object-path: `jwt.access.secret`
+- object-path: `jwt.secret`
 - dotenv var: `JWT_ACCESS_SECRET`
-- type: `string`
+- type: `string` (min. 32 characters)
+- required
 
 ### Admin application settings
 
@@ -76,7 +77,8 @@ You need to set a secret manually or use the [CLI](/cli/generate-key) to generat
 
 - object-path: `jwt.admin.refresh.secret`
 - dotenv var: `JWT_ADMIN_REFRESH_SECRET`
-- type: `string`
+- type: `string` (min. 32 characters)
+- required
 
 #### Refresh token audience
 
@@ -130,7 +132,7 @@ Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.co
 
 - object-path: `jwt.admin.cookie.sameSite`
 - dotenv var: `JWT_ADMIN_COOKIE_SAMESITE`
-- type: `boolean | 'lax' | 'strict' | 'none'`
+- type: `'lax' | 'strict' | 'none'`
 - default: `'lax'`
 
 #### Cookie secure
@@ -169,7 +171,8 @@ You need to set a secret manually or use the [CLI](/cli/generate-key) to generat
 
 - object-path: `jwt.survey.refresh.secret`
 - dotenv var: `JWT_SURVEY_REFRESH_SECRET`
-- type: `string`
+- type: `string` (min. 32 characters)
+- required
 
 #### Refresh token audience
 
@@ -223,7 +226,7 @@ Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.co
 
 - object-path: `jwt.survey.cookie.sameSite`
 - dotenv var: `JWT_SURVEY_COOKIE_SAMESITE`
-- type: `boolean | 'lax' | 'strict' | 'none'`
+- type: `'lax' | 'strict' | 'none'`
 - default: `'lax'`
 
 #### Cookie secure
@@ -254,8 +257,8 @@ Compatibility date cut-off for personal access tokens.
 - if set to `null`, no cut-off is applied for personal access tokens and user needs to issue new tokens with MFA enabled
 
 - object-path: `mfa.compat`
-- dotenv var: `MFA_COMPAT_DATE`
-- type: `string | null`
+- dotenv var: `MFA_COMPAT_DATE` (date string, e.g. `2025-01-01`)
+- type: `Date | null`
 - default: `null`
 
 Supported providers:
@@ -304,7 +307,29 @@ URL where to redirect from MFA verification step. This should be admin tool logi
 - object-path: `mfa.providers.duo.redirectUrl`
 - dotenv var: `DUO_REDIRECT_URL`
 - type: `string`
-- default: `''`
+- default: `'https://localhost:8100'`
+
+### FIDO provider settings
+
+#### Issuer
+
+Relying party name displayed by FIDO2 / WebAuthn authenticators.
+
+- object-path: `mfa.providers.fido.issuer`
+- dotenv var: `FIDO_ISSUER`
+- type: `string`
+- default: `'intake24'`
+
+### OTP provider settings
+
+#### Issuer
+
+Issuer name displayed in authenticator apps.
+
+- object-path: `mfa.providers.otp.issuer`
+- dotenv var: `OTP_ISSUER`
+- type: `string`
+- default: `'intake24'`
 
 ## Passwords
 
@@ -312,9 +337,9 @@ Settings for password restore functionality.
 
 ### Expire
 
-Password reset link expiration in **minutes**.
+Password reset link expiration. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
 
-- object-path: `passwords.expire`
+- object-path: `passwords.expiresIn`
 - dotenv var: `PASSWORDS_EXPIRES_IN`
 - type: `string`
 - default: `'1h'`
@@ -329,7 +354,7 @@ Size of the tokens - string's length.
 
 - object-path: `authTokens.size`
 - dotenv var: `AUTH_TOKENS_SIZE`
-- type: `number`
+- type: `number` (min. 32)
 - default: `32`
 
 ### Alphabet
@@ -338,8 +363,8 @@ String of custom alphabet - character set to be used for token generation.
 
 - object-path: `authTokens.alphabet`
 - dotenv var: `AUTH_TOKENS_ALPHABET`
-- type: `string | null`
-- default: `null`
+- type: `string | undefined`
+- default: `undefined`
 
 ## Sign-in logging
 

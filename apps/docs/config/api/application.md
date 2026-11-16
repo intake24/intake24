@@ -15,7 +15,7 @@ Node environment to start the application in.
 
 Application name.
 
-- object-path: `env`
+- object-path: `name`
 - dotenv var: `APP_NAME`
 - type: `string`
 - default: `'Intake24'`
@@ -24,16 +24,16 @@ Application name.
 
 Application icon - unicode character.
 
-- object-path: `env`
+- object-path: `icon`
 - dotenv var: `APP_ICON`
-- type: `string | undefined`
-- default: 🍴
+- type: `string`
+- default: 🍴 (empty value falls back to default, icon cannot be disabled)
 
 ## Powered by
 
 Powered by text (e.g. local team running the instance).
 
-- object-path: `env`
+- object-path: `poweredBy`
 - dotenv var: `APP_POWERED_BY`
 - type: `string | undefined`
 - default: undefined
@@ -63,6 +63,7 @@ Secret key to use for in-app signing / encryption (cookies / sessions)
 - object-path: `secret`
 - dotenv var: `APP_SECRET`
 - type: `string`
+- required
 
 ## HTTPS
 
@@ -108,7 +109,7 @@ Domain / base url to resolve fully qualified sites URLs (if relative)
 - object-path: `urls.base`
 - dotenv var: `APP_URL_BASE`
 - type: `string`
-- default: `'localhost:3100'`
+- default: `'http://localhost:3100'` (`https` if `DEV_HTTPS` is enabled)
 
 ### Admin URL
 
@@ -144,7 +145,7 @@ URL of images.
 - object-path: `urls.images`
 - dotenv var: `APP_URL_IMAGES`
 - type: `string`
-- default: `'localhost:3100/images'`
+- default: `'http://localhost:3100/images'` (`https` if `DEV_HTTPS` is enabled)
 
 ::: tip
 Default setup allows local images serving - ideal for development purposes. For production, use reverse proxy, CDN etc.
@@ -157,7 +158,7 @@ URL of media files.
 - object-path: `urls.media`
 - dotenv var: `APP_URL_MEDIA`
 - type: `string`
-- default: `'localhost:3100/media'`
+- default: `'http://localhost:3100/media'` (`https` if `DEV_HTTPS` is enabled)
 
 ::: tip
 Default setup allows local media serving - ideal for development purposes. For production, use reverse proxy, CDN etc.

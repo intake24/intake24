@@ -28,7 +28,7 @@ function oidcService({
   const oidcConfigs: Record<string, oidc.Configuration> = {};
 
   async function getOidcConfigs(provider: string) {
-    if (!servicesConfig.oidc[provider])
+    if (!Object.hasOwn(servicesConfig.oidc, provider))
       throw new UnauthorizedError('Invalid OIDC provider');
 
     const { admin: redirectUrl } = appConfig.urls;
@@ -76,7 +76,7 @@ function oidcService({
     };
 
     try {
-      if (!servicesConfig.oidc[provider])
+      if (!Object.hasOwn(servicesConfig.oidc, provider))
         throw new Error('Invalid OIDC provider');
 
       if (!meta.req.session.oidc)

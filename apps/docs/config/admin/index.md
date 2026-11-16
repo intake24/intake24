@@ -128,6 +128,10 @@ Captcha provider. Possible values `re-captcha` or `h-captcha`.
 
 Captcha provider sitekey. Refer to your provider, how to obtain the key.
 
+### VITE_OIDC_PROVIDERS
+
+Comma-delimited list of enabled OpenID Connect providers (e.g. `google,microsoft`). Names have to match lower-cased provider names configured in [API Server Single Sign-On settings](/config/api/services#single-sign-on). Each provider is displayed as a login button. Disabled if not set.
+
 ### VITE_GOOGLE_ANALYTICS_ID
 
 Google Analytics ID. Disabled if not set.
