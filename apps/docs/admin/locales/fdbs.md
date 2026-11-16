@@ -46,7 +46,7 @@ List of tags attached to category or food record. Can be used for various purpos
 
 ### Alternative names (`foods-only`)
 
-List of alternative names for the food record. Used for foods which are known under different names in different regions or by different groups of people.
+List of alternative names for the food record. Used for foods which are known under different names in different regions or by different groups of people. See [Search and alternative names](/admin/locales/search-and-alt-names#alternative-names).
 
 ## Categories
 
