@@ -31,16 +31,6 @@
           @update:model-value="update('quantityCard', $event)"
         />
       </v-col>
-      <v-col cols="12" md="6">
-        <v-select
-          hide-details="auto"
-          :items="quantityCardStyles"
-          :label="$t('survey-schemes.prompts.quantityCard._')"
-          :model-value="quantityCard"
-          variant="outlined"
-          @update:model-value="update('quantityCard', $event)"
-        />
-      </v-col>
     </v-row>
   </v-tabs-window-item>
 </template>

@@ -23,15 +23,6 @@
           variant="outlined"
           @update:model-value="update('quantityCard', $event)"
         />
-        <v-select
-          class="mt-4"
-          hide-details="auto"
-          :items="quantityCardStyles"
-          :label="$t('survey-schemes.prompts.quantityCard._')"
-          :model-value="quantityCard"
-          variant="outlined"
-          @update:model-value="update('quantityCard', $event)"
-        />
       </v-col>
     </v-row>
   </v-tabs-window-item>
