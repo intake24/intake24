@@ -22,6 +22,7 @@ export const checkboxListPrompt: Prompts['checkbox-list-prompt'] = copy({
   id: 'checkbox-list-prompt',
   name: 'Checkbox List Prompt',
   options: { en: [] },
+  updateFoodActions: {},
   other: false,
 });
 
