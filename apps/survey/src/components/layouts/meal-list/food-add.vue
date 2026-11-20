@@ -29,7 +29,7 @@
               autocomplete="off"
               autofocus
               clearable
-              :items="meals"
+              :items="mealItems"
               outlined
               return-object
               :rules="[inputTooLog(64)]"
@@ -169,6 +169,17 @@ const { form, inputTooLog } = useForm();
 
 const mealTimePrompt = computed(() =>
   survey.parameters?.surveyScheme.prompts.meals.preFoods.find(prompt => prompt.component === 'meal-time-prompt'));
+
+const mealNames = computed(() => props.meals.map(m => translate(m.name)));
+const mealItems = computed(() => {
+  const defaultMeals = survey.defaultSchemeMeals?.filter(m => !mealNames.value.includes(translate(m.name))).map(m => ({ ...m, time: undefined } as unknown as MealState)) || [];
+  return [
+    ...new Set([
+      ...props.meals,
+      ...defaultMeals,
+    ]),
+  ].sort();
+});
 
 const dialog = ref(false);
 const meal = ref<MealState | string | undefined>(undefined);
