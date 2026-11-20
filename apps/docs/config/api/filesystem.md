@@ -15,19 +15,19 @@ Public directory for serving static files.
 
 Upload directory for storing temporarily uploaded files.
 
-- object-path: `local.upload`
-- dotenv var: `FS_UPLOAD`
+- object-path: `local.uploads`
+- dotenv var: `FS_UPLOADS`
 - type: `string`
-- default: `'storage/upload'`
+- default: `'storage/private/uploads'`
 
 ## Download dir
 
 Download directory for storing temporarily downloaded files.
 
-- object-path: `local.download`
-- dotenv var: `FS_DOWNLOAD`
+- object-path: `local.downloads`
+- dotenv var: `FS_DOWNLOADS`
 - type: `string`
-- default: `'storage/download'`
+- default: `'storage/private/downloads'`
 
 ## Images dir
 
@@ -36,7 +36,16 @@ Images directory for locally hosted images.
 - object-path: `local.images`
 - dotenv var: `FS_IMAGES`
 - type: `string`
-- default: `'storage/images'`
+- default: `'storage/public/images'`
+
+## Cache dir
+
+Cache directory for locally cached files.
+
+- object-path: `local.cache`
+- dotenv var: `FS_CACHE`
+- type: `string`
+- default: `'storage/private/cache'`
 
 ## URL Expiration
 
@@ -45,3 +54,21 @@ Expiration of URLs for generated files. Defined as `ms-formatted`string, see [ms
 - object-path: `urlExpiresAt`
 - type: `string`
 - default: `'2d'`
+
+## Max chunked upload size
+
+Maximum size of a file uploaded in chunks. Defined as `bytes-formatted` string (e.g. `'100MB'`), see [bytes](https://github.com/visionmedia/bytes.js) for more information.
+
+- object-path: `maxChunkedUploadSize`
+- dotenv var: `FS_MAX_CHUNKED_UPLOAD_SIZE`
+- type: `string`
+- default: `'100MB'`
+
+## Low disk space threshold
+
+Minimum free disk space required to accept chunked uploads and package exports. Defined as `bytes-formatted` string (e.g. `'10GB'`), see [bytes](https://github.com/visionmedia/bytes.js) for more information.
+
+- object-path: `lowDiskSpaceThreshold`
+- dotenv var: `FS_LOW_DISK_SPACE_THRESHOLD`
+- type: `string`
+- default: `'10GB'`

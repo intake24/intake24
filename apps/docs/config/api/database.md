@@ -100,10 +100,22 @@ Examples
 
 SSL connection for database (only Postgresql dialect supported at the moment)
 
-- object-path: `[environment].security`
+- object-path: `[environment][database].dialectOptions.ssl`
 - dotenv vars:
   - `development`: `DB_DEV_FOODS_SSL` and `DB_DEV_SYSTEM_SSL`
   - `test`: `DB_TEST_FOODS_SSL` and `DB_TEST_SYSTEM_SSL`
   - `production`: `DB_FOODS_SSL` and `DB_SYSTEM_SSL`
-- type: `'true' | 'false'`
-- default: `'false'`
+- type: `boolean`
+- default: `false`
+
+## Debug query limit
+
+Maximum length (number of characters) of SQL queries logged in debug mode. Longer queries are truncated. Set to `0` to log full queries.
+
+- object-path: `[environment][database].debugQueryLimit`
+- dotenv vars:
+  - `development`: `DB_DEV_FOODS_DEBUG_QUERY_LIMIT` and `DB_DEV_SYSTEM_DEBUG_QUERY_LIMIT`
+  - `test`: `DB_TEST_FOODS_DEBUG_QUERY_LIMIT` and `DB_TEST_SYSTEM_DEBUG_QUERY_LIMIT`
+  - `production`: `DB_FOODS_DEBUG_QUERY_LIMIT` and `DB_SYSTEM_DEBUG_QUERY_LIMIT`
+- type: `number`
+- default: `0`

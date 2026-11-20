@@ -4,7 +4,7 @@ Path: `apps/api/src/config/rate-limiter.ts`
 
 [Redis](https://redis.io) is used as rate-limiter store driver.
 
-Redis is also used for other parts of system (cache, queue, session), they have separate connection settings, so they can be configured independently if needed.
+Connection settings fall back to [common Redis settings](/config/api/#redis) if not set.
 
 :::tip Rate limiter time window definition
 Time window to track the requests is defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
@@ -113,6 +113,28 @@ Maximum number of requests that can be made within the specified time window.
 - type: `number`
 - default: `1`
 
+## Verify
+
+Rate limit settings for `/api/admin/user/verify` route (sending email verification).
+
+### Window
+
+Time window to track the requests.
+
+- object-path: `verify.windowMs`
+- dotenv var: `RATE_LIMITER_VERIFY_WINDOW`
+- type: `string`
+- default: `'5m'`
+
+### Limit
+
+Maximum number of requests that can be made within the specified time window.
+
+- object-path: `verify.limit`
+- dotenv var: `RATE_LIMITER_VERIFY_LIMIT`
+- type: `number`
+- default: `1`
+
 ## Generate user
 
 Rate limit settings for `/api/surveys/:surveyId/generate-user` routes.
@@ -165,7 +187,7 @@ Rate limit settings for `/api/surveys/:surveyId/rating`.
 
 Time window to track the requests.
 
-- object-path: `feedback.windowMs`
+- object-path: `rating.windowMs`
 - dotenv var: `RATE_LIMITER_RATING_WINDOW`
 - type: `string`
 - default: `'15m'`
@@ -174,7 +196,7 @@ Time window to track the requests.
 
 Maximum number of requests that can be made within the specified time window.
 
-- object-path: `feedback.limit`
+- object-path: `rating.limit`
 - dotenv var: `RATE_LIMITER_RATING_LIMIT`
 - type: `number`
 - default: `1`

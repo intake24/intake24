@@ -15,7 +15,7 @@ export const dbConnectionInfo = z.object({
     ssl: z.boolean().or(z.stringbool()).default(false),
   }),
   pool: z.object({
-    max: z.number().int().default(10),
+    max: z.coerce.number().int().positive().default(10),
   }),
   debugQueryLimit: z.coerce.number().int().default(0),
 });

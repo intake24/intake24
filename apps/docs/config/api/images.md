@@ -23,14 +23,14 @@ of the admin interface.
 
 ### Thumbnail width
 
-- object-path: `imageProcessor.source.thumbnailWidth`
+- object-path: `source.thumbnailWidth`
 - dotenv var: `IMAGE_SOURCE_THUMB_WIDTH`
 - type: `integer number`
 - default: `768`
 
 ### Thumbnail height
 
-- object-path: `imageProcessor.source.thumbnailHeight`
+- object-path: `source.thumbnailHeight`
 - dotenv var: `IMAGE_SOURCE_THUMB_HEIGHT`
 - type: `integer number`
 - default: `432`
@@ -42,7 +42,7 @@ of the admin interface.
 The standard width of the 'as-served' portion size images. Height is
 calculated automatically to preserve the aspect ratio of the original image.
 
-- object-path: `imageProcessor.asServed.width`
+- object-path: `asServed.width`
 - dotenv var: `IMAGE_AS_SERVED_WIDTH`
 - type: `integer number`
 - default: `1000`
@@ -51,7 +51,7 @@ calculated automatically to preserve the aspect ratio of the original image.
 
 Smaller 'as-served' image previews displayed below the main image.
 
-- object-path: `imageProcessor.asServed.thumbnailWidth`
+- object-path: `asServed.thumbnailWidth`
 - dotenv var: `IMAGE_AS_SERVED_THUMB_WIDTH`
 - type: `integer number`
 - default: `200`
@@ -69,7 +69,7 @@ image.
 
 ### Base image size width
 
-- object-path: `imageProcessor.imageMaps.width`
+- object-path: `imageMaps.width`
 - dotenv var: `IMAGE_MAP_WIDTH`
 - type: `integer number`
 - default: `1000`
@@ -87,7 +87,7 @@ image.
 
 ### Base image size width
 
-- object-path: `imageProcessor.drinkScale.width`
+- object-path: `drinkScale.width`
 - dotenv var: `IMAGE_DRINK_SCALE_WIDTH`
 - type: `integer number`
 - default: `1000`
@@ -102,14 +102,23 @@ and are arranged in a grid in the option selection screen.
 
 ### Option selection image width
 
-- object-path: `imageProcessor.optionSelection.width`
+- object-path: `optionSelection.width`
 - dotenv var: `IMAGE_OPTION_SELECTION_WIDTH`
 - type: `integer number`
 - default: `300`
 
 ### Option selection image height
 
-- object-path: `imageProcessor.optionSelection.height`
+- object-path: `optionSelection.height`
 - dotenv var: `IMAGE_OPTION_SELECTION_HEIGHT`
 - type: `integer number`
 - default: `200`
+
+## Food thumbnail images
+
+### Food thumbnail image width
+
+- object-path: `foodThumbnailImage.width`
+- dotenv var: `IMAGE_FOOD_THUMB_WIDTH`
+- type: `integer number`
+- default: `1000`

@@ -4,7 +4,7 @@ Path: `apps/api/src/config/session.ts`
 
 [Redis](https://redis.io) is used as session store driver.
 
-Redis is also used for other parts of system (cache, queue, rate limiter), they have separate connection settings, so they can be configured independently if needed.
+Connection settings fall back to [common Redis settings](/config/api/#redis) if not set.
 
 ## Redis instance
 
@@ -72,18 +72,18 @@ Lifetime of cookie. Defined as `ms-formatted` string, see [ms](https://github.co
 - object-path: `cookie.path`
 - dotenv var: `SESSION_COOKIE_PATH`
 - type: `string`
-- default: `'/api/admin/auth'`
+- default: `'/api/admin'`
 
 ### Cookie sameSite
 
 - object-path: `cookie.sameSite`
 - dotenv var: `SESSION_COOKIE_SAME_SITE`
-- type: `boolean | 'lax' | 'strict' | 'none'`
+- type: `'lax' | 'strict' | 'none'`
 - default: `'lax'`
 
 ### Cookie secure
 
-- object-path: `cookie.httpOnly`
+- object-path: `cookie.secure`
 - dotenv var: `SESSION_COOKIE_SECURE`
 - type: `boolean`
 - default: `false`

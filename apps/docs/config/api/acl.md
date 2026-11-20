@@ -19,11 +19,11 @@ Enables / disables caching for permissions / roles.
 
 ### Expires in
 
-Sets time the cache data expires at. Defined as `ms-formatted` string (see [ms](https://github.com/vercel/ms) for more information) or number in seconds.
+Sets time the cache data expires at. Defined as `ms-formatted` string, see [ms](https://github.com/vercel/ms) for more information.
 
-- object-path: `cache.expiresIn`
+- object-path: `cache.ttl`
 - dotenv var: `ACL_CACHE_TTL`
-- type: `number | string`
+- type: `string`
 - default: `'7d'`
 
 ## Roles
@@ -53,7 +53,7 @@ Enables / disables user sign-up (account creation) for Admin Tool.
 - object-path: `signup.enabled`
 - dotenv var: `ACL_SIGNUP_ENABLED`
 - type: `boolean`
-- default: `true`
+- default: `false`
 
 ### Permissions
 

@@ -22,7 +22,7 @@ const rawPublisherConfig = {
     url: process.env.PUBLISHER_REDIS_URL || process.env.REDIS_URL,
     host: process.env.PUBLISHER_REDIS_HOST || process.env.REDIS_HOST,
     port: process.env.PUBLISHER_REDIS_PORT || process.env.REDIS_PORT,
-    db: process.env.PUBLISHER_DATABASE || process.env.REDIS_DATABASE,
+    db: process.env.PUBLISHER_REDIS_DATABASE || process.env.REDIS_DATABASE,
   },
 };
 
@@ -31,7 +31,7 @@ const rawSubscriberConfig = {
     url: process.env.SUBSCRIBER_REDIS_URL || process.env.REDIS_URL,
     host: process.env.SUBSCRIBER_REDIS_HOST || process.env.REDIS_HOST,
     port: process.env.SUBSCRIBER_REDIS_PORT || process.env.REDIS_PORT,
-    db: process.env.SUBSCRIBER_DATABASE || process.env.REDIS_DATABASE,
+    db: process.env.SUBSCRIBER_REDIS_DATABASE || process.env.REDIS_DATABASE,
   },
   channels: ['locales-index'],
 };

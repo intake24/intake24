@@ -128,6 +128,18 @@ export const sidebar = {
           link: '/config/api/mail',
         },
         {
+          text: 'Media',
+          link: '/config/api/media',
+        },
+        {
+          text: 'Metrics',
+          link: '/config/api/metrics',
+        },
+        {
+          text: 'Package import / export',
+          link: '/config/api/package-io',
+        },
+        {
           text: 'PDF generation',
           link: '/config/api/pdf',
         },
