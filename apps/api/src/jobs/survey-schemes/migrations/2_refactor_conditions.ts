@@ -212,6 +212,7 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
         conditions,
         multiple: false,
         linkedQuantity: { auto: false, parent: [], source: [] },
+        asServedStyle: 'classic',
       };
     }
     case 'drink-scale-prompt': {
@@ -228,6 +229,7 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
               type: 'slider',
               confirm: false,
             },
+        quantityCard: 'classic',
       };
     }
     case 'edit-meal-prompt':

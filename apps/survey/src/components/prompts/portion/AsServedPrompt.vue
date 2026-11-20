@@ -43,6 +43,7 @@
               food,
               prompt,
               asServedSetId: parameters.servingImageSet,
+              selectorStyle: prompt.asServedStyle,
             }"
             @confirm="confirmServing"
             @update:model-value="updateServing"
@@ -84,6 +85,7 @@
                 prompt,
                 asServedSetId: parameters.leftoversImageSet,
                 maxWeight: state.portionSize.serving?.weight,
+                selectorStyle: prompt.asServedStyle,
                 type: 'leftovers',
               }"
               @confirm="confirmLeftovers"
@@ -112,13 +114,14 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <component
-            :is="prompt.multiple.type"
-            v-if="prompt.multiple"
+            :is="multipleComponentName"
+            v-if="multipleComponentName"
             v-model="state.portionSize.quantity"
             v-model:confirmed="state.quantityConfirmed"
             v-bind="multipleProps"
             @update:confirmed="confirmQuantity"
             @update:model-value="updateQuantity"
+            @update:valid="quantityInputValid = $event"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -161,6 +164,7 @@ import {
   Next,
   QuantityBadge,
   QuantityCard,
+  QuantityCardAccessible,
   QuantitySlider,
   useMultiple,
   usePanel,
@@ -173,6 +177,7 @@ defineOptions({
   components: {
     Slider: QuantitySlider,
     Counter: QuantityCard,
+    Accessible: QuantityCardAccessible,
   },
 });
 
@@ -191,6 +196,19 @@ const { multipleProps, multipleEnabled } = useMultiple(props);
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
+const quantityInputValid = ref(true);
+
+const multipleComponentName = computed(() => {
+  const { multiple, asServedStyle } = props.prompt;
+
+  if (!multiple)
+    return undefined;
+
+  if (multiple.type === 'counter' && asServedStyle === 'accessible')
+    return 'accessible';
+
+  return multiple.type;
+});
 
 const leftoversEnabled = computed(() => props.prompt.leftovers && !!parameters.value.leftoversImageSet);
 const servingValid = computed(() => !!(state.value.portionSize.serving && state.value.servingImageConfirmed));
@@ -199,7 +217,7 @@ const quantityValid = computed(() => {
   if (!props.prompt.multiple)
     return true;
 
-  return !props.prompt.multiple.confirm || state.value.quantityConfirmed;
+  return quantityInputValid.value && (!props.prompt.multiple.confirm || state.value.quantityConfirmed);
 });
 const nextStepConditions = computed(() => {
   const conditions = [psmValid.value, servingValid.value];
@@ -208,7 +226,7 @@ const nextStepConditions = computed(() => {
     conditions.push(state.value.leftoversPrompt === false || leftoversValid.value);
 
   if (multipleEnabled.value)
-    conditions.push(state.value.quantityConfirmed);
+    conditions.push(state.value.quantityConfirmed && quantityInputValid.value);
 
   if (props.linkedParent && !props.linkedParent.auto && props.linkedParent.categories.length)
     conditions.push(state.value.linkedQuantityConfirmed);
