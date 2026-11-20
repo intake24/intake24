@@ -229,6 +229,7 @@ function migrateSinglePrompt(prompt: SinglePromptV1, section: PromptSection): Si
               type: 'slider',
               confirm: false,
             },
+        quantityCard: 'classic',
       };
     }
     case 'edit-meal-prompt':
