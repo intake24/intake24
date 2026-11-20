@@ -81,6 +81,7 @@
             v-model:confirmed="state.quantityConfirmed"
             @update:confirmed="confirmQuantity"
             @update:model-value="selectQuantity"
+            @update:valid="quantityInputValid = $event"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -91,6 +92,7 @@
         v-model:confirmed="state.linkedQuantityConfirmed"
         @update:confirmed="confirmLinkedQuantity"
         @update:model-value="selectLinkedQuantity"
+        @update:valid="linkedQuantityInputValid = $event"
       />
     </v-expansion-panels>
     <template #actions>
@@ -137,6 +139,8 @@ const {
 });
 
 const state = ref(copy(props.modelValue));
+const quantityInputValid = ref(true);
+const linkedQuantityInputValid = ref(true);
 
 const unitValid = computed(() => !!state.value.portionSize.unit);
 const quantityCardComponent = computed(() => {
@@ -145,12 +149,12 @@ const quantityCardComponent = computed(() => {
 
   return QuantityCard;
 });
-const quantityValid = computed(() => state.value.quantityConfirmed);
+const quantityValid = computed(() => state.value.quantityConfirmed && quantityInputValid.value);
 const validConditions = computed(() => {
   const conditions = [psmValid.value, unitValid.value, quantityValid.value];
 
   if (props.linkedParent && !props.linkedParent.auto && props.linkedParent.categories.length)
-    conditions.push(state.value.linkedQuantityConfirmed);
+    conditions.push(state.value.linkedQuantityConfirmed && linkedQuantityInputValid.value);
 
   return conditions;
 });

@@ -104,11 +104,12 @@
         :max="isMinPortionSelected ? 1 : maxPortionQuantity"
         :min="isMinPortionSelected ? 0.25 : 1"
         :show-input-label="!isMinPortionSelected"
+        @update:valid="portionQuantityValid = $event"
       />
     </v-row>
     <v-row>
       <v-col class="px-1" cols="12" sm="auto">
-        <v-btn :block="$vuetify.display.mobile" color="primary" @click="confirm">
+        <v-btn :block="$vuetify.display.mobile" color="primary" :disabled="!!accessibleActiveWeightFactor && !portionQuantityValid" @click="confirm">
           {{ $t(`prompts.asServed.${type}.confirm`) }}
         </v-btn>
       </v-col>
@@ -171,6 +172,7 @@ const { i18n: { t } } = useI18n();
 
 const denominator = 4;
 const objectIdx = ref<number | undefined>(undefined);
+const portionQuantityValid = ref(true);
 
 const { imageData: asServedData } = useFetchImageData<AsServedSetResponse>({
   url: `portion-sizes/as-served-sets/${props.asServedSetId}`,
@@ -309,7 +311,9 @@ const maxPortionQuantity = computed(() => {
   const weight = asServedData.value?.images.at(objectIdx.value)?.weight;
   if (!weight)
     return 1;
-  const max = props.maxWeight === undefined ? 5 : props.maxWeight / weight;
+  const max = props.maxWeight === undefined
+    ? 5
+    : props.maxWeight / weight;
 
   return Math.max(0.25, Math.floor(max * denominator) / denominator);
 });
@@ -413,7 +417,9 @@ function isSelected(idx: number) {
 function imageAriaLabel(idx: number) {
   const portion = labels.value.objects?.[idx];
 
-  return portion && isSelected(idx) ? t('prompts.asServed.accessible.selectedPortion', { portion }) : portion;
+  return portion && isSelected(idx)
+    ? t('prompts.asServed.accessible.selectedPortion', { portion })
+    : portion;
 }
 
 function update() {

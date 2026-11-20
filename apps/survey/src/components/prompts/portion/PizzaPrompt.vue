@@ -115,6 +115,7 @@
             v-model:confirmed="state.confirmed.quantity"
             @update:confirmed="confirmType('quantity', $event)"
             @update:model-value="selectQuantity"
+            @update:valid="quantityInputValid = $event"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -154,6 +155,7 @@ const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'pizza'>
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
+const quantityInputValid = ref(true);
 
 type PizzaImageMap = 'type' | 'thickness' | 'slice';
 
@@ -244,7 +246,7 @@ const sliceValid = computed(() => (
   && state.value.portionSize.slice.index !== undefined
   && state.value.confirmed.slice
 ));
-const quantityValid = computed(() => state.value.confirmed.quantity);
+const quantityValid = computed(() => state.value.confirmed.quantity && quantityInputValid.value);
 const validConditions = computed(() => [
   psmValid.value,
   typeValid.value,

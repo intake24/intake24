@@ -147,6 +147,7 @@
                   :is="quantityCardComponent"
                   v-model="state.portionSize.quantity"
                   @update:confirmed="confirmType('quantity', $event)"
+                  @update:valid="quantityInputValid = $event"
                 />
               </v-col>
             </v-row>
@@ -204,11 +205,12 @@ const pizzaDefs = {
 const crustDefs = { classic: 1, 'italian-thin': 0.8, stuffed: 1.2 };
 
 const state = ref(copy(props.modelValue));
+const quantityInputValid = ref(true);
 
 const sizeValid = computed(() => state.value.confirmed.size);
 const crustValid = computed(() => state.value.confirmed.crust);
 const unitValid = computed(() => state.value.confirmed.unit);
-const quantityValid = computed(() => state.value.confirmed.quantity);
+const quantityValid = computed(() => state.value.confirmed.quantity && quantityInputValid.value);
 const quantityCardComponent = computed(() => {
   if (props.prompt.quantityCard === 'accessible')
     return QuantityCardAccessible;

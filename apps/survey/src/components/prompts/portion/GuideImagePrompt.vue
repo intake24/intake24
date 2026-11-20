@@ -71,6 +71,7 @@
             v-model:confirmed="state.quantityConfirmed"
             @update:confirmed="confirmQuantity"
             @update:model-value="selectQuantity"
+            @update:valid="quantityInputValid = $event"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -81,6 +82,7 @@
         v-model:confirmed="state.linkedQuantityConfirmed"
         @update:confirmed="confirmLinkedQuantity"
         @update:model-value="selectLinkedQuantity"
+        @update:valid="linkedQuantityInputValid = $event"
       />
     </v-expansion-panels>
     <template #actions>
@@ -132,6 +134,8 @@ const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'guide-i
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
+const quantityInputValid = ref(true);
+const linkedQuantityInputValid = ref(true);
 state.value.portionSize.guideImageId = parameters.value.guideImageId;
 
 const { imageData } = useFetchImageData<GuideImageResponse>({
@@ -161,12 +165,12 @@ const objectValid = computed(() => (
   && state.value.portionSize.objectIndex !== undefined
   && state.value.objectConfirmed
 ));
-const quantityValid = computed(() => state.value.quantityConfirmed);
+const quantityValid = computed(() => state.value.quantityConfirmed && quantityInputValid.value);
 const validConditions = computed(() => {
   const conditions = [psmValid.value, objectValid.value, quantityValid.value];
 
   if (props.linkedParent && !props.linkedParent.auto && props.linkedParent.categories.length)
-    conditions.push(state.value.linkedQuantityConfirmed);
+    conditions.push(state.value.linkedQuantityConfirmed && linkedQuantityInputValid.value);
 
   return conditions;
 });

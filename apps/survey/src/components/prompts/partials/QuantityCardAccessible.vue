@@ -19,13 +19,12 @@
           class="quantity-field mx-auto"
           :class="{ 'quantity-field--fraction-only': !whole }"
           control-variant="hidden"
+          :error-messages="inputError"
           hide-details="auto"
           :label="whole && showInputLabel ? $t('prompts.quantity.accessible.enterWholeNumber') : undefined"
-          :max="maxWhole"
-          :min="0"
           :readonly="!whole"
           variant="outlined"
-          @blur="setLimits"
+          @blur="onBlur"
         >
           <template #append-inner>
             <span
@@ -59,17 +58,18 @@
           v-if="labelKey"
           :id="inputLabelId"
           class="mt-2 text-body-1"
+          :class="{ 'quantity-label--hidden': !isQuantityValid }"
           :for="inputId"
         >
           {{ $t(labelKey, { quantity: quantitySummary }) }}
         </label>
 
         <p aria-atomic="true" aria-live="polite" class="sr-only" role="status">
-          {{ $t('prompts.quantity.accessible.currentSelection', { selection: quantitySummary }) }}
+          {{ quantitySummary }}
         </p>
 
         <div v-if="confirm" class="pa-3">
-          <v-btn block color="primary" @click="updateConfirmed(true)">
+          <v-btn block color="primary" :disabled="!isQuantityValid" @click="updateConfirmed(true)">
             {{ $t('prompts.quantity.confirm') }}
           </v-btn>
         </div>
@@ -132,7 +132,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'update:confirmed']);
+const emit = defineEmits(['update:modelValue', 'update:confirmed', 'update:valid']);
 
 const { i18n: { t } } = useI18n();
 
@@ -153,23 +153,31 @@ const currentWhole = computed<number | null>({
     if (!props.whole)
       return;
 
-    if (value === null || Number.isNaN(value)) {
-      wholeInputValue.value = value;
-      return;
-    }
-    currentValue.value = clamp(value + currentFraction.value);
-    wholeInputValue.value = Math.floor(currentValue.value);
+    wholeInputValue.value = value;
+
+    if (isValidWhole(value ?? 0))
+      currentValue.value = (value ?? 0) + currentFraction.value;
   },
 });
 
-const maxDisabled = computed(() => currentValue.value >= props.max);
-const minDisabled = computed(() => currentValue.value <= props.min);
+const typedInput = computed(() => {
+  const typedWhole = wholeInputValue.value ?? 0;
 
-const fractionLabel = computed(() => {
-  if (!currentFraction.value)
+  return props.whole
+    ? normalizeFraction(typedWhole + currentFraction.value)
+    : currentValue.value;
+});
+
+const maxDisabled = computed(() => typedInput.value >= props.max);
+const minDisabled = computed(() => typedInput.value <= props.min);
+
+const fractionLabel = computed(() => formatFraction(currentFraction.value));
+
+function formatFraction(value: number) {
+  if (!value)
     return '';
 
-  const fraction = currentFraction.value.toFixed(2);
+  const fraction = value.toFixed(2);
 
   switch (fraction) {
     case '0.25':
@@ -179,25 +187,46 @@ const fractionLabel = computed(() => {
     case '0.75':
       return '¾';
     default:
-      return fraction.toString();
+      return fraction;
   }
-});
+}
 
-const minWhole = computed(() => Math.floor(props.min));
-const maxWhole = computed(() => Math.floor(props.max));
+const minWhole = computed(() => Math.max(0, Math.ceil(props.min - currentFraction.value)));
+const maxWhole = computed(() => Math.floor(props.max - currentFraction.value));
 
-const quantitySummary = computed(() => {
-  const wholeValue = currentWhole.value ?? 0;
-  const fractionValue = currentFraction.value;
+function formatQuantity(value: number, fractionSeparator = ' ') {
+  const wholeValue = Math.floor(value);
+  const fractionValue = normalizeFraction(value - wholeValue);
+  const fraction = formatFraction(fractionValue);
 
-  if (!fractionValue)
+  if (!fraction)
     return wholeValue.toString();
 
   if (!wholeValue)
-    return fractionLabel.value;
+    return fraction;
 
-  return `${wholeValue} ${t('prompts.quantity.and')} ${fractionLabel.value}`;
+  return `${wholeValue}${fractionSeparator}${fraction}`;
+}
+
+const quantitySummary = computed(() =>
+  formatQuantity(currentValue.value, ` ${t('prompts.quantity.and')} `),
+);
+
+const inputError = computed(() => {
+  if (!props.whole || isValidWhole(wholeInputValue.value))
+    return [];
+
+  return [
+    t('prompts.quantity.accessible.invalidNumber', {
+      min: formatQuantity(props.min),
+      max: formatQuantity(props.max),
+    }),
+  ];
 });
+
+const isQuantityValid = computed(() => inputError.value.length === 0);
+
+watch(isQuantityValid, value => emit('update:valid', value), { immediate: true });
 
 function setAll() {
   currentValue.value = props.max;
@@ -208,17 +237,19 @@ function clamp(value: number) {
   return Math.min(props.max, Math.max(props.min, value));
 };
 
+function isValidWhole(value: number | null): boolean {
+  const whole = value ?? 0;
+  return whole >= minWhole.value && whole <= maxWhole.value;
+}
+
 function changeValue(step: number) {
-  currentValue.value = clamp(normalizeFraction(currentValue.value + step));
-};
-
-function setLimits() {
-  if (!props.whole)
-    return;
-
-  if (currentWhole.value === null || Number.isNaN(currentWhole.value)) {
-    currentWhole.value = minWhole.value;
-  }
+  const base = typedInput.value;
+  const clampedBase = clamp(base);
+  // change out of range typed input to the nearest bound, otherwise increment/decrement by step
+  currentValue.value = (clampedBase !== base)
+    ? clampedBase
+    : clamp(normalizeFraction(base + step));
+  wholeInputValue.value = Math.floor(currentValue.value);
 };
 
 function normalizeFraction(value: number) {
@@ -230,8 +261,14 @@ function updateConfirmed(value: boolean) {
   emit('update:confirmed', value);
 };
 
+function onBlur() {
+  if (props.whole && wholeInputValue.value === null)
+    wholeInputValue.value = 0;
+}
+
 watch(currentValue, (value) => {
-  wholeInputValue.value = Math.floor(value);
+  if (!(wholeInputValue.value === null && Math.floor(value) === 0))
+    wholeInputValue.value = Math.floor(value);
 
   if (props.confirmed)
     updateConfirmed(false);
@@ -239,21 +276,13 @@ watch(currentValue, (value) => {
 </script>
 
 <style>
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 .quantity-field {
   width: 260px;
   max-width: 100%;
+}
+
+.quantity-label--hidden {
+  visibility: hidden;
 }
 
 .quantity-field--fraction-only {
@@ -295,5 +324,11 @@ watch(currentValue, (value) => {
 
 .fraction-controls > :first-child {
   border-bottom: thin solid rgba(var(--v-border-color), 0.2);
+}
+
+/* error message font size increased for fraction symbol readability */
+.quantity-field .v-input__details .v-messages__message {
+  font-size: 1rem;
+  line-height: 1.2;
 }
 </style>

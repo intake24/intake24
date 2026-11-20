@@ -320,6 +320,7 @@ const drinkScalePrompt = z.object({
   component: z.literal('drink-scale-prompt'),
   imageMap,
   leftovers: z.boolean(),
+  quantityCard: z.enum(quantityCards).default('classic'),
 });
 
 const guideImagePrompt = z.object({

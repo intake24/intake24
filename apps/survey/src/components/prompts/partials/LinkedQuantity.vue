@@ -25,6 +25,7 @@
         :show-all="!!linkedParent.categories.length"
         @update:confirmed="updateConfirmed"
         @update:model-value="updateQuantity"
+        @update:valid="emit('update:valid', $event)"
       />
     </v-expansion-panel-text>
   </v-expansion-panel>
@@ -71,7 +72,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'update:confirmed']);
+const emit = defineEmits(['update:modelValue', 'update:confirmed', 'update:valid']);
 
 const { foodName } = useFoodUtils(props);
 const { i18n: { t } } = useI18n();

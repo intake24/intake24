@@ -57,6 +57,7 @@ export const drinkScalePrompt: Prompts['drink-scale-prompt'] = copy({
   },
   leftovers: false,
   multiple: false,
+  quantityCard: 'classic',
 });
 
 export const guideImagePrompt: Prompts['guide-image-prompt'] = copy({

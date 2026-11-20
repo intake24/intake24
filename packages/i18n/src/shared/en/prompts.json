@@ -391,7 +391,7 @@
     "less": "Less",
     "accessible": {
       "enterWholeNumber": "Enter a whole number",
-      "currentSelection": "Current selection is {selection}"
+      "invalidNumber": "Value must be from {min} to {max}"
     }
   },
   "portionSizeOption": {
