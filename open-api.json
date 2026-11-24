@@ -4272,6 +4272,10 @@
                                         "type": "string",
                                         "maxLength": 256
                                       },
+                                      "selectedAltName": {
+                                        "nullable": true,
+                                        "type": "string"
+                                      },
                                       "portionSizeId": {
                                         "type": "string",
                                         "enum": [
@@ -4345,6 +4349,7 @@
                                       "locale",
                                       "readyMeal",
                                       "searchTerm",
+                                      "selectedAltName",
                                       "portionSizeId",
                                       "reasonableAmount",
                                       "brand",
