@@ -8,13 +8,14 @@ import type { PhraseMatchResult, PhraseWithKey } from '@intake24/api/food-index/
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
 import type { SearchRequest } from '@intake24/api/food-index/search-query';
+import { parseSynonymSet } from '@intake24/api/food-index/synonym-sets';
 import type { LocaleBuildResult, WorkerRequest } from '@intake24/api/food-index/worker-protocol';
 import { ParentCategoryIndex } from '@intake24/api/food-index/workers/parent-category-index';
 import { planRebuild } from '@intake24/api/food-index/workers/rebuild-plan';
 import { NotFoundError } from '@intake24/api/http/errors';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import { logger as servicesLogger } from '@intake24/common-backend';
-import { Database, FoodBuilder, FoodsLocale, SynonymSet } from '@intake24/db';
+import { Database, FoodsLocale, SynonymSet } from '@intake24/db';
 import type { CategoryData } from './food-data';
 import { fetchCategories, fetchFoodBuilders, fetchFoods } from './food-data';
 
@@ -45,37 +46,12 @@ const index: FoodIndex = {};
 
 const logger = servicesLogger.child({ service: 'Food index' });
 
-function parseSynonymSet(value: string): string[] {
-  return (value.includes(';')
-    ? value.split(';')
-    : value.split(/\s+/))
-    .map(entry => entry.trim())
-    .filter(Boolean);
-}
-
 async function getSynonymSets(localeId: string): Promise<string[][]> {
   const synSets = await SynonymSet.findAll({
     attributes: ['synonyms'],
     where: { localeId },
   });
   return synSets.map(s => parseSynonymSet(s.synonyms));
-}
-
-async function getFoodBuildersSynonymSets(localeId: string): Promise<Set<string>[]> {
-  const foodBuilders = await FoodBuilder.findAll({
-    attributes: ['triggerWord'],
-    where: { localeId },
-    include: [
-      {
-        association: 'synonymSet',
-        attributes: ['synonyms'],
-      },
-    ],
-  });
-  return foodBuilders.map((entry) => {
-    const words = parseSynonymSet(entry.synonymSet?.synonyms ?? '').flatMap(phrase => phrase.split(/\s+/));
-    return new Set([entry.triggerWord, ...words].filter(Boolean));
-  });
 }
 
 async function getLanguageBackendId(localeId: string): Promise<string> {
@@ -96,14 +72,12 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     foods,
     allCategories,
     synonymSets,
-    foodBuildersSynonymSet,
     languageBackendId,
     foodBuilders,
   ] = await Promise.all([
     fetchFoods(localeId),
     fetchCategories(localeId),
     getSynonymSets(localeId),
-    getFoodBuildersSynonymSets(localeId),
     getLanguageBackendId(localeId),
     fetchFoodBuilders(localeId),
   ]);
@@ -148,7 +122,6 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     foodDescriptions,
     languageBackend,
     synonymSets,
-    foodBuildersSynonymSet,
     foodBuilders,
   );
 
@@ -216,38 +189,7 @@ async function matchFoodBuilders(
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.parameters.localeId} does not exist or is not enabled`);
 
-  const foodBuildersTuples = localeIndex.foodIndex.foodBuildersList;
-  const foodBuilderHeaders: FoodHeader[] = [];
-
-  // TODO: Optimise the performance of this function
-  for (const foodBuilder of foodBuildersTuples) {
-    interpretedQuery.words.forEach((word) => {
-      const asTypedExactMatch = foodBuilder[1].synonyms.has(word.asTyped);
-      word.interpretations.forEach((interpretation) => {
-        if (foodBuilder[1].synonyms.has(interpretation.dictionaryWord) || asTypedExactMatch) {
-          return foodBuilderHeaders.push({
-            id: foodBuilder[1].id,
-            code: foodBuilder[1].code,
-            name: foodBuilder[1].description,
-          });
-        }
-      });
-    });
-  }
-
-  const foodBuilderHeadersFiltered: FoodHeader[] = foodBuilderHeaders.reduce((acc, current) => {
-    const temp = acc.find(item => item.code === current.code);
-    if (!temp) {
-      return [
-        ...acc,
-        ...[current],
-      ];
-    }
-    else {
-      return acc;
-    }
-  }, [] as FoodHeader[]);
-  return foodBuilderHeadersFiltered;
+  return localeIndex.foodIndex.findFoodBuilders(interpretedQuery);
 }
 
 function getRelevantCategories(index: LocalFoodIndex, foodResults: PhraseMatchResult<string>[], categoryResults: PhraseMatchResult<string>[], transitiveLimit: number): PhraseMatchResult<string>[] {

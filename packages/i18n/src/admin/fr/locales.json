@@ -70,7 +70,7 @@
     "tab": "Séries de synonymes",
     "add": "Ajouter une série de synonymes",
     "remove": "Enlever une série de synonymes",
-    "synonyms": "Synonymes (délimités par des espaces)"
+    "synonyms": "Synonymes (délimités par des point-virgules)"
   },
   "food-builders": {
     "_": "Séries d'aliments pour des recettes",
@@ -90,7 +90,7 @@
     "label": "Libellé de l'étape",
     "exclusive": "Exclusif",
     "triggerWord": "Mot déclenchant",
-    "synonymSetId": "Synonymes (délimités par des espaces)",
+    "synonymSetId": "Synonymes (délimités par des point-virgules)",
     "steps": {
       "_": "Food builder step",
       "title": "Food builder steps",

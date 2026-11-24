@@ -576,7 +576,7 @@ export class PackageExporter {
         const synonymSetRecord: PkgV2SynonymSet
           = (row.synonyms.includes(';')
             ? row.synonyms.split(';')
-            : row.synonyms.split(WHITESPACE_REGEX))
+            : row.synonyms.split(/\s+/))
             .map(entry => entry.trim())
             .filter(Boolean);
 
