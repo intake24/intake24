@@ -42,7 +42,7 @@
     "title": "Powonera zomwe mwalemba",
     "mealSuggested": "Chakudyachi chaperekedwa ndi makina koma simunatsimikize ngati munadya",
     "food": {
-      "add": "Add food",
+      "add": "Onjezerani Chakudya",
       "delete": "Chotsani chakudya",
       "deleteConfirm": "Mukufuna kuchotsa {item}?",
       "change": "Sinthani chakudya",
