@@ -1,5 +1,5 @@
 <template>
-  <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" class="py-2" :flat="!dialog">
+  <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" class="py-2" :flat="!dialog" @scroll="onScroll">
     <food-search-hints
       class="mb-4"
       :model-value="searchTerm"
@@ -105,6 +105,7 @@
             :enable-grid="prompt.enableGrid"
             :grid-threshold="prompt.gridThreshold"
             :i18n="promptI18n"
+            :percent-scrolled="percentScrolled"
             :type="type"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
@@ -283,6 +284,7 @@ const requestFailed = ref(false);
 const tab = ref<'browse' | 'search'>('browse');
 const searchCount = ref(0);
 const percentScrolled = ref(0);
+const dialog = ref(false);
 const rootCategoryName = ref('...');
 
 const foodBuilders = useFoodBuilders({
@@ -291,27 +293,44 @@ const foodBuilders = useFoodBuilders({
 });
 
 function onScroll(event: Event) {
-  if (event.target instanceof Document) {
-    const scrollTop = event.target.documentElement.scrollTop;
-    const totalHeight = event.target.documentElement.scrollHeight;
-    const clientHeight = event.target.documentElement.clientHeight;
+  if (type.value !== 'foodSearch' || requestInProgress.value || requestFailed.value || foodBuilders.exclusive.value)
+    return;
 
-    const percentages = [25, 50, 75, 90];
-    percentages.forEach((percentage) => {
-      const threshold = (percentage / 100) * (totalHeight - clientHeight);
-      if ((percentScrolled.value < percentage) && (scrollTop >= threshold)) {
-        percentScrolled.value = percentage;
-        console.debug(`Scrolled to ${percentScrolled.value}%`);
-      }
-    });
+  let element: HTMLElement;
+  if (event.target instanceof Document) {
+    if (dialog.value)
+      return;
+
+    element = event.target.documentElement;
+  }
+  else if (dialog.value && event.target instanceof HTMLElement) {
+    element = event.target;
+  }
+  else {
+    return;
+  }
+
+  const scrollableHeight = element.scrollHeight - element.clientHeight;
+  if (scrollableHeight <= 0)
+    return;
+
+  for (const percentage of [25, 50, 75, 90]) {
+    if (percentScrolled.value < percentage && element.scrollTop >= percentage / 100 * scrollableHeight) {
+      percentScrolled.value = percentage;
+      console.debug(`Scrolled to ${percentScrolled.value}%`);
+      sendGtmEvent({
+        event: 'foodSearchScroll',
+        prompt_id: props.prompt.id,
+        section: props.section,
+        percent_scrolled: percentage,
+      });
+    }
   }
 }
 
 const showInDialog = computed(
   () => props.inDialog && searchRef.value?.$vuetify.display.mobile,
 );
-
-const dialog = ref(false);
 
 const backCategoryLabel = computed(() => {
   if (!navigationHistory.value.length)
@@ -443,7 +462,6 @@ async function search() {
   if (!searchTerm.value)
     return;
 
-  percentScrolled.value = 0;
   requestInProgress.value = true;
   searchResults.value = { foods: [], categories: [] };
 
@@ -469,7 +487,6 @@ async function search() {
         search_term: searchTerm.value,
         search_term_order: searchCount.value,
         search_results_count: searchResults.value.foods.length,
-        percent_scrolled: percentScrolled.value,
       });
 
       if (!props.rootCategory || !limitToRootCategory.value)
@@ -562,7 +579,6 @@ watchDebounced(
       currentCategoryContents.value = undefined;
       navigationHistory.value = [];
       tab.value = 'search';
-      percentScrolled.value = 0;
       return;
     }
 
