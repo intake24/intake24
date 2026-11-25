@@ -41,7 +41,7 @@ Entry has following fields:
 
 ## Split words
 
-Split words entries management
+Split words entries management. See [Split words](/admin/locales/search-and-alt-names#split-words) for how entries are used.
 
 Entry has following fields:
 
@@ -49,13 +49,15 @@ Entry has following fields:
 
 ## Synonym sets
 
-Synonym sets entries management
+Synonym sets entries management. See [Synonym sets](/admin/locales/search-and-alt-names#synonym-sets) for how entries are used.
 
 Entry has following fields:
 
 - `Synonyms` - space delimited list of synonyms
 
 ### New locale setup
+
+To adapt the copied data to a new country, continue with [Localising a food database](/admin/locales/localisation-guide).
 
 1. Within the [`locales`](/admin/locales/) section, click on the `New locale` button.
 
