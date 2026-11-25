@@ -144,13 +144,14 @@
         </v-expansion-panel-title>
         <v-expansion-panel-text>
           <component
-            :is="prompt.multiple.type"
-            v-if="prompt.multiple"
+            :is="multipleComponentName"
+            v-if="multipleComponentName"
             v-model="state.portionSize.quantity"
             v-model:confirmed="state.quantityConfirmed"
             v-bind="multipleProps"
             @update:confirmed="confirmQuantity"
             @update:model-value="updateQuantity"
+            @update:valid="quantityInputValid = $event"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -182,6 +183,7 @@ import {
   Next,
   QuantityBadge,
   QuantityCard,
+  QuantityCardAccessible,
   QuantitySlider,
   useFetchImageData,
   useLabels,
@@ -232,6 +234,20 @@ const { multipleProps, multipleEnabled } = useMultiple(props);
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
+const quantityInputValid = ref(true);
+
+const multipleComponentName = computed(() => {
+  const multiple = props.prompt.multiple;
+
+  if (!multiple)
+    return undefined;
+
+  if (multiple.type === 'counter' && props.prompt.quantityCard === 'accessible')
+    return QuantityCardAccessible;
+
+  return multiple.type;
+});
+
 state.value.portionSize.drinkwareId = parameters.value.drinkwareId;
 state.value.portionSize.initialFillLevel = parameters.value.initialFillLevel;
 state.value.portionSize.skipFillLevel = parameters.value.skipFillLevel;
@@ -273,7 +289,7 @@ const quantityValid = computed(() => {
   if (!props.prompt.multiple)
     return true;
 
-  return !props.prompt.multiple.confirm || state.value.quantityConfirmed;
+  return quantityInputValid.value && (!props.prompt.multiple.confirm || state.value.quantityConfirmed);
 });
 const validConditions = computed(() => {
   const conditions = [psmValid.value, objectValid.value, volumeValid.value];
@@ -295,7 +311,7 @@ const nextStepConditions = computed(() => {
     conditions.push(state.value.leftoversPrompt === false || leftoversValid.value);
 
   if (multipleEnabled.value)
-    conditions.push(state.value.quantityConfirmed);
+    conditions.push(state.value.quantityConfirmed && quantityInputValid.value);
 
   return conditions;
 });

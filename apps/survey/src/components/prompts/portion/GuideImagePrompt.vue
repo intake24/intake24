@@ -65,11 +65,13 @@
           </template>
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <quantity-card
+          <component
+            :is="quantityCardComponent"
             v-model="state.portionSize.quantity"
             v-model:confirmed="state.quantityConfirmed"
             @update:confirmed="confirmQuantity"
             @update:model-value="selectQuantity"
+            @update:valid="quantityInputValid = $event"
           />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -80,6 +82,7 @@
         v-model:confirmed="state.linkedQuantityConfirmed"
         @update:confirmed="confirmLinkedQuantity"
         @update:model-value="selectLinkedQuantity"
+        @update:valid="linkedQuantityInputValid = $event"
       />
     </v-expansion-panels>
     <template #actions>
@@ -108,6 +111,7 @@ import {
   Next,
   QuantityBadge,
   QuantityCard,
+  QuantityCardAccessible,
   useFetchImageData,
   useLabels,
   usePanel,
@@ -130,6 +134,8 @@ const { conversionFactor, parameters, psmValid } = usePortionSizeMethod<'guide-i
 const { foodName } = useFoodUtils(props);
 
 const state = ref(copy(props.modelValue));
+const quantityInputValid = ref(true);
+const linkedQuantityInputValid = ref(true);
 state.value.portionSize.guideImageId = parameters.value.guideImageId;
 
 const { imageData } = useFetchImageData<GuideImageResponse>({
@@ -148,17 +154,23 @@ const selectedFoodLabel = computed(() => {
   return labels.value.objects[state.value.portionSize.objectIndex] || foodName.value;
 });
 
+const quantityCardComponent = computed(() => {
+  if (props.prompt.quantityCard === 'accessible')
+    return QuantityCardAccessible;
+  return QuantityCard;
+});
+
 const objectValid = computed(() => (
   state.value.portionSize.objectId !== undefined
   && state.value.portionSize.objectIndex !== undefined
   && state.value.objectConfirmed
 ));
-const quantityValid = computed(() => state.value.quantityConfirmed);
+const quantityValid = computed(() => state.value.quantityConfirmed && quantityInputValid.value);
 const validConditions = computed(() => {
   const conditions = [psmValid.value, objectValid.value, quantityValid.value];
 
   if (props.linkedParent && !props.linkedParent.auto && props.linkedParent.categories.length)
-    conditions.push(state.value.linkedQuantityConfirmed);
+    conditions.push(state.value.linkedQuantityConfirmed && linkedQuantityInputValid.value);
 
   return conditions;
 });

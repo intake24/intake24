@@ -17,13 +17,15 @@
       </template>
     </v-expansion-panel-title>
     <v-expansion-panel-text>
-      <quantity-card
+      <component
+        :is="quantityCardComponent"
         :confirmed="confirmed"
         :max="parentQuantity"
         :model-value="modelValue"
         :show-all="!!linkedParent.categories.length"
         @update:confirmed="updateConfirmed"
         @update:model-value="updateQuantity"
+        @update:valid="emit('update:valid', $event)"
       />
     </v-expansion-panel-text>
   </v-expansion-panel>
@@ -44,6 +46,7 @@ import { useFoodUtils } from '@intake24/survey/composables';
 import { useI18n } from '@intake24/ui';
 
 import QuantityCard from './QuantityCard.vue';
+import QuantityCardAccessible from './QuantityCardAccessible.vue';
 import { useStandardUnits } from './use-standard-units';
 
 const props = defineProps({
@@ -69,7 +72,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'update:confirmed']);
+const emit = defineEmits(['update:modelValue', 'update:confirmed', 'update:valid']);
 
 const { foodName } = useFoodUtils(props);
 const { i18n: { t } } = useI18n();
@@ -85,6 +88,21 @@ const linkedQuantityUnit = computed(() => {
 });
 
 const parentQuantity = computed(() => props.linkedParent.quantity ?? 1);
+
+const quantityCardComponent = computed(() => {
+  if (
+    props.prompt.component !== 'guide-image-prompt'
+    && props.prompt.component !== 'standard-portion-prompt'
+  ) {
+    return QuantityCard;
+  }
+
+  if (props.prompt.quantityCard === 'accessible') {
+    return QuantityCardAccessible;
+  }
+
+  return QuantityCard;
+});
 
 function updateQuantity(value: number) {
   emit('update:modelValue', value);

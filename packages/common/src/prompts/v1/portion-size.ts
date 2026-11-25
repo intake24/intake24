@@ -37,6 +37,7 @@ export const drinkScalePrompt: Prompts['drink-scale-prompt'] = copy({
   name: 'Drink Scale',
   imageMap,
   leftovers: false,
+  quantityCard: 'classic',
   multiple: {
     min: { value: 1, label: false },
     max: { value: 10, label: false },

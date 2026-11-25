@@ -31,6 +31,16 @@
           :model-value="multiple"
           @update:model-value="update('multiple', $event)"
         />
+        <v-select
+          v-if="multiple && multiple.type === 'counter'"
+          class="mt-4"
+          hide-details="auto"
+          :items="quantityCardStyles"
+          :label="$t('survey-schemes.prompts.quantityCard._')"
+          :model-value="quantityCard"
+          variant="outlined"
+          @update:model-value="update('quantityCard', $event)"
+        />
       </v-col>
       <v-col cols="12" md="6">
         <image-map-settings
@@ -48,6 +58,8 @@ import type { PropType } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 
 import { defineComponent } from 'vue';
+
+import { useI18n } from '@intake24/ui';
 
 import { CounterSettings, ImageMapSettings, SliderSettings, useBasePrompt, useMultiple } from '../partials';
 
@@ -77,13 +89,27 @@ export default defineComponent({
       type: [Boolean, Object] as PropType<Prompts['drink-scale-prompt']['multiple']>,
       required: true,
     },
+    quantityCard: {
+      type: String as PropType<Prompts['drink-scale-prompt']['quantityCard']>,
+      required: true,
+    },
   },
 
   setup(props, ctx) {
     const { update } = useBasePrompt(props, ctx);
     const { multipleItems, updateMultiple } = useMultiple(props, ctx);
+    const { i18n } = useI18n();
+    const quantityCardStyles = (['classic', 'accessible'] as const).map(item => ({
+      title: i18n.t(`survey-schemes.prompts.quantityCard.${item}`),
+      value: item,
+    }));
 
-    return { multipleItems, update, updateMultiple };
+    return {
+      multipleItems,
+      quantityCardStyles,
+      update,
+      updateMultiple,
+    };
   },
 });
 </script>
