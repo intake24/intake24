@@ -1,6 +1,9 @@
 import type { Cache } from '@intake24/api/services';
 
+import { Redis } from 'ioredis';
+
 import { initCache, releaseCache } from '@intake24/api-tests/unit/helpers/cache';
+import cacheConfig from '@intake24/api/config/cache';
 
 function delay(time: number) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -106,5 +109,40 @@ describe('cache', () => {
       getData(keys, []));
 
     expect(response).toEqual({});
+  });
+
+  describe('flush', () => {
+    let raw: Redis;
+
+    beforeAll(() => {
+      const { url, keyPrefix: _, ...options } = cacheConfig.redis;
+      raw = url
+        ? new Redis(url, options)
+        : new Redis(options);
+    });
+
+    afterAll(() => {
+      raw.disconnect();
+    });
+
+    it('deletes all keys under the prefix across multiple scan batches and keeps other keys', async () => {
+      const keys = Object.fromEntries(Array.from({ length: 2500 }, (_, i) => [`food-entry:${i}`, i]));
+      await cache.mset(keys);
+      await raw.set('outside-prefix', 1);
+
+      expect(await cache.flush()).toBe(true);
+
+      expect(await raw.keys(`${cacheConfig.redis.keyPrefix}*`)).toEqual([]);
+      expect(await raw.get('outside-prefix')).toBe('1');
+      expect(await cache.flush()).toBe(false);
+    });
+
+    it('deletes only keys matching the pattern', async () => {
+      await cache.mset({ 'acl-permissions:1': 1, 'acl-permissions:2': 2, 'acl-roles:1': 1 });
+
+      expect(await cache.flush('acl-permissions:*')).toBe(true);
+
+      expect(await cache.mget(['acl-permissions:1', 'acl-permissions:2', 'acl-roles:1'])).toEqual([null, null, 1]);
+    });
   });
 });

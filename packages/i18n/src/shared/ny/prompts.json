@@ -212,11 +212,11 @@
     "description": ""
   },
   "foodAdd": {
-    "name": "Add Food",
+    "name": "Onjezerani Chakudya",
     "text": "",
     "description": "",
-    "meal": "When did you have it?",
-    "food": "What did you have?"
+    "meal": "Munadya/munamwa nthawi yanji?",
+    "food": "Munadya/Munamwa chani?"
   },
   "foodSearch": {
     "name": "Fufuzani chakudya",

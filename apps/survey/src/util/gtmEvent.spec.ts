@@ -69,6 +69,31 @@ describe('sendGtmEvent', async () => {
     }));
   });
 
+  it('sends food search scroll depth with explicit prompt and participant context', () => {
+    gtmEvent.recordPromptTransition({
+      prompt_id: 'find-food',
+      prompt_component: 'food-search-prompt',
+      section: 'foods',
+    });
+
+    gtmEvent.sendGtmEvent({
+      event: 'foodSearchScroll',
+      prompt_id: 'find-food',
+      section: 'foods',
+      percent_scrolled: 50,
+    });
+
+    expect(trackEvent).toHaveBeenCalledWith(expect.objectContaining({
+      event: 'foodSearchScroll',
+      prompt_id: 'find-food',
+      prompt_component: 'food-search-prompt',
+      section: 'foods',
+      percent_scrolled: 50,
+      uxSessionId: 'ux-session-id',
+      uxUserId: 'ux-user-id',
+    }));
+  });
+
   it('uses current prompt context when prompt is not supplied on the event', () => {
     gtmEvent.recordPromptTransition({
       prompt_id: 'meal-time-prompt',

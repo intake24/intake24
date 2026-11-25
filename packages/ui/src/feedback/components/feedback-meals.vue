@@ -41,7 +41,7 @@
     </v-container>
     <div class="d-none d-print-block">
       <div v-for="chart in charts" :key="`print-${chart.id}`" class="chart-print-wrapper">
-        <chart autoresize class="chart-print" :option="chart" />
+        <chart ref="printCharts" autoresize class="chart-print" :option="chart" />
       </div>
     </div>
   </v-sheet>
@@ -60,12 +60,14 @@ import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { use } from 'echarts/core';
 import { SVGRenderer } from 'echarts/renderers';
-import { computed, ref } from 'vue';
+import { computed, ref, useTemplateRef } from 'vue';
 import Chart from 'vue-echarts';
 
 import { round } from '@intake24/common/util';
 import { useI18n } from '@intake24/ui';
 import { getNutrientUnit } from '@intake24/ui/util';
+
+import { usePrintCharts } from '../use-print-charts';
 
 interface FeedbackMealChartData extends FeedbackMealChart {
   chartData: NutrientChartData[];
@@ -109,6 +111,8 @@ use([
 ]);
 
 const { i18n: { t }, translate } = useI18n();
+
+usePrintCharts(useTemplateRef('printCharts'));
 
 const selected = ref(props.submissions.length ? props.submissions[0].id : null);
 

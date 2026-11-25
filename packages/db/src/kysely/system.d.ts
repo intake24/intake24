@@ -433,6 +433,7 @@ export interface SurveySubmissionFoods {
   readyMeal: boolean;
   reasonableAmount: boolean;
   searchTerm: string;
+  selectedAltName: string | null;
 }
 
 export interface SurveySubmissionMeals {

@@ -2,6 +2,7 @@ import type { AwilixContainer } from 'awilix';
 
 import type { RequestIoC } from '@intake24/api/ioc';
 import type { AmrMethod, MFAProvider } from '@intake24/common/security';
+import type { FrontEnd } from '@intake24/common/types';
 
 declare global {
   namespace Express {
@@ -10,6 +11,11 @@ declare global {
       aal?: boolean;
       // Depenedency injection container scoped to the request
       scope: AwilixContainer<RequestIoC>;
+      // Signature-verified access token subject, set before authentication runs
+      rateLimitUser?: { userId: string; frontEnd: FrontEnd };
+      rateLimitAccount?: string;
+      // Cleared when the device's own login bucket is exhausted
+      rateLimitDeviceId?: string;
     }
   }
 }

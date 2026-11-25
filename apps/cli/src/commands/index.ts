@@ -8,4 +8,5 @@ export * from './init';
 export { default as packageExportV3 } from './packager/export-v3-command';
 export { default as packageExportV4 } from './packager/export-v4-command';
 export { default as packageImportV4 } from './packager/import-v4-command';
+export { default as clearRedis } from './redis-clear';
 export { default as searchTest } from './search-test';

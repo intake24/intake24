@@ -1,7 +1,7 @@
 {
   "name": "@intake24/api-client-v3",
   "type": "module",
-  "version": "2026.3.0",
+  "version": "2026.4.0",
   "description": "",
   "author": "",
   "license": "Apache-2.0",
@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "axios": "^1.21.0",
+    "axios": "^1.21.1",
     "p-limit": "^7.3.3",
     "winston": "^3.19.0"
   },
