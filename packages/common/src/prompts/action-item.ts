@@ -32,3 +32,9 @@ export const actionItem = z.object({
 });
 
 export type ActionItem = z.infer<typeof actionItem>;
+
+export const updateFoodCodePlaceholder = 'FOOD_CODE';
+
+export function updateFoodSubsetKey(values: string[]) {
+  return JSON.stringify([...new Set(values)].sort());
+}
