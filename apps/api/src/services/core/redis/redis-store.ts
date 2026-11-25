@@ -56,19 +56,17 @@ export default abstract class RedisStore {
    * @memberof RedisStore
    */
   async flush(pattern = '*'): Promise<boolean> {
-    const { keyPrefix } = this.config;
+    const { keyPrefix = '' } = this.config;
+    let deleted = 0;
 
-    const fullKeys = await this.redis.keys([keyPrefix ?? '', pattern].join(''));
-    if (!fullKeys.length)
-      return false;
+    // ioredis applies keyPrefix to UNLINK arguments, but not to the SCAN match pattern or to the keys SCAN returns.
+    const stream = this.redis.scanStream({ match: `${keyPrefix}${pattern}`, count: 1000 });
+    for await (const fullKeys of stream as AsyncIterable<string[]>) {
+      if (fullKeys.length)
+        deleted += await this.redis.unlink(fullKeys.map(key => key.slice(keyPrefix.length)));
+    }
 
-    const keys = keyPrefix
-      ? fullKeys.map(key => key.replace(keyPrefix, ''))
-      : fullKeys;
-
-    const result = await this.redis.del(keys);
-
-    return !!result;
+    return deleted > 0;
   }
 
   /**
