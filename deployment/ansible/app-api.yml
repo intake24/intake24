@@ -9,3 +9,11 @@
     - role: app-api
     - role: app-service
     - role: app-end
+  tasks:
+    # Runs after app-service restarts the API, so the old process can't repopulate the cache with stale data.
+    - name: '{{ app|upper }} | Clear API cache'
+      become_user: '{{ env.user }}'
+      run_once: true
+      command: pnpm cli redis:clear --store cache
+      args:
+        chdir: '{{ env.directory }}/{{ apps.cli.path }}'

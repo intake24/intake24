@@ -6,7 +6,9 @@ import buildUaeLocaleCommand from './commands/uae/build-uae-locale-command';
 import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 import convertImageMap from '@intake24/cli/commands/svg-converters/convert-image-map';
 import pkg from '../package.json';
+import { redisStoreTypes } from '@intake24/common/types';
 import {
+  clearRedis,
   extractCategories,
   findPortionImages,
   generateKey,
@@ -38,6 +40,18 @@ async function run() {
     .description('Synchronize access control list (ACL) between source and database')
     .action(async () => {
       await synchronizeAccessControlList();
+    });
+
+  program
+    .command('redis:clear')
+    .description('Clear Redis stores (keys under each store\'s *_REDIS_PREFIX)')
+    .addOption(
+      new Option('-s, --store <stores...>', 'Redis stores to clear')
+        .choices(redisStoreTypes)
+        .default(['cache']),
+    )
+    .action(async (options) => {
+      await clearRedis(options);
     });
 
   program
