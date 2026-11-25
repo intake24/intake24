@@ -1,10 +1,10 @@
-import type { InterpretedWord } from './interpreted-word';
+import type { RequiredPhrase } from './interpreted-phrase';
 import type {
   DictionaryType,
   PhoneticEncoder,
   SpellingCorrectionParameters,
 } from '@intake24/api/food-index/dictionary';
-import type { FoodBuilderHeader } from '@intake24/common/types/http';
+import type { FoodBuilderHeader, FoodHeader } from '@intake24/common/types/http';
 
 import { uniq } from 'lodash-es';
 
@@ -17,6 +17,7 @@ import {
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;
+const MAX_SYNONYM_VARIANTS = 100;
 
 export interface PhraseWithKey<K> {
   phrase: string;
@@ -24,7 +25,11 @@ export interface PhraseWithKey<K> {
   key: K;
 }
 
-export type FoodBuilderTuple = [key: string, entry: FoodBuilderHeader];
+export type FoodBuilderEntry = Omit<FoodBuilderHeader, 'synonyms'> & {
+  phrases: string[][];
+};
+
+export type FoodBuilderTuple = [key: string, entry: FoodBuilderEntry];
 
 export interface LanguageBackend {
   name: string;
@@ -75,6 +80,24 @@ export interface MatchQualityParameters {
   unmatchedWordCost: number;
 }
 
+interface SynonymVariant {
+  words: string[];
+  requiredPhrases: RequiredPhrase[];
+}
+
+function containsPhrase(
+  queryWords: string[],
+  phrase: string[],
+  candidates: Map<string, Set<string>>,
+): boolean {
+  for (let start = 0; start <= queryWords.length - phrase.length; start++) {
+    if (phrase.every((word, offset) => candidates.get(queryWords[start + offset])?.has(word)))
+      return true;
+  }
+
+  return false;
+}
+
 export class PhraseIndex<K> {
   readonly languageBackend: LanguageBackend;
 
@@ -87,6 +110,10 @@ export class PhraseIndex<K> {
   readonly foodBuildersList: FoodBuilderTuple[];
 
   readonly foodBuildersDictionary: RichDictionary;
+
+  private readonly phraseSynonymSets: string[][][];
+
+  private readonly normalizedBuilderPhrases: string[][][];
 
   getWordList(phrase: string): Array<string> {
     const sanitised = this.languageBackend.sanitiseDescription(phrase.toLocaleLowerCase());
@@ -108,27 +135,141 @@ export class PhraseIndex<K> {
     dictionaryType: DictionaryType = 'foods',
   ): InterpretedPhrase {
     const words = this.getWordList(phrase).slice(0, MAX_WORDS_PER_PHRASE);
-    let interpretedWords: Array<InterpretedWord>;
     // FIXME: Not sure if unmatched words are being completely ignored?
     //        Check that the unmatched word penalty is correctly applied
+    let dictionary: RichDictionary;
+
     switch (dictionaryType) {
       case 'foods':
       case 'categories':
-        interpretedWords = words
-          .map(w => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters))
-          .filter(w => w.interpretations.length > 0);
+        dictionary = this.dictionary;
         break;
       case 'recipes':
-        interpretedWords = words
-          .map(w =>
-            this.foodBuildersDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters),
-          )
-          .filter(w => w.interpretations.length > 0);
+        dictionary = this.foodBuildersDictionary;
         break;
       default:
         throw new Error(`Unknown dictionary type: ${dictionaryType}`);
     }
-    return new InterpretedPhrase(phrase, interpretedWords);
+
+    const variants: SynonymVariant[] = dictionaryType === 'recipes'
+      ? [
+          { words, requiredPhrases: [] },
+        ]
+      : this.expandSynonymPhrases(words, dictionary, spellingCorrectionParameters);
+
+    const interpretedVariants = variants.map((variant) => {
+      const interpretedWords = variant.words
+        .map(w => dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters))
+        .filter(w => w.interpretations.length > 0);
+
+      return new InterpretedPhrase(phrase, interpretedWords, {
+        requiredPhrases: variant.requiredPhrases,
+      });
+    });
+
+    const [primary = new InterpretedPhrase(phrase, []), ...synonymVariants] = interpretedVariants;
+    primary.synonymVariants = synonymVariants;
+    return primary;
+  }
+
+  findFoodBuilders(interpretedQuery: InterpretedPhrase): FoodHeader[] {
+    const queryWords = this.getWordList(interpretedQuery.asTyped).slice(0, MAX_WORDS_PER_PHRASE);
+    const candidates = new Map<string, Set<string>>();
+    for (const word of interpretedQuery.words) {
+      candidates.set(word.asTyped, new Set([
+        word.asTyped,
+        ...word.interpretations.map(interpretation => interpretation.dictionaryWord),
+      ]));
+    }
+
+    const headers = new Map<string, FoodHeader>();
+
+    this.foodBuildersList.forEach(([, entry], i) => {
+      if (headers.has(entry.code))
+        return;
+
+      if (this.normalizedBuilderPhrases[i].some(phrase => containsPhrase(queryWords, phrase, candidates)))
+        headers.set(entry.code, { id: entry.id, code: entry.code, name: entry.description });
+    });
+
+    return [
+      ...headers.values(),
+    ];
+  }
+
+  private expandSynonymPhrases(
+    words: string[],
+    dictionary: RichDictionary,
+    spellingCorrectionParameters: SpellingCorrectionParameters,
+  ): SynonymVariant[] {
+    const phraseSets = this.phraseSynonymSets;
+    const variants: SynonymVariant[] = [
+      {
+        words,
+        requiredPhrases: [],
+      },
+    ];
+    const knownVariants = new Set<string>();
+
+    if (!phraseSets.length)
+      return variants;
+
+    const wordCandidates: Set<string>[] = words.map((w) => {
+      const candidates = new Set<string>([w]);
+      const interpreted = dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, spellingCorrectionParameters);
+      for (const interpretation of interpreted.interpretations)
+        candidates.add(interpretation.dictionaryWord);
+      return candidates;
+    });
+
+    const expand = (
+      queryIndex: number,
+      outputWords: string[],
+      requiredMatches: RequiredPhrase[],
+    ) => {
+      if (variants.length >= MAX_SYNONYM_VARIANTS)
+        return;
+      if (queryIndex === words.length) {
+        if (!requiredMatches.length)
+          return;
+        const key = JSON.stringify([outputWords, requiredMatches]);
+        if (!knownVariants.has(key)) {
+          knownVariants.add(key);
+          variants.push({ words: outputWords, requiredPhrases: requiredMatches });
+        }
+        return;
+      }
+
+      expand(queryIndex + 1, [...outputWords, words[queryIndex]], requiredMatches);
+
+      for (const set of phraseSets) {
+        for (const source of set) {
+          if (!source.every((word, offset) => wordCandidates[queryIndex + offset]?.has(word)))
+            continue;
+          for (const replacement of set) {
+            if (source.length === replacement.length && source.every((word, offset) => word === replacement[offset]))
+              continue;
+
+            expand(
+              queryIndex + source.length,
+              [
+                ...outputWords,
+                ...replacement,
+              ],
+              [
+                ...requiredMatches,
+                {
+                  words: replacement,
+                },
+              ],
+            );
+          }
+        }
+      }
+    };
+
+    expand(0, [], []);
+    return variants;
   }
 
   // Avoid matching a single input word with many phrase words at once,
@@ -265,6 +406,24 @@ export class PhraseIndex<K> {
     for (const key of uniqueGroupedMatches.keys()) {
       const matchedWords = uniqueGroupedMatches.get(key)!;
 
+      const indexedWords = this.phraseIndex[key].words;
+      let requiredPhrasesFound = true;
+      for (const required of phrase.requiredPhrases) {
+        let found = false;
+        for (let start = 0; start <= indexedWords.length - required.words.length; start++) {
+          if (required.words.every((word, offset) => indexedWords[start + offset] === word)) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          requiredPhrasesFound = false;
+          break;
+        }
+      }
+      if (!requiredPhrasesFound)
+        continue;
+
       const quality = this.evaluateMatchQuality(phrase, matchedWords, matchQualityParameters);
 
       phraseMatches.push({
@@ -283,25 +442,30 @@ export class PhraseIndex<K> {
     matchQualityParameters: MatchQualityParameters,
     filter?: (key: K) => boolean,
   ): Array<PhraseMatchResult<K>> {
-    const allMatchedPhrases = phrase
-      .generateCombinations(maxCombinations)
-      .flatMap(c => this.matchCombination(phrase, c, matchQualityParameters));
+    const variants = [phrase, ...phrase.synonymVariants];
+    // evenly split the combination max across variants so total is around maxCombinations
+    const combinationLimit = Math.max(1, Math.floor(maxCombinations / variants.length));
 
-    const matchedPhrases = filter
-      ? allMatchedPhrases.filter(m => filter(this.phraseIndex[m.phraseIndex].key))
-      : allMatchedPhrases;
+    // keep highest word count matches, done per variant so synonyms don't override the original query
+    const bestMatches = variants.flatMap((variant) => {
+      const matches = variant
+        .generateCombinations(combinationLimit)
+        .flatMap(c => this.matchCombination(variant, c, matchQualityParameters));
 
-    if (matchedPhrases.length === 0)
+      const accepted = filter
+        ? matches.filter(m => filter(this.phraseIndex[m.phraseIndex].key))
+        : matches;
+
+      let bestWordCount = 0;
+      for (const m of accepted)
+        bestWordCount = Math.max(bestWordCount, m.matchedWords.length);
+
+      return accepted.filter(m => m.matchedWords.length === bestWordCount);
+    });
+
+    if (bestMatches.length === 0)
       return [];
 
-    let bestMatchWordCount = matchedPhrases[0].matchedWords.length;
-
-    for (let i = 1; i < matchedPhrases.length; i += 1) {
-      if (matchedPhrases[i].matchedWords.length > bestMatchWordCount)
-        bestMatchWordCount = matchedPhrases[i].matchedWords.length;
-    }
-
-    const bestMatches = matchedPhrases.filter(m => m.matchedWords.length === bestMatchWordCount);
     bestMatches.sort((m1, m2) => m2.quality - m1.quality);
 
     // exclude duplicates which could have appeared due to different
@@ -332,14 +496,30 @@ export class PhraseIndex<K> {
   constructor(
     phrases: PhraseWithKey<K>[],
     wordOps: LanguageBackend,
-    synonymSets: Set<string>[],
-    foodBuildersSynonymsSet: Set<string>[] = [],
+    synonymSets: string[][],
     foodBuildersList: FoodBuilderTuple[] = [],
   ) {
     this.languageBackend = wordOps;
     this.phraseIndex = Array.from({ length: phrases.length });
     this.wordIndex = new Map<string, Array<[number, number]>>();
     this.foodBuildersList = foodBuildersList;
+    // V4-1016: stemming algorithm needs to be applied to synonyms, otherwise certain words
+    // will fail to match, e.g. 'sausage' is converted into 'sausag' in the index by the stemming
+    // function and if the synonym is entered as 'sausage' it will fail to match 'sausag' unless
+    // the stemming function is applied to it.
+
+    const normalizedSynonymSets = synonymSets
+      .map(set => set.map(phrase => this.getWordList(phrase)).filter(phrase => phrase.length > 0))
+      .filter(set => set.length > 1);
+    const singleWordSynonymSets = normalizedSynonymSets
+      .filter(set => set.every(phrase => phrase.length === 1))
+      .map(set => new Set(set.map(phrase => phrase[0])));
+    this.phraseSynonymSets = normalizedSynonymSets.filter(set => set.some(phrase => phrase.length > 1));
+    this.normalizedBuilderPhrases = foodBuildersList.map(([, entry]) =>
+      entry.phrases
+        .map(phrase => this.getWordList(phrase.join(' ')))
+        .filter(phrase => phrase.length > 0),
+    );
 
     const dictionaryWords = new Set<string>();
 
@@ -360,33 +540,20 @@ export class PhraseIndex<K> {
       }
     }
 
-    // V4-1016: stemming algorithm needs to be applied to synonyms, otherwise certain words
-    // will fail to match, e.g. 'sausage' is converted into 'sausag' in the index by the stemming
-    // function and if the synonym is entered as 'sausage' it will fail to match 'sausag' unless
-    // the stemming function is applied to it.
-    function stemWordSets(sets: Array<Set<string>>): Array<Set<string>> {
-      return sets.map(set => new Set(Array.from(set, word => wordOps.stem(word))));
-    }
+    const stemmedPhraseSynonyms = this.phraseSynonymSets.map(set => set.map(phrase => phrase.join(' ')));
 
-    const stemmedSynonyms = stemWordSets(synonymSets);
+    // Creating a dictionary for Locale Indexing with all the synonym sets and dictionary words
+    this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, singleWordSynonymSets, stemmedPhraseSynonyms);
 
-    const stemmedFoodBuildersSynonyms = stemWordSets(foodBuildersSynonymsSet);
+    const foodBuildersDictionaryWords = new Set(this.normalizedBuilderPhrases.flat(2));
 
-    // Creatinf a dictionary for Locale Indexing with all the synonym sets and dictionary words
-    this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, stemmedSynonyms);
-
-    // Falten Array of recipe Foods int othe Set of string
-    const foodBuildersDictionaryWords = new Set<string>();
-    for (const foodBuilderSet of stemmedFoodBuildersSynonyms) {
-      for (const foodBuilder of foodBuilderSet)
-        foodBuildersDictionaryWords.add(foodBuilder);
-    }
-
-    // Create a dictionary for Recipe Foods Indexing with all the synonym sets and recipe foods
+    // Create a dictionary for Recipe Foods Indexing with all recipe foods
+    // No synonym sets so individual words of a builder aren't treated as interchangeable synonyms
+    // Builder phrases are instead matched in findFoodBuilders
     this.foodBuildersDictionary = new RichDictionary(
       foodBuildersDictionaryWords,
       wordOps.phoneticEncoder,
-      stemmedFoodBuildersSynonyms,
+      [],
     );
   }
 }

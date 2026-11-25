@@ -81,7 +81,7 @@
     "add": "Add synonym set",
     "remove": "Remove synonym set",
 
-    "synonyms": "Synonyms (space-delimited)"
+    "synonyms": "Synonyms (semicolon-delimited)"
   },
 
   "food-builders": {
@@ -102,7 +102,7 @@
     "label": "Food builder label",
     "exclusive": "Exclusive",
     "triggerWord": "Trigger word",
-    "synonymSetId": "Synonyms (space-delimited)",
+    "synonymSetId": "Synonyms (semicolon-delimited)",
     "steps": {
       "_": "Food builder step",
       "title": "Food builder steps",

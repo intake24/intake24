@@ -1,6 +1,7 @@
 import type { FoodBuilderTuple } from '../phrase-index';
 import type { LocaleTranslations } from '@intake24/common/types';
 
+import { parseSynonymSet } from '@intake24/api/food-index/synonym-sets';
 import { Category, Food, FoodBuilder } from '@intake24/db';
 
 export type FoodData = {
@@ -104,16 +105,24 @@ export async function fetchFoodBuilders(localeId: string): Promise<FoodBuilderTu
     ],
   });
 
-  return foodBuilders.map((entry: FoodBuilder) =>
-    [
+  return foodBuilders.map((entry: FoodBuilder) => {
+    const phrases = [
+      entry.triggerWord,
+      ...parseSynonymSet(entry.synonymSet?.synonyms ?? ''),
+    ]
+      .map(phrase => phrase?.trim())
+      .filter((phrase): phrase is string => !!phrase)
+      .map(phrase => phrase.split(/\s+/));
+
+    return [
       entry.name.toLowerCase(),
       {
         id: entry.id,
         code: entry.code,
         name: entry.name.toLowerCase(),
-        synonyms: new Set<string>(`${entry.triggerWord} ${entry.synonymSet?.synonyms ?? ''}`.trim().split(/\s+/)),
+        phrases,
         description: entry.name.toLocaleLowerCase(),
       },
-    ],
-  );
+    ];
+  });
 }
