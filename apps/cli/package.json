@@ -48,7 +48,7 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^26.6.6",
+    "@types/node": "^26.6.11",
     "@types/unzipper": "^0.10.11",
     "@types/web-push": "^3.6.4",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",

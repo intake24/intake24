@@ -15,6 +15,6 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
-    "@types/node": "^26.6.6"
+    "@types/node": "^26.6.11"
   }
 }
